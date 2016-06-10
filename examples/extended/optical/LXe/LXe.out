@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -20,12 +20,10 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -219,7 +217,7 @@ Index : 3     used in the geometry : Yes
 
 ### Run 0 starts.
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (-0.0205722,0.00634123,-103.48)
+	Energy weighted position of hits in LXe : (-0.0385767,0.00782865,-103.465)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -228,11 +226,11 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1407
+	Number of photons that hit PMTs in this event : 1365
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5702
-	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 4295
+	Number of photons produced by scintillation in this event : 5550
+	Number of photons produced by cerenkov in this event : 3
+	Number of photons absorbed (OpAbsorption) in this event : 4188
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
  Run terminated.
@@ -273,25 +271,25 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-	Energy weighted position of hits in LXe : (-19.2508,-27.1141,-91.4813)
-	Total energy deposition in scintillator : 352.314 (keV)
+	Energy weighted position of hits in LXe : (-9.16951,15.2879,-99.369)
+	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
-	Number of photons that hit PMTs in this event : 1133
+	Number of photons that hit PMTs in this event : 1506
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 3977
+	Number of photons produced by scintillation in this event : 5640
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 2844
+	Number of photons absorbed (OpAbsorption) in this event : 4134
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.13s Sys=0s
+  User=0.2s Real=0.2s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 2.6 Mb
+Dynamic pools deleted: 15 / Total memory freed: 1.3 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

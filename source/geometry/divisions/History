@@ -1,4 +1,4 @@
-$Id: History 90699 2015-06-08 09:34:37Z gcosmo $
+$Id: History 95287 2016-02-03 14:37:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 9th, 2015     G.Cosmo (geomdiv-V10-00-02)
+- Set as unsupported divisions of polycone and polyhedra in MT-mode.
+
+September 9th, 2015     G.Cosmo
+- Use thread-local pointer for rotation matrix as member of the class
+  G4VDivisionParameterisation and set it as suto-delete.
+  Removed unnecessary thread-local verbose flag.
+  Addressing problem reports #1743 and #1758.
+- Migrated unit test-suite ExDivisions to multi-threading.
+
+September 4th, 2015     G.Cosmo
+- Fix for use of rotation matrix in G4VDivisionParameterisation in MT-mode,
+  to address problem reports #1743 and #1758.
+
+August 6th, 2015        G.Cosmo
+- Checked for potential never-ending loops. No issues found.
 
 June 2nd, 2015          G.Cosmo (geomdiv-V10-00-01)
 - Delete rotation matrix in destructor.

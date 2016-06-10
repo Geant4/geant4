@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsListHelper.cc 82663 2014-07-02 08:57:58Z gcosmo $
+// $Id: G4PhysicsListHelper.cc 95347 2016-02-05 08:47:03Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -1108,6 +1108,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;
   tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "ParallelWorld";
+  tmp.processType     = 10;
+  tmp.processSubType  = 491;
+  tmp.ordering[0]     = 9900;
+  tmp.ordering[1]     = 1;
+  tmp.ordering[2]     =  9900;
+  tmp.isDuplicable =  true;
   theTable->push_back(tmp);
   sizeOfTable +=1;  
 }

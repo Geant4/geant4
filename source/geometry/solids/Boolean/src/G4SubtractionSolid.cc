@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4SubtractionSolid.cc 95297 2016-02-04 09:30:14Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -284,7 +284,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
       if( fPtrSolidA->Inside(p+dist*v) != kInside )
       {
         G4int count1=0;
-        do
+        do   // Loop checking, 13.08.2015, G.Cosmo
         {
           disTmp = fPtrSolidA->DistanceToIn(p+dist*v,v) ;
 
@@ -377,7 +377,7 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
               return dist;
             }
           }
-        }
+        }    // Loop checking, 13.08.2015, G.Cosmo
       }
     }
   

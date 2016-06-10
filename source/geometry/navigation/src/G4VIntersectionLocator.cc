@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc 90836 2015-06-10 09:31:06Z gcosmo $
+// $Id: G4VIntersectionLocator.cc 95294 2016-02-04 09:13:46Z gcosmo $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -35,6 +35,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4AutoDelete.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VIntersectionLocator.hh"
 #include "G4GeometryTolerance.hh"
@@ -43,17 +44,18 @@
 //
 // Constructor
 //
-G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator): 
-  fUseNormalCorrection(false), 
-  fiNavigator( theNavigator ),
-  fiChordFinder( 0 ),            // Not set - overridden at each step
-  fiEpsilonStep( -1.0 ),         // Out of range - overridden at each step
-  fiDeltaIntersection( -1.0 ),   // Out of range - overridden at each step
-  fiUseSafety(false),            // Default - overridden at each step
-  fpTouchable(0)           
+G4VIntersectionLocator:: G4VIntersectionLocator(G4Navigator *theNavigator)
+ : fVerboseLevel(0),
+   fUseNormalCorrection(false),
+   fCheckMode(false),
+   fiNavigator(theNavigator),
+   fiChordFinder(0),              // Not set - overridden at each step
+   fiEpsilonStep(-1.0),           // Out of range - overridden at each step
+   fiDeltaIntersection(-1.0),     // Out of range - overridden at each step
+   fiUseSafety(false),            // Default - overridden at each step
+   fpTouchable(0)           
 {
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
-  fVerboseLevel = 0;
   fHelpingNavigator = new G4Navigator();
 }      
 
@@ -78,9 +80,9 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
                                            G4double             safety,
                                            G4int                stepNo)
 {
-   std::ostringstream os; 
-   printStatus( StartFT, CurrentFT, requestStep, safety, stepNo, os);
-   G4cout << os.str();
+  std::ostringstream os; 
+  printStatus( StartFT,CurrentFT,requestStep,safety,stepNo,os,fVerboseLevel);
+  G4cout << os.str();
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -93,9 +95,10 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
                                            G4double             requestStep, 
                                            G4double             safety,
                                            G4int                stepNo,
-                                           std::ostringstream&  os )
+                                           std::ostream&        os,
+                                           int                  verboseLevel)
 {
-  const G4int verboseLevel= fVerboseLevel;
+  // const G4int verboseLevel= fVerboseLevel;
   const G4ThreeVector StartPosition       = StartFT.GetPosition();
   const G4ThreeVector StartUnitVelocity   = StartFT.GetMomentumDir();
   const G4ThreeVector CurrentPosition     = CurrentFT.GetPosition();
@@ -129,7 +132,7 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
   {
     // Recurse to print the start values
     //
-    printStatus( StartFT, StartFT, -1.0, safety, -1);
+    printStatus( StartFT, StartFT, -1.0, safety, -1, os, verboseLevel);
   }
   if( verboseLevel <= 3 )
   {
@@ -187,29 +190,31 @@ G4VIntersectionLocator::printStatus( const G4FieldTrack&        StartFT,
 G4FieldTrack G4VIntersectionLocator::
 ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,  
                     const G4FieldTrack& EstimatedEndStateB,
-                          G4double      linearDistSq,
-                          G4double      curveDist )
+//                        bool &        recalculated)
+                          G4double      , // linearDistSq,  // NOT used
+                          G4double      ) // curveDist )    // NOT used
 {  
   G4FieldTrack newEndPoint( CurrentStateA );
-  G4MagInt_Driver* integrDriver= GetChordFinderFor()->GetIntegrationDriver(); 
+  G4MagInt_Driver* integrDriver = GetChordFinderFor()->GetIntegrationDriver(); 
 
   G4FieldTrack retEndPoint( CurrentStateA );
   G4bool goodAdvance;
   G4int  itrial=0;
-  const G4int no_trials= 20;
+  const G4int no_trials=20;
+
 
   G4double endCurveLen= EstimatedEndStateB.GetCurveLength();
   do
   {
-     G4double currentCurveLen= newEndPoint.GetCurveLength();
-     G4double advanceLength= endCurveLen - currentCurveLen ; 
-     if (std::abs(advanceLength)<kCarTolerance)
-     {
-       goodAdvance=true;
-     }
-     else{
-     goodAdvance= 
-       integrDriver->AccurateAdvance(newEndPoint, advanceLength,
+    G4double currentCurveLen= newEndPoint.GetCurveLength();
+    G4double advanceLength= endCurveLen - currentCurveLen ; 
+    if (std::abs(advanceLength)<kCarTolerance)
+    {
+      goodAdvance=true;
+    }
+    else
+    {
+      goodAdvance= integrDriver->AccurateAdvance(newEndPoint, advanceLength,
                                      GetEpsilonStepFor());
      }
   }
@@ -217,20 +222,20 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
 
   if( goodAdvance )
   {
-    retEndPoint= newEndPoint; 
+    retEndPoint = newEndPoint; 
   }
   else
   {
-    retEndPoint= EstimatedEndStateB; // Could not improve without major work !!
+    retEndPoint = EstimatedEndStateB; // Could not improve without major work !!
   }
 
   //  All the work is done
   //  below are some diagnostics only -- before the return!
   // 
-  static const G4String MethodName("G4VIntersectionLocator::ReEstimateEndpoint");
+  const G4String MethodName("G4VIntersectionLocator::ReEstimateEndpoint()");
 
 #ifdef G4VERBOSE
-  G4int  latest_good_trials=0;
+  G4int  latest_good_trials = 0;
   if( itrial > 1)
   {
     if( fVerboseLevel > 0 )
@@ -240,7 +245,7 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
              << " previous good= " << latest_good_trials
              << G4endl;
     }
-    latest_good_trials=0; 
+    latest_good_trials = 0; 
   }
   else
   {   
@@ -263,7 +268,8 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
              << G4endl;
     }
   }
-
+  G4double linearDist = ( EstimatedEndStateB.GetPosition() 
+                      - CurrentStateA.GetPosition() ).mag(); 
   static G4int noInaccuracyWarnings = 0; 
   G4int maxNoWarnings = 10;
   if (  (noInaccuracyWarnings < maxNoWarnings ) 
@@ -277,7 +283,7 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
               << " an adjustment in the step's endpoint."  << G4endl
               << "   Two mid-points are further apart than their"
               << " curve length difference"                << G4endl 
-              << "   Dist = "       << std::sqrt(linearDistSq)
+              << "   Dist = "       << linearDist
               << " curve length = " << curveDist             << G4endl; 
       message << " Correction applied is " << move.mag() << G4endl
               << "  Old Estimated B position= "
@@ -299,10 +305,74 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
     sumCorrectionsSq += (EstimatedEndStateB.GetPosition() - 
                          newEndPoint.GetPosition()).mag2();
   }
-  linearDistSq -= curveDist; // To use linearDistSq ... !
 #endif
 
   return retEndPoint;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+//
+// ReEstimateEndPoint.
+//
+//   The following values are returned in curveError 
+//       0: Normal - no problem
+//       1: Unexpected co-incidence - milder mixup
+//       2: Real mixup - EndB is NOT past StartA  
+//            ( ie. StartA's curve-lengh is bigger than EndB's)
+
+
+G4bool G4VIntersectionLocator::
+CheckAndReEstimateEndpoint( const G4FieldTrack& CurrentStartA,  
+                            const G4FieldTrack& EstimatedEndB,
+                                  G4FieldTrack& RevisedEndPoint,
+                                  G4int &       curveError)
+{
+  G4double linDistSq, curveDist; 
+
+  G4bool recalculated= false;
+  curveError= 0;
+
+  linDistSq = ( EstimatedEndB.GetPosition() 
+                               - CurrentStartA.GetPosition() ).mag2(); 
+  curveDist = EstimatedEndB.GetCurveLength()
+                               - CurrentStartA.GetCurveLength();
+  if(  (curveDist>=0.0) 
+     && (curveDist*curveDist *(1.0+2.0*fiEpsilonStep ) < linDistSq ) )
+  {
+    // G4FieldTrack oldPointVelB = EstimatedEndB; 
+    G4FieldTrack newEndPointFT= EstimatedEndB;  // Unused
+
+    if (curveDist>0.0) 
+    {
+       // Re-integrate to obtain a new B
+       RevisedEndPoint= ReEstimateEndpoint( CurrentStartA,
+                                            EstimatedEndB,
+                                            linDistSq,    
+                                            curveDist );
+       recalculated = true;
+    }
+    else
+    {
+       // Zero length -> no advance!
+       newEndPointFT= CurrentStartA;
+       recalculated = true;
+       curveError = 1;  // Unexpected co-incidence - milder mixup
+
+       G4Exception("G4MultiLevelLocator::EstimateIntersectionPoint()",
+           "GeomNav1002", JustWarning, 
+           "A & B are at equal distance in 2nd half. A & B will coincide." );
+    }
+  }
+
+  // Sanity check
+  //
+  if( curveDist < 0.0 )
+  {
+    // clean = false;
+    curveError = 2;  //  Real mixup
+  }
+  return recalculated;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -360,7 +430,6 @@ GetLocalSurfaceNormal(const G4ThreeVector& CurrentE_Point, G4bool& validNormal)
       }
     }
   }
-
   return Normal;
 }
 
@@ -444,9 +513,13 @@ AdjustmentOfFoundIntersection( const G4ThreeVector& CurrentA_Point,
   return goodAdjust;
 }
 
-G4ThreeVector
-G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector& CurrentInt_Point,
-                                               G4bool& validNormal) // const
+///////////////////////////////////////////////////////////////////////////
+//
+// GetSurfaceNormal.
+//
+G4ThreeVector G4VIntersectionLocator::
+GetSurfaceNormal(const G4ThreeVector& CurrentInt_Point,
+                       G4bool& validNormal) // const
 {
   G4ThreeVector NormalAtEntry; // ( -10. , -10., -10. ); 
 
@@ -485,6 +558,10 @@ G4VIntersectionLocator::GetSurfaceNormal(const G4ThreeVector& CurrentInt_Point,
   return NormalAtEntry;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
+// GetGlobalSurfaceNormal.
+//
 G4ThreeVector G4VIntersectionLocator::
 GetGlobalSurfaceNormal(const G4ThreeVector& CurrentE_Point,
                              G4bool& validNormal)
@@ -523,9 +600,13 @@ GetGlobalSurfaceNormal(const G4ThreeVector& CurrentE_Point,
   return globalNormal;
 }
 
-G4ThreeVector 
-G4VIntersectionLocator::GetLastSurfaceNormal( const G4ThreeVector& intersectPoint,
-                                              G4bool& normalIsValid) const
+///////////////////////////////////////////////////////////////////////////
+//
+// GetLastSurfaceNormal.
+//
+G4ThreeVector G4VIntersectionLocator::
+GetLastSurfaceNormal( const G4ThreeVector& intersectPoint,
+                            G4bool& normalIsValid) const
 {
   G4ThreeVector normalVec;
   G4bool        validNorm;
@@ -535,6 +616,10 @@ G4VIntersectionLocator::GetLastSurfaceNormal( const G4ThreeVector& intersectPoin
   return normalVec;
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
+// ReportTrialStep.
+//
 void G4VIntersectionLocator::ReportTrialStep( G4int step_no, 
                                         const G4ThreeVector& ChordAB_v,
                                         const G4ThreeVector& ChordEF_v,
@@ -582,6 +667,10 @@ void G4VIntersectionLocator::ReportTrialStep( G4int step_no,
   return; 
 }
 
+///////////////////////////////////////////////////////////////////////////
+//
+// LocateGlobalPointWithinVolumeAndCheck.
+//
 // Locate point using navigator: updates state of Navigator
 // By default, it assumes that the point is inside the current volume,
 // and returns true.
@@ -589,13 +678,13 @@ void G4VIntersectionLocator::ReportTrialStep( G4int step_no,
 //   If it is inside, it returns true
 //   If not, issues a warning and returns false.
 //
-G4bool
-G4VIntersectionLocator::
+G4bool G4VIntersectionLocator::
 LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
 {
   G4bool good= true;
   G4Navigator* nav= GetNavigatorFor();
-  const G4String MethodName("G4VIntersectionLocator::LocateGlobalPointWithinVolumeAndCheck()");
+  const G4String
+  MethodName("G4VIntersectionLocator::LocateGlobalPointWithinVolumeAndCheck()");
 
   if( fCheckMode )
   {
@@ -644,8 +733,11 @@ LocateGlobalPointWithinVolumeAndCheck( const G4ThreeVector& position )
   return good;
 }
 
-void
-G4VIntersectionLocator::
+///////////////////////////////////////////////////////////////////////////
+//
+// LocateGlobalPointWithinVolumeCheckAndReport.
+//
+void G4VIntersectionLocator::
 LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& position,
                                              const G4String& CodeLocationInfo,
                                              G4int CheckMode )
@@ -666,3 +758,134 @@ LocateGlobalPointWithinVolumeCheckAndReport( const G4ThreeVector& position,
   
   SetCheckMode( oldCheck );
 }
+
+///////////////////////////////////////////////////////////////////////////
+//
+// ReportReversedPoints.
+//
+void G4VIntersectionLocator::
+ReportReversedPoints( std::ostringstream& msg,
+                      const G4FieldTrack& StartPointVel, 
+                      const G4FieldTrack& EndPointVel,
+                            G4double NewSafety, G4double epsStep,
+                      const G4FieldTrack& A_PtVel,
+                      const G4FieldTrack& B_PtVel,
+                      const G4FieldTrack& SubStart_PtVel,
+                      const G4ThreeVector& E_Point,
+                      const G4FieldTrack& ApproxIntersecPointV,
+                            G4int  substep_no, G4int substep_no_p, G4int depth )
+{
+   // Expect that 'msg' can hold the name of the calling method
+
+   // FieldTrack 'points' A and B have been tangled
+   // Whereas A should be before B, it is found that curveLen(B) < curveLen(A)
+   G4int verboseLevel= 5; 
+   G4double curveDist = B_PtVel.GetCurveLength() - A_PtVel.GetCurveLength();
+   G4VIntersectionLocator::printStatus( A_PtVel,  B_PtVel,
+                           -1.0, NewSafety,  substep_no, msg, verboseLevel );
+   msg << "Error in advancing propagation." << G4endl
+       << "        Point A (start) is " << A_PtVel  << G4endl
+       << "        Point B (end)   is " << B_PtVel << G4endl
+       << "        Curve distance is " << curveDist << G4endl
+       << G4endl
+       << "The final curve point is not further along"
+       << " than the original!" << G4endl;
+   msg << " Value of fEpsStep= " << epsStep << G4endl;
+
+   G4int oldprc = msg.precision(20);
+   msg << " Point A (Curve start) is " << StartPointVel << G4endl
+       << " Point B (Curve   end)   is " << EndPointVel << G4endl
+       << " Point A (Current start) is " << A_PtVel << G4endl
+       << " Point B (Current end)   is " << B_PtVel << G4endl
+       << " Point S (Sub start)     is " << SubStart_PtVel
+       << " Point E (Trial Point)   is " << E_Point << G4endl
+       << " Point F (Intersection)  is " << ApproxIntersecPointV 
+       << G4endl
+       << " LocateIntersection parameters are : " << G4endl
+       << "      Substep no (total) = "  << substep_no << G4endl
+       << "      Substep (depth= " << depth << substep_no_p;
+   msg.precision(oldprc);
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// ReportProgress.
+//
+void G4VIntersectionLocator::ReportProgress( std::ostream& oss,
+                                    const G4FieldTrack& StartPointVel, 
+                                    const G4FieldTrack& EndPointVel,
+                                          G4int         substep_no, 
+                                    const G4FieldTrack& A_PtVel,
+                                    const G4FieldTrack& B_PtVel,
+                                          G4double      safetyLast,
+                                          G4int         depth )
+
+{
+  oss << "ReportProgress: Current status of intersection search: " << G4endl;
+  if( depth > 0 ) oss << " Depth= " << depth;
+  oss << " Substep no = " << substep_no << G4endl;
+  G4int  verboseLevel = 5; 
+  
+  // printStatus args: (FT0, FT1, dRequestStep, dSafety, iStepNum, os, iVerb);
+  G4double safetyPrev = -1.0;  // Add as argument ?
+
+  printStatus( StartPointVel, EndPointVel, -1.0, -1.0, -1, 
+              oss, verboseLevel);  
+  oss << " * Start and end-point of requested Step:" << G4endl;
+  oss << " ** State of point A: "; 
+  printStatus( A_PtVel, A_PtVel, -1.0, safetyPrev, substep_no-1,
+               oss, verboseLevel);  
+  oss << " ** State of point B: "; 
+  printStatus( A_PtVel, B_PtVel, -1.0, safetyLast, substep_no, 
+               oss, verboseLevel);
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// ReportImmediateHit.
+//
+void
+G4VIntersectionLocator::ReportImmediateHit( const char*          MethodName, 
+                                            const G4ThreeVector& StartPosition, 
+                                            const G4ThreeVector& TrialPoint, 
+                                                  G4double       tolerance,
+                                            unsigned long int    numCalls )
+{
+  static G4ThreadLocal unsigned int occurredOnTop= 0;
+  static G4ThreadLocal G4ThreeVector *ptrLast= 0;
+  if( !ptrLast )
+  {
+     ptrLast= new G4ThreeVector( DBL_MAX, DBL_MAX, DBL_MAX );
+     G4AutoDelete::Register(ptrLast);
+  }
+  G4ThreeVector &lastStart= *ptrLast;
+
+  if( (TrialPoint - StartPosition).mag2() < tolerance*tolerance) 
+  {
+     static G4ThreadLocal unsigned int numUnmoved= 0;
+     static G4ThreadLocal unsigned int numStill= 0;    // Still at same point
+
+     G4cout << "Intersection F == start A in " << MethodName;
+     G4cout << "Start Point: " << StartPosition << G4endl;
+     // G4cout << "Trial Point: " << TrialPoint << G4endl;
+     G4cout << " Start-Trial: " << TrialPoint - StartPosition; // << G4endl;
+     G4cout << " Start-last: " << StartPosition - lastStart;
+
+     if( (StartPosition - lastStart).mag() < tolerance )
+     {
+        // We are at position of last 'Start' position - ie unmoved
+        ++numUnmoved;
+        ++numStill; 
+        G4cout << " { Unmoved: "  << " still#= " << numStill
+               << " total # = " << numUnmoved << " } - ";
+     }
+     else
+     {
+        numStill = 0; 
+     }
+     G4cout << " Occured: " << ++occurredOnTop;  
+     G4cout <<  " out of total calls= " << numCalls;
+     G4cout << G4endl;
+     lastStart = StartPosition;
+  }
+}  // End of ReportImmediateHit() 

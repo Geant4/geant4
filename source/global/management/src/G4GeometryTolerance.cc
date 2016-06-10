@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc 70333 2013-05-29 08:56:45Z gcosmo $
+// $Id: G4GeometryTolerance.cc 95305 2016-02-04 12:02:33Z gcosmo $
 //
 // class G4GeometryTolerance
 //
@@ -108,7 +108,7 @@ void G4GeometryTolerance::SetSurfaceTolerance(G4double worldExtent)
 {
   if (!fInitialised)
   {
-    fCarTolerance = worldExtent*1E-11;
+    fCarTolerance = fRadTolerance = worldExtent*1E-11;
     fInitialised = true;
   }
   else

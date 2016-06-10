@@ -150,10 +150,12 @@ void G4GenericPolycone::Create( G4double phiStart,
     // Convert phi into our convention
     //
     startPhi = phiStart;
-    while( startPhi < 0 ) startPhi += twopi;
+    while( startPhi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
+      startPhi += twopi;
     
     endPhi = phiStart+phiTotal;
-    while( endPhi < startPhi ) endPhi += twopi;
+    while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+      endPhi += twopi;
   }
   
   //
@@ -168,7 +170,7 @@ void G4GenericPolycone::Create( G4double phiStart,
   
   G4PolyconeSideRZ *next = corners;
   iterRZ.Begin();
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next->r = iterRZ.GetA();
     next->z = iterRZ.GetB();
@@ -189,7 +191,7 @@ void G4GenericPolycone::Create( G4double phiStart,
                    *prev = corners + numCorner-1,
                    *nextNext;
   G4VCSGface  **face = faces;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     next = corner+1;
     if (next >= corners+numCorner) next = corners;
@@ -316,7 +318,7 @@ void G4GenericPolycone::CopyStuff( const G4GenericPolycone &source )
   
   G4PolyconeSideRZ  *corn = corners,
         *sourceCorn = source.corners;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *corn = *sourceCorn;
   } while( ++sourceCorn, ++corn < corners+numCorner );
@@ -509,18 +511,18 @@ G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
       std::vector<G4int*> triQuads;
       G4int remaining = numCorner;
       G4int iStarter = 0;
-      while (remaining >= 3)
+      while (remaining >= 3)    // Loop checking, 13.08.2015, G.Cosmo
       {
         // Find unchopped corners...
         //
         G4int A = -1, B = -1, C = -1;
         G4int iStepper = iStarter;
-        do
+        do    // Loop checking, 13.08.2015, G.Cosmo
         {
           if (A < 0)      { A = iStepper; }
           else if (B < 0) { B = iStepper; }
           else if (C < 0) { C = iStepper; }
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStepper >= numCorner) { iStepper = 0; }
           }
@@ -547,7 +549,7 @@ G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
         }
         else
         {
-          do
+          do    // Loop checking, 13.08.2015, G.Cosmo
           {
             if (++iStarter >= numCorner) { iStarter = 0; }
           }

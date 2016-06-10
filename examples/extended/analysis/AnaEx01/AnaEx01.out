@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-01-patch-02    (19-June-2015)
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -757,20 +757,20 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 453.651 MeV +- 15.5761 MeV
- mean Energy in Gap      : 23.7522 MeV +- 7.11944 MeV
+ mean Energy in Absorber : 453.653 MeV +- 15.5769 MeV
+ mean Energy in Gap      : 23.7522 MeV +- 7.11947 MeV
 
- mean trackLength in Absorber : 32.4525 cm  +- 1.25106 cm 
- mean trackLength in Gap      : 11.7458 cm  +- 3.65031 cm 
+ mean trackLength in Absorber : 32.4526 cm  +- 1.2511 cm 
+ mean trackLength in Gap      : 11.7458 cm  +- 3.65034 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
- EAbs : mean = 453.651 MeV rms = 15.5761 MeV
- EGap : mean = 23.7522 MeV rms = 7.11944 MeV
- LAbs : mean = 32.4525 cm  rms = 1.25106 cm 
- LGap : mean = 11.7458 cm  rms = 3.65031 cm 
+ EAbs : mean = 453.653 MeV rms = 15.5769 MeV
+ EGap : mean = 23.7522 MeV rms = 7.11947 MeV
+ LAbs : mean = 32.4526 cm  rms = 1.2511 cm 
+ LGap : mean = 11.7458 cm  rms = 3.65034 cm 
 ... write Root file : AnaEx01.root - done
 
 ----> Histogram Tree is saved in AnaEx01.root

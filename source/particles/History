@@ -1,4 +1,4 @@
-$Id: History 88959 2015-03-16 16:49:02Z gcosmo $
+$Id: History 95335 2016-02-05 07:47:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 27 January 2016  Hisaya Kurashige (particles-V10-00-29)
+- Fix the bug(#1820) in G4PhaseSpaceDecayChannel
+
+- 28 December 2015  Makoto Asai
+- Fix wrong argument order CreateIon(A,Z,LL,0.0) of line #485 in
+  G4IonTable.cc to CreateIon(Z,A,LL,0.0).
 
 - 16 Feb. 2015 Hisaya Kurashige (particles-V10-00-28)
 - Add gamma-gamma, omega-gamma modes to EtaPrime 

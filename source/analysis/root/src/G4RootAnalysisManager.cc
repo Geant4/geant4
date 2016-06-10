@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 85317 2014-10-27 15:58:15Z gcosmo $
+// $Id: G4RootAnalysisManager.cc 95250 2016-02-02 10:33:05Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -505,7 +505,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
          fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
-         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() ) || 
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && fNtupleManager->IsEmpty()) || 
        ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() ) ) {
     result = ! std::remove(fFileManager->GetFullFileName());
     //  std::remove returns 0 when success

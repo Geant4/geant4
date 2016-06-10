@@ -1,4 +1,4 @@
-$Id: History 90836 2015-06-10 09:31:06Z gcosmo $
+$Id: History 95294 2016-02-04 09:13:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,111 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 1, 2016 - G.Cosmo (geomnav-V10-00-23)
+--------------------------
+- Relax condition for zero or almost-zero steps in G4ReplicaNavigation and
+  G4Navigator, to allow for faster progression in case of stuck tracks in
+  3D scoring meshes. Addressed old problem report #1432.
+
+January 29, 2016 - G.Cosmo
+--------------------------
+- Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
+  for particle entering. Fixes issue of negative copyNo observed in nested
+  replica setups. Addressing problem report #1634. 
+
+January 11, 2016 - G.Cosmo
+--------------------------
+- Move check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
+  Addressing problem report #1811.
+
+November 13, 2015 - G.Cosmo
+---------------------------
+- Code cleanup in G4MultiLevelLocator and G4PropagatorInField.
+
+October 30, 2015 - J.Apostolakis
+--------------------------------
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Replaced fatal error for exceeding max steps with warning.
+    In addition it returns immediately, giving the current progress as the
+    'Recalculated End Point'. This signals 'looping' - ie too many steps.
+- G4PropagatorInField detects this condition, and identifies it as a 'Looping
+  Particle' which is then flagged.
+  The calling class (Transportation, PathFinder) is expected to stop the
+  tracking of this particle after this step (or potentially after a few of
+  these steps.) 
+  Note: Current way to identify looping (in PropagatorInField) is:
+        - if flag recalculated is set and the proposed end-point is short,
+          i.e. if it not as far along the curve as the original proposed
+          end-point (the one sent to the Locator).
+  TODO: Consider revising the interface of EstimateIntersectionPoint to add an
+        'unfinished' output value - to make this condition clearer.
+- Addresses issues seen by ALICE in trial productions.
+
+October 23, 2015 - G.Cosmo
+--------------------------
+- Fixed Coverity defect in G4VIntersectionLocator. Some minor code cleanup...
+
+October 14, 2015 - J.Apostolakis
+--------------------------------
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Ensure that splitting of step (new level / depth) advances the required
+    length by calling ChordFinder's AdvanceChordLimited method
+      ( instead of method AccurateAdvance of Driver.)
+       Used when adding a new level / depth.
+   Addresses issue seen by ALICE (non-finishing of step due to poor advances).
+- Added method in G4VIntersectionLocator to report Immediate Hit
+    - ie if the intersection point is within tolerance of the start point 
+- G4NavigationLogger: Added method to report issue with normal that 
+    is the result of applying a rotation (which prints the matrix.)
+- G4NormalNavigation, G4VoxelNavigation: Added check of rotated exit normal
+    
+October 11, 2015 - G.Cosmo
+-------------------------
+- Fix in G4MultiLevelLocator::EstimateIntersectionPoint(): revised condition
+  of 'while' loop which ensures that a new candidate intersection exists.
+  Corrected the resetting of 'first_section' flag: when the linear search is
+  progressing well, several (>1) iterations of the outer loop can be part of
+  the initial sections (i.e. before any bi-section = depth increase).
+  (J.Apostolakis)
+- Removed more debug printouts and conditions.
+- Fixed compilation warning in G4MultiLevelLocator.
+    
+September 5, 2015 - G.Cosmo
+---------------------------	
+- Removed left-over debug statement introduced previously;
+  fixing compilation warning on clang compiler.
+
+September 4, 2015 - G.Cosmo
+---------------------------	
+- Removed 'tracing' mode in G4MultiLevelLocator.
+- Some code cleanup.
+
+September 2, 2015 - J.Apostolakis
+---------------------------------	
+- G4MultiLevelLocator::EstimateIntersectionPoint():
+  * Fix for logic error in keeping consistent candidate intersection.
+    Copes with case that a candidate intersection is not found in the next
+    segment (typically in the 'second half' part).
+    Correction was to examine additional segments until a chord is found that
+    intersects (changing 'if' to 'while') or all were exhausted (then no
+    intersection exists).
+  * Includes new flags and consistency check - in an assert.
+  * Added a 'tracing' mode, to report each call, and the path taken.
+    Off by default. Likely to be suppressed in a future tag.
+- G4VIntersectionLoator: new methods & revised interfaces.
+  Added new auxiliary methods: ReportReversedPoints(), ReportProgress() and
+  CheckAndReEstimateEndpoint().
+  Revised arguments of methods:
+  * ReEstimateEndpoint(): Ignore & recalculate redundant parameters.
+  * Made printStatus( with stream ) static, and added verbose argument.
+  * Changed ostringstream argument to ostream in PrintStatus (more flexible
+    as it can now be used directly with std::cout).
+
+August 4, 2015 - G.Cosmo
+------------------------	
+- G4VIntersectionLocator: properly initialise 'fCheckMode'; fixing Coverity
+  defect.
 
 May 10, 2015 - J.Apostolakis (geomnav-V10-00-22)
 ----------------------------	

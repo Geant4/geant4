@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4EllipticalCone.cc 95301 2016-02-04 11:25:33Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -216,7 +216,7 @@ G4EllipticalCone::CalculateExtent( const EAxis axis,
                 w0, w1;
   transform.ApplyPointTransform( v0 );
   transform.ApplyPointTransform( v1 );
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff
@@ -1008,6 +1008,8 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
                 + sqr(ySemiAxis))*(zheight - zTopCut);
   G4double rTwo = std::sqrt(sqr(xSemiAxis)
                 + sqr(ySemiAxis))*(zheight + zTopCut);
+
+  G4int it1=0, it2=0;
   
   aOne   = pi*(rOne + rTwo)*std::sqrt(sqr(rOne - rTwo)+sqr(2.*zTopCut));
   aTwo   = pi*xSemiAxis*ySemiAxis*sqr(zheight+zTopCut);
@@ -1028,11 +1030,11 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   }
   else if((chose>=aOne) && (chose<aOne+aTwo))
   {
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       rRand1 = RandFlat::shoot(0.,1.) ;
       rRand2 = RandFlat::shoot(0.,1.) ;
-    } while ( rRand2 >= rRand1  ) ;
+    } while (( rRand2 >= rRand1  ) && (++it1 < 1000)) ;
 
     //    rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
     return G4ThreeVector(rRand1*xSemiAxis*(zheight+zTopCut)*cosphi,
@@ -1042,11 +1044,11 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   // else
   //
 
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     rRand1 = RandFlat::shoot(0.,1.) ;
     rRand2 = RandFlat::shoot(0.,1.) ;
-  } while ( rRand2 >= rRand1  ) ;
+  } while (( rRand2 >= rRand1  ) && (++it2 < 1000));
 
   return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut)*cosphi,
                        rRand1*ySemiAxis*(zheight-zTopCut)*sinphi, zTopCut);

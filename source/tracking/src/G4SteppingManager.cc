@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc 77790 2013-11-28 09:52:16Z gcosmo $
+// $Id: G4SteppingManager.cc 95338 2016-02-05 07:59:45Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -318,6 +318,11 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
         fTrack->SetNextTouchableHandle( fTouchableHandle );
      }
   }
+// Set OriginTouchableHandle for primary track
+   if(fTrack->GetParentID()==0){
+     fTrack->SetOriginTouchableHandle(fTrack->GetTouchableHandle());
+   }
+
 // Set vertex information of G4Track at here
    if ( fTrack->GetCurrentStepNumber() == 0 ) {
      fTrack->SetVertexPosition( fTrack->GetPosition() );

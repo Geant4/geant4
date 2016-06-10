@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4VTransitionRadiation.cc 95274 2016-02-03 10:10:22Z gcosmo $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -41,6 +41,7 @@
 #include "G4Material.hh"
 #include "G4Region.hh"
 #include "G4TransportationManager.hh"
+#include "G4EmProcessSubType.hh"
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -53,6 +54,7 @@ G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName,
   gammaMin(100),
   cosDThetaMax(std::cos(0.1))
 {
+  SetProcessSubType(fTransitionRadiation);
   Clear();
 }
 

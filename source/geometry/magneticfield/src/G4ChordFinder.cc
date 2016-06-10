@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ChordFinder.cc 95290 2016-02-04 08:14:10Z gcosmo $
 //
 //
 // 25.02.97 - John Apostolakis - Design and implementation 
@@ -239,15 +239,17 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
 
   fIntgrDriver-> GetDerivatives( yCurrent, dydx );
 
-  G4int     noTrials=0;
+  unsigned int        noTrials=0;
+  const unsigned int  maxTrials= 300; // Avoid endless loop for bad convergence 
+
   const G4double safetyFactor= fFirstFraction; //  0.975 or 0.99 ? was 0.999
 
   stepTrial = std::min( stepMax, safetyFactor*fLastStepEstimate_Unconstrained );
 
   G4double newStepEst_Uncons= 0.0; 
+  G4double stepForChord;
   do
   { 
-     G4double stepForChord;  
      yCurrent = yStart;    // Always start from initial point
     
      //            ************
@@ -281,7 +283,21 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack& yStart,
      }
      noTrials++; 
   }
-  while( ! validEndPoint );   // End of do-while  RKD 
+  while( (! validEndPoint) && (noTrials < maxTrials) );   // End of do-while  RKD 
+
+  if( noTrials >= maxTrials )
+  {
+      std::ostringstream message;
+      message << "Exceeded maximum number of trials= " << maxTrials << G4endl
+              << "Current sagita dist= " << dChordStep << G4endl
+              << "Step sizes (actual and proposed): " << G4endl
+              << "Last trial =         " << lastStepLength  << G4endl
+              << "Next trial =         " << stepTrial  << G4endl
+              << "Proposed for chord = " << stepForChord  << G4endl              
+              ;
+      G4Exception("G4ChordFinder::FindNextChord()", "GeomField0003",
+                  JustWarning, message);
+  }
 
   if( newStepEst_Uncons > 0.0  )
   {

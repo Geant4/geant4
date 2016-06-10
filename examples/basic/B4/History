@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09/12/15 I. Hrivnacova (exampleB4-V10-00-05)
+- Restored the third parameter in G4UIsession construction, which was
+  lost when moving G4UIExecutive at the beginning of main().
+  This fixes the problem report #1802.
+
 18/02/15 I. Hrivnacova (exampleB4-V10-00-04)
 - Fixed accessing gapHit (problem report #1714)
 	 

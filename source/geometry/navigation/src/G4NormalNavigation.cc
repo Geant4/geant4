@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc 90836 2015-06-10 09:31:06Z gcosmo $
+// $Id: G4NormalNavigation.cc 95294 2016-02-04 09:13:46Z gcosmo $
 //
 //
 // class G4NormalNavigation Implementation
@@ -305,6 +305,13 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
           if (rot)
           {
             exitNormal *= rot->inverse();
+#ifdef G4VERBOSE
+            if( fCheck )
+               fLogger->CheckAndReportBadNormal(exitNormal,        // rotated
+                                                motherExitNormal,  // original 
+                                                *rot,
+                                                "From RotationMatrix" );
+#endif            
           }
         }
       }

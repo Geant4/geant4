@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiLevelLocator.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4MultiLevelLocator.hh 95294 2016-02-04 09:13:46Z gcosmo $
 //
 //
 // Class G4MultiLevelLocator 
@@ -70,12 +70,31 @@ class G4MultiLevelLocator : public G4VIntersectionLocator
       // of the current volume (or of one of its daughters). 
       // Should use lateral displacement as measure of convergence
 
+     void ReportStatistics(); 
+
+     inline void SetMaxSteps(unsigned int valMax) { fMaxSteps= valMax; }
+     inline void SetWarnSteps(unsigned int valWarn) { fWarnSteps= valWarn; }
+
    private:
 
-     static const G4int max_depth=10;
+     void ReportFieldValue( const G4FieldTrack& locationPV,
+                            const char* nameLoc,
+                            const G4EquationOfMotion* equation );
 
+     // Invariants -- parameters
+     // ====================================   
+     static const G4int max_depth=10;
+     unsigned int fMaxSteps;   // Effort abandoned; signal particle is looping 
+     unsigned int fWarnSteps;  // Warn about many steps (but it has succeeded)
+
+     // State - varies during simulation
+     // ====================================
      G4FieldTrack* ptrInterMedFT[max_depth+1];
        // Used to store intermediate tracks values in case of too slow progress
+
+     unsigned long int fNumCalls; 
+     unsigned long int fNumAdvanceFull, fNumAdvanceGood, fNumAdvanceTrials;
+      //  Counters for statistics & debugging
 };
 
 #endif

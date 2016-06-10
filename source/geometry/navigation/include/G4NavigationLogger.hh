@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLogger.hh 90836 2015-06-10 09:31:06Z gcosmo $
+// $Id: G4NavigationLogger.hh 95294 2016-02-04 09:13:46Z gcosmo $
 //
 // 
 // class G4NavigationLogger
@@ -104,8 +104,14 @@ class G4NavigationLogger
                                          G4double       step,
                                    const G4VSolid*      solid,                                 
                                    const char* msg ) const;
-      // Report issue with normal - for ComputeStep()
-  
+      // Report issue with normal from Solid    - for ComputeStep()
+
+   G4bool CheckAndReportBadNormal(const G4ThreeVector& unitNormal,
+                                  const G4ThreeVector& originalNormal,
+                                  const G4RotationMatrix& rotationM,
+                                  const char*          msg ) const;
+      // Report issue with normal from Rotation - for ComputeStep()
+   
     void ReportOutsideMother(const G4ThreeVector& localPoint,
                              const G4ThreeVector& localDirection,
                              const G4VPhysicalVolume* motherPV,

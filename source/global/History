@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 17, 2015 G.Cosmo (global-V10-00-48)
+- Corrected conditions for proper treatment of gcc-5 in tls.hh and
+  G4Threading.hh.
+
+December 10, 2015 G.Cosmo
+- Removed unused and buggy operator=(const G4String&) in G4SubString.
+
+September 18, 2015 J.Allison
+- Added string length check in G4String::operator==.
+
+August 28, 2015 G.Cosmo
+- Tune radial tolerance to same value as for Cartesian in G4GeometryTolerance.
+
+August 21, 2015 J.Allison
+- Added 'inline' specification to functions in G4String.icc.
+
+August 10, 2015 G.Cosmo
+- Force use of G4MT wrappers for Intel-icc compiler for random numbers.
+
 June 12, 2015 A.Dotti (global-V10-00-47)
 - Fix bug in G4CacheReference::Destroy method
 - Modify behavior of G4Cache to identify internal

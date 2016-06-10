@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4EllipticalTube.cc 95301 2016-02-04 11:25:33Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -183,7 +183,7 @@ G4EllipticalTube::CalculateExtent( const EAxis axis,
                 w0, w1;
   transform.ApplyPointTransform( v0 );
   transform.ApplyPointTransform( v1 );
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     phi += sigPhi;
     if (numPhi == 1) phi = 0;  // Try to avoid roundoff

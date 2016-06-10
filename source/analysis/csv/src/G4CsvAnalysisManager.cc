@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvAnalysisManager.cc 85317 2014-10-27 15:58:15Z gcosmo $
+// $Id: G4CsvAnalysisManager.cc 95250 2016-02-02 10:33:05Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -527,12 +527,8 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   // object in WriteHn{Pn] function
  
   // Close ntuple files
-  if ( ( ! G4Threading::IsMultithreadedApplication() ) || 
-       ( ! fState.GetIsMaster() ) ) {
-    // In sequential mode or in MT mode only on workers
-    result = CloseNtupleFiles();
-    finalResult = finalResult && result;
-  }  
+  result = CloseNtupleFiles();
+  finalResult = finalResult && result;
 
   // reset data
   result = Reset();

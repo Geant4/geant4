@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolycone.cc 75219 2013-10-29 16:12:13Z gcosmo $
+// $Id: G4ParameterisationPolycone.cc 95287 2016-02-03 14:37:00Z gcosmo $
 //
 // class G4ParameterisationPolycone Implementation file
 //
@@ -48,6 +48,14 @@ G4VParameterisationPolycone( EAxis axis, G4int nDiv, G4double width,
                              DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+#ifdef G4MULTITHREADED
+   std::ostringstream message;
+   message << "Divisions for G4Polycone currently NOT supported in MT-mode."
+           << G4endl
+           << "Sorry! Solid: " << msolid->GetName();
+   G4Exception("G4VParameterisationPolycone::G4VParameterisationPolycone()",
+               "GeomDiv0001", FatalException, message);
+#endif
   G4Polycone* msol = (G4Polycone*)(msolid);
   if (msolid->GetEntityType() == "G4ReflectedSolid")
   {
@@ -474,7 +482,7 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
           isegend = counter;
         }   
         ++counter;   
-      }
+      }  // Loop checking, 06.08.2015, G.Cosmo
     }
     else  {
       // The start/end position of the divided region
@@ -496,7 +504,7 @@ void G4ParameterisationPolyconeZ::CheckParametersValidity()
            isegend = counter;
         }   
         ++counter;   
-      }
+      }  // Loop checking, 06.08.2015, G.Cosmo
     }
       
   

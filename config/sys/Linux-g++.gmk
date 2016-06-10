@@ -1,5 +1,5 @@
 #
-# ------ GNU/LINUX ------ gcc 3.2 and higher
+# ------ GNU/LINUX ------ gcc 4.8 and higher
 #
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
@@ -9,6 +9,16 @@ ifeq ($(G4SYSTEM),Linux-g++)
   ifdef G4USE_STD11
     CPPFLAGS  += -std=c++11
     CXXFLAGS  += -std=c++11
+  endif
+  ifdef G4USE_STD14
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++14
+    CXXFLAGS  += -std=c++14
+  endif
+  ifdef G4USE_STD17
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++17
+    CXXFLAGS  += -std=c++17
   endif
 #
 # Uncomment the following options to activate Pentium4 chip specific

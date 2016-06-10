@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4PVDivision.cc 95287 2016-02-03 14:37:00Z gcosmo $
 //
 // class G4PVDivision Implementation file
 //
@@ -240,7 +240,6 @@ G4PVDivision::CheckAndSetParameters( const EAxis pAxis,
 //--------------------------------------------------------------------------
 G4PVDivision::~G4PVDivision()
 {
-  delete GetRotation();
 }
 
 //--------------------------------------------------------------------------

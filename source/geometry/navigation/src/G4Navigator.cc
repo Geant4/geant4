@@ -727,7 +727,7 @@ void G4Navigator::RestoreSavedState()
 //
 // fBlockedPhysicalVolume - Ptr to exited volume (or 0)
 // fBlockedReplicaNo - Replication no of exited volume
-// fLastStepWasZero  - True if last Step size was zero.
+// fLastStepWasZero  - True if last Step size was almost zero.
 //
 // Flags on exit:
 // -------------
@@ -738,7 +738,7 @@ void G4Navigator::RestoreSavedState()
 // fEntering         - True if entering `daughter' volume (or replica)
 // fBlockedPhysicalVolume - Ptr to candidate (entered) volume
 // fBlockedReplicaNo - Replication no of candidate (entered) volume
-// fLastStepWasZero  - True if this Step size was zero.
+// fLastStepWasZero  - True if this Step size was almost zero.
 // ********************************************************************
 //
 G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
@@ -761,6 +761,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fCalculatedExitNormal  = false;
     // Reset for new step
 
+  static const G4double minStep = 0.05*kCarTolerance;
   static G4ThreadLocal G4int sNavCScalls=0;
   sNavCScalls++;
 
@@ -971,7 +972,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   //                checked
   //
   fLocatedOnEdge   = fLastStepWasZero && (Step==0.0);
-  fLastStepWasZero = (Step==0.0);
+  fLastStepWasZero = (Step<minStep);
   if (fPushed)  { fPushed = fLastStepWasZero; }
 
   // Handle large number of consecutive zero steps
@@ -982,11 +983,12 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
 #ifdef G4DEBUG_NAVIGATION
     if( fNumberZeroSteps > 1 )
     {
-       G4cout << "G4Navigator::ComputeStep(): another zero step, # "
+       G4cout << "G4Navigator::ComputeStep(): another 'zero' step, # "
               << fNumberZeroSteps
-              << " at " << pGlobalpoint
-              << " in volume " << motherPhysical->GetName()
-              << " nav-comp-step calls # " << sNavCScalls
+              << ", at " << pGlobalpoint
+              << ", in volume " << motherPhysical->GetName()
+              << ", nav-comp-step calls # " << sNavCScalls
+              << ", Step= " << Step
               << G4endl;
     }
 #endif
@@ -1026,7 +1028,9 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
               << "        in volume -" << motherPhysical->GetName()
               << "- at point " << pGlobalpoint << G4endl
               << "        direction: " << pDirection << ".";
+#ifdef G4VERBOSE
       motherPhysical->CheckOverlaps(5000, false);
+#endif
       G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
                   EventMustBeAborted, message);
     }
@@ -2061,9 +2065,13 @@ void  G4Navigator::PrintState() const
            << "  Entering       = " << fEntering        // << G4endl
            << "  BlockedPhysicalVolume= " ;
     if (fBlockedPhysicalVolume==0)
+    {
       G4cout << "None";
+    }
     else
+    {
       G4cout << fBlockedPhysicalVolume->GetName();
+    }
     G4cout << G4endl
            << "  BlockedReplicaNo     = " <<  fBlockedReplicaNo   //  << G4endl
            << "  LastStepWasZero      = " <<   fLastStepWasZero   //  << G4endl

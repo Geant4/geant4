@@ -1,4 +1,4 @@
-$Id: History 86967 2014-11-21 11:51:28Z gcosmo $
+$Id: History 95380 2016-02-08 08:07:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 27, 2016, M. Asai (procscore-V10-00-03, 02)
+- G4ParallelWorldProcess: change processType from fParameterized
+  to fParallel and set the processSubType to 491.
+
+July 13, 2015, A. Dotti
+- Coverity fix #23298
+
+February 12, 2015, J.Apostolakis
+- G4ParallelWorldProcess: verbosity to check Update of fieldtrack
+   (protected with custom flag. )   
+    
 November 20, 2014, M.Asai (procscore-V10-00-01)
 - Coverity fixes.
 

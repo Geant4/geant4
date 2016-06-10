@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh 90699 2015-06-08 09:34:37Z gcosmo $
+// $Id: G4VDivisionParameterisation.hh 95287 2016-02-03 14:37:00Z gcosmo $
 //
 // class G4VDivisionParameterisation
 //
@@ -104,15 +104,15 @@ class G4VDivisionParameterisation : public G4VPVParameterisation
     G4VSolid* fmotherSolid;
     G4bool fReflectedSolid;
     G4bool fDeleteSolid;
-  
-    static G4ThreadLocal G4int verbose;
+
+    static G4ThreadLocal G4RotationMatrix* fRot;
+
+    static const G4int verbose;
     G4int theVoluFirstCopyNo;
 
     G4double kCarTolerance;
 
     G4double fhgap;
-
-    G4RotationMatrix* fRotMatrix;
 };
 
 #include "G4VDivisionParameterisation.icc"

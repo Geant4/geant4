@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronCaptureXS.hh 83697 2014-09-10 07:15:29Z gcosmo $
+// $Id: G4NeutronCaptureXS.hh 95283 2016-02-03 13:46:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -110,9 +110,7 @@ private:
   G4bool   isMaster;
 
   static G4ElementData* data;
-
-  std::vector<G4PhysicsVector*> work;
-  std::vector<G4double>         temp;
+  std::vector<G4double> temp;
 
   static const G4int amin[MAXZCAPTURE];
   static const G4int amax[MAXZCAPTURE];

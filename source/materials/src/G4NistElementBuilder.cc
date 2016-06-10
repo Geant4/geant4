@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc 72057 2013-07-04 13:07:29Z gcosmo $
+// $Id: G4NistElementBuilder.cc 95313 2016-02-04 14:03:35Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -211,7 +211,7 @@ void G4NistElementBuilder::PrintElement(G4int Z) const
     G4cout << "          mass(amu): ";
     for(j=0; j<nc; ++j) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
     G4cout << G4endl;
-    G4cout << "     abanbance: ";
+    G4cout << "     abundance: ";
     for(j=0; j<nc; ++j) {G4cout << relAbundance[idx + j] << " ";}
     G4cout << G4endl;
   }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc 70648 2013-06-03 15:15:16Z gcosmo $
+// $Id: G4PolyhedraSide.cc 95301 2016-02-04 11:25:33Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -101,7 +101,8 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   // Set phi to our convention
   //
   startPhi = thePhiStart;
-  while (startPhi < 0.0) startPhi += twopi;
+  while (startPhi < 0.0)    // Loop checking, 13.08.2015, G.Cosmo
+    startPhi += twopi;
   
   phiIsOpen = thePhiIsOpen;
   phiTotal = (phiIsOpen) ? thePhiTotal : twopi;
@@ -136,7 +137,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   G4PolyhedraSideEdge *edge = edges;
           
   G4PolyhedraSideVec *vec = vecs;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
     // ...this is where we are going
@@ -235,7 +236,7 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
   //
   vec = vecs;
   G4PolyhedraSideVec *prev = vecs+numSide-1;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     edge = vec->edges[0];    // The edge between prev and vec
     
@@ -402,7 +403,7 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
   
   G4PolyhedraSideEdge *edge = edges,
           *sourceEdge = source.edges;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *edge = *sourceEdge;
   } while( ++sourceEdge, ++edge < edges + numEdges);
@@ -414,7 +415,7 @@ void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
   
   G4PolyhedraSideVec *vec = vecs,
          *sourceVec = source.vecs;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     *vec = *sourceVec;
     vec->edges[0] = edges + (sourceVec->edges[0] - source.edges);
@@ -507,7 +508,7 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p,
   
   G4int face = 0;
   G4PolyhedraSideVec *vec = vecs;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
     // Correct normal?
@@ -713,7 +714,7 @@ G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
   //
   best = -kInfinity;
   G4ThreeVector **vec = list;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     G4double answer = (*vec)->dot(axis);
     if (answer > best) best = answer;
@@ -737,7 +738,7 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
   // Loop over all sides
   //
   G4PolyhedraSideVec *vec = vecs;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     //
     // Fill our polygon with the four corners of
@@ -951,10 +952,12 @@ G4int G4PolyhedraSide::ClosestPhiSegment( G4double phi0 )
   //
   G4double phi = phi0;
   
-  while( phi < startPhi ) phi += twopi;
+  while( phi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+    phi += twopi;
   G4double d1 = phi-endPhi;
 
-  while( phi > startPhi ) phi -= twopi;
+  while( phi > startPhi )    // Loop checking, 13.08.2015, G.Cosmo
+    phi -= twopi;
   G4double d2 = startPhi-phi;
   
   return (d2 < d1) ? 0 : numSide-1;
@@ -975,8 +978,10 @@ G4int G4PolyhedraSide::PhiSegment( G4double phi0 )
   // that is less than 2*PI
   //
   G4double phi = phi0 - startPhi;
-  while( phi < 0      ) phi += twopi;
-  while( phi > twopi ) phi -= twopi;
+  while( phi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
+    phi += twopi;
+  while( phi > twopi )    // Loop checking, 13.08.2015, G.Cosmo
+    phi -= twopi;
 
   //
   // Divide
@@ -1262,7 +1267,7 @@ G4double G4PolyhedraSide::SurfaceArea()
 
     // Do a loop on all SideEdge
     //
-    do
+    do    // Loop checking, 13.08.2015, G.Cosmo
     {
       // Define 4points for a Plane or Triangle
       //
@@ -1297,7 +1302,7 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
 
   // Do a loop on all SideEdge
   //
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     // Define 4points for a Plane or Triangle
     //
@@ -1317,7 +1322,7 @@ G4ThreeVector G4PolyhedraSide::GetPointOnFace()
   G4double Achose1,Achose2;
   Achose1=0;Achose2=0.; 
   G4int i=0;
-  do 
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     Achose2+=areas[i];
     if(chose>=Achose1 && chose<Achose2)

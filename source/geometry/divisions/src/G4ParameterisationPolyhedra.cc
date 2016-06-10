@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ParameterisationPolyhedra.cc 95287 2016-02-03 14:37:00Z gcosmo $
 //
 // class G4ParameterisationPolyhedra Implementation file
 //
@@ -51,10 +51,18 @@ G4VParameterisationPolyhedra( EAxis axis, G4int nDiv, G4double width,
                               DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, divType, msolid )
 {
+  std::ostringstream message;
+#ifdef G4MULTITHREADED
+  message << "Divisions for G4Polyhedra currently NOT supported in MT-mode."
+          << G4endl
+          << "Sorry! Solid: " << msolid->GetName();
+  G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
+              "GeomDiv0001", FatalException, message);
+#endif
+
   G4Polyhedra* msol = (G4Polyhedra*)(msolid);
   if ((msolid->GetEntityType() != "G4ReflectedSolid") && (msol->IsGeneric()))
   {
-    std::ostringstream message;
     message << "Generic construct for G4Polyhedra NOT supported." << G4endl
             << "Sorry! Solid: " << msol->GetName();
     G4Exception("G4VParameterisationPolyhedra::G4VParameterisationPolyhedra()",
@@ -555,7 +563,7 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
            isegend = counter;
         }   
         ++counter;   
-      }
+      }  // Loop checking, 06.08.2015, G.Cosmo
     }
     else  {
       // The start/end position of the divided region
@@ -577,7 +585,7 @@ void G4ParameterisationPolyhedraZ::CheckParametersValidity()
            isegend = counter;
         }   
         ++counter;   
-      }
+      }  // Loop checking, 06.08.2015, G.Cosmo
     }
   
     if ( isegstart != isegend ) {

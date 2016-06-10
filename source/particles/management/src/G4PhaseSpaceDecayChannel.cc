@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 82335 2014-06-16 10:00:42Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 95335 2016-02-05 07:47:45Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -168,7 +168,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
@@ -268,7 +268,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   
    //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
-  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0);
+  G4DynamicParticle * parentparticle = new G4DynamicParticle( G4MT_parent, dummy, 0.0, parentmass);
 
 
   //create G4Decayproducts
@@ -616,7 +616,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   //create G4Decayproducts
   G4DynamicParticle *parentparticle; 
   direction.setX(1.0);  direction.setY(0.0); direction.setZ(0.0);
-  parentparticle = new G4DynamicParticle( G4MT_parent, direction, 0.0);
+  parentparticle = new G4DynamicParticle( G4MT_parent, direction, 0.0, parentmass);
   products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
   for (index = 0; index<numberOfDaughters; index++) {

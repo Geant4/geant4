@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4CutTubs.cc 95299 2016-02-04 09:46:19Z gcosmo $
 //
 // 
 // class G4CutTubs
@@ -2122,7 +2122,7 @@ void G4CutTubs::GetMaxMinZ(G4double& zmin,G4double& zmax)const
       in_range_hi = true;
     }
     phiHigh += pi;
-    if (phiLow>twopi)  { phiHigh-=twopi; }
+    if (phiHigh>twopi)  { phiHigh-=twopi; }
   }
 
   xc = fRMin*std::cos(fSPhi);

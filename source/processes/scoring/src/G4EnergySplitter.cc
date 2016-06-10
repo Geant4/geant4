@@ -48,7 +48,9 @@ G4EnergySplitter::G4EnergySplitter()
 }
 
 G4EnergySplitter::~G4EnergySplitter()
-{;}
+{
+	delete theElossExt;
+}
 
 G4int G4EnergySplitter::SplitEnergyInVolumes(const G4Step* aStep )
 {

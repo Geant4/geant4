@@ -1,0 +1,1585 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-patch-03    (5-February-2016)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+MT MODE OFF
+DetectorConstructor::SetXtalMaterial() - New Xtal Material: G4_Si
+Using Root
+
+XLatticeManager3::registerLattice: Registering Lattice.Total number of lattices:1
+
+ G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+
+ ExExChProcessChanneling::Constructor:Geometry surface tolerance is: 1e-09 mm
+
+PhysicsList::AddChanneling: Channeling process added...
+
+### ExExChPhysicsList::ConstructProcess is done
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 10 eV  to 1 MeV, 20 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 140 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=       10 TeV  FluoActive
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 154 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       PenConversion :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 10 eV  to 100 keV, 20 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 160 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 TeV   CullenGenerator
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eSingleCoulombScat :  Emin=        0 eV    Emax=       10 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             PenIoni :  Emin=        0 eV    Emax=      100 keV
+        MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eSingleCoulombScat :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      Stopping Power data for 17 ion/material pairs 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+CoulombScat:   for  GenericIon, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+IonCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+
+CoulombScat:   for  alpha, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+IonCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 0
+      0 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 4 GeV ---> 25 GeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      QGSP: 12 GeV ---> 100 TeV
+        Model:                      FTFP: 9.5 GeV ---> 25 GeV
+        Model:            Binary Cascade: 0 eV  ---> 9.9 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+### Run 0 starts.
+... open Root analysis file : ExExCh.root - done
+--> Event 0 starts.
+--> Event 1 starts.
+--> Event 2 starts.
+--> Event 3 starts.
+--> Event 4 starts.
+--> Event 5 starts.
+--> Event 6 starts.
+--> Event 7 starts.
+--> Event 8 starts.
+--> Event 9 starts.
+--> Event 10 starts.
+--> Event 11 starts.
+--> Event 12 starts.
+--> Event 13 starts.
+--> Event 14 starts.
+--> Event 15 starts.
+--> Event 16 starts.
+--> Event 17 starts.
+--> Event 18 starts.
+--> Event 19 starts.
+--> Event 20 starts.
+--> Event 21 starts.
+--> Event 22 starts.
+--> Event 23 starts.
+--> Event 24 starts.
+--> Event 25 starts.
+--> Event 26 starts.
+--> Event 27 starts.
+--> Event 28 starts.
+--> Event 29 starts.
+--> Event 30 starts.
+--> Event 31 starts.
+--> Event 32 starts.
+--> Event 33 starts.
+--> Event 34 starts.
+--> Event 35 starts.
+--> Event 36 starts.
+--> Event 37 starts.
+--> Event 38 starts.
+--> Event 39 starts.
+--> Event 40 starts.
+--> Event 41 starts.
+--> Event 42 starts.
+--> Event 43 starts.
+--> Event 44 starts.
+--> Event 45 starts.
+--> Event 46 starts.
+--> Event 47 starts.
+--> Event 48 starts.
+--> Event 49 starts.
+--> Event 50 starts.
+--> Event 51 starts.
+--> Event 52 starts.
+--> Event 53 starts.
+--> Event 54 starts.
+--> Event 55 starts.
+--> Event 56 starts.
+--> Event 57 starts.
+--> Event 58 starts.
+--> Event 59 starts.
+--> Event 60 starts.
+--> Event 61 starts.
+--> Event 62 starts.
+--> Event 63 starts.
+--> Event 64 starts.
+--> Event 65 starts.
+--> Event 66 starts.
+--> Event 67 starts.
+--> Event 68 starts.
+--> Event 69 starts.
+--> Event 70 starts.
+--> Event 71 starts.
+--> Event 72 starts.
+--> Event 73 starts.
+--> Event 74 starts.
+--> Event 75 starts.
+--> Event 76 starts.
+--> Event 77 starts.
+--> Event 78 starts.
+--> Event 79 starts.
+--> Event 80 starts.
+--> Event 81 starts.
+--> Event 82 starts.
+--> Event 83 starts.
+--> Event 84 starts.
+--> Event 85 starts.
+--> Event 86 starts.
+--> Event 87 starts.
+--> Event 88 starts.
+--> Event 89 starts.
+--> Event 90 starts.
+--> Event 91 starts.
+--> Event 92 starts.
+--> Event 93 starts.
+--> Event 94 starts.
+--> Event 95 starts.
+--> Event 96 starts.
+--> Event 97 starts.
+--> Event 98 starts.
+--> Event 99 starts.
+--> Event 100 starts.
+--> Event 101 starts.
+--> Event 102 starts.
+--> Event 103 starts.
+--> Event 104 starts.
+--> Event 105 starts.
+--> Event 106 starts.
+--> Event 107 starts.
+--> Event 108 starts.
+--> Event 109 starts.
+--> Event 110 starts.
+--> Event 111 starts.
+--> Event 112 starts.
+--> Event 113 starts.
+--> Event 114 starts.
+--> Event 115 starts.
+--> Event 116 starts.
+--> Event 117 starts.
+--> Event 118 starts.
+--> Event 119 starts.
+--> Event 120 starts.
+--> Event 121 starts.
+--> Event 122 starts.
+--> Event 123 starts.
+--> Event 124 starts.
+--> Event 125 starts.
+--> Event 126 starts.
+--> Event 127 starts.
+--> Event 128 starts.
+--> Event 129 starts.
+--> Event 130 starts.
+--> Event 131 starts.
+--> Event 132 starts.
+--> Event 133 starts.
+--> Event 134 starts.
+--> Event 135 starts.
+--> Event 136 starts.
+--> Event 137 starts.
+--> Event 138 starts.
+--> Event 139 starts.
+--> Event 140 starts.
+--> Event 141 starts.
+--> Event 142 starts.
+--> Event 143 starts.
+--> Event 144 starts.
+--> Event 145 starts.
+--> Event 146 starts.
+--> Event 147 starts.
+--> Event 148 starts.
+--> Event 149 starts.
+--> Event 150 starts.
+--> Event 151 starts.
+--> Event 152 starts.
+--> Event 153 starts.
+--> Event 154 starts.
+--> Event 155 starts.
+--> Event 156 starts.
+--> Event 157 starts.
+--> Event 158 starts.
+--> Event 159 starts.
+--> Event 160 starts.
+--> Event 161 starts.
+--> Event 162 starts.
+--> Event 163 starts.
+--> Event 164 starts.
+--> Event 165 starts.
+--> Event 166 starts.
+--> Event 167 starts.
+--> Event 168 starts.
+--> Event 169 starts.
+--> Event 170 starts.
+--> Event 171 starts.
+--> Event 172 starts.
+--> Event 173 starts.
+--> Event 174 starts.
+--> Event 175 starts.
+--> Event 176 starts.
+--> Event 177 starts.
+--> Event 178 starts.
+--> Event 179 starts.
+--> Event 180 starts.
+--> Event 181 starts.
+--> Event 182 starts.
+--> Event 183 starts.
+--> Event 184 starts.
+--> Event 185 starts.
+--> Event 186 starts.
+--> Event 187 starts.
+--> Event 188 starts.
+--> Event 189 starts.
+--> Event 190 starts.
+--> Event 191 starts.
+--> Event 192 starts.
+--> Event 193 starts.
+--> Event 194 starts.
+--> Event 195 starts.
+--> Event 196 starts.
+--> Event 197 starts.
+--> Event 198 starts.
+--> Event 199 starts.
+--> Event 200 starts.
+--> Event 201 starts.
+--> Event 202 starts.
+--> Event 203 starts.
+--> Event 204 starts.
+--> Event 205 starts.
+--> Event 206 starts.
+--> Event 207 starts.
+--> Event 208 starts.
+--> Event 209 starts.
+--> Event 210 starts.
+--> Event 211 starts.
+--> Event 212 starts.
+--> Event 213 starts.
+--> Event 214 starts.
+--> Event 215 starts.
+--> Event 216 starts.
+--> Event 217 starts.
+--> Event 218 starts.
+--> Event 219 starts.
+--> Event 220 starts.
+--> Event 221 starts.
+--> Event 222 starts.
+--> Event 223 starts.
+--> Event 224 starts.
+--> Event 225 starts.
+--> Event 226 starts.
+--> Event 227 starts.
+--> Event 228 starts.
+--> Event 229 starts.
+--> Event 230 starts.
+--> Event 231 starts.
+--> Event 232 starts.
+--> Event 233 starts.
+--> Event 234 starts.
+--> Event 235 starts.
+--> Event 236 starts.
+--> Event 237 starts.
+--> Event 238 starts.
+--> Event 239 starts.
+--> Event 240 starts.
+--> Event 241 starts.
+--> Event 242 starts.
+--> Event 243 starts.
+--> Event 244 starts.
+--> Event 245 starts.
+--> Event 246 starts.
+--> Event 247 starts.
+--> Event 248 starts.
+--> Event 249 starts.
+--> Event 250 starts.
+--> Event 251 starts.
+--> Event 252 starts.
+--> Event 253 starts.
+--> Event 254 starts.
+--> Event 255 starts.
+--> Event 256 starts.
+--> Event 257 starts.
+--> Event 258 starts.
+--> Event 259 starts.
+--> Event 260 starts.
+--> Event 261 starts.
+--> Event 262 starts.
+--> Event 263 starts.
+--> Event 264 starts.
+--> Event 265 starts.
+--> Event 266 starts.
+--> Event 267 starts.
+--> Event 268 starts.
+--> Event 269 starts.
+--> Event 270 starts.
+--> Event 271 starts.
+--> Event 272 starts.
+--> Event 273 starts.
+--> Event 274 starts.
+--> Event 275 starts.
+--> Event 276 starts.
+--> Event 277 starts.
+--> Event 278 starts.
+--> Event 279 starts.
+--> Event 280 starts.
+--> Event 281 starts.
+--> Event 282 starts.
+--> Event 283 starts.
+--> Event 284 starts.
+--> Event 285 starts.
+--> Event 286 starts.
+--> Event 287 starts.
+--> Event 288 starts.
+--> Event 289 starts.
+--> Event 290 starts.
+--> Event 291 starts.
+--> Event 292 starts.
+--> Event 293 starts.
+--> Event 294 starts.
+--> Event 295 starts.
+--> Event 296 starts.
+--> Event 297 starts.
+--> Event 298 starts.
+--> Event 299 starts.
+--> Event 300 starts.
+--> Event 301 starts.
+--> Event 302 starts.
+--> Event 303 starts.
+--> Event 304 starts.
+--> Event 305 starts.
+--> Event 306 starts.
+--> Event 307 starts.
+--> Event 308 starts.
+--> Event 309 starts.
+--> Event 310 starts.
+--> Event 311 starts.
+--> Event 312 starts.
+--> Event 313 starts.
+--> Event 314 starts.
+--> Event 315 starts.
+--> Event 316 starts.
+--> Event 317 starts.
+--> Event 318 starts.
+--> Event 319 starts.
+--> Event 320 starts.
+--> Event 321 starts.
+--> Event 322 starts.
+--> Event 323 starts.
+--> Event 324 starts.
+--> Event 325 starts.
+--> Event 326 starts.
+--> Event 327 starts.
+--> Event 328 starts.
+--> Event 329 starts.
+--> Event 330 starts.
+--> Event 331 starts.
+--> Event 332 starts.
+--> Event 333 starts.
+--> Event 334 starts.
+--> Event 335 starts.
+--> Event 336 starts.
+--> Event 337 starts.
+--> Event 338 starts.
+--> Event 339 starts.
+--> Event 340 starts.
+--> Event 341 starts.
+--> Event 342 starts.
+--> Event 343 starts.
+--> Event 344 starts.
+--> Event 345 starts.
+--> Event 346 starts.
+--> Event 347 starts.
+--> Event 348 starts.
+--> Event 349 starts.
+--> Event 350 starts.
+--> Event 351 starts.
+--> Event 352 starts.
+--> Event 353 starts.
+--> Event 354 starts.
+--> Event 355 starts.
+--> Event 356 starts.
+--> Event 357 starts.
+--> Event 358 starts.
+--> Event 359 starts.
+--> Event 360 starts.
+--> Event 361 starts.
+--> Event 362 starts.
+--> Event 363 starts.
+--> Event 364 starts.
+--> Event 365 starts.
+--> Event 366 starts.
+--> Event 367 starts.
+--> Event 368 starts.
+--> Event 369 starts.
+--> Event 370 starts.
+--> Event 371 starts.
+--> Event 372 starts.
+--> Event 373 starts.
+--> Event 374 starts.
+--> Event 375 starts.
+--> Event 376 starts.
+--> Event 377 starts.
+--> Event 378 starts.
+--> Event 379 starts.
+--> Event 380 starts.
+--> Event 381 starts.
+--> Event 382 starts.
+--> Event 383 starts.
+--> Event 384 starts.
+--> Event 385 starts.
+--> Event 386 starts.
+--> Event 387 starts.
+--> Event 388 starts.
+--> Event 389 starts.
+--> Event 390 starts.
+--> Event 391 starts.
+--> Event 392 starts.
+--> Event 393 starts.
+--> Event 394 starts.
+--> Event 395 starts.
+--> Event 396 starts.
+--> Event 397 starts.
+--> Event 398 starts.
+--> Event 399 starts.
+--> Event 400 starts.
+--> Event 401 starts.
+--> Event 402 starts.
+--> Event 403 starts.
+--> Event 404 starts.
+--> Event 405 starts.
+--> Event 406 starts.
+--> Event 407 starts.
+--> Event 408 starts.
+--> Event 409 starts.
+--> Event 410 starts.
+--> Event 411 starts.
+--> Event 412 starts.
+--> Event 413 starts.
+--> Event 414 starts.
+--> Event 415 starts.
+--> Event 416 starts.
+--> Event 417 starts.
+--> Event 418 starts.
+--> Event 419 starts.
+--> Event 420 starts.
+--> Event 421 starts.
+--> Event 422 starts.
+--> Event 423 starts.
+--> Event 424 starts.
+--> Event 425 starts.
+--> Event 426 starts.
+--> Event 427 starts.
+--> Event 428 starts.
+--> Event 429 starts.
+--> Event 430 starts.
+--> Event 431 starts.
+--> Event 432 starts.
+--> Event 433 starts.
+--> Event 434 starts.
+--> Event 435 starts.
+--> Event 436 starts.
+--> Event 437 starts.
+--> Event 438 starts.
+--> Event 439 starts.
+--> Event 440 starts.
+--> Event 441 starts.
+--> Event 442 starts.
+--> Event 443 starts.
+--> Event 444 starts.
+--> Event 445 starts.
+--> Event 446 starts.
+--> Event 447 starts.
+--> Event 448 starts.
+--> Event 449 starts.
+--> Event 450 starts.
+--> Event 451 starts.
+--> Event 452 starts.
+--> Event 453 starts.
+--> Event 454 starts.
+--> Event 455 starts.
+--> Event 456 starts.
+--> Event 457 starts.
+--> Event 458 starts.
+--> Event 459 starts.
+--> Event 460 starts.
+--> Event 461 starts.
+--> Event 462 starts.
+--> Event 463 starts.
+--> Event 464 starts.
+--> Event 465 starts.
+--> Event 466 starts.
+--> Event 467 starts.
+--> Event 468 starts.
+--> Event 469 starts.
+--> Event 470 starts.
+--> Event 471 starts.
+--> Event 472 starts.
+--> Event 473 starts.
+--> Event 474 starts.
+--> Event 475 starts.
+--> Event 476 starts.
+--> Event 477 starts.
+--> Event 478 starts.
+--> Event 479 starts.
+--> Event 480 starts.
+--> Event 481 starts.
+--> Event 482 starts.
+--> Event 483 starts.
+--> Event 484 starts.
+--> Event 485 starts.
+--> Event 486 starts.
+--> Event 487 starts.
+--> Event 488 starts.
+--> Event 489 starts.
+--> Event 490 starts.
+--> Event 491 starts.
+--> Event 492 starts.
+--> Event 493 starts.
+--> Event 494 starts.
+--> Event 495 starts.
+--> Event 496 starts.
+--> Event 497 starts.
+--> Event 498 starts.
+--> Event 499 starts.
+--> Event 500 starts.
+--> Event 501 starts.
+--> Event 502 starts.
+--> Event 503 starts.
+--> Event 504 starts.
+--> Event 505 starts.
+--> Event 506 starts.
+--> Event 507 starts.
+--> Event 508 starts.
+--> Event 509 starts.
+--> Event 510 starts.
+--> Event 511 starts.
+--> Event 512 starts.
+--> Event 513 starts.
+--> Event 514 starts.
+--> Event 515 starts.
+--> Event 516 starts.
+--> Event 517 starts.
+--> Event 518 starts.
+--> Event 519 starts.
+--> Event 520 starts.
+--> Event 521 starts.
+--> Event 522 starts.
+--> Event 523 starts.
+--> Event 524 starts.
+--> Event 525 starts.
+--> Event 526 starts.
+--> Event 527 starts.
+--> Event 528 starts.
+--> Event 529 starts.
+--> Event 530 starts.
+--> Event 531 starts.
+--> Event 532 starts.
+--> Event 533 starts.
+--> Event 534 starts.
+--> Event 535 starts.
+--> Event 536 starts.
+--> Event 537 starts.
+--> Event 538 starts.
+--> Event 539 starts.
+--> Event 540 starts.
+--> Event 541 starts.
+--> Event 542 starts.
+--> Event 543 starts.
+--> Event 544 starts.
+--> Event 545 starts.
+--> Event 546 starts.
+--> Event 547 starts.
+--> Event 548 starts.
+--> Event 549 starts.
+--> Event 550 starts.
+--> Event 551 starts.
+--> Event 552 starts.
+--> Event 553 starts.
+--> Event 554 starts.
+--> Event 555 starts.
+--> Event 556 starts.
+--> Event 557 starts.
+--> Event 558 starts.
+--> Event 559 starts.
+--> Event 560 starts.
+--> Event 561 starts.
+--> Event 562 starts.
+--> Event 563 starts.
+--> Event 564 starts.
+--> Event 565 starts.
+--> Event 566 starts.
+--> Event 567 starts.
+--> Event 568 starts.
+--> Event 569 starts.
+--> Event 570 starts.
+--> Event 571 starts.
+--> Event 572 starts.
+--> Event 573 starts.
+--> Event 574 starts.
+--> Event 575 starts.
+--> Event 576 starts.
+--> Event 577 starts.
+--> Event 578 starts.
+--> Event 579 starts.
+--> Event 580 starts.
+--> Event 581 starts.
+--> Event 582 starts.
+--> Event 583 starts.
+--> Event 584 starts.
+--> Event 585 starts.
+--> Event 586 starts.
+--> Event 587 starts.
+--> Event 588 starts.
+--> Event 589 starts.
+--> Event 590 starts.
+--> Event 591 starts.
+--> Event 592 starts.
+--> Event 593 starts.
+--> Event 594 starts.
+--> Event 595 starts.
+--> Event 596 starts.
+--> Event 597 starts.
+--> Event 598 starts.
+--> Event 599 starts.
+--> Event 600 starts.
+--> Event 601 starts.
+--> Event 602 starts.
+--> Event 603 starts.
+--> Event 604 starts.
+--> Event 605 starts.
+--> Event 606 starts.
+--> Event 607 starts.
+--> Event 608 starts.
+--> Event 609 starts.
+--> Event 610 starts.
+--> Event 611 starts.
+--> Event 612 starts.
+--> Event 613 starts.
+--> Event 614 starts.
+--> Event 615 starts.
+--> Event 616 starts.
+--> Event 617 starts.
+--> Event 618 starts.
+--> Event 619 starts.
+--> Event 620 starts.
+--> Event 621 starts.
+--> Event 622 starts.
+--> Event 623 starts.
+--> Event 624 starts.
+--> Event 625 starts.
+--> Event 626 starts.
+--> Event 627 starts.
+--> Event 628 starts.
+--> Event 629 starts.
+--> Event 630 starts.
+--> Event 631 starts.
+--> Event 632 starts.
+--> Event 633 starts.
+--> Event 634 starts.
+--> Event 635 starts.
+--> Event 636 starts.
+--> Event 637 starts.
+--> Event 638 starts.
+--> Event 639 starts.
+--> Event 640 starts.
+--> Event 641 starts.
+--> Event 642 starts.
+--> Event 643 starts.
+--> Event 644 starts.
+--> Event 645 starts.
+--> Event 646 starts.
+--> Event 647 starts.
+--> Event 648 starts.
+--> Event 649 starts.
+--> Event 650 starts.
+--> Event 651 starts.
+--> Event 652 starts.
+--> Event 653 starts.
+--> Event 654 starts.
+--> Event 655 starts.
+--> Event 656 starts.
+--> Event 657 starts.
+--> Event 658 starts.
+--> Event 659 starts.
+--> Event 660 starts.
+--> Event 661 starts.
+--> Event 662 starts.
+--> Event 663 starts.
+--> Event 664 starts.
+--> Event 665 starts.
+--> Event 666 starts.
+--> Event 667 starts.
+--> Event 668 starts.
+--> Event 669 starts.
+--> Event 670 starts.
+--> Event 671 starts.
+--> Event 672 starts.
+--> Event 673 starts.
+--> Event 674 starts.
+--> Event 675 starts.
+--> Event 676 starts.
+--> Event 677 starts.
+--> Event 678 starts.
+--> Event 679 starts.
+--> Event 680 starts.
+--> Event 681 starts.
+--> Event 682 starts.
+--> Event 683 starts.
+--> Event 684 starts.
+--> Event 685 starts.
+--> Event 686 starts.
+--> Event 687 starts.
+--> Event 688 starts.
+--> Event 689 starts.
+--> Event 690 starts.
+--> Event 691 starts.
+--> Event 692 starts.
+--> Event 693 starts.
+--> Event 694 starts.
+--> Event 695 starts.
+--> Event 696 starts.
+--> Event 697 starts.
+--> Event 698 starts.
+--> Event 699 starts.
+--> Event 700 starts.
+--> Event 701 starts.
+--> Event 702 starts.
+--> Event 703 starts.
+--> Event 704 starts.
+--> Event 705 starts.
+--> Event 706 starts.
+--> Event 707 starts.
+--> Event 708 starts.
+--> Event 709 starts.
+--> Event 710 starts.
+--> Event 711 starts.
+--> Event 712 starts.
+--> Event 713 starts.
+--> Event 714 starts.
+--> Event 715 starts.
+--> Event 716 starts.
+--> Event 717 starts.
+--> Event 718 starts.
+--> Event 719 starts.
+--> Event 720 starts.
+--> Event 721 starts.
+--> Event 722 starts.
+--> Event 723 starts.
+--> Event 724 starts.
+--> Event 725 starts.
+--> Event 726 starts.
+--> Event 727 starts.
+--> Event 728 starts.
+--> Event 729 starts.
+--> Event 730 starts.
+--> Event 731 starts.
+--> Event 732 starts.
+--> Event 733 starts.
+--> Event 734 starts.
+--> Event 735 starts.
+--> Event 736 starts.
+--> Event 737 starts.
+--> Event 738 starts.
+--> Event 739 starts.
+--> Event 740 starts.
+--> Event 741 starts.
+--> Event 742 starts.
+--> Event 743 starts.
+--> Event 744 starts.
+--> Event 745 starts.
+--> Event 746 starts.
+--> Event 747 starts.
+--> Event 748 starts.
+--> Event 749 starts.
+--> Event 750 starts.
+--> Event 751 starts.
+--> Event 752 starts.
+--> Event 753 starts.
+--> Event 754 starts.
+--> Event 755 starts.
+--> Event 756 starts.
+--> Event 757 starts.
+--> Event 758 starts.
+--> Event 759 starts.
+--> Event 760 starts.
+--> Event 761 starts.
+--> Event 762 starts.
+--> Event 763 starts.
+--> Event 764 starts.
+--> Event 765 starts.
+--> Event 766 starts.
+--> Event 767 starts.
+--> Event 768 starts.
+--> Event 769 starts.
+--> Event 770 starts.
+--> Event 771 starts.
+--> Event 772 starts.
+--> Event 773 starts.
+--> Event 774 starts.
+--> Event 775 starts.
+--> Event 776 starts.
+--> Event 777 starts.
+--> Event 778 starts.
+--> Event 779 starts.
+--> Event 780 starts.
+--> Event 781 starts.
+--> Event 782 starts.
+--> Event 783 starts.
+--> Event 784 starts.
+--> Event 785 starts.
+--> Event 786 starts.
+--> Event 787 starts.
+--> Event 788 starts.
+--> Event 789 starts.
+--> Event 790 starts.
+--> Event 791 starts.
+--> Event 792 starts.
+--> Event 793 starts.
+--> Event 794 starts.
+--> Event 795 starts.
+--> Event 796 starts.
+--> Event 797 starts.
+--> Event 798 starts.
+--> Event 799 starts.
+--> Event 800 starts.
+--> Event 801 starts.
+--> Event 802 starts.
+--> Event 803 starts.
+--> Event 804 starts.
+--> Event 805 starts.
+--> Event 806 starts.
+--> Event 807 starts.
+--> Event 808 starts.
+--> Event 809 starts.
+--> Event 810 starts.
+--> Event 811 starts.
+--> Event 812 starts.
+--> Event 813 starts.
+--> Event 814 starts.
+--> Event 815 starts.
+--> Event 816 starts.
+--> Event 817 starts.
+--> Event 818 starts.
+--> Event 819 starts.
+--> Event 820 starts.
+--> Event 821 starts.
+--> Event 822 starts.
+--> Event 823 starts.
+--> Event 824 starts.
+--> Event 825 starts.
+--> Event 826 starts.
+--> Event 827 starts.
+--> Event 828 starts.
+--> Event 829 starts.
+--> Event 830 starts.
+--> Event 831 starts.
+--> Event 832 starts.
+--> Event 833 starts.
+--> Event 834 starts.
+--> Event 835 starts.
+--> Event 836 starts.
+--> Event 837 starts.
+--> Event 838 starts.
+--> Event 839 starts.
+--> Event 840 starts.
+--> Event 841 starts.
+--> Event 842 starts.
+--> Event 843 starts.
+--> Event 844 starts.
+--> Event 845 starts.
+--> Event 846 starts.
+--> Event 847 starts.
+--> Event 848 starts.
+--> Event 849 starts.
+--> Event 850 starts.
+--> Event 851 starts.
+--> Event 852 starts.
+--> Event 853 starts.
+--> Event 854 starts.
+--> Event 855 starts.
+--> Event 856 starts.
+--> Event 857 starts.
+--> Event 858 starts.
+--> Event 859 starts.
+--> Event 860 starts.
+--> Event 861 starts.
+--> Event 862 starts.
+--> Event 863 starts.
+--> Event 864 starts.
+--> Event 865 starts.
+--> Event 866 starts.
+--> Event 867 starts.
+--> Event 868 starts.
+--> Event 869 starts.
+--> Event 870 starts.
+--> Event 871 starts.
+--> Event 872 starts.
+--> Event 873 starts.
+--> Event 874 starts.
+--> Event 875 starts.
+--> Event 876 starts.
+--> Event 877 starts.
+--> Event 878 starts.
+--> Event 879 starts.
+--> Event 880 starts.
+--> Event 881 starts.
+--> Event 882 starts.
+--> Event 883 starts.
+--> Event 884 starts.
+--> Event 885 starts.
+--> Event 886 starts.
+--> Event 887 starts.
+--> Event 888 starts.
+--> Event 889 starts.
+--> Event 890 starts.
+--> Event 891 starts.
+--> Event 892 starts.
+--> Event 893 starts.
+--> Event 894 starts.
+--> Event 895 starts.
+--> Event 896 starts.
+--> Event 897 starts.
+--> Event 898 starts.
+--> Event 899 starts.
+--> Event 900 starts.
+--> Event 901 starts.
+--> Event 902 starts.
+--> Event 903 starts.
+--> Event 904 starts.
+--> Event 905 starts.
+--> Event 906 starts.
+--> Event 907 starts.
+--> Event 908 starts.
+--> Event 909 starts.
+--> Event 910 starts.
+--> Event 911 starts.
+--> Event 912 starts.
+--> Event 913 starts.
+--> Event 914 starts.
+--> Event 915 starts.
+--> Event 916 starts.
+--> Event 917 starts.
+--> Event 918 starts.
+--> Event 919 starts.
+--> Event 920 starts.
+--> Event 921 starts.
+--> Event 922 starts.
+--> Event 923 starts.
+--> Event 924 starts.
+--> Event 925 starts.
+--> Event 926 starts.
+--> Event 927 starts.
+--> Event 928 starts.
+--> Event 929 starts.
+--> Event 930 starts.
+--> Event 931 starts.
+--> Event 932 starts.
+--> Event 933 starts.
+--> Event 934 starts.
+--> Event 935 starts.
+--> Event 936 starts.
+--> Event 937 starts.
+--> Event 938 starts.
+--> Event 939 starts.
+--> Event 940 starts.
+--> Event 941 starts.
+--> Event 942 starts.
+--> Event 943 starts.
+--> Event 944 starts.
+--> Event 945 starts.
+--> Event 946 starts.
+--> Event 947 starts.
+--> Event 948 starts.
+--> Event 949 starts.
+--> Event 950 starts.
+--> Event 951 starts.
+--> Event 952 starts.
+--> Event 953 starts.
+--> Event 954 starts.
+--> Event 955 starts.
+--> Event 956 starts.
+--> Event 957 starts.
+--> Event 958 starts.
+--> Event 959 starts.
+--> Event 960 starts.
+--> Event 961 starts.
+--> Event 962 starts.
+--> Event 963 starts.
+--> Event 964 starts.
+--> Event 965 starts.
+--> Event 966 starts.
+--> Event 967 starts.
+--> Event 968 starts.
+--> Event 969 starts.
+--> Event 970 starts.
+--> Event 971 starts.
+--> Event 972 starts.
+--> Event 973 starts.
+--> Event 974 starts.
+--> Event 975 starts.
+--> Event 976 starts.
+--> Event 977 starts.
+--> Event 978 starts.
+--> Event 979 starts.
+--> Event 980 starts.
+--> Event 981 starts.
+--> Event 982 starts.
+--> Event 983 starts.
+--> Event 984 starts.
+--> Event 985 starts.
+--> Event 986 starts.
+--> Event 987 starts.
+--> Event 988 starts.
+--> Event 989 starts.
+--> Event 990 starts.
+--> Event 991 starts.
+--> Event 992 starts.
+--> Event 993 starts.
+--> Event 994 starts.
+--> Event 995 starts.
+--> Event 996 starts.
+--> Event 997 starts.
+--> Event 998 starts.
+--> Event 999 starts.
+... write Root file : ExExCh.root - done

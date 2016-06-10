@@ -1,4 +1,4 @@
-$Id: History 90722 2015-06-08 14:30:21Z gcosmo $
+$Id: History 95314 2016-02-04 14:04:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-01-16 M. Verderi (materials-V10-00-29)
+- src/G4NistElementBuilder.cc : fixed typo in print reported in #1786.
 
 28-05-15 V.Ivanchenko (materials-V10-00-28)
 - G4NistManager - fixed problem #1747 - correct printout of elements

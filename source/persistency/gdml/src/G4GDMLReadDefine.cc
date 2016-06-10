@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc 90766 2015-06-09 10:13:41Z gcosmo $
+// $Id: G4GDMLReadDefine.cc 95318 2016-02-04 14:22:18Z gcosmo $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -137,6 +137,7 @@ G4GDMLReadDefine::GetRotationMatrix(const G4ThreeVector& angles)
    rot.rotateX(angles.x());
    rot.rotateY(angles.y());
    rot.rotateZ(angles.z());
+   rot.rectify();  // Rectify matrix from possible roundoff errors
 
    return rot;
 }

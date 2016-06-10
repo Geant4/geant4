@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 88948 2015-03-16 16:26:50Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 95301 2016-02-04 11:25:33Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -338,6 +338,7 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
   //
   G4int iz = 0;
   while ( point.z() > fZSections[iz+1].fZ && iz < fNz-2 ) { ++iz; }
+      // Loop checking, 13.08.2015, G.Cosmo
   
   G4double z0 = ( fZSections[iz+1].fZ + fZSections[iz].fZ )/2.0;
   G4TwoVector p2(point.x(), point.y());
@@ -548,7 +549,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
   std::vector< Vertex >::iterator c1 = verticesToBeDone.begin();
   std::vector< Vertex >::iterator c2 = c1+1;  
   std::vector< Vertex >::iterator c3 = c1+2;  
-  while ( verticesToBeDone.size()>2 )
+  while ( verticesToBeDone.size()>2 )    // Loop checking, 13.08.2015, G.Cosmo
   {
 
     // G4cout << "Looking at triangle : "
@@ -565,7 +566,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //G4cout << "angle " << angle  << G4endl;
 
     G4int counter = 0;
-    while ( angle >= pi )
+    while ( angle >= pi )    // Loop checking, 13.08.2015, G.Cosmo
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
@@ -805,7 +806,7 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   //
   std::vector< std::vector<G4int> >::const_iterator it = fTriangles.begin();
   G4bool inside = false;
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     if ( IsPointInside(fPolygon[(*it)[0]], fPolygon[(*it)[1]],
                        fPolygon[(*it)[2]], pscaled) )  { inside = true; }

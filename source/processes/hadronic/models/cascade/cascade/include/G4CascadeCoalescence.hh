@@ -33,18 +33,19 @@
 //	     replace polymorphic argument lists with use of "ClusterCandidate"
 // 20140116  M. Kelsey -- Move statics to const data members to avoid weird
 //		interactions with MT.
+// 20151016  M. Kelsey -- Replace forward declare of G4InuclElemPart w/include.
 
 #ifndef G4CASCADE_COALESCENCE_HH
 #define G4CASCADE_COALESCENCE_HH
 
 #include "globals.hh"
+#include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
 #include "G4LorentzVector.hh"
 #include <vector>
 #include <set>
 
 class G4CollisionOutput;
-class G4InuclElementaryParticle;
 
 
 class G4CascadeCoalescence {

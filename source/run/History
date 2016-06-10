@@ -1,4 +1,4 @@
-$Id: History 88997 2015-03-17 11:24:44Z gcosmo $
+$Id: History 95347 2016-02-05 08:47:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 27th, 2016 M.Asai (run-V10-00-45)
+- G4PhysicsListHelper: add entry for G4ParallelWorldProcess
+- G4RunManager, G4WorkerRunManager: change process order index of
+  G4ParallelWorldProcess to 9900 to make sure it is registered
+  prior to G4OpBoundaryProcess. 
 
 December 5th, 2014 M.Asai (run-V10-00-44)
 - Print deleting message of G4NavigationHistoryPool only if the

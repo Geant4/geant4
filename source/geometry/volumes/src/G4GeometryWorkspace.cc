@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspace.cc 79096 2014-02-14 16:07:39Z gcosmo $
+// $Id: G4GeometryWorkspace.cc 95303 2016-02-04 11:34:42Z gcosmo $
 //
 // 
 // Class G4GeometryWorkspace - implementation
@@ -220,7 +220,7 @@ G4bool G4GeometryWorkspace::CloneReplicaSolid( G4PVReplica *replicaPV )
 // Each G4PVParameterised instance, has associated with it at least one
 // solid for each worker thread.
 // *Simple* Parameterisations have a single type of solid, and the
-// pointer points to the same instance of a solid during the  simulation.
+// pointer points to the same instance of a solid during the simulation.
 // For this case, it is possible to adapt automatically to
 // multi-threading, simply by cloning the solid - so long
 // as all solids support the Clone() method.
@@ -230,31 +230,31 @@ CloneParameterisedSolids( G4PVParameterised *paramVol )
 {
   // Check whether it is a simple parameterisation or not
   //
-  G4VPVParameterisation *param= paramVol->GetParameterisation();
-  unsigned int numCopies= paramVol->GetMultiplicity();
-  unsigned int numDifferent= 0;
+  // G4VPVParameterisation *param= paramVol->GetParameterisation();
+  // unsigned int numCopies= paramVol->GetMultiplicity();
+  // unsigned int numDifferent= 0;
 
   G4LogicalVolume *logicalV= paramVol->GetLogicalVolume();
   G4VSolid *solid= logicalV->GetSolid();
   
-  for( unsigned int i=0; i< numCopies; i++)
-  {
-    G4VSolid *solidChk= param->ComputeSolid(i, paramVol);
-    if( solidChk != solid)
-    {
-      numDifferent++;
-    }
-  }
-  if( numDifferent>0 )
-  {
-    G4ExceptionDescription ed;
-    ed << "ERROR - Parameterisation using several instances of Solids \n"
-       << "potentially to support different types of solids. \n"
-       << "Geant4-MT currently does not support this type of \n"
-       << "parameterisation, sorry !";
-    G4Exception("G4GeometryWorkspace::CloneParameterisedVolume()",
-                "GeomVol0001", FatalException, ed);
-  }
+  //  for( unsigned int i=0; i< numCopies; i++)
+  //  {
+  //    G4VSolid *solidChk= param->ComputeSolid(i, paramVol);
+  //    if( solidChk != solid)
+  //    {
+  //      numDifferent++;
+  //    }
+  //  }
+  //  if( numDifferent>0 )
+  //  {
+  //    G4ExceptionDescription ed;
+  //    ed << "ERROR - Parameterisation using several instances of Solids \n"
+  //       << "potentially to support different types of solids. \n"
+  //       << "Geant4-MT currently does not support this type of \n"
+  //       << "parameterisation, sorry !";
+  //    G4Exception("G4GeometryWorkspace::CloneParameterisedVolume()",
+  //                "GeomVol0001", FatalException, ed);
+  //  }
   
   // Threads may attempt to clone a solids simultaneously.
   // Those cloned solids will be registered into a shared solid

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh 90717 2015-06-08 14:19:29Z gcosmo $
+// $Id: Randomize.hh 95305 2016-02-04 12:02:33Z gcosmo $
 //
 #ifndef randomize_h
 #define randomize_h 1
@@ -39,7 +39,7 @@
 #endif
 
 #if (defined(G4MULTITHREADED) && \
-    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS))))
+    (!defined(G4USE_STD11) || (defined(CLANG_NOSTDTLS) || defined(__INTEL_COMPILER))))
 
 // MT needs special Random Number distribution classes
 //

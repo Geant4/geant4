@@ -1,4 +1,4 @@
-svn log $Id: History 90693 2015-06-08 08:53:38Z gcosmo $
+svn log $Id: History 95343 2016-02-05 08:27:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th February 2016  Gabriele Cosmo  (config-V10-00-13)
+- Added settings for 14 and 17 C++ standards in platform specific scripts.
+
+6th October 2015   Gabriele Cosmo
+- Updated X11 ssettings in Darwin-clang.gmk and Darwin-g++.gmk for new
+  MacOSX El Capitan; replaced X11R6 with X11.
 
 28th May 2015   Gabriele Cosmo  (config-V10-00-12)
 - Updated CPPFLAGS for Linux-icc and WIN32-g++ configurations.

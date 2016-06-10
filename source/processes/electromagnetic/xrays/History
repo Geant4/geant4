@@ -1,4 +1,4 @@
-$Id: History 87013 2014-11-21 16:22:53Z gcosmo $
+$Id: History 95274 2016-02-03 10:10:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Dec 15: V.Ivanchenko (xrays-V10-00-08)
+- G4VTransitionRadiation, G4VXTRenergyLoss - fixed process sub-type
 
 21 Nov 14: V.Ivanchenko (xrays-V10-00-07)
 - G4ForwardXrayTR - fixed Coverity report (V.Grichine)

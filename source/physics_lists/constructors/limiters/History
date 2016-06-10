@@ -1,4 +1,4 @@
-$Id: History 88969 2015-03-17 09:08:19Z gcosmo $
+$Id: History 95345 2016-02-05 08:36:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-Jan-2016, M. Asai (phys-ctor-limiters-V10-00-06)
+- G4ParallelWorldPhysics: change process order index of
+  G4ParallelWorldProcess to 9900 to make sure it is registered
+  prior to G4OpBoundaryProcess.
 
 20-Jan-2015, Makoto Asai  (phys-ctor-limiters-V10-00-05)
 - Fix G4ParallelWorldProcess.cc to correctly use the new method

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4BooleanSolid.cc 95297 2016-02-04 09:30:14Z gcosmo $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -249,7 +249,7 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   G4double rand;
   G4ThreeVector p;
 
-  do
+  do    // Loop checking, 13.08.2015, G.Cosmo
   {
     rand = G4UniformRand();
 

@@ -1,4 +1,4 @@
-$Id: History 88944 2015-03-16 16:11:10Z gcosmo $
+$Id: History 95290 2016-02-04 08:14:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov  2, 2015 J.Apostolakis             - field-V10-00-06
+--------------------------
+- Added explanation comment in G4MagHelicalSteper.
+
+Oct 13, 2015 J.Apostolakis
+--------------------------
+- G4ChordFinder::FindNextChord: Added check against number of iterations, 
+  to identify potential issue of lack of convergence.
+- test: fixed testProElectricMagField.cc
 
 Jan 28, 2015 J.Apostolakis             - field-V10-00-05
 --------------------------
