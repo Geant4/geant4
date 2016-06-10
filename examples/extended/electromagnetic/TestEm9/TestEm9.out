@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -422,39 +422,39 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.72s Real=1.71s Sys=0s
+  User=1.72s Real=2.15s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         399.1
-Average number of gamma      636.3
-Average number of e+         48
-Average number of steps      2923
-Edep 1x1 =                   0.8303 +- 0.003104  res=  3.739 %   100
-Edep 3x3 =                   0.9581 +- 0.001285  res=  1.341 %   100
-Edep 5x5 =                   0.9798 +- 0.001002  res=  1.023 %   100
+Average number of e-         398
+Average number of gamma      633.3
+Average number of e+         48.52
+Average number of steps      2902
+Edep 1x1 =                   0.829 +- 0.003151  res=  3.801 %   100
+Edep 3x3 =                   0.9565 +- 0.001582  res=  1.654 %   100
+Edep 5x5 =                   0.9781 +- 0.001388  res=  1.419 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8665 +- 0.002887
-  E1/E25 =                   0.8474 +- 0.003024
-  E9/E25 =                   0.9779 +- 0.0008374
+  E1/E9  =                   0.8666 +- 0.002647
+  E1/E25 =                   0.8475 +- 0.002785
+  E9/E25 =                   0.9779 +- 0.000846
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8303  delEdep1x1= -0.1697 nrms= -1.697
-Erms1x1: 0.03104  delErms1x1= -0.969 nrms= -9.69
-Edep3x3: 0.9581  delEdep3x3= -0.04186 nrms= -0.4186
-Erms3x3: 0.01285  delErms3x3= -0.9872 nrms= -9.872
-Edep5x5: 0.9798  delEdep5x5= -0.02021 nrms= -0.2021
-Erms5x5: 0.01002  delErms5x5= -0.99 nrms= -9.9
+Edep1x1: 0.829  delEdep1x1= -0.171 nrms= -1.71
+Erms1x1: 0.03151  delErms1x1= -0.9685 nrms= -9.685
+Edep3x3: 0.9565  delEdep3x3= -0.04352 nrms= -0.4352
+Erms3x3: 0.01582  delErms3x3= -0.9842 nrms= -9.842
+Edep5x5: 0.9781  delEdep5x5= -0.02192 nrms= -0.2192
+Erms5x5: 0.01388  delErms5x5= -0.9861 nrms= -9.861
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         156           0
-  53         261          42           0          45
-  55         278          45           0          47
+  13           0           0         153           0
+  53         258          40           0          45
+  55         276          48           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -542,22 +542,22 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.48s Real=2.48s Sys=0s
+  User=2.48s Real=3.98s Sys=0.05s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         67.79
-Average number of gamma      59.57
-Average number of e+         3.183
-Average number of steps      381.2
-Edep 1x1 =                   0.01409 +- 0.0001969
-Edep 3x3 =                   0.01442 +- 0.0002202
-Edep 5x5 =                   0.01448 +- 0.0002245
+Average number of e-         68.54
+Average number of gamma      60.27
+Average number of e+         3.264
+Average number of steps      384.1
+Edep 1x1 =                   0.01417 +- 0.0001987
+Edep 3x3 =                   0.01452 +- 0.0002222
+Edep 5x5 =                   0.01457 +- 0.0002257
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9838 +- 0.0007294
-  E1/E25 =                   0.9808 +- 0.000829
-  E9/E25 =                   0.9969 +- 0.0002026
+  E1/E9  =                   0.9832 +- 0.0007332
+  E1/E25 =                   0.9806 +- 0.0008226
+  E9/E25 =                   0.9973 +- 0.0001792
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -976,22 +976,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.27s Real=1.32s Sys=0.01s
+  User=1.27s Real=1.38s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         172.5
-Average number of gamma      221.3
-Average number of e+         47.23
-Average number of steps      1799
-Edep 1x1 =                   0.8385 +- 0.004589  res=  5.472 %   100
-Edep 3x3 =                   0.9629 +- 0.00361  res=  3.749 %   100
-Edep 5x5 =                   0.9835 +- 0.003665  res=  3.727 %   100
+Average number of e-         171.8
+Average number of gamma      219.6
+Average number of e+         47.04
+Average number of steps      1797
+Edep 1x1 =                   0.833 +- 0.003544  res=  4.254 %   100
+Edep 3x3 =                   0.9589 +- 0.003468  res=  3.617 %   100
+Edep 5x5 =                   0.9797 +- 0.003368  res=  3.438 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8707 +- 0.003028
-  E1/E25 =                   0.8525 +- 0.003193
-  E9/E25 =                   0.9791 +- 0.001192
+  E1/E9  =                   0.869 +- 0.002828
+  E1/E25 =                   0.8505 +- 0.002863
+  E9/E25 =                   0.9787 +- 0.0009954
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1410,22 +1410,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.49s Real=1.53s Sys=0s
+  User=1.51s Real=2.08s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         171.8
-Average number of gamma      372.8
-Average number of e+         46.75
-Average number of steps      1961
-Edep 1x1 =                   0.8263 +- 0.003644  res=  4.41 %   100
-Edep 3x3 =                   0.9544 +- 0.003454  res=  3.619 %   100
-Edep 5x5 =                   0.976 +- 0.003604  res=  3.693 %   100
+Average number of e-         171.5
+Average number of gamma      373.8
+Average number of e+         47.35
+Average number of steps      1956
+Edep 1x1 =                   0.8296 +- 0.004256  res=  5.13 %   100
+Edep 3x3 =                   0.9517 +- 0.003524  res=  3.703 %   100
+Edep 5x5 =                   0.9756 +- 0.003388  res=  3.473 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8661 +- 0.003218
-  E1/E25 =                   0.847 +- 0.003396
-  E9/E25 =                   0.9779 +- 0.001023
+  E1/E9  =                   0.8718 +- 0.003313
+  E1/E25 =                   0.8504 +- 0.003436
+  E9/E25 =                   0.9754 +- 0.001142
 Beam Energy                  1 GeV
 ==================================================================
 

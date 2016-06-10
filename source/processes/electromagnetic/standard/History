@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 May 13: V.Ivanchenko (emstand-V09-05-69)
+- Removed wrong printout in G4UrbanMscModel96 constructor.
+
+19 April 13: V.Ivanchenko (emstand-V09-05-68)
+- G4WentzelOKandVIxSection - fixed initialisation - really different 
+    screening parameter for e+- and heavy particles
+
+18 April 13: V.Ivanchenko
+- G4WentzelOKandVIxSection - added different screening parameter formula
+    for e+- and heavy particles in order to return back width of electron
+    scattering
+
+09 April 13: L.Urban 
+- G4UrbanMscModel93/95/96 - random first step/ random first step in volume 
+   instead of sampling z (the geam. step length). After this modification
+   there in no zero step length for eIoni,eBrem and annihilation in flight 
+
 29 January 13: V.Ivanchenko (emstand-V09-05-67)
 - G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96: added limit
   c>1.9 for the main parameter responsible for sampling of scattering

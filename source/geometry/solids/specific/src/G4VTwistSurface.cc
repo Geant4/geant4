@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc 67011 2013-01-29 16:17:41Z gcosmo $
+// $Id: G4VTwistSurface.cc 69790 2013-05-15 12:39:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -156,8 +156,8 @@ G4VTwistSurface::~G4VTwistSurface()
 //* AmIOnLeftSide -----------------------------------------------------
 
 G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me, 
-                                const G4ThreeVector &vec,
-                                      G4bool        withtol) 
+                                     const G4ThreeVector &vec,
+                                     G4bool        withtol) 
 {
    // AmIOnLeftSide returns phi-location of "me"
    // (phi relation between me and vec projected on z=0 plane).
@@ -171,7 +171,7 @@ G4int G4VTwistSurface::AmIOnLeftSide(const G4ThreeVector &me,
    static const G4double kAngTolerance
      = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-   static G4RotationMatrix unitrot;  // unit matrix
+   G4RotationMatrix unitrot;
    static const G4RotationMatrix rottol    = unitrot.rotateZ(0.5*kAngTolerance);
    static const G4RotationMatrix invrottol = unitrot.rotateZ(-1.*kAngTolerance);
 

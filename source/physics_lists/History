@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-Feb-2013, V.Ivanchenko               (phys-lists-V09-05-84)
+-  G4EmStandardPhysics_option4 - low limit increased from 10 eV to 100 eV
+
+13-Feb-2013, V.Ivanchenko
+-  G4EmLivermorePhysics - set low-limit 100 eV and number of bins
+     for tables 220 to avoid problems in Livermore ionisation for
+     electron stopping powers and ranges 
+
 18-01-2013, V.Ivanchenko		(phys-lists-V09-05-82)
 - G4EmStandardPhysics_option4 - substituted new low-energy Compton
     model by old LivermoreCompton model to avoid numerical problems 

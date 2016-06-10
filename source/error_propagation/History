@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2009-11-11 17:12:10 arce Exp $
+$Id: History 69834 2013-05-16 08:03:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16 May 2013 - G.Cosmo (error-propagation-V09-05-09)
+- Fixed memory leak in G4ErrorPropagator::PropagateOneStep() for track
+  creation at the first step.
+  Addresses problem report #1466.
+
+10 April 2013 - G.Cosmo (error-propagation-V09-05-08)
+- Fixed compilation error for inclusion of not-existing header in
+  G4ErrorPhysicsList code.
+- Removed use of printf and left-over debug printout...
+
+4 April 2013 - P.Arce (error-propagation-V09-05-07)
+- Changes to correct several bugs: 1435, 1447, 1448, 1453.
+
+26 February 2013 - G.Cosmo
+- Removed unused data member in G4ErrorPropagator.
+
+25 February 2013 - G.Cosmo
+- Corrected composed printout in G4ErrorPropagator.
+
+07 December 2012 - V.Ivanchenko
+- G4ErrorPhysicsList - remove unnecessary header
+
 21 November 2012 - P.Arce (error-propagation-V09-05-06)
 - Changes to G4ErrorRunManagerHelper to correct check for G4ErrorPhysicsList" 
 

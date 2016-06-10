@@ -816,7 +816,7 @@ G4bool G4FTFModel::PutOnMassShell()
  
 //      ResidualMass +=ResidualExcitationEnergy; // Will be given after checks
 //G4cout<<"SumMasses And ResidualMass "<<SumMasses<<" "<<ResidualMass<<G4endl;
-        SumMasses += std::sqrt(sqr(ResidualMass)+PnuclearResidual.mag2()); // Uzhi 12.06.2012
+        SumMasses += std::sqrt(sqr(ResidualMass)+PnuclearResidual.perp2()); // Uzhi 16.05.2013
 //G4cout<<"SumMasses + ResM "<<SumMasses<<G4endl;
 //G4cout<<"Psum "<<Psum<<G4endl;
 //-------------------------------------------------------------
@@ -830,14 +830,14 @@ G4bool G4FTFModel::PutOnMassShell()
                                                    // after putting nuclear nucleons
                                                    // on mass-shell
 
-        SumMasses -= std::sqrt(sqr(ResidualMass)+PnuclearResidual.mag2()); // Uzhi 12.06.2012
+        SumMasses -= std::sqrt(sqr(ResidualMass)+PnuclearResidual.perp2()); // Uzhi 16.05.2013
         SumMasses += std::sqrt(sqr(ResidualMass+ResidualExcitationEnergy)
-                    +PnuclearResidual.mag2());                             // Uzhi 12.06.2012
+                    +PnuclearResidual.perp2());                             // Uzhi 16.05.2013
         if(SqrtS < SumMasses)                                              // Uzhi 12.06.2012
         {
          SumMasses -= std::sqrt(sqr(ResidualMass+ResidualExcitationEnergy)
-                     +PnuclearResidual.mag2());                            // Uzhi 12.06.2012
-         SumMasses += std::sqrt(sqr(ResidualMass)+PnuclearResidual.mag2());// Uzhi 12.06.2012
+                     +PnuclearResidual.perp2());                            // Uzhi 16.05.2013
+         SumMasses += std::sqrt(sqr(ResidualMass)+PnuclearResidual.perp2());// Uzhi 16.05.2013
          ResidualExcitationEnergy=0.;
         }
 
@@ -1013,7 +1013,7 @@ G4bool G4FTFModel::PutOnMassShell()
 
              if(InerSuccess && (ResidualMassNumber != 0))
              {
-              M2target +=(sqr(ResidualMass) + PnuclearResidual.mag2())/XminusSum;
+              M2target +=(sqr(ResidualMass) + PnuclearResidual.perp2())/XminusSum; // Uzhi 16.05.2013
              }
 //G4cout<<"InerSuccess "<<InerSuccess<<" "<<SqrtS<<" "<<Mprojectile + std::sqrt(M2target)<<" "<<std::sqrt(M2target)<<G4endl;
 //G4int Uzhi;G4cin>>Uzhi;

@@ -64,9 +64,8 @@ G4AdjointPosOnPhysVolGenerator::~G4AdjointPosOnPhysVolGenerator()
 ////////////////////////////////////////////////////
 //
 G4AdjointPosOnPhysVolGenerator::G4AdjointPosOnPhysVolGenerator()
-   : theSolid(0), thePhysicalVolume(0), NStat(1000000), epsilon(0.001),
+   : theSolid(0), thePhysicalVolume(0),
      UseSphere(true), ModelOfSurfaceSource("OnSolid"),
-     ExtSourceRadius(0.), ExtSourceDx(0.), ExtSourceDy(0.), ExtSourceDz(0.),
      AreaOfExtSurfaceOfThePhysicalVolume(0.), CosThDirComparedToNormal(0.)
 { 
 }

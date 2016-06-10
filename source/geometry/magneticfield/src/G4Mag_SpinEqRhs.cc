@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_SpinEqRhs.cc 69970 2013-05-21 10:14:30Z gcosmo $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -68,7 +68,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4double particleCharge, // in e+ units
    beta  = MomentumXc/E;
    gamma = E/particleMass;
 
-   G4double neutronAnomaly = -2.913042725;
+   G4double neutronAnomaly = -2.9156797;
    if (pcharge==0.) SetAnomaly(neutronAnomaly);
 }
 

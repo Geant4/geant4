@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -578,28 +578,28 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.22s Real=0.23s Sys=0s
+  User=0.19s Real=0.2s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32[0.0]
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.334   RMS(GeV) 4.273
-Average number of steps              53.84
-Average number of gamma              1.57
+Average energy deposit (GeV)         5.68   RMS(GeV) 3.994
+Average number of steps              48.28
+Average number of gamma              1.64
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           15.94
-Average number of protons            15.81
-Average number of antiprotons        0.01
-Average number of pi+ & pi-          2.15
-Average number of pi0                0.9
-Average number of kaons              0.04
+Average number of neutrons           17.03
+Average number of protons            16.77
+Average number of antiprotons        0
+Average number of pi+ & pi-          1.86
+Average number of pi0                1.22
+Average number of kaons              0.02
 Average number of muons              0
-Average number of deuterons+tritons  0.8
-Average number of He3+alpha          0.75
-Average number of ions               0.66
+Average number of deuterons+tritons  0.97
+Average number of He3+alpha          0.8
+Average number of ions               0.68
 ========================================================
 
 G4 kernel has come to Quit state.

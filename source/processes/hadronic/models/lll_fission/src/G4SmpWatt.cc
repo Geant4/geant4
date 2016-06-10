@@ -53,7 +53,7 @@
 // UCRL-CODE-224807
 //
 //
-// $Id$
+// $Id: G4SmpWatt.cc 69860 2013-05-16 14:39:02Z gcosmo $
 //
 
 #define nZAfis 39    /* 38 fissionable isotopes in ENDL + U-232 from ENDF7 */
@@ -148,7 +148,9 @@ G4double G4fissionEvent::G4SmpWatt(G4double ePart, G4int iso) {
       if (iso == nZA[i]) isoindex = i;
    }
    if (isoindex == -1) {
-      std::string errMsg = "No Watt spectrum available for iso " + iso;
+      std::ostringstream o;
+      o << iso;
+      std::string errMsg = "No Watt spectrum available for iso " + o.str();
       G4fissionerr(6, "SmpWatt", errMsg);
    }
    

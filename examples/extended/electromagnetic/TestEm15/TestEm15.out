@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -176,6 +176,8 @@ userDetector->Construct() start.
 World is registered to the default region.
 physicsList->Construct() start.
 physicsList->Construct() start.
+!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
+!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 #
@@ -457,19 +459,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.11s Real=0.1s Sys=0s
+  User=0.11s Real=0.21s Sys=0s
 
  The run consists of 10000 e- of 5 MeV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	2.7529 cm  +- 19.55 nm 
- geomPathLength :	2.0709 cm  +- 14.091 nm 
- lateralDisplac :	0 fm  +- 0 fm 
- Psi            :	0 mrad +- 0 mrad  (0 deg +- 0 deg)
+ truePathLength :	2.7386 cm  +- 1.3434 mm 
+ geomPathLength :	2.0624 cm  +- 850.38 um 
+ lateralDisplac :	142.43 um  +- 1.2136 mm 
+ Psi            :	7.6447 mrad +- 60.637 mrad  (0.43801 deg +- 3.4743 deg)
 
- Theta_plane    :	0 mrad  (0 deg)
- phi correlation:	0 +- 0  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	134.63 mrad  (7.7138 deg)
+ phi correlation:	0.0050509 +- 0.060744  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
@@ -477,11 +479,11 @@ Run Summary
  range from restrict dE/dx:	2.7529 cm 
  ---> effective facRange  :	1
 
- compute theta0 from Highland :	620.23 mrad  (35.536 deg)
+ compute theta0 from Highland :	618.48 mrad  (35.436 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
+ Current couple of seeds = 1274458481, 168542267
 ----------------------------------------
 #
 /gun/energy 100 keV
@@ -522,7 +524,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
+ Current couple of seeds = 1274458481, 168542267
 ----------------------------------------
 Start Run processing.
 
@@ -530,31 +532,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.14s Real=0.15s Sys=0s
+  User=0.16s Real=0.26s Sys=0s
 
  The run consists of 10000 e- of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
  Process calls frequency --->	msc = 10000
 
- truePathLength :	6.3051 um  +- 2011.3 fm 
- geomPathLength :	6.1807 um  +- 2968 fm 
- lateralDisplac :	938.18 nm  +- 241.99 nm 
- Psi            :	150.44 mrad +- 38.414 mrad  (8.6194 deg +- 2.2009 deg)
+ truePathLength :	6.3074 um  +- 1.8007 um 
+ geomPathLength :	6.1716 um  +- 1.7282 um 
+ lateralDisplac :	970.95 nm  +- 484.79 nm 
+ Psi            :	149.4 mrad +- 44.308 mrad  (8.5599 deg +- 2.5387 deg)
 
- Theta_plane    :	236.59 mrad  (13.555 deg)
- phi correlation:	0.080668 +- 0.13493  (std::cos(phi_pos - phi_dir))
+ Theta_plane    :	250.47 mrad  (14.351 deg)
+ phi correlation:	0.075114 +- 0.13535  (std::cos(phi_pos - phi_dir))
 
  Verification from G4EmCalculator. 
 
  transport mean free path :	157.63 um 
  range from restrict dE/dx:	143.25 um 
- ---> effective facRange  :	0.04
+ ---> effective facRange  :	0.040015
 
- compute theta0 from Highland :	180.68 mrad  (10.352 deg)
+ compute theta0 from Highland :	180.72 mrad  (10.355 deg)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 582836152, 1493366679
+ Current couple of seeds = 25306853, 2038673675
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

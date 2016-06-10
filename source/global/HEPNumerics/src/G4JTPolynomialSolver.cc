@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4JTPolynomialSolver.cc 69792 2013-05-15 12:59:26Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -47,10 +47,10 @@ const G4double G4JTPolynomialSolver::lo     = DBL_MIN/DBL_EPSILON ;
 G4JTPolynomialSolver::G4JTPolynomialSolver()
   : sr(0.), si(0.), u(0.),v(0.),
     a(0.), b(0.), c(0.), d(0.),
-    a1(0.), a2(0.), a3(0.), a6(0.), a7(0.),
+    a1(0.), a3(0.), a7(0.),
     e(0.), f(0.), g(0.), h(0.),
     szr(0.), szi(0.), lzr(0.), lzi(0.),
-    n(0), nmi(0)
+    n(0)
 {
 }
 

@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th March 2013  John Allison (greps-V09-05-15)
+- HepPolyhedron.cc:
+  o Introduced const G4double spatialTolerance = 0.01*nm;
+  o Used in RotateAroundZ and in HepPolyhedronSphere and HepPolyhedronTorus
+    constructors.
+  o Allows creation of nm-sized objects.
+  o Fixes bug report 1452.
+
 1st October 2012  John Allison (greps-V09-05-14)
 - G4DimensionedType: Another attempt to keep compilers happy:
   o Created G4DimensionedType.cc.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Pow.cc 69381 2013-05-02 09:58:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,23 +43,23 @@
 
 #include "G4Pow.hh"
 
-G4Pow* G4Pow::fInstance = 0;
+G4Pow* G4Pow::fpInstance = 0;
 
 // -------------------------------------------------------------------
 
 G4Pow* G4Pow::GetInstance()
 {
-  if (fInstance == 0)
+  if (fpInstance == 0)
   {
-    static G4Pow manager;
-    fInstance = &manager;
+    fpInstance = new G4Pow;
   }
-  return fInstance;
+  return fpInstance;
 }
 
 // -------------------------------------------------------------------
 
 G4Pow::G4Pow()
+  : onethird(1.0/3.0), minA(0.5000001), maxA(255.5)
 {
   const G4int maxZ = 512; 
   const G4int maxZfact = 170; 
@@ -69,7 +69,6 @@ G4Pow::G4Pow()
   fact.resize(maxZfact,0.0);
   logfact.resize(maxZ,0.0);
 
-  onethird = 1.0/3.0;
   G4double f = 1.0;
   G4double logf = 0.0;
   fact[0] = 1.0;
@@ -79,7 +78,8 @@ G4Pow::G4Pow()
     G4double x  = G4double(i);
     pz13[i] = std::pow(x,onethird);
     lz[i]   = std::log(x);
-    if(i < maxZfact) { 
+    if(i < maxZfact)
+    { 
       f *= x; 
       fact[i] = f;
     }
@@ -91,7 +91,9 @@ G4Pow::G4Pow()
 // -------------------------------------------------------------------
 
 G4Pow::~G4Pow()
-{}
+{
+  delete fpInstance; fpInstance = 0;
+}
 
 // -------------------------------------------------------------------
 

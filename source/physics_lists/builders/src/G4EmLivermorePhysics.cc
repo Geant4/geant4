@@ -449,10 +449,10 @@ void G4EmLivermorePhysics::ConstructProcess()
   // Physics tables
   //
 
-  opt.SetMinEnergy(10*eV);
+  opt.SetMinEnergy(100*eV);
   opt.SetMaxEnergy(10*TeV);
-  opt.SetDEDXBinning(240);
-  opt.SetLambdaBinning(240);
+  opt.SetDEDXBinning(220);
+  opt.SetLambdaBinning(220);
 
   // Nuclear stopping
   pnuc->SetMaxKinEnergy(MeV);

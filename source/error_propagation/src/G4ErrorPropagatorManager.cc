@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorPropagatorManager.cc 69766 2013-05-14 14:33:55Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -68,7 +68,7 @@ G4ErrorPropagatorManager::theG4ErrorPropagatorManager = 0;
 //-----------------------------------------------------------------------
 G4ErrorPropagatorManager* G4ErrorPropagatorManager::GetErrorPropagatorManager()
 {
-  if( theG4ErrorPropagatorManager == NULL ) {
+  if( !theG4ErrorPropagatorManager ) {
     theG4ErrorPropagatorManager = new G4ErrorPropagatorManager;
   }
 

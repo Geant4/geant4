@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 30, 2013 V.Ivanchenko (global-V09-05-17)
+- G4Pow: fixed bug in interpolation inside logA() and A13() methods,
+  now interpolation is accurate at better than per mille level; in worse
+  cases (x~1.45 or x~0.75) better than 2% level.
+- Updated date for release 9.6.p02.
+
+February 22, 2013 G.Cosmo (global-V09-05-16)
+- Removed unused private members in G4JTPolynomialSolver.
+
+February 21, 2013 J.Madsen
+- Minor changes to G4ConvergenceTester: output can now optionally be
+  redirected a different stream (defaults is cout).
+  Accessors are made public and check if data has been added.
+
 November 16, 2012 V.Ivantchenko (global-V09-05-15)
 - G4Physics2DVector: fixed comments, more correct references.
 - Updated date for release 9.6.

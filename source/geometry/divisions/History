@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2010-11-10 09:16:33 gcosmo Exp $
+$Id: History 69784 2013-05-15 09:16:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 22nd, 2013     G.Cosmo (geomdiv-V09-05-02)
+- Corrected G4PVDivisionFactory instance accessor.
+- Corrected composed cout in exceptions for G4ParameterisationBox and
+  G4ParameterisationTrd.
 
 June 12th, 2012         G.Cosmo (geomdiv-V09-05-01)
 - Explicitly use inclusion of headers for system of units and physical

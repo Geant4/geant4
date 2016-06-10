@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ParallelWorldProcess.cc 69966 2013-05-21 09:52:06Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -72,6 +72,7 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fGhostPostStepPoint = fGhostStep->GetPostStepPoint();
 
   fTransportationManager = G4TransportationManager::GetTransportationManager();
+  fTransportationManager->GetNavigatorForTracking()->SetPushVerbosity(false);
   fPathFinder = G4PathFinder::GetInstance();
 
   if (verboseLevel>0)
@@ -97,6 +98,7 @@ SetParallelWorld(G4String parallelWorldName)
   fGhostWorldName = parallelWorldName;
   fGhostWorld = fTransportationManager->GetParallelWorld(fGhostWorldName);
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::
@@ -105,6 +107,7 @@ SetParallelWorld(G4VPhysicalVolume* parallelWorld)
   fGhostWorldName = parallelWorld->GetName();
   fGhostWorld = parallelWorld;
   fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
+  fGhostNavigator->SetPushVerbosity(false);
 }
 
 void G4ParallelWorldProcess::StartTracking(G4Track* trk)
@@ -130,10 +133,8 @@ void G4ParallelWorldProcess::StartTracking(G4Track* trk)
   fGhostPostStepPoint->SetStepStatus(fUndefined);
 
 //  G4VPhysicalVolume* thePhys = fNewGhostTouchable->GetVolume();
-//  G4cout << "======= G4ParallelWorldProcess::StartTracking() =======" << G4endl;
 //  if(thePhys)
 //  {
-//    G4cout << " --- Parallel world volume : " << thePhys->GetName() << G4endl;
 //    G4Material* ghostMaterial = thePhys->GetLogicalVolume()->GetMaterial();
 //    if(ghostMaterial)
 //    { G4cout << " --- Material : " << ghostMaterial->GetName() << G4endl; }

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -182,6 +182,8 @@
 
 
 PhysicsList::AddPhysicsList: <local>
+!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
+!!!=== G4UrbanMscModel96 WARNING This class will be removed in the next reference tag, please, use G4UrbanMscModel===!!!
 ### G4VEmProcess::SetModel is obsolete method and will be removed for the next release.
     Please, use SetEmModel
 

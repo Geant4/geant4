@@ -62,7 +62,7 @@ G4TwistTrapParallelSide::G4TwistTrapParallelSide(const G4String     &name,
                            G4double      pAlph,      // tilt angle at +pDz
                            G4double      AngleSide    // parity
                                                )
-  : G4VTwistSurface(name), fDy(0.)
+  : G4VTwistSurface(name)
 {  
   
   fAxis[0]    = kXAxis; // in local coordinate system
@@ -124,7 +124,7 @@ G4TwistTrapParallelSide::G4TwistTrapParallelSide( __void__& a )
     fDy2(0.), fDx3(0.), fDx4(0.), fDz(0.), fAlph(0.), fTAlph(0.), fPhiTwist(0.), 
     fAngleSide(0.), fdeltaX(0.), fdeltaY(0.), fDx4plus2(0.), fDx4minus2(0.), 
     fDx3plus1(0.), fDx3minus1(0.), fDy2plus1(0.), fDy2minus1(0.), fa1md1(0.), 
-    fa2md2(0.), fDy(0.)
+    fa2md2(0.)
 {
 }
 
@@ -260,7 +260,10 @@ G4int G4TwistTrapParallelSide::DistanceToSurface(const G4ThreeVector &gp,
       
       phi = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
 
-      u = (2*(fdeltaY*phi*v.x() - fPhiTwist*p.y()*v.x() - fdeltaX*phi*v.y() + fPhiTwist*p.x()*v.y()) + (fDy2plus1*fPhiTwist + 2*fDy2minus1*phi)*(v.x()*std::cos(phi) + v.y()*std::sin(phi)))/(2.* fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi))) ;
+      u = (2*(fdeltaY*phi*v.x() - fPhiTwist*p.y()*v.x() - fdeltaX*phi*v.y()
+              + fPhiTwist*p.x()*v.y()) + (fDy2plus1*fPhiTwist
+              + 2*fDy2minus1*phi)*(v.x()*std::cos(phi) + v.y()*std::sin(phi)))
+        / (2.* fPhiTwist*(v.y()*std::cos(phi) - v.x()*std::sin(phi)));
 
       xbuftmp.phi = phi ;
       xbuftmp.u = u ;

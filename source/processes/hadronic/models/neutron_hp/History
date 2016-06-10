@@ -14,9 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 March 2013  Dennis Wright (hadr-hpn-V09-05-28)
+- fix MacOS Clang compiler warnings: 
+  G4NeutronHPCapture.hh : remove unused private variable "it"
+  G4NeutronHPCaptureFS.hh : remove unused private variables "theCurrentA"
+                            and "theCurrentZ"  
+  G4NeutronHPThermalScattering.hh : remove unused private variable "xSec" 
+                            and "numEle"  
+
+
 9 January  2013  Tatsumi Koi (hadr-hpn-V09-05-27)
 Fixed improper use of abort() 
 	src/G4NeutronHPThermalScattering.cc
+
 
 29 November 2012 Alberto Ribon (hadr-hpn-V09-05-26)
 Added protection against negative argument in square root

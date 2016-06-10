@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -102,11 +102,11 @@ WARNING: model G4LEAlphaInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LENeutronInelastic is being deprecated and will
 disappear in Geant4 version 10.0
-/build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/cdash/G4/release/slc5-gcc43/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
+/build/electric_commander/G4-builds/release/slc5-gcc43-RelWithDebInfo/build/data/G4NDL4.2
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc5-gcc43-RelWithDebInfo/build/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc5-gcc43-RelWithDebInfo/build/data/G4NDL4.2/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc5-gcc43-RelWithDebInfo/build/data/G4NDL4.2/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc5-gcc43-RelWithDebInfo/build/data/G4NDL4.2/Capture/CrossSection/8_17_Oxygen
 WARNING: model G4LEProtonInelastic is being deprecated and will
 disappear in Geant4 version 10.0
 WARNING: model G4LEPionPlusInelastic is being deprecated and will

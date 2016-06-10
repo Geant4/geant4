@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -594,15 +594,15 @@ Using Root analysis manager
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 288.831 MeV       total track length: 20.4665 cm 
-        Gap: total energy: 8.19232 MeV       total track length: 3.81315 cm 
+   Absorber: total energy: 283.193 MeV       total track length: 20.1678 cm 
+        Gap: total energy: 9.27174 MeV       total track length: 4.33951 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 288.831 MeV rms = 0 eV 
- EGap : mean = 8.19232 MeV rms = 0 eV 
- LAbs : mean = 20.4665 cm  rms = 0 fm 
- LGap : mean = 3.81315 cm  rms = 0 fm 
+ EAbs : mean = 283.193 MeV rms = 0 eV 
+ EGap : mean = 9.27174 MeV rms = 0 eV 
+ LAbs : mean = 20.1678 cm  rms = 0 fm 
+ LGap : mean = 4.33951 cm  rms = 0 fm 
      Transportation,                msc,              hIoni,            ionIoni
              hBrems,          hPairProd,              eIoni,              eBrem
             annihil,        CoulombScat,               phot,              compt
@@ -939,15 +939,15 @@ Using Root analysis manager
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy:  282.08 MeV       total track length: 20.1981 cm 
-        Gap: total energy: 16.6294 MeV       total track length: 8.51564 cm 
+   Absorber: total energy: 272.262 MeV       total track length: 19.3333 cm 
+        Gap: total energy:  21.546 MeV       total track length: 9.79252 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 282.08 MeV rms = 0 eV 
- EGap : mean = 16.6294 MeV rms = 0 eV 
- LAbs : mean = 20.1981 cm  rms = 0 fm 
- LGap : mean = 8.51564 cm  rms = 0 fm 
+ EAbs : mean = 272.262 MeV rms = 0 eV 
+ EGap : mean = 21.546 MeV rms = 0 eV 
+ LAbs : mean = 19.3333 cm  rms = 0 fm 
+ LGap : mean = 9.79252 cm  rms = 0 fm 
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1269,14 +1269,14 @@ Using Root analysis manager
 
 ---> Begin of event: 0
 ---> End of event: 0
-   Absorber: total energy: 462.772 MeV       total track length: 33.1144 cm 
-        Gap: total energy: 21.7635 MeV       total track length: 11.0673 cm 
+   Absorber: total energy: 445.661 MeV       total track length: 31.3591 cm 
+        Gap: total energy: 34.0784 MeV       total track length: 17.4048 cm 
 
  ----> print histograms statistic 
 
- EAbs : mean = 462.772 MeV rms = 0 eV 
- EGap : mean = 21.7635 MeV rms = 0 eV 
- LAbs : mean = 33.1144 cm  rms = 0 fm 
- LGap : mean = 11.0673 cm  rms = 0 fm 
+ EAbs : mean = 445.661 MeV rms = 0 eV 
+ EGap : mean = 34.0784 MeV rms = 0 eV 
+ LAbs : mean = 31.3591 cm  rms = 0 fm 
+ LGap : mean = 17.4048 cm  rms = 0 fm 
 Graphics systems deleted.
 Visualization Manager deleting...

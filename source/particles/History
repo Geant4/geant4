@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 24 Feb. 2013 H.Kurashige (particles-V09-05-08)
+- Remove unused variable of thePDGiSpin from G4PDGCodeChecker
+
 - 9 Sep. 2012 G.Cosmo (particles-V09-05-07)
 - Fix constructor of G4PhaseSpaceDecayChannel
 

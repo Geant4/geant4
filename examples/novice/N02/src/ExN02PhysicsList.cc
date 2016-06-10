@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: ExN02PhysicsList.cc 69899 2013-05-17 10:05:33Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +35,7 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4IonConstructor.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,6 +63,8 @@ void ExN02PhysicsList::ConstructParticle()
   ConstructLeptons();
   ConstructMesons();
   ConstructBaryons();
+  G4IonConstructor pIonConstructor;
+  pIonConstructor.ConstructParticle(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

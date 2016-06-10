@@ -18,6 +18,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- April 4, 2013 V.Ivanchenko (track-V09-05-21)
+- G4ParticleChange - fixed bug #1451 - neutron do not change velocity 
+    after elastic scattering; little clean up useful for MT
+- G4ParticleChangeForEloss, G4ParticleChangeForGamma - clean up 
+    computation of velocity (a little performance improvement expected) 
+
 - November 8, 2012 I.Hrivnacova (track-V09-05-20)
 - Fixed G4Track: added initialisation of useGivenVelocity where missing
 

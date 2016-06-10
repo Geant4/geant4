@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RKG3_Stepper.cc 69786 2013-05-15 09:38:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -33,7 +33,7 @@
 #include "G4Mag_EqRhs.hh"
 
 G4RKG3_Stepper::G4RKG3_Stepper(G4Mag_EqRhs *EqRhs)
-  : G4MagIntegratorStepper(EqRhs,6), hStep(0.), fPtrMagEqOfMot(EqRhs)
+  : G4MagIntegratorStepper(EqRhs,6), hStep(0.)
 {
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorFreeTrajState.cc 69766 2013-05-14 14:33:55Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -56,10 +56,10 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4String& partName, const G4Po
 //------------------------------------------------------------------------
 G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD ) : G4ErrorTrajState( tpSD.GetParticleType(), tpSD.GetPosition(), tpSD.GetMomentum() )
 {
-  //  G4ThreeVector planeNormal = tpSD.GetPlaneNormal();
+  // G4ThreeVector planeNormal = tpSD.GetPlaneNormal();
   // G4double fPt = tpSD.GetMomentum()*planeNormal;//mom projected on normal to plane  
-  //  G4ErrorSurfaceTrajParam tpSDparam = tpSD.GetParameters();
-  //  G4ThreeVector Psc = fPt * planeNormal + tpSDparam.GetPU()*tpSDparam.GetVectorU() + tpSD.GetPV()*tpSD.GetVectorW();
+  // G4ErrorSurfaceTrajParam tpSDparam = tpSD.GetParameters();
+  // G4ThreeVector Psc = fPt * planeNormal + tpSDparam.GetPU()*tpSDparam.GetVectorU() + tpSD.GetPV()*tpSD.GetVectorW();
 
   fTrajParam = G4ErrorFreeTrajParam( fPosition, fMomentum );
   Init();
@@ -68,7 +68,7 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
   G4ErrorSurfaceTrajParam tpSDparam = tpSD.GetParameters();
   G4double mom = fMomentum.mag();
   G4double mom2 = fMomentum.mag2();
-  G4double TVW1 = std::sqrt( mom2 / ( mom2 + tpSDparam.GetPV()*tpSDparam.GetPV() + tpSDparam.GetPV()*tpSDparam.GetPV()) );
+  G4double TVW1 = std::sqrt( mom2 / ( mom2 + tpSDparam.GetPV()*tpSDparam.GetPV() + tpSDparam.GetPW()*tpSDparam.GetPW()) );
   G4ThreeVector vTVW( TVW1, tpSDparam.GetPV()/mom * TVW1, tpSDparam.GetPW()/mom * TVW1 );
   G4Vector3D vectorU = tpSDparam.GetVectorV().cross(  tpSDparam.GetVectorW() );
   G4Vector3D vTN = vTVW.x()*vectorU + vTVW.y()*tpSDparam.GetVectorV() + vTVW.z()*tpSDparam.GetVectorW();
@@ -96,7 +96,7 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
   vVperp *= 1./vVperp.mag();
 
 #ifdef G4EVERBOSE
-   if( iverbose >= 5){
+   if( iverbose >= 5 ){
      G4cout << " CHECK: vUN " << vUN << " = " << vUperp <<  " diff " << (vUN-vUperp).mag() << G4endl;
      G4cout << " CHECK: vVN " << vVN << " = " << vVperp <<  " diff " << (vVN-vVperp).mag() << G4endl;
    }
@@ -108,16 +108,15 @@ G4ErrorFreeTrajState::G4ErrorFreeTrajState( const G4ErrorSurfaceTrajState& tpSD 
   G4double dVU = vVperp * tpSD.GetVectorV();
   G4double dVV = vVperp * tpSD.GetVectorW();
 
-
   //--- Get transformation first
   G4ErrorMatrix transfM(5, 5, 1 );
   //--- Get magnetic field
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
   G4ThreeVector dir = fTrajParam.GetDirection();
   G4double invCosTheta = 1./std::cos( dir.theta() );
+  G4cout << " dir="<<dir<<" invCosTheta "<<invCosTheta << G4endl;  
 
-  if( fCharge != 0 
-&& field ) {
+  if( fCharge != 0 && field ) {
     G4double pos1[3]; pos1[0] = fPosition.x()*cm; pos1[1] = fPosition.y()*cm; pos1[2] = fPosition.z()*cm;
     G4double h1[3];
     field->GetFieldValue( pos1, h1 );
@@ -212,6 +211,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   
 #ifdef G4EVERBOSE
   if( iverbose >= 2 )G4cout << "  G4ErrorFreeTrajState::PropagateError " << G4endl;
+  G4cout << "G4EP: iverbose="<< iverbose << G4endl;
 #endif
 
   // * *** ERROR PROPAGATION ON A HELIX ASSUMING SC VARIABLES
@@ -242,10 +242,12 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   G4double pInvPre = 1./pPre;
   G4double pInvPost = 1./pPost;
   G4double deltaPInv = pInvPost - pInvPre;
+  if( iverbose >= 2 ) G4cout << "G4EP:  pInvPre" << pInvPre<< "  pInvPost:" << pInvPost<<"  deltaPInv:" << deltaPInv<<   G4endl;
+
 
   G4Vector3D vpPreNorm = vpPre * pInvPre;
   G4Vector3D vpPostNorm = vpPost * pInvPost;
-  //  if( iverbose >= 2 ) G4cout << "G4EP: vpPreNorm " << vpPreNorm << " vpPostNorm " << vpPostNorm << G4endl;
+  if( iverbose >= 2 ) G4cout << "G4EP: vpPreNorm " << vpPreNorm << " vpPostNorm " << vpPostNorm << G4endl;
   //return if propagation along Z??  
   if( 1. - std::fabs(vpPostNorm.z()) < kCarTolerance ) return 4;
   G4double sinpPre = std::sin( vpPreNorm.theta() ); //cosine perpendicular to pPre = sine pPre
@@ -281,25 +283,36 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
   // check if the magnetic field is = 0.
 
   //position is from geant4, it is assumed to be in mm (for debugging, eventually it will not be transformed)
+  //it is assumed vposPre[] is in cm and pos1[] is in mm.
   G4double pos1[3]; pos1[0] = vposPre.x()*cm; pos1[1] = vposPre.y()*cm; pos1[2] = vposPre.z()*cm;
   G4double pos2[3]; pos2[0] = vposPost.x()*cm; pos2[1] = vposPost.y()*cm; pos2[2] = vposPost.z()*cm;
   G4double h1[3], h2[3];
 
   const G4Field* field = G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField();
   if( !field ) return 0; //goto 45
- 
+
+
+
   // calculate transformation except it NEUTRAL PARTICLE OR FIELDFREE REGION
   if( charge != 0. && field ) {
 
-    field->GetFieldValue( pos1, h1 );
+    field->GetFieldValue( pos1, h1 ); //here pos1[], pos2[] are in mm, not changed
     field->GetFieldValue( pos2, h2 );
     G4ThreeVector HPre = G4ThreeVector( h1[0], h1[1], h1[2] ) / tesla *10.; //10. is to get same dimensions as GEANT3 (kilogauss)
     G4ThreeVector HPost= G4ThreeVector( h2[0], h2[1], h2[2] ) / tesla *10.;
     G4double magHPre = HPre.mag();
     G4double magHPost = HPost.mag();
 #ifdef G4EVERBOSE
-    if( iverbose >= 2 ) G4cout << "G4EP: HPre " << HPre << G4endl
-                            << "G4EP: HPost " << HPost << G4endl;
+    if( iverbose >= 2 ) {
+      G4cout << "G4EP: h1 = "
+             << h1[0] << ", " << h1[1] << ", " << h1[2] << G4endl;
+      G4cout << "G4EP: pos1/mm = "
+             << pos1[0] << ", " << pos1[1] << ", " << pos1[2] << G4endl;
+      G4cout << "G4EP: pos2/mm = "
+             << pos2[0] << ", " << pos2[1] << ", " << pos2[2] << G4endl;
+      G4cout << "G4EP: B-filed in KGauss HPre " << HPre << G4endl
+	     << "G4EP: in KGauss HPost " << HPost << G4endl;
+    }
 #endif
     
   if( magHPre + magHPost != 0. ) {
@@ -317,7 +330,11 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     G4double diffHSqr = ( HPre * pInvPre - HPost * pInvPost ).mag2();
     G4double delhp6Sqr = 300.*300.; 
 #ifdef G4EVERBOSE
-    if( iverbose >= 2 ) G4cout << " G4EP: gam " << gam << " alphaSqr " << alphaSqr << " diffHSqr " << diffHSqr << G4endl;
+    if( iverbose >= 2 ) {
+      G4cout << " G4EP: gam " << gam << " alphaSqr " << alphaSqr
+             << " diffHSqr " << diffHSqr << G4endl;
+      G4cout << " alpha= " << sqrt(alphaSqr) << G4endl;
+    }
 #endif
     if( diffHSqr * alphaSqr > delhp6Sqr ) return 3;
 
@@ -343,7 +360,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
     G4ThreeVector AN2 = vHAverNorm.cross( vpPostNorm );
     
 #ifdef G4EVERBOSE
-    if( iverbose >= 2 ) G4cout << " G4EP: AN2 " << AN2 << G4endl;
+    if( iverbose >= 2 ) G4cout << " G4EP: AN2 " << AN2 << "  gamma:"<<gamma<< "  theta="<< thetaAver<<G4endl;
 #endif
     G4double AU = 1./vpPreNorm.perp();
     //t  G4ThreeVector vU( vpPreNorm.cross( G4ThreeVector(0.,0.,1.) ) * AU );
@@ -364,7 +381,7 @@ G4int G4ErrorFreeTrajState::PropagateError( const G4Track* aTrack )
                        vpPostNorm.z()*vUPost.x(), 
                        vpPostNorm.x()*vUPost.y() - vpPostNorm.y()*vUPost.x() );
 #ifdef G4EVERBOSE
-    //-    G4cout << " vpPostNorm " << vpPostNorm << G4endl;
+    G4cout << " vpPostNorm " << vpPostNorm << G4endl;
     if( iverbose >= 2 ) G4cout << " G4EP: AU " << AU << " vUPre " << vUPre << " vVPre " << vVPre << " vUPost " << vUPost << " vVPost " << vVPost << G4endl;
 #endif
     G4Point3D deltaPos( vposPre - vposPost );
@@ -596,13 +613,13 @@ G4int G4ErrorFreeTrajState::PropagateErrorMSC( const G4Track* aTrack )
 #ifdef G4EVERBOSE
   if( iverbose >= 4 ) G4cout << "material " << mate->GetName() 
                      //<< " " << mate->GetZ() << " "  << mate->GetA() 
-                        << " " << effZ << " " << effA
-                        << " "  << mate->GetDensity()/g*mole << " " << mate->GetRadlen()/cm << " " << mate->GetNuclearInterLength()/cm << G4endl;
+                        << " effZ:" << effZ << " effA:" << effA
+                        << " dens(g/mole):"  << mate->GetDensity()/g*mole << " Radlen/cm:" << mate->GetRadlen()/cm << " nuclLen/cm" << mate->GetNuclearInterLength()/cm << G4endl;
 #endif
 
   G4double RI = stepLengthCm / (mate->GetRadlen()/cm);
 #ifdef G4EVERBOSE
-  if( iverbose >= 4 ) G4cout << std::setprecision(6) << std::setw(6) << "G4EP:MSC: RI " << RI << " stepLengthCm " << stepLengthCm << " radlen " << (mate->GetRadlen()/cm) << " " << RI*1.e10 << G4endl;
+  if( iverbose >= 4 ) G4cout << std::setprecision(6) << std::setw(6) << "G4EP:MSC: RI=X/X0 " << RI << " stepLengthCm " << stepLengthCm << " radlen/cm " << (mate->GetRadlen()/cm) << " RI*1.e10:" << RI*1.e10 << G4endl;
 #endif
   G4double charge = aTrack->GetDynamicParticle()->GetCharge();
   G4double DD = 1.8496E-4*RI*(charge/pBeta * charge/pBeta );
@@ -667,13 +684,13 @@ G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
   G4double mass = aTrack->GetDynamicParticle()->GetMass() / GeV;
   G4double gamma = Etot / mass;
   
-  // *     Calculate xi factor (KeV).
+  // *     Calculate xi factor (keV).
   G4double XI = 153.5*effZ*stepLengthCm*(mate->GetDensity()/mg*mole) / 
     (effA*beta*beta);
 
 #ifdef G4EVERBOSE
   if( iverbose >= 2 ){
-    G4cout << "G4EP:IONI: XI " << XI << " beta " << beta << " gamma " << gamma << G4endl;
+    G4cout << "G4EP:IONI: XI/keV " << XI << " beta " << beta << " gamma " << gamma << G4endl;
     G4cout << " density " << (mate->GetDensity()/mg*mole) << " effA " << effA << " step " << stepLengthCm << G4endl;
   }
 #endif
@@ -684,12 +701,26 @@ G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
   G4double massRatio = eMass / mass;
   G4double F1 = 2*eMass*etasq;
   G4double F2 = 1. + 2. * massRatio * gamma + massRatio * massRatio;
-  G4double Emax = 1.E+6*F1/F2;
+  G4double Emax = 1.E+6*F1/F2; // now in keV
 
   //  * *** and now sigma**2  in GeV
-  G4double dedxSq = XI*Emax*(1.-(beta*beta/2.))*1.E-12;
+  G4double dedxSq = XI*Emax*(1.-(beta*beta/2.))*1.E-12; // now in GeV^2
+  /*The above  formula for var(1/p) good for dens scatterers. However, for MIPS passing
+    through a gas it leads to overestimation. Further more for incident electrons
+    the Emax is almost equal to incident energy.
+    This leads  to  k=Xi/Emax  as small as e-6  and gradually the cov matrix  explodes.
+
+    http://www2.pv.infn.it/~rotondi/kalman_1.pdf
+    
+    Since I do not have enough info at the moment to implement Landau & sub-Landau models for k=Xi/Emax <0.01 I'll saturate k at this value for now
+  */
+
+  if (XI/Emax<0.01)  dedxSq *=XI/Emax*100  ;// Quench for low Elos, see above: newVar=odVar *k/0.01
+  
 #ifdef G4EVERBOSE
-  if( iverbose >= 2 ) G4cout << "G4EP:IONI: DEDX2 " << dedxSq << " emass " << eMass << " Emax " << Emax << G4endl;
+  if( iverbose >= 2 )  G4cout << "G4EP:IONI: DEDX^2(GeV^2) " << dedxSq << " emass/GeV: " << eMass << " Emax/keV: " << Emax 
+			      <<"  k=Xi/Emax="<< XI/Emax<<     G4endl;
+  
 #endif
 
   G4double pPre6 = (aTrack->GetStep()->GetPreStepPoint()->GetMomentum()/GeV).mag();
@@ -697,10 +728,9 @@ G4int G4ErrorFreeTrajState::PropagateErrorIoni( const G4Track* aTrack )
   //Apply it to error 
   fError[0][0] += Etot*Etot*dedxSq / pPre6;
 #ifdef G4EVERBOSE
-  if( iverbose >= 2 ) G4cout << "G4:IONI getot " << Etot << " dedx2 " << dedxSq << " p " << pPre6 << G4endl;
-  if( iverbose >= 2 ) G4cout << "G4EP:IONI: error_from_ionisation " << (Etot*Etot*dedxSq) / pPre6 << G4endl;
+  if( iverbose >= 2 ) G4cout << "G4:IONI Etot/GeV: " << Etot << " err_dedx^2/GeV^2: " << dedxSq << " p^6: " << pPre6 << G4endl;
+  if( iverbose >= 2 ) G4cout << "G4EP:IONI: error2_from_ionisation " << (Etot*Etot*dedxSq) / pPre6 << G4endl;
 #endif
 
   return 0;
 }
-

@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
@@ -64,7 +63,7 @@ class G4NeutronHPCapture : public G4HadronicInteraction
       std::vector<G4NeutronHPChannel*> theCapture;
   G4String dirName;
   G4int numEle;
-  G4int it;
+//  G4int it;
   
   G4HadFinalState theResult;
       void addChannelForNewElement();

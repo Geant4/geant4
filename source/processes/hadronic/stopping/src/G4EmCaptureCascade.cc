@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmCaptureCascade.cc 69256 2013-04-24 14:59:10Z vnivanch $
 //
 //-----------------------------------------------------------------------------
 //
@@ -94,6 +94,7 @@ G4EmCaptureCascade::G4EmCaptureCascade()
     fKLevelEnergy[z2] = listKEnergy[i];
     idx = i;  
   }
+  for( G4int i = 0; i<14; ++i) { fLevelEnergy[i] = 0.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

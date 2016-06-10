@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Transportation.hh 69887 2013-05-17 08:17:02Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -160,7 +160,6 @@ class G4Transportation : public G4VProcess
      G4double             fTransportEndKineticEnergy;
      G4ThreeVector        fTransportEndSpin;
      G4bool               fMomentumChanged;
-     G4bool               fEnergyChanged;
      G4bool               fEndGlobalTimeComputed; 
      G4double             fCandidateEndGlobalTime;
        // The particle's state after this Step, Store for DoIt
@@ -193,8 +192,6 @@ class G4Transportation : public G4VProcess
      G4int    fThresholdTrials;              //    for this no of trials
        // Above 'important' energy a 'looping' particle in field will 
        //   *NOT* be abandoned, except after fThresholdTrials attempts.
-     G4double fUnimportant_Energy;
-       //  Below this energy, no verbosity for looping particles is issued
 
   // Counter for steps in which particle reports 'looping',
   //   if it is above 'Important' Energy 

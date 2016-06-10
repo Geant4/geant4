@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: FCALPrimaryGeneratorAction.cc 69896 2013-05-17 09:57:59Z gcosmo $
 //
 // 
 
@@ -80,7 +80,7 @@ FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
 	 >> Cos_X[InEvent] >> Cos_Y[InEvent] >> Cos_Z[InEvent];
   };   
 
-  Nevent = 2500;
+  Nevent = 0;
 }
 
 

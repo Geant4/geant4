@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2010-06-06 04:05:29 perl Exp $
+$Id: History 69899 2013-05-17 10:05:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-02-13 V.Ivant (exampleN02-V09-05-01)
+- ExN02PhysicsList - fixed bug #1444 - ions are added
      
 12-12-11 mma (exampleN02-V09-05-00)
 - modify SteppingVerbose for OutOfWorld

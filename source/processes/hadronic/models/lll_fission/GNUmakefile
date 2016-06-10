@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2007-05-22 00:39:08 dennis Exp $
+# $Id: GNUmakefile 69860 2013-05-16 14:39:02Z gcosmo $
 # ------------------------------------------------------------------------
 # GNUmakefile for Livermore fission library.  Dennis Wright, 14 March 2007
 # ------------------------------------------------------------------------

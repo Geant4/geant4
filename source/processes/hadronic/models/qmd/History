@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 March 2013 Dennis Wright (hadr-qmd-V09-05-05)
+- fix MacOS Clang compiler warnings for G4QMDCollision.hh, .cc :
+  remove unused private variables sig0 and sig1   
+
 11-January-2013  Gabriele Cosmo (hadr-qmd-V09-05-04)
 - Fix for logic error in G4QMDGroundStateNucleus::packNucleons().
   Addressing problem report #1418.

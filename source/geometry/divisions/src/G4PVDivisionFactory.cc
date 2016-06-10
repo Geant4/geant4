@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4PVDivisionFactory.cc 69784 2013-05-15 09:16:06Z gcosmo $
 //
 // class G4PVDivisionFactory Implementation file
 //
@@ -54,12 +54,12 @@ G4PVDivisionFactory::~G4PVDivisionFactory()
 
 G4PVDivisionFactory* G4PVDivisionFactory::GetInstance()
 {
-  static G4PVDivisionFactory theFactory;
+  static G4PVDivisionFactory * theFactory = new G4PVDivisionFactory;
   if (!fgInstance)
   {
-    fgInstance = &theFactory;
+    fgInstance = theFactory;
   }
-  return &theFactory;
+  return theFactory;
 } 
 
 //_____________________________________________________________________________

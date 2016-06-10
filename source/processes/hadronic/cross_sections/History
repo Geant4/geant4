@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 March 2013 V.Ivanchenko   (hadr-cross-V09-05-46)
+-----------------------------------------------------
+- G4HadronFissionDataSet - always return zero (only HP may simulate 
+  fission as a separate process)
+
 29 January 2013 A.Ribon     (hadr-cross-V09-05-45)
 ----------------------------------------------------
 - G4ComponentAntiNuclNuclearXS : consider anti-protons and anti-neutrons

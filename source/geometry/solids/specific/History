@@ -1,4 +1,4 @@
-$Id: History 67011 2013-01-29 16:17:41Z gcosmo $
+$Id: History 69790 2013-05-15 12:39:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,26 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-Apr-2013  J.Apostolakis (geom-specific-V09-05-26)
+- Revised G4ExtrudedSolid::IsSameLine to use the perpendicular
+  distance to a line when deciding - not the y-intercept difference.
+  ( Issue responsible for a problem in Subtraction Solid in Atlas ).
+
+16-Apr-2013  T.Nikitina
+- Fix in calculation of normal in G4Tet::DistanceToOut(p,v,..) and
+  SurfaceNormal(p).
+- Fix in G4Polycone::GetPointOnCone() for cases of shape with decreasing Z.
+  Fixes cases of false report for overlaps detection. Problem report #1462.
+  Added check with exception in constructor for polycone with rInner > rOuter
+  for the same Z.
+
+18-Mar-2013  M.Gayer
+- G4TessellatedSolid: fixed problem with navigation in tessellated solids
+  with concave surfaces. Addresses problem report #1456.
+
+22-Feb-2013  G.Cosmo
+- Removed unused private data member in G4TwistTrapParallelSide.
 
 11-Jan-2013  G.Cosmo (geom-specific-V09-05-25)
 - Fixed condition in G4VTwistSurface::GetBoundaryLimit() for logical error.
@@ -48,6 +68,9 @@ committal in the CVS repository !
 14-Nov-2012  P.Mato (geom-specific-V09-05-21)
 - Added #undef NDEBUG in unit tests to ensure assert works also in
   full optimised mode.
+
+14-Nov-2012  P. Mato (geom-specific-V09-05-20)
+- Added #undef NDEBUG in unit tests to ensure that assert always works
 
 13-Nov-2012  M.Gayer (geom-specific-V09-05-19)
 - More fixes for out-of-bound array accesses in G4SurfaceVoxelizer.

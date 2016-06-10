@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 May 2013: V.Ivant (emmuons-V09-05-07)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel - fixed rare bug
+    in cross section computation - division by zero (bug report #1471)
+
 06 November 2012: V.Ivant (emmuons-V09-05-06)
 - G4MuBremsstrahlungModel, G4MuPairProductionModel - reduce number of
     computations of log of the same argument, no change in results

@@ -111,12 +111,8 @@ class G4AdjointPosOnPhysVolGenerator
    static G4AdjointPosOnPhysVolGenerator* theInstance;
    G4VSolid* theSolid;
    G4VPhysicalVolume* thePhysicalVolume;
-   G4int NStat;
-   G4double epsilon;
    G4bool UseSphere;
    G4String ModelOfSurfaceSource;
-   G4double ExtSourceRadius;
-   G4double ExtSourceDx,ExtSourceDy,ExtSourceDz ;
    G4AffineTransform theTransformationFromPhysVolToWorld;
    G4double AreaOfExtSurfaceOfThePhysicalVolume;
    G4double CosThDirComparedToNormal;

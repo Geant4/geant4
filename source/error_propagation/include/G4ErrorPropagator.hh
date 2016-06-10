@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ErrorPropagator.hh 69766 2013-05-14 14:33:55Z gcosmo $
 //
 //
 // Class Description:
@@ -118,7 +118,6 @@ class G4ErrorPropagator
   G4double theStepLength;
 
   G4ErrorTrajState* theInitialTrajState;
-  G4ErrorTrajState* theFinalTrajState;
 
   G4int theStepN;
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2010-11-11 11:51:56 ldesorgh Exp $
+$Id: History 69845 2013-05-16 09:19:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22 Feb 2013: L.Desorgher (emadjoint-V09-05-05)
+-Remove of unused variables detected by compilation warnings.     
+
+23 Jan 2013: V.Ivanchenko
+- G4AdjointhMultipleScattering - use msc95 instead of msc90
+
 30 Oct 2012: L. Desorgher (emadjoint-V09-05-04)
 -Inclusion of headers for system of units and physical constants in G4AdjointBremsstrahlungModel
 

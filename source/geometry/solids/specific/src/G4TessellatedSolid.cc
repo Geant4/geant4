@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 67011 2013-01-29 16:17:41Z gcosmo $
+// $Id: G4TessellatedSolid.cc 69790 2013-05-15 12:39:10Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -261,7 +261,7 @@ G4bool G4TessellatedSolid::AddFacet (G4VFacet *aFacet)
         {
           --it;
           G4int id = (*it).id;
-          G4VFacet *facet = fFacets[id];  
+          G4VFacet *facet = fFacets[id];	  
           G4ThreeVector q = facet->GetCircumcentre();
           found = (facet == aFacet);
           if (found) break;
@@ -350,7 +350,7 @@ void G4TessellatedSolid::PrecalculateInsides()
 {
   vector<G4int> voxel(3), maxVoxels(3);
   for (G4int i = 0; i <= 2; ++i) maxVoxels[i] = fVoxels.GetBoundary(i).size();
-  unsigned int size = maxVoxels[0] * maxVoxels[1] * maxVoxels[2];
+  G4int size = maxVoxels[0] * maxVoxels[1] * maxVoxels[2];
 
   G4SurfBits checked(size-1);
   fInsides.Clear();
@@ -494,7 +494,7 @@ void G4TessellatedSolid::CreateVertexList()
             G4double dif = (q-p).mag2();
             found = (dif < kCarTolerance24);
             if (found) break;
-            dif = value.mag2 - (q.x() + q.y() + q.z());
+        dif = value.mag2 - (q.x() + q.y() + q.z());
             if (dif > kCarTolerance3) break;
           }
         }
@@ -502,11 +502,11 @@ void G4TessellatedSolid::CreateVertexList()
 
       if (!found)
       {
-#ifdef G4SPECSDEBUG
+#ifdef G4SPECSDEBUG	
         G4cout << p.x() << ":" << p.y() << ":" << p.z() << G4endl;
         G4cout << "Adding new vertex #" << i << " of facet " << k
                << " id " << value.id << G4endl;
-        G4cout << "===" << G4endl;
+        G4cout << "===" << G4endl;	
 #endif
         fVertexList.push_back(p);
         vertexListSorted.insert(value);
@@ -529,7 +529,7 @@ void G4TessellatedSolid::CreateVertexList()
       }
       else
       {
-#ifdef G4SPECSDEBUG
+#ifdef G4SPECSDEBUG	
         G4cout << p.x() << ":" << p.y() << ":" << p.z() << G4endl;
         G4cout << "Vertex #" << i << " of facet " << k
                << " found, redirecting to " << id << G4endl;
@@ -542,7 +542,7 @@ void G4TessellatedSolid::CreateVertexList()
     //
     facet.SetVertices(&fVertexList);
     for (G4int i = 0; i < max; i++)
-      facet.SetVertexIndex(i,newIndex[i]);
+        facet.SetVertexIndex(i,newIndex[i]);
   }
   vector<G4ThreeVector>(fVertexList).swap(fVertexList);
   
@@ -555,7 +555,7 @@ void G4TessellatedSolid::CreateVertexList()
     G4ThreeVector vec = fVertexList[id];
     G4double mvalue = vec.x() + vec.y() + vec.z();
     if (previousValue && (previousValue - 1e-9 > mvalue))
-      G4cout << "Error in CreateVertexList: previousValue " << previousValue
+      G4cout << "Error in CreateVertexList: previousValue " << previousValue 
              <<  " is smaller than mvalue " << mvalue << G4endl;
     previousValue = mvalue;
   }
@@ -570,7 +570,7 @@ void G4TessellatedSolid::DisplayAllocatedMemory()
   G4int with = AllocatedMemory();
   G4double ratio = (G4double) with / without;
   G4cout << "G4TessellatedSolid - Allocated memory without voxel overhead "
-         << without << "; with " << with << "; ratio: " << ratio << G4endl; 
+         << without << "; with " << with << "; ratio: " << ratio << G4endl;	 
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -578,7 +578,7 @@ void G4TessellatedSolid::DisplayAllocatedMemory()
 void G4TessellatedSolid::SetSolidClosed (const G4bool t)
 {
   if (t)
-  {  
+  {
 #ifdef G4SPECSDEBUG    
     G4cout << "Creating vertex list..." << G4endl;
 #endif
@@ -1069,7 +1069,7 @@ G4TessellatedSolid::DistanceToInNoVoxels (const G4ThreeVector &p,
   G4ThreeVector normal;
 
 #if G4SPECSDEBUG
-  if ( Inside(p) == kInside )
+  if (Inside(p) == kInside )
   {
     std::ostringstream message;
     G4int oldprc = message.precision(16) ;
@@ -1208,14 +1208,14 @@ DistanceToOutCandidates(const std::vector<G4int> &candidates,
         //
         minDist = 0.0;
         minNormal = normal;
-        minCandidate = i;
+        minCandidate = candidate;
         break;
       }
       if (dist >= 0.0 && dist < minDist)
       {
         minDist = dist;
         minNormal = normal;
-        minCandidate = i;
+        minCandidate = candidate;
       }
     }
   }
@@ -1473,11 +1473,11 @@ G4double G4TessellatedSolid::SafetyFromOutside (const G4ThreeVector &p,
 
   G4double minDist;
 
-  if (!aAccurate)
-    return fVoxels.DistanceToBoundingBox(p);
-
   if (fVoxels.GetCountOfVoxels() > 1)
   {
+    if (!aAccurate)
+      return fVoxels.DistanceToBoundingBox(p);
+
     if (!OutsideOfExtent(p, kCarTolerance))
     {
       vector<G4int> startingVoxel(3);

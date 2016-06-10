@@ -24,21 +24,18 @@
 // ********************************************************************
 //
 //
-//
 
 #include "G4NuclearFermiDensity.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
-G4NuclearFermiDensity::G4NuclearFermiDensity(G4int anA, G4int aZ) 
-  :  theA(anA), theZ(aZ), a(0.545 * fermi) 
+G4NuclearFermiDensity::G4NuclearFermiDensity(G4int anA, G4int /*aZ*/) 
+ : theA(anA), a(0.545 * fermi) 
 {
-//        const G4double r0=1.14*fermi;
-	const G4double r0=1.16 * ( 1. - 1.16 * std::pow(G4double(anA), -2./3.)) * fermi;
-	theR= r0 * std::pow(anA, 1./3. );
-	Setrho0(3./ (4. * pi * std::pow(r0,3.) * theA * ( 1. + sqr(a/theR)*pi2 )));
+  const G4double r0 = 1.16 * (1. - 1.16 * std::pow(G4double(anA), -2./3.)) * fermi;
+  theR = r0 * std::pow(anA, 1./3.);
+  Setrho0(3./ (4.*pi * std::pow(r0,3.) * theA * (1. + sqr(a/theR)*pi2 )));
 }
 
 G4NuclearFermiDensity::~G4NuclearFermiDensity() {}
-        
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2006-05-08 12:28:20 gcosmo Exp $
+$Id: History 69796 2013-05-15 13:26:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 27th, 2013, M. Verderi (gflash-V09-05-01)
+--------------------------
+- fix warning compilation in clang from
+  GFlashShowerModelMessenger.hh about
+  unused data member.
 
 Jul 5th, 2012 G.Cosmo (gflash-V09-05-00)
 ---------------------

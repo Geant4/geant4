@@ -25,7 +25,7 @@
 //
 //
 //
-// $Id$
+// $Id: G4RKG3_Stepper.hh 69786 2013-05-15 09:38:51Z gcosmo $
 //
 //
 //
@@ -102,8 +102,6 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
    G4ThreeVector  fpInitial;
    G4ThreeVector  BfldIn;
    G4double       hStep;
-  
-   G4Mag_EqRhs*  fPtrMagEqOfMot;
 };
 
 #endif

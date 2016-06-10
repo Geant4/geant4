@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4Mag_UsualEqRhs.hh 69786 2013-05-15 09:38:51Z gcosmo $
 //
 //
 // class G4Mag_UsualEqRhs
@@ -52,7 +52,7 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
    public:  // with description
 
      G4Mag_UsualEqRhs( G4MagneticField* MagField );
-    ~G4Mag_UsualEqRhs();
+     virtual ~G4Mag_UsualEqRhs();
        // Constructor and destructor. No actions.
 
      void EvaluateRhsGivenB( const G4double y[],
@@ -64,13 +64,6 @@ class G4Mag_UsualEqRhs : public G4Mag_EqRhs
      virtual void SetChargeMomentumMass( G4double particleCharge, // in e+ units
                                          G4double MomentumXc,
                                          G4double mass);
-     
-  private:
-
-    G4double  fInvCurrentMomentumXc;   // OBSOLETE:
-                            // This extra state was meant to save a square root 
-                            // in a critical method.   But its use reduced
-                            // robustness (it was unstable for large steps.)
 };
 
 #endif /* G4MAG_USUAL_EQRHS */

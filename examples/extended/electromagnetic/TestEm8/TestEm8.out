@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -768,32 +768,32 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.09s Real=0.09s Sys=0s
+  User=0.08s Real=0.1s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents = 1000
 
-   Mean energy deposit in absorber = 0.7362 +- 0.11096 keV    RMS/Emean = 4.7663
-   Mean number of steps in absorber= 1.236  mean number of ion-clusters = 784.76
+   Mean energy deposit in absorber = 0.73965 +- 0.11174 keV    RMS/Emean = 4.7773
+   Mean number of steps in absorber= 1.238  mean number of ion-clusters = 788.79
 
  ====== Energy deposit distribution   Noverflows= 0.01 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1         3           3       0.003
-    2         6          81       0.081
-    3         9         279       0.279
+    2         6          80        0.08
+    3         9         280        0.28
     4        12         254       0.254
-    5        15         153       0.153
-    6        18         106       0.106
+    5        15         151       0.151
+    6        18         102       0.102
     7        21          49       0.049
-    8        24          25       0.025
-    9        27          12       0.012
+    8        24          29       0.029
+    9        27          13       0.013
    10        30           9       0.009
    11        33           7       0.007
    12        36           3       0.003
    13        39           1       0.001
    14        42           3       0.003
-   15        45           0           0
+   15        45           1       0.001
    16        48           3       0.003
    17        51           0           0
    18        54           1       0.001

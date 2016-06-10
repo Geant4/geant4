@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -458,35 +458,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.28s Real=4.32s Sys=0s
+  User=4.23s Real=4.78s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 778.85 MeV :  16.01 MeV     2.056 +- 0.2056 %      54.5 cm  +- 1.32 cm 
-   liquidArgon: 211.24 MeV :  15.62 MeV     7.393 +- 0.7393 %      1.04 m   +- 7.94 cm 
+          Lead: 779.63 MeV :  16.99 MeV      2.18 +- 0.218 %      54.6 cm  +- 1.36 cm 
+   liquidArgon: 211.24 MeV :  16.56 MeV      7.84 +- 0.784 %      1.04 m   +-  8.5 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          510
- Mean number of e-             869
- Mean number of e+             54.2
- Mean number of charged steps  5049.33
- Mean number of neutral steps  3625.36
+ Mean number of gamma          508
+ Mean number of e-             870
+ Mean number of e+             53.4
+ Mean number of charged steps  5057.63
+ Mean number of neutral steps  3646.6
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 778.667 MeV
-liquidArgon:	 211.394 MeV
+      Lead:	 779.63 MeV
+liquidArgon:	 211.213 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1156520236, 1832437928
+ Current couple of seeds = 1731860735, 1713430856
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -862,7 +862,7 @@ Index : 2     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1156520236, 1832437928
+ Current couple of seeds = 1731860735, 1713430856
 ----------------------------------------
 Start Run processing.
 
@@ -872,35 +872,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.59s Real=3.61s Sys=0.01s
+  User=3.58s Real=3.75s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 782.91 MeV :   21.1 MeV     2.695 +- 0.2695 %      52.2 cm  +- 1.15 cm 
-   liquidArgon: 206.93 MeV :  16.34 MeV     7.896 +- 0.7896 %      97.9 cm  +- 7.55 cm 
+          Lead: 780.63 MeV :  19.24 MeV     2.464 +- 0.2464 %        52 cm  +- 1.18 cm 
+   liquidArgon: 210.14 MeV :  15.58 MeV     7.414 +- 0.7414 %      99.5 cm  +- 6.74 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma          292
- Mean number of e-             554
+ Mean number of gamma          294
+ Mean number of e-             562
  Mean number of e+             53.9
- Mean number of charged steps  4293.59
- Mean number of neutral steps  2907.14
+ Mean number of charged steps  4341.08
+ Mean number of neutral steps  2945.71
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 782.274 MeV
-liquidArgon:	 209.043 MeV
+      Lead:	 778.372 MeV
+liquidArgon:	 211.762 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1354253930, 2040355413
+ Current couple of seeds = 961726926, 1751768890
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

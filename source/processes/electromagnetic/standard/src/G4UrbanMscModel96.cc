@@ -66,6 +66,7 @@
 
 #include "G4Poisson.hh"
 #include "globals.hh"
+#include "G4Pow.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,7 +129,7 @@ G4UrbanMscModel96::G4UrbanMscModel96(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
-  SetSampleZ(true);
+  SetSampleZ(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,23 +169,24 @@ G4double G4UrbanMscModel96::ComputeCrossSectionPerAtom(
                                    G4double AtomicNumber,G4double,
 				   G4double, G4double)
 {
-  const G4double sigmafactor = twopi*classic_electr_radius*classic_electr_radius;
-  const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
+  static const G4double sigmafactor = 
+    twopi*classic_electr_radius*classic_electr_radius;
+  static const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
-  const G4double epsmin = 1.e-4 , epsmax = 1.e10;
+  static const G4double epsmin = 1.e-4 , epsmax = 1.e10;
 
-  const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
-                             50., 56., 64., 74., 79., 82. };
+  static const G4double Zdat[15] = { 4.,  6., 13., 20., 26., 29., 32., 38., 47.,
+				     50., 56., 64., 74., 79., 82. };
 
-  const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
-                               1*keV,   2*keV,   4*keV,   7*keV,
-			      10*keV,  20*keV,  40*keV,  70*keV,
-                             100*keV, 200*keV, 400*keV, 700*keV,
-                               1*MeV,   2*MeV,   4*MeV,   7*MeV,
-			      10*MeV,  20*MeV};
+  static const G4double Tdat[22] = { 100*eV,  200*eV,  400*eV,  700*eV,
+				     1*keV,   2*keV,   4*keV,   7*keV,
+				     10*keV,  20*keV,  40*keV,  70*keV,
+				     100*keV, 200*keV, 400*keV, 700*keV,
+				     1*MeV,   2*MeV,   4*MeV,   7*MeV,
+				     10*MeV,  20*MeV};
 
   // corr. factors for e-/e+ lambda for T <= Tlim
-          G4double celectron[15][22] =
+  static const G4double celectron[15][22] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
             1.054,1.057,1.062,1.069,1.075,1.090,1.105,1.111,
             1.112,1.108,1.100,1.093,1.089,1.087            },
@@ -231,7 +233,7 @@ G4double G4UrbanMscModel96::ComputeCrossSectionPerAtom(
             1.985,1.609,1.343,1.188,1.113,1.013,0.960,0.939,
             0.933,0.930,0.933,0.936,0.939,0.949            }};
 	    
-           G4double cpositron[15][22] = {
+  static const G4double cpositron[15][22] = {
            {2.589,2.044,1.658,1.446,1.347,1.217,1.144,1.110,
             1.097,1.083,1.080,1.086,1.092,1.108,1.123,1.131,
             1.131,1.126,1.117,1.108,1.103,1.100            },
@@ -279,25 +281,27 @@ G4double G4UrbanMscModel96::ComputeCrossSectionPerAtom(
             1.456,1.412,1.364,1.328,1.307,1.282            }};
 
   //data/corrections for T > Tlim  
-  G4double Tlim = 10.*MeV;
-  G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
+  static const G4double Tlim = 10.*MeV;
+  static const G4double beta2lim = Tlim*(Tlim+2.*electron_mass_c2)/
                       ((Tlim+electron_mass_c2)*(Tlim+electron_mass_c2));
-  G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
+  static const G4double bg2lim   = Tlim*(Tlim+2.*electron_mass_c2)/
                       (electron_mass_c2*electron_mass_c2);
 
-  G4double sig0[15] = {0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
+  static const G4double sig0[15] = {
+                     0.2672*barn,  0.5922*barn, 2.653*barn,  6.235*barn,
                       11.69*barn  , 13.24*barn  , 16.12*barn, 23.00*barn ,
 		      35.13*barn  , 39.95*barn  , 50.85*barn, 67.19*barn ,
                       91.15*barn  , 104.4*barn  , 113.1*barn};
 		      		       
-  G4double hecorr[15] = {120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
+  static const G4double hecorr[15] = {
+                         120.70, 117.50, 105.00, 92.92, 79.23,  74.510,  68.29,
                           57.39,  41.97,  36.14, 24.53, 10.21,  -7.855, -16.84,
 			 -22.30};
 
   G4double sigma;
   SetParticle(part);
 
-  Z23 = pow(AtomicNumber,2./3.);
+  Z23 = G4Pow::GetInstance()->Z23(G4lrint(AtomicNumber));
 
   // correction if particle .ne. e-/e+
   // compute equivalent kinetic energy
@@ -615,8 +619,23 @@ G4double G4UrbanMscModel96::ComputeTruePathLengthLimit(
       //lower limit for tlimit
       if(tlimit < tlimitmin) tlimit = tlimitmin;
       
-      if(tPathLength > tlimit) tPathLength = tlimit;
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        G4double temptlimit = tlimit;
+        if(temptlimit > tlimitmin)
+        {
+          do {
+            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
+             } while ((temptlimit < tlimitmin) ||
+                      (temptlimit > 2.*tlimit-tlimitmin));
+        }
+        else
+          temptlimit = tlimitmin;
 
+        if(tPathLength > temptlimit) tPathLength = temptlimit;
+      }
+      else
+        if(tPathLength > tlimit) tPathLength = tlimit;
     }
   
   // version similar to 7.1 (needed for some experiments)
@@ -777,7 +796,7 @@ G4double G4UrbanMscModel96::ComputeTheta0(G4double trueStepLength,
   // for all particles take the width of the central part
   //  from a  parametrization similar to the Highland formula
   // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  const G4double c_highland = 13.6*MeV ;
+  static const G4double c_highland = 13.6*MeV ;
   G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
                          KineticEnergy*(KineticEnergy+2.*mass)/
                       ((currentKinEnergy+mass)*(KineticEnergy+mass)));
@@ -815,28 +834,30 @@ G4UrbanMscModel96::SampleScattering(const G4ThreeVector& oldDirection,
   if(std::fabs(cth) > 1.) { return fDisplacement; }
 
   // extra protection agaist high energy particles backscattered 
-  //if(cth < 1.0 - 1000*tPathLength/lambda0 && kineticEnergy > 20*MeV) { 
     //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
     //	   << " s(mm)= " << tPathLength/mm
     //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
     // do Gaussian central scattering
-  if(kineticEnergy > 5*GeV && cth < 0.9) {
+  //  if(kineticEnergy > 5*GeV && cth < 0.9) {
+  /*
+  if(cth < 1.0 - 1000*tPathLength/lambda0 
+     && cth < 0.8 && kineticEnergy > 20*MeV) { 
     G4ExceptionDescription ed;
     ed << particle->GetParticleName()
        << " E(MeV)= " << kineticEnergy/MeV
        << " Step(mm)= " << tPathLength/mm
        << " in " << CurrentCouple()->GetMaterial()->GetName()
        << " CosTheta= " << cth 
-       << " is too big" << G4endl;
+       << " is too big";
     G4Exception("G4UrbanMscModel96::SampleScattering","em0004",
 		JustWarning, ed,"");
-/*
+
     if(kineticEnergy > GeV && cth < 0.0) {
     do {
       cth = 1.0 + 2*log(G4UniformRand())*tPathLength/lambda0;
     } while(cth < -1.0);
-*/
   }
+*/
 
   G4double sth  = sqrt((1.0 - cth)*(1.0 + cth));
   G4double phi  = twopi*G4UniformRand();
@@ -919,17 +940,16 @@ G4double G4UrbanMscModel96::SampleCosineTheta(G4double trueStepLength,
   lambdaeff = trueStepLength/currentTau;
   currentRadLength = couple->GetMaterial()->GetRadlen();
 
-  if (tau >= taubig) cth = -1.+2.*G4UniformRand();
-  else if (tau >= tausmall)
-  {
-    const G4double numlim = 0.01;
+  if (tau >= taubig) { cth = -1.+2.*G4UniformRand(); }
+  else if (tau >= tausmall) {
+    static const G4double numlim = 0.01;
     G4double xmeanth, x2meanth;
     if(tau < numlim) {
       xmeanth = 1.0 - tau*(1.0 - 0.5*tau);
       x2meanth= 1.0 - tau*(5.0 - 6.25*tau)/3.;
     } else {
-    xmeanth = exp(-tau);
-    x2meanth = (1.+2.*exp(-2.5*tau))/3.;
+      xmeanth = exp(-tau);
+      x2meanth = (1.+2.*exp(-2.5*tau))/3.;
     }
     G4double relloss = 1.-KineticEnergy/currentKinEnergy;
 
@@ -938,19 +958,17 @@ G4double G4UrbanMscModel96::SampleCosineTheta(G4double trueStepLength,
 
     // is step extreme small ?
     G4bool extremesmallstep = false ;
+    G4double tsmall = tlimitmin ;
     G4double theta0 = 0.;
-    if(trueStepLength > stepmin)
+    if(trueStepLength > tsmall) {
        theta0 = ComputeTheta0(trueStepLength,KineticEnergy);
-    else {
-           G4double rate = trueStepLength/stepmin ;
-           if(G4UniformRand() < rate) {
-             theta0 = ComputeTheta0(stepmin,KineticEnergy);
-             extremesmallstep = true ;
-           }
-    else
-      theta0 = 0.;
+    } else {
+      G4double rate = trueStepLength/tsmall ;
+      if(G4UniformRand() < rate) {
+	theta0 = ComputeTheta0(tsmall,KineticEnergy);
+	extremesmallstep = true ;
+      }
     }
-
     //G4cout << "Theta0= " << theta0 << " theta0max= " << theta0max 
     //	     << "  sqrt(tausmall)= " << sqrt(tausmall) << G4endl;
 
@@ -972,18 +990,29 @@ G4double G4UrbanMscModel96::SampleCosineTheta(G4double trueStepLength,
     // parameter for tail
     G4double ltau= log(tau);
     G4double u   = exp(ltau/6.);
-    if(extremesmallstep)  u = exp(log(stepmin/lambda0)/6.);
+    if(extremesmallstep)  u = exp(log(tsmall/lambda0)/6.);
     G4double xx  = log(lambdaeff/currentRadLength);
     G4double xsi = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*xx;
 
     // tail should not be too big
-    if(xsi < 1.9) { xsi = 1.9; }
+    if(xsi < 1.9) { 
+      /*
+      if(KineticEnergy > 20*MeV && xsi < 1.6) {
+	G4cout << "G4UrbanMscModel96::SampleCosineTheta: E(GeV)= " 
+	       << KineticEnergy/GeV 
+	       << " !!** c= " << xsi
+	       << " **!! length(mm)= " << trueStepLength << " Zeff= " << Zeff 
+	       << " " << couple->GetMaterial()->GetName()
+	       << " tau= " << tau << G4endl;
+      }
+      */
+      xsi = 1.9; 
+    }
 
-    G4double   c = xsi;
+    G4double c = xsi;
 
-    if(abs(c-3.) < 0.001)  c = 3.001;      
-    if(abs(c-2.) < 0.001)  c = 2.001;      
-    if(abs(c-1.) < 0.001)  c = 1.001;      
+    if(fabs(c-3.) < 0.001)      { c = 3.001; }
+    else if(fabs(c-2.) < 0.001) { c = 2.001; }
 
     G4double c1 = c-1.;
 
@@ -1095,8 +1124,8 @@ G4double G4UrbanMscModel96::SampleDisplacement()
 
 G4double G4UrbanMscModel96::LatCorrelation()
 {
-  const G4double kappa = 2.5;
-  const G4double kappami1 = kappa-1.;
+  static const G4double kappa = 2.5;
+  static const G4double kappami1 = kappa-1.;
 
   G4double latcorr = 0.;
   if((currentTau >= tausmall) && !insideskin)

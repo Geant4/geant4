@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -492,31 +492,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.03s Real=5.07s Sys=0s
+  User=5.09s Real=5.66s Sys=0s
 
  SUMMARY 
 
 
- Mean number of charged steps:  7289.47
- Mean number of neutral steps:  3921.76
+ Mean number of charged steps:  7249.81
+ Mean number of neutral steps:  3892.12
 
- energy deposit :   95.05 % E0 +-    0.85 % E0
- charged traklen:  482.44 radl +-    4.72 radl
- neutral traklen: 4222.91 radl +-  117.12 radl
+ energy deposit :   94.89 % E0 +-    1.05 % E0
+ charged traklen:  482.02 radl +-    5.39 radl
+ neutral traklen: 4193.18 radl +-  125.80 radl
 
- 90.00 % confinement: radius = 2.92 radl  (2.61 cm )
+ 90.00 % confinement: radius = 2.95 radl  (2.64 cm )
 
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1918418437, 255561390
+ Current couple of seeds = 535821722, 1638040350
 ----------------------------------------
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.950513  delEdep= 0.00151344 nrms= 1.84565
-Erms: 0.0084966  delErms= 0.000296596 nrms= 0.361703
+Edep: 0.948932  delEdep= -6.77264e-05 nrms= -0.0825932
+Erms: 0.0104705  delErms= 0.00227051 nrms= 2.76892
 <<<<END>>>>   IS ACCEPTED
 
 G4 kernel has come to Quit state.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc 67009 2013-01-29 16:00:21Z gcosmo $
+// $Id: G4SteppingManager2.cc 69894 2013-05-17 09:47:23Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -301,6 +301,8 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
      lifeTime =
        fCurrentProcess->AtRestGPIL( *fTrack, &fCondition );
 
+     
+
      if(fCondition==Forced && fCurrentProcess){
        (*fSelectedAtRestDoItVector)[ri] = Forced;
      }
@@ -309,10 +311,11 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        if(lifeTime < shortestLifeTime ){
           shortestLifeTime = lifeTime;
           fAtRestDoItProcTriggered =  G4int(ri);
-          (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
        }
      }
    }
+
+  (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
 
 // at least one process is necessary to destroy the particle  
 // exit with warning 

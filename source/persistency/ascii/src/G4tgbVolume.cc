@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgbVolume.cc 69803 2013-05-15 15:24:50Z gcosmo $
 //
 //
 // class G4tgbVolume
@@ -160,10 +160,6 @@ void G4tgbVolume::ConstructG4Volumes( const G4tgrPlace* place,
 	logvol = ConstructG4LogVol( solid );
 	g4vmgr->RegisterMe( logvol );
 	g4vmgr->RegisterChildParentLVs( logvol, parentLV ); 
-      }
-      else
-      {
-        return;
       }
     }
     else

@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History,v 1.21 2010-11-16 17:54:39 allison Exp $
+$Id: History 69897 2013-05-17 09:58:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.21 2010-11-16 17:54:39 allison Exp $
 
                       Category History file
                       ---------------------
+
+12.03.2013 - L.Pandola Tag (lAr_calorimeter-V09-05-04)
+	     Fix bug in the primary generator, which caused the abort 
+	     of all events in the run (run1.mac)
 
 02.11.2012 - L.Garnier Tag (lAr_calorimeter-V09-05-03)
              Fix CMakeFile.txt, gui.mac and icons.mac. Now ok for cmake

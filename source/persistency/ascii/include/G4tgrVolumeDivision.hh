@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrVolumeDivision.hh 69803 2013-05-15 15:24:50Z gcosmo $
 //
 //
 // class G4tgrVolumeDivision
@@ -63,12 +63,9 @@ class G4tgrVolumeDivision : public G4tgrVolume
     G4tgrVolumeDivision( const std::vector<G4String>& wl );
    ~G4tgrVolumeDivision();
 
-    G4bool SetSolid(G4tgrVolume* parentDU, G4bool byStep,
-                    EAxis axis, G4double div_step, G4double offset);
+    // G4bool SetSolid(G4tgrVolume* parentDU, G4bool byStep,
+    //                EAxis axis, G4double div_step, G4double offset);
       // Set the solid type and parameters dividing the mother volune
-
-    static void SetSupportedAxis();
-      // Set the list of supported axis for each solid types
 
     G4tgrPlaceDivRep* GetPlaceDivision() { return thePlaceDiv; }
 
@@ -77,7 +74,6 @@ class G4tgrVolumeDivision : public G4tgrVolume
   private:
 
     G4tgrPlaceDivRep* thePlaceDiv;
-    static G4mmss theSupportedAxis;
 };
 
 #endif

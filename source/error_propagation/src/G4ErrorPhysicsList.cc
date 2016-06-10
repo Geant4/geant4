@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorPhysicsList.cc 69766 2013-05-14 14:33:55Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -157,8 +157,6 @@ void G4ErrorPhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4PhysicsTable.hh"
-
-#include "G4VEnergyLoss.hh"
 
 #include "G4MuIonisation.hh"
 

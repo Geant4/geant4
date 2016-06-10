@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ErrorPropagator.cc 69834 2013-05-16 08:03:15Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -55,8 +55,7 @@
 
 //---------------------------------------------------------------------------
 G4ErrorPropagator::G4ErrorPropagator()
-  : theStepLength(0.), theInitialTrajState(0),
-    theFinalTrajState(0), theStepN(0), theG4Track(0)
+  : theStepLength(0.), theInitialTrajState(0), theStepN(0), theG4Track(0)
 {
   verbose =  G4ErrorPropagatorData::verbose();
 #ifdef G4EVERBOSE
@@ -186,14 +185,11 @@ G4int G4ErrorPropagator::PropagateOneStep( G4ErrorTrajState* currentTS )
     || (G4StateManager::GetStateManager()->GetCurrentState()
        != G4State_GeomClosed) )
   {
-    G4cout << "ERROR - G4ErrorPropagator::PropagateOneStep()" << G4endl
-           << "        Called before initialization is done for this track."
-           << G4endl
-           << "        Please call G4ErrorPropagatorManager::InitGeant4e()."
-           << G4endl;
+    std::ostringstream message;
+    message << "Called before initialization is done for this track!";
     G4Exception("G4ErrorPropagator::PropagateOneStep()",
-                "InvalidCall", FatalException,
-                "Called before initialization is done for this track!");
+                "InvalidCall", FatalException, message,
+                "Please call G4ErrorPropagatorManager::InitGeant4e().");
   }
 
   // to start ierror is set to 0 (= OK)
@@ -226,7 +222,11 @@ G4int G4ErrorPropagator::PropagateOneStep( G4ErrorTrajState* currentTS )
 
   //----- If it is the first step, create a track
   //
-  if( theStepN == 0 ) { theG4Track = InitG4Track( *currentTS ); }
+  if( theStepN == 0 )
+  {
+    if( theG4Track != 0 ) { delete theG4Track; }
+    theG4Track = InitG4Track( *currentTS );
+  }
     // set to 0 by the initialization in G4ErrorPropagatorManager
   theStepN++;
 
@@ -258,10 +258,10 @@ G4Track* G4ErrorPropagator::InitG4Track( G4ErrorTrajState& initialTS )
   G4ParticleDefinition* particle = particleTable->FindParticle(partType); 
   if( particle == 0)
   {
-    G4cerr << "ERROR - G4ErrorPropagator::InitG4Track()" << G4endl
-           << "        Particle type not defined " + partType << G4endl;
+    std::ostringstream message;
+    message << "Particle type not defined: " << partType;
     G4Exception( "G4ErrorPropagator::InitG4Track()", "InvalidSetup",
-                 FatalException, "Particle type not defined !" );
+                 FatalException, message );
   }
  
   G4DynamicParticle* DP = 
@@ -461,10 +461,10 @@ G4ErrorPropagator::InitFreeTrajState( G4ErrorTrajState* currentTS )
   }
   else
   {
-    G4cerr << "ERROR - G4ErrorPropagator::InitFreeTrajState()" << G4endl
-           << "WRONG TrajState " + currentTS->GetTSType() << G4endl;
+    std::ostringstream message;
+    message << "Wrong trajectory state: " << currentTS->GetTSType();
     G4Exception("G4ErrorPropagator::InitFreeTrajState()", "InvalidState",
-                FatalException, "WRONG trajectory state !");
+                FatalException, message);
   }
   return currentTS_FREE;
 }
@@ -554,12 +554,11 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
     lastG4eStep = true;
     if( exception )
     {
-      G4cerr << "ERROR - G4ErrorPropagator::CheckIfLastStep()" << G4endl
-             << "        Track extrapolated until end of World" << G4endl
-             << "        without finding the defined target " << G4endl;
+      std::ostringstream message;
+      message << "Track extrapolated until end of World" << G4endl
+              << "without finding the defined target!";
       G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                  "InvalidSetup", FatalException,
-                  "Track extrapolated without finding the defined target.");
+                  "InvalidSetup", FatalException, message);
     }
     else
     {
@@ -575,12 +574,11 @@ G4bool G4ErrorPropagator::CheckIfLastStep( G4Track* aTrack )
   { 
     if( exception )
     {
-      G4cerr << "ERROR - G4ErrorPropagator::CheckIfLastStep()" << G4endl
-             << "        Track extrapolated until energy is exhausted" << G4endl
-             << "        without finding the defined target !" << G4endl;
+      std::ostringstream message;
+      message << "Track extrapolated until energy is exhausted" << G4endl
+              << "without finding the defined target!";
       G4Exception("G4ErrorPropagator::CheckIfLastStep()",
-                  "InvalidSetup", FatalException,
-                  "Track extrapolated without finding the defined target.");
+                  "InvalidSetup", FatalException, message);
     }
     else
     {

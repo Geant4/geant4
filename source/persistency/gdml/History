@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 February 2013 Gabriele Cosmo (gdml-V09-05-06)
+- Removed unused data member in G4STRead.
+
 25 October 2012 Gabriele Cosmo (gdml-V09-05-05)
 - Added inclusion of headers to G4STRead.cc to make it self consistent.
 

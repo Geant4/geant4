@@ -1,4 +1,4 @@
-$Id: History,v 1.153 2010-09-14 07:57:13 gcosmo Exp $
+$Id: History 69970 2013-05-21 10:14:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,13 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 14th, 2012 P. Mato - field-V09-05-07
------------------------
+May 10th, 2013 P.Gumplinger - field-V09-05-09
+---------------------------
+- Changed numerical value of the neutron anomaly to -2.9156797 in
+  G4Mag_SpinEqRhs constructor. For details see:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/203/1.html
+
+February 22nd, 2013 G.Cosmo - field-V09-05-08
+---------------------------
+- Removed unused private data-members in G4Mag_UsualEqRhs and G4RKG3_Stepper.
+
+November 14th, 2012 P.Mato - field-V09-05-07
+--------------------------
 - G4QuadrupoleMagField: allow displaced origin and rotation (Björn Riese)
 - Added G4SystemOfUnits.hh in unit tests
 
-August 30th, 2012 P. Mato - field-V09-05-06
------------------------
+August 30th, 2012 P.Mato - field-V09-05-06
+------------------------
 - Adapted CMakeLists.txt files to new unit tests
 
 June 11th, 2012 G.Cosmo - field-V09-05-05

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4tgrVolumeDivision.cc 69803 2013-05-15 15:24:50Z gcosmo $
 //
 //
 // class G4tgrVolumeDivision
@@ -44,14 +44,10 @@
 #include "G4tgrMessenger.hh"
 
 
-G4mmss G4tgrVolumeDivision::theSupportedAxis;
-
-
 //-------------------------------------------------------------
 G4tgrVolumeDivision::~G4tgrVolumeDivision()
 {
 }
-
 
 //-------------------------------------------------------------
 G4tgrVolumeDivision::G4tgrVolumeDivision( const std::vector<G4String>& wl ) 

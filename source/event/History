@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 22nd, 2013, B.Morgan (event-V09-05-20)
+- Ensure deletion of "angsigmayCmd1" G4UIcommand instance in destructor of
+  G4GeneralParticleSourceMessenger, fixing minor memory leak.
+
+Feb. 26th, 2013, L.Desorgher (event-V09-05-19)
+- Remove unused variables in G4AdjointPosOnPhysVolGenerator,
+     G4AdjointPosOnPhysVolGenerator, G4GeneralParticleSource, G4SPSEneDistribution, and 
+     G4SPSRandomGenerator
+
 December 4th, 2012, M.Asai (event-V09-05-18)
 - Delete undeleted UI command in the destructor of G4StackMessenger.
   Addressing to bug report #1380.

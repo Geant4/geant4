@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4Pow.hh 69386 2013-05-02 10:35:42Z vnivanch $
 //
 //
 // -------------------------------------------------------------------
@@ -95,9 +95,11 @@ class G4Pow
 
   private:
 
-    static G4Pow* fInstance;
+    static G4Pow* fpInstance;
 
-    G4double onethird;
+    const G4double onethird;
+    const G4double minA;
+    const G4double maxA;
 
     G4DataVector pz13;
     G4DataVector lz;
@@ -114,15 +116,15 @@ inline G4double G4Pow::Z13(G4int Z)
 
 inline G4double G4Pow::A13(G4double A)
 {
-  const G4double minA = 0.5000001; 
-  const G4double maxA = 255.5; 
-
   G4double res;
-  if((A >= minA) && (A <= maxA))
+  G4double a = A;
+  if(1.0 > A) { a = 1.0/A; }
+  if(a <= maxA)
   {
-    G4int i = G4int(A + 0.5);
-    G4double x = (1.0 - A/G4double(i))*onethird;
+    G4int i = G4int(a + 0.5);
+    G4double x = (a/G4double(i) - 1.0)*onethird;
     res = pz13[i]*(1.0 + x - x*x*(1.0 - 1.66666666*x));
+    if(1.0 > A) { res = 1.0/res; }
   }
   else
   {
@@ -150,15 +152,15 @@ inline G4double G4Pow::logZ(G4int Z)
 
 inline G4double G4Pow::logA(G4double A)
 {
-  const G4double minA = 0.5000001; 
-  const G4double maxA = 255.5; 
-
   G4double res;
-  if((A >= minA) && (A <= maxA))
+  G4double a = A;
+  if(1.0 > A) { a = 1.0/A; }
+  if(a <= maxA)
   {
-    G4int i = G4int(A + 0.5);
-    G4double x = 1.0 - A/G4double(i);
-    res = lz[i] + x*(1.0 - 0.5*x + onethird*x*x);
+    G4int i = G4int(a + 0.5);
+    G4double x = a/G4double(i) - 1;
+    res = lz[i] + x*(1.0 - (0.5 - onethird*x)*x);
+    if(1.0 > A) { res = -res; }
   }
   else
   {

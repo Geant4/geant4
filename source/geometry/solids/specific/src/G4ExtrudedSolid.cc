@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4ExtrudedSolid.cc 69790 2013-05-15 12:39:10Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -362,10 +362,23 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
   {
     return std::fabs(p.x() - l1.x()) < kCarTolerance * 0.5; 
   }
+   G4double  slope= ((l2.y() - l1.y())/(l2.x() - l1.x())); 
+   G4double predy= l1.y() +  slope *(p.x() - l1.x()); 
+   G4double dy= p.y() - predy; 
 
-  return std::fabs (p.y() - l1.y() - ((l2.y() - l1.y())/(l2.x() - l1.x()))
-                                    *(p.x() - l1.x())) < kCarTolerance * 0.5;
- }
+   // Calculate perpendicular distance
+   //
+   // G4double perpD= std::fabs(dy) / std::sqrt( 1 + slope * slope ); 
+   // G4bool   simpleComp= (perpD<0.5*kCarTolerance); 
+
+   // Check perpendicular distance vs tolerance 'directly'
+   //
+   const G4double tol= 0.5 * kCarTolerance ; 
+   G4bool    squareComp=  (dy*dy < (1+slope*slope) * tol * tol); 
+
+   // return  simpleComp; 
+   return squareComp;
+}                    
 
 //_____________________________________________________________________________
 

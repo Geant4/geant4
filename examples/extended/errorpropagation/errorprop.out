@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x1753ccb0
+ creating G4RunManagerKernel 0x5192e90
 
 The materials defined are : 
 
@@ -71,14 +71,14 @@ List of instantiated particles ============================================
 e+ e- gamma mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1760dfe0G4ErrorPhysicsList:: particle process manager e+ = 0x1760f500
-0x1760ddd0G4ErrorPhysicsList:: particle process manager e- = 0x17610b20
-0x1760dad0G4ErrorPhysicsList:: particle process manager gamma = 0x17610d30
-0x1760e1f0G4ErrorPhysicsList:: particle process manager mu+ = 0x17610f80
-0x1760e640G4ErrorPhysicsList:: particle process manager mu- = 0x176111d0
-0x1760eab0G4ErrorPhysicsList:: particle process manager pi+ = 0x17611420
-0x1760eed0G4ErrorPhysicsList:: particle process manager pi- = 0x17611670
-0x1760f2f0G4ErrorPhysicsList:: particle process manager proton = 0x176118c0
+0x5264260G4ErrorPhysicsList:: particle process manager e+ = 0x5265780
+0x5264050G4ErrorPhysicsList:: particle process manager e- = 0x5266da0
+0x5263d50G4ErrorPhysicsList:: particle process manager gamma = 0x5266fb0
+0x5264470G4ErrorPhysicsList:: particle process manager mu+ = 0x5267200
+0x52648c0G4ErrorPhysicsList:: particle process manager mu- = 0x5267450
+0x5264d30G4ErrorPhysicsList:: particle process manager pi+ = 0x52676a0
+0x5265150G4ErrorPhysicsList:: particle process manager pi- = 0x52678f0
+0x5265570G4ErrorPhysicsList:: particle process manager proton = 0x5267b40
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -233,10 +233,10 @@ Function called when *NOT* at a Boundary.
  Position: (2210,35.101117232114,0)
  Momentum: (22434.27692245721,696.1984265127808,0)
  Error: 
-  2.422872018018548e-06                       0   8.714398249161118e-07   5.944872744398391e-05                       0 
+  9.872380209714692e-08                       0   3.726670385663592e-08   2.667490570130503e-06                       0 
                       0   3.518686263650635e-05                       0                       0    0.004070045168510479 
-  8.714398249161118e-07                       0   3.554133512806087e-05    0.004448290200720724                       0 
-  5.944872744398391e-05                       0    0.004448290200720724      0.6279808050740527                       0 
+  3.726670385663592e-08                       0   3.519153656525931e-05    0.004421941180102793                       0 
+  2.667490570130503e-06                       0    0.004421941180102793      0.6258683708345222                       0 
                       0    0.004070045168510479                       0                       0      0.5409524025112168 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
@@ -302,10 +302,10 @@ Function called when *NOT* at a Boundary.
  Position: (2210,35.101117232114,0)
  Momentum: (22434.27692245721,696.1984265127808,0)
  Error: 
-  2.422872018018548e-06                       0   8.714398249161118e-07   5.944872744398391e-05                       0 
+  9.872380209714692e-08                       0   3.726670385663592e-08   2.667490570130503e-06                       0 
                       0   3.518686263650635e-05                       0                       0    0.004070045168510479 
-  8.714398249161118e-07                       0   3.554133512806087e-05    0.004448290200720724                       0 
-  5.944872744398391e-05                       0    0.004448290200720724      0.6279808050740527                       0 
+  3.726670385663592e-08                       0   3.519153656525931e-05    0.004421941180102793                       0 
+  2.667490570130503e-06                       0    0.004421941180102793      0.6258683708345222                       0 
                       0    0.004070045168510479                       0                       0      0.5409524025112168 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
@@ -371,9 +371,9 @@ Function called when *NOT* at a Boundary.
  Position: (2210,35.101117232114,0)
  Momentum: (22434.27692245721,696.1984265127808,0)
  Error: 
-  2.422872018018548e-06                       0   8.714398249161118e-07   5.944872744398391e-05                       0 
+  9.872380209714692e-08                       0   3.726670385663592e-08   2.667490570130503e-06                       0 
                       0   3.518686263650635e-05                       0                       0    0.004070045168510479 
-  8.714398249161118e-07                       0   3.554133512806087e-05    0.004448290200720724                       0 
-  5.944872744398391e-05                       0    0.004448290200720724      0.6279808050740527                       0 
+  3.726670385663592e-08                       0   3.519153656525931e-05    0.004421941180102793                       0 
+  2.667490570130503e-06                       0    0.004421941180102793      0.6258683708345222                       0 
                       0    0.004070045168510479                       0                       0      0.5409524025112168 
 

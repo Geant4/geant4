@@ -25,7 +25,6 @@
 //
 //
 // $Id: G4Transportation]ProcessType.hh,v 1.2 2008-09-19 03:19:53 kurasige Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------

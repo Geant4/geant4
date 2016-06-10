@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-00    (30-November-2012)
+ Geant4 version Name: geant4-09-06-patch-02    (17-May-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -250,7 +250,7 @@ Unacounted for photons in this event : 0
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.57s Real=0.59s Sys=0s
+  User=0.59s Real=0.65s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
