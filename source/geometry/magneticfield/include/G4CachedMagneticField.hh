@@ -67,7 +67,7 @@ class G4CachedMagneticField : public G4MagneticField
      void  ClearCounts() { fCountCalls = 0; fCountEvaluations=0; }
      void  ReportStatistics();
     
-    virtual G4CachedMagneticField* Clone() const;
+    virtual G4Field* Clone() const;
 
   private: 
      G4MagneticField *fpMagneticField;

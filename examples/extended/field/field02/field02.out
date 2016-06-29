@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -4592,7 +4592,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.08s Real=0.1s Sys=0s
+  User=0.06s Real=0.09s Sys=0.02s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

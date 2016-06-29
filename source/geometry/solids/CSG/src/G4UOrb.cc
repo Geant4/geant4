@@ -32,9 +32,10 @@
 #include "G4Orb.hh"
 #include "G4UOrb.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
+#include "G4PhysicalConstants.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -92,6 +93,21 @@ G4UOrb& G4UOrb::operator = (const G4UOrb& rhs)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Accessors & modifiers
+
+G4double G4UOrb::GetRadius() const
+{
+  return GetShape()->GetRadius();
+}
+
+void G4UOrb::SetRadius(G4double newRmax)
+{
+  GetShape()->SetRadius(newRmax);
+  fRebuildPolyhedron = true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -109,6 +125,15 @@ void G4UOrb::ComputeDimensions(       G4VPVParameterisation* p,
 G4VSolid* G4UOrb::Clone() const
 {
   return new G4UOrb(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+
+G4Polyhedron* G4UOrb::CreatePolyhedron() const
+{
+  return new G4PolyhedronSphere(0., GetRadius(), 0., twopi, 0., pi);
 }
 
 #endif  // G4GEOM_USE_USOLIDS

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.cc 91914 2015-08-11 07:00:39Z gcosmo $
+// $Id: G4FTFAnnihilation.cc 97625 2016-06-06 13:35:58Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -66,10 +66,10 @@
 //#include "G4ios.hh"
 //#include "UZHI_diffraction.hh"
 
-
+#include "G4ParticleTable.hh"     // Uzhi March 2016
 //============================================================================
 
-//define debugFTFannih
+//#define debugFTFannih
 
 
 //============================================================================
@@ -88,6 +88,8 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
                                       G4VSplitableHadron* target,
                                       G4VSplitableHadron*& AdditionalString,
                                       G4FTFParameters* theParameters ) const  {
+
+//theParameters->SetProbabilityOfAnnihilation( 0.0 );  // Uzhi March 2016 ??? for other Anti_bar annih.
 
   #ifdef debugFTFannih 
   G4cout << "---------------------------- Annihilation----------------" << G4endl;
@@ -142,6 +144,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
   G4double SqrtS = std::sqrt( S );
   G4double maxPtSquare;
   G4double X_a( 0.0 ), X_b( 0.0 ), X_c( 0.0 ), X_d( 0.0 );
+
   G4double MesonProdThreshold = projectile->GetDefinition()->GetPDGMass() +
                                 target->GetDefinition()->GetPDGMass() +
                                 ( 2.0*140.0 + 16.0 )*MeV;  // 2 Mpi + DeltaE
@@ -235,6 +238,11 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
   #endif
 
   G4double Xannihilation = X_a + X_b + X_c + X_d;
+//X_a=0.;    // Uzhi
+//X_b=0.; 
+//X_c=0.;
+//X_d=0.;
+//Xannihilation = X_a + X_b + X_c + X_d;
 
   // Projectile unpacking
   G4int AQ[3];
@@ -279,14 +287,110 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     projectile->SetSecondParton( Q[0] );
     projectile->SetStatus( 0 );
 
+// Uzhi March 2016 start
+G4int aAQ, aQ;
+aAQ=std::abs( AQ[0] ); aQ=std::abs( Q[0] );
+G4int NewCode;
+G4double aKsi = G4UniformRand();
+
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/AQ[0]; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/Q[0];  }
+}
+
+G4ParticleDefinition* TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+projectile->SetDefinition( TestParticle );
+
+theParameters->SetProjMinDiffMass( 0.5 );     // Uzhi 2016 M+140 ??
+theParameters->SetProjMinNonDiffMass( 0.5 );  // Uzhi 2016 M+140 ??
+// Uzhi March 2016 end
+
     //G4cout << "String 2 " << Q[1] << " " << AQ[1] << G4endl;
     target->SplitUp();
     target->SetFirstParton( Q[1] );
     target->SetSecondParton( AQ[1] );
     target->SetStatus( 0 );
 
+// Uzhi March 2016 Start
+aAQ=std::abs( AQ[1] ); aQ=std::abs( Q[1] ); aKsi = G4UniformRand();
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/AQ[1]; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/Q[1];  }
+}
+TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+target->SetDefinition( TestParticle );
+
+theParameters->SetTarMinDiffMass( 0.5 );    // Uzhi 2016 M+140 ??
+theParameters->SetTarMinNonDiffMass( 0.5 ); // Uzhi 2016 M+140 ??
+// Uzhi March 2016 end
+
+
     //G4cout << "String 3 " << AQ[2] << " " << Q[2] << G4endl;
     AdditionalString = new G4DiffractiveSplitableHadron();
+
+// Uzhi March 2016 start
+aAQ=std::abs( AQ[2] ); aQ=std::abs( Q[2] ); aKsi = G4UniformRand();
+
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/AQ[2]; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/Q[2];  }
+}
+
+TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+AdditionalString->SetDefinition( TestParticle );
+// Uzhi March 2016 end
+
     AdditionalString->SplitUp();
     AdditionalString->SetFirstParton( AQ[2] );
     AdditionalString->SetSecondParton( Q[2] );
@@ -539,6 +643,8 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
     AdditionalString->IncrementCollisionCount( 1 );
     target->IncrementCollisionCount( 1 );
 
+theParameters->SetProbabilityOfAnnihilation( 0.0 );  // Uzhi March 2016
+
     return true;
 
   }  // End of if ( Ksi < X_a / Xannihilation )
@@ -605,6 +711,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       Pprojectile.setPz( 0.0 );
       Pprojectile.setE( SqrtS );
       Pprojectile.transform( toLab );
+// Uzhi March 2016 if QQ_QQbar will interact Set Mmin, MdifMin
 
       // Calculation of the creation time
       projectile->SetTimeOfCreation( target->GetTimeOfCreation() );
@@ -618,6 +725,9 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
 
       projectile->IncrementCollisionCount( 1 );
       target->IncrementCollisionCount( 1 );
+
+//theParameters->SetProbabilityOfAnnihilation( 0.0 );  // Uzhi March 2016
+// In the case baryon and anti-baryon are created. Thus the antibaryon can annihilate latter.
 
       return true;
     }
@@ -669,11 +779,78 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       projectile->SetFirstParton( LeftAQ1 );
       projectile->SetSecondParton( LeftQ1 );
       projectile->SetStatus( 0 );
+
+// Uzhi March 2016 start
+G4int aAQ, aQ;
+aAQ=std::abs( LeftAQ1 ); aQ=std::abs( LeftQ1 );
+
+G4int NewCode;
+G4double aKsi = G4UniformRand();
+
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/LeftAQ1; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/LeftQ1;  }
+}
+
+G4ParticleDefinition* TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+projectile->SetDefinition( TestParticle );
+theParameters->SetProjMinDiffMass( 0.5 );            // (0.5)  // GeV    Uzhi March 2016 ???
+theParameters->SetProjMinNonDiffMass( 0.5 );
+// Uzhi March 2016 end
+
       //G4cout << "String 2 " << LeftAQ2 << " " << LeftQ2 << G4endl;
       target->SplitUp();
       target->SetFirstParton( LeftQ2 );
       target->SetSecondParton( LeftAQ2 );
       target->SetStatus( 0 );
+
+// Uzhi March 2016 start
+aAQ=std::abs( LeftAQ2 ); aQ=std::abs( LeftQ2 ); aKsi = G4UniformRand();
+
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/LeftAQ2; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/LeftQ2;  }
+}
+
+TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+target->SetDefinition( TestParticle );
+theParameters->SetTarMinDiffMass( 0.5 );     // Uzhi March 2016 ???
+theParameters->SetTarMinNonDiffMass( 0.5 );
+// Uzhi March 2016
 
       // Sampling kinematical properties
       // 1 string LeftAQ1-LeftQ1// 2 string LeftAQ2-LeftQ2
@@ -857,6 +1034,8 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       projectile->IncrementCollisionCount( 1 );
       target->IncrementCollisionCount( 1 );
 
+theParameters->SetProbabilityOfAnnihilation( 0.0 );  // Uzhi March 2016
+
       return true;
 
     } // End of if ( CandidatsN != 0 )
@@ -920,6 +1099,42 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       projectile->SetFirstParton( LeftQ );
       projectile->SetSecondParton( LeftAQ );
       projectile->SetStatus( 0 );
+
+// Uzhi March 2016 start
+G4int aAQ, aQ;
+aAQ=std::abs( LeftAQ ); aQ=std::abs( LeftQ );
+
+G4int NewCode;
+G4double aKsi = G4UniformRand();
+
+if ( aAQ == aQ )
+{
+ if ( aAQ != 3 )
+ {
+  NewCode = 111;                       // Pi0-meson
+  if ( aKsi < 0.5 )
+  {
+   NewCode = 221;                     // Eta -meson
+   if ( aKsi < 0.25 ) {NewCode = 331;} // Eta'-meson
+  }
+ } else
+ {
+  NewCode = 221;                      // Eta -meson
+  if( aKsi < 0.5 ) {NewCode = 331;}    // Eta'-meson
+ }
+} else
+{
+ if ( aAQ > aQ ){ NewCode = aAQ*100 + aQ*10 + 1; NewCode *= aAQ/LeftAQ; } 
+ else           { NewCode = aQ*100 + aAQ*10 + 1; NewCode *=  aQ/LeftQ;  }
+}
+
+G4ParticleDefinition* TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewCode );
+if(!TestParticle) return false;
+projectile->SetDefinition( TestParticle );
+theParameters->SetProjMinDiffMass( 0.5 );            // (0.5)  // GeV Uzhi March 2016
+theParameters->SetProjMinNonDiffMass( 0.5 );
+// Uzhi March 2016 end
+
       target->SetStatus( 4 );  // The target nucleon has annihilated 3->4 Uzhi Oct 2014
       Pprojectile.setPx( 0.0 );
       Pprojectile.setPy( 0.0 );
@@ -938,6 +1153,9 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
 
       projectile->IncrementCollisionCount( 1 );
       target->IncrementCollisionCount( 1 );
+
+theParameters->SetProbabilityOfAnnihilation( 0.0 );  // Uzhi March 2016
+
       return true;
     }
 

@@ -32,10 +32,10 @@
 // File name:     G4hParametrisedLossModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 20 July 2000
 //
-// Modifications: 
+// Modifications:
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/08/2000  V.Ivanchenko TRIM85 model is added
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
@@ -67,6 +67,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ElementVector.hh"
 #include "G4Material.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -108,7 +109,7 @@ void G4hParametrisedLossModel::InitializeMe()
       eStopingPowerTable = new G4hICRU49p();
       highEnergyLimit = 2.0*MeV;
       lowEnergyLimit  = 1.0*keV;
-      G4cout << "G4hParametrisedLossModel Warning: <" << modelName 
+      G4cout << "G4hParametrisedLossModel Warning: <" << modelName
              << "> is unknown - default <"
              << ir49p << ">" << " is used for Electronic Stopping"
              << G4endl;
@@ -296,22 +297,22 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   G4String myFormula = G4String(" ") ;
   const G4String chFormula = material->GetChemicalFormula() ;
   if (myFormula == chFormula ) return false ;
-  
+
   //  There are no evidence for difference of stopping power depended on
-  //  phase of the compound except for water. The stopping power of the 
+  //  phase of the compound except for water. The stopping power of the
   //  water in gas phase can be predicted using Bragg's rule.
-  //  
-  //  No chemical factor for water-gas 
-   
+  //
+  //  No chemical factor for water-gas
+
   myFormula = G4String("H_2O") ;
   const G4State theState = material->GetState() ;
   if( theState == kStateGas && myFormula == chFormula) return false ;
-    
+
   const size_t numberOfMolecula = 53 ;
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  static const G4double HeEff = 2.8735 ;    
-  
+  static const G4double HeEff = 2.8735 ;
+
   static const G4String name[numberOfMolecula] = {
     "H_2O",     "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
@@ -325,9 +326,9 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
   };
-    
+
   static const G4double expStopping[numberOfMolecula] = {
-     66.1,  190.4, 258.7,  42.2, 141.5, 
+     66.1,  190.4, 258.7,  42.2, 141.5,
     210.9,  279.6, 198.8,  31.0, 267.5,
     122.8,  311.4, 260.3, 328.9, 391.3,
     206.6,  374.0, 422.0, 432.0, 398.0,
@@ -341,7 +342,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   } ;
 
   static const G4double expCharge[numberOfMolecula] = {
-    HeEff, HeEff, HeEff,   1.0, HeEff, 
+    HeEff, HeEff, HeEff,   1.0, HeEff,
     HeEff, HeEff, HeEff,   1.0,   1.0,
       1.0, HeEff, HeEff, HeEff, HeEff,
     HeEff, HeEff, HeEff, HeEff, HeEff,
@@ -355,7 +356,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
   } ;
 
   static const G4double numberOfAtomsPerMolecula[numberOfMolecula] = {
-    3.0,  7.0, 10.0,  4.0,  6.0,  
+    3.0,  7.0, 10.0,  4.0,  6.0,
     9.0, 12.0,  7.0,  4.0, 24.0,
     12.0, 14.0, 10.0, 13.0,  5.0,
     5.0, 14.0, 18.0, 17.0, 17.0,
@@ -370,16 +371,16 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
 
   // Search for the compaund in the table
   for (size_t i=0; i<numberOfMolecula; i++)
-    { 
-      if(chFormula == name[i]) { 
-        G4double exp125 = expStopping[i] * 
+    {
+      if(chFormula == name[i]) {
+        G4double exp125 = expStopping[i] *
 	                  (material->GetTotNbOfAtomsPerVolume()) /
 	                  (expCharge[i] * numberOfAtomsPerMolecula[i]) ;
         SetExpStopPower125(exp125) ;
         return true ;
       }
     }
-  
+
   return false ;
 }
 
@@ -391,18 +392,18 @@ G4double G4hParametrisedLossModel::ChemicalFactor(
   // Approximation of Chemical Factor according to
   // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
   // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
-  
-  G4double gamma    = 1.0 + kineticEnergy/proton_mass_c2 ;    
+
+  G4double gamma    = 1.0 + kineticEnergy/proton_mass_c2 ;
   G4double gamma25  = 1.0 + 25.0*keV /proton_mass_c2 ;
   G4double gamma125 = 1.0 + 125.0*keV/proton_mass_c2 ;
   G4double beta     = std::sqrt(1.0 - 1.0/(gamma*gamma)) ;
   G4double beta25   = std::sqrt(1.0 - 1.0/(gamma25*gamma25)) ;
   G4double beta125  = std::sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
-  
+
   G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
-                   (1.0 + std::exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
-                   (1.0 + std::exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
-  
+                   (1.0 + G4Exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
+                   (1.0 + G4Exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+
   return factor ;
 }
 

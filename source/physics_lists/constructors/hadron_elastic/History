@@ -1,4 +1,4 @@
-$Id: History 95780 2016-02-24 08:34:54Z gcosmo $
+$Id: History 97609 2016-06-06 09:49:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, A. Ribon         (phys-ctor-helastic-V10-01-07)
+- G4HadronElasticPhysicsPHP : made it thread-safe.
 
 23-Feb-2016, A. Ribon         (phys-ctor-helastic-V10-01-06)
 - G4HadronElasticPhysics : added missing hadron elastic for He3,

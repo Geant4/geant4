@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh 68055 2013-03-13 14:43:28Z gcosmo $
+// $Id: G4Field.hh 97486 2016-06-03 10:45:04Z gcosmo $
 //
 //
 // class G4Field
@@ -83,7 +83,7 @@ class G4Field
       G4Field( G4bool gravityOn= false);
       G4Field( const G4Field & );
       virtual ~G4Field();
-      inline G4Field& operator = (const G4Field &p); 
+      G4Field& operator = (const G4Field &p); 
 
      // A field signature function that can be used to insure
      // that the Equation of motion object and the G4Field object
@@ -99,9 +99,11 @@ class G4Field
        //  Does this field include gravity?
       inline void SetGravityActive( G4bool OnOffFlag );
     
-    virtual G4Field* Clone() const;
-      //Implements cloning, needed by G4 MT
+      virtual G4Field* Clone() const;
+       // Implements cloning, needed by G4 MT
+
   private:
+
       G4bool  fGravityActive;
 };
 

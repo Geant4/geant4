@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc 94380 2015-11-13 10:14:39Z gcosmo $
+// $Id: G4MultiLevelLocator.cc 97507 2016-06-03 12:48:42Z gcosmo $
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -183,8 +183,8 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   fNumCalls++;
   
 #ifdef G4DEBUG_FIELD
-  static unsigned int trigger_substepno_print=0;
-  static const G4double tolerance = 1.0e-8 * CLHEP::mm;
+  unsigned int trigger_substepno_print=0;
+  const G4double tolerance = 1.0e-8 * CLHEP::mm;
   unsigned int biggest_depth= 0;
 
 #if (G4DEBUG_FIELD>1) 

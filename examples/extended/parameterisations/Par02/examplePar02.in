@@ -2,6 +2,9 @@
 #
 #/tracking/verbose 1
 #
+/globalField/setValue 0 0 1 tesla
+/globalField/verbose 1
+#
 ###/gun/particle mu-
 ###/gun/energy 100 GeV
 ###/run/beamOn 1000

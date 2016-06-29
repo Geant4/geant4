@@ -67,8 +67,9 @@ endif()
 
 # - USolids
 # Compile definitions
-if(GEANT4_USE_USOLIDS)
-  list(APPEND GEANT4_CORE_DEFINITIONS -DG4GEOM_USE_USOLIDS)
+if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
+  set(GEANT4_USE_USOLIDS_EITHER ON)
+  list(APPEND GEANT4_CORE_DEFINITIONS ${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # System USolids headers, because these do appear in Geant4's
   # public interface. The library should be in the link interface

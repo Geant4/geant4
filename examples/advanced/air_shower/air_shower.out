@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -405,8 +405,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1456833362
- float_seed_table[] = 0.215576 0.0755085 0.55068 0.927864 0.576761 0.690018 0.553144 0.507929 0.288786 0.56241 0.415428 0.0689605 0.531581 0.674399 0.566532 0.37853 0.558108 0.29166 0.547408 0.153416 0.802165 0.861343 0.926117 0.830926 
+ Initial seed = 1467025659
+ float_seed_table[] = 0.051339 0.287153 0.266665 0.451768 0.218104 0.364492 0.879297 0.225476 0.232141 0.00818038 0.527705 0.719851 0.259945 0.534538 0.150509 0.612227 0.719533 0.526322 0.317769 0.234285 0.760191 0.424932 0.239266 0.157135 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -417,7 +417,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.77s Real=5.77s Sys=0s
+  User=3.52s Real=3.52s Sys=0s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -440,13 +440,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.222 MB
-Pool ID '7G4Track', size : 0.443 MB
+Pool ID '17G4DynamicParticle', size : 0.253 MB
+Pool ID '7G4Track', size : 0.506 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '15UltraOpticalHit', size : 0.00385 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.69 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.78 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

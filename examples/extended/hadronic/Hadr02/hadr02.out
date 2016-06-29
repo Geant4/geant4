@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -761,33 +761,33 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.28s Real=0.28s Sys=0s
+  User=0.18s Real=0.29s Sys=0s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.409   RMS(GeV) 4.103
-Average number of steps              54.55
-Average number of gamma              1.34
+Average energy deposit (GeV)         6.172   RMS(GeV) 4.148
+Average number of steps              52.4
+Average number of gamma              1.07
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           9.6
-Average number of protons            9.46
+Average number of neutrons           9.42
+Average number of protons            9.75
 Average number of antiprotons        0
-Average number of pi+ & pi-          9.65
-Average number of pi0                5.03
-Average number of kaons              0.41
+Average number of pi+ & pi-          7.48
+Average number of pi0                3.71
+Average number of kaons              0.47
 Average number of muons              0
-Average number of deuterons+tritons  1.44
-Average number of He3+alpha          1.6
-Average number of ions               1.11
+Average number of deuterons+tritons  1.64
+Average number of He3+alpha          1.75
+Average number of ions               1.15
 ========================================================
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.084 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.092 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

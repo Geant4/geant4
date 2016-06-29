@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SensitiveVolumeList.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4SensitiveVolumeList.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -79,19 +79,17 @@
  //Other Operations 
    G4bool G4SensitiveVolumeList::CheckPV(const G4VPhysicalVolume * pvp) const
    {
-     if (thePhysicalVolumeList.size()==0) return false;
-     for(size_t i=0;i<thePhysicalVolumeList.size();i++)
-     { if(thePhysicalVolumeList[i]==pvp) return true; }
+     for(auto pv : thePhysicalVolumeList) 
+     { if(pv==pvp) return true; }
      return false;  
    }
 
 
    G4bool G4SensitiveVolumeList::CheckLV(const G4LogicalVolume * lvp) const
    {
-    if (theLogicalVolumeList.size()==0) return false;
-      for(size_t i=0;i<theLogicalVolumeList.size();i++)
-      { if(theLogicalVolumeList[i]==lvp) return true; }
-    return false;  
+     for(auto lv : theLogicalVolumeList)
+     { if(lv==lvp) return true; }
+     return false;  
    }
 
 

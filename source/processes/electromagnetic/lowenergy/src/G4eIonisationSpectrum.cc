@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eIonisationSpectrum.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -33,18 +33,18 @@
 // File name:     G4eIonisationSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 29 September 2001
 //
-// Modifications: 
-// 10.10.2001 MGP           Revision to improve code quality and 
+// Modifications:
+// 10.10.2001 MGP           Revision to improve code quality and
 //                          consistency with design
-// 02.11.2001 VI            Optimize sampling of energy 
-// 29.11.2001 VI            New parametrisation 
-// 19.04.2002 VI            Add protection in case of energy below binding  
+// 02.11.2001 VI            Optimize sampling of energy
+// 29.11.2001 VI            New parametrisation
+// 19.04.2002 VI            Add protection in case of energy below binding
 // 30.05.2002 VI            Update to 24-parameters data
 // 11.07.2002 VI            Fix in integration over spectrum
-// 23.03.2009 LP            Added protection against division by zero (for 
+// 23.03.2009 LP            Added protection against division by zero (for
 //                          faulty database files), Bug Report 1042
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4Exp.hh"
 
 G4eIonisationSpectrum::G4eIonisationSpectrum():G4VEnergySpectrum(),
   lowestE(0.1*eV),
@@ -69,20 +69,20 @@ G4eIonisationSpectrum::G4eIonisationSpectrum():G4VEnergySpectrum(),
 }
 
 
-G4eIonisationSpectrum::~G4eIonisationSpectrum() 
+G4eIonisationSpectrum::~G4eIonisationSpectrum()
 {
   delete theParam;
 }
 
 
-G4double G4eIonisationSpectrum::Probability(G4int Z, 
-  	    				    G4double tMin, 
-					    G4double tMax, 
+G4double G4eIonisationSpectrum::Probability(G4int Z,
+  	    				    G4double tMin,
+					    G4double tMax,
 					    G4double e,
 					    G4int shell,
 					    const G4ParticleDefinition* ) const
 {
-  // Please comment what Probability does and what are the three 
+  // Please comment what Probability does and what are the three
   // functions mentioned below
   // Describe the algorithms used
 
@@ -106,59 +106,59 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
            << "; Eb(keV)= " << bindingEnergy/keV
-           << "; x1= " << x1 
-           << "; x2= " << x2 
+           << "; x1= " << x1
+           << "; x2= " << x2
            << G4endl;
-     
+
   }
 
   G4DataVector p;
 
   // Access parameters
-  for (G4int i=0; i<iMax; i++) 
+  for (G4int i=0; i<iMax; i++)
   {
     G4double x = theParam->Parameter(Z, shell, i, e);
-    if(i<4) x /= energy; 
-    p.push_back(x); 
+    if(i<4) x /= energy;
+    p.push_back(x);
   }
 
   if(p[3] > 0.5) p[3] = 0.5;
-  
+
   G4double gLocal = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*gLocal - 1.0)/(gLocal*gLocal));
-  
-  //Add protection against division by zero: actually in Function() 
+
+  //Add protection against division by zero: actually in Function()
   //parameter p[3] appears in the denominator. Bug report 1042
   if (p[3] > 0)
     p[iMax-1] = Function(p[3], p);
   else
     {
       G4cout << "WARNING: G4eIonisationSpectrum::Probability "
-	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
-	     << Z << ". Please check and/or update it " << G4endl;      
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = "
+	     << Z << ". Please check and/or update it " << G4endl;
     }
 
   if(e >= 1. && e <= 0. && Z == 4) p.push_back(0.0);
 
-  
+
   G4double val = IntSpectrum(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
   G4double nor = IntSpectrum(x0, 0.5, p);
-  
+
   if(verbose > 1 || (Z==4 && e>= 1.0 && e<= 0.0)) {
-    G4cout << "tcut= " << tMin 
-           << "; tMax= " << tMax 
-           << "; x0= " << x0 
-           << "; x1= " << x1 
-           << "; x2= " << x2 
-           << "; val= " << val 
-           << "; nor= " << nor 
-           << "; sum= " << p[0] 
-           << "; a= " << p[1] 
-           << "; b= " << p[2] 
-           << "; c= " << p[3] 
+    G4cout << "tcut= " << tMin
+           << "; tMax= " << tMax
+           << "; x0= " << x0
+           << "; x1= " << x1
+           << "; x2= " << x2
+           << "; val= " << val
+           << "; nor= " << nor
+           << "; sum= " << p[0]
+           << "; a= " << p[1]
+           << "; b= " << p[2]
+           << "; c= " << p[3]
            << G4endl;
-    if(shell == 1) G4cout << "============" << G4endl; 
+    if(shell == 1) G4cout << "============" << G4endl;
   }
 
   p.clear();
@@ -166,18 +166,18 @@ G4double G4eIonisationSpectrum::Probability(G4int Z,
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
 
-  return val; 
+  return val;
 }
 
 
 G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
-	        			      G4double tMin, 
-					      G4double tMax, 
+	        			      G4double tMin,
+					      G4double tMax,
 					      G4double e,
 					      G4int shell,
 					      const G4ParticleDefinition* ) const
 {
-  // Please comment what AverageEnergy does and what are the three 
+  // Please comment what AverageEnergy does and what are the three
   // functions mentioned below
   // Describe the algorithms used
 
@@ -201,18 +201,18 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
            << "; shell= " << shell
            << "; E(keV)= " << e/keV
            << "; bindingE(keV)= " << bindingEnergy/keV
-           << "; x1= " << x1 
-           << "; x2= " << x2 
+           << "; x1= " << x1
+           << "; x2= " << x2
            << G4endl;
   }
 
   G4DataVector p;
 
   // Access parameters
-  for (G4int i=0; i<iMax; i++) 
+  for (G4int i=0; i<iMax; i++)
   {
     G4double x = theParam->Parameter(Z, shell, i, e);
-    if(i<4) x /= energy; 
+    if(i<4) x /= energy;
     p.push_back(x);
   }
 
@@ -221,35 +221,35 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
   G4double gLocal2 = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*gLocal2 - 1.0)/(gLocal2*gLocal2));
 
-  
-  //Add protection against division by zero: actually in Function() 
+
+  //Add protection against division by zero: actually in Function()
   //parameter p[3] appears in the denominator. Bug report 1042
   if (p[3] > 0)
     p[iMax-1] = Function(p[3], p);
   else
     {
       G4cout << "WARNING: G4eIonisationSpectrum::AverageEnergy "
-	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
-	     << Z << ". Please check and/or update it " << G4endl;      
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = "
+	     << Z << ". Please check and/or update it " << G4endl;
     }
-    
+
   G4double val = AverageValue(x1, x2, p);
   G4double x0  = (lowestE + bindingEnergy)/energy;
   G4double nor = IntSpectrum(x0, 0.5, p);
   val *= energy;
 
   if(verbose > 1) {
-    G4cout << "tcut(MeV)= " << tMin/MeV 
-           << "; tMax(MeV)= " << tMax/MeV 
-           << "; x0= " << x0 
-           << "; x1= " << x1 
-           << "; x2= " << x2 
-           << "; val= " << val 
-           << "; nor= " << nor 
-           << "; sum= " << p[0] 
-           << "; a= " << p[1] 
-           << "; b= " << p[2] 
-           << "; c= " << p[3] 
+    G4cout << "tcut(MeV)= " << tMin/MeV
+           << "; tMax(MeV)= " << tMax/MeV
+           << "; x0= " << x0
+           << "; x1= " << x1
+           << "; x2= " << x2
+           << "; val= " << val
+           << "; nor= " << nor
+           << "; sum= " << p[0]
+           << "; a= " << p[1]
+           << "; b= " << p[2]
+           << "; c= " << p[3]
            << G4endl;
   }
 
@@ -258,13 +258,13 @@ G4double G4eIonisationSpectrum::AverageEnergy(G4int Z,
   if(nor > 0.0) val /= nor;
   else          val  = 0.0;
 
-  return val; 
+  return val;
 }
 
 
 G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
-					     G4double tMin, 
-					     G4double tMax, 
+					     G4double tMin,
+					     G4double tMax,
 				             G4double e,
 				             G4int shell,
 					     const G4ParticleDefinition* ) const
@@ -297,10 +297,10 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4DataVector p;
 
   // Access parameters
-  for (G4int i=0; i<iMax; i++) 
+  for (G4int i=0; i<iMax; i++)
   {
     G4double x = theParam->Parameter(Z, shell, i, e);
-    if(i<4) x /= energy; 
+    if(i<4) x /= energy;
     p.push_back(x);
   }
 
@@ -309,16 +309,16 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   G4double gLocal3 = energy/electron_mass_c2 + 1.;
   p.push_back((2.0*gLocal3 - 1.0)/(gLocal3*gLocal3));
 
-  
-  //Add protection against division by zero: actually in Function() 
+
+  //Add protection against division by zero: actually in Function()
   //parameter p[3] appears in the denominator. Bug report 1042
   if (p[3] > 0)
     p[iMax-1] = Function(p[3], p);
   else
     {
       G4cout << "WARNING: G4eIonisationSpectrum::SampleSpectrum "
-	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = " 
-	     << Z << ". Please check and/or update it " << G4endl;      
+	     << "parameter p[3] <= 0. G4LEDATA dabatase might be corrupted for Z = "
+	     << Z << ". Please check and/or update it " << G4endl;
     }
 
   G4double aria1 = 0.0;
@@ -335,7 +335,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   //======= First aria to sample =====
 
-  if(aria <= aria1) { 
+  if(aria <= aria1) {
 
     amaj = p[4];
     for (G4int j=5; j<iMax; j++) {
@@ -352,7 +352,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       z1 = p[1];
       z2 = p[3];
       dx = (p[2] - p[1]) / 3.0;
-      dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
+      dx1= G4Exp(std::log(p[3]/p[2]) / 16.0);
       for (i=4; i<iMax-1; i++) {
 
         if (i < 7) {
@@ -369,8 +369,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       fun = p[i] + (x - z1) * (p[i+1] - p[i])/(z2 - z1);
 
       if(fun > amaj) {
-          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-                 << " Majoranta " << amaj 
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:"
+                 << " Majoranta " << amaj
                  << " < " << fun
                  << " in the first aria at x= " << x
                  << G4endl;
@@ -394,8 +394,8 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
       fun = Function(x, p);
 
       if(fun > amaj) {
-          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:" 
-                 << " Majoranta " << amaj 
+          G4cout << "WARNING in G4eIonisationSpectrum::SampleEnergy:"
+                 << " Majoranta " << amaj
                  << " < " << fun
                  << " in the second aria at x= " << x
                  << G4endl;
@@ -412,25 +412,25 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
   tDelta = x*energy - bindingEnergy;
 
   if(verbose > 1) {
-    G4cout << "tcut(MeV)= " << tMin/MeV 
-           << "; tMax(MeV)= " << tMax/MeV 
-           << "; x1= " << x1 
-           << "; x2= " << x2 
-           << "; a1= " << a1 
-           << "; a2= " << a2 
-           << "; x= " << x 
-           << "; be= " << bindingEnergy 
-           << "; e= " << e 
-           << "; tDelta= " << tDelta 
+    G4cout << "tcut(MeV)= " << tMin/MeV
+           << "; tMax(MeV)= " << tMax/MeV
+           << "; x1= " << x1
+           << "; x2= " << x2
+           << "; a1= " << a1
+           << "; a2= " << a2
+           << "; x= " << x
+           << "; be= " << bindingEnergy
+           << "; e= " << e
+           << "; tDelta= " << tDelta
            << G4endl;
   }
 
 
-  return tDelta; 
+  return tDelta;
 }
 
 
-G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin, 
+G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 					    G4double xMax,
 				      const G4DataVector& p) const
 {
@@ -447,7 +447,7 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
     y1 = p[4];
 
     G4double dx = (p[2] - p[1]) / 3.0;
-    G4double dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
+    G4double dx1= G4Exp(std::log(p[3]/p[2]) / 16.0);
 
     for (size_t i=0; i<19; i++) {
 
@@ -475,25 +475,25 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
           if (xMin > x1) {
             xs1 = xMin;
             ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
-	  } 
+	  }
           if (xMax < x2) {
             xs2 = xMax;
             ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
-	  } 
+	  }
           if (xs2 > xs1) {
-            q = (ys1*xs2 - ys2*xs1)/(xs1*xs2) 
+            q = (ys1*xs2 - ys2*xs1)/(xs1*xs2)
               +  std::log(xs2/xs1)*(ys2 - ys1)/(xs2 - xs1);
             sum += q;
             if(p.size() == 26) G4cout << "i= " << i << "  q= " << q << " sum= " << sum << G4endl;
 	  }
-	}  
+	}
       }
       x1 = x2;
       y1 = y2;
     }
   }
 
-  // Integral over aria with parametrised formula 
+  // Integral over aria with parametrised formula
 
   x1 = std::max(xMin, p[3]);
   if(x1 >= xMax) return sum;
@@ -501,20 +501,20 @@ G4double G4eIonisationSpectrum::IntSpectrum(G4double xMin,
 
   xs1 = 1./x1;
   xs2 = 1./x2;
-  q = (xs1 - xs2)*(1.0 - p[0]) 
-       - p[iMax]*std::log(x2/x1) 
+  q = (xs1 - xs2)*(1.0 - p[0])
+       - p[iMax]*std::log(x2/x1)
        + (1. - p[iMax])*(x2 - x1)
-       + 1./(1. - x2) - 1./(1. - x1) 
+       + 1./(1. - x2) - 1./(1. - x1)
        + p[iMax]*std::log((1. - x2)/(1. - x1))
        + 0.25*p[0]*(xs1*xs1 - xs2*xs2);
   sum += q;
   if(p.size() == 26) G4cout << "param...  q= " << q <<  " sum= " << sum << G4endl;
 
   return sum;
-} 
+}
 
 
-G4double G4eIonisationSpectrum::AverageValue(G4double xMin, 
+G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
 				             G4double xMax,
 				       const G4DataVector& p) const
 {
@@ -530,7 +530,7 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
     y1 = p[4];
 
     G4double dx = (p[2] - p[1]) / 3.0;
-    G4double dx1= std::exp(std::log(p[3]/p[2]) / 16.0);
+    G4double dx1= G4Exp(std::log(p[3]/p[2]) / 16.0);
 
     for (size_t i=0; i<19; i++) {
 
@@ -557,16 +557,16 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
           if (xMin > x1) {
             xs1 = xMin;
             ys1 += (xs1 - x1)*(y2 - y1)/(x2 - x1);
-	  } 
+	  }
           if (xMax < x2) {
             xs2 = xMax;
             ys2 += (xs2 - x2)*(y1 - y2)/(x1 - x2);
-	  } 
+	  }
           if (xs2 > xs1) {
-            sum += std::log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1) 
+            sum += std::log(xs2/xs1)*(ys1*xs2 - ys2*xs1)/(xs2 - xs1)
                 +  ys2 - ys1;
 	  }
-	}  
+	}
       }
       x1 = x2;
       y1 = y2;
@@ -574,7 +574,7 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
     }
   }
 
-  // Integral over aria with parametrised formula 
+  // Integral over aria with parametrised formula
 
   x1 = std::max(xMin, p[3]);
   if(x1 >= xMax) return sum;
@@ -583,17 +583,17 @@ G4double G4eIonisationSpectrum::AverageValue(G4double xMin,
   xs1 = 1./x1;
   xs2 = 1./x2;
 
-  sum  += std::log(x2/x1)*(1.0 - p[0]) 
+  sum  += std::log(x2/x1)*(1.0 - p[0])
         + 0.5*(1. - p[iMax])*(x2*x2 - x1*x1)
-        + 1./(1. - x2) - 1./(1. - x1) 
+        + 1./(1. - x2) - 1./(1. - x1)
         + (1. + p[iMax])*std::log((1. - x2)/(1. - x1))
         + 0.5*p[0]*(xs1 - xs2);
 
   return sum;
-} 
+}
 
 
-void G4eIonisationSpectrum::PrintData() const 
+void G4eIonisationSpectrum::PrintData() const
 {
   theParam->PrintData();
 }

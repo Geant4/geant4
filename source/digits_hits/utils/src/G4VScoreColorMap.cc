@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreColorMap.cc 89185 2015-03-23 16:11:02Z gcosmo $
+// $Id: G4VScoreColorMap.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4VScoreColorMap.hh"
@@ -41,7 +41,7 @@
 #include "G4Polyhedron.hh"
 
 G4VScoreColorMap::G4VScoreColorMap(G4String mName)
-:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX),fVisManager(0)
+:fName(mName),ifFloat(true),fMinVal(0.),fMaxVal(DBL_MAX),fVisManager(nullptr)
 {;}
 
 G4VScoreColorMap::~G4VScoreColorMap()

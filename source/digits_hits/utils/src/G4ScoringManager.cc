@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.cc 78004 2013-12-02 08:28:23Z gcosmo $
+// $Id: G4ScoringManager.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4ScoringManager.hh"
@@ -36,7 +36,7 @@
 #include "G4DefaultLinearColorMap.hh"
 #include "G4ScoreLogColorMap.hh"
 
-G4ThreadLocal G4ScoringManager* G4ScoringManager::fSManager = 0;
+G4ThreadLocal G4ScoringManager* G4ScoringManager::fSManager = nullptr;
 
 G4ThreadLocal G4int G4ScoringManager::replicaLevel = 3;
 
@@ -53,7 +53,7 @@ G4ScoringManager* G4ScoringManager::GetScoringManagerIfExist()
 { return fSManager; }
 
 G4ScoringManager::G4ScoringManager()
-  : verboseLevel(0),fCurrentMesh(0)
+  : verboseLevel(0),fCurrentMesh(nullptr)
 {
   fMessenger = new G4ScoringMessenger(this);
   fQuantityMessenger = new G4ScoreQuantityMessenger(this);
@@ -72,7 +72,7 @@ G4ScoringManager::~G4ScoringManager()
   delete fColorMapDict;
   delete fQuantityMessenger;
   delete fMessenger;
-  fSManager = 0;
+  fSManager = nullptr;
 }
 
 void G4ScoringManager::SetReplicaLevel(G4int lvl)
@@ -82,44 +82,49 @@ G4int G4ScoringManager::GetReplicaLevel()
 
 void G4ScoringManager::Accumulate(G4VHitsCollection* map)
 {
-  G4String wName = map->GetSDname();
-  G4VScoringMesh* sm = FindMesh(wName);
-  if(sm == 0) return;
+  auto sm = FindMesh(map);
+  if(!sm) return;
   if(verboseLevel>9)
   { G4cout << "G4ScoringManager::Accumulate() for " << map->GetSDname() << " / " << map->GetName() << G4endl;
     G4cout << "  is calling G4VScoringMesh::Accumulate() of " << sm->GetWorldName() << G4endl; }
   sm->Accumulate(static_cast<G4THitsMap<double>*>(map));
 }
 
+G4VScoringMesh* G4ScoringManager::FindMesh(G4VHitsCollection* map)
+{
+  auto colID = map->GetColID();
+  G4VScoringMesh* sm = nullptr;
+  auto msh = fMeshMap.find(colID);
+  if(msh==fMeshMap.end())
+  {
+    auto wName = map->GetSDname();
+    sm = FindMesh(wName);
+    fMeshMap[colID] = sm;
+  }
+  else
+  { sm = (*msh).second; }
+  return sm;
+}
+  
 G4VScoringMesh* G4ScoringManager::FindMesh(const G4String& wName)
 {
-  G4VScoringMesh* sm = 0;
-  for(MeshVecItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
-    G4String smName = (*itr)->GetWorldName();
-    if(wName == smName) {
-      sm = *itr;
-      break;
-    }
-  }
+  G4VScoringMesh* sm = nullptr;
+  for(auto msh : fMeshVec)
+  { if(msh->GetWorldName()==wName) return msh; }
   if(!sm && verboseLevel>9)
   { G4cout << "WARNING : G4ScoringManager::FindMesh() --- <" << wName << "> is not found. Null returned." << G4endl; }
-
-  return sm;
+  return nullptr;
 }
 
 void G4ScoringManager::List() const
 {
   G4cout << "G4ScoringManager has " << GetNumberOfMesh() << " scoring meshes." << G4endl;
-  for(MeshVecConstItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
-   (*itr)->List();
-  }
+  for(auto msh : fMeshVec) msh->List();
 }
 
 void G4ScoringManager::Dump() const
 {
-  for(MeshVecConstItr itr = fMeshVec.begin(); itr != fMeshVec.end(); itr++) {
-   (*itr)->Dump();
-  }
+  for(auto msh : fMeshVec) msh->Dump();
 }
 
 void G4ScoringManager::DrawMesh(const G4String& meshName,
@@ -208,7 +213,7 @@ void G4ScoringManager::RegisterScoreColorMap(G4VScoreColorMap* colorMap)
 G4VScoreColorMap* G4ScoringManager::GetScoreColorMap(const G4String& mapName)
 {
   ColorMapDictItr mItr = fColorMapDict->find(mapName);
-  if(mItr == fColorMapDict->end()) { return 0; }
+  if(mItr == fColorMapDict->end()) { return nullptr; }
   return (mItr->second);
 }
 

@@ -1,4 +1,4 @@
-$Id: History 94096 2015-11-05 15:19:03Z gcosmo $
+$Id: History 97608 2016-06-06 09:37:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, Alberto Ribon                (phys-lists-V10-01-15)
+- QGSP_BIC_AllHP : use new, specialized ion constructor, G4IonPhysicsPHP.
+
+06-Apr-2016, Alberto Ribon                (phys-lists-V10-01-14)
+- FTFP_BERT_ATL : created new, experimental physics list for ATLAS,
+  similar to FTFP_BERT but with the transition between BERT and FTFP
+  in the energy region [9, 12] GeV.
 
 05-Nov-2015, Alberto Ribon                (phys-lists-V10-01-13)
 - Removed neutron_hp/ .

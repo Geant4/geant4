@@ -14,8 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-01-Nov-2015, W. Pokorski hadr-qelastic-V10-01-03
-- moving to G4Log, G4Exp and G4Pow
+20-Apr-2016, G.Cosmo hadr-qelastic-V10-01-04
+- Fixed shadowing compilation warnings in G4QuasiElRatios for 'ps'.
+
+01-Nov-2015, W.Pokorski hadr-qelastic-V10-01-03
+- Moving to G4Log, G4Exp and G4Pow
 
 15-July-2015, A.Dotti	  hadr-qelastic-V10-01-02
 - Fix for double delete

@@ -52,13 +52,12 @@
     theFF.Init(A, Z, M, dirName, aFSType, projectile);
     if ( G4ParticleHPManager::GetInstance()->GetProduceFissionFragments() && theFF.HasFSData() ) 
     {
-       G4cout << "Activate Fission Fragments Production for the target isotope of " 
+       G4cout << "Fission fragment production is now activated in HP package for " 
        << "Z = " << (G4int)Z
        << ", A = " << (G4int)A
        //<< "M = " << M
        << G4endl;
-       G4cout << "As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay." 
-       << G4endl;
+       G4cout << "As currently modeled this option precludes production of delayed neutrons from fission fragments." << G4endl;
        produceFissionFragments = true; 
     }
  }

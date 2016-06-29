@@ -1,4 +1,4 @@
-$Id: History 90754 2015-06-09 07:40:58Z gcosmo $
+$Id: History 97477 2016-06-03 10:13:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 16th, 2016 A.Dotti (event-V10-01-09)
+- Fix typos and bug from bugzilla #1860.
+
+April 20th, 2016  G.Cosmo
+- Fixed shadowing compilation warnings in G4GeneralParticleSourceMessenger
+  for 'ps'.
+
+December 28th, 2015 M.Asai
+- Code clean-up.
 
 June 8th, 2015 A.Dotti (event-V10-01-08)
 - Fixing valgring report

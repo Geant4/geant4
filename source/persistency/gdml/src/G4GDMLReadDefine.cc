@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc 92977 2015-09-24 14:56:22Z gcosmo $
+// $Id: G4GDMLReadDefine.cc 97543 2016-06-03 15:49:14Z gcosmo $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -299,7 +299,11 @@ G4GDMLReadDefine::PositionRead(const xercesc::DOMElement* const positionElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); }  else
-      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadDefine::PositionRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }	  
+      } else
       if (attName=="x") { position.setX(eval.Evaluate(attValue)); } else
       if (attName=="y") { position.setY(eval.Evaluate(attValue)); } else
       if (attName=="z") { position.setZ(eval.Evaluate(attValue)); }
@@ -338,8 +342,12 @@ G4GDMLReadDefine::RotationRead(const xercesc::DOMElement* const rotationElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); }  else
-      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="x") { rotation.setX(eval.Evaluate(attValue)); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadDefine::RotationRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
+	if (attName=="x") { rotation.setX(eval.Evaluate(attValue)); } else
       if (attName=="y") { rotation.setY(eval.Evaluate(attValue)); } else
       if (attName=="z") { rotation.setZ(eval.Evaluate(attValue)); }
    }

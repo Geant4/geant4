@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 95470 2016-02-12 09:02:26Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
 
-G4ThreadLocal G4double G4PhaseSpaceDecayChannel::current_parent_mass = 0.0;
+//G4ThreadLocal G4double G4PhaseSpaceDecayChannel::current_parent_mass = 0.0;
 
 G4PhaseSpaceDecayChannel::G4PhaseSpaceDecayChannel(G4int Verbose)
  :G4VDecayChannel("Phase Space", Verbose)
@@ -86,11 +86,11 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::DecayIt(G4double parentMass)
   
   G4DecayProducts * products = 0;
  
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
-  if (parentMass >0.0) current_parent_mass = parentMass;
-  else                 current_parent_mass = G4MT_parent_mass;
+  if (parentMass >0.0) current_parent_mass.Put( parentMass );
+  else                 current_parent_mass.Put(G4MT_parent_mass);
 
   switch (numberOfDaughters){
   case 0:
@@ -130,7 +130,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::OneBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = current_parent_mass;
+  G4double parentmass = current_parent_mass.Get();
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -160,7 +160,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = current_parent_mass;
+  G4double parentmass = current_parent_mass.Get();
   
   //daughters'mass, width
   G4double daughtermass[2], daughterwidth[2]; 
@@ -188,7 +188,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 	if (GetVerboseLevel()>0) {
 	  G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
 		 << "sum of daughter mass is larger than parent mass" << G4endl;
-	  G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	  G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass.Get()/GeV << G4endl;
 	  G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
 	  G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
 	}
@@ -217,7 +217,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
     if (GetVerboseLevel()>0) {
       G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
 	     << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass.Get()/GeV << G4endl;
       G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
       G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
       if (useGivenDaughterMass) {
@@ -264,7 +264,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   if (GetVerboseLevel()>1) G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()"<<G4endl;
 #endif
   // parent mass
-  G4double parentmass = current_parent_mass;
+  G4double parentmass = current_parent_mass.Get();
   //daughters'mass
   G4double daughtermass[3], daughterwidth[3]; 
   G4double sumofdaughtermass = 0.0;
@@ -295,7 +295,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 	if (GetVerboseLevel()>0) {
 	  G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
 		 << "sum of daughter mass is larger than parent mass" << G4endl;
-	  G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	  G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass.Get()/GeV << G4endl;
 	  G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
 	  G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
 	  G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
@@ -332,7 +332,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
     if (GetVerboseLevel()>0) {
       G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
 	     << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass.Get()/GeV << G4endl;
       G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
       G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
       G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
@@ -464,7 +464,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
 
 
   // parent mass
-  G4double parentmass = current_parent_mass;
+  G4double parentmass = current_parent_mass.Get();
 
   //parent particle
   G4ThreeVector dummy;
@@ -491,7 +491,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     if (GetVerboseLevel()>0) {
       G4cout << "G4PhaseSpaceDecayChannel::ManyBodyDecayIt " 
 	     << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass.Get()/GeV << G4endl;
       G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
       G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
       G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
@@ -719,8 +719,8 @@ G4bool  G4PhaseSpaceDecayChannel::SampleDaughterMasses()
 G4bool  G4PhaseSpaceDecayChannel::IsOKWithParentMass(G4double parentMass) {
   if (!useGivenDaughterMass) return G4VDecayChannel::IsOKWithParentMass(parentMass);
  
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   G4double sumOfDaughterMassMin=0.0;
   for (G4int index=0; index < numberOfDaughters;  index++) { 

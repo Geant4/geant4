@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.cc 92328 2015-08-28 07:44:26Z gcosmo $
+// $Id: G4GeometryTolerance.cc 97527 2016-06-03 14:59:04Z gcosmo $
 //
 // class G4GeometryTolerance
 //
@@ -36,25 +36,25 @@
 
 #include "G4GeometryTolerance.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
 #include "globals.hh"
 
 
 // ***************************************************************************
-// Static class data
+// Static class instance
 // ***************************************************************************
 //
-G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
-G4bool G4GeometryTolerance::fInitialised = false;
-G4double G4GeometryTolerance::fCarTolerance = 1E-9*mm;
-G4double G4GeometryTolerance::fAngTolerance = 1E-9*rad;
-G4double G4GeometryTolerance::fRadTolerance = 1E-9*mm;
+G4ThreadLocal G4GeometryTolerance* G4GeometryTolerance::fpInstance = 0;
 
 // ***************************************************************************
 // Constructor.
 // ***************************************************************************
 //
-G4GeometryTolerance::G4GeometryTolerance()
+G4GeometryTolerance::G4GeometryTolerance() : fInitialised(false)
 {
+  fCarTolerance = 1E-9*mm;
+  fAngTolerance = 1E-9*rad;
+  fRadTolerance = 1E-9*mm;
 }
 
 // ***************************************************************************
@@ -63,7 +63,6 @@ G4GeometryTolerance::G4GeometryTolerance()
 //
 G4GeometryTolerance::~G4GeometryTolerance()
 {
-  delete fpInstance; fpInstance = 0;
 }
 
 // ***************************************************************************
@@ -76,6 +75,7 @@ G4GeometryTolerance* G4GeometryTolerance::GetInstance()
   if (fpInstance == 0)
   {
     fpInstance = new  G4GeometryTolerance;
+    G4AutoDelete::Register(fpInstance);
   }
   return fpInstance;    
 }

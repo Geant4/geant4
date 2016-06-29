@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIWin32.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4UIWin32.cc 97681 2016-06-07 08:59:17Z gcosmo $
 //
 // G.Barrand
 
@@ -228,7 +228,7 @@ G4UIWin32::G4UIWin32 (
 
   menuBar = CreateMenu();
   defaultMenu = CreatePopupMenu();
-  AppendMenu(menuBar,MF_POPUP,(UINT)defaultMenu,"Geant4");
+  AppendMenu(menuBar,MF_POPUP,(UINT_PTR)defaultMenu,"Geant4");
 
   textBuffer = new TextBuffer();
 
@@ -241,7 +241,7 @@ G4UIWin32::G4UIWin32 (
 			      ::GetModuleHandle(NULL),
 			      NULL);
   tmpSession = NULL;
-  ::SetWindowLongPtr(mainWindow,GWLP_USERDATA,LONG(this));
+  ::SetWindowLongPtr(mainWindow,GWLP_USERDATA,(LONG_PTR)this);
 
   ::SetForegroundWindow(mainWindow);
   ::ShowWindow(mainWindow,SW_SHOWDEFAULT);
@@ -398,7 +398,7 @@ void G4UIWin32::AddMenu (
     defaultMenu = NULL;
   }
   HMENU hMenu = CreatePopupMenu();
-  AppendMenu(menuBar,MF_POPUP,(UINT)hMenu,a_label);
+  AppendMenu(menuBar,MF_POPUP,(UINT_PTR)hMenu,a_label);
   AddInteractor(a_name,(G4Interactor)hMenu);
   DrawMenuBar(mainWindow);
 }
@@ -465,7 +465,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
 				       a_window,NULL,
 				       GetWindowInstance(a_window),
 				       NULL);
-      ::SetWindowLongPtr (This->textWindow,GWLP_USERDATA,LONG(This));
+      ::SetWindowLongPtr (This->textWindow,GWLP_USERDATA,(LONG_PTR)This);
       
       This->editWindow = CreateWindow ("edit",NULL,
 				       WS_CHILD | WS_VISIBLE | WS_BORDER,
@@ -475,7 +475,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
 				       GetWindowInstance(a_window),
 				       NULL);
       oldEditWindowProc = (WNDPROC)GetWindowLongPtr(This->editWindow,GWLP_WNDPROC);
-      SetWindowLongPtr (This->editWindow,GWLP_WNDPROC,(LONG)EditWindowProc);
+      SetWindowLongPtr (This->editWindow,GWLP_WNDPROC,(LONG_PTR)EditWindowProc);
       
       MoveWindow (a_window,
 		  rect.left,rect.top,

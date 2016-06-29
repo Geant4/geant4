@@ -1,5 +1,5 @@
 Starting run with
-Macro File    : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patches_branch/geant4-10-02-patches_branch/examples/extended/medical/electronScattering2/electronScattering2.in
+Macro File    : /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-02-patch-02_cand-01/geant4-10-02-patch-02_cand-01/examples/extended/medical/electronScattering2/electronScattering2.in
 Starting Seed : 1
 Output File   : output.csv
 
@@ -8,7 +8,7 @@ Output File   : output.csv
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -165,8 +165,10 @@ G4SDManager::AddNewCollection : the collection <MyDetector/cell flux> is registe
 G4SDManager::AddNewCollection : the collection <MyDetector/e cell flux> is registered at 2
 G4SDManager::AddNewCollection : the collection <MyDetector/population> is registered at 3
 G4SDManager::AddNewCollection : the collection <MyDetector/e population> is registered at 4
-New sensitive detector <MyDetector> is registored at /
-New sensitive detector <MyDetector> is registored at /
+New sensitive detector <MyDetector> is registered at /
+New sensitive detector <MyDetector> is registered at /
+New sensitive detector <MyDetector> is registered at /
+New sensitive detector <MyDetector> is registered at /
  G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
 
 phot:   for  gamma    SubType= 12  BuildTable= 0

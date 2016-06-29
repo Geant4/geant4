@@ -45,8 +45,8 @@
 B3aEventAction::B3aEventAction(B3aRunAction* runAction)
  : G4UserEventAction(), 
    fRunAction(runAction),
-   fCollID_cryst(0),
-   fCollID_patient(0)
+   fCollID_cryst(-1),
+   fCollID_patient(-1)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,16 +56,8 @@ B3aEventAction::~B3aEventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B3aEventAction::BeginOfEventAction(const G4Event* evt )
-{
-  G4int evtNb = evt->GetEventID();
-  
-  if (evtNb == 0) {
-    G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
-    fCollID_cryst   = SDMan->GetCollectionID("crystal/edep");
-    fCollID_patient = SDMan->GetCollectionID("patient/dose");    
-  }
-}
+void B3aEventAction::BeginOfEventAction(const G4Event* /*evt*/)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,6 +68,13 @@ void B3aEventAction::EndOfEventAction(const G4Event* evt )
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   if(!HCE) return;
                
+   // Get hits collections IDs
+  if (fCollID_cryst < 0) {
+    G4SDManager* SDMan = G4SDManager::GetSDMpointer();  
+    fCollID_cryst   = SDMan->GetCollectionID("crystal/edep");
+    fCollID_patient = SDMan->GetCollectionID("patient/dose");    
+  }
+  
   //Energy in crystals : identify 'good events'
   //
   const G4double eThreshold = 500*keV;
@@ -103,7 +102,7 @@ void B3aEventAction::EndOfEventAction(const G4Event* evt )
     ///G4int copyNb  = (itr->first);
     dose = *(itr->second);
   }
-  if (dose > 0.) fRunAction->SumDose(dose);    
+  if (dose > 0.) fRunAction->SumDose(dose);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

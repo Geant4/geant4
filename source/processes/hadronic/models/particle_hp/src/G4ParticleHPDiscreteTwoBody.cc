@@ -307,7 +307,9 @@ G4ReactionProduct * G4ParticleHPDiscreteTwoBody::Sample(G4double anEnergy, G4dou
    //G4double kinE = restEnergy/(1+result->GetMass()/residualMass); // non relativistic @@
    G4double A1     =  GetTarget()->GetMass()/GetProjectileRP()->GetMass(); 
    G4double A1prim =  result->GetMass()/GetProjectileRP()->GetMass();
-   G4double E1     =  (A1+1)*(A1+1)/A1/A1*anEnergy; 
+   //G4double E1     =  (A1+1)*(A1+1)/A1/A1*anEnergy; 
+   //Bug fix Bugzilla #1815
+   G4double E1     =  anEnergy; 
    G4double kinE = (A1+1-A1prim)/(A1+1)/(A1+1)*(A1*E1+(1+A1)*GetQValue());
 
    result->SetKineticEnergy(kinE); // non relativistic @@

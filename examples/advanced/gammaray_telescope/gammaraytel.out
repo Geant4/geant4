@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2513,7 +2513,7 @@ Number of digits in this event =  9
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.9s Real=0.91s Sys=0s
+  User=0.66s Real=0.81s Sys=0.01s
 End of Run 0
 /gun/particle gamma
 /gun/energy 1 GeV
@@ -3791,7 +3791,7 @@ Number of digits in this event =  1
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.48s Real=3.48s Sys=0s
+  User=2.82s Real=2.81s Sys=0s
 End of Run 1
 /gun/particle e-
 /gun/energy 1 GeV
@@ -6617,7 +6617,7 @@ Number of digits in this event =  8
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.06s Real=4.08s Sys=0s
+  User=2.79s Real=2.83s Sys=0s
 End of Run 2
 Graphics systems deleted.
 Visualization Manager deleting...

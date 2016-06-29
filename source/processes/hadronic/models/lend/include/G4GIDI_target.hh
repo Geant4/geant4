@@ -52,6 +52,7 @@ struct crossSectionData_s {
 struct G4GIDI_Product_s {
     int A, Z, m;
     double kineticEnergy, px, py, pz;
+    double birthTimeSec;
 };
 
 class G4GIDI_target {

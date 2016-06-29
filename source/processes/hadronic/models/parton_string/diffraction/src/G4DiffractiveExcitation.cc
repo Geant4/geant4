@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.cc 92048 2015-08-14 07:24:57Z gcosmo $
+// $Id: G4DiffractiveExcitation.cc 97625 2016-06-06 13:35:58Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -259,14 +259,24 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   G4double ProbProjectileDiffraction = theParameters->GetProcProb( 2, ProjectileRapidity );
   G4double ProbTargetDiffraction     = theParameters->GetProcProb( 3, ProjectileRapidity );
 
+// =================================== Apr. 19 ========================================= Vova
+//QeNoExc = 1.; 
+//QeExc   = 0.;
+//ProbProjectileDiffraction = 0.0;
+//ProbTargetDiffraction     = 0.0;
+//AveragePt2 = 0.;
+// =================================== Apr. 19 =========================================
+
   if(QeNoExc+QeExc+ProbProjectileDiffraction+ProbTargetDiffraction > 1.)   // Uzhi Nov. 2014 
     {QeNoExc=1.0-QeExc-ProbProjectileDiffraction-ProbTargetDiffraction;}
-
+//QeNoExc=0.;
   G4double ProbExc( 0.0 ); 
   if ( QeExc + QeNoExc != 0.0 ) ProbExc = QeExc/(QeExc + QeNoExc);
   G4double DeltaProbAtQuarkExchange = theParameters->GetDeltaProbAtQuarkExchange();
   G4double DeltaMass = G4ParticleTable::GetParticleTable()->FindParticle( 2224 )->GetPDGMass();
 
+//ProbProjectileDiffraction = 0.5;        // Vova
+//ProbTargetDiffraction     = 0.5;        // Vova
   G4double ProbOfDiffraction = ProbProjectileDiffraction + ProbTargetDiffraction;
 
   #ifdef debugFTFexictation
@@ -925,6 +935,7 @@ M0target = MtestTr;                                                             
         PMinusMin = std::sqrt( ProjMassT2 + PZcms2 ) - PZcms;
         PMinusMax = SqrtS - TargMassT;
 
+//        PMinusNew = PMinusMax; //ChooseP( PMinusMin, PMinusMax ); ==== Apr. 19 ==================== Vova
         PMinusNew = ChooseP( PMinusMin, PMinusMax );
 
         TMinusNew = SqrtS - PMinusNew;

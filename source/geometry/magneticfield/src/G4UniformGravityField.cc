@@ -58,9 +58,11 @@ G4UniformGravityField::G4UniformGravityField(const G4double gy )
       fFieldComponents[2] = 0.0;
 }
 
-G4UniformGravityField* G4UniformGravityField::Clone() const
+G4Field* G4UniformGravityField::Clone() const
 {
-    return new G4UniformGravityField( G4ThreeVector(this->fFieldComponents[0],this->fFieldComponents[1],this->fFieldComponents[2]) );
+    return new G4UniformGravityField( G4ThreeVector(fFieldComponents[0],
+                                                    fFieldComponents[1],
+                                                    fFieldComponents[2]) );
 }
 
 G4UniformGravityField::~G4UniformGravityField()
@@ -71,17 +73,21 @@ G4UniformGravityField::G4UniformGravityField (const G4UniformGravityField &p)
    : G4Field(p)
 {
    for (G4int i=0; i<3; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
+   {
+     fFieldComponents[i] = p.fFieldComponents[i];
+   }
 }
 
 G4UniformGravityField&
 G4UniformGravityField::operator = (const G4UniformGravityField &p)
 {
-   // G4Field::SetGravityActive( p.IsGravityActive ); 
-
-   for (G4int i=0; i<3; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
-   return *this;
+  if (&p == this) return *this; 
+  G4Field::operator=(p); 
+  for (G4int i=0; i<3; i++)
+  {
+    fFieldComponents[i] = p.fFieldComponents[i];
+  }
+  return *this;
 }
 
 // -------------------------------------------------------------------

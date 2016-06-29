@@ -32,22 +32,22 @@
 // File name:     G4hICRU49He
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 20 July 2000
 //
-// Modifications: 
+// Modifications:
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/09/2000  V.Ivanchenko clean up - all variable are the same as in ICRU
 // 03/10/2000  V.Ivanchenko clean up accoding to CodeWizard
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 26/08/2004  V.Ivanchenko Fix a problem of effective charge
 //
-// Class Description: 
+// Class Description:
 //
 // Electronic stopping power parametrised according to
 // ICRU Report N49, 1993. J.F. Ziegler model for He ion.
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
@@ -60,22 +60,23 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4Material.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hICRU49He::G4hICRU49He():G4VhElectronicStoppingPower(), 
+G4hICRU49He::G4hICRU49He():G4VhElectronicStoppingPower(),
   rateMass(4.0026/1.007276),
   iMolecula(0)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hICRU49He::~G4hICRU49He() 
+G4hICRU49He::~G4hICRU49He()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4hICRU49He::HasMaterial(const G4Material* material) 
+G4bool G4hICRU49He::HasMaterial(const G4Material* material)
 {
   G4String chFormula = material->GetChemicalFormula() ;
   G4String myFormula = G4String(" ");
@@ -86,17 +87,17 @@ G4bool G4hICRU49He::HasMaterial(const G4Material* material)
   }
 
   // ICRU Report N49, 1993. Power's model for He.
-  const size_t numberOfMolecula = 30 ;    
+  const size_t numberOfMolecula = 30 ;
   static const G4String name[numberOfMolecula] = {
     "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
     "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
     "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
     "CO_2", "Cellulose-Nitrat", "C_2H_4", "LiF",
     "CH_4", "Nylon", "Polycarbonate", "(CH_2)_N-Polyetilene", "PMMA",
-    "(C_8H_8)_N", "SiO_2", "CsI", "H_2O", "H_2O-Gas"};      
-  
+    "(C_8H_8)_N", "SiO_2", "CsI", "H_2O", "H_2O-Gas"};
+
   // Special treatment for water in gas state
-  
+
   myFormula = G4String("H_2O") ;
   const G4State theState = material->GetState() ;
   if( theState == kStateGas && myFormula == chFormula) {
@@ -116,23 +117,23 @@ G4bool G4hICRU49He::HasMaterial(const G4Material* material)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hICRU49He::StoppingPower(const G4Material* material,
-                                          G4double kineticEnergy) 
+                                          G4double kineticEnergy)
 {
   G4double ionloss = 0.0 ;
 
   // pure material (normally not the case for this function)
   if(1 == (material->GetNumberOfElements())) {
     G4double z = material->GetZ() ;
-    ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
+    ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;
 
-  // The data and the fit from: 
+  // The data and the fit from:
   // ICRU Report N49, 1993. Power's model for He.
   } else if ( iMolecula < 30 ) {
 
-    // Reduced kinetic energy  
+    // Reduced kinetic energy
     // in internal units of parametrisation formula (MeV)
-    G4double T = kineticEnergy*rateMass/MeV ;  
-  
+    G4double T = kineticEnergy*rateMass/MeV ;
+
     static const G4double c[30][7] = {
       {8.0080,  3.6287,  23.0700,  14.9900,  0.8507, 0.60, 2.0
    },{ 13.3100,  3.7432,  39.4130,  12.1990,  1.0950, 0.38, 1.4
@@ -170,26 +171,26 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
   // Free electron gas model
     if ( T < 0.001 ) {
       G4double T0 = 0.001 ;
-      a1 = 1.0 - std::exp(-c[iMolecula][1]*std::pow(T0,-2.0+c[iMolecula][5])) ;
+      a1 = 1.0 - G4Exp(-c[iMolecula][1]*std::pow(T0,-2.0+c[iMolecula][5])) ;
       a2 = (c[iMolecula][0]*std::log(T0)/T0 + c[iMolecula][2]/T0) *
-            std::exp(-c[iMolecula][4]*std::pow(T0,-c[iMolecula][6])) +
+            G4Exp(-c[iMolecula][4]*std::pow(T0,-c[iMolecula][6])) +
             c[iMolecula][3]/(T0*T0) ;
 
-      ionloss *= std::sqrt(T/T0) ; 
-  
+      ionloss *= std::sqrt(T/T0) ;
+
   // Main parametrisation
     } else {
-      a1 = 1.0 - std::exp(-c[iMolecula][1]*std::pow(T,-2.0+c[iMolecula][5])) ;
+      a1 = 1.0 - G4Exp(-c[iMolecula][1]*std::pow(T,-2.0+c[iMolecula][5])) ;
       a2 = (c[iMolecula][0]*std::log(T)/T + c[iMolecula][2]/T) *
-            std::exp(-c[iMolecula][4]*std::pow(T,-c[iMolecula][6])) +
+            G4Exp(-c[iMolecula][4]*std::pow(T,-c[iMolecula][6])) +
             c[iMolecula][3]/(T*T) ;
     }
 
   // He effective charge
-    G4double z = (material->GetTotNbOfElectPerVolume()) / 
+    G4double z = (material->GetTotNbOfElectPerVolume()) /
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
+    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy*rateMass) ;
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }
@@ -206,14 +207,14 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
   G4int i = G4int(z)-1 ;  // index of atom
   if(i < 0)  i = 0 ;
   if(i > 91) i = 91 ;
-  
-  // The data and the fit from: 
+
+  // The data and the fit from:
   // ICRU Report 49, 1993. Ziegler's type of parametrisations
-  // Reduced kinetic energy  
+  // Reduced kinetic energy
 
   // He energy in internal units of parametrisation formula (MeV)
-  G4double T = kineticEnergy*rateMass/MeV ;  
-  
+  G4double T = kineticEnergy*rateMass/MeV ;
+
   static const G4double a[92][5] = {
     {0.35485, 0.6456, 6.01525,  20.8933, 4.3515
    },{ 0.58,    0.59,   6.3,	 130.0,   44.07
@@ -265,13 +266,13 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
    },{ 3.55,    0.6068, 124.7,    1.112,    3.119
    },{ 3.6,     0.62,   105.8,	 0.1692,   6.026
    },{ 5.4,     0.53,   103.1,	 3.931,    7.767
-   },{ 3.97,    0.6459, 131.8,    0.2233,   2.723 
+   },{ 3.97,    0.6459, 131.8,    0.2233,   2.723
    },{ 3.65,    0.64,   126.8,	 0.6834,   3.411
    },{ 3.118,   0.6519, 164.9,    1.208,    1.51
    },{ 3.949,   0.6209, 200.5,    1.878,    0.9126
    },{ 14.4,    0.3923, 152.5,    8.354,    2.597
    },{ 10.99,   0.4599, 138.4,    4.811,    3.726
-   },{ 16.6,    0.3773, 224.1,    6.28,	   0.9121 
+   },{ 16.6,    0.3773, 224.1,    6.28,	   0.9121
    },{ 10.54,   0.4533, 159.3,	 4.832,	   2.529
    },{ 10.33,   0.4502, 162.0,	 5.132,	   2.444
    },{ 10.15,   0.4471, 165.6,	 5.378,	   2.328
@@ -308,38 +309,26 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
    },{ 5.408,   0.5811, 235.7,	 3.961,	   1.358
    },{ 5.218,   0.5828, 245.0,	 3.838,	   1.25}
   };
-  
+
   // Free electron gas model
   if ( T < 0.001 ) {
     G4double slow  = a[i][0] ;
-    G4double shigh = std::log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 ) 
+    G4double shigh = std::log( 1.0 + a[i][3]*1000.0 + a[i][4]*0.001 )
                    * a[i][2]*1000.0 ;
-    ionloss  = slow*shigh / (slow + shigh) ; 
-    ionloss *= std::sqrt(T*1000.0) ; 
-    
+    ionloss  = slow*shigh / (slow + shigh) ;
+    ionloss *= std::sqrt(T*1000.0) ;
+
   // Main parametrisation
   } else {
     G4double slow  = a[i][0] * std::pow((T*1000.0), a[i][1]) ;
     G4double shigh = std::log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
-    ionloss = slow*shigh / (slow + shigh) ; 
-    
+    ionloss = slow*shigh / (slow + shigh) ;
+
   }
   if ( ionloss < 0.0) ionloss = 0.0 ;
 
   // He effective charge
-  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass) ; 
-  
+  ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass) ;
+
   return ionloss;
 }
-
-
-
-
-
-
-
-
-
-
-
-

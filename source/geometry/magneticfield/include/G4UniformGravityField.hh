@@ -70,7 +70,7 @@ class G4UniformGravityField : public G4Field
 
     virtual void GetFieldValue(const G4double Point[4], G4double *field) const;
     
-    virtual G4UniformGravityField* Clone() const;
+    virtual G4Field* Clone() const;
 
   private:
 

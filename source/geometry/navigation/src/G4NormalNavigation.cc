@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc 93289 2015-10-15 10:01:15Z gcosmo $
+// $Id: G4NormalNavigation.cc 97507 2016-06-03 12:48:42Z gcosmo $
 //
 //
 // class G4NormalNavigation Implementation
@@ -273,10 +273,13 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
 
       if( (motherStep >= kInfinity) || (motherStep < 0.0) )
       {
-        // Clearly outside the mother solid!
-#ifdef G4VERBOSE         
-        fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
-#endif         
+#ifdef G4VERBOSE
+        if( fCheck )  // Clearly outside the mother solid!
+        {
+          fLogger->ReportOutsideMother(localPoint, localDirection,
+                                       motherPhysical);
+        }
+#endif
         ourStep = motherStep = 0.0;
         exiting = true;
         entering = false;

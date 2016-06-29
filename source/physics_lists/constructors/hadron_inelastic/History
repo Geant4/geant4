@@ -1,4 +1,4 @@
-$Id: History 94087 2015-11-05 15:10:09Z gcosmo $
+$Id: History 97610 2016-06-06 10:02:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,20 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, A. Ribon                   (phys-ctor-hinelastic-V10-01-08, 07)
+- G4HadronPhysicsQGSP_BIC_AllHP : treat only proton with ParticleHP in
+  this class, and move the others (deuteron, triton, 3He, alpha) to
+  the new class G4IonPhysicsPHP.
+
+06-Apr-2016, A. Ribon                   (phys-ctor-hinelastic-V10-01-06)
+- G4HadronPhysicsFTFP_BERT_ATL : created new constructor for ATLAS, similar
+  to G4HadronPhysicsFTFP_BERT but with the transition between BERT and FTFP
+  in the energy region [9, 12] GeV.
+
+04-Dec-2015, A. Ribon
+- G4HadronPhysicsQGSP_BIC_AllHP : activate ParticleHP for deuteron,
+  triton, He3 and alpha.
 
 05-Nov-2015, A. Ribon                   (phys-ctor-hinelastic-V10-01-05)
 - Removed neutron_hp/

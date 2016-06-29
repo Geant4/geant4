@@ -279,7 +279,7 @@ Widget G4OpenInventorXtExtendedViewer::AddMenu(
   // Cascade button :
   Arg args[2];
   XmString cps = 
-    XmStringLtoRCreate((char*)aLabel.c_str(),XmSTRING_DEFAULT_CHARSET);
+    XmStringLtoRCreate((char*)aLabel.c_str(),(char*)XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[0],XmNlabelString,cps);
   XtSetArg (args[1],XmNsubMenuId,menu);
   Widget widget = XmCreateCascadeButton(aMenuBar,(char*)aName.c_str(),args,2);

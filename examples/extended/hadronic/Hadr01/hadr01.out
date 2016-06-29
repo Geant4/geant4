@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -420,7 +420,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-RunAction::BeginOfRunAction:  User=1.23s Real=1.24s Sys=0.01s
+RunAction::BeginOfRunAction:  User=1.03s Real=1.05s Sys=0.02s
 NuclearData:  User=0s Real=0s Sys=0s
 EventAction: Event # 0 started
 EventAction: Event # 10 started

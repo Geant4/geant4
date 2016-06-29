@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh 83518 2014-08-27 12:57:10Z gcosmo $
+// $Id: G4VScoringMesh.hh 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #ifndef G4VScoringMesh_h
@@ -135,7 +135,7 @@ class G4VScoringMesh
   G4bool FindPrimitiveScorer(const G4String & psname);
   // get whether current primitive scorer is set or not
   G4bool IsCurrentPrimitiveScorerNull() {
-    if(fCurrentPS == NULL) return true;
+    if(fCurrentPS == nullptr) return true;
     else return false;
   }
   // get unit of primitive scorer by the name
@@ -153,7 +153,7 @@ class G4VScoringMesh
   void GetDivisionAxisNames(G4String divisionAxisNames[3]);
 
   // set current  primitive scorer to NULL
-  void SetNullToCurrentPrimitiveScorer() {fCurrentPS = NULL;}
+  void SetNullToCurrentPrimitiveScorer() {fCurrentPS = nullptr;}
   // set verbose level
   inline void SetVerboseLevel(G4int vl) 
   { verboseLevel = vl; }
@@ -213,7 +213,7 @@ public:
   inline void GeometryHasBeenDestroyed()
   {
     fGeometryHasBeenDestroyed = true;
-    fMeshElementLogical = 0;
+    fMeshElementLogical = nullptr;
   }
 };
 

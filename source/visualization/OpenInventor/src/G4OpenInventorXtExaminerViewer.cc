@@ -4370,7 +4370,7 @@ void G4OpenInventorXtExaminerViewer::sortBookmarksCB(Widget,
       char *vpName2 = new char[nVPName];
       strncpy(vpName2, charList[i].c_str(), nVPName);
       newStrList[i] = XmStringCreateLocalized(vpName2);
-      delete vpName2;
+      delete [] vpName2;
    }
 
    XmListDeleteAllItems(This->myViewPtList);

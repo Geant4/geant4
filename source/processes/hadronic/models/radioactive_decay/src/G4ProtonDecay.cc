@@ -67,10 +67,10 @@ G4ProtonDecay::~G4ProtonDecay()
 G4DecayProducts* G4ProtonDecay::DecayIt(G4double)
 {
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  if (G4MT_parent == 0) FillParent();
+  CheckAndFillParent();
 
   // Fill G4MT_daughters with proton and residual nucleus (stored by SetDaughter)  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillDaughters();
 
   G4double protonMass = G4MT_daughters[1]->GetPDGMass();
   // Excitation energy included in PDG mass

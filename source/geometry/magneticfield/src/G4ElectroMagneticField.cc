@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroMagneticField.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ElectroMagneticField.cc 97486 2016-06-03 10:45:04Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -40,7 +40,7 @@ G4ElectroMagneticField::~G4ElectroMagneticField()
 }
 
 G4ElectroMagneticField::G4ElectroMagneticField(const G4ElectroMagneticField &r)
-  : G4Field( r.IsGravityActive() )    // To allow extension to joint EM & g field
+  : G4Field( r )    // To allow extension to joint EM & g field
 {
 }
 
@@ -48,5 +48,6 @@ G4ElectroMagneticField&
 G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
 {
   if (&p == this) return *this;
-  *this = p; return *this;
+  G4Field::operator=(p);
+  return *this;
 }

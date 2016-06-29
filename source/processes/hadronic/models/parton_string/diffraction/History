@@ -1,4 +1,4 @@
-$Id: History 92048 2015-08-14 07:24:57Z gcosmo $
+$Id: History 97625 2016-06-06 13:35:58Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+5-May-2016 V. Uzhinsky    (hadr-string-diff-V10-01-15)
+- A bug was fixed in G4FTFModel for nucleus-nucleus interactions
+    if ( G4UniformRand() < 
+       ( 1.0 - target->GetSoftCollisionCount()     / MaxNumOfInelCollisions )  *  // Uzhi March 2015
+       ( 1.0 - projectile->GetSoftCollisionCount() / MaxNumOfInelCollisions ) ) {
+
+  There are also some improvements in sampling of kinematical variables.
+
+- G4FTFAnnihilation was improved. Now the code create Pi0, Eta and Eta_prime.
 
 13-Aug-2015 A. Ribon    (hadr-string-diff-V10-01-14)
 - G4FTFModel and G4DiffractiveExcitation : Coverity fixes.

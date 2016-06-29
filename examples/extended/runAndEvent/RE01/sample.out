@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -60,6 +60,19 @@ Available colours:
 <<< Geant4 Physics List simulation engine: QGSP_BERT 3.4
 
 I'm World.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : DIGIHIT1001
+      issued by : G4VReadOutGeometry
+The concept and the functionality of Readout Geometry has been merged
+into Parallel World. This G4VReadOutGeometry is kept for the sake of
+not breaking the commonly-used interface in the sensitive detector class.
+But this functionality of G4VReadOutGeometry class is no longer tested
+and thus may not be working well. We strongly recommend our customers to
+migrate to Parallel World scheme.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Warning : Region <TrackerRegion> does not have specific production cuts,
 even though it appears in the current tracking world.
@@ -765,7 +778,7 @@ Tracks in tracking region have been processed. -- Stage 0 over.
 >>> Summary of Event 0
 
 Tracker hits --------------------------------------------------------------
-1411 hits are stored in RE01TrackerHitsCollection.
+1479 hits are stored in RE01TrackerHitsCollection.
 
 Calorimeter hits --------------------------------------------------------------
 0 hits are stored in RE01CalorimeterHitsCollection.

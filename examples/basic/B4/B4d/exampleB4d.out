@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -103,10 +103,10 @@ Checking overlaps for volume Gap ... OK!
 ------------------------------------------------------------
 G4SDManager::AddNewCollection : the collection <Absorber/Edep> is registered at 1
 G4SDManager::AddNewCollection : the collection <Absorber/TrackLength> is registered at 2
-New sensitive detector <Absorber> is registored at /
+New sensitive detector <Absorber> is registered at /
 G4SDManager::AddNewCollection : the collection <Gap/Edep> is registered at 3
 G4SDManager::AddNewCollection : the collection <Gap/TrackLength> is registered at 4
-New sensitive detector <Gap> is registored at /
+New sensitive detector <Gap> is registered at /
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0

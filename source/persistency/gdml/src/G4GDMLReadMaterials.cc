@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc 89243 2015-03-27 16:24:39Z gcosmo $
+// $Id: G4GDMLReadMaterials.cc 97543 2016-06-03 15:49:14Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -81,7 +81,11 @@ G4GDMLReadMaterials::AtomRead(const xercesc::DOMElement* const atomElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
+	if (attName=="unit")  {unit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Molar mass") {
+	    G4Exception("G4GDMLReadMaterials::AtomRead()", "InvalidRead",
+			FatalException, "Invalid unit for atomic mass!");  }
+	}
    }
 
    return value*unit;
@@ -151,7 +155,12 @@ G4double G4GDMLReadMaterials::DRead(const xercesc::DOMElement* const DElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
+	if (attName=="unit")  {
+	  unit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Volumic Mass") {
+	    G4Exception("G4GDMLReadMaterials::DRead()", "InvalidRead",
+			FatalException, "Invalid unit for density!");  }
+	}  
    }
 
    return value*unit;
@@ -185,7 +194,11 @@ G4double G4GDMLReadMaterials::PRead(const xercesc::DOMElement* const PElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
+	if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Pressure") {
+	    G4Exception("G4GDMLReadMaterials::PRead()", "InvalidRead",
+			FatalException, "Invalid unit for pressure!");  }
+	}
    }
 
    return value*unit;
@@ -219,7 +232,11 @@ G4double G4GDMLReadMaterials::TRead(const xercesc::DOMElement* const TElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
+	if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Temperature") {
+	    G4Exception("G4GDMLReadMaterials::TRead()", "InvalidRead",
+			FatalException, "Invalid unit for temperature!");  } 
+	}
    }
 
    return value*unit;
@@ -253,7 +270,11 @@ G4double G4GDMLReadMaterials::MEERead(const xercesc::DOMElement* const PElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="value") { value = eval.Evaluate(attValue); } else
-      if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue); }
+	if (attName=="unit")  { unit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Energy") {
+	    G4Exception("G4GDMLReadMaterials::MEERead()", "InvalidRead",
+			FatalException, "Invalid unit for energy!");  }
+	}
    }
 
    return value*unit;

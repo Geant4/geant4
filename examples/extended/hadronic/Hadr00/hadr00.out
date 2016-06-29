@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -753,7 +753,7 @@ EventAction: Event # 0 started
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.21s Real=0.22s Sys=0s
+  User=0.1s Real=0.17s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
@@ -1564,6 +1564,6 @@ HistoManager: End of run actions are started
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.043 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.049 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

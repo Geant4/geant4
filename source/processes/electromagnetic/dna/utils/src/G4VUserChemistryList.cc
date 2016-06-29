@@ -38,7 +38,8 @@
 #include "G4ProcessManager.hh"
 #include "G4DNAChemistryManager.hh"
 
-G4VUserChemistryList::G4VUserChemistryList()
+G4VUserChemistryList::G4VUserChemistryList(bool flag) :
+fIsPhysicsConstructor(flag)
 {
   verboseLevel = 1;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 88772 2015-03-09 12:42:03Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.cc 97696 2016-06-07 10:23:09Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -506,30 +506,28 @@ void G4GMocrenFileSceneHandler::GFBeginModeling( void )
 
   if( !GFIsInModeling() ) {
 
-
     if(GFDEBUG || G4VisManager::GetVerbosity() >= G4VisManager::confirmations)
       G4cout << "***** G4GMocrenFileSceneHandler::GFBeginModeling (called & started)" << G4endl;
 
-      //----- Send saving command and heading comment
-      BeginSavingGdd();
-      
-      kFlagInModeling = true ;
+    //----- Send saving command and heading comment
+    BeginSavingGdd();
 
-      // These models are entrusted to user commands /vis/scene/add/psHits or hits
-      //GetScene()->AddEndOfEventModel(new G4PSHitsModel()); 
-      //GetScene()->AddEndOfRunModel(new G4PSHitsModel()); 
-      //scene->AddEndOfEventModel(new G4HitsModel());
-      if(GFDEBUG_HIT) {
-        G4Scene * scene = GetScene();
-	std::vector<G4Scene::Model> vmodel = scene->GetEndOfEventModelList();
-	std::vector<G4Scene::Model>::iterator itr = vmodel.begin();
-	for(; itr != vmodel.end(); itr++) {
-	  G4cout << " IIIIII model name: " << itr->fpModel->GetGlobalTag() << G4endl;
-	}
+    kFlagInModeling = true ;
+
+    // These models are entrusted to user commands /vis/scene/add/psHits or hits
+    //GetScene()->AddEndOfEventModel(new G4PSHitsModel());
+    //GetScene()->AddEndOfRunModel(new G4PSHitsModel());
+    //scene->AddEndOfEventModel(new G4HitsModel());
+    if(GFDEBUG_HIT) {
+      G4Scene * scene = GetScene();
+      std::vector<G4Scene::Model> vmodel = scene->GetEndOfEventModelList();
+      std::vector<G4Scene::Model>::iterator itr = vmodel.begin();
+      for(; itr != vmodel.end(); itr++) {
+        G4cout << " IIIIII model name: " << itr->fpModel->GetGlobalTag() << G4endl;
       }
-
-    } // if
-} 
+    }
+  }
+}
 
 
 //========== AddPrimitive() functions ==========//
@@ -1617,7 +1615,7 @@ void G4GMocrenFileSceneHandler::AddCompound( const G4VHit & hit) {
   }
   
   std::vector<G4AttValue> * attval = hit.CreateAttValues();
-  if(!attval) {G4cout << "0 empty " << (unsigned long)attval << G4endl;}
+  if(!attval) {G4cout << "0 empty " << G4endl;}
   else {
 
     G4bool bid[3] = {false, false, false};

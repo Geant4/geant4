@@ -41,9 +41,16 @@
 #include "G4ParticleHPElastic.hh"
 #include "G4ParticleHPElasticData.hh"
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+//
+G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronElasticPhysicsPHP);
+//
+G4ThreadLocal G4bool G4HadronElasticPhysicsPHP::wasActivated = false;
+G4ThreadLocal G4HadronElasticPhysics* G4HadronElasticPhysicsPHP::mainElasticBuilder = 0;
+
 G4HadronElasticPhysicsPHP::G4HadronElasticPhysicsPHP(G4int ver)
-  : G4VPhysicsConstructor("hElasticPhysics_PHP"), verbose(ver), 
-    wasActivated(false)
+  : G4VPhysicsConstructor("hElasticPhysics_PHP"), verbose(ver)
 {
   if(verbose > 1) { 
     G4cout << "### G4HadronElasticPhysicsPHP: " << GetPhysicsName() 
@@ -54,7 +61,7 @@ G4HadronElasticPhysicsPHP::G4HadronElasticPhysicsPHP(G4int ver)
 
 G4HadronElasticPhysicsPHP::~G4HadronElasticPhysicsPHP()
 {
-  delete mainElasticBuilder;
+  delete mainElasticBuilder; mainElasticBuilder = 0;
 }
 
 void G4HadronElasticPhysicsPHP::ConstructParticle()
@@ -67,7 +74,8 @@ void G4HadronElasticPhysicsPHP::ConstructProcess()
 {
   if(wasActivated) { return; }
   wasActivated = true;
-
+  //Needed because this is a TLS object and this method is called by all threads
+  if ( ! mainElasticBuilder ) mainElasticBuilder = new G4HadronElasticPhysics(verbose);
   mainElasticBuilder->ConstructProcess();
 
   mainElasticBuilder->GetNeutronModel()->SetMinEnergy(19.5*MeV);

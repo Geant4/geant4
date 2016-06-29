@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandlerFunc.icc 76287 2013-11-08 13:03:49Z gcosmo $
+// $Id: G4VRML1SceneHandlerFunc.icc 97698 2016-06-07 10:26:53Z gcosmo $
 //
 // G4VRML1SceneHandlerFunc.icc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -397,7 +397,7 @@ void G4VRML1SCENEHANDLER::AddPrimitive( const G4Text& )
           " not implemented yet."
              << "\n";
 
-	VRMLBeginModeling () ;
+  VRMLBeginModeling () ;
 }
 
 void G4VRML1SCENEHANDLER::AddPrimitive( const G4Circle& circle ) 

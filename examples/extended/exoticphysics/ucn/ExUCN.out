@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -91,6 +91,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.969593203,34.08057488,0.1921720276)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -124,6 +139,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.211666956,-34.24896874,0.5705202699)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -157,6 +187,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.363754488,34.21659129,0.9489146646)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -190,6 +235,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.583653715,-34.37521642,1.327263419)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -223,6 +283,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-6.637359447,34.36488702,1.705662488)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -256,6 +331,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.847222721,-34.50811479,2.084013503)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -289,6 +379,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-5.800466253,34.51600486,2.462415786)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -322,6 +427,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.013051742,-34.63912978,2.840770689)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -355,6 +475,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-4.865367143,34.6601818,3.219174499)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -388,6 +523,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.093854706,-34.75975192,3.59753468)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -421,6 +571,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-3.846575839,34.78798434,3.975938211)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -454,6 +619,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (3.104294158,-34.86206187,4.35430473)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -487,6 +667,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-2.760689868,34.89095286,4.732706173)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -520,6 +715,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (2.060779591,-34.93927858,5.11107968)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -553,6 +763,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-1.626112067,34.96220473,5.489477352)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -586,6 +811,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (0.9811470894,-34.98624516,5.86785803)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -619,6 +859,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-0.4626338694,34.99694229,6.246250492)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -652,6 +907,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-0.1157685219,-34.99980854,6.624638043)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -685,6 +955,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (0.7090970919,34.99281614,7.003024201)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -718,6 +1003,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-1.210641894,-34.97905582,7.381417861)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -751,6 +1051,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (1.868184356,34.95010568,7.759797047)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -784,6 +1099,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-2.284206219,-34.92538335,8.138195642)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -817,6 +1147,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (2.994112227,34.87169758,8.516567658)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -850,6 +1195,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-3.317797301,-34.84239115,8.894969685)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -883,6 +1243,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.067341216,34.76286432,9.273334815)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -916,6 +1291,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-4.293847547,-34.7356139,9.651738553)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -949,6 +1339,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.069818743,34.63086684,10.03009754)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -982,6 +1387,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-5.196292862,-34.61211552,10.40850117)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1015,6 +1435,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.985367976,34.48442214,10.78685514)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1048,6 +1483,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-6.010868451,-34.47998638,11.16525688)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1081,6 +1531,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.799936247,34.33308706,11.54360729)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1114,6 +1579,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-6.725285557,-34.34778791,11.92200548)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1147,6 +1627,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.501704527,34.18661184,12.30035399)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1180,6 +1675,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.329296938,-34.22398876,12.67874724)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1213,6 +1723,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.08107711,34.0543124,13.05709561)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1246,6 +1771,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.814671774,-34.1164316,13.43548284)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1279,6 +1819,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.530583428,33.94450097,13.81383283)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1312,6 +1867,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.175109154,-34.0318614,14.19221336)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1345,6 +1915,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.844730583,33.86400362,14.57056658)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1378,6 +1963,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.406122644,-33.97553682,14.94894015)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1411,6 +2011,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (9.019845757,33.81778205,15.32729804)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1444,6 +2059,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.504927027,-33.95093837,15.70566482)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1477,6 +2107,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (9.053942928,33.80866926,16.0840285)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1510,6 +2155,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.470352955,-33.95958069,16.46238906)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1543,6 +2203,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.946640201,33.83722254,16.84075931)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1576,6 +2251,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.302807518,-34.00093215,17.21911461)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1609,6 +2299,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.699143377,33.90169471,17.5974918)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1642,6 +2347,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.004288777,-34.07244284,17.97584314)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1675,6 +2395,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.314298259,33.99812413,18.35422721)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1708,6 +2443,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.578450323,-34.16968087,18.73257614)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1741,6 +2491,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.796701671,34.12054283,19.1109666)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1774,6 +2539,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.030703636,-34.28657473,19.48931481)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1807,6 +2587,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.152851147,34.26130062,19.86771078)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1840,6 +2635,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-6.368336109,-34.4157565,20.24606005)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1873,6 +2683,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.391302015,34.41149893,20.62446027)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1906,6 +2731,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-5.600615591,-34.54899572,21.00281232)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1939,6 +2779,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.522794341,34.56152113,21.38121526)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -1972,6 +2827,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-4.738849067,-34.67770623,21.75957165)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2005,6 +2875,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.56031015,34.70163644,22.13797557)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2038,6 +2923,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-3.796364063,-34.79349968,22.5163376)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2071,6 +2971,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (3.519025008,34.82264296,22.89474068)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2104,6 +3019,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-2.788387386,-34.88875028,23.2731093)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2137,6 +3067,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (2.416127932,34.91650506,23.65150976)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2170,6 +3115,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-1.731806731,-34.95712868,24.02988547)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2203,6 +3163,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (1.270499185,34.97693285,24.40828168)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2236,6 +3211,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-0.6448153402,-34.99405968,24.78666453)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2269,6 +3259,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (0.1022547066,34.99985063,25.16505515)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2302,6 +3307,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (0.4535441513,-34.99706127,25.54344468)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2335,6 +3355,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-1.067814433,34.98370724,25.92182874)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2368,6 +3403,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (1.543905126,-34.96593138,26.30022406)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2401,6 +3451,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-2.218862176,34.92959563,26.67860104)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2434,6 +3499,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (2.607129514,-34.90276315,27.05700087)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2467,6 +3547,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-3.330612528,34.84116847,27.43537071)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2500,6 +3595,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (3.62484103,-34.81178719,27.81377346)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2533,6 +3643,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-4.383933781,34.72435924,28.1921366)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2566,6 +3691,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.579895774,-34.69905697,28.5705405)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2599,6 +3739,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-5.361314956,34.58693831,28.94889781)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2632,6 +3787,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.456756849,-34.57200898,29.32730104)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2665,6 +3835,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-6.247212493,34.43794907,29.70565375)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2698,6 +3883,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.241753628,-34.43893889,30.08405456)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2731,6 +3931,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.028254893,34.28707677,30.46240421)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2764,6 +3979,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.923222773,-34.308439,30.84080101)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2797,6 +4027,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.69331261,34.144003,31.21914929)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2830,6 +4075,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.491543169,-34.18884001,31.59754079)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2863,6 +4123,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.233456886,34.01779222,31.97588947)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2896,6 +4171,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.939088587,-34.08769386,32.3542747)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2929,6 +4219,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.641842155,33.91634656,32.73262551)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2962,6 +4267,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.260128789,-34.01132565,33.11100391)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -2995,6 +4315,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.913551417,33.84595398,33.48935843)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3028,6 +4363,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.450711639,-33.96447369,33.86772988)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3061,6 +4411,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-9.045442809,33.81094445,34.24608944)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3094,6 +4459,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.508556008,-33.95002908,34.62445422)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3127,6 +4507,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-9.036029442,33.8134614,35.00281986)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3160,6 +4555,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.432978999,-33.96888084,35.38117869)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3193,6 +4603,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.885416123,33.85335109,35.75955105)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3226,6 +4651,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (8.224872904,-34.01986869,36.13790499)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3259,6 +4699,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.595304345,33.92817035,36.51628431)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3292,6 +4747,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (7.886735841,-34.09984454,36.89463474)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3325,6 +4795,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-8.169064166,34.03331295,37.27302085)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3358,6 +4843,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.02024884,8.223300375,70.84675265)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3391,6 +4891,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (11.23797958,-33.14676176,101.4923365)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3424,6 +4939,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-31.65257689,-14.93701363,131.2879763)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3457,6 +4987,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-16.18336154,31.0338333,163.6246407)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3490,6 +5035,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (31.13293366,15.99188674,197.4421378)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3523,6 +5083,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (18.34185269,-29.80899931,228.5211552)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3556,6 +5131,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-27.45538028,-21.70718991,258.1972497)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3589,6 +5179,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-23.17966469,26.22409474,290.0302013)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3622,6 +5227,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (26.44793649,22.92393193,323.9583431)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3655,6 +5275,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (24.54342672,-24.9523587,355.5163631)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3688,6 +5323,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-21.88608901,-27.31298424,385.1666414)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3721,6 +5371,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-28.76652079,19.93708308,416.5049074)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3754,6 +5419,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (20.18571732,28.59260073,450.4006943)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3787,6 +5467,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (29.52942376,-18.78864371,482.4607968)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3820,6 +5515,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-15.23778059,-31.50888831,512.1791319)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3853,6 +5563,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-32.66351018,12.57358751,543.0563124)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3886,6 +5611,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (12.67616604,32.62383813,576.7794688)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3919,6 +5659,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (33.02477269,-11.59156542,609.3380385)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3952,6 +5707,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-7.838699233,-34.11091899,639.2174638)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -3985,6 +5755,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-34.69970284,4.574999782,669.6877501)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4018,6 +5803,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.35735646,34.72770428,703.1135328)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4051,6 +5851,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.80348904,-3.703667204,736.1369258)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4084,6 +5899,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-31.36070742,15.54046428,684.4712686)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4117,6 +5947,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (19.33496636,-29.17463069,634.7069666)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4150,6 +5995,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-5.696953857,34.53324075,583.626012)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4183,6 +6043,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-9.998202854,-33.54155542,532.8839035)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4216,6 +6091,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (25.01916969,24.47531712,482.834495)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4249,6 +6139,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-32.16831044,-13.79129449,431.2848503)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4282,6 +6187,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.66702598,-4.816358534,381.8137084)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4315,6 +6235,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-30.82775881,16.57254618,330.1564495)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4348,6 +6283,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (18.40618005,-29.76932206,280.3655392)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4381,6 +6331,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-4.490492159,34.71074013,229.3183204)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4414,6 +6379,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-11.05039233,-33.20977009,178.53819)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4447,6 +6427,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (25.83298763,23.61475704,128.5226213)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4480,6 +6475,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-32.58993931,-12.76306608,76.95658908)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4513,6 +6523,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.49508794,-5.92358909,27.48997702)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4546,6 +6571,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-30.25900404,17.58956152,-24.15794239)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4579,6 +6619,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (17.45830297,-30.33492471,-73.97645871)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4612,6 +6667,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-3.276944327,34.84625713,-124.989236)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4645,6 +6715,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-12.09246323,-32.84466978,-175.8070863)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4678,6 +6763,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (26.61618404,22.72836877,-225.7895152)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4711,6 +6811,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-32.9793583,-11.72015044,-277.3709811)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4744,6 +6859,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.28790354,-7.024220313,-326.8342872)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4777,6 +6907,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-29.65478549,18.59015055,-378.4719192)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4810,6 +6955,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (16.49228169,-30.87077331,-428.3190075)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4843,6 +7003,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-2.057990241,34.93944299,-479.296676)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4876,6 +7051,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-13.12330421,-32.44655431,-530.1518887)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4909,6 +7099,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (27.36793793,21.81733195,-580.1019195)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4942,6 +7147,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-33.33601575,-10.66349165,-631.697866)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -4975,6 +7195,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (34.04572075,-8.117197723,-681.1590913)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5008,6 +7243,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-29.0154527,19.57303004,-732.7854792)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5041,6 +7291,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (15.50901253,-31.37627337,-782.6620852)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5074,6 +7339,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-0.8352509312,34.99003224,-833.6040174)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5107,6 +7387,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-14.14186686,-32.01573991,-884.4961845)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5140,6 +7435,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (28.08750895,20.8828121,-934.4145995)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5173,6 +7483,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-33.65939056,-9.594030817,-986.0240751)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5206,6 +7531,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (33.76881433,-9.201476997,-1035.48445)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5239,6 +7579,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-28.34141767,20.53689471,-1087.09863)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5272,6 +7627,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (14.50944102,-31.85084177,-1137.00567)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5305,6 +7675,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (0.3896040241,34.99783149,-1187.911282)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5338,6 +7723,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-15.14708561,-31.55258781,-1238.839945)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5371,6 +7771,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (28.77418796,19.92601584,-1288.727566)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5404,6 +7819,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-33.94897619,-8.512756071,-1340.349621)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5437,6 +7867,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (33.45749433,-10.275995,-1389.810379)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5470,6 +7915,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-27.63316492,21.48041425,-1441.411381)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5503,6 +7963,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (13.49456108,-32.29391307,-1491.349741)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5536,6 +8011,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (1.614863517,34.96272609,-1542.218495)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5569,6 +8059,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-16.13788295,-31.05750689,-1593.183147)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5602,6 +8107,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (29.42730253,18.94818898,-1643.040835)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5635,6 +8155,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-34.20428615,-7.420701359,-1694.674521)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5668,6 +8203,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (33.11210949,-11.33967393,-1744.1369)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5701,6 +8251,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-26.89125532,22.40224068,-1795.723747)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5734,6 +8299,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (12.46541341,-32.70494563,-1845.694276)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5767,6 +8347,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (2.838782768,34.88468593,-1896.525684)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5800,6 +8395,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-17.11317495,-30.53095549,-1947.525771)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5833,6 +8443,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (30.04622208,17.95061387,-1997.354421)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5866,6 +8491,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-34.4248593,-6.318944729,-2048.998793)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5899,6 +8539,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (32.73305008,-12.39142575,-2098.464032)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5932,6 +8587,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-26.11632918,23.30101608,-2150.035743)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5965,6 +8635,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (11.42308331,-33.08342739,-2200.039254)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -5998,6 +8683,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (4.059591762,34.76377015,-2250.832881)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6031,6 +8731,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-18.07187679,-29.97344274,-2301.867799)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6064,6 +8779,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (30.63036517,16.93460155,-2351.668349)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6097,6 +8827,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-34.61026706,-5.208590411,-2403.322462)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6130,6 +8875,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (32.32073997,-13.43018123,-2452.791799)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6163,6 +8923,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-25.3090812,24.17540918,-2504.347387)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6196,6 +8971,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (10.36865285,-33.42889526,-2554.38465)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6229,6 +9019,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (5.275566762,34.60012132,-2605.140114)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6262,6 +9067,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-19.01296492,-29.38549243,-2656.209216)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6295,6 +9115,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (31.17923991,15.90141499,-2705.982633)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6328,6 +9163,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-34.76012594,-4.090677785,-2757.645545)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6361,6 +9211,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (31.87559425,-14.45498155,-2807.120214)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6394,6 +9259,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (-24.47018624,25.024188,-2858.658695)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6427,6 +9307,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (9.303125951,-33.74095208,-2908.730442)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 
@@ -6460,6 +9355,21 @@ History depth=1
   - but |normal|   = 0  - and |normal|^2 = 0
  which differs from 1.0 by -1
    n = (0,0,0)
+ Global point: (6.485094339,34.39394644,-2959.447419)
+ Volume: Guide
+ Solid: SolidGuide, Type: G4Tubs
+-----------------------------------------------------------
+    *** Dump for solid - SolidGuide ***
+    ===================================================
+ Solid type: G4Tubs
+ Parameters: 
+    inner radius : 35 mm 
+    outer radius : 37 mm 
+    half length Z: 3000 mm 
+    starting phi : 0 degrees 
+    delta phi    : 360 degrees 
+-----------------------------------------------------------
+
 ============================================================
    State of Navigator: 
 The current state of G4Navigator is: 

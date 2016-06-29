@@ -1,4 +1,4 @@
-$Id: History 93028 2015-09-30 16:09:00Z gcosmo $
+$Id: History 97631 2016-06-06 14:06:58Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+- May 4, 2016 H.Kurashige(track-V10-01-11)
+- Use G4Log in G4VelocityTable::Value()
 
 - September 29, 2015 H.Kurashige (track-V10-01-10)
 - Add GetNumberOfSecondariesInCurrrentStep method to G4Step

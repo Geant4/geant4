@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 93069 2015-10-02 09:54:27Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 97702 2016-06-07 10:39:30Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -1421,13 +1421,16 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   switch (logoDirection) {
   case X:
   case minusX:
-    if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
+    if (freeHeightFraction * (xmax - xmin) < height) room = false;
+    break;
   case Y:
   case minusY:
-    if (freeHeightFraction * (ymax - ymin) < height) room = false; break;
+    if (freeHeightFraction * (ymax - ymin) < height) room = false;
+    break;
   case Z:
   case minusZ:
-    if (freeHeightFraction * (zmax - zmin) < height) room = false; break;
+    if (freeHeightFraction * (zmax - zmin) < height) room = false;
+    break;
   }
   if (!room) {
     worried = true;
@@ -2029,11 +2032,14 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4bool room  = true;
   switch (scaleDirection) {
   case G4Scale::x:
-    if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
+    if (freeLengthFraction * (xmax - xmin) < length) room = false;
+    break;
   case G4Scale::y:
-    if (freeLengthFraction * (ymax - ymin) < length) room = false; break;
+    if (freeLengthFraction * (ymax - ymin) < length) room = false;
+    break;
   case G4Scale::z:
-    if (freeLengthFraction * (zmax - zmin) < length) room = false; break;
+    if (freeLengthFraction * (zmax - zmin) < length) room = false;
+    break;
   }
   if (!room) {
     worried = true;

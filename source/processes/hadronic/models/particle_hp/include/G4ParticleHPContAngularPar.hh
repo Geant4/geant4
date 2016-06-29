@@ -66,6 +66,12 @@ class G4ParticleHPContAngularPar
     fCache.Put(NULL);
     theMinEner = DBL_MAX;
     theMaxEner = -DBL_MAX;
+    theEnergy = -1;
+    nEnergies = -1;
+    nDiscreteEnergies = -1;
+    nAngularParameters = -1;
+    theProjectile = NULL;
+    adjustResult = true;
   }
 
   G4ParticleHPContAngularPar(G4ParticleDefinition* projectile); 

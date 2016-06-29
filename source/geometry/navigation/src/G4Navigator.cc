@@ -67,6 +67,9 @@ G4Navigator::G4Navigator()
   fAbandonThreshold_NoZeroSteps = 25; 
 
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
+  fMinStep = 0.05*kCarTolerance;
+  fSqTol = kCarTolerance*kCarTolerance;
+
   fregularNav.SetNormalNavigation( &fnormalNav );
 
   fStepEndPoint = G4ThreeVector( kInfinity, kInfinity, kInfinity ); 
@@ -761,7 +764,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fCalculatedExitNormal  = false;
     // Reset for new step
 
-  static const G4double minStep = 0.05*kCarTolerance;
   static G4ThreadLocal G4int sNavCScalls=0;
   sNavCScalls++;
 
@@ -798,7 +800,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
     G4ThreeVector oldLocalPoint = fLastLocatedPointLocal;
     G4double moveLenSq = (newLocalPoint-oldLocalPoint).mag2();
 
-    if ( moveLenSq >= kCarTolerance*kCarTolerance )
+    if ( moveLenSq >= fSqTol )
     {
 #ifdef G4VERBOSE
       ComputeStepLog(pGlobalpoint, moveLenSq);
@@ -972,7 +974,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   //                checked
   //
   fLocatedOnEdge   = fLastStepWasZero && (Step==0.0);
-  fLastStepWasZero = (Step<minStep);
+  fLastStepWasZero = (Step<fMinStep);
   if (fPushed)  { fPushed = fLastStepWasZero; }
 
   // Handle large number of consecutive zero steps
@@ -1569,18 +1571,14 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 {
   G4bool         validNormal;
   G4ThreeVector  localNormal, globalNormal;
-  G4bool         usingStored;
  
-  usingStored=
-   fCalculatedExitNormal &&
-     (  ( fLastTriedStepComputation && fExiting) // Just calculated it
-        ||                                       // No locate in between
-         (!fLastTriedStepComputation
-          && (IntersectPointGlobal-fStepEndPoint).mag2()
-             < (10.0*kCarTolerance*kCarTolerance)
-        )  // Calculated it 'just' before & then called locate
+  G4bool usingStored = fCalculatedExitNormal && (
+       ( fLastTriedStepComputation && fExiting ) // Just calculated it
+       ||                                        // No locate in between
+       ( !fLastTriedStepComputation
+          && (IntersectPointGlobal-fStepEndPoint).mag2() < 10.0*fSqTol ) );
+           // Calculated it 'just' before & then called locate
            // but it did not move position
-      );
   
   if( usingStored )
   {
@@ -1603,7 +1601,18 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
                << "  - but |normal|   = "  << std::sqrt(normMag2)
                << "  - and |normal|^2 = "  << normMag2 << G4endl
                << " which differs from 1.0 by " << normMag2 - 1.0 << G4endl
-               << "   n = " << fExitNormalGlobalFrame << G4endl;
+               << "   n = " << fExitNormalGlobalFrame << G4endl
+               << " Global point: " << IntersectPointGlobal << G4endl
+               << " Volume: " << fHistory.GetTopVolume()->GetName() << G4endl;
+#ifdef G4VERBOSE
+       G4LogicalVolume* candLog = fHistory.GetTopVolume()->GetLogicalVolume();
+       if ( candLog )
+       {
+         message << " Solid: " << candLog->GetSolid()->GetName()
+                 << ", Type: " << candLog->GetSolid()->GetEntityType() << G4endl
+                 << *candLog->GetSolid() << G4endl;
+       }
+#endif
        message << "============================================================"
                << G4endl;
        G4int oldVerbose = fVerbose; 
@@ -1636,7 +1645,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 #ifdef G4DEBUG_NAVIGATION
     usingStored= false;
 
-    if( (!validNormal) && !fCalculatedExitNormal)
+    if( (!validNormal) && !fCalculatedExitNormal )
     {
       G4ExceptionDescription edN;
       edN << "  Calculated = " << fCalculatedExitNormal << G4endl;
@@ -1910,7 +1919,7 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
 
   if( fEnteredDaughter )
   {
-     if( motherLogical->CharacteriseDaughters() ==kReplica )  { return false; }
+     if( motherLogical->CharacteriseDaughters() == kReplica )  { return false; }
 
      // Track arrived at boundary of a daughter volume at 
      //   the last call of ComputeStep().
@@ -2095,12 +2104,12 @@ void  G4Navigator::PrintState() const
            << std::setw( 9)  << fExiting          << " "
            << std::setw( 9)  << fEntering         << " ";
     if ( fBlockedPhysicalVolume==0 )
-      G4cout << std::setw(15) << "None";
+    { G4cout << std::setw(15) << "None"; }
     else
-      G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
-      G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
-             << std::setw( 8)  << fLastStepWasZero   << " "
-             << G4endl;   
+    { G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName(); }
+    G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
+           << std::setw( 8)  << fLastStepWasZero   << " "
+           << G4endl;   
   }
   if( fVerbose > 2 ) 
   {
@@ -2122,8 +2131,8 @@ void G4Navigator::ComputeStepLog(const G4ThreeVector& pGlobalpoint,
   //  The following checks only make sense if the move is larger
   //  than the tolerance.
 
-  static const G4double fAccuracyForWarning   = kCarTolerance,
-                        fAccuracyForException = 1000*kCarTolerance;
+  const G4double fAccuracyForWarning   = kCarTolerance,
+                 fAccuracyForException = 1000*kCarTolerance;
 
   G4ThreeVector OriginalGlobalpoint = fHistory.GetTopTransform().Inverse().
                                       TransformPoint(fLastLocatedPointLocal); 

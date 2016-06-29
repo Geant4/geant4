@@ -45,10 +45,33 @@
 #include "G4DecayProducts.hh"
 #include "G4LorentzVector.hh"
 
+namespace {
+  const G4double beta = 3.6612e-03;
+  const G4double cib  = 1.16141e-03;
+  const G4double csdp = 3.45055e-02;
+  const G4double csdm = 5.14122e-03;
+  const G4double cif  = 4.63543e-05;
+  const G4double cig  = 1.78928e-05;
+  const G4double xl = 2.*0.1*MeV/139.57*MeV;
+  const G4double yl = ((1.-xl) + std::sqrt((1-xl)*(1-xl)+4*beta*beta))/2.;
+
+  const G4double xu = 1. - (yl - std::sqrt(yl*yl-4.*beta*beta))/2.;
+  const G4double yu = 1. + beta*beta;
+
+  inline G4double D2W(const G4double x,const G4double y) {
+    return cib*(1.-y)*(1.+((1.-x)*(1.-x)))/((x*x)*(x+y-1.)) +
+        csdp*(1.-x)*((x+y-1.)*(x+y-1.)) +
+        csdm*(1.-x)*((1.-y)*(1.-y)) +
+        cif*(x-1.)*(1.-y)/x +
+        cig*(1.-y)*(1.-x+(x*x)/(x+y-1.))/x;
+  }
+
+  const G4double d2wmax = D2W(xl,yl);
+
+
+}
 G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel()
-  : G4VDecayChannel(),
-    beta(0.),cib(0.),csdp(0.),csdm(0.),cif(0.),cig(0.),
-    xl(0.), yl(0.), xu(0.), yu(0.), d2wmax(0.)
+  : G4VDecayChannel()
 {
 }
 
@@ -81,34 +104,13 @@ G4PionRadiativeDecayChannel::
     }
 #endif
   }
-
-  beta = 3.6612e-03;
-
-  cib  = 1.16141e-03;
-  csdp = 3.45055e-02;
-  csdm = 5.14122e-03;
-  cif  = 4.63543e-05;
-  cig  = 1.78928e-05;
-
-  xl = 2.*0.1*MeV/139.57*MeV;
-  yl = ((1.-xl) + std::sqrt((1-xl)*(1-xl)+4*beta*beta))/2.;
-
-  xu = 1. - (yl - std::sqrt(yl*yl-4.*beta*beta))/2.;
-  yu = 1. + beta*beta;
-
-  d2wmax = D2W(xl,yl);
-
 }
 
 G4PionRadiativeDecayChannel::~G4PionRadiativeDecayChannel()
 {
 }
 G4PionRadiativeDecayChannel::G4PionRadiativeDecayChannel(const G4PionRadiativeDecayChannel &right)
-  :G4VDecayChannel(right),
-   beta(right.beta),cib(right.cib),csdp(right.csdp),
-   csdm(right.csdm),cif(right.cif),cig(right.cig),
-   xl(right.xl), yl(right.yl), xu(right.xu), yu(right.yu), 
-   d2wmax(right.d2wmax)
+  :G4VDecayChannel(right)
 {
 }
 
@@ -135,17 +137,6 @@ G4PionRadiativeDecayChannel & G4PionRadiativeDecayChannel::operator=(const G4Pio
           daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
-    beta = right.beta;
-    cib  = right.cib;
-    csdp = right.csdp;
-    csdm = right.csdm;
-    cif  = right.cif;
-    cig  = right.cig;
-    xl   = right.xl;
-    yl   = right.yl;
-    xu   = right.xu;
-    yu   = right.yu; 
-    d2wmax = right.d2wmax;
   }
   return *this;
 }
@@ -158,8 +149,8 @@ G4DecayProducts *G4PionRadiativeDecayChannel::DecayIt(G4double)
                  G4cout << "G4PionRadiativeDecayChannel::DecayIt ";
 #endif
 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();

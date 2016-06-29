@@ -46,9 +46,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UTubs.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UTubs : public G4USolid
@@ -73,18 +74,22 @@ class G4UTubs : public G4USolid
 
     inline UTubs* GetShape() const;
 
-    inline G4double GetInnerRadius   () const;
-    inline G4double GetOuterRadius   () const;
-    inline G4double GetZHalfLength   () const;
-    inline G4double GetStartPhiAngle () const;
-    inline G4double GetDeltaPhiAngle () const;
+    G4double GetInnerRadius   () const;
+    G4double GetOuterRadius   () const;
+    G4double GetZHalfLength   () const;
+    G4double GetStartPhiAngle () const;
+    G4double GetDeltaPhiAngle () const;
 
-    inline void SetInnerRadius   (G4double newRMin);
-    inline void SetOuterRadius   (G4double newRMax);
-    inline void SetZHalfLength   (G4double newDz);
-    inline void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
-    inline void SetDeltaPhiAngle (G4double newDPhi);
+    void SetInnerRadius   (G4double newRMin);
+    void SetOuterRadius   (G4double newRMax);
+    void SetZHalfLength   (G4double newDz);
+    void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
+    void SetDeltaPhiAngle (G4double newDPhi);
     
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
+
   public:  // without description
 
     G4UTubs(__void__&);
@@ -107,51 +112,9 @@ inline UTubs* G4UTubs::GetShape() const
   return (UTubs*) fShape;
 }
 
-inline G4double G4UTubs::GetInnerRadius() const
+inline G4GeometryType G4UTubs::GetEntityType() const
 {
-  return GetShape()->GetInnerRadius();
-}
-inline G4double G4UTubs::GetOuterRadius() const
-{
-  return GetShape()->GetOuterRadius();
-}
-inline G4double G4UTubs::GetZHalfLength() const
-{
-  return GetShape()->GetZHalfLength();
-}
-inline G4double G4UTubs::GetStartPhiAngle() const
-{
-  return GetShape()->GetStartPhiAngle();
-}
-inline G4double G4UTubs::GetDeltaPhiAngle() const
-{
-  return GetShape()->GetDeltaPhiAngle();
-}
-
-inline void G4UTubs::SetInnerRadius(G4double newRMin)
-{
-  GetShape()->SetInnerRadius(newRMin);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTubs::SetOuterRadius(G4double newRMax)
-{
-  GetShape()->SetOuterRadius(newRMax);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTubs::SetZHalfLength(G4double newDz)
-{
-  GetShape()->SetZHalfLength(newDz);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
-{
-  GetShape()->SetStartPhiAngle(newSPhi, trig);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
-{
-  GetShape()->SetDeltaPhiAngle(newDPhi);
-  fRebuildPolyhedron = true;
+  return "G4Tubs";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

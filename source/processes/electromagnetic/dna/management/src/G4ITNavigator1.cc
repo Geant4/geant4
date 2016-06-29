@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITNavigator1.cc 80151 2014-04-03 09:42:22Z gcosmo $
+// $Id: G4ITNavigator1.cc 97709 2016-06-07 11:00:54Z gcosmo $
 // 
 // class G4ITNavigator1 Implementation
 //
@@ -1879,9 +1879,9 @@ void  G4ITNavigator1::PrintState() const
       G4cout << std::setw(15) << "None";
     else
       G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
-      G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
-             << std::setw( 8)  << fLastStepWasZero   << " "
-             << G4endl;   
+    G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
+           << std::setw( 8)  << fLastStepWasZero   << " "
+           << G4endl;   
   }
   if( fVerbose > 2 ) 
   {

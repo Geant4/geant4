@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -260,7 +260,7 @@ At time : 13.9179 ns  Reaction : OH^-1 (-258) + H3O^1 (-172) -> No product
 At time : 19.2074 ns  Reaction : OH^0 (-221) + e_aq^1 (-53) -> OH^-1 (-262)
 At time : 21.4331 ns  Reaction : OH^0 (-243) + H^0 (-208) -> No product
 At time : 26.1514 ns  Reaction : H3O^1 (-124) + OH^-1 (-262) -> No product
-At time : 67.3931 ns  Reaction : H3O^1 (-138) + OH^-1 (-259) -> No product
+At time :  67.393 ns  Reaction : H3O^1 (-138) + OH^-1 (-259) -> No product
 *** G4Scheduler ends at time : 100 ns 
 ___________________________________
 Seed used :9876

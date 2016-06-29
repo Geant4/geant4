@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -257,11 +257,8 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-Set field value to (33000,0,0) Gauss 
-Set field value to (33000,0,0) Gauss 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 10 mm
-Set field value to (33000,0,0) Gauss 
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -462,7 +459,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -484,7 +481,7 @@ WARNING: Scene "none" not found.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -506,7 +503,7 @@ WARNING: Scene "none" not found.
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

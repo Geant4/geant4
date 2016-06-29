@@ -49,6 +49,8 @@ class G4ParticleHPLabAngularEnergy : public G4VParticleHPEnergyAngular
     theData = 0;
     nCosTh = 0;
     theSecondManager = 0;
+    nEnergies = -1;
+    currentMeanEnergy = -1.0;
   }
   ~G4ParticleHPLabAngularEnergy()
   {

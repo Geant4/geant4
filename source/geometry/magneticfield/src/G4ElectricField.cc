@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectricField.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ElectricField.cc 97486 2016-06-03 10:45:04Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -38,12 +38,14 @@ G4ElectricField::~G4ElectricField()
 {
 }
 
-G4ElectricField::G4ElectricField(const G4ElectricField &)
-  : G4ElectroMagneticField()
+G4ElectricField::G4ElectricField(const G4ElectricField &p)
+  : G4ElectroMagneticField(p)
 {
 }
 
 G4ElectricField& G4ElectricField::operator = (const G4ElectricField &p)
 {
-  if (&p == this) return *this; *this = p; return *this;
+  if (&p == this) return *this;
+  G4ElectroMagneticField::operator=(p);
+  return *this;
 }

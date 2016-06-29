@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 Mar 2016 Vladimir Ivanchenko (hadr-deex-V10-01-66)
+----------------------------------------------------------
+- G4PhotonEvaporation - fixed final energy in the case of X-level
+- G4ExcitationHandler - subsituted usage of iterators by simple
+    loop; add exception for the case of infinite loop of
+    evaporation
+  Both fixes address the problem report #1837
+
 12 Feb 2016 Vladimir Ivanchenko (hadr-deex-V10-01-65)
 ----------------------------------------------------------
 - remove debug printout

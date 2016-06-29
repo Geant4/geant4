@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ReplicaNavigation.hh 97507 2016-06-03 12:48:42Z gcosmo $
 //
 // 
 // class G4ReplicaNavigation
@@ -176,7 +176,9 @@ class G4ReplicaNavigation
     G4int  fVerbose;
       // Configuration parameters
 
-    G4double kCarTolerance, kRadTolerance, kAngTolerance;
+    G4double kCarTolerance, kRadTolerance, kAngTolerance,
+             halfkCarTolerance, halfkRadTolerance, halfkAngTolerance,
+             fMinStep;
       // Local copy of constants
 };
 

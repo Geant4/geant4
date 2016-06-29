@@ -1,4 +1,4 @@
-$Id: History 95547 2016-02-12 15:05:34Z gcosmo $
+$Id: History 97615 2016-06-06 12:34:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+02 March 16: V.Ivanchenko (emstand-V10-01-44)
+- G4eSingleCoulombScatteringModel, G4ScreeningMottCrossSection
+    (Mauro Tacconi) - fixed initialisation of classes allowing
+    to use precomputed cross sections (problem #1823)
 
 12 February 16: V.Ivanchenko (emstand-V10-01-43)
 - G4eSingleCoulombScatteringModel - fixed sampling of scattering angle.

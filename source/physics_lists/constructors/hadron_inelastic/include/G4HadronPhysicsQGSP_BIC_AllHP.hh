@@ -54,18 +54,6 @@
 #include "G4BinaryNeutronBuilder.hh"
 #include "G4NeutronPHPBuilder.hh"
 
-#include "G4DeuteronBuilder.hh"
-#include "G4DeuteronPHPBuilder.hh"
-
-#include "G4TritonBuilder.hh"
-#include "G4TritonPHPBuilder.hh"
-
-#include "G4He3Builder.hh"
-#include "G4He3PHPBuilder.hh"
-
-#include "G4AlphaBuilder.hh"
-#include "G4AlphaPHPBuilder.hh"
-
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
 #include "G4FTFPAntiBarionBuilder.hh"
@@ -104,22 +92,6 @@ class G4HadronPhysicsQGSP_BIC_AllHP : public G4VPhysicsConstructor
       G4QGSPProtonBuilder * theQGSPProton;
       G4BinaryProtonBuilder * theBinaryProton;
       G4ProtonPHPBuilder * thePHPProton;
-
-      G4DeuteronBuilder * theDeuteronB;
-      G4DeuteronPHPBuilder * thePHPDeuteron; 
-      G4BinaryDeuteronBuilder * theBinaryDeuteron;
-
-      G4TritonBuilder * theTritonB;
-      G4TritonPHPBuilder * thePHPTriton; 
-      G4BinaryTritonBuilder * theBinaryTriton;
-
-      G4He3Builder * theHe3B;
-      G4He3PHPBuilder * thePHPHe3; 
-      G4BinaryHe3Builder * theBinaryHe3;
-      
-      G4AlphaBuilder * theAlphaB;
-      G4AlphaPHPBuilder * thePHPAlpha; 
-      G4BinaryAlphaBuilder * theBinaryAlpha;
 
       G4HyperonFTFPBuilder * theHyperon;
 

@@ -1,4 +1,4 @@
-svn log $Id: History 95400 2016-02-09 11:35:59Z gcosmo $
+svn log $Id: History 97454 2016-06-03 09:15:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th April 2016  Gabriele Cosmo  (config-V10-01-10)
+- Added Linux-clang.gmk script for use of clang compiler on Linux system.
+
+14th April 2016  Gabriele Cosmo
+- Added flags for partial use of USolids/VecGeom types.
 
 5th February 2016  Gabriele Cosmo  (config-V10-01-09)
 - Added settings for 14 and 17 C++ standards in platform specific scripts.

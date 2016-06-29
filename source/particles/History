@@ -1,4 +1,4 @@
-$Id: History 95471 2016-02-12 09:09:23Z gcosmo $
+$Id: History 97537 2016-06-03 15:26:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 1 Match 2016 Andrea Dotti (particles-V10-01-21)
+- Fix for WIN: removing constexpr
+
+- 29 February 2016 Andrea Dotti
+- Fix for bug #1834: MT data-race in G4VDecayTable class
+
+- 25 February 2016 Andrea Dotti
+- Preliminary tag to review of MT treatment for SetDaughter in 
+  G4VDecayChannel: raise exception if re-definition of daughters
+  is requested
 
 - 27 January 2016  Hisaya Kurashige (particles-V10-01-20)
 - Fix the bug(#1820) in G4PhaseSpaceDecayChannel

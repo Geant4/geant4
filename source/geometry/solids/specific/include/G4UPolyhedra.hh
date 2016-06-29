@@ -45,7 +45,7 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UPolyhedra.hh"
 #include "G4PolyhedraSide.hh"
@@ -86,17 +86,19 @@ class G4UPolyhedra : public G4USolid
 
     inline UPolyhedra* GetShape() const;
 
-    inline G4int GetNumSide()     const;
-    inline G4double GetStartPhi() const;
-    inline G4double GetEndPhi()   const;
-    inline G4bool IsOpen()        const;
-    inline G4bool IsGeneric()     const;
-    inline G4int GetNumRZCorner() const;
-    inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
-    inline G4PolyhedraHistorical* GetOriginalParameters() const;
-    inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
+    G4int GetNumSide()     const;
+    G4double GetStartPhi() const;
+    G4double GetEndPhi()   const;
+    G4bool IsOpen()        const;
+    G4bool IsGeneric()     const;
+    G4int GetNumRZCorner() const;
+    G4PolyhedraSideRZ GetCorner( const G4int index ) const;
+    G4PolyhedraHistorical* GetOriginalParameters() const;
+    void SetOriginalParameters(G4PolyhedraHistorical* pars);
 
-    inline G4bool Reset();
+    G4bool Reset();
+
+    inline G4GeometryType GetEntityType() const;
 
   public:  // without description
 
@@ -120,70 +122,9 @@ inline UPolyhedra* G4UPolyhedra::GetShape() const
   return (UPolyhedra*) fShape;
 }
 
-inline G4int G4UPolyhedra::GetNumSide() const
+inline G4GeometryType G4UPolyhedra::GetEntityType() const
 {
-  return GetShape()->GetNumSide();
-}
-inline G4double G4UPolyhedra::GetStartPhi() const
-{
-  return GetShape()->GetStartPhi();
-}
-inline G4double G4UPolyhedra::GetEndPhi() const
-{
-  return GetShape()->GetEndPhi();
-}
-inline G4bool G4UPolyhedra::IsOpen() const
-{
-  return GetShape()->IsOpen();
-}
-inline G4bool G4UPolyhedra::IsGeneric() const
-{
-  return GetShape()->IsGeneric();
-}
-inline G4int G4UPolyhedra::GetNumRZCorner() const
-{
-  return GetShape()->GetNumRZCorner();
-}
-inline G4PolyhedraSideRZ G4UPolyhedra::GetCorner(G4int index) const
-{
-  UPolyhedraSideRZ pside = GetShape()->GetCorner(index);
-  G4PolyhedraSideRZ psiderz = { pside.r, pside.z };
-
-  return psiderz;
-}
-inline G4PolyhedraHistorical* G4UPolyhedra::GetOriginalParameters() const
-{
-  UPolyhedraHistorical* pars = GetShape()->GetOriginalParameters();
-  G4PolyhedraHistorical* pdata = new G4PolyhedraHistorical(pars->fNumZPlanes);
-  pdata->Start_angle = pars->fStartAngle;
-  pdata->Opening_angle = pars->fOpeningAngle;
-  pdata->numSide = pars->fNumSide;
-  for (G4int i=0; i<pars->fNumZPlanes; ++i)
-  {
-    pdata->Z_values[i] = pars->fZValues[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
-  return pdata;
-}
-inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
-{
-  UPolyhedraHistorical* pdata = GetShape()->GetOriginalParameters();
-  pdata->fStartAngle = pars->Start_angle;
-  pdata->fOpeningAngle = pars->Opening_angle;
-  pdata->fNumSide = pars->numSide;
-  pdata->fNumZPlanes = pars->Num_z_planes;
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
-  {
-    pdata->fZValues[i] = pars->Z_values[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
-  fRebuildPolyhedron = true;
-}
-inline G4bool G4UPolyhedra::Reset()
-{
-  return GetShape()->Reset();
+  return "G4Polyhedra";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

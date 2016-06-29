@@ -26,6 +26,7 @@
 // G4MultiSensitiveDetector
 
 #include "G4MultiSensitiveDetector.hh"
+#include "G4SDManager.hh"
 #include <sstream>
 
 //#define MSDDEBUG
@@ -133,3 +134,9 @@ G4VSensitiveDetector* G4MultiSensitiveDetector::Clone() const
 	return newInst;
 }
 
+void G4MultiSensitiveDetector::AddSD(G4VSensitiveDetector* sd) 
+{ 
+  // making sure this sensitive detector is registered to G4SDManager
+  G4SDManager::GetSDMpointer()->AddNewDetector(sd);
+  fSensitiveDetectors.push_back(sd);
+}

@@ -83,10 +83,10 @@ namespace {
     G4GeneralParticleSourceMessenger* theInstance = 0;
 }
 
-G4GeneralParticleSourceMessenger* G4GeneralParticleSourceMessenger::GetInstance(G4GeneralParticleSource* ps)
+G4GeneralParticleSourceMessenger* G4GeneralParticleSourceMessenger::GetInstance(G4GeneralParticleSource* psc)
 {
     G4AutoLock l(&creationM);
-    if ( theInstance == 0 ) theInstance = new G4GeneralParticleSourceMessenger(ps);
+    if ( theInstance == 0 ) theInstance = new G4GeneralParticleSourceMessenger(psc);
     return theInstance;
 }
 
@@ -1775,7 +1775,7 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
     if (ion==0)
     {
       G4cout << "Ion with Z=" << fAtomicNumber;
-      G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
+      G4cout << " A=" << fAtomicMass << " is not defined" << G4endl;    
     }
     else
     {
@@ -1816,7 +1816,7 @@ void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
     ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumberL, fAtomicMassL, fIonEnergyLevel);
     if (ion == 0) {
       G4cout << "Ion with Z=" << fAtomicNumberL;
-      G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;
+      G4cout << " A=" << fAtomicMassL << " is not defined" << G4endl;
     } else {
       fParticleGun->SetParticleDefinition(ion);
       fParticleGun->SetParticleCharge(fIonChargeL*eplus);

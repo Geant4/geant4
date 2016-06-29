@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4KL3DecayChannel.hh 97537 2016-06-03 15:26:56Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -66,7 +66,7 @@ class G4KL3DecayChannel :public G4VDecayChannel
   protected:
      // assignment of daughter particles for arrays of daughters[] etc.
      enum{idPi=0, idLepton=1, idNutrino=2}; 
-     G4double daughterM[3];
+     //G4double daughterM[3];
 
   protected:
      // calcurate momentum of daughters
@@ -88,11 +88,10 @@ class G4KL3DecayChannel :public G4VDecayChannel
      //    pLambda : linear energy dependence of f+
      //    pXi0    : = f+(0)/f-
      //    pNorm   : normalization factor
-     G4double   DalitzDensity(G4double Epi, G4double El,  G4double Enu);  
+     G4double   DalitzDensity(G4double parentmass, G4double Epi, G4double El,  G4double Enu,
+                              G4double massPi, G4double massL , G4double massNu );
   private:
      // constants used in DalitzDensity() 
-     //   Kon mass
-     G4double massK;
      //   coefficients
      G4double   pLambda;
      G4double   pXi0;

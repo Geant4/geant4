@@ -79,12 +79,13 @@
   G4ParticleHPFission::~G4ParticleHPFission()
   {
     //delete [] theFission;
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           it = theFission->begin() ; it != theFission->end() ; it++ )
-     {
-        delete *it;
+     if ( theFission != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+           it = theFission->begin() ; it != theFission->end() ; it++ ) {
+           delete *it;
+        }
+        theFission->clear();
      }
-     theFission->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"

@@ -33,7 +33,7 @@
 #include "G4Sphere.hh"
 #include "G4USphere.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -97,6 +97,66 @@ G4USphere& G4USphere::operator = (const G4USphere& rhs)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Accessors & modifiers
+
+G4double G4USphere::GetInnerRadius() const
+{
+  return GetShape()->GetInnerRadius();
+}
+G4double G4USphere::GetOuterRadius() const
+{
+  return GetShape()->GetOuterRadius();
+}
+G4double G4USphere::GetStartPhiAngle() const
+{
+  return GetShape()->GetStartPhiAngle();
+}
+G4double G4USphere::GetDeltaPhiAngle() const
+{
+  return GetShape()->GetDeltaPhiAngle();
+}
+G4double G4USphere::GetStartThetaAngle() const
+{
+  return GetShape()->GetStartThetaAngle();
+}
+G4double G4USphere::GetDeltaThetaAngle() const
+{
+  return GetShape()->GetDeltaThetaAngle();
+}
+
+void G4USphere::SetInnerRadius(G4double newRMin)
+{
+  GetShape()->SetInnerRadius(newRMin);
+  fRebuildPolyhedron = true;
+}
+void G4USphere::SetOuterRadius(G4double newRmax)
+{
+  GetShape()->SetOuterRadius(newRmax);
+  fRebuildPolyhedron = true;
+}
+void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
+{
+  GetShape()->SetStartPhiAngle(newSphi, trig);
+  fRebuildPolyhedron = true;
+}
+void G4USphere::SetDeltaPhiAngle(G4double newDphi)
+{
+  GetShape()->SetDeltaPhiAngle(newDphi);
+  fRebuildPolyhedron = true;
+}
+void G4USphere::SetStartThetaAngle(G4double newSTheta)
+{
+  GetShape()->SetStartThetaAngle(newSTheta);
+  fRebuildPolyhedron = true;
+}
+void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
+{
+  GetShape()->SetDeltaThetaAngle(newDTheta);
+  fRebuildPolyhedron = true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -114,6 +174,20 @@ void G4USphere::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4USphere::Clone() const
 {
   return new G4USphere(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+
+G4Polyhedron* G4USphere::CreatePolyhedron() const
+{
+  return new G4PolyhedronSphere(GetInnerRadius(),
+                                GetOuterRadius(),
+                                GetStartPhiAngle(),
+                                GetDeltaPhiAngle(),
+                                GetStartThetaAngle(),
+                                GetDeltaThetaAngle());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

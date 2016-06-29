@@ -33,7 +33,7 @@
 #include "G4Tubs.hh"
 #include "G4UTubs.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -96,6 +96,57 @@ G4UTubs& G4UTubs::operator = (const G4UTubs& rhs)
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Accessors and modifiers
+
+G4double G4UTubs::GetInnerRadius() const
+{
+  return GetShape()->GetInnerRadius();
+}
+G4double G4UTubs::GetOuterRadius() const
+{
+  return GetShape()->GetOuterRadius();
+}
+G4double G4UTubs::GetZHalfLength() const
+{
+  return GetShape()->GetZHalfLength();
+}
+G4double G4UTubs::GetStartPhiAngle() const
+{
+  return GetShape()->GetStartPhiAngle();
+}
+G4double G4UTubs::GetDeltaPhiAngle() const
+{
+  return GetShape()->GetDeltaPhiAngle();
+}
+
+void G4UTubs::SetInnerRadius(G4double newRMin)
+{
+  GetShape()->SetInnerRadius(newRMin);
+  fRebuildPolyhedron = true;
+}
+void G4UTubs::SetOuterRadius(G4double newRMax)
+{
+  GetShape()->SetOuterRadius(newRMax);
+  fRebuildPolyhedron = true;
+}
+void G4UTubs::SetZHalfLength(G4double newDz)
+{
+  GetShape()->SetZHalfLength(newDz);
+  fRebuildPolyhedron = true;
+}
+void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
+{
+  GetShape()->SetStartPhiAngle(newSPhi, trig);
+  fRebuildPolyhedron = true;
+}
+void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
+{
+  GetShape()->SetDeltaPhiAngle(newDPhi);
+  fRebuildPolyhedron = true;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -113,6 +164,19 @@ void G4UTubs::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4UTubs::Clone() const
 {
   return new G4UTubs(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+//
+G4Polyhedron* G4UTubs::CreatePolyhedron() const
+{
+  return new G4PolyhedronTubs(GetInnerRadius(),
+                              GetOuterRadius(),
+                              GetZHalfLength(),
+                              GetStartPhiAngle(),
+                              GetDeltaPhiAngle());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

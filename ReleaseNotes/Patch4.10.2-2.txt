@@ -1,0 +1,258 @@
+
+                 Geant4 10.2 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                                 17 June 2016
+
+List of fixes included in this public patch since the public release 10.2.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Enhanced advanced option for use of external USolids/VecGeom library;
+        it is now possible to select individual shapes for partial use of the
+        set of primitives provided by the library, by specifying through the
+        GEANT4_USE_USOLIDS the list of primitives to consider, i.e. using:
+        -DGEANT4_USE_USOLIDS="box;tubs" will replace box and tubs shapes with
+        USolids/VecGeom ones; -DGEANT4_USE_USOLIDS="all" or -DGEANT4_USE_USOLIDS
+        will replace with all shapes enabled in the library.
+      o Fix for treatment of FindCLHEP module for the case of external CLHEP
+        installation. Addressing problem report #1855.
+      o Adding libXt to X11_LIBRARIES on all Unix platforms when using
+        Motif/Inventor. Addressing problem report #1828.
+        Added missing Xmu to X11_LIBRARIES when using Motif/OpenInventor on
+        MacOSX.
+      o Corrected Modules/genwindef/LibSymbolInfo.cpp for use with Windows
+        VC++ 64 bits compilation.
+      o Updated data-sets to RadioactiveDecay-4.3.2 and G4ENSDFSTATE-1.2.3.
+    + GNUMake:
+      o Added flags for partial use of USolids/VecGeom types.
+      o Added Linux-clang.gmk script for use of clang compiler on Linux system.
+
+  o Analysis:
+    --------
+    + Fixed compilation warnings from gcc-6.1.
+
+  o Digits-Hits:
+    -----------
+    + Fixed typo in printing on cout in G4SDManager::AddNewDetector().
+    + Fixed shadowing compilation warnings in G4VScoringMesh for 'ps'.
+    + Code cleanup and introduced some C++11 features.
+    + Checked do-while loops for potential infinite loops.
+
+  o Event:
+    -----
+    + Fixed typo in printout. Addressing problem report #1860.
+    + Fixed shadowing compilation warnings for 'ps'.
+    + Code cleanup and introduced some C++11 features.
+
+  o Externals
+    ---------
+    + zlib:
+      o Fix in gzguts.h for Windows with Visual Studio 2015 in 64 bit
+        compilation.
+
+  o Geometry:
+    --------
+    + magnetic-field:
+      o Corrected implementation of operator=() and copy-ctor for G4Field,
+        G4ElectroMagneticField, G4ElectricField and G4CachedMagneticField.
+        Fixed Clone() signatures in derived Field classes.
+    + management:
+      o Throw exception in call to CreatePolyhedron() for base class G4USolid.
+        Method is now implemented in the concrete wrappers. Code cleanup.
+      o In G4USolid, directly call GetEntityType() from wrapper classes for
+        CreatePolyhedron().
+      o Added flag to USolids wrappers for partial use of USolids/VecGeom types.
+      o G4AffineTransform: added inline keywords and fixed formatting.
+    + navigation:
+      o Avoid static constant definition of surface tolerance in
+        G4VoxelNavigation in method LocateNextVoxel() to clear spurious
+        warnings for data-race conflicts from Valgrind/DRD tool; defined
+        as class data member. Cleared up use of static constants also in
+        other navigation classes.
+      o Improved diagnostics in G4Navigator. Moved some debug checks to
+        G4VERBOSE.
+      o Fixed few compilation warnings on gcc-6.1.
+    + solids/Boolean:
+      o Moved accessors and modifiers in UMultiUnion wrapper to be not inlined.
+        Required modification in order to allow correct dispatching to VecGeom
+        types.
+    + solids/CSG:
+      o Added overloaded CreatePolyhedron() method to USolids wrappers.
+        It is now possible to visualize supported VecGeom shapes.
+        Added flag for partial use of USolids/VecGeom types.
+        Moved accessors and modifiers to be not inlined. Required modification
+        in order to allow correct dispatching to VecGeom types.
+        Added overloaded GetEntityType() method.
+      o G4Orb: fixed typo in G4Exception message.
+    + solids/specific:
+      o Fix in G4IntersectingCone for smaller precision constant in
+        LineHitsCone1() and LineHitsCone2(). Fixes issue observed in
+        G4GenericPolycone. Addressing problem report #1794.
+      o Added overloaded GetEntityType() method to USolids wrappers.
+        Moved accessors and modifiers to be not inlined. Required modification
+        in order to allow correct dispatching to VecGeom types.
+        Added overloaded CreatePolyhedron() method. It is now possible to
+        visualize supported VecGeom shapes.
+        Added flag for partial use of USolids/VecGeom types.
+
+  o Global:
+    ------
+    + Define G4GeometryTolerance singleton instance pointer as tread-local
+      to get rid of spurious race conflicts at initialisation.
+    + Added check for support of atomics for clang compiler in HEPRandom
+      wrappers.
+    + Improved algorithm for G4RandomDirection.
+    + Turn warnings to fatal exceptions in G4UnitsTable for non existing
+      units or categories in the table. Addressing problem report #1843.
+    + Updated date and version for 10.2.p02.
+
+  o Interfaces:
+    ----------
+    + Fix for Qt driver for position of 'OK' button.
+    + Fixed compilation warnings on MacOS for conversion to char* in G4UIXm.
+    + Fixed compilation warnings in G4UIWin32 for Windows.
+
+  o Particles:
+    ---------
+    + Fixed MT data-race in G4VDecayTable. Addressing problem report #1834.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o G4GDMLWrite: increased max_chars in the transcode() calls.
+        Addressing problem report #1847.
+      o Added checks for correctness of imported units.
+        Addressing problem report #1842.
+
+  o Parameterisations:
+    -----------------
+    + gflash:
+      o Added missing inclusion of header in G4VGFlashSensitiveDetector.
+        Addressing problem report #1867.
+
+  o Physics Lists
+    -------------
+    + constructors/hadron_elastic:
+      o Made G4HadronElasticPhysicsPHP constructor thread-safe.
+    + constructors/hadron_inelastic:
+      o G4HadronPhysicsFTFP_BERT_ATL: new constructor for ATLAS, similar to
+        G4HadronPhysicsFTFP_BERT but with the transition between BERT and FTFP
+        in the energy region [9, 12] GeV.
+      o G4HadronPhysicsQGSP_BIC_AllHP: treat only proton with ParticleHP in
+        this class, and move the others (deuteron, triton, 3He, alpha) to
+        the class G4IonPhysicsPHP.
+    + constructors/ions:
+      o Added G4IonPhysicsPHP constructor class.
+    + lists:
+      o New experimental physics-list FTFP_BERT_ATL, similar to FTFP_BERT but
+        with the transition between BERT and FTFP in the energy region [9, 12]
+        GeV. Meant to reduce jet energy scale difference observed in ATLAS.
+      o QGSP_BIC_AllHP : use new, specialized ion constructor, G4IonPhysicsPHP.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Fixed compilation warnings from gcc-6.1.
+    + lowenergy:
+      o Updated G4LowEPComptonModel; addressing problem report #1676.
+      o Replaced usage of std::exp() by G4Exp().
+      o Fixed compilation warnings in gcc-6.1. Code cleanup.
+    + standard:
+      o G4eSingleCoulombScatteringModel, G4ScreeningMottCrossSection: fixed
+        initialisation of classes allowing to use precomputed cross-sections.
+        Addressing problem report #1823.
+    + utils:
+      o G4EmCalculator: added protection against zero cut value; use lowest
+        electron energy. Addressing problem report #1845.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/de_excitation:
+      o G4PhotonEvaporation: fixed final energy in the case of X-level.
+      o G4ExcitationHandler: substituted usage of iterators by simple loop;
+        added exception for the case of infinite loop of evaporation.
+        Addressing problem report #1837.
+    + models/lend:
+      o Fixed problem on setting birth time of delayed neutrons.
+    + models/particle_hp:
+      o Fixed problem in deletion of models in multi-thread mode.
+      o Corrected message about a behavior under the activation of fission
+        fragment production.
+      o Fixed bug in usage of G4Nucleus::GetBiassedThermalNucleus().
+      o Fix for calculation of residual A and Z, affecting results for
+        charged particle projectiles. Addressing problem report #1815.
+      o Bug fix in sampling of kinematic energy of scattered particle in
+        DiscreteTwoBody. Addressing problem report #1815.
+      o Fixed warning message from gcc-6.1.
+      o Fixed Coverity defects.
+    + models/parton_string/diffraction:
+      o Fixed bug in G4FTFModel for nucleus-nucleus interactions
+        Also improvements in sampling of kinematical variables.
+      o Improved G4FTFAnnihilation; now creating Pi0, Eta and Eta_prime.
+    + models/quasi_elastic:
+      o Fixed shadowing compilation warnings in G4QuasiElRatios for 'ps'.
+    + models/radioactive_decay:
+      o Use new API for G4VDecayChannel class to avoid MT data-race.
+        Fixes issues of observed event non-reproducibility in MT mode.
+    + models/util:
+      o G4Fragment: introduced "spin", added accessors and modifiers needed
+        by INCL++; fixes a memory leak discussed on HN PhysicsList Forum #930.
+      o Use modified G4VDecayChannel API to avoid data-race in MT.
+      o Fixed Coverity defects.
+
+  o Track:
+    -----
+    + Use G4Log in G4VelocityTable::Value() method.
+
+  o Visualization:
+    -------------
+    + Fixed compilation warnings from gcc-6.1.
+    + gMocren:
+      o Fixed compilation warnings on win64.
+    + OpenInventor:
+      o Corrected delete statement in sortBookmarksCB() for
+        G4OpenInventorXtExaminerViewer.
+      o Fixed compilation warnings on MacOS for conversion to char* in
+        G4OpenInventorXtExtendedViewer and G4OpenInventorXtViewer sources.
+
+  o Data sets:
+    ---------
+    + Patched data set for nuclides properties G4ENSDFSTATE-1.2.3:
+      o Corrected packaging for download. Contents unchanged.
+        Addressing problem reports #1849, #1854.
+    + Patched data set for radioactive-decay, G4RadioactiveDecay-4.3.2:
+      o Corrected packaging for download. Contents unchanged.
+        Addressing problem reports #1849, #1854.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + advanced/human_phantom:
+      o Fixed compilation warnings from gcc-6.1.
+    + basic/B3:
+      o Fixed initialization of the hits collections IDs in B3aEventAction.
+        Addressing problem report #1862.
+    + basic/B5:
+      o Fixed wrong determination of the copy number in replicas.
+    + extended/field:
+      o field03, field04: fixed compilation warnings from gcc-6.1.
+    + extended/parameterisations/Par02:
+      o Added magnetic field and corrected the way to create a G4FieldTrack
+        object in Par02FastSimModelTracker.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.2.
+  o  Technical notes distributed for release 10.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.2.p01 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

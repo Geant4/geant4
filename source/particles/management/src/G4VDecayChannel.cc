@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc 93024 2015-09-30 15:59:32Z gcosmo $
+// $Id: G4VDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -42,22 +42,7 @@
 #include "G4DecayTable.hh"
 #include "G4DecayProducts.hh"
 #include "G4VDecayChannel.hh"
-
-/////@@// This static member is thread local. For each thread, it holds the array
-/////@@// size of G4DecayChannelData instances.
-/////@@//
-/////@@template <class G4DecayChannelData> G4ThreadLocal
-/////@@G4int G4PDefSplitter<G4DecayChannelData>::slavetotalspace = 0;
-/////@@
-/////@@// This static member is thread local. For each thread, it points to the
-/////@@// array of G4DecayChannelData instances.
-/////@@//
-/////@@template <class G4DecayChannelData> G4ThreadLocal
-/////@@G4DecayChannelData* G4PDefSplitter<G4DecayChannelData>::offset = 0;
-/////@@
-/////@@// This new field helps to use the class G4VDecayChannelSubInstanceManager.
-/////@@//
-/////@@G4DecayChannelManager G4VDecayChannel::subInstanceManager;
+#include "G4AutoLock.hh"
 
 const G4String G4VDecayChannel::noName = " ";
 
@@ -71,7 +56,6 @@ G4VDecayChannel::G4VDecayChannel()
    particletable(0),
    verboseLevel(1)		
 {
-/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -90,9 +74,10 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
    rangeMass(2.5),
    parent_polarization(),
    particletable(0),
-   verboseLevel(Verbose)		
+   verboseLevel(Verbose),
+   daughtersMutex(G4MUTEX_INITIALIZER),
+   parentMutex(G4MUTEX_INITIALIZER)
 {
-/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -118,9 +103,10 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
                 rangeMass(1.0),
                 parent_polarization(),
 		particletable(0),
-		verboseLevel(1)		
+		verboseLevel(1),
+		daughtersMutex(G4MUTEX_INITIALIZER),
+		parentMutex(G4MUTEX_INITIALIZER)
 {
-/////@@  instanceID = subInstanceManager.CreateSubInstance();
   G4MT_parent = 0;
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
@@ -146,8 +132,6 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 
 G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
 {
-/////@@  instanceID = subInstanceManager.CreateSubInstance();
-
   kinematics_name = right.kinematics_name;
   verboseLevel = right.verboseLevel;
   rbranch = right.rbranch;
@@ -181,6 +165,8 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
 
   parent_polarization = right.parent_polarization;
 
+  G4MUTEXINIT(daughtersMutex);
+  G4MUTEXINIT(parentMutex);
 }
 
 G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
@@ -219,6 +205,9 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
 
+  G4MUTEXINIT(daughtersMutex);
+  G4MUTEXINIT(parentMutex);
+
   return *this;
 }
 
@@ -231,15 +220,13 @@ G4VDecayChannel::~G4VDecayChannel()
   G4MT_daughters_mass =0;
   if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
   G4MT_daughters_width = 0;
+  G4MUTEXDESTROY(daughtersMutex);
+  G4MUTEXDESTROY(parentMutex);
 } 
-
-/////@@const G4DecayChannelManager& G4VDecayChannel::GetSubInstanceManager()
-/////@@{
-/////@@  return subInstanceManager;
-/////@@}
 
 void G4VDecayChannel::ClearDaughtersName()
 {
+  G4AutoLock l(&daughtersMutex);
   if ( daughters_name != 0) {
     if (numberOfDaughters>0) {
 #ifdef G4VERBOSE
@@ -293,14 +280,27 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
     return;
   }
 
-  // check existence of daughters_name array
-  if (daughters_name == 0) {
-    // cleate array
-    daughters_name = new G4String*[numberOfDaughters];
-    for (G4int index=0;index<numberOfDaughters;index++) {
-      daughters_name[index]=0;
-    }
+  //ANDREA:-> Feb 25 2016
+  // An analysis of this code, shows that this method is called
+  // only in the constructor of derived classes.
+  // The general idea of this method is probably to support
+  // the possibility to re-define daughters on the fly, however
+  // this design is extremely problematic for MT mode, we thus
+  // require (as practically happens) that the method is called only
+  // at construction, i.e. when G4MT_daugheters == 0
+  // moreover this method can be called only after SetNumberOfDaugthers
+  // has been called (see previous if), in such a case daughters_name != 0
+  if ( daughters_name == 0 ) {
+      G4Exception("G4VDecayChannel::SetDaughter","PART112",FatalException,
+          "Trying to add a daughter without specifying number of secondaries, useSetNumberOfDaughters first");
+      return;
   }
+  if ( G4MT_daughters != 0 ) {
+      G4Exception("G4VDecayChannel::SetDaughter","PART111",FatalException,
+          "Trying to modify a daughter of a decay channel, but decay channel already has daughters.");
+      return;
+  }
+  //<-:ANDREA
 
   // check an index    
   if ( (anIndex<0) || (anIndex>=numberOfDaughters) ) {
@@ -311,12 +311,8 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
     }
 #endif
   } else {
-    // delete the old name if it exists
-    if (daughters_name[anIndex]!=0) delete daughters_name[anIndex];
     // fill the name
     daughters_name[anIndex] = new G4String(particle_name);
-    // refill the array of daughters[] if it exists
-    if (G4MT_daughters != 0) FillDaughters();
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
       G4cout << "G4VDecayChannel::SetDaughter[" << anIndex <<"] :";
@@ -333,6 +329,11 @@ void G4VDecayChannel::SetDaughter(G4int anIndex, const G4ParticleDefinition * pa
 
 void G4VDecayChannel::FillDaughters()
 {
+  G4AutoLock lock(&daughtersMutex);
+  //Double check, check again if another thread has already filled this, in
+  //case do not need to do anything
+  if ( G4MT_daughters != 0 ) return;
+
   G4int index;
   
 #ifdef G4VERBOSE
@@ -344,7 +345,7 @@ void G4VDecayChannel::FillDaughters()
   }
 
   // parent mass
-  if (G4MT_parent == 0) FillParent();  
+  CheckAndFillParent();
   G4double parentmass = G4MT_parent->GetPDGMass();
 
   //
@@ -443,6 +444,11 @@ void G4VDecayChannel::FillDaughters()
 
 void G4VDecayChannel::FillParent()
 {
+  G4AutoLock lock(&parentMutex);
+  //Double check, check again if another thread has already filled this, in
+  //case do not need to do anything
+  if ( G4MT_parent != 0 ) return;
+
   if (parent_name == 0) {
     // parent name is not defined
 #ifdef G4VERBOSE
@@ -485,7 +491,7 @@ G4int G4VDecayChannel::GetAngularMomentum()
   // determine angular momentum
 
   // fill pointers to daughter particles if not yet set  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillDaughters();
 
   const G4int PiSpin = G4MT_parent->GetPDGiSpin();
   const G4int PParity = G4MT_parent->GetPDGiParity();
@@ -578,8 +584,8 @@ G4double G4VDecayChannel::DynamicalMass(G4double massPDG, G4double width, G4doub
 G4bool    G4VDecayChannel::IsOKWithParentMass(G4double parentMass)
 {
   G4double sumOfDaughterMassMin=0.0;
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   for (G4int index=0; index < numberOfDaughters;  index++) { 
     sumOfDaughterMassMin += 

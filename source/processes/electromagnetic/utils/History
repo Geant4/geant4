@@ -1,4 +1,4 @@
-$Id: History 95476 2016-02-12 09:39:50Z gcosmo $
+$Id: History 97616 2016-06-06 12:37:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 March 16: V.Ivant (emutils-V10-01-42)
+- G4EmCalculator - added protection against zero cut value - use 
+    lowest electron energy (fixed problem #1845)
 
 22 January 16: V.Ivant (emutils-V10-01-41)
 - G4LossTableManager - avoid double addition of He3 and alpha to the

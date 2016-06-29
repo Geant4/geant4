@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh 85265 2014-10-27 09:00:58Z gcosmo $
+// $Id: G4Event.hh 97477 2016-06-03 10:13:42Z gcosmo $
 //
 //
 // class description:
@@ -153,7 +153,7 @@ class G4Event
       //  Returns the event ID
       inline void AddPrimaryVertex(G4PrimaryVertex* aPrimaryVertex)
       {
-        if( thePrimaryVertex == 0 )
+        if( thePrimaryVertex == nullptr )
         { thePrimaryVertex = aPrimaryVertex; }
         else
         { thePrimaryVertex->SetNext( aPrimaryVertex ); }
@@ -173,13 +173,13 @@ class G4Event
           G4PrimaryVertex* primaryVertex = thePrimaryVertex;
           for( G4int j=0; j<i; j++ )
           {
-            if( primaryVertex == 0 ) return 0; 
+            if( !primaryVertex ) return nullptr; 
             primaryVertex = primaryVertex->GetNext();
           }
           return primaryVertex;
         }
         else
-        { return 0; }
+        { return nullptr; }
       }
       //  Returns i-th primary vertex of the event.
       inline G4HCofThisEvent* GetHCofThisEvent()  const

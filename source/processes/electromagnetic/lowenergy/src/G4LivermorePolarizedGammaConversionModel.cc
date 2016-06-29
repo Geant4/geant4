@@ -353,7 +353,7 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
       // Limits of the screening variable
       G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
-      G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
+      G4double screenMax = G4Exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
@@ -987,7 +987,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvtan(G4double* p_p1, G4dou
   G4double a = p_p1[0];
   G4double b = p_p1[1];
 
-  value = b*(1-exp(r*cnor/a));
+  value = b*(1-G4Exp(r*cnor/a));
 
   return value;
 }

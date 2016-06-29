@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
+// $Id: G4TauLeptonicDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -142,8 +142,8 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4TauLeptonicDecayChannel::DecayIt ";
 #endif
 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
  
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.hh 92057 2015-08-14 13:34:55Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.hh 97537 2016-06-03 15:26:56Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -41,6 +41,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDecayChannel.hh"
+#include "G4Cache.hh"
 
 class G4PhaseSpaceDecayChannel :public G4VDecayChannel
 {
@@ -73,8 +74,9 @@ class G4PhaseSpaceDecayChannel :public G4VDecayChannel
   public: 
      static G4double Pmx(G4double e, G4double p1, G4double p2);
  
-  private: 
-     static G4ThreadLocal G4double        current_parent_mass;
+  private:
+     //A thread-local object
+     G4Cache<G4double> current_parent_mass;
      G4DecayProducts *OneBodyDecayIt();
      G4DecayProducts *TwoBodyDecayIt();
      G4DecayProducts *ThreeBodyDecayIt();

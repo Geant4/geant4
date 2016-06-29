@@ -82,9 +82,9 @@ void G4DNAUeharaScreenedRutherfordElasticModel::Initialise(const G4ParticleDefin
                                                            const G4DataVector& /*cuts*/)
 {
 
-  if (verboseLevel > 3)
-    G4cout << "Calling G4DNAUeharaScreenedRutherfordElasticModel::Initialise()"
-        << G4endl;
+    if (verboseLevel > 3)
+      G4cout << "Calling G4DNAUeharaScreenedRutherfordElasticModel::Initialise()"
+             << G4endl;
 
     // Energy limits
 

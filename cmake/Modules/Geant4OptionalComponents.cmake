@@ -177,21 +177,78 @@ endif()
 
 #-----------------------------------------------------------------------
 # Optional support for USolids - Requires USolids package
-#
-option(GEANT4_USE_USOLIDS "EXPERIMENTAL: Replace Geant4 solids with USolids equivalents" OFF)
+# GEANT4_USE_USOLIDS is a list argument which must take values:
+# - Empty/CMake boolean false : DEFAULT, do not replace G4 solids with USolids
+# - ALL/CMake boolean true : Replace all G4 solids with USolids
+# - List : Replace listed G4 solids with Usolids equivalents. Valid elements are
+set(GEANT4_USOLIDS_SHAPES
+  BOX
+  CONS
+  EXTRUDEDSOLID
+  GENERICPOLYCONE
+  GENERICTRAP
+  ORB
+  PARABOLOID
+  POLYCONE
+  POLYHEDRA
+  SPHERE
+  TET
+  TRAP
+  TRD
+  TORUS
+  TUBS
+  )
+
+set(GEANT4_USE_USOLIDS OFF CACHE STRING "EXPERIMENTAL: List Geant4 solids to replace with USolids equivalents (ALL;${GEANT4_USOLIDS_SHAPES})")
 mark_as_advanced(GEANT4_USE_USOLIDS)
 
+# - Must be a CMake list - no real way to enforce this
+# Preprocess by stripping any spaces and uppercasing
+string(REPLACE " " "" __g4_usolids_shape_list "${GEANT4_USE_USOLIDS}")
+string(TOUPPER "${__g4_usolids_shape_list}" __g4_usolids_shape_list)
+
+# - Check for use of all or usolids
+set(GEANT4_USE_ALL_USOLIDS OFF)
+string(REGEX MATCH "ALL|^(1|ON|YES|TRUE)" GEANT4_USE_ALL_USOLIDS "${__g4_usolids_shape_list}")
+
+# - Check and validate partial non-empty list
+if(NOT GEANT4_USE_ALL_USOLIDS AND GEANT4_USE_USOLIDS)
+  set(GEANT4_USE_PARTIAL_USOLIDS ON)
+  set(GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST)
+
+  foreach(__g4_usolids_requested_shape ${__g4_usolids_shape_list})
+    list(FIND GEANT4_USOLIDS_SHAPES "${__g4_usolids_requested_shape}" __g4solids_shape_index)
+    if(__g4solids_shape_index GREATER -1)
+      list(APPEND GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST ${__g4_usolids_requested_shape})
+    else()
+      message(FATAL_ERROR "GEANT4_USE_USOLIDS: unknown shape '${__g4_usolids_requested_shape}' in input, must be one of\n${GEANT4_USOLIDS_SHAPES}\n")
+    endif()
+  endforeach()
+endif()
+
+
 # - G4USolids setup
-if(GEANT4_USE_USOLIDS)
+if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   find_package(USolids REQUIRED)
-  add_definitions(-DG4GEOM_USE_USOLIDS)
+
+  if(GEANT4_USE_ALL_USOLIDS)
+    set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_USOLIDS")
+    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing all Geant4 solids with USolids equivalents (EXPERIMENTAL)")
+  else()
+    set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_PARTIAL_USOLIDS")
+    foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
+      list(APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_U${__g4_usolid_shape}")
+    endforeach()
+    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
+  endif()
+
+  # Combined definitions
+  add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # Add USolids inc dirs here - can be removed once USolids supports
   # INTERFACE_INCLUDE_DIRECTORIES
   include_directories(${USOLIDS_INCLUDE_DIRS})
 endif()
-
-GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents (EXPERIMENTAL)")
 
 
 #-----------------------------------------------------------------------

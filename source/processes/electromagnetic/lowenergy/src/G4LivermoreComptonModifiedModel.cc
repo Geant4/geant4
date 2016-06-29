@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermoreComptonModifiedModel.cc 82874 2014-07-15 15:25:29Z gcosmo $
+// $Id: G4LivermoreComptonModifiedModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -33,10 +33,10 @@
 // History:
 // --------
 // 18 Apr 2009   V Ivanchenko Cleanup initialisation and generation of secondaries:
-//                  - apply internal high-energy limit only in constructor 
+//                  - apply internal high-energy limit only in constructor
 //                  - do not apply low-energy limit (default is 0)
 //                  - remove GetMeanFreePath method and table
-//                  - added protection against numerical problem in energy sampling 
+//                  - added protection against numerical problem in energy sampling
 //                  - use G4ElementSelector
 // 26 Dec 2010   V Ivanchenko Load data tables only once to avoid memory leak
 // 30 May 2011   V Ivanchenko Migration to model design for deexcitation
@@ -53,6 +53,7 @@
 #include "G4CompositeEMDataSet.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4Gamma.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -68,13 +69,13 @@ G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4Particl
 {
   verboseLevel=0 ;
   // Verbosity scale:
-  // 0 = nothing 
-  // 1 = warning for energy non-conservation 
+  // 0 = nothing
+  // 1 = warning for energy non-conservation
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
-  if(  verboseLevel>0 ) 
+  if(  verboseLevel>0 )
     G4cout << "Livermore Modified Compton model is constructed " << G4endl;
 
   //Mark this model as "applicable" for atomic deexcitation
@@ -85,7 +86,7 @@ G4LivermoreComptonModifiedModel::G4LivermoreComptonModifiedModel(const G4Particl
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreComptonModifiedModel::~G4LivermoreComptonModifiedModel()
-{  
+{
   delete crossSectionHandler;
   delete scatterFunctionData;
 }
@@ -106,7 +107,7 @@ void G4LivermoreComptonModifiedModel::Initialise(const G4ParticleDefinition* par
   }
   delete scatterFunctionData;
 
-  // Reading of data files - all materials are read  
+  // Reading of data files - all materials are read
   crossSectionHandler = new G4CrossSectionHandler;
   G4String crossSectionFile = "comp/ce-cs-";
   crossSectionHandler->LoadData(crossSectionFile);
@@ -134,13 +135,13 @@ void G4LivermoreComptonModifiedModel::Initialise(const G4ParticleDefinition* par
 
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
 
-  if(  verboseLevel>0 ) { 
+  if(  verboseLevel>0 ) {
     G4cout << "Livermore modified Compton model is initialized " << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / eV << " eV - "
 	   << HighEnergyLimit() / GeV << " GeV"
 	   << G4endl;
-  }  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -154,10 +155,10 @@ G4double G4LivermoreComptonModifiedModel::ComputeCrossSectionPerAtom(
   if (verboseLevel > 3) {
     G4cout << "Calling ComputeCrossSectionPerAtom() of G4LivermoreComptonModifiedModel" << G4endl;
   }
-  if (GammaEnergy < LowEnergyLimit()) 
+  if (GammaEnergy < LowEnergyLimit())
     { return 0.0; }
-    
-  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);  
+
+  G4double cs = crossSectionHandler->FindValue(G4int(Z), GammaEnergy);
   return cs;
 }
 
@@ -186,15 +187,15 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
   if (verboseLevel > 3) {
-    G4cout << "G4LivermoreComptonModifiedModel::SampleSecondaries() E(MeV)= " 
-	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
+    G4cout << "G4LivermoreComptonModifiedModel::SampleSecondaries() E(MeV)= "
+	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName()
 	   << G4endl;
   }
 
   // do nothing below the threshold
   // should never get here because the XS is zero below the limit
-  if (photonEnergy0 < LowEnergyLimit())     
-    return ;   
+  if (photonEnergy0 < LowEnergyLimit())
+    return ;
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
@@ -217,13 +218,13 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double oneCosT;
   G4double sinT2;
   G4double gReject;
-  
+
   do
     {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
 	  // std::pow(epsilon0Local,G4UniformRand())
-	  epsilon = std::exp(-alpha1 * G4UniformRand());  
+	  epsilon = G4Exp(-alpha1 * G4UniformRand());
 	  epsilonSq = epsilon * epsilon;
 	}
       else
@@ -248,10 +249,10 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   G4double dirz = cosTheta ;
 
   // Doppler broadening -  Method based on:
-  // Y. Namito, S. Ban and H. Hirayama, 
-  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon 
+  // Y. Namito, S. Ban and H. Hirayama,
+  // "Implementation of the Doppler Broadening of a Compton-Scattered Photon
   // into the EGS4 Code", NIM A 349, pp. 489-494, 1994
-  
+
   // Maximum number of sampling iterations
   G4int maxDopplerIterations = 1000;
   G4double bindingE = 0.;
@@ -263,7 +264,7 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   G4int shellIdx = 0;
   G4double vel_c = 299792458;
   G4double momentum_au_to_nat = 1.992851740*std::pow(10.,-24.);
-  G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);  
+  G4double e_mass_kg = 9.10938188 * std::pow(10.,-31.);
   G4double eMax = -1;
   G4double Alpha=0;
   do
@@ -272,14 +273,14 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       // Select shell based on shell occupancy
       shellIdx = shellData.SelectRandomShell(Z);
       bindingE = shellData.BindingEnergy(Z,shellIdx);
-      
-      
-     
-      // Randomly sample bound electron momentum 
+
+
+
+      // Randomly sample bound electron momentum
       // (memento: the data set is in Atomic Units)
       G4double pSample = profileData.RandomSelectMomentum(Z,shellIdx);
       // Rescale from atomic units
-      
+
 
       //Kinetic energy of target electron
 
@@ -289,15 +290,15 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       do {
          Alpha = G4UniformRand()*pi/2.0;
          } while(Alpha >= (pi/2.0));
- 
+
       ePAU = pSample / std::cos(Alpha);
-      
+
       // Convert to SI and the calculate electron energy in natural units
-      
+
       G4double ePSI = ePAU * momentum_au_to_nat;
       G4double u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)))/vel_c;
       G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
-      
+
       //Total energy of the system
       systemE = eEIncident+photonEnergy0;
 
@@ -310,19 +311,19 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       G4double var = var4*var4 - var3 + pDoppler2 * var3;
       if (var > 0.)
 	{
-	  G4double varSqrt = std::sqrt(var);        
-	  G4double scale = photonEnergy0 / var3;  
+	  G4double varSqrt = std::sqrt(var);
+	  G4double scale = photonEnergy0 / var3;
           // Random select either root
- 	  if (G4UniformRand() < 0.5) { photonE = (var4 - varSqrt) * scale; }               
+ 	  if (G4UniformRand() < 0.5) { photonE = (var4 - varSqrt) * scale; }
 	  else                       { photonE = (var4 + varSqrt) * scale; }
-	} 
+	}
       else
 	{
 	  photonE = -1.;
 	}
-    } while ( iteration <= maxDopplerIterations && 
+    } while ( iteration <= maxDopplerIterations &&
 	     (photonE < 0. || photonE > eMax ) );
-  
+
   // End of recalculation of photon energy with Doppler broadening
   // Kinematics of the scattered electron
   G4double eKineticEnergy = systemE - photonE - bindingE - electron_mass_c2;
@@ -376,7 +377,7 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
   if (photonEnergy1 > 0.)
     {
       fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
-      
+
         if (iteration < maxDopplerIterations)
         {
          G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
@@ -390,7 +391,7 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
     {
       photonEnergy1 = 0.;
       fParticleChange->SetProposedKineticEnergy(0.) ;
-      fParticleChange->ProposeTrackStatus(fStopAndKill);   
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
      }
 
   // sample deexcitation
@@ -406,11 +407,10 @@ void G4LivermoreComptonModifiedModel::SampleSecondaries(std::vector<G4DynamicPar
       if(nafter > nbefore) {
 	for (size_t i=nbefore; i<nafter; ++i) {
 	  bindingE -= ((*fvect)[i])->GetKineticEnergy();
-	} 
+	}
       }
     }
   }
   if(bindingE < 0.0) { bindingE = 0.0; }
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
 }
-

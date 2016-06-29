@@ -147,7 +147,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
              first = false;
              biff = new G4String(); // delete here as theName
              *biff = base+"/CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
-             if(theName!=0) delete theName;
+             delete theName;
              theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              result.SetName(*theName);
@@ -168,9 +168,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              else
              {
                 biff = new G4String(); // delete here as theName
-                if(theName!=0) delete theName;
                 *biff = base+"/"+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
                 if ( rest=="/CrossSection" ) *biff = base+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
+                delete theName;
                 theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 result.SetName(*theName);

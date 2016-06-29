@@ -63,6 +63,7 @@
 // | Feb. 2013 JMCB       - Geant4 9.6 FPE fix for bug 1426            |
 // | Jan. 2015 JMCB       - Migration to MT (Based on Livermore        |
 // |                        implementation)                            |
+// | Feb. 2016 JMCB       - Geant4 10.2 FPE fix for bug 1676           |
 // |                                                                   |
 // *********************************************************************
 

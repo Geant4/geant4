@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGun.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ParticleGun.cc 97477 2016-06-03 10:13:42Z gcosmo $
 //
 
 // G4ParticleGun
@@ -57,7 +57,7 @@ G4ParticleGun::G4ParticleGun
 void G4ParticleGun::SetInitialValues()
 {
   NumberOfParticlesToBeGenerated = 1;
-  particle_definition = 0;
+  particle_definition = nullptr;
   G4ThreeVector zero;
   particle_momentum_direction = (G4ParticleMomentum)zero;
   particle_energy = 0.0;
@@ -74,29 +74,29 @@ G4ParticleGun::~G4ParticleGun()
   delete theMessenger;
 }
 
-G4ParticleGun::G4ParticleGun(const G4ParticleGun& /*right*/)
-:G4VPrimaryGenerator()
-{ G4Exception(
-  "G4ParticleGun::G4ParticleGun","Event0191",FatalException,
-  "G4ParticleGun : Copy constructor should not be used."); }
-
-const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun& right)
-{ G4Exception(
-  "G4ParticleGun::operator=","Event0192",FatalException,
-  "G4ParticleGun : Equal operator should not be used.");
-  return right; }
-
-G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
-{ G4Exception(
-  "G4ParticleGun::operator==","Event0193",FatalException,
-  "G4ParticleGun : == operator should not be used.");
-  return true; }
-
-G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
-{ G4Exception(
-  "G4ParticleGun::operator!=","Event0193",FatalException,
-  "G4ParticleGun : != operator should not be used.");
-  return false; }
+//G4ParticleGun::G4ParticleGun(const G4ParticleGun& /*right*/)
+//:G4VPrimaryGenerator()
+//{ G4Exception(
+//  "G4ParticleGun::G4ParticleGun","Event0191",FatalException,
+//  "G4ParticleGun : Copy constructor should not be used."); }
+//
+//const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun& right)
+//{ G4Exception(
+//  "G4ParticleGun::operator=","Event0192",FatalException,
+//  "G4ParticleGun : Equal operator should not be used.");
+//  return right; }
+//
+//G4int G4ParticleGun::operator==(const G4ParticleGun& /*right*/) const
+//{ G4Exception(
+//  "G4ParticleGun::operator==","Event0193",FatalException,
+//  "G4ParticleGun : == operator should not be used.");
+//  return true; }
+//
+//G4int G4ParticleGun::operator!=(const G4ParticleGun& /*right*/) const
+//{ G4Exception(
+//  "G4ParticleGun::operator!=","Event0193",FatalException,
+//  "G4ParticleGun : != operator should not be used.");
+//  return false; }
 
 void G4ParticleGun::SetParticleDefinition
                  (G4ParticleDefinition * aParticleDefinition)
@@ -161,7 +161,7 @@ void G4ParticleGun::SetParticleMomentum(G4double aMomentum)
     G4cout << " is now defined in terms Momentum: "
            << aMomentum/GeV       << "GeV/c" << G4endl;
   }
-  if(particle_definition==0)
+  if(!particle_definition)
   {
     G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
     G4cout <<"Zero Mass is assumed"<<G4endl;
@@ -191,7 +191,7 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
     G4cout << " is now defined in terms Momentum: "
            << aMomentum.mag()/GeV << "GeV/c" << G4endl;
   }
-  if(particle_definition==0)
+  if(!particle_definition)
   {
     G4cout <<"Particle Definition not defined yet for G4ParticleGun"<< G4endl;
     G4cout <<"Zero Mass is assumed"<<G4endl;
@@ -211,7 +211,15 @@ void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 
 void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
 {
-  if(particle_definition==0) return;
+  if(!particle_definition) 
+  {
+    G4ExceptionDescription ED;
+    ED << "Particle definition is not defined." << G4endl;
+    ED << "G4ParticleGun::SetParticleDefinition() has to be invoked beforehand." << G4endl;
+    G4Exception("G4ParticleGun::GeneratePrimaryVertex()","Event0109",
+    FatalException, ED);
+    return;
+  }
 
   // create a new vertex
   G4PrimaryVertex* vertex = 

@@ -74,14 +74,13 @@
   G4ParticleHPElastic::~G4ParticleHPElastic()
   {
      //delete [] theElastic;
-     /*
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           it = theElastic.begin() ; it != theElastic.end() ; it++ )
-     {
-        delete *it;
+     if ( theElastic != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+              it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
+           delete *it;
+        }
+        theElastic->clear();
      }
-     */
-     theElastic->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"

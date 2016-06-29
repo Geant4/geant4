@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiFunctionalDetector.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4MultiFunctionalDetector.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 // G4MultiFunctionalDetector
 //
@@ -40,26 +40,25 @@ G4MultiFunctionalDetector::G4MultiFunctionalDetector(G4String name)
 {;}
 
 G4MultiFunctionalDetector::~G4MultiFunctionalDetector()
-{;}
+{
+  for(auto pr : primitives) delete pr;
+  primitives.clear();
+}
 
 G4bool G4MultiFunctionalDetector::ProcessHits(G4Step* aStep,G4TouchableHistory* aTH)
 {
-    if(aStep->GetStepLength()>0. || aStep->GetTotalEnergyDeposit()>0.){
-	G4int nPrim = primitives.size();
-	for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-	{ 
-	    primitives[iPrim]->HitPrimitive(aStep,aTH); 
-	}
-    }
-   return true;
+  if(aStep->GetStepLength()>0. || aStep->GetTotalEnergyDeposit()>0.){
+    for(auto pr : primitives)
+    { pr->HitPrimitive(aStep,aTH); }
+  }
+  return true;
 }
 
 G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveScorer* aPS)
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
+   for(auto pr : primitives)
    {
-     if(primitives[iPrim]==aPS)
+     if(pr==aPS)
      {
        G4ExceptionDescription ED;
        ED << "Primitive <" << aPS->GetName() << "> is already defined in <" << SensitiveDetectorName
@@ -83,17 +82,12 @@ G4bool G4MultiFunctionalDetector::RegisterPrimitive(G4VPrimitiveScorer* aPS)
 
 G4bool G4MultiFunctionalDetector::RemovePrimitive(G4VPrimitiveScorer* aPS)
 {
-   std::vector<G4VPrimitiveScorer*>::iterator iterPS;
-   std::vector<G4String>::iterator iterName = collectionName.begin();
-   for(iterPS=primitives.begin();iterPS!=primitives.end();iterPS++)
+   auto pr = std::find(primitives.begin(),primitives.end(),aPS);
+   if(pr!=primitives.end())
    { 
-     if(*iterPS==aPS)
-     {
-       primitives.erase(iterPS);
-       aPS->SetMultiFunctionalDetector(0);
-       return true;
-     }
-     iterName++;
+     primitives.erase(pr);
+     aPS->SetMultiFunctionalDetector(nullptr);
+     return true;
    }
    G4cerr << "Primitive <" << aPS->GetName() << "> is not defined in <" << SensitiveDetectorName
           << ">." << G4endl << "Method RemovePrimitive() is ignored." << G4endl;
@@ -102,36 +96,31 @@ G4bool G4MultiFunctionalDetector::RemovePrimitive(G4VPrimitiveScorer* aPS)
 
 void G4MultiFunctionalDetector::Initialize(G4HCofThisEvent* HC)
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->Initialize(HC); }
+   for(auto pr : primitives)
+   { pr->Initialize(HC); }
 }
 
 void G4MultiFunctionalDetector::EndOfEvent(G4HCofThisEvent* HC)
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->EndOfEvent(HC); }
+   for(auto pr : primitives)
+   { pr->EndOfEvent(HC); }
 }
 
 void G4MultiFunctionalDetector::clear()
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->clear(); }
+   for(auto pr : primitives)
+   { pr->clear(); }
 }
 
 void G4MultiFunctionalDetector::DrawAll()
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->DrawAll(); }
+   for(auto pr : primitives)
+   { pr->DrawAll(); }
 }
 
 void G4MultiFunctionalDetector::PrintAll()
 {
-   G4int nPrim = primitives.size();
-   for(G4int iPrim=0;iPrim<nPrim;iPrim++)
-   { primitives[iPrim]->PrintAll(); }
+   for(auto pr : primitives)
+   { pr->PrintAll(); }
 }
 

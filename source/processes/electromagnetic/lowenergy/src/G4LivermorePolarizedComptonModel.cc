@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedComptonModel.cc 93359 2015-10-19 13:42:18Z gcosmo $
+// $Id: G4LivermorePolarizedComptonModel.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // Authors: G.Depaola & F.Longo
 //
@@ -364,7 +364,7 @@ void G4LivermorePolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPa
   do {
     if ( alpha1/(alpha1+alpha2) > G4UniformRand() )
       {
-	epsilon   = std::exp(-alpha1*G4UniformRand());  
+	epsilon   = G4Exp(-alpha1*G4UniformRand());  
 	epsilonSq = epsilon*epsilon; 
       }
     else 

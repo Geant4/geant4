@@ -78,39 +78,33 @@ public:  // With Description
 private:
 // Radiative Correction Factors
 
-  G4double F_c(G4double x, G4double x0);
-  G4double F_theta(G4double x, G4double x0);
-  G4double R_c(G4double x);
-
-  G4double EMMU;
-  G4double EMASS;
+  G4double F_c(G4double x, G4double x0 , G4double omega);
+  G4double F_theta(G4double x, G4double x0 , G4double omega);
+  G4double R_c(G4double x , G4double omega);
 
 };
 
-inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0)
+inline G4double G4MuonDecayChannelWithSpin::F_c(G4double x, G4double x0 , G4double omega)
 {
-  G4double omega = std::log(EMMU/EMASS);
 
   G4double f_c;
 
   f_c = (5.+17.*x-34.*x*x)*(omega+std::log(x))-22.*x+34.*x*x;
   f_c = (1.-x)/(3.*x*x)*f_c;
-  f_c = (6.-4.*x)*R_c(x)+(6.-6.*x)*std::log(x) + f_c;
+  f_c = (6.-4.*x)*R_c(x,omega)+(6.-6.*x)*std::log(x) + f_c;
   f_c = (CLHEP::fine_structure_const/CLHEP::twopi) * (x*x-x0*x0) * f_c;
 
   return f_c;
 }
 
-inline G4double G4MuonDecayChannelWithSpin::F_theta(G4double x, G4double x0)
+inline G4double G4MuonDecayChannelWithSpin::F_theta(G4double x, G4double x0,G4double omega)
 {
-  G4double omega = std::log(EMMU/EMASS);
-
   G4double f_theta;
 
   f_theta = (1.+x+34*x*x)*(omega+std::log(x))+3.-7.*x-32.*x*x;
   f_theta = f_theta + ((4.*(1.-x)*(1.-x))/x)*std::log(1.-x);
   f_theta = (1.-x)/(3.*x*x) * f_theta;
-  f_theta = (2.-4.*x)*R_c(x)+(2.-6.*x)*std::log(x)-f_theta;
+  f_theta = (2.-4.*x)*R_c(x,omega)+(2.-6.*x)*std::log(x)-f_theta;
   f_theta = (CLHEP::fine_structure_const/CLHEP::twopi) * (x*x-x0*x0) * f_theta;
 
   return f_theta;

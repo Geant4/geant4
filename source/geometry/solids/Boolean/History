@@ -1,5 +1,5 @@
 
-$Id: History 95422 2016-02-10 14:35:47Z gcosmo $
+$Id: History 97509 2016-06-03 13:32:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 20, 2016 G. Cosmo                   geom-bool-V10-01-04
+ - Moved accessors and modifiers in UMultiUnion wrapper to be not inlined.
+   Required modification in order to allow correct dispatching to VecGeom
+   types.
 
  February 8, 2016 G.Cosmo                geom-bool-V10-01-03
  - Minor optimisation in Inside(p) for G4UnionSolid and G4SubtractionSolid.

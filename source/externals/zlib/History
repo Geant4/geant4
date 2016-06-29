@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for G4 zlib package
 --------------------------------
 
+19 April 2015 Gunter Folger   (zlib-V10-01-03)
+-  fix in gzguts.h for Windows; as of Studio 2015 in 64 bit compilation,
+    _snprintf is no longer provided, but snprintf finally is available. 
+
 15 January 2015Gunter Folger   (zlib-V10-01-02)
 -  fix clang compiler warning in inflate.cc: return explicit value 
      of -1L << 16 (0xffffFFFFffff000L)

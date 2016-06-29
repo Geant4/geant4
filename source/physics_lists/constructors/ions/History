@@ -1,4 +1,4 @@
-$Id: History 94086 2015-11-05 15:09:08Z gcosmo $
+$Id: History 97612 2016-06-06 12:08:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, Alberto Ribon              (phys-ctor-ions-V10-01-01)
+- Created G4IonPhysicsPHP.
 
 05-Nov-2014, Alberto Ribon              (phys-ctor-ions-V10-01-00)
 - Replaced neutron_hp/ with particle_hp/

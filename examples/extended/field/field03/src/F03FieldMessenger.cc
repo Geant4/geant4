@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03FieldMessenger class
 //
 //
-// $Id: F03FieldMessenger.cc 76602 2013-11-13 08:33:35Z gcosmo $
+// $Id: F03FieldMessenger.cc 97643 2016-06-06 14:27:17Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,10 +103,12 @@ void F03FieldMessenger::SetNewValue( G4UIcommand* command, G4String newValue)
   if( command == fUpdateCmd )
     fEMfieldSetup->UpdateField();
   if( command == fMagFieldCmd )
+  {
     fEMfieldSetup->SetFieldValue(fMagFieldCmd->GetNewDoubleValue(newValue));
     // Check the value
     G4cout << "Set field value to " <<
       fEMfieldSetup->GetConstantFieldValue() / gauss << " Gauss " << G4endl;
+  }
   if( command == fMinStepCmd )
     fEMfieldSetup->SetMinStep(fMinStepCmd->GetNewDoubleValue(newValue));
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc 90451 2015-05-29 09:48:07Z gcosmo $
+// $Id: G4BrentLocator.cc 97507 2016-06-03 12:48:42Z gcosmo $
 //
 // Class G4BrentLocator implementation
 //
@@ -187,7 +187,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   G4int depth=0; // Depth counts how many subdivisions of initial step made
 
 #ifdef G4DEBUG_FIELD
-  static G4double tolerance= 1.0e-8; 
+  const G4double tolerance= 1.0e-8; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * CLHEP::mm ) 
   {
@@ -572,7 +572,7 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
         // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4DEBUG_LOCATE_INTERSECTION  
-      static G4int trigger_substepno_print= warn_substeps - 20 ;
+      G4int trigger_substepno_print= warn_substeps - 20 ;
 
       if( substep_no >= trigger_substepno_print )
       {

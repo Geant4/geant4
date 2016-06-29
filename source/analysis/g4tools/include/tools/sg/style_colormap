@@ -303,9 +303,15 @@ public:
       g = col.r();
       b = col.r();
       if (i == 1) { r = 0.6; g = 0.6; b = 0.6; }
-      if (r == 1) r = 0.9; if (r == 0) r = 0.1;
-      if (g == 1) g = 0.9; if (g == 0) g = 0.1;
-      if (b == 1) b = 0.9; if (b == 0) b = 0.1;
+
+      if (r == 1) r = 0.9;
+      if (r == 0) r = 0.1;
+
+      if (g == 1) g = 0.9;
+      if (g == 0) g = 0.1;
+
+      if (b == 1) b = 0.9;
+      if (b == 0) b = 0.1;
 
       rgb_to_hls(r,g,b,h,l,s);
 

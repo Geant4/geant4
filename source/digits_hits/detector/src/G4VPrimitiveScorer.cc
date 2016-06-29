@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPrimitiveScorer.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VPrimitiveScorer.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 // G4VPrimitiveScorer
 #include "G4VPrimitiveScorer.hh"
@@ -35,7 +35,7 @@
 #include "G4UnitsTable.hh"
 
 G4VPrimitiveScorer::G4VPrimitiveScorer(G4String name, G4int depth)
-  :primitiveName(name),detector(0),filter(0),verboseLevel(0),indexDepth(depth),
+  :primitiveName(name),detector(nullptr),filter(nullptr),verboseLevel(0),indexDepth(depth),
    unitName("NoUnit"),unitValue(1.0),fNi(0),fNj(0),fNk(0)
 {;} 
 

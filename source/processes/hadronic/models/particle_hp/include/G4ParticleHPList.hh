@@ -42,6 +42,7 @@ class G4ParticleHPList
     theData = new G4double[2]; 
     nPoints=2;
     nEntries=0;
+    theLabel=0.0;
   }
   
   ~G4ParticleHPList()

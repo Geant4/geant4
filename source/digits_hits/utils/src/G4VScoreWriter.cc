@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoreWriter.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VScoreWriter.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4VScoreWriter.hh"
@@ -38,7 +38,7 @@
 #include <fstream>
 
 G4VScoreWriter::G4VScoreWriter()
-  : fScoringMesh(0), verboseLevel(0) {
+  : fScoringMesh(nullptr), verboseLevel(0) {
   fNMeshSegments[0] = fNMeshSegments[1] = fNMeshSegments[2] = 0;
 }
 

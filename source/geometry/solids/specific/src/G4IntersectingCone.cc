@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4IntersectingCone.cc 97516 2016-06-03 14:01:05Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -215,6 +215,8 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
                                          const G4ThreeVector &v,
                                                G4double *s1, G4double *s2 )
 {
+  static const G4double EPS = DBL_EPSILON; // Precision constant,
+                                           // originally it was 1E-6
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
 
@@ -224,9 +226,9 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
  
-  if (radical < -1E-6*std::fabs(b))  { return 0; }    // No solution
+  if (radical < -EPS*std::fabs(b))  { return 0; }    // No solution
   
-  if (radical < 1E-6*std::fabs(b))
+  if (radical < EPS*std::fabs(b))
   {
     //
     // The radical is roughly zero: check for special, very rare, cases
@@ -234,7 +236,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
     if (std::fabs(a) > 1/kInfinity)
       {
       if(B==0.) { return 0; }
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(EPS/B) )
       {
          *s1 = -0.5*b/a;
          return 1;
@@ -305,9 +307,10 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
                                          const G4ThreeVector &v,
                                                G4double *s1, G4double *s2 )
 {
+  static const G4double EPS = DBL_EPSILON; // Precision constant,
+                                           // originally it was 1E-6
   G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
   G4double tx = v.x(), ty = v.y(), tz = v.z();
-  
   
   // Special case which might not be so rare: B = 0 (precisely)
   //
@@ -327,16 +330,16 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
   
   G4double radical = b*b - 4*a*c;
  
-  if (radical < -1E-6*std::fabs(b)) { return 0; }   // No solution
+  if (radical < -EPS*std::fabs(b)) { return 0; }   // No solution
   
-  if (radical < 1E-6*std::fabs(b))
+  if (radical < EPS*std::fabs(b))
   {
     //
     // The radical is roughly zero: check for special, very rare, cases
     //
     if (std::fabs(a) > 1/kInfinity)
     {
-      if ( std::fabs(x0*ty - y0*tx) < std::fabs(1E-6/B) )
+      if ( std::fabs(x0*ty - y0*tx) < std::fabs(EPS/B) )
       {
         *s1 = -0.5*b/a;
         return 1;

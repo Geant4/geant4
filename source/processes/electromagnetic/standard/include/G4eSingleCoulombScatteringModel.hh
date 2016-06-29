@@ -73,6 +73,8 @@ public:
   virtual ~G4eSingleCoulombScatteringModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, G4VEmModel* masterModel);
  
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -118,9 +120,6 @@ private:
   const G4ParticleDefinition* particle;		
   G4double                  mass;		
   G4double                  lowEnergyLimit;
-
-  //private:
-  G4bool                    isInitialised;	
 
 };
 

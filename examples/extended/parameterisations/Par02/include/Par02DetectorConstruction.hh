@@ -38,6 +38,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "tls.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 
 /// Construction of detector geometry.
 ///
@@ -72,6 +74,9 @@ class Par02DetectorConstruction : public G4VUserDetectorConstruction {
 
     /// A vector of the muon detector regions
     std::vector< G4Region* > fMuonList;
+
+    /// Messenger of the magnetic field
+    G4GlobalMagFieldMessenger* fMagFieldMessenger;
 };
 
 #endif

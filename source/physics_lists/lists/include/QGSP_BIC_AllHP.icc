@@ -47,7 +47,7 @@
 #include "G4DecayPhysics.hh"
 #include "G4EmStandardPhysics.hh"
 #include "G4EmExtraPhysics.hh"
-#include "G4IonPhysics.hh"
+#include "G4IonPhysicsPHP.hh"
 #include "G4StoppingPhysics.hh"
 #include "G4HadronElasticPhysicsPHP.hh"
 
@@ -86,7 +86,7 @@ template<class T> TQGSP_BIC_AllHP<T>::TQGSP_BIC_AllHP(G4int ver):  T()
   this->RegisterPhysics( new G4StoppingPhysics(ver) );
 
   // Ion Physics
-  this->RegisterPhysics( new G4IonPhysics(ver));
+  this->RegisterPhysics( new G4IonPhysicsPHP(ver) );
   
 }
 

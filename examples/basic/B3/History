@@ -1,4 +1,4 @@
-$Id: History 94093 2015-11-05 15:16:06Z gcosmo $
+$Id: History 97640 2016-06-06 14:23:20Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24/05/16 I. Hrivnacova (exampleB3-V10-01-02)
+- Fixed compiler warning introduced in the previous update
+
+20/05/16 I. Hrivnacova
+- Fixed initialization of the hits collections IDs in B3aEventAction
+  (this fixes the problem report #1862)
 
 05/11/15 I. Hrivnacova (exampleB3-V10-01-01)
 - Splitting example in two variants of merging data:

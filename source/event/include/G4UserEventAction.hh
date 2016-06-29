@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserEventAction.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4UserEventAction.hh 97477 2016-06-03 10:13:42Z gcosmo $
 //
 //
 //
@@ -53,7 +53,7 @@ class G4UserEventAction
   public:
       G4UserEventAction();
       virtual ~G4UserEventAction();
-      inline void SetEventManager(G4EventManager* value)
+      virtual void SetEventManager(G4EventManager* value)
       { fpEventManager = value; }
   public: // with description
       virtual void BeginOfEventAction(const G4Event* anEvent);

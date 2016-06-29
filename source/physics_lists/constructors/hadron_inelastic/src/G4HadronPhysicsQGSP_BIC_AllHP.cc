@@ -29,14 +29,9 @@
 //
 // ClassName:   G4HadronPhysicsQGSP_BIC_AllHP
 //
-// Author: 2006 G.Folger
+// Author: 2013 P. Arce
 //
-// Based on G4HadronPhysicsQGSP_BIC
-//
-// Modified:
-// 25.04.2007 G.Folger: Add code for quasielastic
-// 31.10.2012 A.Ribon: Use G4MiscBuilder
-// 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
+// based on G4HadronPhysicsQGSP_BIC_HP
 //
 //----------------------------------------------------------------------------
 //
@@ -160,40 +155,6 @@ void G4HadronPhysicsQGSP_BIC_AllHP::CreateModels()
   tpdata->thePHPProton->SetMinEnergy(0.*MeV); 
   tpdata->thePHPProton->SetMaxEnergy(200*MeV); 
 
-  //ParticleHP
-  tpdata->theDeuteronB=new G4DeuteronBuilder;
-  tpdata->thePHPDeuteron=new G4DeuteronPHPBuilder;
-  tpdata->theDeuteronB->RegisterMe(tpdata->thePHPDeuteron);
-  tpdata->thePHPDeuteron->SetMaxEnergy(200*MeV);
-  tpdata->theDeuteronB->RegisterMe(tpdata->theBinaryDeuteron=new G4BinaryDeuteronBuilder);
-  tpdata->theBinaryDeuteron->SetMaxEnergy(maxBIC);
-
-
-  //ParticleHP
-  tpdata->theTritonB=new G4TritonBuilder;
-  tpdata->thePHPTriton=new G4TritonPHPBuilder;
-  tpdata->theTritonB->RegisterMe(tpdata->thePHPTriton);
-  tpdata->thePHPTriton->SetMaxEnergy(200*MeV);
-  tpdata->theTritonB->RegisterMe(tpdata->theBinaryTriton=new G4BinaryTritonBuilder);
-  tpdata->theBinaryTriton->SetMaxEnergy(maxBIC);
-
-  //ParticleHP
-  tpdata->theHe3B=new G4He3Builder;
-  tpdata->thePHPHe3=new G4He3PHPBuilder;
-  tpdata->theHe3B->RegisterMe(tpdata->thePHPHe3);
-  tpdata->thePHPHe3->SetMaxEnergy(200*MeV);
-  tpdata->theHe3B->RegisterMe(tpdata->theBinaryHe3=new G4BinaryHe3Builder);
-  tpdata->theBinaryHe3->SetMaxEnergy(maxBIC);
-
-  //ParticleHP
-  tpdata->theAlphaB=new G4AlphaBuilder;
-  tpdata->thePHPAlpha=new G4AlphaPHPBuilder;
-  tpdata->theAlphaB->RegisterMe(tpdata->thePHPAlpha);
-  tpdata->thePHPAlpha->SetMaxEnergy(200*MeV);
-  tpdata->theAlphaB->RegisterMe(tpdata->theBinaryAlpha=new G4BinaryAlphaBuilder);
-  tpdata->theBinaryAlpha->SetMaxEnergy(maxBIC);
-
-  
   tpdata->thePiKB=new G4PiKBuilder;
   tpdata->thePiKB->RegisterMe(tpdata->theQGSPPiK=new G4QGSPPiKBuilder(quasiElasticQGS));
   tpdata->thePiKB->RegisterMe(tpdata->theFTFPPiK=new G4FTFPPiKBuilder(quasiElasticFTF));
@@ -214,10 +175,6 @@ G4HadronPhysicsQGSP_BIC_AllHP::~G4HadronPhysicsQGSP_BIC_AllHP()
   //ParticleHP
    delete tpdata->thePHPNeutron;
    delete tpdata->thePHPProton;
-   delete tpdata->thePHPDeuteron;
-   delete tpdata->thePHPTriton;
-   delete tpdata->thePHPHe3;
-   delete tpdata->thePHPAlpha;
    delete tpdata->theBinaryNeutron;
    delete tpdata->theQGSPNeutron;
    delete tpdata->theFTFPNeutron;
@@ -247,9 +204,6 @@ void G4HadronPhysicsQGSP_BIC_AllHP::ConstructParticle()
 
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();
-
-  G4IonConstructor pIonConstructor;
-  pIonConstructor.ConstructParticle();
 }
 
 #include "G4ProcessManager.hh"

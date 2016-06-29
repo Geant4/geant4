@@ -28,7 +28,7 @@
 //
 #if __clang__
   #if ((defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-      !__has_feature(cxx_thread_local))
+      !__has_feature(cxx_thread_local)) || !__has_feature(c_atomic)
     #define CLANG_NOSTDTLS
   #endif
 #endif

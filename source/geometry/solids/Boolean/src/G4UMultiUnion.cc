@@ -94,6 +94,58 @@ G4UMultiUnion& G4UMultiUnion::operator=(const G4UMultiUnion &source)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Accessors & modifiers
+//
+void G4UMultiUnion::AddNode(G4VSolid& solid, G4Transform3D& trans)
+{
+  HepGeom::Rotate3D rot;
+  HepGeom::Translate3D transl ;
+  HepGeom::Scale3D scale;
+
+  trans.getDecomposition(scale,rot,transl); 
+  G4ThreeVector pos = transl.getTranslation();
+    
+  UTransform3D tr;
+  tr.fRot[0] = rot.xx(); tr.fRot[1] = rot.xy(); tr.fRot[2] = rot.xz();
+  tr.fRot[3] = rot.yx(); tr.fRot[4] = rot.yy(); tr.fRot[5] = rot.yz();
+  tr.fRot[6] = rot.zx(); tr.fRot[7] = rot.zy(); tr.fRot[8] = rot.zz();
+  tr.fTr = UVector3(pos.x(), pos.y(), pos.z());
+ 
+  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), tr);
+}
+
+G4Transform3D* G4UMultiUnion::GetTransformation(G4int index) const
+{
+  UTransform3D tr = GetShape()->GetTransformation(index);
+
+  G4RotationMatrix
+    rot(CLHEP::HepRep3x3(tr.fRot[0], tr.fRot[1], tr.fRot[2],
+                         tr.fRot[3], tr.fRot[4], tr.fRot[5],
+                         tr.fRot[6], tr.fRot[7], tr.fRot[8]));
+  G4ThreeVector transl(tr.fTr.x(), tr.fTr.y(), tr.fTr.z());
+
+  return new G4Transform3D(rot, transl);
+}
+
+G4VSolid* G4UMultiUnion::GetSolid(G4int index) const
+{
+  VUSolid* solid = GetShape()->GetSolid(index);
+  return new G4USolid(solid->GetName(), solid);
+}
+
+G4int G4UMultiUnion::GetNumberOfSolids()const
+{
+  return GetShape()->GetNumberOfSolids();
+}
+
+void G4UMultiUnion::Voxelize()
+{
+  GetShape()->Voxelize();
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
 // CreatePolyhedron
 //
 G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const

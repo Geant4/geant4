@@ -246,8 +246,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 
     G4double targetMass=0;
     G4double eps = 0.0001;
-    targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
-                   theProjectile->GetPDGMass();
+    targetMass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps));
 #ifdef G4PHPDEBUG
     if( getenv("G4ParticleHPDebug"))  G4cout <<this <<" G4ParticleHPInelasticCompFS::CompositeApply A " <<theBaseA <<" Z " <<theBaseZ <<" incident " <<hadProjectile->GetDefinition()->GetParticleName() <<G4endl;
 #endif
@@ -259,16 +258,20 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 //        targetMass = theFinalStatePhotons[50]->GetTargetMass();
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
-    G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
-    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
+    //G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
+    //theTarget = aNucleus.GetBiasedThermalNucleus( targetMass/hadProjectile->GetDefinition()->GetPDGMass() , neuVelo, theTrack.GetMaterial()->GetTemperature());
+    //G4Nucleus::GetBiasedThermalNucleus requests normalization of mass and velocity in neutron mass
+    G4ThreeVector neuVelo = ( 1./G4Neutron::Neutron()->GetPDGMass() )*incidReactionProduct.GetMomentum();
+    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass/G4Neutron::Neutron()->GetPDGMass()
+                                                , neuVelo, theTrack.GetMaterial()->GetTemperature() );
+    
     theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //XX
 
 // prepare the residual mass
     G4double residualMass=0;
-    G4double residualZ = theBaseZ - aDefinition->GetPDGCharge();
-    G4double residualA = theBaseA - aDefinition->GetBaryonNumber()+1;
-    residualMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualA+eps), static_cast<G4int>(residualZ+eps)) ) /
-      theProjectile->GetPDGMass();
+    G4double residualZ = theBaseZ + theProjectile->GetPDGCharge() - aDefinition->GetPDGCharge();
+    G4double residualA = theBaseA + theProjectile->GetBaryonNumber() - aDefinition->GetBaryonNumber();
+    residualMass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(residualA+eps), static_cast<G4int>(residualZ+eps));
 
 // prepare energy in target rest frame
     G4ReactionProduct boosted;
@@ -287,7 +290,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
     G4ReactionProduct aHadron;
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
     G4double availableEnergy = incidReactionProduct.GetKineticEnergy() + incidReactionProduct.GetMass() - aHadron.GetMass() +
-                             (targetMass - residualMass)*theProjectile->GetPDGMass();
+                             (targetMass - residualMass);
 //080730c
     if ( availableEnergy < 0 )
     {
@@ -305,8 +308,8 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 
 //    TK Excitation level is not determined
       iLevel=-1;
-      aHadron.SetKineticEnergy(availableEnergy*residualMass*theProjectile->GetPDGMass()/
-                               (aHadron.GetMass()+residualMass*theProjectile->GetPDGMass()));
+      aHadron.SetKineticEnergy(availableEnergy*residualMass/
+                               (aHadron.GetMass()+residualMass));
 
       //aHadron.SetMomentum(incidReactionProduct.GetMomentum()*(1./incidReactionProduct.GetTotalMomentum())*
       //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
@@ -777,7 +780,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
    adjust_final_state ( init_4p_lab ); 
 
 // clean up the primary neutron
-    theResult.Get()->SetStatusChange(stopAndKill);
+    theResult.Get()->SetStatusChange( stopAndKill );
 }
 
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -67,11 +67,11 @@ Available colours:
 G4SDManager::AddNewCollection : the collection <Calor_abs/eDep> is registered at 1
 G4SDManager::AddNewCollection : the collection <Calor_abs/nNeutral> is registered at 2
 G4SDManager::AddNewCollection : the collection <Calor_abs/nCharged> is registered at 3
-New sensitive detector <Calor_abs> is registored at /
+New sensitive detector <Calor_abs> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor_gap/eDep> is registered at 4
 G4SDManager::AddNewCollection : the collection <Calor_gap/nNeutral> is registered at 5
 G4SDManager::AddNewCollection : the collection <Calor_gap/nCharged> is registered at 6
-New sensitive detector <Calor_gap> is registored at /
+New sensitive detector <Calor_gap> is registered at /
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
@@ -805,7 +805,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.16s Real=0.17s Sys=0.01s
+  User=0.14s Real=0.14s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -865,7 +865,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.03s Real=1.03s Sys=0s
+  User=0.94s Real=0.94s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

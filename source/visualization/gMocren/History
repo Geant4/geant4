@@ -1,4 +1,4 @@
-$Id: History 88772 2015-03-09 12:42:03Z gcosmo $
+$Id: History 97696 2016-06-07 10:23:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+1st June 2016  Laurent Garnier  (gMocren-V10-01-02)
+- Fixed Win64 warning.
+
+29th May 2016  John Allison
+- Fixed gcc-6.1 warnings.
 
 7th February 2015  Akinori Kimura (gMocren-V10-01-01)
 - G4GMocrenFileSceneHandler.cc: fixed bugs of checking string lengths.

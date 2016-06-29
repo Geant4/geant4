@@ -14,6 +14,52 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+2 June 2016 Tatsumi Koi (hadr-hpp-V10-01-35)
+---------------------------------------------------
+- Bug fix usage of G4Nucleus::GetBiassedThermalNucleus 
+- Bug fix for calculation residual A and Z (Bugzilla 1815)
+- Both of them effects results only in charged particle projectiles
+- Bug fix in sampling of kinematic energy of scattered particle in DiscreteTwoBody (Bugzilla 1815)
+
+31 May 2016 Tatsumi Koi
+---------------------------------------------------
+- Bug fix in thermal scattering (Coverity 58647)
+- Fix coverity issues 61922
+- Fix compilation error in GNUmake system in previous tag
+
+30 May 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix coverity issues 58644
+- Round2 Fix coverity issues 58648 
+- Fix warning message in previous tag
+
+27 May 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix coverity issues 58622
+
+06 May 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix problem in deletion of models in multithreading mode
+
+05 May 2016 V.Ivanchenko
+29 April 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix a warning message from gcc 6.1
+
+30 March 2016 Tatsumi Koi
+---------------------------------------------------
+- A message about a behavior under the activation of fission fragment production 
+  was modified reflecting hyper news comment.
+
+4 March 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix coverity issues 58701, 58702, 58703 and 58704
+
+
+1 March 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix coverity issues 58699 and 58700
+
 18 February 2016 Tatsumi Koi (hadr-hpp-V10-01-34)
 ---------------------------------------------------
 - Fixes on problem on MT library

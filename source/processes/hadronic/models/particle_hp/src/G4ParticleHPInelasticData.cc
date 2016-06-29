@@ -271,8 +271,7 @@ GetCrossSection(const G4DynamicParticle* projectile, const G4Element*anE, G4doub
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
-  eleMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theA+eps), static_cast<G4int>(theZ+eps))
-	     ) / theProjectile->GetPDGMass();
+  eleMass = G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theA+eps), static_cast<G4int>(theZ+eps) );
   
   G4ReactionProduct boosted;
   G4double aXsection;
@@ -293,7 +292,9 @@ GetCrossSection(const G4DynamicParticle* projectile, const G4Element*anE, G4doub
     {
       counter ++;
 #endif
-      G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus(eleMass, aT);
+      //G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus( eleMass/theProjectile->GetPDGMass(), aT );
+      //G4Nucleus::GetThermalNucleus requests normalization of mass in neutron mass
+      G4ReactionProduct aThermalNuc = aNuc.GetThermalNucleus( eleMass/G4Neutron::Neutron()->GetPDGMass(), aT );
       boosted.Lorentz(theNeutron, aThermalNuc);
       G4double theEkin = boosted.GetKineticEnergy();
       aXsection = (*((*theCrossSections)(index))).GetValue(theEkin, outOfRange);

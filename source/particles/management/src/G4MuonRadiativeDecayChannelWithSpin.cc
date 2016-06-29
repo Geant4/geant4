@@ -134,8 +134,8 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
                  G4cout << "G4MuonRadiativeDecayChannelWithSpin::DecayIt ";
 #endif
 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();

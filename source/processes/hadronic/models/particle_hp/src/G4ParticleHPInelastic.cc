@@ -221,12 +221,11 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
   {
 //    delete [] theInelastic;
      if ( theInelastic != NULL ) {
-     for ( std::vector<G4ParticleHPChannelList*>::iterator 
-           it = theInelastic->begin() ; it != theInelastic->end() ; it++ )
-     {
-        delete *it;
-     }
-     theInelastic->clear();
+        for ( std::vector<G4ParticleHPChannelList*>::iterator 
+              it = theInelastic->begin() ; it != theInelastic->end() ; it++ ) {
+           delete *it;
+        }
+        theInelastic->clear();
      }
   }
   
@@ -251,7 +250,7 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-	if(aTrack.GetDefinition() == G4Neutron::Neutron() ) {
+	if ( aTrack.GetDefinition() == G4Neutron::Neutron() ) {
 	  xSec[i] = ((*theInelastic)[index])->GetXsec(aThermalE.GetThermalEnergy(aTrack,
 									      theMaterial->GetElement(i),
 									      theMaterial->GetTemperature()));

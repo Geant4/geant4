@@ -2276,9 +2276,9 @@ void  G4ITNavigator2::PrintState() const
       G4cout << std::setw(15) << "None";
     else
       G4cout << std::setw(15)<< fBlockedPhysicalVolume->GetName();
-      G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
-             << std::setw( 8)  << fLastStepWasZero   << " "
-             << G4endl;   
+    G4cout << std::setw( 9)  << fBlockedReplicaNo  << " "
+           << std::setw( 8)  << fLastStepWasZero   << " "
+           << G4endl;   
   }
   if( fVerbose > 2 ) 
   {

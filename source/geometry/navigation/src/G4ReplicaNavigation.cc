@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 95420 2016-02-10 13:47:17Z gcosmo $
+// $Id: G4ReplicaNavigation.cc 97507 2016-06-03 12:48:42Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -60,6 +60,10 @@ G4ReplicaNavigation::G4ReplicaNavigation()
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   kRadTolerance = G4GeometryTolerance::GetInstance()->GetRadialTolerance();
   kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+  halfkCarTolerance = kCarTolerance*0.5;
+  halfkRadTolerance = kRadTolerance*0.5;
+  halfkAngTolerance = kAngTolerance*0.5;
+  fMinStep = 0.05*kCarTolerance;
 }
 
 // ********************************************************************
@@ -80,10 +84,6 @@ G4ReplicaNavigation::Inside(const G4VPhysicalVolume *pVol,
                             const G4ThreeVector &localPoint) const
 {
   EInside in = kOutside;
-
-  static const G4double halfkCarTolerance = kCarTolerance*0.5;
-  static const G4double halfkAngTolerance = kAngTolerance*0.5;
-  static const G4double halfkRadTolerance = kRadTolerance*0.5;
   
   // Replication data
   //
@@ -199,7 +199,6 @@ G4ReplicaNavigation::DistanceToOut(const G4VPhysicalVolume *pVol,
   G4double safety=0.;
   G4double safe1,safe2;
   G4double coord, rho, rmin, rmax;
-  static const G4double halfkCarTolerance = kCarTolerance*0.5;
 
   pVol->GetReplicationData(axis, nReplicas, width, offset, consuming);
   switch(axis)
@@ -338,7 +337,6 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
   G4double pDistS, pDistE, compS, compE, Dist, dist2, yi;
   G4ExitNormal::ESide sidePhi= G4ExitNormal::kNull;
   G4ThreeVector  candidateNormal;
-  static const G4double halfkCarTolerance = kCarTolerance*0.5;
 
   if ( (localPoint.x()!=0.0) || (localPoint.y()!=0.0) )
   {
@@ -511,7 +509,6 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
   G4double rmin, rmax, t1, t2, t3, deltaR;
   G4double b, c, d2, srd;
   G4ExitNormal::ESide  sideR= G4ExitNormal::kNull;
-  static const G4double halfkRadTolerance = kRadTolerance*0.5;
 
   //
   // Radial Intersections
@@ -777,9 +774,6 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   G4ExitNormal exitNormalStc;
   // G4int depthDeterminingStep= -1; // Useful only for debugging - for now
 
-  static const G4double halfkCarTolerance = kCarTolerance*0.5;
-  static const G4double minStep = 0.05*kCarTolerance;
-
   calculatedExitNormal= false;
   
   // Exiting normal optimisation
@@ -927,7 +921,7 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
   // Requires further investigation and eventually reimplementation of
   // LevelLocate() to take into account point and direction ...
   //
-  if  ( ( (ourStep<minStep) && (sampleSafety<halfkCarTolerance) )
+  if  ( ( (ourStep<fMinStep) && (sampleSafety<halfkCarTolerance) )
      && ( repLogical->GetSolid()->Inside(localPoint)==kSurface ) )
   {
     ourStep = 100*kCarTolerance;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrupoleMagField.cc 68055 2013-03-13 14:43:28Z gcosmo $
+// $Id: G4QuadrupoleMagField.cc 97486 2016-06-03 10:45:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -52,12 +52,9 @@ G4QuadrupoleMagField::G4QuadrupoleMagField(G4double pGradient,
    fpMatrix     = pMatrix ;
 }
 
-G4QuadrupoleMagField* G4QuadrupoleMagField::Clone() const
+G4Field* G4QuadrupoleMagField::Clone() const
 {
-    //TODO: Can the fpMatrix be shared??
-    return new G4QuadrupoleMagField(this->fGradient,
-                                    this->fOrigin,
-                                    this->fpMatrix);
+    return new G4QuadrupoleMagField(fGradient, fOrigin, fpMatrix);
 }
 
 /////////////////////////////////////////////////////////////////////////

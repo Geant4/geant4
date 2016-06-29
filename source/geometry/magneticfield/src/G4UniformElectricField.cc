@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc 68055 2013-03-13 14:43:28Z gcosmo $
+// $Id: G4UniformElectricField.cc 97486 2016-06-03 10:45:04Z gcosmo $
 //
 // 
 //
@@ -65,9 +65,11 @@ G4UniformElectricField::G4UniformElectricField(G4double vField,
    fFieldComponents[5] = vField*std::cos(vTheta) ;
 }
 
-G4UniformElectricField* G4UniformElectricField::Clone() const
+G4Field* G4UniformElectricField::Clone() const
 {
-    return new G4UniformElectricField( G4ThreeVector(this->fFieldComponents[3],this->fFieldComponents[4],this->fFieldComponents[5]) );
+    return new G4UniformElectricField( G4ThreeVector(fFieldComponents[3],
+                                                     fFieldComponents[4],
+                                                     fFieldComponents[5]) );
 }
 
 G4UniformElectricField::~G4UniformElectricField()
@@ -78,15 +80,21 @@ G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
    : G4ElectricField(p)
 {
    for (G4int i=0; i<6; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
+   {
+     fFieldComponents[i] = p.fFieldComponents[i];
+   }
 }
 
 G4UniformElectricField&
 G4UniformElectricField::operator = (const G4UniformElectricField &p)
 {
-   for (G4int i=0; i<6; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
-   return *this;
+  if (&p == this) return *this; 
+  G4ElectricField::operator=(p); 
+  for (G4int i=0; i<6; i++)
+  {
+    fFieldComponents[i] = p.fFieldComponents[i];
+  }
+  return *this;
 }
 
 // ------------------------------------------------------------------------

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BN.cc 94083 2015-11-05 15:06:58Z gcosmo $
+// $Id: G4Generator2BN.cc 97613 2016-06-06 12:24:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,25 +38,26 @@
 //
 // Creation date: 21 June 2003
 //
-// Modifications: 
+// Modifications:
 // 21 Jun 2003                                 First implementation acording with new design
 // 05 Nov 2003  MGP                            Fixed compilation warning
 // 14 Mar 2004                                 Code optimization
 //
-// Class Description: 
+// Class Description:
 //
-// Concrete base class for Bremsstrahlung Angular Distribution Generation 
+// Concrete base class for Bremsstrahlung Angular Distribution Generation
 // 2BN Distribution
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
-//   
+//
 
 #include "G4Generator2BN.hh"
 #include "Randomize.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Exp.hh"
 
 //
 
@@ -175,9 +176,9 @@ G4Generator2BN::G4Generator2BN(const G4String&)
   // ConstructMajorantSurface();
 }
 
-//    
+//
 
-G4Generator2BN::~G4Generator2BN() 
+G4Generator2BN::~G4Generator2BN()
 {}
 
 G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
@@ -217,7 +218,7 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
     // generate k accordimg to std::pow(k,-b)
     trials++;
 
-    // normalization constant 
+    // normalization constant
     //  cte1 = (1-b)/(std::pow(kmax,(1-b))-std::pow(kmin2,(1-b)));
     //  y = G4UniformRand();
     //  k = std::pow(((1-b)/cte1*y+std::pow(kmin2,(1-b))),(1/(1-b)));
@@ -227,7 +228,7 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
     cte2 = 2*c/std::log(1+c*pi2);
 
     y = G4UniformRand();
-    t = std::sqrt((std::exp(2*c*y/cte2)-1)/c);
+    t = std::sqrt((G4Exp(2*c*y/cte2)-1)/c);
     u = G4UniformRand();
 
     // point acceptance algorithm
@@ -239,19 +240,19 @@ G4ThreeVector& G4Generator2BN::SampleDirection(const G4DynamicParticle* dp,
     // violation point
     if(ds > dmax && nwarn >= 20) {
       ++nwarn;
-      G4cout << "### WARNING in G4Generator2BN: Ekin(MeV)= " << Ek/MeV 
+      G4cout << "### WARNING in G4Generator2BN: Ekin(MeV)= " << Ek/MeV
 	     << "  D(Ekin,k)/Dmax-1= " << (ds/dmax - 1)
-	     << "  results are not reliable!" 
+	     << "  results are not reliable!"
 	     << G4endl;
-      if(20 == nwarn) { 
-	G4cout << "   WARNING in G4Generator2BN is closed" << G4endl; 
+      if(20 == nwarn) {
+	G4cout << "   WARNING in G4Generator2BN is closed" << G4endl;
       }
     }
 
   } while(u*dmax > ds || t > CLHEP::pi);
 
   G4double sint = std::sin(t);
-  G4double phi  = twopi*G4UniformRand(); 
+  G4double phi  = twopi*G4UniformRand();
 
   fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi),std::cos(t));
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
@@ -380,7 +381,7 @@ void G4Generator2BN::ConstructMajorantSurface()
     A = 2*std::sqrt(c)*dsmax/(std::pow(kmin,-b));
   }
 
-  // look for correction factor to normalization at kmin 
+  // look for correction factor to normalization at kmin
   ratmin = 1.;
 
   // Volume under surfaces
@@ -429,5 +430,4 @@ void G4Generator2BN::PrintGeneratorInformation() const
   G4cout << "\n" << G4endl;
   G4cout << "Bremsstrahlung Angular Generator is 2BN Generator from 2BN Koch & Motz distribution (Rev Mod Phys 31(4), 920 (1959))" << G4endl;
   G4cout << "\n" << G4endl;
-} 
-
+}

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HCofThisEvent.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4HCofThisEvent.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4HCofThisEvent.hh"
@@ -57,7 +57,10 @@ G4HCofThisEvent::~G4HCofThisEvent()
 void G4HCofThisEvent::AddHitsCollection(G4int HCID,G4VHitsCollection * aHC)
 { if (!anHCoTHAllocator_G4MT_TLS_) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>  ;
   if(HCID>=0 && HCID<G4int(HC->size()))
-  { (*HC)[HCID] = aHC; }
+  {
+    aHC->SetColID(HCID);
+    (*HC)[HCID] = aHC;
+  }
 }
 
 

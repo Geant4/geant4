@@ -36,7 +36,7 @@
 #include "G4Tet.hh"
 #include "G4UTet.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -104,6 +104,45 @@ G4UTet& G4UTet::operator = (const G4UTet& rhs)
    G4USolid::operator=(rhs);
 
    return *this;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Accessors
+//
+std::vector<G4ThreeVector> G4UTet::GetVertices() const
+{
+  std::vector<UVector3> vec = GetShape()->GetVertices();
+  std::vector<G4ThreeVector> vertices;
+  for (unsigned int i=0; i<vec.size(); ++i)
+  {
+    G4ThreeVector v(vec[i].x(), vec[i].y(), vec[i].z());
+    vertices.push_back(v);
+  }
+  return vertices;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// CreatePolyhedron
+//
+G4Polyhedron* G4UTet::CreatePolyhedron() const
+{
+  G4int index = 0;
+  G4double array[12];
+  GetShape()->GetParametersList(index, array);
+
+  G4Polyhedron *ph=new G4Polyhedron;
+  G4double xyz[4][3];
+  const G4int faces[4][4]={{1,3,2,0},{1,4,3,0},{1,2,4,0},{2,3,4,0}};
+  xyz[0][0]=array[0]; xyz[0][1]=array[1]; xyz[0][2]=array[2]; // fAnchor
+  xyz[1][0]=array[3]; xyz[1][1]=array[4]; xyz[1][2]=array[5]; // fP2
+  xyz[2][0]=array[6]; xyz[2][1]=array[7]; xyz[2][2]=array[8]; // fP3
+  xyz[3][0]=array[9]; xyz[3][1]=array[10]; xyz[3][2]=array[11]; // fP4
+
+  ph->createPolyhedron(4,4,xyz,faces);
+
+  return ph;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

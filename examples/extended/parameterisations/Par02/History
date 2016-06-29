@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Mar-2016 A. Ribon                              (expar02-V10-01-08)
+- Added magnetic field, and corrected the way to create a G4FieldTrack
+  object in Par02FastSimModelTracker.
+
 14-Oct-2015 J. Apostolakis                        (expar02-V10-01-07)
 - Simplified code to set Primary Particle Information (Par02FastSimModelHCal)
 

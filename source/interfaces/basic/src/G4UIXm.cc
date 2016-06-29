@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIXm.cc 74547 2013-10-14 12:51:17Z gcosmo $
+// $Id: G4UIXm.cc 97681 2016-06-07 08:59:17Z gcosmo $
 //
 // G.Barrand
 
@@ -130,7 +130,7 @@ G4UIXm::G4UIXm (
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
   XtSetArg(args[3],XmNbottomAttachment,XmATTACH_WIDGET);
   XtSetArg(args[4],XmNbottomWidget    ,command);
-  XmString cps = XmStringLtoRCreate((char*)"Clear",XmSTRING_DEFAULT_CHARSET);
+  XmString cps = XmStringLtoRCreate((char*)"Clear",(char*)XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[5],XmNlabelString,cps);
   Widget clearButton = XmCreatePushButton(form,(char*)"clearButton",args,6);
   XmStringFree (cps);
@@ -201,7 +201,7 @@ void G4UIXm::Prompt (
 {
   Arg args[1];
   char* str = (char*)XtNewString(aPrompt.data());
-  XmString cps = XmStringLtoRCreate(str,XmSTRING_DEFAULT_CHARSET);
+  XmString cps = XmStringLtoRCreate(str,(char*)XmSTRING_DEFAULT_CHARSET);
   XtFree(str);
   XtSetArg(args[0],XmNpromptString,cps);
   XtSetValues(command,args,1);
@@ -316,7 +316,7 @@ void G4UIXm::AddMenu (
   AddInteractor (a_name,(G4Interactor)widget);
   // Cascade button :
   Arg args[2];
-  XmString cps = XmStringLtoRCreate((char*)a_label,XmSTRING_DEFAULT_CHARSET);
+  XmString cps = XmStringLtoRCreate((char*)a_label,(char*)XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[0],XmNlabelString,cps);
   XtSetArg (args[1],XmNsubMenuId,widget);
   widget = XmCreateCascadeButton (menuBar,(char*)a_name,args,2);

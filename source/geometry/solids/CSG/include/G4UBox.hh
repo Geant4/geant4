@@ -44,9 +44,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UBox.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UBox : public G4USolid 
@@ -66,13 +67,17 @@ class G4UBox : public G4USolid
 
     inline UBox* GetShape() const;
 
-    inline G4double GetXHalfLength() const;
-    inline G4double GetYHalfLength() const;
-    inline G4double GetZHalfLength() const;
+    G4double GetXHalfLength() const;
+    G4double GetYHalfLength() const;
+    G4double GetZHalfLength() const;
 
-    inline void SetXHalfLength(G4double dx);
-    inline void SetYHalfLength(G4double dy);
-    inline void SetZHalfLength(G4double dz);
+    void SetXHalfLength(G4double dx);
+    void SetYHalfLength(G4double dy);
+    void SetZHalfLength(G4double dz);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
 
@@ -95,33 +100,9 @@ inline UBox* G4UBox::GetShape() const
   return (UBox*) fShape;
 }
 
-inline G4double G4UBox::GetXHalfLength() const
+inline G4GeometryType G4UBox::GetEntityType() const
 {
-  return GetShape()->GetXHalfLength();
-}
-inline G4double G4UBox::GetYHalfLength() const
-{
-  return GetShape()->GetYHalfLength();
-}
-inline G4double G4UBox::GetZHalfLength() const
-{
-  return GetShape()->GetZHalfLength();
-}
-
-inline void G4UBox::SetXHalfLength(G4double dx)
-{
-  GetShape()->SetXHalfLength(dx);
-  fRebuildPolyhedron = true;
-}
-inline void G4UBox::SetYHalfLength(G4double dy)
-{
-  GetShape()->SetYHalfLength(dy);
-  fRebuildPolyhedron = true;
-}
-inline void G4UBox::SetZHalfLength(G4double dz)
-{
-  GetShape()->SetZHalfLength(dz);
-  fRebuildPolyhedron = true;
+  return "G4Box";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

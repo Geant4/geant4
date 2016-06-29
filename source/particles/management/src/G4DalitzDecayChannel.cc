@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DalitzDecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
+// $Id: G4DalitzDecayChannel.cc 97537 2016-06-03 15:26:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -108,8 +108,8 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
 #ifdef G4VERBOSE
   if (GetVerboseLevel()>1) G4cout << "G4DalitzDecayChannel::DecayIt ";
 #endif 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();

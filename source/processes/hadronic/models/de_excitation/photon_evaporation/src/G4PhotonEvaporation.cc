@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc 95483 2016-02-12 10:21:53Z gcosmo $
+// $Id: G4PhotonEvaporation.cc 97619 2016-06-06 12:57:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -373,7 +373,8 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       }
     }
     efinal = (G4double)level->FinalExcitationEnergy(idx);
-    fIndex = idx;
+    fIndex += idx;
+    fIndex = (fIndex >= ntrans) ? fIndex - ntrans : 0; 
 
     if(fSampleTime && ltime > 0.0) { 
       time -= ltime*G4Log(G4UniformRand()); 
@@ -386,7 +387,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     G4double e = std::max(mass,nucleus->GetMomentum().e()); 
     G4double mom = std::sqrt((e - mass)*(e + mass)); 
     v *= mom;
-    nucleus->SetMomentum(G4LorentzVector(v.x(),v.y(),v.z(),efinal+mass));
+    nucleus->SetMomentum(G4LorentzVector(v.x(),v.y(),v.z(),e));
     if(fVerbose > 1) { 
       G4cout << "X-level Eexc= " << nucleus->GetExcitationEnergy() 
 	     << G4endl;

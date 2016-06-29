@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-01    (26-February-2016)
+ Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,7 +73,7 @@ G4SDManager::AddNewCollection : the collection <Calor-A_abs/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/minEkinPositron> is registered at 7
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/trackLength> is registered at 8
 G4SDManager::AddNewCollection : the collection <Calor-A_abs/nStep> is registered at 9
-New sensitive detector <Calor-A_abs> is registored at /
+New sensitive detector <Calor-A_abs> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/eDep> is registered at 10
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/nGamma> is registered at 11
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/nElectron> is registered at 12
@@ -83,7 +83,7 @@ G4SDManager::AddNewCollection : the collection <Calor-A_gap/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/minEkinPositron> is registered at 16
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/trackLength> is registered at 17
 G4SDManager::AddNewCollection : the collection <Calor-A_gap/nStep> is registered at 18
-New sensitive detector <Calor-A_gap> is registored at /
+New sensitive detector <Calor-A_gap> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/eDep> is registered at 19
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/nGamma> is registered at 20
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/nElectron> is registered at 21
@@ -93,7 +93,7 @@ G4SDManager::AddNewCollection : the collection <Calor-B_abs/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/minEkinPositron> is registered at 25
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/trackLength> is registered at 26
 G4SDManager::AddNewCollection : the collection <Calor-B_abs/nStep> is registered at 27
-New sensitive detector <Calor-B_abs> is registored at /
+New sensitive detector <Calor-B_abs> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/eDep> is registered at 28
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/nGamma> is registered at 29
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/nElectron> is registered at 30
@@ -103,7 +103,7 @@ G4SDManager::AddNewCollection : the collection <Calor-B_gap/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/minEkinPositron> is registered at 34
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/trackLength> is registered at 35
 G4SDManager::AddNewCollection : the collection <Calor-B_gap/nStep> is registered at 36
-New sensitive detector <Calor-B_gap> is registored at /
+New sensitive detector <Calor-B_gap> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/eDep> is registered at 37
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/nGamma> is registered at 38
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/nElectron> is registered at 39
@@ -113,7 +113,7 @@ G4SDManager::AddNewCollection : the collection <Calor-C_abs/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/minEkinPositron> is registered at 43
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/trackLength> is registered at 44
 G4SDManager::AddNewCollection : the collection <Calor-C_abs/nStep> is registered at 45
-New sensitive detector <Calor-C_abs> is registored at /
+New sensitive detector <Calor-C_abs> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/eDep> is registered at 46
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/nGamma> is registered at 47
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/nElectron> is registered at 48
@@ -123,31 +123,31 @@ G4SDManager::AddNewCollection : the collection <Calor-C_gap/minEkinElectron> is 
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/minEkinPositron> is registered at 52
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/trackLength> is registered at 53
 G4SDManager::AddNewCollection : the collection <Calor-C_gap/nStep> is registered at 54
-New sensitive detector <Calor-C_gap> is registored at /
+New sensitive detector <Calor-C_gap> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/eDep> is registered at 55
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/nGamma> is registered at 56
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/nElectron> is registered at 57
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/nPositron> is registered at 58
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/trackLength> is registered at 59
 G4SDManager::AddNewCollection : the collection <Calor-AP_para/nStep> is registered at 60
-New sensitive detector <Calor-AP_para> is registored at /
-New sensitive detector <Calor-AP_para> is registored at /
+New sensitive detector <Calor-AP_para> is registered at /
+New sensitive detector <Calor-AP_para> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/eDep> is registered at 61
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/nGamma> is registered at 62
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/nElectron> is registered at 63
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/nPositron> is registered at 64
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/trackLength> is registered at 65
 G4SDManager::AddNewCollection : the collection <Calor-BP_para/nStep> is registered at 66
-New sensitive detector <Calor-BP_para> is registored at /
-New sensitive detector <Calor-BP_para> is registored at /
+New sensitive detector <Calor-BP_para> is registered at /
+New sensitive detector <Calor-BP_para> is registered at /
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/eDep> is registered at 67
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/nGamma> is registered at 68
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/nElectron> is registered at 69
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/nPositron> is registered at 70
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/trackLength> is registered at 71
 G4SDManager::AddNewCollection : the collection <Calor-CP_para/nStep> is registered at 72
-New sensitive detector <Calor-CP_para> is registored at /
-New sensitive detector <Calor-CP_para> is registored at /
+New sensitive detector <Calor-CP_para> is registered at /
+New sensitive detector <Calor-CP_para> is registered at /
  G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Warning : Region <Calor-A> does not have specific production cuts,
@@ -935,7 +935,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=4.32s Real=4.59s Sys=0.26s
+  User=2.17s Real=2.45s Sys=0.25s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1578,7 +1578,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=4.72s Real=5.03s Sys=0.3s
+  User=2.53s Real=2.82s Sys=0.3s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2252,7 +2252,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.46s Real=0.48s Sys=0.02s
+  User=0.47s Real=0.52s Sys=0.05s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2955,7 +2955,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=5.57s Real=5.99s Sys=0.41s
+  User=4.59s Real=5.09s Sys=0.5s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

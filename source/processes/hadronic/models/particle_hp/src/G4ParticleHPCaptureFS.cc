@@ -84,14 +84,16 @@
     if ( HasFSData() && !G4ParticleHPManager::GetInstance()->GetUseOnlyPhotoEvaporation() ) 
     { 
        //NDL has final state data
-      if ( hasExactMF6 )
-	{
+       if ( hasExactMF6 ) {
 	  theMF6FinalState.SetTarget(theTarget);
 	  theMF6FinalState.SetProjectileRP(theNeutron);
           thePhotons = theMF6FinalState.Sample( eKinetic );
-       }
-       else
+       } else {
           thePhotons = theFinalStatePhotons.GetPhotons(eKinetic);
+       }
+       if ( thePhotons == NULL ) {
+          throw G4HadronicException(__FILE__, __LINE__, "Final state data for photon is not properly allocated");
+       }
     }
     else
     {
@@ -141,7 +143,7 @@
 // add them to the final state
 
     G4int nPhotons = 0;
-    if(thePhotons!=0) nPhotons=thePhotons->size();
+    nPhotons=thePhotons->size();
 
 ///*
    if ( DoNotAdjustFinalState() ) {
@@ -156,7 +158,7 @@
        G4double sinth = std::sin(theta);
        G4ThreeVector direction( sinth*std::cos(phi), sinth*std::sin(phi), std::cos(theta) );
        theOne->SetMomentum( direction ) ;
-       if ( thePhotons != NULL ) thePhotons->push_back(theOne);
+       thePhotons->push_back(theOne);
        nPhotons++; // 0 -> 1
     }
 //One photon case: energy set to Q-value 

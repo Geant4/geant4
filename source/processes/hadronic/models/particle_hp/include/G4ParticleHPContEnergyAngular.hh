@@ -52,6 +52,10 @@ class G4ParticleHPContEnergyAngular : public G4VParticleHPEnergyAngular
   {
     theAngular = 0;
     currentMeanEnergy.Put( -2 );
+    theTargetCode = -1.0;
+    theAngularRep = -1;
+    nEnergy = -1;
+    theInterpolation = -1;
   }
   
   ~G4ParticleHPContEnergyAngular()

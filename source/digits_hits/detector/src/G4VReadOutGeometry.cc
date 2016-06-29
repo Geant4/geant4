@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VReadOutGeometry.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4VReadOutGeometry.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #include "G4VReadOutGeometry.hh"
@@ -32,8 +32,8 @@
 
 
 G4VReadOutGeometry::G4VReadOutGeometry()
-  :ROworld(0),fincludeList(0),
-   fexcludeList(0),touchableHistory(0)
+  :ROworld(nullptr),fincludeList(nullptr),
+   fexcludeList(nullptr),touchableHistory(nullptr)
 {
   name = "unknown";
   ROnavigator = new G4Navigator();
@@ -49,21 +49,29 @@ G4VReadOutGeometry::G4VReadOutGeometry()
 
 G4VReadOutGeometry::G4VReadOutGeometry(const G4VReadOutGeometry &right)
 {
-  fincludeList = 0;
-  fexcludeList = 0;
+  fincludeList = nullptr;
+  fexcludeList = nullptr;
   name = right.name;
   ROworld = right.ROworld;
-  touchableHistory = 0;
+  touchableHistory = nullptr;
   ROnavigator = new G4Navigator();
   // COPY CONSTRUCTOR NOT STRAIGHT FORWARD: need to copy the touchabelHistory
   // VALUE, same for navigator and same for the World+Geom hierachy
 }
 
 G4VReadOutGeometry::G4VReadOutGeometry(G4String n) 
-  :ROworld(0),fincludeList(0),
-   fexcludeList(0),name(n),touchableHistory(0)
+  :ROworld(nullptr),fincludeList(nullptr),
+   fexcludeList(nullptr),name(n),touchableHistory(nullptr)
 {
   ROnavigator = new G4Navigator();
+  G4ExceptionDescription ed;
+  ed<<"The concept and the functionality of Readout Geometry has been merged\n"
+    <<"into Parallel World. This G4VReadOutGeometry is kept for the sake of\n"
+    <<"not breaking the commonly-used interface in the sensitive detector class.\n"
+    <<"But this functionality of G4VReadOutGeometry class is no longer tested\n"
+    <<"and thus may not be working well. We strongly recommend our customers to\n"
+    <<"migrate to Parallel World scheme.";
+  G4Exception("G4VReadOutGeometry","DIGIHIT1001",JustWarning,ed);
 }
 
 G4VReadOutGeometry::~G4VReadOutGeometry()
@@ -78,11 +86,11 @@ G4VReadOutGeometry::~G4VReadOutGeometry()
 G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
 {
   if ( this == &right ) return *this;
-  delete fincludeList; fincludeList     = 0;
-  delete fexcludeList; fexcludeList     = 0;
+  delete fincludeList; fincludeList     = nullptr;
+  delete fexcludeList; fexcludeList     = nullptr;
   name             = right.name;
   ROworld          = right.ROworld;
-  delete touchableHistory; touchableHistory = 0;
+  delete touchableHistory; touchableHistory = nullptr;
   delete ROnavigator; ROnavigator = new G4Navigator();
   return *this;
 }
@@ -101,7 +109,7 @@ void G4VReadOutGeometry::BuildROGeometry()
 
 G4bool G4VReadOutGeometry::CheckROVolume(G4Step*currentStep,G4TouchableHistory*& ROhist)
 {
-  ROhist = 0;
+  ROhist = nullptr;
   G4bool incFlg = true;
   G4VPhysicalVolume* PV = currentStep->GetPreStepPoint()->GetPhysicalVolume();
   if((fexcludeList)&&(fexcludeList->CheckPV(PV)))

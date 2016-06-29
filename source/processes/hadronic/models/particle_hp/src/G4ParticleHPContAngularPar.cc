@@ -57,7 +57,7 @@
 #include "G4IonTable.hh"
 #include <set>
  
-G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile)
+G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile )
 {  
   theAngular = 0;
   fCache.Get()->currentMeanEnergy = -2;

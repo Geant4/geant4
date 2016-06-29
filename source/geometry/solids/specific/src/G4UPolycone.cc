@@ -32,7 +32,7 @@
 #include "G4Polycone.hh"
 #include "G4UPolycone.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -111,6 +111,67 @@ G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
   return *this;
 }
 
+
+////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+//
+G4double G4UPolycone::GetStartPhi() const
+{
+  return GetShape()->GetStartPhi();
+}
+G4double G4UPolycone::GetEndPhi() const
+{
+  return GetShape()->GetEndPhi();
+}
+G4bool G4UPolycone::IsOpen() const
+{
+  return GetShape()->IsOpen();
+}
+G4int G4UPolycone::GetNumRZCorner() const
+{
+  return GetShape()->GetNumRZCorner();
+}
+G4PolyconeSideRZ G4UPolycone::GetCorner(G4int index) const
+{
+  UPolyconeSideRZ pside = GetShape()->GetCorner(index);
+  G4PolyconeSideRZ psiderz = { pside.r, pside.z };
+
+  return psiderz;
+}
+G4PolyconeHistorical* G4UPolycone::GetOriginalParameters() const
+{
+  UPolyconeHistorical* pars = GetShape()->GetOriginalParameters();
+  G4PolyconeHistorical* pdata = new G4PolyconeHistorical(pars->fNumZPlanes);
+  pdata->Start_angle = pars->fStartAngle;
+  pdata->Opening_angle = pars->fOpeningAngle;
+  for (G4int i=0; i<pars->fNumZPlanes; ++i)
+  {
+    pdata->Z_values[i] = pars->fZValues[i];
+    pdata->Rmin[i] = pars->Rmin[i];
+    pdata->Rmax[i] = pars->Rmax[i];
+  }
+  return pdata;
+}
+void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
+{
+  UPolyconeHistorical* pdata = GetShape()->GetOriginalParameters();
+  pdata->fStartAngle = pars->Start_angle;
+  pdata->fOpeningAngle = pars->Opening_angle;
+  pdata->fNumZPlanes = pars->Num_z_planes;
+  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
+  {
+    pdata->fZValues[i] = pars->Z_values[i];
+    pdata->Rmin[i] = pars->Rmin[i];
+    pdata->Rmax[i] = pars->Rmax[i];
+  }
+  fRebuildPolyhedron = true;
+}
+G4bool G4UPolycone::Reset()
+{
+  GetShape()->Reset();
+  return 0;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //

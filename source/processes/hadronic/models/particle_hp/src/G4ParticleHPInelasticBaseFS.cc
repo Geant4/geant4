@@ -197,8 +197,10 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   G4double targetMass;
   G4double eps = 0.0001;
   targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) /
-               theProjectile->GetPDGMass();
+               //theProjectile->GetPDGMass();
+               G4Neutron::Neutron()->GetPDGMass();
 
+  //give priority to ENDF vales for target mass
   if(theEnergyAngData!=0)
      { targetMass = theEnergyAngData->GetTargetMass(); }
   if(theAngularDistribution!=0)
@@ -210,13 +212,17 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   if ( targetMass == 0 ) 
   {
      //G4cout << "TKDB targetMass = 0; ENDF-VII.0 21Sc45 has trouble in MF4MT22 (n,np) targetMass is not properly recorded. This could be a similar situation." << G4endl;
-     targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) / theProjectile->GetPDGMass();
+     //targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) / theProjectile->GetPDGMass();
+     targetMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps))) / G4Neutron::Neutron()->GetPDGMass();
   }
 
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
-  G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
-  theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
+  //G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
+  //theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
+   //G4Nucleus::GetBiasedThermalNucleus requests normalization of mass and velocity in neutron mass
+   G4ThreeVector neuVelo = (1./G4Neutron::Neutron()->GetPDGMass())*incidReactionProduct.GetMomentum();
+   theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
   theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );
 
@@ -280,7 +286,11 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   }
   
   G4ReactionProductVector * tmpHadrons = 0;
-  G4int ii = 0, dummy;
+#ifdef G4PHPDEBUG
+  //To avoid compilation error around line 532.
+  G4int ii(0);
+#endif
+  G4int dummy;
   unsigned int i;
 
   if(theEnergyAngData != 0)
@@ -319,22 +329,24 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
     G4bool * Done = new G4bool[nDef];
     G4int i0;
     for(i0=0; i0<nDef; i0++) Done[i0] = false;
-    if(tmpHadrons == 0) 
-    {
+
+//Following lines are commented out to fix coverity defeat 58622 
+//    if(tmpHadrons == 0) 
+//    {
       tmpHadrons = new G4ReactionProductVector;
-    }
-    else
-    {
-      for(i=0; i<tmpHadrons->size(); i++)
-      {
-	for(ii=0; ii<nDef; ii++)
-          if(!Done[ii] && tmpHadrons->operator[](i)->GetDefinition() == theDefs[ii]) 
-              Done[ii] = true;
-      }
+//    }
+//    else
+//    {
+//      for(i=0; i<tmpHadrons->size(); i++)
+//      {
+//	for(ii=0; ii<nDef; ii++)
+//          if(!Done[ii] && tmpHadrons->operator[](i)->GetDefinition() == theDefs[ii]) 
+//              Done[ii] = true;
+//      }
 #ifdef G4PHPDEBUG
-      if( getenv("G4ParticleHPDebug"))  G4cout << " G4ParticleHPInelasticBaseFS::BaseApply secondary previously added " << tmpHadrons->operator[](i)->GetDefinition()->GetParticleName() << " E= " << tmpHadrons->operator[](i)->GetKineticEnergy() << G4endl;
+//      if( getenv("G4ParticleHPDebug"))  G4cout << " G4ParticleHPInelasticBaseFS::BaseApply secondary previously added " << tmpHadrons->operator[](i)->GetDefinition()->GetParticleName() << " E= " << tmpHadrons->operator[](i)->GetKineticEnergy() << G4endl;
 #endif
-    }
+//    }
     G4ReactionProduct * aHadron;
     G4double localMass = ( G4NucleiProperties::GetNuclearMass(static_cast<G4int>(theBaseA+eps), static_cast<G4int>(theBaseZ+eps)));
     G4ThreeVector bufferedDirection(0,0,0);

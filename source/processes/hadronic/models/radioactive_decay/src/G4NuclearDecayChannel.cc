@@ -105,7 +105,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   }
 #endif
   SetParent(theParentNucleus);
-  FillParent();
+  CheckAndFillParent();
   G4MT_parent_mass = theParentNucleus->GetPDGMass();
   SetBR(theBR);
   SetNumberOfDaughters (1);
@@ -113,7 +113,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
-  FillDaughters();
+  CheckAndFillDaughters();
 }
 
 // Constructor for a daughter nucleus and one other particle.
@@ -137,7 +137,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   }
 #endif
   SetParent(theParentNucleus);
-  FillParent();
+  CheckAndFillParent();
   G4MT_parent_mass = theParentNucleus->GetPDGMass();
   SetBR(theBR);
   SetNumberOfDaughters (2);
@@ -146,7 +146,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
-  FillDaughters();
+  CheckAndFillDaughters();
 }
 
 // Constructor for a daughter nucleus and two other particles
@@ -174,7 +174,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
   }
 #endif
   SetParent(theParentNucleus);
-  FillParent();
+  CheckAndFillParent();
   G4MT_parent_mass = theParentNucleus->GetPDGMass();
   SetBR (theBR);
   SetNumberOfDaughters (3);
@@ -186,7 +186,7 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
   halflifethreshold = nanosecond;
   applyICM = true;
   applyARM = true;
-  FillDaughters();
+  CheckAndFillDaughters();
 }
 
 G4NuclearDecayChannel::~G4NuclearDecayChannel()

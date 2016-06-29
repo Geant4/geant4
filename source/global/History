@@ -17,6 +17,25 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 25, 2016 G.Cosmo (global-V10-01-27)
+- Added check for support of atomics for clang compiler in HEPRandom wrappers.
+
+April 14, 2016 G.Cosmo
+- Define G4GeometryTolerance singleton instance pointer as tread-local
+  to get rid of spurious race conflicts at initialisation.
+
+March 30, 2016 G.Cosmo
+- Added MixMax in unit tests for HepRandom.
+
+March 22, 2016 A.Dotti
+- Fixing compilation of unit test for HEPRandom. Only test
+  subdirectory touched to port to new G4 interfaces
+
+March 16, 2016 G.Cosmo
+- Improved algorithm for G4RandomDirection (E.Tcherniaev).
+- Turn warnings to fatal exceptions in G4UnitsTable for non existing
+  units or categories in the table. Addressing problem report #1843.
+
 December 17, 2015 G.Cosmo (global-V10-01-26)
 - Corrected conditions for proper treatment of gcc-5 in tls.hh and
   G4Threading.hh.

@@ -33,7 +33,7 @@
 #include "G4Trd.hh"
 #include "G4UTrd.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -93,6 +93,63 @@ G4UTrd& G4UTrd::operator = (const G4UTrd& rhs)
    return *this;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+
+G4double G4UTrd::GetXHalfLength1() const
+{
+  return GetShape()->GetXHalfLength1();
+}
+G4double G4UTrd::GetXHalfLength2() const
+{
+  return GetShape()->GetXHalfLength2();
+}
+G4double G4UTrd::GetYHalfLength1() const
+{
+  return GetShape()->GetYHalfLength1();
+}
+G4double G4UTrd::GetYHalfLength2() const
+{
+  return GetShape()->GetYHalfLength2();
+}
+G4double G4UTrd::GetZHalfLength()  const
+{
+  return GetShape()->GetZHalfLength();
+}
+
+void G4UTrd::SetXHalfLength1(G4double val)
+{
+  GetShape()->SetXHalfLength1(val);
+  fRebuildPolyhedron = true;
+}
+void G4UTrd::SetXHalfLength2(G4double val)
+{
+  GetShape()->SetXHalfLength2(val);
+  fRebuildPolyhedron = true;
+}
+void G4UTrd::SetYHalfLength1(G4double val)
+{
+  GetShape()->SetYHalfLength1(val);
+  fRebuildPolyhedron = true;
+}
+void G4UTrd::SetYHalfLength2(G4double val)
+{
+  GetShape()->SetYHalfLength2(val);
+  fRebuildPolyhedron = true;
+}
+void G4UTrd::SetZHalfLength(G4double val)
+{
+  GetShape()->SetZHalfLength(val);
+  fRebuildPolyhedron = true;
+}
+void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
+                              G4double pdy1, G4double pdy2, G4double pdz)
+{
+  GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
+  fRebuildPolyhedron = true;
+}
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
@@ -112,6 +169,19 @@ void G4UTrd::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4UTrd::Clone() const
 {
   return new G4UTrd(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+//
+G4Polyhedron* G4UTrd::CreatePolyhedron() const
+{
+  return new G4PolyhedronTrd2(GetXHalfLength1(),
+                              GetXHalfLength2(),
+                              GetYHalfLength1(),
+                              GetYHalfLength2(),
+                              GetZHalfLength());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

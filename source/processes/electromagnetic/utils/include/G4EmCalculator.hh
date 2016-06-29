@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 90333 2015-05-26 08:28:09Z gcosmo $
+// $Id: G4EmCalculator.hh 97616 2016-06-06 12:37:57Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -76,6 +76,7 @@ class G4ionEffectiveCharge;
 class G4Region;
 class G4Element;
 class G4EmCorrections;
+class G4EmParameters;
 class G4IonTable;
 
 class G4EmCalculator
@@ -300,12 +301,14 @@ private:
 
   void CheckMaterial(G4int Z);
 
+  // hide copy and assign
   G4EmCalculator & operator=(const  G4EmCalculator &right);
   G4EmCalculator(const  G4EmCalculator&);
 
   std::vector<const G4Material*>            localMaterials;
   std::vector<const G4MaterialCutsCouple*>  localCouples;
 
+  G4EmParameters*              theParameters;
   G4LossTableManager*          manager;
   G4NistManager*               nist;
   G4IonTable*                  ionTable;
@@ -315,7 +318,7 @@ private:
 
   G4int                        verbose;
 
-  // cash
+  // cache
   G4int                        currentCoupleIndex;
   const G4MaterialCutsCouple*  currentCouple;
   const G4Material*            currentMaterial;

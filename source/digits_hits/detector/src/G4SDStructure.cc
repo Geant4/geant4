@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDStructure.cc 74576 2013-10-15 07:20:11Z gcosmo $
+// $Id: G4SDStructure.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 // G4SDStructure
@@ -47,12 +47,10 @@ G4SDStructure::G4SDStructure(G4String aPath):verboseLevel(0)
 
 G4SDStructure::~G4SDStructure()
 {
-  size_t nTree = structure.size();
-  for(size_t iTree=0;iTree<nTree;iTree++)
-  { delete structure[iTree]; }
-  size_t nDet = detector.size();
-  for(size_t iDet=0;iDet<nDet;iDet++)
-  { delete detector[iDet]; }
+  for(auto st : structure) delete st;
+  structure.clear();
+  for(auto dt : detector) delete dt;
+  detector.clear();
 }
 
 G4int G4SDStructure::operator==(const G4SDStructure &right) const
@@ -70,7 +68,7 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
      // First, check if the subdirectoy exists.
     G4String subD = ExtractDirName( remainingPath );
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
-    if( tgtSDS == 0 )
+    if( tgtSDS == nullptr )
     { // Subdirectory not found. Create a new directory.
       subD.prepend(pathName);
       tgtSDS = new G4SDStructure(subD);
@@ -100,33 +98,22 @@ void G4SDStructure::AddNewDetector(G4VSensitiveDetector*aSD,
 
 G4SDStructure* G4SDStructure::FindSubDirectory(G4String subD)
 {
-  for( size_t i=0; i<structure.size(); i++ )
-  {
-    if( subD == structure[i]->dirName ) return structure[i];
-  } 
-  return 0;
+  for(auto st : structure)
+  { if( subD == st->dirName ) return st; }
+  return nullptr;
 }
 
 G4VSensitiveDetector* G4SDStructure::GetSD(G4String aSDName)
 {
-  for( size_t i=0; i<detector.size(); i++ )
-  {
-    G4VSensitiveDetector* tgtSD = detector[i];
-    if( aSDName == tgtSD->GetName() ) return tgtSD;
-  }
-  return 0;
+  for(auto det : detector)
+  { if(aSDName == det->GetName()) return det; }
+  return nullptr;
 }
 
 void G4SDStructure::RemoveSD(G4VSensitiveDetector* sd)
 {
-  std::vector<G4VSensitiveDetector*>::iterator itr = detector.begin();
-  for(;itr!=detector.end();itr++)
-  { 
-    if((*itr)==sd) {
-      detector.erase(itr);
-      break;
-    }
-  }
+  auto det = std::find(detector.begin(), detector.end(), sd);
+  if(det!=detector.end()) detector.erase(det);
 }
 
 G4String G4SDStructure::ExtractDirName(G4String aName)
@@ -145,7 +132,7 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
   {  // Command is ordered for a subdirectory.
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
-    if( tgtSDS == 0 )
+    if( tgtSDS == nullptr )
     {  // The subdirectory is not found
       G4cout << subD << " is not found in " << pathName << G4endl;
     }
@@ -156,19 +143,13 @@ void G4SDStructure::Activate(G4String aName, G4bool sensitiveFlag)
   }
   else if( aPath.isNull() )
   {  // Command is ordered for all detectors in this directory.
-    for( size_t i=0; i<detector.size(); i++)
-    { 
-      detector[i]->Activate(sensitiveFlag);
-    }
-    for( size_t j=0;j<structure.size(); j++)
-    {
-      structure[j]->Activate(G4String("/"),sensitiveFlag);
-    }
+    for(auto det : detector) det->Activate(sensitiveFlag);
+    for(auto st : structure) st->Activate(G4String("/"),sensitiveFlag);
   }
   else
   {  // Command is ordered to a particular detector.
     G4VSensitiveDetector* tgtSD = GetSD(aPath);
-    if( tgtSD == 0 )
+    if( tgtSD == nullptr )
     {  // The detector is not found.
       G4cout << aPath << " is not found in " << pathName << G4endl;
     }
@@ -187,11 +168,11 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName, G4boo
   { // SD exists in sub-directory
     G4String subD = ExtractDirName(aPath);
     G4SDStructure* tgtSDS = FindSubDirectory(subD);
-    if( tgtSDS == 0 )
+    if( tgtSDS == nullptr )
     {  // The subdirectory is not found
       if (warning)
         G4cout << subD << " is not found in " << pathName << G4endl;
-      return 0;
+      return nullptr;
     }
     else
     {
@@ -201,7 +182,7 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName, G4boo
   else
   { // SD must exist in this directory
     G4VSensitiveDetector* tgtSD = GetSD(aPath);
-    if( tgtSD == 0 )
+    if( tgtSD == nullptr )
     {  // The detector is not found.
       if (warning)
         G4cout << aPath << " is not found in " << pathName << G4endl;
@@ -212,40 +193,29 @@ G4VSensitiveDetector* G4SDStructure::FindSensitiveDetector(G4String aName, G4boo
 
 void G4SDStructure::Initialize(G4HCofThisEvent*HCE)
 {
-  size_t i;
   // Broadcast to subdirectories.
-  for( i=0; i<structure.size(); i++ )
-  {
-    structure[i]->Initialize(HCE);
-  }
+  for(auto st : structure)
+  { st->Initialize(HCE); }
   // Initialize all detectors in this directory.
-  for( i=0; i<detector.size(); i++ )
-  {
-    if(detector[i]->isActive()) detector[i]->Initialize(HCE);
-  }
+  for(auto dt : detector)
+  { if(dt->isActive()) dt->Initialize(HCE); }
 }
 
 void G4SDStructure::Terminate(G4HCofThisEvent*HCE)
 {
-  size_t i;
   // Broadcast to subdirectories.
-  for( i=0; i<structure.size(); i++ )
-  {
-    structure[i]->Terminate(HCE);
-  }
-  // Initialize all detectors in this directory.
-  for( i=0; i<detector.size(); i++ )
-  {
-    if(detector[i]->isActive()) detector[i]->EndOfEvent(HCE);
-  }
+  for(auto st : structure)
+  { st->Terminate(HCE); }
+  // Terminate all detectors in this directory.
+  for(auto dt : detector)
+  { if(dt->isActive()) dt->EndOfEvent(HCE); }
 }
 
 void G4SDStructure::ListTree()
 {
   G4cout << pathName << G4endl;
-  for(size_t i=0; i<detector.size(); i++)
+  for(auto sd : detector)
   {
-    G4VSensitiveDetector* sd = detector[i];
     G4cout << pathName << sd->GetName();
     if( sd->isActive() )
     { G4cout << "   *** Active "; }
@@ -253,8 +223,7 @@ void G4SDStructure::ListTree()
     { G4cout << "   XXX Inactive "; }
     G4cout << G4endl;
   }
-  for(size_t j=0; j<structure.size(); j++)
-  { structure[j]->ListTree(); }
+  for(auto st : structure) st->ListTree();
 }
         
 

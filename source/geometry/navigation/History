@@ -1,4 +1,4 @@
-$Id: History 95420 2016-02-10 13:47:17Z gcosmo $
+$Id: History 97507 2016-06-03 12:48:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,27 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2016 - G.Cosmo (geomnav-V10-01-37)
+----------------------
+- Fixed compilation warning on gcc-6.1 in G4Navigator::PrintState().
+
+May 3, 2016 - G.Cosmo
+---------------------
+- Reinstated check on anomalous mother-step with corrective action, previously
+  moved only in check-mode in G4VoxelNavigation and G4NormalNavigation.
+
+April 15, 2016 - G.Cosmo
+------------------------
+- Avoid static constant definition of surface tolerance in G4VoxelNavigation
+  in method LocateNextVoxel() to clear spurious warnings for data-race
+  conflicts from Valgrind/DRD tool; defined as class data member.
+- Cleared up use of static constants also in other navigation classes.
+
+April 12, 2016 - G.Cosmo
+------------------------
+- Improved diagnostic in G4Navigator. Moved some debug checks in "check-mode".
+- Minor code cleanup.
 
 February 1, 2016 - G.Cosmo (geomnav-V10-01-36)
 --------------------------

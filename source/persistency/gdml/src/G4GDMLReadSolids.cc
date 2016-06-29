@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 93151 2015-10-08 11:53:10Z gcosmo $
+// $Id: G4GDMLReadSolids.cc 97543 2016-06-03 15:49:14Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -206,8 +206,13 @@ void G4GDMLReadSolids::BoxRead(const xercesc::DOMElement* const boxElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else 
+	if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::BoxRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	}
+	else
       if (attName=="x") { x = eval.Evaluate(attValue); } else
       if (attName=="y") { y = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); }
@@ -256,9 +261,17 @@ void G4GDMLReadSolids::ConeRead(const xercesc::DOMElement* const coneElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="name") { name = GenerateName(attValue); } else 
+	if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::ConeRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
+	  if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	    if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	      G4Exception("G4GDMLReadSolids::ConeRead()", "InvalidRead",
+			  FatalException, "Invalid unit for angle!");  }
+	  } else
       if (attName=="rmin1") { rmin1 = eval.Evaluate(attValue); } else
       if (attName=="rmax1") { rmax1 = eval.Evaluate(attValue); } else
       if (attName=="rmin2") { rmin2 = eval.Evaluate(attValue); } else
@@ -313,7 +326,11 @@ ElconeRead(const xercesc::DOMElement* const elconeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::ElconeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="dx") { dx = eval.Evaluate(attValue); } else
       if (attName=="dy") { dy = eval.Evaluate(attValue); } else
       if (attName=="zmax") { zmax = eval.Evaluate(attValue); } else
@@ -361,7 +378,11 @@ EllipsoidRead(const xercesc::DOMElement* const ellipsoidElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name  = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::EllipsoidRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="ax") { ax = eval.Evaluate(attValue); } else
       if (attName=="by") { by = eval.Evaluate(attValue); } else
       if (attName=="cz") { cz = eval.Evaluate(attValue); } else
@@ -411,7 +432,11 @@ EltubeRead(const xercesc::DOMElement* const eltubeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::EltubeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="dx") { dx = eval.Evaluate(attValue); } else
       if (attName=="dy") { dy = eval.Evaluate(attValue); } else
       if (attName=="dz") { dz = eval.Evaluate(attValue); }
@@ -453,7 +478,11 @@ void G4GDMLReadSolids::XtruRead(const xercesc::DOMElement* const xtruElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); }
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::XtruRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      }
    }
 
    std::vector<G4TwoVector> twoDimVertexList;
@@ -518,8 +547,16 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::HypeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::HypeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
       if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
       if (attName=="inst") { inst = eval.Evaluate(attValue); } else
@@ -717,7 +754,11 @@ void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::OrbRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="r") { r = eval.Evaluate(attValue); }
    }
 
@@ -762,9 +803,17 @@ void G4GDMLReadSolids::ParaRead(const xercesc::DOMElement* const paraElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="x") { x = eval.Evaluate(attValue); } else
+	if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::ParaRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
+	  if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	    if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	      G4Exception("G4GDMLReadSolids::ParaRead()", "InvalidRead",
+			  FatalException, "Invalid unit for angle!");  }
+	  } else
+	    if (attName=="x") { x = eval.Evaluate(attValue); } else
       if (attName=="y") { y = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
       if (attName=="alpha") { alpha = eval.Evaluate(attValue); } else
@@ -815,7 +864,11 @@ ParaboloidRead(const xercesc::DOMElement* const paraElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name")  { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::ParaboloidRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="rlo")   { rlo =  eval.Evaluate(attValue); } else
       if (attName=="rhi")   { rhi = eval.Evaluate(attValue); } else
       if (attName=="dz")    { dz = eval.Evaluate(attValue); } 
@@ -861,8 +914,16 @@ PolyconeRead(const xercesc::DOMElement* const polyconeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::PolyconeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::PolyconeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="startphi") { startphi = eval.Evaluate(attValue); }else
       if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); }
    }
@@ -944,8 +1005,16 @@ GenericPolyconeRead(const xercesc::DOMElement* const polyconeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::GenericPolyconeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::GenericPolyconeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="startphi") { startphi = eval.Evaluate(attValue); }else
       if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); }
    }
@@ -1023,8 +1092,16 @@ PolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::PolyhedraRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::PolyhedraRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="startphi") { startphi = eval.Evaluate(attValue); } else
       if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); } else
       if (attName=="numsides") { numsides = eval.EvaluateInteger(attValue); }
@@ -1108,8 +1185,16 @@ GenericPolyhedraRead(const xercesc::DOMElement* const polyhedraElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::GenericPolyhedraRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::GenericPolyhedraRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="startphi") { startphi = eval.Evaluate(attValue); } else
       if (attName=="deltaphi") { deltaphi = eval.Evaluate(attValue); } else
       if (attName=="numsides") { numsides = eval.EvaluateInteger(attValue); }
@@ -1198,8 +1283,12 @@ QuadrangularRead(const xercesc::DOMElement* const quadrangularElement)
       if (attName=="vertex4")
         { vertex4 = GetPosition(GenerateName(attValue)); } else
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="type")
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::QuadrangularRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
+	if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
 
@@ -1242,8 +1331,16 @@ ReflectedSolidRead(const xercesc::DOMElement* const reflectedSolidElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::ReflectedSolidRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::ReflectedSolidRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="solid") { solid = GenerateName(attValue); } else
       if (attName=="sx") { scale.setX(eval.Evaluate(attValue)); } else
       if (attName=="sy") { scale.setY(eval.Evaluate(attValue)); } else
@@ -1345,8 +1442,16 @@ SphereRead(const xercesc::DOMElement* const sphereElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::SphereRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::SphereRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
       if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
       if (attName=="startphi") { startphi = eval.Evaluate(attValue); } else
@@ -1457,7 +1562,11 @@ void G4GDMLReadSolids::TetRead(const xercesc::DOMElement* const tetElement)
       if (attName=="name")
         { name = GenerateName(attValue); } else
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::TetRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="vertex1")
         { vertex1 = GetPosition(GenerateName(attValue)); } else
       if (attName=="vertex2")
@@ -1506,8 +1615,16 @@ void G4GDMLReadSolids::TorusRead(const xercesc::DOMElement* const torusElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TorusRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TorusRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
       if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
       if (attName=="rtor") { rtor = eval.Evaluate(attValue); } else
@@ -1558,7 +1675,11 @@ GenTrapRead(const xercesc::DOMElement* const gtrapElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::GenTrapRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="dz") { dz = eval.Evaluate(attValue); } else
       if (attName=="v1x") { v1x = eval.Evaluate(attValue); } else
       if (attName=="v1y") { v1y = eval.Evaluate(attValue); } else
@@ -1632,8 +1753,16 @@ void G4GDMLReadSolids::TrapRead(const xercesc::DOMElement* const trapElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TrapRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+      	    if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	      G4Exception("G4GDMLReadSolids::TrapRead()", "InvalidRead",
+			  FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
       if (attName=="theta") { theta = eval.Evaluate(attValue); } else
       if (attName=="phi") { phi = eval.Evaluate(attValue); } else
@@ -1695,7 +1824,11 @@ void G4GDMLReadSolids::TrdRead(const xercesc::DOMElement* const trdElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TrdRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="x1") { x1 = eval.Evaluate(attValue); } else
       if (attName=="x2") { x2 = eval.Evaluate(attValue); } else
       if (attName=="y1") { y1 = eval.Evaluate(attValue); } else
@@ -1751,7 +1884,11 @@ TriangularRead(const xercesc::DOMElement* const triangularElement)
       if (attName=="vertex3")
         { vertex3 = GetPosition(GenerateName(attValue)); } else
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadSolids::TriangularRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="type")
         { if (attValue=="RELATIVE") { type = RELATIVE; } }
    }
@@ -1794,8 +1931,16 @@ void G4GDMLReadSolids::TubeRead(const xercesc::DOMElement* const tubeElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TubeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TubeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
       if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
@@ -1849,8 +1994,16 @@ void G4GDMLReadSolids::CutTubeRead(const xercesc::DOMElement* const cuttubeEleme
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::CutTubeRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+	if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadSolids::CutTubeRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="rmin") { rmin = eval.Evaluate(attValue); } else
       if (attName=="rmax") { rmax = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
@@ -1909,8 +2062,16 @@ TwistedboxRead(const xercesc::DOMElement* const twistedboxElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TwistedBoxRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TwistedboxRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="PhiTwist") { PhiTwist = eval.Evaluate(attValue); } else
       if (attName=="x") { x = eval.Evaluate(attValue); } else
       if (attName=="y") { y = eval.Evaluate(attValue); } else
@@ -1967,8 +2128,16 @@ TwistedtrapRead(const xercesc::DOMElement* const twistedtrapElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TwistedtrapRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TwistedtrapRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="PhiTwist") { PhiTwist = eval.Evaluate(attValue); } else
       if (attName=="z") { z = eval.Evaluate(attValue); } else
       if (attName=="Theta") { Theta = eval.Evaluate(attValue); } else
@@ -2035,8 +2204,16 @@ TwistedtrdRead(const xercesc::DOMElement* const twistedtrdElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TwistedtrdRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TwistedtrdRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="x1") { x1 = eval.Evaluate(attValue); } else
       if (attName=="x2") { x2 = eval.Evaluate(attValue); } else
       if (attName=="y1") { y1 = eval.Evaluate(attValue); } else
@@ -2091,8 +2268,16 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = GenerateName(attValue); } else
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
-      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadSolids::TwistedtubsRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
+      if (attName=="aunit") { aunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	  G4Exception("G4GDMLReadSolids::TwistedtubsRead()", "InvalidRead",
+		      FatalException, "Invalid unit for angle!");  }
+      } else
       if (attName=="twistedangle") { twistedangle=eval.Evaluate(attValue); } else
       if (attName=="endinnerrad")  { endinnerrad=eval.Evaluate(attValue);  } else
       if (attName=="endouterrad")  { endouterrad=eval.Evaluate(attValue);  } else

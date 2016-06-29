@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VHitsCollection.cc 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 // G4VHitsCollection
@@ -35,12 +35,14 @@ G4VHitsCollection::G4VHitsCollection()
 {
   collectionName = "Unknown";
   SDname = "Unknown";
+  colID = -1;
 }
 
 G4VHitsCollection::G4VHitsCollection(G4String detName,G4String colNam)
 {
   collectionName = colNam;
   SDname = detName;
+  colID = -1;
 }
 
 G4VHitsCollection::~G4VHitsCollection()

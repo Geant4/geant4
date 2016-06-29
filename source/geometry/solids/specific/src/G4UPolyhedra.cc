@@ -32,7 +32,7 @@
 #include "G4Polyhedra.hh"
 #include "G4UPolyhedra.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -116,6 +116,77 @@ G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra &source )
   G4USolid::operator=( source );
     
   return *this;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+//
+G4int G4UPolyhedra::GetNumSide() const
+{
+  return GetShape()->GetNumSide();
+}
+G4double G4UPolyhedra::GetStartPhi() const
+{
+  return GetShape()->GetStartPhi();
+}
+G4double G4UPolyhedra::GetEndPhi() const
+{
+  return GetShape()->GetEndPhi();
+}
+G4bool G4UPolyhedra::IsOpen() const
+{
+  return GetShape()->IsOpen();
+}
+G4bool G4UPolyhedra::IsGeneric() const
+{
+  return GetShape()->IsGeneric();
+}
+G4int G4UPolyhedra::GetNumRZCorner() const
+{
+  return GetShape()->GetNumRZCorner();
+}
+G4PolyhedraSideRZ G4UPolyhedra::GetCorner(G4int index) const
+{
+  UPolyhedraSideRZ pside = GetShape()->GetCorner(index);
+  G4PolyhedraSideRZ psiderz = { pside.r, pside.z };
+
+  return psiderz;
+}
+G4PolyhedraHistorical* G4UPolyhedra::GetOriginalParameters() const
+{
+  UPolyhedraHistorical* pars = GetShape()->GetOriginalParameters();
+  G4PolyhedraHistorical* pdata = new G4PolyhedraHistorical(pars->fNumZPlanes);
+  pdata->Start_angle = pars->fStartAngle;
+  pdata->Opening_angle = pars->fOpeningAngle;
+  pdata->numSide = pars->fNumSide;
+  for (G4int i=0; i<pars->fNumZPlanes; ++i)
+  {
+    pdata->Z_values[i] = pars->fZValues[i];
+    pdata->Rmin[i] = pars->Rmin[i];
+    pdata->Rmax[i] = pars->Rmax[i];
+  }
+  return pdata;
+}
+void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
+{
+  UPolyhedraHistorical* pdata = GetShape()->GetOriginalParameters();
+  pdata->fStartAngle = pars->Start_angle;
+  pdata->fOpeningAngle = pars->Opening_angle;
+  pdata->fNumSide = pars->numSide;
+  pdata->fNumZPlanes = pars->Num_z_planes;
+  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
+  {
+    pdata->fZValues[i] = pars->Z_values[i];
+    pdata->Rmin[i] = pars->Rmin[i];
+    pdata->Rmax[i] = pars->Rmax[i];
+  }
+  fRebuildPolyhedron = true;
+}
+G4bool G4UPolyhedra::Reset()
+{
+  return GetShape()->Reset();
 }
 
 

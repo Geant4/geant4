@@ -1,4 +1,4 @@
-$Id: History 93079 2015-10-02 14:43:41Z gcosmo $
+$Id: History 97676 2016-06-07 08:36:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 6th, 2016, M. Verderi (gflash-V10-01-01)
+-------------------------
+- Fix bug 1867: missing G4VSensitiveDetector include in G4VGFlashSensitiveDetector.
 
 Oct 2nd, 2015, M. Verderi (gflash-V10-01-00)
 -------------------------

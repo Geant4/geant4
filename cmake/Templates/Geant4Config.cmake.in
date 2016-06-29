@@ -266,8 +266,12 @@ if(NOT Geant4_builtin_clhep_FOUND)
   set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
 
   set(CLHEP_ROOT_DIR "@CLHEP_ROOT_DIR@")
+  set(__GEANT4_OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
+  set(CMAKE_MODULE_PATH "${_geant4_thisdir}/Modules" ${CMAKE_MODULE_PATH})
   find_package(CLHEP @CLHEP_VERSION@ REQUIRED @__g4_clhep_components@)
+  set(CMAKE_MODULE_PATH ${__GEANT4_OLD_CMAKE_MODULE_PATH})
   unset(CLHEP_ROOT_DIR)
+  unset(__GEANT4_OLD_CMAKE_MODULE_PATH)
   #CLHEP doesn't use target properties fully yet, so always include_directories
   include_directories(${CLHEP_INCLUDE_DIRS})
 endif()
@@ -301,7 +305,7 @@ if(Geant4_g3tog4_FOUND)
 endif()
 
 # - Usolids
-set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS@)
+set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS_EITHER@)
 if(Geant4_usolids_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
 endif()

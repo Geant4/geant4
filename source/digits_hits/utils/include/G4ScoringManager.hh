@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringManager.hh 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4ScoringManager.hh 97466 2016-06-03 09:59:34Z gcosmo $
 //
 
 #ifndef G4ScoringManager_h
@@ -55,7 +55,9 @@ typedef std::vector<G4VScoringMesh*>::const_iterator MeshVecConstItr;
 typedef std::map<G4String,G4VScoreColorMap*> ColorMapDict;
 typedef std::map<G4String,G4VScoreColorMap*>::iterator ColorMapDictItr;
 typedef std::map<G4String,G4VScoreColorMap*>::const_iterator ColorMapDictConstItr;
-
+typedef std::map<G4int,G4VScoringMesh*> MeshMap;
+typedef std::map<G4int,G4VScoringMesh*>::iterator MeshMapItr;
+typedef std::map<G4int,G4VScoringMesh*>::const_iterator MeshMapConstItr;
 
 class G4ScoringManager 
 {
@@ -83,6 +85,7 @@ class G4ScoringManager
   public:
       void Accumulate(G4VHitsCollection* map);
       void Merge(const G4ScoringManager* scMan);
+      G4VScoringMesh* FindMesh(G4VHitsCollection* map);
       G4VScoringMesh* FindMesh(const G4String&);
       void List() const;
       void Dump() const;
@@ -112,6 +115,7 @@ class G4ScoringManager
       G4VScoreColorMap * fDefaultLinearColorMap;
       ColorMapDict * fColorMapDict;
 
+      MeshMap fMeshMap;
   public:
       inline void SetCurrentMesh(G4VScoringMesh* scm)
       { fCurrentMesh = scm; }

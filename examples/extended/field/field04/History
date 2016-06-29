@@ -15,16 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-May 14, 2015 P.Gumplinger - (fieldex04-V10-01-00 & fieldex04-V10-01-01)
-- remove obsolete /event/drawTrack and /event/printModulo
+May 19, 2016 G.Cosmo - (fieldex04-V10-01-02)
+- Fixed compilation warning on gcc-6.1 in F04GlobalField.
+
+May 14, 2015 P.Gumplinger - (fieldex04-V10-01-01, 00)
+- Removed obsolete /event/drawTrack and /event/printModulo.
 
 November 5, 2014 A.Dotti -  (fieldex04-V10-00-11)
-- Bug fixing for shared process
+- Bug fixing for shared process.
 
 October 28, 2014 A. Dotti - (fieldex04-V10-00-10)
 - Proting to new optical phsyics processes API 
   (no statics), requires: xrays-V10-00-06, op-V10-00-09, 
-  phys-ctor-em-V10-00-18 
+  phys-ctor-em-V10-00-18.
 
 February 28, 2014 G. Cosmo - (fieldex04-V10-00-09)
 - Corrected mismatch for delete/new of fFp pointer array in Clear()...

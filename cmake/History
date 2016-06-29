@@ -31,6 +31,63 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+3rd June 2016 - Gunter Folger (cmake-V10-01-46)
+- Switch to corrected datasets to correct bad packing in patch01:
+   - G4ENSDFSTATE.1.2.3
+	- G4RadioactiveDecay.4.3.2
+
+25th May 2016 - Ben Morgan (cmake-V10-01-45)
+- Modules/Geant4InterfaceOptions.cmake : Always add Xmu to X11_LIBRARIES when
+  using Motif/OpenInventor to avoid missing symbol errors on OS X.
+
+24th May 2016 - Ben Morgan
+- Modules/Geant4OptionalComponents.cmake : Fix regex to avoid matching to "CONS"
+  shape is check for all shapes.
+
+24th May 2016 - Ben Morgan
+- Modules/Geant4OptionalComponents.cmake : Initial implementation of a list
+  based interface to GEANT4_USE_USOLIDS. Rather than booleans, unify USolids
+  replacement into single string/list variable with following behaviour:
+  1) Setting to "all", any CMake boolean true value, or a list containing either
+     results in complete usolids replacement
+  2) A list, i.e. "a;b;c", or shapes to replace with Usolids equivalents may be supplied.
+  Validate arguments to prevent unknown shapes being set, and otherwise retain previous
+  behaviour
+  List allowed values in option docstring.
+- Modules/Geant4BuildProjectConfig.cmake : Ensure setting of Usolids use marker to a
+  proper boolean value.
+- Templates/Geant4Config.cmake.in : Use new full boolean variable as expansion variable
+  to indicate usolids support.
+
+23rd May 2016 - Ben Morgan
+- Modules/Geant4OptionalComponents.cmake : Allow developers to select
+  subsets of solids to replace with USolids equivalents. Request from developers 
+  and CMS to assist in performance evaluation. NOT INTENDED FOR USERS!
+  If GEANT4_USE_SOLIDS is set, use existing configuration/setup. If it is OFF,
+  allow setting of additional CMake options, one per shape, to enable replacement
+  of that shape with USolids equivalent. When any of these variables are set, set
+  additional internal variable GEANT4_USE_PARTIAL_USOLIDS. Convert variables to
+  internal preprocessor flags for shape/usolid activation.
+- Modules/Geant4BuildProjectConfig.cmake : Export needed USOLIDS/shape activation
+  preprocessor flags for selected configuration.
+- Modules/Geant4ConfigureConfigScript.cmake : Export needed USOLIDS/shape activation
+  preprocessor flags for selected configuration.
+
+28th April 2016 - Ben Morgan
+- Templates/Geant4Config.cmake.in: BUGFIX #1855. When using an external
+  CLHEP, the provided FindCLHEP module is not used. Wrap call to
+  find_package(CLHEP) with push/pop of CMAKE_MODULE_PATH to ensure
+  Geant4's builtin module is used and not interfere with any user
+  settings of CMAKE_MODULE_PATH.
+
+19th April 2016
+- Correct Modules/genwindef/LibSymbolInfo.cpp for use with VC 64 bit compilation 
+     
+16th March 2016 - Ben Morgan
+- Modules/Geant4InterfaceOptions.cmake : Fix Bug #1828
+  Apply patch from Vladimir Belov to add libXt to X11_LIBRARIES on all
+  Unix platforms when using Motif/Inventor.
+
 23rd February 2016 - Gunter Folger (cmake-V10-01-44)
 -  Correct md5sum for RadioactiveDecay-4.3.1 after removal of MAC Safari files.
 

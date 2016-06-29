@@ -236,11 +236,9 @@ if(UNIX)
     endif()
 
     # Create final list of X11 libraries needed for Geant4
-    # - Motif
-    if(APPLE)
-      if(GEANT4_USE_XM OR GEANT4_USE_INVENTOR)
-        set(X11_LIBRARIES ${X11_LIBRARIES} ${X11_Xt_LIB})
-      endif()
+    # - Motif/Inventor
+    if(GEANT4_USE_XM OR GEANT4_USE_INVENTOR)
+      set(X11_LIBRARIES ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xmu_LIBRARY})
     endif()
 
     # - If we got to this point, RayTracer is o.k., so add the feature

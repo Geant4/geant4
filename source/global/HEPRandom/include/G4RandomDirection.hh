@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RandomDirection.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4RandomDirection.hh 97527 2016-06-03 14:59:04Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -39,6 +39,7 @@
 // providing more performant results.
 
 // History:
+//    15.03.16 E. Tcherniaev, removed unnecessary if and unit()
 //    18.03.08 V. Grichine, unit radius sphere surface based algorithm
 //      ~ 2007 M. Kossov, algorithm based on 8 Quadrants technique
 //
@@ -54,13 +55,10 @@
 
 inline G4ThreeVector G4RandomDirection()
 {
-  G4double cosTheta  = 2.*G4UniformRand()-1.;
-  G4double sinTheta2 = 1. - cosTheta*cosTheta;
-  if( sinTheta2 < 0.)  sinTheta2 = 0.;
-  G4double sinTheta  = std::sqrt(sinTheta2); 
-  G4double phi       = CLHEP::twopi*G4UniformRand();
-  return G4ThreeVector(sinTheta*std::cos(phi),
-                       sinTheta*std::sin(phi), cosTheta).unit(); 
+  G4double z   = 2.*G4UniformRand() - 1.;  // z = cos(theta)
+  G4double rho = std::sqrt((1.+z)*(1.-z)); // rho = sqrt(1-z*z)
+  G4double phi = CLHEP::twopi*G4UniformRand();
+  return G4ThreeVector(rho*std::cos(phi), rho*std::sin(phi), z);
 }
 
 #endif  /* G4RANDOMDIR_HH */

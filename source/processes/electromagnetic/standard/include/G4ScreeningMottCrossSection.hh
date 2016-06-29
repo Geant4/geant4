@@ -180,8 +180,6 @@ private:
         G4double                 e2;
 
         //angle
-        static G4double dangle[DIM];
-        static G4double tet[DIM];
         G4double cross[DIM];
 };
 

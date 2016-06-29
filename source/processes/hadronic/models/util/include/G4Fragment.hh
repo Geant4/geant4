@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 92198 2015-08-21 10:00:50Z gcosmo $
+// $Id: G4Fragment.hh 97617 2016-06-06 12:47:17Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -116,6 +116,10 @@ public:
   // computation of mass for any Z and A
   inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
 
+  // extra methods
+  inline G4double GetSpin() const;
+  inline void SetSpin(G4double value);
+
   inline G4int GetCreatorModelType() const;
   inline void SetCreatorModelType(G4int value);
 
@@ -200,6 +204,7 @@ private:
 
   const G4ParticleDefinition* theParticleDefinition;
   
+  G4double spin;
   G4double theCreationTime;
 };
 
@@ -227,7 +232,7 @@ inline void * G4Fragment::operator new(size_t)
 
 inline void G4Fragment::operator delete(void * aFragment)
 {
-  ((G4Fragment *)aFragment)->SetNuclearPolarization(0);
+  ((G4Fragment *)aFragment)->SetNuclearPolarization(nullptr);
   pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
 }
 
@@ -389,6 +394,16 @@ inline G4int G4Fragment::GetCreatorModelType() const
 inline void G4Fragment::SetCreatorModelType(G4int value)
 {
   creatorModel = value;
+}
+
+inline G4double G4Fragment::GetSpin() const
+{
+  return spin;
+}
+
+inline void G4Fragment::SetSpin(G4double value)
+{
+  spin = value;
 }
 
 inline 

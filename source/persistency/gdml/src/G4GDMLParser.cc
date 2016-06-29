@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.cc 90041 2015-05-11 09:46:06Z gcosmo $
+// $Id: G4GDMLParser.cc 97543 2016-06-03 15:49:14Z gcosmo $
 //
 //
 // class G4GDMLParser Implementation
@@ -121,6 +121,9 @@ void G4GDMLParser::ImportRegions()
         {
           const G4String& cvalue = raux->value;
           const G4String& cunit = raux->unit;
+	  if (G4UnitDefinition::GetCategory(cunit)!="Length") {
+	    G4Exception("G4GDMLParser::ImportRegions()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }	  
           G4double cut = eval.Evaluate(cvalue) * G4UnitDefinition::GetValueOf(cunit);
           pcuts->SetProductionCut(cut,"proton");
         } else
@@ -128,6 +131,9 @@ void G4GDMLParser::ImportRegions()
         {
           const G4String& cvalue = raux->value;
           const G4String& cunit = raux->unit;
+	  if (G4UnitDefinition::GetCategory(cunit)!="Length") {
+	    G4Exception("G4GDMLParser::ImportRegions()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }	  
           G4double cut = eval.Evaluate(cvalue) * G4UnitDefinition::GetValueOf(cunit);
           pcuts->SetProductionCut(cut,"e-");
         } else
@@ -135,6 +141,9 @@ void G4GDMLParser::ImportRegions()
         {
           const G4String& cvalue = raux->value;
           const G4String& cunit = raux->unit;
+	  if (G4UnitDefinition::GetCategory(cunit)!="Length") {
+	    G4Exception("G4GDMLParser::ImportRegions()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }	  
           G4double cut = eval.Evaluate(cvalue) * G4UnitDefinition::GetValueOf(cunit);
           pcuts->SetProductionCut(cut,"e+");
         } else
@@ -142,6 +151,9 @@ void G4GDMLParser::ImportRegions()
         {
           const G4String& cvalue = raux->value;
           const G4String& cunit = raux->unit;
+	  if (G4UnitDefinition::GetCategory(cunit)!="Length") {
+	    G4Exception("G4GDMLParser::ImportRegions()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }	  
           G4double cut = eval.Evaluate(cvalue) * G4UnitDefinition::GetValueOf(cunit);
           pcuts->SetProductionCut(cut,"gamma");
         } else

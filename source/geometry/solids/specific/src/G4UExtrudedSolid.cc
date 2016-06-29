@@ -33,9 +33,9 @@
 #include "G4ExtrudedSolid.hh"
 #include "G4UExtrudedSolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "G4Polyhedron.hh"
+#include "G4PolyhedronArbitrary.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -122,6 +122,92 @@ G4UExtrudedSolid::operator=(const G4UExtrudedSolid &source)
   G4USolid::operator=( source );
   
   return *this;
+}
+
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Accessors
+
+G4int G4UExtrudedSolid::GetNofVertices() const
+{
+  return GetShape()->GetNofVertices();
+}
+G4TwoVector G4UExtrudedSolid::GetVertex(G4int i) const
+{
+  UVector2 v = GetShape()->GetVertex(i);
+  return G4TwoVector(v.x, v.y);
+}
+std::vector<G4TwoVector> G4UExtrudedSolid::GetPolygon() const
+{
+  std::vector<UVector2> pol = GetShape()->GetPolygon();
+  std::vector<G4TwoVector> v;
+  for (unsigned int i=0; i<pol.size(); ++i)
+  {
+    v.push_back(G4TwoVector(pol[i].x, pol[i].y));
+  }
+  return v;
+}
+G4int G4UExtrudedSolid::GetNofZSections() const
+{
+  return GetShape()->GetNofZSections();
+}
+G4UExtrudedSolid::ZSection G4UExtrudedSolid::GetZSection(G4int i) const
+{
+  return ZSection(GetShape()->GetZSection(i));
+}
+std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
+{
+  std::vector<UExtrudedSolid::ZSection> sv = GetShape()->GetZSections();
+  std::vector<G4UExtrudedSolid::ZSection> vec;
+  for (unsigned int i=0; i<sv.size(); ++i)
+  {
+    vec.push_back(ZSection(sv[i]));
+  }
+  return vec;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// CreatePolyhedron()
+//
+G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
+{
+  G4int nFacets = GetShape()->GetNumberOfFacets();
+  G4int nVertices = 0;
+  for (G4int l = 0; l<nFacets; ++l)  // compute total number of vertices first
+  {
+    VUFacet* facet = GetShape()->GetFacet(l);
+    G4int n = facet->GetNumberOfVertices();
+    nVertices += n;
+  }
+
+  G4PolyhedronArbitrary *polyhedron =
+    new G4PolyhedronArbitrary (nVertices,nFacets);
+
+  for (G4int i = 0; i<nFacets; ++i)
+  {
+    VUFacet* facet = GetShape()->GetFacet(i);
+    G4int v[4];
+    G4int n = facet->GetNumberOfVertices();
+    for (G4int m = 0; m<n; ++m)
+    {
+      UVector3 vtx = facet->GetVertex(m);
+      polyhedron->AddVertex(G4ThreeVector(vtx.x(), vtx.y(), vtx.z()));
+    }
+    if (n > 4) n = 4;
+    else if (n == 3) v[3] = 0;
+    for (G4int j=0; j<n; ++j)
+    {
+      G4int k = facet->GetVertexIndex(j);
+      v[j] = k+1;
+    }
+    polyhedron->AddFacet(v[0],v[1],v[2],v[3]);
+  }
+  polyhedron->SetReferences();  
+
+  return (G4Polyhedron*) polyhedron;
 }
 
 #endif  // G4GEOM_USE_USOLIDS

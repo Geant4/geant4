@@ -81,13 +81,13 @@
   G4ParticleHPCapture::~G4ParticleHPCapture()
   {
     //delete [] theCapture;
-//    G4cout << "Leaving G4ParticleHPCapture::~G4ParticleHPCapture"<<G4endl;
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           ite = theCapture->begin() ; ite != theCapture->end() ; ite++ )
-     {
-        delete *ite;
+     if ( theCapture != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+              ite = theCapture->begin() ; ite != theCapture->end() ; ite++ ) {
+           delete *ite;
+        }
+        theCapture->clear();
      }
-     theCapture->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"

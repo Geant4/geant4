@@ -95,7 +95,7 @@
           break;
       }
     }
-    targetMass = theFinalStateNeutrons.GetTargetMass();
+    //targetMass = theFinalStateNeutrons.GetTargetMass();
     //theData.close();
   }
   

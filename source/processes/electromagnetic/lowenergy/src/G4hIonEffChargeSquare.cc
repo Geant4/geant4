@@ -32,22 +32,22 @@
 // File name:     G4hIonEffChargeSquare
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 20 July 2000
 //
-// Modifications: 
+// Modifications:
 // 20/07/2000  V.Ivanchenko First implementation
 // 18/06/2001  V.Ivanchenko Continuation for eff.charge (small change of y)
-// 08/10/2002  V.Ivanchenko The charge of the nucleus is used not charge of 
+// 08/10/2002  V.Ivanchenko The charge of the nucleus is used not charge of
 //                          DynamicParticle
 //
-// Class Description: 
+// Class Description:
 //
 // Ion effective charge model
 // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
 // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
@@ -60,23 +60,24 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hIonEffChargeSquare::G4hIonEffChargeSquare(const G4String& name)
-  : G4VLowEnergyModel(name), 
+  : G4VLowEnergyModel(name),
     theHeMassAMU(4.0026)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hIonEffChargeSquare::~G4hIonEffChargeSquare() 
+G4hIonEffChargeSquare::~G4hIonEffChargeSquare()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hIonEffChargeSquare::TheValue(const G4DynamicParticle* particle,
-                	                 const G4Material* material) 
+                	                 const G4Material* material)
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double particleMass = particle->GetMass() ;
@@ -91,7 +92,7 @@ G4double G4hIonEffChargeSquare::TheValue(const G4DynamicParticle* particle,
 
 G4double G4hIonEffChargeSquare::TheValue(const G4ParticleDefinition* aParticle,
        		                         const G4Material* material,
-					 G4double kineticEnergy) 
+					 G4double kineticEnergy)
 {
   //  SetRateMass(aParticle) ;
   G4double particleMass = aParticle->GetPDGMass() ;
@@ -137,7 +138,7 @@ G4double G4hIonEffChargeSquare::LowEnergyLimit(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4bool G4hIonEffChargeSquare::IsInCharge(const G4DynamicParticle* ,
 		                         const G4Material* ) const
 {
@@ -145,7 +146,7 @@ G4bool G4hIonEffChargeSquare::IsInCharge(const G4DynamicParticle* ,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4bool G4hIonEffChargeSquare::IsInCharge(const G4ParticleDefinition* ,
       		                         const G4Material* ) const
 {
@@ -160,7 +161,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
 						   G4double particleMass,
 						   G4double ionCharge) const
 {
-  // The aproximation of ion effective charge from: 
+  // The aproximation of ion effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
@@ -168,7 +169,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/particleMass ;
   if(reducedEnergy < 1.0*keV) reducedEnergy = 1.0*keV;
-  if( (reducedEnergy > ionCharge * 10.0 * MeV) || 
+  if( (reducedEnergy > ionCharge * 10.0 * MeV) ||
       (ionCharge < 1.5) ) return ionCharge*ionCharge ;
 
   static const G4double vFermi[92] = {
@@ -189,24 +190,24 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     0.98, 0.97, 0.96, 0.93, 0.91, 0.9,  0.88, 0.9,  0.9,  0.9,
     0.9,  0.85, 0.9,  0.9,  0.91, 0.92, 0.9,  0.9,  0.9,  0.9,
     0.9,  0.88, 0.9,  0.88, 0.88, 0.9,  0.9,  0.88, 0.9,  0.9,
-    0.9,  0.9,  0.96, 1.2,  0.9,  0.88, 0.88, 0.85, 0.9,  0.9, 
+    0.9,  0.9,  0.96, 1.2,  0.9,  0.88, 0.88, 0.85, 0.9,  0.9,
     0.92, 0.95, 0.99, 1.03, 1.05, 1.07, 1.08, 1.1,  1.08, 1.08,
     1.08, 1.08, 1.09, 1.09, 1.1,  1.11, 1.12, 1.13, 1.14, 1.15,
     1.17, 1.2,  1.18, 1.17, 1.17, 1.16, 1.16, 1.16, 1.16, 1.16,
-    1.16, 1.16} ; 
+    1.16, 1.16} ;
 
   static const G4double c[6] = {0.2865,  0.1266, -0.001429,
                           0.02402,-0.01135, 0.001475} ;
 
   // get elements in the actual material,
   const G4ElementVector* theElementVector = material->GetElementVector() ;
-  const G4double* theAtomicNumDensityVector = 
+  const G4double* theAtomicNumDensityVector =
                          material->GetAtomicNumDensityVector() ;
   const G4int NumberOfElements = material->GetNumberOfElements() ;
-  
+
   //  loop for the elements in the material
   //  to find out average values Z, vF, lF
-  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ; 
+  G4double z = 0.0, vF = 0.0, lF = 0.0, norm = 0.0 ;
 
   if( 1 == NumberOfElements ) {
     z = material->GetZ() ;
@@ -238,16 +239,16 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
   // Helium ion case
   if( ionCharge < 2.5 ) {
 
-    G4double e = std::log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ; 
+    G4double e = std::log(std::max(1.0, kineticEnergy / (keV*theHeMassAMU) )) ;
     G4double x = c[0] ;
     G4double y = 1.0 ;
     for (G4int i=1; i<6; i++) {
       y *= e ;
       x += y * c[i] ;
     }
-    G4double q = 7.6 -  e ; 
-    q = 1.0 + ( 0.007 + 0.00005 * z ) * std::exp( -q*q ) ;
-    return  4.0 * q * q * (1.0 - std::exp(-x)) ;
+    G4double q = 7.6 -  e ;
+    q = 1.0 + ( 0.007 + 0.00005 * z ) * G4Exp( -q*q ) ;
+    return  4.0 * q * q * (1.0 - G4Exp(-x)) ;
 
     // Heavy ion case
   } else {
@@ -267,12 +268,12 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     }
 
     G4double y3 = std::pow(y, 0.3) ;
-    G4double q = 1.0 - std::exp( 0.803*y3 - 1.3167*y3*y3 - 
-                            0.38157*y - 0.008983*y*y ) ;     
+    G4double q = 1.0 - G4Exp( 0.803*y3 - 1.3167*y3*y3 -
+                            0.38157*y - 0.008983*y*y ) ;
     if( q < 0.0 ) q = 0.0 ;
 
-    G4double sLocal = 7.6 -  std::log(std::max(1.0, reducedEnergy/keV)) ; 
-    sLocal = 1.0 + ( 0.18 + 0.0015 * z ) * std::exp( -sLocal*sLocal )/ (ionCharge*ionCharge) ;
+    G4double sLocal = 7.6 -  std::log(std::max(1.0, reducedEnergy/keV)) ;
+    sLocal = 1.0 + ( 0.18 + 0.0015 * z ) * G4Exp( -sLocal*sLocal )/ (ionCharge*ionCharge) ;
 
     // Screen length according to
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
@@ -281,9 +282,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     G4double lambda = 10.0 * vF * std::pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
     G4double qeff   = ionCharge * sLocal *
       ( q + 0.5*(1.0-q) * std::log(1.0 + lambda*lambda) / (vF*vF) ) ;
-    if( 0.1 > qeff ) qeff = 0.1 ; 
-    return qeff*qeff ;    
+    if( 0.1 > qeff ) qeff = 0.1 ;
+    return qeff*qeff ;
   }
 }
-
-
