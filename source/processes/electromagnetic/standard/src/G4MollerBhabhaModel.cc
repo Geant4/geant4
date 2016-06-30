@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4MollerBhabhaModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -213,11 +213,7 @@ G4double G4MollerBhabhaModel::ComputeDEDXPerVolume(
   
   G4double Zeff  = material->GetIonisation()->GetZeffective();
   G4double th    = 0.25*sqrt(Zeff)*keV;
-  //  G4double cut;  
-  // if(isElectron) { cut  = std::max(th*0.5, cutEnergy); }
-  // else           { cut  = std::max(th, cutEnergy); }
-  G4double tkin  = kineticEnergy;
-  if (kineticEnergy < th) { tkin = th; }
+  G4double tkin = std::max(kineticEnergy, th);
  
   G4double tau   = tkin/electron_mass_c2;
   G4double gam   = tau + 1.0;

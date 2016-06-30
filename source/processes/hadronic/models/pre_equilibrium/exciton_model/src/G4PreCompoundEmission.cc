@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 96527 2016-04-20 08:51:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,10 +49,11 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "Randomize.hh"
-#include "G4PreCompoundParameters.hh"
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 #include "G4HadronicException.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 G4PreCompoundEmission::G4PreCompoundEmission()
 {
@@ -60,9 +61,10 @@ G4PreCompoundEmission::G4PreCompoundEmission()
   theFragmentsVector = 
     new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
   g4pow = G4Pow::GetInstance();
-  G4PreCompoundParameters param;
-  fLevelDensity = param.GetLevelDensity();
-  fFermiEnergy  = param.GetFermiEnergy();
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters() ;
+  fLevelDensity = param->GetLevelDensity();
+  fFermiEnergy  = param->GetFermiEnergy();
 }
 
 G4PreCompoundEmission::~G4PreCompoundEmission()

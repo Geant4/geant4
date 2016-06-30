@@ -254,7 +254,7 @@ inline myuint fmodmulM61(myuint cum, myuint a, myuint b){
 
 inline myuint fmodmulM61(myuint cum, myuint s, myuint a)
 {
-    register myuint o,ph,pl,ah,al;
+    myuint o,ph,pl,ah,al;
     o=(s)*a;
     ph = ((s)>>32);
     pl = (s) & MASK32;
@@ -379,10 +379,14 @@ myuint apply_bigskip(myuint* Vout, myuint* Vin, myID_t clusterID, myID_t machine
 	
 	const	myuint skipMat[128][N] = 
 	
-//#if (N==88) 
+//#if (N==8) 
+//#include "CLHEP/Random/mixmax_skip_N8.icc"
+//#elif (N==17) 
+#include "CLHEP/Random/mixmax_skip_N17.icc"
+//#elif (N==88) 
 //#include "CLHEP/Random/mixmax_skip_N88.icc"  // to make this file, delete all except some chosen 128 rows of the coefficients table
 //#elif (N==256) 
-#include "CLHEP/Random/mixmax_skip_N256.icc"
+//#include "CLHEP/Random/mixmax_skip_N256.icc"
 //#elif (N==1000) 
 //#include "CLHEP/Random/mixmax_skip_N1000.icc"
 //#elif (N==3150) 

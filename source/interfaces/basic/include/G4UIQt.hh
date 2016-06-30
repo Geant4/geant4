@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh 90762 2015-06-09 07:52:57Z gcosmo $
+// $Id: G4UIQt.hh 97174 2016-05-27 12:41:02Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -263,7 +263,7 @@ private:
   QWidget* CreateHistoryTBWidget();
   G4UIDockWidget* CreateUITabWidget();
   QWidget* CreateSceneTreeComponentsTBWidget();
-  QWidget* CreateViewerWidget();
+  void CreateViewerWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);

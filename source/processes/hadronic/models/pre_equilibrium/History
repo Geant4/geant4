@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-06
+- G4PreCompoundFragment - fixed problem of the previous tag
+
+22-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-05
+- G4GNASHTransitions - fixed problem in computation of probability
+- G4PreCompoundFragment, G4PreCompoundFragmentVector,
+  G4PreCompoundIon, G4PreCompoundModel, G4PreCompoundNucleon,
+  G4PreCompoundTransitions, G4VPreCompoundEmissionFactory,
+  G4VPreCompoundFragment - use nullptr, all internal cost are static
+
+19-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-04
+19-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-02
+-------------------------------------------------
+- G4GNASHTransitions, G4PreCompoundModel, G4VPreCompoundFragment,
+  G4HETCFragment, G4PreCompoundIon, G4HETCChargedFragment,
+  G4PreCompoundEmission, G4PreCompoundTransitions - migration from 
+  G4PreCompoundParameters to G4DeexPrecoParameters
+- G4PreCompoundParameters - removed
+
+21-Mar-2016 V.Ivanchenko  hadr-pre-V10-02-01
+-------------------------------------------------
+- Fixed division by zero due to the previous tag
+
+21-Mar-2016 V.Ivanchenko  hadr-pre-V10-02-00
+-------------------------------------------------
+- G4PreCompoundModel, G4PreCompoundParameters - changed non-equilibrium
+    condition to switch to the de-excitation - instead check (Z<9 || A<17)
+    check A<=5 || excitation<=A*Elimit (default Elimit = 0.1MeV);
+    This allows to perform pre-equilibrium emission for light nuclei.
+
 10-Nov-2015 V.Ivanchenko  hadr-pre-V10-01-06
 -------------------------------------------------
 - G4PreCompoundFragment - an attempt to fix icc compillation problem

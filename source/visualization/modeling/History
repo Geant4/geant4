@@ -1,4 +1,4 @@
-$Id: History 94206 2015-11-09 08:11:59Z gcosmo $
+$Id: History 96733 2016-05-02 11:52:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,54 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+2nd May 2016  John Allison  (modeling-V10-02-04)
+- G4PhysicalVolumeModel.cc: Fixed gcc-6.1 warning.
+
+5th April 2016  John Allison  (modeling-V10-02-03)
+- G4TrajectoryDrawByOriginVolume.cc: Tidied #include statements.
+
+15th February 2016  John Allison  (modeling-V10-02-02)
+- Introduced drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+  and their associated commands.  Note that this
+  selects only by a single string, the physical volume name.  If there
+  are more than one physical volumes with that name then any trajectory
+  touching any one of those volumes will be selected.  If the user sets
+  more than one physical volume name (by using the set command more than
+  once) the trajectory will be selected if it touches either of those
+  volumes and which of the attributes (e.g., colour) associated with
+  those volumes is chosen is undefined, but one will be chosen.
+  A more comprehensive facility would allow the user to select by
+  touched touchable, i.e., by the full path and copy numbers of the
+  physical volume - but that is a job for the future if a use case arises.
+  o G4TrajectoryModelFactories.hh/cc:
+    Added G4TrajectoryDrawByTouchedVolumeFactory.
+  o G4TrajectoryFilterFactories.hh/cc:
+    Added G4TrajectoryTouchedVolumeFilterFactory.
+  o Added new files and classes:
+    G4TrajectoryDrawByTouchedVolume.hh/cc
+    G4TrajectoryTouchedVolumeFilter.hh/cc  
+  o G4ModelColourMap.hh: Added new access function:
+    const std::map<T, G4Colour>& GetBasicMap() const;
+    to allow access to the T objects (which are G4String objects,
+    physical volume name(s) in this case) that have been set.
+  o sources.make: Added:
+    G4TrajectoryDrawByTouchedVolume.hh
+    G4TrajectoryTouchedVolumeFilter.hh
+    G4TrajectoryDrawByTouchedVolume.cc
+    G4TrajectoryTouchedVolumeFilter.cc
+- G4TrajectoryDrawByOriginVolume.cc: Tidied.
+
+26th January 2016  John Allison  (modeling-V10-02-01)
+- G4ModelingParameters.hh: Added VisAttributesModifier Set commands.
+
+26th January 2016  John Allison  (modeling-V10-02-00)
+- G4TrajectoryDrawByOriginVolume::Draw and
+  G4TrajectoryOriginVolumeFilter::Evaluate:
+  Added specific arguments to LocateGlobalPointAndSetup to handle
+  multithreading mode.
 
 2nd October 2015  John Allison  (modeling-V10-01-05)
 - G4MagneticFieldModel.cc: Cosmetic improvements.

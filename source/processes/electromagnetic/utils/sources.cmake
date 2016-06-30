@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 84398 2014-10-15 07:20:18Z gcosmo $
+# $Id: sources.cmake 96626 2016-04-27 08:36:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -61,11 +61,11 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmProcessSubType.hh
         G4EmSaturation.hh
         G4EmTableType.hh
-        G4EnergyLossMessenger.hh
         G4EnergyLossTables.hh
         G4LossTableBuilder.hh
         G4LossTableManager.hh
         G4MscStepLimitType.hh
+        G4NuclearFormfactorType.hh
         G4VAtomDeexcitation.hh
         G4VEmAngularDistribution.hh
         G4VEmFluctuationModel.hh
@@ -78,7 +78,6 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4ionEffectiveCharge.hh
     SOURCES
         G4AngleDirect.cc
-        G4AtomicShell.cc
         G4DummyModel.cc
         G4ElectronIonPair.cc
         G4EmBiasingManager.cc
@@ -92,7 +91,6 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4EmParametersMessenger.cc
         G4EmProcessOptions.cc
         G4EmSaturation.cc
-        G4EnergyLossMessenger.cc
         G4EnergyLossTables.cc
         G4LossTableBuilder.cc
         G4LossTableManager.cc

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VoxelNavigation.hh 96449 2016-04-15 08:29:57Z gcosmo $
 //
 // 
 // class G4VoxelNavigation
@@ -181,7 +181,10 @@ class G4VoxelNavigation
     //
 
     G4VoxelSafety  *fpVoxelSafety;
-    //  Helper object for Voxel Safety
+      // Helper object for Voxel Safety
+
+    G4double fHalfTolerance;
+      // Surface tolerance
 
     G4bool fCheck;
     G4bool fBestSafety; 

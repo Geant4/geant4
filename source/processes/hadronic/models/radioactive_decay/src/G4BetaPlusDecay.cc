@@ -73,10 +73,10 @@ G4BetaPlusDecay::~G4BetaPlusDecay()
 G4DecayProducts* G4BetaPlusDecay::DecayIt(G4double)
 {
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  if (G4MT_parent == 0) FillParent();
+  CheckAndFillParent();
 
   // Fill G4MT_daughters with e-, nu and residual nucleus (stored by SetDaughter)  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillDaughters();
 
   G4double parentMass = G4MT_parent->GetPDGMass();
   G4double eMass = G4MT_daughters[1]->GetPDGMass();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh 69557 2013-05-08 12:01:40Z gcosmo $
+// $Id: G4Ions.hh 96314 2016-04-06 07:21:51Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -91,11 +91,32 @@ class G4Ions : public G4ParticleDefinition
   // Get Isomer level (=0 for ground state)
   G4int GetIsomerLevel() const; 
    
-  private:
+  // enumerator for floating level base
+  enum class G4FloatLevelBase { noFloat=0, plus_U, plus_V, plus_W, plus_X, plus_Y, plus_Z };
+  static G4Ions::G4FloatLevelBase FloatLevelBase(char flbChar);
+  static G4Ions::G4FloatLevelBase FloatLevelBase(G4int flbIdx);
+  static char FloatLevelBaseChar(G4Ions::G4FloatLevelBase flb);
+
+  // set/get methods for floating level base
+  G4Ions::G4FloatLevelBase GetFloatLevelBase() const;
+  G4int GetFloatLevelBaseIndex() const;
+  void SetFloatLevelBase(G4Ions::G4FloatLevelBase flb);
+  void SetFloatLevelBase(char flbChar);
+  void SetFloatLevelBase(G4int flbIdx);
+
+ private:
   G4double theExcitationEnergy; 
   G4int    theIsomerLevel;
+  G4FloatLevelBase floatLevelBase;
 
 };
+
+#define plusU G4Ions::G4FloatLevelBase::plus_U 
+#define plusV G4Ions::G4FloatLevelBase::plus_V 
+#define plusW G4Ions::G4FloatLevelBase::plus_W 
+#define plusX G4Ions::G4FloatLevelBase::plus_X
+#define plusY G4Ions::G4FloatLevelBase::plus_Y 
+#define plusZ G4Ions::G4FloatLevelBase::plus_Z 
 
 inline
  G4Ions* G4Ions::IonsDefinition()
@@ -121,6 +142,87 @@ inline
   return theIsomerLevel;
 }
     
+inline
+ G4Ions::G4FloatLevelBase G4Ions::GetFloatLevelBase() const
+{
+  return floatLevelBase;
+}
+
+inline
+ G4int G4Ions::GetFloatLevelBaseIndex() const
+{
+  return static_cast<G4int>(floatLevelBase);
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(G4Ions::G4FloatLevelBase flb)
+{
+  floatLevelBase = flb;
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(char flbChar)
+{
+  floatLevelBase = FloatLevelBase(flbChar);
+}
+
+inline
+ void G4Ions::SetFloatLevelBase(G4int flbIdx)
+{
+  floatLevelBase = FloatLevelBase(flbIdx);
+}
+
+inline
+ G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(char flbChar)
+{
+  G4Ions::G4FloatLevelBase flb = G4FloatLevelBase::noFloat;
+  switch(flbChar)
+  {
+   case 'u': case 'U':
+    flb = plusU;
+    break;
+   case 'v': case 'V':
+    flb = plusV;
+    break;
+   case 'w': case 'W':
+    flb = plusW;
+    break;
+   case 'x': case 'X':
+    flb = plusX;
+    break;
+   case 'y': case 'Y':
+    flb = plusY;
+    break;
+   case 'z': case 'Z':
+    flb = plusZ;
+    break;
+   default:
+    break;
+  }
+  return flb;
+}
+
+inline
+ G4Ions::G4FloatLevelBase G4Ions::FloatLevelBase(G4int flbIdx)
+{
+  static G4Ions::G4FloatLevelBase flb[] = 
+  { G4FloatLevelBase::noFloat,
+    G4FloatLevelBase::plus_U,
+    G4FloatLevelBase::plus_V,
+    G4FloatLevelBase::plus_W,
+    G4FloatLevelBase::plus_X,
+    G4FloatLevelBase::plus_Y,
+    G4FloatLevelBase::plus_Z };
+  return flb[flbIdx];
+}
+
+inline
+ char G4Ions::FloatLevelBaseChar(G4Ions::G4FloatLevelBase flb)
+{
+  static char flbChar[] = {'\0','U','V','W','X','Y','Z'};
+  return flbChar[static_cast<G4int>(flb)];
+}
+
 #endif
 
 

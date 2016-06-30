@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.hh 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4DCofThisEvent.hh 94771 2015-12-09 09:44:05Z gcosmo $
 //
 
 #ifndef G4DCofThisEvent_h
@@ -74,10 +74,7 @@ class G4DCofThisEvent
       inline G4int GetNumberOfCollections() const
       {
         G4int n = 0;
-        for(size_t i=0;i<DC->size();i++)
-        {
-          if((*DC)[i]) n++;
-        }
+        for(auto dc : *DC) if(dc) n++;
         return n;
       }
       //  Returns the number of digi collections which are stored in this class

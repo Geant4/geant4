@@ -36,7 +36,7 @@ using namespace std;
 #include "CLHEP/Units/PhysicalConstants.h"
 
 #include "G4LEPTSDiffXS.hh"
-
+#include "G4Exp.hh"
 
 G4LEPTSDiffXS::G4LEPTSDiffXS(string file) {
   fileName = file;
@@ -197,7 +197,7 @@ void G4LEPTSDiffXS::InterpolateCDXS() {  // *10 angles, linear
 	  ICDXS[eBin][ia] = (y1*(x2-x) + y2*(x-x1))/(x2-x1);
 	}
 	else {           //log-log ordenada
-	  ICDXS[eBin][ia] = exp( (log(y1)*log(x2/x)+log(y2)*log(x/x1))/log(x2/x1) );
+	  ICDXS[eBin][ia] = G4Exp( (log(y1)*log(x2/x)+log(y2)*log(x/x1))/log(x2/x1) );
 	}
 
 	IKT[eBin][ia] = (z1*(x2-x) + z2*(x-x1))/(x2-x1);

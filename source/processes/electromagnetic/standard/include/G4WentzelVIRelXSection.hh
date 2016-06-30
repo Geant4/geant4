@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.hh 94676 2015-12-02 09:51:20Z gunter $
+// $Id: G4WentzelVIRelXSection.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ class G4WentzelVIRelXSection
 
 public:
 
-  G4WentzelVIRelXSection(G4bool combined = true);
+  explicit G4WentzelVIRelXSection(G4bool combined = true);
 
   virtual ~G4WentzelVIRelXSection();
 
@@ -113,8 +113,9 @@ private:
   void ComputeMaxElectronScattering(G4double cut);
 
   //  hide assignment operator
-  G4WentzelVIRelXSection & operator=(const  G4WentzelVIRelXSection &right);
-  G4WentzelVIRelXSection(const  G4WentzelVIRelXSection&);
+  G4WentzelVIRelXSection & operator=
+  (const G4WentzelVIRelXSection &right) = delete;
+  G4WentzelVIRelXSection(const  G4WentzelVIRelXSection&) = delete;
 
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;

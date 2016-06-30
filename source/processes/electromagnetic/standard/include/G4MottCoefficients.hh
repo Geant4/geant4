@@ -69,7 +69,7 @@ class G4MottCoefficients
 
 public:
 
-  	G4MottCoefficients();
+  	explicit G4MottCoefficients();
 
   	virtual ~G4MottCoefficients();
 
@@ -77,8 +77,8 @@ public:
 
 private:
 
- 	G4MottCoefficients & operator=(const  G4MottCoefficients &right);
-  	G4MottCoefficients(const  G4MottCoefficients&);
+ 	G4MottCoefficients & operator=(const  G4MottCoefficients &right) = delete;
+  	G4MottCoefficients(const  G4MottCoefficients&) = delete;
 
 
 };

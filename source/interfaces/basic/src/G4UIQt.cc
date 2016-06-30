@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 87700 2014-12-17 09:52:39Z gcosmo $
+// $Id: G4UIQt.cc 97174 2016-05-27 12:41:02Z gcosmo $
 //
 // L. Garnier
 
@@ -184,7 +184,7 @@ G4UIQt::G4UIQt (
   fMainWindow->setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
   fMainWindow->setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
   
-  fMainWindow->setCentralWidget(CreateViewerWidget());
+  CreateViewerWidget();
   fMainWindow->addDockWidget(Qt::LeftDockWidgetArea, CreateUITabWidget());
   fMainWindow->addDockWidget(Qt::BottomDockWidgetArea, CreateCoutTBWidget());
 
@@ -542,7 +542,7 @@ QWidget* G4UIQt::CreateSceneTreeComponentsTBWidget(){
 }
 
 
-QWidget* G4UIQt::CreateViewerWidget(){
+void G4UIQt::CreateViewerWidget(){
 
   // Set layouts
 
@@ -576,6 +576,7 @@ QWidget* G4UIQt::CreateViewerWidget(){
   // fill right splitter
   if (fViewerTabWidget == NULL) {
     fViewerTabWidget = new G4QTabWidget();
+    fMainWindow->setCentralWidget(fViewerTabWidget);
 #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true);
@@ -599,8 +600,6 @@ QWidget* G4UIQt::CreateViewerWidget(){
   fViewerTabWidget->setSizePolicy(policy);
   
   fViewerTabWidget->setMinimumSize(40,40);
-  
-  return fViewerTabWidget;
 }
 
 
@@ -681,7 +680,7 @@ bool G4UIQt::AddTabWidget(
    #if QT_VERSION >= 0x050000
   QString message = QString(
                             "This Qt version [")+qVersion ()+"] has some issues with the OpenGL viewer.\n"+
-  "To prevent problems, you are not allowed to open a Store nor Immediate viewer.\n" +
+  "To prevent problems, you are not allowed to open a Stored nor Immediate viewer.\n" +
   "\n" +
   "Please upgrade to Qt version >= 5.1\n";
   
@@ -694,22 +693,7 @@ bool G4UIQt::AddTabWidget(
 #endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget();
-#if QT_VERSION < 0x040500
-#else
-    fViewerTabWidget->setTabsClosable (true); 
-#endif
-    
-#if QT_VERSION < 0x040200
-#else
-    fViewerTabWidget->setUsesScrollButtons (true);
-#endif
-      
-#if QT_VERSION < 0x040500
-#else
-    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
-#endif
-    connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int))); 
+    CreateViewerWidget();
   }
 
   if (!aWidget) {
@@ -2541,11 +2525,11 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       
       applyButton->setAutoDefault( TRUE );
       applyButton->setDefault( TRUE );
-      gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,0);
 
       QPushButton* cancelButton = new QPushButton( tr( "&Cancel" ));
       cancelButton->setAutoDefault( TRUE );
       gridLayout->addWidget(cancelButton,n_parameterEntry-nbColorParameter,1);
+      gridLayout->addWidget(applyButton,n_parameterEntry-nbColorParameter,0);
       
       QSignalMapper* signalMapper = new QSignalMapper(this);
       signalMapper->setMapping(applyButton, paramWidget);

@@ -47,6 +47,7 @@ class G4ParticleHPFissionERelease
      , delayedNeutronKinetic( 0.0 )
      , promptGammaEnergy( 0.0 )
      , delayedGammaEnergy( 0.0 )
+     , delayedBetaEnergy( 0.0 )
      , neutrinoEnergy( 0.0 )
      , reducedTotalEnergy( 0.0 )
      {

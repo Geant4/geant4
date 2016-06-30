@@ -52,7 +52,8 @@ class Run : public G4Run
   public:
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
 
-    void AddEdep (G4double e);
+    void AddEdep (G4int i, G4double e);
+    void AddTotEdep     (G4double e);
     void AddTrackLength (G4double t);
     void AddProjRange   (G4double x);
     void AddStepSize    (G4int nb, G4double st);
@@ -68,17 +69,19 @@ class Run : public G4Run
     void EndOfRun();
     
   private:
-    DetectorConstruction*   fDetector;
+    DetectorConstruction*  fDetector;
     G4ParticleDefinition*  fParticle;
     G4double  fEkin; 
-       
-    G4double   fEdeposit,  fEdeposit2;
+
     G4double   fTrackLen,  fTrackLen2;
     G4double   fProjRange, fProjRange2;
     G4int      fNbOfSteps, fNbOfSteps2;
     G4double   fStepSize,  fStepSize2;
     G4int      fStatus[3];
     
+    G4double   fEdeposit[MaxAbsor];
+    G4double   fEmin[MaxAbsor], fEmax[MaxAbsor];
+    G4double   fTotEdep[3];
     G4double   fCsdaRange[MaxAbsor];
     G4double   fXfrontNorm[MaxAbsor];    
 };

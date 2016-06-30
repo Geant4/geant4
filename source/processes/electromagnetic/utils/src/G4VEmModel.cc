@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEmModel.cc 97742 2016-06-08 09:24:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +64,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const G4double G4VEmModel::inveplus = 1.0/CLHEP::eplus;
-const G4double log106 = 6*G4Log(10.);
 
 G4VEmModel::G4VEmModel(const G4String& nam):
   flucModel(nullptr),anglModel(nullptr), name(nam), lowLimit(0.1*CLHEP::keV), 
@@ -84,8 +83,8 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   isLocked = false;
   idxTable = 0;
 
-  fManager = G4LossTableManager::Instance();
-  fManager->Register(this);
+  fEmManager = G4LossTableManager::Instance();
+  fEmManager->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,8 +110,7 @@ G4VEmModel::~G4VEmModel()
     delete fElementData;
     fElementData = nullptr;
   }
-  
-  fManager->DeRegister(this);
+  fEmManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -151,7 +149,6 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
   // using spline for element selectors should be investigated in details
   // because small number of points may provide biased results
   // large number of points requires significant increase of memory
-  //G4bool spline = fManager->SplineFlag();
   G4bool spline = false;
   
   //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
@@ -160,6 +157,8 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
   // two times less bins because probability functon is normalized 
   // so correspondingly is more smooth
   if(highLimit <= lowLimit) { return; }
+
+  G4int nbinsPerDec = G4EmParameters::Instance()->NumberOfBinsPerDecade();
 
   G4ProductionCutsTable* theCoupleTable=
     G4ProductionCutsTable::GetProductionCutsTable();
@@ -195,8 +194,8 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
       G4double emin = std::max(lowLimit, 
                                MinPrimaryEnergy(material, part, cuts[i]));
       G4double emax = std::max(highLimit, 10*emin);
-      G4int nbins = G4int(fManager->GetNumberOfBinsPerDecade()
-                          *G4Log(emax/emin)/log106);
+      static const G4double invlog106 = 1.0/(6*G4Log(10.));
+      G4int nbins = (G4int)(nbinsPerDec*G4Log(emax/emin)*invlog106);
       nbins = std::max(nbins, 3);
 
       (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
@@ -229,7 +228,7 @@ void G4VEmModel::InitialiseForMaterial(const G4ParticleDefinition* part,
     const G4ElementVector* theElementVector = material->GetElementVector();
     G4int n = material->GetNumberOfElements();
     for(G4int i=0; i<n; ++i) {
-      G4int Z = G4lrint(((*theElementVector)[i])->GetZ());
+      G4int Z = ((*theElementVector)[i])->GetZasInt();
       InitialiseForElement(part, Z);
     }
   } else {
@@ -277,6 +276,15 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
     xsec[i] = cross;
   }
   return cross;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4VEmModel::GetPartialCrossSection(const G4Material*, G4int,
+                                            const G4ParticleDefinition*,
+                                            G4double)
+{ 
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

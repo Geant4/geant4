@@ -45,7 +45,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DetectorConstruction::DetectorConstruction() :
-    G4VUserDetectorConstruction(), fpWaterMaterial(0)
+  G4VUserDetectorConstruction(), fpWaterMaterial(nullptr),
+  fLogicWorld(nullptr),fPhysiWorld(nullptr)
 {
   // create commands for interactive definition of the detector  
   fDetectorMessenger = new DetectorMessenger(this);
@@ -63,6 +64,7 @@ DetectorConstruction::~DetectorConstruction()
 G4VPhysicalVolume* DetectorConstruction::Construct()
 
 {
+  if(fPhysiWorld) { return fPhysiWorld; }
   DefineMaterials();
   return ConstructDetector();
 }
@@ -98,11 +100,7 @@ void DetectorConstruction::DefineMaterials()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
-
-  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
   // WORLD VOLUME
-
   G4double worldSizeX = 100 * micrometer;
   G4double worldSizeY = worldSizeX;
   G4double worldSizeZ = worldSizeX;
@@ -110,22 +108,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   G4Box* solidWorld = new G4Box("World", //its name
       worldSizeX / 2, worldSizeY / 2, worldSizeZ / 2); //its size
 
-  G4LogicalVolume* logicWorld = new G4LogicalVolume(solidWorld, //its solid
+  fLogicWorld = new G4LogicalVolume(solidWorld, //its solid
       fpWaterMaterial, //its material
       "World"); //its name
 
-  G4PVPlacement* physiWorld = new G4PVPlacement(0, //no rotation
+  fPhysiWorld = new G4PVPlacement(0, //no rotation
       G4ThreeVector(), //at (0,0,0)
       "World", //its name
-      logicWorld, //its logical volume
+      fLogicWorld, //its logical volume
       0, //its mother  volume
       false, //no boolean operation
       0); //copy number
 
-  // Visualization attributes
-  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0)); //White
+  // Visualization attributes - white
+  G4VisAttributes* worldVisAtt = new G4VisAttributes(G4Colour(1.0, 1.0, 1.0));
   worldVisAtt->SetVisibility(true);
-  logicWorld->SetVisAttributes(worldVisAtt);
+  fLogicWorld->SetVisAttributes(worldVisAtt);
 
   G4VisAttributes* worldVisAtt1 = new G4VisAttributes(G4Colour(1.0, 0.0, 0.0));
   worldVisAtt1->SetVisibility(true);
@@ -135,7 +133,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   //
   //logicWorld->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,20*eV));
 
-  return physiWorld;
+  return fPhysiWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,17 +147,11 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   if (pttoMaterial)
   {
     fpWaterMaterial = pttoMaterial;
-    G4LogicalVolume* logicWorld =
-        G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-    logicWorld->SetMaterial(fpWaterMaterial);
+    if(fLogicWorld) {
+      fLogicWorld->SetMaterial(fpWaterMaterial);
+    }
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
-}

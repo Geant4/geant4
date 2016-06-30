@@ -9,6 +9,13 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+04 June 2016 - V.Ivanchenko - microdosimetry-V10-02-01
+- Fix PhysicsList
+
+31 May 2016 - M. Karamitros - microdosimetry-V10-02-00
+- Increase cuts of G4ElectronCapture to 7.4 eV to remain compatible
+  with the energy validity of the Champion's elastic model
+
 17 Sep 2015 - S. Incerti - microdosimetry-V10-01-00
 - Applied coding guidelines
 

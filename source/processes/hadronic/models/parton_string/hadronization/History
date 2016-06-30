@@ -1,4 +1,4 @@
-$Id: History 92025 2015-08-13 14:17:05Z gcosmo $
+$Id: History 97675 2016-06-07 08:29:49Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,33 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+ 6-June-2016 V. Uzhinsky     (had-hadronization-V10-02-05)
+   Re-tag of previouse tag. Compilation warning is erased.
+
+ 4-June-2016 V. Uzhinsky     (had-hadronization-V10-02-04)
+   A solution of the baryon puzzle of NA49 data has been found! <Pt>
+   of baryons 1/2 at a string fragmentation is setting up at 435 MeV/c,
+   and <Pt> for barion 3/2 production - 900 MeV/c.
+
+ 1-June-2016 V. Uzhinsky     (had-hadronization-V10-02-03)
+   Fine tuning of G4LundStringFragmentation.cc. <Pt> of mesons created at 
+   quark fragmentation is decreased. <Pt> of baryons created at quark and
+   diquark is increased. Fragmentation functions of qq-> B(1/2) and B(3/2)
+   are implemented correctly.
+
+28-May-2016 V. Uzhinsky      (had-hadronization-V10-02-02)
+   <Pt^2> is increased in 2 times in G4LundStringFragmentation.cc.
+   It is very important for a description of NA49 exp. data on
+   pp-interactions at 158 GeV/c, especially for xF and Pt distributions.
+
+23-May-2016 V. Uzhinsky      (had-hadronization-V10-02-01)
+   Di-quark fragmentation into baryons is improved in LUND
+   string fragmentation. Description of NA49 and NA61/SHINE
+   exp. data on p+p->p+X is improved.
+
+12-May-2016 V. Uzhinsky      (had-hadronization-V10-02-00)
+ - G4LundStringFragmentation.cc, the method SetMinimalStringMass was improved
+   which is important for Pbar P annihilation.
 
 13-Aug-2015 A. Ribon      (had-hadronization-V10-01-09)
  - G4QGSMFragmentation, G4FragmentingString : Coverity fix.

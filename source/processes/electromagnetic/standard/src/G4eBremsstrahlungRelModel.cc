@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.cc 97273 2016-05-31 14:16:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -41,6 +41,9 @@
 // 13.11.08    add SetLPMflag and SetLPMconstant methods
 // 13.11.08    change default LPMconstant value
 // 13.10.10    add angular distributon interface (VI)
+// 31.05.16    change LPMconstant such that it gives suppression variable 's' 
+//             that consistent to Migdal's one; fix a small bug in 'logTS1' 
+//             computation; better agreement with exp.(M.Novak)    
 //
 // Main References:
 //  Y.-S.Tsai, Rev. Mod. Phys. 46 (1974) 815; Rev. Mod. Phys. 49 (1977) 421. 
@@ -91,7 +94,7 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
     bremFactor(fine_structure_const*classic_electr_radius*classic_electr_radius*16./3.),
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
-    fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)*0.5),
+    fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
     fXiLPM(0), fPhiLPM(0), fGLPM(0),
     use_completescreening(false)
 {
@@ -352,7 +355,7 @@ void  G4eBremsstrahlungRelModel::CalcLPMFunctions(G4double k)
 
   G4double s1 = preS1*z23;
   G4double logS1 = 2./3.*lnZ-2.*facFel;
-  G4double logTS1 = logTwo+logS1;
+  G4double logTS1 = 0.5*logTwo+logS1;
 
   xiLPM = 2.;
 

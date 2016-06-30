@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -105,16 +105,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -270,44 +272,44 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --> Event 0 starts.
 --> Event 10000 starts.
 
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52690 Ne-_cav= 2880 doseCavity/Ebeam= 1.03240  (100*(ratio-1) = 3.24017 %)
+--->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52690 Ne-_cav= 2925 doseCavity/Ebeam= 1.14452  (100*(ratio-1) = 14.45166 %)
 --> Event 20000 starts.
 
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79043 Ne-_cav= 5660 doseCavity/Ebeam= 1.07096  (100*(ratio-1) = 7.09638 %)
+--->evntNb= 20000 Nwall= 19997 Ncav= 4 Ic/Iw= 1.05396 Ne-_cav= 5752 doseCavity/Ebeam= 1.11478  (100*(ratio-1) = 11.47813 %)
 --> Event 30000 starts.
 
---->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87828 Ne-_cav= 8333 doseCavity/Ebeam= 1.04386  (100*(ratio-1) = 4.38576 %)
+--->evntNb= 30000 Nwall= 29996 Ncav= 5 Ic/Iw= 0.87828 Ne-_cav= 8563 doseCavity/Ebeam= 1.14826  (100*(ratio-1) = 14.82635 %)
  Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=8.72s Real=8.73s Sys=0s
+  User=9.33s Real=9.39s Sys=0.02s
 
- Process calls frequency --->  msc= 619203  eIoni= 602443  Transportation= 22350
+ Process calls frequency --->  msc= 607654  eIoni= 602184  Transportation= 22901
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11177	 Energy = 7.132 GeV
-      Exit  --> nbParticles = 11173	 Energy = 7.130 GeV
+      Enter --> nbParticles = 11452	 Energy = 7.282 GeV
+      Exit  --> nbParticles = 11449	 Energy = 7.280 GeV
 
- beamFluence in wall = 39994	 in cavity = 6	 Icav/Iwall = 0.79047	 energyFluence = 37.95067 MeV*cm2/mg
+ beamFluence in wall = 39993	 in cavity = 7	 Icav/Iwall = 0.92224	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 7.97796 MeV +- 3.51836 %
- Total dose in cavity = 39.88982 MeV*cm2/mg +- 3.51836 %
+ Total edep in cavity = 8.59124 MeV +- 4.32354 %
+ Total dose in cavity = 42.95621 MeV*cm2/mg +- 4.32354 %
 
- DoseCavity/EnergyFluence = 1.05110 +- 0.03698
+ DoseCavity/EnergyFluence = 1.13190 +- 0.04894
 
- Total charged trackLength in cavity = 35.0103 m     (mean value = 3.1323 mm )
+ Total charged trackLength in cavity = 36.5026 m     (mean value = 3.1874 mm )
 
- StepSize of ch. tracks in wall   = 144.9505 um  +- 128.8491 um 	 (nbSteps/track = 30.4326)
- StepSize of ch. tracks in cavity = 1.3027 mm  +- 1.5571 mm 	 (nbSteps/track = 2.4046)
+ StepSize of ch. tracks in wall   = 146.2519 um  +- 127.9811 um 	 (nbSteps/track = 30.1808)
+ StepSize of ch. tracks in cavity = 1.4194 mm  +- 2.0130 mm 	 (nbSteps/track = 2.2456)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 317599981, 1509512472
+ Current couple of seeds = 643435522, 1008375888
 ----------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 317599981, 1509512472
+ Current couple of seeds = 643435522, 1008375888
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Vee2hadrons.hh 83000 2014-07-24 10:27:23Z gcosmo $
+// $Id: G4Vee2hadrons.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,7 +65,7 @@ class G4Vee2hadrons
 
 public:
 
-  G4Vee2hadrons(G4eeCrossSections* cr,
+  explicit G4Vee2hadrons(G4eeCrossSections* cr,
 		G4double vlowEnergy,
 		G4double vhighEnergy,
 		G4double vdelta) : cross(cr)
@@ -98,8 +98,8 @@ public:
 private:
 
   // hide assignment operator
-  G4Vee2hadrons & operator=(const  G4Vee2hadrons &right);
-  G4Vee2hadrons(const  G4Vee2hadrons&);
+  G4Vee2hadrons & operator=(const  G4Vee2hadrons &right) = delete;
+  G4Vee2hadrons(const  G4Vee2hadrons&) = delete;
 
   // parameters of the table
   G4double lowEnergy;

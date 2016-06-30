@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModifiedTsai.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ModifiedTsai.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,22 +65,21 @@ class G4ModifiedTsai : public G4VEmAngularDistribution
 
 public:
 
-  G4ModifiedTsai(const G4String& name = "");
+  explicit G4ModifiedTsai(const G4String& name = "");
 
   virtual ~G4ModifiedTsai();
 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy,
-                                         G4int Z,
-                                         const G4Material* mat = 0);
+                                         G4double out_energy, G4int Z,
+                                         const G4Material* mat = nullptr) final;
 
-  void PrintGeneratorInformation() const;
+  virtual void PrintGeneratorInformation() const final;
 
 private:
 
   // hide assignment operator 
-  G4ModifiedTsai & operator=(const  G4ModifiedTsai &right);
-  G4ModifiedTsai(const  G4ModifiedTsai&);
+  G4ModifiedTsai & operator=(const  G4ModifiedTsai &right) = delete;
+  G4ModifiedTsai(const  G4ModifiedTsai&) = delete;
 
 };
 

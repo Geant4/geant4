@@ -45,10 +45,8 @@
 
 using namespace std;
 
-static const G4double kEps = 1.e-15;
-
 G4PolarizationTransition::G4PolarizationTransition() 
-  : fTwoJ1(0), fTwoJ2(0), fLbar(1), fL(0), fDelta(0), 
+  : fTwoJ1(0), fTwoJ2(0), fLbar(1), fL(0), fDelta(0), kEps(1.e-15), 
     kPolyPDF(0, nullptr, -1, 1)
 {}
 

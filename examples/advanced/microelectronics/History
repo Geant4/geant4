@@ -9,6 +9,10 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+4 June 2016 - V.Ivanchenko - microelectronics-V10-02-01
+4 June 2016 - V.Ivanchenko - microelectronics-V10-02-00
+  - Fix msc definition in PhysicsList
+
 1 November 2014 - L. Garnier from M. Raine - microelectronics-V10-00-03
   - Fix a warning "'ui' may be used uninitialized in this function"
 

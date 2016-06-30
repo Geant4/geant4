@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 94090 2015-11-05 15:13:10Z gcosmo $
+# $Id: GNUmakefile 97907 2016-06-22 13:37:05Z gcosmo $
 # ---------------------------------------------------------------------------
 # GNUmakefile for physics_lists/constructors/decay library.  
 #  Gunter Folger 10-Jan-2012.
@@ -38,6 +38,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/transportation/include \
             -I$(G4BASE)/processes/decay/include \
             -I$(G4BASE)/processes/cuts/include \
+            -I$(G4BASE)/processes/electromagnetic/lowenergy/include \
+            -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \

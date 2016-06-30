@@ -1,4 +1,4 @@
-$Id: History 94237 2015-11-09 11:01:24Z gcosmo $
+$Id: History 97798 2016-06-13 12:10:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,100 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-09 October 15: V.Ivanchenko (emstand-V10-01-41)
+13 June 16: V.Ivanchenko (emstand-V10-02-22)
+- G4SeltzerBergerModel - fixed data handling for Z > 92
+    (problem report #1870 - invalid read of data in run time)
+
+09 June 16: V.Ivanchenko (emstand-V10-02-21)
+- G4UrbanMscModel - roll back selection of lateral displacement,
+    by default use old algorithm, for Opt3,4 - new
+
+07 June 16: V.Ivanchenko (emstand-V10-02-20)
+- G4eMultipleScattering, G4hMultipleScattering - roll back previous 
+    version to avoid necessity to change user code
+
+02 June 16: V.Ivanchenko (emstand-V10-02-19)
+- G4eMultipleScattering, G4hMultipleScattering - fixed model 
+    initialisation (do not create extra unneccesary objects)
+
+31 May 16: M. Novak (emstand-V10-02-18)
+- G4eBremsstrahlungRelModel - change LPM constant such that it gives
+    suppression variable that consistent to Migdal's one; fix small
+    bug in LPM function computation; 
+
+23 May 16: V.Ivanchenko (emstand-V10-02-17)
+- G4UrbanMscModel - use new displacement in all PhysList
+
+17 May 16: V.Ivanchenko (emstand-V10-02-16)
+  Added c++11 keywords: explicit, final, override, delete;
+    use nullptr and use G4Element::GetZasInt();
+
+22 April 16: M.Novak (emstand-V10-02-15)
+- G4GoudsmitSaundersonMscModel - change some variable names
+
+11 April 16: L.Urban (emstand-V10-02-14)
+- G4UrbanMscModel - randomisation of "true path length" is modified
+
+11 March 16: V.Ivanchenko (emstand-V10-02-13)
+- G4alphaIonisation, G4hIonisation, G4ionIonisation - do not define
+    StepFunction in constructor
+
+02 March 16: V.Ivanchenko (emstand-V10-02-12)
+- G4eSingleCoulombScatteringModel, G4ScreeningMottCrossSection
+    (Mauro Tacconi) - fixed initialisation of classes allowing
+    to use precomputed cross sections (problem 1823)
+
+26 February 16: V.Ivanchenko (emstand-V10-02-11)
+- Extra attempt to fix VC14 compillation warnings
+
+25 February 16: V.Ivanchenko (emstand-V10-02-10)
+- Attempt to fix clang and VC14 compillation warnings
+
+25 February 16: V.Ivanchenko (emstand-V10-02-09)
+- G4UniversalFluctuation - (L.Urban) fixed bug introduced in -06
+- G4UniversalFluctuations, G4BohrFulatuations,  G4IonFluctuations
+    added c++11 keywords explicit, override, delete, final
+
+24 February 16: V.Ivanchenko (emstand-V10-02-08)
+- G4BetheBlochModel - removed unused class members to address clang 
+    warnings 
+
+24 February 16: V.Ivanchenko (emstand-V10-02-07)
+- G4BraggModel, G4BraggIonModel, G4BetheBlochModel - use float for
+    local static data, introduced C++11 keyword "delete"
+
+23 February 16: V.Ivanchenko (emstand-V10-02-06)
+- G4UniversalFluctuation - two private inline method are made and
+    some code cleanup done
+23 February 16: L.Urban
+- G4UniversalFluctuation - fixed bug in Glandz part, Gaussian sampling.
+  The sampling is symmetrical around emean now
+
+12 February 16: V.Ivanchenko (emstand-V10-02-05)
+- G4eSingleCoulombScatteringModel - fixed sampling of scattering 
+  angle (problem report #1823)
+
+11 February 16: M.Novak (emstand-V10-02-04)
+- G4GoudsmitSaundersonMscModel - handle special case (when gun is on 
+  the boundary) in the step limitation
+ 
+10 February 16: V.Ivanchenko (emstand-V10-02-03)
+- G4ASTARStopping, G4PSTARStopping, G4NISTStoppingData,
+  G4BraggModel - data arrays become float, computation is left double
+
+23 January 16: V.Ivanchenko (emstand-V10-02-02)
+- G4ScreeningMottCrossSection - a bit cleanup the code to be
+    more fast: keep fixed static array of angles, use G4Pow::powN 
+    method instead of pow (Mauro Tacconi)
+
+17 December 15: M.Novak (emstand-V10-02-01)
+- G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable - updated step 
+    limitations, fixed coverity problems and improved comments.      
+
+17 December 15: V.Ivanchenko (emstand-V10-02-00)
+- G4ScreeningMottCrossSection - fixed FPE problem (Mauro Tacconi)
+
+09 November 15: V.Ivanchenko (emstand-V10-01-41)
 - G4ScreeningMottCrossSection - fixed Coverity report
 
 28 October 15: V.Ivanchenko (emstand-V10-01-40)

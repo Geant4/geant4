@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ionIonisation.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -79,14 +79,14 @@ class G4ionIonisation : public G4VEnergyLossProcess
 {
 public:
 
-  G4ionIonisation(const G4String& name = "ionIoni");
+  explicit G4ionIonisation(const G4String& name = "ionIoni");
 
   virtual ~G4ionIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
 		       G4PhysicsVector* dVector);
@@ -95,19 +95,20 @@ public:
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+  virtual void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				   const G4Material*, G4double cut);
+				    const G4Material*, G4double cut) final;
 
   inline G4double BetheBlochEnergyThreshold();
 
 private:
 
   // hide assignment operator
-  G4ionIonisation & operator=(const G4ionIonisation &right);
-  G4ionIonisation(const G4ionIonisation&);
+  G4ionIonisation & operator=(const G4ionIonisation &right) = delete;
+  G4ionIonisation(const G4ionIonisation&) = delete;
 
   G4EmCorrections*            corr;
 

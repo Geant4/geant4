@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc 93001 2015-09-28 15:00:44Z gcosmo $
+// $Id: G4DNARuddIonisationExtendedModel.cc 96060 2016-03-11 12:58:04Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Modified by Z. Francis, S. Incerti to handle HZE 
@@ -41,6 +41,7 @@
 #include "G4IonTable.hh"
 #include "G4DNARuddAngle.hh"
 #include "G4DeltaAngle.hh"
+#include "G4Exp.hh"
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -763,6 +764,10 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+        //SI: additional protection if tcs interpolation method is modified
+        if (k<bindingEnergy) return;
+        //
+
         G4int Z = 8;
 
         if(fAtomDeexcitation) {
@@ -1001,7 +1006,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
 
     G4double v = std::sqrt(v2);
     G4double wc = 4.*v2 - 2.*v - (Ry/(4.*Bj_energy));
-    G4double rejection_term = 1.+std::exp(alphaConst*(proposed_ws - wc) / v);
+    G4double rejection_term = 1.+G4Exp(alphaConst*(proposed_ws - wc) / v);
     rejection_term = (1./rejection_term)*CorrectionFactor(particleDefinition,k,ionizationLevelIndex) * Gj[j];
     //* (S/Bj_energy) ; Not needed anymore
 
@@ -1019,7 +1024,7 @@ G4double G4DNARuddIonisationExtendedModel::RejectionFunction(G4ParticleDefinitio
         G4double Z = particleDefinition->GetAtomicNumber();
 
         G4double x = 100.*std::sqrt(beta2)/std::pow(Z,(2./3.));
-        G4double Zeffion = Z*(1.-std::exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
+        G4double Zeffion = Z*(1.-G4Exp(-1.316*x+0.112*x*x-0.0650*x*x*x));
         rejection_term*=Zeffion*Zeffion;
     }
 
@@ -1209,7 +1214,7 @@ G4double G4DNARuddIonisationExtendedModel::S_1s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value = 1. - std::exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
+    G4double value = 1. - G4Exp(-2 * r) * ( ( 2. * r + 2. ) * r + 1. );
 
     return value;
 }
@@ -1225,7 +1230,7 @@ G4double G4DNARuddIonisationExtendedModel::S_2s(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (8)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
     return value;
 
@@ -1242,7 +1247,7 @@ G4double G4DNARuddIonisationExtendedModel::S_2p(G4double t,
     // Dingfelder, in Chattanooga 2005 proceedings, formula (9)
 
     G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-    G4double value =  1. - std::exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
+    G4double value =  1. - G4Exp(-2 * r) * (((( 2./3. * r + 4./3.) * r + 2.) * r + 2.) * r  + 1.);
 
     return value;
 }
@@ -1277,7 +1282,7 @@ G4double G4DNARuddIonisationExtendedModel::CorrectionFactor(G4ParticleDefinition
     {
         G4double value = (std::log10(k/eV)-4.2)/0.5;
         // The following values are provided by M. Dingfelder (priv. comm)
-        return((0.6/(1+std::exp(value))) + 0.9);
+        return((0.6/(1+G4Exp(value))) + 0.9);
     }
     else
     {

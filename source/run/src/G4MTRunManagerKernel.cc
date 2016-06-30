@@ -42,7 +42,7 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0109",FatalException,msg);
 #endif
     G4AutoLock l(&workerRMMutex);
     if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;

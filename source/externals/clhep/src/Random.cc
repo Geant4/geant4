@@ -24,6 +24,7 @@
 #include "CLHEP/Random/StaticRandomStates.h"
 #include "CLHEP/Utility/memory.h"
 #include "CLHEP/Utility/thread_local.h"
+#include "CLHEP/Utility/use_atomic.h"
 
 // -----------------------------
 // Static members initialisation
@@ -33,43 +34,141 @@
 
 namespace CLHEP {
 
+  namespace {
 
-namespace {
+    struct defaults {
 
-struct defaults {
-  defaults( HepRandom & g, HepJamesRandom & e )
-    : theGenerator( &g, do_nothing_deleter() )
-    , theEngine   ( &e, do_nothing_deleter() )
-  { }
+      defaults()
+        : theGenerator( &theDefaultGenerator, do_nothing_deleter() )
+        , theEngine   ( &theDefaultEngine, do_nothing_deleter() )
+      { }
 
-  void  resetEngine( HepRandomEngine * newEngine ) {
-    theEngine.reset( newEngine );
-  }
+      defaults(defaults const& other) = delete;
+      defaults const& operator=(defaults const&) = delete;
 
-  void  resetEngine( HepRandomEngine & newEngine ) {
-    theEngine.reset( &newEngine, do_nothing_deleter() );
-  }
+      void  resetEngine( HepRandomEngine * newEngine ) {
+        theEngine.reset( newEngine );
+      }
 
-  bool  ensureInitialized()  {
-    assert( theGenerator.get() != 0  && theEngine.get() != 0 );
-    return true;
-  }
+      void  resetEngine( HepRandomEngine & newEngine ) {
+        theEngine.reset( &newEngine, do_nothing_deleter() );
+      }
 
-  ~defaults()
-  { }
+      bool  ensureInitialized()  {
+        assert( theGenerator.get() != 0  && theEngine.get() != 0 );
+        return true;
+      }
 
-  std::shared_ptr<HepRandom      >  theGenerator;
-  std::shared_ptr<HepRandomEngine>  theEngine;
-};  // defaults
+      ~defaults()
+      { }
 
-  defaults &  theDefaults()  {
-    static  CLHEP_THREAD_LOCAL HepRandom       theDefaultGenerator;
-    static  CLHEP_THREAD_LOCAL HepJamesRandom  theDefaultEngine;
-    static  CLHEP_THREAD_LOCAL defaults theDefaults(theDefaultGenerator, theDefaultEngine);
-    return theDefaults;
-  }
+    private:
 
-}  // namespace
+      HepRandom theDefaultGenerator;
+      HepJamesRandom  theDefaultEngine;
+
+    public:
+
+      std::shared_ptr<HepRandom      >  theGenerator;
+      std::shared_ptr<HepRandomEngine>  theEngine;
+    };  // defaults
+
+
+#ifdef CLHEP_USE_ATOMIC
+
+    // The ThreadSafeDefaultCache is used only by the function named theDefaults.
+    // It is a singly linked list that is intended to hold one object of
+    // type "defaults" per thread.
+
+    class ThreadSafeDefaultsCache {
+    public:
+
+      ThreadSafeDefaultsCache();
+
+      // The destructor deletes the objects of type "defaults"
+      ~ThreadSafeDefaultsCache();
+
+      // Creates new objects and adds them to the linked list in a thread safe manner.
+      defaults* createNewDefaults();
+
+      // Note that there are no other functions. No erasing or moving or other accessors.
+
+    private:
+
+      class DefaultsNode {
+      public:
+        DefaultsNode(DefaultsNode* iNext);
+        DefaultsNode const* next() const { return next_; }
+        void setNext(DefaultsNode* v) { next_ = v; }
+        defaults* addressOfDefaults() { return &defaults_; }
+      private:
+        DefaultsNode* next_;
+        defaults defaults_;
+      };
+
+      // points to first node in the linked list
+      std::atomic<DefaultsNode*> front_;
+    };
+
+    ThreadSafeDefaultsCache::ThreadSafeDefaultsCache() :
+      front_(nullptr) {
+    }
+
+    defaults* ThreadSafeDefaultsCache::createNewDefaults() {
+      DefaultsNode* expected = front_.load();
+      DefaultsNode* newNode = new DefaultsNode(expected);
+      while (!front_.compare_exchange_strong(expected, newNode)) {
+        // another thread changed front_ before us so try again
+        newNode->setNext(expected);
+      }
+      return newNode->addressOfDefaults();
+    }
+
+    ThreadSafeDefaultsCache::DefaultsNode::DefaultsNode(DefaultsNode* iNext) :
+      next_(iNext),
+      defaults_() {
+    }
+
+    ThreadSafeDefaultsCache::~ThreadSafeDefaultsCache() {
+      DefaultsNode const* node = front_.load();
+      while (node) {
+        DefaultsNode const* next = node->next();
+        delete node;
+        node = next;
+      }
+    }
+
+    defaults &  theDefaults()  {
+
+      // We need to have different engines on different threads because
+      // the engines are not thread safe. One cannot generate random numbers
+      // using the same engine on different threads simultaneously.
+      // Originally we had the defaults object itself as a thread local,
+      // but that was failing because on Mac OSX there is not full
+      // support for thread locals yet.  Objects containing std::shared_ptr
+      // in thread local storage were causing failures. So now we create
+      // a container of them that is a function static (not thread local)
+      // and the thread local contains only a pointer to an object in the
+      // container.
+      static ThreadSafeDefaultsCache defaultsForAllThreads;
+
+      // A pointer for each thread to defaults object built for each thread.
+      static CLHEP_THREAD_LOCAL defaults* theDefaults = defaultsForAllThreads.createNewDefaults();
+
+      return *theDefaults;
+    }
+#else
+
+    // This version is used with old compilers not supporting atomics.
+    // In that case, the code should not be executed in more than one thread.
+    defaults &  theDefaults()  {
+      static defaults theDefaults;
+      return theDefaults;
+    }
+
+#endif
+
+  }  // namespace
 
 //---------------------------- HepRandom ---------------------------------
 
@@ -91,7 +190,7 @@ HepRandom::HepRandom(HepRandomEngine * algorithm)
   theDefaults().resetEngine( algorithm );
 }
 
-HepRandom::~HepRandom() 
+HepRandom::~HepRandom()
 { }
 
 double HepRandom::flat()
@@ -112,7 +211,7 @@ std::string HepRandom::name() const {return "HepRandom";}
 HepRandomEngine & HepRandom::engine() {
   std::cerr << "HepRandom::engine() called -- there is no assigned engine!\n";
   return *theDefaults().theEngine.get();
-} 
+}
 
 std::ostream & operator<< (std::ostream & os, const HepRandom & dist) {
   return dist.put(os);
@@ -176,12 +275,12 @@ void HepRandom::setTheEngine (HepRandomEngine* theNewEngine)
 void HepRandom::saveEngineStatus( const char filename[] )
 {
   theDefaults().theEngine->saveStatus( filename );
-}  
+}
 
 void HepRandom::restoreEngineStatus( const char filename[] )
 {
   theDefaults().theEngine->restoreStatus( filename );
-}  
+}
 
 std::ostream& HepRandom::saveFullState ( std::ostream & os ) {
   os << *getTheEngine();
@@ -204,7 +303,7 @@ std::istream& HepRandom::restoreStaticRandomStates ( std::istream & is ) {
 void HepRandom::showEngineStatus()
 {
   theDefaults().theEngine->showStatus();
-}  
+}
 
 int HepRandom::createInstance()
 {

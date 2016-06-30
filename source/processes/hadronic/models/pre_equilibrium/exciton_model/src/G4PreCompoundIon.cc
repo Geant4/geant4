@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundIon.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -43,14 +43,12 @@
 #include "G4PreCompoundIon.hh"
 #include "G4PhysicalConstants.hh"
 
-const G4double sixoverpi2 = 6.0/CLHEP::pi2;
-
 G4PreCompoundIon::
 G4PreCompoundIon(const G4ParticleDefinition* part,
 		 G4VCoulombBarrier* aCoulombBarrier)
   : G4PreCompoundFragment(part,aCoulombBarrier)
 {
-  G4double r0 = theParameters->Getr0();
+  G4double r0 = theParameters->GetR0();
   fact = 0.75*CLHEP::millibarn/(CLHEP::pi*r0*r0*r0);
 }
 
@@ -70,6 +68,7 @@ ProbabilityDistributionFunction(G4double eKin,
   G4int A = GetA();
   G4int N = P + H;
 
+  static const G4double sixoverpi2 = 6.0/CLHEP::pi2;
   G4double g0 = sixoverpi2*theFragA*theParameters->GetLevelDensity();
   G4double g1 = sixoverpi2*theResA*theParameters->GetLevelDensity();
 

@@ -54,7 +54,7 @@ G4OpenInventorXtExtended::G4OpenInventorXtExtended ()
 
 void G4OpenInventorXtExtended::Initialize()
 {
-   G4cout << "DEBUG G4OpenInventorXtExtended::Initialize() CALLED" << G4endl;
+  // G4cout << "DEBUG G4OpenInventorXtExtended::Initialize() CALLED" << G4endl;
   if(fInited) return; //Done
 
   SetInteractorManager (G4Xt::getInstance ());

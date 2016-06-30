@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88709 2015-03-06 15:33:12Z gcosmo $
+# $Id: sources.cmake 96634 2016-04-27 09:31:49Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -65,7 +65,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4Li5FermiFragment.cc
         G4StableFermiFragment.cc
         G4UnstableFermiFragment.cc
-        G4VFermiBreakUp.cc
         G4VFermiFragment.cc
     GRANULAR_DEPENDENCIES
         G4baryons

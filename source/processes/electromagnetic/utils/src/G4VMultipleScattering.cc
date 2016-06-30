@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc 94120 2015-11-06 09:18:03Z gcosmo $
+// $Id: G4VMultipleScattering.cc 97742 2016-06-08 09:24:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -88,13 +88,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-static const G4double minSafety = 1.20*CLHEP::nm;
-static const G4double geomMin   = 0.05*CLHEP::nm;
-static const G4double minDisplacement2 = geomMin*geomMin;
-
-G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
-                                        G4ProcessType):
-  G4VContinuousDiscreteProcess("msc", fElectromagnetic),
+G4VMultipleScattering::G4VMultipleScattering(const G4String& name, G4ProcessType)
+  : G4VContinuousDiscreteProcess("msc", fElectromagnetic),
   numberOfModels(0),
   firstParticle(nullptr),
   currParticle(nullptr),
@@ -115,6 +110,9 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
 
   physStepLimit = gPathLength = tPathLength = 0.0;
   fIonisation = nullptr;
+
+  geomMin   = 0.05*CLHEP::nm;
+  minDisplacement2 = geomMin*geomMin;
 
   pParticleChange = &fParticleChange;
   safetyHelper = nullptr;
@@ -254,6 +252,13 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
     // initialisation of models
     numberOfModels = modelManager->NumberOfModels();
+    /*
+        G4cout << "### G4VMultipleScattering::PreparePhysicsTable() for "
+        << GetProcessName()
+        << " and particle " << part.GetParticleName()
+        << " Nmod= " << numberOfModels << "  " << this
+        << G4endl;
+    */
     for(G4int i=0; i<numberOfModels; ++i) {
       G4VMscModel* msc = static_cast<G4VMscModel*>(modelManager->GetModel(i));
       msc->SetIonisation(0, firstParticle);
@@ -313,8 +318,8 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
       // initialisation of models
       G4bool printing = true;
       numberOfModels = modelManager->NumberOfModels();
-      /*
-        G4cout << "### G4VMultipleScattering::SlaveBuildPhysicsTable() for "
+      /*      
+        G4cout << "### G4VMultipleScattering::BuildPhysicsTable() for "
         << GetProcessName()
         << " and particle " << num
         << " Nmod= " << numberOfModels << "  " << this
@@ -465,8 +470,8 @@ G4double
 G4VMultipleScattering::PostStepGetPhysicalInteractionLength(
               const G4Track&, G4double, G4ForceCondition* condition)
 {
-  *condition = Forced;
-  //*condition = NotForced;
+  //*condition = Forced;
+  *condition = NotForced;
   return DBL_MAX;
 }
 
@@ -495,7 +500,6 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 
     tPathLength = currentModel->ComputeTrueStepLength(geomLength);
   
-    // protection against wrong t->g->t conversion
     /*    
     if(currParticle->GetPDGMass() > 0.9*GeV)    
     G4cout << "G4VMsc::AlongStepDoIt: GeomLength= " 
@@ -505,10 +509,14 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
            << " dr= " << range - tPathLength
            << " ekin= " << track.GetKineticEnergy() << G4endl;
     */
+    // protection against wrong t->g->t conversion
     tPathLength = std::min(tPathLength, physStepLimit);
 
     // do not sample scattering at the last or at a small step
     if(tPathLength < range && tPathLength > geomMin) {
+
+      static const G4double minSafety = 1.20*CLHEP::nm;
+      static const G4double sFact = 0.99;
 
       G4ThreeVector displacement = currentModel->SampleScattering(
         step.GetPostStepPoint()->GetMomentumDirection(),minSafety);
@@ -519,21 +527,17 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       if(r2 > minDisplacement2) {
 
         fPositionChanged = true;
-        const G4double sFact = 0.99;
+	G4double dispR = std::sqrt(r2);
         G4double postSafety = 
-          sFact*(step.GetPreStepPoint()->GetSafety() - geomLength); 
-        //G4cout<<"    R= "<<sqrt(r2)<<" postSafety= "<<postSafety<<G4endl;
+	  sFact*safetyHelper->ComputeSafety(fNewPosition, dispR); 
+        //G4cout<<"    R= "<< dispR<<" postSafety= "<<postSafety<<G4endl;
 
         // far away from geometry boundary
-        if(postSafety > 0.0 && r2 <= postSafety*postSafety) {
+        if(postSafety > 0.0 && dispR <= postSafety) {
           fNewPosition += displacement;
 
 	  //near the boundary
         } else {
-          G4double dispR = std::sqrt(r2);
-          postSafety = 
-            sFact*safetyHelper->ComputeSafety(fNewPosition, dispR); 
-
           // displaced point is definitely within the volume
           //G4cout<<"    R= "<<dispR<<" postSafety= "<<postSafety<<G4endl;
           if(dispR < postSafety) {
@@ -618,12 +622,14 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
             fPositionChanged = false;
           }
         }
-        //safetyHelper->ReLocateWithinVolume(fNewPosition);
+	if(fPositionChanged) { 
+	  safetyHelper->ReLocateWithinVolume(fNewPosition);
+	  fParticleChange.ProposePosition(fNewPosition); 
+	}
       }
     }
   }
   fParticleChange.ProposeTrueStepLength(tPathLength);
-  //fParticleChange.ProposePosition(fNewPosition);
   return &fParticleChange;
 }
 
@@ -633,12 +639,6 @@ G4VParticleChange*
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
 {
   fParticleChange.Initialize(track);
- 
-  if(fPositionChanged) { 
-    safetyHelper->ReLocateWithinVolume(fNewPosition);
-    fParticleChange.ProposePosition(fNewPosition); 
-  }
- 
   return &fParticleChange;
 }
 

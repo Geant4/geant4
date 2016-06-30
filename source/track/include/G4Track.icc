@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc 83388 2014-08-21 14:29:33Z gcosmo $
+// $Id: G4Track.icc 94983 2016-01-13 11:02:33Z gcosmo $
 //
 //-----------------------------------------------------------------
 // Definitions of inline functions
@@ -310,7 +310,7 @@ extern G4TRACK_DLL G4ThreadLocal G4Allocator<G4Track> *aTrackAllocator;
 // user information
    inline G4VUserTrackInformation* G4Track::GetUserInformation() const
    { return fpUserInformation; }
-   inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue)
+   inline void G4Track::SetUserInformation(G4VUserTrackInformation* aValue) const
    { fpUserInformation = aValue; }
 
    inline const G4Step* G4Track::GetStep() const

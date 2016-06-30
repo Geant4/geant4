@@ -97,6 +97,7 @@ void G4SPBaryon::
 SampleQuarkAndDiquark(G4int & quark, G4int & diQuark) const
 {
 	typedef std::vector<G4SPPartonInfo *>::const_iterator iter;
+
 	G4double random = G4UniformRand();
 	G4double sum = 0;
 	iter i;
@@ -153,9 +154,9 @@ FindDiquark(G4int quark, G4int & diQuark) const
 G4SPBaryon::
 G4SPBaryon(G4Proton * aProton)
 {
-	theDefinition = aProton;
-	thePartonInfo.push_back(new G4SPPartonInfo(2203, 1, 1./3.)); // uu_1, d
-	thePartonInfo.push_back(new G4SPPartonInfo(2103, 2, 1./6.)); // ud_1, u
+	theDefinition = aProton;                              // Uzhi
+	thePartonInfo.push_back(new G4SPPartonInfo(2203, 1, 1./3./2.)); // uu_1, d
+	thePartonInfo.push_back(new G4SPPartonInfo(2103, 2, 1./6.*2.)); // ud_1, u
 	thePartonInfo.push_back(new G4SPPartonInfo(2101, 2, 1./2.)); // ud_0, u
 }
 
@@ -171,10 +172,10 @@ G4SPBaryon(G4AntiProton * aAntiProton)
 G4SPBaryon::
 G4SPBaryon(G4Neutron * aNeutron)
 {
-	theDefinition = aNeutron;
-	thePartonInfo.push_back(new G4SPPartonInfo(2103, 1, 1./6.)); // ud_1, d
-	thePartonInfo.push_back(new G4SPPartonInfo(2101, 1, 1./2.)); // ud_0, d
-	thePartonInfo.push_back(new G4SPPartonInfo(1103, 2, 1./3.)); // dd_1, u
+	theDefinition = aNeutron;                                // Uzhi
+	thePartonInfo.push_back(new G4SPPartonInfo(2103, 1, 1./6.*2.)); // ud_1, d
+	thePartonInfo.push_back(new G4SPPartonInfo(2101, 1, 1./2.   )); // ud_0, d
+	thePartonInfo.push_back(new G4SPPartonInfo(1103, 2, 1./3./2 )); // dd_1, u
 }
 
 G4SPBaryon::
@@ -348,7 +349,8 @@ G4SPBaryon(G4ParticleDefinition * aDefinition)
 			G4ParticleTable::GetParticleTable()->FindParticle(2114))// D0
 	{
 		thePartonInfo.push_back(new G4SPPartonInfo(2103, 1, 2./3.));
-		thePartonInfo.push_back(new G4SPPartonInfo(2103, 2, 1./3.));
+// Uzhi		thePartonInfo.push_back(new G4SPPartonInfo(2103, 2, 1./3.));
+		thePartonInfo.push_back(new G4SPPartonInfo(1103, 2, 1./3.));  // Uzhi 14.05.2014
 	}
 	else if(theDefinition ==
 			G4ParticleTable::GetParticleTable()->FindParticle(-2114))// anti D0

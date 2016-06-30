@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88190 2015-02-02 17:24:54Z gcosmo $
+# $Id: sources.cmake 95593 2016-02-16 10:48:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -85,12 +85,14 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4TrajectoryDrawByCharge.hh
         G4TrajectoryDrawByOriginVolume.hh
         G4TrajectoryDrawByParticleID.hh
+        G4TrajectoryDrawByTouchedVolume.hh
         G4TrajectoryDrawerUtils.hh
         G4TrajectoryFilterFactories.hh
         G4TrajectoryGenericDrawer.hh
         G4TrajectoryModelFactories.hh
         G4TrajectoryOriginVolumeFilter.hh
         G4TrajectoryParticleFilter.hh
+        G4TrajectoryTouchedVolumeFilter.hh
         G4VAttValueFilter.hh
         G4VModel.hh
         G4VModel.icc
@@ -125,12 +127,14 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4TrajectoryDrawByCharge.cc
         G4TrajectoryDrawByOriginVolume.cc
         G4TrajectoryDrawByParticleID.cc
+        G4TrajectoryDrawByTouchedVolume.cc
         G4TrajectoryDrawerUtils.cc
         G4TrajectoryFilterFactories.cc
         G4TrajectoryGenericDrawer.cc
         G4TrajectoryModelFactories.cc
         G4TrajectoryOriginVolumeFilter.cc
         G4TrajectoryParticleFilter.cc
+        G4TrajectoryTouchedVolumeFilter.cc
         G4VModel.cc
         G4VTrajectoryModel.cc
         G4VisTrajContext.cc

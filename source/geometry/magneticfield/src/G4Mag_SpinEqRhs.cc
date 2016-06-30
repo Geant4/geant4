@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.cc 78728 2014-01-20 12:57:20Z gcosmo $
+// $Id: G4Mag_SpinEqRhs.cc 95822 2016-02-26 08:04:51Z gcosmo $
 //
 // This is the standard right-hand side for equation of motion.
 // This version of the right-hand side includes the three components
@@ -69,7 +69,7 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,
    G4double muB = 0.5*eplus*hbar_Planck/(mass/c_squared);
 
    G4double g_BMT;
-   if ( spin != 0. ) g_BMT = (magMoment/muB)/spin;
+   if ( spin != 0. ) g_BMT = (std::abs(magMoment)/muB)/spin;
    else g_BMT = 2.;
 
    anomaly = (g_BMT - 2.)/2.;

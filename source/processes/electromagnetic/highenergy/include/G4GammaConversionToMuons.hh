@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh 83660 2014-09-08 09:57:12Z gcosmo $
+// $Id: G4GammaConversionToMuons.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -63,15 +63,16 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4GammaConversionToMuons(const G4String& processName ="GammaToMuPair",
-                                    G4ProcessType type = fElectromagnetic);
+     explicit G4GammaConversionToMuons(
+                        const G4String& processName ="GammaToMuPair",
+                        G4ProcessType type = fElectromagnetic);
 
     ~G4GammaConversionToMuons();
 
-     G4bool IsApplicable(const G4ParticleDefinition&);
+     G4bool IsApplicable(const G4ParticleDefinition&) override;
        // true for Gamma only.
 
-     void BuildPhysicsTable(const G4ParticleDefinition&);
+     void BuildPhysicsTable(const G4ParticleDefinition&) override;
        // here dummy, the total cross section parametrization is used rather
        // than tables,  just calling PrintInfoDefinition
 
@@ -88,7 +89,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
-                              G4ForceCondition* condition);
+                              G4ForceCondition* condition) override;
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
@@ -96,12 +97,12 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
        // It is invoked by the ProcessManager of the Particle.
 
      G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicGamma,
-                                           G4Element*         anElement);
+                                           G4Element* anElement);
        // It returns the total CrossSectionPerAtom of the process,
        // for the current DynamicGamma (energy), in anElement.
 
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-                                    const G4Step& aStep);
+                                    const G4Step& aStep) override;
        // It computes the final state of the process (at end of step),
        // returned as a ParticleChange object.
        // This function overloads a virtual function of the base class.
@@ -109,7 +110,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 
      virtual
      G4double ComputeCrossSectionPerAtom(G4double GammaEnergy,
-                                         G4double AtomicZ,G4double AtomicA);
+                                   G4double AtomicZ,G4double AtomicA);
 
      G4double ComputeMeanFreePath (G4double GammaEnergy,
                                    G4Material* aMaterial);
@@ -122,8 +123,9 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
   private:
 
      // hide assignment operator as private
-     G4GammaConversionToMuons& operator=(const G4GammaConversionToMuons &right);
-     G4GammaConversionToMuons(const G4GammaConversionToMuons& );
+     G4GammaConversionToMuons& 
+      operator=(const G4GammaConversionToMuons &right) = delete;
+     G4GammaConversionToMuons(const G4GammaConversionToMuons& ) = delete;
 
   private:
 

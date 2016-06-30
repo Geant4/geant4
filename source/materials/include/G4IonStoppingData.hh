@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonStoppingData.hh 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4IonStoppingData.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // ===========================================================================
 // GEANT4 class header file
@@ -152,6 +152,10 @@ class G4IonStoppingData : public G4VIonDEDXTable {
    void DumpMap();
 
  private:
+
+   G4IonStoppingData(G4IonStoppingData&) = delete;
+   const G4IonStoppingData & operator=(const G4IonStoppingData&) = delete;
+
    // Subdirectory of G4LEDATA
    G4String subDir;
 

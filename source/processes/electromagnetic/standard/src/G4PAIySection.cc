@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIySection.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4PAIySection.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // 
 // G4PAIySection.cc -- class implementation file
@@ -55,6 +55,8 @@
 #include "G4Material.hh"
 #include "G4MaterialCutsCouple.hh"
 #include "G4SandiaTable.hh"
+#include "G4Exp.hh"
+#include "G4Log.hh"
 
 using namespace std;
 
@@ -65,11 +67,6 @@ const G4double G4PAIySection::fError = 0.005; // error in lin-log approximation
 
 const G4int G4PAIySection::fMaxSplineSize = 500;  // Max size of output spline
                                                   // arrays
-
-static const G4double betaBohr = fine_structure_const;
-static const G4double cofBetaBohr = 4.0;
-static const G4double betaBohr2   = fine_structure_const*fine_structure_const;
-static const G4double betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
 
 //////////////////////////////////////////////////////////////////
 //
@@ -82,7 +79,12 @@ G4PAIySection::G4PAIySection()
   fDensity = fElectronDensity = fNormalizationCof = fLowEnergyCof = 0.0;
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
-    
+
+  betaBohr = fine_structure_const;
+  G4double cofBetaBohr = 4.0;
+  G4double betaBohr2   = fine_structure_const*fine_structure_const;
+  betaBohr4   = betaBohr2*betaBohr2*cofBetaBohr;
+  
   fSplineEnergy          = G4DataVector(fMaxSplineSize,0.0);
   fRePartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
   fImPartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
@@ -97,7 +99,7 @@ G4PAIySection::G4PAIySection()
 
   for( G4int i = 0; i < 500; ++i ) 
   {
-    for( G4int j = 0; j < 112; ++j )  fPAItable[i][j] = 0.0; 
+    for( G4int j = 0; j < 112; ++j ) { fPAItable[i][j] = 0.0; }
   }
 }
 
@@ -362,8 +364,9 @@ void G4PAIySection::NormShift(G4double betaGammaSq)
     }
     // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
   } 
-  fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2;
-  fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber];
+  static const G4double nfactor =
+    2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2;
+  fNormalizationCof = nfactor*fElectronDensity/fIntegralTerm[fSplineNumber];
 
   // G4cout<<"fNormalizationCof = "<<fNormalizationCof<<G4endl;
 
@@ -458,7 +461,8 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
 
       G4double x = 2*(fDifPAIySection[i+1] - y)/(fDifPAIySection[i+1] + y);
 
-      G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])/(fSplineEnergy[i+1]+fSplineEnergy[i]);
+      G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])
+	/(fSplineEnergy[i+1]+fSplineEnergy[i]);
 
       if( x < 0 ) 
       {
@@ -486,10 +490,11 @@ G4double G4PAIySection::RutherfordIntegral( G4int k,
                                               G4double x2   )
 {
    G4double  c1, c2, c3;
-   // G4cout<<"RI: x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;   
-   c1 = (x2 - x1)/x1/x2;
-   c2 = (x2 - x1)*(x2 + x1)/x1/x1/x2/x2;
-   c3 = (x2 - x1)*(x1*x1 + x1*x2 + x2*x2)/x1/x1/x1/x2/x2/x2;
+   // G4cout<<"RI: x1 = "<<x1<<"; "<<"x2 = "<<x2<<G4endl;
+   G4double x12 = x1*x2;   
+   c1 = (x2 - x1)/x12;
+   c2 = (x2 - x1)*(x2 + x1)/(x12*x12);
+   c3 = (x2 - x1)*(x1*x1 + x1*x2 + x2*x2)/(x12*x12*x12);
    // G4cout<<" RI: c1 = "<<c1<<"; "<<"c2 = "<<c2<<"; "<<"c3 = "<<c3<<G4endl;   
    
    return  fA1[k]*log(x2/x1) + fA2[k]*c1 + fA3[k]*c2/2 + fA4[k]*c3/3;
@@ -552,9 +557,10 @@ G4double G4PAIySection::RePartDielectricConst(G4double enb)
       x03 = x02*x0;
       x04 = x03*x0;
       x05 = x04*x0;
-      c1  = (x2 - x1)/x1/x2;
-      c2  = (x2 - x1)*(x2 +x1)/x1/x1/x2/x2;
-      c3  = (x2 -x1)*(x1*x1 + x1*x2 + x2*x2)/x1/x1/x1/x2/x2/x2;
+      G4double x12 = x1*x2;
+      c1  = (x2 - x1)/x12;
+      c2  = (x2 - x1)*(x2 +x1)/(x12*x12);
+      c3  = (x2 -x1)*(x1*x1 + x1*x2 + x2*x2)/(x12*x12*x12);
 
       result -= (fA1[i]/x02 + fA3[i]/x04)*xln1;
       result -= (fA2[i]/x02 + fA4[i]/x04)*c1;
@@ -622,7 +628,7 @@ G4double G4PAIySection::DifPAIySection( G4int              i ,
         fImPartDielectricConst[i]*fImPartDielectricConst[i];
 
    result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i]);
-   if(result < 1.0e-8) result = 1.0e-8;
+   result = std::max(result, 1.0e-8);
    result *= fine_structure_const/be2/pi;
    // low energy correction
 
@@ -721,7 +727,7 @@ G4double G4PAIySection::PAIdNdxPlasmon( G4int    i ,
 
    dNdxP = ( resonance + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i] );
 
-   if( dNdxP < 1.0e-8 ) dNdxP = 1.0e-8;
+   dNdxP = std::max(dNdxP, 1.0e-8);
 
    dNdxP *= fine_structure_const/be2/pi;
    dNdxP *= (1-exp(-be4/betaBohr4));
@@ -1150,10 +1156,8 @@ G4double G4PAIySection::SumOverBordCerenkov( G4int      i ,
    a  = log10(yy1/y0)/log10(x1/x0);
   
    //   G4cout << "a= " << a << G4endl;
-   if(a < 20.) b = y0/pow(x0,a);
-
    if(a > 20.0) b = 0.0;
-   else         b = y0/pow(x0,a);  // pow(10.,b0);
+   else         b = y0/pow(x0,a); 
 
    //G4cout << "b= " << b << G4endl;
 
@@ -1388,10 +1392,8 @@ const G4double G4PAIySection::fLorentzFactor[112] =     // fNumberOfGammas+1
 // The number of gamma for creation of  spline (near ion-min , G ~ 4 )
 //
 
-const
-G4int G4PAIySection::fRefGammaNumber = 29; 
+const G4int G4PAIySection::fRefGammaNumber = 29; 
 
-   
 //   
 // end of G4PAIySection implementation file 
 //

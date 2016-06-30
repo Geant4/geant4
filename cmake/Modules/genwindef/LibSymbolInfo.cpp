@@ -15,7 +15,7 @@
 using namespace std;
 
 
-#define MakePtr( cast, ptr, addValue ) (cast)( (DWORD)(ptr) + (DWORD)(addValue))
+#define MakePtr( cast, ptr, addValue ) (cast)( (DWORD_PTR)(ptr) + (DWORD_PTR)(addValue))
 
 /////////////////////////////////////////////////////////////////////////////
 // CLibSymbolInfo

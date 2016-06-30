@@ -14,7 +14,10 @@ RE01
 
  This example demonstrates how to connect the information between
 primary particles and hits. It also utilizes some user-information 
-classes.
+classes. Readout geometry is implemented as a parallel world.
+Decay of "Unknown" particle (that may represent whatever a particle 
+Geant4 does not know how to deal with) is taken care as "pre-assigned
+decay products".
 
 RE02
 ----

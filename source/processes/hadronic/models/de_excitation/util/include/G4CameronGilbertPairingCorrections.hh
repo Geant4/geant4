@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CameronGilbertPairingCorrections.hh 85841 2014-11-05 15:35:06Z gcosmo $
+// $Id: G4CameronGilbertPairingCorrections.hh 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -41,9 +41,7 @@ class G4CameronGilbertPairingCorrections
 {
 public:
 
-  G4CameronGilbertPairingCorrections();
-
-  ~G4CameronGilbertPairingCorrections();
+  explicit G4CameronGilbertPairingCorrections();
 
   inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
@@ -59,6 +57,9 @@ public:
 	  NTableMin = 11, NTableMax = 150 };
 
 private:
+
+  G4CameronGilbertPairingCorrections(const G4CameronGilbertPairingCorrections & right) = delete;
+  const G4CameronGilbertPairingCorrections & operator=(const G4CameronGilbertPairingCorrections & right) = delete;
 
   static G4double PairingZTable[ZTableSize];
   static G4double PairingNTable[NTableSize];

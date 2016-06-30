@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StableFermiFragment.hh 85607 2014-10-31 11:21:24Z gcosmo $
+// $Id: G4StableFermiFragment.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -40,19 +40,18 @@ class G4StableFermiFragment : public G4VFermiFragment
 {
 public:
 
-  G4StableFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
+  explicit G4StableFermiFragment(G4int anA, G4int aZ, G4int Pol, G4double ExE);
 
   virtual ~G4StableFermiFragment();
 
-  virtual void FillFragment(G4FragmentVector*, const G4LorentzVector & aMomentum) const;
+  virtual void FillFragment(G4FragmentVector*, const G4LorentzVector & aMomentum) const final;
   
 private:
 
-  G4StableFermiFragment(const G4StableFermiFragment &right);
-  
-  const G4StableFermiFragment & operator=(const G4StableFermiFragment &right);
-  G4bool operator==(const G4StableFermiFragment &right) const;
-  G4bool operator!=(const G4StableFermiFragment &right) const;
+  G4StableFermiFragment(const G4StableFermiFragment &right) = delete;
+  const G4StableFermiFragment & operator=(const G4StableFermiFragment &right) = delete;
+  G4bool operator==(const G4StableFermiFragment &right) const = delete;
+  G4bool operator!=(const G4StableFermiFragment &right) const = delete;
 
 };
 

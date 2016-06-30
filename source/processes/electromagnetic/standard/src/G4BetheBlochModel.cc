@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4BetheBlochModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -78,10 +78,7 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p,
     particle(nullptr),
     tlimit(DBL_MAX),
     twoln10(2.0*G4Log(10.0)),
-    bg2lim(0.0169),
-    taulim(8.4146e-3),
-    isIon(false),
-    isInitialised(false)
+    isIon(false)
 {
   fParticleChange = nullptr;
   theElectron = G4Electron::Electron();
@@ -116,8 +113,7 @@ void G4BetheBlochModel::Initialise(const G4ParticleDefinition* p,
   // always false before the run
   SetDeexcitationFlag(false);
 
-  if(!isInitialised) {
-    isInitialised = true;
+  if(nullptr == fParticleChange) {
     fParticleChange = GetParticleChangeForLoss();
     if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
       SetAngularDistribution(new G4DeltaAngle());
@@ -206,12 +202,6 @@ G4BetheBlochModel::ComputeCrossSectionPerElectron(const G4ParticleDefinition* p,
     // +term for spin=1/2 particle
     if( 0.0 < spin ) { cross += 0.5*(maxEnergy - cutEnergy)/energy2; }
 
-    // High order correction different for hadrons and ions
-    // nevetheless they are applied to reduce high energy transfers
-    //    if(!isIon) 
-    //cross += corr->FiniteSizeCorrectionXS(p,currentMaterial,
-    //                                          kineticEnergy,cutEnergy);
-
     cross *= twopi_mc2_rcl2*chargeSquare/beta2;
   }
   
@@ -295,7 +285,7 @@ G4double G4BetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
     dedx += corr->HighOrderCorrections(p,material,kineticEnergy,cutEnergy);
   }
 
-  if (dedx < 0.0) { dedx = 0.0; }
+  dedx = std::max(dedx, 0.0); 
 
   //G4cout << "E(MeV)= " << kineticEnergy/MeV << " dedx= " << dedx 
   //         << "  " << material->GetName() << G4endl;

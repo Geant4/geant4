@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 96669 2016-04-29 12:03:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -50,6 +50,12 @@
 #include "G4AttHolder.hh"
 
 #include <typeinfo>
+
+G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
+
+G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
+G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
+G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 G4OpenGLStoredSceneHandler::PO::PO():
   fDisplayListId(0),
@@ -626,10 +632,5 @@ void G4OpenGLStoredSceneHandler::ClearTransientStore ()
   }
 }
 
-G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
-
-G4int  G4OpenGLStoredSceneHandler::fDisplayListId = 0;
-G4bool G4OpenGLStoredSceneHandler::fMemoryForDisplayLists = true;
-G4int  G4OpenGLStoredSceneHandler::fDisplayListLimit = 50000;
 
 #endif

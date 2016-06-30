@@ -1,4 +1,4 @@
-$Id: History 94458 2015-11-18 14:36:25Z gcosmo $
+$Id: History 97882 2016-06-16 16:11:41Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,37 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16-06-16 V.Ivanchenko (rdecay01-V10-02-07)
+- PhysicsList::ConstructProcess - return back initialisation of 
+    atomic de-excitation
+
+15-06-16 dwright (rdecay01-V10-02-06)
+- initialize atomic deexcitation in PhysicsList::ConstructProcess
+  instead of in G4RadioactiveDecay to avoid overwriting initializtion in EM
+
+09-06-16 mma (rdecay01-V10-02-05)
+- world size = 2 cm
+- gun direction : along x
+
+16-05-16 mma (rdecay01-V10-02-04)
+- complete printing of activity of each nuclide.
+
+11-05-16 mma (rdecay01-V10-02-03)
+- survey activity of each nuclide in a given time window.
+  Classes modified : Run, TrackingAction, TrackingMessenger. Added timWindow.mac
+
+31-01-16 mma (rdecay01-V10-02-02)
+- Run::EndOfRun() : improve printout
+
+08-12-15 dwright (rdecay01-V10-02-01)
+- PhysicsList : SetLevelTolerance (1*eV) : needed to fix crash in system testing 
+  There appears to already be a level Ni60[1332.510] stored somewhere instead of
+  Ni60[1332.514].  Setting the tolerance to 1 eV gets the right level.
+
+06-12-15 mma (rdecay01-V10-02-00)
+- PhysicsList : SetLevelTolerance (10*eV)
+- update references : it1.mac it2.mac
 	 
 18-11-15 mma  (rdecay01-V10-01-06)
 - PhysicsList : add LevelTolerance (100*eV),  HalfLife(0.1*ps)

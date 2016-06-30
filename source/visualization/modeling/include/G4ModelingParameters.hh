@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 81056 2014-05-20 09:02:16Z gcosmo $
+// $Id: G4ModelingParameters.hh 95224 2016-02-01 09:14:18Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -102,11 +102,17 @@ public: // With description
        VisAttributesSignifier signifier,
        const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
     const G4VisAttributes& GetVisAttributes() const
-      {return fVisAtts;}
+    {return fVisAtts;}
     VisAttributesSignifier GetVisAttributesSignifier() const
-      {return fSignifier;}
+    {return fSignifier;}
     const PVNameCopyNoPath& GetPVNameCopyNoPath() const
-      {return fPVNameCopyNoPath;}
+    {return fPVNameCopyNoPath;}
+    void SetVisAttributes(const G4VisAttributes& visAtts)
+    {fVisAtts = visAtts;}
+    void SetVisAttributesSignifier(VisAttributesSignifier signifier)
+    {fSignifier = signifier;}
+    void SetPVNameCopyNoPath(const PVNameCopyNoPath& PVNameCopyNoPath)
+    {fPVNameCopyNoPath = PVNameCopyNoPath;}
     G4bool operator!=(const VisAttributesModifier&) const;
     G4bool operator==(const VisAttributesModifier& rhs) const
       {return !operator!=(rhs);}

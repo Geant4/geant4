@@ -66,7 +66,7 @@ The wvalue.in macro allows a full control of the simulation.
 
 ---->4. PHYSICS
 
-You can select Geant4-DNA physics in wvalue.in.
+You can select Geant4-DNA physics constructor in wvalue.in.
 
 A tracking cut can be applied if requested.
 

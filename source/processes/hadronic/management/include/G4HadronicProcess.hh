@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 90237 2015-05-21 09:04:11Z gcosmo $
+// $Id: G4HadronicProcess.hh 97172 2016-05-27 12:37:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,13 +84,13 @@ public:
   // get cross section per element
   G4double GetElementCrossSection(const G4DynamicParticle * part, 
 				  const G4Element * elm, 
-				  const G4Material* mat = 0);
+				  const G4Material* mat = nullptr);
 
   // obsolete method to get cross section per element
   inline
   G4double GetMicroscopicCrossSection(const G4DynamicParticle * part, 
 				      const G4Element * elm, 
-				      const G4Material* mat = 0)
+				      const G4Material* mat = nullptr)
   { return GetElementCrossSection(part, elm, mat); }
 
   // generic PostStepDoIt recommended for all derived classes
@@ -149,6 +149,10 @@ public:
 
   void BiasCrossSectionByFactor(G4double aScale);
 
+  // Integral option 
+  inline void SetIntegral(G4bool val)
+  { useIntegralXS = val; }
+
   // Energy-momentum non-conservation limits and reporting
   inline void SetEpReportLevel(G4int level)
   { epReportLevel = level; }
@@ -203,9 +207,6 @@ private:
   // Set E/p conservation check levels from environment variables
   void GetEnergyMomentumCheckEnvvars();
 
-  // The Nist manager builds or finds a simple material from the Z of an element
-  G4Material* InitialiseMaterial(G4int Z);
-
 protected:
 
   G4HadProjectile thePro;
@@ -227,6 +228,10 @@ private:
   G4Nucleus targetNucleus;
 
   bool G4HadronicProcess_debug_flag;
+
+  bool useIntegralXS;
+
+  G4int nMatWarn;
 
   // Energy-momentum checking
   std::pair<G4double, G4double> epCheckLevels;

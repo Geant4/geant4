@@ -440,6 +440,7 @@ vector<G4GIDI_Product> *G4GIDI_target::getFinalState( int nIndices, int *indices
                 (*products)[i].px = productData->px_vx;
                 (*products)[i].py = productData->py_vy;
                 (*products)[i].pz = productData->pz_vz;
+	        (*products)[i].birthTimeSec = productData->birthTimeSec;
             }
         }
     }

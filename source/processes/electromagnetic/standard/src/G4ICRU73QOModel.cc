@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4ICRU73QOModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@ using namespace std;
 
 G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
-    particle(0),
+    particle(nullptr),
     isInitialised(false)
 {
   mass = charge = chargeSquare = massRate = ratio = 0.0;
@@ -91,8 +91,8 @@ G4ICRU73QOModel::G4ICRU73QOModel(const G4ParticleDefinition* p, const G4String& 
         indexZ[ZElementAvailable[i]] = i;
       }
     }
-  fParticleChange = 0;
-  denEffData = 0;
+  fParticleChange = nullptr;
+  denEffData = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -225,8 +225,8 @@ G4double G4ICRU73QOModel::DEDX(const G4Material* material,
   for (G4int i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
-      eloss   += DEDXPerElement(G4lrint(element->GetZ()), kineticEnergy)
-                                 * theAtomicNumDensityVector[i] * G4int(element->GetZ());
+      eloss   += DEDXPerElement(element->GetZasInt(), kineticEnergy)
+	* theAtomicNumDensityVector[i] * element->GetZ();
     }      
   return eloss;
 }
@@ -291,7 +291,8 @@ G4double G4ICRU73QOModel::GetOscillatorEnergy(G4int Z,
     * G4AtomicShells::GetNumberOfElectrons(Z,nbOfTheShell)  
     * PlasmaEnergy2 / (Z*Z) ; 
 
-  G4double ionTerm = G4Exp(0.5) * 
+  static const G4double exphalf = G4Exp(0.5);
+  G4double ionTerm = exphalf * 
     (G4AtomicShells::GetBindingEnergy(Z,nbOfTheShell)) ;
   G4double ionTerm2 = ionTerm*ionTerm ;
    
@@ -459,17 +460,20 @@ G4double G4ICRU73QOModel::MaxSecondaryEnergy(const G4ParticleDefinition* pd,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4int G4ICRU73QOModel::ZElementAvailable[NQOELEM] = {1,2,4,6,7,8,10,13,14,-18,
-                                                  22,26,28,29,32,36,42,47,
-                                                  50,54,73,74,78,79,82,92};
+const G4int G4ICRU73QOModel::ZElementAvailable[NQOELEM] = 
+  {1,2,4,6,7,8,10,13,14,-18,
+   22,26,28,29,32,36,42,47,
+   50,54,73,74,78,79,82,92};
 
-const G4int G4ICRU73QOModel::nbofShellsForElement[NQOELEM] = {1,1,2,3,3,3,3,4,5,4,
-                                                         5,5,5,5,6,4,6,6,
-                                                         7,6,6,8,7,7,9,9};
+const G4int G4ICRU73QOModel::nbofShellsForElement[NQOELEM] = 
+  {1,1,2,3,3,3,3,4,5,4,
+   5,5,5,5,6,4,6,6,
+   7,6,6,8,7,7,9,9};
 
-const G4int G4ICRU73QOModel::startElemIndex[NQOELEM] = {0,1,2,4,7,10,13,16,20,25,
-                                                  29,34,39,44,49,55,59,65,
-                                                  71,78,84,90,98,105,112,121};
+const G4int G4ICRU73QOModel::startElemIndex[NQOELEM] = 
+  {0,1,2,4,7,10,13,16,20,25,
+   29,34,39,44,49,55,59,65,
+   71,78,84,90,98,105,112,121};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

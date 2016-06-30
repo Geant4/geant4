@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExecutive.icc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4VisExecutive.icc 96765 2016-05-04 13:28:37Z gcosmo $
 //
 // 
 // John Allison 24th January 1998.
@@ -197,6 +197,10 @@ G4VisExecutive::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OPENGLQT
   ogliwin32->AddNickname("OGLIQt_FALLBACK");
   oglswin32->AddNickname("OGLSQt_FALLBACK");
+#else
+  ogliwin32->AddNickname("OGLI");
+  oglswin32->AddNickname("OGL");
+  oglswin32->AddNickname("OGLS");
 #endif
 #endif
 
@@ -235,16 +239,18 @@ G4VisExecutive::RegisterModelFactories()
 {
    // Trajectory draw models
    RegisterModelFactory(new G4TrajectoryGenericDrawerFactory());       
+   RegisterModelFactory(new G4TrajectoryDrawByAttributeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByChargeFactory());
+   RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());
    RegisterModelFactory(new G4TrajectoryDrawByParticleIDFactory());
-   RegisterModelFactory(new G4TrajectoryDrawByOriginVolumeFactory());  
-   RegisterModelFactory(new G4TrajectoryDrawByAttributeFactory());  
+   RegisterModelFactory(new G4TrajectoryDrawByTouchedVolumeFactory());
 
    // Trajectory filter models
-   RegisterModelFactory(new G4TrajectoryChargeFilterFactory());
-   RegisterModelFactory(new G4TrajectoryParticleFilterFactory());
-   RegisterModelFactory(new G4TrajectoryOriginVolumeFilterFactory());
    RegisterModelFactory(new G4TrajectoryAttributeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryChargeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryOriginVolumeFilterFactory());
+   RegisterModelFactory(new G4TrajectoryParticleFilterFactory());
+   RegisterModelFactory(new G4TrajectoryTouchedVolumeFilterFactory());
 
    // Hit filter models
    RegisterModelFactory(new G4HitAttributeFilterFactory());

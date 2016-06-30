@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 88763 2015-03-09 12:26:23Z gcosmo $
+// $Id: G4PhysicalVolumeModel.cc 96733 2016-05-02 11:52:48Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -927,7 +927,8 @@ std::ostream& operator<<
        << ':' << node.GetCopyNo()
        << '[' << node.GetNonCulledDepth() << ']'
        << ':' << node.GetTransform();
-    if (!node.GetDrawn()) os << "  Not "; os << "drawn";
+    if (!node.GetDrawn()) os << "  Not ";
+    os << "drawn";
   } else {
     os << "Null node";
   }

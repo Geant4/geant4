@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 88349 2015-02-16 08:47:16Z gcosmo $
+// $Id: G4ParallelWorldProcess.cc 95193 2016-01-29 08:23:25Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -60,9 +60,11 @@ G4int G4ParallelWorldProcess::GetHypNavigatorID()
 
 G4ParallelWorldProcess::
 G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
-:G4VProcess(processName,theType), fGhostNavigator(0), fNavigatorID(-1),
- fFieldTrack('0'),layeredMaterialFlag(false)
+:G4VProcess(processName,theType),fGhostWorld(nullptr),fGhostNavigator(nullptr),
+ fNavigatorID(-1),fFieldTrack('0'),fGhostSafety(0.),fOnBoundary(false),
+ layeredMaterialFlag(false)
 {
+  SetProcessSubType(491);
   if(!fpHyperStep) fpHyperStep = new G4Step();
   iParallelWorld = ++nParallelWorlds;
 
@@ -77,10 +79,6 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fPathFinder = G4PathFinder::GetInstance();
 
   fGhostWorldName = "** NotDefined **";
-  fGhostWorld = 0;
-  fGhostSafety = 0.;
-  fOnBoundary = false;
-
   G4ParallelWorldProcessStore::GetInstance()->SetParallelWorld(this,processName);
 
   if (verboseLevel>0)

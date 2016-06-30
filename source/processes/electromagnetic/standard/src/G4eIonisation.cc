@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4eIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,7 +89,6 @@ G4eIonisation::G4eIonisation(const G4String& name)
     isElectron(true),
     isInitialised(false)
 {
-  //  SetStepFunction(0.2, 1*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(theElectron);
 }

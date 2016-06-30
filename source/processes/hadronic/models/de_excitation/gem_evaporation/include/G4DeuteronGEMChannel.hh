@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DeuteronGEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4DeuteronGEMChannel.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
@@ -35,39 +35,26 @@
 #define G4DeuteronGEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4DeuteronGEMCoulombBarrier.hh"
 #include "G4DeuteronGEMProbability.hh"
 
 class G4DeuteronGEMChannel : public G4GEMChannel
 {
 public:
   // only available constructor
-  G4DeuteronGEMChannel() : G4GEMChannel(2,1,"deuteron",
-                                        &theEvaporationProbability,
-                                        &theCoulombBarrier)
-        {
-            theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-            
-        }
+  explicit G4DeuteronGEMChannel() 
+    : G4GEMChannel(2,1,"d",&theEvaporationProbability) {}
+
   // destructor
   ~G4DeuteronGEMChannel() {};
 
 private:
 
-    const G4DeuteronGEMChannel & operator=(const G4DeuteronGEMChannel & right);  
-    
-    G4DeuteronGEMChannel(const G4DeuteronGEMChannel & right);
-    
-public:
-    G4bool operator==(const G4DeuteronGEMChannel & right) const;
-    G4bool operator!=(const G4DeuteronGEMChannel & right) const;
-    
-private:
-     // JMQ 190709
-//     G4DeuteronCoulombBarrier theCoulombBarrier;    
-    G4DeuteronGEMCoulombBarrier theCoulombBarrier;
+  const G4DeuteronGEMChannel & operator=(const G4DeuteronGEMChannel & right) = delete;  
+  G4DeuteronGEMChannel(const G4DeuteronGEMChannel & right) = delete;
+  G4bool operator==(const G4DeuteronGEMChannel & right) const = delete;
+  G4bool operator!=(const G4DeuteronGEMChannel & right) const = delete;
 	
-    G4DeuteronGEMProbability theEvaporationProbability;
+  G4DeuteronGEMProbability theEvaporationProbability;
     
 };
 #endif

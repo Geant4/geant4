@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/TestEm10.cc
-/// \brief Main program of the electromagnetic/TestEm10 example
+/// \file electromagnetic/TestEm10/Test.cc
+/// \brief Main program of the electromagnetic/Test example
 //
 //
-// $Id: TestEm10.cc 73033 2013-08-15 09:24:45Z gcosmo $
+// $Id: TestEm10.cc 94932 2015-12-18 09:21:29Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,15 +37,12 @@
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
-#include "Em10DetectorConstruction.hh"
-// #include "ALICEDetectorConstruction.hh"
-#include "Em10PhysicsList.hh"
-#include "Em10PrimaryGeneratorAction.hh"
-#include "Em10RunAction.hh"
-#include "Em10EventAction.hh"
-#include "Em10SteppingAction.hh"
-#include "Em10SteppingVerbose.hh"
-#include "Em10TrackingAction.hh"
+#include "DetectorConstruction.hh"
+#include "PhysicsList.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "StackingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -63,43 +60,32 @@ int main(int argc,char** argv)
   //choose the Random engine
 
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-  
-  //my Verbose output class
-
-  G4VSteppingVerbose::SetInstance(new Em10SteppingVerbose);
-    
+      
   // Construct the default run manager
 
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
 
-  Em10DetectorConstruction* detector;
-  detector = new Em10DetectorConstruction;
+  DetectorConstruction* detector;
+  detector = new DetectorConstruction;
 
   // ALICEDetectorConstruction* detector;
   // detector = new ALICEDetectorConstruction;
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Em10PhysicsList(detector));
+  runManager->SetUserInitialization(new PhysicsList(detector));
  
   // set user action classes
-  runManager->SetUserAction(new Em10PrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new PrimaryGeneratorAction());
 
-  Em10RunAction* runAction = new Em10RunAction;
-
+  RunAction* runAction = new RunAction;
   runManager->SetUserAction(runAction);
 
-  Em10EventAction* eventAction = new Em10EventAction(runAction);
-
+  EventAction* eventAction = new EventAction(runAction);
   runManager->SetUserAction(eventAction);
 
-  Em10SteppingAction* steppingAction = new Em10SteppingAction(eventAction,
-                                                              runAction);
-  runManager->SetUserAction(steppingAction);
-
-
-  runManager->SetUserAction( new Em10TrackingAction );
+  runManager->SetUserAction( new StackingAction );
 
 
   G4UImanager* UI = G4UImanager::GetUIpointer();  

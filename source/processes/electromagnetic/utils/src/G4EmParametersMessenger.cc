@@ -44,7 +44,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4EmParametersMessenger.hh"
-
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -55,6 +54,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UImanager.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4NuclearFormfactorType.hh"
 #include "G4EmParameters.hh"
 
 #include <sstream>
@@ -96,7 +96,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   splCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rsCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
-  rsCmd->SetGuidance("Enable?disable use of cut in range as a final range");
+  rsCmd->SetGuidance("Enable/disable use of cut in range as a final range");
   rsCmd->SetParameterName("choice",true);
   rsCmd->SetDefaultValue(false);
   rsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -308,7 +308,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   msc1Cmd = new G4UIcmdWithAString("/process/msc/StepLimitMuHad",this);
   msc1Cmd->SetGuidance("Set msc step limitation type for muons/hadrons");
   msc1Cmd->SetParameterName("StepLim1",true);
-  msc1Cmd->SetCandidates("fMinimal fUseSafety fUseSafetyPlus fUseDistanceToBoundary");
+  msc1Cmd->SetCandidates("Minimal UseSafety UseSafetyPlus UseDistanceToBoundary");
   msc1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
@@ -328,6 +328,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   paiCmd->SetGuidance("  partName  : particle name (default - all)");
   paiCmd->SetGuidance("  regName   : G4Region name");
   paiCmd->SetGuidance("  paiType   : PAI, PAIphoton");
+  paiCmd->AvailableForStates(G4State_PreInit);
 
   G4UIparameter* part = new G4UIparameter("partName",'s',false);
   paiCmd->SetParameter(part);
@@ -347,6 +348,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   dnaCmd->SetGuidance("Activate DNA in the G4Region.");
   dnaCmd->SetGuidance("  regName   : G4Region name");
   dnaCmd->SetGuidance("  dnaType   : opt0, opt1, opt2");
+  dnaCmd->AvailableForStates(G4State_PreInit);
 
   G4UIparameter* regName = new G4UIparameter("regName",'s',false);
   dnaCmd->SetParameter(regName);
@@ -357,6 +359,149 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   dumpCmd = new G4UIcommand("/process/em/printParameters",this);
   dumpCmd->SetGuidance("Print all EM parameters.");
 
+  SubSecCmd = new G4UIcommand("/process/eLoss/subsec",this);
+  SubSecCmd->SetGuidance("Switch true/false the subcutoff generation per region.");
+  SubSecCmd->SetGuidance("  subSec   : true/false");
+  SubSecCmd->SetGuidance("  Region   : region name");
+  SubSecCmd->AvailableForStates(G4State_PreInit);
+
+  G4UIparameter* subSec = new G4UIparameter("subSec",'s',false);
+  SubSecCmd->SetParameter(subSec);
+
+  G4UIparameter* subSecReg = new G4UIparameter("Region",'s',false);
+  SubSecCmd->SetParameter(subSecReg);
+
+  StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
+  StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters for e+-.");
+  StepFuncCmd->SetGuidance("  dRoverR   : max Range variation per step");
+  StepFuncCmd->SetGuidance("  finalRange: range for final step");
+  StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  G4UIparameter* dRoverRPrm = new G4UIparameter("dRoverR",'d',false);
+  dRoverRPrm->SetParameterRange("dRoverR>0. && dRoverR<=1.");
+  StepFuncCmd->SetParameter(dRoverRPrm);
+
+  G4UIparameter* finalRangePrm = new G4UIparameter("finalRange",'d',false);
+  finalRangePrm->SetParameterRange("finalRange>0.");
+  StepFuncCmd->SetParameter(finalRangePrm);
+
+  G4UIparameter* unitPrm = new G4UIparameter("unit",'s',true);
+  unitPrm->SetDefaultValue("mm");
+  StepFuncCmd->SetParameter(unitPrm);
+
+  StepFuncCmd1 = new G4UIcommand("/process/eLoss/StepFunctionMuHad",this);
+  StepFuncCmd1->SetGuidance("Set the energy loss step limitation parameters for muon/hadron.");
+  StepFuncCmd1->SetGuidance("  dRoverR   : max Range variation per step");
+  StepFuncCmd1->SetGuidance("  finalRange: range for final step");
+  StepFuncCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  G4UIparameter* dRoverRPrm1 = new G4UIparameter("dRoverRMuHad",'d',false);
+  dRoverRPrm1->SetParameterRange("dRoverRMuHad>0. && dRoverRMuHad<=1.");
+  StepFuncCmd1->SetParameter(dRoverRPrm1);
+
+  G4UIparameter* finalRangePrm1 = new G4UIparameter("finalRangeMuHad",'d',false);
+  finalRangePrm1->SetParameterRange("finalRangeMuHad>0.");
+  StepFuncCmd1->SetParameter(finalRangePrm1);
+
+  G4UIparameter* unitPrm1 = new G4UIparameter("unit",'s',true);
+  unitPrm1->SetDefaultValue("mm");
+  StepFuncCmd1->SetParameter(unitPrm1);
+
+  IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
+  IntegCmd->SetGuidance("Switch true/false the integral option");
+  IntegCmd->SetParameterName("integ",true);
+  IntegCmd->SetDefaultValue(true);
+  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  deexCmd = new G4UIcommand("/process/em/deexcitation",this);
+  deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
+  deexCmd->SetGuidance("  regName   : G4Region name");
+  deexCmd->SetGuidance("  flagFluo  : Fluorescence");
+  deexCmd->SetGuidance("  flagAuger : Auger");
+  deexCmd->SetGuidance("  flagPIXE  : PIXE");
+  deexCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  G4UIparameter* regNameD = new G4UIparameter("regName",'s',false);
+  deexCmd->SetParameter(regNameD);
+
+  G4UIparameter* flagFluo = new G4UIparameter("flagFluo",'s',false);
+  deexCmd->SetParameter(flagFluo);
+
+  G4UIparameter* flagAuger = new G4UIparameter("flagAuger",'s',false);
+  deexCmd->SetParameter(flagAuger);
+
+  G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
+  deexCmd->SetParameter(flagPIXE);
+
+  bfCmd = new G4UIcommand("/process/em/setBiasingFactor",this);
+  bfCmd->SetGuidance("Set factor for the process cross section.");
+  bfCmd->SetGuidance("  procName   : process name");
+  bfCmd->SetGuidance("  procFact   : factor");
+  bfCmd->SetGuidance("  flagFact   : flag to change weight");
+  bfCmd->AvailableForStates(G4State_Idle,G4State_Idle);
+
+  G4UIparameter* procName = new G4UIparameter("procName",'s',false);
+  bfCmd->SetParameter(procName);
+
+  G4UIparameter* procFact = new G4UIparameter("procFact",'d',false);
+  bfCmd->SetParameter(procFact);
+
+  G4UIparameter* flagFact = new G4UIparameter("flagFact",'s',false);
+  bfCmd->SetParameter(flagFact);
+
+  fiCmd = new G4UIcommand("/process/em/setForcedInteraction",this);
+  fiCmd->SetGuidance("Set factor for the process cross section.");
+  fiCmd->SetGuidance("  procNam    : process name");
+  fiCmd->SetGuidance("  regNam     : region name");
+  fiCmd->SetGuidance("  tlength    : fixed target length");
+  fiCmd->SetGuidance("  unitT      : length unit");
+  fiCmd->SetGuidance("  tflag      : flag to change weight");
+  fiCmd->AvailableForStates(G4State_Idle,G4State_Idle);
+
+  G4UIparameter* procNam = new G4UIparameter("procNam",'s',false);
+  fiCmd->SetParameter(procNam);
+
+  G4UIparameter* regNam = new G4UIparameter("regNam",'s',false);
+  fiCmd->SetParameter(regNam);
+
+  G4UIparameter* tlength = new G4UIparameter("tlength",'d',false);
+  fiCmd->SetParameter(tlength);
+
+  G4UIparameter* unitT = new G4UIparameter("unitT",'s',true);
+  fiCmd->SetParameter(unitT);
+
+  G4UIparameter* flagT = new G4UIparameter("tflag",'s',true);
+  fiCmd->SetParameter(flagT);
+
+  bsCmd = new G4UIcommand("/process/em/setSecBiasing",this);
+  bsCmd->SetGuidance("Set bremsstrahlung or delta-e- splitting/Russian roullette per region.");
+  bsCmd->SetGuidance("  bProcNam : process name");
+  bsCmd->SetGuidance("  bRegNam  : region name");
+  bsCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
+  bsCmd->SetGuidance("  bEnergy  : max energy of a secondary for this biasing method");
+  bsCmd->SetGuidance("  bUnit    : energy unit");
+  bsCmd->AvailableForStates(G4State_Idle,G4State_Idle);
+
+  G4UIparameter* bProcNam = new G4UIparameter("bProcNam",'s',false);
+  bsCmd->SetParameter(bProcNam);
+
+  G4UIparameter* bRegNam = new G4UIparameter("bRegNam",'s',false);
+  bsCmd->SetParameter(bRegNam);
+
+  G4UIparameter* bFactor = new G4UIparameter("bFactor",'d',false);
+  bsCmd->SetParameter(bFactor);
+
+  G4UIparameter* bEnergy = new G4UIparameter("bEnergy",'d',false);
+  bsCmd->SetParameter(bEnergy);
+
+  G4UIparameter* bUnit = new G4UIparameter("bUnit",'s',true);
+  bsCmd->SetParameter(bUnit);
+
+  nffCmd = new G4UIcmdWithAString("/process/em/setNuclearFormFactor",this);
+  nffCmd->SetGuidance("Define typy of nuclear form-factor");
+  nffCmd->SetParameterName("NucFF",true);
+  nffCmd->SetCandidates("None Exponential Gaussian Flat");
+  nffCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -418,6 +563,16 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete meCmd;
   delete dnaCmd;
   delete dumpCmd;
+
+  delete SubSecCmd;
+  delete StepFuncCmd;
+  delete StepFuncCmd1;
+  delete IntegCmd;
+  delete deexCmd;
+  delete bfCmd;
+  delete fiCmd;
+  delete bsCmd;
+  delete nffCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -576,6 +731,72 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->AddDNA(s1, s2);
   } else if (command == dumpCmd) {
     theParameters->Dump();
+  } else if (command == SubSecCmd) {
+    G4String s1, s2;
+    std::istringstream is(newValue);
+    is >> s1 >> s2;
+    G4bool yes = false;
+    if(s1 == "true") { yes = true; }
+    theParameters->SetSubCutoff(yes,s2);
+  } else if (command == StepFuncCmd || command == StepFuncCmd1) {
+    G4double v1,v2;
+    G4String unt;
+    std::istringstream is(newValue);
+    is >> v1 >> v2 >> unt;
+    v2 *= G4UIcommand::ValueOf(unt);
+    if(command == StepFuncCmd) {
+      theParameters->SetStepFunction(v1,v2);
+    } else {
+      theParameters->SetStepFunctionMuHad(v1,v2);
+    }
+    physicsModified = true;
+  } else if (command == IntegCmd) {
+    theParameters->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+    physicsModified = true;
+  } else if (command == deexCmd) {
+    G4String s1 (""), s2(""), s3(""), s4("");
+    G4bool b2(false), b3(false), b4(false);
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> s3 >> s4;
+    if(s2 == "true") { b2 = true; }
+    if(s3 == "true") { b3 = true; }
+    if(s4 == "true") { b4 = true; }
+    theParameters->SetDeexActiveRegion(s1,b2,b3,b4);
+    physicsModified = true;
+  } else if (command == bfCmd) {
+    G4double v1(1.0);
+    G4String s0(""),s1("");
+    std::istringstream is(newValue);
+    is >> s0 >> v1 >> s1;
+    G4bool yes = false;
+    if(s1 == "true") { yes = true; }
+    theParameters->SetProcessBiasingFactor(s0,v1,yes);
+    physicsModified = true;
+  } else if (command == fiCmd) {
+    G4double v1(0.0);
+    G4String s1(""),s2(""),s3(""),unt("mm");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> v1 >> unt >> s3;
+    G4bool yes = false;
+    if(s3 == "true") { yes = true; }
+    v1 *= G4UIcommand::ValueOf(unt);
+    theParameters->ActivateForcedInteraction(s1,s2,v1,yes);
+    physicsModified = true;
+  } else if (command == bsCmd) {
+    G4double fb(1.0),en(1.e+30);
+    G4String s1(""),s2(""),unt("MeV");
+    std::istringstream is(newValue);
+    is >> s1 >> s2 >> fb >> en >> unt;
+    en *= G4UIcommand::ValueOf(unt);    
+    theParameters->ActivateSecondaryBiasing(s1,s2,fb,en);
+    physicsModified = true;
+  } else if (command == nffCmd) {
+    G4NuclearFormfactorType x = fNoneNF;
+    if(newValue == "Exponential") { x = fExponentialNF; }
+    else if(newValue == "Gaussian") { x = fGaussianNF; }
+    else if(newValue == "Flat") { x = fFlatNF; }
+    theParameters->SetNuclearFormfactorType(x);
+    physicsModified = true;
   }
   if(physicsModified) {
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xs:schema>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!DOCTYPE xs:schema []>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="gdml_core.xsd"/>
   <xs:include schemaLocation="gdml_extensions.xsd"/>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->

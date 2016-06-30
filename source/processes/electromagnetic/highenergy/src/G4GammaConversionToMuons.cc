@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc 91869 2015-08-07 15:21:02Z gcosmo $
+// $Id: G4GammaConversionToMuons.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -57,7 +57,7 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
   : G4VDiscreteProcess (processName, type),
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
     Rc(elm_coupling/Mmuon),
-    LowestEnergyLimit (4*Mmuon), // 4*Mmuon
+    LowestEnergyLimit (4.*Mmuon), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
@@ -156,7 +156,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { 
-  if(Egam <= LowestEnergyLimit) return 0 ; // below threshold return 0
+  if(Egam <= LowestEnergyLimit) return 0.0 ; // below threshold return 0
 
   G4int Z = G4lrint(ZZ);
   G4double CrossSection = 0.0;

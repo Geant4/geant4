@@ -1,4 +1,4 @@
-$Id: History 94333 2015-11-12 09:57:47Z gcosmo $
+$Id: History 96400 2016-04-12 07:26:33Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-04-16 mma  (testem5-V10-02-03)
+- PhysListEmStandard: use G4EmParameters
+- remove geant3 subdirectory
 
+24-02-16 mma (testem5-V10-02-02)
+- EventAction: correct filling of histo 1
+
+11-01-16 V.Ivant (testem5-V10-02-01)
+- PhysicsList - added hadron elastic physics
+
+10-12-15 V.Ivant (testem5-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
+    
 12-11-15 V.Ivant (testem5-V10-01-06)
 - TrackingAction - more accurate fix which does not change results
 

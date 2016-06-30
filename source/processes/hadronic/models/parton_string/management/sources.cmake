@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 96953 2016-05-18 12:22:54Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -49,7 +49,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_man
         G4EventGenerator.hh
         G4InteractionCode.hh
         G4InteractionContent.hh
-        G4PomeronCrossSection.hh
         G4StringModel.hh
         G4VParticipants.hh
         G4VPartonStringModel.hh
@@ -59,7 +58,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_string_man
     SOURCES
         G4EventGenerator.cc
         G4InteractionContent.cc
-        G4PomeronCrossSection.cc
         G4StringModel.cc
         G4VParticipants.cc
         G4VPartonStringModel.cc

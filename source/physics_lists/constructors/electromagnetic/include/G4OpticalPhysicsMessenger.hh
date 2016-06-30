@@ -69,6 +69,7 @@ class G4UIcommand;
 // - /process/optical/defaults/scintillation/setByParticleType val
 // - /process/optical/defaults/scintillation/setFiniteRiseTime val
 // - /process/optical/defaults/wls/setTimeProfile val
+// - /process/optical/defaults/boundary/setInvokeSD flag
 
 class G4OpticalPhysicsMessenger: public G4UImessenger
 {
@@ -120,6 +121,9 @@ private:
   /// setScintillationByParticleType command
   G4UIcmdWithABool*      fSetScintillationByParticleTypeCmd;
 
+  /// setScintillationTrackInfo command
+  G4UIcmdWithABool*      fSetScintillationTrackInfoCmd;
+
 //  /// setOpticalSurfaceModel command
 //  G4UIcmdWithAString*    fSetOpticalSurfaceModelCmd;
 
@@ -131,6 +135,9 @@ private:
 
   /// setFiniteRiseTime command
   G4UIcmdWithABool*      fSetFiniteRiseTimeCmd;
+
+  /// setInvokeSD command
+  G4UIcmdWithABool*      fSetInvokeSDCmd;
 
 };
 

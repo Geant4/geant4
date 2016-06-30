@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 February 2016 Alberto Ribon     (hadr-util-V10-02-00)
+--------------------------------------------------------
+- G4Nucleus : increased the max number of loops allowed in the method
+    GetBiasedThermalNucleus.
+
 02 November 2015 Alberto Ribon     (hadr-util-V10-01-02)
 --------------------------------------------------------
 - G4Nucleus : checking of 'while' loops.

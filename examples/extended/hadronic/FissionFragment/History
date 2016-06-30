@@ -15,7 +15,7 @@ track of all tags.
      ----------------------------------------------------------
 
 26-10-15    T. Koi		(exExtHadFissFrag-V10-01-01)
-- Fix Waring message in prvious tag
+- Fix compiler waring message in previous tag
 
 25-10-15    T. Koi		(exExtHadFissFrag-V10-01-00)
 - Limit number of worker threads of one

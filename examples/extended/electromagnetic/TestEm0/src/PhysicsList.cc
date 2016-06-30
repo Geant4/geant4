@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 93512 2015-10-23 13:45:07Z gcosmo $
+// $Id: PhysicsList.cc 96419 2016-04-13 10:23:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,8 +178,6 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // Transportation
@@ -192,25 +190,9 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  //emOptions.SetMinEnergy(100*eV);        //default    
-  //emOptions.SetMaxEnergy(100*TeV);        //default  
-  //emOptions.SetDEDXBinning(12*20);        //default=12*7  
-  //emOptions.SetLambdaBinning(12*20);        //default=12*7
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetBuildCSDARange(true);
 
-  emOptions.SetBuildCSDARange(true);     
-  emOptions.SetMaxEnergyForCSDARange(10*GeV);
-  //emOptions.SetDEDXBinningForCSDARange(12*20);
-  
-  //emOptions.SetSplineFlag(true);        //default
-     
-  emOptions.SetVerbose(0);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -280,14 +262,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 void PhysicsList::SetCuts()
 { 
-  // fixe lower limit for cut
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
+ // fixe lower limit for cut
+ G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
 
-  // call base class method to set cuts which default value can be
-  // modified via /run/setCut/* commands
-  G4VUserPhysicsList::SetCuts();
+ // call base class method to set cuts which default value can be
+ // modified via /run/setCut/* commands
+ G4VUserPhysicsList::SetCuts();
 
-  DumpCutValuesTable();
+ DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

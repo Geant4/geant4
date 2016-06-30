@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id: G4VVisCommand.hh 95006 2016-01-15 08:26:18Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -73,6 +73,9 @@ protected:
 
   // Data members.
   static G4VisManager* fpVisManager;
+
+  // Error management
+  static G4int fErrorCode;
 
   // Current quantities for use in appropriate commands
   static G4Colour                   fCurrentColour;

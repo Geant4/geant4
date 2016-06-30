@@ -85,7 +85,7 @@ public:
         G4ExceptionDescription msg;
         msg << "No seed number "<<seedId<<"("<<seeds.size()<<" available)\n"
             << " Original seed number "<<sdId<<" filled so far "<<offset;
-        G4Exception("G4RNGHelper::GetSeed","Run0035", FatalException,msg);
+        G4Exception("G4RNGHelper::GetSeed","Run0115", FatalException,msg);
         return T();
     }
     

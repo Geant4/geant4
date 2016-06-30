@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh 93026 2015-09-30 16:07:07Z gcosmo $
+// $Id: G4VisManager.hh 97316 2016-06-01 12:12:58Z gcosmo $
 //
 // 
 
@@ -79,6 +79,11 @@
 
 #ifndef G4VISMANAGER_HH
 #define G4VISMANAGER_HH
+
+// Temporary definition until Xeon Phi can handle full C++11.
+#ifndef __MIC__
+#define G4VIS_USE_STD11
+#endif
 
 #include "G4VVisManager.hh"
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BsMesonZero.cc 83749 2014-09-12 12:14:59Z gcosmo $
+// $Id: G4BsMesonZero.cc 95951 2016-03-03 10:44:16Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -64,11 +64,11 @@ G4BsMesonZero* G4BsMesonZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     5.36677*GeV, 4.353e-10*MeV,          0.,
+                 name,     5.36679*GeV, 4.359e-10*MeV,          0.,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,         531,
-                false,     1.512e-3*ns,          NULL,
+                false,     1.510e-3*ns,          NULL,
                 false,       "Bs");
   }
   theInstance = reinterpret_cast<G4BsMesonZero*>(anInstance);

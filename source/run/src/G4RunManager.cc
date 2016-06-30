@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 90233 2015-05-21 08:56:28Z gcosmo $
+// $Id: G4RunManager.cc 95232 2016-02-01 14:31:22Z gcosmo $
 //
 // 
 
@@ -59,9 +59,9 @@
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParallelWorldProcessStore.hh"
-
 #include "G4ios.hh"
 #include <sstream>
+
 
 using namespace CLHEP;
 
@@ -139,7 +139,7 @@ G4RunManager::G4RunManager( RMType rmType )
   G4ExceptionDescription msg;
   msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
   msg<<" This type of RunManager can only be used in mult-threaded applications.";
-  G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msg);
+  G4Exception("G4RunManager::G4RunManager(G4bool)","Run0107",FatalException,msg);
 #endif
     
   if(fRunManager)
@@ -161,7 +161,7 @@ G4RunManager::G4RunManager( RMType rmType )
    default:
     G4ExceptionDescription msgx;
     msgx<<" This type of RunManager can only be used in mult-threaded applications.";
-    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msgx);
+    G4Exception("G4RunManager::G4RunManager(G4bool)","Run0108",FatalException,msgx);
     return;
   }
   runManagerType = rmType;
@@ -765,9 +765,9 @@ void G4RunManager::ConstructScoringWorlds()
           {
             pmanager->AddProcess(theParallelWorldProcess);
             if(theParallelWorldProcess->IsAtRestRequired(particle))
-            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900); }
             pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
           }
         }
       }
@@ -860,10 +860,14 @@ void G4RunManager::SetUserInitialization(G4VUserActionInitialization* userInit)
 }
 
 void G4RunManager::SetUserAction(G4UserRunAction* userAction)
-{ userRunAction = userAction; }
+{
+  userRunAction = userAction;
+}
 
 void G4RunManager::SetUserAction(G4VUserPrimaryGeneratorAction* userAction)
-{ userPrimaryGeneratorAction = userAction; }
+{
+  userPrimaryGeneratorAction = userAction;
+}
 
 void G4RunManager::SetUserAction(G4UserEventAction* userAction)
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc 89893 2015-05-04 07:29:17Z gcosmo $
+// $Id: G4PAIModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,13 +77,13 @@ using namespace std;
 G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
     fVerbose(0),
-    fModelData(0),
-    fParticle(0)
+    fModelData(nullptr),
+    fParticle(nullptr)
 {  
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
 
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   if(p) { SetParticle(p); }
   else  { SetParticle(fElectron); }

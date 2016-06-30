@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh 84717 2014-10-20 07:39:47Z gcosmo $
+// $Id: G4OpBoundaryProcess.hh 96023 2016-03-08 08:25:42Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -175,6 +175,9 @@ public:
         G4OpBoundaryProcessStatus GetStatus() const;
         // Returns the current status.
 
+        void SetInvokeSD(G4bool );
+        // Set flag for call to InvokeSD method.
+
 private:
 
 	G4bool G4BooleanRand(const G4double prob) const;
@@ -255,6 +258,8 @@ private:
 
         size_t idx, idy;
         G4Physics2DVector* DichroicVector;
+
+        G4bool fInvokeSD;
 };
 
 ////////////////////
@@ -280,6 +285,12 @@ inline
 G4OpBoundaryProcessStatus G4OpBoundaryProcess::GetStatus() const
 {
    return theStatus;
+}
+
+inline
+void G4OpBoundaryProcess::SetInvokeSD(G4bool flag)
+{
+  fInvokeSD = flag;
 }
 
 inline

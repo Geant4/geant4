@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc 92056 2015-08-14 13:33:43Z gcosmo $
+// $Id: G4Decay.cc 97800 2016-06-13 12:14:40Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -251,9 +251,30 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     decaychannel = decaytable->SelectADecayChannel(massParent);
     if ( decaychannel ==0) {
       // decay channel not found
-      G4Exception("G4Decay::DoIt", "DECAY003", FatalException,
-		  " can not determine decay channel ");
-    } else {
+	   G4ExceptionDescription ed;
+      ed << "Can not determine decay channel for " 
+		   << aParticleDef->GetParticleName() << G4endl 
+		   << "  mass of dynamic particle: " << massParent/GeV << " (GEV)" << G4endl
+			<< "  dacay table has " << decaytable->entries() << " entries" << G4endl;
+      G4double checkedmass=massParent;
+      if (massParent < 0.) {
+			checkedmass=aParticleDef->GetPDGMass();
+			ed << "Using PDG mass ("<<checkedmass/GeV << "(GeV)) in IsOKWithParentMass" << G4endl;	
+		}
+		for (G4int ic =0;ic <decaytable->entries();++ic) {
+		  G4VDecayChannel * dc= decaytable->GetDecayChannel(ic);
+   	  ed << ic << ": BR " << dc->GetBR() << ", IsOK? " 
+			  << dc->IsOKWithParentMass(checkedmass)
+			  << ", --> "; 
+		  G4int ndaughters=dc->GetNumberOfDaughters();
+		  for (G4int id=0;id<ndaughters;++id) {
+			  if (id>0) ed << " + ";   // seperator, except for first
+			  ed << dc->GetDaughterName(id);
+		  }
+		  ed << G4endl;
+		}
+      G4Exception("G4Decay::DoIt", "DECAY003", FatalException,ed);
+	 } else {
       // execute DecayIt() 
 #ifdef G4VERBOSE
       G4int temp = decaychannel->GetVerboseLevel();

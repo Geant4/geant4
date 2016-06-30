@@ -74,21 +74,20 @@ using namespace std;
 
 G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
-    cosThetaMin(1.0),
-    isInitialised(false)
+    cosThetaMin(1.0)
 {
   fNistManager = G4NistManager::Instance();
   theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
-  pCuts=0;
-  currentMaterial = 0;
-  currentElement  = 0;
-  currentCouple = 0;
+  pCuts=nullptr;
+  currentMaterial = nullptr;
+  currentElement  = nullptr;
+  currentCouple = nullptr;
 
-  lowEnergyLimit  = 0*eV;
+  lowEnergyLimit  = 0*keV;
   recoilThreshold = 0.*eV;
-  particle = 0;
+  particle = nullptr;
   mass=0;
   currentMaterialIndex = -1;
 
@@ -108,21 +107,35 @@ void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 						 const G4DataVector&  cuts)
 {
   SetupParticle(p);
-  currentCouple = 0;
+  currentCouple = nullptr;
   currentMaterialIndex = -1;
   //cosThetaMin = cos(PolarAngleLimit());
   Mottcross->Initialise(p,cosThetaMin);
  
   pCuts = &cuts; 
   //G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
-
-
-  if(!isInitialised) {
-    isInitialised = true;
+   
+  /*
+  G4cout << "!!! G4eSingleCoulombScatteringModel::Initialise for " 
+         << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
+         << "  cos(TetMax)= " << cosThetaMax <<G4endl;
+  G4cout << "cut= " << (*pCuts)[0] << "  cut1= " << (*pCuts)[1] << G4endl;
+  */
+  
+  if(!fParticleChange) {
     fParticleChange = GetParticleChangeForGamma();
+  }
+
+  if(IsMaster()) {
+    InitialiseElementSelectors(p,cuts);
   }
 }
 
+void G4eSingleCoulombScatteringModel::InitialiseLocal(const G4ParticleDefinition*,
+                                                G4VEmModel* masterModel)
+{
+  SetElementSelectors(masterModel->GetElementSelectors());
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
@@ -141,10 +154,10 @@ G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
 
   //Total Cross section
-  Mottcross->SetupKinematic(kinEnergy, Z);
+  Mottcross->SetupKinematic(kinEnergy, G4lrint(Z));
   cross = Mottcross->NuclearCrossSection();
 
-  //cout<< "....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
+  //cout<< "Compute Cross Section....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<" Z: "<<Z<<" kinEnergy: "<<kinEnergy<<endl;
   return cross;
 }
 
@@ -170,15 +183,16 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   currentElement = SelectRandomAtom(couple,particle,
 				    kinEnergy,cutEnergy,kinEnergy);
 
-  G4double Z  = currentElement->GetZ();
-  G4int iz    = G4int(Z);
+  G4int iz = currentElement->GetZasInt();
   G4int ia = SelectIsotopeNumber(currentElement);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 
   //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
-
-  G4double cross= Mottcross->GetTotalCross();
+  
+  Mottcross->SetupKinematic(kinEnergy, iz);
+  G4double cross= Mottcross->NuclearCrossSection(); //MODIFY TO LOAD TABLE
   if(cross == 0.0) { return; }
+  //cout<< "Energy: "<<kinEnergy/MeV<<" Z: "<<Z<<"....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
 
   G4double z1 = Mottcross->GetScatteringAngle();
   G4double sint = sin(z1);

@@ -487,7 +487,7 @@ G4PiNuclearCrossSection::GetElementCrossSection(const G4DynamicParticle* particl
   //  debug.push_back(Z);
   size_t it = 0;
 
-  while(it < theZ.size() && Z > theZ[it]) it++;
+  while(it < theZ.size() && Z > theZ[it]) it++; /* Loop checking, 08.01.2016, W. Pokorski */
 
   //  debug.push_back(theZ[it]);
   //  debug.push_back(kineticEnergy);

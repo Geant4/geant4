@@ -16,6 +16,16 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   ifdef G4USE_STD11
     CXXFLAGS  += -std=c++11
   endif
+  ifdef G4USE_STD14
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++14
+    CXXFLAGS  += -std=c++14
+  endif
+  ifdef G4USE_STD17
+    G4USE_STD11 := 1
+    CPPFLAGS  += -std=c++17
+    CXXFLAGS  += -std=c++17
+  endif
 # CXXFLAGS  += -stdlib=libstdc++
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2

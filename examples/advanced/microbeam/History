@@ -9,6 +9,9 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+02 Mar 2016 - S.Incerti - tag microbeam-V10-02-00
+- removed exp
+
 28 Aug 2015 - S.Incerti - tag microbeam-V10-01-03
 - added stronger constraints on SetMinimumEpsilonStep
 and SetMaximumEpsilonStep

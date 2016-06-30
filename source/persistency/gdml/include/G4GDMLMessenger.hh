@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.hh 89381 2015-04-08 15:32:47Z gcosmo $
+// $Id: G4GDMLMessenger.hh 96673 2016-04-29 12:08:20Z gcosmo $
 //
 //
 // class G4GDMLMessenger
@@ -73,6 +73,7 @@ class G4GDMLMessenger : public G4UImessenger
     G4UIcmdWithoutParameter*   ClearCmd;
     G4UIcmdWithABool*          RegionCmd;    
     G4UIcmdWithABool*          EcutsCmd;    
+    G4UIcmdWithABool*          SDCmd;    
 };
 
 #endif

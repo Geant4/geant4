@@ -14,6 +14,101 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 June 2016 Tatsumi Koi (hadr-hpp-V10-02-17)
+---------------------------------------------------
+- Change default option of GNUmake system "G4PHPDEBUG" was unintentionally activated.
+
+
+2 June 2016 Tatsumi Koi (hadr-hpp-V10-02-16)
+---------------------------------------------------
+- Bug fix usage of G4Nucleus::GetBiassedThermalNucleus 
+- Bug fix for calculation residual A and Z (Bugzilla 1815)
+- Both of them effects results only in charged particle projectiles
+- Bug fix in sampling of kinematic energy of scattered particle in DiscreteTwoBody (Bugzilla 1815)
+
+
+31 May 2016 Tatsumi Koi (hadr-hpp-V10-02-15)
+---------------------------------------------------
+- Bug fix in thermal scattering (Coverity 58647)
+- Fix coverity issues 61922
+- Fix compilation error in GNUmake system in previous tag
+
+
+30 May 2016 Tatsumi Koi (hadr-hpp-V10-02-14)
+---------------------------------------------------
+- Fix coverity issues 58644
+- Round2 Fix coverity issues 58648 
+- Fix warning message in previous tag
+
+
+27 May 2016 Tatsumi Koi (hadr-hpp-V10-02-13)
+---------------------------------------------------
+- Fix coverity issues 58622
+
+
+06 May 2016 Tatsumi Koi (hadr-hpp-V10-02-12)
+---------------------------------------------------
+- Fix problem in deletion of models in multithreading mode
+
+
+05 May 2016 V.Ivanchenko (hadr-hpp-V10-02-11)
+29 April 2016 Tatsumi Koi (hadr-hpp-V10-02-10)
+---------------------------------------------------
+- Fix a warning message from gcc 6.1
+
+
+30 March 2016 Tatsumi Koi (hadr-hpp-V10-02-09)
+---------------------------------------------------
+-A message about a behavior under the activation of fission fragment production 
+was modified reflecting hyper news comment. 
+
+
+4 March 2016 Tatsumi Koi (hadr-hpp-V10-02-08)
+---------------------------------------------------
+- Fix coverity issues 58701, 58702, 58703 and 58704
+
+
+1 March 2016 Tatsumi Koi (hadr-hpp-V10-02-07)
+---------------------------------------------------
+- Fix coverity issues 58699 and 58700
+
+
+18 February 2016 Tatsumi Koi (hadr-hpp-V10-02-06)
+---------------------------------------------------
+- Fix on problem on MT library
+
+
+16 February 2016 Tatsumi Koi (hadr-hpp-V10-02-05)
+---------------------------------------------------
+- Fixes for problem on materials which have hydrogen or helium in
+charged particle hp
+
+
+2 February 2016 Tatsumi Koi (hadr-hpp-V10-02-04)
+---------------------------------------------------
+- Fix problem in deletion of cross section data set in multithreading mode
+
+
+25 January 2016 Tatsumi Koi (hadr-hpp-V10-02-03)
+---------------------------------------------------
+- Fix coverity issues 58648 and 61705
+
+
+15 January 2016 Tatsumi Koi (hadr-hpp-V10-02-02)
+---------------------------------------------------
+- Fix coverity issues 58693, 58694 and 58695
+
+
+12 January 2016 Tatsumi Koi (hadr-hpp-V10-02-01)
+---------------------------------------------------
+- Fix coverity issues 53477 and 53481
+
+
+7 January 2016 Tatsumi Koi (hadr-hpp-V10-02-00)
+---------------------------------------------------
+- Fix coverity issues 58696, 58697, 58723 and 58729
+
+
 20 November 2015 Tatsumi Koi (hadr-hpp-V10-01-31)
 ---------------------------------------------------
 - Fix for solving reproducibility problem 

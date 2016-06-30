@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: DetectorConstruction.cc 97768 2016-06-09 15:11:02Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@
 DetectorConstruction::DetectorConstruction()
  : G4VUserDetectorConstruction()
 {
-  fWorldSize = 2*mm;
+  fWorldSize = 20*mm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

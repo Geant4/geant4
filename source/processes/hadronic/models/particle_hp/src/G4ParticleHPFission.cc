@@ -79,12 +79,13 @@
   G4ParticleHPFission::~G4ParticleHPFission()
   {
     //delete [] theFission;
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           it = theFission->begin() ; it != theFission->end() ; it++ )
-     {
-        delete *it;
+     if ( theFission != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+           it = theFission->begin() ; it != theFission->end() ; it++ ) {
+           delete *it;
+        }
+        theFission->clear();
      }
-     theFission->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"
@@ -97,7 +98,7 @@
     G4int index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
     {
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();

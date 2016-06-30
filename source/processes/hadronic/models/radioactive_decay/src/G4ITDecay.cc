@@ -73,7 +73,7 @@ G4ITDecay::~G4ITDecay()
 G4DecayProducts* G4ITDecay::DecayIt(G4double)
 {
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  if (G4MT_parent == 0) FillParent();
+  CheckAndFillParent();
 
   // Set up final state
   // parentParticle is set at rest here because boost with correct momentum 

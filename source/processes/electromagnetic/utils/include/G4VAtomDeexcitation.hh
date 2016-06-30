@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4VAtomDeexcitation.hh 96698 2016-05-02 07:19:24Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,7 +64,7 @@ class G4MaterialCutsCouple;
 class G4VAtomDeexcitation {
 public:
 
-  G4VAtomDeexcitation(const G4String& modname = "Deexcitation");
+  explicit G4VAtomDeexcitation(const G4String& modname = "Deexcitation");
 
   virtual ~G4VAtomDeexcitation();
 
@@ -142,15 +142,16 @@ public:
                                         G4int Z, 
                                         G4AtomicShellEnumerator shell,
                                         G4double kinE,
-                                        const G4Material* mat = 0) = 0;
+                                        const G4Material* mat = nullptr) = 0;
 
   // access or compute PIXE cross section 
   virtual G4double 
-  ComputeShellIonisationCrossSectionPerAtom(const G4ParticleDefinition*, 
-                                            G4int Z, 
-                                            G4AtomicShellEnumerator shell,
-                                            G4double kinE,
-                                            const G4Material* mat = 0) = 0;
+  ComputeShellIonisationCrossSectionPerAtom(
+                                        const G4ParticleDefinition*, 
+                                        G4int Z, 
+                                        G4AtomicShellEnumerator shell,
+                                        G4double kinE,
+                                        const G4Material* mat = nullptr) = 0;
 
   // Sampling of PIXE for ionisation processes
   void AlongStepDeexcitation(std::vector<G4Track*>& tracks,  
@@ -161,8 +162,8 @@ public:
 private:
 
   // copy constructor and hide assignment operator
-  G4VAtomDeexcitation(G4VAtomDeexcitation &);
-  G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
+  G4VAtomDeexcitation(G4VAtomDeexcitation &) = delete;
+  G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right) = delete;
 
   G4EmParameters*             theParameters;  
   const G4ParticleDefinition* gamma;
@@ -170,11 +171,18 @@ private:
   G4ProductionCutsTable* theCoupleTable;
   G4int    verbose;
   G4String name;
+
   G4bool   isActive;
   G4bool   flagAuger;
   G4bool   flagAugerCascade;
   G4bool   flagPIXE;
   G4bool   ignoreCuts;
+
+  G4bool   isActiveLocked;
+  G4bool   isAugerLocked;
+  G4bool   isAugerCascadeLocked;
+  G4bool   isPIXELocked;
+
   std::vector<G4bool>   activeZ;
   std::vector<G4bool>   activeDeexcitationMedia;
   std::vector<G4bool>   activeAugerMedia;
@@ -191,8 +199,7 @@ private:
 
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)
 {
-  isActive = val;
-  theParameters->SetFluo(val);
+  if(!isActiveLocked) { isActive = val; isActiveLocked = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsFluoActive() const
@@ -202,9 +209,7 @@ inline G4bool G4VAtomDeexcitation::IsFluoActive() const
 
 inline void G4VAtomDeexcitation::SetAuger(G4bool val)
 {
-  flagAuger = val;
-  if(val) { isActive = true; }
-  theParameters->SetAuger(val);
+  if(!isAugerLocked) { flagAuger = val; isAugerLocked = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerActive() const
@@ -214,9 +219,7 @@ inline G4bool G4VAtomDeexcitation::IsAugerActive() const
 
 inline void G4VAtomDeexcitation::SetAugerCascade(G4bool val)
 {
-  flagAugerCascade = val;
-  if(val) { isActive = true; }
-  theParameters->SetAugerCascade(val);
+  if(!isAugerCascadeLocked) { flagAugerCascade = val;  isAugerCascadeLocked = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerCascadeActive() const
@@ -226,9 +229,7 @@ inline G4bool G4VAtomDeexcitation::IsAugerCascadeActive() const
 
 inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
 {
-  flagPIXE = val;
-  if(val) { isActive = true; }
-  theParameters->SetPixe(val);
+  if(!isPIXELocked) { flagPIXE = val;  isPIXELocked = true; }
 }
 
 inline G4bool G4VAtomDeexcitation::IsPIXEActive() const

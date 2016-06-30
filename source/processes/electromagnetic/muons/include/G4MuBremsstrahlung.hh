@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh 72942 2013-08-14 13:37:37Z gcosmo $
+// $Id: G4MuBremsstrahlung.hh 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,29 +80,29 @@ class G4MuBremsstrahlung : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuBremsstrahlung(const G4String& processName = "muBrems");
+  explicit G4MuBremsstrahlung(const G4String& processName = "muBrems");
 
   virtual ~G4MuBremsstrahlung();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 				    const G4Material*, 
-				    G4double cut);
+				    G4double cut) override;
 
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
 private:
 
-  G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right);
-  G4MuBremsstrahlung(const G4MuBremsstrahlung&);
+  G4MuBremsstrahlung & operator=(const G4MuBremsstrahlung &right) = delete;
+  G4MuBremsstrahlung(const G4MuBremsstrahlung&) = delete;
 
 protected:
 

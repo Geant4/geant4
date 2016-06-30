@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4ExtrudedSolid.hh 95945 2016-03-03 09:54:38Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -57,6 +57,7 @@
 
 // Author:
 //   Ivana Hrivnacova, IPN Orsay
+//
 // --------------------------------------------------------------------
 
 #ifndef G4ExtrudedSolid_HH
@@ -86,7 +87,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     struct ZSection
     {
-      ZSection(G4double z, G4TwoVector offset, G4double scale)
+      ZSection(G4double z, const G4TwoVector& offset, G4double scale)
         : fZ(z), fOffset(offset), fScale(scale) {}
 
       G4double    fZ;
@@ -97,15 +98,15 @@ class G4ExtrudedSolid : public G4TessellatedSolid
   public:  // with description
 
      G4ExtrudedSolid( const G4String&                 pName,
-                            std::vector<G4TwoVector>  polygon,
-                            std::vector<ZSection>     zsections);
+                      const std::vector<G4TwoVector>& polygon,
+                      const std::vector<ZSection>&    zsections);
        // General constructor
 
      G4ExtrudedSolid( const G4String&                 pName,
-                            std::vector<G4TwoVector>  polygon,
+                      const std::vector<G4TwoVector>& polygon,
                             G4double                  halfZ,
-                            G4TwoVector off1, G4double scale1,
-                            G4TwoVector off2, G4double scale2 );
+                      const G4TwoVector& off1, G4double scale1,
+                      const G4TwoVector& off2, G4double scale2 );
        // Special constructor for solid with 2 z-sections
 
      virtual ~G4ExtrudedSolid();
@@ -142,25 +143,34 @@ class G4ExtrudedSolid : public G4TessellatedSolid
       // persistifiable objects.
 
     G4ExtrudedSolid(const G4ExtrudedSolid& rhs);
-    G4ExtrudedSolid& operator=(const G4ExtrudedSolid& rhs); 
+    G4ExtrudedSolid& operator=(const G4ExtrudedSolid& rhs);
       // Copy constructor and assignment operator.
 
   private:
 
+    void CheckPolygon(G4String& removedVertices);     
     void ComputeProjectionParameters();
     
     G4ThreeVector GetVertex(G4int iz, G4int ind) const;
     G4TwoVector ProjectPoint(const G4ThreeVector& point) const;
 
-    G4bool IsSameLine(G4TwoVector p,
-                      G4TwoVector l1, G4TwoVector l2) const;
-    G4bool IsSameLineSegment(G4TwoVector p,
-                      G4TwoVector l1, G4TwoVector l2) const;
-    G4bool IsSameSide(G4TwoVector p1, G4TwoVector p2, 
-                      G4TwoVector l1, G4TwoVector l2) const;
-    G4bool IsPointInside(G4TwoVector a, G4TwoVector b, G4TwoVector c, 
-                      G4TwoVector p) const;
-    G4double GetAngle(G4TwoVector p0, G4TwoVector pa, G4TwoVector pb) const;                      
+    G4bool IsSameLine(const G4TwoVector& p,
+                      const G4TwoVector& l1,
+                      const G4TwoVector& l2) const;
+    G4bool IsSameLineSegment(const G4TwoVector& p,
+                             const G4TwoVector& l1,
+                             const G4TwoVector& l2) const;
+    G4bool IsSameSide(const G4TwoVector& p1,
+                      const G4TwoVector& p2,
+                      const G4TwoVector& l1,
+                      const G4TwoVector& l2) const;
+    G4bool IsPointInside(const G4TwoVector& a,
+                         const G4TwoVector& b,
+                         const G4TwoVector& c,
+                         const G4TwoVector& p) const;
+    G4double GetAngle(const G4TwoVector& p0,
+                      const G4TwoVector& pa,
+                      const G4TwoVector& pb) const;                      
       
     G4VFacet* MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const;      
     G4VFacet* MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const;      
@@ -168,7 +178,6 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     G4bool AddGeneralPolygonFacets();
     G4bool MakeFacets();
     G4bool IsConvex() const;
-
 
   private:
 

@@ -45,7 +45,7 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UGenericPolycone.hh"
 #include "G4PolyconeSide.hh"
@@ -65,12 +65,14 @@ class G4UGenericPolycone : public G4USolid
 
     inline UGenericPolycone* GetShape() const;
 
-    inline G4double GetStartPhi()  const;
-    inline G4double GetEndPhi()    const;
-    inline G4bool IsOpen()         const;
-    inline G4int  GetNumRZCorner() const;
-    inline G4PolyconeSideRZ GetCorner(G4int index) const;
+    G4double GetStartPhi()  const;
+    G4double GetEndPhi()    const;
+    G4bool IsOpen()         const;
+    G4int  GetNumRZCorner() const;
+    G4PolyconeSideRZ GetCorner(G4int index) const;
   
+    inline G4GeometryType GetEntityType() const;
+
   public:  // without description
 
     G4UGenericPolycone(__void__&);
@@ -93,28 +95,9 @@ inline UGenericPolycone* G4UGenericPolycone::GetShape() const
   return (UGenericPolycone*) fShape;
 }
 
-inline G4double G4UGenericPolycone::GetStartPhi() const
+inline G4GeometryType G4UGenericPolycone::GetEntityType() const
 {
-  return GetShape()->GetStartPhi();
-}
-inline G4double G4UGenericPolycone::GetEndPhi() const
-{
-  return GetShape()->GetEndPhi();
-}
-inline G4bool G4UGenericPolycone::IsOpen() const
-{
-  return GetShape()->IsOpen();
-}
-inline G4int G4UGenericPolycone::GetNumRZCorner() const
-{
-  return GetShape()->GetNumRZCorner();
-}
-inline G4PolyconeSideRZ G4UGenericPolycone::GetCorner(G4int index) const
-{
-  UPolyconeSideRZ pside = GetShape()->GetCorner(index);
-  G4PolyconeSideRZ psiderz = { pside.r, pside.z };
-
-  return psiderz;
+  return "G4GenericPolycone";
 }
   
 #endif  // G4GEOM_USE_USOLIDS

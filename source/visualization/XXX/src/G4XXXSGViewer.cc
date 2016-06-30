@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXSGViewer.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4XXXSGViewer.cc 95225 2016-02-01 09:15:32Z gcosmo $
 //
 // 
 // John Allison  10th March 2006
@@ -132,8 +132,8 @@ G4bool G4XXXSGViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetDefaultTextVisAttributes()->GetColour() !=
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
-      (lastVP.GetVisAttributesModifiers().size() !=
-       fVP.GetVisAttributesModifiers().size())
+      (lastVP.GetVisAttributesModifiers() !=
+       fVP.GetVisAttributesModifiers())
       ) {
     return true;
   }

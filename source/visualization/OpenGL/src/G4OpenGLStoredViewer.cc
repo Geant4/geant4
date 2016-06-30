@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4OpenGLStoredViewer.cc 95635 2016-02-17 08:06:22Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -93,8 +93,8 @@ G4bool G4OpenGLStoredViewer::CompareForKernelVisit(G4ViewParameters& lastVP) {
        fVP.GetDefaultTextVisAttributes()->GetColour())            ||
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())          ||
-      (lastVP.GetVisAttributesModifiers().size() !=
-       fVP.GetVisAttributesModifiers().size())
+      (lastVP.GetVisAttributesModifiers() !=
+       fVP.GetVisAttributesModifiers())
       )
   return true;
   

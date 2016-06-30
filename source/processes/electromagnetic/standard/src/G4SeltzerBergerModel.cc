@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4SeltzerBergerModel.cc 97798 2016-06-13 12:10:14Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -268,8 +268,13 @@ G4SeltzerBergerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
   // majoranta
   G4double x0 = cut/kineticEnergy;
-  G4double vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
-  //  G4double invbeta1 = 0;
+  G4double vmax;
+  if(Z <= 92) {
+    vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.02;
+  } else {
+    idx = idy = 0;
+    vmax = dataSB[Z]->Value(x0, y, idx, idy)*1.2;
+  }
 
   // majoranta corrected for e-
   if(isElectron && x0 < 0.97 && 

@@ -17,6 +17,61 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 May 2016 - G.Cosmo
+- Updated to CLHEP-2.3.3.0.
+- Corrected check for counter range in MixMaxRng::getState().
+  Avoid hard-coded constant for initialisation of VECTOR_STATE_SIZE in
+  MixMaxRng, to directly use actual value of "N" from mixmax.
+
+02 May 2016 - G.Cosmo
+- Added symbols 'us' and 'ps' for microsend and picosecond respectively
+  to SystemOfUnits.h and setSystemOfUnits.cc and converted all symbols and
+  constants from "static const" to "static constexpr".
+
+28 April 2016 - G.Cosmo
+- Restored skipping of sequences for safer setting of seeds in setSeeds()
+  in MixMaxRng. Changed number of N in mixmax to 17 (was 256) and provided
+  new skipping coefficients for the new value of N and for the case N=8.
+
+25 April 2016 - G.Cosmo
+- Use seed_spbox() for seeding MixMax with single seed.
+
+21 April 2016 - G.Cosmo
+- Refined fix for sequence skipping; make it optional by adding Boolean flag
+  argument (true by default) in seed_uniquestream() function in mixmax.cc to
+  force sequence skipping when setting seeds. Simplified code, removing
+  compilation guard flags.
+  Set flag to false by default in MixMaxRng wrapper and defined function
+  skipSequencesOnce() to optional instruct to apply skipping of sequences
+  at the next seeds setting.
+
+20 April 2016 - G.Cosmo
+- Updated to CLHEP-2.3.2.2:
+  * Utility (L.Garren <garren@fnal.gov>)
+    o Added use_atomic.h: use std::atomic when the compiler declares it 
+      uses the C++11 standard.
+  * Random (W.D.Dagenhart <wdd@fnal.gov>)
+    o MixMaxRng.cc: the uncorrected code might not always yield independent
+      seeds.
+      If two threads execute numberOfEngines++ and after both finish that both
+      execute setSeed, then they will have the same seed. Fixed.
+    o Random.cc: there is a thread local variable of the type "defaults"
+      that contains two shared_ptr's in Random.cc.  This causes an intermittent
+      problem on OSX.  The complex objects containing the shared_ptr's have been
+      moved into a list of objects and the now the thread_local only contains a
+      simple pointer now that points into the list.
+      Use the new Utility/use_atomic.h header.
+
+19 April 2016 - G.Cosmo
+- Commented out sequence skipping from built-in table in mixmax.cc (undefined
+  flag SKIPISON), in order to avoid contention in multi-threaded jobs and
+  simplify seeding procedure. Removed use of obselete 'register' keyword.
+- Minor code cleanup in MixMaxRng.
+
+11 April 2016 - G.Cosmo
+- Use simple loop for flatArray() in MixMaxRng; engine built-in function
+  turns out to be extremely slot and unefficient.
+
 09 November 2015 - G.Cosmo
 - Updated to CLHEP-2.3.1.1.
 - Added MixMaxRng to Randomize.h.

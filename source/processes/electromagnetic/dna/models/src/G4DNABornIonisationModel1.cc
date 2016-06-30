@@ -35,6 +35,7 @@
 #include "G4DNAMolecularMaterial.hh"
 #include "G4DNABornAngle.hh"
 #include "G4DeltaAngle.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -377,7 +378,7 @@ G4double G4DNABornIonisationModel1::CrossSectionPerVolume(const G4Material* mate
           {
            G4double A = 1.39241700556072800000E-009 ;
            G4double B = -8.52610412942622630000E-002 ;
-           sigma = sigma * std::exp(A*(ekin/eV)+B);
+           sigma = sigma * G4Exp(A*(ekin/eV)+B);
           }
           //
 
@@ -475,6 +476,10 @@ void G4DNABornIonisationModel1::SampleSecondaries(std::vector<G4DynamicParticle*
 
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
+
+    //SI: additional protection if tcs interpolation method is modified
+    if (k<bindingEnergy) return;
+    //
 
     G4int Z = 8;
     if(fAtomDeexcitation)

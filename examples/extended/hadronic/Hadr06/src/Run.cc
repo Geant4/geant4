@@ -299,7 +299,7 @@ void Run::EndOfRun()
                                 
  //particles flux
  //
- G4cout << "\n List of particles leaving the absorber :" << G4endl;
+ G4cout << "\n List of particles emerging from the absorber :" << G4endl;
      
  std::map<G4String,ParticleData>::iterator itn;               
  for (itn = fParticleDataMap2.begin(); itn != fParticleDataMap2.end(); itn++) { 

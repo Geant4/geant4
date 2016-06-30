@@ -81,13 +81,13 @@
   G4ParticleHPCapture::~G4ParticleHPCapture()
   {
     //delete [] theCapture;
-//    G4cout << "Leaving G4ParticleHPCapture::~G4ParticleHPCapture"<<G4endl;
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           ite = theCapture->begin() ; ite != theCapture->end() ; ite++ )
-     {
-        delete *ite;
+     if ( theCapture != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+              ite = theCapture->begin() ; ite != theCapture->end() ; ite++ ) {
+           delete *ite;
+        }
+        theCapture->clear();
      }
-     theCapture->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"
@@ -103,7 +103,7 @@
     G4int index = theMaterial->GetElement(0)->GetIndex();
     if(n!=1)
     {
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();

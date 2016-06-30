@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc 94234 2015-11-09 10:58:13Z gcosmo $
+// $Id: G4NistElementBuilder.cc 97248 2016-05-30 15:00:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,14 +57,13 @@
 #include <sstream>
 
 #include "G4NistElementBuilder.hh"
-#include "G4Element.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NistElementBuilder::G4NistElementBuilder(G4int vb):
-  verbose(vb), first(true)
+  verbose(vb)
 {
   nFirstIsotope[0] = 0;
   nIsotopes[0] = 0;
@@ -100,19 +99,37 @@ G4double G4NistElementBuilder::GetAtomicMassAmu(const G4String& name) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
+G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 {
-  if(first) {
-    if(verbose > 0) {
-      G4cout << "### NIST DataBase for Elements is used" << G4endl;
-    }
-    first = false;
+  G4Element* anElement = FindElement(Z);
+  if(anElement == nullptr && Z > 0 && Z < maxNumElements) {
+    anElement = BuildElement(Z);
+    if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
   }
-  G4Element* elm = 0;
-  for(G4int Z = 1; Z<maxNumElements; ++Z) {
-    if(symb == elmSymbol[Z]) { 
-      elm = FindOrBuildElement(Z);
+  return anElement;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Element* 
+G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
+{
+  G4Element* elm = nullptr;
+  const G4ElementTable* theElementTable = G4Element::GetElementTable();
+  size_t nelm = theElementTable->size();
+  for(size_t i=0; i<nelm; ++i) {
+    if(symb == ((*theElementTable)[i])->GetSymbol()) {
+      elm = (*theElementTable)[i];
       break;
+    }
+  }
+  if(nullptr == elm) {
+    for(G4int Z = 1; Z<maxNumElements; ++Z) {
+      if(symb == elmSymbol[Z]) { 
+	elm = BuildElement(Z);
+	break;
+      }
     }
   }
   return elm;
@@ -120,29 +137,9 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
-{
-  G4Element* anElement = 0;
-  if(Z <= 0 || Z >= maxNumElements) { return anElement; }
-
-  // Nist or user defined element does exist
-  if(elmIndex[Z] >= 0) {
-    const G4ElementTable* theElementTable = G4Element::GetElementTable();
-    anElement = (*theElementTable)[elmIndex[Z]];
-
-    // build new element
-  } else {
-    anElement = BuildElement(Z);
-    if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
-  }  
-  return anElement;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4Element* G4NistElementBuilder::BuildElement(G4int Z)
 {
-  G4Element* theElement = 0;
+  G4Element* theElement = nullptr;
   if(Z<1 || Z>=maxNumElements) { return theElement; }
   G4double Aeff = atomicMass[Z];
   if (verbose > 1) {
@@ -213,7 +210,7 @@ void G4NistElementBuilder::PrintElement(G4int Z) const
     G4cout << "          mass(amu): ";
     for(j=0; j<nc; ++j) {G4cout << GetAtomicMass(i, n0 + j) << " ";}
     G4cout << G4endl;
-    G4cout << "     abanbance: ";
+    G4cout << "     abundance: ";
     for(j=0; j<nc; ++j) {G4cout << relAbundance[idx + j] << " ";}
     G4cout << G4endl;
   }

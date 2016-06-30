@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc 90446 2015-05-29 07:39:20Z gcosmo $
+// $Id: G4NistManager.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,13 +61,13 @@
 #include "G4NistMessenger.hh"
 #include "G4Isotope.hh"
 
-G4NistManager* G4NistManager::instance = 0;
+G4NistManager* G4NistManager::instance = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4NistManager* G4NistManager::Instance()
 {
-  if (instance == 0) {
+  if (instance == nullptr) {
     static G4NistManager manager;
     instance = &manager;
   }
@@ -125,7 +125,8 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
   bmat = FindOrBuildMaterial(basename);
   if(!bmat) {
     G4cout << "G4NistManager::BuildMaterialWithNewDensity ERROR: " << G4endl;
-    G4cout << " New material <" << name << "> cannot be built because " << G4endl;
+    G4cout << " New material <" << name << "> cannot be built because " 
+	   << G4endl;
     G4cout << " base material <" << basename << "> does not exist" << G4endl;
     G4Exception("G4NistManager::BuildMaterialWithNewDensity()", "mat102",
                  FatalException, "Wrong material name");    
@@ -146,7 +147,7 @@ G4NistManager::BuildMaterialWithNewDensity(const G4String& name,
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintElement(const G4String& symbol)
+void G4NistManager::PrintElement(const G4String& symbol) const
 {
   if (symbol == "all") { elmBuilder->PrintElement(0); }
   else                 { elmBuilder->PrintElement(elmBuilder->GetZ(symbol)); }
@@ -154,7 +155,7 @@ void G4NistManager::PrintElement(const G4String& symbol)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintG4Element(const G4String& name)
+void G4NistManager::PrintG4Element(const G4String& name) const
 {
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
   size_t nelm = theElementTable->size();
@@ -168,7 +169,7 @@ void G4NistManager::PrintG4Element(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4NistManager::PrintG4Material(const G4String& name)
+void G4NistManager::PrintG4Material(const G4String& name) const
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   size_t nmat = theMaterialTable->size();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmStandardPhysics_option3.cc 96267 2016-04-01 12:38:51Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -75,6 +75,7 @@
 #include "G4MuPairProduction.hh"
 #include "G4hBremsstrahlung.hh"
 #include "G4hPairProduction.hh"
+#include "G4ePairProduction.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -125,6 +126,7 @@ G4EmStandardPhysics_option3::G4EmStandardPhysics_option3(G4int ver)
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -205,6 +207,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   G4hPairProduction* kp = new G4hPairProduction();
   G4hBremsstrahlung* pb = new G4hBremsstrahlung();
   G4hPairProduction* pp = new G4hPairProduction();
+  G4ePairProduction* ee = new G4ePairProduction();
 
   // muon & hadron multiple scattering
   // G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
@@ -259,6 +262,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(brem, particle);
+      ph->RegisterProcess(ee, particle);
 
     } else if (particleName == "e+") {
 
@@ -280,6 +284,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(brem, particle);
+      ph->RegisterProcess(ee, particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
 
     } else if (particleName == "mu+" ||

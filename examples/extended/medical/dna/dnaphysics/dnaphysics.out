@@ -4,30 +4,11 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
-
-
-***** Table : Nb of materials = 1 *****
-
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
-                       Imean:  78.000 eV 
-
-   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
-          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
-
-   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
-         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
-         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
-         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
-          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
-
-
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -56,16 +37,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -76,9 +59,64 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+# use /run/initialize before calling /dna/det/setMat
+# in this example, this is done in dnaphysics.cc
+#/dna/det/setMat G4_WATER_MODIFIED
+/dna/det/setMat G4_WATER
+/run/geometryModified
+/process/em/auger true
+/run/physicsModified
+/process/em/deexcitationIgnoreCut true
+/run/physicsModified
+/process/em/AddDNARegion World Opt0
+/run/initialize
+userDetector->Construct() start.
+
+***** Table : Nb of materials = 1 *****
+
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
+                       Imean:  78.000 eV 
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction:  11.19 %  ElmAbundance  66.67 % 
+
+   --->  Element: O (O)   Z =  8.0   N =    16   A = 15.999 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
+
+
+
+World is registered to the default region.
+physicsList->Construct() start.
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
+/gun/particle e-
+#/gun/particle proton
+#/gun/particle hydrogen
+#/gun/particle alpha
+#/gun/particle alpha+
+#/gun/particle helium
+#/gun/particle ion
+#/gun/ion 14 28
+/gun/energy 1 keV
+/run/beamOn 100
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 0
+### ===  Ignore cuts flag:   1
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : 
+      issued by : *** WARNING: the G4DNAScreenedRutherfordElasticModel class is not validated below 9 eV
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -107,15 +145,14 @@ Rayl:   for  gamma    SubType= 11  BuildTable= 1
 msc:   for e-    SubType= 10
       RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        1 MeV   Emax=      100 MeV  Table with 140 bins Emin=      1 MeV   Emax=     10 TeV
-            UrbanMsc :  Emin=      100 MeV   Emax=       10 TeV  Table with 140 bins Emin=      1 MeV   Emax=     10 TeV
+            UrbanMsc :  Emin=        1 MeV   Emax=      100 MeV  Table with 40 bins Emin=      1 MeV   Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 100 bins Emin=    100 MeV   Emax=     10 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        1 MeV   Emax=        1 MeV   deltaVI
         MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
 
 eBrem:   for  e-    SubType= 3
@@ -126,6 +163,13 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
+ePairProd:   for  e-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 0.1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
@@ -135,37 +179,35 @@ CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
  Total cross sections computed from DNAScreenedRutherfordElasticModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAScreenedRutherfordElasticModel :  Emin=        0 eV    Emax=       11 eV 
-DNAScreenedRutherfordElasticModel :  Emin=       11 eV    Emax=        1 MeV
+DNAScreenedRutherfordElasticModel :  Emin=        0 eV    Emax=      7.4 eV 
+DNAChampionElasticModel :  Emin=      7.4 eV    Emax=        1 MeV
           DummyModel :  Emin=        1 MeV   Emax=       10 TeV
 
 e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
  Total cross sections computed from DNABornExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornExcitationModel :  Emin=        0 eV    Emax=      100 eV 
-DNABornExcitationModel :  Emin=      100 eV    Emax=        1 MeV
+DNAEmfietzoglouExcitationModel :  Emin=        0 eV    Emax=       10 keV
+DNABornExcitationModel :  Emin=       10 keV   Emax=        1 MeV
           DummyModel :  Emin=        1 MeV   Emax=       10 TeV
 
 e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
  Total cross sections computed from DNASancheExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNASancheExcitationModel :  Emin=        0 eV    Emax=       11 eV 
-DNASancheExcitationModel :  Emin=       11 eV    Emax=      100 eV 
+DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV 
           DummyModel :  Emin=      100 eV    Emax=       10 TeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
  Total cross sections computed from DNABornIonisationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornIonisationModel :  Emin=        0 eV    Emax=      100 eV    deltaBorn  FluoActive
-DNABornIonisationModel :  Emin=      100 eV    Emax=        1 MeV   deltaBorn  FluoActive
+DNAEmfietzoglouIonisationModel :  Emin=        0 eV    Emax=       10 keV   deltaBorn  FluoActive
+DNABornIonisationModel :  Emin=       10 keV   Emax=        1 MeV   deltaBorn  FluoActive
           DummyModel :  Emin=        1 MeV   Emax=       10 TeV
 
 e-_G4DNAAttachment:   for  e-    SubType= 55  BuildTable= 0
  Total cross sections computed from DNAMeltonAttachmentModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       11 eV 
-DNAMeltonAttachmentModel :  Emin=       11 eV    Emax=       13 eV 
-          DummyModel :  Emin=      100 eV    Emax=       10 TeV
+DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
+          DummyModel :  Emin=       13 eV    Emax=       10 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.02, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
@@ -189,6 +231,13 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
+ePairProd:   for  e+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 0.1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
@@ -209,7 +258,6 @@ hIoni:   for  proton    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=      100 MeV   Emax=       10 TeV   deltaVI
 
 hBrems:   for  proton    SubType= 3
@@ -239,24 +287,23 @@ nuclearStopping:   for  proton    SubType= 8  BuildTable= 0
 proton_G4DNAElastic:   for  proton    SubType= 51  BuildTable= 0
  Total cross sections computed from DNAIonElasticModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel :  Emin=        0 eV    Emax=      100 eV 
-          DummyModel :  Emin=      100 eV    Emax=       10 TeV
+          DummyModel :  Emin=        0 eV    Emax=       10 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      100 eV 
 DNAMillerGreenExcitationModel :  Emin=      100 eV    Emax=      500 keV
-          DummyModel :  Emin=      500 keV   Emax=      500 keV
 DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
+          DummyModel :  Emin=      100 MeV   Emax=       10 TeV
 
 proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNARuddIonisationModel :  Emin=        0 eV    Emax=      100 eV    deltaRudd  FluoActive
 DNARuddIonisationModel :  Emin=      100 eV    Emax=      500 keV   deltaRudd  FluoActive
-          DummyModel :  Emin=      500 keV   Emax=      500 keV
 DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn  FluoActive
+          DummyModel :  Emin=      100 MeV   Emax=       10 TeV
 
 proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
@@ -274,8 +321,7 @@ ionIoni:   for  GenericIon    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=        2 MeV   deltaVI
-          BetheBloch :  Emin=        1 TeV   Emax=       10 TeV   deltaVI
+          BetheBloch :  Emin=        1 GeV   Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -284,9 +330,8 @@ nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
 GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationExtendedModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 eV    deltaRudd  FluoActive
-DNARuddIonisationExtendedModel :  Emin=      100 eV    Emax=        1 TeV   deltaRudd  FluoActive
-          DummyModel :  Emin=        1 TeV   Emax=       10 TeV
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 GeV   deltaRudd  FluoActive
+          DummyModel :  Emin=        1 GeV   Emax=       10 TeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -298,7 +343,6 @@ ionIoni:   for  alpha    SubType= 2
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
       finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=      100 MeV   Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
@@ -308,14 +352,13 @@ nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
 alpha_G4DNAElastic:   for  alpha    SubType= 51  BuildTable= 0
  Total cross sections computed from DNAIonElasticModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  DNAIonElasticModel :  Emin=        0 eV    Emax=      100 eV 
-          DummyModel :  Emin=      100 eV    Emax=       10 TeV
+          DummyModel :  Emin=        0 eV    Emax=       10 TeV
 
 alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel :  Emin=        0 eV    Emax=        1 keV
-DNAMillerGreenExcitationModel :  Emin=        1 keV   Emax=      100 MeV
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      100 MeV
+          DummyModel :  Emin=      100 MeV   Emax=       10 TeV
 
 alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
  Total cross sections computed from DNARuddIonisationModel
@@ -326,8 +369,8 @@ DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=      100 MeV   delt
 alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          DummyModel :  Emin=        0 eV    Emax=        1 keV
-DNADingfelderChargeDecreaseModel :  Emin=        1 keV   Emax=      400 MeV
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+          DummyModel :  Emin=      400 MeV   Emax=       10 TeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
@@ -596,13 +639,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x21e73c0
+##### Create analysis manager   0x12441a0
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.96s Real=6.3s Sys=0.12s
+  User=7.75s Real=8.03s Sys=0.23s
 ... write Root file : dna.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

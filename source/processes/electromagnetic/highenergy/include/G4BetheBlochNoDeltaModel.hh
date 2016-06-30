@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochNoDeltaModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4BetheBlochNoDeltaModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,7 +56,7 @@ class G4BetheBlochNoDeltaModel : public G4BetheBlochModel
 
 public:
 
-  G4BetheBlochNoDeltaModel(const G4ParticleDefinition* p = 0,
+  explicit G4BetheBlochNoDeltaModel(const G4ParticleDefinition* p = nullptr,
     const G4String& nam = "BetheBlochNoD");
 
   virtual ~G4BetheBlochNoDeltaModel();
@@ -64,19 +64,20 @@ public:
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double maxEnergy) override;
 
 private:
 
   // hide assignment operator
-  G4BetheBlochNoDeltaModel & operator=(const  G4BetheBlochNoDeltaModel &right);
-  G4BetheBlochNoDeltaModel(const  G4BetheBlochNoDeltaModel&);
+  G4BetheBlochNoDeltaModel &
+    operator=(const  G4BetheBlochNoDeltaModel &right) = delete;
+  G4BetheBlochNoDeltaModel(const  G4BetheBlochNoDeltaModel&) = delete;
 
 };
 

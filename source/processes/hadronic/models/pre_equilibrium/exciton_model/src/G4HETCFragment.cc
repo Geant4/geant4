@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc 91837 2015-08-07 07:27:08Z gcosmo $
+// $Id: G4HETCFragment.cc 96527 2016-04-20 08:51:00Z gcosmo $
 //
 // by V. Lara
 //
@@ -33,14 +33,13 @@
  
 #include "G4HETCFragment.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4PreCompoundParameters.hh"
 
 G4HETCFragment::
 G4HETCFragment(const G4ParticleDefinition* part,
 	       G4VCoulombBarrier* aCoulombBarrier)
   : G4VPreCompoundFragment(part, aCoulombBarrier)
 {
-  G4double r0 = theParameters->Getr0();
+  G4double r0 = theParameters->GetR0();
   r2norm = r0*r0/(CLHEP::pi*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
 }
 

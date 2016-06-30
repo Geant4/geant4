@@ -34,14 +34,14 @@
 #include "G4TransportationManager.hh"
 #include "G4TouchableDumpScene.hh"
 
-////////////// /vis/touchable/dump ///////////////////////////////////////
-
 G4VisCommandsTouchable::G4VisCommandsTouchable()
 {
   fpCommandDump = new G4UIcmdWithoutParameter("/vis/touchable/dump",this);
   fpCommandDump->SetGuidance("Dump touchable attributes.");
   fpCommandDump->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
+  fpCommandDump->SetGuidance
+  ("Use \"/vis/touchable/set\" to set attributes.");
 }
 
 G4VisCommandsTouchable::~G4VisCommandsTouchable() {

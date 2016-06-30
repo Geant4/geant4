@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.hh 93511 2015-10-23 13:43:49Z gcosmo $
+// $Id: G4QGSDiffractiveExcitation.hh 94750 2015-12-07 08:24:29Z gcosmo $
 
 #ifndef G4QGSDiffractiveExcitation_h
 #define G4QGSDiffractiveExcitation_h 1
@@ -53,7 +53,7 @@ class G4QGSDiffractiveExcitation
 
 public:
 
-	G4QGSDiffractiveExcitation();                           // Uzhi
+	G4QGSDiffractiveExcitation();
 	virtual ~G4QGSDiffractiveExcitation();
 
 	virtual G4bool ExciteParticipants (G4VSplitableHadron *aPartner, G4VSplitableHadron * bPartner) const;
@@ -68,23 +68,15 @@ private:
 
 	G4QGSDiffractiveExcitation(const G4QGSDiffractiveExcitation &right);
 
-	//    G4double ChooseX(G4double Xmin, G4double Xmax) const;                       // Uzhi
-	G4double ChooseP(G4double Pmin, G4double Pmax) const;                       // Uzhi
+	G4double ChooseP(G4double Pmin, G4double Pmax) const;
 
-	//    G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare) const;
-	G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;  // Uzhi
+	G4ThreeVector GaussianPt(G4double  AveragePt2, G4double maxPtSquare) const;
 
 	const G4QGSDiffractiveExcitation & operator=(const G4QGSDiffractiveExcitation &right);
 	int operator==(const G4QGSDiffractiveExcitation &right) const;
 	int operator!=(const G4QGSDiffractiveExcitation &right) const;
 
 private:
-	// Model Parameters:
-	/*                                                                                // Uzhi
-	const G4double widthOfPtSquare;	// width^2 of pt for string excitation    
-	const G4double minExtraMass;	// minimum excitation mass                
-	const G4double minmass;	// mean pion transverse mass; used for Xmin       
-	 */                                                                                // Uzhi
 };
 
 #endif

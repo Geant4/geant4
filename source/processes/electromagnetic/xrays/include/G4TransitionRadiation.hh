@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TransitionRadiation.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4TransitionRadiation.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -58,19 +58,20 @@ class G4TransitionRadiation : public   G4VDiscreteProcess
 {
 public:
 
-  G4TransitionRadiation( const G4String& processName = "TR",
+  explicit G4TransitionRadiation( const G4String& processName = "TR",
 			 G4ProcessType type = fElectromagnetic) ;
 
   virtual ~G4TransitionRadiation() ;
 
   // Methods
 
-  G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+  G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
 
-  G4double GetMeanFreePath(const G4Track&, G4double,
-			   G4ForceCondition* condition);
+  virtual G4double GetMeanFreePath(const G4Track&, G4double,
+			   G4ForceCondition* condition) override;
 
-  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+                                          const G4Step&) override;
 
   virtual
   G4double SpectralAngleTRdensity( G4double energy,
@@ -120,8 +121,9 @@ protected :
 private:
 
 // Operators
-  G4TransitionRadiation(const G4TransitionRadiation& right) ;
-  G4TransitionRadiation& operator=(const G4TransitionRadiation& right) ;
+  G4TransitionRadiation(const G4TransitionRadiation& right) = delete;
+  G4TransitionRadiation& 
+    operator=(const G4TransitionRadiation& right) = delete;
 
 };
 

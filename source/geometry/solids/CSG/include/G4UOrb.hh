@@ -44,9 +44,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UOrb.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UOrb : public G4USolid
@@ -65,8 +66,12 @@ class G4UOrb : public G4USolid
 
     inline UOrb* GetShape() const;
 
-    inline G4double GetRadius() const;
-    inline void SetRadius(G4double newRmax);
+    G4double GetRadius() const;
+    void SetRadius(G4double newRmax);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
 
@@ -89,15 +94,9 @@ inline UOrb* G4UOrb::GetShape() const
   return (UOrb*) fShape;
 }
 
-inline G4double G4UOrb::GetRadius() const
+inline G4GeometryType G4UOrb::GetEntityType() const
 {
-  return GetShape()->GetRadius();
-}
-
-inline void G4UOrb::SetRadius(G4double newRmax)
-{
-  GetShape()->SetRadius(newRmax);
-  fRebuildPolyhedron = true;
+  return "G4Orb";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

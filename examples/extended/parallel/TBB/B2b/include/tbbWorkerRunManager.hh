@@ -29,7 +29,7 @@
 //    This class implements the worker model run manager for TBB based
 //    application.
 //    It is instantiated by tbbUserWorkerInitialization and used by
-//    tbbMasterRunManager.
+//    SimpleTbbMasterRunManager.
 //    See G4WorkerRunManager for documentation of methods relative to
 //    base class. Only class specific methods are documented here.
 //
@@ -38,6 +38,7 @@
 //
 // History:
 //    Oct 31st, 2013 A. Dotti - First Implementation
+//    May 12th, 2014 J. Apostolakis - Additional methods/functionality
 
 #ifndef TBBWORKERRUNMANAGER_HH
 #define TBBWORKERRUNMANAGER_HH

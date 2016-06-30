@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ModelColourMap.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4ModelColourMap.hh 95593 2016-02-16 10:48:50Z gcosmo $
 //
 // Generic variable->G4Colour map, where "variable" is the template
 // parameter.
@@ -52,6 +52,7 @@ public: // With description
   G4Colour& operator[](const T& quantity);
 
   // Access functions
+  const std::map<T, G4Colour>& GetBasicMap() const;
   bool GetColour(const T&, G4Colour&) const;
   void Print(std::ostream& ostr) const;
 
@@ -99,6 +100,10 @@ G4ModelColourMap<T>::Set(const T& quantity, const G4Colour& colour)
 {
   fMap[quantity] = colour;
 }   
+
+template <typename T>
+const std::map<T, G4Colour>& G4ModelColourMap<T>::GetBasicMap() const
+{ return fMap; }
 
 template <typename T>
 bool

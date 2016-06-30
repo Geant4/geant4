@@ -165,9 +165,9 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
       G4double x2 = totEnergy*(eTotEnergy - e) - e*eTotEnergy 
         - totMomentum*eTotMomentum*costet + electron_mass_c2*electron_mass_c2;
       G4double y = -x2/x0;
-      if(std::fabs(y) <= 1.0) { 
+      if(std::abs(y) <= 1.0) { 
         cost = -(x2 + x1*sqrt(1. - y*y))/x0; 
-        if(std::fabs(cost) <= 1.0) { isOK = true; }
+        if(std::abs(cost) <= 1.0) { isOK = true; }
         else { cost = 1.0; }
       }
 

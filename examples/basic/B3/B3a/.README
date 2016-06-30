@@ -1,0 +1,186 @@
+//$Id: .README 94957 2016-01-08 13:27:26Z gcosmo $
+
+///\file "B3/.README"
+///\brief Example B3 README page
+
+/*! \page ExampleB3 Example B3
+
+ This example simulates schematically a Positron Emitted Tomography system.
+	
+\section B3_s1 GEOMETRY DEFINITION
+
+   The support of gamma detection are scintillating crystals. A small number
+   of such crystals are optically grouped in a matrix of crystals. In
+   this example, individual crystals are not described; only the matrix of
+   crystals is and it is still called 'Crystal' hereafter.
+
+   Crystals are circularly arranged to form a ring. Few rings make up the full
+   detector (gamma camera). This is done by positionning Crystals in 
+   Ring with an appropriate rotation matrix. Several copies of Ring are 
+   then placed in the full detector.  
+
+   The head of a patient is schematised as a homogeneous cylinder of brain
+   tissue, placed at the center of full detector.
+	
+   The Crystal material, Lu2SiO5, is not included in the G4Nist database. 
+   Therefore, it is explicitly built in DefineMaterials().
+ 	 	
+\section B3_s2 PHYSICS LIST
+
+   The physics list contains standard electromagnetic processes and the
+   radioactiveDecay module for GenericIon. It is defined in the B3PhysicsList 
+   class as a Geant4 modular physics list with registered physics builders 
+   provided in Geant4:
+   - G4DecayPhysics - defines all particles and their decay processes
+   - G4RadioactiveDecayPhysics - defines radioactiveDecay for GenericIon
+   - G4EmStandardPhysics - defines all EM standard processes
+   
+   This physics list requires data files for:
+   - low energy electromagnetic processes which path is defined via 
+     the G4LEDATA envirnoment variable
+   - radioactive decay hadronic processes which path is defined via 
+     the G4RADIOACTIVEDATA envirnoment variable.
+ 	 
+   See more on installation of the datasets in
+   <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
+                                         /InstallationGuide/html/ch03s03.html">
+   Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
+   
+\section B3_s3  ACTION INITALIZATION
+
+   A newly introduced class, B1ActionInitialization, instantiates and registers 
+   to Geant4 kernel all user action classes.
+
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B3ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance is created also in the method
+      B3ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+     
+\section B3_s4 PRIMARY GENERATOR
+
+   The default particle beam is an ion (F18), at rest, randomly distributed 
+   within a zone inside a patient and is defined in 
+   B3PrimaryGeneratorAction::GeneratePrimaries().
+   The type of a primary particle can be changed with G4ParticleGun commands 
+   (see run2.mac).
+   
+\section B3_s5 DETECTOR RESPONSE : scorers
+
+   A 'good' event is an event in which an identical energy of 511 keV is 
+   deposited in two separate Crystals. A count of the number of such events 
+   corresponds to a measure of the efficiency of the PET system. 
+   The total dose deposited in a patient during a run is also computed. 
+   
+   Scorers are defined in DetectorConstruction::ConstructSDandField(). There are
+   two G4MultiFunctionalDetector objects: one for the Crystal (EnergyDeposit), 
+   and one for the Patient (DoseDeposit)
+	
+   B3Run::RecordEvent() collects informations event per event
+   from the hits collections, and accumulates statistic for 
+   RunAction::EndOfRunAction().	
+   
+   In multi-threading mode the statistics accumulated per workers is merged 
+   to the master in Run::Merge().
+   	
+\section B3_s6 STACKING ACTION
+
+   Beta decay of Fluor generates a neutrino. One wishes not to track this
+   neutrino; therefore one kills it immediately, before created particles
+   are put in a stack.
+   The function B3StackingAction::ClassifyNewTrack() is invoked by G4 kernel
+   each time a new particle is created.
+       		
+<hr>
+
+The following paragraphs are common to all basic examples
+
+\section B3_A VISUALISATION
+
+   The visualization manager is set via the G4VisExecutive class
+   in the main () function in exampleB3.cc.    
+   The initialisation of the drawing is done via a set of /vis/ commands
+   in the macro vis.mac. This macro is automatically read from
+   the main function when the example is used in interactive running mode.
+
+   By default, vis.mac opens an OpenGL viewer (/vis/open OGL).
+   The user can change the initial viewer by commenting out this line
+   and instead uncommenting one of the other /vis/open statements, such as
+   HepRepFile or DAWNFILE (which produce files that can be viewed with the
+   HepRApp and DAWN viewers, respectively).  Note that one can always
+   open new viewers at any time from the command line.  For example, if
+   you already have a view in, say, an OpenGL window with a name
+   "viewer-0", then
+\verbatim
+/vis/open DAWNFILE
+\endverbatim
+   then to get the same view
+\verbatim
+/vis/viewer/copyView viewer-0
+\endverbatim
+   or to get the same view *plus* scene-modifications
+\verbatim
+/vis/viewer/set/all viewer-0
+\endverbatim
+   then to see the result
+\verbatim
+/vis/viewer/flush
+\endverbatim
+
+   The DAWNFILE, HepRepFile drivers are always available
+   (since they require no external libraries), but the OGL driver requires
+   that the Geant4 libraries have been built with the OpenGL option.
+
+   For more information on visualization, including information on how to
+   install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
+   for example,\n
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4OpenGLTutorial/G4OpenGLTutorial.html">
+     OpenGL Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4DAWNTutorial/G4DAWNTutorial.html">
+     DAWN Tutorial </a>
+   - <a href="http://geant4.slac.stanford.edu/Presentations/vis/G4HepRAppTutorial/G4HepRAppTutorial.html">
+     HepRApp Tutorial </a>
+
+   The tracks are automatically drawn at the end of each event, accumulated
+   for all events and erased at the beginning of the next run.
+
+\section B3_B USER INTERFACES
+ 
+   The user command interface is set via the G4UIExecutive class
+   in the main () function in exampleB3.cc 
+   The selection of the user command interface is then done automatically 
+   according to the Geant4 configuration or it can be done explicitly via 
+   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+
+\section B3_C HOW TO RUN
+ 
+   - Execute exampleB3 in the 'interactive mode' with visualization
+\verbatim
+% exampleB3
+and type in the commands from run1.mac line by line:  
+Idle> /control/verbose 2
+Idle> /tracking/verbose 2
+Idle> /run/beamOn 1 
+Idle> ...
+Idle> exit
+\endverbatim                
+      or
+\verbatim
+Idle> /control/execute run1.mac
+....
+Idle> exit
+\endverbatim                
+
+   - Execute exampleB3 in the 'batch' mode from macro files 
+   (without visualization)
+\verbatim
+% exampleB3 run2.mac
+% exampleB3 exampleB3.in > exampleB3.out
+\endverbatim                
+
+*/

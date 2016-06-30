@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 82116 2014-06-11 09:08:07Z gcosmo $
+# $Id: sources.cmake 96375 2016-04-11 06:57:10Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,9 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4materials
     HEADERS
 			G4AtomicShells.hh
+			G4AtomicShells_EADL.hh 
+			G4AtomicShells_EADL.hh 
+			G4AtomicShells_EADL.hh 
 			G4DensityEffectData.hh
 			G4ElementData.hh
 			G4Element.hh
@@ -62,6 +65,9 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4VIonDEDXTable.hh
     SOURCES
 			G4AtomicShells.cc
+			G4AtomicShells_EADL.cc 
+			G4AtomicShells_EADL.cc 
+			G4AtomicShells_EADL.cc 
 			G4DensityEffectData.cc
 			G4Element.cc
 			G4ElementData.cc

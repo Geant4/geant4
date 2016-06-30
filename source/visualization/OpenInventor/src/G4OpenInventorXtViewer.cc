@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenInventorXtViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 /*
  * jck 05 Feb 1997 - Initial Implementation
@@ -203,6 +203,7 @@ void G4OpenInventorXtViewer::Initialise() {
     fInteractorManager->FlushAndWaitExecution ();
   }
   fInteractorManager->SetCreatedInteractor (fViewer -> getWidget());
+  fViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
 }
 
 G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {
@@ -253,7 +254,7 @@ Widget G4OpenInventorXtViewer::AddMenu(
   // Cascade button :
   Arg args[2];
   XmString cps = 
-    XmStringLtoRCreate((char*)aLabel.c_str(),XmSTRING_DEFAULT_CHARSET);
+    XmStringLtoRCreate((char*)aLabel.c_str(),(char*)XmSTRING_DEFAULT_CHARSET);
   XtSetArg (args[0],XmNlabelString,cps);
   XtSetArg (args[1],XmNsubMenuId,menu);
   Widget widget = XmCreateCascadeButton(aMenuBar,(char*)aName.c_str(),args,2);

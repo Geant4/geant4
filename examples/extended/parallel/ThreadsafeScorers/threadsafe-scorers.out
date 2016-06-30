@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -135,12 +135,20 @@ Checking overlaps for volume Target_1_4_4 ... OK!
 Checking overlaps for volume Target_2_4_4 ... OK! 
 Checking overlaps for volume Target_3_4_4 ... OK! 
 Checking overlaps for volume Target_4_4_4 ... OK! 
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Type of de-excitation inverse x-section             3
+Min excitation energy (keV)                         0.1
+Level density (1/MeV)                               0.1
+=======================================================================
+/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -168,16 +176,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -197,7 +207,9 @@ Available colours:
 /run/beamOn 10000
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 0
+### ===  Ignore cuts flag:   0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -245,6 +257,13 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
 
+ePairProd:   for  e-    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 0.1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 10 TeV, 20 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
@@ -272,6 +291,13 @@ eBrem:   for  e+    SubType= 3
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   AngularGen2BS
+
+ePairProd:   for  e+    SubType= 4
+      dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
+      Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
+      Sampling table 21x1001 from 0.1 GeV to 10 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -334,9 +360,6 @@ ionIoni:   for  GenericIon    SubType= 2
 nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    ICRU49NucStopping :  Emin=        0 eV    Emax=        1 MeV
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -520,13 +543,13 @@ CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/UseGranularCLHEP/10-02-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc48/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-02-ref-06_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
@@ -611,6 +634,11 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
 ---------------------------------------------------
                            Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: He3Inelastic
         Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
@@ -776,7 +804,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:            BertiniCascade: 19.9 MeV ---> 9.9 GeV
-        Model:       ParticleHPInelastic: 0 eV  ---> 20 MeV
+        Model:        NeutronHPInelastic: 0 eV  ---> 20 MeV
      Cr_sctns:      NeutronHPInelasticXS: 0 eV  ---> 20 MeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
@@ -1007,524 +1035,524 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=105.86s Real=111.71s Sys=0.65s
+  User=66.48s Real=67.24s Sys=0.47s
  ###### EndOfTSRunAction ###### 
 ============================================================
  opened file mfd_tl_EnergyDeposit.out for output
 ============================================================
-             0         670.223331 keV
-             2         475.013749 keV
-             3         743.453040 keV
-             4         713.192314 keV
-             5         127.687425 keV
-             6         233.452919 keV
-             7          10.326920 keV
-             8         596.649094 keV
-             9         412.055277 keV
-            10         104.888836 keV
-            11        2604.416107 keV
-            12          22.790327 keV
-            13         559.522361 keV
-            14         576.747526 keV
-            15        1828.898730 keV
-            16         484.551181 keV
-            17         168.060885 keV
-            18        1671.188447 keV
-            19          46.921210 keV
-            20           3.104307 keV
-            21        1187.502551 keV
-            22          30.855690 keV
-            23          85.548855 keV
-            24          51.006143 keV
-            25        2225.201142 keV
-            26        1009.630394 keV
-            27        2394.804927 keV
-            28        6515.559609 keV
-            29        1246.486372 keV
-            30        1267.530178 keV
-            31        6133.822222 keV
-            32        4751.947640 keV
-            33         958.134139 keV
-            34        3029.512181 keV
-            35         393.154959 keV
-            36        2746.579029 keV
-            37        4613.164231 keV
-            38        5803.317277 keV
-            39         696.787563 keV
-            40        1324.285363 keV
-            41        4940.894149 keV
-            42        4304.387049 keV
-            43        6111.258339 keV
-            44         891.756649 keV
-            45        4060.209222 keV
-            46         377.969963 keV
-            47        3723.043598 keV
-            48        3282.049009 keV
-            49         989.269770 keV
-            50        2628.350850 keV
-            51        6104.241816 keV
-            52        8364.768741 keV
-            53       11289.696047 keV
-            54        5168.361034 keV
-            55        7873.498722 keV
-            56       19478.022618 keV
-            57        8962.510328 keV
-            58       15774.260277 keV
-            59        4515.988203 keV
-            60        2112.479262 keV
-            61       13273.279528 keV
-            62       14778.476415 keV
-            63       16208.921447 keV
-            64        7626.547551 keV
-            65        9695.813441 keV
-            66       18345.110314 keV
-            67       19108.791314 keV
-            68       12953.099563 keV
-            69        5048.988065 keV
-            70        4188.391852 keV
-            71        4318.937491 keV
-            72        7748.011731 keV
-            73        8772.674971 keV
-            74        7598.924770 keV
-            75       31279.850061 keV
-            76       26471.385845 keV
-            77       35173.918249 keV
-            78       35656.951712 keV
-            79       26400.568897 keV
-            80       25551.677006 keV
-            81      353113.888628 keV
-            82      290300.605612 keV
-            83      354601.906927 keV
-            84       34160.967960 keV
-            85       31317.768362 keV
-            86      308126.042778 keV
-            87      275377.149833 keV
-            88      297994.973781 keV
-            89       25246.491432 keV
-            90       41437.315034 keV
-            91      342331.126940 keV
-            92      290673.826590 keV
-            93      348396.404306 keV
-            94       23679.119893 keV
-            95       20057.663731 keV
-            96       24501.817591 keV
-            97       31836.259811 keV
-            98       34183.683234 keV
-            99       22491.028759 keV
-           100      326657.959246 keV
-           101      381609.748952 keV
-           102      332213.118753 keV
-           103      367327.968528 keV
-           104      336363.806935 keV
-           105      370305.375119 keV
-           106      403263.403869 keV
-           107      413126.459309 keV
-           108      390821.335900 keV
-           109      350209.929934 keV
-           110      364782.217987 keV
-           111      433530.333102 keV
-           112      384839.277664 keV
-           113      378203.255602 keV
-           114      331327.858436 keV
-           115      326682.730163 keV
-           116      392376.906386 keV
-           117      401783.657215 keV
-           118      372085.694633 keV
-           119      360120.933347 keV
-           120      343013.433985 keV
-           121      348446.535331 keV
-           122      330690.182100 keV
-           123      315711.225028 keV
-           124      319923.104801 keV
+             0         378.726423 keV
+             1         182.113828 keV
+             2          91.855243 keV
+             3        1738.088101 keV
+             4          29.509791 keV
+             5         317.878320 keV
+             6         588.260717 keV
+             7         173.872823 keV
+             8        1922.899168 keV
+             9         476.185016 keV
+            10        1192.642995 keV
+            11        2208.236423 keV
+            12         637.555497 keV
+            13        2304.901783 keV
+            14         102.068024 keV
+            15         876.154399 keV
+            16         231.910653 keV
+            17        3059.076567 keV
+            18         184.109496 keV
+            19         455.475414 keV
+            20         139.416741 keV
+            21        2857.101317 keV
+            22           3.627981 keV
+            24         416.767545 keV
+            25        2554.798156 keV
+            26        1986.521150 keV
+            27        3504.976593 keV
+            28        2642.944812 keV
+            29         915.849131 keV
+            30        4349.858421 keV
+            31        4945.383058 keV
+            32        1331.257843 keV
+            33        2657.823501 keV
+            34        2180.730963 keV
+            35        3943.900053 keV
+            36        5406.614866 keV
+            37        5256.925007 keV
+            38        2787.210882 keV
+            39        1599.266573 keV
+            40        3793.481430 keV
+            41        9303.577646 keV
+            42        6255.942660 keV
+            43        8547.056622 keV
+            44         523.361227 keV
+            45        2290.941302 keV
+            46        1028.565583 keV
+            47         218.027201 keV
+            48        3678.513030 keV
+            49        1226.425889 keV
+            50        2645.238408 keV
+            51       11136.302982 keV
+            52        5199.428565 keV
+            53       11867.219743 keV
+            54        2127.645076 keV
+            55        6641.442650 keV
+            56       14852.111285 keV
+            57       25287.985610 keV
+            58       13753.701070 keV
+            59        5986.665777 keV
+            60        3958.381014 keV
+            61       16327.868030 keV
+            62       24944.275545 keV
+            63       17949.000037 keV
+            64        3608.377834 keV
+            65        3253.093993 keV
+            66       17619.078371 keV
+            67        9615.578395 keV
+            68       17494.177120 keV
+            69        6352.938898 keV
+            70        5467.889000 keV
+            71        3786.312363 keV
+            72        6441.046944 keV
+            73        3663.871571 keV
+            74        6813.250045 keV
+            75       21030.645630 keV
+            76       45541.249355 keV
+            77       26558.014099 keV
+            78       32627.273048 keV
+            79       23717.253726 keV
+            80       28838.876225 keV
+            81      364891.555133 keV
+            82      322076.175708 keV
+            83      332120.124765 keV
+            84       29226.907934 keV
+            85       34239.869390 keV
+            86      291668.120324 keV
+            87      258787.969858 keV
+            88      324403.288681 keV
+            89       27580.806278 keV
+            90       27387.908214 keV
+            91      360194.295529 keV
+            92      320146.279200 keV
+            93      366230.501342 keV
+            94       26826.561321 keV
+            95       20184.069502 keV
+            96       29691.560351 keV
+            97       26903.589481 keV
+            98       34790.354386 keV
+            99       19908.308718 keV
+           100      336209.249724 keV
+           101      324030.733317 keV
+           102      345996.862684 keV
+           103      366343.853324 keV
+           104      313450.641500 keV
+           105      355350.644979 keV
+           106      396198.280568 keV
+           107      385956.302862 keV
+           108      432561.438510 keV
+           109      380138.019562 keV
+           110      350892.416227 keV
+           111      384920.721356 keV
+           112      399097.638108 keV
+           113      363179.462184 keV
+           114      373647.565392 keV
+           115      339528.845363 keV
+           116      373550.933446 keV
+           117      382235.155810 keV
+           118      401447.254977 keV
+           119      355212.311282 keV
+           120      354737.288041 keV
+           121      354215.218471 keV
+           122      341958.906632 keV
+           123      354223.523786 keV
+           124      353983.341914 keV
 ============================================================
  closed file mfd_tl_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tg_EnergyDeposit.out for output
 ============================================================
-             0         670.223331 keV
-             2         475.013749 keV
-             3         743.453040 keV
-             4         713.192314 keV
-             5         127.687425 keV
-             6         233.452919 keV
-             7          10.326920 keV
-             8         596.649094 keV
-             9         412.055277 keV
-            10         104.888836 keV
-            11        2604.416107 keV
-            12          22.790327 keV
-            13         559.522361 keV
-            14         576.747526 keV
-            15        1828.898730 keV
-            16         484.551181 keV
-            17         168.060885 keV
-            18        1671.188447 keV
-            19          46.921210 keV
-            20           3.104307 keV
-            21        1187.502551 keV
-            22          30.855690 keV
-            23          85.548855 keV
-            24          51.006143 keV
-            25        2225.201142 keV
-            26        1009.630394 keV
-            27        2394.804927 keV
-            28        6515.559609 keV
-            29        1246.486372 keV
-            30        1267.530178 keV
-            31        6133.822222 keV
-            32        4751.947640 keV
-            33         958.134139 keV
-            34        3029.512181 keV
-            35         393.154959 keV
-            36        2746.579029 keV
-            37        4613.164231 keV
-            38        5803.317277 keV
-            39         696.787563 keV
-            40        1324.285363 keV
-            41        4940.894149 keV
-            42        4304.387049 keV
-            43        6111.258339 keV
-            44         891.756649 keV
-            45        4060.209222 keV
-            46         377.969963 keV
-            47        3723.043598 keV
-            48        3282.049009 keV
-            49         989.269770 keV
-            50        2628.350850 keV
-            51        6104.241816 keV
-            52        8364.768741 keV
-            53       11289.696047 keV
-            54        5168.361034 keV
-            55        7873.498722 keV
-            56       19478.022618 keV
-            57        8962.510328 keV
-            58       15774.260277 keV
-            59        4515.988203 keV
-            60        2112.479262 keV
-            61       13273.279528 keV
-            62       14778.476415 keV
-            63       16208.921447 keV
-            64        7626.547551 keV
-            65        9695.813441 keV
-            66       18345.110314 keV
-            67       19108.791314 keV
-            68       12953.099563 keV
-            69        5048.988065 keV
-            70        4188.391852 keV
-            71        4318.937491 keV
-            72        7748.011731 keV
-            73        8772.674971 keV
-            74        7598.924770 keV
-            75       31279.850061 keV
-            76       26471.385845 keV
-            77       35173.918249 keV
-            78       35656.951712 keV
-            79       26400.568897 keV
-            80       25551.677006 keV
-            81      353113.888628 keV
-            82      290300.605612 keV
-            83      354601.906927 keV
-            84       34160.967960 keV
-            85       31317.768362 keV
-            86      308126.042778 keV
-            87      275377.149833 keV
-            88      297994.973781 keV
-            89       25246.491432 keV
-            90       41437.315034 keV
-            91      342331.126940 keV
-            92      290673.826590 keV
-            93      348396.404306 keV
-            94       23679.119893 keV
-            95       20057.663731 keV
-            96       24501.817591 keV
-            97       31836.259811 keV
-            98       34183.683234 keV
-            99       22491.028759 keV
-           100      326657.959246 keV
-           101      381609.748952 keV
-           102      332213.118753 keV
-           103      367327.968528 keV
-           104      336363.806935 keV
-           105      370305.375119 keV
-           106      403263.403869 keV
-           107      413126.459309 keV
-           108      390821.335900 keV
-           109      350209.929934 keV
-           110      364782.217987 keV
-           111      433530.333102 keV
-           112      384839.277664 keV
-           113      378203.255602 keV
-           114      331327.858436 keV
-           115      326682.730163 keV
-           116      392376.906386 keV
-           117      401783.657215 keV
-           118      372085.694633 keV
-           119      360120.933347 keV
-           120      343013.433985 keV
-           121      348446.535331 keV
-           122      330690.182100 keV
-           123      315711.225028 keV
-           124      319923.104801 keV
+             0         378.726423 keV
+             1         182.113828 keV
+             2          91.855243 keV
+             3        1738.088101 keV
+             4          29.509791 keV
+             5         317.878320 keV
+             6         588.260717 keV
+             7         173.872823 keV
+             8        1922.899168 keV
+             9         476.185016 keV
+            10        1192.642995 keV
+            11        2208.236423 keV
+            12         637.555497 keV
+            13        2304.901783 keV
+            14         102.068024 keV
+            15         876.154399 keV
+            16         231.910653 keV
+            17        3059.076567 keV
+            18         184.109496 keV
+            19         455.475414 keV
+            20         139.416741 keV
+            21        2857.101317 keV
+            22           3.627981 keV
+            24         416.767545 keV
+            25        2554.798156 keV
+            26        1986.521150 keV
+            27        3504.976593 keV
+            28        2642.944812 keV
+            29         915.849131 keV
+            30        4349.858421 keV
+            31        4945.383058 keV
+            32        1331.257843 keV
+            33        2657.823501 keV
+            34        2180.730963 keV
+            35        3943.900053 keV
+            36        5406.614866 keV
+            37        5256.925007 keV
+            38        2787.210882 keV
+            39        1599.266573 keV
+            40        3793.481430 keV
+            41        9303.577646 keV
+            42        6255.942660 keV
+            43        8547.056622 keV
+            44         523.361227 keV
+            45        2290.941302 keV
+            46        1028.565583 keV
+            47         218.027201 keV
+            48        3678.513030 keV
+            49        1226.425889 keV
+            50        2645.238408 keV
+            51       11136.302982 keV
+            52        5199.428565 keV
+            53       11867.219743 keV
+            54        2127.645076 keV
+            55        6641.442650 keV
+            56       14852.111285 keV
+            57       25287.985610 keV
+            58       13753.701070 keV
+            59        5986.665777 keV
+            60        3958.381014 keV
+            61       16327.868030 keV
+            62       24944.275545 keV
+            63       17949.000037 keV
+            64        3608.377834 keV
+            65        3253.093993 keV
+            66       17619.078371 keV
+            67        9615.578395 keV
+            68       17494.177120 keV
+            69        6352.938898 keV
+            70        5467.889000 keV
+            71        3786.312363 keV
+            72        6441.046944 keV
+            73        3663.871571 keV
+            74        6813.250045 keV
+            75       21030.645630 keV
+            76       45541.249355 keV
+            77       26558.014099 keV
+            78       32627.273048 keV
+            79       23717.253726 keV
+            80       28838.876225 keV
+            81      364891.555133 keV
+            82      322076.175708 keV
+            83      332120.124765 keV
+            84       29226.907934 keV
+            85       34239.869390 keV
+            86      291668.120324 keV
+            87      258787.969858 keV
+            88      324403.288681 keV
+            89       27580.806278 keV
+            90       27387.908214 keV
+            91      360194.295529 keV
+            92      320146.279200 keV
+            93      366230.501342 keV
+            94       26826.561321 keV
+            95       20184.069502 keV
+            96       29691.560351 keV
+            97       26903.589481 keV
+            98       34790.354386 keV
+            99       19908.308718 keV
+           100      336209.249724 keV
+           101      324030.733317 keV
+           102      345996.862684 keV
+           103      366343.853324 keV
+           104      313450.641500 keV
+           105      355350.644979 keV
+           106      396198.280568 keV
+           107      385956.302862 keV
+           108      432561.438510 keV
+           109      380138.019562 keV
+           110      350892.416227 keV
+           111      384920.721356 keV
+           112      399097.638108 keV
+           113      363179.462184 keV
+           114      373647.565392 keV
+           115      339528.845363 keV
+           116      373550.933446 keV
+           117      382235.155810 keV
+           118      401447.254977 keV
+           119      355212.311282 keV
+           120      354737.288041 keV
+           121      354215.218471 keV
+           122      341958.906632 keV
+           123      354223.523786 keV
+           124      353983.341914 keV
 ============================================================
  closed file mfd_tg_EnergyDeposit.out for output
 ============================================================
  opened file mfd_tl_NumberOfSteps.out for output
 ============================================================
-             0          22.000000 steps
-             1           3.000000 steps
+             0          19.000000 steps
+             1          23.000000 steps
              2          23.000000 steps
-             3          67.000000 steps
-             4          50.000000 steps
-             5          13.000000 steps
-             6          40.000000 steps
-             7          13.000000 steps
-             8          42.000000 steps
-             9          42.000000 steps
-            10          29.000000 steps
-            11         104.000000 steps
-            12          26.000000 steps
-            13          69.000000 steps
-            14          36.000000 steps
-            15          44.000000 steps
-            16          46.000000 steps
-            17          25.000000 steps
-            18          39.000000 steps
-            19           9.000000 steps
-            20           8.000000 steps
-            21          47.000000 steps
-            22          12.000000 steps
-            23          17.000000 steps
-            24           8.000000 steps
-            25          91.000000 steps
-            26          54.000000 steps
-            27         201.000000 steps
-            28         175.000000 steps
-            29         188.000000 steps
-            30          74.000000 steps
-            31         156.000000 steps
-            32         233.000000 steps
-            33         156.000000 steps
-            34          87.000000 steps
-            35          45.000000 steps
-            36         161.000000 steps
-            37         278.000000 steps
-            38         223.000000 steps
-            39         155.000000 steps
-            40          42.000000 steps
-            41         209.000000 steps
-            42         172.000000 steps
-            43         224.000000 steps
-            44         114.000000 steps
-            45          75.000000 steps
-            46          35.000000 steps
-            47          63.000000 steps
-            48         139.000000 steps
-            49          48.000000 steps
-            50         352.000000 steps
-            51         350.000000 steps
-            52         262.000000 steps
-            53         622.000000 steps
-            54         410.000000 steps
-            55         462.000000 steps
-            56         500.000000 steps
-            57         475.000000 steps
-            58         585.000000 steps
-            59         369.000000 steps
-            60         311.000000 steps
-            61         557.000000 steps
-            62         669.000000 steps
-            63         595.000000 steps
-            64         502.000000 steps
-            65         384.000000 steps
-            66         582.000000 steps
-            67         858.000000 steps
-            68         539.000000 steps
-            69         369.000000 steps
-            70         103.000000 steps
-            71         298.000000 steps
-            72         574.000000 steps
-            73         367.000000 steps
-            74         399.000000 steps
-            75        2754.000000 steps
-            76        2744.000000 steps
-            77        3062.000000 steps
-            78        3467.000000 steps
-            79        3282.000000 steps
-            80        3598.000000 steps
-            81        2712.000000 steps
-            82        2651.000000 steps
-            83        2507.000000 steps
-            84        3838.000000 steps
-            85        3598.000000 steps
-            86        2976.000000 steps
-            87        2969.000000 steps
-            88        2896.000000 steps
-            89        3295.000000 steps
-            90        3866.000000 steps
-            91        2737.000000 steps
-            92        3081.000000 steps
-            93        2404.000000 steps
-            94        3610.000000 steps
-            95        2453.000000 steps
-            96        2918.000000 steps
-            97        3134.000000 steps
-            98        3043.000000 steps
-            99        2690.000000 steps
-           100       14152.000000 steps
-           101       17517.000000 steps
-           102       16496.000000 steps
-           103       17798.000000 steps
-           104       14269.000000 steps
-           105       18539.000000 steps
-           106       23826.000000 steps
-           107       22663.000000 steps
-           108       21082.000000 steps
-           109       16520.000000 steps
-           110       19251.000000 steps
-           111       24086.000000 steps
-           112       22262.000000 steps
-           113       21595.000000 steps
-           114       18330.000000 steps
-           115       16488.000000 steps
-           116       21568.000000 steps
-           117       22503.000000 steps
-           118       19665.000000 steps
-           119       16882.000000 steps
-           120       14498.000000 steps
-           121       18150.000000 steps
-           122       17959.000000 steps
-           123       15368.000000 steps
-           124       13966.000000 steps
+             3          85.000000 steps
+             4          11.000000 steps
+             5          48.000000 steps
+             6         106.000000 steps
+             7          28.000000 steps
+             8          50.000000 steps
+             9          21.000000 steps
+            10          78.000000 steps
+            11          65.000000 steps
+            12          46.000000 steps
+            13          64.000000 steps
+            14          17.000000 steps
+            15          32.000000 steps
+            16          17.000000 steps
+            17          90.000000 steps
+            18          17.000000 steps
+            19          23.000000 steps
+            20          23.000000 steps
+            21          66.000000 steps
+            22          11.000000 steps
+            23           5.000000 steps
+            24          16.000000 steps
+            25          44.000000 steps
+            26          81.000000 steps
+            27         147.000000 steps
+            28          98.000000 steps
+            29          58.000000 steps
+            30         135.000000 steps
+            31         188.000000 steps
+            32         144.000000 steps
+            33         166.000000 steps
+            34          67.000000 steps
+            35         190.000000 steps
+            36         293.000000 steps
+            37         314.000000 steps
+            38         221.000000 steps
+            39          97.000000 steps
+            40         105.000000 steps
+            41         315.000000 steps
+            42         233.000000 steps
+            43         161.000000 steps
+            44          50.000000 steps
+            45          57.000000 steps
+            46          73.000000 steps
+            47          27.000000 steps
+            48          90.000000 steps
+            49          53.000000 steps
+            50         236.000000 steps
+            51         457.000000 steps
+            52         275.000000 steps
+            53         511.000000 steps
+            54         401.000000 steps
+            55         444.000000 steps
+            56         544.000000 steps
+            57         784.000000 steps
+            58         506.000000 steps
+            59         253.000000 steps
+            60         411.000000 steps
+            61         601.000000 steps
+            62         829.000000 steps
+            63         592.000000 steps
+            64         403.000000 steps
+            65         311.000000 steps
+            66         574.000000 steps
+            67         712.000000 steps
+            68         574.000000 steps
+            69         398.000000 steps
+            70         323.000000 steps
+            71         331.000000 steps
+            72         424.000000 steps
+            73         479.000000 steps
+            74         302.000000 steps
+            75        2882.000000 steps
+            76        3396.000000 steps
+            77        3383.000000 steps
+            78        3322.000000 steps
+            79        2285.000000 steps
+            80        2899.000000 steps
+            81        2954.000000 steps
+            82        3173.000000 steps
+            83        2647.000000 steps
+            84        3264.000000 steps
+            85        3620.000000 steps
+            86        2731.000000 steps
+            87        3015.000000 steps
+            88        2975.000000 steps
+            89        3281.000000 steps
+            90        2988.000000 steps
+            91        2841.000000 steps
+            92        2722.000000 steps
+            93        2860.000000 steps
+            94        3540.000000 steps
+            95        3000.000000 steps
+            96        3076.000000 steps
+            97        2802.000000 steps
+            98        3080.000000 steps
+            99        2923.000000 steps
+           100       14424.000000 steps
+           101       17602.000000 steps
+           102       18481.000000 steps
+           103       18643.000000 steps
+           104       13974.000000 steps
+           105       18025.000000 steps
+           106       23546.000000 steps
+           107       20789.000000 steps
+           108       23010.000000 steps
+           109       19279.000000 steps
+           110       17682.000000 steps
+           111       22997.000000 steps
+           112       22628.000000 steps
+           113       23609.000000 steps
+           114       18175.000000 steps
+           115       17084.000000 steps
+           116       21237.000000 steps
+           117       21187.000000 steps
+           118       22002.000000 steps
+           119       18564.000000 steps
+           120       13679.000000 steps
+           121       18812.000000 steps
+           122       17528.000000 steps
+           123       18327.000000 steps
+           124       15936.000000 steps
 ============================================================
  closed file mfd_tl_NumberOfSteps.out for output
 ============================================================
  opened file mfd_tg_NumberOfSteps.out for output
 ============================================================
-             0          22.000000 steps
-             1           3.000000 steps
+             0          19.000000 steps
+             1          23.000000 steps
              2          23.000000 steps
-             3          67.000000 steps
-             4          50.000000 steps
-             5          13.000000 steps
-             6          40.000000 steps
-             7          13.000000 steps
-             8          42.000000 steps
-             9          42.000000 steps
-            10          29.000000 steps
-            11         104.000000 steps
-            12          26.000000 steps
-            13          69.000000 steps
-            14          36.000000 steps
-            15          44.000000 steps
-            16          46.000000 steps
-            17          25.000000 steps
-            18          39.000000 steps
-            19           9.000000 steps
-            20           8.000000 steps
-            21          47.000000 steps
-            22          12.000000 steps
-            23          17.000000 steps
-            24           8.000000 steps
-            25          91.000000 steps
-            26          54.000000 steps
-            27         201.000000 steps
-            28         175.000000 steps
-            29         188.000000 steps
-            30          74.000000 steps
-            31         156.000000 steps
-            32         233.000000 steps
-            33         156.000000 steps
-            34          87.000000 steps
-            35          45.000000 steps
-            36         161.000000 steps
-            37         278.000000 steps
-            38         223.000000 steps
-            39         155.000000 steps
-            40          42.000000 steps
-            41         209.000000 steps
-            42         172.000000 steps
-            43         224.000000 steps
-            44         114.000000 steps
-            45          75.000000 steps
-            46          35.000000 steps
-            47          63.000000 steps
-            48         139.000000 steps
-            49          48.000000 steps
-            50         352.000000 steps
-            51         350.000000 steps
-            52         262.000000 steps
-            53         622.000000 steps
-            54         410.000000 steps
-            55         462.000000 steps
-            56         500.000000 steps
-            57         475.000000 steps
-            58         585.000000 steps
-            59         369.000000 steps
-            60         311.000000 steps
-            61         557.000000 steps
-            62         669.000000 steps
-            63         595.000000 steps
-            64         502.000000 steps
-            65         384.000000 steps
-            66         582.000000 steps
-            67         858.000000 steps
-            68         539.000000 steps
-            69         369.000000 steps
-            70         103.000000 steps
-            71         298.000000 steps
-            72         574.000000 steps
-            73         367.000000 steps
-            74         399.000000 steps
-            75        2754.000000 steps
-            76        2744.000000 steps
-            77        3062.000000 steps
-            78        3467.000000 steps
-            79        3282.000000 steps
-            80        3598.000000 steps
-            81        2712.000000 steps
-            82        2651.000000 steps
-            83        2507.000000 steps
-            84        3838.000000 steps
-            85        3598.000000 steps
-            86        2976.000000 steps
-            87        2969.000000 steps
-            88        2896.000000 steps
-            89        3295.000000 steps
-            90        3866.000000 steps
-            91        2737.000000 steps
-            92        3081.000000 steps
-            93        2404.000000 steps
-            94        3610.000000 steps
-            95        2453.000000 steps
-            96        2918.000000 steps
-            97        3134.000000 steps
-            98        3043.000000 steps
-            99        2690.000000 steps
-           100       14152.000000 steps
-           101       17517.000000 steps
-           102       16496.000000 steps
-           103       17798.000000 steps
-           104       14269.000000 steps
-           105       18539.000000 steps
-           106       23826.000000 steps
-           107       22663.000000 steps
-           108       21082.000000 steps
-           109       16520.000000 steps
-           110       19251.000000 steps
-           111       24086.000000 steps
-           112       22262.000000 steps
-           113       21595.000000 steps
-           114       18330.000000 steps
-           115       16488.000000 steps
-           116       21568.000000 steps
-           117       22503.000000 steps
-           118       19665.000000 steps
-           119       16882.000000 steps
-           120       14498.000000 steps
-           121       18150.000000 steps
-           122       17959.000000 steps
-           123       15368.000000 steps
-           124       13966.000000 steps
+             3          85.000000 steps
+             4          11.000000 steps
+             5          48.000000 steps
+             6         106.000000 steps
+             7          28.000000 steps
+             8          50.000000 steps
+             9          21.000000 steps
+            10          78.000000 steps
+            11          65.000000 steps
+            12          46.000000 steps
+            13          64.000000 steps
+            14          17.000000 steps
+            15          32.000000 steps
+            16          17.000000 steps
+            17          90.000000 steps
+            18          17.000000 steps
+            19          23.000000 steps
+            20          23.000000 steps
+            21          66.000000 steps
+            22          11.000000 steps
+            23           5.000000 steps
+            24          16.000000 steps
+            25          44.000000 steps
+            26          81.000000 steps
+            27         147.000000 steps
+            28          98.000000 steps
+            29          58.000000 steps
+            30         135.000000 steps
+            31         188.000000 steps
+            32         144.000000 steps
+            33         166.000000 steps
+            34          67.000000 steps
+            35         190.000000 steps
+            36         293.000000 steps
+            37         314.000000 steps
+            38         221.000000 steps
+            39          97.000000 steps
+            40         105.000000 steps
+            41         315.000000 steps
+            42         233.000000 steps
+            43         161.000000 steps
+            44          50.000000 steps
+            45          57.000000 steps
+            46          73.000000 steps
+            47          27.000000 steps
+            48          90.000000 steps
+            49          53.000000 steps
+            50         236.000000 steps
+            51         457.000000 steps
+            52         275.000000 steps
+            53         511.000000 steps
+            54         401.000000 steps
+            55         444.000000 steps
+            56         544.000000 steps
+            57         784.000000 steps
+            58         506.000000 steps
+            59         253.000000 steps
+            60         411.000000 steps
+            61         601.000000 steps
+            62         829.000000 steps
+            63         592.000000 steps
+            64         403.000000 steps
+            65         311.000000 steps
+            66         574.000000 steps
+            67         712.000000 steps
+            68         574.000000 steps
+            69         398.000000 steps
+            70         323.000000 steps
+            71         331.000000 steps
+            72         424.000000 steps
+            73         479.000000 steps
+            74         302.000000 steps
+            75        2882.000000 steps
+            76        3396.000000 steps
+            77        3383.000000 steps
+            78        3322.000000 steps
+            79        2285.000000 steps
+            80        2899.000000 steps
+            81        2954.000000 steps
+            82        3173.000000 steps
+            83        2647.000000 steps
+            84        3264.000000 steps
+            85        3620.000000 steps
+            86        2731.000000 steps
+            87        3015.000000 steps
+            88        2975.000000 steps
+            89        3281.000000 steps
+            90        2988.000000 steps
+            91        2841.000000 steps
+            92        2722.000000 steps
+            93        2860.000000 steps
+            94        3540.000000 steps
+            95        3000.000000 steps
+            96        3076.000000 steps
+            97        2802.000000 steps
+            98        3080.000000 steps
+            99        2923.000000 steps
+           100       14424.000000 steps
+           101       17602.000000 steps
+           102       18481.000000 steps
+           103       18643.000000 steps
+           104       13974.000000 steps
+           105       18025.000000 steps
+           106       23546.000000 steps
+           107       20789.000000 steps
+           108       23010.000000 steps
+           109       19279.000000 steps
+           110       17682.000000 steps
+           111       22997.000000 steps
+           112       22628.000000 steps
+           113       23609.000000 steps
+           114       18175.000000 steps
+           115       17084.000000 steps
+           116       21237.000000 steps
+           117       21187.000000 steps
+           118       22002.000000 steps
+           119       18564.000000 steps
+           120       13679.000000 steps
+           121       18812.000000 steps
+           122       17528.000000 steps
+           123       18327.000000 steps
+           124       15936.000000 steps
 ============================================================
  closed file mfd_tg_NumberOfSteps.out for output
 ============================================================
@@ -1537,6 +1565,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.059 MB
+Dynamic pools deleted: 13 / Total memory freed: 0.058 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

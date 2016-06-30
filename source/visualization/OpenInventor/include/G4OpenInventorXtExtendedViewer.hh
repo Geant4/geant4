@@ -83,7 +83,6 @@ private:
   G4OpenInventorXtExaminerViewer* fViewer;
   Widget fHelpForm;
   Widget fHelpText;
-  Widget fPDFButton;
 };
 
 #endif

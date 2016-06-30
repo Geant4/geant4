@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DELPHIMagField.cc 68055 2013-03-13 14:43:28Z gcosmo $
+// $Id: G4DELPHIMagField.cc 96751 2016-05-04 09:39:38Z gcosmo $
 // -------------------------------------------------------------------
 
 #include "G4DELPHIMagField.hh"
@@ -35,9 +35,9 @@ G4DELPHIMagField::G4DELPHIMagField()
 {
 }
 
-G4DELPHIMagField* G4DELPHIMagField::Clone() const
+G4Field* G4DELPHIMagField::Clone() const
 {
-    return new G4DELPHIMagField;
+   return new G4DELPHIMagField;
 }
 ////////////////////////////////////////////////////////////////////////
 

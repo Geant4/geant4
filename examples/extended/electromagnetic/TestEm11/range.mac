@@ -1,4 +1,4 @@
-# $Id: range.mac 82462 2014-06-23 10:45:28Z gcosmo $
+# $Id: range.mac 96172 2016-03-22 09:19:11Z gcosmo $
 #
 # Macro file for "TestEm11.cc"
 # 
@@ -25,6 +25,7 @@
 /process/inactivate msc
 /process/eLoss/fluct false
 #
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 600 keV
 #

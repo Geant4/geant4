@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularReactionTable.cc 94688 2015-12-02 17:15:08Z gunter $
+// $Id: G4DNAMolecularReactionTable.cc 95948 2016-03-03 10:40:33Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -48,6 +48,7 @@
 #include "G4MolecularConfiguration.hh"
 #include "G4ReactionTableMessenger.hh"
 #include "G4IosFlagsSaver.hh"
+#include "G4Exp.hh"
 
 using namespace std;
 
@@ -191,7 +192,7 @@ double G4DNAMolecularReactionData::PolynomialParam(double temp_K, std::vector<do
 
  double G4DNAMolecularReactionData::ArrehniusParam(double temp_K, std::vector<double> P)
  {
-   return P[0]*exp(P[1]/temp_K)*
+   return P[0]*G4Exp(P[1]/temp_K)*
           (1e-3 * CLHEP::m3 / (CLHEP::mole * CLHEP::s));
  }
 

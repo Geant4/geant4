@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SimpleLocator.cc 90451 2015-05-29 09:48:07Z gcosmo $
+// $Id: G4SimpleLocator.cc 96743 2016-05-03 08:01:33Z gcosmo $
 //
 // Class G4SimpleLocator implementation
 //
@@ -120,7 +120,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
   NormalAtEntry = GetSurfaceNormal( CurrentE_Point, validNormalAtE); 
 
 #ifdef G4DEBUG_FIELD
-  static G4double tolerance = 1.0e-8; 
+  const G4double tolerance = 1.0e-8; 
   G4ThreeVector  StartPosition= CurveStartPointVelocity.GetPosition(); 
   if( (TrialPoint - StartPosition).mag() < tolerance * CLHEP::mm ) 
   {
@@ -422,7 +422,7 @@ G4bool G4SimpleLocator::EstimateIntersectionPoint(
        // tests ChordAF_Vector.mag() <= maximum_lateral_displacement 
 
 #ifdef G4DEBUG_LOCATE_INTERSECTION  
-     static G4int trigger_substepno_print= warn_substeps - 20;
+     G4int trigger_substepno_print= warn_substeps - 20;
 
      if( substep_no >= trigger_substepno_print )
      {

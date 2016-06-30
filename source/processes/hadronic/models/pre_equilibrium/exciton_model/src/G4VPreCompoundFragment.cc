@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4VPreCompoundFragment.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
@@ -33,7 +33,8 @@
 
 #include "G4VPreCompoundFragment.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4PreCompoundParameters.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4NucleiProperties.hh"
 
 G4VPreCompoundFragment::G4VPreCompoundFragment(
@@ -46,18 +47,16 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
     theMaxKinEnergy(0.0),theResMass(0.0),
     theReducedMass(0.0),
     theEmissionProbability(0.0),theCoulombBarrier(0.0),
-    OPTxs(3),useSICB(false)
+    OPTxs(3),useSICB(true)
 {
   theMass = particle->GetPDGMass();
-  theParameters = new G4PreCompoundParameters();
+  theParameters = G4NuclearLevelData::GetInstance()->GetParameters();
   g4pow = G4Pow::GetInstance();
-  theResA13 = 0;
+  theResA13 = 0.0;
 }
 
 G4VPreCompoundFragment::~G4VPreCompoundFragment()
-{
-  delete theParameters;
-}
+{}
 
 std::ostream& 
 operator << (std::ostream &out, const G4VPreCompoundFragment &theFragment)

@@ -9,8 +9,8 @@
   c1->cd();
   c1->Update();
   
-  TFile fa = TFile("Li7.root");  
-  TFile fb = TFile("Li6.root");  
+  TFile fa("Li7.root");  
+  TFile fb("Li6.root");  
 
   TH1D* ha1 = (TH1D*)fa.Get("6");  
   ha1->SetStats(kFALSE);

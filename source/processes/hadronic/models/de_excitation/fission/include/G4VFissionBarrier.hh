@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VFissionBarrier.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VFissionBarrier.hh 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -43,14 +43,15 @@ public:
   virtual ~G4VFissionBarrier();
 
 private:
-  G4VFissionBarrier(const G4VFissionBarrier & right);
+  G4VFissionBarrier(const G4VFissionBarrier & right) = delete;
 
-  const G4VFissionBarrier & operator=(const G4VFissionBarrier & right);
-  G4bool operator==(const G4VFissionBarrier & right) const;
-  G4bool operator!=(const G4VFissionBarrier & right) const;
+  const G4VFissionBarrier & operator=(const G4VFissionBarrier & right) = delete;
+  G4bool operator==(const G4VFissionBarrier & right) const = delete;
+  G4bool operator!=(const G4VFissionBarrier & right) const = delete;
   
 public:
-  virtual G4double FissionBarrier(G4int A, G4int Z,const G4double U) = 0;
+
+  virtual G4double FissionBarrier(G4int A, G4int Z, G4double U) const = 0;
   
 
 };

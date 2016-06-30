@@ -67,7 +67,6 @@
 #include "G4NucleusLimits.hh"
 #include "G4RadioactiveDecayRate.hh"
 #include "G4RadioactiveDecayRateVector.hh"
-#include "G4RIsotopeTable.hh"
 #include "G4RadioactivityTable.hh"
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
@@ -253,11 +252,19 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4double GetMeanLifeTime(const G4Track& theTrack,
                              G4ForceCondition* condition);
 
-    G4double GetTaoTime(const G4double, const G4double);
+    G4double ConvolveSourceTimeProfile(const G4double, const G4double);
 
     G4double GetDecayTime();
 
     G4int GetDecayTimeBin(const G4double aDecayTime);
+
+    //Add gamma,Xray,conversion,and auger electrons for bias mode
+    void AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
+                                            G4double weight,
+                                            G4double currenTime,
+                                            std::vector<double>& weights_v,
+                                            std::vector<double>& times_v,
+                                            std::vector<G4DynamicParticle*>& secondaries_v);
 
   private:
 

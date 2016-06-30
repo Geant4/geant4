@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 86125 2014-11-07 11:07:29Z gcosmo $
+// $Id: PhysicsList.cc 96284 2016-04-04 07:19:26Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,7 +76,7 @@ PhysicsList::PhysicsList()
   //
   RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
-  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
+  ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Elastic scattering

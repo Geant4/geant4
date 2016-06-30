@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 96669 2016-04-29 12:03:24Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -57,31 +57,8 @@
 #include "G4AttHolder.hh"
 #include "G4PhysicalConstants.hh"
 
-G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
-                                            G4int id,
-                                            const G4String& name):
-G4VSceneHandler (system, id, name),
-#ifdef G4OPENGL_VERSION_2
-fEmulate_GL_QUADS(false),
-#endif
-fPickName(0),
-// glFlush take about 90% time.  Dividing glFlush number by 100 will
-// change the first vis time from 100% to 10+90/100 = 10,9%.
-fEventsDrawInterval(1),
-fEventsWaitingToBeFlushed(0),
-fThreePassCapable(false),
-fSecondPassForTransparencyRequested(false),
-fSecondPassForTransparency(false),
-fThirdPassForNonHiddenMarkersRequested(false),
-fThirdPassForNonHiddenMarkers(false),
-fEdgeFlag(true)
-{
-}
-
-G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
-{
-  ClearStore ();
-}
+G4int G4OpenGLSceneHandler::fEventsDrawInterval = 1;
+G4int G4OpenGLSceneHandler::fEventsWaitingToBeFlushed = 0;
 
 const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
@@ -101,6 +78,30 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55
 };
+
+G4OpenGLSceneHandler::G4OpenGLSceneHandler (G4VGraphicsSystem& system,
+                                            G4int id,
+                                            const G4String& name):
+G4VSceneHandler (system, id, name),
+#ifdef G4OPENGL_VERSION_2
+fEmulate_GL_QUADS(false),
+#endif
+fPickName(0),
+// glFlush take about 90% time.  Dividing glFlush number by 100 will
+// change the first vis time from 100% to 10+90/100 = 10,9%.
+fThreePassCapable(false),
+fSecondPassForTransparencyRequested(false),
+fSecondPassForTransparency(false),
+fThirdPassForNonHiddenMarkersRequested(false),
+fThirdPassForNonHiddenMarkers(false),
+fEdgeFlag(true)
+{
+}
+
+G4OpenGLSceneHandler::~G4OpenGLSceneHandler ()
+{
+  ClearStore ();
+}
 
 void G4OpenGLSceneHandler::ClearAndDestroyAtts()
 {
@@ -1199,7 +1200,7 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
 #endif
   }
   
-  // delet the buffer
+  // delete the buffer
 #ifndef G4VIS_BUILD_OPENGLWT_DRIVER
   glDeleteBuffers(1,&fVertexBufferObject);
 #else
@@ -1207,6 +1208,5 @@ void G4OpenGLSceneHandler::drawVBOArray(std::vector<double> vertices)  {
 #endif
 }
 #endif
-
 
 #endif

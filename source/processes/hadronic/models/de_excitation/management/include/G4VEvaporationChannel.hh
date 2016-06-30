@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporationChannel.hh 93357 2015-10-19 13:40:13Z gcosmo $
+// $Id: G4VEvaporationChannel.hh 96526 2016-04-20 08:49:53Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -51,7 +51,7 @@ class G4VEvaporationChannel
 {
 public:
 
-  G4VEvaporationChannel(const G4String & aName = "");
+  explicit G4VEvaporationChannel(const G4String & aName = "");
   virtual ~G4VEvaporationChannel();
 
   // option definition
@@ -115,10 +115,10 @@ protected:
 
 private:
 
-  G4VEvaporationChannel(const G4VEvaporationChannel & right);
-  const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
-  G4bool operator==(const G4VEvaporationChannel & right) const;
-  G4bool operator!=(const G4VEvaporationChannel & right) const;
+  G4VEvaporationChannel(const G4VEvaporationChannel & right) = delete;
+  const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right)  = delete;
+  G4bool operator==(const G4VEvaporationChannel & right) const = delete;
+  G4bool operator!=(const G4VEvaporationChannel & right) const = delete;
 
   G4VEvaporationChannel* photonEvaporation;
 };
@@ -149,14 +149,10 @@ G4VEvaporationChannel::SetPhotonEvaporation(G4VEvaporationChannel* p)
   photonEvaporation = p;
 }
 
-inline void G4VEvaporationChannel::SetOPTxs(G4int opt) 
-{ 
-  OPTxs = opt; 
-}
+inline void G4VEvaporationChannel::SetOPTxs(G4int) 
+{}
 
-inline void G4VEvaporationChannel::UseSICB(G4bool use) 
-{ 
-  useSICB = use; 
-}
+inline void G4VEvaporationChannel::UseSICB(G4bool) 
+{}
 
 #endif

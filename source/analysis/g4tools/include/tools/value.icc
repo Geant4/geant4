@@ -340,8 +340,8 @@ inline bool value::minus(value& aThis,std::string& aError){
     return true;
   case value::ARRAY_DOUBLE:{
     std::vector<double>& stdv = aThis.u.m_array_double->vector();
-    unsigned int number = stdv.size();
-    for(unsigned int index=0;index<number;index++) stdv[index] = -stdv[index];
+    size_t number = stdv.size();
+    for(size_t index=0;index<number;index++) stdv[index] = -stdv[index];
     return true;}
   //case value::CHAR:
   //  aThis.u.m_char = -aThis.u.m_char;
@@ -979,8 +979,8 @@ inline bool value::subtract(value& aThis,const value& aV,std::string& aError){
       }
       std::vector<double>& stdv = aThis.u.m_array_double->vector();
       const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) { 
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) { 
         stdv[index] -= stdv2[index];
       }
       return true;}
@@ -1279,8 +1279,8 @@ inline bool value::multiply(value& aThis,const value& aV,std::string& aError){
       }
       std::vector<double>& stdv = aThis.u.m_array_double->vector();
       const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) { 
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) { 
         stdv[index] *= stdv2[index];
       }
       return true;}
@@ -1695,8 +1695,8 @@ inline bool value::divide(value& aThis,const value& aV,std::string& aError){
       std::vector<double>& stdv = aThis.u.m_array_double->vector();
       const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
       bool has_div_zero = false;
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) { 
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) { 
         if(stdv2[index]==0) {
           //FIXME : stdv[index] = nan;
           stdv[index] = 0; //PAW convention.
@@ -1805,8 +1805,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_int<=stdv[index]) {
           aThis.set(false);
           return true;
@@ -1861,8 +1861,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_double<=stdv[index]) {
           aThis.set(false);
           return true;
@@ -1917,8 +1917,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_float<=stdv[index]) {
           aThis.set(false);
           return true;
@@ -2032,8 +2032,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
     switch(aV.m_type) {
     case value::INT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]<=aV.u.m_int) {
           aThis.set(false);
           return true;
@@ -2044,8 +2044,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
     }
     case value::FLOAT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]<=aV.u.m_float) {
           aThis.set(false);
           return true;
@@ -2056,8 +2056,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
     }
     case value::DOUBLE:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]<=aV.u.m_double) {
           aThis.set(false);
           return true;
@@ -2068,8 +2068,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
     }
     case value::UNSIGNED_INT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]<=aV.u.m_unsigned_int ) {
           aThis.set(false);
           return true;
@@ -2082,8 +2082,8 @@ inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
       const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
       if(stdv.size()!=stdv2.size()) break;
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]<=stdv2[index]) {
           aThis.set(false);
           return true;
@@ -2175,8 +2175,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_int!=stdv[index]) {
           aThis.set(false);
           return true;
@@ -2233,8 +2233,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_float!=stdv[index]) {
           aThis.set(false);
           return true;
@@ -2289,8 +2289,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_double!=stdv[index]) {
           aThis.set(false);
           return true;
@@ -2435,8 +2435,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::ARRAY_DOUBLE:{
       const std::vector<double>& stdv = aV.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(aThis.u.m_unsigned_int !=stdv[index]) {
           aThis.set(false);
           return true;
@@ -2513,8 +2513,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
     switch(aV.m_type) {
     case value::INT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]!=aV.u.m_int) {
           aThis.set(false);
           return true;
@@ -2525,8 +2525,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
     }
     case value::FLOAT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]!=aV.u.m_float) {
           aThis.set(false);
           return true;
@@ -2537,8 +2537,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
     }
     case value::DOUBLE:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]!=aV.u.m_double) {
           aThis.set(false);
           return true;
@@ -2549,8 +2549,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
     }
     case value::UNSIGNED_INT:{
       const std::vector<double>& stdv = aThis.u.m_array_double->vector();
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]!=aV.u.m_unsigned_int ) {
           aThis.set(false);
           return true;
@@ -2566,8 +2566,8 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
         aThis.set(false);
         return true;
       }
-      unsigned int number = stdv.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = stdv.size();
+      for(size_t index=0;index<number;index++) {
         if(stdv[index]!=stdv2[index]) {
           aThis.set(false);
           return true;
@@ -3102,7 +3102,7 @@ inline std::string value::to_string(const value& aThis){
     tools::sprintf(s,16,"%g",aThis.u.m_double);
     return s;
   case value::VOID_STAR:
-    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_void_star);
+    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_void_star);
     return s;
   case value::UNSIGNED_SHORT:
     tools::sprintf(s,16,"%u",aThis.u.m_unsigned_short);
@@ -3132,13 +3132,13 @@ inline std::string value::to_string(const value& aThis){
   //  tools::sprintf(s,16,"%c",aThis.u.m_char);
   //  return s;
   case value::DOUBLE_STAR:
-    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_double_star);
+    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_double_star);
     return s;
   case value::FLOAT_STAR:
-    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_float_star);
+    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_float_star);
     return s;
   case value::INT_STAR:
-    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_int_star);
+    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_int_star);
     return s;
   case value::STRING:
     return *aThis.u.m_string;

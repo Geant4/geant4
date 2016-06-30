@@ -57,7 +57,7 @@ class G4PhysicsVector;
 class G4VIonDEDXTable {
 
  public:
-   G4VIonDEDXTable(); 
+   explicit G4VIonDEDXTable(); 
    virtual ~G4VIonDEDXTable();  
 
    // Function for building a stopping power table for a material consisting of
@@ -104,6 +104,12 @@ class G4VIonDEDXTable {
 	G4int,           // Atomic number of ion
         const G4String&  // Name or chemical formula of material
 					     ) = 0;
+
+private:
+
+  G4VIonDEDXTable(G4VIonDEDXTable&) = delete;
+  const G4VIonDEDXTable & operator=(const G4VIonDEDXTable&) = delete;
+
 };
 
 #endif // G4VIONDEDXTABLE_HH

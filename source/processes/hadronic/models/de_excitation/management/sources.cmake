@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88709 2015-03-06 15:33:12Z gcosmo $
+# $Id: sources.cmake 96348 2016-04-08 14:33:41Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -31,6 +31,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/hadrons/mesons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -41,17 +42,21 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_management
     HEADERS
+        G4DeexPrecoParameters.hh
         G4LevelManager.hh
         G4LevelReader.hh
         G4NuclearLevelData.hh
         G4NucLevel.hh
+        G4VEmissionProbability.hh
         G4VEvaporationChannel.hh
         G4VEvaporationFactory.hh
     SOURCES
+        G4DeexPrecoParameters.cc
         G4LevelManager.cc
         G4LevelReader.cc
         G4NuclearLevelData.cc
         G4NucLevel.cc
+        G4VEmissionProbability.cc
         G4VEvaporationChannel.cc
         G4VEvaporationFactory.cc
     GRANULAR_DEPENDENCIES
@@ -59,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_management
         G4bosons
         G4globman
         G4had_mod_util
+        G4hadronic_deex_util
         G4hadronic_mgt
         G4hadronic_util
         G4hepnumerics

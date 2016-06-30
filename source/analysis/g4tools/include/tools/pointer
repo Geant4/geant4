@@ -4,7 +4,10 @@
 #ifndef tools_pointer
 #define tools_pointer
 
-//WARNING : touchy
+//WARNING : touchy.
+//WARNING : _MSC_VER && _WIN64 : sizeof(void*) is NOT sizeof(unsigned long).
+
+#include "typedefs"
 
 #include "snpf"
 
@@ -13,59 +16,29 @@
 namespace tools {
 
 inline bool to_pointer(const std::string& a_string,void*& a_value){
-  if(sizeof(unsigned long)==sizeof(void*)) { //majority of cases.
-    unsigned long v = 0L;
-    if(::sscanf(a_string.c_str(),"0x%lx",&v)!=1) {
-      if(::sscanf(a_string.c_str(),"%lu",&v)!=1) {
-        a_value = 0;
-        return false;
-      }
+  upointer v = 0;
+  if(::sscanf(a_string.c_str(),upointer_format_x(),&v)!=1) {
+    if(::sscanf(a_string.c_str(),upointer_format(),&v)!=1) {
+      a_value = 0;
+      return false;
     }
-    a_value = (void*)v;
-    return true;
-  } else if(sizeof(unsigned long long)==sizeof(void*)) { //but not on my Windows-8/64bits !
-    unsigned long long v = 0L;
-    if(::sscanf(a_string.c_str(),"0x%llx",&v)!=1) {
-      if(::sscanf(a_string.c_str(),"%llu",&v)!=1) {
-        a_value = 0;
-        return false;
-      }
-    }
-    a_value = (void*)v;
-    return true;
   }
-  a_value = 0;
-  return false;
+  a_value = (void*)v;
+  return true;
 }
 
 inline bool p2s(const void* a_value,std::string& a_s){
   char s[512];
-  if(sizeof(unsigned long)==sizeof(void*)) { //majority of cases.
-    snpf(s,sizeof(s),"%lu",(unsigned long)a_value);
-    a_s = s;
-    return true;
-  } else if(sizeof(unsigned long long)==sizeof(void*)) { //but not on my Windows-8/64bits !
-    snpf(s,sizeof(s),"%llu",(unsigned long long)a_value);
-    a_s = s;
-    return true;
-  }
-  a_s.clear();
-  return false;
+  snpf(s,sizeof(s),upointer_format(),(upointer)a_value);
+  a_s = s;
+  return true;
 }
 
 inline bool p2sx(const void* a_value,std::string& a_s){
   char s[512];
-  if(sizeof(unsigned long)==sizeof(void*)) { //majority of cases.
-    snpf(s,sizeof(s),"0x%lx",(unsigned long)a_value);
-    a_s = s;
-    return true;
-  } else if(sizeof(unsigned long long)==sizeof(void*)) { //but not on my Windows-8/64bits !
-    snpf(s,sizeof(s),"0x%llx",(unsigned long long)a_value);
-    a_s = s;
-    return true;
-  }
-  a_s.clear();
-  return false;
+  snpf(s,sizeof(s),upointer_format_x(),(upointer)a_value);
+  a_s = s;
+  return true;
 }
 
 /*

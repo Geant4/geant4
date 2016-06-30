@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eMultipleScattering.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eMultipleScattering.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -62,20 +62,20 @@ class G4eMultipleScattering : public G4VMultipleScattering
 {
 public:    // with description
 
-  G4eMultipleScattering(const G4String& processName = "msc");
+  explicit G4eMultipleScattering(const G4String& processName = "msc");
 
   virtual ~G4eMultipleScattering();
 
   // returns true for charged particles, false otherwise
-  G4bool IsApplicable (const G4ParticleDefinition& p);
+  G4bool IsApplicable (const G4ParticleDefinition& p) final;
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  void PrintInfo() override;
 
 protected:
 
   // This function initialise models
-  void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:        // data members
 

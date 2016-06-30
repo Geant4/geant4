@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmBiasingManager.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -137,9 +137,9 @@ private:
   inline G4double ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
 				       G4int index); 
 
-  // copy constructor and hide assignment operator
-  G4EmBiasingManager(G4EmBiasingManager &);
-  G4EmBiasingManager & operator=(const G4EmBiasingManager &right);
+  // hide copy constructor and assignment operator
+  G4EmBiasingManager(G4EmBiasingManager &) = delete;
+  G4EmBiasingManager & operator=(const G4EmBiasingManager &right) = delete;
 
   G4int                        nForcedRegions;
   G4int                        nSecBiasedRegions;
@@ -200,7 +200,7 @@ G4EmBiasingManager::ApplyRussianRoulette(std::vector<G4DynamicParticle*>& vd,
     if(G4UniformRand()*weight > 1.0) {
       const G4DynamicParticle* dp = vd[k];
       delete dp;
-      vd[k] = 0;
+      vd[k] = nullptr;
     }
   }
   return weight;

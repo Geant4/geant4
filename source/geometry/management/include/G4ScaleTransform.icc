@@ -1,0 +1,237 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: $
+//
+//
+// G4ScaleTransform Inline implementation.
+// Based on implementation provided in Root
+//
+// --------------------------------------------------------------------
+
+inline G4ScaleTransform::G4ScaleTransform()
+  : fScale(1.,1.,1.), fIScale(1.,1.,1.), flFactor(1.), fgFactor(1.)
+{
+}
+
+inline G4ScaleTransform::G4ScaleTransform(G4double sx, G4double sy, G4double sz)
+  : fScale(sx,sy,sz), fIScale(), flFactor(1.), fgFactor(1.)
+{
+  Init();
+}  
+
+inline G4ScaleTransform::G4ScaleTransform(const G4ThreeVector& scale)
+  : fScale(scale), fIScale(), flFactor(1.), fgFactor(1.)
+{
+  Init();
+}
+        
+inline G4ScaleTransform::G4ScaleTransform(const G4Scale3D& scale)
+  : fScale(scale.xx(), scale.yy(), scale.zz()), fIScale(),
+    flFactor(1.), fgFactor(1.)
+{
+  Init();
+}
+
+inline G4ScaleTransform::G4ScaleTransform(const G4ScaleTransform& right)
+  : fScale(right.fScale), fIScale(right.fIScale),
+    flFactor(right.flFactor), fgFactor(right.fgFactor)
+{
+}
+  
+inline G4ScaleTransform&
+G4ScaleTransform::operator=(const G4ScaleTransform& right)
+{
+  fScale = right.fScale;
+  fIScale = right.fIScale;
+  flFactor = right.flFactor;
+  fgFactor = right.fgFactor;
+  return *this;
+}
+          
+inline void G4ScaleTransform::Init()
+{
+  if (!((fScale.x()>0) && (fScale.y()>0) && (fScale.z()>0)))
+  {
+     G4Exception("G4ScaleTransform::Init()", "GeomMgt0001",
+                 FatalException, "Scale transformation must be positive!");
+  }
+  fIScale.set(1./fScale.x(), 1./fScale.y(), 1./fScale.z());
+  flFactor = std::min(std::min(fIScale.x(), fIScale.y()), fIScale.z());
+  fgFactor = std::min(std::min(fScale.x(), fScale.y()), fScale.z());
+}
+
+inline const G4ThreeVector& G4ScaleTransform::GetScale() const
+{
+  return fScale;
+}
+
+inline const G4ThreeVector& G4ScaleTransform::GetInvScale() const
+{
+  return fIScale;
+}
+
+inline void G4ScaleTransform::SetScale(const G4ThreeVector& scale)
+{
+  fScale = scale;
+  Init();
+}
+
+inline void G4ScaleTransform::SetScale(const G4Scale3D& scale)
+{
+  fScale.set(scale.xx(), scale.yy(), scale.zz());
+  Init();
+}
+ 
+inline void G4ScaleTransform::SetScale(G4double sx, G4double sy, G4double sz)
+{
+  fScale.set(sx,sy,sz);
+  Init();
+}
+
+inline void G4ScaleTransform::Transform(const G4ThreeVector& global,
+                                              G4ThreeVector& local) const
+{
+  local.set(global.x()*fIScale.x(),
+            global.y()*fIScale.y(),
+            global.z()*fIScale.z());      
+}
+  
+inline G4ThreeVector
+G4ScaleTransform::Transform(const G4ThreeVector& global) const
+{
+  G4ThreeVector local(global.x()*fIScale.x(),
+                      global.y()*fIScale.y(),
+                      global.z()*fIScale.z());
+  return local;
+}     
+    
+inline void
+G4ScaleTransform::InverseTransform(const G4ThreeVector& local, 
+                                         G4ThreeVector& global) const
+{
+  global.set(local.x()*fScale.x(),
+             local.y()*fScale.y(),
+             local.z()*fScale.z());
+}
+
+inline G4ThreeVector
+G4ScaleTransform::InverseTransform(const G4ThreeVector& local) const
+{
+  G4ThreeVector global(local.x()*fScale.x(),
+                       local.y()*fScale.y(),
+                       local.z()*fScale.z());
+  return global;
+}
+
+inline void
+G4ScaleTransform::TransformNormal(const G4ThreeVector& global,
+                                        G4ThreeVector& local) const
+{
+  local.set(global.x()*fIScale.y()*fIScale.z(),
+            global.y()*fIScale.z()*fIScale.x(),
+            global.z()*fIScale.x()*fIScale.y());      
+}
+  
+inline G4ThreeVector
+G4ScaleTransform::TransformNormal(const G4ThreeVector& global) const
+{
+  G4ThreeVector local(global.x()*fIScale.y()*fIScale.z(),
+                      global.y()*fIScale.z()*fIScale.x(),
+                      global.z()*fIScale.x()*fIScale.y());
+  return local;
+}     
+    
+inline void
+G4ScaleTransform::InverseTransformNormal(const G4ThreeVector& local, 
+                                               G4ThreeVector& global) const
+{
+  global.set(local.x()*fScale.y()*fScale.z(),
+             local.y()*fScale.z()*fScale.x(),
+             local.z()*fScale.x()*fScale.y());
+}
+
+inline G4ThreeVector
+G4ScaleTransform::InverseTransformNormal(const G4ThreeVector& local) const
+{
+  G4ThreeVector global(local.x()*fScale.y()*fScale.z(),
+                       local.y()*fScale.z()*fScale.x(),
+                       local.z()*fScale.x()*fScale.y());
+  return global;
+}
+
+inline G4double
+G4ScaleTransform::TransformDistance(G4double dist,
+                                    const G4ThreeVector& dir) const
+{
+  G4ThreeVector v(dir.x()*fIScale.x(),
+                  dir.y()*fIScale.y(),
+                  dir.z()*fIScale.z());
+  G4double scale = std::sqrt(v.dot(v));
+  return ( scale*dist );
+}
+
+inline G4double G4ScaleTransform::TransformDistance(G4double safety) const
+{
+  return ( safety*flFactor );
+}
+    
+inline G4double
+G4ScaleTransform::InverseTransformDistance(G4double dist,
+                                           const G4ThreeVector& dir) const
+{
+  G4ThreeVector v(dir.x()*fScale.x(),
+                  dir.y()*fScale.y(),
+                  dir.z()*fScale.z());
+  G4double scale = std::sqrt(v.dot(v));
+  return ( scale*dist );
+}
+
+inline G4double
+G4ScaleTransform::InverseTransformDistance(G4double safety) const
+{
+  return ( safety*fgFactor );
+}
+
+inline
+std::ostream& operator << (std::ostream& os, const G4ScaleTransform& transf)
+{
+  std::streamsize oldPrec = os.precision(6); 
+
+  os << "  Scale Transformation: " << G4endl
+     << "    x,y,z: "
+       << transf.GetScale().x()  << " "
+       << transf.GetScale().y()  << " "
+       << transf.GetScale().z()  << G4endl
+     << "    Inverse x,y,z: "
+       << transf.GetInvScale().x() << " "
+       << transf.GetInvScale().y() << " "
+       << transf.GetInvScale().z() << G4endl;
+  
+  os.precision(oldPrec); 
+
+  return os; 
+}

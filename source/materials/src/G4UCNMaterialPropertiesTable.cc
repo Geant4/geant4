@@ -53,10 +53,10 @@
 G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
                              : G4MaterialPropertiesTable() 
 {
-  theMicroRoughnessTable = NULL;
-  maxMicroRoughnessTable = NULL;
-  theMicroRoughnessTransTable = NULL;
-  maxMicroRoughnessTransTable = NULL;
+  theMicroRoughnessTable = nullptr;
+  maxMicroRoughnessTable = nullptr;
+  theMicroRoughnessTransTable = nullptr;
+  maxMicroRoughnessTransTable = nullptr;
 
   theta_i_min =  0.*degree;
   theta_i_max = 90.*degree;

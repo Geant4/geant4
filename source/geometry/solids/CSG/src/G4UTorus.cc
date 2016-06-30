@@ -35,7 +35,7 @@
 #include "G4Torus.hh"
 #include "G4UTorus.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -90,6 +90,76 @@ G4UTorus& G4UTorus::operator = (const G4UTorus& rhs)
    return *this;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+
+G4double G4UTorus::GetRmin() const
+{
+  return GetShape()->GetRmin();
+}
+
+G4double G4UTorus::GetRmax() const
+{
+  return GetShape()->GetRmax();
+}
+
+G4double G4UTorus::GetRtor() const
+{
+  return GetShape()->GetRtor();
+}
+
+G4double G4UTorus::GetSPhi() const
+{
+  return GetShape()->GetSPhi();
+}
+
+G4double G4UTorus::GetDPhi() const
+{
+  return GetShape()->GetDPhi();
+}
+
+void G4UTorus::SetRmin(G4double arg)
+{
+  GetShape()->SetRmin(arg);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTorus::SetRmax(G4double arg)
+{
+  GetShape()->SetRmax(arg);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTorus::SetRtor(G4double arg)
+{
+  GetShape()->SetRtor(arg);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTorus::SetSPhi(G4double arg)
+{
+  GetShape()->SetSPhi(arg);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTorus::SetDPhi(G4double arg)
+{
+  GetShape()->SetDPhi(arg);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTorus::SetAllParameters(G4double arg1, G4double arg2,
+                        G4double arg3, G4double arg4, G4double arg5)
+{
+  GetShape()->SetRmin(arg1);
+  GetShape()->SetRmax(arg2);
+  GetShape()->SetRtor(arg3);
+  GetShape()->SetSPhi(arg4);
+  GetShape()->SetDPhi(arg5);
+  fRebuildPolyhedron = true;
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
@@ -109,6 +179,19 @@ void G4UTorus::ComputeDimensions(G4VPVParameterisation* p,
 G4VSolid* G4UTorus::Clone() const
 {
   return new G4UTorus(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+
+G4Polyhedron* G4UTorus::CreatePolyhedron() const
+{
+  return new G4PolyhedronTorus(GetRmin(),
+                               GetRmax(),
+                               GetRtor(),
+                               GetSPhi(),
+                               GetDPhi());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

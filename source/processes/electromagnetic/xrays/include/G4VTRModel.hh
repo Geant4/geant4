@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTRModel.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4VTRModel.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // G4VTRModel  -- header file
 //
@@ -53,7 +53,7 @@ public:
 
 // Constructors
 
-  G4VTRModel( const G4String& modelName) {fName = modelName;};
+  explicit G4VTRModel( const G4String& modelName) {fName = modelName;};
 
 // Destructor
 
@@ -74,8 +74,8 @@ public:
 
   // hide assignment operator
 
-  G4VTRModel & operator=(const G4VTRModel &right);
-  G4VTRModel(const G4VTRModel&);
+  G4VTRModel & operator=(const G4VTRModel &right) = delete;
+  G4VTRModel(const G4VTRModel&) = delete;
 
 protected:
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeneralPhaseSpaceDecay.cc 93821 2015-11-02 13:06:39Z gcosmo $
+// $Id: G4GeneralPhaseSpaceDecay.cc 95909 2016-03-02 11:01:47Z gcosmo $
 // ----------------------------------------------------------------
 //      GEANT 4 class header file
 //
@@ -149,8 +149,8 @@ G4DecayProducts *G4GeneralPhaseSpaceDecay::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4GeneralPhaseSpaceDecay::DecayIt ";
   G4DecayProducts * products = NULL;
  
-  if (G4MT_parent == NULL) FillParent();  
-  if (G4MT_daughters == NULL) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
   
   switch (numberOfDaughters){
   case 0:

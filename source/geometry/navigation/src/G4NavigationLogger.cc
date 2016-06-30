@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLogger.cc 93289 2015-10-15 10:01:15Z gcosmo $
+// $Id: G4NavigationLogger.cc 96409 2016-04-12 08:12:10Z gcosmo $
 //
 //
 // class G4NavigationLogger Implementation
@@ -789,7 +789,7 @@ G4NavigationLogger::ReportVolumeAndIntersection( std::ostream&      os,
                                            const G4ThreeVector&     localDirection,
                                            const G4VPhysicalVolume* physical ) const 
 {
-  G4String fMethod = fId + "::ComputeStep() / output from G4NavigatorLogger::ReportVolumeAndIntersection";   
+  G4String fMethod = fId + "::ComputeStep()";   
   const G4LogicalVolume* logicalVol = physical
                                     ? physical->GetLogicalVolume() : 0;
   const G4VSolid* solid = logicalVol

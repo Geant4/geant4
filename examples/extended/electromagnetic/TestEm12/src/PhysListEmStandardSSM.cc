@@ -26,10 +26,10 @@
 /// \file electromagnetic/TestEm12/src/PhysListEmStandardSSM.cc
 /// \brief Implementation of the PhysListEmStandardSSM class
 //
-// $Id: PhysListEmStandardSSM.cc 68530 2013-04-01 21:30:05Z adotti $
+// $Id: PhysListEmStandardSSM.cc 96380 2016-04-11 07:01:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardSSM.hh"
 
@@ -55,8 +55,6 @@
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
-
-#include "G4EmProcessOptions.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -151,9 +149,6 @@ void PhysListEmStandardSSM::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4CoulombScattering);            
     }
   }
-  // scattering
-  G4EmProcessOptions emOptions;
-  emOptions.SetPolarAngleLimit(0.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

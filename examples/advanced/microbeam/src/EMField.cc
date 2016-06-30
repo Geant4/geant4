@@ -34,6 +34,7 @@
 
 #include "EMField.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Exp.hh"
 
 EMField::EMField() 
 {    
@@ -107,8 +108,8 @@ if ( (z >= limitMinEntrance) && (z < limitMaxEntrance) )
   dsdx = 0;
 
   largeS = wc0 + wc1*ws + wc2*ws*ws + wc3*ws*ws*ws;
-  h = 1./(1.+std::exp(largeS));
-  dhdlargeS = -std::exp(largeS)*h*h;  
+  h = 1./(1.+G4Exp(largeS));
+  dhdlargeS = -G4Exp(largeS)*h*h;  
   dlargeSds = wc1+ 2*wc2*ws + 3*wc3*ws*ws;
   dhds = dhdlargeS * dlargeSds;
       
@@ -150,8 +151,8 @@ if (
   dsdx = (1/D)*(x-xcenter)/std::sqrt((z-zcenter)*(z-zcenter)+(x-xcenter)*(x-xcenter));
 
   largeS = wc0 + wc1*ws + wc2*ws*ws + wc3*ws*ws*ws;
-  h = 1./(1.+std::exp(largeS));
-  dhdlargeS = -std::exp(largeS)*h*h;  
+  h = 1./(1.+G4Exp(largeS));
+  dhdlargeS = -G4Exp(largeS)*h*h;  
   dlargeSds = wc1+ 2*wc2*ws + 3*wc3*ws*ws;
   dhds = dhdlargeS * dlargeSds;
       
@@ -344,23 +345,23 @@ if (z>=-1400*mm && z <-200*mm)
 
 	 P2 = 2*c2[i]/a0[i]/a0[i];
 
-	 cte = 1 + std::exp(c0[i]);
+	 cte = 1 + G4Exp(c0[i]);
 
-	 K1 = -cte*P1*std::exp(P0)/( (1+std::exp(P0))*(1+std::exp(P0)) );
+	 K1 = -cte*P1*G4Exp(P0)/( (1+G4Exp(P0))*(1+G4Exp(P0)) );
 
-	 K2 = -cte*std::exp(P0)*(
-	  P2/( (1+std::exp(P0))*(1+std::exp(P0)) )
-	 +2*P1*K1/(1+std::exp(P0))/cte
-	 +P1*P1/(1+std::exp(P0))/(1+std::exp(P0))
+	 K2 = -cte*G4Exp(P0)*(
+	  P2/( (1+G4Exp(P0))*(1+G4Exp(P0)) )
+	 +2*P1*K1/(1+G4Exp(P0))/cte
+	 +P1*P1/(1+G4Exp(P0))/(1+G4Exp(P0))
 	 );
  
-	 K3 = -cte*std::exp(P0)*(
-	 (3*P2*P1+P1*P1*P1)/(1+std::exp(P0))/(1+std::exp(P0))
-	 +4*K1*(P1*P1+P2)/(1+std::exp(P0))/cte
-	 +2*P1*(K1*K1/cte/cte+K2/(1+std::exp(P0))/cte)
+	 K3 = -cte*G4Exp(P0)*(
+	 (3*P2*P1+P1*P1*P1)/(1+G4Exp(P0))/(1+G4Exp(P0))
+	 +4*K1*(P1*P1+P2)/(1+G4Exp(P0))/cte
+	 +2*P1*(K1*K1/cte/cte+K2/(1+G4Exp(P0))/cte)
 	  );
 	  
-	 G0 = gradient[i]*cte/(1+std::exp(P0));
+	 G0 = gradient[i]*cte/(1+G4Exp(P0));
 	 G1 = gradient[i]*K1;
 	 G2 = gradient[i]*K2;
 	 G3 = gradient[i]*K3;

@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 81073 2014-05-20 10:23:13Z gcosmo $
+// $Id: HistoManager.cc 96284 2016-04-04 07:19:26Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -248,6 +248,16 @@ void HistoManager::EndOfRun()
   fAnalysisManager->Write();
   fAnalysisManager->CloseFile();
 
+  G4bool extra = true;
+  if(fTargetMaterial && extra) {
+    G4double E= 5*GeV;
+    G4double cross = 
+      store->GetInelasticCrossSectionPerVolume(particle,E,fTargetMaterial);
+    if(cross <= 0.0) { cross = 1.e-100; }
+    G4cout << "### " << particle->GetParticleName() << " " << E/GeV
+           << " GeV on " << fTargetMaterial->GetName()
+           << " xs/X0= " << 1.0/(cross*fTargetMaterial->GetRadlen()) << G4endl;
+  }
   delete fAnalysisManager;
 }
 

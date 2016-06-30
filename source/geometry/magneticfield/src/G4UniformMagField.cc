@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformMagField.cc 90643 2015-06-05 13:18:26Z gcosmo $
+// $Id: G4UniformMagField.cc 96751 2016-05-04 09:39:38Z gcosmo $
 //
 //
 // Class for creation of uniform Magnetic Field
@@ -43,11 +43,11 @@ G4UniformMagField::G4UniformMagField(const G4ThreeVector& FieldVector )
       fFieldComponents[2] = FieldVector.z();
 }
 
-G4UniformMagField* G4UniformMagField::Clone() const
+G4Field* G4UniformMagField::Clone() const
 {
-    return new G4UniformMagField( G4ThreeVector(this->fFieldComponents[0],
-                                                this->fFieldComponents[1],
-                                                this->fFieldComponents[2]) );
+    return new G4UniformMagField( G4ThreeVector(fFieldComponents[0],
+                                                fFieldComponents[1],
+                                                fFieldComponents[2]) );
 }
 
 void
@@ -99,14 +99,19 @@ G4UniformMagField::G4UniformMagField (const G4UniformMagField &p)
    : G4MagneticField(p)
 {
    for (G4int i=0; i<3; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
+   {
+     fFieldComponents[i] = p.fFieldComponents[i];
+   }
 }
 
 G4UniformMagField& G4UniformMagField::operator = (const G4UniformMagField &p)
 {
    if (&p == this) return *this;
+   G4MagneticField::operator=(p); 
    for (G4int i=0; i<3; i++)
-      fFieldComponents[i] = p.fFieldComponents[i];
+   {
+     fFieldComponents[i] = p.fFieldComponents[i];
+   }
    return *this;
 }
 

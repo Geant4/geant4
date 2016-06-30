@@ -83,7 +83,7 @@ G4double G4XTRTransparentRegRadModel::SpectralXTRdEdx(G4double energy)
 
   sigma = aMa + bMb;
    
-  cofPHC  = 4*pi*hbarc;
+  cofPHC  = 4.*pi*hbarc;
   tmp     = (fSigma1 - fSigma2)/cofPHC/energy;  
   cof1    = fPlateThick*tmp;
   cof2    = fGasThick*tmp;
@@ -187,8 +187,8 @@ G4XTRTransparentRegRadModel::GetStackFactor( G4double energy,
   G4complex Hb( Qb*std::cos(bZb), -Qb*std::sin(bZb)    );
   G4complex H  = Ha*Hb;
   G4complex Hs = conj(H);
-  D            = 1.0 /( (1 - Q)*(1 - Q) + 
-                  4*Q*std::sin(0.5*(aZa + bZb))*std::sin(0.5*(aZa + bZb)) );
+  D            = 1.0 /( (1. - Q)*(1. - Q) + 
+                  4.*Q*std::sin(0.5*(aZa + bZb))*std::sin(0.5*(aZa + bZb)) );
   G4complex F1 = (1.0 - Ha)*(1.0 - Hb)*(1.0 - Hs)
                  * G4double(fPlateNumber)*D;
   G4complex F2 = (1.0 - Ha)*(1.0 - Ha)*Hb*(1.0 - Hs)*(1.0 - Hs)

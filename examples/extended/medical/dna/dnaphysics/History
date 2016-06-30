@@ -5,6 +5,19 @@
                        Package History file
                        --------------------
 
+03 June 2016 - tag dnaphysics-V10-02-02 - M. Karamitros
+- SteppingAction: add label for solvation
+- dnaphysics.cc: second arg is nb of threads
+
+02 June 2016 - tag dnaphysics-V10-02-01 - V. Ivanchenko
+- DetectorConstructor, DetectorMessenger - ensure that geometry 
+    is created once, material may be changed for next runs
+- /run/initialise moved from the code to macro
+- DNA physics configuration is moved from the code to macro
+
+28 May 2016 - tag dnaphysics-V10-02-00 - S. Incerti
+- added flagProcess value for electron capture
+
 13 November 2015 - tag dnaphysics-V10-01-04 - V. Ivanchenko
 - use G4EmModelActivator to define DNA physics
 

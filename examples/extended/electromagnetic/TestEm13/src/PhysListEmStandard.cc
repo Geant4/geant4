@@ -27,10 +27,10 @@
 /// \brief Implementation of the PhysListEmStandard class
 //
 //
-// $Id: PhysListEmStandard.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysListEmStandard.cc 96378 2016-04-11 06:59:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
@@ -53,7 +53,6 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
-#include "G4EmProcessOptions.hh"
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 

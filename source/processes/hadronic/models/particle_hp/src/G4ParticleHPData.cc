@@ -65,12 +65,13 @@ G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
      theData.clear();
   }
   
-G4ParticleHPData * G4ParticleHPData::Instance(G4ParticleDefinition* projectile)
+  G4ParticleHPData * G4ParticleHPData::Instance(G4ParticleDefinition* projectile)
   {
     static G4ThreadLocal G4ParticleHPData *theCrossSectionData_G4MT_TLS_ = 0 ;
-    if (!theCrossSectionData_G4MT_TLS_) theCrossSectionData_G4MT_TLS_ = new  G4ParticleHPData(projectile)  ;  G4ParticleHPData &theCrossSectionData = *theCrossSectionData_G4MT_TLS_;
+    if ( !theCrossSectionData_G4MT_TLS_ ) theCrossSectionData_G4MT_TLS_ = new G4ParticleHPData(projectile);  
+    G4ParticleHPData &theCrossSectionData = *theCrossSectionData_G4MT_TLS_;
     return &theCrossSectionData;
-    } 
+  } 
 
   G4PhysicsVector * G4ParticleHPData::DoPhysicsVector(G4ParticleHPVector * theVector)
   {

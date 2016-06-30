@@ -27,9 +27,11 @@
 
 
 G4BOptnCloning::G4BOptnCloning(G4String name)
-  : G4VBiasingOperation(name),
+  : G4VBiasingOperation( name    ),
+    fClone1W           ( -1.0    ),
+    fClone2W           ( -1.0    ),
     fParticleChange(),
-    fCloneTrack(nullptr)
+    fCloneTrack        ( nullptr )
 {}
 
 G4BOptnCloning::~G4BOptnCloning()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4eCoulombScatteringModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,19 +83,19 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
     cosThetaMax(-1.0),
     isCombined(combined)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   fNistManager = G4NistManager::Instance();
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
   currentMaterial = 0; 
   fixedCut = -1.0;
 
-  pCuts = 0;
+  pCuts = nullptr;
 
   recoilThreshold = 0.*keV; // by default does not work
 
-  particle = 0;
-  currentCouple = 0;
+  particle = nullptr;
+  currentCouple = nullptr;
   wokvi = new G4WentzelOKandVIxSection(combined);
 
   currentMaterialIndex = 0;
@@ -176,8 +176,7 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
   // select lightest element
   G4int Z = 300;
   for (G4int j=0; j<nelm; ++j) {        
-    G4int iz = G4lrint((*theElementVector)[j]->GetZ());
-    if(iz < Z) { Z = iz; }
+    Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
   G4double targetMass = G4NucleiProperties::GetNuclearMass(A, Z);
@@ -205,7 +204,7 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
   G4double costmin = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosThetaMax < costmin) {
-    G4int iz = G4int(Z);
+    G4int iz = G4lrint(Z);
     G4double cut = cutEnergy;
     if(fixedCut > 0.0) { cut = fixedCut; }
     costmin = wokvi->SetupTarget(iz, cut);
@@ -255,8 +254,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   const G4Element* currentElement = 
     SelectRandomAtom(couple,particle,kinEnergy,cut,kinEnergy);
 
-  G4double Z = currentElement->GetZ();
-  G4int iz = G4int(Z);
+  G4int iz = currentElement->GetZasInt();
 
   G4double costmin = wokvi->SetupTarget(iz, cut);
   G4double costmax = cosThetaMax; 

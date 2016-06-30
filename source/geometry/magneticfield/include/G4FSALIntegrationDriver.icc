@@ -1,0 +1,178 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: G4FSALIntegrationDriver.icc 97387 2016-06-02 10:03:42Z gcosmo $
+//
+// --------------------------------------------------------------------
+
+inline
+G4double G4FSALIntegrationDriver::GetHmin() const
+{
+      return fMinimumStep;
+} 
+
+inline
+G4double G4FSALIntegrationDriver::Hmin() const
+{
+      return fMinimumStep;
+}
+
+inline
+G4double G4FSALIntegrationDriver::GetSafety() const
+{
+      return safety;
+}
+
+inline
+G4double G4FSALIntegrationDriver::GetPshrnk() const
+{
+      return pshrnk;
+} 
+
+inline
+G4double G4FSALIntegrationDriver::GetPgrow() const
+{
+      return pgrow;
+}
+ 
+inline
+G4double G4FSALIntegrationDriver::GetErrcon() const
+{
+      return errcon;
+}
+
+inline
+void G4FSALIntegrationDriver::SetHmin(G4double newval)
+{
+      fMinimumStep = newval;
+} 
+
+inline
+G4double G4FSALIntegrationDriver::ComputeAndSetErrcon()
+{
+      errcon = std::pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
+      return errcon;
+} 
+
+inline
+void G4FSALIntegrationDriver::ReSetParameters(G4double new_safety)
+{
+      safety = new_safety;
+      pshrnk = -1.0 / pIntStepper->IntegratorOrder();
+      pgrow  = -1.0 / (1.0 + pIntStepper->IntegratorOrder());
+      ComputeAndSetErrcon();
+}
+
+inline
+void G4FSALIntegrationDriver::SetSafety(G4double val)
+{ 
+      safety=val;
+      ComputeAndSetErrcon();
+}
+
+inline
+void G4FSALIntegrationDriver::SetPgrow(G4double  val)
+{ 
+      pgrow=val;
+      ComputeAndSetErrcon(); 
+}
+
+inline
+void G4FSALIntegrationDriver::SetErrcon(G4double val)
+{ 
+      errcon=val;
+}
+
+inline
+void G4FSALIntegrationDriver::RenewStepperAndAdjust(G4VFSALIntegrationStepper *pItsStepper)
+{  
+      pIntStepper = pItsStepper; 
+      ReSetParameters();
+}
+
+inline
+const G4VFSALIntegrationStepper* G4FSALIntegrationDriver::GetStepper() const
+{
+  return pIntStepper;
+}
+
+inline
+G4VFSALIntegrationStepper* G4FSALIntegrationDriver::GetStepper()
+{
+  return pIntStepper;
+}
+
+inline
+G4int G4FSALIntegrationDriver::GetMaxNoSteps() const
+{
+  return fMaxNoSteps;
+}
+
+inline
+void G4FSALIntegrationDriver::SetMaxNoSteps(G4int val)
+{
+  fMaxNoSteps= val;
+}
+
+inline
+void G4FSALIntegrationDriver::GetDerivatives(const G4FieldTrack &y_curr, // const, INput
+                                           G4double     dydx[])  // OUTput
+{ 
+  G4double  tmpValArr[G4FieldTrack::ncompSVEC];
+  y_curr.DumpToArray( tmpValArr  );
+  pIntStepper -> RightHandSide( tmpValArr , dydx );
+}
+
+inline
+G4double G4FSALIntegrationDriver::GetVerboseLevel() const
+{
+      return fVerboseLevel;
+} 
+
+inline 
+void G4FSALIntegrationDriver::SetVerboseLevel(G4int newLevel)
+{
+      fVerboseLevel= newLevel;
+}
+
+inline
+G4double G4FSALIntegrationDriver::GetSmallestFraction() const
+{
+      return fSmallestFraction; 
+}
+
+inline
+G4int G4FSALIntegrationDriver::GetNoTotalSteps() const
+{
+    return fNoTotalSteps;
+}
+
+inline
+G4int G4FSALIntegrationDriver::GetTotalNoStepperCalls() const
+{
+    return TotalNoStepperCalls;
+}
+

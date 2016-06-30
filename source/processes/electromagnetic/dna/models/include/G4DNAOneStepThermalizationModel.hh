@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.hh 94218 2015-11-09 08:24:48Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.hh 96932 2016-05-18 09:07:51Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -67,7 +67,7 @@ class G4DNAOneStepThermalizationModel : public G4VEmModel
 public:
   G4DNAOneStepThermalizationModel(const G4ParticleDefinition* p = 0,
                                   const G4String& nam =
-                                      "DNASancheSolvatationModel");
+                                      "DNAOneStepThermalizationModel");
   virtual ~G4DNAOneStepThermalizationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);

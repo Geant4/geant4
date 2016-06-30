@@ -90,9 +90,10 @@ public:
   
 private:
   G4ILawForceFreeFlight* fForceFreeFlightInteractionLaw;
-  G4double fCumulatedWeightChange, fInitialTrackWeight;
-  G4ParticleChange fParticleChange;
-  G4bool fOperationComplete;
+  G4double               fCumulatedWeightChange,
+                         fInitialTrackWeight;
+  G4ParticleChange       fParticleChange;
+  G4bool                 fOperationComplete;
 };
 
 #endif

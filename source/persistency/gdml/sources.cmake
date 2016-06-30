@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89398 2015-04-09 09:56:29Z gcosmo $
+# $Id: sources.cmake 96673 2016-04-29 12:08:20Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -49,6 +49,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/detector/include)
 
 #
 # Define the Geant4 Module.

@@ -1,4 +1,4 @@
-$Id: History 91858 2015-08-07 13:57:22Z gcosmo $
+$Id: History 96953 2016-05-18 12:22:54Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+18-May-2016 A. Ribon      hadr-partonstring-mgt-V10-02-00
+-  G4PomeronCrossSection : moved into the qgsm/ directory.
 
 07-Aug-2015 A. Ribon      hadr-partonstring-mgt-V10-01-02
 -  G4VPartonStringModel : checking of 'while' loops.

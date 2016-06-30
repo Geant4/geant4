@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.cc 94080 2015-11-05 15:04:02Z gcosmo $
+// $Id: G4eeToHadronsModel.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -128,7 +128,7 @@ void G4eeToHadronsModel::Initialise(const G4ParticleDefinition*,
   ComputeCMCrossSectionPerElectron();
 
   if(verbose>1) {
-    G4cout << "G4eeToHadronsModel: Cross secsions per electron"
+    G4cout << "G4eeToHadronsModel: Cross sections per electron"
            << " nbins= " << nbins
            << " emin(MeV)= " << emin/MeV
            << " emax(MeV)= " << emax/MeV
@@ -279,7 +279,7 @@ void G4eeToHadronsModel::ComputeCMCrossSectionPerElectron()
 G4DynamicParticle* G4eeToHadronsModel::GenerateCMPhoton(G4double e)
 {
   G4double x;
-  G4DynamicParticle* gamma = 0;
+  G4DynamicParticle* gamma = nullptr;
   G4double LL   = 2.0*G4Log(e/electron_mass_c2);
   G4double bt  = 2.0*fine_structure_const*(LL - 1.)/pi;
   G4double btm1= bt - 1.0;

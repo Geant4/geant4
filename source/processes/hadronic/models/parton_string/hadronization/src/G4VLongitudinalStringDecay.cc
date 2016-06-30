@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VLongitudinalStringDecay.cc 91773 2015-08-05 13:59:07Z gcosmo $
+// $Id: G4VLongitudinalStringDecay.cc 97393 2016-06-02 10:12:05Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -72,7 +72,7 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
    ClusterLoopInterrupt   =  500;
 
 // Changable Parameters below.
-   SigmaQT = 0.5 * GeV;  // 0.5 0.1
+   SigmaQT = 0.5 * GeV;
    
    StrangeSuppress  = 0.44;    //  27 % strange quarks produced, ie. u:d:s=1:1:0.27
    DiquarkSuppress  = 0.07;
@@ -86,9 +86,9 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
 
    //... vectorMesonMix[] is quark mixing parameters for vector mesons (Variable spin = 3)
    vectorMesonMix.resize(6);
-   vectorMesonMix[0] = 0.0;  //AR-20Oct2014 : it was 0.5
+   vectorMesonMix[0] = 0.5;  //AR-20Oct2014 : it was 0.5
    vectorMesonMix[1] = 0.0;
-   vectorMesonMix[2] = 0.0;  //AR-20Oct2014 : it was 0.5
+   vectorMesonMix[2] = 0.5;  //AR-20Oct2014 : it was 0.5
    vectorMesonMix[3] = 0.0;
    vectorMesonMix[4] = 1.0;
    vectorMesonMix[5] = 1.0; 
@@ -489,7 +489,9 @@ G4VLongitudinalStringDecay::pDefPair G4VLongitudinalStringDecay::CreatePartonPai
 
     } else {
       // Create a Quark - AntiQuark pair, first in pair  IsParticle
+//G4double StrSup=StrangeSuppress; StrangeSuppress=0.5;
       G4int PDGcode=SampleQuarkFlavor()*NeedParticle;
+//StrangeSuppress=StrSup;
       return pDefPair (FindParticle(PDGcode),FindParticle(-PDGcode));
     }
 

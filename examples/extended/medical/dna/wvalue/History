@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+14-03-16 SI (wvalue-V10-02-00)
+- changed physics constructor selection
+
 22-10-15 SI (wvalue-V10-01-03)
 - upgraded plot.C to ROOT 6
 

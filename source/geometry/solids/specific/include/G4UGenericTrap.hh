@@ -45,12 +45,12 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UGenericTrap.hh"
 #include "G4TwoVector.hh"
 
-class G4Polyhedron;
+#include "G4Polyhedron.hh"
 
 class G4UGenericTrap : public G4USolid 
 {
@@ -63,15 +63,17 @@ class G4UGenericTrap : public G4USolid
 
     inline UGenericTrap* GetShape() const;
 
-    inline G4double    GetZHalfLength() const;
-    inline G4int       GetNofVertices() const;
-    inline G4TwoVector GetVertex(G4int index) const;
-    inline const std::vector<G4TwoVector>& GetVertices() const;
-    inline G4double    GetTwistAngle(G4int index) const;
-    inline G4bool      IsTwisted() const;
-    inline G4int       GetVisSubdivisions() const;
-    inline void        SetVisSubdivisions(G4int subdiv);
-    inline void        SetZHalfLength(G4double);
+    G4double    GetZHalfLength() const;
+    G4int       GetNofVertices() const;
+    G4TwoVector GetVertex(G4int index) const;
+    const std::vector<G4TwoVector>& GetVertices() const;
+    G4double    GetTwistAngle(G4int index) const;
+    G4bool      IsTwisted() const;
+    G4int       GetVisSubdivisions() const;
+    void        SetVisSubdivisions(G4int subdiv);
+    void        SetZHalfLength(G4double);
+
+    inline G4GeometryType GetEntityType() const;
 
   public:  // without description
 
@@ -96,50 +98,9 @@ inline UGenericTrap* G4UGenericTrap::GetShape() const
   return (UGenericTrap*) fShape;
 }
 
-inline G4double G4UGenericTrap::GetZHalfLength() const
+inline G4GeometryType G4UGenericTrap::GetEntityType() const
 {
-  return GetShape()->GetZHalfLength();
-}
-inline G4int G4UGenericTrap::GetNofVertices() const
-{
-  return GetShape()->GetNofVertices();
-}
-inline G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
-{
-  UVector2 v = GetShape()->GetVertex(index);
-  return G4TwoVector(v.x, v.y);
-}
-inline const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
-{
-  std::vector<UVector2> v = GetShape()->GetVertices();
-  static std::vector<G4TwoVector> vertices; vertices.clear();
-  for (size_t n=0; n<v.size(); ++n)
-  {
-    vertices.push_back(G4TwoVector(v[n].x,v[n].y));
-  }
-  return vertices;
-}
-inline G4double G4UGenericTrap::GetTwistAngle(G4int index) const
-{
-  return GetShape()->GetTwistAngle(index);
-}
-inline G4bool G4UGenericTrap::IsTwisted() const
-{
-  return GetShape()->IsTwisted();
-}
-inline G4int G4UGenericTrap::GetVisSubdivisions() const
-{
-  return GetShape()->GetVisSubdivisions();
-}
-
-inline void G4UGenericTrap::SetVisSubdivisions(G4int subdiv)
-{
-  GetShape()->SetVisSubdivisions(subdiv);
-}
-
-inline void G4UGenericTrap::SetZHalfLength(G4double halfZ)
-{
-  GetShape()->SetZHalfLength(halfZ);
+  return "G4GenericTrap";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

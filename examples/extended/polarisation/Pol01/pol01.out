@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -124,14 +124,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton -1 MeV
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_Fe
  Range cuts        :  gamma  100 um     e-  100 um     e+  100 um  proton 100 um 
- Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton -1 MeV
+ Energy thresholds :  gamma  6.28375 keV    e-  235.116 keV    e+  228.88 keV proton 10 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -149,38 +149,38 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.78s Real=1.79s Sys=0s
+  User=0.14s Real=0.15s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 57532
-	pol-compt = 11819
-	msc = 46504
-	pol-eBrem = 10451
-	pol-phot = 4857
-	pol-eIoni = 16845
-	pol-conv = 62
-	pol-annihil = 32
+	Transportation = 31258
+	pol-compt = 288
+	pol-eBrem = 344
+	msc = 1912
+	pol-phot = 159
+	pol-eIoni = 674
+	pol-conv = 228
+	pol-annihil = 83
  Gamma: 
-Mean Number per Event :1.5441
-Mean Energy :2.2701 MeV +- 2.6731 MeV
-Mean Polarization :-0.42845 +- 0.4935
+Mean Number per Event :1.0118
+Mean Energy :9.5325 MeV +- 2.0054 MeV
+Mean Polarization :-0.95974 +- 0.20421
  Electron: 
-Mean Number per Event :0.8294
-Mean Energy :4.8634 MeV +- 2.3614 MeV
-Mean Polarization :-0.82222 +- 0.25063
+Mean Number per Event :0.0359
+Mean Energy :5.2324 MeV +- 2.5034 MeV
+Mean Polarization :-0.73265 +- 0.28916
  Positron: 
-Mean Number per Event :0.0031
-Mean Energy :3.2484 MeV +- 1.8025 MeV
-Mean Polarization :-0.70748 +- 0.27491
+Mean Number per Event :0.0152
+Mean Energy :4.2212 MeV +- 2.0464 MeV
+Mean Polarization :-0.62236 +- 0.30062
 ... write Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.175692 0.385647 0.861036 0.507748 0.269676 0.314197 0.610989 0.106925 0.553456 0.136075 0.80907 0.772456 0.556632 0.525917 0.667838 0.656322 0.0480373 0.802785 0.581367 0.841234 0.00786269 0.865653 0.343942 0.702005 
- i_lag = 17, j_lag = 3
- carry = 5.96046e-08, count24 = 10
+ float_seed_table[] = 0.231637 0.0340691 0.470641 0.149545 0.520636 0.787609 0.381197 0.600592 0.0749142 0.791613 0.521982 0.171886 0.112185 0.43382 0.388659 0.034739 0.510846 0.801344 0.309089 0.876676 0.270264 0.805324 0.747375 0.835086 
+ i_lag = 5, j_lag = 15
+ carry = 0, count24 = 14
  luxury = 3 nskip = 199
 ----------------------------------------
 #
@@ -200,11 +200,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00192 MB
-Pool ID '7G4Track', size : 0.00385 MB
+Pool ID '7G4Track', size : 0.00288 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.019 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.018 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

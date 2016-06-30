@@ -1,4 +1,4 @@
-$Id: History 94380 2015-11-13 10:14:39Z gcosmo $
+$Id: History 96938 2016-05-18 09:24:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,44 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 18, 2016 - G.Cosmo (geomnav-V10-02-08)
+----------------------
+- Fixed compilation warning on gcc-6.1 in G4Navigator::PrintState().
+
+May 3, 2016 - G.Cosmo (geomnav-V10-02-07)
+---------------------
+- Reinstated check on anomalous mother-step with corrective action, previously
+  moved only in check-mode in G4VoxelNavigation and G4NormalNavigation.
+
+April 15, 2016 - G.Cosmo (geomnav-V10-02-06, 05)
+------------------------
+- Avoid static constant definition of surface tolerance in G4VoxelNavigation
+  in method LocateNextVoxel() to clear spurious warnings for data-race
+  conflicts from Valgrind/DRD tool; defined as class data member.
+- Cleared up use of static constants also in other navigation classes.
+
+April 12, 2016 - G.Cosmo (geomnav-V10-02-04)
+------------------------
+- Improved diagnostic in G4Navigator. Moved some debug checks in "check-mode".
+- Minor code cleanup.
+
+February 1, 2016 - G.Cosmo (geomnav-V10-02-03, 02)
+--------------------------
+- Relax condition for zero or almost-zero steps in G4ReplicaNavigation and
+  G4Navigator, to allow for faster progression in case of stuck tracks in
+  3D scoring meshes. Addressed old problem report #1432.
+
+January 29, 2016 - G.Cosmo (geomnav-V10-02-01)
+--------------------------
+- Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
+  for particle entering. Fixes issue of negative copyNo observed in nested
+  replica setups. Addressing problem report #1634. 
+
+January 11, 2016 - G.Cosmo (geomnav-V10-02-00)
+--------------------------
+- Move check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
+  Addressing problem report #1811.
 
 November 13, 2015 - G.Cosmo (geomnav-V10-01-35)
 ---------------------------

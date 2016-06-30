@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASmoluchowskiReactionModel.cc 94218 2015-11-09 08:24:48Z gcosmo $
+// $Id: G4DNASmoluchowskiReactionModel.cc 95948 2016-03-03 10:40:33Z gcosmo $
 //
 #include "G4DNASmoluchowskiReactionModel.hh"
 #include "Randomize.hh"
@@ -32,6 +32,7 @@
 #include "G4UnitsTable.hh"
 #include "G4Molecule.hh"
 //#include "G4Scheduler.hh"
+#include "G4Exp.hh"
 
 G4DNASmoluchowskiReactionModel::G4DNASmoluchowskiReactionModel() :
     G4VDNAReactionModel()
@@ -171,7 +172,7 @@ G4bool G4DNASmoluchowskiReactionModel::FindReaction(const G4Track& __trackA,
 //      assert(G4Scheduler::Instance()->GetTimeStep() == __trackB.GetStep()->GetDeltaTime());
 //    }
 
-    G4double __probabiltyOfEncounter = std::exp(
+    G4double __probabiltyOfEncounter = G4Exp(
         -(__preStepSeparation - __R) * (postStepSeparation - __R) / (__D
             * (__trackB.GetStep()->GetDeltaTime())));
     G4double __selectedPOE = G4UniformRand();

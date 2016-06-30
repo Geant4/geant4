@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc 91743 2015-08-04 11:49:58Z gcosmo $
+// $Id: G4MuPairProductionModel.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -90,12 +90,14 @@
 
 // static members
 //
-const G4int    G4MuPairProductionModel::zdat[]={1, 4, 13, 29, 92};
-const G4double G4MuPairProductionModel::adat[]={1.01, 9.01,26.98, 63.55, 238.03};
-const G4double G4MuPairProductionModel::xgi[]={ 0.0199, 0.1017, 0.2372, 0.4083,
-                                                0.5917, 0.7628, 0.8983, 0.9801 };
-const G4double G4MuPairProductionModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
-                                                0.1813, 0.1569, 0.1112, 0.0506 };
+static const G4double ak1 = 6.9;
+static const G4double ak2 = 1.0;
+static const G4int    zdat[5] = {1, 4, 13, 29, 92};
+
+const G4double G4MuPairProductionModel::xgi[] = 
+  { 0.0199, 0.1017, 0.2372, 0.4083, 0.5917, 0.7628, 0.8983, 0.9801 };
+const G4double G4MuPairProductionModel::wgi[8] = 
+  { 0.0506, 0.1112, 0.1569, 0.1813, 0.1813, 0.1569, 0.1112, 0.0506 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -104,12 +106,12 @@ using namespace std;
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    particle(0),
+    particle(nullptr),
     factorForCross(4.*fine_structure_const*fine_structure_const
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
     sqrte(sqrt(G4Exp(1.))),
     currentZ(0),
-    fParticleChange(0),
+    fParticleChange(nullptr),
     minPairEnergy(4.*electron_mass_c2),
     lowestKinEnergy(1.0*GeV),
     nzdat(5),
@@ -124,16 +126,15 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition* p,
   theElectron = G4Electron::Electron();
   thePositron = G4Positron::Positron();
 
-  particleMass = lnZ = z13 = z23 = 0;
+  particleMass = lnZ = z13 = z23 = 0.;
 
   // setup lowest limit dependent on particle mass
   if(p) { 
     SetParticle(p); 
-    G4double limit = p->GetPDGMass()*8;
-    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
+    lowestKinEnergy = std::max(lowestKinEnergy,p->GetPDGMass()*8.0); 
   }
   emin = lowestKinEnergy;
-  emax = 10*TeV;
+  emax = 10.*TeV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,7 +217,7 @@ G4double G4MuPairProductionModel::ComputeDEDXPerVolume(
      G4double loss = ComputMuPairLoss(Z, kineticEnergy, cutEnergy, tmax);
      dedx += loss*theAtomicNumDensityVector[i];
   }
-  if (dedx < 0.) { dedx = 0.; }
+  dedx = std::max(dedx, 0.0);
   return dedx;
 }
 
@@ -234,8 +235,6 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
 
   // calculate the rectricted loss
   // numerical integration in log(PairEnergy)
-  G4double ak1=6.9;
-  G4double ak2=1.0;
   G4double aaa = G4Log(minPairEnergy);
   G4double bbb = G4Log(cut);
 
@@ -257,7 +256,7 @@ G4double G4MuPairProductionModel::ComputMuPairLoss(G4double Z,
     x += hhh;
   }
   loss *= hhh;
-  if (loss < 0.) loss = 0.;
+  loss = std::max(loss, 0.0);
   return loss;
 }
 
@@ -273,8 +272,8 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   G4double cut  = std::max(cutEnergy, minPairEnergy);
   if (tmax <= cut) { return cross; }
 
-  G4double ak1=6.9 ;
-  G4double ak2=1.0 ;
+  //  G4double ak1=6.9 ;
+  // G4double ak2=1.0 ;
   G4double aaa = G4Log(cut);
   G4double bbb = G4Log(tmax);
   G4int kkk = (G4int)((bbb-aaa)/ak1 + ak2);
@@ -295,7 +294,7 @@ G4double G4MuPairProductionModel::ComputeMicroscopicCrossSection(
   }
 
   cross *= hhh;
-  if(cross < 0.0) { cross = 0.0; }
+  cross = std::max(cross, 0.0);
   return cross;
 }
 
@@ -305,9 +304,9 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
                                            G4double tkin,
                                            G4double Z,
                                            G4double pairEnergy)
- // Calculates the  differential (D) microscopic cross section
- // using the cross section formula of R.P. Kokoulin (18/01/98)
- // Code modified by R.P. Kokoulin, V.N. Ivanchenko (27/01/04)
+// Calculates the  differential (D) microscopic cross section
+// using the cross section formula of R.P. Kokoulin (18/01/98)
+// Code modified by R.P. Kokoulin, V.N. Ivanchenko (27/01/04)
 {
   static const G4double bbbtf= 183. ;
   static const G4double bbbh = 202.4 ;
@@ -318,8 +317,8 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
 
   G4double totalEnergy  = tkin + particleMass;
   G4double residEnergy  = totalEnergy - pairEnergy;
-  G4double massratio    = particleMass/electron_mass_c2 ;
-  G4double massratio2   = massratio*massratio ;
+  G4double massratio    = particleMass/electron_mass_c2;
+  G4double massratio2   = massratio*massratio;
   G4double cross = 0.;
 
   G4double c3 = 0.75*sqrte*particleMass;
@@ -408,7 +407,7 @@ G4double G4MuPairProductionModel::ComputeDMicroscopicCrossSection(
   }
 
   cross = -tmn*sum*factorForCross*z2*residEnergy/(totalEnergy*pairEnergy);
-  if(cross < 0.0) { cross = 0.0; }
+  cross = std::max(cross, 0.0); 
   return cross;
 }
 

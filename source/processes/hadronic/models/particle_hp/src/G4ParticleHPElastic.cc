@@ -74,14 +74,13 @@
   G4ParticleHPElastic::~G4ParticleHPElastic()
   {
      //delete [] theElastic;
-     /*
-     for ( std::vector<G4ParticleHPChannel*>::iterator 
-           it = theElastic.begin() ; it != theElastic.end() ; it++ )
-     {
-        delete *it;
+     if ( theElastic != NULL ) {
+        for ( std::vector<G4ParticleHPChannel*>::iterator 
+              it = theElastic->begin() ; it != theElastic->end() ; it++ ) {
+           delete *it;
+        }
+        theElastic->clear();
      }
-     */
-     theElastic->clear();
   }
   
   #include "G4ParticleHPThermalBoost.hh"
@@ -98,7 +97,7 @@
     if(n!=1)
     {
       G4int i;
-      xSec = new G4double[n];
+      G4double* xSec = new G4double[n];
       G4double sum=0;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    

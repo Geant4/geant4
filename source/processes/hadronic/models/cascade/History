@@ -15,6 +15,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 March 2016  Dennis Wright (hadr-casc-V10-02-01)
+--------------------------------------------------
+- G4InuclCollider.cc: re-instate getenv for photonuclearOkay().  This
+  method causes significant performance degradation and the physics needs 
+  to be improved before it can made default
+
+25 January 2016  Michael Kelsey (hadr-casc-V10-02-00)
+-----------------------------------------------------
+- G4InuclCollider.cc:  Remove envvar which enables "photonuclearOkay()"
+  test.  This test will now be used by default, improving the match for
+  production of neutrons and protons in the GDR region.
+
 6 November 2015  Dennis Wright (hadr-casc-V10-01-13)
 ----------------------------------------------------
 - G4CascadeKplusNChannel: extend to 9-body final states and 32 GeV using same

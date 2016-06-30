@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc 71031 2013-06-10 09:11:38Z gcosmo $
+// $Id: G4EventManager.cc 94950 2016-01-07 11:53:14Z gcosmo $
 //
 //
 //
@@ -42,12 +42,12 @@
 #include "G4Navigator.hh"
 #include "Randomize.hh"
 
-G4ThreadLocal G4EventManager* G4EventManager::fpEventManager = 0;
+G4ThreadLocal G4EventManager* G4EventManager::fpEventManager = nullptr;
 G4EventManager* G4EventManager::GetEventManager()
 { return fpEventManager; }
 
 G4EventManager::G4EventManager()
-:currentEvent(0),trajectoryContainer(0),
+:currentEvent(nullptr),trajectoryContainer(nullptr),
  verboseLevel(0),tracking(false),abortRequested(false),
  storetRandomNumberStatusToG4Event(false)
 {
@@ -65,17 +65,18 @@ G4EventManager::G4EventManager()
   sdManager = G4SDManager::GetSDMpointerIfExist();
   stateManager = G4StateManager::GetStateManager();
   fpEventManager = this;
-  userEventAction = 0;
-  userStackingAction = 0;
-  userTrackingAction = 0;
-  userSteppingAction = 0;
+  userEventAction = nullptr;
+  userStackingAction = nullptr;
+  userTrackingAction = nullptr;
+  userSteppingAction = nullptr;
  }
 }
 
-// private -> never called
+/* private -> never called
 G4EventManager::G4EventManager(const G4EventManager&) {;}
 G4EventManager& G4EventManager::operator=(const G4EventManager&)
 { return *this; }
+*/
 
 G4EventManager::~G4EventManager()
 {
@@ -83,7 +84,7 @@ G4EventManager::~G4EventManager()
    delete transformer;
    delete trackManager;
    delete theMessenger;
-   if(userEventAction) delete userEventAction;
+   delete userEventAction;
    fpEventManager = 0;
 }
 
@@ -93,8 +94,6 @@ const G4EventManager & G4EventManager::operator=(const G4EventManager &right)
 G4int G4EventManager::operator==(const G4EventManager &right) const { }
 G4int G4EventManager::operator!=(const G4EventManager &right) const { }
 */
-
-
 
 void G4EventManager::DoProcessing(G4Event* anEvent)
 {
@@ -117,15 +116,15 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     currentEvent->SetRandomNumberStatusForProcessing(randomNumberStatusToG4Event); 
   }
 
-  // Reseting Navigator has been moved to G4Eventmanager, so that resetting
+  // Reseting Navigator has been moved to G4EventManager, so that resetting
   // is now done for every event.
   G4ThreeVector center(0,0,0);
   G4Navigator* navigator =
       G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   navigator->LocateGlobalPointAndSetup(center,0,false);
                                                                                       
-  G4Track * track;
-  G4TrackStatus istop;
+  G4Track * track = nullptr;
+  G4TrackStatus istop = fAlive;
 
 #ifdef G4VERBOSE
   if ( verboseLevel > 0 )
@@ -139,7 +138,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   trackContainer->PrepareNewEvent();
 
 #ifdef G4_STORE_TRAJECTORY
-  trajectoryContainer = 0;
+  trajectoryContainer = nullptr;
 #endif
 
   sdManager = G4SDManager::GetSDMpointerIfExist();
@@ -169,7 +168,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
 #endif
   
   G4VTrajectory* previousTrajectory;
-  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != 0 )
+  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != 0 ) // Loop checking 12.28.2015 M.Asai
   {
 
 #ifdef G4VERBOSE
@@ -195,7 +194,7 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
     }
 #endif
 
-    G4VTrajectory * aTrajectory = 0;
+    G4VTrajectory * aTrajectory = nullptr;
 #ifdef G4_STORE_TRAJECTORY
     aTrajectory = trackManager->GimmeTrajectory();
 
@@ -263,22 +262,22 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
   if(userEventAction) userEventAction->EndOfEventAction(currentEvent);
 
   stateManager->SetNewState(G4State_GeomClosed);
-  currentEvent = 0;
+  currentEvent = nullptr;
   abortRequested = false;
 }
 
 void G4EventManager::StackTracks(G4TrackVector *trackVector,G4bool IDhasAlreadySet)
 {
-  G4Track * newTrack;
-
   if( trackVector )
   {
-
-    size_t n_passedTrack = trackVector->size();
-    if( n_passedTrack == 0 ) return;
-    for( size_t i = 0; i < n_passedTrack; i++ )
+    //size_t n_passedTrack = trackVector->size();
+    //if( n_passedTrack == 0 ) return;
+    //for( size_t i = 0; i < n_passedTrack; i++ )
+    //{
+    //  newTrack = (*trackVector)[ i ];
+    if( trackVector->size() == 0 ) return;
+    for( auto newTrack : *trackVector )
     {
-      newTrack = (*trackVector)[ i ];
       trackIDCounter++;
       if(!IDhasAlreadySet)
       {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.hh 82754 2014-07-08 14:06:13Z gcosmo $
+// $Id: G4KleinNishinaModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,14 +61,15 @@ class G4KleinNishinaModel : public G4VEmModel
 
 public:
 
-  G4KleinNishinaModel(const G4String& nam = "KleinNishina");
+  explicit G4KleinNishinaModel(const G4String& nam = "KleinNishina");
 
   virtual ~G4KleinNishinaModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -76,13 +77,13 @@ public:
                                       G4double Z, 
                                       G4double A, 
                                       G4double cut,
-                                      G4double emax);
+                                      G4double emax) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 protected:
 
@@ -94,8 +95,8 @@ protected:
 private:
 
   // hide assignment operator
-  G4KleinNishinaModel & operator=(const  G4KleinNishinaModel &right);
-  G4KleinNishinaModel(const  G4KleinNishinaModel&);
+  G4KleinNishinaModel & operator=(const  G4KleinNishinaModel &right) = delete;
+  G4KleinNishinaModel(const  G4KleinNishinaModel&) = delete;
  
   G4LorentzVector lv1, lv2;
   G4ThreeVector bst;

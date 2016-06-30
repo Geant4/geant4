@@ -122,7 +122,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   else if (particleName == "helium")   flagParticle = 6;
 
   // Processes
-  if (processName=="e-_G4DNAElastic")    flagProcess =11;
+  if (processName=="Capture"||processName=="e-_G4DNAElectronSolvation") flagProcess =1;
+  else if (processName=="e-_G4DNAElastic")    flagProcess =11;
   else if (processName=="e-_G4DNAExcitation")    flagProcess =12;
   else if (processName=="e-_G4DNAIonisation")    flagProcess =13;
   else if (processName=="e-_G4DNAAttachment")    flagProcess =14;

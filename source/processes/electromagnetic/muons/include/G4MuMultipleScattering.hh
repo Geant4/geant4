@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh 68035 2013-03-13 14:12:34Z gcosmo $
+// $Id: G4MuMultipleScattering.hh 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -62,26 +62,27 @@ class G4MuMultipleScattering : public G4VMultipleScattering
 {
 public:    // with description
 
-  G4MuMultipleScattering(const G4String& processName="muMsc");
+  explicit G4MuMultipleScattering(const G4String& processName="muMsc");
 
   virtual ~G4MuMultipleScattering();
 
   // returns true for charged particles, false otherwise
-  G4bool IsApplicable (const G4ParticleDefinition& p);
+  G4bool IsApplicable (const G4ParticleDefinition& p) override;
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  void PrintInfo() override;
 
 protected:
 
   // This function initialise models
-  void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:        // data members
 
   //  hide assignment operator
-  G4MuMultipleScattering & operator=(const  G4MuMultipleScattering &right);
-  G4MuMultipleScattering(const  G4MuMultipleScattering&);
+  G4MuMultipleScattering & 
+    operator=(const  G4MuMultipleScattering &right) = delete;
+  G4MuMultipleScattering(const  G4MuMultipleScattering&) = delete;
 
   G4bool   isInitialized;
 

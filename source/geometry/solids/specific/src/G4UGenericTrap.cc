@@ -33,10 +33,13 @@
 #include "G4GenericTrap.hh"
 #include "G4UGenericTrap.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex UGenericTrapMutex = G4MUTEX_INITIALIZER; }
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -99,6 +102,57 @@ G4UGenericTrap::operator=(const G4UGenericTrap &source)
   G4USolid::operator=( source );
   
   return *this;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+//
+G4double G4UGenericTrap::GetZHalfLength() const
+{
+  return GetShape()->GetZHalfLength();
+}
+G4int G4UGenericTrap::GetNofVertices() const
+{
+  return GetShape()->GetNofVertices();
+}
+G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
+{
+  UVector2 v = GetShape()->GetVertex(index);
+  return G4TwoVector(v.x, v.y);
+}
+const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
+{
+  G4AutoLock l(&UGenericTrapMutex);
+  std::vector<UVector2> v = GetShape()->GetVertices();
+  static std::vector<G4TwoVector> vertices; vertices.clear();
+  for (size_t n=0; n<v.size(); ++n)
+  {
+    vertices.push_back(G4TwoVector(v[n].x,v[n].y));
+  }
+  return vertices;
+}
+G4double G4UGenericTrap::GetTwistAngle(G4int index) const
+{
+  return GetShape()->GetTwistAngle(index);
+}
+G4bool G4UGenericTrap::IsTwisted() const
+{
+  return GetShape()->IsTwisted();
+}
+G4int G4UGenericTrap::GetVisSubdivisions() const
+{
+  return GetShape()->GetVisSubdivisions();
+}
+
+void G4UGenericTrap::SetVisSubdivisions(G4int subdiv)
+{
+  GetShape()->SetVisSubdivisions(subdiv);
+}
+
+void G4UGenericTrap::SetZHalfLength(G4double halfZ)
+{
+  GetShape()->SetZHalfLength(halfZ);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransparentRegXTRadiator.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4TransparentRegXTRadiator.cc 97385 2016-06-02 09:59:53Z gcosmo $
 //
 
 #include <complex>
@@ -135,7 +135,7 @@ G4double G4TransparentRegXTRadiator::SpectralXTRdEdx(G4double energy)
               <<"      "<<sum<<G4endl;  
     }  
   }
-  result = 4*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
+  result = 4.*( cof1 + cof2 )*( cof1 + cof2 )*sum/energy;
   // result *= ( 1 - std::exp(-0.5*fPlateNumber*sigma) )/( 1 - std::exp(-0.5*sigma) );  
   // fPlateNumber;
   result *= fPlateNumber; // *std::exp(-0.5*fPlateNumber*sigma); 

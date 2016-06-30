@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEvaporationFactory.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VEvaporationFactory.hh 96402 2016-04-12 07:30:48Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -43,7 +43,7 @@ class G4VEvaporationFactory
 {
 public:
 
-  G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
+  explicit G4VEvaporationFactory(G4VEvaporationChannel* photoEvaporation);
 
   virtual ~G4VEvaporationFactory();
 
@@ -51,10 +51,10 @@ public:
 
 private:
 
-  G4VEvaporationFactory(const G4VEvaporationFactory & );
-  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val);
-  G4bool operator==(const G4VEvaporationFactory & val) const;
-  G4bool operator!=(const G4VEvaporationFactory & val) const;
+  G4VEvaporationFactory(const G4VEvaporationFactory & ) = delete;
+  const G4VEvaporationFactory & operator=(const G4VEvaporationFactory & val) = delete;
+  G4bool operator==(const G4VEvaporationFactory & val) const = delete;
+  G4bool operator!=(const G4VEvaporationFactory & val) const = delete;
 
 protected:
 

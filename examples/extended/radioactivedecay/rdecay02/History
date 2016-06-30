@@ -1,4 +1,4 @@
-$Id: History 92227 2015-08-24 10:43:08Z gcosmo $
+$Id: History 95739 2016-02-23 09:33:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+22-02-2016  mma  (rdecay02-V10-02-00)
+- PhysicsList : register hadronic processes
+ 
 24-08-2015  mma  (rdecay02-V10-01-03)
 - update Readme
      

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.cc 87062 2014-11-24 11:45:21Z gcosmo $
+// $Id: G4EnergyLossForExtrapolator.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,13 +62,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = 0;
+G4TablesForExtrapolator* G4EnergyLossForExtrapolator::tables = nullptr;
 
 G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
   : maxEnergyTransfer(DBL_MAX), verbose(verb)
 {
-  currentParticle = 0;
-  currentMaterial = 0;
+  currentParticle = nullptr;
+  currentMaterial = nullptr;
 
   linLossLimit = 0.01;
   emin         = 1.*MeV;
@@ -86,7 +86,7 @@ G4EnergyLossForExtrapolator::G4EnergyLossForExtrapolator(G4int verb)
     = idxInvRangeElectron = idxInvRangePositron = idxInvRangeMuon
     = idxInvRangeProton = idxMscElectron = 0;
  
-  electron = positron = proton = muonPlus = muonMinus = 0;
+  electron = positron = proton = muonPlus = muonMinus = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -220,7 +220,7 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 const G4ParticleDefinition* 
 G4EnergyLossForExtrapolator::FindParticle(const G4String& name)
 {
-  const G4ParticleDefinition* p = 0;
+  const G4ParticleDefinition* p = nullptr;
   if(name != currentParticleName) {
     p = G4ParticleTable::GetParticleTable()->FindParticle(name);
     if(!p) {
@@ -307,8 +307,8 @@ void G4EnergyLossForExtrapolator::Initialisation()
   if(verbose>1) {
     G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
   }
-  currentParticle = 0;
-  currentMaterial = 0;
+  currentParticle = nullptr;
+  currentMaterial = nullptr;
   kineticEnergy   = 0.0;
 
   electron = G4Electron::Electron();
@@ -347,7 +347,7 @@ G4EnergyLossForExtrapolator::~G4EnergyLossForExtrapolator()
 {
   G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
   delete tables;
-  tables = 0;
+  tables = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

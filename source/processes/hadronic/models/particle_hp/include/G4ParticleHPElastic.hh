@@ -71,7 +71,6 @@ class G4ParticleHPElastic : public G4HadronicInteraction
   private:
       std::vector<G4ParticleHPChannel*>* theElastic;
   
-  G4double * xSec;
   G4String dirName;
   G4int numEle;
   G4bool overrideSuspension;

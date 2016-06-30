@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.cc 92431 2015-09-01 09:11:46Z gcosmo $
+// $Id: G4EvaporationDefaultGEMFactory.cc 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code
@@ -124,8 +124,8 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel(
     new std::vector<G4VEvaporationChannel*>;
   theChannel->reserve(68);
 
-  theChannel->push_back( thePhotonEvaporation );          // Photon Channel
-  theChannel->push_back( new G4CompetitiveFission() );         // Fission Channel
+  theChannel->push_back( thePhotonEvaporation );        // Photon Channel
+  theChannel->push_back( new G4CompetitiveFission() );  // Fission Channel
 
   // JMQ 220709 standard particle evaporation channels (Z<3,A<5)
   theChannel->push_back( new G4NeutronEvaporationChannel() );  // n
@@ -198,7 +198,7 @@ std::vector<G4VEvaporationChannel*>* G4EvaporationDefaultGEMFactory::GetChannel(
   theChannel->push_back( new G4Mg28GEMChannel() );     // Mg28
 
   size_t nn = theChannel->size();
-  for(size_t i=2; i<nn; ++i) { 
+  for(size_t i=1; i<nn; ++i) { 
     (*theChannel)[i]->SetPhotonEvaporation(thePhotonEvaporation);
   }
   return theChannel;

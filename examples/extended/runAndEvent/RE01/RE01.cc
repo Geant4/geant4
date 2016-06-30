@@ -48,9 +48,10 @@
 #include "G4UImanager.hh"
 
 #include "RE01DetectorConstruction.hh"
-#include "RE01PhysicsList.hh"
+#include "RE01CalorimeterROGeometry.hh"
 #include "QGSP_BERT.hh"
-
+#include "G4UnknownDecayPhysics.hh"
+#include "G4ParallelWorldPhysics.hh"
 #include "RE01ActionInitialization.hh"
 
 
@@ -77,11 +78,21 @@ int main(int argc,char** argv)
   visManager->Initialize();
 #endif
 
-  runManager->SetUserInitialization(new RE01DetectorConstruction);
-  runManager->SetUserInitialization(new RE01PhysicsList);
-  //runManager->SetUserInitialization(new QGSP_BERT);
+  G4String parallelWorldName = "ReadoutWorld";
+  G4VUserDetectorConstruction* detector
+     = new RE01DetectorConstruction();
+  detector->RegisterParallelWorld(
+       new RE01CalorimeterROGeometry(parallelWorldName));
+  runManager->SetUserInitialization(detector);
+
+  G4VModularPhysicsList* physicsList = new QGSP_BERT;
+  physicsList->RegisterPhysics(new G4UnknownDecayPhysics);
+  physicsList->RegisterPhysics(
+       new G4ParallelWorldPhysics(parallelWorldName));
+  runManager->SetUserInitialization(physicsList);
   
-  runManager->SetUserInitialization(new RE01ActionInitialization);
+  runManager->SetUserInitialization(
+       new RE01ActionInitialization);
   
   runManager->Initialize();
   

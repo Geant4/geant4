@@ -48,9 +48,11 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UTet.hh"
+
+#include "G4Polyhedron.hh"
 
 class G4UTet : public G4USolid
 {
@@ -68,6 +70,8 @@ class G4UTet : public G4USolid
 
     inline UTet* GetShape() const;
 
+    inline G4GeometryType GetEntityType() const;
+
   public:   // without description
 
     G4UTet(__void__&);
@@ -79,7 +83,9 @@ class G4UTet : public G4USolid
     G4UTet& operator=(const G4UTet& rhs); 
       // Copy constructor and assignment operator.
 
-    inline std::vector<G4ThreeVector> GetVertices() const;
+    G4Polyhedron* CreatePolyhedron() const;
+
+    std::vector<G4ThreeVector> GetVertices() const;
       // Return the four vertices of the shape.
 };
 
@@ -92,16 +98,9 @@ inline UTet* G4UTet::GetShape() const
   return (UTet*) fShape;
 }
 
-inline std::vector<G4ThreeVector> G4UTet::GetVertices() const
+inline G4GeometryType G4UTet::GetEntityType() const
 {
-  std::vector<UVector3> vec = GetShape()->GetVertices();
-  std::vector<G4ThreeVector> vertices;
-  for (unsigned int i=0; i<vec.size(); ++i)
-  {
-    G4ThreeVector v(vec[i].x(), vec[i].y(), vec[i].z());
-    vertices.push_back(v);
-  }
-  return vertices;
+  return "G4Tet";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

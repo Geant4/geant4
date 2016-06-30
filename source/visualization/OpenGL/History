@@ -1,4 +1,4 @@
-$Id: History 94428 2015-11-16 12:40:02Z gcosmo $
+$Id: History 97430 2016-06-03 07:20:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,62 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st June 2016  Laurent Garnier
+- G4OpenGLWin32Viewer :Fixed compilation warnings on Win32 about LONG_PTR
+
+1st June 2016  John Allison  (opengl-V10-02-06)
+- G4OpenGLXViewer.cc: Fixed bug in GetPickDetails (wrong placement
+  of std::ostringstream oss;).
+
+30th May 2016  John Allison  (opengl-V10-02-05)
+- G4OpenGLXViewer.cc:
+  o G4OpenGLXViewer::SetView: Added thread awareness regarding
+    glXMakeCurrent.  NOTE: This will have to be done for Win32
+    for multithreading on Windows.
+- Tidying of outdated comments.
+
+2nd May 2016  John Allison  (opengl-V10-02-04)
+- G4OpenGLXmViewer.cc: Added glXWaitGL (); glFlush (); to ShowView
+  to ensure all items get flushed to screen, even when
+  eventsDrawInterval is set >1.
+- G4OpenGLSceneHandler.hh: Made Get/SetEventsDrawInterval static
+  to match static members changed in opengl-V10-02-03.
+
+23rd April 2016  John Allison  (opengl-V10-02-03)
+- /vis/ogl/set/eventsDrawInterval and /vis/ogl/set/displayListLimit:
+  Fixed some inconsistencies.
+  o G4OpenGLViewerMessenger.cc: eventsDrawInterval now applies also
+    to immediate mode.
+  o G4OpenGLSceneHandler.hh/cc: Made fEventsDrawInterval and
+    fEventsWaitingToBeFlushed static so that they apply to all
+    OGL scene handlers.
+  o G4OpenGLImmediateSceneHandler.cc: Fixed bug in EndPrimitives2D -
+    now calls ScaledFlush.
+  o G4OpenGLStoredSceneHandler.cc: Simply moved static variable
+    implementations to near top of file.
+
+10th February 2016 Andrea Dotti (opengl-V10-02-00)
+- Fix typo for macro G4CONDITIONBROADCAST (requires global-V10-02-03)
+
+27th January 2016  John Allison
+- CompareForKernelVisit:
+  Tested for total vis attributes modifiers instead of just for size.
+
+26th January 2016  John Allison
+- G4OpenGLViewer::getRealPrintFilename:
+  o fExportFilename contains filled characters:
+    << setw(4) << setfill('0') << fExportFilenameIndex
+    so that files can easily be referenced in alphanumeric order.
+
+14th January 2016  John Allison
+- Fix for notifying multiple OGL X views:
+  o Added glXMakeCurrent(dpy,win,cxMaster) to G4OpenGLXViewer::SetView.
+
+11th December 2015  Laurent Garnier
+- G4OpenGLQtViewer: Add the "F" key to test flytrough    
+- G4OpenGLViewer: Fix a problem in picking, does not clean correctly
+    an outupt stream buffer  
 
 5th November 2015  Laurent Garnier (opengl-V10-01-13)
 - G4OpenGLViewer: Fix warning with VC14

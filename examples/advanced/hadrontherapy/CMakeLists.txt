@@ -62,6 +62,7 @@ endif()
 set(EXAMPLEhadrontherapy_SCRIPTS
   clean.sh
  batch.mac
+ ModoulWeight.txt
  macro/GUIPersonalisation.mac
   macro/carbon_beamline.mac
   macro/detectorGeometry.mac

@@ -7,7 +7,7 @@
 //
 // ======================================================================
 
-#if (defined (G4MULTITHREADED) && defined (G4USE_STD11))
+#if (defined (G4MULTITHREADED))
 
   #if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 7)
     #include <atomic>

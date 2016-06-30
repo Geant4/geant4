@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -152,7 +152,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
@@ -166,7 +166,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -275,7 +275,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -308,7 +308,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -465,39 +465,39 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.83s Real=1.84s Sys=0.01s
+  User=1.9s Real=1.9s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         402.5
-Average number of gamma      640.3
-Average number of e+         48.86
-Average number of steps      2932
-Edep 1x1 =                   0.8275 +- 0.002893  res=  3.496 %   100
-Edep 3x3 =                   0.9582 +- 0.001307  res=  1.364 %   100
-Edep 5x5 =                   0.9792 +- 0.0009431  res=  0.9631 %   100
+Average number of e-         401
+Average number of gamma      639.4
+Average number of e+         48.26
+Average number of steps      2923
+Edep 1x1 =                   0.8345 +- 0.002442  res=  2.926 %   100
+Edep 3x3 =                   0.9589 +- 0.001137  res=  1.186 %   100
+Edep 5x5 =                   0.9797 +- 0.0007976  res=  0.8141 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8636 +- 0.002791
-  E1/E25 =                   0.8451 +- 0.002923
-  E9/E25 =                   0.9785 +- 0.0009045
+  E1/E9  =                   0.8703 +- 0.002249
+  E1/E25 =                   0.8518 +- 0.002306
+  E9/E25 =                   0.9787 +- 0.0008004
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8275  delEdep1x1= -0.1725 nrms= -1.725
-Erms1x1: 0.02893  delErms1x1= -0.9711 nrms= -9.711
-Edep3x3: 0.9582  delEdep3x3= -0.04182 nrms= -0.4182
-Erms3x3: 0.01307  delErms3x3= -0.9869 nrms= -9.869
-Edep5x5: 0.9792  delEdep5x5= -0.02079 nrms= -0.2079
-Erms5x5: 0.009431  delErms5x5= -0.9906 nrms= -9.906
+Edep1x1: 0.8345  delEdep1x1= -0.1655 nrms= -1.655
+Erms1x1: 0.02442  delErms1x1= -0.9756 nrms= -9.756
+Edep3x3: 0.9589  delEdep3x3= -0.04109 nrms= -0.4109
+Erms3x3: 0.01137  delErms3x3= -0.9886 nrms= -9.886
+Edep5x5: 0.9797  delEdep5x5= -0.02026 nrms= -0.2026
+Erms5x5: 0.007976  delErms5x5= -0.992 nrms= -9.92
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0         157           0
-  53         268          41           0          47
-  55         273          48           0          48
+  53         263          40           0          45
+  55         278          48           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -575,22 +575,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.93s Real=2.93s Sys=0s
+  User=4.07s Real=4.1s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         73.2
-Average number of gamma      68.59
-Average number of e+         3.986
-Average number of steps      425.5
-Edep 1x1 =                   0.01472 +- 0.0005456
-Edep 3x3 =                   0.0151 +- 0.0006058
-Edep 5x5 =                   0.01516 +- 0.0006167
+Average number of e-         76.57
+Average number of gamma      73.45
+Average number of e+         4.225
+Average number of steps      448.3
+Edep 1x1 =                   0.01499 +- 0.0006727
+Edep 3x3 =                   0.01542 +- 0.0007462
+Edep 5x5 =                   0.0155 +- 0.0007589
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9847 +- 0.0006475
-  E1/E25 =                   0.9819 +- 0.0007355
-  E9/E25 =                   0.9972 +- 0.000176
+  E1/E9  =                   0.9835 +- 0.0007225
+  E1/E25 =                   0.9807 +- 0.0008143
+  E9/E25 =                   0.9971 +- 0.0001764
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -739,7 +739,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
@@ -753,7 +753,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -862,7 +862,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -895,7 +895,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -1052,22 +1052,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.34s Real=1.34s Sys=0s
+  User=1.43s Real=1.46s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         170.8
-Average number of gamma      220.3
-Average number of e+         47.35
-Average number of steps      1806
-Edep 1x1 =                   0.8276 +- 0.00418  res=  5.051 %   100
-Edep 3x3 =                   0.9548 +- 0.003349  res=  3.508 %   100
-Edep 5x5 =                   0.9748 +- 0.003258  res=  3.342 %   100
+Average number of e-         170.7
+Average number of gamma      219.8
+Average number of e+         46.76
+Average number of steps      1799
+Edep 1x1 =                   0.8394 +- 0.003595  res=  4.283 %   100
+Edep 3x3 =                   0.959 +- 0.00322  res=  3.358 %   100
+Edep 5x5 =                   0.9785 +- 0.003065  res=  3.133 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8668 +- 0.00324
-  E1/E25 =                   0.8491 +- 0.003401
-  E9/E25 =                   0.9795 +- 0.00106
+  E1/E9  =                   0.8753 +- 0.002587
+  E1/E25 =                   0.8579 +- 0.002728
+  E9/E25 =                   0.9801 +- 0.001062
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1083,10 +1083,13 @@ Beam Energy                  1 GeV
 #
 /run/beamOn 100
 
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          VertexDetector
+### ===  Deexcitation model UAtomDeexcitation is activated for 3 regions:
+          DefaultRegionForTheWorld  1  0  1
+          VertexDetector  1  0  1
+          MuonDetector  1  0  1
 
 ### === G4UAtomicDeexcitation::InitialiseForNewRun()
+### ===  Ignore cuts flag:   0
 ### ===  PIXE model for hadrons: Empirical
 ### ===  PIXE model for e+-:     Livermore
  Secondary biasing is activated for e+ and eIoni inside G4Regions: 
@@ -1219,7 +1222,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
@@ -1233,7 +1236,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -1342,7 +1345,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -1375,7 +1378,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -1532,22 +1535,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.22s Real=2.23s Sys=0s
+  User=2.03s Real=2.04s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         170
-Average number of gamma      521.2
-Average number of e+         47.37
-Average number of steps      2113
-Edep 1x1 =                   0.8336 +- 0.003763  res=  4.515 %   100
-Edep 3x3 =                   0.9555 +- 0.003074  res=  3.217 %   100
-Edep 5x5 =                   0.975 +- 0.003144  res=  3.224 %   100
+Average number of e-         170.6
+Average number of gamma      518.8
+Average number of e+         47.17
+Average number of steps      2112
+Edep 1x1 =                   0.8276 +- 0.003187  res=  3.851 %   100
+Edep 3x3 =                   0.9513 +- 0.003034  res=  3.19 %   100
+Edep 5x5 =                   0.9751 +- 0.002977  res=  3.053 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8724 +- 0.002979
-  E1/E25 =                   0.855 +- 0.003092
-  E9/E25 =                   0.98 +- 0.001011
+  E1/E9  =                   0.8704 +- 0.003206
+  E1/E25 =                   0.8492 +- 0.003388
+  E9/E25 =                   0.9757 +- 0.00127
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1555,6 +1558,6 @@ Beam Energy                  1 GeV
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.33 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.28 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

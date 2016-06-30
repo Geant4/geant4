@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh 85355 2014-10-28 09:58:59Z gcosmo $
+// $Id: G4Scintillation.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -94,19 +94,19 @@ public:
 	// Constructors and Destructor
 	////////////////////////////////
 
-	G4Scintillation(const G4String& processName = "Scintillation",
+	explicit G4Scintillation(const G4String& processName = "Scintillation",
                                  G4ProcessType type = fElectromagnetic);
 	~G4Scintillation();
 
 private:
 
-        G4Scintillation(const G4Scintillation &right);
+        G4Scintillation(const G4Scintillation &right) = delete;
 
         //////////////
         // Operators
         //////////////
 
-        G4Scintillation& operator=(const G4Scintillation &right);
+        G4Scintillation& operator=(const G4Scintillation &right) = delete;
 
 public:
 
@@ -118,30 +118,32 @@ public:
         // deposition of particles in flight) and AtRestDoIt (for energy
         // given to the medium by particles at rest)
 
-        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+        G4bool IsApplicable(
+          const G4ParticleDefinition& aParticleType) override;
         // Returns true -> 'is applicable', for any particle type except
         // for an 'opticalphoton' and for short-lived particles
 
-        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
+        void BuildPhysicsTable(
+          const G4ParticleDefinition& aParticleType) override;
         // Build table at the right time
 
-	G4double GetMeanFreePath(const G4Track& aTrack,
-				       G4double ,
-                                       G4ForceCondition* );
+        G4double GetMeanFreePath(const G4Track& aTrack,
+                                       G4double ,
+                                       G4ForceCondition* ) override;
         // Returns infinity; i. e. the process does not limit the step,
         // but sets the 'StronglyForced' condition for the DoIt to be 
         // invoked at every step.
 
         G4double GetMeanLifeTime(const G4Track& aTrack,
-                                 G4ForceCondition* );
+                                 G4ForceCondition* ) override;
         // Returns infinity; i. e. the process does not limit the time,
         // but sets the 'StronglyForced' condition for the DoIt to be
         // invoked at every step.
 
-	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-			                const G4Step&  aStep);
+        G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+                            const G4Step&  aStep) override;
         G4VParticleChange* AtRestDoIt (const G4Track& aTrack,
-                                       const G4Step& aStep);
+                                       const G4Step& aStep) override;
 
         G4double GetScintillationYieldByParticleType(const G4Track &aTrack,
 						     const G4Step &aStep);
@@ -156,12 +158,12 @@ public:
         // produced scintillation photons are tracked next. When all 
         // have been tracked, the tracking of the primary resumes.
 
+        G4bool GetTrackSecondariesFirst() const;
+        // Returns the boolean flag for tracking secondaries first.
+
         void SetFiniteRiseTime(const G4bool state);
         // If set, the G4Scintillation process expects the user to have
         // set the constant material property FAST/SLOWSCINTILLATIONRISETIME.
-
-        G4bool GetTrackSecondariesFirst() const;
-        // Returns the boolean flag for tracking secondaries first.
 
         G4bool GetFiniteRiseTime() const;
         // Returns the boolean flag for a finite scintillation rise time.
@@ -189,23 +191,30 @@ public:
         G4PhysicsTable* GetSlowIntegralTable() const;
         // Returns the address of the slow scintillation integral table.
 
-        void AddSaturation(G4EmSaturation* );
+        void AddSaturation(G4EmSaturation* sat);
         // Adds Birks Saturation to the process.
 
         void RemoveSaturation();
         // Removes the Birks Saturation from the process.
 
-        G4EmSaturation* GetSaturation() const { return fEmSaturation; }
+        G4EmSaturation* GetSaturation() const;
         // Returns the Birks Saturation.
 
         void SetScintillationByParticleType(const G4bool );
         // Called by the user to set the scintillation yield as a function
         // of energy deposited by particle type
 
-        G4bool GetScintillationByParticleType() const
-        { return fScintillationByParticleType; }
+        G4bool GetScintillationByParticleType() const;
         // Return the boolean that determines the method of scintillation
         // production
+
+        void SetScintillationTrackInfo(const G4bool trackType);
+        // Call by the user to set the G4ScintillationTrackInformation
+        // to scintillation photon track
+
+        G4bool GetScintillationTrackInfo() const;
+        // Return the boolean for whether or not the
+        // G4ScintillationTrackInformation is set to the scint. photon track
 
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
@@ -233,6 +242,8 @@ private:
         G4double fExcitationRatio;
 
         G4bool fScintillationByParticleType;
+
+        G4bool fScintillationTrackInfo;
 
 #ifdef G4DEBUG_SCINTILLATION
         G4double ScintTrackEDep, ScintTrackYield;
@@ -262,9 +273,21 @@ G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
 }
 
 inline
+void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
+{
+        fTrackSecondariesFirst = state;
+}
+
+inline
 G4bool G4Scintillation::GetTrackSecondariesFirst() const
 {
         return fTrackSecondariesFirst;
+}
+
+inline
+void G4Scintillation::SetFiniteRiseTime(const G4bool state)
+{
+        fFiniteRiseTime = state;
 }
 
 inline 
@@ -274,9 +297,21 @@ G4bool G4Scintillation::GetFiniteRiseTime() const
 }
 
 inline
+void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
+{
+        fYieldFactor = yieldfactor;
+}
+
+inline
 G4double G4Scintillation::GetScintillationYieldFactor() const
 {
         return fYieldFactor;
+}
+
+inline
+void G4Scintillation::SetScintillationExcitationRatio(const G4double ratio)
+{
+        fExcitationRatio = ratio;
 }
 
 inline
@@ -295,6 +330,42 @@ inline
 G4PhysicsTable* G4Scintillation::GetFastIntegralTable() const
 {
         return fFastIntegralTable;
+}
+
+inline
+void G4Scintillation::AddSaturation(G4EmSaturation* sat)
+{
+        fEmSaturation = sat;
+}
+
+inline
+void G4Scintillation::RemoveSaturation()
+{
+        fEmSaturation = nullptr;
+}
+
+inline
+G4EmSaturation* G4Scintillation::GetSaturation() const
+{
+        return fEmSaturation;
+}
+
+inline
+G4bool G4Scintillation::GetScintillationByParticleType() const
+{
+        return fScintillationByParticleType;
+}
+
+inline
+void G4Scintillation::SetScintillationTrackInfo(const G4bool trackType)
+{
+        fScintillationTrackInfo = trackType;
+}
+
+inline
+G4bool G4Scintillation::GetScintillationTrackInfo() const
+{
+        return fScintillationTrackInfo;
 }
 
 inline

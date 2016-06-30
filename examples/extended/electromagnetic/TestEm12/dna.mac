@@ -17,7 +17,7 @@
 /analysis/h1/set 1 50  0.   100 nm	#edep profile
 /analysis/h1/set 3 50  0.   300 nm	#true track length
 #
-/testem/applyAutomaticStepMax false
+/testem/applyAutomaticStepMax true
 #
 /run/printProgress 1000
 #

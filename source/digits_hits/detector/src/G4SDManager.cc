@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.cc 73819 2013-09-12 15:52:52Z gcosmo $
+// $Id: G4SDManager.cc 96455 2016-04-15 08:44:06Z gcosmo $
 //
 
 #include "G4SDManager.hh"
@@ -35,7 +35,7 @@
 #include "G4ios.hh"
 
 
-G4ThreadLocal G4SDManager* G4SDManager::fSDManager = 0;
+G4ThreadLocal G4SDManager* G4SDManager::fSDManager = nullptr;
 
 G4SDManager* G4SDManager::GetSDMpointer()
 {
@@ -62,6 +62,10 @@ G4SDManager::~G4SDManager()
   delete theMessenger;
   delete HCtable;
   delete treeTop;
+  theMessenger = nullptr;
+  HCtable = nullptr;
+  treeTop = nullptr;
+  fSDManager = nullptr;
 }
 
 void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
@@ -81,7 +85,7 @@ void G4SDManager::AddNewDetector(G4VSensitiveDetector*aSD)
   if( verboseLevel > 0 )
   {
     G4cout << "New sensitive detector <" << aSD->GetName()
-         << "> is registored at " << pathName << G4endl;
+         << "> is registered at " << pathName << G4endl;
   }
 }
 

@@ -34,15 +34,15 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
-#include "G4PolyhedronArbitrary.hh"
 #include "G4VisExtent.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4GeometryTolerance.hh"
 
 #include "G4AutoLock.hh"
 
@@ -82,13 +82,8 @@ EInside G4USolid::Inside(const G4ThreeVector& p) const
 
   in_temp = fShape->Inside(pt);
 
-#ifndef G4USE_STD11
-  if (in_temp == VUSolid::eSurface)return kSurface;
-  if (in_temp == VUSolid::eInside)return kInside;
-#else
-  if (in_temp == VUSolid::EnumInside::eSurface)return kSurface;
-  if (in_temp == VUSolid::EnumInside::eInside)return kInside;
-#endif
+  if (in_temp == VUSolid::EnumInside::eSurface) return kSurface;
+  if (in_temp == VUSolid::EnumInside::eInside) return kInside;
 
   return in;
 }
@@ -105,7 +100,7 @@ G4ThreeVector G4USolid::SurfaceNormal(const G4ThreeVector& pt) const
 }
 
 G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
-                                const G4ThreeVector& d)const
+                                const G4ThreeVector& d) const
 {
   UVector3 p;
   p.x() = pt.x();
@@ -116,7 +111,8 @@ G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
   v.y() = d.y();
   v.z() = d.z(); // better assign at construction
   G4double dist = fShape->DistanceToIn(p, v);
-  if (dist > kInfinity) dist = kInfinity;
+  if (dist > kInfinity) return kInfinity;
+//  return  (dist > halfTolerance) ? dist : 0.0;
   return dist;
 }
 
@@ -127,7 +123,8 @@ G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
   p.y() = pt.y();
   p.z() = pt.z(); // better assign at construction
   G4double dist = fShape->SafetyFromOutside(p); // true?
-  if (dist > kInfinity) dist = kInfinity;
+  if (dist > kInfinity) return kInfinity;
+//  return (dist > halfTolerance) ? dist : 0.0;
   return dist;
 }
 
@@ -146,19 +143,21 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
   v.y() = d.y();
   v.z() = d.z(); // better assign at construction
   UVector3 n;
-  bool valid;
-  G4double dist = fShape->DistanceToOut(p, v, n,valid); // should use local variable
+  G4bool valid;
+  G4double dist = fShape->DistanceToOut(p, v, n, valid); // should use local variable
   if(calcNorm)
   {
-    if(valid){ *validNorm = true;}
-    else {* validNorm =false;}
-    if(*validNorm)
-    { norm->setX(n.x());
+    if(valid){ *validNorm = true; }
+    else { *validNorm = false; }
+    if(*validNorm)  // *norm = n, but only after calcNorm check
+    {
+      norm->setX(n.x());
       norm->setY(n.y());
       norm->setZ(n.z());
-    } // *norm = n, but only after calcNorm check
+    }
   }
-  if (dist > kInfinity) dist = kInfinity;
+  if (dist > kInfinity) return kInfinity;
+//  return (dist > halfTolerance) ? dist : 0.0;
   return dist;
 }
 
@@ -168,7 +167,9 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt) const
   p.x() = pt.x();
   p.y() = pt.y();
   p.z() = pt.z(); // better assign at construction
-  return fShape->SafetyFromInside(p); // true?
+  G4double dist = fShape->SafetyFromInside(p); // true?
+//  return (dist > halfTolerance) ? dist : 0.0;
+  return dist;
 }
 
 G4double G4USolid::GetCubicVolume()
@@ -452,108 +453,13 @@ G4USolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 
 G4Polyhedron* G4USolid::CreatePolyhedron() const
 {
-  G4int index = 0;
-  if (fShape->GetEntityType() == "Box")
-  {
-    double array[3];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronBox(array[0], array[1], array[2]);
-  }
-  if (fShape->GetEntityType() == "Tubs")
-  {
-    double array[5];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronTubs(array[0], array[1], array[2], array[3], array[4]);
-  }
-  if (fShape->GetEntityType() == "Cons")
-  {
-    double array[7];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronCons(array[0], array[1], array[2], array[3], array[4], array[5], array[6]);
-  }
-  if (fShape->GetEntityType() == "Orb")
-  {
-    double array[1];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronSphere(0., array[0], 0., 2 * pi, 0., pi);
-  }
-  if (fShape->GetEntityType() == "Sphere")
-  {
-    double array[6];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronSphere(array[0], array[1], array[2], array[3], array[4], array[5]);
-  }
-  if (fShape->GetEntityType() == "Tet")
-  {
-    double array[12];
-    fShape->GetParametersList(index, array);
-    G4Polyhedron* ph = new G4Polyhedron;
-    double xyz[4][3];
-    static int faces[4][4] = {{1, 3, 2, 0}, {1, 4, 3, 0}, {1, 2, 4, 0}, {2, 3, 4, 0}};
-    xyz[0][0] = array[0];
-    xyz[0][1] = array[1];
-    xyz[0][2] = array[2];
-    xyz[1][0] = array[3];
-    xyz[1][1] = array[4];
-    xyz[1][2] = array[5];
-    xyz[2][0] = array[6];
-    xyz[2][1] = array[7];
-    xyz[2][2] = array[8];
-    xyz[3][0] = array[9];
-    xyz[3][1] = array[10];
-    xyz[3][2] = array[11];
+  // Must be implemented in concrete wrappers...
 
-    ph->createPolyhedron(4, 4, xyz, faces);    
-    return ph;
-  }
-  if (fShape->GetEntityType() == "Trd")
-  {
-    double array[5];
-    fShape->GetParametersList(index, array);
-    return new G4PolyhedronTrd2(array[0], array[1], array[2], array[3], array[4]);
-  }
-  if (fShape->GetEntityType() == "Trap")
-  {
-    double array[12];
-    fShape->GetParametersList(index, array);
-    double phi = (array[11] != 1.0) ? (std::atan(array[10] / array[9])) : (0.0);
-    double alpha1 = std::atan(array[4]);
-    double alpha2 = std::atan(array[8]);
-    double theta = std::acos(array[11]);
-
-    return new G4PolyhedronTrap(array[0], theta, phi,
-                                array[1], array[2], array[3], alpha1,
-                                array[5], array[6], array[7], alpha2);
-  }
-
-  /*
-  if(fShape->GetEntityType()=="TessellatedSolid"){
-
-      G4Polyhedron *uPolyhedron=fShape->GetPolyhedron();
-      std::size_t nVertices = (*uPolyhedron).vertices.size();
-      std::size_t nFacets   = (*uPolyhedron).facets.size();
-
-      G4PolyhedronArbitrary *polyhedron =
-      new G4PolyhedronArbitrary (nVertices, nFacets);
-
-      for (std::vector<UVector3>::const_iterator v = (*uPolyhedron).vertices.begin();
-           v!=(*uPolyhedron).vertices.end(); v++)
-     {
-           UVector3 p=(*v);
-           G4ThreeVector pt(p.x(),p.y(),p.z());
-
-           polyhedron->AddVertex(pt);
-      }
-      for (std::vector<UFacet>::const_iterator f=(*uPolyhedron).facets.begin();
-          f != (*uPolyhedron).facets.end(); f++)
-      {
-   polyhedron->AddFacet((*f).f1,(*f).f2,(*f).f3,(*f).f4);
-      }
-
-     return (G4Polyhedron*) polyhedron;
-  }
-  */
-
+  std::ostringstream message;
+  message << "Visualization not supported for USolid shape "
+          << GetEntityType() << "... Sorry!" << G4endl;
+  G4Exception("G4USolid::CreatePolyhedron()", "GeomSolids0003",
+              FatalException, message);
   return 0;
 }
 

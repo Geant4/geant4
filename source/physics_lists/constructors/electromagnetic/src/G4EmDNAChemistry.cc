@@ -37,7 +37,7 @@
 
 // *** Processes and models for Geant4-DNA
 
-#include "G4DNAElectronSolvatation.hh"
+#include "G4DNAElectronSolvation.hh"
 
 #include "G4DNAAttachment.hh"
 #include "G4DNAVibExcitation.hh"
@@ -90,7 +90,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAChemistry);
 #include "G4Threading.hh"
 
 G4EmDNAChemistry::G4EmDNAChemistry() :
-    G4VUserChemistryList()
+    G4VUserChemistryList(true)
 {
   G4DNAChemistryManager::Instance()->SetChemistryList(this);
 }
@@ -118,20 +118,6 @@ void G4EmDNAChemistry::ConstructMolecule()
   G4H2O2::Definition();
   G4H2::Definition();
 
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("H3Op", G4H3O::Definition());
-//  G4Molecule* OHm = G4MoleculeTable::Instance()->
-//      CreateMoleculeModel("OHm", // just a tag to store and retrieve from
-//                                 // G4MoleculeTable
-//      G4OH::Definition(), -1, 5.0e-9 * (m2 / s));
-//  OHm->SetMass(17.0079 * g / Avogadro * c_squared);
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("OH", G4OH::Definition());
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("e_aq",
-//                                                   G4Electron_aq::Definition());
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("H",
-//                                                   G4Hydrogen::Definition());
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("H2", G4H2::Definition());
-//  G4MoleculeTable::Instance()->CreateMoleculeModel("H2O2", G4H2O2::Definition());
-
   //____________________________________________________________________________
 
   G4MoleculeTable::Instance()->CreateConfiguration("H3Op", G4H3O::Definition());
@@ -155,14 +141,6 @@ void G4EmDNAChemistry::ConstructMolecule()
 
 void G4EmDNAChemistry::ConstructDissociationChannels()
 {
-//  //-----------------------------------
-//  //Create the dynamic objects
-//  G4Molecule* OH = G4MoleculeTable::Instance()->GetMoleculeModel("OH");
-//  G4Molecule* OHm = G4MoleculeTable::Instance()->GetMoleculeModel("OHm");
-//  G4Molecule* e_aq = G4MoleculeTable::Instance()->GetMoleculeModel("e_aq");
-//  G4Molecule* H2 = G4MoleculeTable::Instance()->GetMoleculeModel("H2");
-//  G4Molecule* H3O = G4MoleculeTable::Instance()->GetMoleculeModel("H3Op");
-//  G4Molecule* H = G4MoleculeTable::Instance()->GetMoleculeModel("H");
   //-----------------------------------
   //Get the molecular configuration
   G4MolecularConfiguration* OH =
@@ -404,35 +382,27 @@ void G4EmDNAChemistry::ConstructDissociationChannels()
 void G4EmDNAChemistry::ConstructReactionTable(G4DNAMolecularReactionTable*
                                               theReactionTable)
 {
-  //  //-----------------------------------
-//  G4Molecule* OH = G4MoleculeTable::Instance()->GetMoleculeModel("OH");
-//  G4Molecule* e_aq = G4MoleculeTable::Instance()->GetMoleculeModel("e_aq");
-//  G4Molecule* H2 = G4MoleculeTable::Instance()->GetMoleculeModel("H2");
-//  G4Molecule* H3Op = G4MoleculeTable::Instance()->GetMoleculeModel("H3Op");
-//  G4Molecule* OHm = G4MoleculeTable::Instance()->GetMoleculeModel("OHm");
-//  G4Molecule* H2O2 =  G4MoleculeTable::Instance()->GetMoleculeModel("H2O2");
-//  G4Molecule* H = G4MoleculeTable::Instance()->GetMoleculeModel("H");
-    //-----------------------------------
-    //Get the molecular configuration
-    G4MolecularConfiguration* OH =
-        G4MoleculeTable::Instance()->GetConfiguration("OH");
-    G4MolecularConfiguration* OHm =
-        G4MoleculeTable::Instance()->GetConfiguration("OHm");
-    G4MolecularConfiguration* e_aq =
-        G4MoleculeTable::Instance()->GetConfiguration("e_aq");
-    G4MolecularConfiguration* H2 =
-        G4MoleculeTable::Instance()->GetConfiguration("H2");
-    G4MolecularConfiguration* H3Op =
-        G4MoleculeTable::Instance()->GetConfiguration("H3Op");
-    G4MolecularConfiguration* H =
-        G4MoleculeTable::Instance()->GetConfiguration("H");
-    G4MolecularConfiguration* H2O2 =
-        G4MoleculeTable::Instance()->GetConfiguration("H2O2");
+  //-----------------------------------
+  //Get the molecular configuration
+  G4MolecularConfiguration* OH =
+   G4MoleculeTable::Instance()->GetConfiguration("OH");
+  G4MolecularConfiguration* OHm =
+   G4MoleculeTable::Instance()->GetConfiguration("OHm");
+  G4MolecularConfiguration* e_aq =
+   G4MoleculeTable::Instance()->GetConfiguration("e_aq");
+  G4MolecularConfiguration* H2 =
+   G4MoleculeTable::Instance()->GetConfiguration("H2");
+  G4MolecularConfiguration* H3Op =
+   G4MoleculeTable::Instance()->GetConfiguration("H3Op");
+  G4MolecularConfiguration* H =
+   G4MoleculeTable::Instance()->GetConfiguration("H");
+  G4MolecularConfiguration* H2O2 =
+   G4MoleculeTable::Instance()->GetConfiguration("H2O2");
 
   //------------------------------------------------------------------
   // e_aq + e_aq + 2H2O -> H2 + 2OH-
-  G4DNAMolecularReactionData* reactionData = new G4DNAMolecularReactionData(
-      0.5e10 * (1e-3 * m3 / (mole * s)), e_aq, e_aq);
+  G4DNAMolecularReactionData* reactionData =
+   new G4DNAMolecularReactionData(0.5e10 * (1e-3 * m3 / (mole * s)), e_aq, e_aq);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(OHm);
   reactionData->AddProduct(H2);
@@ -512,41 +482,18 @@ void G4EmDNAChemistry::ConstructProcess()
   }
 
   //===============================================================
-  // Modify elastic scattering models to avoid killing electrons
-  // at low energy
-  //
-  process =
-      G4ProcessTable::GetProcessTable()->
-        FindProcess("e-_G4DNAElastic", "e-");
-
-  if (process)
-  {
-    G4DNAElastic* vibExcitation = (G4DNAElastic*) process;
-    G4VEmModel* model = vibExcitation->EmModel();
-
-    if(G4DNAChampionElasticModel* championMod =
-        dynamic_cast<G4DNAChampionElasticModel*>(model))
-    {
-      championMod->SetKillBelowThreshold(-1);
-    }
-    else if(G4DNAScreenedRutherfordElasticModel* screenRutherfordMod =
-            dynamic_cast<G4DNAScreenedRutherfordElasticModel*>(model))
-    {
-      screenRutherfordMod->SetKillBelowThreshold(-1);
-    }
-    else if (G4DNAUeharaScreenedRutherfordElasticModel* ueharaScreenRutherfordMod =
-        dynamic_cast<G4DNAUeharaScreenedRutherfordElasticModel*>(model))
-    {
-      ueharaScreenRutherfordMod->SetKillBelowThreshold(-1);
-    }
-  }
-
-  //===============================================================
   // *** Electron Solvatation ***
   //
-  ph->RegisterProcess(
-      new G4DNAElectronSolvatation("e-_G4DNAElectronSolvatation"),
-      G4Electron::Definition());
+  process =
+  G4ProcessTable::GetProcessTable()->
+  FindProcess("e-_G4DNAElectronSolvation", "e-");
+  
+  if (process == 0)
+  {
+    ph->RegisterProcess(
+        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation"),
+        G4Electron::Definition());
+  }
 
   //===============================================================
   // Define processes for molecules

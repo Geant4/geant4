@@ -50,20 +50,22 @@ class G4DNAMolecularReactionTable;
 class G4VITStepModel;
 class G4MoleculeDefinition;
 
-class G4VPhysicsConstructor;
-
 class G4VUserChemistryList
 {
 public:
-  G4VUserChemistryList();
+  G4VUserChemistryList(bool flag = true);
   virtual ~G4VUserChemistryList();
 
   // If your user class also inherits from G4VPhysicsConstructor,
   // please put this flag to true
-  virtual bool IsPhysicsConstructor()
+  bool IsPhysicsConstructor()
   {
-    if((G4VPhysicsConstructor*)(this)) return true;
-    return false;
+    return fIsPhysicsConstructor;
+  }
+  
+  void ThisIsAPhysicsConstructor(bool flag = true)
+  {
+    fIsPhysicsConstructor = flag;
   }
 
   ////////////////////////////////
@@ -95,6 +97,7 @@ protected:
   void BuildPhysicsTable(G4MoleculeDefinition*);
 
   int verboseLevel;
+  bool fIsPhysicsConstructor;
 };
 
 #endif /* G4VUSERCHEMISTRYLIST_HH_ */

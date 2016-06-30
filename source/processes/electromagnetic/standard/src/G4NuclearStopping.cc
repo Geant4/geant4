@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc 78837 2014-01-28 08:44:36Z gcosmo $
+// $Id: G4NuclearStopping.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
   SetBuildTableFlag(false);
   enableAlongStepDoIt = true; 
   enablePostStepDoIt = false; 
-  modelICRU49 = 0;
+  modelICRU49 = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

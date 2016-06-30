@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPreCompoundFragment.icc 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4VPreCompoundFragment.icc 96527 2016-04-20 08:51:00Z gcosmo $
 //
 // by V. Lara
 //
@@ -110,13 +110,11 @@ void G4VPreCompoundFragment::SetMomentum(const G4LorentzVector & value)
   theMomentum = value;
 }
 
-//for inverse cross section choice
 inline void G4VPreCompoundFragment::SetOPTxs(G4int opt)
 {
   OPTxs=opt;
 }
 
-//for superimposed Coulomb Barrier for inverse cross sections
 inline void G4VPreCompoundFragment::UseSICB(G4bool use)
 {
   useSICB=use;

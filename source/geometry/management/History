@@ -1,4 +1,4 @@
-$Id: History 93287 2015-10-15 09:50:22Z gcosmo $
+$Id: History 97689 2016-06-07 09:34:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,57 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 7, 2016 G.Cosmo                       geommng-V10-02-13
+- Initialise 'emin' and 'emax' in G4BoundingEnvelope::CalculateExtent().
+
+June 6, 2016 E.Tcherniaev                  geommng-V10-02-12
+- Introduced G4BoundingEnvelope helper class to be used for the calculation
+  of the extent of a solid within the limits defined by the G4VoxelLimits
+  object.
+- Re-implemented CalculateExtent() in G4ReflectedSolid to use new class
+  G4BoundingEnvelope.
+
+June 6, 2016 E.Tcherniaev                  geommng-V10-02-11
+- G4G4ScaleTransform: simplified signatures in TransformDistance() and
+  in InverseTransformDistance(); make use of accessors.
+
+June 1, 2016 G.Cosmo                       geommng-V10-02-10
+- Corrected treatment of polyhedron for G4ReflectedSolid to avoid thread
+  contention.
+
+May 18, 2016 G.Cosmo                       geommng-V10-02-09, 08
+- More simplified code for G4ReflectedSolid; also removed not used cached
+  inverse transformation.
+
+May 17, 2016 E.Tcherniaev                  geommng-V10-02-07
+- Use G4Normal3D with proper inverse transformation for calculation of
+  normals in G4ReflectedSolid.
+
+May 13, 2016 G.Cosmo                       geommng-V10-02-06, 05
+- Properly use 3D transformations in G4ReflectedSolid. Removed unused
+  affine-transformation data and related methods.
+  Corrected GetPolyhedron() for multi-threading.
+- Updated unit test visualization macros and UI setup.
+
+May 12, 2016 E.Tcherniaev                  geommng-V10-02-04
+- Added transformations for normal vectors in G4ScaleTransform.
+
+April 14, 2016 G.Cosmo                     geommng-V10-02-03
+- Added flag for partial use of USolids/VecGeom types.
+
+April 12, 2016 G.Cosmo                     geommng-V10-02-02
+- Minor cosmetics to G4USolid.
+
+March 31, 2016 G.Cosmo                     geommng-V10-02-01
+- Throw exception in call to CreatePolyhedron() for base class G4USolid.
+  Method is now implemented in the concrete wrappers.
+
+March 16, 2016 G.Cosmo                     geommng-V10-02-00
+- Added G4ScaleTransform class for Cartesian scaling transformations.
+- G4AffineTransform: added inline keywords and fixed formatting.
+- In G4USolid, directly call GetEntityType() from wrapper classes for
+  CreatePolyhedron().
 
 October 15, 2015 W.Pokorski                geommng-V10-01-07
 - Added shadow pointers to shared data structures in G4LogicalVolume

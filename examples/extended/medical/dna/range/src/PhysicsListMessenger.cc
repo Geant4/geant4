@@ -67,7 +67,7 @@ PhysicsListMessenger::~PhysicsListMessenger()
 void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {       
   if( command == fListCmd )
-   { fPhysicsList->RegisterConstructor(newValue);}
+   { fPhysicsList->AddPhysicsList(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

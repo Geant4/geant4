@@ -128,7 +128,7 @@ void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngi
            << " Cannot clone this type of RNG engine, as required for this thread" << G4endl
            << " Aborting " << G4endl;
         G4Exception("G4UserWorkerInitializition::SetupRNGEngine()",
-                    "Run10099",FatalException,msg);
+                    "Run0122",FatalException,msg);
     }
 }
 

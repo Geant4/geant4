@@ -32,6 +32,10 @@
 #include "G4GenericIon.hh"
 #include "globals.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4EmParameters.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -67,6 +71,15 @@ void G4RadioactiveDecayPhysics::ConstructParticle()
 
 void G4RadioactiveDecayPhysics::ConstructProcess()
 {
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* ad = man->AtomDeexcitation();
+  if(!ad) {
+    man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
+  }
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetFluo(true);
+  param->SetAuger(true);
+
   G4PhysicsListHelper::GetPhysicsListHelper()->
     RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());
 }

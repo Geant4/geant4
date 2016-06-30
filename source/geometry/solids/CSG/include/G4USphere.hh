@@ -44,9 +44,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "USphere.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4USphere : public G4USolid
@@ -69,20 +70,24 @@ class G4USphere : public G4USolid
     G4VSolid* Clone() const;
 
     inline USphere* GetShape() const;
-       
-    inline G4double GetInnerRadius    () const;
-    inline G4double GetOuterRadius    () const;
-    inline G4double GetStartPhiAngle  () const;
-    inline G4double GetDeltaPhiAngle  () const;
-    inline G4double GetStartThetaAngle() const;
-    inline G4double GetDeltaThetaAngle() const;
 
-    inline void SetInnerRadius    (G4double newRMin);
-    inline void SetOuterRadius    (G4double newRmax);
-    inline void SetStartPhiAngle  (G4double newSphi, G4bool trig=true);
-    inline void SetDeltaPhiAngle  (G4double newDphi);
-    inline void SetStartThetaAngle(G4double newSTheta);
-    inline void SetDeltaThetaAngle(G4double newDTheta);
+    G4double GetInnerRadius    () const;
+    G4double GetOuterRadius    () const;
+    G4double GetStartPhiAngle  () const;
+    G4double GetDeltaPhiAngle  () const;
+    G4double GetStartThetaAngle() const;
+    G4double GetDeltaThetaAngle() const;
+
+    void SetInnerRadius    (G4double newRMin);
+    void SetOuterRadius    (G4double newRmax);
+    void SetStartPhiAngle  (G4double newSphi, G4bool trig=true);
+    void SetDeltaPhiAngle  (G4double newDphi);
+    void SetStartThetaAngle(G4double newSTheta);
+    void SetDeltaThetaAngle(G4double newDTheta);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
    
@@ -106,60 +111,9 @@ inline USphere* G4USphere::GetShape() const
   return (USphere*) fShape;
 }
 
-inline G4double G4USphere::GetInnerRadius() const
+inline G4GeometryType G4USphere::GetEntityType() const
 {
-  return GetShape()->GetInnerRadius();
-}
-inline G4double G4USphere::GetOuterRadius() const
-{
-  return GetShape()->GetOuterRadius();
-}
-inline G4double G4USphere::GetStartPhiAngle() const
-{
-  return GetShape()->GetStartPhiAngle();
-}
-inline G4double G4USphere::GetDeltaPhiAngle() const
-{
-  return GetShape()->GetDeltaPhiAngle();
-}
-inline G4double G4USphere::GetStartThetaAngle() const
-{
-  return GetShape()->GetStartThetaAngle();
-}
-inline G4double G4USphere::GetDeltaThetaAngle() const
-{
-  return GetShape()->GetDeltaThetaAngle();
-}
-
-inline void G4USphere::SetInnerRadius(G4double newRMin)
-{
-  GetShape()->SetInnerRadius(newRMin);
-  fRebuildPolyhedron = true;
-}
-inline void G4USphere::SetOuterRadius(G4double newRmax)
-{
-  GetShape()->SetOuterRadius(newRmax);
-  fRebuildPolyhedron = true;
-}
-inline void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
-{
-  GetShape()->SetStartPhiAngle(newSphi, trig);
-  fRebuildPolyhedron = true;
-}
-inline void G4USphere::SetDeltaPhiAngle(G4double newDphi)
-{
-  GetShape()->SetDeltaPhiAngle(newDphi);
-  fRebuildPolyhedron = true;
-}
-inline void G4USphere::SetStartThetaAngle(G4double newSTheta)
-{
-  GetShape()->SetStartThetaAngle(newSTheta);
-  fRebuildPolyhedron = true;
-}
-inline void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
-{
-  GetShape()->SetDeltaThetaAngle(newDTheta);
-  fRebuildPolyhedron = true;
+  return "G4Sphere";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

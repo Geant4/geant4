@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StrawTubeXTRadiator.hh 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4StrawTubeXTRadiator.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -54,9 +54,9 @@ class G4StrawTubeXTRadiator : public G4VXTRenergyLoss
 {
 public:
 
-  G4StrawTubeXTRadiator (G4LogicalVolume* anEnvelope, G4Material*, G4Material*,
-                         G4double,G4double,G4Material*,G4bool unishut = false,
-                         const G4String & processName = "StrawTubeXTRadiator");
+  explicit G4StrawTubeXTRadiator (G4LogicalVolume* anEnvelope, G4Material*, 
+             G4Material*, G4double,G4double,G4Material*,G4bool unishut = false,
+             const G4String & processName = "StrawTubeXTRadiator");
   virtual ~G4StrawTubeXTRadiator ();
 
   // Auxiliary functions for plate/gas material parameters
@@ -67,7 +67,8 @@ public:
   G4complex GetMediumComplexFZ(G4double,G4double,G4double) ;
 
   // Pure virtual function from base class
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+  G4double GetStackFactor(G4double energy, G4double gamma, 
+                          G4double varAngle) override;
 
 protected:
 

@@ -1,4 +1,4 @@
-$Id: History 93288 2015-10-15 09:51:02Z gcosmo $
+$Id: History 96865 2016-05-13 13:47:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 13th, 2016 G.Cosmo                    - geomvol-V10-02-01
+- Updated unit tests build scripts.
+
+April 8th, 2016 G.Cosmo                   - geomvol-V10-02-00
+- G4NavigationHistory: corrected printout in streaming operator.
 
 October 15th, 2015 G.Cosmo                - geomvol-V10-01-05
 - Enable paramerisation by solid type in G4GeometryWorkspace.

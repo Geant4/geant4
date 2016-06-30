@@ -63,6 +63,7 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
          //       << ", px = " << (*products)[j].px
          //       << ", py = " << (*products)[j].py
          //       << ", pz = " << (*products)[j].pz
+         //       << ", birthTimeSec = " << (*products)[j].birthTimeSec << " [second]" 
          //       << G4endl;
 
          G4DynamicParticle* theSec = new G4DynamicParticle;
@@ -83,6 +84,12 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
          theSec->SetMomentum( G4ThreeVector( (*products)[j].px*MeV , (*products)[j].py*MeV , (*products)[j].pz*MeV ) );
          //G4cout << theSec->GetDefinition()->GetParticleName() << G4endl;
          theResult->AddSecondary( theSec );
+         //Set time for delayed neutrons
+         //Current implementation is a little tricky, 
+         if ( (*products)[j].birthTimeSec != 0 ) {
+            G4double time = (*products)[j].birthTimeSec*second + aTrack.GetGlobalTime();
+            theResult->GetSecondary(theResult->GetNumberOfSecondaries()-1)->SetTime(time);
+         }
       } 
    }
    delete products;

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh 88839 2015-03-12 10:30:07Z gcosmo $
+// $Id: G4HadronicInteraction.hh 96490 2016-04-19 06:57:04Z gcosmo $
 //
 // Hadronic Interaction  abstract base class
 // This class is the base class for the model classes.
@@ -65,7 +65,7 @@ class G4HadronicInteraction
 {
 public: // With description
     
-  G4HadronicInteraction(const G4String& modelName = "HadronicModel");
+  explicit G4HadronicInteraction(const G4String& modelName = "HadronicModel");
     
   virtual ~G4HadronicInteraction();
     
@@ -77,10 +77,9 @@ public: // With description
 				    G4double plab,
 				    G4int Z, G4int A);
   // The interface to implement sampling of scattering or change exchange
-   
-  virtual G4bool IsApplicable(const G4HadProjectile &/*aTrack*/, 
-			      G4Nucleus & /*targetNucleus*/)
-  { return true;}
+     
+  virtual G4bool IsApplicable(const G4HadProjectile & aTrack, 
+  			      G4Nucleus & targetNucleus);
  
   inline G4double GetMinEnergy() const
   { return theMinEnergy; }
@@ -107,14 +106,11 @@ public: // With description
   void SetMaxEnergy( G4double anEnergy, const G4Element *anElement );
     
   void SetMaxEnergy( G4double anEnergy, const G4Material *aMaterial );
-  
-  inline const G4HadronicInteraction* GetMyPointer() const
-  { return this; }
 
-  virtual G4int GetVerboseLevel() const
+  inline G4int GetVerboseLevel() const
   { return verboseLevel; }
 
-  virtual void SetVerboseLevel( G4int value )
+  inline void SetVerboseLevel( G4int value )
   { verboseLevel = value; }
 
   inline const G4String& GetModelName() const
@@ -146,29 +142,20 @@ public: // With description
   G4double GetRecoilEnergyThreshold() const 
   { return recoilEnergyThreshold;}
 
-  inline G4bool operator==(const G4HadronicInteraction &right ) const
-  { return ( this == (G4HadronicInteraction *) &right ); }
-    
-  inline G4bool operator!=(const G4HadronicInteraction &right ) const
-  { return ( this != (G4HadronicInteraction *) &right ); }
-
   virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   virtual std::pair<G4double, G4double> GetEnergyMomentumCheckLevels() const;
 
-  inline void SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
+  inline void 
+  SetEnergyMomentumCheckLevels(G4double relativeLevel, G4double absoluteLevel)
   { epCheckLevels.first = relativeLevel;
     epCheckLevels.second = absoluteLevel; }
 
   virtual void ModelDescription(std::ostream& outFile) const ; //=0;
 
   // Initialisation before run
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&){;};
-
-private:
-    
-  G4HadronicInteraction(const G4HadronicInteraction &right );
-  const G4HadronicInteraction& operator=(const G4HadronicInteraction &right);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void InitialiseModel();
 
 protected:
 
@@ -197,6 +184,11 @@ protected:
   G4bool isBlocked;
 
 private:       
+
+  G4HadronicInteraction(const G4HadronicInteraction &right ) = delete;
+  const G4HadronicInteraction& operator=(const G4HadronicInteraction &right) = delete;
+  G4bool operator==(const G4HadronicInteraction &right ) const = delete;
+  G4bool operator!=(const G4HadronicInteraction &right ) const = delete;
     
   G4HadronicInteractionRegistry* registry;
 

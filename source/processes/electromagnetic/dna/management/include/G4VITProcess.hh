@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITProcess.hh 88348 2015-02-16 08:43:34Z gcosmo $
+// $Id: G4VITProcess.hh 96060 2016-03-11 12:58:04Z gcosmo $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 

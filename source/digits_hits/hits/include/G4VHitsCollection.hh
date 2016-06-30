@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VHitsCollection.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4VHitsCollection.hh 94772 2015-12-09 09:46:45Z gcosmo $
 //
 
 #ifndef G4VHitsCollection_h
@@ -58,18 +58,24 @@ class G4VHitsCollection
       // Collection name
       G4String collectionName;
       G4String SDname;
+      // Collection ID
+      G4int colID;
 
   public:
-      inline G4String GetName()
+      inline G4String& GetName()
       { return collectionName; }
-      inline G4String GetSDname()
+      inline G4String& GetSDname()
       { return SDname; }
+      inline void SetColID(G4int i)
+      { colID = i; }
+      inline G4int GetColID() const
+      { return colID; }
 
   public:
       // GetHit and GetSize are given a default implementation here so
       // that the template G4THitsCollection can be used, but they
       // are re-implemented G4THitsCollection.
-      virtual G4VHit* GetHit(size_t) const { return 0; } 
+      virtual G4VHit* GetHit(size_t) const { return nullptr; } 
       virtual size_t GetSize() const { return 0; };
 
 };

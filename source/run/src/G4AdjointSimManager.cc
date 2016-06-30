@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.cc 86968 2014-11-21 11:52:04Z gcosmo $
+// $Id: G4AdjointSimManager.cc 97327 2016-06-01 14:24:40Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -102,10 +102,10 @@ G4AdjointSimManager::G4AdjointSimManager():
   
   //Define user action and set this class instance  as RunAction
   //----------------
-  DefineUserActions();
-  G4RunManager* theRunManager = G4RunManager::GetRunManager();
+  //DefineUserActions();
+  //G4RunManager* theRunManager = G4RunManager::GetRunManager();
 
-  theRunManager->G4RunManager::SetUserAction(this);
+  //theRunManager->G4RunManager::SetUserAction(this);
 /*
 #ifdef G4MULTITHREADED
 
@@ -158,6 +158,7 @@ void G4AdjointSimManager::RunAdjointSimulation(G4int nb_evt)
   //------------
   
   nb_evt_of_last_run =nb_evt;
+  G4cout<<"Test Sim Adjoint1"<<std::endl;
   G4RunManager::GetRunManager()->BeamOn(nb_evt*theAdjointPrimaryGeneratorAction->GetNbOfAdjointPrimaryTypes());
   //G4RunManager::GetRunManager()->BeamOn(theAdjointPrimaryGeneratorAction->GetNbOfAdjointPrimaryTypes()*2*nb_evt);
 
@@ -233,9 +234,10 @@ void G4AdjointSimManager::SetAdjointActions()
   
   if (!user_action_already_defined) DefineUserActions();
 
+
  //Replace the user action by the adjoint actions
  //------------------------------------------------- 
-  
+  theRunManager->G4RunManager::SetUserAction(this);
   theRunManager->G4RunManager::SetUserAction(theAdjointPrimaryGeneratorAction);
   theRunManager->G4RunManager::SetUserAction(theAdjointStackingAction);
   if (use_user_StackingAction)	theAdjointStackingAction->SetUserFwdStackingAction(fUserStackingAction);
@@ -271,7 +273,7 @@ void G4AdjointSimManager::ResetUserActions()
 
   //Restore the user defined actions
   //-------------------------------
-
+  theRunManager->G4RunManager::SetUserAction(fUserRunAction);
   theRunManager->G4RunManager::SetUserAction(fUserEventAction);
   theRunManager->G4RunManager::SetUserAction(fUserSteppingAction);
   theRunManager->G4RunManager::SetUserAction(fUserTrackingAction);
@@ -620,12 +622,16 @@ void G4AdjointSimManager::SetNbOfPrimaryFwdGammasPerEvent(G4int nb)
 void G4AdjointSimManager::BeginOfRunAction(const G4Run* aRun)
 {
 
+/*
  if (!adjoint_sim_mode){
   if(fUserRunAction) fUserRunAction->BeginOfRunAction(aRun);
  }
  else {
   if (theAdjointRunAction) theAdjointRunAction->BeginOfRunAction(aRun);
  }
+ */
+fUserRunAction->BeginOfRunAction(aRun);
+
 }
 ///////////////////////////////////////////////////////////////////////////////
 //

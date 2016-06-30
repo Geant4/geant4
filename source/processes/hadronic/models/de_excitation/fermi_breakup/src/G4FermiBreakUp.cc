@@ -38,20 +38,10 @@
 #include "Randomize.hh"
 #include "G4Pow.hh"
 
-// Kappa = V/V_0 it is used in calculation of Coulomb energy
-const G4double Kappa = 6.0;
-// Nuclear radius r0 (is a model parameter)
-const G4double r0 = 1.3*CLHEP::fermi;
-const G4double sqrtpi = std::sqrt(CLHEP::pi);
-
-G4FermiBreakUp::G4FermiBreakUp()
+G4FermiBreakUp::G4FermiBreakUp() : thePool(nullptr), thePhaseSpace(nullptr)
 {
-  thePool = G4FermiFragmentsPool::Instance(); 
   g4pow = G4Pow::GetInstance();
-  Coef = 0.6*(CLHEP::elm_coupling/r0)/g4pow->Z13(1+G4int(Kappa));
-  ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa/(6.0*pi*pi);
-
-  thePhaseSpace = thePool->GetFermiPhaseSpaceDecay();
+  Coef = ConstCoeff = 0.0;
 
   nmax = 16;
   NormalizedWeights.resize(nmax,0.0);
@@ -61,6 +51,26 @@ G4FermiBreakUp::G4FermiBreakUp()
 
 G4FermiBreakUp::~G4FermiBreakUp()
 {}
+
+void G4FermiBreakUp::Initialise()
+{
+  if(thePool != nullptr) { return; }
+  thePool = G4FermiFragmentsPool::Instance(); 
+  // Kappa = V/V_0 it is used in calculation of Coulomb energy
+  // Nuclear radius r0 (is a model parameter)
+  G4double Kappa = 6.0;
+  G4double r0 = 1.3*CLHEP::fermi;
+
+  Coef = 0.6*(CLHEP::elm_coupling/r0)/g4pow->Z13(1+G4int(Kappa));
+  ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa/(6.0*pi*pi);
+
+  thePhaseSpace = thePool->GetFermiPhaseSpaceDecay();
+}
+
+G4bool G4FermiBreakUp::IsApplicable(G4int Z, G4int A, G4double mass) const
+{
+  return thePool != nullptr ? thePool->IsApplicable(Z, A, mass) : false;
+}
 
 G4double G4FermiBreakUp::CoulombBarrier(
   const std::vector<const G4VFermiFragment*>* conf)
@@ -92,6 +102,7 @@ G4FragmentVector* G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
 void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult, 
 				   G4Fragment* theNucleus)
 {
+  if(thePool == nullptr) { Initialise(); }
   // Calculate Momenta of K fragments
   G4double M = theNucleus->GetMomentum().m();
   const std::vector<const G4VFermiFragment*>* conf = 
@@ -238,6 +249,8 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
   } else   { 
     G4int n2 = 3*K - 4;
     G4int n1 = n2/2;
+
+    static const G4double sqrtpi = std::sqrt(CLHEP::pi);
     Gamma = sqrtpi*g4pow->factorial(n2)/
       (g4pow->powN(4.0,n1)*g4pow->factorial(n1));
     Energ = g4pow->powN(Energ, n1)*std::sqrt(Energ);

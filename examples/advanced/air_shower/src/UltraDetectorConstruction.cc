@@ -67,6 +67,7 @@
 #include "G4OpBoundaryProcess.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -337,7 +338,7 @@ void UltraDetectorConstruction::ConstructTableMaterials()
       abslength = 1.0/kInfinity ;
     }
     else {
-      abslength = -3.0*mm/(std::log(ABS[i]/100.0)) ;
+      abslength = -3.0*mm/(G4Log(ABS[i]/100.0)) ;
     }
 
     MPT_Acrylic->AddEntry("ABSLENGTH", energy, abslength);

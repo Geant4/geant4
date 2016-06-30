@@ -69,9 +69,11 @@ ComputeECForSinglePlane(G4double vX,
     for(unsigned int i=0;i<3;i++){
         G4double vTemp = 0.;
         vTemp += ( std::exp(-vX/ aTF * fBeta[i] ) *
-                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] - vX/ vTVA) / std::pow(2.,0.5))) );
+                 (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] - vX/ vTVA)
+                     / std::pow(2.,0.5))) );
         vTemp += ( std::exp( vX/ aTF * fBeta[i] ) *
-                  (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] + vX/ vTVA) / std::pow(2.,0.5))) );
+                 (1.-CLHEP::HepStat::erfQ((vTVA / aTF * fBeta[i] + vX/ vTVA)
+                     / std::pow(2.,0.5))) );
         vValueForSinglePlane += ( vTemp * fGamma[i] * std::exp( vTau[i] ) /2.0);
     }
     

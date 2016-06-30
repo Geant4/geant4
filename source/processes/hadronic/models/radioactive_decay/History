@@ -12,7 +12,58 @@ track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
-     ---------------------------------------------------------
+     ----------------------------------------------------------
+
+16 June 2016  Vladimir Ivanchenko  radioactive_decay-V10-02-07
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable: remove initialization of atomic 
+  deexcitation and leave only G4Exception. Initialisation should be done 
+  in Physics List
+
+15 June 2016  Dennis Wright  radioactive_decay-V10-02-06
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable: remove initialization of atomic 
+  deexcitation to avoid overwriting its initialization in EM.  Throw
+  fatal exception if initialization not done somewhere.
+ 
+4 April 2016  Dennis Wright  radioactive_decay-V10-02-05
+--------------------------------------------------------
+- remove obsolete class G4RIsotopeTable
+
+29 March 2016 Laurent Desorgher   radioactive_decay-V10-02-04
+-------------------------------------------------------------
+- Add production of gamma and electron spectra from deexcitation of excited levels
+  in the biased mode. New method G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode
+
+29 February 2016 Andrea Dotti   radioactive_decay-V10-02-03
+-----------------------------------------------------------
+- New API for G4VDecayChannel class (avoid MT data-race)
+  requires partciles-V10-02-08
+
+16 February 2016 Dennis Wright  radioactive_decay-V10-02-02
+-----------------------------------------------------------
+- G4RadioactiveDecay::DoDecay: add protection for zero ptr in case of missing
+  decay channel
+
+16 December 2015 Dennis Wright  radioactive_decay-V10-02-01
+-----------------------------------------------------------
+- G4RadioactiveDecay: rename several methods and variables to more closely
+  represent their meaning: 
+    GetTaoTime() -> ConvolveSourceTimeProfile()
+    taotime -> convolvedTime
+    theDecayTable -> summedDecayTable
+    rates -> Acoeff
+
+- added class G4BatemanParameters to eventually replace G4RadioactiveDecayRate
+
+ 3 December 2015 Dennis Wright  radioactive_decay-V10-02-00
+-----------------------------------------------------------
+- retag radioactive_decay-V10-01-24
+
+ 2 December 2015 Dennis Wright  radioactive_decay-V10-01-24
+-----------------------------------------------------------
+- G4BetaMinusDecay.cc, G4RadioactiveDecay.cc: add protection for case
+  when endpoint energy is 0 in beta- decay.  This fixes bug #1766.
 
 18 November 2015 Dennis Wright  radioactive_decay-V10-01-23
 -----------------------------------------------------------

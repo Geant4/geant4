@@ -27,7 +27,7 @@
 #ifndef HEP_POLYHEDRONPROCESSOR_HH
 #define HEP_POLYHEDRONPROCESSOR_HH
 
-#include <HepPolyhedron.h>
+#include "HepPolyhedron.h"
 
 #include <vector>
 

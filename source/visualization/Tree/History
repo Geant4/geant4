@@ -1,4 +1,5 @@
-$Id: History 88761 2015-03-09 12:23:46Z gcosmo $
+
+$Id: History 96317 2016-04-06 07:25:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +24,11 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+5th April 2016  John Allison  (vistree-V10-02-00)
+- G4ASCIITreeSceneHandler.cc:
+  o Prevented multiple writing of the informational header on
+    the output file.
 
 8th March 2015  John Allison  (vistree-V10-01-04 needs modeling-V10-01-01)
 - G4ASCIITreeSceneHandler: Added polyhedron dump for verbosity >=7.

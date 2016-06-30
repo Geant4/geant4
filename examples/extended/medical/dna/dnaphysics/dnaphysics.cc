@@ -70,7 +70,8 @@ int main(int argc,char** argv)
 
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(2);
+  if(argc==3) runManager->SetNumberOfThreads(atoi(argv[2]));
+  else runManager->SetNumberOfThreads(2);
 #else
   G4RunManager* runManager = new G4RunManager;
 #endif
@@ -83,10 +84,6 @@ int main(int argc,char** argv)
   
   runManager->SetUserInitialization(new ActionInitialization());
   
-  // Initialize G4 kernel
-  
-  runManager->Initialize();
-
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();

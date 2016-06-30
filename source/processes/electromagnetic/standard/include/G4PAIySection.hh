@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIySection.hh 70170 2013-05-24 13:32:33Z gcosmo $
+// $Id: G4PAIySection.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // 
 // G4PAIySection.hh -- header file
@@ -53,14 +53,14 @@ class G4PAIySection
 {
 public:
 
-  G4PAIySection();
+  explicit G4PAIySection();
 	  
   ~G4PAIySection();
 
-  void Initialize(const G4Material* material, 
-  		  G4double maxEnergyTransfer, G4double betaGammaSq, G4SandiaTable*);
+  void Initialize(const G4Material* material, G4double maxEnergyTransfer, 
+		  G4double betaGammaSq, G4SandiaTable*);
 
-  void     ComputeLowEnergyCof(const G4Material* material);
+  void ComputeLowEnergyCof(const G4Material* material);
 
   void InitPAI();
 
@@ -151,20 +151,23 @@ private :
   static const G4double fDelta; // energy shift from interval border = 0.001
   static const G4double fError; // error in lin-log approximation = 0.005
 
-  static G4int fNumberOfGammas;         // = 111;
+  static G4int fNumberOfGammas; // = 111;
   static const G4double fLorentzFactor[112];  //  static gamma array
 
   static
-  const G4int fRefGammaNumber ; // The number of gamma for creation of spline (15)
+  const G4int fRefGammaNumber; // The number of gamma for creation of spline (15)
 
-  G4int    fIntervalNumber ;    //  The number of energy intervals
-  G4double fNormalizationCof;   // Normalization cof for PhotoAbsorptionXsection
+  G4int    fIntervalNumber ;   //  The number of energy intervals
+  G4double fNormalizationCof;  // Normalization cof for PhotoAbsorptionXsection
+
+  G4double betaBohr;
+  G4double betaBohr4;
 
   G4double fDensity;            // Current density
   G4double fElectronDensity;    // Current electron (number) density
-  G4double fLowEnergyCof;    // Correction cof for low energy region
+  G4double fLowEnergyCof;       // Correction cof for low energy region
   G4int    fSplineNumber;       // Current size of spline
-  G4int    fVerbose;       // verbose flag
+  G4int    fVerbose;            // verbose flag
 
   G4SandiaTable*  fSandia;
 
@@ -175,28 +178,23 @@ private :
   G4DataVector fA4;
 
   static
-  const G4int   fMaxSplineSize ;          // Max size of output splain arrays = 500
+  const G4int  fMaxSplineSize; // Max size of output splain arrays = 500
 
-  G4DataVector          fSplineEnergy;   // energy points of splain
-  G4DataVector   fRePartDielectricConst;   // Real part of dielectric const
-  G4DataVector   fImPartDielectricConst;   // Imaginary part of dielectric const
-  G4DataVector            fIntegralTerm;   // Integral term in PAI cross section
-  G4DataVector          fDifPAIySection;   // Differential PAI cross section
-  G4DataVector            fdNdxCerenkov;   // dNdx of Cerenkov collisions
-  G4DataVector            fdNdxPlasmon;    // dNdx of Plasmon collisions
+  G4DataVector fSplineEnergy;          // energy points of splain
+  G4DataVector fRePartDielectricConst; // Real part of dielectric const
+  G4DataVector fImPartDielectricConst; // Imaginary part of dielectric const
+  G4DataVector fIntegralTerm;          // Integral term in PAI cross section
+  G4DataVector fDifPAIySection;        // Differential PAI cross section
+  G4DataVector fdNdxCerenkov;          // dNdx of Cerenkov collisions
+  G4DataVector fdNdxPlasmon;           // dNdx of Plasmon collisions
 
-  G4DataVector     fIntegralPAIySection;   // Integral PAI cross section  ?
-  G4DataVector     fIntegralPAIdEdx;       // Integral PAI dEdx  ?
-  G4DataVector     fIntegralCerenkov;      // Integral Cerenkov N>omega  ?
-  G4DataVector     fIntegralPlasmon;       // Integral Plasmon N>omega  ?
+  G4DataVector fIntegralPAIySection;   // Integral PAI cross section  ?
+  G4DataVector fIntegralPAIdEdx;       // Integral PAI dEdx  ?
+  G4DataVector fIntegralCerenkov;      // Integral Cerenkov N>omega  ?
+  G4DataVector fIntegralPlasmon;       // Integral Plasmon N>omega  ?
 
-  G4double   fPAItable[500][112];         // Output array
-
+  G4double     fPAItable[500][112];    // Output array
 };
-
-////////////////  Inline methods //////////////////////////////////
-//
-
 
 inline G4double G4PAIySection::GetPAItable(G4int i, G4int j) const
 {

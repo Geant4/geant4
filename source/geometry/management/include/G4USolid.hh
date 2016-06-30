@@ -40,7 +40,7 @@
 
 #include "G4VSolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "VUSolid.hh"
 
@@ -154,7 +154,7 @@ class G4USolid : public G4VSolid
 
     virtual G4VisExtent   GetExtent()  const;
     // Provide extent (bounding box) as possible hint to the graphics view.
-    G4Polyhedron* CreatePolyhedron() const;
+    virtual G4Polyhedron* CreatePolyhedron() const;
     // Create Polyhedron used for Visualisation
     virtual G4Polyhedron* GetPolyhedron() const;
     // Smart access function - creates on request and stores for future

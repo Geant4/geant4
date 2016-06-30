@@ -52,12 +52,16 @@ G4ParticleHPFissionData::G4ParticleHPFissionData()
 
    theCrossSections = 0;
    onFlightDB = true;
+   instanceOfWorker = false;
+   if ( G4Threading::IsWorkerThread() ) {
+      instanceOfWorker = true;
+   }
    //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
 G4ParticleHPFissionData::~G4ParticleHPFissionData()
 {
-   if ( theCrossSections != NULL ) {
+   if ( theCrossSections != NULL && instanceOfWorker != true ) {
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
      theCrossSections = NULL;

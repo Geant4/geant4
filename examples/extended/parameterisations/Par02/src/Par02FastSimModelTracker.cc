@@ -91,22 +91,16 @@ G4bool Par02FastSimModelTracker::ModelTrigger( const G4FastTrack& /*aFastTrack*/
 
 void Par02FastSimModelTracker::DoIt( const G4FastTrack& aFastTrack,
                                      G4FastStep& aFastStep ) {
-  //G4cout << " ________Tracker model triggered _________" << G4endl;
+
+  G4cout << " ________Tracker model triggered _________" << G4endl;
 
   // Calculate the final position (at the outer boundary of the tracking detector)
   // of the particle with the momentum at the entrance of the tracking detector.
-  G4ThreeVector spin = aFastTrack.GetPrimaryTrack()->GetPolarization() ;
-  G4FieldTrack theFieldTrack = 
-    G4FieldTrack( aFastTrack.GetPrimaryTrack()->GetPosition(),
-                  aFastTrack.GetPrimaryTrack()->GetMomentumDirection(),
-                  0.0,
-                  aFastTrack.GetPrimaryTrack()->GetKineticEnergy(),
-                  aFastTrack.GetPrimaryTrack()->GetDynamicParticle()->
-                                                      GetDefinition()->GetPDGMass(),
-                  0.0,    // UNUSED: aFastTrack.GetPrimaryTrack().GetVelocity(),
-                  aFastTrack.GetPrimaryTrack()->GetGlobalTime(), // Lab.
-                  aFastTrack.GetPrimaryTrack()->GetProperTime(), // Part.
-                  &spin );
+
+  G4Track track = * aFastTrack.GetPrimaryTrack();
+  G4FieldTrack aFieldTrack( '0' );
+  G4FieldTrackUpdator::Update( &aFieldTrack, &track );
+
   G4double retSafety = -1.0;
   ELimited retStepLimited;
   G4FieldTrack endTrack( 'a' );
@@ -114,14 +108,15 @@ void Par02FastSimModelTracker::DoIt( const G4FastTrack& aFastTrack,
                                          // to particle momentum.
   G4PathFinder* fPathFinder = G4PathFinder::GetInstance();
   /*G4double lengthAlongCurve = */ 
-  fPathFinder->ComputeStep( theFieldTrack,
+  fPathFinder->ComputeStep( aFieldTrack,
                             currentMinimumStep,
                             0,
                             aFastTrack.GetPrimaryTrack()->GetCurrentStepNumber(),
                             retSafety,
                             retStepLimited,
                             endTrack,
-                            aFastTrack.GetPrimaryTrack()->GetVolume() ) ;
+                            aFastTrack.GetPrimaryTrack()->GetVolume() );
+
   // Place the particle at the tracking detector exit 
   // (at the place it would reach without the change of its momentum).
   aFastStep.ProposePrimaryTrackFinalPosition( endTrack.GetPosition() );

@@ -1,4 +1,4 @@
-$Id: History 89264 2015-03-30 08:18:11Z gcosmo $
+$Id: History 96272 2016-04-01 12:44:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 31st, 2016 Gabriele Cosmo G01-V10-02-01
+- Added missing gdml files to CMake installation script.
+
+March 30th, 2016 Gabriele Cosmo G01-V10-02-00
+- Added test case for scaled solids: scaledTube.gdml.
 
 March 30th, 2014 Gabriele Cosmo G01-V10-01-01
 - Activate flag in parser for enabling export of geometrical regions.

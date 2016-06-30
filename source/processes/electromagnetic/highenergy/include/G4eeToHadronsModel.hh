@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eeToHadronsModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,37 +61,38 @@ class G4eeToHadronsModel : public G4VEmModel
 
 public:
 
-  G4eeToHadronsModel(G4Vee2hadrons*, G4int ver=0,
+  explicit G4eeToHadronsModel(G4Vee2hadrons*, G4int ver=0,
                      const G4String& nam = "eeToHadrons");
 
   virtual ~G4eeToHadronsModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double maxEnergy) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double Z, G4double A,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
+                                       const G4ParticleDefinition*,
+                                       G4double kineticEnergy,
+                                       G4double Z, G4double A,
+                                       G4double cutEnergy = 0.0,
+                                       G4double maxEnergy = DBL_MAX) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
-                                         const G4ParticleDefinition*,
-                                         G4double kineticEnergy,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
+                                       const G4ParticleDefinition*,
+                                       G4double kineticEnergy,
+                                       G4double cutEnergy = 0.0,
+                                       G4double maxEnergy = DBL_MAX);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin = 0.0,
-				 G4double maxEnergy = DBL_MAX);
+				 G4double maxEnergy = DBL_MAX) override;
 
   G4DynamicParticle* GenerateCMPhoton(G4double);
 
@@ -102,8 +103,8 @@ private:
   void ComputeCMCrossSectionPerElectron();
 
   // hide assignment operator
-  G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right);
-  G4eeToHadronsModel(const  G4eeToHadronsModel&);
+  G4eeToHadronsModel & operator=(const  G4eeToHadronsModel &right) = delete;
+  G4eeToHadronsModel(const  G4eeToHadronsModel&) = delete;
 
   G4Vee2hadrons*        model;
   G4ParticleDefinition* theGamma;

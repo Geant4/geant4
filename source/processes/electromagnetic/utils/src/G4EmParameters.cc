@@ -49,10 +49,18 @@
 #include "G4PhysicalConstants.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4VEmProcess.hh"
+#include "G4VEnergyLossProcess.hh"
+#include "G4VAtomDeexcitation.hh"
 #include "G4EmParametersMessenger.hh"
 #include "G4NistManager.hh"
+#include "G4RegionStore.hh"
+#include "G4Region.hh"
+#include "G4ApplicationState.hh"
+#include "G4StateManager.hh"
+#include "G4Threading.hh"
 
-G4EmParameters* G4EmParameters::theInstance = 0;
+G4EmParameters* G4EmParameters::theInstance = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -79,21 +87,19 @@ G4EmParameters::G4EmParameters()
   G4NistManager::Instance();
   theMessenger = new G4EmParametersMessenger(this);
 
+  fStateManager = G4StateManager::GetStateManager();
   SetDefaults();
 }
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex EmParametersMutex = G4MUTEX_INITIALIZER; }
-
 void G4EmParameters::SetDefaults()
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   
   lossFluctuation = true;
   buildCSDARange = false;
   flagLPM = true;
   spline = true;
-  finalRange = false;
+  cutAsFinalRange = false;
   applyCuts = false;
   fluo = false;
   beardenFluoDir = false;
@@ -106,13 +112,14 @@ void G4EmParameters::SetDefaults()
   latDisplacementBeyondSafety = false;
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
+  integral = true;
 
   minSubRange = 1.0;
-  minKinEnergy = 0.1*keV;
-  maxKinEnergy = 10.0*TeV;
-  maxKinEnergyCSDA = 1.0*GeV;
-  lowestElectronEnergy = 1.0*keV;
-  lowestMuHadEnergy = 1.0*keV;
+  minKinEnergy = 0.1*CLHEP::keV;
+  maxKinEnergy = 10.0*CLHEP::TeV;
+  maxKinEnergyCSDA = 1.0*CLHEP::GeV;
+  lowestElectronEnergy = 1.0*CLHEP::keV;
+  lowestMuHadEnergy = 1.0*CLHEP::keV;
   linLossLimit = 0.01;
   bremsTh = maxKinEnergy;
   lambdaFactor = 0.8;
@@ -122,6 +129,10 @@ void G4EmParameters::SetDefaults()
   rangeFactorMuHad = 0.2;
   geomFactor = 2.5;
   skin = 1.0;
+  dRoverRange = 0.2;
+  finalRange = CLHEP::mm;
+  dRoverRangeMuHad = 0.2;
+  finalRangeMuHad = 0.1*CLHEP::mm;
 
   nbins  = 77;
   nbinsPerDecade = 7;
@@ -130,6 +141,7 @@ void G4EmParameters::SetDefaults()
 
   mscStepLimit = fUseSafety;
   mscStepLimitMuHad = fMinimal;
+  nucFormfactor = fExponentialNF;
 
   namePIXE = "Empirical";
   nameElectronPIXE = "Livermore";
@@ -137,7 +149,7 @@ void G4EmParameters::SetDefaults()
 
 void G4EmParameters::SetLossFluctuations(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   lossFluctuation = val;
 }
 
@@ -148,7 +160,7 @@ G4bool G4EmParameters::LossFluctuation() const
 
 void G4EmParameters::SetBuildCSDARange(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   buildCSDARange = val;
 }
 
@@ -159,7 +171,7 @@ G4bool G4EmParameters::BuildCSDARange() const
 
 void G4EmParameters::SetLPM(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   flagLPM = val;
 }
 
@@ -170,7 +182,7 @@ G4bool G4EmParameters::LPM() const
 
 void G4EmParameters::SetSpline(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   spline = val;
 }
 
@@ -181,18 +193,18 @@ G4bool G4EmParameters::Spline() const
 
 void G4EmParameters::SetUseCutAsFinalRange(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
-  finalRange = val;
+  if(IsLocked()) { return; }
+  cutAsFinalRange = val;
 }
 
 G4bool G4EmParameters::UseCutAsFinalRange() const
 {
-  return finalRange;
+  return cutAsFinalRange;
 }
 
 void G4EmParameters::SetApplyCuts(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   applyCuts = val;
 }
 
@@ -203,7 +215,7 @@ G4bool G4EmParameters::ApplyCuts() const
 
 void G4EmParameters::SetFluo(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   fluo = val;
 }
 
@@ -214,7 +226,7 @@ G4bool G4EmParameters::Fluo() const
 
 void G4EmParameters::SetBeardenFluoDir(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   beardenFluoDir = val;
 }
 
@@ -225,7 +237,7 @@ G4bool G4EmParameters::BeardenFluoDir() const
 
 void G4EmParameters::SetAuger(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   auger = val;
   if(val) { fluo = true; }
 }
@@ -237,7 +249,7 @@ G4bool G4EmParameters::Auger() const
 
 void G4EmParameters::SetAugerCascade(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   augerCascade = val;
   if(val) { fluo = true; auger = true; }
 }
@@ -249,7 +261,7 @@ G4bool G4EmParameters::AugerCascade() const
 
 void G4EmParameters::SetPixe(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   pixe = val;
   if(val) { fluo = true; }
 }
@@ -261,7 +273,7 @@ G4bool G4EmParameters::Pixe() const
 
 void G4EmParameters::SetDeexcitationIgnoreCut(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   deexIgnoreCut = val;
 }
 
@@ -272,7 +284,7 @@ G4bool G4EmParameters::DeexcitationIgnoreCut() const
 
 void G4EmParameters::SetLateralDisplacement(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   lateralDisplacement = val;
 }
 
@@ -283,7 +295,7 @@ G4bool G4EmParameters::LateralDisplacement() const
 
 void G4EmParameters::SetMuHadLateralDisplacement(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   muhadLateralDisplacement = val;
 }
 
@@ -294,7 +306,7 @@ G4bool G4EmParameters::MuHadLateralDisplacement() const
 
 void G4EmParameters::SetLatDisplacementBeyondSafety(G4bool val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   latDisplacementBeyondSafety = val;
 }
 
@@ -305,6 +317,7 @@ G4bool G4EmParameters::LatDisplacementBeyondSafety() const
 
 void G4EmParameters::ActivateAngularGeneratorForIonisation(G4bool val)
 {
+  if(IsLocked()) { return; }
   useAngGeneratorForIonisation = val;
 }
 
@@ -315,6 +328,7 @@ G4bool G4EmParameters::UseAngularGeneratorForIonisation() const
 
 void G4EmParameters::SetUseMottCorrection(G4bool val)
 {
+  if(IsLocked()) { return; }
   useMottCorrection = val;
 }
 
@@ -323,9 +337,20 @@ G4bool G4EmParameters::UseMottCorrection() const
   return useMottCorrection;
 }
 
+void G4EmParameters::SetIntegral(G4bool val)
+{
+  if(IsLocked()) { return; }
+  integral = val;
+}
+
+G4bool G4EmParameters::Integral() const
+{
+  return integral;
+}
+
 void G4EmParameters::SetMinSubRange(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     minSubRange = val;
   } else {
@@ -343,7 +368,7 @@ G4double G4EmParameters::MinSubRange() const
 
 void G4EmParameters::SetMinEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 1.e-3*eV && val < maxKinEnergy) {
     minKinEnergy = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
@@ -362,7 +387,7 @@ G4double G4EmParameters::MinKinEnergy() const
 
 void G4EmParameters::SetMaxEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > minKinEnergy && val < 1.e+7*TeV) {
     maxKinEnergy = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
@@ -381,7 +406,7 @@ G4double G4EmParameters::MaxKinEnergy() const
 
 void G4EmParameters::SetMaxEnergyForCSDARange(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > minKinEnergy && val <= 100*TeV) {
     maxKinEnergyCSDA = val;
   } else {
@@ -399,7 +424,7 @@ G4double G4EmParameters::MaxEnergyForCSDARange() const
 
 void G4EmParameters::SetLowestElectronEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 0.0) {
     lowestElectronEnergy = val;
   } else {
@@ -417,7 +442,7 @@ G4double G4EmParameters::LowestElectronEnergy() const
 
 void G4EmParameters::SetLowestMuHadEnergy(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 0.0) {
     lowestMuHadEnergy = val;
   } else {
@@ -435,7 +460,7 @@ G4double G4EmParameters::LowestMuHadEnergy() const
 
 void G4EmParameters::SetLinearLossLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 0.5) {
     linLossLimit = val;
   } else {
@@ -453,7 +478,7 @@ G4double G4EmParameters::LinearLossLimit() const
 
 void G4EmParameters::SetBremsstrahlungTh(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0) {
     bremsTh = val;
   } else {
@@ -471,7 +496,7 @@ G4double G4EmParameters::BremsstrahlungTh() const
 
 void G4EmParameters::SetLambdaFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     lambdaFactor = val;
   } else {
@@ -489,7 +514,7 @@ G4double G4EmParameters::LambdaFactor() const
 
 void G4EmParameters::SetFactorForAngleLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0) {
     factorForAngleLimit = val;
   } else {
@@ -507,7 +532,7 @@ G4double G4EmParameters::FactorForAngleLimit() const
 
 void G4EmParameters::SetMscThetaLimit(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 0.0 && val <= pi) {
     thetaLimit = val;
   } else {
@@ -525,9 +550,8 @@ G4double G4EmParameters::MscThetaLimit() const
 
 void G4EmParameters::SetMscRangeFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
-    //G4cout << " G4EmParameters::SetMscRangeFactor: " << val << G4endl;
     rangeFactor = val;
   } else {
     G4ExceptionDescription ed;
@@ -544,7 +568,7 @@ G4double G4EmParameters::MscRangeFactor() const
 
 void G4EmParameters::SetMscMuHadRangeFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val > 0.0 && val < 1.0) {
     rangeFactorMuHad = val;
   } else {
@@ -562,7 +586,7 @@ G4double G4EmParameters::MscMuHadRangeFactor() const
 
 void G4EmParameters::SetMscGeomFactor(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 1.0) {
     geomFactor = val;
   } else {
@@ -580,7 +604,7 @@ G4double G4EmParameters::MscGeomFactor() const
 
 void G4EmParameters::SetMscSkin(G4double val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 1.0) {
     skin = val;
   } else {
@@ -596,9 +620,37 @@ G4double G4EmParameters::MscSkin() const
   return skin;
 }
 
+void G4EmParameters::SetStepFunction(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  if(v1 > 0.0 && v1 <= 1.0 && v2 > 0.0) {
+    dRoverRange = v1;
+    finalRange = v2;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Values of step function are out of range: " 
+       << v1 << ", " << v2/CLHEP::mm << " mm - are ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+void G4EmParameters::SetStepFunctionMuHad(G4double v1, G4double v2)
+{
+  if(IsLocked()) { return; }
+  if(v1 > 0.0 && v1 <= 1.0 && v2 > 0.0) {
+    dRoverRangeMuHad = v1;
+    finalRangeMuHad = v2;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Values of step function are out of range: " 
+       << v1 << ", " << v2/CLHEP::mm << " mm - are ignored"; 
+    PrintWarning(ed);
+  }
+}
+
 void G4EmParameters::SetNumberOfBins(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 5 && val < 10000000) {
     nbins = val;
     nbinsPerDecade = G4lrint(nbins/std::log10(maxKinEnergy/minKinEnergy));
@@ -617,7 +669,7 @@ G4int G4EmParameters::NumberOfBins() const
 
 void G4EmParameters::SetNumberOfBinsPerDecade(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   if(val >= 5 && val < 1000000) {
     nbinsPerDecade = val;
     nbins = nbinsPerDecade*G4lrint(std::log10(maxKinEnergy/minKinEnergy));
@@ -636,7 +688,7 @@ G4int G4EmParameters::NumberOfBinsPerDecade() const
 
 void G4EmParameters::SetVerbose(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   verbose = val;
   workerVerbose = std::min(workerVerbose, verbose);
 }
@@ -648,7 +700,7 @@ G4int G4EmParameters::Verbose() const
 
 void G4EmParameters::SetWorkerVerbose(G4int val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   workerVerbose = val;
 }
 
@@ -659,7 +711,7 @@ G4int G4EmParameters::WorkerVerbose() const
 
 void G4EmParameters::SetMscStepLimitType(G4MscStepLimitType val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   mscStepLimit = val;
 }
 
@@ -670,7 +722,7 @@ G4MscStepLimitType G4EmParameters::MscStepLimitType() const
 
 void G4EmParameters::SetMscMuHadStepLimitType(G4MscStepLimitType val)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   mscStepLimitMuHad = val;
 }
 
@@ -679,10 +731,22 @@ G4MscStepLimitType G4EmParameters::MscMuHadStepLimitType() const
   return mscStepLimitMuHad;
 }
 
+void 
+G4EmParameters::SetNuclearFormfactorType(G4NuclearFormfactorType val)
+{
+  if(IsLocked()) { return; }
+  nucFormfactor = val;
+}
+
+G4NuclearFormfactorType G4EmParameters::NuclearFormfactorType() const
+{
+  return nucFormfactor;
+}
+
 void G4EmParameters::SetPIXECrossSectionModel(const G4String& sss)
 {
   G4cout << "G4EmParameters::SetPIXECrossSectionModel " << sss << G4endl;
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   namePIXE = sss;
 }
 
@@ -693,7 +757,7 @@ const G4String& G4EmParameters::PIXECrossSectionModel()
 
 void G4EmParameters::SetPIXEElectronCrossSectionModel(const G4String& sss)
 {
-  G4AutoLock l(&EmParametersMutex);
+  if(IsLocked()) { return; }
   nameElectronPIXE = sss;
 }
 
@@ -702,17 +766,25 @@ const G4String& G4EmParameters::PIXEElectronCrossSectionModel()
   return nameElectronPIXE;
 }
 
-void G4EmParameters::PrintWarning(G4ExceptionDescription& ed)
+void G4EmParameters::PrintWarning(G4ExceptionDescription& ed) const
 {
   G4Exception("G4EmParameters", "em0044", JustWarning, ed);
+}
+
+G4String G4EmParameters::CheckRegion(const G4String& reg) const
+{
+  G4String r = reg;
+  if(r == "" || r == "world" || r == "World") {
+    r = "DefaultRegionForTheWorld";
+  }
+  return r;
 }
 
 void G4EmParameters::AddPAIModel(const G4String& particle,
                                  const G4String& region,
                                  const G4String& type)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
+  G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesPAI.size();
   for(G4int i=0; i<nreg; ++i) {
     if((m_particlesPAI[i] == particle || 
@@ -723,7 +795,7 @@ void G4EmParameters::AddPAIModel(const G4String& particle,
         r == "DefaultRegionForTheWorld") ) {
 
       m_typesPAI[i] = type;
-      if(particle == "all") m_particlesPAI[i] = particle;
+      if(particle == "all") { m_particlesPAI[i] = particle; }
       if(r == "DefaultRegionForTheWorld") { m_regnamesPAI[i] = r; }
       return;
     }
@@ -750,8 +822,7 @@ const std::vector<G4String>& G4EmParameters::TypesPAI() const
 
 void G4EmParameters::AddMicroElec(const G4String& region)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
+  G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesME.size();
   for(G4int i=0; i<nreg; ++i) {
     if(r == m_regnamesME[i]) { return; }
@@ -766,8 +837,7 @@ const std::vector<G4String>& G4EmParameters::RegionsMicroElec() const
 
 void G4EmParameters::AddDNA(const G4String& region, const G4String& type)
 {
-  G4String r = region;
-  if(r == "" || r == "world" || r == "World") r = "DefaultRegionForTheWorld";
+  G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesDNA.size();
   for(G4int i=0; i<nreg; ++i) {
     if(r == m_regnamesDNA[i]) { return; }
@@ -784,6 +854,206 @@ const std::vector<G4String>& G4EmParameters::RegionsDNA() const
 const std::vector<G4String>& G4EmParameters::TypesDNA() const
 {
   return m_typesDNA;
+}
+
+void G4EmParameters::SetSubCutoff(G4bool val, const G4String& region)
+{
+  if(IsLocked()) { return; }
+  G4String r = CheckRegion(region);
+  G4int nreg =  m_regnamesSubCut.size();
+  for(G4int i=0; i<nreg; ++i) {
+    if(r == m_regnamesSubCut[i]) { 
+      m_subCuts[i] = val;
+      return; 
+    }
+  }
+  m_regnamesSubCut.push_back(r);
+  m_subCuts.push_back(val);
+}
+
+void 
+G4EmParameters::SetDeexActiveRegion(const G4String& region, G4bool fdeex,
+                                    G4bool fauger, G4bool fpixe)
+{
+  if(IsLocked()) { return; }
+  G4String r = CheckRegion(region);
+  G4int nreg =  m_regnamesDeex.size();
+  for(G4int i=0; i<nreg; ++i) {
+    if(r == m_regnamesDeex[i]) { 
+      m_fluo[i] = fdeex;
+      m_auger[i]= fauger;
+      m_pixe[i] = fpixe;
+      return; 
+    }
+  }
+  m_regnamesDeex.push_back(r);
+  m_fluo.push_back(fdeex);
+  m_auger.push_back(fauger);
+  m_pixe.push_back(fpixe);
+}
+
+void 
+G4EmParameters::SetProcessBiasingFactor(const G4String& procname, 
+                                        G4double val, G4bool wflag)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) {
+    G4int n =  m_procBiasedXS.size();
+    for(G4int i=0; i<n; ++i) {
+      if(procname == m_procBiasedXS[i]) { 
+	m_factBiasedXS[i] = val;
+	m_weightBiasedXS[i]= wflag;
+	return; 
+      }
+    }
+    m_procBiasedXS.push_back(procname);
+    m_factBiasedXS.push_back(val);
+    m_weightBiasedXS.push_back(wflag);
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Process: " << procname << " XS biasing factor " 
+       << val << " is negative - ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+void 
+G4EmParameters::ActivateForcedInteraction(const G4String& procname, 
+                                          const G4String& region,
+                                          G4double length, 
+                                          G4bool wflag)
+{
+  if(IsLocked()) { return; }
+  G4String r = CheckRegion(region);
+  if(length >= 0.0) {
+    G4int n =  m_procForced.size();
+    for(G4int i=0; i<n; ++i) {
+      if(procname == m_procForced[i] && r == m_regnamesForced[i] ) { 
+	m_lengthForced[i] = length;
+	m_weightForced[i]= wflag;
+	return; 
+      }
+    }
+    m_regnamesForced.push_back(r);
+    m_procForced.push_back(procname);
+    m_lengthForced.push_back(length);
+    m_weightForced.push_back(wflag);
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Process: " << procname << " in region " << r
+       << " : forced interacttion length= " 
+       << length << " is negative - ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+void 
+G4EmParameters::ActivateSecondaryBiasing(const G4String& procname,
+                                         const G4String& region, 
+                                         G4double factor,
+                                         G4double energyLimit)
+{
+  if(IsLocked()) { return; }
+  G4String r = CheckRegion(region);
+  if(factor >= 0.0 && energyLimit >= 0.0) {
+    G4int n =  m_procBiasedSec.size();
+    for(G4int i=0; i<n; ++i) {
+      if(procname == m_procBiasedSec[i] && r == m_regnamesBiasedSec[i] ) { 
+	m_factBiasedSec[i] = factor;
+	m_elimBiasedSec[i] = energyLimit;
+	return; 
+      }
+    }
+    m_regnamesBiasedSec.push_back(r);
+    m_procBiasedSec.push_back(procname);
+    m_factBiasedSec.push_back(factor);
+    m_elimBiasedSec.push_back(energyLimit);
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Process: " << procname << " in region " << r
+       << " : secondary bised factor= " 
+       << factor << ", Elim= " << energyLimit <<  " - ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+void G4EmParameters::DefineRegParamForLoss(G4VEnergyLossProcess* ptr, 
+                                           G4bool isElectron) const
+{
+  if(isElectron) { ptr->SetStepFunction(dRoverRange, finalRange, false); }
+  else { ptr->SetStepFunction(dRoverRangeMuHad, finalRangeMuHad, false); }
+
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  G4int n = m_regnamesSubCut.size();
+  for(G4int i=0; i<n; ++i) { 
+    const G4Region* reg = regionStore->GetRegion(m_regnamesSubCut[i], false);
+    if(reg) { ptr->ActivateSubCutoff(m_subCuts[i], reg); }
+  }
+  n = m_procBiasedXS.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procBiasedXS[i]) {
+      ptr->SetCrossSectionBiasingFactor(m_factBiasedXS[i], 
+					m_weightBiasedXS[i]);
+      break; 
+    }
+  }
+  n = m_procForced.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procForced[i]) {
+      ptr->ActivateForcedInteraction(m_lengthForced[i],
+				     m_regnamesForced[i],
+				     m_weightForced[i]);
+      break; 
+    }
+  }
+  n = m_procBiasedSec.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procBiasedSec[i]) {
+      ptr->ActivateSecondaryBiasing(m_regnamesBiasedSec[i],
+				    m_factBiasedSec[i], 
+				    m_elimBiasedSec[i]);
+      break; 
+    }
+  }
+}
+
+void G4EmParameters::DefineRegParamForEM(G4VEmProcess* ptr) const
+{
+  G4int n = m_procBiasedXS.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procBiasedXS[i]) {
+      ptr->SetCrossSectionBiasingFactor(m_factBiasedXS[i], 
+					m_weightBiasedXS[i]);
+      break; 
+    }
+  }
+  n = m_procForced.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procForced[i]) {
+      ptr->ActivateForcedInteraction(m_lengthForced[i],
+				     m_regnamesForced[i],
+				     m_weightForced[i]);
+      break; 
+    }
+  }
+  n = m_procBiasedSec.size();
+  for(G4int i=0; i<n; ++i) {
+    if(ptr->GetProcessName() == m_procBiasedSec[i]) {
+      ptr->ActivateSecondaryBiasing(m_regnamesBiasedSec[i],
+				    m_factBiasedSec[i], 
+				    m_elimBiasedSec[i]);
+      break; 
+    }
+  }
+}
+
+void G4EmParameters::DefineRegParamForDeex(G4VAtomDeexcitation* ptr) const
+{
+  G4int n = m_regnamesDeex.size();
+  for(G4int i=0; i<n; ++i) {
+    ptr->SetDeexcitationActiveRegion(m_regnamesDeex[i],
+				     m_fluo[i], m_auger[i], m_pixe[i]);
+  }
 }
 
 std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
@@ -811,6 +1081,8 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
      <<useAngGeneratorForIonisation << "\n";
   os << "Use Mott correction for e- scattering              " 
      <<useMottCorrection << "\n";
+  os << "Use integral approach for tracking                 " 
+     <<integral << "\n";
 
   os << "Factor of cut reduction for sub-cutoff method      " <<minSubRange << "\n";
   os << "Min kinetic energy for tables                      " 
@@ -837,6 +1109,10 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
   os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
   os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
+  os << "Step function for e+-                              " <<"("<< dRoverRange
+     << ", " << finalRange << " mm)\n";
+  os << "Step function for muons/hadrons                    " <<"("<< dRoverRangeMuHad
+     << ", " << finalRangeMuHad << " mm)\n";
 
   os << "Number of bins in tables                           " <<nbins   << "\n";
   os << "Number of bins per decade of a table               " <<nbinsPerDecade << "\n";
@@ -845,6 +1121,7 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
 
   os << "Type of msc step limit algorithm for e+-           " <<mscStepLimit << "\n";
   os << "Type of msc step limit algorithm for muons/hadrons " <<mscStepLimitMuHad << "\n";
+  os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
 
   os << "Type of PIXE cross section for hadrons             " <<namePIXE << "\n";
   os << "Type of PIXE cross section for e+-                 " <<nameElectronPIXE << "\n";
@@ -861,6 +1138,13 @@ void G4EmParameters::Dump() const
 std::ostream& operator<< (std::ostream& os, const G4EmParameters& par)
 {
   return par.StreamInfo(os);
+}
+
+G4bool G4EmParameters::IsLocked() const
+{
+  return (G4Threading::IsWorkerThread() ||
+	  (fStateManager->GetCurrentState() != G4State_PreInit &&
+	   fStateManager->GetCurrentState() != G4State_Idle));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc 87013 2014-11-21 16:22:53Z gcosmo $
+// $Id: G4ForwardXrayTR.cc 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // G4ForwardXrayTR class -- implementation file
 //
@@ -85,12 +85,12 @@ G4ForwardXrayTR( const G4String& matName1,   //  G4Material* pMat1,
                  const G4String& processName                          )
   :        G4TransitionRadiation(processName)
 {
-  fPtrGamma = 0;
-  fGammaCutInKineticEnergy = 0;
+  fPtrGamma = nullptr;
+  fGammaCutInKineticEnergy = nullptr;
   fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR =  fMaxThetaTR = fGamma = 
     fSigma1 = fSigma2 = 0.0; 
-  fAngleDistrTable = 0;
-  fEnergyDistrTable = 0;
+  fAngleDistrTable = nullptr;
+  fEnergyDistrTable = nullptr;
   fMatIndex1 = fMatIndex2 = 0;
 
   // Proton energy vector initialization
@@ -147,12 +147,12 @@ G4ForwardXrayTR::
 G4ForwardXrayTR( const G4String& processName  )
    :        G4TransitionRadiation(processName)
 {
-  fPtrGamma = 0;
-  fGammaCutInKineticEnergy = 0;
+  fPtrGamma = nullptr;
+  fGammaCutInKineticEnergy = nullptr;
   fGammaTkinCut = fMinEnergyTR = fMaxEnergyTR =  fMaxThetaTR = fGamma = 
     fSigma1 = fSigma2 = 0.0; 
-  fAngleDistrTable = 0;
-  fEnergyDistrTable = 0;
+  fAngleDistrTable = nullptr;
+  fEnergyDistrTable = nullptr;
   fMatIndex1 = fMatIndex2 = 0;
 
   // Proton energy vector initialization

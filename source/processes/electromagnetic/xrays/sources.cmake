@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 74582 2013-10-15 12:06:25Z gcosmo $
+# $Id: sources.cmake 95093 2016-01-25 08:48:23Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -51,6 +51,7 @@ GEANT4_DEFINE_MODULE(NAME G4xrays
         G4GammaXTRadiator.hh
         G4RegularXTRadiator.hh
         G4Scintillation.hh
+        G4ScintillationTrackInformation.hh
         G4StrawTubeXTRadiator.hh
         G4SynchrotronRadiation.hh
         G4SynchrotronRadiationInMat.hh
@@ -68,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4xrays
         G4GammaXTRadiator.cc
         G4RegularXTRadiator.cc
         G4Scintillation.cc
+        G4ScintillationTrackInformation.cc
         G4StrawTubeXTRadiator.cc
         G4SynchrotronRadiation.cc
         G4SynchrotronRadiationInMat.cc

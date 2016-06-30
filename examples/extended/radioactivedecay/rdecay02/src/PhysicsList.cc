@@ -91,23 +91,23 @@ PhysicsList::PhysicsList()
   RegisterPhysics(new G4RadioactiveDecayPhysics());
             
   // Hadron Elastic scattering
-  ////RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
+  RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic physics
-  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Elastic scattering
-  ///RegisterPhysics( new G4IonElasticPhysics(verb));
+  RegisterPhysics( new G4IonElasticPhysics(verb));
       
   // Ion Inelastic physics
-  ////RegisterPhysics( new G4IonPhysics(verb));
+  RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
     
   // Gamma-Nuclear Physics
-  ////RegisterPhysics( new GammaPhysics("gamma"));
+  RegisterPhysics( new GammaPhysics("gamma"));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

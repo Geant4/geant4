@@ -1,4 +1,4 @@
-$Id: History 94232 2015-11-09 10:53:57Z gcosmo $
+$Id: History 97606 2016-06-06 09:21:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,8 +14,82 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-June-2016 M. Karamitros (phys-ctor-em-V10-02-20)
+- G4EmModelActivator: Correct elastic process name for ions
+
+03-June-2016 M. Karamitros (phys-ctor-em-V10-02-19)
+- G4EmModelActivator: Use Uehara model with chemistry
+- G4EmDNAPhysics: load G4EmParameters
+
+02-June-2016 V.Ivanchenko (phys-ctor-em-V10-02-18)
+- G4EmModelActivator - fixed activation of DNA models
+
+28-May-2016 M. Karamitros (phys-ctor-em-V10-02-17) 
+- G4EmDNAPhysics_option7: correct preproc flag
+
+24-May-2016 M. Novak (phys-ctor-em-V10-02-16)
+- G4EmStandardPhysicsGS: change back default step limit type to opt0 like
+  and set default range factor to 0.1
+
+17-May-2016 M. Karamitros (phys-ctor-em-V10-02-15)
+- DNA and ModelActivator constructors: 
+* correct model/process names
+* adjust high energy threshold of solvation (kill) in respect to the energy range 
+of the elastic model 
+
+12-May-2016 M. Karamitros (phys-ctor-em-V10-02-14)
+- Add G4DNAElectronSolvation to all DNA constructors
+- Update G4EmModelActivator
+
+27-Apr-2016 M.Novak (phys-ctor-em-V10-02-13)
+- G4EmStandardPhysicsGS: changed default step limit type to error-free
+
+23-Apr-2016 M. Karamitros (phys-ctor-em-V10-02-12)
+- G4EmDNAChemistry: G4DNAElectronSolvatation->G4DNAElectronSolvation
+
+20-Apr-2016 S. Incerti (phys-ctor-em-V10-02-11)
+- updated G4EmDNAPhysics_option5
+
+30-Mar-2016 V.Ivanchenko (phys-ctor-em-V10-02-10)
+- G4EmStandardPhysics_option3 - fixed typo: uncomment commented line
+
+29-Mar-2016 V.Ivanchenko (phys-ctor-em-V10-02-09)
+- G4EmStandardPhysics_option3, option4 - added process of e+e-
+    pair creation by e+ and e-; enable lateral displacement for 
+    muons and hadrons
+
+21-Mar-2016 S. Incerti (phys_ctor-em-V10-02-08)
+- added updated G4EmDNAPhysics_option7
+
+07-Mar-2016 P. Gumplinger (phys_ctor-em-V10-02-07)
+- add flag and command whether or not to call InvokeSD method
+  of G4OpBoundaryProcess
+
+07-Mar-2016 M. Karamitros (phys_ctor-em-V10-02-06)
+- remove G4EmDNAPhysics_option7 from sources.cmake
+
+07-Mar-2016 M. Karamitros (phys_ctor-em-V10-02-05)
+- remove G4EmDNAPhysics_option7
+
+03-Mar-2016 I.Hrivnacova (phys_ctor-em-V10-02-04)
+- fixed G4Exception message in G4OpticalPhysicsMessenger
+
+01-Mar-2016 P.Gumplinger (phys_ctor-em-V10-02-03)
+- fix Coverity error of uninitialized fScintillationTrackInfo
+
+26-Feb-2016 P.Gumplinger (phys-ctor-em-V10-02-02)
+- addressing part of bug report 1832 as suggested by Ivana Hrivnacova
+
+05-Feb-2016 P.Gumplinger (phys-ctor-em-V10-02-01)
+- fix val-grind memory leakage check tool flag in G4OpticalPhysicsMessenger
+
+02-Feb-2016 P.Gumplinger (phys-ctor-em-V10-02-00)
+- add SetScintillationTrackInfo to G4OpticalPhysics with
+  associated command in G4OpticalPhysicsMessenger
+
 09-Nov-2015 V.Ivanchenko (phys-ctor-em-V10-01-22)
-- G4EmStandardPhysicsSS - allowing ally Mott correction for e-
+- G4EmStandardPhysicsSS - allowing optional model with Mott 
+    correction for e-
 
 28-Oct-2015 V.Ivanchenko (phys-ctor-em-V10-01-21)
 - G4EmStandardPhysicsGS - M. Novak tunned parameters and make 

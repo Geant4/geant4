@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShells.cc 94016 2015-11-05 10:14:49Z gcosmo $
+// $Id: G4AtomicShells.cc 95987 2016-03-07 08:11:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -35,9 +35,6 @@
 // 30-04-10, added fIndexOfShells, V.Ivanchenko
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
-
-#include <assert.h>
 
 #include "G4AtomicShells.hh"
 #include "G4SystemOfUnits.hh"
@@ -749,7 +746,9 @@ G4AtomicShells::fNumberOfElectrons[1540] =
 G4int
 G4AtomicShells::GetNumberOfShells(G4int Z)  
 {
-  assert (Z>0 && Z<101);
+#ifdef G4VERBOSE
+  if(Z<0 || Z>100) { Z = PrintErrorZ(Z, "GetNumberOfShells"); }
+#endif
   return fNumberOfShells[Z];
 }
 
@@ -758,8 +757,13 @@ G4AtomicShells::GetNumberOfShells(G4int Z)
 G4double 
 G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 {
-  assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
-  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*eV;
+#ifdef G4VERBOSE
+  if(Z<0 || Z>100) { Z = PrintErrorZ(Z, "GetBindingEnergy"); }
+  if(ShellNb < 0 || ShellNb>=fNumberOfShells[Z]) { 
+    ShellNb = PrintErrorShell(Z, ShellNb, "GetBindingEnergy");
+  }
+#endif
+  return fBindingEnergies[fIndexOfShells[Z] + ShellNb]*CLHEP::eV;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -767,21 +771,53 @@ G4AtomicShells::GetBindingEnergy(G4int Z, G4int ShellNb)
 G4int
 G4AtomicShells::GetNumberOfElectrons(G4int Z, G4int ShellNb)
 {
-  assert (Z>0 && Z<101 && ShellNb<fNumberOfShells[Z]);
+#ifdef G4VERBOSE
+  if(Z<0 || Z>100) { Z = PrintErrorZ(Z, "GetNumberOfElectrons"); }
+  if(ShellNb < 0 || ShellNb>=fNumberOfShells[Z]) { 
+    ShellNb = PrintErrorShell(Z, ShellNb, "GetNumberOfElectrons");
+  }
+#endif
   return fNumberOfElectrons[fIndexOfShells[Z] + ShellNb];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-G4double G4AtomicShells::GetTotalBindingEnergy (G4int Z)
+G4double G4AtomicShells::GetTotalBindingEnergy(G4int Z) 
 {
-  assert (Z>=1 && Z<101);
-  
+#ifdef G4VERBOSE
+  if(Z<0 || Z>100) { Z = PrintErrorZ(Z, "GetTotalBindingEnergy"); }
+#endif
   G4int idx = fIndexOfShells[Z];
   G4int idxmax = idx +  fNumberOfShells[Z];
   G4double energy = 0.0;
   for (G4int i=idx; i<idxmax; ++i) {energy += fBindingEnergies[i];}
-  return energy*eV;
+  return energy*CLHEP::eV;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+#ifdef G4VERBOSE
+
+G4int G4AtomicShells::PrintErrorZ(G4int Z, const G4String& ss)
+{
+  G4String sss = "G4AtomicShells::"+ss+"()";
+  G4ExceptionDescription ed;
+  ed << "Atomic number out of range Z= " << Z;
+  G4Exception(sss,"mat060",FatalException,ed,"");
+  return 1;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4int 
+G4AtomicShells::PrintErrorShell(G4int Z, G4int n, const G4String& ss)
+{
+  G4String sss = "G4AtomicShells::"+ss+"()";
+  G4ExceptionDescription ed;
+  ed << "Shell number out of range Nshell= " << n << "  Z= " << Z;
+  G4Exception(sss,"mat061",FatalException,ed,"");
+  return 0;
+}
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

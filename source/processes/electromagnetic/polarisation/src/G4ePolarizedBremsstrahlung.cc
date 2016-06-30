@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedBremsstrahlung.cc 93113 2015-10-07 07:49:04Z gcosmo $
+// $Id: G4ePolarizedBremsstrahlung.cc 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(
     SetSecondaryParticle(G4Gamma::Gamma());
     SetIonisation(false);
 
-    G4VEmFluctuationModel* fm =  0;
+    G4VEmFluctuationModel* fm =  nullptr;
     //G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
 
     G4VEmModel* em = new G4ePolarizedBremsstrahlungModel;

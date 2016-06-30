@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.icc 86974 2014-11-21 11:58:31Z gcosmo $
+// $Id: G4ViewParameters.icc 97316 2016-06-01 12:12:58Z gcosmo $
 //
 // 
 // John Allison  20th October 1996
@@ -387,7 +387,6 @@ inline void G4ViewParameters::SetRotationStyle
   fRotationStyle = style;
 }
 
-inline void G4ViewParameters::AddVisAttributesModifier
-(const G4ModelingParameters::VisAttributesModifier& vam) {
-  fVisAttributesModifiers.push_back(vam);
+inline void G4ViewParameters::ClearVisAttributesModifiers () {
+  fVisAttributesModifiers.clear ();
 }

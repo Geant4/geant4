@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedPEEffectModel.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedPEEffectModel.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,17 +66,18 @@ class G4PolarizedPEEffectModel : public G4PEEffectFluoModel
 
 public:
 
-  G4PolarizedPEEffectModel(const G4ParticleDefinition* p = 0, 
+  explicit G4PolarizedPEEffectModel(const G4ParticleDefinition* p = nullptr,
 			   const G4String& nam = "Polarized-PhotoElectric");
 
-  void Initialise(const G4ParticleDefinition* pd, const G4DataVector& dv);
+  void Initialise(const G4ParticleDefinition* pd, 
+                  const G4DataVector& dv) override;
   virtual ~G4PolarizedPEEffectModel();
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   // polarized routines 
   /*
@@ -90,8 +91,9 @@ public:
 private:
 
   // hide assignment operator
-  G4PolarizedPEEffectModel & operator=(const  G4PolarizedPEEffectModel &right);
-  G4PolarizedPEEffectModel(const  G4PolarizedPEEffectModel&);
+  G4PolarizedPEEffectModel & 
+    operator=(const  G4PolarizedPEEffectModel &right) = delete;
+  G4PolarizedPEEffectModel(const  G4PolarizedPEEffectModel&) = delete;
 
   G4PolarizedPEEffectCrossSection * crossSectionCalculator;
   // incomming

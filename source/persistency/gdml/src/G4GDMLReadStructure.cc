@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadStructure.cc 91689 2015-07-31 09:58:27Z gcosmo $
+// $Id: G4GDMLReadStructure.cc 96190 2016-03-29 08:07:36Z gcosmo $
 //
 // class G4GDMLReadStructure Implementation
 //
@@ -156,7 +156,11 @@ DivisionvolRead(const xercesc::DOMElement* const divisionvolElement)
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="name") { name = attValue; } else
-      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadStructure::DivisionvolRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="width") { width = eval.Evaluate(attValue); } else
       if (attName=="offset") { offset = eval.Evaluate(attValue); } else
       if (attName=="number") { number = eval.EvaluateInteger(attValue); } else
@@ -550,7 +554,11 @@ QuantityRead(const xercesc::DOMElement* const readElement)
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="unit") { unit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadStructure::QuantityRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="value"){ value= eval.Evaluate(attValue); } 
    }
 

@@ -53,24 +53,34 @@
 
 G4NeutronRadCapture::G4NeutronRadCapture() 
   : G4HadronicInteraction("nRadCapture"),
-    lab4mom(0.,0.,0.,0.)
+    photonEvaporation(nullptr),lab4mom(0.,0.,0.,0.)
 {
-  lowestEnergyLimit = 10*eV;
-  minExcitation = 1*keV;
-  SetMinEnergy( 0.0*GeV );
-  SetMaxEnergy( 100.*TeV );
+  lowestEnergyLimit = 10*CLHEP::eV;
+  minExcitation = 0.1*CLHEP::keV;
+  SetMinEnergy( 0.0*CLHEP::GeV );
+  SetMaxEnergy( 100.*CLHEP::TeV );
 
-  char* env = getenv("G4UsePhotonEvaporationOLD"); 
-  if(!env) { photonEvaporation = new G4PhotonEvaporation(); } 
-  else     { photonEvaporation = new G4PhotonEvaporationOLD(); }
-  photonEvaporation->SetICM(true);
- 
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
 
 G4NeutronRadCapture::~G4NeutronRadCapture()
 {
   delete photonEvaporation;
+}
+
+void G4NeutronRadCapture::InitialiseModel()
+{
+  if(photonEvaporation != nullptr) { return; }
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters();
+  minExcitation = param->GetMinExcitation();
+
+  char* env = getenv("G4UsePhotonEvaporationOLD"); 
+  if(!env) { photonEvaporation = new G4PhotonEvaporation(); } 
+  else     { photonEvaporation = new G4PhotonEvaporationOLD(); }
+ 
+  photonEvaporation->Initialise();
+  photonEvaporation->SetICM(true);
 }
 
 G4HadFinalState* G4NeutronRadCapture::ApplyYourself(

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePolarizedPhotoElectricModel.hh 93359 2015-10-19 13:42:18Z gcosmo $
+// $Id: G4LivermorePolarizedPhotoElectricModel.hh 95040 2016-01-20 11:26:14Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -36,8 +36,8 @@
 //
 
 
-#ifndef G4LivermorePhotoElectricModel_h
-#define G4LivermorePhotoElectricModel_h 1
+#ifndef G4LivermorePolarizedPhotoElectricModel_h
+#define G4LivermorePolarizedPhotoElectricModel_h 1
 
 #include "G4VEmModel.hh"
 #include "G4ElementData.hh"
@@ -52,8 +52,7 @@ class G4LivermorePolarizedPhotoElectricModel : public G4VEmModel
 
 public:
 
-  G4LivermorePolarizedPhotoElectricModel(
-					   const G4String& nam = "LivermorePolarizedPhotoElectric");
+  G4LivermorePolarizedPhotoElectricModel(const G4String& nam = "LivermorePolarizedPhotoElectric");
 
   virtual ~G4LivermorePolarizedPhotoElectricModel();
 

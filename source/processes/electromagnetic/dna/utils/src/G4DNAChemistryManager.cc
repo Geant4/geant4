@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.cc 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id: G4DNAChemistryManager.cc 97429 2016-06-03 07:16:13Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -616,10 +616,10 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
       H2O -> AddElectron(5,1);
       break;
       case eExcitedMolecule :
-      H2O -> ExciteMolecule(electronicLevel);
+      H2O -> ExciteMolecule(4-electronicLevel);
       break;
       case eIonizedMolecule :
-      H2O -> IonizeMolecule(electronicLevel);
+      H2O -> IonizeMolecule(4-electronicLevel);
       break;
     }
 

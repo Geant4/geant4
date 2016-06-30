@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.cc 82961 2014-07-21 09:20:49Z gcosmo $
+// $Id: G4eeToHadronsMultiModel.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -72,8 +72,8 @@ G4eeToHadronsMultiModel::G4eeToHadronsMultiModel(G4int ver,
 {
   thKineticEnergy  = DBL_MAX;
   maxKineticEnergy = 4.521*GeV;  //crresponding to 10TeV in lab
-  fParticleChange  = 0;
-  cross = 0;
+  fParticleChange  = nullptr;
+  cross = nullptr;
   delta = 1.0*MeV;  //for bin width
 }
 

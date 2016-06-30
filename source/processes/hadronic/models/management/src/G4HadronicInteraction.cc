@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicInteraction.cc 88839 2015-03-12 10:30:07Z gcosmo $
+// $Id: G4HadronicInteraction.cc 96490 2016-04-19 06:57:04Z gcosmo $
 //
 // Hadronic Interaction  base class
 // original by H.P. Wellisch
@@ -53,12 +53,25 @@ G4HadronicInteraction::~G4HadronicInteraction()
   registry->RemoveMe(this);
 }
 
+void G4HadronicInteraction::BuildPhysicsTable(const G4ParticleDefinition&)
+{}
+
+void G4HadronicInteraction::InitialiseModel()
+{}
+
 G4double 
 G4HadronicInteraction::SampleInvariantT(const G4ParticleDefinition*, 
 					G4double, G4int, G4int)
 {
   return 0.0;
 }
+
+G4bool G4HadronicInteraction::IsApplicable(const G4HadProjectile&, 
+					   G4Nucleus&)
+{ 
+  return true;
+}
+
  
 G4double G4HadronicInteraction::GetMinEnergy(
    const G4Material *aMaterial, const G4Element *anElement ) const

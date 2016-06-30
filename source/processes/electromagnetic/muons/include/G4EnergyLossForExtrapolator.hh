@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EnergyLossForExtrapolator.hh 86978 2014-11-21 12:08:34Z gcosmo $
+// $Id: G4EnergyLossForExtrapolator.hh 97392 2016-06-02 10:10:32Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ class G4EnergyLossForExtrapolator
 {
 public:
 
-  G4EnergyLossForExtrapolator(G4int verb = 1);
+  explicit G4EnergyLossForExtrapolator(G4int verb = 1);
 
   ~G4EnergyLossForExtrapolator();
 

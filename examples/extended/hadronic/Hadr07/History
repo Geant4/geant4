@@ -1,0 +1,22 @@
+$Id: History 95740 2016-02-23 09:34:37Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Hadr07 History file
+                    -------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+13-04-16 mma  (exhadr07-V10-02-01)
+- EmStandardPhysics: use G4EmParameters
+
+01-04-16 michel maire (exhadr07-V10-02-00)
+- created, from TestEm11 and Hadr06

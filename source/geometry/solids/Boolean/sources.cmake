@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
+# $Id: sources.cmake 96129 2016-03-16 22:05:08Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -39,6 +39,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4DisplacedSolid.hh
         G4IntersectionSolid.hh
         G4MultiUnion.hh
+        G4ScaledSolid.hh
         G4SubtractionSolid.hh
         G4UMultiUnion.hh
         G4UnionSolid.hh
@@ -46,6 +47,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4BooleanSolid.cc
         G4DisplacedSolid.cc
         G4IntersectionSolid.cc
+        G4ScaledSolid.cc
         G4SubtractionSolid.cc
         G4UMultiUnion.cc
         G4UnionSolid.cc

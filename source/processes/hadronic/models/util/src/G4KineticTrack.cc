@@ -658,12 +658,14 @@ G4KineticTrackVector* G4KineticTrack::Decay()
      G4DecayProducts* theDecayProducts = thePhaseSpaceDecayChannel.DecayIt();
      if(!theDecayProducts)
      {
-       G4cerr << "Error condition encountered in G4KineticTrack::Decay()"<<G4endl;
-       G4cerr << "  phase-space decay failed."<<G4endl;
-       G4cerr << "  particle was "<<thisDefinition->GetParticleName()<<G4endl;
-       G4cerr << "  channel index "<< chosench << "of "<<nChannels<<"channels"<<G4endl;
-       G4cerr << "  "<<theNumberOfDaughters<< " Daughter particles: "
-              << theDaughtersName1<<" "<<theDaughtersName2<<" "<<theDaughtersName3<<" "<<theDaughtersName4<<G4endl;
+       G4ExceptionDescription ed;
+       ed << "Error condition encountered: phase-space decay failed." << G4endl
+          << "\t the decaying particle is: " << thisDefinition->GetParticleName() << G4endl
+          << "\t the channel index is: "<< chosench << " of "<< nChannels << "channels" << G4endl
+          << "\t " << theNumberOfDaughters << " daughter particles: "
+          << theDaughtersName1 << " " << theDaughtersName2 << " " << theDaughtersName3 << " " 
+          << theDaughtersName4 << G4endl;
+       G4Exception( "G4KineticTrack::Decay ", "HAD_KINTRACK_001", JustWarning, ed );
        return 0;
      }
 		                                        

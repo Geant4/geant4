@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.cc 89381 2015-04-08 15:32:47Z gcosmo $
+// $Id: G4GDMLMessenger.cc 96673 2016-04-29 12:08:20Z gcosmo $
 //
 //
 // class G4GDMLMessenger Implementation
@@ -85,6 +85,13 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   EcutsCmd->SetDefaultValue(false);
   EcutsCmd->AvailableForStates(G4State_Idle);
 
+  SDCmd = new G4UIcmdWithABool("/persistency/gdml/export_SD",this);
+  SDCmd->SetGuidance("Enable export of SD associated");
+  SDCmd->SetGuidance("to logical volumes.");
+  SDCmd->SetParameterName("export_SD",false);
+  SDCmd->SetDefaultValue(false);
+  SDCmd->AvailableForStates(G4State_Idle);
+
   ClearCmd = new G4UIcmdWithoutParameter("/persistency/gdml/clear",this);
   ClearCmd->SetGuidance("Clear geometry (before reading a new one from GDML).");
   ClearCmd->AvailableForStates(G4State_Idle);
@@ -98,6 +105,7 @@ G4GDMLMessenger::~G4GDMLMessenger()
   delete TopVolCmd;
   delete RegionCmd;
   delete EcutsCmd;
+  delete SDCmd;
   delete persistencyDir;
   delete gdmlDir;
 }
@@ -121,6 +129,12 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   {
     G4bool mode = EcutsCmd->GetNewBoolValue(newValue);
     myParser->SetEnergyCutsExport(mode);
+  }
+   
+  if( command == SDCmd )
+  {
+    G4bool mode = SDCmd->GetNewBoolValue(newValue);
+    myParser->SetSDExport(mode);
   }
    
   if( command == TopVolCmd )

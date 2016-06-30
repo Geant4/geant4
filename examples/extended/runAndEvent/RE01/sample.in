@@ -1,6 +1,7 @@
 /control/verbose 1
 #
 /mydet/generator PYTHIA
+##/mydet/generator particleGun
 #
 /run/beamOn 1
 #

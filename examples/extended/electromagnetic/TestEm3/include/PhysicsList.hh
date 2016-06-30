@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 82333 2014-06-16 09:57:47Z gcosmo $
+// $Id: PhysicsList.hh 95227 2016-02-01 09:19:15Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +54,8 @@ public:
     virtual void ConstructProcess();
     
     void AddPhysicsList(const G4String& name);
+    void AddDecay();
+    void AddRadioactiveDecay();
     void AddStepMax();
 
 private:

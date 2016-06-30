@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAngularDistribution.hh 73847 2013-09-13 14:32:39Z gcosmo $
+// $Id: G4VEmAngularDistribution.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,7 +61,7 @@ class G4VEmAngularDistribution
 {
 public:
 
-  G4VEmAngularDistribution(const G4String& name);
+  explicit G4VEmAngularDistribution(const G4String& name);
 
   virtual ~G4VEmAngularDistribution();
 
@@ -91,9 +91,10 @@ protected:
 
 private:
 
-  // hide assignment operator 
-  G4VEmAngularDistribution & operator=(const  G4VEmAngularDistribution &right);
-  G4VEmAngularDistribution(const  G4VEmAngularDistribution&);
+  // hide assignment operator
+  G4VEmAngularDistribution & 
+    operator=(const  G4VEmAngularDistribution &right) = delete;
+  G4VEmAngularDistribution(const  G4VEmAngularDistribution&) = delete;
 
   G4String fName;
 };

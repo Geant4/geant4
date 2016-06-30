@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4OpenGLQtViewer.cc 95635 2016-02-17 08:06:22Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -1657,7 +1657,28 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
     else if (evnt->key() == Qt::Key_Plus) { // go forward
       moveScene(0,0,-1,false);
     }
-
+    else if (evnt->key() == Qt::Key_F) {
+      std::vector <G4ThreeVector> cameraPosition = ComputeFlyThrough(NULL);
+      G4Point3D targetPoint;
+      G4Point3D origineTargetPoint;
+      G4VisExtent extent;
+      G4double radius;
+      origineTargetPoint = fSceneHandler.GetScene()->GetStandardTargetPoint() + fVP.GetCurrentTargetPoint ();
+        
+      for (unsigned int a=0; a<cameraPosition.size()-1; a++) {
+            
+        // should change camera position and target point
+            
+        radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
+        G4Vector3D vpDirection = -(cameraPosition[a+1]-cameraPosition[a]);
+        fVP.SetViewpointDirection(vpDirection.unit());
+        G4Vector3D newTargetPoint = cameraPosition[a] - radius * vpDirection.unit() - fSceneHandler.GetScene()->GetStandardTargetPoint();
+            
+        fVP.SetCurrentTargetPoint(newTargetPoint);
+            
+        updateQWidget();
+        }
+    }
     // escaped from full screen
     if (evnt->key() == Qt::Key_Escape) {
       toggleFullScreen(false);
@@ -4625,7 +4646,7 @@ void G4OpenGLQtViewer::SwitchToVisSubThread()
   SetQGLContextVisSubThread(QThread::currentThread());
   
   // - Wait for the vis thread to set its QThread
-  G4CONDTIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
+  G4CONDITIONBROADCAST(&c1_VisSubThreadQtOpenGLContextInitialized);
   
   // Unlock the vis thread if it is Qt Viewer
   G4CONDITIONWAIT(&c2_VisSubThreadQtOpenGLContextMoved, &mWaitForVisSubThreadQtOpenGLContextMoved);
@@ -4687,7 +4708,7 @@ void G4OpenGLQtViewer::MovingToVisSubThread(){
   qGLW->context()->moveToThread(fQGLContextVisSubThread);
 #endif
   
-  G4CONDTIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
+  G4CONDITIONBROADCAST(&c2_VisSubThreadQtOpenGLContextMoved);
 }
 
 #endif

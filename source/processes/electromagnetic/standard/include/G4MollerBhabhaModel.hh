@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MollerBhabhaModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4MollerBhabhaModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,12 +65,13 @@ class G4MollerBhabhaModel : public G4VEmModel
 
 public:
 
-  G4MollerBhabhaModel(const G4ParticleDefinition* p = nullptr, 
-		      const G4String& nam = "MollerBhabha");
+  explicit G4MollerBhabhaModel(const G4ParticleDefinition* p = nullptr, 
+			       const G4String& nam = "MollerBhabha");
 
   virtual ~G4MollerBhabhaModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -83,31 +84,31 @@ public:
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 				const G4ParticleDefinition*,
 				G4double kineticEnergy,
-				G4double cutEnergy);
+				G4double cutEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy);
+				      G4double kinEnergy) final;
 			      
-  inline void SetParticle(const G4ParticleDefinition* p);			      
+  inline void SetParticle(const G4ParticleDefinition* p);
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
@@ -120,8 +121,8 @@ protected:
 private:
 
   // hide assignment operator 
-  G4MollerBhabhaModel & operator=(const  G4MollerBhabhaModel &right);
-  G4MollerBhabhaModel(const  G4MollerBhabhaModel&);
+  G4MollerBhabhaModel & operator=(const  G4MollerBhabhaModel &right) = delete;
+  G4MollerBhabhaModel(const  G4MollerBhabhaModel&) = delete;
 
   G4bool   isInitialised;
 

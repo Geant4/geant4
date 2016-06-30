@@ -47,13 +47,20 @@ Hadr05
 ------
 
 This example demonstrates the usage of G4GenericPhysicsList to build 
-the concrente physics list at the run time.
+the concrete physics list at the run time.
 
 Hadr06
 ------
 
 This example demonstrates survey of energy deposition and particle's flux from 
 a hadronic cascade.
+
+Hadr07
+------
+
+Survey energy deposition and particle's flux from an hadronic cascade.
+Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
+Show how to plot a depth dose profile in a rectangular box.    
 
 FissionFragment
 ---------------

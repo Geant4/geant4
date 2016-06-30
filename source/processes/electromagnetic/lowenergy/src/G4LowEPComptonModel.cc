@@ -63,6 +63,7 @@
 // | Feb. 2013 JMCB       - Geant4 9.6 FPE fix for bug 1426            |
 // | Jan. 2015 JMCB       - Migration to MT (Based on Livermore        |
 // |                        implementation)                            |
+// | Feb. 2016 JMCB       - Geant4 10.2 FPE fix for bug 1676           |
 // |                                                                   |
 // *********************************************************************
 
@@ -549,18 +550,30 @@ void G4LowEPComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
       G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
 
 
-      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+      // Floating point precision protection
+      // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
+      // Issue due to propagation of FPE and only impacts 8th sig fig onwards
+
+      if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
+      if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
+
+      // End of FP protection
+
       G4double ThetaE = 0.;
-      G4double sol_select = G4UniformRand();
+
+   
+      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+       G4double sol_select = G4UniformRand();
 
       if (sol_select < 0.5)
       {
-          ThetaE = std::acos(X_p);
+           ThetaE = std::acos(X_p);
       }
       if (sol_select > 0.5)
       {
           ThetaE = std::acos(X_m);
       }
+      
 
       cosThetaE = std::cos(ThetaE);
       sinThetaE = std::sin(ThetaE);

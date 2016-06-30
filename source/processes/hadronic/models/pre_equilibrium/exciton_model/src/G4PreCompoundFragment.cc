@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.cc 94281 2015-11-10 15:00:15Z gcosmo $
+// $Id: G4PreCompoundFragment.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -39,9 +39,8 @@
 #include "G4ChatterjeeCrossSection.hh"
 #include "Randomize.hh"
 
-const G4int NPOINTSGL = 10;
 // 10-Points Gauss-Legendre abcisas and weights
-const G4double w[NPOINTSGL] = {
+const G4double G4PreCompoundFragment::ws[] = {
     0.0666713443086881,
     0.149451349150581,
     0.219086362515982,
@@ -53,7 +52,7 @@ const G4double w[NPOINTSGL] = {
     0.149451349150581,
     0.0666713443086881
   };
-const G4double x[NPOINTSGL] = {
+const G4double G4PreCompoundFragment::xs[] = {
     -0.973906528517172,
     -0.865063366688985,
     -0.679409568299024,
@@ -66,16 +65,14 @@ const G4double x[NPOINTSGL] = {
     0.973906528517172
 };
 
-G4PreCompoundFragment::
-G4PreCompoundFragment(const G4ParticleDefinition* part,
-		      G4VCoulombBarrier* aCoulombBarrier)
-  : G4VPreCompoundFragment(part,aCoulombBarrier)
+G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
+					     G4VCoulombBarrier* aCoulBarrier)
+  : G4VPreCompoundFragment(p, aCoulBarrier)
 {
   muu = probmax = 0.0;
   index = 0;
   if(1 == theZ) { index = theA; }
   else { index = theA + 1; }
-  for(G4int i=0; i<12; ++i) { probability[i] = 0.0; }
 }
 
 G4PreCompoundFragment::~G4PreCompoundFragment()
@@ -88,8 +85,7 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   // If  theCoulombBarrier effect is included in the emission probabilities
   // Coulomb barrier is the lower limit of integration over kinetic energy
 
-  G4double LowerLimit = 0.0;
-  if(OPTxs==0 ||  useSICB) { LowerLimit = theCoulombBarrier; }
+  G4double LowerLimit = theCoulombBarrier;
 
   if (theMaxKinEnergy <= LowerLimit) 
     {
@@ -130,11 +126,10 @@ IntegrateEmissionProbability(G4double low, G4double up,
   probmax = 0.0;
 
   for (G4int i=0; i<NPOINTSGL; ++i) {
-    e = del*x[i] + avr;
+    e = del*xs[i] + avr;
     y = ProbabilityDistributionFunction(e, aFragment);
-    probability[i] = y;
     probmax = std::max(probmax, y);
-    sum += w[i]*y;
+    sum += ws[i]*y;
   }
   return sum*del;
 }
@@ -159,7 +154,7 @@ G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
 // *********************** OPT=0 : Dostrovski's cross section  ***************
 G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
 {
-  G4double r0 = theParameters->Getr0()*theResA13;
+  G4double r0 = theParameters->GetR0()*theResA13;
   // cross section is now given in mb (r0 is in mm) for the sake of consistency
   //with the rest of the options
   return 1.e+25*CLHEP::pi*r0*r0*theResA13*GetAlpha()*(1.+GetBeta()/ekin);
@@ -168,8 +163,7 @@ G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
 G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment) 
 {
   //let's keep this way for consistency with CalcEmissionProbability method
-  G4double limit = 0.0;
-  if(useSICB) { limit = theCoulombBarrier; }
+  G4double limit = theCoulombBarrier; 
 
   if(theMaxKinEnergy <= limit) { return 0.0; }
 

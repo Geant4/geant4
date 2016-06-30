@@ -77,31 +77,6 @@ class G4PionRadiativeDecayChannel : public G4VDecayChannel
 
     virtual G4DecayProducts *DecayIt(G4double);
 
-  private:
-
-    G4double beta;
-
-    G4double cib;
-    G4double csdp;
-    G4double csdm;
-    G4double cif;
-    G4double cig;
-
-    G4double xl, yl, xu, yu, d2wmax;
-
-    G4double D2W(const G4double x, const G4double y);
-
 };
-
-inline G4double G4PionRadiativeDecayChannel::D2W(const G4double x, 
-                                                 const G4double y)
-{
-  G4double d2w = cib*(1.-y)*(1.+((1.-x)*(1.-x)))/((x*x)*(x+y-1.)) +
-                 csdp*(1.-x)*((x+y-1.)*(x+y-1.)) +
-                 csdm*(1.-x)*((1.-y)*(1.-y)) +
-                 cif*(x-1.)*(1.-y)/x +
-                 cig*(1.-y)*(1.-x+(x*x)/(x+y-1.))/x;
-  return d2w;
-}
 
 #endif

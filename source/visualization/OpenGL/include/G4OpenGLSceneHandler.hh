@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh 85263 2014-10-27 08:58:31Z gcosmo $
+// $Id: G4OpenGLSceneHandler.hh 96733 2016-05-02 11:52:48Z gcosmo $
 //
 //
 // Andrew Walkden  27th March 1996
@@ -83,8 +83,8 @@ public:
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
   
-  G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
-  void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
+  static G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
+  static void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
   
 #ifdef G4OPENGL_VERSION_2
   private :
@@ -147,11 +147,12 @@ protected:
   
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
+  // Static so that they apply to all OGL scene handlers...
   // Number of events to wait until we make a single glFlush
-  G4int fEventsDrawInterval;
+  static G4int fEventsDrawInterval;
   // Number of events waiting to be flushed
-  G4int fEventsWaitingToBeFlushed;
-  
+  static G4int fEventsWaitingToBeFlushed;
+
   // True if caller of primitives is capable of processing three passes.
   G4bool fThreePassCapable;
   

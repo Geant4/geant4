@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id: PhysicsList.hh 96329 2016-04-06 15:53:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -54,21 +54,19 @@ class PhysicsList: public G4VModularPhysicsList
    ~PhysicsList();
 
     virtual void ConstructParticle();
-        
+
     void AddPhysicsList(const G4String& name);
     virtual void ConstructProcess();
-    
     void AddDecay();
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
+    void AddRadioactiveDecay();
+    void AddStepMax();
 
-    inline void SetNumAngles(G4int num) { fNumAngles = num; };
+    StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
   private:
     G4String               fEmName;
     G4VPhysicsConstructor* fEmPhysicsList;    
     static G4ThreadLocal StepMax* fStepMaxProcess;
-    G4int fNumAngles;    
 
     PhysicsListMessenger*  fMessenger;
 };

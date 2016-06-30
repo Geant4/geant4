@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4BetheHeitlerModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,15 +62,16 @@ class G4BetheHeitlerModel : public G4VEmModel
 
 public:
 
-  G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
-		      const G4String& nam = "BetheHeitler");
+  explicit G4BetheHeitlerModel(const G4ParticleDefinition* p = 0, 
+			       const G4String& nam = "BetheHeitler");
  
   virtual ~G4BetheHeitlerModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -78,13 +79,13 @@ public:
                                       G4double Z, 
                                       G4double A=0., 
                                       G4double cut=0.,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 private:
 
@@ -93,8 +94,8 @@ private:
   G4double ScreenFunction2(G4double ScreenVariable);
 
   // hide assignment operator
-  G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right);
-  G4BetheHeitlerModel(const  G4BetheHeitlerModel&);
+  G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right) = delete;
+  G4BetheHeitlerModel(const  G4BetheHeitlerModel&) = delete;
 
   G4Pow*                    g4pow;
   G4ParticleDefinition*     theGamma;

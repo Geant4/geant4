@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 89518 2015-04-15 14:43:30Z gcosmo $
+# $Id: sources.cmake 96634 2016-04-27 09:31:49Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -62,7 +62,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4ShellCorrection.hh
         G4TritonCoulombBarrier.hh
         G4VCoulombBarrier.hh
-        G4VEmissionProbability.hh
         G4VLevelDensityParameter.hh
     SOURCES
         G4AlphaCoulombBarrier.cc
@@ -84,8 +83,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_util
         G4ShellCorrection.cc
         G4TritonCoulombBarrier.cc
         G4VCoulombBarrier.cc
-        G4VEmissionProbability.cc
-        G4VLevelDensityParameter.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc 84194 2014-10-10 14:29:58Z gcosmo $
+// $Id: G4Event.cc 94950 2016-01-07 11:53:14Z gcosmo $
 //
 
 // G4Event
@@ -37,41 +37,43 @@
 #include "G4VDigiCollection.hh"
 #include "G4ios.hh"
 
-G4ThreadLocal G4Allocator<G4Event> *anEventAllocator = 0;
+G4ThreadLocal G4Allocator<G4Event> *anEventAllocator = nullptr;
 
 G4Event::G4Event()
 :eventID(0),
- thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- randomNumberStatus(0),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
+ thePrimaryVertex(nullptr),numberOfPrimaryVertex(0),
+ HC(nullptr),DC(nullptr),trajectoryContainer(nullptr),
+ eventAborted(false),userInfo(nullptr),
+ randomNumberStatus(nullptr),validRandomNumberStatus(false),
+ randomNumberStatusForProcessing(nullptr),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false),grips(0)
 {
 }
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
- thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
- randomNumberStatus(0),validRandomNumberStatus(false),
- randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
+ thePrimaryVertex(nullptr),numberOfPrimaryVertex(0),
+ HC(nullptr),DC(nullptr),trajectoryContainer(nullptr),
+ eventAborted(false),userInfo(nullptr),
+ randomNumberStatus(nullptr),validRandomNumberStatus(false),
+ randomNumberStatusForProcessing(nullptr),validRandomNumberStatusForProcessing(false),
  keepTheEvent(false),grips(0)
 {
 }
 
 G4Event::~G4Event()
 {
-  if(thePrimaryVertex) delete thePrimaryVertex;
-  if(HC) delete HC;
-  if(DC) delete DC;
+  delete thePrimaryVertex;
+  delete HC;
+  delete DC;
   if(trajectoryContainer)
   {
     trajectoryContainer->clearAndDestroy();
     delete trajectoryContainer;
   }
-  if(userInfo) delete userInfo;
-  if(validRandomNumberStatus) delete randomNumberStatus;
-  if(validRandomNumberStatusForProcessing) delete randomNumberStatusForProcessing;
+  delete userInfo;
+  delete randomNumberStatus;
+  delete randomNumberStatusForProcessing;
 }
 
 G4int G4Event::operator==(const G4Event &right) const

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4ViewParameters.hh 97316 2016-06-01 12:12:58Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -248,6 +248,7 @@ public: // With description
   void SetBackgroundColour     (const G4Colour&);
   void SetPicking              (G4bool);
   void SetRotationStyle        (RotationStyle);
+  void ClearVisAttributesModifiers ();
   void AddVisAttributesModifier
   (const G4ModelingParameters::VisAttributesModifier&);
 
@@ -261,6 +262,19 @@ public: // With description
   
   // Other functions.
   void PrintDifferences (const G4ViewParameters& v) const;
+
+  // Interpolation
+  // Returns a null pointer when no more to be done.  For example:
+  // do {
+  //   G4ViewParameters* vp =
+  //   G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+  //   if (!vp) break;
+  //     ...
+  // } while (true);
+  // Assumes equal intervals
+  static G4ViewParameters* CatmullRomCubicSplineInterpolation
+  (const std::vector<G4ViewParameters>& views,
+   G4int nInterpolationPoints = 50);  // No of interpolations points per interval
 
 private:
   

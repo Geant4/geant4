@@ -32,11 +32,11 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
-#include "G4Exp.hh"
 #include "G4Electron.hh"                                                           
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4Exp.hh"
                                                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -45,13 +45,13 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4LivermoreGammaConversionModelRC::maxZ = 99;
-G4LPhysicsFreeVector* G4LivermoreGammaConversionModelRC::data[] = {0};
+G4LPhysicsFreeVector* G4LivermoreGammaConversionModelRC::data[] = {nullptr};
 
 G4LivermoreGammaConversionModelRC::G4LivermoreGammaConversionModelRC
 (const G4ParticleDefinition*, const G4String& nam)
 :G4VEmModel(nam),isInitialised(false),smallEnergy(2.*MeV)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 
   lowEnergyLimit = 2.0*electron_mass_c2;
   	 
@@ -372,10 +372,10 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(
       G4double HardPhotonThreshold = 0.08;
       G4double r1, r2, r3, beta=0, gbeta, sigt = 582.068, sigh, rejet;
       // , Pi = 2.*acos(0.);
-      G4double cg = (11./2.)/(exp(-11.*HardPhotonThreshold/2.)-exp(-11./2.));
+      G4double cg = (11./2.)/(G4Exp(-11.*HardPhotonThreshold/2.)-G4Exp(-11./2.));
       
       r1 = G4UniformRand();
-      sigh = 1028.58*exp(-HardPhotonThreshold/0.09033) + 136.63; // sigma hard
+      sigh = 1028.58*G4Exp(-HardPhotonThreshold/0.09033) + 136.63; // sigma hard
       
       
       if (r1 > 1.- sigh/sigt) {
@@ -383,8 +383,8 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(
         rejet = 0.;
 	while (r2 > rejet) {
           r3 = G4UniformRand();
-          beta = (-2./11.)*log(exp(-0.08*11./2.)-r3*11./(2.*cg));
-          gbeta = exp(-11.*beta/2.);
+          beta = (-2./11.)*log(G4Exp(-0.08*11./2.)-r3*11./(2.*cg));
+          gbeta = G4Exp(-11.*beta/2.);
           rejet = fbeta(beta)/(8000.*gbeta);
         }
 	HardPhotonEnergy = beta * photonEnergy;
@@ -444,9 +444,7 @@ void G4LivermoreGammaConversionModelRC::SampleSecondaries(
       
   
   // Fix charges randomly
-  
-  
-  
+    
   // Scattered electron (positron) angles. ( Z - axis along the parent photon)
   // Universal distribution suggested by L. Urban (Geant3 manual (1993) Phys211),
   // derived from Tsai distribution (Rev. Mod. Phys. 49, 421 (1977)

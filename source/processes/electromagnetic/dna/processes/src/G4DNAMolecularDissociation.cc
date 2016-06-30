@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularDissociation.cc 93936 2015-11-04 09:37:59Z gcosmo $
+// $Id: G4DNAMolecularDissociation.cc 96060 2016-03-11 12:58:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //

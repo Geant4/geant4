@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvaporationDefaultGEMFactory.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4EvaporationDefaultGEMFactory.hh 96402 2016-04-12 07:30:48Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by J. M. Quesada (July 2009) on base of V. Lara code
@@ -48,7 +48,7 @@ class G4EvaporationDefaultGEMFactory : public G4VEvaporationFactory
 {
 public:
 
-  G4EvaporationDefaultGEMFactory(G4VEvaporationChannel* photoEvaporation);
+  explicit G4EvaporationDefaultGEMFactory(G4VEvaporationChannel* photoEvaporation);
 
   virtual ~G4EvaporationDefaultGEMFactory();
 
@@ -56,10 +56,10 @@ public:
 
 private:
 
-  G4EvaporationDefaultGEMFactory(const G4EvaporationDefaultGEMFactory & );
-  const G4EvaporationDefaultGEMFactory & operator=(const G4EvaporationDefaultGEMFactory & val);
-  G4bool operator==(const G4EvaporationDefaultGEMFactory & val) const;
-  G4bool operator!=(const G4EvaporationDefaultGEMFactory & val) const;
+  G4EvaporationDefaultGEMFactory(const G4EvaporationDefaultGEMFactory & ) = delete;
+  const G4EvaporationDefaultGEMFactory & operator=(const G4EvaporationDefaultGEMFactory & val) = delete;
+  G4bool operator==(const G4EvaporationDefaultGEMFactory & val) const = delete;
+  G4bool operator!=(const G4EvaporationDefaultGEMFactory & val) const = delete;
 
 };
 

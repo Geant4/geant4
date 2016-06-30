@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4MaterialPropertiesTable.icc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -88,58 +88,3 @@ void G4MaterialPropertiesTable::RemoveProperty(const char *key)
   MPT.erase(G4String(key));
 }
 
-inline
-G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
-{
-  // Returns the constant material property corresponding to a key
-
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return j->second;
-  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
-              FatalException, "Constant Material Property not found.");
-  return 0.;
-}
-
-inline
-G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
-{
-  // Returns true if a const property 'key' exists
-
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return true;
-  return false;
-}
-
-inline G4MaterialPropertyVector*
-G4MaterialPropertiesTable::GetProperty(const char *key)
-{
-  // Returns a Material Property Vector corresponding to a key
-
-  MPTiterator i;
-  i = MPT.find(G4String(key));
-  if ( i != MPT.end() ) return i->second;
-  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
-  return NULL;
-}
-
-inline
-void G4MaterialPropertiesTable::AddEntry(const char *key,
-                                         G4double    aPhotonEnergy,
-                                         G4double    aPropertyValue)
-{
-  // Allows to add an entry pair directly to the Material Property Vector
-  // given a key
-
-  G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
-  if (targetVector != 0)
-  {
-    targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
-  }
-  else
-  {
-    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat203",
-                FatalException, "Material Property Vector not found.");
-  }
-}

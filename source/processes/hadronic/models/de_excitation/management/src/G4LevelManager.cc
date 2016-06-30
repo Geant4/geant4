@@ -41,6 +41,7 @@
 // -------------------------------------------------------------------
 
 #include "G4LevelManager.hh"
+#include "G4HadronicException.hh"
 
 G4LevelManager::G4LevelManager(const std::vector<G4float>& energies,
 			       const std::vector<G4float>& lifetime,
@@ -59,3 +60,51 @@ G4LevelManager::~G4LevelManager()
 {
   for(size_t i=0; i<=nTransitions; ++i) { delete fLevels[i]; }
 }
+
+size_t  
+G4LevelManager::NearestLevelIndex(G4double ener, size_t index) const
+{
+  //G4cout<< "index= " << index << " max= " << nTransitions << " exc= " << ener 
+  //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
+  size_t idx = nTransitions;
+  G4float energy = (G4float)ener;
+  // always (nTransitions > 0)
+  if(energy < fLevelEnergy[nTransitions]) {
+    // ground state
+    if(energy <= tolerance)  
+      { idx = 0; }
+    // take next level
+    else if(energy <= fLevelEnergy[1])  
+      { idx = 1; }
+    else {
+      idx = std::min(idx, index);
+      if(std::fabs(energy - fLevelEnergy[idx]) > tolerance) {
+	// take top level
+	if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
+	  { idx = nTransitions; }
+
+	// if shortcuts are not working, make binary search
+	else {
+	  idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
+	    - fLevelEnergy.begin() - 1;
+	  if(energy - fLevelEnergy[idx] > fLevelEnergy[idx+1] - energy) { ++idx; }
+	  //G4cout << "E= " << energy << " " << fLevelEnergy[idx-1] 
+	  //<< " " << fLevelEnergy[idx] << G4endl;
+	}
+      }
+    }
+  }
+  return idx;
+}
+
+#ifdef G4VERBOSE
+void G4LevelManager::PrintError(size_t idx, const G4String& ss) const
+{
+  G4String sss = "G4LevelManager::"+ss+"()";
+  G4ExceptionDescription ed;
+  ed << "Index of a level " << idx << " > " 
+     << nTransitions << " (number of levels)";
+  G4Exception(sss,"had061",JustWarning,ed,"");
+  throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
+}  
+#endif

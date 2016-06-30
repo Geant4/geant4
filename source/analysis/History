@@ -1,4 +1,4 @@
-$Id: History 94599 2015-11-25 13:00:41Z gcosmo $
+$Id: History 97670 2016-06-07 08:22:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,34 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 7, 2016 I. Hrivnacova (analysis-V10-02-05)
+- Updated to g4tools 1.27.4 (Guy Barrand):
+  Fixed remaining Windows-64 compiler warnings.
+  See History_tools for the complete list of modifications.
+
+June 3, 2016 I. Hrivnacova (analysis-V10-02-04)
+- Updated to g4tools 1.27.3 (Guy Barrand):
+  Fixed Windows-64 compiler warnings.
+  See History_tools for the complete list of modifications.
+
+May 25, 2016 I. Hrivnacova (analysis-V10-02-03)
+- Updated to g4tools 1.27.2 (Guy Barrand):
+  Fixed Mac OSX compiler warnings.
+
+May 4, 2016 I. Hrivnacova (analysis-V10-02-02)
+- Updated to g4tools 1.27.1 (Guy Barrand):
+  Fixed gcc 6.1 compiler warnings.
+
+April 18, 2016 I. Hrivnacova (analysis-V10-02-01)
+- Updated to g4tools 1.27.0 (Guy Barrand):
+  Fixed incompatibility with ROOT 5.x and 6.x formats reported in ROOT forum:
+  https://root.cern.ch/phpBB3/viewtopic.php?t=21315
+
+December 8, 2015 I. Hrivnacova (analysis-V10-02-00)
+- Fixed definition of /analysis/ntuple command directory
+  which was created implicitly with the commands and so
+  defined without a guideline and not deleted
 
 November 25, 2015 I. Hrivnacova (analysis-V10-01-47)
 - Adding GNUmakefile in parameters sub-category

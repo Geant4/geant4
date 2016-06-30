@@ -75,13 +75,7 @@ struct compDoubleWithPrecision
 
 typedef std::map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
 
-#if __cplusplus > 199711L && !defined __clang__
-#define stdunique_ptr std::unique_ptr
-#else
-#define stdunique_ptr std::auto_ptr
-#endif
-
-typedef stdunique_ptr<std::set<G4double> > RecordedTimes;
+typedef std::unique_ptr<std::set<G4double> > RecordedTimes;
 typedef std::set<G4double>::iterator RecordedTimesIterator;
 
 class G4MoleculeCounter
@@ -89,15 +83,7 @@ class G4MoleculeCounter
 public:
   typedef std::map<G4MolecularConfiguration*,
                    NbMoleculeAgainstTime> CounterMapType;
-  typedef stdunique_ptr<std::vector<G4MolecularConfiguration*> > RecordedMolecules;
-
-  /*
-   #if __cplusplus > 199711L && !defined __clang__
-   typedef std::unique_ptr<std::vector<G4Molecule> > RecordedMolecules;
-   #else
-   typedef std::auto_ptr<std::vector<G4Molecule> > RecordedMolecules;
-   #endif
-   */
+  typedef std::unique_ptr<std::vector<G4MolecularConfiguration*> > RecordedMolecules;
 
 protected:
   G4MoleculeCounter();
@@ -122,7 +108,7 @@ protected:
     bool fLowerBoundSet;
   };
 
-  stdunique_ptr<Search> fpLastSearch;
+  std::unique_ptr<Search> fpLastSearch;
 
 #ifdef MOLECULE_COUNTER_TESTING
 public:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CookShellCorrections.cc 68724 2013-04-05 09:26:32Z gcosmo $
+// $Id: G4CookShellCorrections.cc 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -72,6 +72,4 @@ G4CookShellCorrections::G4CookShellCorrections()
   for(size_t i=0; i<NTableSize; ++i) { ShellNTable[i] *= CLHEP::MeV; }
 }
 
-G4CookShellCorrections::~G4CookShellCorrections()
-{}
 

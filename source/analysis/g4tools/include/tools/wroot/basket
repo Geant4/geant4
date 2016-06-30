@@ -118,6 +118,13 @@ public:
     mem::increment(s_class().c_str());
 #endif
 
+    if(m_version>1000) {
+    } else {
+      // G.Barrand : April 2016 : WARNING : this is a change in the ROOT/IO format compared to CERN-ROOT/4.x :
+      // We follow the logic found on CERN-ROOT/5.x that enforces "+1000" on all baskets.
+      m_version += 1000;
+    }
+
     m_key_length = header_record_size(m_version);
     initialize(0);
 

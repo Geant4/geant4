@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc 92942 2015-09-22 07:31:39Z gcosmo $
+// $Id: G4OpenGLXViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 // 
 // Andrew Walkden  7th February 1997
@@ -92,6 +92,15 @@ extern "C" {
 }
 
 void G4OpenGLXViewer::SetView () {
+#ifdef G4MULTITHREADED
+  if (G4Threading::IsMasterThread()) {
+    glXMakeCurrent (dpy, win, cxMaster);
+  } else {
+    glXMakeCurrent (dpy, win, cxVisSubThread);
+  }
+#else
+  glXMakeCurrent (dpy, win, cxMaster);
+#endif
   G4OpenGLViewer::SetView ();
 }
 

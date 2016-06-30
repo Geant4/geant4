@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -563,7 +563,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
@@ -579,7 +579,7 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
@@ -699,7 +699,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -735,7 +735,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
@@ -861,44 +861,45 @@ Index : 2     used in the geometry : Yes
 ### Run 0 starts.
 ### Run 0 start analysis activation: 
  BinsCluster= 1    BinsE= 20   Emax(keV)= 60
- WidthALICE= 0      FactorALICE= 325
+ WidthALICE(keV)= 0      FactorALICE= 325
 ... open Root analysis file : testem8.root - done
-### PrimaryGeneratorAction::GeneratePrimaries ##########
-### proton  E(MeV)= 200000  Z(mm)= -12.7061
-########################################################
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.32s Real=0.33s Sys=0s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0164919
+  User=0.14s Real=0.14s Sys=0s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0160136
+ ====================================================
+   Beam Particle: proton
+   Ekin(MeV)    = 200000
+   Z(mm)        = -12.7061
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.492 +- 0.63672 keV    RMS/Emean = 1.2209
-   Mean number of steps in absorber= 1.267  mean number of ion-clusters = 824.92 MeanCluster= 824.59
+   Mean energy deposit in absorber = 16.014 +- 0.59917 keV    RMS/Emean = 1.1832
+   Mean number of steps in absorber= 1.25  mean number of ion-clusters = 801.28 MeanCluster= 800.58
 
- ====== Energy deposit distribution   Noverflows= 0.013 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.012 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           5       0.005
-    2         6          89       0.089
-    3         9         271       0.271
-    4        12         254       0.254
-    5        15         152       0.152
-    6        18          84       0.084
-    7        21          42       0.042
-    8        24          18       0.018
-    9        27          18       0.018
-   10        30          10        0.01
-   11        33          12       0.012
+    1         3           4       0.004
+    2         6         104       0.104
+    3         9         266       0.266
+    4        12         239       0.239
+    5        15         147       0.147
+    6        18          95       0.095
+    7        21          46       0.046
+    8        24          31       0.031
+    9        27          22       0.022
+   10        30           9       0.009
+   11        33          11       0.011
    12        36           3       0.003
-   13        39           5       0.005
-   14        42           7       0.007
-   15        45           6       0.006
-   16        48           4       0.004
-   17        51           3       0.003
-   18        54           3       0.003
+   13        39           3       0.003
+   14        42           0           0
+   15        45           2       0.002
+   16        48           3       0.003
+   17        51           1       0.001
+   18        54           1       0.001
    19        57           1       0.001
  ================== run end ==========================
 ... write Root file : testem8.root - done

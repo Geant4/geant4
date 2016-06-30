@@ -47,6 +47,9 @@
 #include "G4PhysListStamper.hh"
 #include "G4PhysicsConstructorRegistry.hh"
 
+// include this with this compilation unit so static builds pull them in
+#include "G4RegisterPhysLists.icc"
+
 G4ThreadLocal G4PhysListRegistry* G4PhysListRegistry::theInstance = 0;
 
 G4PhysListRegistry* G4PhysListRegistry::Instance()
@@ -142,7 +145,7 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
       ED << "]" << G4endl;
     }
     G4Exception("G4PhysListRegistry::GetModularPhysicsList", 
-                "PhysicsList001", FatalException, ED);
+                "PhysicsList002", FatalException, ED);
     return 0;
   }
 
@@ -161,13 +164,13 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
     G4String pcname = physicsExtensions[extName];
     // this doesn't have a verbose option ... it should
     // but G4PhysicsConstructorFactory doesn't support it
-    G4VPhysicsConstructor* pc = pcRegistry->GetPhysicsConstructor(pcname);
+    G4VPhysicsConstructor* pctor = pcRegistry->GetPhysicsConstructor(pcname);
     G4String reporreg = "";
     if ( physReplace[ipc] > 0 ) {
-      pl->ReplacePhysics(pc);
+      pl->ReplacePhysics(pctor);
       reporreg = "ReplacePhysics ";
     } else {
-      pl->RegisterPhysics(pc);
+      pl->RegisterPhysics(pctor);
       reporreg = "RegisterPhysics";
     }
     if ( verbose > 0 ) G4cout << "<<< " << reporreg << " with " << pcname 

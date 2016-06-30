@@ -41,25 +41,37 @@
 // -------------------------------------------------------------------
 
 #include "G4NucLevel.hh"
+#include "G4HadronicException.hh"
 
-G4NucLevel::G4NucLevel(const std::vector<G4float>&  eTransition,
-		       const std::vector<G4float>&  wLevelGamma,
-		       const std::vector<G4float>&  wLevelGammaE,
-		       const std::vector<G4float>&  wGamma,
-		       const std::vector<G4int>&  vTrans,
+G4NucLevel::G4NucLevel(const std::vector<size_t>&  idxTrans,
+		       const std::vector<G4int>&   vTrans,
+		       const std::vector<G4float>& wLevelGamma,
+		       const std::vector<G4float>& wLevelGammaE,
+		       const std::vector<G4float>& wGamma,
+      	               const std::vector<G4float>& vRatio,
 		       const std::vector<const std::vector<G4float>*>& wShell)
-  :fFinalEnergy(eTransition),fGammaCumProbability(wLevelGamma),
+  :fFinalIndex(idxTrans),fTrans(vTrans),fGammaCumProbability(wLevelGamma),
    fGammaECumProbability(wLevelGammaE),fGammaProbability(wGamma),
-   fTrans(vTrans),fShellProbability(wShell)
+   fMpRatio(vRatio),fShellProbability(wShell)
 {
-  length = eTransition.size();
+  length = fFinalIndex.size();
 }
 
 G4NucLevel::~G4NucLevel()
 {
-  //G4cout << "G4NucLevel: length= " << length << " " 
-  //	 << fGammaProbability.size() << G4endl;
   for(size_t i=0; i<length; ++i) {
     delete fShellProbability[i];
   }
 }
+
+#ifdef G4VERBOSE
+void G4NucLevel::PrintError(size_t idx, const G4String& ss) const
+{
+  G4String sss = "G4NucLevel::"+ss+"()";
+  G4ExceptionDescription ed;
+  ed << "Index of a level " << idx << " >= " 
+     << length << " (number of transitions)";
+  G4Exception(sss,"had061",JustWarning,ed,"");
+  throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
+}  
+#endif

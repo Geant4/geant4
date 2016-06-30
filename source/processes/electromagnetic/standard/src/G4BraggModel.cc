@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4BraggModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -79,8 +79,7 @@
 
 using namespace std;
 
-static const G4double invLog10 = 1.0/G4Log(10.);
-G4PSTARStopping* G4BraggModel::fPSTAR = 0;
+G4PSTARStopping* G4BraggModel::fPSTAR = nullptr;
 
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
@@ -89,10 +88,9 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
     protonMassAMU(1.007276),
     iMolecula(-1),
     iPSTAR(-1),
-    isIon(false),
-    isInitialised(false)
+    isIon(false)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   SetHighEnergyLimit(2.0*MeV);
 
   lowestKinEnergy  = 1.0*keV;
@@ -109,7 +107,7 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
 
 G4BraggModel::~G4BraggModel()
 {
-  if(IsMaster()) { delete fPSTAR; fPSTAR = 0; }
+  if(IsMaster()) { delete fPSTAR; fPSTAR = nullptr; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -122,8 +120,12 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
   // always false before the run
   SetDeexcitationFlag(false);
 
-  if(!isInitialised) {
-    isInitialised = true;
+  if(IsMaster()) {
+    if(nullptr == fPSTAR)  { fPSTAR = new G4PSTARStopping(); }
+    if(particle->GetPDGMass() < GeV) { fPSTAR->Initialise(); }
+  }
+
+  if(nullptr == fParticleChange) {
 
     if(UseAngularGeneratorFlag() && !GetAngularDistribution()) {
       SetAngularDistribution(new G4DeltaAngle());
@@ -135,9 +137,7 @@ void G4BraggModel::Initialise(const G4ParticleDefinition* p,
        pname != "hydrogen") { isIon = true; }
 
     fParticleChange = GetParticleChangeForLoss();
-    if(!fPSTAR) { fPSTAR = new G4PSTARStopping(); }
   }
-  if(IsMaster() && particle->GetPDGMass() < GeV) { fPSTAR->Initialise(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -251,9 +251,7 @@ G4double G4BraggModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // now compute the total ionization loss
 
-  if (dedx < 0.0) { dedx = 0.0; }
-
-  dedx *= chargeSquare;
+  dedx = std::max(dedx, 0.0) * chargeSquare;
 
   //G4cout << "E(MeV)= " << tkin/MeV << " dedx= " << dedx 
   //         << "  " << material->GetName() << G4endl;
@@ -394,35 +392,40 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
 
     G4double T = kineticEnergy/(keV*protonMassAMU) ; 
 
-    static const G4double a[11][5] = {
-   {1.187E+1, 1.343E+1, 1.069E+4, 7.723E+2, 2.153E-2},
-   {7.802E+0, 8.814E+0, 8.303E+3, 7.446E+2, 7.966E-3}, 
-   {7.294E+0, 8.284E+0, 5.010E+3, 4.544E+2, 8.153E-3}, 
-   {8.646E+0, 9.800E+0, 7.066E+3, 4.581E+2, 9.383E-3}, 
-   {1.286E+1, 1.462E+1, 5.625E+3, 2.621E+3, 3.512E-2}, 
-   {3.229E+1, 3.696E+1, 8.918E+3, 3.244E+3, 1.273E-1}, 
-   {1.604E+1, 1.825E+1, 6.967E+3, 2.307E+3, 3.775E-2}, 
-   {8.049E+0, 9.099E+0, 9.257E+3, 3.846E+2, 1.007E-2},
-   {4.015E+0, 4.542E+0, 3.955E+3, 4.847E+2, 7.904E-3}, 
-   {4.571E+0, 5.173E+0, 4.346E+3, 4.779E+2, 8.572E-3},
-   {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2} };
+    static const G4float a[11][5] = {
+   {1.187E+1f, 1.343E+1f, 1.069E+4f, 7.723E+2f, 2.153E-2f},
+   {7.802E+0f, 8.814E+0f, 8.303E+3f, 7.446E+2f, 7.966E-3f}, 
+   {7.294E+0f, 8.284E+0f, 5.010E+3f, 4.544E+2f, 8.153E-3f}, 
+   {8.646E+0f, 9.800E+0f, 7.066E+3f, 4.581E+2f, 9.383E-3f}, 
+   {1.286E+1f, 1.462E+1f, 5.625E+3f, 2.621E+3f, 3.512E-2f}, 
+   {3.229E+1f, 3.696E+1f, 8.918E+3f, 3.244E+3f, 1.273E-1f}, 
+   {1.604E+1f, 1.825E+1f, 6.967E+3f, 2.307E+3f, 3.775E-2f}, 
+   {8.049E+0f, 9.099E+0f, 9.257E+3f, 3.846E+2f, 1.007E-2f},
+   {4.015E+0f, 4.542E+0f, 3.955E+3f, 4.847E+2f, 7.904E-3f}, 
+   {4.571E+0f, 5.173E+0f, 4.346E+3f, 4.779E+2f, 8.572E-3f},
+   {2.631E+0f, 2.601E+0f, 1.701E+3f, 1.279E+3f, 1.638E-2f} };
 
-    static const G4double atomicWeight[11] = {
-    101.96128, 44.0098, 16.0426, 28.0536, 42.0804,
-    104.1512, 44.665, 60.0843, 18.0152, 18.0152, 12.0};       
+    static const G4float atomicWeight[11] = {
+    101.96128f, 44.0098f, 16.0426f, 28.0536f, 42.0804f,
+    104.1512f, 44.665f, 60.0843f, 18.0152f, 18.0152f, 12.0f};       
 
     if ( T < 10.0 ) {
-      ionloss = a[iMolecula][0] * sqrt(T) ;
+      ionloss = ((G4double)(a[iMolecula][0])) * sqrt(T) ;
     
     } else if ( T < 10000.0 ) {
-      G4double slow  = a[iMolecula][1] * G4Exp(G4Log(T)* 0.45);
-      G4double shigh = G4Log( 1.0 + a[iMolecula][3]/T  
-                     + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
+      G4double x1 = (G4double)(a[iMolecula][1]);
+      G4double x2 = (G4double)(a[iMolecula][2]);
+      G4double x3 = (G4double)(a[iMolecula][3]);
+      G4double x4 = (G4double)(a[iMolecula][4]);
+      G4double slow  = x1 * G4Exp(G4Log(T)* 0.45);
+      G4double shigh = G4Log( 1.0 + x3/T  + x4*T ) * x2/T;
       ionloss = slow*shigh / (slow + shigh) ;     
     } 
 
-    if ( ionloss < 0.0) ionloss = 0.0 ;
+    ionloss = std::max(ionloss, 0.0);
     if ( 10 == iMolecula ) { 
+      static const G4double invLog10 = 1.0/G4Log(10.);
+
       if (T < 100.0) {
         ionloss *= (1.0+0.023+0.0066*G4Log(T)*invLog10);  
       }
@@ -433,7 +436,7 @@ G4double G4BraggModel::StoppingPower(const G4Material* material,
         ionloss *=(1.0+0.089-0.0248*G4Log(700.-99.)*invLog10);
       }
     }
-    ionloss /= atomicWeight[iMolecula];
+    ionloss /= (G4double)atomicWeight[iMolecula];
 
   // pure material (normally not the case for this function)
   } else if(1 == (material->GetNumberOfElements())) {
@@ -460,131 +463,135 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
 
   G4double T = kineticEnergy/(keV*protonMassAMU) ; 
   
-  static const G4double a[92][5] = {
-   {1.254E+0, 1.440E+0, 2.426E+2, 1.200E+4, 1.159E-1},
-   {1.229E+0, 1.397E+0, 4.845E+2, 5.873E+3, 5.225E-2},
-   {1.411E+0, 1.600E+0, 7.256E+2, 3.013E+3, 4.578E-2},
-   {2.248E+0, 2.590E+0, 9.660E+2, 1.538E+2, 3.475E-2},
-   {2.474E+0, 2.815E+0, 1.206E+3, 1.060E+3, 2.855E-2},
-   {2.631E+0, 2.601E+0, 1.701E+3, 1.279E+3, 1.638E-2},
-   {2.954E+0, 3.350E+0, 1.683E+3, 1.900E+3, 2.513E-2},
-   {2.652E+0, 3.000E+0, 1.920E+3, 2.000E+3, 2.230E-2},
-   {2.085E+0, 2.352E+0, 2.157E+3, 2.634E+3, 1.816E-2},
-   {1.951E+0, 2.199E+0, 2.393E+3, 2.699E+3, 1.568E-2},
+  static const G4float a[92][5] = {
+   {1.254E+0f, 1.440E+0f, 2.426E+2f, 1.200E+4f, 1.159E-1f},
+   {1.229E+0f, 1.397E+0f, 4.845E+2f, 5.873E+3f, 5.225E-2f},
+   {1.411E+0f, 1.600E+0f, 7.256E+2f, 3.013E+3f, 4.578E-2f},
+   {2.248E+0f, 2.590E+0f, 9.660E+2f, 1.538E+2f, 3.475E-2f},
+   {2.474E+0f, 2.815E+0f, 1.206E+3f, 1.060E+3f, 2.855E-2f},
+   {2.631E+0f, 2.601E+0f, 1.701E+3f, 1.279E+3f, 1.638E-2f},
+   {2.954E+0f, 3.350E+0f, 1.683E+3f, 1.900E+3f, 2.513E-2f},
+   {2.652E+0f, 3.000E+0f, 1.920E+3f, 2.000E+3f, 2.230E-2f},
+   {2.085E+0f, 2.352E+0f, 2.157E+3f, 2.634E+3f, 1.816E-2f},
+   {1.951E+0f, 2.199E+0f, 2.393E+3f, 2.699E+3f, 1.568E-2f},
        // Z= 11-20
-   {2.542E+0, 2.869E+0, 2.628E+3, 1.854E+3, 1.472E-2},
-   {3.791E+0, 4.293E+0, 2.862E+3, 1.009E+3, 1.397E-2},
-   {4.154E+0, 4.739E+0, 2.766E+3, 1.645E+2, 2.023E-2},
-   {4.914E+0, 5.598E+0, 3.193E+3, 2.327E+2, 1.419E-2},
-   {3.232E+0, 3.647E+0, 3.561E+3, 1.560E+3, 1.267E-2},
-   {3.447E+0, 3.891E+0, 3.792E+3, 1.219E+3, 1.211E-2},
-   {5.301E+0, 6.008E+0, 3.969E+3, 6.451E+2, 1.183E-2},
-   {5.731E+0, 6.500E+0, 4.253E+3, 5.300E+2, 1.123E-2},
-   {5.152E+0, 5.833E+0, 4.482E+3, 5.457E+2, 1.129E-2},
-   {5.521E+0, 6.252E+0, 4.710E+3, 5.533E+2, 1.112E-2},
+   {2.542E+0f, 2.869E+0f, 2.628E+3f, 1.854E+3f, 1.472E-2f},
+   {3.791E+0f, 4.293E+0f, 2.862E+3f, 1.009E+3f, 1.397E-2f},
+   {4.154E+0f, 4.739E+0f, 2.766E+3f, 1.645E+2f, 2.023E-2f},
+   {4.914E+0f, 5.598E+0f, 3.193E+3f, 2.327E+2f, 1.419E-2f},
+   {3.232E+0f, 3.647E+0f, 3.561E+3f, 1.560E+3f, 1.267E-2f},
+   {3.447E+0f, 3.891E+0f, 3.792E+3f, 1.219E+3f, 1.211E-2f},
+   {5.301E+0f, 6.008E+0f, 3.969E+3f, 6.451E+2f, 1.183E-2f},
+   {5.731E+0f, 6.500E+0f, 4.253E+3f, 5.300E+2f, 1.123E-2f},
+   {5.152E+0f, 5.833E+0f, 4.482E+3f, 5.457E+2f, 1.129E-2f},
+   {5.521E+0f, 6.252E+0f, 4.710E+3f, 5.533E+2f, 1.112E-2f},
        // Z= 21-30
-   {5.201E+0, 5.884E+0, 4.938E+3, 5.609E+2, 9.995E-3},
-   {4.858E+0, 5.489E+0, 5.260E+3, 6.511E+2, 8.930E-3},
-   {4.479E+0, 5.055E+0, 5.391E+3, 9.523E+2, 9.117E-3},
-   {3.983E+0, 4.489E+0, 5.616E+3, 1.336E+3, 8.413E-3},
-   {3.469E+0, 3.907E+0, 5.725E+3, 1.461E+3, 8.829E-3},
-   {3.519E+0, 3.963E+0, 6.065E+3, 1.243E+3, 7.782E-3},
-   {3.140E+0, 3.535E+0, 6.288E+3, 1.372E+3, 7.361E-3},
-   {3.553E+0, 4.004E+0, 6.205E+3, 5.551E+2, 8.763E-3},
-   {3.696E+0, 4.194E+0, 4.649E+3, 8.113E+1, 2.242E-2},
-   {4.210E+0, 4.750E+0, 6.953E+3, 2.952E+2, 6.809E-3},
+   {5.201E+0f, 5.884E+0f, 4.938E+3f, 5.609E+2f, 9.995E-3f},
+   {4.858E+0f, 5.489E+0f, 5.260E+3f, 6.511E+2f, 8.930E-3f},
+   {4.479E+0f, 5.055E+0f, 5.391E+3f, 9.523E+2f, 9.117E-3f},
+   {3.983E+0f, 4.489E+0f, 5.616E+3f, 1.336E+3f, 8.413E-3f},
+   {3.469E+0f, 3.907E+0f, 5.725E+3f, 1.461E+3f, 8.829E-3f},
+   {3.519E+0f, 3.963E+0f, 6.065E+3f, 1.243E+3f, 7.782E-3f},
+   {3.140E+0f, 3.535E+0f, 6.288E+3f, 1.372E+3f, 7.361E-3f},
+   {3.553E+0f, 4.004E+0f, 6.205E+3f, 5.551E+2f, 8.763E-3f},
+   {3.696E+0f, 4.194E+0f, 4.649E+3f, 8.113E+1f, 2.242E-2f},
+   {4.210E+0f, 4.750E+0f, 6.953E+3f, 2.952E+2f, 6.809E-3f},
        // Z= 31-40
-   {5.041E+0, 5.697E+0, 7.173E+3, 2.026E+2, 6.725E-3},
-   {5.554E+0, 6.300E+0, 6.496E+3, 1.100E+2, 9.689E-3},
-   {5.323E+0, 6.012E+0, 7.611E+3, 2.925E+2, 6.447E-3},
-   {5.874E+0, 6.656E+0, 7.395E+3, 1.175E+2, 7.684E-3},
-   {6.658E+0, 7.536E+0, 7.694E+3, 2.223E+2, 6.509E-3},
-   {6.413E+0, 7.240E+0, 1.185E+4, 1.537E+2, 2.880E-3},
-   {5.694E+0, 6.429E+0, 8.478E+3, 2.929E+2, 6.087E-3},
-   {6.339E+0, 7.159E+0, 8.693E+3, 3.303E+2, 6.003E-3},
-   {6.407E+0, 7.234E+0, 8.907E+3, 3.678E+2, 5.889E-3},
-   {6.734E+0, 7.603E+0, 9.120E+3, 4.052E+2, 5.765E-3},
+   {5.041E+0f, 5.697E+0f, 7.173E+3f, 2.026E+2f, 6.725E-3f},
+   {5.554E+0f, 6.300E+0f, 6.496E+3f, 1.100E+2f, 9.689E-3f},
+   {5.323E+0f, 6.012E+0f, 7.611E+3f, 2.925E+2f, 6.447E-3f},
+   {5.874E+0f, 6.656E+0f, 7.395E+3f, 1.175E+2f, 7.684E-3f},
+   {6.658E+0f, 7.536E+0f, 7.694E+3f, 2.223E+2f, 6.509E-3f},
+   {6.413E+0f, 7.240E+0f, 1.185E+4f, 1.537E+2f, 2.880E-3f},
+   {5.694E+0f, 6.429E+0f, 8.478E+3f, 2.929E+2f, 6.087E-3f},
+   {6.339E+0f, 7.159E+0f, 8.693E+3f, 3.303E+2f, 6.003E-3f},
+   {6.407E+0f, 7.234E+0f, 8.907E+3f, 3.678E+2f, 5.889E-3f},
+   {6.734E+0f, 7.603E+0f, 9.120E+3f, 4.052E+2f, 5.765E-3f},
        // Z= 41-50
-   {6.901E+0, 7.791E+0, 9.333E+3, 4.427E+2, 5.587E-3},
-   {6.424E+0, 7.248E+0, 9.545E+3, 4.802E+2, 5.376E-3},
-   {6.799E+0, 7.671E+0, 9.756E+3, 5.176E+2, 5.315E-3},
-   {6.109E+0, 6.887E+0, 9.966E+3, 5.551E+2, 5.151E-3},
-   {5.924E+0, 6.677E+0, 1.018E+4, 5.925E+2, 4.919E-3},
-   {5.238E+0, 5.900E+0, 1.038E+4, 6.300E+2, 4.758E-3},
-   // {5.623,    6.354,    7160.0,   337.6,    0.013940}, // Ag Ziegler77
-   {5.345E+0, 6.038E+0, 6.790E+3, 3.978E+2, 1.676E-2}, // Ag ICRU49
-   {5.814E+0, 6.554E+0, 1.080E+4, 3.555E+2, 4.626E-3},
-   {6.229E+0, 7.024E+0, 1.101E+4, 3.709E+2, 4.540E-3},
-   {6.409E+0, 7.227E+0, 1.121E+4, 3.864E+2, 4.474E-3},
+   {6.901E+0f, 7.791E+0f, 9.333E+3f, 4.427E+2f, 5.587E-3f},
+   {6.424E+0f, 7.248E+0f, 9.545E+3f, 4.802E+2f, 5.376E-3f},
+   {6.799E+0f, 7.671E+0f, 9.756E+3f, 5.176E+2f, 5.315E-3f},
+   {6.109E+0f, 6.887E+0f, 9.966E+3f, 5.551E+2f, 5.151E-3f},
+   {5.924E+0f, 6.677E+0f, 1.018E+4f, 5.925E+2f, 4.919E-3f},
+   {5.238E+0f, 5.900E+0f, 1.038E+4f, 6.300E+2f, 4.758E-3f},
+   // {5.623f,    6.354f,    7160.0f,   337.6f,    0.013940f}, // Ag Ziegler77
+   {5.345E+0f, 6.038E+0f, 6.790E+3f, 3.978E+2f, 1.676E-2f}, // Ag ICRU49
+   {5.814E+0f, 6.554E+0f, 1.080E+4f, 3.555E+2f, 4.626E-3f},
+   {6.229E+0f, 7.024E+0f, 1.101E+4f, 3.709E+2f, 4.540E-3f},
+   {6.409E+0f, 7.227E+0f, 1.121E+4f, 3.864E+2f, 4.474E-3f},
        // Z= 51-60
-   {7.500E+0, 8.480E+0, 8.608E+3, 3.480E+2, 9.074E-3},
-   {6.979E+0, 7.871E+0, 1.162E+4, 3.924E+2, 4.402E-3},
-   {7.725E+0, 8.716E+0, 1.183E+4, 3.948E+2, 4.376E-3},
-   {8.337E+0, 9.425E+0, 1.051E+4, 2.696E+2, 6.206E-3},
-   {7.287E+0, 8.218E+0, 1.223E+4, 3.997E+2, 4.447E-3},
-   {7.899E+0, 8.911E+0, 1.243E+4, 4.021E+2, 4.511E-3},
-   {8.041E+0, 9.071E+0, 1.263E+4, 4.045E+2, 4.540E-3},
-   {7.488E+0, 8.444E+0, 1.283E+4, 4.069E+2, 4.420E-3},
-   {7.291E+0, 8.219E+0, 1.303E+4, 4.093E+2, 4.298E-3},
-   {7.098E+0, 8.000E+0, 1.323E+4, 4.118E+2, 4.182E-3},
+   {7.500E+0f, 8.480E+0f, 8.608E+3f, 3.480E+2f, 9.074E-3f},
+   {6.979E+0f, 7.871E+0f, 1.162E+4f, 3.924E+2f, 4.402E-3f},
+   {7.725E+0f, 8.716E+0f, 1.183E+4f, 3.948E+2f, 4.376E-3f},
+   {8.337E+0f, 9.425E+0f, 1.051E+4f, 2.696E+2f, 6.206E-3f},
+   {7.287E+0f, 8.218E+0f, 1.223E+4f, 3.997E+2f, 4.447E-3f},
+   {7.899E+0f, 8.911E+0f, 1.243E+4f, 4.021E+2f, 4.511E-3f},
+   {8.041E+0f, 9.071E+0f, 1.263E+4f, 4.045E+2f, 4.540E-3f},
+   {7.488E+0f, 8.444E+0f, 1.283E+4f, 4.069E+2f, 4.420E-3f},
+   {7.291E+0f, 8.219E+0f, 1.303E+4f, 4.093E+2f, 4.298E-3f},
+   {7.098E+0f, 8.000E+0f, 1.323E+4f, 4.118E+2f, 4.182E-3f},
        // Z= 61-70
-   {6.909E+0, 7.786E+0, 1.343E+4, 4.142E+2, 4.058E-3},
-   {6.728E+0, 7.580E+0, 1.362E+4, 4.166E+2, 3.976E-3},
-   {6.551E+0, 7.380E+0, 1.382E+4, 4.190E+2, 3.877E-3},
-   {6.739E+0, 7.592E+0, 1.402E+4, 4.214E+2, 3.863E-3},
-   {6.212E+0, 6.996E+0, 1.421E+4, 4.239E+2, 3.725E-3},
-   {5.517E+0, 6.210E+0, 1.440E+4, 4.263E+2, 3.632E-3},
-   {5.220E+0, 5.874E+0, 1.460E+4, 4.287E+2, 3.498E-3},
-   {5.071E+0, 5.706E+0, 1.479E+4, 4.330E+2, 3.405E-3},
-   {4.926E+0, 5.542E+0, 1.498E+4, 4.335E+2, 3.342E-3},
-   {4.788E+0, 5.386E+0, 1.517E+4, 4.359E+2, 3.292E-3},
+   {6.909E+0f, 7.786E+0f, 1.343E+4f, 4.142E+2f, 4.058E-3f},
+   {6.728E+0f, 7.580E+0f, 1.362E+4f, 4.166E+2f, 3.976E-3f},
+   {6.551E+0f, 7.380E+0f, 1.382E+4f, 4.190E+2f, 3.877E-3f},
+   {6.739E+0f, 7.592E+0f, 1.402E+4f, 4.214E+2f, 3.863E-3f},
+   {6.212E+0f, 6.996E+0f, 1.421E+4f, 4.239E+2f, 3.725E-3f},
+   {5.517E+0f, 6.210E+0f, 1.440E+4f, 4.263E+2f, 3.632E-3f},
+   {5.220E+0f, 5.874E+0f, 1.460E+4f, 4.287E+2f, 3.498E-3f},
+   {5.071E+0f, 5.706E+0f, 1.479E+4f, 4.330E+2f, 3.405E-3f},
+   {4.926E+0f, 5.542E+0f, 1.498E+4f, 4.335E+2f, 3.342E-3f},
+   {4.788E+0f, 5.386E+0f, 1.517E+4f, 4.359E+2f, 3.292E-3f},
        // Z= 71-80
-   {4.893E+0, 5.505E+0, 1.536E+4, 4.384E+2, 3.243E-3},
-   {5.028E+0, 5.657E+0, 1.555E+4, 4.408E+2, 3.195E-3},
-   {4.738E+0, 5.329E+0, 1.574E+4, 4.432E+2, 3.186E-3},
-   {4.587E+0, 5.160E+0, 1.541E+4, 4.153E+2, 3.406E-3},
-   {5.201E+0, 5.851E+0, 1.612E+4, 4.416E+2, 3.122E-3},
-   {5.071E+0, 5.704E+0, 1.630E+4, 4.409E+2, 3.082E-3},
-   {4.946E+0, 5.563E+0, 1.649E+4, 4.401E+2, 2.965E-3},
-   {4.477E+0, 5.034E+0, 1.667E+4, 4.393E+2, 2.871E-3},
-   //  {4.856,    5.460,    18320.0,  438.5,    0.002542}, //Ziegler77
-   {4.844E+0, 5.458E+0, 7.852E+3, 9.758E+2, 2.077E-2}, //ICRU49
-   {4.307E+0, 4.843E+0, 1.704E+4, 4.878E+2, 2.882E-3},
+   {4.893E+0f, 5.505E+0f, 1.536E+4f, 4.384E+2f, 3.243E-3f},
+   {5.028E+0f, 5.657E+0f, 1.555E+4f, 4.408E+2f, 3.195E-3f},
+   {4.738E+0f, 5.329E+0f, 1.574E+4f, 4.432E+2f, 3.186E-3f},
+   {4.587E+0f, 5.160E+0f, 1.541E+4f, 4.153E+2f, 3.406E-3f},
+   {5.201E+0f, 5.851E+0f, 1.612E+4f, 4.416E+2f, 3.122E-3f},
+   {5.071E+0f, 5.704E+0f, 1.630E+4f, 4.409E+2f, 3.082E-3f},
+   {4.946E+0f, 5.563E+0f, 1.649E+4f, 4.401E+2f, 2.965E-3f},
+   {4.477E+0f, 5.034E+0f, 1.667E+4f, 4.393E+2f, 2.871E-3f},
+   //  {4.856f,    5.460f,    18320.0f,  438.5f,    0.002542f}, //Ziegler77
+   {4.844E+0f, 5.458E+0f, 7.852E+3f, 9.758E+2f, 2.077E-2f}, //ICRU49
+   {4.307E+0f, 4.843E+0f, 1.704E+4f, 4.878E+2f, 2.882E-3f},
        // Z= 81-90
-   {4.723E+0, 5.311E+0, 1.722E+4, 5.370E+2, 2.913E-3},
-   {5.319E+0, 5.982E+0, 1.740E+4, 5.863E+2, 2.871E-3},
-   {5.956E+0, 6.700E+0, 1.780E+4, 6.770E+2, 2.660E-3},
-   {6.158E+0, 6.928E+0, 1.777E+4, 5.863E+2, 2.812E-3},
-   {6.203E+0, 6.979E+0, 1.795E+4, 5.863E+2, 2.776E-3},
-   {6.181E+0, 6.954E+0, 1.812E+4, 5.863E+2, 2.748E-3},
-   {6.949E+0, 7.820E+0, 1.830E+4, 5.863E+2, 2.737E-3},
-   {7.506E+0, 8.448E+0, 1.848E+4, 5.863E+2, 2.727E-3},
-   {7.648E+0, 8.609E+0, 1.866E+4, 5.863E+2, 2.697E-3},
-   {7.711E+0, 8.679E+0, 1.883E+4, 5.863E+2, 2.641E-3},
+   {4.723E+0f, 5.311E+0f, 1.722E+4f, 5.370E+2f, 2.913E-3f},
+   {5.319E+0f, 5.982E+0f, 1.740E+4f, 5.863E+2f, 2.871E-3f},
+   {5.956E+0f, 6.700E+0f, 1.780E+4f, 6.770E+2f, 2.660E-3f},
+   {6.158E+0f, 6.928E+0f, 1.777E+4f, 5.863E+2f, 2.812E-3f},
+   {6.203E+0f, 6.979E+0f, 1.795E+4f, 5.863E+2f, 2.776E-3f},
+   {6.181E+0f, 6.954E+0f, 1.812E+4f, 5.863E+2f, 2.748E-3f},
+   {6.949E+0f, 7.820E+0f, 1.830E+4f, 5.863E+2f, 2.737E-3f},
+   {7.506E+0f, 8.448E+0f, 1.848E+4f, 5.863E+2f, 2.727E-3f},
+   {7.648E+0f, 8.609E+0f, 1.866E+4f, 5.863E+2f, 2.697E-3f},
+   {7.711E+0f, 8.679E+0f, 1.883E+4f, 5.863E+2f, 2.641E-3f},
        // Z= 91-92
-   {7.407E+0, 8.336E+0, 1.901E+4, 5.863E+2, 2.603E-3},
-   {7.290E+0, 8.204E+0, 1.918E+4, 5.863E+2, 2.673E-3}
+   {7.407E+0f, 8.336E+0f, 1.901E+4f, 5.863E+2f, 2.603E-3f},
+   {7.290E+0f, 8.204E+0f, 1.918E+4f, 5.863E+2f, 2.673E-3f}
   };
 
   G4double fac = 1.0 ;
 
     // Carbon specific case for E < 40 keV
   if ( T < 40.0 && 5 == i) {
-    fac = sqrt(T/40.0) ;
-    T = 40.0 ;  
+    fac = sqrt(T*0.025);
+    T = 40.0;  
 
     // Free electron gas model
   } else if ( T < 10.0 ) { 
     fac = sqrt(T*0.1) ;
-    T =10.0 ;
+    T = 10.0;
   }
 
   // Main parametrisation
-  G4double slow  = a[i][1] * G4Exp(G4Log(T) * 0.45) ;
-  G4double shigh = G4Log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
-  ionloss = slow*shigh*fac / (slow + shigh) ;     
+  G4double x1 = (G4double)(a[i][1]);
+  G4double x2 = (G4double)(a[i][2]);
+  G4double x3 = (G4double)(a[i][3]);
+  G4double x4 = (G4double)(a[i][4]);
+  G4double slow  = x1 * G4Exp(G4Log(T) * 0.45);
+  G4double shigh = G4Log( 1.0 + x3/T + x4*T ) * x2/T;
+  ionloss = slow*shigh*fac / (slow + shigh);
   
-  if ( ionloss < 0.0) { ionloss = 0.0; }
+  ionloss = std::max(ionloss, 0.0);
   
   return ionloss;
 }
@@ -637,7 +644,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector();
   
     //  Loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; i++) {
+    for (G4int i=0; i<numberOfElements; ++i) {
       const G4Element* element = (*theElementVector)[i] ;
       G4double z = element->GetZ() ;
       eloss    += ElectronicStoppingPower(z,kineticEnergy)
@@ -655,7 +662,7 @@ G4double G4BraggModel::DEDX(const G4Material* material, G4double kineticEnergy)
                            material->GetElementVector() ;
   
     //  loop for the elements in the material
-    for (G4int i=0; i<numberOfElements; i++)
+    for (G4int i=0; i<numberOfElements; ++i)
     {
       const G4Element* element = (*theElementVector)[i] ;
       eloss   += ElectronicStoppingPower(element->GetZ(), kineticEnergy)
@@ -689,10 +696,10 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     
 
   // The coffecient from Table.4 of Ziegler & Manoyan
-  static const G4double HeEff = 2.8735 ;
+  static const G4float HeEff = 2.8735f;
   
   static const size_t numberOfMolecula = 53;
-  static const G4String nameOfMol[53] = {
+  static const G4String nameOfMol[numberOfMolecula] = {
     "H_2O",      "C_2H_4O",    "C_3H_6O",  "C_2H_2",             "C_H_3OH",
     "C_2H_5OH",  "C_3H_7OH",   "C_3H_4",   "NH_3",               "C_14H_10",
     "C_6H_6",    "C_4H_10",    "C_4H_6",   "C_4H_8O",            "CCl_4",
@@ -706,60 +713,56 @@ G4bool G4BraggModel::MolecIsInZiegler1988(const G4Material* material)
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
   };
 
-  static const G4double expStopping[numberOfMolecula] = {
-     66.1,  190.4, 258.7,  42.2, 141.5,
-    210.9,  279.6, 198.8,  31.0, 267.5,
-    122.8,  311.4, 260.3, 328.9, 391.3,
-    206.6,  374.0, 422.0, 432.0, 398.0,
-    554.0,  353.0, 326.0,  74.6, 220.5,
-    197.4,  362.0, 170.0, 330.5, 211.3,
-    262.3,  349.6,  51.3, 187.0, 236.9,
-    121.9,   35.8, 247.0, 292.6, 268.0,
-    262.3,   49.0, 398.9, 444.0,  22.91,
-     68.0,  155.0,  84.0,  74.2, 254.7,
-    306.8,  324.4, 420.0
+  static const G4float expStopping[numberOfMolecula] = {
+     66.1f,  190.4f, 258.7f,  42.2f, 141.5f,
+    210.9f,  279.6f, 198.8f,  31.0f, 267.5f,
+    122.8f,  311.4f, 260.3f, 328.9f, 391.3f,
+    206.6f,  374.0f, 422.0f, 432.0f, 398.0f,
+    554.0f,  353.0f, 326.0f,  74.6f, 220.5f,
+    197.4f,  362.0f, 170.0f, 330.5f, 211.3f,
+    262.3f,  349.6f,  51.3f, 187.0f, 236.9f,
+    121.9f,   35.8f, 247.0f, 292.6f, 268.0f,
+    262.3f,   49.0f, 398.9f, 444.0f,  22.91f,
+     68.0f,  155.0f,  84.0f,  74.2f, 254.7f,
+    306.8f,  324.4f, 420.0f
   } ;
 
-  static const G4double expCharge[53] = {
-    HeEff, HeEff, HeEff,   1.0, HeEff,
-    HeEff, HeEff, HeEff,   1.0,   1.0,
-      1.0, HeEff, HeEff, HeEff, HeEff,
+  static const G4float expCharge[53] = {
+    HeEff, HeEff, HeEff,  1.0f, HeEff,
+    HeEff, HeEff, HeEff,  1.0f,  1.0f,
+     1.0f, HeEff, HeEff, HeEff, HeEff,
     HeEff, HeEff, HeEff, HeEff, HeEff,
-    HeEff, HeEff, HeEff,   1.0, HeEff,
+    HeEff, HeEff, HeEff,  1.0f, HeEff,
     HeEff, HeEff, HeEff, HeEff, HeEff,
-    HeEff, HeEff,   1.0, HeEff, HeEff,
-    HeEff,   1.0, HeEff, HeEff, HeEff,
-    HeEff,   1.0, HeEff, HeEff,   1.0,
-      1.0,   1.0,   1.0,   1.0, HeEff,
+    HeEff, HeEff,  1.0f, HeEff, HeEff,
+    HeEff,  1.0f, HeEff, HeEff, HeEff,
+    HeEff,  1.0f, HeEff, HeEff,  1.0f,
+     1.0f,  1.0f,  1.0f,  1.0f, HeEff,
     HeEff, HeEff, HeEff
   } ;
 
-  static const G4double numberOfAtomsPerMolecula[53] = {
-    3.0,  7.0, 10.0,  4.0,  6.0,
-    9.0, 12.0,  7.0,  4.0, 24.0,
-    12.0, 14.0, 10.0, 13.0,  5.0,
-    5.0, 14.0, 18.0, 17.0, 17.0,
-    24.0, 15.0, 13.0,  9.0,  8.0,
-    6.0, 14.0,  8.0,  8.0,  9.0,
-    10.0, 15.0,  6.0,  7.0,  7.0,
-    3.0,  5.0,  5.0,  5.0,  5.0,
-    9.0,  3.0, 16.0, 14.0,  3.0,
-    9.0, 16.0, 11.0,  9.0, 10.0,
-    10.0,  9.0, 15.0
-  } ;
+  static const G4int numberOfAtomsPerMolecula[53] = {
+    3,  7, 10,  4,  6,
+    9, 12,  7,  4, 24,
+    12,14, 10, 13,  5,
+    5, 14, 18, 17, 17,
+    24,15, 13,  9,  8,
+    6, 14,  8,  8,  9,
+    10,15,  6,  7,  7,
+    3,  5,  5,  5,  5,
+    9,  3, 16, 14,  3,
+    9, 16, 11,  9, 10,
+    10, 9,  15};
 
   // Search for the compaund in the table
-  for (size_t i=0; i<numberOfMolecula; i++)
-    {
-      if(chFormula == nameOfMol[i]) {
-        G4double exp125 = expStopping[i] *
-                          (material->GetTotNbOfAtomsPerVolume()) /
-                          (expCharge[i] * numberOfAtomsPerMolecula[i]) ;
-        SetExpStopPower125(exp125);
-        return true;
-      }
+  for (size_t i=0; i<numberOfMolecula; ++i) {
+    if(chFormula == nameOfMol[i]) {
+      expStopPower125 = ((G4double)expStopping[i])
+        * (material->GetTotNbOfAtomsPerVolume()) /
+        ((G4double)(expCharge[i] * numberOfAtomsPerMolecula[i]));
+      return true;
     }
-  
+  }
   return false;
 }
 
@@ -771,17 +774,18 @@ G4double G4BraggModel::ChemicalFactor(G4double kineticEnergy,
   // Approximation of Chemical Factor according to
   // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
   // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
+
+  static const G4double gamma25  = 1.0 + 25.0*keV /proton_mass_c2;
+  static const G4double gamma125 = 1.0 + 125.0*keV/proton_mass_c2;
+  static const G4double beta25   = sqrt(1.0 - 1.0/(gamma25*gamma25));
+  static const G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125));
+  static const G4double f12525   = 1.0 + G4Exp( 1.48*(beta125/beta25 - 7.0) );
   
-  G4double gamma    = 1.0 + kineticEnergy/proton_mass_c2 ;    
-  G4double gamma25  = 1.0 + 25.0*keV /proton_mass_c2 ;
-  G4double gamma125 = 1.0 + 125.0*keV/proton_mass_c2 ;
-  G4double beta     = sqrt(1.0 - 1.0/(gamma*gamma)) ;
-  G4double beta25   = sqrt(1.0 - 1.0/(gamma25*gamma25)) ;
-  G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
+  G4double gamma = 1.0 + kineticEnergy/proton_mass_c2;
+  G4double beta  = sqrt(1.0 - 1.0/(gamma*gamma));
   
-  G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
-                   (1.0 + G4Exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
-                   (1.0 + G4Exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+  G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) * f12525/
+    (1.0 + G4Exp( 1.48 * ( beta/beta25    - 7.0 ) ) );
 
   return factor ;
 }

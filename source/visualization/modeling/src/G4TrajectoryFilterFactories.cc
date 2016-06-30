@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.cc 68043 2013-03-13 14:27:49Z gcosmo $
+/// $Id: G4TrajectoryFilterFactories.cc 95593 2016-02-16 10:48:50Z gcosmo $
 //
 //
 // Trajectory filter model factories creating filters
@@ -37,6 +37,7 @@
 #include "G4TrajectoryChargeFilter.hh"
 #include "G4TrajectoryParticleFilter.hh"
 #include "G4TrajectoryOriginVolumeFilter.hh"
+#include "G4TrajectoryTouchedVolumeFilter.hh"
 
 // Attribute filter
 G4TrajectoryAttributeFilterFactory::G4TrajectoryAttributeFilterFactory()
@@ -116,10 +117,9 @@ G4TrajectoryParticleFilterFactory::Create(const G4String& placement, const G4Str
   return ModelAndMessengers(model, messengers);
 }
 
-
 // Origin volume filter
 G4TrajectoryOriginVolumeFilterFactory::G4TrajectoryOriginVolumeFilterFactory()
-  :G4VModelFactory< G4VFilter<G4VTrajectory> >("originVolumeFilter") 
+:G4VModelFactory< G4VFilter<G4VTrajectory> >("originVolumeFilter")
 {}
 
 G4TrajectoryOriginVolumeFilterFactory::~G4TrajectoryOriginVolumeFilterFactory() {}
@@ -129,17 +129,40 @@ G4TrajectoryOriginVolumeFilterFactory::Create(const G4String& placement, const G
 {
   // Create model
   G4TrajectoryOriginVolumeFilter* model = new G4TrajectoryOriginVolumeFilter(name);
-  
+
   // Create associated messengers
   Messengers messengers;
-  
+
   messengers.push_back(new G4ModelCmdAddString<G4TrajectoryOriginVolumeFilter>(model, placement));
   messengers.push_back(new G4ModelCmdInvert<G4TrajectoryOriginVolumeFilter>(model, placement));
   messengers.push_back(new G4ModelCmdActive<G4TrajectoryOriginVolumeFilter>(model, placement));
   messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryOriginVolumeFilter>(model, placement));
   messengers.push_back(new G4ModelCmdReset<G4TrajectoryOriginVolumeFilter>(model, placement));
-  
+
   return ModelAndMessengers(model, messengers);
 }
 
+// Touched volume filter
+G4TrajectoryTouchedVolumeFilterFactory::G4TrajectoryTouchedVolumeFilterFactory()
+:G4VModelFactory< G4VFilter<G4VTrajectory> >("touchedVolumeFilter")
+{}
 
+G4TrajectoryTouchedVolumeFilterFactory::~G4TrajectoryTouchedVolumeFilterFactory() {}
+
+G4TrajectoryTouchedVolumeFilterFactory::ModelAndMessengers
+G4TrajectoryTouchedVolumeFilterFactory::Create(const G4String& placement, const G4String& name)
+{
+  // Create model
+  G4TrajectoryTouchedVolumeFilter* model = new G4TrajectoryTouchedVolumeFilter(name);
+
+  // Create associated messengers
+  Messengers messengers;
+
+  messengers.push_back(new G4ModelCmdAddString<G4TrajectoryTouchedVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdInvert<G4TrajectoryTouchedVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdActive<G4TrajectoryTouchedVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryTouchedVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdReset<G4TrajectoryTouchedVolumeFilter>(model, placement));
+
+  return ModelAndMessengers(model, messengers);
+}

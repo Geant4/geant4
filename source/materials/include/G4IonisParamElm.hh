@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.hh 81374 2014-05-27 13:07:25Z gcosmo $
+// $Id: G4IonisParamElm.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 
 // class description
@@ -53,7 +53,7 @@ class G4IonisParamElm
 public:  // with description
 
     G4IonisParamElm(G4double Z);
-    virtual ~G4IonisParamElm();
+    ~G4IonisParamElm();
 
     // retrieval methods
     
@@ -80,12 +80,7 @@ public:  // with description
       
     G4double* GetShellCorrectionVector() const {return fShellCorrectionVector;}
                                        // shell correction coefficients
-   
-    // operators
-    G4IonisParamElm& operator=(const G4IonisParamElm&);   
-    G4int operator==(const G4IonisParamElm&) const;
-    G4int operator!=(const G4IonisParamElm&) const;
-     
+        
     G4IonisParamElm(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
@@ -93,7 +88,11 @@ public:  // with description
 
 private:
 
-    G4IonisParamElm(G4IonisParamElm&);
+    // operators
+    G4IonisParamElm& operator=(const G4IonisParamElm&) = delete;
+    G4int operator==(const G4IonisParamElm&) const = delete;
+    G4int operator!=(const G4IonisParamElm&) const = delete;
+    G4IonisParamElm(G4IonisParamElm&) = delete;
     //
     //  data members
     //

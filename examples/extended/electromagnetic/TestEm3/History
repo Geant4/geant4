@@ -1,4 +1,4 @@
-$Id: History 93737 2015-10-30 11:01:43Z gcosmo $
+$Id: History 95469 2016-02-12 08:48:53Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+10-02-16 mma (testem3-V10-02-03)
+- update radioactive.mac again
 
+06-02-16 mma (testem3-V10-02-02)
+- update radioactive.mac
+
+29-01-16 mma (testem3-V10-02-01)
+- Physicsist: add radioactiveDecay process (not active by default)
+
+10-12-15 V.Ivant (testem3-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
+    
 28-10-15 D.Sawkey (testem3-V10-01-04)
 - update description of physics lists in README, again
 

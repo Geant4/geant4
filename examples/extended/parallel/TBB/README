@@ -13,7 +13,8 @@ task-based parallelism. It should not be considered a feature-complete example
 and it present some limitations (no merging of output, no correct clean-up of 
 heap). 
 
-It will be substantially improved in 2014. If you have interest in TBB please 
+It will be substantially improved in the future.
+If you have interest in TBB please 
 refer to Geant4 Multi-threading user-forum (reachable from Geant4 website)
 where updates on TBB will be communicated or contact example author at: 
 adotti@slac.stanford.edu.

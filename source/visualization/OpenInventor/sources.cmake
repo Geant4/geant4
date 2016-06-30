@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 88190 2015-02-02 17:24:54Z gcosmo $
+# $Id: sources.cmake 96179 2016-03-22 15:43:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -107,6 +107,8 @@ if(UNIX)
     console.h
     favorites.h
     saveViewPt.h
+    pickext.h
+    pickref.h
     )
 
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES

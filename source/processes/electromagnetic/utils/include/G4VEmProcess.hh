@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEmProcess.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -103,7 +103,7 @@ public:
   // Virtual methods to be implemented in concrete processes
   //------------------------------------------------------------------------
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
 
   virtual void PrintInfo() = 0;
 
@@ -127,28 +127,29 @@ protected:
 public:
 
   // Initialise for build of tables
-  virtual void PreparePhysicsTable(const G4ParticleDefinition&);
+  virtual void PreparePhysicsTable(const G4ParticleDefinition&) override;
 
   // Build physics table during initialisation
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   // Called before tracking of each new G4Track
-  virtual void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   // implementation of virtual method, specific for G4VEmProcess
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
   // implementation of virtual method, specific for G4VEmProcess
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track&, 
+                                          const G4Step&) override;
 
   // Store PhysicsTable in a file.
   // Return false in case of failure at I/O
   virtual G4bool StorePhysicsTable(const G4ParticleDefinition*,
                                    const G4String& directory,
-                                   G4bool ascii = false);
+                                   G4bool ascii = false) override;
 
   // Retrieve Physics from a file.
   // (return true if the Physics Table can be build by using file)
@@ -157,7 +158,7 @@ public:
   // should be placed under the directory specifed by the argument.
   virtual G4bool RetrievePhysicsTable(const G4ParticleDefinition*,
                                       const G4String& directory,
-                                      G4bool ascii);
+                                      G4bool ascii) override;
 
   //------------------------------------------------------------------------
   // Specific methods for Discrete EM post step simulation 
@@ -220,7 +221,7 @@ public:
    
   // Add model for region, smaller value of order defines which
   // model will be selected for a given energy interval  
-  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = 0);
+  void AddEmModel(G4int, G4VEmModel*, const G4Region* region = nullptr);
 
   // return the assigned model
   G4VEmModel* EmModel(G4int index = 1) const;
@@ -232,13 +233,16 @@ public:
   void UpdateEmModel(const G4String&, G4double, G4double);
 
   // Access to models
+  G4int GetNumberOfModels() const;
+  G4int GetNumberOfRegionModels(size_t couple_index) const;
+  G4VEmModel* GetRegionModel(G4int idx, size_t couple_index) const;
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
 
-  // access atom on which interaction happens
-  const G4Element* GetCurrentElement() const;
-
-  // access to active model
+  // Access to active model
   inline const G4VEmModel* GetCurrentModel() const;
+
+  // Access to the current G4Element
+  const G4Element* GetCurrentElement() const;
 
   // Biasing parameters
   void SetCrossSectionBiasingFactor(G4double f, G4bool flag = true);
@@ -264,7 +268,7 @@ protected:
 
   virtual G4double GetMeanFreePath(const G4Track& track,
                                    G4double previousStepSize,
-                                   G4ForceCondition* condition);
+                                   G4ForceCondition* condition) override;
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
@@ -326,9 +330,9 @@ private:
 
   inline G4double ComputeCurrentLambda(G4double kinEnergy);
 
-  // copy constructor and hide assignment operator
-  G4VEmProcess(G4VEmProcess &);
-  G4VEmProcess & operator=(const G4VEmProcess &right);
+  // hide copy constructor and assignment operator
+  G4VEmProcess(G4VEmProcess &) = delete;
+  G4VEmProcess & operator=(const G4VEmProcess &right) = delete;
 
   // ======== Parameters of the class fixed at construction =========
 
@@ -396,7 +400,7 @@ private:
   const G4ParticleDefinition*  particle;
   const G4ParticleDefinition*  currentParticle;
 
-  // cash
+  // cache
   const G4Material*            baseMaterial;
   const G4Material*            currentMaterial;
   const G4MaterialCutsCouple*  currentCouple;

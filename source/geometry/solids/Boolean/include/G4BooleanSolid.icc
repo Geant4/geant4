@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4BooleanSolid.icc 96960 2016-05-18 14:59:54Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -100,15 +100,4 @@ G4double G4BooleanSolid::GetSurfaceArea()
   if(fSurfaceArea != 0.) {;}
   else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
   return fSurfaceArea;
-}
-
-inline 
-G4double G4BooleanSolid::GetAreaRatio() const
-{
-  if (fAreaRatio <= 0.)
-  {
-    fAreaRatio = fPtrSolidA->GetSurfaceArea() /
-      (fPtrSolidA->GetSurfaceArea()+fPtrSolidB->GetSurfaceArea());
-  }
-  return fAreaRatio;
 }

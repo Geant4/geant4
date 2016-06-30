@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIsotopeTable.hh 69557 2013-05-08 12:01:40Z gcosmo $
+// $Id: G4VIsotopeTable.hh 96314 2016-04-06 07:21:51Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -38,6 +38,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include "G4Ions.hh"
 
 class G4IsotopeProperty;
 
@@ -62,7 +63,8 @@ class G4VIsotopeTable
 
  public: // With Description
   // pure virtual method
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E)=0;
+  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+              G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat)=0;
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level=0);
   // Search the isotope in the G4VIsotopeTable. 
   // The isotope is desingated by 
@@ -70,6 +72,7 @@ class G4VIsotopeTable
   //    G4int    A:  number of nucleon (Atomic mass)
   //      and
   //    G4double E:  excited energy
+  //    G4Ions::G4FloatLevelBase flb: floating level base (enum defined in G4Ions.hh)
   //      or
   //    G4int  level: isomer level
   // in the given G4IsotopeProperty.

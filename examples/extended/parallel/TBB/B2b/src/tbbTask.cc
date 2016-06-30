@@ -42,10 +42,10 @@
 tbbTask::tbbTask(G4int anId,
                      tbb::concurrent_queue<const G4Run*>* out,
                      G4int nevts) 
-: nEvents(nevts),
-  thisID(anId),
-  output(out),
-  beamOnCondition(false)
+: m_nEvents(nevts),
+  m_taskID(anId),
+  m_output(out),
+  m_beamOnCondition(false)
 {
 }
 
@@ -177,20 +177,20 @@ tbb::task* tbbTask::execute()
     G4int numSelect = masterRM->GetNumberOfSelectEvents();
     if ( macroFile == "" || macroFile == " " )
     {
-        localRM->BeamOn(nEvents,0,numSelect);
+        localRM->BeamOn(m_nEvents,0,numSelect);
     }
     else
     {
-        localRM->BeamOn(nEvents,macroFile,numSelect);
+        localRM->BeamOn(m_nEvents,macroFile,numSelect);
     }
     //======= NEW TBB SPECIFIC ===========
     //Step-5: Initialize and start run
     //====================================
     // bla-bla-bla-bla
     // This is basically BeamOn 
-    beamOnCondition = localRM->ConfirmBeamOnCondition();
-    if (beamOnCondition) {
-      localRM->SetNumberOfEventsToBeProcessed( nEvents );
+    m_beamOnCondition = localRM->ConfirmBeamOnCondition();
+    if (m_beamOnCondition) {
+      localRM->SetNumberOfEventsToBeProcessed( m_nEvents );
       localRM->ConstructScoringWorlds(); 
       localRM->RunInitialization();
       //Register this G4Run in output
@@ -198,12 +198,12 @@ tbb::task* tbbTask::execute()
       //G4Run or derived class. We let the kernel know this is the object
       //where the output is accumulated for the tbb::tasks that run on 
       //this thread.
-      if ( output ) {}
+      if ( m_output ) {}
     }
   }
   assert(localRM!=0);
-  if ( beamOnCondition ) {
-    localRM->DoEventLoop( nEvents );
+  if ( m_beamOnCondition ) {
+    localRM->DoEventLoop( m_nEvents );
     //localRM->RunTermination(); //<<<< How to call this??? ANDREA TBB
   }
 

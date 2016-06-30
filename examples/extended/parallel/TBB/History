@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd Fev 2016 A. Dotti	    (tbbex-V10-02-01)
+- Removing example "granular" that is not yet ready. Use
+  previous tag to develop it.
+
+22nd Feb 2016 A. Dotti      (tbbex-V10-02-00)
+- Compatibility porting to run-V10-02-07 tag
+
 10th November 2013 I. Hrivnacova (tbbex-V09-06-02)
 - Added README files (and moved previous README in DevelopmentStatus.txt)
 - Fixed CMake build

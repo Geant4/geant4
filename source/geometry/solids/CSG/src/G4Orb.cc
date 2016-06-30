@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Orb.cc 96318 2016-04-06 07:26:42Z gcosmo $
 //
 // class G4Orb
 //
@@ -83,7 +83,7 @@ G4Orb::G4Orb( const G4String& pName, G4double pRmax )
   if ( pRmax < 10*kCarTolerance )
   {
     G4Exception("G4Orb::G4Orb()", "GeomSolids0002", FatalException,
-                "Invalid radius > 10*kCarTolerance.");
+                "Invalid radius < 10*kCarTolerance.");
   }
   fRmaxTolerance =  std::max( kRadTolerance, fEpsilon*fRmax);
 

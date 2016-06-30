@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc 80573 2014-04-29 07:40:08Z gcosmo $
+// $Id: G4MaterialPropertiesTable.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Log.hh"
 
 /////////////////
 // Constructors
@@ -67,6 +68,7 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
   MPTiterator i;
   for (i = MPT.begin(); i != MPT.end(); ++i)
   {
+    G4cout << (*i).second << G4endl;
     delete (*i).second;
   }
   MPT.clear();
@@ -76,6 +78,82 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
 ////////////
 // Methods
 ////////////
+
+G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
+{
+  // Returns the constant material property corresponding to a key
+
+  MPTCiterator j;
+  j = MPTC.find(G4String(key));
+  if ( j != MPTC.end() ) return j->second;
+  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
+              FatalException, "Constant Material Property not found.");
+  return 0.;
+}
+
+G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
+{
+  // Returns true if a const property 'key' exists
+
+  MPTCiterator j;
+  j = MPTC.find(G4String(key));
+  if ( j != MPTC.end() ) return true;
+  return false;
+}
+
+G4MaterialPropertyVector*
+G4MaterialPropertiesTable::GetProperty(const char *key)
+{
+  // Returns a Material Property Vector corresponding to a key
+
+  //Important Note for MT. adotti 17 Feb 2016
+  //In previous implementation the following line was at the bottom of the
+  //function causing a rare race-condition.
+  //Moving this line here from the bottom solves the problem because:
+  //1- Map is accessed only via operator[] (to insert) and find() (to search),
+  //   and these are thread safe if done on separate elements.
+  //   See notes on data-races at:
+  //   http://www.cplusplus.com/reference/map/map/operator%5B%5D/
+  //   http://www.cplusplus.com/reference/map/map/find/
+  //2- So we have a data race if two threads access the same element (GROUPVEL)
+  //   one in read and one in write mode. This was happening with the line
+  //   at the bottom of the code, one thread in SetGROUPVEL(), 
+  //   and the other here
+  //3- SetGROUPVEL() is protected by a mutex that ensures that only
+  //   one thread at the time will execute its code
+  //4- The if() statement guarantees that only if two threads are searching
+  //   the same problematic key (GROUPVEL) the mutex will be used.
+  //   Different keys do not lock (good for performances)
+  //5- As soon as a thread acquires the mutex in SetGROUPVEL it checks again
+  //   if the map has GROUPVEL key, if so returns immediately.
+  //   This "double check" allows to execute the heavy code to calculate
+  //   group velocity only once even if two threads enter SetGROUPVEL together
+  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
+
+  MPTiterator i;
+  i = MPT.find(G4String(key));
+  if ( i != MPT.end() ) return i->second;
+  return nullptr;
+}
+
+void G4MaterialPropertiesTable::AddEntry(const char *key,
+                                         G4double    aPhotonEnergy,
+                                         G4double    aPropertyValue)
+{
+  // Allows to add an entry pair directly to the Material Property Vector
+  // given a key
+
+  G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
+  if (targetVector != nullptr)
+  {
+    targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
+  }
+  else
+  {
+    G4Exception("G4MaterialPropertiesTable::AddEntry()", "mat203",
+                FatalException, "Material Property Vector not found.");
+  }
+}
 
 void G4MaterialPropertiesTable::DumpTable()
 {
@@ -170,7 +248,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
     // add entry at first photon energy
     //
-    vg = c_light/(n0+(n1-n0)/std::log(E1/E0));
+    vg = c_light/(n0+(n1-n0)/G4Log(E1/E0));
 
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
     //
@@ -183,7 +261,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
     for (size_t i = 2; i < rindex->GetVectorLength(); i++)
     {
-      vg = c_light/( 0.5*(n0+n1)+(n1-n0)/std::log(E1/E0));
+      vg = c_light/( 0.5*(n0+n1)+(n1-n0)/G4Log(E1/E0));
 
       // allow only for 'normal dispersion' -> dn/d(logE) > 0
       //
@@ -206,7 +284,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
     // add entry at last photon energy
     //
-    vg = c_light/(n1+(n1-n0)/std::log(E1/E0));
+    vg = c_light/(n1+(n1-n0)/G4Log(E1/E0));
 
     // allow only for 'normal dispersion' -> dn/d(logE) > 0
     //

@@ -1,4 +1,4 @@
-$Id: History 94233 2015-11-09 10:55:01Z gcosmo $
+$Id: History 97742 2016-06-08 09:24:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,103 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 June 16: V.Ivant (emutils-V10-02-23)
+- G4LossTableManager - removed debug printout
+
+07 June 16: V.Ivant (emutils-V10-02-22)
+- G4VEmModel - fixed destruction in MT mode
+- G4VMultipleScattering, G4EmModelManager, G4LossTableManager 
+    improved debug printout
+
+02 June 16: V.Ivant (emutils-V10-02-21)
+- G4VAtomicDeexcitation - extended printout at initialisation
+
+02 June 16: V.Ivant (emutils-V10-02-20)
+- G4EmModelManager - review and fix model configuration (mainly
+    for DNA models)
+- G4DummyModel - set default low-enegry limit to 0.0 (needed for DNA)
+- G4VMultipleScattering - added method NumberOfModels()
+- G4EmConfigurator - minor cleanup
+
+11 May 16: V.Ivant (emutils-V10-02-19)
+- G4VEmModel, G4VAtomDeexcitation, G4EmCalculator - use new method
+    G4Element::GetZasInt()
+- G4VEmModel - fixed SelectRandomAtomNumber() method
+
+01 May 16: V.Ivant (emutils-V10-02-18)
+29 April 16: V.Ivant (emutils-V10-02-17)
+- G4EmCorrections - fixed Coverity warning
+- G4VAtomDeexcitation - fixed possible data race at initialistion
+
+25 April 16: V.Ivant (emutils-V10-02-16)
+25 April 16: V.Ivant (emutils-V10-02-14)
+- G4AtomicShell - make the class pure inlined, use a default destructors
+- G4LossTableManager, G4VEmModel, G4VMultipleScattering - minor 
+    cleanup of static const data
+- G4EmCorrections - make part of data static, make internal vectors
+    static, shared between threads
+
+15 April 16: V.Ivant (emutils-V10-02-13)
+- G4EmParameters - allow to change parameters only from the master thread 
+  and only at PreInit or Idle states
+
+15 April 16: V.Ivant (emutils-V10-02-12)
+- G4VAtomDeexcitation - complete migration to G4EmParameters interface;
+    addresing data race in MT mode
+
+11 April 16: V.Ivant (emutils-V10-02-11)
+- G4VMultipleScattering - move position change to AlongStep
+
+17 March 16: V.Ivant (emutils-V10-02-10)
+- G4VEnergyLossProcess - return back removed method to fix compillation
+    of reverse MC example  
+
+15 March 16: V.Ivant (emutils-V10-02-09)
+- removed commented lines left from the previous tag
+- G4EmCalculator - added protection against zero cut value - use 
+    lowest electron energy (fixed problem #1845)
+
+11 March 16: V.Ivant (emutils-V10-02-08)
+- G4EmParameters, G4EmParametersMessenger - moved remaining 
+    parameters from G4EmProcessOptions, which become obsolete
+- G4EmCalculator, G4LossTableBuilder, G4LossTableManager, G4VMscModel,
+  G4VEmModel, G4VEmProcess, G4VEnergyLossProcess - use only 
+    G4EmParameters class interfaces for initialisation
+- G4NuclearFormfactorType - added new enumerator
+
+17 February 16: V.Ivant (emutils-V10-02-07)
+- G4EmMultiModel - changed "override" by "final"
+
+17 February 16: V.Ivant (emutils-V10-02-06)
+- G4VEnegryLossProcess, G4EmCorrections - removed unused class members
+- G4VEmModel, G4EmMultiModel - address clang warnings
+
+16 February 16: D.Sawkey (emutils-V10-02-05)
+- Again, added more overrides, to remove clang warnings in previous tag
+- put deleted copy/assignment operators back in private section
+
+12 February 16: D.Sawkey (emutils-V10-02-04)
+- added more overrides, to remove clang warnings in previous tag
+
+11 February 16: D.Sawkey (emutils-V10-02-03)
+- partial C++11 migration in header files: explicit, override, delete 
+  keywords; nullptr
+
+10 February 16: V.Ivant
+- G4VEmProcess, G4EmModelManager - added extra methods to access models
+
+22 January 16: V.Ivant (emutils-V10-02-01)
+- G4LossTableManager - avoid double addition of He3 and alpha to the
+    loss table map (should not have any effect on results)
+- G4EmCalculator - fixed computation of dEdx and range for He3 and 
+    alpha (problem #1808)
+
+14 January 16: V.Ivant (emutils-V10-02-00)
+- G4EmSaturation - fixed #1807 by changing method name from
+    VisibleEnergyDeposition(..) to VisibleEnergyDepositionAtAStep(..)
+    This fix change user interface in order to allow overload virtual
+    method
 
 09 November 15: V.Ivant (emutils-V10-01-40)
 - G4EmParameters - fixed typo in name of the new method

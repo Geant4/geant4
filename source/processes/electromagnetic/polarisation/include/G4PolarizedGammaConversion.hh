@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedGammaConversion.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedGammaConversion.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,26 +64,27 @@ class G4PolarizedGammaConversion : public G4VEmProcess
 {
 public:  // with description
 
-  G4PolarizedGammaConversion(const G4String& processName ="pol-conv",
+  explicit G4PolarizedGammaConversion(const G4String& processName ="pol-conv",
 			     G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PolarizedGammaConversion();
 
   // true for Gamma only.
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
   
   // hide assignment operator as private 
-  G4PolarizedGammaConversion& operator=(const G4PolarizedGammaConversion &right);
-  G4PolarizedGammaConversion(const G4PolarizedGammaConversion& );
+  G4PolarizedGammaConversion& 
+    operator=(const G4PolarizedGammaConversion &right) = delete;
+  G4PolarizedGammaConversion(const G4PolarizedGammaConversion& ) = delete;
      
   G4bool          isInitialised;
 };

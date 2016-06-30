@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.cc 93663 2015-10-28 09:50:49Z gcosmo $
+// $Id: G4GoudsmitSaundersonTable.cc 94933 2015-12-18 09:22:52Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -388,6 +388,13 @@ G4double G4GoudsmitSaundersonTable::SampleCosThetaII(G4double lambdavalue, G4dou
   G4double probOfLamG1J = (fgLamG1ValuesII[lamg1indx+1]-lamG1value)*onePerLamG1Diff;
   if(rndm2 > probOfLamG1J)
      ++lamg1indx;
+
+  // protection against cases when the sampled lamG1 values are not possible due
+  // to the fact that G1<=1 (G1 = lam_el/lam_tr1)
+  // -- in theory it should never happen when lamg1indx=0 but check it just to be sure
+  if(fgLamG1ValuesII[lamg1indx]>lambdavalue && lamg1indx>0) 
+    --lamg1indx;
+    
 
   G4int begin = lambdaindx*(fgNumLamG1II*fgNumUvalues)+lamg1indx*fgNumUvalues;
 

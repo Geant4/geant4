@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4BetheHeitlerModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,27 +66,13 @@
 
 using namespace std;
 
-static const G4double GammaEnergyLimit = 1.5*MeV;
-static const G4double Egsmall=2.*MeV;
-static const G4double
-    a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
-    a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
-
-static const G4double
-    b0=-1.0342e+1*microbarn, b1= 1.7692e+1*microbarn, b2=-8.2381   *microbarn,
-    b3= 1.3063   *microbarn, b4=-9.0815e-2*microbarn, b5= 2.3586e-3*microbarn;
-
-static const G4double
-    c0=-4.5263e+2*microbarn, c1= 1.1161e+3*microbarn, c2=-8.6749e+2*microbarn,
-    c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
 					 const G4String& nam)
   : G4VEmModel(nam)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
@@ -131,6 +117,18 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   G4double xSection = 0.0 ;
   if ( Z < 0.9 || GammaEnergy <= 2.0*electron_mass_c2 ) { return xSection; }
 
+  static const G4double GammaEnergyLimit = 1.5*MeV;
+  static const G4double
+    a0= 8.7842e+2*microbarn, a1=-1.9625e+3*microbarn, a2= 1.2949e+3*microbarn,
+    a3=-2.0028e+2*microbarn, a4= 1.2575e+1*microbarn, a5=-2.8333e-1*microbarn;
+
+  static const G4double
+    b0=-1.0342e+1*microbarn, b1= 1.7692e+1*microbarn, b2=-8.2381   *microbarn,
+    b3= 1.3063   *microbarn, b4=-9.0815e-2*microbarn, b5= 2.3586e-3*microbarn;
+
+  static const G4double
+    c0=-4.5263e+2*microbarn, c1= 1.1161e+3*microbarn, c2=-8.6749e+2*microbarn,
+    c3= 2.1773e+2*microbarn, c4=-2.0467e+1*microbarn, c5= 6.5372e-1*microbarn;
 
   G4double GammaEnergySave = GammaEnergy;
   if (GammaEnergy < GammaEnergyLimit) { GammaEnergy = GammaEnergyLimit; }
@@ -150,7 +148,7 @@ G4BetheHeitlerModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
     xSection *= X*X;
   }
 
-  if (xSection < 0.) { xSection = 0.; }
+  xSection = std::max(xSection, 0.); 
   return xSection;
 }
 
@@ -185,10 +183,12 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
   // do it fast if GammaEnergy < Egsmall
   // select randomly one element constituing the material
-  const G4Element* anElement = SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
+  const G4Element* anElement = 
+    SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
+  static const G4double Egsmall=2.*MeV;
   if (GammaEnergy < Egsmall) {
 
     epsil = epsil0 + (0.5-epsil0)*rndmEngine->flat();

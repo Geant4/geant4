@@ -1,4 +1,4 @@
-//$Id: .README.txt 94710 2015-12-03 16:15:05Z gunter $
+//$Id: .README.txt 94957 2016-01-08 13:27:26Z gcosmo $
 
 ///\file "B1/.README.txt"
 ///\brief Example B1 README page
@@ -36,8 +36,8 @@
    <a href="http://geant4.web.cern.ch/geant4/UserDocumentation/UsersGuides
                                          /InstallationGuide/html/ch03s03.html">
    Geant4 Installation Guide, Chapter 3.3: Note On Geant4 Datasets </a>.
-   The following datasets: G4LEDATA, G4LEVELGAMMADATA, G4NEUTRONXSDATA and 
-   G4SAIDXSDATA are mandatory for this example.
+   The following datasets: G4LEDATA, G4LEVELGAMMADATA, G4NEUTRONXSDATA,
+   G4SAIDXSDATA and G4ENSDFSTATEDATA are mandatory for this example.
  
    In addition the build-in interactive command:
 \verbatim

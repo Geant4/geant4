@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+   <define>
+   </define>
+
+   <materials>
+      <material Z="1.0" name="AIR">
+         <D value="1e-24"/>
+         <atom value="1.00794"/>
+      </material>
+      <material name="ALU" Z="13.0">
+         <D value="2.70"/>
+	 <atom value="26.98"/>
+      </material>
+   </materials>
+
+   <solids>
+      <box y="200" x="200" lunit="cm" z="200" name="WorldBox"/>
+      <tube z="100.0" rmax="10.0" deltaphi="360" lunit="cm" aunit="deg" name="DiamondTube"/>
+      <xtru name="Extruded">
+         <twoDimVertex x="0" y="0"/>
+         <twoDimVertex x="100" y="0"/>
+         <twoDimVertex x="0" y="200"/>
+         <section zOrder="0" zPosition="000" xOffset="0" yOffset="0" scalingFactor="1.0"/>
+         <section zOrder="1" zPosition="200" xOffset="0" yOffset="0" scalingFactor="0.5"/>
+      </xtru>
+      <scaledSolid name="DiamondScaledTube">
+         <solidref ref="DiamondTube"/>
+         <scale name="ScaleTube" x="1" y="2" z="1"/>
+      </scaledSolid>
+   </solids>
+
+   <structure>
+      <volume name="VExtruded">
+         <materialref ref="ALU"/>
+         <solidref ref="Extruded"/>
+      </volume>
+      <volume name="VDiamondTube">
+         <materialref ref="ALU"/>
+         <solidref ref="DiamondScaledTube"/>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+	    <scale name="ScalePPP" x="+1" y="+1" z="+1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScaleNPP" x="-1" y="+1" z="+1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScalePNP" x="+1" y="-1" z="+1"/>
+         </physvol> 
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScaleNNP" x="-1" y="-1" z="+1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScalePPN" x="+1" y="+1" z="-1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScalePNN" x="+1" y="-1" z="-1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScaleNPN" x="-1" y="+1" z="-1"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VExtruded"/>
+            <scale name="ScaleNNN" x="-1" y="-1" z="-1"/>
+         </physvol>
+      </volume>
+      <volume name="VMother">
+         <materialref ref="ALU"/>
+         <solidref ref="WorldBox"/>
+         <physvol>
+            <volumeref ref="VDiamondTube"/>
+            <position name="pos" x="200"/>
+            <rotation name="rot" z="30" unit="deg"/>
+         </physvol>
+      </volume>
+      <volume name="TOP">
+         <materialref ref="AIR"/>
+         <solidref ref="WorldBox"/>
+         <physvol>
+            <volumeref ref="VMother"/>
+         </physvol>
+         <physvol>
+            <volumeref ref="VMother"/>
+            <scale name="scl2" x="-1" y="1" z="1"/>
+         </physvol>
+      </volume>
+   </structure>
+
+   <setup version="1.0" name="Default">
+      <world ref="TOP"/>
+   </setup>
+
+</gdml>

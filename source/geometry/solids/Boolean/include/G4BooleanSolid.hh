@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4BooleanSolid.hh 96960 2016-05-18 14:59:54Z gcosmo $
 //
 //
 // class G4BooleanSolid
@@ -34,9 +34,7 @@
 // Abstract base class for solids created by boolean operations
 // between other solids.
 
-// History:
-//
-// 10.09.98 V.Grichine, created
+// 10.09.98 V.Grichine - created
 //
 // --------------------------------------------------------------------
 #ifndef G4BOOLEANSOLID_HH
@@ -110,19 +108,18 @@ class G4BooleanSolid : public G4VSolid
 
   protected:
   
+    void GetListOfPrimitives(std::vector<std::pair<G4VSolid *,G4Transform3D>>&,
+                             const G4Transform3D&) const;
+      // Get list of constituent primitives of the solid and their placements.
+
     G4Polyhedron* StackPolyhedron(HepPolyhedronProcessor&,
                                   const G4VSolid*) const;
       // Stack polyhedra for processing. Return top polyhedron.
-
-    inline G4double GetAreaRatio() const;
-      // Ratio of surface areas of SolidA to total A+B
 
   protected:
   
     G4VSolid* fPtrSolidA;
     G4VSolid* fPtrSolidB;
-
-    mutable G4double fAreaRatio; // Calculation deferred to GetPointOnSurface()
 
   private:
 
@@ -134,6 +131,9 @@ class G4BooleanSolid : public G4VSolid
 
     mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
+
+    mutable std::vector<std::pair<G4VSolid *,G4Transform3D>> fPrimitives;
+    mutable G4double fPrimitivesSurfaceArea;
 
     G4bool  createdDisplacedSolid;
       // If & only if this object created it, it must delete it

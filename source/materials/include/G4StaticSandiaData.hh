@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StaticSandiaData.hh 75603 2013-11-04 13:15:47Z gcosmo $
+// $Id: G4StaticSandiaData.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -81,9 +81,6 @@
 // Tables, 18(1976)497-508.
 //------------------------------------------------------------------------------
 //
-// Ionization potentials of first 100 elements in eV   
-//
-// const G4double G4SandiaTable::fIonizationPotentials[101]
 //
 // The most of ionization energies are taken from S. Ruben, Handbook of the
 // Elements, 3rd ed. (Open Court, La Salle, IL, 1985). 28 of the ionization
@@ -1409,7 +1406,7 @@ const G4double G4SandiaTable::fSandiaTable[981][5] =
 // of energy interval in which Sandia coeeficients are parametrized for each
 // element.
 
-const G4int G4SandiaTable::fNbOfIntervals [101] = 
+static const G4int fNbOfIntervals [101] = 
 {
 
       0,  // nonexisting 'zero' element
@@ -1457,7 +1454,7 @@ const G4int G4SandiaTable::fNbOfIntervals [101] =
 // The ration of atomic number to atomic mass for first 100 elements
 // (which assumes A in amu/atom or in g/mole)
 
-const G4double G4SandiaTable::fZtoAratio[101] = 
+static const G4double fZtoAratio[101] = 
 {
 
       0,  // nonexisting 'zero' element
@@ -1513,7 +1510,7 @@ const G4double G4SandiaTable::fZtoAratio[101] =
 // element.
 
 															
-const G4double G4SandiaTable::fIonizationPotentials[101] =
+static const G4double fIonizationPotentials[101] =
 {
      0,  // nonexisting 'zero' element
 
@@ -1555,7 +1552,7 @@ const G4double G4SandiaTable::fIonizationPotentials[101] =
 
 };     // ............... end of fIonizationPotentials array
 
-const G4double G4SandiaTable::fH2OlowerI1[23][5] = 
+static const G4double fH2OlowerI1[23][5] = 
 {
 
   { 1.993334e-09,	1.864182e-09,	8.181011e-18,	-4.963267e-26,	5.482299e-35 },
@@ -1589,11 +1586,8 @@ const G4double G4SandiaTable::fH2OlowerI1[23][5] =
 };
 
 const G4int G4SandiaTable::fNumberOfElements  = 100;
-
 const G4int G4SandiaTable::fIntervalLimit     = 100;
-
 const G4int G4SandiaTable::fNumberOfIntervals = 980;
-
 const G4int G4SandiaTable::fH2OlowerInt       = 23;
 
 //

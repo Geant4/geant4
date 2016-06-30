@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Evaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
+// $Id: G4Evaporation.hh 96931 2016-05-18 09:06:52Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -55,27 +55,26 @@
 class G4VEvaporationFactory;
 class G4NistManager;
 class G4IonTable;
-class G4FermiFragmentsPool;
+class G4VFermiBreakUp;
 
 class G4Evaporation : public G4VEvaporation
 {
 public:
 
-  G4Evaporation();
-  G4Evaporation(G4VEvaporationChannel* photoEvaporation);
+  explicit G4Evaporation(G4VEvaporationChannel* photoEvaporation = nullptr);
 	 
   virtual ~G4Evaporation();
 
-  virtual void InitialiseChannels();
+  virtual void InitialiseChannels() final;
 
   // primary fragment is copied, the copy is deleted 
   // or is added to the list of products 
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) final;
 
   // new interface - vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
-  void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
+  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) final;
 
   void SetDefaultChannel();
   void SetGEMChannel();
@@ -83,17 +82,13 @@ public:
 
 private:
 
-  void SetParameters();
+  void InitialiseChannelFactory();
 
-  void InitialiseEvaporation();
+  G4Evaporation(const G4Evaporation &right) = delete;
+  const G4Evaporation & operator=(const G4Evaporation &right) = delete;
+  G4bool operator==(const G4Evaporation &right) const = delete;
+  G4bool operator!=(const G4Evaporation &right) const = delete;
 
-  G4Evaporation(const G4Evaporation &right);
-
-  const G4Evaporation & operator=(const G4Evaporation &right);
-  G4bool operator==(const G4Evaporation &right) const;
-  G4bool operator!=(const G4Evaporation &right) const;
-
-  std::vector<G4double>   probabilities;
   size_t   nChannels;
   G4int    maxZforFBU;
   G4int    maxAforFBU;
@@ -101,7 +96,9 @@ private:
   G4NistManager* nist;
   G4IonTable*    theTableOfIons;
   G4UnstableFragmentBreakUp unstableBreakUp;
-  G4FermiFragmentsPool* thePool;   
+  G4bool isInitialised;
+
+  std::vector<G4double> probabilities;
 };
 
 #endif

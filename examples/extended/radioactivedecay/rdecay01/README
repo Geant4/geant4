@@ -1,4 +1,4 @@
-$Id: README 87827 2015-01-14 17:17:27Z gcosmo $
+$Id: README 96904 2016-05-17 09:12:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -43,6 +43,10 @@ $Id: README 87827 2015-01-14 17:17:27Z gcosmo $
  ions, and energy-momentum balance of that decay.
  
  Total time of life of decay chain is plotted. Activity is computed.
+ 
+ The command /rdecay01/timeWindow allows to survey activity of each nuclide in a specified
+ time window [t1,t2] : population at t1 and t2, nb of decays within [t1,t2], mean activity.
+ See timeWindow.mac
  
  Few macros are given in example. Debug.mac is to be run in interactive mode. 
  

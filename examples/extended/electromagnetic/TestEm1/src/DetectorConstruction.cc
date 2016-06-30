@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 84815 2014-10-21 12:19:02Z gcosmo $
+// $Id: DetectorConstruction.cc 97813 2016-06-14 07:58:46Z gcosmo $
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -49,6 +49,7 @@
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -167,10 +168,17 @@ void DetectorConstruction::DefineMaterials()
  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
 
+ // example of vacuum
+ //
+ density = universe_mean_density;    //from PhysicalConstants.h
+ new G4Material("Galactic", z=1., a=1.008*g/mole, density,
+                            kStateGas,2.73*kelvin,3.e-18*pascal);
+
+ // use Nist
+ //
  G4NistManager* man = G4NistManager::Instance();
  
  G4bool isotopes = false;
- 
  ///G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
  G4Element* Si = man->FindOrBuildElement("Si", isotopes);
  G4Element* Lu = man->FindOrBuildElement("Lu", isotopes);  

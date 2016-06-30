@@ -44,11 +44,11 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UTrap.hh"
 
-class G4Polyhedron;
+#include "G4Polyhedron.hh"
 
 class G4UTrap : public G4USolid 
 {
@@ -105,24 +105,28 @@ class G4UTrap : public G4USolid
 
     inline UTrap* GetShape() const;
 
-    inline G4double GetZHalfLength()  const;
-    inline G4double GetYHalfLength1() const;
-    inline G4double GetXHalfLength1() const;
-    inline G4double GetXHalfLength2() const;
-    inline G4double GetTanAlpha1()    const;
-    inline G4double GetYHalfLength2() const;
-    inline G4double GetXHalfLength3() const;
-    inline G4double GetXHalfLength4() const;
-    inline G4double GetTanAlpha2()    const;
-    inline TrapSidePlane GetSidePlane(G4int n) const;
-    inline G4ThreeVector GetSymAxis() const;
+    G4double GetZHalfLength()  const;
+    G4double GetYHalfLength1() const;
+    G4double GetXHalfLength1() const;
+    G4double GetXHalfLength2() const;
+    G4double GetTanAlpha1()    const;
+    G4double GetYHalfLength2() const;
+    G4double GetXHalfLength3() const;
+    G4double GetXHalfLength4() const;
+    G4double GetTanAlpha2()    const;
+    TrapSidePlane GetSidePlane(G4int n) const;
+    G4ThreeVector GetSymAxis() const;
 
-    inline void SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
-                                 G4double pDy1, G4double pDx1, G4double pDx2,
-                                 G4double pAlp1,
-                                 G4double pDy2, G4double pDx3, G4double pDx4,
-                                 G4double pAlp2);
-    inline void SetPlanes(const G4ThreeVector pt[8]);
+    void SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
+                          G4double pDy1, G4double pDx1, G4double pDx2,
+                          G4double pAlp1,
+                          G4double pDy2, G4double pDx3, G4double pDx4,
+                          G4double pAlp2);
+    void SetPlanes(const G4ThreeVector pt[8]);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
 
@@ -134,8 +138,6 @@ class G4UTrap : public G4USolid
     G4UTrap(const G4UTrap& rhs);
     G4UTrap& operator=(const G4UTrap& rhs); 
       // Copy constructor and assignment operator.
-
-    G4Polyhedron* CreatePolyhedron   () const;
 };
 
 // --------------------------------------------------------------------
@@ -147,76 +149,9 @@ inline UTrap* G4UTrap::GetShape() const
   return (UTrap*) fShape;
 }
 
-inline G4double G4UTrap::GetZHalfLength() const
+inline G4GeometryType G4UTrap::GetEntityType() const
 {
-  return GetShape()->GetZHalfLength();
-}
-inline G4double G4UTrap::GetYHalfLength1() const
-{
-  return GetShape()->GetYHalfLength1();
-}
-inline G4double G4UTrap::GetXHalfLength1() const
-{
-  return GetShape()->GetXHalfLength1();
-}
-inline G4double G4UTrap::GetXHalfLength2() const
-{
-  return GetShape()->GetXHalfLength2();
-}
-inline G4double G4UTrap::GetTanAlpha1() const
-{
-  return GetShape()->GetTanAlpha1();
-}
-inline G4double G4UTrap::GetYHalfLength2() const
-{
-  return GetShape()->GetYHalfLength2();
-}
-inline G4double G4UTrap::GetXHalfLength3() const
-{
-  return GetShape()->GetXHalfLength3();
-}
-inline G4double G4UTrap::GetXHalfLength4() const
-{
-  return GetShape()->GetXHalfLength4();
-}
-inline G4double G4UTrap::GetTanAlpha2() const
-{
-  return GetShape()->GetTanAlpha2();
-}
-inline TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
-{
-  UTrapSidePlane iplane = GetShape()->GetSidePlane(n);
-  TrapSidePlane oplane = {iplane.a, iplane.b, iplane.c, iplane.d };
-  return oplane;
-}
-inline G4ThreeVector G4UTrap::GetSymAxis() const
-{
-  UVector3 axis = GetShape()->GetSymAxis();
-  return G4ThreeVector(axis.x(), axis.y(), axis.z());
-}
-
-inline
-void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
-                               G4double pDy1, G4double pDx1, G4double pDx2,
-                               G4double pAlp1,
-                               G4double pDy2, G4double pDx3, G4double pDx4,
-                               G4double pAlp2)
-{
-  GetShape()->SetAllParameters(pDz, pTheta, pPhi,
-                               pDy1, pDx1, pDx2, pAlp1,
-                               pDy2, pDx3, pDx4, pAlp2);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
-{
-  UVector3 upt[8];
-  for (unsigned int i=0; i<8; ++i)
-  {
-    upt[i] = UVector3(pt[i].x(), pt[i].y(), pt[i].z());
-  }
-  GetShape()->SetPlanes(upt);
-  fRebuildPolyhedron = true;
+  return "G4Trap";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

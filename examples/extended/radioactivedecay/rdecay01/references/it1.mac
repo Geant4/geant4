@@ -2,7 +2,7 @@
 /run/verbose 1
 #
 /gun/particle ion
-/gun/ion 28 60 0 2505.8
+/gun/ion 28 60 0 2505.753
 #
 /rdecay01/fullChain true
 #

@@ -64,7 +64,7 @@ G4NuclideTable::G4NuclideTable()
    minimum_threshold_of_half_life(DBL_MAX),
    fUserDefinedList(NULL), 
    fIsotopeList(NULL),
-   flevelTolerance(1.0e-3*eV)
+   flevelTolerance(1.0*eV)
 {
   //SetVerboseLevel(G4ParticleTable::GetParticleTable()->GetVerboseLevel());
   //FillHardCodeList();
@@ -104,22 +104,23 @@ G4NuclideTable::~G4NuclideTable()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
+G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E,
+                       G4Ions::G4FloatLevelBase flb)
 {
 
-   G4IsotopeProperty* fProperty = NULL;
+   G4IsotopeProperty* fProperty = nullptr;
 
    // At first searching UserDefined
-   if ( fUserDefinedList != NULL ) {
+   if ( fUserDefinedList ) {
       for ( G4IsotopeList::iterator it = fUserDefinedList->begin() ; it != fUserDefinedList->end() ; it++ ) {
         
          if ( Z == (*it)->GetAtomicNumber() && A == (*it)->GetAtomicMass() ) {
             G4double levelE = (*it)->GetEnergy();         
             if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 ) {
-               return *it; //found
+               if( flb == (*it)->GetFloatLevelBase() )
+               { return *it; } //found 
             }
          }
-
       }
    } 
 
@@ -135,12 +136,13 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
       if ( lower_bound_itr !=  itf -> second.end() ) {
          levelE = lower_bound_itr->first;
          if ( levelE - flevelTolerance/2 <= E && E < levelE + flevelTolerance/2 ) {
-            return lower_bound_itr->second; // found
+            if( flb == (lower_bound_itr->second)->GetFloatLevelBase() )
+            { return lower_bound_itr->second; } // found 
          }
       }
    }
 
-   return fProperty; // not found;
+   return fProperty; // not found
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -206,6 +208,8 @@ void G4NuclideTable::GenerateNuclide()
          }
 
          ionE *= keV;
+         G4int flbIndex = 0;
+         ionE = StripFloatLevelBase( ionE, flbIndex );
          ionLife *= ns;
          ionMu *= (joule/tesla);
 
@@ -226,6 +230,7 @@ void G4NuclideTable::GenerateNuclide()
             fProperty->SetLifeTime(ionLife);
             fProperty->SetDecayTable(0);
             fProperty->SetMagneticMoment(ionMu);
+            fProperty->SetFloatLevelBase(flbIndex);
 
             fIsotopeList->push_back(fProperty);
 
@@ -287,6 +292,16 @@ void G4NuclideTable::GenerateNuclide()
 void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE, G4double ionLife, G4int ionJ, G4double ionMu )
 {
    if ( G4Threading::IsMasterThread() ) {
+      G4int flbIndex = 0;
+      ionE = StripFloatLevelBase( ionE, flbIndex );
+      AddState(ionZ,ionA,ionE,flbIndex,ionLife,ionJ,ionMu);
+   }
+}
+
+void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE,
+                               G4int flbIndex, G4double ionLife, G4int ionJ, G4double ionMu )
+{
+   if ( G4Threading::IsMasterThread() ) {
 
    if ( fUserDefinedList == NULL ) fUserDefinedList = new G4IsotopeList();
 
@@ -301,6 +316,7 @@ void G4NuclideTable::AddState( G4int ionZ, G4int ionA, G4double ionE, G4double i
    fProperty->SetLifeTime(ionLife);
    fProperty->SetDecayTable(0);
    fProperty->SetMagneticMoment(ionMu);
+   fProperty->SetFloatLevelBase(flbIndex);
 
    fUserDefinedList->push_back(fProperty);
    fIsotopeList->push_back(fProperty);
@@ -315,4 +331,11 @@ void G4NuclideTable::SetThresholdOfHalfLife( G4double t )
       threshold_of_half_life=t; 
       GenerateNuclide();
    }
+}
+
+G4double G4NuclideTable::StripFloatLevelBase(G4double E, G4int& flbIndex)
+{
+  G4double rem = fmod(E/(1.0E-3*eV),10.0);
+  flbIndex = int(rem);
+  return E-rem;
 }

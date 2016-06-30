@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc 82764 2014-07-08 14:24:04Z gcosmo $
+// $Id: G4OpenGLViewerMessenger.cc 96669 2016-04-29 12:03:24Z gcosmo $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -173,7 +173,7 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandEventsDrawInterval =
     new G4UIcmdWithAnInteger("/vis/ogl/set/eventsDrawInterval", this);
   fpCommandEventsDrawInterval->SetGuidance
-    ("Set number of events allowed in drawing pipeline - speeds drawing");
+    ("Set number of events allowed in drawing pipeline - speeds drawing.");
   fpCommandEventsDrawInterval->SetGuidance
     ("By default, the screen is updated at the end of every event."
      "\nAllowing OpenGL to buffer several events can make a big improvement"
@@ -316,7 +316,6 @@ void G4OpenGLViewerMessenger::SetNewValue
   G4VisManager* pVisManager = G4VisManager::GetInstance();
 
   G4VViewer* pViewer = pVisManager->GetCurrentViewer();
-
   if (!pViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: No current viewer."
@@ -325,8 +324,18 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
+  G4VSceneHandler* pSceneHandler = pViewer->GetSceneHandler();
+  if (!pSceneHandler) {
+    G4cout <<
+    "G4OpenGLViewerMessenger::SetNewValue: This viewer has no scene handler."
+    "\n  Shouldn't happen - please report circumstances."
+    "\n  (Viewer is \"" << pViewer->GetName() << "\".)"
+    "\n  Try \"/vis/open\", or similar, to get one."
+    << G4endl;
+    return;
+  }
+  
   G4OpenGLViewer* pOGLViewer = dynamic_cast<G4OpenGLViewer*>(pViewer);
-
   if (!pOGLViewer) {
     G4cout <<
       "G4OpenGLViewerMessenger::SetNewValue: Current viewer is not of type"
@@ -337,6 +346,19 @@ void G4OpenGLViewerMessenger::SetNewValue
     return;
   }
 
+  G4OpenGLSceneHandler* pOGLSceneHandler =
+  dynamic_cast<G4OpenGLSceneHandler*>(pSceneHandler);
+  if (!pOGLSceneHandler) {
+    G4cout <<
+    "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
+    "\n  OGL.  (Viewer is \"" << pViewer->GetName() << "\".)"
+    "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
+    "\n  Use \"/vis/sceneHandler/list\" and \"/vis/sceneHandler/select\""
+    "\n  or \"/vis/open\"."
+    << G4endl;
+    return;
+  }
+  
   if (command == fpCommandPrintEPS)
   {
     pOGLViewer->setExportImageFormat("eps",true);
@@ -405,6 +427,14 @@ void G4OpenGLViewerMessenger::SetNewValue
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
       return;
     }
+
+  if (command == fpCommandEventsDrawInterval)
+  {
+    G4int eventsDrawInterval =
+    fpCommandEventsDrawInterval->GetNewIntValue(newValue);
+    pOGLSceneHandler->SetEventsDrawInterval(eventsDrawInterval);
+    return;
+  }
 
   G4OpenGLStoredViewer* pOGLSViewer =
     dynamic_cast<G4OpenGLStoredViewer*>(pViewer);
@@ -504,40 +534,6 @@ void G4OpenGLViewerMessenger::SetNewValue
       }
       if (pOGLSViewer->fVP.IsAutoRefresh())
 	G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
-      return;
-    }
-
-  G4VSceneHandler* pSceneHandler = pViewer->GetSceneHandler();
-
-  if (!pSceneHandler) {
-    G4cout <<
-  "G4OpenGLViewerMessenger::SetNewValue: This viewer has no scene handler."
-  "\n  Shouldn't happen - please report circumstances."
-  "\n  (Viewer is \"" << pViewer->GetName() << "\".)"
-  "\n  Try \"/vis/open\", or similar, to get one."
-           << G4endl;
-    return;
-  }
-
-  G4OpenGLSceneHandler* pOGLSceneHandler =
-    dynamic_cast<G4OpenGLSceneHandler*>(pSceneHandler);
-
-  if (!pOGLSceneHandler) {
-    G4cout <<
-  "G4OpenGLViewerMessenger::SetNewValue: Current scene handler is not of type"
-  "\n  OGL.  (Viewer is \"" << pViewer->GetName() << "\".)"
-  "\n  (Scene handler is \"" << pSceneHandler->GetName() << "\".)"
-  "\n  Use \"/vis/sceneHandler/list\" and \"/vis/sceneHandler/select\""
-  "\n  or \"/vis/open\"."
-           << G4endl;
-    return;
-  }
-
-  if (command == fpCommandEventsDrawInterval)
-    {
-      G4int eventsDrawInterval =
-	fpCommandEventsDrawInterval->GetNewIntValue(newValue);
-      pOGLSceneHandler->SetEventsDrawInterval(eventsDrawInterval);
       return;
     }
 

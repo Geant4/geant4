@@ -113,8 +113,9 @@ G4EmStandardPhysicsGS::G4EmStandardPhysicsGS(G4int ver)
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetLowestElectronEnergy(10*eV);
-  param->SetMscRangeFactor(0.12);
+  param->SetMscRangeFactor(0.1);
   param->SetMscStepLimitType(fUseSafetyPlus);// corresponds to Urban fUseSafety
+//  param->SetMscStepLimitType(fUseSafety);// corresponds to the error-free stepping
 //  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -128,8 +129,9 @@ G4EmStandardPhysicsGS::G4EmStandardPhysicsGS(G4int ver, const G4String&)
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetLowestElectronEnergy(10*eV);
-  param->SetMscRangeFactor(0.12);
+  param->SetMscRangeFactor(0.1);
   param->SetMscStepLimitType(fUseSafetyPlus);// corresponds to Urban fUseSafety
+//  param->SetMscStepLimitType(fUseSafety);// corresponds to the error-free stepping
 //  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }

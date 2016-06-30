@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4ionIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,12 +83,11 @@ using namespace std;
 
 G4ionIonisation::G4ionIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
+    theParticle(nullptr),
     isInitialised(false),
     stopDataActive(false)
 {
   SetLinearLossLimit(0.02);
-  SetStepFunction(0.1, 0.01*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
   corr = G4LossTableManager::Instance()->EmCorrections();
@@ -131,11 +130,11 @@ void G4ionIonisation::InitialiseEnergyLossProcess(
     theParticle = part;
 
     // define base particle
-    const G4ParticleDefinition* theBaseParticle = 0;
+    const G4ParticleDefinition* theBaseParticle = nullptr;
 
-    if(part == ion)     { theBaseParticle = 0; }
-    else if(bpart == 0) { theBaseParticle = ion; }
-    else                { theBaseParticle = bpart; }
+    if(part == ion)           { theBaseParticle = nullptr; }
+    else if(bpart == nullptr) { theBaseParticle = ion; }
+    else                      { theBaseParticle = bpart; }
 
     SetBaseParticle(theBaseParticle);
 

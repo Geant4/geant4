@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 94428 2015-11-16 12:40:02Z gcosmo $
+// $Id: G4OpenGLViewer.cc 97315 2016-06-01 12:12:25Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -60,6 +60,7 @@
 
 #include <sstream>
 #include <string>
+#include <iomanip>
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
@@ -503,7 +504,6 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
 {
   std::vector < G4OpenGLViewerPickMap* > pickMapVector;
   
-  std::ostringstream oss;
   const G4int BUFSIZE = 512;
   GLuint selectBuffer[BUFSIZE];
   glSelectBuffer(BUFSIZE, selectBuffer);
@@ -540,7 +540,6 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
       p++;
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
-        oss.clear();
         GLuint name = *p++;
         pickMap->setHitNumber(i);
         pickMap->setSubHitNumber(j);
@@ -552,6 +551,7 @@ std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x
 	  if(attHolder && attHolder->GetAttDefs().size()) {
 	    for (size_t iAtt = 0;
 		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
+              std::ostringstream oss;
 	      oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
                                 attHolder->GetAttDefs()[iAtt]);
               pickMap->addAttributes(oss.str());
@@ -1036,7 +1036,7 @@ std::string G4OpenGLViewer::getRealPrintFilename() {
   if (fExportFilenameIndex != -1) {
     temp += std::string("_");
     std::ostringstream os;
-    os << fExportFilenameIndex;
+    os << std::setw(4) << std::setfill('0') << fExportFilenameIndex;
     std::string nb_str = os.str();
     temp += nb_str;
   }

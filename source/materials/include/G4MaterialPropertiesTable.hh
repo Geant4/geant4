@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4MaterialPropertiesTable.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -72,7 +72,7 @@ class G4MaterialPropertiesTable
   public: // Without description
 
     G4MaterialPropertiesTable(); 
-   ~G4MaterialPropertiesTable();
+    virtual ~G4MaterialPropertiesTable();
 
   public: // With description
 
@@ -97,16 +97,16 @@ class G4MaterialPropertiesTable
     inline void RemoveProperty(const char *key);
     // Remove a property from the table.
 
-    inline G4double GetConstProperty(const char *key);
+    G4double GetConstProperty(const char *key);
     // Get the constant property from the table corresponding to the key-name
 
-    inline G4bool ConstPropertyExists(const char *key);
+    G4bool ConstPropertyExists(const char *key);
     // Return true if a const property 'key' exists.
 
-    inline G4MaterialPropertyVector* GetProperty(const char *key);
+    G4MaterialPropertyVector* GetProperty(const char *key);
     // Get the property from the table corresponding to the key-name.
 
-    inline void AddEntry(const char *key, G4double aPhotonEnergy,
+    void AddEntry(const char *key, G4double aPhotonEnergy,
                                           G4double aPropertyValue);
     // Add a new entry (pair of numbers) to the table for a given key.
 

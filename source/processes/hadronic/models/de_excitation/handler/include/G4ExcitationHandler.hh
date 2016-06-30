@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 88849 2015-03-12 16:19:38Z gcosmo $
+// $Id: G4ExcitationHandler.hh 96931 2016-05-18 09:06:52Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -58,33 +58,36 @@ class G4VMultiFragmentation;
 class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
-class G4FermiFragmentsPool;
 class G4NistManager;
 
 class G4ExcitationHandler 
 {
 public:
 
-  G4ExcitationHandler(); 
+  explicit G4ExcitationHandler(); 
   ~G4ExcitationHandler();
 
   G4ReactionProductVector* BreakItUp(const G4Fragment &theInitialState);
 
+  // short model description used for automatic web documentation
+  void ModelDescription(std::ostream& outFile) const;
+
+  void Initialise();
+
   // user defined sub-models
-  // deletion is responsibility of this handler
-  void SetEvaporation(G4VEvaporation* ptr);
+  // deletion is responsibility of this handler if isLocal=true 
+  void SetEvaporation(G4VEvaporation* ptr, G4bool isLocal=false);
   void SetMultiFragmentation(G4VMultiFragmentation* ptr);
   void SetFermiModel(G4VFermiBreakUp* ptr);
   void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
-  // parameters of sub-models
-  void SetMaxZForFermiBreakUp(G4int aZ);
-  void SetMaxAForFermiBreakUp(G4int anA);
-  void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
-  void SetMinEForMultiFrag(G4double anE);
+  //======== Obsolete methods to be removed =====
 
-  // short model description used for automatic web documentation
-  void ModelDescription(std::ostream& outFile) const;
+  // parameters of sub-models
+  inline void SetMaxZForFermiBreakUp(G4int aZ);
+  inline void SetMaxAForFermiBreakUp(G4int anA);
+  inline void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
+  inline void SetMinEForMultiFrag(G4double anE);
 
   // access methods
   inline G4VEvaporation* GetEvaporation();
@@ -97,21 +100,22 @@ public:
   // for superimposed Coulomb Barrir for inverse cross sections
   inline void UseSICB();
 
+  //==============================================
+
 private:
 
   void SetParameters();
 
-  G4ExcitationHandler(const G4ExcitationHandler &right);
-  const G4ExcitationHandler & operator=(const G4ExcitationHandler &right);
-  G4bool operator==(const G4ExcitationHandler &right) const;
-  G4bool operator!=(const G4ExcitationHandler &right) const;
+  G4ExcitationHandler(const G4ExcitationHandler &right) = delete;
+  const G4ExcitationHandler & operator
+  =(const G4ExcitationHandler &right) = delete;
+  G4bool operator==(const G4ExcitationHandler &right) const = delete;
+  G4bool operator!=(const G4ExcitationHandler &right) const = delete;
   
   G4VEvaporation* theEvaporation;  
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
-
-  G4FermiFragmentsPool* thePool;
 
   G4int maxZForFermiBreakUp;
   G4int maxAForFermiBreakUp;
@@ -121,8 +125,7 @@ private:
   G4IonTable* theTableOfIons;
   G4NistManager* nist;
 
-  G4int  OPTxs;
-  G4bool useSICB;
+  G4bool isInitialised;
   G4bool isEvapLocal;
 
   // list of fragments to store final result   
@@ -137,6 +140,27 @@ private:
   // list of fragments to apply Evaporation or Fermi Break-Up
   std::vector<G4Fragment*> theEvapList;          
 };
+
+inline void G4ExcitationHandler::SetMaxZForFermiBreakUp(G4int aZ)
+{
+  maxZForFermiBreakUp = aZ;
+}
+
+inline void G4ExcitationHandler::SetMaxAForFermiBreakUp(G4int anA)
+{
+  maxAForFermiBreakUp = anA;
+}
+
+inline void G4ExcitationHandler::SetMaxAandZForFermiBreakUp(G4int anA, G4int aZ)
+{
+  SetMaxAForFermiBreakUp(anA);
+  SetMaxZForFermiBreakUp(aZ);
+}
+
+inline void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
+{
+  minEForMultiFrag = anE;
+}
 
 inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()
 {
@@ -158,16 +182,10 @@ inline G4VEvaporationChannel* G4ExcitationHandler::GetPhotonEvaporation()
   return thePhotonEvaporation;
 }
 
-inline void G4ExcitationHandler::SetOPTxs(G4int opt) 
-{ 
-  OPTxs = opt; 
-  SetParameters();
-}
+inline void G4ExcitationHandler::SetOPTxs(G4int) 
+{}
 
 inline void G4ExcitationHandler::UseSICB()
-{ 
-  useSICB = true; 
-  SetParameters();
-}
+{}
 
 #endif

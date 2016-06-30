@@ -1,10 +1,17 @@
 /tracking/verbose 0
 /run/verbose 2
+/control/verbose 2
 
 # use /run/initialize before calling /dna/det/setMat
 # in this example, this is done in dnaphysics.cc
 #/dna/det/setMat G4_WATER_MODIFIED
 /dna/det/setMat G4_WATER
+
+/process/em/auger true
+/process/em/deexcitationIgnoreCut true 
+/process/em/AddDNARegion World Opt0
+
+/run/initialize 
 
 /gun/particle e-
 #/gun/particle proton
@@ -15,8 +22,5 @@
 #/gun/particle ion
 #/gun/ion 14 28
 /gun/energy 1 keV
-
-/process/em/auger true
-/process/em/deexcitationIgnoreCut true 
 
 /run/beamOn 100

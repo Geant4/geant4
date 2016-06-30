@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.cc 92057 2015-08-14 13:34:55Z gcosmo $
+// $Id: G4DecayTable.cc 95052 2016-01-21 08:34:03Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -96,8 +96,7 @@ G4VDecayChannel *G4DecayTable::SelectADecayChannel(G4double parentMass)
       if (r < sumBR) return (*i);
     }
   }
-  G4VDecayChannelVector::iterator i = channels->begin();
-  return (*i);
+  return 0;
 }
 
 void G4DecayTable::DumpInfo() const

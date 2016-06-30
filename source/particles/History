@@ -1,4 +1,4 @@
-$Id: History 94620 2015-11-26 14:05:52Z gcosmo $
+$Id: History 96797 2016-05-09 10:13:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,60 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 5 May 2016 Hisaya Kurashige (particles-V10-02-14)
+- Fix Coverity defects (43015,62787,62788)
+- Modify G4IonTable::GetIon with non-zero lvl 
+  (Coverity 63524)
+
+- 5 April 2016 Makoto Asai (particles-V10-02-13)
+- G4IsotopeMagneticMomentTable: Ignoring floating level base for
+  the time being.
+
+- 4 April 2016 Makoto Asai (particles-V10-02-12)
+- G4NuclideTable has migrated to the new floating level base scheme.
+
+- 31 March 2016 Makoto Asai (particles-V10-02-11)
+- Introducing floating level base to G4Ions and related classes.
+
+- 2 March 2016 Hisaya Kurashige (particles-V10-02-10)
+- Update properties of particles according to PDG
+
+- 1 Match 2016 Andrea Dotti (particles-V10-02-09)
+- Fix for WIN: removing constexpr
+
+- 29 February 2016 Andrea Dotti  (particles-V10-02-08)
+- Fix for bug #1834: MT data-race in G4VDecayTable class
+
+- 25 February 2016 Andrea Dotti  (particles-V10-02-07)
+- Preliminary tag to review of MT treatment for SetDaugheter in 
+  G4VDecayChannel: raise exception if re-definition of daughters
+  is requested
+
+- 4 February  2016 Tatsumi Koi (particles-V10-02-06)
+- Change default life of ion and hyper nucleus from -1 to 0
+
+- 27 January 2016  Hisaya Kurashige(particles-V10-02-05)
+- Fix the bug(#1820) in G4PhaseSpaceDecayChannel
+
+- 21 January 2016  Hisaya Kurashige(particles-V10-02-04)
+- Fix G4DecayTable::SelectADecayChannel
+
+- 28 December 2015  Makoto Asai (particles-V10-02-03)
+- Fix wrong argument order CreateIon(A,Z,LL,0.0) of line #485 in
+  G4IonTable.cc to CreateIon(Z,A,LL,0.0).
+
+- 18 December 2015  Tatsumi Koi (particles-V10-02-02)
+- Fix problem on previous tag
+
+- 17 December 2015  Tatsumi Koi (particles-V10-02-01)
+- Revert default value of level tolerance in NuclideTable to 1 eV
+- Turn out rounding of excitation energy to avoid potential conservation problem  
+
+- 3 December 2015  Dennis Wright (particles-V10-01-19) 
+- In G4IonTable remove static const tolerance and replace it with 
+  pNuclideTable->GetLevelTolerance() in all locations.
+  This recovers missed levels when they are closer together than 2 keV
 
 - 25 Nov. 2015  Gunter Folger (particles-V10-01-18)
 - Fix for Windows in G4NuclideTable:

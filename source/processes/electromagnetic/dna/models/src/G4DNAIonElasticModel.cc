@@ -35,6 +35,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4ParticleTable.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -357,7 +358,10 @@ G4DNAIonElasticModel::SampleSecondaries (
     (1-std::cos(thetaCM*CLHEP::pi/180))
     / (2 * std::pow((fParticle_Mass+water_mass),2));
 
-    if (!statCode) fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0 - depositEnergyCM);
+    //SI: added protection particleEnergy0 >= depositEnergyCM
+    if (!statCode && (particleEnergy0 >= depositEnergyCM) ) 
+
+      fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0 - depositEnergyCM);
     
     else fParticleChangeForGamma->SetProposedKineticEnergy(particleEnergy0);
    
@@ -437,7 +441,7 @@ G4DNAIonElasticModel::LinLogInterpolate (G4double e1, G4double e2, G4double e,
 {
   G4double d1 = std::log(xs1);
   G4double d2 = std::log(xs2);
-  G4double value = std::exp(d1 + (d2 - d1) * (e - e1) / (e2 - e1));
+  G4double value = G4Exp(d1 + (d2 - d1) * (e - e1) / (e2 - e1));
   return value;
 }
 

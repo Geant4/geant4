@@ -40,11 +40,8 @@ endif()
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
-# If it's internal, add it to the externals list, if it's external, add the
-# include directories to the list of third party header paths
-if(GEANT4_USE_SYSTEM_CLHEP)
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${CLHEP_INCLUDE_DIRS})
-else()
+# If it's internal, add it to the externals list
+if(NOT GEANT4_USE_SYSTEM_CLHEP)
   list(APPEND GEANT4_EXTERNALS_TARGETS G4clhep)
 endif()
 
@@ -70,8 +67,9 @@ endif()
 
 # - USolids
 # Compile definitions
-if(GEANT4_USE_USOLIDS)
-  list(APPEND GEANT4_CORE_DEFINITIONS -DG4GEOM_USE_USOLIDS)
+if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
+  set(GEANT4_USE_USOLIDS_EITHER ON)
+  list(APPEND GEANT4_CORE_DEFINITIONS ${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # System USolids headers, because these do appear in Geant4's
   # public interface. The library should be in the link interface
@@ -163,7 +161,7 @@ configure_file(
   COPYONLY
   )
 
-foreach(_mod AIDA HepMC Pythia6 ROOT StatTest TBB)
+foreach(_mod AIDA CLHEP HepMC Pythia6 ROOT StatTest TBB)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake
@@ -207,7 +205,7 @@ else()
 
   set(GEANT4_INCLUDE_DIR_SETUP "
 # Geant4 configured for the install with relative paths, so use these
-get_filename_component(Geant4_INCLUDE_DIR \"\${_thisdir}/${GEANT4_RELATIVE_HEADER_PATH}\" ABSOLUTE)
+get_filename_component(Geant4_INCLUDE_DIR \"\${_geant4_thisdir}/${GEANT4_RELATIVE_HEADER_PATH}\" ABSOLUTE)
   ")
 endif()
 

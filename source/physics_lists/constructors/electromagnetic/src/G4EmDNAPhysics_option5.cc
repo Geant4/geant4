@@ -34,6 +34,7 @@
 
 // *** Processes and models for Geant4-DNA
 
+#include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
 #include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
@@ -155,67 +156,33 @@ void G4EmDNAPhysics_option5::ConstructProcess()
 
     if (particleName == "e-")
     {
-
-      // *** Elastic scattering (two alternative models available) ***
-      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
-
-      //theDNAElasticProcess->SetEmModel(new G4DNAChampionElasticModel());
-      theDNAElasticProcess->SetEmModel(new G4DNAUeharaScreenedRutherfordElasticModel());
-      //theDNAElasticProcess->SetEmModel(new G4DNAScreenedRutherfordElasticModel());
+      // *** Solvation ***
       
+      G4DNAElectronSolvation* solvation =
+        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+      G4DNAOneStepThermalizationModel* therm =
+        new G4DNAOneStepThermalizationModel();
+      therm->SetHighEnergyLimit(10.*eV); // limit of the Uehara's model
+      solvation->SetEmModel(therm);
+      ph->RegisterProcess(solvation, particle);
+      
+      // *** Elastic scattering ***
+      G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
+      theDNAElasticProcess->SetEmModel(new G4DNAUeharaScreenedRutherfordElasticModel());
+      ((G4DNAUeharaScreenedRutherfordElasticModel*)(theDNAElasticProcess->EmModel()))->SelectFasterComputation(true);
       ph->RegisterProcess(theDNAElasticProcess, particle);
 
-      {
       // *** Excitation ***
-      G4DNAExcitation* theDNAExcitationProcess =
-          new G4DNAExcitation("e-_G4DNAExcitation");
-      {
-      G4DNABornExcitationModel* bornExc = new G4DNABornExcitationModel();
-      bornExc->SetLowEnergyLimit(10*keV);
-      bornExc->SetHighEnergyLimit(1.*MeV);
-      bornExc->SetActivationLowEnergyLimit(10*keV);
-      bornExc->SetActivationHighEnergyLimit(1.*MeV);
-      theDNAExcitationProcess->SetEmModel(bornExc,1);
-      theDNAExcitationProcess->AddEmModel(1, bornExc);
-      }
-      {
-      G4DNAEmfietzoglouExcitationModel* emExc = new G4DNAEmfietzoglouExcitationModel();
-      emExc->SetActivationLowEnergyLimit(0);
-      emExc->SetActivationHighEnergyLimit(10.*keV);
-      theDNAExcitationProcess->SetEmModel(emExc,2);
-      theDNAExcitationProcess->AddEmModel(2, emExc);
-      }
+      G4DNAExcitation* theDNAExcitationProcess = new G4DNAExcitation("e-_G4DNAExcitation");
+      theDNAExcitationProcess->SetEmModel(new G4DNAEmfietzoglouExcitationModel());
       ph->RegisterProcess(theDNAExcitationProcess, particle);
-      }
-      {
+
       // *** Ionisation ***
-      G4DNAIonisation* theDNAIonisationProcess =
-          new G4DNAIonisation("e-_G4DNAIonisation");
-      {
-      G4DNABornIonisationModel* bornIon = new G4DNABornIonisationModel();
-      bornIon->SetLowEnergyLimit(10*keV);
-      bornIon->SetHighEnergyLimit(1.*MeV);
-      bornIon->SetActivationLowEnergyLimit(10*keV);
-      bornIon->SetActivationHighEnergyLimit(1.*MeV);
-
-      theDNAIonisationProcess->SetEmModel(bornIon,1);
-      bornIon->SelectFasterComputation(true);
-      theDNAIonisationProcess->AddEmModel(1,bornIon);
-      }
-
-      {
-      G4DNAEmfietzoglouIonisationModel* emIonModel = new G4DNAEmfietzoglouIonisationModel();
-      emIonModel->SetLowEnergyLimit(10*eV);
-      emIonModel->SetHighEnergyLimit(10.*keV);
-      emIonModel->SetActivationLowEnergyLimit(0);
-      emIonModel->SetActivationHighEnergyLimit(10.*keV);
-
-      theDNAIonisationProcess->SetEmModel(emIonModel,2);
-      emIonModel->SelectFasterComputation(true);
-      theDNAIonisationProcess->AddEmModel(2,emIonModel);
-      }
+      G4DNAIonisation* theDNAIonisationProcess = new G4DNAIonisation("e-_G4DNAIonisation");
+      theDNAIonisationProcess->SetEmModel(new G4DNAEmfietzoglouIonisationModel());
+      ((G4DNAEmfietzoglouIonisationModel*)(theDNAIonisationProcess->EmModel()))->SelectFasterComputation(true);
       ph->RegisterProcess(theDNAIonisationProcess, particle);
-      }
+
       // *** Vibrational excitation ***
       //ph->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), particle);
       

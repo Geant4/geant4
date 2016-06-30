@@ -57,7 +57,7 @@ class G4XTRGammaRadModel : public G4VXTRenergyLoss
 {
 public:
 
-  G4XTRGammaRadModel (G4LogicalVolume *anEnvelope,
+  explicit G4XTRGammaRadModel (G4LogicalVolume *anEnvelope,
 		      G4double,G4double,
 		      G4Material*,G4Material*,
 		      G4double,G4double,G4int,
@@ -66,7 +66,8 @@ public:
 
   // Pure virtual function from base class
 
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+  G4double GetStackFactor(G4double energy, G4double gamma, 
+                          G4double varAngle) override;
 
 private:
 

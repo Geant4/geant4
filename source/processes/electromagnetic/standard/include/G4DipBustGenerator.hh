@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DipBustGenerator.hh 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4DipBustGenerator.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,26 +57,25 @@ class G4DipBustGenerator : public G4VEmAngularDistribution
 
 public:
 
-  G4DipBustGenerator(const G4String& name = "");
+  explicit G4DipBustGenerator(const G4String& name = "");
 
   virtual ~G4DipBustGenerator();
 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
-                                         G4double out_energy,
-                                         G4int Z,
-                                         const G4Material* mat = 0);
+                                         G4double out_energy, G4int Z,
+                                         const G4Material* mat = nullptr) final;
 
   G4double PolarAngle(const G4double initial_energy,
 		      const G4double final_energy,
 		      const G4int Z);
 
-  void PrintGeneratorInformation() const;
+  virtual void PrintGeneratorInformation() const final;
 
 private:
 
   // hide assignment operator 
-  G4DipBustGenerator & operator=(const  G4DipBustGenerator &right);
-  G4DipBustGenerator(const  G4DipBustGenerator&);
+  G4DipBustGenerator & operator=(const  G4DipBustGenerator &right) = delete;
+  G4DipBustGenerator(const  G4DipBustGenerator&) = delete;
 
 };
 

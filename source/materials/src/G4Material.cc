@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 94016 2015-11-05 10:14:49Z gcosmo $
+// $Id: G4Material.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -130,7 +130,7 @@ G4Material::G4Material(const G4String& name, G4double z,
 
   fMassFractionVector    = new G4double[1];
   fMassFractionVector[0] = 1. ;
-  fMassOfMolecule        = a/Avogadro;
+  fMassOfMolecule        = a/CLHEP::Avogadro;
   
   if (fState == kStateUndefined)
     {
@@ -215,8 +215,6 @@ G4Material::G4Material(const G4String& name, G4double density,
   maxNbComponents = fNumberOfElements;
   fNumberOfComponents = fNumberOfElements;
 
-  fMaterialPropertiesTable = fBaseMaterial->GetMaterialPropertiesTable();
-
   CopyPointersOfBaseMaterial();
 }
 
@@ -226,14 +224,9 @@ G4Material::G4Material(const G4String& name, G4double density,
 //                            for usage restricted to object persistency
 
 G4Material::G4Material(__void__&)
-  : fChemicalFormula(""), fDensity(0.0), fState(kStateUndefined), fTemp(0.0), 
-    fPressure(0.0), maxNbComponents(0), fArrayLength(0), 
-    fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
-    fMassFractionVector(0), fAtomsVector(0), fMaterialPropertiesTable(0), 
-    fIndexInTable(0), VecNbOfAtomsPerVolume(0), TotNbOfAtomsPerVolume(0), 
-    TotNbOfElectPerVolume(0), fRadlen(0.0), fNuclInterLen(0.0), fIonisation(0), 
-    fSandiaTable(0), fBaseMaterial(0), fMassOfMolecule(0.0)
+  : fName("")
 {
+  InitializePointers();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -241,31 +234,32 @@ G4Material::G4Material(__void__&)
 G4Material::~G4Material()
 {
   //  G4cout << "### Destruction of material " << fName << " started" <<G4endl;
-  if(!fBaseMaterial) {
-    if (theElementVector)       { delete    theElementVector; }
-    if (fMassFractionVector)    { delete [] fMassFractionVector; }
-    if (fAtomsVector)           { delete [] fAtomsVector; }
-    if (fSandiaTable)           { delete fSandiaTable; }
+  if(fBaseMaterial == nullptr) {
+    delete theElementVector;  
+    delete fSandiaTable; 
+    //delete fMaterialPropertiesTable;
+    if(fMassFractionVector) { delete [] fMassFractionVector; } 
+    if(fAtomsVector)        { delete [] fAtomsVector; } 
   }
-  if (fIonisation)            { delete fIonisation; }
-  if (VecNbOfAtomsPerVolume)  { delete [] VecNbOfAtomsPerVolume; }
+  delete fIonisation; 
+  if(VecNbOfAtomsPerVolume) { delete [] VecNbOfAtomsPerVolume; } 
 
   // Remove this material from theMaterialTable.
   //
-  theMaterialTable[fIndexInTable] = 0;
+  theMaterialTable[fIndexInTable] = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4Material::InitializePointers()
 {
-  theElementVector         = 0;
-  fMassFractionVector      = 0;
-  fAtomsVector             = 0;
-  fMaterialPropertiesTable = 0;
+  theElementVector         = nullptr;
+  fMassFractionVector      = nullptr;
+  fAtomsVector             = nullptr;
+  fMaterialPropertiesTable = nullptr;
     
-  VecNbOfAtomsPerVolume    = 0;
-  fBaseMaterial            = 0;
+  VecNbOfAtomsPerVolume    = nullptr;
+  fBaseMaterial            = nullptr;
 
   fChemicalFormula         = "";
 
@@ -276,14 +270,16 @@ void G4Material::InitializePointers()
   fPressure = 0.0;
   maxNbComponents     = 0;
   fArrayLength        = 0;
-  TotNbOfAtomsPerVolume = 0;
-  TotNbOfElectPerVolume = 0; 
+  fNumberOfComponents = 0;
+  fNumberOfElements   = 0;
+  TotNbOfAtomsPerVolume = 0.0;
+  TotNbOfElectPerVolume = 0.0; 
   fRadlen = 0.0;
   fNuclInterLen = 0.0;
   fMassOfMolecule = 0.0;
 
-  fIonisation = 0;
-  fSandiaTable = 0;
+  fIonisation = nullptr;
+  fSandiaTable = nullptr;
 
   // Store in the static Table of Materials
   fIndexInTable = theMaterialTable.size();
@@ -355,6 +351,8 @@ void G4Material::CopyPointersOfBaseMaterial()
 
   fSandiaTable = fBaseMaterial->GetSandiaTable();
   fIonisation->SetMeanExcitationEnergy(fBaseMaterial->GetIonisation()->GetMeanExcitationEnergy());
+
+  fMaterialPropertiesTable = fBaseMaterial->GetMaterialPropertiesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -617,7 +615,7 @@ G4Material::GetMaterial(const G4String& materialName, G4bool warning)
 	   << " does not exist in the table. Return NULL pointer."
 	   << G4endl;
   }	 
-  return 0;          
+  return nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -644,20 +642,6 @@ G4double G4Material::GetA() const
 		 "the Atomic mass is not well defined." );
   } 
   return  (*theElementVector)[0]->GetA();      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4Material::operator==(const G4Material& right) const
-{
-  return (this == (G4Material *) &right);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int G4Material::operator!=(const G4Material& right) const
-{
-  return (this != (G4Material *) &right);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

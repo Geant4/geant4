@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuasiElRatios.cc 93888 2015-11-03 08:30:20Z gcosmo $
+// $Id: G4QuasiElRatios.cc 96538 2016-04-20 12:39:18Z gcosmo $
 //
 //
 // G4 Physics class: G4QuasiElRatios for N+A elastic cross sections
@@ -1085,14 +1085,14 @@ G4bool G4QuasiElRatios::RelDecayIn2(G4LorentzVector& theMomentum, G4LorentzVecto
         ct = minCost+dcost*G4UniformRand();
     }
     G4double phi= twopi*G4UniformRand();  // @@ Change 360.*deg to M_TWOPI (?)
-    G4double ps=0.;
-    if(std::fabs(ct)<1.) ps = p * std::sqrt(1.-ct*ct);
+    G4double pss=0.;
+    if(std::fabs(ct)<1.) pss = p * std::sqrt(1.-ct*ct);
     else
     {
         if(ct>1.) ct=1.;
         if(ct<-1.) ct=-1.;
     }
-    G4ThreeVector pVect=(ps*std::sin(phi))*vz+(ps*std::cos(phi))*vy+p*ct*vx;
+    G4ThreeVector pVect=(pss*std::sin(phi))*vz+(pss*std::cos(phi))*vy+p*ct*vx;
     
     f4Mom.setVect(pVect);
     f4Mom.setE(std::sqrt(fM2+p2));

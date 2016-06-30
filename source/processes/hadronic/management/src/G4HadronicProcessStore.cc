@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc 92691 2015-09-14 07:04:52Z gcosmo $
+// $Id: G4HadronicProcessStore.cc 96491 2016-04-19 06:58:23Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -563,6 +563,7 @@ void G4HadronicProcessStore::PrintInfo(const G4ParticleDefinition* part)
     buildTableStart = false;
     Dump(verbose);
     if (getenv("G4PhysListDocDir") ) DumpHtml();
+    G4HadronicInteractionRegistry::Instance()->InitialiseModels();
   }
 }
 

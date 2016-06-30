@@ -53,17 +53,19 @@ class G4NeutronRadCapture : public G4HadronicInteraction
 {
 public:
 
-  G4NeutronRadCapture();
+  explicit G4NeutronRadCapture();
 
   virtual ~G4NeutronRadCapture();
  
-  G4HadFinalState * ApplyYourself(const G4HadProjectile & aTrack, 
-				  G4Nucleus & targetNucleus);
+  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile & aTrack, 
+					 G4Nucleus & targetNucleus) final;
+
+  virtual void InitialiseModel() final;
 
 private:
 
-  G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right);
-  G4NeutronRadCapture(const G4NeutronRadCapture&);
+  G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right) = delete;
+  G4NeutronRadCapture(const G4NeutronRadCapture&) = delete;
 
   G4double lowestEnergyLimit;
   G4double minExcitation;

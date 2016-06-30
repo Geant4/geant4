@@ -13,6 +13,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-04-16 mma  (exhadr06-V10-02-01)
+- EmStandardPhysics: use G4EmParameters
+
+14-02-16 mma (exhadr06-V10-02-00)
+- PhysicsList : add G4StoppingPhysics
+- materials : add NE213
 	 
 02-11-15 A. Ribon (exhadr06-V10-01-00)
 - Migrated to ParticleHP

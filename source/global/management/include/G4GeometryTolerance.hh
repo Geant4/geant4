@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryTolerance.hh 92328 2015-08-28 07:44:26Z gcosmo $
+// $Id: G4GeometryTolerance.hh 96427 2016-04-14 09:37:29Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file 
@@ -69,25 +69,29 @@ class G4GeometryTolerance
     G4double GetRadialTolerance() const;
       // Returns the current radial tolerance.
 
+  public:  // without description
+
+    ~G4GeometryTolerance();
+      // Destructor.
+
   protected:
 
-    static void SetSurfaceTolerance(G4double worldExtent);
+    void SetSurfaceTolerance(G4double worldExtent);
       // Sets the Cartesian and Radial surface tolerance to a value computed
       // from the maximum extent of the world volume. This method
       // can be called only once, and is done only through the
       // G4GeometryManager class.
 
     G4GeometryTolerance();
-    ~G4GeometryTolerance();
-      // Protected constructor and destructor.
+      // Protected constructor.
 
   private:
 
-    static G4GeometryTolerance* fpInstance;
-    static G4double fCarTolerance;
-    static G4double fAngTolerance;
-    static G4double fRadTolerance;
-    static G4bool fInitialised;
+    static G4ThreadLocal G4GeometryTolerance* fpInstance;
+    G4double fCarTolerance;
+    G4double fAngTolerance;
+    G4double fRadTolerance;
+    G4bool fInitialised;
  };
 
 #endif // G4GeometryTolerance_hh

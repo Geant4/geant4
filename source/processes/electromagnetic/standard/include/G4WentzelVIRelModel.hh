@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelModel.hh 79067 2014-02-14 09:48:52Z gcosmo $
+// $Id: G4WentzelVIRelModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,30 +71,32 @@ class G4WentzelVIRelModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIRelModel(G4bool combined = true);
+  explicit G4WentzelVIRelModel(G4bool combined = true);
 
   virtual ~G4WentzelVIRelModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
-  void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber,
 					      G4double AtomicWeight=0., 
 					      G4double cut = DBL_MAX,
-					      G4double emax= DBL_MAX);
+					      G4double emax= DBL_MAX) override;
 
   virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
-					  G4double safety);
+					  G4double safety) override;
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4double& currentMinimalStep);
+  virtual G4double 
+  ComputeTruePathLengthLimit(const G4Track& track,
+			     G4double& currentMinimalStep) override;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+  virtual G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
 private:
 
@@ -105,8 +107,8 @@ private:
   inline void DefineMaterial(const G4MaterialCutsCouple*);
 
   //  hide assignment operator
-  G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right);
-  G4WentzelVIRelModel(const  G4WentzelVIRelModel&);
+  G4WentzelVIRelModel & operator=(const  G4WentzelVIRelModel &right) = delete;
+  G4WentzelVIRelModel(const  G4WentzelVIRelModel&) = delete;
 
   G4LossTableManager*       theManager;
   G4NistManager*            fNistManager;

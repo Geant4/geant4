@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Qt.cc 79026 2014-02-12 09:53:32Z gcosmo $
+// $Id: G4Qt.cc 97174 2016-05-27 12:41:02Z gcosmo $
 //
 // L. Garnier
 
@@ -81,9 +81,6 @@ G4Qt::G4Qt (
   args = NULL;
   externalApp = false;
 
-#ifdef G4DEBUG_INTERFACES_COMMON
-  printf("G4Qt::G4Qt try to inited Qt\n");
-#endif
   // Check if Qt already init in another external app
   if(qApp) {
     externalApp = true;
@@ -91,9 +88,6 @@ G4Qt::G4Qt (
     SetMainInteractor (qApp);
     SetArguments      (a_argn,a_args);
     
-#ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::G4Qt alredy inited in external \n");
-#endif
   } else {
     
     if(QtInited==FALSE) {  //Qt should be Inited once !
@@ -119,9 +113,6 @@ G4Qt::G4Qt (
 
       int *p_argn = (int*)malloc(sizeof(int));
       *p_argn = argn;
-#ifdef G4DEBUG_INTERFACES_COMMON
-    printf("G4Qt::G4Qt QAppl \n");
-#endif
       new QApplication (*p_argn, args);
       if(!qApp) {
         
@@ -133,25 +124,12 @@ G4Qt::G4Qt (
       } else {
         QtInited  = TRUE;
         if (a_argn != 0) {
-#ifdef G4DEBUG_INTERFACES_COMMON
-          printf("G4Qt::G4Qt SetMainInteractor\n");
-#endif
           SetMainInteractor (qApp);
         }
         SetArguments      (a_argn,a_args);
-#ifdef G4DEBUG_INTERFACES_COMMON
-        printf("G4Qt::G4Qt inited Qt END\n");
-#endif
       }
     }
   }
-#ifdef G4DEBUG_INTERFACES_COMMON
-  if (qApp) {
-    printf("G4Qt::qApp already exist\n");
-  }  else {
-    printf("G4Qt::qApp not exist\n");
-  }
-#endif
   //  AddDispatcher     ((G4DispatchFunction)XtDispatchEvent);
   
   /*

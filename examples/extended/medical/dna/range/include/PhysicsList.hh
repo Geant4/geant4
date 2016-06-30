@@ -52,12 +52,17 @@ public:
   PhysicsList();
   ~PhysicsList();
 
-  void RegisterConstructor(const G4String& name);
+  virtual void ConstructParticle();
+
+  void AddPhysicsList(const G4String& name);
+  
   virtual void ConstructProcess();
+
   void AddTrackingCut();
 
 private:
   G4String fEmName;
+  G4VPhysicsConstructor*        fEmPhysicsList;    
 
   PhysicsListMessenger* fMessenger;
 };

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/TestEm11.cc
 /// \brief Main program of the electromagnetic/TestEm11 example
 //
-// $Id: TestEm11.cc 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id: TestEm11.cc 96329 2016-04-06 15:53:16Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,17 +65,9 @@ int main(int argc,char** argv) {
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   // Number of threads can be defined via 3rd argument
-  G4int nThreads = 4;
-  if (argc==3) {
-    if(G4String(argv[2]) == "NMAX") { 
-      nThreads = G4Threading::G4GetNumberOfCores();
-    } else {
-      nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    } 
-  } else if(argc==1) { 
-    nThreads = 1;
-  }
-  if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),4);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
   G4cout << "===== TestEm11 is started with " 
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else

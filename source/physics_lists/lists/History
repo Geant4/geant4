@@ -1,4 +1,4 @@
-$Id: History 94096 2015-11-05 15:19:03Z gcosmo $
+$Id: History 97750 2016-06-08 12:20:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,40 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, Alberto Ribon                (phys-lists-V10-02-06)
+- QGSP_BIC_AllHP : use new, specialized ion constructor, G4IonPhysicsPHP.
+
+10-May-2016, Robert Hatcher               (phys-lists-V10-02-05)
+- mv src/G4RegisterPhysLists.cc to include/G4RegisterPhysLists.icc
+  so that it gets compiled as part of the G4PhysListRegistry compilation
+  unit.  This ensures that all the physics lists declared to the
+  registry are referenced by it such that the linker will include
+  them if libraries are built statically, even when the loader
+  doesn't force whole-archive (not possible for MS Visual Studio) loading.
+- Fix exception label so it is unique.
+
+06-Apr-2016, Alberto Ribon                (phys-lists-V10-02-04)
+- FTFP_BERT_ATL : created new, experimental physics list for ATLAS,
+  similar to FTFP_BERT but with the transition between BERT and FTFP
+  in the energy region [9, 12] GeV.
+ 
+09-Mar-2016, Alberto Ribon                (phys-lists-V10-02-03)
+- FTFP_BERT_TRV : Use GS multiple scattering with the most precise 
+  "error-free" stepping. This is done for the purpose of studying
+  the impact of multiple scattering on hadronic showers.
+
+23-Feb-2016, Alberto Ribon                (phys-lists-V10-02-02)
+- FTFP_BERT_TRV : Use GS multiple scattering with the more precise option,
+  (Opt3), instead of the default (Opt0). This is done for the purpose of
+  studying the impact of multiple scattering on hadronic showers.
+
+14-Jan-2016, Alberto Ribon                (phys-lists-V10-02-01)
+- Re-submitting the previous tag (that was rejected).
+
+04-Dec-2015, Alberto Ribon                (phys-lists-V10-02-00)
+- FTFP_BERT_TRV : Switch on (again) the low-mass diffraction dissociation
+  used in G4HadronHElasticPhysics
 
 05-Nov-2015, Alberto Ribon                (phys-lists-V10-01-13)
 - Removed neutron_hp/ .

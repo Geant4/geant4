@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85608 2014-10-31 11:23:30Z gcosmo $
+# $Id: sources.cmake 97686 2016-06-07 09:27:32Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -37,6 +37,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4AffineTransform.icc
         G4BlockingList.hh
         G4BlockingList.icc
+        G4BoundingEnvelope.hh
         G4ErrorCylSurfaceTarget.hh
         G4ErrorPlaneSurfaceTarget.hh
         G4ErrorSurfaceTarget.hh
@@ -55,6 +56,8 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4Region.hh
         G4Region.icc
         G4RegionStore.hh
+        G4ScaleTransform.hh
+        G4ScaleTransform.icc
         G4SmartVoxelHeader.hh
         G4SmartVoxelHeader.icc
         G4SmartVoxelNode.hh
@@ -85,6 +88,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         voxeldefs.hh
     SOURCES
         G4BlockingList.cc
+        G4BoundingEnvelope.cc
         G4ErrorCylSurfaceTarget.cc
         G4ErrorPlaneSurfaceTarget.cc
         G4ErrorSurfaceTarget.cc

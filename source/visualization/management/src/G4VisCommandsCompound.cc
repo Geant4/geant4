@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4VisCommandsCompound.cc 95006 2016-01-15 08:26:18Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -35,6 +35,7 @@
 #include "G4UIcmdWithAString.hh"
 
 #include <sstream>
+#include <set>
 
 ////////////// /vis/drawTree ///////////////////////////////////////
 
@@ -64,6 +65,20 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
   std::istringstream is(newValue);
   is >> pvname >> system;
 
+  // Note: The second parameter, "system", is intended to allow the user
+  // a choice of dedicated tree printing/displaying systems but at present
+  // the only such dedicated system is ASCIITree.  It doesn't make sense to
+  // specify OGLSX, for example.  So to avoid confusion we restrict this
+  // feature to systems that have "Tree" in the name or nickname.
+
+  // Of course, some other systems, such as OGLSQt, have a tree browser
+  // built-in.  The HepRApp offline browser also has a tree browser
+  // built in.
+
+  if (!system.contains("Tree")) {
+    system = "ATree";
+  }
+
   G4VGraphicsSystem* keepSystem = fpVisManager->GetCurrentGraphicsSystem();
   G4Scene* keepScene = fpVisManager->GetCurrentScene();
   G4VSceneHandler* keepSceneHandler = fpVisManager->GetCurrentSceneHandler();
@@ -77,19 +92,20 @@ void G4VisCommandDrawTree::SetNewValue(G4UIcommand*, G4String newValue) {
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand(G4String("/vis/open " + system));
-  UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
-  UImanager->ApplyCommand("/vis/viewer/flush");
-  UImanager->SetVerboseLevel(keepVerbose);
-
-  if (keepViewer) {
-    if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-      G4cout << "Reverting to " << keepViewer->GetName() << G4endl;
+  if (fErrorCode == 0) {
+    UImanager->ApplyCommand(G4String("/vis/drawVolume " + pvname));
+    UImanager->ApplyCommand("/vis/viewer/flush");
+    if (keepViewer) {
+      if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
+        G4cout << "Reverting to " << keepViewer->GetName() << G4endl;
+      }
+      fpVisManager->SetCurrentGraphicsSystem(keepSystem);
+      fpVisManager->SetCurrentScene(keepScene);
+      fpVisManager->SetCurrentSceneHandler(keepSceneHandler);
+      fpVisManager->SetCurrentViewer(keepViewer);
     }
-    fpVisManager->SetCurrentGraphicsSystem(keepSystem);
-    fpVisManager->SetCurrentScene(keepScene);
-    fpVisManager->SetCurrentSceneHandler(keepSceneHandler);
-    fpVisManager->SetCurrentViewer(keepViewer);
   }
+  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/drawView ///////////////////////////////////////
@@ -195,8 +211,8 @@ G4VisCommandDrawVolume::G4VisCommandDrawVolume() {
      "\nworld and parallel worlds, if any - are drawn.  Otherwise a search of"
      "\nall worlds is made, taking the first matching occurence only.  To see"
      "\na representation of the geometry hierarchy of the worlds, try"
-     "\n\"/vis/drawTree [worlds]\" or one of the driver/browser combinations"
-     "\nthat have the required functionality, e.g., HepRep");
+     "\n\"/vis/drawTree worlds\" or one of the driver/browser combinations"
+     "\nthat have the required functionality, e.g., HepRepFile/HepRApp.");
   fpCommand->SetParameterName("physical-volume-name", omitable = true);
   fpCommand->SetDefaultValue("world");
 }
@@ -262,8 +278,26 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand*, G4String newValue) {
       fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
     newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
-  UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
+  fErrorCode = UImanager->ApplyCommand(G4String("/vis/sceneHandler/create " + systemName));
+  if (fErrorCode == 0) {
+    UImanager->ApplyCommand(G4String("/vis/viewer/create ! ! " + windowSizeHint));
+  } else {
+    // Use set to get alphabetical order
+    std::set<G4String> candidates;
+    for (const auto gs: fpVisManager -> GetAvailableGraphicsSystems()) {
+      // Just list nicknames, but exclude FALLBACK nicknames
+      for (const auto& nickname: gs->GetNicknames()) {
+        if (!nickname.contains("FALLBACK")) {
+          candidates.insert(nickname);
+        }
+      }
+    }
+    G4cerr << "Candidates are:";
+    for (const auto& candidate: candidates) {
+      G4cerr << ' ' << candidate;
+    }
+    G4cerr << G4endl;
+  }
   UImanager->SetVerboseLevel(keepVerbose);
 }
 

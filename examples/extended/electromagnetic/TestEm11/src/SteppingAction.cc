@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 74997 2013-10-25 10:52:13Z gcosmo $
+// $Id: SteppingAction.cc 95740 2016-02-23 09:34:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,10 +59,6 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4double edep = step->GetTotalEnergyDeposit();
  if (edep <= 0.) return;
  
- //total energy deposit in absorber
- //
- fEventAction->AddEdep(edep); 
- 
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();     
  
  //longitudinal profile of deposited energy
@@ -91,7 +87,11 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    G4double xnorm = xfrontNorm + (x - xfront)/csdaRange;
    analysisManager->FillH1(8, xnorm, edep/(csdaRange*density));
  }
-   
+ 
+ //total energy deposit in absorber
+ //
+ fEventAction->AddEdep(iabs, edep);
+ 
  //step size of primary particle or charged secondaries
  //
  G4double steplen = step->GetStepLength();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.cc 93563 2015-10-26 14:46:09Z gcosmo $
+// $Id: G4QGSDiffractiveExcitation.cc 94750 2015-12-07 08:24:29Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -60,8 +60,13 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
+//============================================================================
 
-G4QGSDiffractiveExcitation::G4QGSDiffractiveExcitation()                                     // Uzhi
+//#define debugQGSdiffExictation
+
+//============================================================================
+
+G4QGSDiffractiveExcitation::G4QGSDiffractiveExcitation()
 {
 }
 
@@ -73,6 +78,8 @@ G4QGSDiffractiveExcitation::~G4QGSDiffractiveExcitation()
 G4bool G4QGSDiffractiveExcitation::
 ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) const
 {
+G4cout<<"G4QGSDiffractiveExcitation::ExciteParticipants"<<G4endl;
+G4cout<<"Proj Targ "<<projectile->GetDefinition()->GetPDGEncoding()<<" "<<target->GetDefinition()->GetPDGEncoding()<<G4endl;
 
 	G4LorentzVector Pprojectile=projectile->Get4Momentum();
 
@@ -121,6 +128,9 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 
 	// -------------------- Target parameters ----------------------------------------------
 	G4LorentzVector Ptarget=target->Get4Momentum();
+
+//G4cout<<"Pr Tr 4-Mom "<<Pprojectile<<" "<<Pprojectile.mag()<<G4endl
+//      <<"            "<<Ptarget    <<" "<<Ptarget.mag()   <<G4endl;
 
 	G4double M0target = Ptarget.mag();
 
@@ -217,11 +227,8 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 	G4LorentzVector Qmomentum;
 	G4double Qminus, Qplus;
 
-	// /* Vova
 	G4int whilecount=0;
 	do {
-		//  Generate pt
-
 		if (whilecount++ >= 500 && (whilecount%100)==0)
 			//	   	 G4cout << "G4QGSDiffractiveExcitation::ExciteParticipants possibly looping"
 			//	   	 << ", loop count/ maxPtSquare : "
@@ -232,26 +239,8 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 				return false; 	  //  Ignore this interaction
 			}
 
+		//  Generate pt
 		Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
-
-		//G4cout << "generated Pt " << Qmomentum << G4endl;
-		//G4cout << "Pprojectile with pt : " << Pprojectile+Qmomentum << G4endl;
-		//G4cout << "Ptarget with pt : " << Ptarget-Qmomentum << G4endl;
-
-		//  Momentum transfer
-		/*                                                                          // Uzhi
-	       G4double Xmin = minmass / ( Pprojectile.e() + Ptarget.e() );
-	       G4double Xmax=1.;
-	       G4double Xplus =ChooseX(Xmin,Xmax);
-	       G4double Xminus=ChooseX(Xmin,Xmax);
-
-//	       G4cout << " X-plus  " << Xplus << G4endl;
-//	       G4cout << " X-minus " << Xminus << G4endl;
-
-	       G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-	       G4double Qplus =-1 * pt2 / Xminus/Ptarget.minus();
-	       G4double Qminus=     pt2 / Xplus /Pprojectile.plus();
-		 */                                                                          // Uzhi    *
 
 		Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
 		ProjMassT2=Mprojectile2+Pt2;
@@ -293,12 +282,13 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 		 */                                                                                 // Uzhi     *
 
 
-	} while (  /* Loop checking, 26.10.2015, A.Ribon */
-                 ( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
-			(Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  // Uzhi
-			( (Pprojectile+Qmomentum).mag2()  <  ProjectileDiffCut2 &&     // Uzhi No double Diffraction
-					(Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) );// Uzhi
+	} while (( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||      // Uzhi No without excitation
+		   (Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  // Uzhi
+		 ( (Pprojectile+Qmomentum).mag2()  <  ProjectileDiffCut2 &&     // Uzhi No double Diffraction
+		   (Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) );  /* Loop checking, 07.08.2015, A.Ribon */
 
+//G4cout<<"(Ptarget-Qmomentum).mag2() < NuclearNucleonDiffCut2  "<<(Ptarget-Qmomentum).mag2()    <<" "<<NuclearNucleonDiffCut2<<G4endl;
+//G4cout<<"(Pprojectile+Qmomentum).mag2() <  ProjectileDiffCut2 "<<(Pprojectile+Qmomentum).mag2()<<" "<< ProjectileDiffCut2<<G4endl;
 	if((Ptarget-Qmomentum).mag2() < NuclearNucleonDiffCut2)                 // Uzhi Projectile diffraction
 	{
 		G4double TMinusNew=SqrtS-PMinusNew;
@@ -323,37 +313,17 @@ ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) c
 	Pprojectile += Qmomentum;
 	Ptarget     -= Qmomentum;
 
-	// Vova
-
-	/*
-		Pprojectile.setPz(0.);
-		Pprojectile.setE(SqrtS-M0target);
-
-		Ptarget.setPz(0.);
-		Ptarget.setE(M0target);
-	 */
-
-	//G4cout << "Pprojectile with Q : " << Pprojectile << G4endl;
-	//G4cout << "Ptarget with Q : " << Ptarget << G4endl;
-
-	//	   G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
-	//	   G4cout << "Target back: " << toLab * Ptarget << G4endl;
-
 	// Transform back and update SplitableHadron Participant.
 	Pprojectile.transform(toLab);
 	Ptarget.transform(toLab);
 
-	//G4cout << "Pprojectile with Q M: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
-	//G4cout << "Ptarget     with Q M: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
-
-	//G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
+//G4cout << "Pprojectile with Q and Mass: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
+//G4cout << "Ptarget     with Q and Mass: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
 
 	target->Set4Momentum(Ptarget);
-
-	//G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
-
 	projectile->Set4Momentum(Pprojectile);
 
+//G4int Uzhi; G4cin>>Uzhi;
 	return true;
 }
 
@@ -364,12 +334,12 @@ String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 	hadron->SplitUp();
 	G4Parton *start= hadron->GetNextParton();
 	if ( start==NULL) 
-	{ G4cout << " G4FTFModel::String() Error:No start parton found"<< G4endl;
+	{ G4cout << " G4QGSDiffractiveExcitation::String() Error:No start parton found"<< G4endl;
 	return NULL;
 	}
 	G4Parton *end  = hadron->GetNextParton();
 	if ( end==NULL) 
-	{ G4cout << " G4FTFModel::String() Error:No end parton found"<< G4endl;
+	{ G4cout << " G4QGSDiffractiveExcitation::String() Error:No end parton found"<< G4endl;
 	return NULL;
 	}
 
@@ -424,10 +394,10 @@ String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 	start->Set4Momentum(Pstart);
 	end->Set4Momentum(Pend);
 
-	#ifdef G4_FTFDEBUG
-		G4cout << " generated string flavors          " << start->GetPDGcode() << " / " << end->GetPDGcode() << G4endl;
+	#ifdef debugQGSdiffExictation
+		G4cout << " generated string flavors          " << start->GetPDGcode()   << " / " << end->GetPDGcode() << G4endl;
 		G4cout << " generated string momenta:   quark " << start->Get4Momentum() << "mass : " <<start->Get4Momentum().mag()<< G4endl;
-		G4cout << " generated string momenta: Diquark " << end ->Get4Momentum() << "mass : " <<end->Get4Momentum().mag()<< G4endl;
+		G4cout << " generated string momenta: Diquark " << end ->Get4Momentum()  << "mass : " <<end->Get4Momentum().mag()<< G4endl;
 		G4cout << " sum of ends                       " << Pstart+Pend << G4endl;
 		G4cout << " Original                          " << hadron->Get4Momentum() << G4endl;
 	#endif
@@ -438,13 +408,12 @@ String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 
 // --------- private methods ----------------------
 
-G4double G4QGSDiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const // Uzhi
+G4double G4QGSDiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const
 {
 	// choose an x between Xmin and Xmax with P(x) ~ 1/x
-
 	//  to be improved...
 
-	G4double range=Pmax-Pmin;                                         // Uzhi
+	G4double range=Pmax-Pmin;
 
 	if ( Pmin <= 0. || range <=0. ) 
 	{
@@ -453,29 +422,17 @@ G4double G4QGSDiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const
 	}
 
 	G4double P;
-	/*                                                                          // Uzhi
-	do {
-	    x=Xmin + G4UniformRand() * range;
-	}  while ( Xmin/x < G4UniformRand() );
-	 */                                                                          // Uzhi
-
-	P=Pmin * G4Pow::GetInstance()->powA(Pmax/Pmin,G4UniformRand());                       // Uzhi
-
+	P=Pmin * G4Pow::GetInstance()->powA(Pmax/Pmin,G4UniformRand());
 	//debug-hpw	cout << "DiffractiveX "<<x<<G4endl;
 	return P;
 }
 
-G4ThreeVector G4QGSDiffractiveExcitation::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const // Uzhi
+G4ThreeVector G4QGSDiffractiveExcitation::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 
 	G4double Pt2;
-	/*                                                                          // Uzhi
-	do {
-	    pt2=widthSquare * G4Log( G4UniformRand() );
-	} while ( pt2 > maxPtSquare);
-	 */                                                                          // Uzhi
 
-	Pt2 = -AveragePt2 * G4Log(1. + G4UniformRand() * (G4Exp(-maxPtSquare/AveragePt2)-1.));// Uzhi
+	Pt2 = -AveragePt2 * G4Log(1. + G4UniformRand() * (G4Exp(-maxPtSquare/AveragePt2)-1.));
 
 	G4double Pt=std::sqrt(Pt2);
 

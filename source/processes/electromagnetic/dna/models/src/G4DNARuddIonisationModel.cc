@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 92859 2015-09-18 07:58:30Z gcosmo $
+// $Id: G4DNARuddIonisationModel.cc 96060 2016-03-11 12:58:04Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -36,6 +36,7 @@
 #include "G4DNAMolecularMaterial.hh"
 #include "G4DNARuddAngle.hh"
 #include "G4DeltaAngle.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -491,6 +492,10 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+    //SI: additional protection if tcs interpolation method is modified
+    if (k<bindingEnergy) return;
+    //
+
     G4int Z = 8;
     if(fAtomDeexcitation)
     {
@@ -820,14 +825,14 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
           * (S / Bj[ionizationLevelIndex])
           * ((F1 + w * F2)
               / (std::pow((1. + w), 3)
-                  * (1. + std::exp(alphaConst * (w - wc) / v))));
+                  * (1. + G4Exp(alphaConst * (w - wc) / v))));
 
   if (j == 4)
     sigma = CorrectionFactor(particleDefinition, k) * Gj[j]
         * (S / waterStructure.IonisationEnergy(ionizationLevelIndex))
         * ((F1 + w * F2)
             / (std::pow((1. + w), 3)
-                * (1. + std::exp(alphaConst * (w - wc) / v))));
+                * (1. + G4Exp(alphaConst * (w - wc) / v))));
 
   if ((particleDefinition == instance->GetIon("hydrogen"))
       && (ionizationLevelIndex == 4))
@@ -836,7 +841,7 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
     sigma = Gj[j] * (S / waterStructure.IonisationEnergy(ionizationLevelIndex))
         * ((F1 + w * F2)
             / (std::pow((1. + w), 3)
-                * (1. + std::exp(alphaConst * (w - wc) / v))));
+                * (1. + G4Exp(alphaConst * (w - wc) / v))));
   }
 //    if (    particleDefinition == G4Proton::ProtonDefinition()
 //            || particleDefinition == instance->GetIon("hydrogen")
@@ -887,14 +892,14 @@ G4double G4DNARuddIonisationModel::DifferentialCrossSection(G4ParticleDefinition
     sigma = Gj[j] * (S / Bj[ionizationLevelIndex])
         * ((F1 + w * F2)
             / (std::pow((1. + w), 3)
-                * (1. + std::exp(alphaConst * (w - wc) / v))));
+                * (1. + G4Exp(alphaConst * (w - wc) / v))));
 
     if (j == 4)
       sigma = Gj[j]
           * (S / waterStructure.IonisationEnergy(ionizationLevelIndex))
           * ((F1 + w * F2)
               / (std::pow((1. + w), 3)
-                  * (1. + std::exp(alphaConst * (w - wc) / v))));
+                  * (1. + G4Exp(alphaConst * (w - wc) / v))));
 
     G4double zEff = particleDefinition->GetPDGCharge() / eplus
         + particleDefinition->GetLeptonNumber();
@@ -923,7 +928,7 @@ G4double G4DNARuddIonisationModel::S_1s(G4double t,
   // Dingfelder, in Chattanooga 2005 proceedings, formula (7)
 
   G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
-  G4double value = 1. - std::exp(-2 * r) * ((2. * r + 2.) * r + 1.);
+  G4double value = 1. - G4Exp(-2 * r) * ((2. * r + 2.) * r + 1.);
 
   return value;
 }
@@ -940,7 +945,7 @@ G4double G4DNARuddIonisationModel::S_2s(G4double t,
 
   G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
   G4double value = 1.
-      - std::exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
+      - G4Exp(-2 * r) * (((2. * r * r + 2.) * r + 2.) * r + 1.);
 
   return value;
 
@@ -958,7 +963,7 @@ G4double G4DNARuddIonisationModel::S_2p(G4double t,
 
   G4double r = R(t, energyTransferred, slaterEffectiveChg, shellNumber);
   G4double value = 1.
-      - std::exp(-2 * r)
+      - G4Exp(-2 * r)
           * ((((2. / 3. * r + 4. / 3.) * r + 2.) * r + 2.) * r + 1.);
 
   return value;
@@ -998,7 +1003,7 @@ G4double G4DNARuddIonisationModel::CorrectionFactor(G4ParticleDefinition* partic
   {
     G4double value = (std::log10(k / eV) - 4.2) / 0.5;
     // The following values are provided by M. Dingfelder (priv. comm)
-    return ((0.6 / (1 + std::exp(value))) + 0.9);
+    return ((0.6 / (1 + G4Exp(value))) + 0.9);
   } else
   {
     return (1.);

@@ -8,7 +8,8 @@
 #
 /vis/open OGL
 #
-# draw scene
+# draw all worlds
+/vis/drawVolume worlds
 #
 /vis/viewer/zoom 1.4
 #

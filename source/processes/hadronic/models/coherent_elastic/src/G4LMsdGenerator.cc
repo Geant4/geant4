@@ -147,7 +147,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   G4ParticleMomentum p1unit = p1.unit();
 
   G4double Mx = SampleMx(aParticle); // in GeV
-  G4double t  = 0.; // SampleT( aParticle, Mx); // in GeV
+  G4double t  = SampleT( aParticle, Mx); // in GeV
 
   Mx *= CLHEP::GeV;
 
@@ -254,11 +254,11 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
   // G4cout<<fPDGencoding<<", "<<ddPart->GetParticleName()<<", "<<ddPart->GetPDGMass()<<" MeV; lvRes = "<<lvRes<<G4endl;
 
-    G4DynamicParticle * aRes = new G4DynamicParticle( ddPart, lvRes);
-    theParticleChange.AddSecondary(aRes); // simply return resonance
+  // G4DynamicParticle * aRes = new G4DynamicParticle( ddPart, lvRes);
+  //  theParticleChange.AddSecondary(aRes); // simply return resonance
 
 
-  /*
+  
   // Recursive decay using methods of G4KineticTrack
 
   G4KineticTrack ddkt( ddPart, 0., G4ThreeVector(0.,0.,0.), lvRes);
@@ -271,13 +271,14 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
     G4DynamicParticle * aNew = 
       new G4DynamicParticle( ddktv->operator[](i)->GetDefinition(),
                              ddktv->operator[](i)->Get4Momentum());
+
     // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
 
     theParticleChange.AddSecondary(aNew);
     delete ddktv->operator[](i);
   }
   delete ddktv;
-  */  
+   
   return &theParticleChange;
 }
 

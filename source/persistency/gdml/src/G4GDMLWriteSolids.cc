@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 93151 2015-10-08 11:53:10Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 96133 2016-03-16 22:21:17Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -36,6 +36,7 @@
 
 #include "G4SystemOfUnits.hh"
 #include "G4BooleanSolid.hh"
+#include "G4ScaledSolid.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
 #include "G4Ellipsoid.hh"
@@ -263,6 +264,39 @@ BooleanWrite(xercesc::DOMElement* solElement,
    {
      FirstrotationWrite(booleanElement,name+"_frot",firstrot);
    }
+}
+
+void G4GDMLWriteSolids::
+ScaledWrite(xercesc::DOMElement* solElement,
+            const G4ScaledSolid* const scaled)
+{
+   G4String tag("scaledSolid");
+   
+   G4VSolid* solid = const_cast<G4VSolid*>(scaled->GetUnscaledSolid());
+   G4Scale3D scale = scaled->GetScaleTransform();
+   G4ThreeVector sclVector = G4ThreeVector(scale.xx(), scale.yy(), scale.zz());
+
+   AddSolid(solid);   // Add the constituent solid!
+
+   const G4String& name = GenerateName(scaled->GetName(),scaled);
+   const G4String& solidref = GenerateName(solid->GetName(),solid);
+
+   xercesc::DOMElement* scaledElement = NewElement(tag);
+   scaledElement->setAttributeNode(NewAttribute("name",name));
+
+   xercesc::DOMElement* solidElement = NewElement("solidref");
+   solidElement->setAttributeNode(NewAttribute("ref",solidref));
+   scaledElement->appendChild(solidElement);
+
+   if ( (std::fabs(scale.xx()) > kLinearPrecision)
+     && (std::fabs(scale.yy()) > kLinearPrecision)
+     && (std::fabs(scale.zz()) > kLinearPrecision) )
+   {
+     ScaleWrite(scaledElement, name+"_scl", sclVector);
+   }
+
+   solElement->appendChild(scaledElement);
+     // Add the scaled solid AFTER its constituent solid!
 }
 
 void G4GDMLWriteSolids::
@@ -1041,6 +1075,9 @@ void G4GDMLWriteSolids::AddSolid(const G4VSolid* const solidPtr)
    if (const G4BooleanSolid* const booleanPtr
      = dynamic_cast<const G4BooleanSolid*>(solidPtr))
      { BooleanWrite(solidsElement,booleanPtr); } else
+   if (const G4ScaledSolid* const scaledPtr
+     = dynamic_cast<const G4ScaledSolid*>(solidPtr))
+     { ScaledWrite(solidsElement,scaledPtr); } else
    if (solidPtr->GetEntityType()=="G4MultiUnion")
      { const G4MultiUnion* const munionPtr
      = static_cast<const G4MultiUnion*>(solidPtr);

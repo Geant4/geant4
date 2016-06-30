@@ -23,31 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc 87375 2014-12-02 08:17:28Z gcosmo $
+// $Id: G4DNAChampionElasticModel.cc 97520 2016-06-03 14:23:17Z gcosmo $
 //
 
 #include "G4DNAChampionElasticModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
 
+#define CHAMPION_VERBOSE
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*,
-                                                     const G4String& nam) :
+G4DNAChampionElasticModel::
+G4DNAChampionElasticModel(const G4ParticleDefinition*, const G4String& nam) :
     G4VEmModel(nam), isInitialised(false)
 {
-//  nistwater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
-
-  killBelowEnergy = 7.4 * eV;
-  lowEnergyLimit = 0 * eV;
-  highEnergyLimit = 1. * MeV;
-  SetLowEnergyLimit(lowEnergyLimit);
-  SetHighEnergyLimit(highEnergyLimit);
+  SetLowEnergyLimit(7.4 * eV);
+  SetHighEnergyLimit(1. * MeV);
 
   verboseLevel = 0;
   // Verbosity scale:
@@ -57,15 +55,21 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
 
+#ifdef CHAMPION_VERBOSE
   if (verboseLevel > 0)
   {
-    G4cout << "Champion Elastic model is constructed " << G4endl<< "Energy range: "
-    << lowEnergyLimit / eV << " eV - "
-    << highEnergyLimit / MeV << " MeV"
-    << G4endl;
+    G4cout << "Champion Elastic model is constructed "
+           << G4endl
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
   }
+#endif
+  
   fParticleChangeForGamma = 0;
   fpMolWaterDensity = 0;
+  fpData = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -73,66 +77,64 @@ G4DNAChampionElasticModel::G4DNAChampionElasticModel(const G4ParticleDefinition*
 G4DNAChampionElasticModel::~G4DNAChampionElasticModel()
 {
   // For total cross section
-
-  std::map<G4String, G4DNACrossSectionDataSet*, std::less<G4String> >::iterator pos;
-  for (pos = tableData.begin(); pos != tableData.end(); ++pos)
-  {
-    G4DNACrossSectionDataSet* table = pos->second;
-    delete table;
-  }
+  if(fpData) delete fpData;
 
   // For final state
-
   eVecm.clear();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particle*/,
+void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* particle,
                                            const G4DataVector& /*cuts*/)
 {
-
+#ifdef CHAMPION_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling G4DNAChampionElasticModel::Initialise()" << G4endl;
+  {
+    G4cout << "Calling G4DNAChampionElasticModel::Initialise()" << G4endl;
+  }
+#endif
+  
+  if(particle->GetParticleName() != "e-")
+  {
+    G4Exception("G4DNAChampionElasticModel::Initialise",
+                "em0002",
+                FatalException,
+                "Model not applicable to particle type.");
+  }
 
   // Energy limits
 
-  if (LowEnergyLimit() < lowEnergyLimit)
+  if (LowEnergyLimit() < 7.4*eV)
   {
-    G4cout << "G4DNAChampionElasticModel: low energy limit increased from " <<
-    LowEnergyLimit()/eV << " eV to " << lowEnergyLimit/eV << " eV" << G4endl;
-    SetLowEnergyLimit(lowEnergyLimit);
+    G4cout << "G4DNAChampionElasticModel: low energy limit increased from "
+           << LowEnergyLimit()/eV << " eV to " << 7.4 << " eV"
+           << G4endl;
+    SetLowEnergyLimit(7.4*eV);
   }
 
-  if (HighEnergyLimit() > highEnergyLimit)
+  if (HighEnergyLimit() > 1.*MeV)
   {
-    G4cout << "G4DNAChampionElasticModel: high energy limit decreased from " <<
-    HighEnergyLimit()/MeV << " MeV to " << highEnergyLimit/MeV << " MeV" << G4endl;
-    SetHighEnergyLimit(highEnergyLimit);
+    G4cout << "G4DNAChampionElasticModel: high energy limit decreased from "
+           << HighEnergyLimit()/MeV << " MeV to " << 1. << " MeV"
+           << G4endl;
+    SetHighEnergyLimit(1.*MeV);
   }
 
+  if (isInitialised) { return; }
+
+  // *** ELECTRON
+  // For total cross section
   // Reading of data files 
 
   G4double scaleFactor = 1e-16*cm*cm;
 
   G4String fileElectron("dna/sigma_elastic_e_champion");
 
-  G4ParticleDefinition* electronDef = G4Electron::ElectronDefinition();
-  G4String electron;
-
-  // *** ELECTRON
-
-  // For total cross section
-
-  electron = electronDef->GetParticleName();
-
-  tableFile[electron] = fileElectron;
-
-  G4DNACrossSectionDataSet* tableE =
-      new G4DNACrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-  tableE->LoadData(fileElectron);
-  tableData[electron] = tableE;
+  fpData = new G4DNACrossSectionDataSet(new G4LogLogInterpolation(),
+                                        eV,
+                                        scaleFactor );
+  fpData->LoadData(fileElectron);
 
   // For final state
 
@@ -140,8 +142,10 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 
   if (!path)
   {
-    G4Exception("G4ChampionElasticModel::Initialise","em0006",
-        FatalException,"G4LEDATA environment variable not set.");
+    G4Exception("G4ChampionElasticModel::Initialise",
+                "em0006",
+                FatalException,
+                "G4LEDATA environment variable not set.");
     return;
   }
 
@@ -150,9 +154,16 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
 
   if (!eDiffCrossSection)
-  G4Exception("G4DNAChampionElasticModel::Initialise","em0003",
-      FatalException,
-      "Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat; please use G4EMLOW6.36 and above.");
+  {
+    G4ExceptionDescription errMsg;
+    errMsg << "Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat; "
+           << "please use G4EMLOW6.36 and above.";
+    
+    G4Exception("G4DNAChampionElasticModel::Initialise",
+                "em0003",
+                FatalException,
+                errMsg);
+  }
 
   // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
   // Added clear for MT
@@ -169,7 +180,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   {
     double tDummy;
     double eDummy;
-    eDiffCrossSection>>tDummy>>eDummy;
+    eDiffCrossSection >> tDummy >> eDummy;
 
     // SI : mandatory eVecm initialization
 
@@ -179,32 +190,34 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
       eVecm[tDummy].push_back(0.);
     }
 
-    eDiffCrossSection>>eDiffCrossSectionData[tDummy][eDummy];
+    eDiffCrossSection >> eDiffCrossSectionData[tDummy][eDummy];
 
     if (eDummy != eVecm[tDummy].back()) eVecm[tDummy].push_back(eDummy);
-
   }
 
   // End final state
-
-  if (verboseLevel > 2)
-  G4cout << "Loaded cross section files for Champion Elastic model" << G4endl;
-
-  if( verboseLevel>0 )
+#ifdef CHAMPION_VERBOSE
+  if (verboseLevel>0)
   {
+    if (verboseLevel > 2)
+    {
+      G4cout << "Loaded cross section files for Champion Elastic model" << G4endl;
+    }
+
     G4cout << "Champion Elastic model is initialized " << G4endl
-    << "Energy range: "
-    << LowEnergyLimit() / eV << " eV - "
-    << HighEnergyLimit() / MeV << " MeV"
-    << G4endl;
+           << "Energy range: "
+           << LowEnergyLimit() / eV << " eV - "
+           << HighEnergyLimit() / MeV << " MeV"
+           << G4endl;
   }
+#endif
 
   // Initialize water density pointer
   G4DNAMolecularMaterial::Instance()->Initialize();
-  fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
+  
+  fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->
+    GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
-  if (isInitialised)
-  { return;}
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 
@@ -212,66 +225,54 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAChampionElasticModel::CrossSectionPerVolume(const G4Material* material,
-                                                          const G4ParticleDefinition* p,
-                                                          G4double ekin,
-                                                          G4double,
-                                                          G4double)
+G4double
+G4DNAChampionElasticModel::
+CrossSectionPerVolume(const G4Material* material,
+#ifdef CHAMPION_VERBOSE
+                      const G4ParticleDefinition* p,
+#else
+                      const G4ParticleDefinition*,
+#endif
+                      G4double ekin,
+                      G4double,
+                      G4double)
 {
+#ifdef CHAMPION_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling CrossSectionPerVolume() of G4DNAChampionElasticModel"
-  << G4endl;
+  {
+   G4cout << "Calling CrossSectionPerVolume() of G4DNAChampionElasticModel"
+          << G4endl;
+  }
+#endif
 
   // Calculate total cross section for model
 
-  G4double sigma=0;
-
+  G4double sigma = 0.;
   G4double waterDensity = (*fpMolWaterDensity)[material->GetIndex()];
 
   if(waterDensity!= 0.0)
-//  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
-    const G4String& particleName = p->GetParticleName();
-
-    if (ekin < highEnergyLimit)
+    if (ekin < HighEnergyLimit() && ekin >= LowEnergyLimit())
     {
       //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < killBelowEnergy) return DBL_MAX;
-      //      
-
-      std::map< G4String,G4DNACrossSectionDataSet*,std::less<G4String> >::iterator pos;
-      pos = tableData.find(particleName);
-
-      if (pos != tableData.end())
-      {
-        G4DNACrossSectionDataSet* table = pos->second;
-        if (table != 0)
-        {
-          sigma = table->FindValue(ekin);
-        }
-      }
-      else
-      {
-        G4Exception("G4DNAChampionElasticModel::ComputeCrossSectionPerVolume","em0002",
-            FatalException,"Model not applicable to particle type.");
-      }
+      //
+      sigma = fpData->FindValue(ekin);
     }
 
+#ifdef CHAMPION_VERBOSE
     if (verboseLevel > 2)
     {
       G4cout << "__________________________________" << G4endl;
       G4cout << "=== G4DNAChampionElasticModel - XS INFO START" << G4endl;
-      G4cout << "=== Kinetic energy(eV)=" << ekin/eV << " particle : " << particleName << G4endl;
+      G4cout << "=== Kinetic energy(eV)=" << ekin/eV << " particle : " << p->GetParticleName() << G4endl;
       G4cout << "=== Cross section per water molecule (cm^2)=" << sigma/cm/cm << G4endl;
       G4cout << "=== Cross section per water molecule (cm^-1)=" << sigma*waterDensity/(1./cm) << G4endl;
-      // G4cout << " - Cross section per water molecule (cm^-1)=" << sigma*material->GetAtomicNumDensityVector()[1]/(1./cm) << G4endl;
       G4cout << "=== G4DNAChampionElasticModel - XS INFO END" << G4endl;
     }
-
+#endif
   }
 
   return sigma*waterDensity;
-// return sigma*material->GetAtomicNumDensityVector()[1];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -283,22 +284,17 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
                                                   G4double)
 {
 
+#ifdef CHAMPION_VERBOSE
   if (verboseLevel > 3)
-  G4cout << "Calling SampleSecondaries() of G4DNAChampionElasticModel" << G4endl;
+  {
+    G4cout << "Calling SampleSecondaries() of G4DNAChampionElasticModel" << G4endl;
+  }
+#endif
 
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
 
-  if (electronEnergy0 < killBelowEnergy)
+//  if (electronEnergy0 < HighEnergyLimit()) // necessaire ?
   {
-    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
-    fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
-    return;
-  }
-
-  if (electronEnergy0>= killBelowEnergy && electronEnergy0 < highEnergyLimit)
-  {
-
     G4double cosTheta = RandomizeCosTheta(electronEnergy0);
 
     G4double phi = 2. * pi * G4UniformRand();
@@ -317,13 +313,13 @@ void G4DNAChampionElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
     fParticleChangeForGamma->ProposeMomentumDirection(zPrimeVers.unit());
 
     fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+    // necessaire ?
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4DNAChampionElasticModel::Theta(G4ParticleDefinition * particleDefinition,
+G4double G4DNAChampionElasticModel::Theta(//G4ParticleDefinition * particleDefinition,
                                           G4double k,
                                           G4double integrDiff)
 {
@@ -339,7 +335,7 @@ G4double G4DNAChampionElasticModel::Theta(G4ParticleDefinition * particleDefinit
   G4double xs21 = 0;
   G4double xs22 = 0;
 
-  if (particleDefinition == G4Electron::ElectronDefinition())
+//  if (particleDefinition == G4Electron::ElectronDefinition()) // necessaire ?
   {
     std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
                                                         eTdummyVec.end(), k);
@@ -386,7 +382,7 @@ G4double G4DNAChampionElasticModel::LinLogInterpolate(G4double e1,
 {
   G4double d1 = std::log(xs1);
   G4double d2 = std::log(xs2);
-  G4double value = std::exp(d1 + (d2 - d1) * (e - e1) / (e2 - e1));
+  G4double value = G4Exp(d1 + (d2 - d1) * (e - e1) / (e2 - e1));
   return value;
 }
 
@@ -468,7 +464,8 @@ G4double G4DNAChampionElasticModel::RandomizeCosTheta(G4double k)
 
   G4double theta = 0.;
   G4double cosTheta = 0.;
-  theta = Theta(G4Electron::ElectronDefinition(), k / eV, integrdiff);
+  theta = Theta(//G4Electron::ElectronDefinition(),
+                k / eV, integrdiff);
 
   cosTheta = std::cos(theta * pi / 180);
 
@@ -477,15 +474,13 @@ G4double G4DNAChampionElasticModel::RandomizeCosTheta(G4double k)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4DNAChampionElasticModel::SetKillBelowThreshold(G4double threshold)
+void G4DNAChampionElasticModel::SetKillBelowThreshold(G4double)
 {
-  killBelowEnergy = threshold;
-
-  if (threshold < 7.4 * eV)
-  {
-    G4cout<< "*** WARNING : the G4DNAChampionElasticModel class is not "
-        "activated below 7.4 eV !" << G4endl;
-    G4cout<< "*** NOTE: if you are using G4EmDNAChemistry, do not worry, this is"
-        " the expected behavior" << G4endl;
-  }
+  G4ExceptionDescription errMsg;
+  errMsg << "The method G4DNAChampionElasticModel::SetKillBelowThreshold is deprecated";
+  
+  G4Exception("G4DNAChampionElasticModel::SetKillBelowThreshold",
+              "deprecated",
+              JustWarning,
+              errMsg);
 }

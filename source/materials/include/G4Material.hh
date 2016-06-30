@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 94016 2015-11-05 10:14:49Z gcosmo $
+// $Id: G4Material.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -270,10 +270,6 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, const G4Material*);    
   friend std::ostream& operator<<(std::ostream&, const G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
-
-  // operators       
-  G4int operator==(const G4Material&) const;
-  G4int operator!=(const G4Material&) const;
     
   G4Material(__void__&);
     // Fake default constructor for usage restricted to direct object
@@ -284,8 +280,11 @@ public:  // with description
 
 private:
 
-  G4Material(const G4Material&);
-  const G4Material& operator=(const G4Material&);
+  // operators       
+  G4int operator==(const G4Material&) const = delete;
+  G4int operator!=(const G4Material&) const = delete;
+  G4Material(const G4Material&) = delete;
+  const G4Material& operator=(const G4Material&) = delete;
 
   void InitializePointers();
    

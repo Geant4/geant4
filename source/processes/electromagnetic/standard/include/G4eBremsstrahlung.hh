@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eBremsstrahlung.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,27 +83,28 @@ class G4eBremsstrahlung : public G4VEnergyLossProcess
 
 public:
 
-  G4eBremsstrahlung(const G4String& name = "eBrem");
+  explicit G4eBremsstrahlung(const G4String& name = "eBrem");
 
   virtual ~G4eBremsstrahlung();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+  virtual void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
 
   G4bool   isInitialised;
 
 private:
 
   // hide assignment operator
-  G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right);
-  G4eBremsstrahlung(const G4eBremsstrahlung&);
+  G4eBremsstrahlung & operator=(const G4eBremsstrahlung &right) = delete;
+  G4eBremsstrahlung(const G4eBremsstrahlung&) = delete;
 
 };
 

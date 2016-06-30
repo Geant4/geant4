@@ -1,4 +1,4 @@
-$Id: History 94088 2015-11-05 15:11:00Z gcosmo $
+$Id: History 97178 2016-05-27 12:45:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,15 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-May-2016, A. Ribon         (phys-ctor-helastic-V10-02-01)
+- G4HadronElasticPhysicsPHP : made it thread-safe.
+
+23-Feb-2016, A. Ribon         (phys-ctor-helastic-V10-02-00)
+- G4HadronElasticPhysics : added missing hadron elastic for He3,
+  using Glauber-Gribov elastic cross section (Gheisha does not have
+  hadronic (elastic and inelastic) cross sections for He3).
+  Thanks ALICE for spotting this.
 
 05-Nov-2015, A. Ribon         (phys-ctor-helastic-V10-01-05)
 - Removed neutron_hp/

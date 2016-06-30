@@ -57,7 +57,7 @@
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
 #include <vector>
-
+#include "G4Exp.hh"
 
 class G4IonDEDXScalingICRU73 : public G4VIonDEDXScalingAlgorithm {
 
@@ -192,7 +192,7 @@ inline G4double G4IonDEDXScalingICRU73::EquilibriumCharge(
 
   G4double velOverBohrVel = beta / CLHEP::fine_structure_const;
 
-  G4double q1 = 1.0 - std::exp(-velOverBohrVel / atomicNumberPow);
+  G4double q1 = 1.0 - G4Exp(-velOverBohrVel / atomicNumberPow);
  
   return q1 * charge;
 }

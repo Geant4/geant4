@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc 94206 2015-11-09 08:11:59Z gcosmo $
+// $Id: G4OpenGLStoredQtViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -136,8 +136,8 @@ G4bool G4OpenGLStoredQtViewer::CompareForKernelVisit(G4ViewParameters& lastVP)
       (lastVP.GetBackgroundColour ()!= fVP.GetBackgroundColour ())||
       (lastVP.IsPicking ()          != fVP.IsPicking ())
 //      ||
-//      (lastVP.GetVisAttributesModifiers().size() !=
-//       fVP.GetVisAttributesModifiers().size())
+//      (lastVP.GetVisAttributesModifiers() !=
+//       fVP.GetVisAttributesModifiers())
       )
     return true;
 
@@ -402,11 +402,13 @@ void G4OpenGLStoredQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  //  glFlush ();  // Tentativley offered by JA 29/04/16.
+
   // Some X servers fail to draw all trajectories, particularly Mac
   // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
   // extra...
-  ClearView();
-  DrawView();
+  ClearView();  // Necessary?  JA 29/04/16
+  DrawView();   // Necessary?  JA 29/04/16
   activateWindow();
   //  glFlush(); // NO NEED and as drawView will already cause a flush
   // that could do a double flush

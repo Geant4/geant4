@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 91566 2015-07-27 12:20:23Z gcosmo $
+// $Id: G4LossTableManager.hh 96115 2016-03-16 18:53:00Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -81,7 +81,6 @@
 #include <vector>
 #include "globals.hh"
 #include "G4ThreadLocalSingleton.hh"
-#include "G4EmParameters.hh"
 #include "G4VEnergyLossProcess.hh"
 #include "G4EmCorrections.hh"
 #include "G4LossTableBuilder.hh"
@@ -90,7 +89,6 @@
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
-class G4EnergyLossMessenger;
 class G4ParticleDefinition;
 class G4Region;
 class G4EmSaturation;
@@ -204,36 +202,6 @@ public:
   void RegisterExtraParticle(const G4ParticleDefinition* aParticle, 
                              G4VEnergyLossProcess* p);
 
-  void SetLossFluctuations(G4bool val);
-
-  void SetSubCutoff(G4bool val, const G4Region* r=0);
-
-  void SetIntegral(G4bool val);
-
-  void SetRandomStep(G4bool val);
-
-  void SetMinSubRange(G4double val);
-
-  void SetMinEnergy(G4double val);
-
-  void SetMaxEnergy(G4double val);
-
-  void SetMaxEnergyForCSDARange(G4double val);
-
-  void SetMaxEnergyForMuons(G4double val);
-
-  void SetDEDXBinning(G4int val);
-
-  void SetDEDXBinningForCSDARange(G4int val);
-
-  void SetLambdaBinning(G4int val);
-
-  void SetStepFunction(G4double v1, G4double v2);
-
-  void SetBuildCSDARange(G4bool val);
-
-  void SetLinearLossLimit(G4double val);
-
   void SetVerbose(G4int val);
 
   void SetAtomDeexcitation(G4VAtomDeexcitation*);
@@ -244,17 +212,7 @@ public:
   // Access methods
   //-------------------------------------------------
 
-  G4EnergyLossMessenger* GetMessenger();
-
-  inline G4bool BuildCSDARange() const;
-
   inline G4bool IsMaster() const;
-
-  inline G4double MinKinEnergy() const;
-
-  inline G4double MaxKinEnergy() const;
-
-  inline G4int GetNumberOfBinsPerDecade() const;
 
   inline 
   G4VEnergyLossProcess* GetEnergyLossProcess(const G4ParticleDefinition*);
@@ -296,15 +254,12 @@ private:
 
   void ParticleHaveNoLoss(const G4ParticleDefinition* aParticle);
 
-  void SetParameters(const G4ParticleDefinition* aParticle,
-                     G4VEnergyLossProcess*);
-
   void CopyDEDXTables();
 
   void PrintEWarning(G4String, G4double);
 
-  G4LossTableManager(G4LossTableManager &);
-  G4LossTableManager & operator=(const G4LossTableManager &right);
+  G4LossTableManager(G4LossTableManager &) = delete;
+  G4LossTableManager & operator=(const G4LossTableManager &right) = delete;
 
   static G4ThreadLocal G4LossTableManager* instance;
 
@@ -325,7 +280,7 @@ private:
   std::vector<G4VEmModel*> mod_vector;
   std::vector<G4VEmFluctuationModel*> fmod_vector;
 
-  // cash
+  // cache
   G4VEnergyLossProcess* currentLoss;
   PD                    currentParticle;
   PD                    theElectron;
@@ -337,18 +292,8 @@ private:
 
   G4bool all_tables_are_built;
   G4bool startInitialisation;
-
-  G4bool subCutoffFlag;
-  G4bool integral;
-  G4bool integralActive;
-  G4bool stepFunctionActive;
   G4bool isMaster;
-
-  G4double maxRangeVariation;
-  G4double maxFinalStep;
-
   G4LossTableBuilder*         tableBuilder;
-  G4EnergyLossMessenger*      theMessenger;
   G4EmCorrections*            emCorrections;
   G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
@@ -368,8 +313,8 @@ private:
 inline G4VEnergyLossProcess* 
 G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
 {
-  //G4cout << aParticle << "  " << currentParticle 
-  //<< "  " << currentLoss << G4endl;
+  //G4cout << "G4LossTableManager::GetEnergyLossProcess: " 
+  //<< aParticle << "  " << currentParticle << "  " << currentLoss << G4endl;
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
     std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
@@ -377,10 +322,8 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
       currentLoss = (*pos).second;
     } else {
       currentLoss = 0;
-      //if(aParticle->GetParticleType() == "nucleus") {
       if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
         currentLoss = (*pos).second;
-        //}
       }
     }
   }
@@ -485,37 +428,9 @@ G4double G4LossTableManager::GetDEDXDispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-inline G4bool G4LossTableManager::BuildCSDARange() const
-{
-  return theParameters->BuildCSDARange();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 inline G4bool G4LossTableManager::IsMaster() const
 {
   return isMaster;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4LossTableManager::MinKinEnergy() const
-{
-  return theParameters->MinKinEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline G4double G4LossTableManager::MaxKinEnergy() const
-{
-  return theParameters->MaxKinEnergy();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4int G4LossTableManager::GetNumberOfBinsPerDecade() const
-{
-  return theParameters->NumberOfBinsPerDecade();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hCoulombScatteringModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4hCoulombScatteringModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,23 +73,23 @@ G4hCoulombScatteringModel::G4hCoulombScatteringModel(G4bool combined)
     cosThetaMax(-1.0),
     isCombined(combined)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   fNistManager = G4NistManager::Instance();
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
-  currentMaterial = 0; 
+  currentMaterial = nullptr; 
   fixedCut = -1.0;
 
   pCuts = 0;
 
-  recoilThreshold = 0.*keV; // by default does not work
+  recoilThreshold = 0.*CLHEP::keV; // by default does not work
 
-  particle = 0;
-  currentCouple = 0;
+  particle = nullptr;
+  currentCouple = nullptr;
   wokvi = new G4WentzelVIRelXSection(combined);
 
   currentMaterialIndex = 0;
-  mass = proton_mass_c2;
+  mass = CLHEP::proton_mass_c2;
   elecRatio = 0.0;
 }
 
@@ -242,9 +242,7 @@ void G4hCoulombScatteringModel::SampleSecondaries(
   const G4Element* elm = SelectRandomAtom(couple,particle,
 					  kinEnergy,cutEnergy,kinEnergy);
 
-  G4double Z = elm->GetZ();
-
-  G4int iz = G4int(Z);
+  G4int iz = elm->GetZasInt();
   G4int ia = SelectIsotopeNumber(elm);
   G4double mass2 = G4NucleiProperties::GetNuclearMass(ia, iz);
 

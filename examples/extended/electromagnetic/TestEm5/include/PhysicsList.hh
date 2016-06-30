@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
-// $Id: PhysicsList.hh 82340 2014-06-16 14:13:44Z gcosmo $
+// $Id: PhysicsList.hh 94973 2016-01-12 10:13:56Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +62,7 @@ private:
 
   G4String fEmName;
   G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fHadPhysicsList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

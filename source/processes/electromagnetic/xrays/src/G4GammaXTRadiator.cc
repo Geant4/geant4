@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaXTRadiator.cc 68037 2013-03-13 14:15:08Z gcosmo $
+// $Id: G4GammaXTRadiator.cc 97385 2016-06-02 09:59:53Z gcosmo $
 //
 
 #include <complex>
@@ -46,7 +46,7 @@ G4GammaXTRadiator::G4GammaXTRadiator(G4LogicalVolume* anEnvelope,
                                      const G4String& processName) :
   G4VXTRenergyLoss(anEnvelope,foilMat,gasMat,a,b,n,processName)
 {
-  G4cout<<"Gammma distributed X-ray TR radiator model is called"<<G4endl ;
+  G4cout<<"Gamma distributed X-ray TR radiator model is called"<<G4endl ;
 
   // Build energy and angular integral spectra of X-ray TR photons from
   // a radiator

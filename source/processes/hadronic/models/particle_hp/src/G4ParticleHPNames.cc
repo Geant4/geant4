@@ -147,7 +147,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
              first = false;
              biff = new G4String(); // delete here as theName
              *biff = base+"/CrossSection/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];
-             if(theName!=0) delete theName;
+             delete theName;
              theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              result.SetName(*theName);
@@ -168,9 +168,9 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              else
              {
                 biff = new G4String(); // delete here as theName
-                if(theName!=0) delete theName;
                 *biff = base+"/"+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
                 if ( rest=="/CrossSection" ) *biff = base+rest+"/"+itoa(myZ)+"_"+"nat"+"_"+theString[myZ-1];  
+                delete theName;
                 theName = biff;
 if(getenv("NeutronHPNames"))    G4cout <<"HPWD 3 "<<*theName<<G4endl;
                 result.SetName(*theName);
@@ -360,7 +360,8 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           else
           { 
              //080901 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
-             if ( ( reac.find("Inelastic") != reac.size() && ( (Z == 1 && A == 1) || (Z == 2 && A == 4) ) ) 
+             //160216 Increase protencted isotopes for fixing problem on charged particle HP
+             if ( ( reac.find("Inelastic") != reac.size() && ( (Z == 1 && A == 1) || (Z == 1 && A == 2) || (Z == 1 && A == 3) || (Z == 2 && A == 3) || (Z == 2 && A == 4) ) ) 
                || ( reac.find("Capture")   != reac.size() && ( (Z == 1 && A == 3) || (Z == 2 && A == 4) ) )  
                || ( reac.find("Fission")   != reac.size() && ( (Z == 88 && A == 224) || (Z == 88 && A == 225) || (Z == 89 && A == 225) || (Z == 88 && A == 226) ) ) ) 
                    

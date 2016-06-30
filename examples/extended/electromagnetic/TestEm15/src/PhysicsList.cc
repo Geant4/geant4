@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 82361 2014-06-17 15:18:30Z gcosmo $
+// $Id: PhysicsList.cc 96376 2016-04-11 06:58:14Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -165,8 +165,6 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // Transportation
@@ -179,10 +177,10 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  emOptions.SetStepFunction(1., 1*mm);  
-  emOptions.SetIntegral(false);
-  emOptions.SetLossFluctuations(false);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetIntegral(false);
+  param->SetStepFunction(1., 1*mm);
+  param->SetLossFluctuations(false);
   
   // step limitation (as a full process)
   //  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.cc 87870 2015-01-16 08:27:07Z gcosmo $
+// $Id: G4Isotope.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,7 +57,7 @@ G4IsotopeTable G4Isotope::theIsotopeTable;
 // Create an isotope
 //
 G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
-  : fName(Name), fZ(Z), fN(N), fA(A), fm(il)//, fCountUse(0)
+  : fName(Name), fZ(Z), fN(N), fA(A), fm(il)
 {
   if (Z<1) { 
     G4ExceptionDescription ed;
@@ -70,7 +70,8 @@ G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
     G4Exception ("G4Isotope::G4Isotope()", "mat002", FatalException, ed);
   }
   if (A<=0.0) {
-    fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))*g/(mole*amu_c2);  
+    fA = (G4NistManager::Instance()->GetAtomicMass(Z,N))
+      *CLHEP::g/(CLHEP::mole*CLHEP::amu_c2);  
   }
   theIsotopeTable.push_back(this);
   fIndexInTable = theIsotopeTable.size() - 1;
@@ -82,7 +83,7 @@ G4Isotope::G4Isotope(const G4String& Name,G4int Z,G4int N,G4double A,G4int il)
 //                            for usage restricted to object persistency
 
 G4Isotope::G4Isotope(__void__&)
-  : fZ(0), fN(0), fA(0), fm(0), /*fCountUse(0),*/ fIndexInTable(0)
+  : fZ(0), fN(0), fA(0), fm(0), fIndexInTable(0)
 {
 }
 
@@ -90,7 +91,7 @@ G4Isotope::G4Isotope(__void__&)
 
 G4Isotope::~G4Isotope()
 {
-  theIsotopeTable[fIndexInTable] = 0;
+  theIsotopeTable[fIndexInTable] = nullptr;
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +116,6 @@ G4Isotope & G4Isotope::operator=(const G4Isotope& right)
     fN = right.fN;
     fA = right.fA;
     fm = right.fm;    
-    //    fCountUse = right.fCountUse;
   }
   return *this;
 }

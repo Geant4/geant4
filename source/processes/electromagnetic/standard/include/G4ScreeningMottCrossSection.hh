@@ -79,16 +79,18 @@
 #include "G4Pow.hh"
 #include "G4LossTableManager.hh"
 
-class G4ParticleDefinition;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+static const G4int DIM = 750;
+
+class G4ParticleDefinition;
 
 class G4ScreeningMottCrossSection
 {
 
 public:
 
-  	G4ScreeningMottCrossSection();
+  	explicit G4ScreeningMottCrossSection();
 
   	virtual ~G4ScreeningMottCrossSection();
 
@@ -100,7 +102,7 @@ public:
 
                
   	inline void SetupParticle(const G4ParticleDefinition*);
- 	void SetupKinematic(G4double kinEnergy ,G4double Z);
+ 	void SetupKinematic(G4double kinEnergy ,G4int Z);
 
         G4double NuclearCrossSection();
         G4ThreeVector GetNewDirection();
@@ -165,7 +167,7 @@ private:
 
 
   	// target nucleus
-  	G4double                targetZ;    
+  	G4int                   targetZ;    
 	G4double 		targetA;
   	G4double                targetMass; 
 	G4double 		Trec;
@@ -178,11 +180,6 @@ private:
         G4double                 e2;
 
         //angle
-        static const G4int DIM = 950;
-
-        G4double angle[DIM];
-        G4double tet[DIM];
-        G4double dangle[DIM];
         G4double cross[DIM];
 };
 

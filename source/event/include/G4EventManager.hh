@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.hh 71031 2013-06-10 09:11:38Z gcosmo $
+// $Id: G4EventManager.hh 94950 2016-01-07 11:53:14Z gcosmo $
 //
 //
 
@@ -71,8 +71,8 @@ class G4EventManager
       ~G4EventManager();
 
   private:
-      G4EventManager(const G4EventManager &right);
-      G4EventManager& operator=(const G4EventManager& right);
+      G4EventManager(const G4EventManager &right) = delete;
+      G4EventManager& operator=(const G4EventManager& right) = delete;
 
   public: // with description
       void ProcessOneEvent(G4Event* anEvent);

@@ -11,9 +11,11 @@
 
 #ifdef WIN32
 #include <float.h>
-#define isnan(a) _isnan(a)
+#define is_nan(a) _isnan(a)
 /*#define INFINITY (DBL_MAX+DBL_MAX)*/
 /*#define NAN (INFINITY-INFINITY)*/
+#else
+#define is_nan(a) std::isnan(a)
 #endif
 
 #if defined __cplusplus
@@ -58,7 +60,7 @@ double nfu_getNAN( void ) {
 */
 int nfu_isNAN( double d ) {
 
-    return( isnan( d ) );
+    return( is_nan( d ) );
 }
 /*
 ************************************************************

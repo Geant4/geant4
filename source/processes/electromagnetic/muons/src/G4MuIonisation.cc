@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuIonisation.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -98,8 +98,8 @@ using namespace std;
 
 G4MuIonisation::G4MuIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
-    theBaseParticle(0),
+    theParticle(nullptr),
+    theBaseParticle(nullptr),
     isInitialised(false)
 {
   mass = ratio = 0;

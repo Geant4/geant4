@@ -24,14 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh 85355 2014-10-28 09:58:59Z gcosmo $
+// $Id: G4Cerenkov.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
-// Cerenkov Radiation Class Definition 
+// Cerenkov Radiation Class Definition
 ////////////////////////////////////////////////////////////////////////
 //
-// File:        G4Cerenkov.hh  
+// File:        G4Cerenkov.hh
 // Description:	Discrete Process - Generation of Cerenkov Photons
 // Version:     2.0
 // Created:     1996-02-21
@@ -63,7 +63,7 @@
 #include "G4VProcess.hh"
 #include "G4OpticalPhoton.hh"
 #include "G4DynamicParticle.hh"
-#include "G4Material.hh" 
+#include "G4Material.hh"
 #include "G4PhysicsTable.hh"
 #include "G4MaterialPropertyVector.hh"
 #include "G4MaterialPropertiesTable.hh"
@@ -83,175 +83,167 @@ class G4Cerenkov : public G4VProcess
 
 public:
 
-	////////////////////////////////
-	// Constructors and Destructor
-	////////////////////////////////
+  ////////////////////////////////
+  // Constructors and Destructor
+  ////////////////////////////////
 
-	G4Cerenkov(const G4String& processName = "Cerenkov", 
-                            G4ProcessType type = fElectromagnetic);
-	~G4Cerenkov();
+  explicit G4Cerenkov(const G4String& processName = "Cerenkov", 
+             G4ProcessType type = fElectromagnetic);
+  ~G4Cerenkov();
 
-        G4Cerenkov(const G4Cerenkov &right);
+  explicit G4Cerenkov(const G4Cerenkov &right);
 
 private:
 
-        //////////////
-        // Operators
-        //////////////
+  //////////////
+  // Operators
+  //////////////
 
-        G4Cerenkov& operator=(const G4Cerenkov &right);
+  G4Cerenkov& operator=(const G4Cerenkov &right) = delete;
 
 public:
 
-        ////////////
-        // Methods
-        ////////////
+  ////////////
+  // Methods
+  ////////////
 
-        G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
-        // Returns true -> 'is applicable', for all charged particles
-        // except short-lived particles.
+  G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
+  // Returns true -> 'is applicable', for all charged particles
+  // except short-lived particles.
 
-        void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
-        // Build table at a right time
+  void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) override;
+  // Build table at a right time
 
-        G4double GetMeanFreePath(const G4Track& aTrack,
-                                 G4double ,
-                                 G4ForceCondition* );
-        // Returns the discrete step limit and sets the 'StronglyForced'
-        // condition for the DoIt to be invoked at every step.
+  G4double GetMeanFreePath(const G4Track& aTrack, 
+                           G4double, G4ForceCondition* );
+  // Returns the discrete step limit and sets the 'StronglyForced'
+  // condition for the DoIt to be invoked at every step.
 
-        G4double PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
-                                                      G4double ,
-                                                      G4ForceCondition* );
-        // Returns the discrete step limit and sets the 'StronglyForced'
-        // condition for the DoIt to be invoked at every step.
+  G4double PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
+                                                G4double ,
+                                                G4ForceCondition* ) override;
+  // Returns the discrete step limit and sets the 'StronglyForced'
+  // condition for the DoIt to be invoked at every step.
 
-	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-					const G4Step&  aStep);
-        // This is the method implementing the Cerenkov process.
+  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+                                  const G4Step&  aStep) override;
+  // This is the method implementing the Cerenkov process.
 
-        //  no operation in  AtRestDoIt and  AlongStepDoIt
-        virtual G4double AlongStepGetPhysicalInteractionLength(
-                               const G4Track&,
-                               G4double  ,
-                               G4double  ,
-                               G4double& ,
-                               G4GPILSelection*
-                              ) { return -1.0; };
+  //  no operation in  AtRestDoIt and  AlongStepDoIt
+  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track&,
+                                                         G4double  ,
+                                                         G4double  ,
+                                                         G4double& ,
+                                                         G4GPILSelection*
+                                                ) override { return -1.0; };
 
-        virtual G4double AtRestGetPhysicalInteractionLength(
-                               const G4Track& ,
-                               G4ForceCondition*
-                              ) { return -1.0; };
+  virtual G4double AtRestGetPhysicalInteractionLength(const G4Track& ,
+                                                      G4ForceCondition*
+                                                 ) override { return -1.0; };
 
-        //  no operation in  AtRestDoIt and  AlongStepDoIt
-        virtual G4VParticleChange* AtRestDoIt(
-                               const G4Track& ,
-                               const G4Step&
-                              ) {return 0;};
+  //  no operation in  AtRestDoIt and  AlongStepDoIt
+  virtual G4VParticleChange* AtRestDoIt(const G4Track& , const G4Step& ) 
+                             override {return nullptr;};
 
-        virtual G4VParticleChange* AlongStepDoIt(
-                               const G4Track& ,
-                               const G4Step&
-                              ) {return 0;};
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track& , const G4Step&) 
+                             override {return nullptr;};
 
-        void SetTrackSecondariesFirst(const G4bool state);
-        // If set, the primary particle tracking is interrupted and any 
-        // produced Cerenkov photons are tracked next. When all have 
-        // been tracked, the tracking of the primary resumes.
+  void SetTrackSecondariesFirst(const G4bool state);
+  // If set, the primary particle tracking is interrupted and any 
+  // produced Cerenkov photons are tracked next. When all have 
+  // been tracked, the tracking of the primary resumes.
 
-        G4bool GetTrackSecondariesFirst() const;
-        // Returns the boolean flag for tracking secondaries first.
+  G4bool GetTrackSecondariesFirst() const;
+  // Returns the boolean flag for tracking secondaries first.
 
-        void SetMaxBetaChangePerStep(const G4double d);
-        // Set the maximum allowed change in beta = v/c in % (perCent)
-        // per step.
+  void SetMaxBetaChangePerStep(const G4double d);
+  // Set the maximum allowed change in beta = v/c in % (perCent)
+  // per step.
 
-        G4double GetMaxBetaChangePerStep() const;
-        // Returns the maximum allowed change in beta = v/c in % (perCent)
+  G4double GetMaxBetaChangePerStep() const;
+  // Returns the maximum allowed change in beta = v/c in % (perCent)
 
-        void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
-        // Set the maximum number of Cerenkov photons allowed to be 
-        // generated during a tracking step. This is an average ONLY; 
-        // the actual number will vary around this average. If invoked, 
-        // the maximum photon stack will roughly be of the size set.
-        // If not called, the step is not limited by the number of 
-        // photons generated.
+  void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
+  // Set the maximum number of Cerenkov photons allowed to be 
+  // generated during a tracking step. This is an average ONLY; 
+  // the actual number will vary around this average. If invoked, 
+  // the maximum photon stack will roughly be of the size set.
+  // If not called, the step is not limited by the number of 
+  // photons generated.
 
-        G4int GetMaxNumPhotonsPerStep() const;
-        // Returns the maximum number of Cerenkov photons allowed to be
-        // generated during a tracking step.
+  G4int GetMaxNumPhotonsPerStep() const;
+  // Returns the maximum number of Cerenkov photons allowed to be
+  // generated during a tracking step.
 
-        G4PhysicsTable* GetPhysicsTable() const;
-        // Returns the address of the physics table.
+  G4PhysicsTable* GetPhysicsTable() const;
+  // Returns the address of the physics table.
 
-        void DumpPhysicsTable() const;
-        // Prints the physics table.
+  void DumpPhysicsTable() const;
+  // Prints the physics table.
 
 private:
 
-        void BuildThePhysicsTable();
+  void BuildThePhysicsTable();
 
-	/////////////////////
-	// Helper Functions
-	/////////////////////
+  /////////////////////
+  // Helper Functions
+  /////////////////////
 
-	G4double GetAverageNumberOfPhotons(const G4double charge,
-                                const G4double beta,
-		    		const G4Material *aMaterial,
-				G4MaterialPropertyVector* Rindex) const;
+  G4double GetAverageNumberOfPhotons(const G4double charge,
+                                     const G4double beta,
+                                     const G4Material *aMaterial,
+                                     G4MaterialPropertyVector* Rindex) const;
 
-        ///////////////////////
-        // Class Data Members
-        ///////////////////////
+  ///////////////////////
+  // Class Data Members
+  ///////////////////////
 
 protected:
 
-        G4PhysicsTable* thePhysicsTable;
-        //  A Physics Table can be either a cross-sections table or
-        //  an energy table (or can be used for other specific
-        //  purposes).
+  G4PhysicsTable* thePhysicsTable;
+  //  A Physics Table can be either a cross-sections table or
+  //  an energy table (or can be used for other specific
+  //  purposes).
 
 private:
 
-	G4bool fTrackSecondariesFirst;
-    G4double fMaxBetaChange;
-    G4int  fMaxPhotons;
+  G4bool fTrackSecondariesFirst;
+  G4double fMaxBetaChange;
+  G4int  fMaxPhotons;
 };
 
-////////////////////
-// Inline methods
-////////////////////
+  ////////////////////
+  // Inline methods
+  ////////////////////
 
 inline
 G4bool G4Cerenkov::GetTrackSecondariesFirst() const
 {
-        return fTrackSecondariesFirst;
+  return fTrackSecondariesFirst;
 }
 
 inline
 G4double G4Cerenkov::GetMaxBetaChangePerStep() const
 {
-        return fMaxBetaChange;
+  return fMaxBetaChange;
 }
 
 inline
 G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
 {
-        return fMaxPhotons;
+  return fMaxPhotons;
 }
 
 inline
 void G4Cerenkov::DumpPhysicsTable() const
 {
-        G4int PhysicsTableSize = thePhysicsTable->entries();
-        G4PhysicsOrderedFreeVector *v;
+  G4int PhysicsTableSize = thePhysicsTable->entries();
+  G4PhysicsOrderedFreeVector *v;
 
-        for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
-        {
-        	v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
-        	v->DumpValues();
-        }
+  for (G4int i = 0 ; i < PhysicsTableSize ; i++ ) {
+      v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
+      v->DumpValues();
+  }
 }
 
 inline

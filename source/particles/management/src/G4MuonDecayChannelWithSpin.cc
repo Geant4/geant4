@@ -49,17 +49,13 @@
 #include "G4LorentzVector.hh"
 
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin()
-  : G4MuonDecayChannel(),
-    EMMU( 0.*MeV),
-    EMASS( 0.*MeV) 
+  : G4MuonDecayChannel()
 {
 }
 
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4String& theParentName, 
 						       G4double        theBR)
-  : G4MuonDecayChannel(theParentName,theBR),
-    EMMU( 0.*MeV),
-    EMASS( 0.*MeV) 
+  : G4MuonDecayChannel(theParentName,theBR)
 {
 }
 
@@ -70,8 +66,6 @@ G4MuonDecayChannelWithSpin::~G4MuonDecayChannelWithSpin()
 G4MuonDecayChannelWithSpin::G4MuonDecayChannelWithSpin(const G4MuonDecayChannelWithSpin &right):
   G4MuonDecayChannel(right)
 {
-  EMMU  = right.EMMU;
-  EMASS = right.EMASS;
 }
 
 G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonDecayChannelWithSpin & right)
@@ -97,8 +91,6 @@ G4MuonDecayChannelWithSpin & G4MuonDecayChannelWithSpin::operator=(const G4MuonD
           daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
-    EMMU  = right.EMMU;
-    EMASS = right.EMASS;
   }
   return *this;
 }
@@ -114,13 +106,13 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannelWithSpin::DecayIt ";
 #endif
 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
 
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();
 
-  EMMU = parentmass;
+  G4double EMMU = parentmass;
 
   //daughters'mass
   G4double daughtermass[3]; 
@@ -130,7 +122,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
     sumofdaughtermass += daughtermass[index];
   }
 
-  EMASS = daughtermass[0];
+  G4double EMASS = daughtermass[0];
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -191,14 +183,14 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
     F_AS = F_AS + G_AS;
 
     // *** Radiative Corrections ***
-
-    G4double R_IS = F_c(x,x0);
+    const G4double omega =  std::log(EMMU/EMASS);
+    G4double R_IS = F_c(x,x0,omega);
 
     G4double F = 6.*F_IS + R_IS/std::sqrt(x_squared-x0_squared);
 
     // *** Radiative Corrections ***
 
-    G4double R_AS = F_theta(x,x0);
+    G4double R_AS = F_theta(x,x0,omega);
 
     rndm = G4UniformRand();
 
@@ -292,7 +284,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   return products;
 }
 
-G4double G4MuonDecayChannelWithSpin::R_c(G4double x){
+G4double G4MuonDecayChannelWithSpin::R_c(G4double x,G4double omega){
 
   G4int n_max = (int)(100.*x);
 
@@ -303,8 +295,6 @@ G4double G4MuonDecayChannelWithSpin::R_c(G4double x){
   for(G4int n=1; n<=n_max; n++){
     L2 += std::pow(x,n)/(n*n);
   }
-
-  G4double omega = std::log(EMMU/EMASS);
 
   G4double r_c;
 

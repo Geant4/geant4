@@ -124,7 +124,7 @@ void G4PAIModelData::Initialise(const G4MaterialCutsCouple* couple,
   G4double Tmin = fSandia.GetSandiaMatTablePAI(0,0); 
 
   // energy safety
-  const G4double deltaLow = 100.*eV; 
+  static const G4double deltaLow = 100.*eV; 
 
   for (G4int i = 0; i <= fTotBin; ++i) {
 

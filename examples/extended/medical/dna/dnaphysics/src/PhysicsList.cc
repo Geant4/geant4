@@ -38,7 +38,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
-#include "G4EmParameters.hh"
+#include "G4DecayPhysics.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,7 +49,7 @@ PhysicsList::PhysicsList()
   SetVerboseLevel(1);
   //  RegisterPhysics(new G4EmDNAPhysics());
   RegisterPhysics(new G4EmStandardPhysics_option4());
-  G4EmParameters::Instance()->AddDNA("World","Opt0");
+  RegisterPhysics(new G4DecayPhysics());
   G4ProductionCutsTable::GetProductionCutsTable()->
       SetEnergyRange(100*eV, 1*GeV);
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4eBremsstrahlungSpectrum.cc 95950 2016-03-03 10:42:48Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -50,6 +50,7 @@
 #include "G4BremsstrahlungParameters.hh"
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Exp.hh"
 
 G4eBremsstrahlungSpectrum::G4eBremsstrahlungSpectrum(const G4DataVector& bins,
   const G4String& name):G4VEnergySpectrum(),
@@ -197,7 +198,7 @@ G4double G4eBremsstrahlungSpectrum::SampleEnergy(G4int Z,
 
   do {
     G4double x = amin + G4UniformRand()*(amax - amin);
-    tgam = std::exp(x);
+    tgam = G4Exp(x);
     fun = Function(tgam, p);
 
     if(fun > amaj) {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLImmediateSceneHandler.cc 96669 2016-04-29 12:03:24Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -271,8 +271,8 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives2D()
   glMatrixMode (GL_MODELVIEW);
   glPopMatrix();
 
-  // See all primitives immediately...
-  glFlush ();
+  // See all primitives immediately...  At least soon...
+  ScaledFlush();
 
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }

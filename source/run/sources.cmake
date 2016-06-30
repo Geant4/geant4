@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85358 2014-10-28 10:02:44Z gcosmo $
+# $Id: sources.cmake 95232 2016-02-01 14:31:22Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -75,19 +75,20 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.hh
         G4MatScanMessenger.hh
         G4MaterialScanner.hh
-	G4PhysicsListHelper.hh
-	G4PhysicsListOrderingParameter.hh
+    	G4PhysicsListHelper.hh
+	    G4PhysicsListOrderingParameter.hh
         G4PhysicsListWorkspace.hh
         G4Run.hh
         G4RunManager.hh
-	G4MTRunManager.hh
-	G4WorkerRunManager.hh
+	    G4MTRunManager.hh
+	    G4WorkerRunManager.hh
         G4RunManagerKernel.hh
         G4MTRunManagerKernel.hh
         G4WorkerRunManagerKernel.hh
         G4RunMessenger.hh
         G4UserPhysicsListMessenger.hh
         G4UserRunAction.hh
+        G4MultiRunAction.hh
         G4UserWorkerInitialization.hh
         G4UserWorkerThreadInitialization.hh
         G4VModularPhysicsList.hh
@@ -98,7 +99,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUserParallelWorld.hh
         G4VUserPhysicsList.hh
         G4VUserPrimaryGeneratorAction.hh
-	G4WorkerThread.hh
+    	G4WorkerThread.hh
         G4VUPLSplitter.hh
         rundefs.hh
         G4RNGHelper.hh 
@@ -110,19 +111,20 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MSSteppingAction.cc
         G4MatScanMessenger.cc
         G4MaterialScanner.cc
-	G4PhysicsListHelper.cc
-	G4PhysicsListOrderingParamater.cc
+	    G4PhysicsListHelper.cc
+	    G4PhysicsListOrderingParamater.cc
         G4PhysicsListWorkspace.cc
         G4Run.cc
         G4RunManager.cc
-	G4MTRunManager.cc
-	G4WorkerRunManager.cc
+	    G4MTRunManager.cc
+	    G4WorkerRunManager.cc
         G4RunManagerKernel.cc
         G4MTRunManagerKernel.cc
         G4WorkerRunManagerKernel.cc
         G4RunMessenger.cc
         G4UserPhysicsListMessenger.cc
         G4UserRunAction.cc
+        G4MultiRunAction.cc
         G4UserWorkerInitialization.cc
         G4UserWorkerThreadInitialization.cc
         G4VModularPhysicsList.cc

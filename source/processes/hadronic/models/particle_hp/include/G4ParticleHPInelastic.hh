@@ -105,7 +105,6 @@ class G4ParticleHPInelastic : public G4HadronicInteraction
 
 protected:
   
-  G4double * xSec;
   //G4ParticleHPChannelList * theInelastic; // one List per element
   std::vector<G4ParticleHPChannelList*>* theInelastic; // one List per element
   G4String dirName;

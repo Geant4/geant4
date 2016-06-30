@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QuadrangularFacet.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4QuadrangularFacet.hh 95801 2016-02-25 10:59:41Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -90,7 +90,7 @@ class G4QuadrangularFacet : public G4VFacet
                              G4double &distFromSurface, G4ThreeVector &normal);
     G4ThreeVector GetSurfaceNormal () const;
 
-    G4double GetArea ();
+    G4double GetArea () const;
     G4ThreeVector GetPointOnFace () const;
 
     G4GeometryType GetEntityType () const;

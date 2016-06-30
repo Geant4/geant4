@@ -51,7 +51,7 @@ class G4GammaTransition
 {
 public:
 
-  G4GammaTransition();
+  explicit G4GammaTransition();
 
   virtual ~G4GammaTransition();
   
@@ -64,11 +64,10 @@ public:
 
 private:  
 
-  G4GammaTransition(const G4GammaTransition &right);
-  
-  const G4GammaTransition& operator=(const G4GammaTransition &right);
-  G4bool operator==(const G4GammaTransition &right) const;
-  G4bool operator!=(const G4GammaTransition &right) const;
+  G4GammaTransition(const G4GammaTransition &right) = delete;
+  const G4GammaTransition& operator=(const G4GammaTransition &right) = delete;
+  G4bool operator==(const G4GammaTransition &right) const = delete;
+  G4bool operator!=(const G4GammaTransition &right) const = delete;
  
 };
 

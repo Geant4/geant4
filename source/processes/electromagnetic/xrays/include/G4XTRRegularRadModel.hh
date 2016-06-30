@@ -50,16 +50,17 @@ class G4XTRRegularRadModel : public G4VXTRenergyLoss
 {
 public:
 
-  G4XTRRegularRadModel (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
-                        G4double,G4double,G4int,
+  explicit G4XTRRegularRadModel (G4LogicalVolume *anEnvelope,G4Material*,
+                        G4Material*, G4double,G4double,G4int,
                         const G4String & processName = "XTRegularModel");
   virtual ~G4XTRRegularRadModel ();
 
-  G4double SpectralXTRdEdx(G4double energy);
+  G4double SpectralXTRdEdx(G4double energy) override;
 
   // Pure virtual function from base class
 
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+  G4double GetStackFactor(G4double energy, G4double gamma, 
+                          G4double varAngle) override;
 };
 
 #endif

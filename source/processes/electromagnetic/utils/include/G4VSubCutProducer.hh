@@ -59,7 +59,7 @@ class G4VSubCutProducer
 {
 public:
 
-  G4VSubCutProducer(const G4String& name) : fName(name) {};
+  explicit G4VSubCutProducer(const G4String& name) : fName(name) {};
 
   virtual ~G4VSubCutProducer() {};
 
@@ -76,8 +76,8 @@ public:
 private:
 
   // hide assignment operator 
-  G4VSubCutProducer & operator=(const  G4VSubCutProducer &right);
-  G4VSubCutProducer(const  G4VSubCutProducer&);
+  G4VSubCutProducer & operator=(const  G4VSubCutProducer &right) = delete;
+  G4VSubCutProducer(const  G4VSubCutProducer&) = delete;
 
   G4String fName;
 };

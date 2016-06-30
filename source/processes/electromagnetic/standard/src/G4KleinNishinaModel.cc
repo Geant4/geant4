@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KleinNishinaModel.cc 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4KleinNishinaModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,16 +63,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
-
-static const G4double
-  d1= 2.7965e-1*CLHEP::barn, d2=-1.8300e-1*CLHEP::barn, 
-  d3= 6.7527   *CLHEP::barn, d4=-1.9798e+1*CLHEP::barn,
-  e1= 1.9756e-5*CLHEP::barn, e2=-1.0205e-2*CLHEP::barn, 
-  e3=-7.3913e-2*CLHEP::barn, e4= 2.7079e-2*CLHEP::barn,
-  f1=-3.9178e-7*CLHEP::barn, f2= 6.8241e-5*CLHEP::barn, 
-  f3= 6.0480e-5*CLHEP::barn, f4= 3.0274e-4*CLHEP::barn;
-static const G4double dT0 = keV;
-static const G4int nlooplim = 1000;
 
 G4KleinNishinaModel::G4KleinNishinaModel(const G4String& nam)
   : G4VEmModel(nam), 
@@ -127,6 +117,14 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   if (gammaEnergy <= LowEnergyLimit()) { return xSection; }
 
   static const G4double a = 20.0 , b = 230.0 , c = 440.0;
+
+static const G4double
+  d1= 2.7965e-1*CLHEP::barn, d2=-1.8300e-1*CLHEP::barn, 
+  d3= 6.7527   *CLHEP::barn, d4=-1.9798e+1*CLHEP::barn,
+  e1= 1.9756e-5*CLHEP::barn, e2=-1.0205e-2*CLHEP::barn, 
+  e3=-7.3913e-2*CLHEP::barn, e4= 2.7079e-2*CLHEP::barn,
+  f1=-3.9178e-7*CLHEP::barn, f2= 6.8241e-5*CLHEP::barn, 
+  f3= 6.0480e-5*CLHEP::barn, f4= 3.0274e-4*CLHEP::barn;
   
   G4double p1Z = Z*(d1 + e1*Z + f1*Z*Z), p2Z = Z*(d2 + e2*Z + f2*Z*Z),
            p3Z = Z*(d3 + e3*Z + f3*Z*Z), p4Z = Z*(d4 + e4*Z + f4*Z*Z);
@@ -139,6 +137,7 @@ G4KleinNishinaModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
                + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
                 
   //  modification for low energy. (special case for Hydrogen)
+  static const G4double dT0 = keV;
   if (gammaEnergy < T0) {
     X = (T0+dT0) / electron_mass_c2 ;
     G4double sigma = p1Z*G4Log(1.+2*X)/X
@@ -189,6 +188,7 @@ void G4KleinNishinaModel::SampleSecondaries(
   }
 
   // Loop on sampling
+  static const G4int nlooplim = 1000;
   G4int nloop = 0;
 
   G4double bindingEnergy, ePotEnergy, eKinEnergy;
@@ -375,7 +375,7 @@ void G4KleinNishinaModel::SampleSecondaries(
       edep -= esec;
     }
   }
-  if(fabs(energy - gamEnergy1 - eKinEnergy - esec - edep) > eV) {
+  if(std::abs(energy - gamEnergy1 - eKinEnergy - esec - edep) > eV) {
     G4cout << "### G4KleinNishinaModel dE(eV)= " 
            << (energy - gamEnergy1 - eKinEnergy - esec - edep)/eV 
            << " shell= " << i 

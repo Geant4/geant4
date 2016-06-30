@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 93897 2015-11-03 08:38:30Z gcosmo $
+$Id: History 97922 2016-06-23 09:30:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History 93897 2015-11-03 08:38:30Z gcosmo $
 
                       Category History file
                       ---------------------
+
+22.06.2016 - V. Ivanchenko (DMX-V10-02-00)
+             DMXPhysicsList: migrated EM physics to G4EmParameters.
 
 02.11.2015 - A. Ribon (DMX-V10-01-01)
              DMXPhysicsList: migrated to ParticleHP.

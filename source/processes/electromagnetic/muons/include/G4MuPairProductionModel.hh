@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh 74544 2013-10-14 12:40:29Z gcosmo $
+// $Id: G4MuPairProductionModel.hh 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,37 +74,38 @@ class G4MuPairProductionModel : public G4VEmModel
 {
 public:
 
-  G4MuPairProductionModel(const G4ParticleDefinition* p = 0,
-                          const G4String& nam = "muPairProd");
+  explicit G4MuPairProductionModel(const G4ParticleDefinition* p = nullptr,
+                                   const G4String& nam = "muPairProd");
 
   virtual ~G4MuPairProductionModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 			
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                 const G4ParticleDefinition*,
                                 G4double kineticEnergy,
-                                G4double cutEnergy);
+                                G4double cutEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*, 
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
                                     const G4ParticleDefinition*,
-                                    G4double);
+                                    G4double) override;
 
   inline void SetLowestKineticEnergy(G4double e);
 
@@ -119,9 +120,9 @@ protected:
                                           G4double Z,
                                           G4double cut);
 
-  virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
-						   G4double Z,
-						   G4double pairEnergy);
+  virtual G4double 
+  ComputeDMicroscopicCrossSection(G4double tkin, G4double Z,
+				  G4double pairEnergy);
 
   inline G4double MaxSecondaryEnergyForElement(G4double kineticEnergy,
 					       G4double Z);
@@ -136,8 +137,8 @@ private:
 				   G4double yymin, G4double yymax); 
 
   // hide assignment operator
-  G4MuPairProductionModel & operator=(const  G4MuPairProductionModel &right);
-  G4MuPairProductionModel(const  G4MuPairProductionModel&);
+  G4MuPairProductionModel & operator=(const G4MuPairProductionModel &right) = delete;
+  G4MuPairProductionModel(const  G4MuPairProductionModel&) = delete;
 
 protected:
 
@@ -173,9 +174,6 @@ private:
   G4double dy;
   G4double emin;
   G4double emax;
-
-  static const G4int zdat[5];
-  static const G4double adat[5];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,7 +11,7 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake 75774 2013-11-06 09:16:47Z gcosmo $
+# $Id: sources.cmake 97598 2016-06-06 07:19:46Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -29,6 +29,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4magneticfield
     HEADERS
+        G4BogackiShampine23.hh
+        G4BogackiShampine45.hh
         G4CachedMagneticField.hh
         G4CashKarpRKF45.hh
         G4ChargeState.hh
@@ -38,6 +40,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ClassicalRK4.hh
         G4ConstRK4.hh
         G4DELPHIMagField.hh
+        G4DoLoMcPriRK34.hh
+        G4DormandPrince745.hh
+        G4DormandPrinceRK56.hh
+        G4DormandPrinceRK78.hh
         G4ElectricField.hh
         G4ElectroMagneticField.hh
         G4EqEMFieldWithEDM.hh
@@ -55,6 +61,12 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManagerStore.hh
         G4FieldTrack.hh
         G4FieldTrack.icc
+        G4FSALBogackiShampine45.hh
+        G4FSALDormandPrince745.hh
+        G4FSALIntegrationDriver.hh
+        G4FSALIntegrationDriver.icc
+        G4VFSALIntegrationStepper.hh
+        G4VFSALIntegrationStepper.icc
         G4HarmonicPolMagField.hh
         G4HelixExplicitEuler.hh
         G4HelixHeum.hh
@@ -85,10 +97,13 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4SimpleRunge.hh
         G4TrialsCounter.hh
         G4TrialsCounter.icc
+        G4TsitourasRK45.hh
         G4UniformElectricField.hh
         G4UniformGravityField.hh
         G4UniformMagField.hh
     SOURCES
+        G4BogackiShampine23.cc
+        G4BogackiShampine45.cc
         G4CachedMagneticField.cc
         G4CashKarpRKF45.cc
         G4ChargeState.cc
@@ -97,6 +112,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4ClassicalRK4.cc
         G4ConstRK4.cc
         G4DELPHIMagField.cc
+        G4DoLoMcPriRK34.cc
+        G4DormandPrince745.cc
+        G4DormandPrinceRK56.cc
+        G4DormandPrinceRK78.cc
         G4ElectricField.cc
         G4ElectroMagneticField.cc
         G4EqEMFieldWithEDM.cc
@@ -111,6 +130,10 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManager.cc
         G4FieldManagerStore.cc
         G4FieldTrack.cc
+        G4FSALBogackiShampine45.cc
+        G4FSALDormandPrince745.cc
+        G4FSALIntegrationDriver.cc
+        G4VFSALIntegrationStepper.cc
         G4HarmonicPolMagField.cc
         G4HelixExplicitEuler.cc
         G4HelixHeum.cc
@@ -136,6 +159,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4SimpleHeum.cc
         G4SimpleRunge.cc
         G4TrialsCounter.cc
+        G4TsitourasRK45.cc
         G4UniformElectricField.cc
         G4UniformGravityField.cc
         G4UniformMagField.cc

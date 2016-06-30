@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,7 +12,6 @@
 
 Using the sequential Run Manager
 XrayFluoAnalysisManager created
-### NIST DataBase for Materials is used
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltMain> is not found out
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <MadaBasaltTraces> is not found out
 G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <IceBasaltMain> is not found out
@@ -2319,16 +2318,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -2359,6 +2360,8 @@ The Anode is a slice 1e-05mm thick of G4_Ni
 World is registered to the default region.
 XrayFluoSD created
 physicsList->Construct() start.
+### WARNING: G4EmProcessOptions class is obsolete and will be removed in the next public release 
+    Please, try to use G4EmParameters class and/or UI interface to EM parameters
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -2391,9 +2394,11 @@ PhysicsList::SetCuts:CutLength : 10 um
 /run/beamOn 10
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  1  1
 
 ### === G4UAtomicDeexcitation::InitialiseForNewRun()
+### ===  Auger cascade flag: 0
+### ===  Ignore cuts flag:   0
 ### ===  PIXE model for hadrons: ECPSSR_FormFactor
 ### ===  PIXE model for e+-:     Livermore
 
@@ -2862,7 +2867,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.5s Real=1.51s Sys=0s
+  User=0.93s Real=0.94s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 /vis/viewer/update
@@ -2883,21 +2888,21 @@ XrayFluoSD deleted
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 7
+Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00865 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.319 MB
-Pool ID '7G4Track', size : 0.638 MB
+Pool ID '17G4DynamicParticle', size : 0.323 MB
+Pool ID '7G4Track', size : 0.645 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.97 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.98 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

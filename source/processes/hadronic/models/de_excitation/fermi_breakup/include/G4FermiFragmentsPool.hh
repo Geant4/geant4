@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiBreakUp.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
+// $Id: G4FermiFragmentsPool.hh,v 1.5 2006-06-29 20:13:13 gunter Exp $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -50,7 +50,7 @@ public:
   ~G4FermiFragmentsPool();
 
   G4bool IsApplicable(G4int Z, G4int A, G4double mass) const;
-
+ 
   const std::vector<const G4FermiConfiguration*>* 
   GetConfigurationList(G4int Z, G4int A, G4double mass) const;
 

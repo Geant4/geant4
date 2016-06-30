@@ -1,4 +1,4 @@
-$Id: History 94234 2015-11-09 10:58:13Z gcosmo $
+$Id: History 97673 2016-06-07 08:27:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,59 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-06-16 V.Ivanchenko (materials-V10-02-12)
+- G4DensityEffectData - fixed initialisation 
+
+30-05-16 V.Ivanchenko (materials-V10-02-11)
+- G4DensityEffectData, G4IonisParamMat - fixed density effect 
+    parameters corrections for the case when NIST mean ionisation
+    potential does not equal to that parameter in Shternheimer table
+- G4NistElementBuilder, G4NistMaterialBuilder - added access to 
+    the mean ionisation potential; put liquid water in front of
+    the list of NIST materials (index=0), so pure materials can be 
+    easier accessted via atomic number (Z > 0)
+
+09-05-16 V.Ivanchenko (materials-V10-02-10)
+- G4Material - do not delete G4MaterialPropertyTable, because this 
+    is unsafe
+
+06-05-16 V.Ivanchenko (materials-V10-02-09)
+06-05-16 V.Ivanchenko (materials-V10-02-08)
+- cleanup all classes: use nullptr, use const/static 
+- G4MaterialPropertiesTable - 4 complex methods moved from inline
+    to source
+- G4UCNMicroRoughnessHelper - all methods are const
+- G4NistManager, G4NistMaterialBuilder, G4NistElementBuilder -
+    added new const methods FindElement(..), FindMaterial(..), 
+    FindSimpleMaterial(..), which may be used in run time in MT mode
+- G4Element - added method GetZ_asInt()
+
+08-04-16 L.G. Sarmiento (materials-V10-02-07)
+- G4AtomicShells_EADL class added. Not being used by anything yet.
+
+06-04-16 V.Ivanchenko (materials-V10-02-06)
+- G4SandiaTable - fixed problem for the case when G4VERBOSE flag
+    unset (introduced in the previous tag)
+
+06-03-16 V.Ivanchenko (materials-V10-02-05)
+04-03-16 V.Ivanchenko (materials-V10-02-04)
+- G4AtomicShells, G4SandiaTable - asserts are substituted by G4Exception,
+    which are happens only if G4VERBOSE compillation flag is set;
+- G4SandiaTable - cleanup of methods is done, unused methods removed, 
+    some are moved from public to private 
+
+18-02-16 A. Dotti   (materials-V10-02-02)
+- Fix rare data-race in G4MaterialPropertiesTable for optical physics
+  crash
+
+03-01-16 M. Verderi (materials-V10-02-01)
+- src/G4NistElementBuilder.cc : fixed typo in print reported in #1786.
+
+20-01-16 V.Ivanchenko (materials-V10-02-00)
+- G4NistMaterialBuilder - added lock to build of a new NIST
+    material. This is needed, because some physics processes may 
+    create a new NIST material from a worker thread.
 
 09-11-15 V.Ivanchenko (materials-V10-01-14)
 - fixed typo in comments (no code change)

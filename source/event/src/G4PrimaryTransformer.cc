@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc 72252 2013-07-12 09:04:11Z gcosmo $
+// $Id: G4PrimaryTransformer.cc 94950 2016-01-07 11:53:14Z gcosmo $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -42,8 +42,8 @@
 
 G4PrimaryTransformer::G4PrimaryTransformer()
 :verboseLevel(0),trackID(0),
- unknown(0),unknownParticleDefined(false),
- opticalphoton(0),opticalphotonDefined(false),
+ unknown(nullptr),unknownParticleDefined(false),
+ opticalphoton(nullptr),opticalphotonDefined(false),
  nWarn(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
@@ -72,11 +72,12 @@ G4TrackVector* G4PrimaryTransformer::GimmePrimaries(G4Event* anEvent,G4int track
   trackID = trackIDCounter;
 
   //TV.clearAndDestroy();
-  for( size_t ii=0; ii<TV.size();ii++)
-  { delete TV[ii]; }
+  for(auto tr : TV) delete tr;
   TV.clear();
+
+  //Loop over vertices
   G4PrimaryVertex* nextVertex = anEvent->GetPrimaryVertex();
-  while(nextVertex)
+  while(nextVertex) // Loop checking 12.28.2015 M.Asai
   { 
     GenerateTracks(nextVertex);
     nextVertex = nextVertex->GetNext();
@@ -105,7 +106,7 @@ void G4PrimaryTransformer::GenerateTracks(G4PrimaryVertex* primaryVertex)
 #endif
 
   G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
-  while( primaryParticle != 0 )
+  while( primaryParticle != 0 ) // Loop checking 12.28.2015 M.Asai
   {
     GenerateSingleTrack( primaryParticle, X0, Y0, Z0, T0, WV );
     primaryParticle = primaryParticle->GetNext();
@@ -128,7 +129,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
     }
 #endif 
     G4PrimaryParticle* daughter = primaryParticle->GetDaughter();
-    while(daughter)
+    while(daughter) // Loop checking 12.28.2015 M.Asai
     {
       GenerateSingleTrack(daughter,x0,y0,z0,t0,wv);
       daughter = daughter->GetNext();

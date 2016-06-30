@@ -59,9 +59,14 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4MscStepLimitType.hh"
+#include "G4NuclearFormfactorType.hh"
 #include <vector>
 
 class G4EmParametersMessenger;
+class G4VEnergyLossProcess;
+class G4VEmProcess;
+class G4VAtomDeexcitation;
+class G4StateManager;
 
 class G4EmParameters
 {
@@ -130,6 +135,9 @@ public:
   void SetUseMottCorrection(G4bool val);
   G4bool UseMottCorrection() const;
 
+  void SetIntegral(G4bool val);
+  G4bool Integral() const;
+
   // double parameters with values
   void SetMinSubRange(G4double val);
   G4double MinSubRange() const;
@@ -176,6 +184,10 @@ public:
   void SetMscSkin(G4double val);
   G4double MscSkin() const;
 
+  void SetStepFunction(G4double v1, G4double v2);
+
+  void SetStepFunctionMuHad(G4double v1, G4double v2);
+
   // integer parameters 
   void SetNumberOfBins(G4int val);
   G4int NumberOfBins() const;
@@ -195,6 +207,9 @@ public:
   void SetMscMuHadStepLimitType(G4MscStepLimitType val);
   G4MscStepLimitType MscMuHadStepLimitType() const;
 
+  void SetNuclearFormfactorType(G4NuclearFormfactorType val);
+  G4NuclearFormfactorType NuclearFormfactorType() const;
+
   // string parameters 
   void SetPIXECrossSectionModel(const G4String&);
   const G4String& PIXECrossSectionModel();
@@ -202,6 +217,7 @@ public:
   void SetPIXEElectronCrossSectionModel(const G4String&);
   const G4String& PIXEElectronCrossSectionModel();
 
+  // parameters per region or per process 
   void AddPAIModel(const G4String& particle,
                    const G4String& region,
                    const G4String& type);
@@ -216,21 +232,51 @@ public:
   const std::vector<G4String>& RegionsDNA() const;
   const std::vector<G4String>& TypesDNA() const;
 
+  void SetSubCutoff(G4bool val, const G4String& region = "");
+
+  void SetDeexActiveRegion(const G4String& region, G4bool fdeex,
+			   G4bool fauger, G4bool fpixe);
+
+  void SetProcessBiasingFactor(const G4String& procname, 
+                               G4double val, G4bool wflag);
+
+  void ActivateForcedInteraction(const G4String& procname, 
+                                 const G4String& region,
+                                 G4double length, 
+                                 G4bool wflag);
+
+  void ActivateSecondaryBiasing(const G4String& name,
+				const G4String& region, 
+				G4double factor,
+				G4double energyLimit);
+
+  // initialisation methods
+  void DefineRegParamForLoss(G4VEnergyLossProcess*, 
+                             G4bool isElectron) const;
+  void DefineRegParamForEM(G4VEmProcess*) const;
+  void DefineRegParamForDeex(G4VAtomDeexcitation*) const;
+
 private:
 
   G4EmParameters();
 
-  void PrintWarning(G4ExceptionDescription& ed);
+  G4bool IsLocked() const;
+
+  G4String CheckRegion(const G4String&) const;
+
+  void PrintWarning(G4ExceptionDescription& ed) const;
 
   static G4EmParameters* theInstance;
 
   G4EmParametersMessenger* theMessenger;
 
+  G4StateManager* fStateManager;
+
   G4bool lossFluctuation;
   G4bool buildCSDARange;
   G4bool flagLPM;
   G4bool spline;
-  G4bool finalRange;
+  G4bool cutAsFinalRange;
   G4bool applyCuts;
   G4bool fluo;
   G4bool beardenFluoDir;
@@ -243,6 +289,7 @@ private:
   G4bool latDisplacementBeyondSafety;
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
+  G4bool integral;
 
   G4double minSubRange;
   G4double minKinEnergy;
@@ -259,6 +306,10 @@ private:
   G4double rangeFactorMuHad;
   G4double geomFactor;
   G4double skin;
+  G4double dRoverRange;
+  G4double finalRange;
+  G4double dRoverRangeMuHad;
+  G4double finalRangeMuHad;
 
   G4int nbins;
   G4int nbinsPerDecade;
@@ -267,6 +318,7 @@ private:
 
   G4MscStepLimitType mscStepLimit;
   G4MscStepLimitType mscStepLimitMuHad;
+  G4NuclearFormfactorType nucFormfactor;
 
   G4String namePIXE;
   G4String nameElectronPIXE;
@@ -279,6 +331,28 @@ private:
 
   std::vector<G4String>  m_regnamesDNA;
   std::vector<G4String>  m_typesDNA;
+
+  std::vector<G4String>  m_regnamesSubCut;
+  std::vector<G4bool>    m_subCuts;
+
+  std::vector<G4String>  m_regnamesDeex;
+  std::vector<G4bool>    m_fluo;
+  std::vector<G4bool>    m_auger;
+  std::vector<G4bool>    m_pixe;
+
+  std::vector<G4String>  m_procBiasedXS;
+  std::vector<G4double>  m_factBiasedXS;
+  std::vector<G4bool>    m_weightBiasedXS;
+
+  std::vector<G4String>  m_procForced;
+  std::vector<G4String>  m_regnamesForced;
+  std::vector<G4double>  m_lengthForced;
+  std::vector<G4bool>    m_weightForced;
+
+  std::vector<G4String>  m_procBiasedSec;
+  std::vector<G4String>  m_regnamesBiasedSec;
+  std::vector<G4double>  m_factBiasedSec;
+  std::vector<G4double>  m_elimBiasedSec;
 
 };
 

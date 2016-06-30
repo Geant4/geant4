@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4MagneticField.cc 96678 2016-04-29 16:21:01Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -47,6 +47,6 @@ G4MagneticField::G4MagneticField(const G4MagneticField &MagField)
 G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
 {
   if (&p == this) return *this; 
-  *this = p; 
+  G4ElectroMagneticField::operator=(p); 
   return *this;
 }

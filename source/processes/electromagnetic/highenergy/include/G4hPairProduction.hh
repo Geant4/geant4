@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hPairProduction.hh 72943 2013-08-14 13:40:29Z gcosmo $
+// $Id: G4hPairProduction.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,21 +60,21 @@ class G4hPairProduction : public G4MuPairProduction
 {
 public:
 
-  G4hPairProduction(const G4String& processName = "hPairProd");
+  explicit G4hPairProduction(const G4String& processName = "hPairProd");
 
   virtual ~G4hPairProduction();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
 private:
 
-  G4hPairProduction & operator=(const G4hPairProduction &right);
-  G4hPairProduction(const G4hPairProduction&);
+  G4hPairProduction & operator=(const G4hPairProduction &right) = delete;
+  G4hPairProduction(const G4hPairProduction&) = delete;
 
 };
 

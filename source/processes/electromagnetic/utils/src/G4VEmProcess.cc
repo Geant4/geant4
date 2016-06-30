@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEmProcess.cc 96115 2016-03-16 18:53:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -114,10 +114,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   maxKinEnergy = 10.0*TeV;
   nLambdaBins  = 77;
   minKinEnergyPrim = DBL_MAX;
-  actBinning = false;
-  actSpline = false;
-  actMinKinEnergy = false;
-  actMaxKinEnergy = false;
+  actBinning = actSpline = actMinKinEnergy = actMaxKinEnergy = false;
 
   // default lambda factor
   lambdaFactor  = 0.8;
@@ -216,7 +213,9 @@ void G4VEmProcess::AddEmModel(G4int order, G4VEmModel* p,
 void G4VEmProcess::SetEmModel(G4VEmModel* p, G4int index) 
 {
   G4int n = emModels.size();
-  if(index >= n) { for(G4int i=n; i<=index; ++i) {emModels.push_back(0);} }
+  if(index >= n) { 
+    for(G4int i=n; i<=index; ++i) {emModels.push_back(nullptr);} 
+  }
   emModels[index] = p;
 }
 
@@ -235,6 +234,27 @@ void G4VEmProcess::UpdateEmModel(const G4String& nam,
                                  G4double emin, G4double emax)
 {
   modelManager->UpdateEmModel(nam, emin, emax);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEmProcess::GetNumberOfModels() const
+{
+  return modelManager->NumberOfModels();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEmProcess::GetNumberOfRegionModels(size_t couple_index) const
+{
+  return modelManager->NumberOfRegionModels(couple_index);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEmModel* G4VEmProcess::GetRegionModel(G4int idx, size_t couple_index) const
+{
+  return modelManager->GetRegionModel(idx, couple_index);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -295,10 +315,13 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   // initialisation of the process  
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
+  if(!actSpline) { splineFlag = theParameters->Spline(); }
+
   if(isMaster) { SetVerboseLevel(theParameters->Verbose()); }
   else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
   applyCuts = theParameters->ApplyCuts();
   lambdaFactor = theParameters->LambdaFactor();
+  theParameters->DefineRegParamForEM(this);
 
   // initialisation of models
   numberOfModels = modelManager->NumberOfModels();
@@ -450,7 +473,6 @@ void G4VEmProcess::BuildLambdaTable()
   G4int nbin = theParameters->NumberOfBins();
   if(actBinning) { nbin = std::max(nbin, nLambdaBins); }
   G4double emax1 = std::min(maxKinEnergy, minKinEnergyPrim);
-  if(!actSpline) { splineFlag = theParameters->Spline(); }
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -663,10 +685,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
 
     } else if(currentInteractionLength < DBL_MAX) {
 
-      // subtract NumberOfInteractionLengthLeft using previous step
       theNumberOfInteractionLengthLeft -= 
         previousStepSize/currentInteractionLength;
-      //SubtractNumberOfInteractionLengthLeft(previousStepSize);
       theNumberOfInteractionLengthLeft = 
         std::max(theNumberOfInteractionLengthLeft, 0.0);
     }

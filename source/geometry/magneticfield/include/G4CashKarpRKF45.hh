@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4CashKarpRKF45.hh 97598 2016-06-06 07:19:46Z gcosmo $
 //
 //
 // class G4CashKarpRKF45
@@ -86,7 +86,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   private:
 
-    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *yTemp, *yIn;
+   G4double *ak2, *ak3, *ak4, *ak5, *ak6, *yTemp, *yIn; // *ak7
       // scratch space
 
     G4double fLastStepLength;

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 94458 2015-11-18 14:36:25Z gcosmo $
+// $Id: PhysicsList.cc 97882 2016-06-16 16:11:41Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,8 @@
 #include "G4RadioactiveDecay.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4NuclideTable.hh"
+#include "G4LossTableManager.hh"
+#include "G4UAtomicDeexcitation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -101,9 +103,22 @@ void PhysicsList::ConstructProcess()
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
-  
-  G4NuclideTable::GetInstance()->SetLevelTolerance(100*eV);
-  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.0001*ns);
+
+  // Need to initialize atomic deexcitation outside of radioactive decay
+  G4LossTableManager* theManager = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* p = theManager->AtomDeexcitation();
+  if (!p) {
+     G4UAtomicDeexcitation* atomDeex = new G4UAtomicDeexcitation();
+     theManager->SetAtomDeexcitation(atomDeex);
+     atomDeex->SetFluo(true);
+     atomDeex->SetAuger(true);
+     atomDeex->InitialiseAtomicDeexcitation();
+  }
+  //
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
+  G4NuclideTable::GetInstance()->SetLevelTolerance(1.0*eV);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

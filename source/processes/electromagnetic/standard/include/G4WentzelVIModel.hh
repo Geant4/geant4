@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.hh 89893 2015-05-04 07:29:17Z gcosmo $
+// $Id: G4WentzelVIModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,33 +68,36 @@ class G4WentzelVIModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIModel(G4bool comb = true, const G4String& nam = "WentzelVIUni");
+  explicit G4WentzelVIModel(G4bool comb = true, 
+			    const G4String& nam = "WentzelVIUni");
 
   virtual ~G4WentzelVIModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel);
+                               G4VEmModel* masterModel) override;
 
-  void StartTracking(G4Track*);
+  virtual void StartTracking(G4Track*) override;
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double KineticEnergy,
 					      G4double AtomicNumber,
 					      G4double AtomicWeight=0., 
 					      G4double cut = DBL_MAX,
-					      G4double emax= DBL_MAX);
+					      G4double emax= DBL_MAX) override;
 
   virtual G4ThreeVector& SampleScattering(const G4ThreeVector&, 
-					  G4double safety);
+					  G4double safety) override;
 
-  virtual G4double ComputeTruePathLengthLimit(const G4Track& track,
-					      G4double& currentMinimalStep);
+  virtual G4double 
+  ComputeTruePathLengthLimit(const G4Track& track,
+			     G4double& currentMinimalStep) override;
 
-  virtual G4double ComputeGeomPathLength(G4double truePathLength);
+  virtual G4double ComputeGeomPathLength(G4double truePathLength) override;
 
-  virtual G4double ComputeTrueStepLength(G4double geomStepLength);
+  virtual G4double ComputeTrueStepLength(G4double geomStepLength) override;
 
   // defines low energy limit on energy transfer to atomic electron
   inline void SetFixedCut(G4double);
@@ -131,8 +134,8 @@ private:
   inline void SetupParticle(const G4ParticleDefinition*);
 
   //  hide assignment operator
-  G4WentzelVIModel & operator=(const  G4WentzelVIModel &right);
-  G4WentzelVIModel(const  G4WentzelVIModel&);
+  G4WentzelVIModel & operator=(const  G4WentzelVIModel &right) = delete;
+  G4WentzelVIModel(const  G4WentzelVIModel&) = delete;
 
 protected:
 
@@ -179,11 +182,12 @@ private:
   size_t          idx2;
 
   // data for single scattering mode
-  G4double xtsec;
+  G4int minNCollisions;
+  G4int nelments;
   std::vector<G4double> xsecn;
   std::vector<G4double> prob;
-  G4int    nelments;
 
+  G4double xtsec;
   G4double numlimit;
 
   // projectile

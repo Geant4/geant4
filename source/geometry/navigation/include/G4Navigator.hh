@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh 81577 2014-06-03 10:13:36Z gcosmo $
+// $Id: G4Navigator.hh 96458 2016-04-15 10:15:24Z gcosmo $
 //
 //
 // class G4Navigator
@@ -358,8 +358,8 @@ class G4Navigator
 
  protected:  // without description
 
-  G4double kCarTolerance;
-    // Geometrical tolerance for surface thickness of shapes.
+  G4double kCarTolerance, fMinStep, fSqTol;
+    // Cached tolerances.
 
   //
   // BEGIN State information

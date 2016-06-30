@@ -25,18 +25,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrangularFacet.cc 66819 2013-01-12 16:20:10Z gcosmo $
+// $Id: G4QuadrangularFacet.cc 95945 2016-03-03 09:54:38Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 //
-// 31 October 2004, P R Truscott, QinetiQ Ltd, UK - Created.
-// 12 October 2012, M Gayer, CERN
+// 31 October 2004  P R Truscott, QinetiQ Ltd, UK - Created.
+//
+// 12 October 2012  M Gayer, CERN
 //                  New implementation reducing memory requirements by 50%,
 //                  and considerable CPU speedup together with the new
 //                  implementation of G4TessellatedSolid.
+//
+// 29 February 2016 E Tcherniaev, CERN
+//                  Added exhaustive tests to catch various problems with a
+//                  quadrangular facet: collinear vertices, non planar surface,
+//                  degenerate, concave or self intersecting quadrilateral.
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -57,8 +63,12 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector &vt0,
                                           const G4ThreeVector &vt3,
                                                 G4FacetVertexType vertexType)
 {
-  G4ThreeVector e1, e2, e3;
+  G4double delta   =  1.0 * kCarTolerance; // dimension tolerance
+  G4double epsilon = 0.01 * kCarTolerance; // planarity tolerance
 
+  fRadius = 0.0;
+
+  G4ThreeVector e1, e2, e3;
   SetVertex(0, vt0);
   if (vertexType == ABSOLUTE)
   {
@@ -80,59 +90,128 @@ G4QuadrangularFacet::G4QuadrangularFacet (const G4ThreeVector &vt0,
     e2 = vt2;
     e3 = vt3;
   }
-  G4double length1 = e1.mag();
-  G4double length2 = (GetVertex(2)-GetVertex(1)).mag();
-  G4double length3 = (GetVertex(3)-GetVertex(2)).mag();
-  G4double length4 = e3.mag();
 
-  G4ThreeVector normal1 = e1.cross(e2).unit();
-  G4ThreeVector normal2 = e2.cross(e3).unit(); 
+  // Check length of sides and diagonals
+  //
+  G4double leng1 = e1.mag();
+  G4double leng2 = (e2-e1).mag();
+  G4double leng3 = (e3-e2).mag();
+  G4double leng4 = e3.mag();
 
-  bool isDefined = (length1 > kCarTolerance && length2 > kCarTolerance &&
-    length3 > kCarTolerance && length4 > kCarTolerance &&
-    normal1.dot(normal2) >= 0.9999999999);
+  G4double diag1 = e2.mag();
+  G4double diag2 = (e3-e1).mag();
 
-  if (isDefined)
+  if (leng1 <= delta || leng2 <= delta || leng3 <= delta || leng4 <= delta ||
+      diag1 <= delta || diag2 <= delta)
   {
-    fFacet1 = G4TriangularFacet (GetVertex(0),GetVertex(1),
-                                 GetVertex(2),ABSOLUTE);
-    fFacet2 = G4TriangularFacet (GetVertex(0),GetVertex(2),
-                                 GetVertex(3),ABSOLUTE);
-
-    G4TriangularFacet facet3 (GetVertex(0),GetVertex(1),GetVertex(3),ABSOLUTE);
-    G4TriangularFacet facet4 (GetVertex(1),GetVertex(2),GetVertex(3),ABSOLUTE);
-
-    G4ThreeVector normal12 = fFacet1.GetSurfaceNormal()
-                           + fFacet2.GetSurfaceNormal();
-    G4ThreeVector normal34 = facet3.GetSurfaceNormal()
-                           + facet4.GetSurfaceNormal();
-    G4ThreeVector normal = 0.25 * (normal12 + normal34);
-
-    fFacet1.SetSurfaceNormal (normal);
-    fFacet2.SetSurfaceNormal (normal);
-
-    G4ThreeVector vtmp = 0.5 * (e1 + e2);
-    fCircumcentre = GetVertex(0) + vtmp;
-    G4double radiusSqr = vtmp.mag2();
-    fRadius = std::sqrt(radiusSqr);
-  }
-  else
-  {
+    ostringstream message;
+    message << "Sides/diagonals of facet are too small." << G4endl
+            << "P0 = " << GetVertex(0) << G4endl
+            << "P1 = " << GetVertex(1) << G4endl
+            << "P2 = " << GetVertex(2) << G4endl
+            << "P3 = " << GetVertex(3) << G4endl
+            << "Side1 length (P0->P1) = " << leng1 << G4endl
+            << "Side2 length (P1->P2) = " << leng2 << G4endl
+            << "Side3 length (P2->P3) = " << leng3 << G4endl
+            << "Side4 length (P3->P0) = " << leng4 << G4endl
+            << "Diagonal1 length (P0->P2) = " << diag1 << G4endl
+            << "Diagonal2 length (P1->P3) = " << diag2;
     G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
-                "GeomSolids0002", JustWarning,
-                "Length of sides of facet are too small or sides not planar.");
-    G4cout << G4endl;
-    G4cout << "P0 = " << GetVertex(0) << G4endl;
-    G4cout << "P1 = " << GetVertex(1) << G4endl;
-    G4cout << "P2 = " << GetVertex(2) << G4endl;
-    G4cout << "P3 = " << GetVertex(3) << G4endl;
-    G4cout << "Side lengths = P0->P1" << length1 << G4endl;    
-    G4cout << "Side lengths = P1->P2" << length2 << G4endl;    
-    G4cout << "Side lengths = P2->P3" << length3 << G4endl;    
-    G4cout << "Side lengths = P3->P0" << length4 << G4endl;    
-    G4cout << G4endl;
-    fRadius = 0.0;
+                "GeomSolids1001", JustWarning, message);
+    return;
   }
+
+  // Check that vertices are not collinear
+  //
+  G4double s1 = (e1.cross(e2)).mag()*0.5;
+  G4double s2 = ((e2-e1).cross(e3-e2)).mag()*0.5;
+  G4double s3 = (e2.cross(e3)).mag()*0.5;
+  G4double s4 = (e1.cross(e3)).mag()*0.5;
+
+  G4double h1 = 2.*s1 / std::max(std::max(leng1,leng2),diag1);
+  G4double h2 = 2.*s2 / std::max(std::max(leng2,leng3),diag2);
+  G4double h3 = 2.*s3 / std::max(std::max(leng3,leng4),diag1);
+  G4double h4 = 2.*s4 / std::max(std::max(leng4,leng1),diag2);
+   
+  if (h1 <= delta || h2 <= delta || h3 <= delta || h4 <= delta )
+  {
+    ostringstream message;
+    message << "Facet has three or more collinear vertices." << G4endl
+            << "P0 = " << GetVertex(0) << G4endl
+            << "P1 = " << GetVertex(1) << G4endl
+            << "P2 = " << GetVertex(2) << G4endl
+            << "P3 = " << GetVertex(3) << G4endl
+            << "Height in P0-P1-P2 = " << h1 << G4endl
+            << "Height in P1-P2-P3 = " << h2 << G4endl
+            << "Height in P2-P3-P4 = " << h3 << G4endl
+            << "Height in P4-P0-P1 = " << h4;
+    G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
+	        "GeomSolids1001", JustWarning, message);
+    return;
+  }
+
+  // Check that vertices are coplanar by computing minimal
+  // height of tetrahedron comprising of vertices
+  //
+  G4double smax = std::max( std::max(s1,s2), std::max(s3,s4) ); 
+  G4double hmin = 0.5 * std::fabs( e1.dot(e2.cross(e3)) ) / smax;
+  if (hmin >= epsilon)
+  {
+    ostringstream message;
+    message << "Facet is not planar." << G4endl
+            << "Disrepancy = " << hmin << G4endl
+            << "P0 = " << GetVertex(0) << G4endl
+            << "P1 = " << GetVertex(1) << G4endl
+            << "P2 = " << GetVertex(2) << G4endl
+            << "P3 = " << GetVertex(3);
+    G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
+	        "GeomSolids1001", JustWarning, message);
+    return;
+  }
+  
+  // Check that facet is convex by computing crosspoint 
+  // of diagonals
+  //
+  G4ThreeVector normal = e2.cross(e3-e1);
+  G4double s = kInfinity, t = kInfinity, magnitude2 = normal.mag2();
+  if (magnitude2 > delta*delta) // check: magnitude2 != 0.
+  {
+    s = normal.dot(e1.cross(e3-e1)) / magnitude2;
+    t = normal.dot(e1.cross(e2))    / magnitude2;
+  }
+  if (s <= 0. || s >= 1. || t <= 0. || t >= 1.)
+  {
+    ostringstream message;
+    message << "Facet is not convex." << G4endl
+            << "Parameters of crosspoint of diagonals: "
+            << s << " and " << t << G4endl
+            << "should both be within (0,1) range" << G4endl
+	    << "P0 = " << GetVertex(0) << G4endl
+	    << "P1 = " << GetVertex(1) << G4endl
+	    << "P2 = " << GetVertex(2) << G4endl
+	    << "P3 = " << GetVertex(3);
+    G4Exception("G4QuadrangularFacet::G4QuadrangularFacet()",
+	        "GeomSolids1001", JustWarning, message);
+    return;
+  }
+
+  // Define facet
+  //
+  fFacet1 = G4TriangularFacet(GetVertex(0),GetVertex(1),GetVertex(2),ABSOLUTE);
+  fFacet2 = G4TriangularFacet(GetVertex(0),GetVertex(2),GetVertex(3),ABSOLUTE);
+
+  normal = normal.unit();
+  fFacet1.SetSurfaceNormal(normal);
+  fFacet2.SetSurfaceNormal(normal);
+  
+  G4ThreeVector vtmp = 0.5 * (e1 + e2);
+  fCircumcentre = GetVertex(0) + vtmp;
+  G4double radiusSqr = vtmp.mag2();
+  fRadius = std::sqrt(radiusSqr);
+  // 29.02.2016 Remark by E.Tcherniaev: computation
+  // of fCircumcenter and fRadius is wrong, however
+  // it did not create any problem till now.
+  // Bizarre! Need to investigate!
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -250,20 +329,21 @@ G4bool G4QuadrangularFacet::Intersect (const G4ThreeVector &p,
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-// Auxiliary method to get a random point on surface
+// Auxiliary method to get a uniform random point on the facet
 //
 G4ThreeVector G4QuadrangularFacet::GetPointOnFace() const
 {
-  G4ThreeVector pr = (G4RandFlat::shoot(0.,1.) < 0.5)
-                   ? fFacet1.GetPointOnFace() : fFacet2.GetPointOnFace();
-  return pr;
+  G4double s1 = fFacet1.GetArea();
+  G4double s2 = fFacet2.GetArea();
+  return ((s1+s2)*G4UniformRand() < s1) ?
+    fFacet1.GetPointOnFace() : fFacet2.GetPointOnFace();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
 // Auxiliary method for returning the surface area
 //
-G4double G4QuadrangularFacet::GetArea()
+G4double G4QuadrangularFacet::GetArea() const
 {
   G4double area = fFacet1.GetArea() + fFacet2.GetArea();
   return area;

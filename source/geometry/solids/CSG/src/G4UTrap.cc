@@ -33,10 +33,9 @@
 #include "G4Trap.hh"
 #include "G4UTrap.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
-#include "G4Polyhedron.hh"
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -133,6 +132,81 @@ G4UTrap& G4UTrap::operator = (const G4UTrap& rhs)
    return *this;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Accessors & modifiers
+
+G4double G4UTrap::GetZHalfLength() const
+{
+  return GetShape()->GetZHalfLength();
+}
+G4double G4UTrap::GetYHalfLength1() const
+{
+  return GetShape()->GetYHalfLength1();
+}
+G4double G4UTrap::GetXHalfLength1() const
+{
+  return GetShape()->GetXHalfLength1();
+}
+G4double G4UTrap::GetXHalfLength2() const
+{
+  return GetShape()->GetXHalfLength2();
+}
+G4double G4UTrap::GetTanAlpha1() const
+{
+  return GetShape()->GetTanAlpha1();
+}
+G4double G4UTrap::GetYHalfLength2() const
+{
+  return GetShape()->GetYHalfLength2();
+}
+G4double G4UTrap::GetXHalfLength3() const
+{
+  return GetShape()->GetXHalfLength3();
+}
+G4double G4UTrap::GetXHalfLength4() const
+{
+  return GetShape()->GetXHalfLength4();
+}
+G4double G4UTrap::GetTanAlpha2() const
+{
+  return GetShape()->GetTanAlpha2();
+}
+TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
+{
+  UTrapSidePlane iplane = GetShape()->GetSidePlane(n);
+  TrapSidePlane oplane = {iplane.a, iplane.b, iplane.c, iplane.d };
+  return oplane;
+}
+G4ThreeVector G4UTrap::GetSymAxis() const
+{
+  UVector3 axis = GetShape()->GetSymAxis();
+  return G4ThreeVector(axis.x(), axis.y(), axis.z());
+}
+
+void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
+                               G4double pDy1, G4double pDx1, G4double pDx2,
+                               G4double pAlp1,
+                               G4double pDy2, G4double pDx3, G4double pDx4,
+                               G4double pAlp2)
+{
+  GetShape()->SetAllParameters(pDz, pTheta, pPhi,
+                               pDy1, pDx1, pDx2, pAlp1,
+                               pDy2, pDx3, pDx4, pAlp2);
+  fRebuildPolyhedron = true;
+}
+
+void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
+{
+  UVector3 upt[8];
+  for (unsigned int i=0; i<8; ++i)
+  {
+    upt[i] = UVector3(pt[i].x(), pt[i].y(), pt[i].z());
+  }
+  GetShape()->SetPlanes(upt);
+  fRebuildPolyhedron = true;
+}
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
@@ -156,7 +230,7 @@ G4VSolid* G4UTrap::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// CreatePolyhedron()
+// Create polyhedron for visualization
 //
 G4Polyhedron* G4UTrap::CreatePolyhedron() const
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc 92939 2015-09-22 07:24:30Z gcosmo $
+// $Id: G4String.icc 94844 2015-12-10 16:23:09Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -46,11 +46,6 @@ inline G4SubString::G4SubString(G4String& str, str_size siz, str_size e)
   : mystring(&str),mystart(siz),extent(e)
 {
 } 
-
-inline G4SubString& G4SubString::operator=(const G4String& str)
-{
-  return operator=(str);
-}
 
 inline G4SubString& G4SubString::operator=(const G4SubString& str)
 {

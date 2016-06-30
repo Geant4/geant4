@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh 89698 2015-04-27 13:25:23Z gcosmo $
+// $Id: G4GDMLParser.hh 96673 2016-04-29 12:08:20Z gcosmo $
 //
 //
 // class G4GDMLParser
@@ -126,6 +126,7 @@ class G4GDMLParser
    inline void SetOverlapCheck(G4bool);
    inline void SetRegionExport(G4bool);
    inline void SetEnergyCutsExport(G4bool);
+   inline void SetSDExport(G4bool);
 
    inline void Clear();                  // Clears the evaluator
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU73QOModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ICRU73QOModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,67 +73,68 @@ class G4ICRU73QOModel : public G4VEmModel
 
 public:
 
-  G4ICRU73QOModel(const G4ParticleDefinition* p = 0,
-		  const G4String& nam = "ICRU73QO");
+  explicit G4ICRU73QOModel(const G4ParticleDefinition* p = 0,
+			   const G4String& nam = "ICRU73QO");
 
   virtual ~G4ICRU73QOModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
 				 
   virtual G4double ComputeCrossSectionPerAtom(
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double);
+					G4double) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   // add correction to energy loss and compute non-ionizing energy loss
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple*,
 				    const G4DynamicParticle*,
 				    G4double& eloss,
 				    G4double& niel,
-				    G4double length);
-
+				    G4double length) override;
+ 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy);
+				      G4double kinEnergy) final;
 
 private:
 
   inline void SetParticle(const G4ParticleDefinition* p);
-  inline void SetLowestKinEnergy(const G4double val);
+  inline void SetLowestKinEnergy(G4double val);
 
   G4double DEDX(const G4Material* material, G4double kineticEnergy);
 
   G4double DEDXPerElement(G4int Z, G4double kineticEnergy);
 
   // hide assignment operator
-  G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right);
-  G4ICRU73QOModel(const  G4ICRU73QOModel&);
+  G4ICRU73QOModel & operator=(const  G4ICRU73QOModel &right) = delete;
+  G4ICRU73QOModel(const  G4ICRU73QOModel&) = delete;
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;   
@@ -248,7 +249,7 @@ G4ICRU73QOModel::GetShellStrength(G4int Z, G4int nbOfTheShell) const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4ICRU73QOModel::SetLowestKinEnergy(const G4double val)
+inline void G4ICRU73QOModel::SetLowestKinEnergy(G4double val)
 {
   lowestKinEnergy = val;
 }

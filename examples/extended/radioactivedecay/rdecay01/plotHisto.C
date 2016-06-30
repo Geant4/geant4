@@ -3,8 +3,8 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  ////TFile f = TFile("run1.root");
-  TFile f = TFile("Ni60.root");      
+  ////TFile f("run1.root");
+  TFile f("Ni60.root");      
   TCanvas* c1 = new TCanvas("c1", "  ");
   
   c1->SetLogy(1);

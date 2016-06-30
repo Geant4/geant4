@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 96115 2016-03-16 18:53:00Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -195,7 +195,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   useDeexcitation(false),
   particle(nullptr),
   currentCouple(nullptr),
-  nWarnings(0),
   mfpKinEnergy(0.0)
 {
   theParameters = G4EmParameters::Instance();
@@ -214,13 +213,12 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
   actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit 
-    = actLossFluc = false;
+    = actLossFluc = actIntegral = actStepFunc = false;
 
   // default linear loss limit for spline
   linLossLimit  = 0.01;
-
-  // default dRoverRange and finalRange
-  SetStepFunction(0.2, 1.0*mm);
+  dRoverRange = 0.2;
+  finalRange = CLHEP::mm;
 
   // default lambda factor
   lambdaFactor  = 0.8;
@@ -525,6 +523,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theCrossSectionMax.resize(n, DBL_MAX);
 
   // parameters of the process
+  if(!actIntegral) { integral = theParameters->Integral(); }
   if(!actLossFluc) { lossFluctuationFlag = theParameters->LossFluctuation(); }
   rndmStepFlag = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
@@ -537,6 +536,10 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   lambdaFactor = theParameters->LambdaFactor();
   if(isMaster) { SetVerboseLevel(theParameters->Verbose()); }
   else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
+
+  G4bool isElec = true;
+  if(particle->GetPDGMass() > CLHEP::MeV) { isElec = false; }
+  theParameters->DefineRegParamForLoss(this, isElec);
 
   G4double initialCharge = particle->GetPDGCharge();
   G4double initialMass   = particle->GetPDGMass();
@@ -578,7 +581,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
         G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
     }
 
-    if (lManager->BuildCSDARange()) {
+    if (theParameters->BuildCSDARange()) {
       theDEDXunRestrictedTable = 
         G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
       theCSDARangeTable = 
@@ -1060,7 +1063,6 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
       }
     }
   }
-
   // new region 
   if(val) {
     scoffRegions.push_back(reg);
@@ -1570,7 +1572,6 @@ G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks,
   G4ThreeVector dr = postStepPoint->GetPosition() - prepoint;
   G4double pretime = preStepPoint->GetGlobalTime();
   G4double dt = postStepPoint->GetGlobalTime() - pretime;
-  //G4double dt = length/preStepPoint->GetVelocity();
   G4double fragment = 0.0;
 
   do {
@@ -1648,14 +1649,13 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
     /*
-    if(preStepLambda<lx && 1 < verboseLevel && nWarnings<200) {
+    if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARNING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
              << " preLambda= " << preStepLambda 
              << " < " << lx << " (postLambda) "
              << G4endl;
-      ++nWarnings;
     }
     */
     if(lx <= 0.0 || preStepLambda*G4UniformRand() > lx) {
@@ -2346,8 +2346,11 @@ void G4VEnergyLossProcess::SetIonisation(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
+void 
+G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2, G4bool lock)
 {
+  if(actStepFunc) { return; }
+  actStepFunc = lock;
   if(0.0 < v1 && 0.0 < v2 && v2 < 1.e+50) { 
     dRoverRange = std::min(1.0, v1);
     finalRange = v2;

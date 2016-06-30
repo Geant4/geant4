@@ -68,7 +68,7 @@ as protons, hydrogen, alpha particles and their charge states, is specific.
 
 ---->4. PHYSICS
 
-You can select Geant4-DNA physics in range.in.
+You can select Geant4-DNA physics constructor in range.in.
 
 A tracking cut can be applied if requested.
 

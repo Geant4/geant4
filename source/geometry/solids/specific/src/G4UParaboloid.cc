@@ -35,9 +35,11 @@
 #include "G4Paraboloid.hh"
 #include "G4UParaboloid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4Polyhedron.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -93,11 +95,41 @@ G4UParaboloid& G4UParaboloid::operator = (const G4UParaboloid& rhs)
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Accessors
+
+G4double G4UParaboloid::GetZHalfLength() const
+{
+  return GetShape()->GetDz();
+}
+
+G4double G4UParaboloid::GetRadiusMinusZ() const
+{
+  return GetShape()->GetRlo();
+}
+
+G4double G4UParaboloid::GetRadiusPlusZ() const
+{
+  return GetShape()->GetRhi();
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Make a clone of the object
 
 G4VSolid* G4UParaboloid::Clone() const
 {
   return new G4UParaboloid(*this);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// CreatePolyhedron
+//
+G4Polyhedron* G4UParaboloid::CreatePolyhedron() const
+{
+  return new G4PolyhedronParaboloid(GetRadiusMinusZ(),
+                                    GetRadiusPlusZ(),
+                                    GetZHalfLength(), 0., twopi);
 }
 
 #endif  // G4GEOM_USE_USOLIDS

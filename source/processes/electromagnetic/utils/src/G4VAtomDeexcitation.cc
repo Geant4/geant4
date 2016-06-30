@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4VAtomDeexcitation.cc 97432 2016-06-03 07:23:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,9 +68,10 @@ G4int G4VAtomDeexcitation::pixeIDg = -1;
 G4int G4VAtomDeexcitation::pixeIDe = -1;
 
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname) 
-  : verbose(1), name(modname), isActive(false), 
-    flagAuger(false),flagAugerCascade(false), 
-    flagPIXE(false), ignoreCuts(false)
+  : verbose(1), name(modname), isActive(false), flagAuger(false),
+    flagAugerCascade(false), flagPIXE(false), ignoreCuts(false),
+    isActiveLocked(false), isAugerLocked(false),
+    isAugerCascadeLocked(false), isPIXELocked(false)
 {
   theParameters = G4EmParameters::Instance();
   vdyn.reserve(5);
@@ -103,10 +104,11 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   activeZ.resize(93, false);
 
   // initialisation of flags and options
-  isActive   = theParameters->Fluo();
-  flagAuger  = theParameters->Auger();
-  flagAugerCascade = theParameters->AugerCascade();
-  flagPIXE   = theParameters->Pixe();
+  // normally there is no locksed flags
+  if(!isActiveLocked)       { isActive  = theParameters->Fluo(); }
+  if(!isAugerLocked)        { flagAuger = theParameters->Auger(); }
+  if(!isAugerCascadeLocked) { flagAugerCascade = theParameters->AugerCascade(); }
+  if(!isPIXELocked)         { flagPIXE  = theParameters->Pixe(); }
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
 
   // check if deexcitation is active for the given run
@@ -135,7 +137,9 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     if(reg && 0 < numOfCouples) {
       const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
       if(0 < verbose) {
-        G4cout << "          " << activeRegions[j] << G4endl;  
+        G4cout << "          " << activeRegions[j]
+	       << "  " << deRegions[j]  << "  " << AugerRegions[j]
+	       << "  " << PIXERegions[j] << G4endl;  
       }
       for(G4int i=0; i<numOfCouples; ++i) {
         const G4MaterialCutsCouple* couple =
@@ -151,7 +155,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   G4int nelm = G4Element::GetNumberOfElements();
   //G4cout << nelm << G4endl;
   for(G4int k=0; k<nelm; ++k) {
-    G4int Z = G4lrint((*(G4Element::GetElementTable()))[k]->GetZ());
+    G4int Z = (*(G4Element::GetElementTable()))[k]->GetZasInt();
     if(Z > 5 && Z < 93) { 
       activeZ[Z] = true;
       //G4cout << "!!! Active de-excitation Z= " << Z << G4endl;  
@@ -161,6 +165,14 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   // Initialise derived class
   InitialiseForNewRun();
 
+  if(0 < verbose && flagAuger) {
+    G4cout << "### ===  Auger cascade flag: " << flagAugerCascade 
+	   << G4endl;
+  }
+  if(0 < verbose) {
+    G4cout << "### ===  Ignore cuts flag:   " << ignoreCuts
+	   << G4endl;
+  }
   if(0 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " 
            << theParameters->PIXECrossSectionModel()
@@ -265,7 +277,7 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // loop over deexcitations
   for(G4int i=0; i<nelm; ++i) {
-    G4int Z = G4lrint((*theElementVector)[i]->GetZ());
+    G4int Z = (*theElementVector)[i]->GetZasInt();
     if(activeZ[Z] && Z < 93) {  
       G4int nshells = 
         std::min(9,(*theElementVector)[i]->GetNbOfAtomicShells());

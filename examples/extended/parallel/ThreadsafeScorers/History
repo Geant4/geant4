@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15/06/16 Gunter Folger                (ThreadsafeScorers-V10-02-02)
+- Correct GNUmakefile, remove setting of WORKDIR=.
+
+15/06/16 Gunter Folger                (ThreadsafeScorers-V10-02-01)
+- Correct GNUmakefile,i.e. replace spaces by tab
+
 17/11/15 J. Madsen
 - Removed preprocessor checks for C++11
 - Removed _HAS_ATOMICS_ preprocessor definition/conditions

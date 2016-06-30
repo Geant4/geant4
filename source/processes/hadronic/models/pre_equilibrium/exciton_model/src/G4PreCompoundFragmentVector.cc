@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.cc 68028 2013-03-13 13:48:15Z gcosmo $
+// $Id: G4PreCompoundFragmentVector.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara 
@@ -36,7 +36,7 @@
 #include "G4PreCompoundFragmentVector.hh"
 
 G4PreCompoundFragmentVector::G4PreCompoundFragmentVector(pcfvector * avector) 
-  : theChannels(0), nChannels(0) 
+  : theChannels(nullptr), nChannels(0) 
 {
   SetVector(avector);
 }

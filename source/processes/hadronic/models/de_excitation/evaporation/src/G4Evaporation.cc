@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 94459 2015-11-18 14:39:46Z gcosmo $
+// $Id: G4Evaporation.cc 96931 2016-05-18 09:06:52Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -53,94 +53,86 @@
 #include "G4EvaporationFactory.hh"
 #include "G4EvaporationGEMFactory.hh"
 #include "G4EvaporationDefaultGEMFactory.hh"
-#include "G4HadronicException.hh"
 #include "G4NistManager.hh"
-#include "G4FermiFragmentsPool.hh"
+#include "G4VFermiBreakUp.hh"
 #include "G4PhotonEvaporation.hh"
 #include "G4PhotonEvaporationOLD.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-G4Evaporation::G4Evaporation()  
-  : nChannels(0)
-{
-  thePool = G4FermiFragmentsPool::Instance();
-
-  G4VEvaporationChannel* gammaEvap = 0;
-  char* env = getenv("G4UsePhotonEvaporationOLD"); 
-  if(env)  { gammaEvap = new G4PhotonEvaporationOLD(); } 
-  else     { gammaEvap = new G4PhotonEvaporation(); }
-  SetPhotonEvaporation(gammaEvap);
-
-  theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  SetParameters();
-  InitialiseEvaporation();
-  theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
-}
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
+#include "Randomize.hh"
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : nChannels(0)
+  : G4VEvaporation(), nChannels(0), maxZforFBU(), maxAforFBU(), 
+    minExcitation(0.1*keV), isInitialised(false)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }
 
-  thePool = G4FermiFragmentsPool::Instance();
-  theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  SetParameters();
-  InitialiseEvaporation();
+  theChannelFactory = new G4EvaporationFactory(thePhotonEvaporation);
+  theChannels = theChannelFactory->GetChannel(); 
+
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
+  nist = G4NistManager::Instance();
 }
 
 G4Evaporation::~G4Evaporation()
 {}
 
-void G4Evaporation::SetParameters()
+void G4Evaporation::InitialiseChannels()
 {
-  nist = G4NistManager::Instance();
-  minExcitation = 0.1*CLHEP::keV;
-  maxZforFBU = thePool->GetMaxZ();
-  maxAforFBU = thePool->GetMaxA();
-  probabilities.reserve(68);
+  if(isInitialised) { return; }
+
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters(); 
+  minExcitation = param->GetMinExcitation();
+  maxZforFBU = param->GetMaxZForFermiBreakUp();
+  maxAforFBU = param->GetMaxAForFermiBreakUp();
+
+  G4DeexChannelType type = param->GetDeexChannels();
+  if(type == fCombined) { SetCombinedChannel(); }
+  else if(type == fGEM) { SetGEMChannel(); }
+
+  InitialiseChannelFactory();
+  isInitialised = true;
 }
 
-void G4Evaporation::InitialiseEvaporation()
+void G4Evaporation::InitialiseChannelFactory()
 {
-  CleanChannels();
   theChannels = theChannelFactory->GetChannel(); 
   nChannels = theChannels->size();   
   probabilities.resize(nChannels, 0.0);
-  InitialiseChannels();
-}
 
-void G4Evaporation::InitialiseChannels()
-{
   for(size_t i=0; i<nChannels; ++i) {
     (*theChannels)[i]->SetOPTxs(OPTxs);
-    (*theChannels)[i]->UseSICB(useSICB);
     (*theChannels)[i]->Initialise();
   }
 }
 
 void G4Evaporation::SetDefaultChannel()
 {
+  CleanChannels();
   delete theChannelFactory;
   theChannelFactory = new G4EvaporationFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
+  InitialiseChannelFactory();
 }
 
 void G4Evaporation::SetGEMChannel()
 {
+  CleanChannels();
   delete theChannelFactory;
   theChannelFactory = new G4EvaporationGEMFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
+  InitialiseChannelFactory();
 }
 
 void G4Evaporation::SetCombinedChannel()
 {
+  CleanChannels();
   delete theChannelFactory;
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
-  InitialiseEvaporation();
+  InitialiseChannelFactory();
 }
 
 G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
@@ -154,6 +146,8 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 void G4Evaporation::BreakFragment(G4FragmentVector* theResult, 
 				  G4Fragment* theResidualNucleus)
 {
+  if(!isInitialised) { InitialiseChannels(); }
+
   G4double totprob, prob, oldprob = 0.0;
   size_t maxchannel, i;
 
@@ -171,7 +165,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 
     // stop deecitation loop if residual can be deexcited by FBU    
     if(maxZforFBU > Z && maxAforFBU > A && Z > 0 && A > Z) {
-      if(thePool->IsApplicable(Z, A, mass+Eex)) {
+      if(theFBU->IsApplicable(Z, A, mass+Eex)) {
 	theResult->push_back(theResidualNucleus);
 	return;
       }
@@ -199,13 +193,13 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      // G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
+      //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
 
       totprob += prob;
       probabilities[i] = totprob;
 
       // if two recent probabilities are near zero stop computations
-      if(i>=8) {
+      if(i>=8 && prob > 0.0) {
 	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
 	  maxchannel = i+1; 
 	  break;
@@ -217,7 +211,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
-      // G4cout << "Start chain of gamma evaporation" << G4endl;
+      //G4cout << "Start chain of gamma evaporation" << G4endl;
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
       totprob = 0.0;
     }
@@ -239,6 +233,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     totprob *= G4UniformRand();
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
+    if(i >= maxchannel) { i = maxchannel-1; }
 
     //G4cout << "Channel # " << i << G4endl;
     G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);

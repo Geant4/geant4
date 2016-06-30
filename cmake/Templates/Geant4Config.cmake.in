@@ -157,7 +157,7 @@ endif()
 # Locate ourselves, since all other config files should have been
 # installed alongside us...
 #
-get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
+get_filename_component(_geant4_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
 #-----------------------------------------------------------------------
 # Provide *recommended* compiler flags used by this build of Geant4
@@ -203,6 +203,22 @@ endif()
 @GEANT4_MODULE_PATH_SETUP@
 
 #-----------------------------------------------------------------------
+# Re-Configure paths for third party packages.
+# - Refind any needed external/imported targets.
+# - Relies on same/compatible packages being in the paths CMake uses to
+#   search for packages
+
+#-----------------------------------------------------------------------
+# If we have used imported targets for any third party packages, reimport
+# them here, BEFORE we try and import the Geant4 targets which are
+# linked against them.
+# Generally, we try and use a standard find_package, but try and force it
+# to find the actual package we were built against.
+# THIS IS NOT PERFECT, AS IT CANNOT GUARANTEE A BINARY COMPATIBLE
+# PACKAGE IS FOUND.
+@GEANT4_THIRD_PARTY_IMPORT_SETUP@
+
+#-----------------------------------------------------------------------
 # Configure the path(s) to third party headers.
 # This is not a perfect solution to recording dependencies on external
 # libraries, but it does ensure that users of THIS Geant4 will pick up
@@ -218,31 +234,6 @@ set(Geant4_THIRD_PARTY_INCLUDE_DIRS @GEANT4_THIRD_PARTY_INCLUDES@)
 set(Geant4_INCLUDE_DIRS
     ${Geant4_INCLUDE_DIR}
     ${Geant4_THIRD_PARTY_INCLUDE_DIRS})
-
-#-----------------------------------------------------------------------
-# If we have used imported targets for any third party packages, reimport
-# them here, BEFORE we try and import the Geant4 targets which are
-# linked against them.
-# Generally, we try and use a standard find_package, but try and force it
-# to find the actual package we were built against.
-# THIS IS NOT PERFECT, AS IT CANNOT GUARANTEE A BINARY COMPATIBLE
-# PACKAGE IS FOUND.
-@GEANT4_THIRD_PARTY_IMPORT_SETUP@
-
-#-----------------------------------------------------------------------
-# Include the files listing all the imported targets and configuring
-# Intel Compile Features
-# (Not needed if used in the same Geant4 project, or if we have run before)
-# This is always installed in the same location as us...
-#
-if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
-  include("${_thisdir}/Modules/IntelCompileFeatures.cmake")
-
-  if(NOT Geant4_LIBDEPS_LOADED)
-    include("${_thisdir}/Geant4LibraryDepends.cmake")
-    set(Geant4_LIBDEPS_LOADED 1)
-  endif()
-endif()
 
 #-----------------------------------------------------------------------
 # Data Resources
@@ -273,6 +264,16 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
 if(NOT Geant4_builtin_clhep_FOUND)
   set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
+
+  set(CLHEP_ROOT_DIR "@CLHEP_ROOT_DIR@")
+  set(__GEANT4_OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
+  set(CMAKE_MODULE_PATH "${_geant4_thisdir}/Modules" ${CMAKE_MODULE_PATH})
+  find_package(CLHEP @CLHEP_VERSION@ REQUIRED @__g4_clhep_components@)
+  set(CMAKE_MODULE_PATH ${__GEANT4_OLD_CMAKE_MODULE_PATH})
+  unset(CLHEP_ROOT_DIR)
+  unset(__GEANT4_OLD_CMAKE_MODULE_PATH)
+  #CLHEP doesn't use target properties fully yet, so always include_directories
+  include_directories(${CLHEP_INCLUDE_DIRS})
 endif()
 
 set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)
@@ -304,7 +305,7 @@ if(Geant4_g3tog4_FOUND)
 endif()
 
 # - Usolids
-set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS@)
+set(Geant4_usolids_FOUND @GEANT4_USE_USOLIDS_EITHER@)
 if(Geant4_usolids_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS usolids)
 endif()
@@ -488,6 +489,20 @@ if(Geant4_vis_openinventor_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS vis_openinventor)
 endif()
 
+#-----------------------------------------------------------------------
+# Include the files listing all the imported targets and configuring
+# Intel Compile Features
+# (Not needed if used in the same Geant4 project, or if we have run before)
+# This is always installed in the same location as us...
+#
+if(NOT CMAKE_PROJECT_NAME STREQUAL Geant4)
+  include("${_geant4_thisdir}/Modules/IntelCompileFeatures.cmake")
+
+  if(NOT Geant4_LIBDEPS_LOADED)
+    include("${_geant4_thisdir}/Geant4LibraryDepends.cmake")
+    set(Geant4_LIBDEPS_LOADED 1)
+  endif()
+endif()
 
 #-----------------------------------------------------------------------
 # Now perform final configuration of libraries...
@@ -614,7 +629,7 @@ list(REMOVE_DUPLICATES Geant4_LIBRARIES)
 # Point the user to the UseGeant4.cmake file which they may wish to include
 # to help them with setting up Geant4
 #
-set(Geant4_USE_FILE ${_thisdir}/UseGeant4.cmake)
+set(Geant4_USE_FILE "${_geant4_thisdir}/UseGeant4.cmake")
 
 #-----------------------------------------------------------------------
 # Finally, handle any remaining components.

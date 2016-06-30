@@ -23,18 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeComptonModel.cc 82874 2014-07-15 15:25:29Z gcosmo $
+// $Id: G4PenelopeComptonModel.cc 95950 2016-03-03 10:42:48Z gcosmo $
 //
 // Author: Luciano Pandola
 //
 // History:
 // --------
 // 15 Feb 2010   L Pandola  Implementation
-// 18 Mar 2010   L Pandola  Removed GetAtomsPerMolecule(), now demanded 
+// 18 Mar 2010   L Pandola  Removed GetAtomsPerMolecule(), now demanded
 //                            to G4PenelopeOscillatorManager
-// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is 
+// 01 Feb 2011   L Pandola  Suppress fake energy-violation warning when Auger is
 //                            active.
-//                          Make sure that fluorescence/Auger is generated only 
+//                          Make sure that fluorescence/Auger is generated only
 //                            if above threshold
 // 24 May 2011   L Pandola  Renamed (make v2008 as default Penelope)
 // 10 Jun 2011   L Pandola  Migrate atomic deexcitation interface
@@ -56,6 +56,7 @@
 #include "G4PenelopeOscillatorManager.hh"
 #include "G4PenelopeOscillator.hh"
 #include "G4LossTableManager.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -74,11 +75,11 @@ G4PenelopeComptonModel::G4PenelopeComptonModel(const G4ParticleDefinition* part,
 
   if (part)
     SetParticle(part);
- 
+
   verboseLevel= 0;
   // Verbosity scale:
-  // 0 = nothing 
-  // 1 = warning for energy non-conservation 
+  // 0 = nothing
+  // 1 = warning for energy non-conservation
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
@@ -115,35 +116,35 @@ void G4PenelopeComptonModel::Initialise(const G4ParticleDefinition* part,
 
   SetParticle(part);
 
-  if (IsMaster() && part == fParticle) 
+  if (IsMaster() && part == fParticle)
     {
 
-      if (verboseLevel > 0) 
+      if (verboseLevel > 0)
 	{
 	  G4cout << "Penelope Compton model v2008 is initialized " << G4endl
 		 << "Energy range: "
 		 << LowEnergyLimit() / keV << " keV - "
-		 << HighEnergyLimit() / GeV << " GeV";  
+		 << HighEnergyLimit() / GeV << " GeV";
 	}
-      //Issue a warning, if the model is going to be used down to a 
+      //Issue a warning, if the model is going to be used down to a
       //energy which is outside the validity of the model itself
       if (LowEnergyLimit() < fIntrinsicLowEnergyLimit)
 	{
 	  G4ExceptionDescription ed;
-	  ed << "Using the Penelope Compton model outside its intrinsic validity range. " 
+	  ed << "Using the Penelope Compton model outside its intrinsic validity range. "
 	     << G4endl;
-	  ed << "-> LowEnergyLimit() in process = " << LowEnergyLimit()/keV << "keV " << G4endl; 
-	  ed << "-> Instrinsic low-energy limit = " << fIntrinsicLowEnergyLimit/keV << "keV " 
+	  ed << "-> LowEnergyLimit() in process = " << LowEnergyLimit()/keV << "keV " << G4endl;
+	  ed << "-> Instrinsic low-energy limit = " << fIntrinsicLowEnergyLimit/keV << "keV "
 	     << G4endl;
 	  ed << "Result of the simulation have to be taken with care" << G4endl;
 	  G4Exception("G4PenelopeComptonModel::Initialise()",
 		      "em2100",JustWarning,ed);
 	}
-    }      
+    }
 
   if(isInitialised) return;
   fParticleChange = GetParticleChangeForGamma();
-  isInitialised = true; 
+  isInitialised = true;
 
 }
 
@@ -154,17 +155,17 @@ void G4PenelopeComptonModel::InitialiseLocal(const G4ParticleDefinition* part,
 {
   if (verboseLevel > 3)
     G4cout << "Calling  G4PenelopeComptonModel::InitialiseLocal()" << G4endl;
- 
+
   //
-  //Check that particle matches: one might have multiple master models (e.g. 
+  //Check that particle matches: one might have multiple master models (e.g.
   //for e+ and e-).
   //
   if (part == fParticle)
     {
       //Get the const table pointers from the master to the workers
-      const G4PenelopeComptonModel* theModel = 
+      const G4PenelopeComptonModel* theModel =
         static_cast<G4PenelopeComptonModel*> (masterModel);
-      
+
       //Same verbosity for all workers, as the master
       verboseLevel = theModel->verboseLevel;
     }
@@ -183,13 +184,13 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
 {
   // Penelope model v2008 to calculate the Compton scattering cross section:
   // D. Brusa et al., Nucl. Instrum. Meth. A 379 (1996) 167
-  // 
-  // The cross section for Compton scattering is calculated according to the Klein-Nishina 
+  //
+  // The cross section for Compton scattering is calculated according to the Klein-Nishina
   // formula for energy > 5 MeV.
   // For E < 5 MeV it is used a parametrization for the differential cross-section dSigma/dOmega,
   // which is integrated numerically in cos(theta), G4PenelopeComptonModel::DifferentialCrossSection().
-  // The parametrization includes the J(p) 
-  // distribution profiles for the atomic shells, that are tabulated from Hartree-Fock calculations 
+  // The parametrization includes the J(p)
+  // distribution profiles for the atomic shells, that are tabulated from Hartree-Fock calculations
   // from F. Biggs et al., At. Data Nucl. Data Tables 16 (1975) 201
   //
   if (verboseLevel > 3)
@@ -199,8 +200,8 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
 
   G4double cs = 0;
   //Force null cross-section if below the low-energy edge of the table
-  if (energy < LowEnergyLimit()) 
-    return cs; 
+  if (energy < LowEnergyLimit())
+    return cs;
 
   //Retrieve the oscillator table for this material
   G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
@@ -217,18 +218,18 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
     }
   else //use Klein-Nishina for E>5 MeV
     cs = KleinNishinaCrossSection(energy,material);
-       
+
   //cross sections are in units of pi*classic_electr_radius^2
   cs *= pi*classic_electr_radius*classic_electr_radius;
 
-  //Now, cs is the cross section *per molecule*, let's calculate the 
+  //Now, cs is the cross section *per molecule*, let's calculate the
   //cross section per volume
 
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
   G4double atPerMol =  oscManager->GetAtomsPerMolecule(material);
 
   if (verboseLevel > 3)
-    G4cout << "Material " << material->GetName() << " has " << atPerMol << 
+    G4cout << "Material " << material->GetName() << " has " << atPerMol <<
       "atoms per molecule" << G4endl;
 
   G4double moleculeDensity = 0.;
@@ -237,9 +238,9 @@ G4double G4PenelopeComptonModel::CrossSectionPerVolume(const G4Material* materia
     moleculeDensity = atomDensity/atPerMol;
 
   G4double csvolume = cs*moleculeDensity;
-  
+
   if (verboseLevel > 2)
-    G4cout << "Compton mean free path at " << energy/keV << " keV for material " << 
+    G4cout << "Compton mean free path at " << energy/keV << " keV for material " <<
             material->GetName() << " = " << (1./csvolume)/mm << " mm" << G4endl;
   return csvolume;
 }
@@ -271,46 +272,46 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 					      G4double,
 					      G4double)
 {
-  
+
   // Penelope model v2008 to sample the Compton scattering final state.
   // D. Brusa et al., Nucl. Instrum. Meth. A 379 (1996) 167
-  // The model determines also the original shell from which the electron is expelled, 
+  // The model determines also the original shell from which the electron is expelled,
   // in order to produce fluorescence de-excitation (from G4DeexcitationManager)
-  // 
-  // The final state for Compton scattering is calculated according to the Klein-Nishina 
-  // formula for energy > 5 MeV. In this case, the Doppler broadening is negligible and 
+  //
+  // The final state for Compton scattering is calculated according to the Klein-Nishina
+  // formula for energy > 5 MeV. In this case, the Doppler broadening is negligible and
   // one can assume that the target electron is at rest.
   // For E < 5 MeV it is used the parametrization for the differential cross-section dSigma/dOmega,
-  // to sample the scattering angle and the energy of the emerging electron, which is  
-  // G4PenelopeComptonModel::DifferentialCrossSection(). The rejection method is 
-  // used to sample cos(theta). The efficiency increases monotonically with photon energy and is 
-  // nearly independent on the Z; typical values are 35%, 80% and 95% for 1 keV, 1 MeV and 10 MeV, 
+  // to sample the scattering angle and the energy of the emerging electron, which is
+  // G4PenelopeComptonModel::DifferentialCrossSection(). The rejection method is
+  // used to sample cos(theta). The efficiency increases monotonically with photon energy and is
+  // nearly independent on the Z; typical values are 35%, 80% and 95% for 1 keV, 1 MeV and 10 MeV,
   // respectively.
-  // The parametrization includes the J(p) distribution profiles for the atomic shells, that are 
-  // tabulated 
-  // from Hartree-Fock calculations from F. Biggs et al., At. Data Nucl. Data Tables 16 (1975) 201. 
+  // The parametrization includes the J(p) distribution profiles for the atomic shells, that are
+  // tabulated
+  // from Hartree-Fock calculations from F. Biggs et al., At. Data Nucl. Data Tables 16 (1975) 201.
   // Doppler broadening is included.
   //
 
   if (verboseLevel > 3)
     G4cout << "Calling SampleSecondaries() of G4PenelopeComptonModel" << G4endl;
-  
+
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
   // do nothing below the threshold
   // should never get here because the XS is zero below the limit
-  if(photonEnergy0 < LowEnergyLimit()) 
-    return; 
+  if(photonEnergy0 < LowEnergyLimit())
+    return;
 
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
   const G4Material* material = couple->GetMaterial();
 
-  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material); 
+  G4PenelopeOscillatorTable* theTable = oscManager->GetOscillatorTableCompton(material);
 
   const G4int nmax = 64;
   G4double rn[nmax]={0.0};
   G4double pac[nmax]={0.0};
-  
+
   G4double S=0.0;
   G4double epsilon = 0.0;
   G4double cosTheta = 1.0;
@@ -331,32 +332,32 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 
   G4double TST = 0;
   G4double tau = 0.;
- 
-  //If the incoming photon is above 5 MeV, the quicker approach based on the 
+
+  //If the incoming photon is above 5 MeV, the quicker approach based on the
   //pure Klein-Nishina formula is used
   if (photonEnergy0 > 5*MeV)
     {
       do{
 	do{
 	  if ((a2*G4UniformRand()) < a1)
-	    tau = std::pow(taumin,G4UniformRand());	    
+	    tau = std::pow(taumin,G4UniformRand());
 	  else
-	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));	    
+	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
 	  //rejection function
 	  TST = (1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));
 	}while (G4UniformRand()> TST);
 	epsilon=tau;
 	cosTheta = 1.0 - (1.0-tau)/(ek*tau);
 
-	//Target shell electrons	
+	//Target shell electrons
 	TST = oscManager->GetTotalZ(material)*G4UniformRand();
 	targetOscillator = numberOfOscillators-1; //last level
 	S=0.0;
 	G4bool levelFound = false;
 	for (size_t j=0;j<numberOfOscillators && !levelFound; j++)
 	  {
-	    S += (*theTable)[j]->GetOscillatorStrength();	    
-	    if (S > TST) 
+	    S += (*theTable)[j]->GetOscillatorStrength();
+	    if (S > TST)
 	      {
 		targetOscillator = j;
 		levelFound = true;
@@ -379,27 +380,27 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	  if (photonEnergy0 > ionEnergy)
 	    {
 	      G4double aux2 = photonEnergy0*(photonEnergy0-ionEnergy)*2.0;
-	      hartreeFunc = (*theTable)[i]->GetHartreeFactor(); 
+	      hartreeFunc = (*theTable)[i]->GetHartreeFactor();
 	      oscStren = (*theTable)[i]->GetOscillatorStrength();
 	      pzomc = hartreeFunc*(aux2-electron_mass_c2*ionEnergy)/
 		(electron_mass_c2*std::sqrt(2.0*aux2+ionEnergy*ionEnergy));
-	      if (pzomc > 0) 	
-		rni = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
-				       (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));		
-	      else		  
-		rni = 0.5*std::exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
-				   (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));	    
+	      if (pzomc > 0)
+		rni = 1.0-0.5*G4Exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
+				       (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
+	      else
+		rni = 0.5*G4Exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
+				   (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
 	      s0 += oscStren*rni;
 	    }
-	}      
+	}
       //Sampling tau
       G4double cdt1 = 0.;
       do
 	{
-	  if ((G4UniformRand()*a2) < a1)	    
-	    tau = std::pow(taumin,G4UniformRand());	    
-	  else	    
-	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));	    
+	  if ((G4UniformRand()*a2) < a1)
+	    tau = std::pow(taumin,G4UniformRand());
+	  else
+	    tau = std::sqrt(1.0+G4UniformRand()*(taumin*taumin-1.0));
 	  cdt1 = (1.0-tau)/(ek*tau);
 	  //Incoherent scattering function
 	  S = 0.;
@@ -409,24 +410,24 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	      if (photonEnergy0 > ionEnergy) //sum only on excitable levels
 		{
 		  aux = photonEnergy0*(photonEnergy0-ionEnergy)*cdt1;
-		  hartreeFunc = (*theTable)[i]->GetHartreeFactor(); 
+		  hartreeFunc = (*theTable)[i]->GetHartreeFactor();
 		  oscStren = (*theTable)[i]->GetOscillatorStrength();
 		  pzomc = hartreeFunc*(aux-electron_mass_c2*ionEnergy)/
 		    (electron_mass_c2*std::sqrt(2.0*aux+ionEnergy*ionEnergy));
-		  if (pzomc > 0) 
-		    rn[i] = 1.0-0.5*std::exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
-					     (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));		    
-		  else		    
-		    rn[i] = 0.5*std::exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
-					 (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));		    
+		  if (pzomc > 0)
+		    rn[i] = 1.0-0.5*G4Exp(0.5-(std::sqrt(0.5)+std::sqrt(2.0)*pzomc)*
+					     (std::sqrt(0.5)+std::sqrt(2.0)*pzomc));
+		  else
+		    rn[i] = 0.5*G4Exp(0.5-(std::sqrt(0.5)-std::sqrt(2.0)*pzomc)*
+					 (std::sqrt(0.5)-std::sqrt(2.0)*pzomc));
 		  S += oscStren*rn[i];
 		  pac[i] = S;
 		}
 	      else
-		pac[i] = S-1e-6;		
+		pac[i] = S-1e-6;
 	    }
 	  //Rejection function
-	  TST = S*(1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));  
+	  TST = S*(1.0+tau*(ek1+tau*(ek2+tau*eks)))/(eks*tau*(1.0+tau*tau));
 	}while ((G4UniformRand()*s0) > TST);
 
       cosTheta = 1.0 - cdt1;
@@ -442,43 +443,43 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	      G4bool levelFound = false;
 	      for (size_t i=0;i<numberOfOscillators && !levelFound;i++)
 		{
-		  if (pac[i]>TST) 
-		    {		     
+		  if (pac[i]>TST)
+		    {
 		      targetOscillator = i;
 		      levelFound = true;
 		    }
 		}
 	      A = G4UniformRand()*rn[targetOscillator];
-	      hartreeFunc = (*theTable)[targetOscillator]->GetHartreeFactor(); 
+	      hartreeFunc = (*theTable)[targetOscillator]->GetHartreeFactor();
 	      oscStren = (*theTable)[targetOscillator]->GetOscillatorStrength();
-	      if (A < 0.5) 
+	      if (A < 0.5)
 		pzomc = (std::sqrt(0.5)-std::sqrt(0.5-std::log(2.0*A)))/
-		  (std::sqrt(2.0)*hartreeFunc);	      
-	      else		
+		  (std::sqrt(2.0)*hartreeFunc);
+	      else
 		pzomc = (std::sqrt(0.5-std::log(2.0-2.0*A))-std::sqrt(0.5))/
-		  (std::sqrt(2.0)*hartreeFunc);	
+		  (std::sqrt(2.0)*hartreeFunc);
 	    } while (pzomc < -1);
 
 	  // F(EP) rejection
 	  G4double XQC = 1.0+tau*(tau-2.0*cosTheta);
 	  G4double AF = std::sqrt(XQC)*(1.0+tau*(tau-cosTheta)/XQC);
-	  if (AF > 0) 
+	  if (AF > 0)
 	    fpzmax = 1.0+AF*0.2;
 	  else
-	    fpzmax = 1.0-AF*0.2;	    
+	    fpzmax = 1.0-AF*0.2;
 	  fpz = 1.0+AF*std::max(std::min(pzomc,0.2),-0.2);
 	}while ((fpzmax*G4UniformRand())>fpz);
-  
+
       //Energy of the scattered photon
       G4double T = pzomc*pzomc;
       G4double b1 = 1.0-T*tau*tau;
       G4double b2 = 1.0-T*tau*cosTheta;
-      if (pzomc > 0.0)	
-	epsilon = (tau/b1)*(b2+std::sqrt(std::abs(b2*b2-b1*(1.0-T))));	
-      else	
-	epsilon = (tau/b1)*(b2-std::sqrt(std::abs(b2*b2-b1*(1.0-T))));	
+      if (pzomc > 0.0)
+	epsilon = (tau/b1)*(b2+std::sqrt(std::abs(b2*b2-b1*(1.0-T))));
+      else
+	epsilon = (tau/b1)*(b2-std::sqrt(std::abs(b2*b2-b1*(1.0-T))));
     } //energy < 5 MeV
-  
+
   //Ok, the kinematics has been calculated.
   G4double sinTheta = std::sqrt(1-cosTheta*cosTheta);
   G4double phi = twopi * G4UniformRand() ;
@@ -493,31 +494,31 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 
   G4double photonEnergy1 = epsilon * photonEnergy0;
 
-  if (photonEnergy1 > 0.)  
-    fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;  
+  if (photonEnergy1 > 0.)
+    fParticleChange->SetProposedKineticEnergy(photonEnergy1) ;
   else
   {
     fParticleChange->SetProposedKineticEnergy(0.) ;
     fParticleChange->ProposeTrackStatus(fStopAndKill);
   }
-  
+
   //Create scattered electron
   G4double diffEnergy = photonEnergy0*(1-epsilon);
   ionEnergy = (*theTable)[targetOscillator]->GetIonisationEnergy();
 
-  G4double Q2 = 
+  G4double Q2 =
     photonEnergy0*photonEnergy0+photonEnergy1*(photonEnergy1-2.0*photonEnergy0*cosTheta);
   G4double cosThetaE = 0.; //scattering angle for the electron
 
-  if (Q2 > 1.0e-12)    
-    cosThetaE = (photonEnergy0-photonEnergy1*cosTheta)/std::sqrt(Q2);    
-  else    
-    cosThetaE = 1.0;    
+  if (Q2 > 1.0e-12)
+    cosThetaE = (photonEnergy0-photonEnergy1*cosTheta)/std::sqrt(Q2);
+  else
+    cosThetaE = 1.0;
   G4double sinThetaE = std::sqrt(1-cosThetaE*cosThetaE);
 
   //Now, try to handle fluorescence
   //Notice: merged levels are indicated with Z=0 and flag=30
-  G4int shFlag = (*theTable)[targetOscillator]->GetShellFlag(); 
+  G4int shFlag = (*theTable)[targetOscillator]->GetShellFlag();
   G4int Z = (G4int) (*theTable)[targetOscillator]->GetParentZ();
 
   //initialize here, then check photons created by Atomic-Deexcitation, and the final state e-
@@ -528,23 +529,23 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   if (Z > 0 && shFlag<30)
     {
       shell = fTransitionManager->Shell(Z,shFlag-1);
-      bindingEnergy = shell->BindingEnergy();    
+      bindingEnergy = shell->BindingEnergy();
     }
 
   G4double ionEnergyInPenelopeDatabase = ionEnergy;
   //protection against energy non-conservation
-  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase);  
+  ionEnergy = std::max(bindingEnergy,ionEnergyInPenelopeDatabase);
 
   //subtract the excitation energy. If not emitted by fluorescence
   //the ionization energy is deposited as local energy deposition
-  G4double eKineticEnergy = diffEnergy - ionEnergy; 
-  G4double localEnergyDeposit = ionEnergy; 
+  G4double eKineticEnergy = diffEnergy - ionEnergy;
+  G4double localEnergyDeposit = ionEnergy;
   G4double energyInFluorescence = 0.; //testing purposes only
   G4double energyInAuger = 0; //testing purposes
 
-  if (eKineticEnergy < 0) 
+  if (eKineticEnergy < 0)
     {
-      //It means that there was some problem/mismatch between the two databases. 
+      //It means that there was some problem/mismatch between the two databases.
       //Try to make it work
       //In this case available Energy (diffEnergy) < ionEnergy
       //Full residual energy is deposited locally
@@ -556,14 +557,14 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   //Notice: shell might be NULL (invalid!) if shFlag=30. Must be protected
   //Now, take care of fluorescence, if required
   if (fAtomDeexcitation && shell)
-    {      
+    {
       G4int index = couple->GetIndex();
       if (fAtomDeexcitation->CheckDeexcitationActiveRegion(index))
-	{	
+	{
 	  size_t nBefore = fvect->size();
 	  fAtomDeexcitation->GenerateParticles(fvect,shell,Z,index);
-	  size_t nAfter = fvect->size(); 
-      
+	  size_t nAfter = fvect->size();
+
 	  if (nAfter > nBefore) //actual production of fluorescence
 	    {
 	      for (size_t j=nBefore;j<nAfter;j++) //loop on products
@@ -574,7 +575,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 		    energyInFluorescence += itsEnergy;
 		  else if (((*fvect)[j])->GetParticleDefinition() == G4Electron::Definition())
 		    energyInAuger += itsEnergy;
-		  
+
 		}
 	    }
 
@@ -597,13 +598,13 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
     // Protection to avoid generating photons in the unphysical case of
     // shell binding energy > photon energy
     if (localEnergyDeposit > cutg || localEnergyDeposit > cute)
-      { 
+      {
 	G4DynamicParticle* aPhoton;
 	deexcitationManager.SetCutForSecondaryPhotons(cutg);
 	deexcitationManager.SetCutForAugerElectrons(cute);
 
 	photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-	if(photonVector) 
+	if(photonVector)
 	  {
 	    size_t nPhotons = photonVector->size();
 	    for (size_t k=0; k<nPhotons; k++)
@@ -615,14 +616,14 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 		    G4bool keepIt = false;
 		    if (itsEnergy <= localEnergyDeposit)
 		      {
-			//check if good! 
+			//check if good!
 			if(aPhoton->GetDefinition() == G4Gamma::Gamma()
 			   && itsEnergy >= cutg)
 			  {
 			    keepIt = true;
-			    energyInFluorescence += itsEnergy;			  
+			    energyInFluorescence += itsEnergy;
 			  }
-			if (aPhoton->GetDefinition() == G4Electron::Electron() && 
+			if (aPhoton->GetDefinition() == G4Electron::Electron() &&
 			    itsEnergy >= cute)
 			  {
 			    energyInAuger += itsEnergy;
@@ -634,7 +635,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 		      {
 			localEnergyDeposit -= itsEnergy;
 			fvect->push_back(aPhoton);
-		      }		    
+		      }
 		    else
 		      {
 			delete aPhoton;
@@ -649,10 +650,10 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   */
 
 
-  //Always produce explicitely the electron 
+  //Always produce explicitely the electron
   G4DynamicParticle* electron = 0;
 
-  G4double xEl = sinThetaE * std::cos(phi+pi); 
+  G4double xEl = sinThetaE * std::cos(phi+pi);
   G4double yEl = sinThetaE * std::sin(phi+pi);
   G4double zEl = cosThetaE;
   G4ThreeVector eDirection(xEl,yEl,zEl); //electron direction
@@ -660,17 +661,17 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
   electron = new G4DynamicParticle (G4Electron::Electron(),
 				    eDirection,eKineticEnergy) ;
   fvect->push_back(electron);
-    
+
 
   if (localEnergyDeposit < 0)
     {
-      G4cout << "WARNING-" 
+      G4cout << "WARNING-"
 	     << "G4PenelopeComptonModel::SampleSecondaries - Negative energy deposit"
 	     << G4endl;
       localEnergyDeposit=0.;
     }
   fParticleChange->ProposeLocalEnergyDeposit(localEnergyDeposit);
-  
+
   G4double electronEnergy = 0.;
   if (electron)
     electronEnergy = eKineticEnergy;
@@ -688,7 +689,7 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 	G4cout << "Auger electrons: " << energyInAuger/keV << " keV" << G4endl;
       G4cout << "Local energy deposit " << localEnergyDeposit/keV << " keV" << G4endl;
       G4cout << "Total final state: " << (photonEnergy1+electronEnergy+energyInFluorescence+
-					  localEnergyDeposit+energyInAuger)/keV << 
+					  localEnergyDeposit+energyInAuger)/keV <<
 	" keV" << G4endl;
       G4cout << "-----------------------------------------------------------" << G4endl;
     }
@@ -698,11 +699,11 @@ void G4PenelopeComptonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* 
 				      electronEnergy+energyInFluorescence+
 				      localEnergyDeposit+energyInAuger-photonEnergy0);
       if (energyDiff > 0.05*keV)
-	G4cout << "Warning from G4PenelopeCompton: problem with energy conservation: " << 
-	  (photonEnergy1+electronEnergy+energyInFluorescence+energyInAuger+localEnergyDeposit)/keV << 
-	  " keV (final) vs. " << 
+	G4cout << "Warning from G4PenelopeCompton: problem with energy conservation: " <<
+	  (photonEnergy1+electronEnergy+energyInFluorescence+energyInAuger+localEnergyDeposit)/keV <<
+	  " keV (final) vs. " <<
 	  photonEnergy0/keV << " keV (initial)" << G4endl;
-    }    
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -711,41 +712,41 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta,G4do
 							    G4PenelopeOscillator* osc)
 {
   //
-  // Penelope model v2008. Single differential cross section *per electron* 
-  // for photon Compton scattering by 
-  // electrons in the given atomic oscillator, differential in the direction of the 
-  // scattering photon. This is in units of pi*classic_electr_radius**2 
+  // Penelope model v2008. Single differential cross section *per electron*
+  // for photon Compton scattering by
+  // electrons in the given atomic oscillator, differential in the direction of the
+  // scattering photon. This is in units of pi*classic_electr_radius**2
   //
   // D. Brusa et al., Nucl. Instrum. Meth. A 379 (1996) 167
-  // The parametrization includes the J(p) distribution profiles for the atomic shells, 
-  // that are tabulated from Hartree-Fock calculations 
+  // The parametrization includes the J(p) distribution profiles for the atomic shells,
+  // that are tabulated from Hartree-Fock calculations
   // from F. Biggs et al., At. Data Nucl. Data Tables 16 (1975) 201
   //
   G4double ionEnergy = osc->GetIonisationEnergy();
-  G4double harFunc = osc->GetHartreeFactor(); 
+  G4double harFunc = osc->GetHartreeFactor();
 
   static const G4double k2 = std::sqrt(2.);
-  static const G4double k1 = 1./k2; 
+  static const G4double k1 = 1./k2;
 
   if (energy < ionEnergy)
     return 0;
 
   //energy of the Compton line
   G4double cdt1 = 1.0-cosTheta;
-  G4double EOEC = 1.0+(energy/electron_mass_c2)*cdt1; 
+  G4double EOEC = 1.0+(energy/electron_mass_c2)*cdt1;
   G4double ECOE = 1.0/EOEC;
 
   //Incoherent scattering function (analytical profile)
   G4double aux = energy*(energy-ionEnergy)*cdt1;
-  G4double Pzimax = 
+  G4double Pzimax =
     (aux - electron_mass_c2*ionEnergy)/(electron_mass_c2*std::sqrt(2*aux+ionEnergy*ionEnergy));
   G4double sia = 0.0;
   G4double x = harFunc*Pzimax;
-  if (x > 0) 
-    sia = 1.0-0.5*std::exp(0.5-(k1+k2*x)*(k1+k2*x));    
-  else    
-    sia = 0.5*std::exp(0.5-(k1-k2*x)*(k1-k2*x));
-   
+  if (x > 0)
+    sia = 1.0-0.5*G4Exp(0.5-(k1+k2*x)*(k1+k2*x));
+  else
+    sia = 0.5*G4Exp(0.5-(k1-k2*x)*(k1-k2*x));
+
   //1st order correction, integral of Pz times the Compton profile.
   //Calculated approximately using a free-electron gas profile
   G4double pf = 3.0/(4.0*harFunc);
@@ -771,12 +772,12 @@ G4double G4PenelopeComptonModel::DifferentialCrossSection(G4double cosTheta,G4do
 
 G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4PenelopeOscillator* osc)
 {
-  //Total cross section (integrated) for the given oscillator in units of 
+  //Total cross section (integrated) for the given oscillator in units of
   //pi*classic_electr_radius^2
 
   //Integrate differential cross section for each oscillator
   G4double stre = osc->GetOscillatorStrength();
-  
+
   // here one uses the  using the 20-point
   // Gauss quadrature method with an adaptive bipartition scheme
   const G4int npoints=10;
@@ -839,26 +840,26 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
       c=a*Abscissas[0];
       G4double dLocal = Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
-      
+
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
 	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
-	}    
+	}
       G4double s1=dLocal*a;
       a=0.5*(xc-xb);
       b=0.5*(xc+xb);
       c=a*Abscissas[0];
       dLocal=Weights[0]*
 	(DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
-      
+
       for (G4int j=1;j<npoints;j++)
 	{
 	  c=a*Abscissas[j];
 	  dLocal += Weights[j]*
 	    (DifferentialCrossSection(b+c,energy,osc)+DifferentialCrossSection(b-c,energy,osc));
-	}    
+	}
       G4double s2=dLocal*a;
       icall=icall+4*npoints;
       G4double s12=s1+s2;
@@ -873,7 +874,7 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
 	  sn[LHN-2]=s1;
 	  xrn[LHN-2]=xa;
 	}
-      
+
       if (icall>ncallsmax || LHN>nst)
 	{
 	  G4cout << "G4PenelopeComptonModel: " << G4endl;
@@ -886,7 +887,7 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
 	}
     }
     Err=std::abs(sumr)/std::max(std::abs(sumr+sumga),1e-35);
-    if (Err < Ctol || LHN == 0) 
+    if (Err < Ctol || LHN == 0)
       loopAgain = false; //end of cycle
     LH=LHN;
     for (G4int i=0;i<LH;i++)
@@ -894,12 +895,12 @@ G4double G4PenelopeComptonModel::OscillatorTotalCrossSection(G4double energy,G4P
 	S[i]=sn[i];
 	x[i]=xrn[i];
       }
-  }while(Ctol < 1.0 && loopAgain); 
+  }while(Ctol < 1.0 && loopAgain);
 
 
   G4double xs = stre*sumga;
 
-  return xs; 
+  return xs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -947,6 +948,6 @@ G4double G4PenelopeComptonModel::KleinNishinaCrossSection(G4double energy,
 void G4PenelopeComptonModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(!fParticle) {
-    fParticle = p;  
+    fParticle = p;
   }
 }

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85359 2014-10-28 10:04:03Z gcosmo $
+# $Id: sources.cmake 95631 2016-02-17 08:02:06Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -101,6 +101,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
 	G4ThreadLocalSingleton.hh
 	G4AutoDelete.hh
         G4TWorkspacePool.hh
+	G4MTBarrier.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
@@ -135,6 +136,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ofstreamDestination.cc
         G4MTcoutDestination.cc
 	G4CacheDetails.cc
+	G4MTBarrier.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

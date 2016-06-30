@@ -57,6 +57,7 @@ class G4NtupleMessenger : public G4UImessenger
  
     G4VAnalysisManager*  fManager; ///< Associated class
     
+    std::unique_ptr<G4UIdirectory>     fNtupleDir;   
     std::unique_ptr<G4UIcommand>       fSetActivationCmd;   
     std::unique_ptr<G4UIcmdWithABool>  fSetActivationAllCmd;   
 };

@@ -14,6 +14,171 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 June 2016 Vladimir Ivanchenko (hadr-deex-V10-02-30)
+- G4PhotonEvaporation - removed debug cout
+
+09 June 2016 Vladimir Ivanchenko (hadr-deex-V10-02-29)
+- G4DeexPrecoParameters, G4NuclearLevelData, G4ExcitationHandler,
+  G4PhotonEvaporation - fixed initialisation in MT mode if PhysicsList 
+  has only radioactive decay
+
+09 June 2016 Vladimir Ivanchenko (hadr-deex-V10-02-28)
+- G4PhotonEvaporation - fix initialisation, in the case of the
+    radioactive decay initialisation was incomplete, no effect on
+    hadron inelastic 
+
+24 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-27)
+- Fixed compillation problems of the previous tag
+- Removed specific GEMCoulombBarrier classes per ion 
+
+23 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-26)
+- G4ExcitationHandler - removed G4Exception when MF model is called, 
+    instead increase default limit on excitation energy per nucleon 
+    to 100GeV
+- Clean-up CoulombBarrier classes
+- Clean-up FermiFragment classes 
+
+17 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-25)
+- G4ExcitationHandler - fixed crash at destruction introduced in the 
+    previous tag
+
+17 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-24)
+- G4ExcitationHandler - allowing addition of new evaporation or 
+    FermiBreakUp models after the initialisation of the handler
+- G4Evaporation - allowing change of the channel factory after 
+    initialisation
+
+13 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-23)
+- G4KalbachCrossSection - more smooth inverse cross section for 
+    transitions of high enegry
+- G4EvaporationProbability - use the same sampling algorithm as 
+    in the pre-compound model (do not interpolate probability)
+
+07 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-22)
+06 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-21)
+- G4DeexPrecoParameters, Evaporation - use default channel factory
+- G4NuclearLevelData, G4LevelManager - added method to access low-edge
+    levels
+- G4EvaporationProbability - more detailed grid for probabilities
+- G4NeutronRadCapture - added initialisation of G4PhotonEvaporation
+
+02 May 2016 Vladimir Ivanchenko (hadr-deex-V10-02-20)
+- G4DeexPrecoParameters - fixed Coverity warning
+- G4VEvaporation, G4Evaporation, G4VFermiBreakUp, G4FermiBreakUp,
+  G4PhotonEvaporation, G4ExcitationHandler - cleanup initialisation,
+    added G4VFermiBreakUp pure virtual methods allowing to have
+    alternative models
+
+27 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-17)
+- code cleanup - many minor changes
+
+19 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-16)
+- G4EvaporationChannel - fixed division by zero due to previous tags
+
+19 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-15)
+- G4ExcitationHandler - fix previous tag for model level tests
+
+19 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-14)
+- G4ExcitationHandler, G4DeexPrecoParameters, G4NeutronRadCapture -
+    full migration to G4DeexPrecoParameters
+
+15 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-13)
+- G4DeexPrecoParameters - added de-excitation parameters;
+    allow to change parameters only from the master thread 
+    and only at PreInit or Idle states 
+- G4LevelReader, G4VEvaporationChannel, G4LevelReader, 
+  G4ExcitationHandler - removed commented lines, removed empty 
+     descructors
+
+11 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-12)
+- G4DeexPrecoParameters - added full list of pre-coumpound 
+    parameters and extra de-excitation parameters
+- in many headers added c++11 keywords
+
+08 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-11)
+07 Apr 2016 Vladimir Ivanchenko (hadr-deex-V10-02-10)
+----------------------------------------------------------
+- G4DeexPrecoParameters - renamed G4DeexParameters class and updated
+    list of parameters 
+- G4ExcitationHandler, G4EvaporationChannel, G4EvaporationProbability
+    use G4DeexPrecoParameters for initialisation; initialisation
+    is done ones at the first event
+- G4NucLevel, G4LevelManager, G4LevelReader, G4PhotonEvaporation - 
+    changed data structure for the transition data: instead of final 
+    energy, index of final level, added multipolarity of the transition. 
+    This will allow corellated gamma emission 
+- G4EvaporationChannel, G4EvaporationProbability - improved 
+    initialisation of run time members
+- G4NuclearLevelData - improved FindLevel method
+
+30 Mar 2016 Vladimir Ivanchenko (hadr-deex-V10-02-09)
+----------------------------------------------------------
+- G4NuclearLevelData - added method FindLevel allowing to find discrete
+    level for any consumer model
+- G4EvaporationProbability - fixed bug in computation of probability 
+    density function; use this new method FindLevel when sample kinetic
+    energy of emitted particles; change interface for sampling method
+- G4EvaporationChannel - used changed interface to the sampling of energy
+
+22 Mar 2016 Vladimir Ivanchenko (hadr-deex-V10-02-08)
+----------------------------------------------------------
+- G4ExcitationHandler - improved warning printout for the high 
+    energy excitation 
+- G4EvaporationChannel, G4EvaporationProbability - fixed kinematics
+    and added discrete excitation energy for the residual fragment
+    if the excitation is below max known level energy 
+- G4DeexParameters, G4NuclearLevelData - added new class for parameters 
+
+07 Mar 2016 Vladimir Ivanchenko (hadr-deex-V10-02-07)
+----------------------------------------------------------
+- G4LevelManager, G4NucLevel - asserts are substituted by G4Exception
+- G4NuclearLevelData - extra methods are added allowing to acess the 
+    max level energy per isotope in level DB
+- G4ExcitationHandler - added warning for super excited fragments
+
+01 Mar 2016 Vladimir Ivanchenko (hadr-deex-V10-02-06)
+----------------------------------------------------------
+- G4PhotonEvaporation - fixed final energy in the case of X-level
+- G4ExcitationHandler - subsituted usage of iterators by simple
+    loop; add exception for the case of infinite loop of
+    evaporation
+  Both fixes address the problem report #1837
+
+12 Feb 2016 Vladimir Ivanchenko (hadr-deex-V10-02-05)
+----------------------------------------------------------
+- remove debug printout
+
+12 Feb 2016 Vladimir Ivanchenko (hadr-deex-V10-02-04)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4LevelReader, G4NucLevel - fixed treatment
+    of X-levels (meta-stable nuclear levels which have forbidden
+    gamma transition but opened beta-transitions); this fix excludes
+    creation of very low-energy fake gamma and provides a correct
+    nuclear decay sequence 
+
+20 Jan 2016 Vladimir Ivanchenko (hadr-deex-V10-02-03)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4LevelManager - fixed one non-reproducibility 
+    of the recent tag and also hidden rare old non-reproducibilty case 
+
+19 Jan 2016 Vladimir Ivanchenko (hadr-deex-V10-02-02)
+----------------------------------------------------------
+- G4PhotonEvaporation, G4LevelManager, G4LevelReader, G4NuclearLevelData
+    fixed remaining cases of production of excited stated (bug #1806)
+
+29 Dec 2015 Vladimir Ivanchenko (hadr-deex-V10-02-01)
+----------------------------------------------------------
+- G4GammaTransition - add protection against rare problem in samling 
+    of internal conversion when transition energy is lower than atomic 
+    level energy: instead of stop of the cascade set bound level 
+    energy to zero and produce final e-. This allowing to complete
+    radioactive decay cascade (bug #1806)
+
+16 Dec 2015 Vladimir Ivanchenko (hadr-deex-V10-02-00)
+----------------------------------------------------------
+- G4PhotonEvaporation - set limit on emitted gamma energy 0.1 keV 
+    (was 10 keV) 
+
 20 Nov 2015 Vladimir Ivanchenko (hadr-deex-V10-01-63)
 ----------------------------------------------------------
 - G4NuclearLevelData - protect G4MUTEXLOCK by ifdef statement,

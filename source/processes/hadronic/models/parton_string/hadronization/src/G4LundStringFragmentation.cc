@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.cc 91857 2015-08-07 13:55:49Z gcosmo $
+// $Id: G4LundStringFragmentation.cc 97675 2016-06-07 08:29:49Z gcosmo $
 // GEANT4 tag $Name:  $ 1.8
 //
 // -----------------------------------------------------------------------------
@@ -63,10 +63,12 @@ G4LundStringFragmentation::G4LundStringFragmentation()
 // ------ smearing sharp mass cut-off ---------------------------
     SmoothParam  = 0.2;                   
 
+    SigmaQT = 0.435 * GeV;  // 0.5 -> 0.471 <Pt^2> = 0.5 GeV^2   Uzhi 28 May
+
     SetStringTensionParameter(1.);                         
     SetDiquarkBreakProbability(0.05); 
-    SetStrangenessSuppression(0.46); //(0.447);                        Uzhi 25.05.2015
-    SetDiquarkSuppression(0.05);
+    SetStrangenessSuppression(0.45); //(0.46); //(0.447);                        Uzhi 25.05.2015
+    SetDiquarkSuppression(0.06);     // 0.05 -> 0.06        Uzhi 28 May 2016
 
 // For treating of small string decays
    for(G4int i=0; i<3; i++)
@@ -394,7 +396,7 @@ G4LundStringFragmentation::G4LundStringFragmentation()
    Prob_QQbar[0]=StrangeSuppress;         // Probability of ddbar production
    Prob_QQbar[1]=StrangeSuppress;         // Probability of uubar production
    Prob_QQbar[2]=1.0-2.*StrangeSuppress;  // Probability of ssbar production 
-   SetStrangenessSuppression(0.46); //(0.447);                            // Uzhi May 2014
+   SetStrangenessSuppression(0.45); //(0.46); //(0.447);                            // Uzhi May 2014
 
    //A.R. 25-Jul-2012 : Coverity fix.
    for ( G4int i=0 ; i<35 ; i++ ) { 
@@ -475,26 +477,40 @@ void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  
 //  G4cout<<"Number_of_quarks "<<Number_of_quarks<<" Number_of_squarks "<<Number_of_squarks<<G4endl;
 #endif
 
-	if(Number_of_quarks==2){EstimatedMass += 70.*MeV;} //100.*MeV;}
-//	if(Number_of_quarks==3){EstimatedMass += 20.*MeV;}
+	if(Number_of_quarks==2){
+          if(Number_of_squarks < 2) {EstimatedMass +=  70.*MeV;}
+          else                      {EstimatedMass += 230.*MeV;}
+	}
+
         if(Number_of_quarks==3)
         { 
-          if(Number_of_squarks==0) {EstimatedMass += 740.*MeV;} // 700 Uzhi July 2014
-          if(Number_of_squarks==1) {EstimatedMass += 740.*MeV;} // 740 Uzhi Nov 2014
-          if(Number_of_squarks==2) {EstimatedMass += 400.*MeV;}        
-          if(Number_of_squarks==3) {EstimatedMass += 382.*MeV;}
+          if(Number_of_squarks==0)      {EstimatedMass += 740.*MeV;}
+          else if(Number_of_squarks==1) {EstimatedMass += 600.*MeV;}   // 740. Uzhi May 2016
+          else if(Number_of_squarks==2) {EstimatedMass += 400.*MeV;}        
+          else                          {EstimatedMass += 400.*MeV;}   // 382. Uzhi May 2016
         }
 	if(Number_of_quarks==4)
 	{
+		if(StringM > 1880.) {       // 382. Uzhi May 2016            // 2*Mn = 1880
+          	  if(Number_of_squarks==0)      {EstimatedMass += 1320.*MeV;}//560+1320=1880=2*Mn
+    	          else if(Number_of_squarks==1) {EstimatedMass += 1150.*MeV;}//920+1150=2070=M(Lam+N)
+          	  else if(Number_of_squarks==2) {EstimatedMass +=  960.*MeV;}//1280+960=2240= 2*M Lam
+          	  else if(Number_of_squarks==3) {EstimatedMass +=  800.*MeV;}//1640+800=2440=Mxi+Mlam
+          	  else if(Number_of_squarks==4) {EstimatedMass +=  640.*MeV;}//2000+640=2640=2*Mxi
+                  else {}
+                }
+/*
 		if((StringM > 1880.) && ( EstimatedMass < 2100))     {EstimatedMass = 2020.;}//1880.;}
 		//   if((StringM > 1880.) && ( EstimatedMass < 2100))     {EstimatedMass = 2051.;}
 		else if((StringM > 2232.) && ( EstimatedMass < 2730)){EstimatedMass = 2570.;}
 		else if((StringM > 5130.) && ( EstimatedMass < 3450)){EstimatedMass = 5130.;}
+*/
 		else
 		{
-// VU 30 May 2014			EstimatedMass -=2.*Mass_of_string_junction;
-			if(EstimatedMass <= 1600.*MeV){EstimatedMass-=200.*MeV;}
-			else                          {EstimatedMass+=100.*MeV;}
+          	  if(Number_of_squarks < 3)     {EstimatedMass -= 200.*MeV;}
+          	  else if(Number_of_squarks==3) {EstimatedMass -=  50.*MeV;}
+          	  else if(Number_of_squarks==4) {EstimatedMass -=  40.*MeV;}
+                  else {}
 		}
 	}
 
@@ -847,6 +863,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 	G4double StringMT =std::sqrt(StringMT2);
 
 	G4double HadronMass = pHadron->GetPDGMass();
+//        G4int AbsBaryonNumber =std::abs(pHadron->GetBaryonNumber());  // Uzhi 30 May
 
 	SetMinimalStringMass(newString);
 
@@ -874,10 +891,13 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 	G4double      HadronMassT2, ResidualMassT2;
 
         //...  sample Pt of the hadron
+        G4double InitSigmaQT=SigmaQT;                          // Uzhi 30 May 2016
+//        if(AbsBaryonNumber > 0) SigmaQT=0.7 * GeV;             // Uzhi 30 May 2016  0.66
+if(pHadron->GetPDGIsospin() >= 1.5 ) SigmaQT=0.9 * GeV;             // Uzhi 30 May 2016  0.66 0.70
         G4int attempt=0;
         do
         {
-         attempt++; if(attempt > StringLoopInterrupt) return 0;
+         attempt++; if(attempt > StringLoopInterrupt) {SigmaQT=InitSigmaQT; return 0;}  // Uzhi 30 May 2016
 
          HadronPt =SampleQuarkPt()  + string->DecayPt();	
          HadronPt.setZ(0);
@@ -888,6 +908,8 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 
         } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);  /* Loop checking, 07.08.2015, A.Ribon */
 
+//        if(AbsBaryonNumber > 0) SigmaQT=InitSigmaQT;           // Uzhi 30 May 2016
+if(pHadron->GetPDGIsospin() >= 1.5 ) SigmaQT=InitSigmaQT;
 	//...  sample z to define hadron longitudinal momentum and energy
 	//... but first check the available phase space
 
@@ -905,7 +927,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 
 	if (zMin >= zMax) return 0;		// have to start all over!
 
-	G4double z = GetLightConeZ(zMin, zMax,
+	G4double z = GetLightConeZ(zMin, zMax, 
 			string->GetDecayParton()->GetPDGEncoding(), pHadron,
 			HadronPt.x(), HadronPt.y());
 
@@ -937,13 +959,14 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 		G4double Px, G4double Py)
 {
 	G4double Mass = pHadron->GetPDGMass();
-//	G4int HadronEncoding=std::abs(pHadron->GetPDGEncoding());
+      G4int HadronEncoding=std::abs(pHadron->GetPDGEncoding());
 
 	G4double Mt2 = Px*Px + Py*Py + Mass*Mass;
 
 	G4double  alund;
 	G4double zOfMaxyf(0.), maxYf(1.), z(0.), yf(1.);
-	if(std::abs(PDGEncodingOfDecayParton) < 1000)
+
+	if(!((std::abs(PDGEncodingOfDecayParton) > 1000) && (HadronEncoding > 1000)))
 	{    // ---------------- Quark fragmentation ----------------------
           alund=0.7/GeV/GeV;
 	//    If blund get restored, you MUST adapt the calculation of zOfMaxyf.
@@ -967,25 +990,12 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 	   return z;
         }
 
-	if(std::abs(PDGEncodingOfDecayParton) > 1000)         // Uzhi Sept. 2014
+	if(std::abs(PDGEncodingOfDecayParton) > 1000)         // Uzhi May. 2016
 	{
-/*
-         if(HadronEncoding < 3000)
-         {
-	    maxYf=(zmax-zmin);
-	    do
-	    {
-		z = zmin + G4UniformRand()*(zmax-zmin);
-		//yf=G4Exp(-sqr(z-Zc)/2/sqr(0.28));  // 0.42 0.632 0.28 a'la UrQMD
-		yf =(z-zmin);
-	    }
-	    while (G4UniformRand()*maxYf > yf);
-         }
-         else
-         {            // Strange baryons
-*/
-	    z = zmin + G4UniformRand()*(zmax-zmin);
-//         }
+		G4double an=2.5; 
+		if(pHadron->GetPDGIsospin() > 0.5) an=0.75;
+
+		z=zmin + (zmax-zmin)*G4Pow::GetInstance()->powA(G4UniformRand(),1./an);
 	}
 
 	return z;

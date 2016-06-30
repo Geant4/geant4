@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 90967 2015-06-12 08:10:54Z gcosmo $
+// $Id: PhysicsList.cc 96380 2016-04-11 07:01:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,7 +128,6 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -142,10 +141,9 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(8*10);
-    
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetBuildCSDARange(true);
+
   // decay process
   //
   AddDecay();

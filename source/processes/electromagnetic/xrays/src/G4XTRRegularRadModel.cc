@@ -199,17 +199,17 @@ G4XTRRegularRadModel::GetStackFactor( G4double energy,
 
   F2          *= std::pow(Q,G4double(fPlateNumber)) - std::pow(H,fPlateNumber) ;
 
-  result       = ( 1 - std::pow(Q,G4double(fPlateNumber)) )/( 1 - Q ) ;
+  result       = ( 1. - std::pow(Q,G4double(fPlateNumber)) )/( 1. - Q ) ;
 
-  result      *= (1 - Qa)*(1 + Qa - 2*std::sqrt(Qa)*std::cos(aZa)) ;
+  result      *= (1. - Qa)*(1. + Qa - 2.*std::sqrt(Qa)*std::cos(aZa)) ;
 
-  result      /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
-                  4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
+  result      /= (1. - std::sqrt(Q))*(1. - std::sqrt(Q)) + 
+                  4.*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
 
   I2           = 1.; // 2.0*std::real(F2) ;
 
-  I2           /= (1 - std::sqrt(Q))*(1 - std::sqrt(Q)) + 
-                  4*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
+  I2           /= (1. - std::sqrt(Q))*(1. - std::sqrt(Q)) + 
+                  4.*std::sqrt(Q)*std::sin(0.5*(aZa+bZb))*std::sin(0.5*(aZa+bZb)) ;
 
   I2           /= Q*( (std::sqrt(Q)-std::cos(aZa+bZb))*(std::sqrt(Q)-std::cos(aZa+bZb)) + 
                       std::sin(aZa+bZb)*std::sin(aZa+bZb)   ) ;

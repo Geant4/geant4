@@ -34,6 +34,7 @@
 
 // *** Processes and models for Geant4-DNA
 
+#include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
 #include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
@@ -153,7 +154,17 @@ void G4EmDNAPhysics_option4::ConstructProcess()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
-
+      
+      // *** Solvation ***
+      
+      G4DNAElectronSolvation* solvation =
+       new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+      G4DNAOneStepThermalizationModel* therm =
+       new G4DNAOneStepThermalizationModel();
+      therm->SetHighEnergyLimit(10.*eV); // limit of the Uehara's model
+      solvation->SetEmModel(therm);
+      ph->RegisterProcess(solvation, particle);
+      
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");

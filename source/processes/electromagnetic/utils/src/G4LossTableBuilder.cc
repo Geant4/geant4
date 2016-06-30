@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4LossTableBuilder.cc 96088 2016-03-14 16:03:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,11 +66,13 @@
 #include "G4VEmModel.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LossTableBuilder::G4LossTableBuilder() 
 {
+  theParameters = G4EmParameters::Instance();
   splineFlag = true;
   isInitialized = false;
 
@@ -419,7 +421,7 @@ G4LossTableBuilder::BuildTableForModel(G4PhysicsTable* aTable,
   }
   InitialiseBaseMaterials(table);
 
-  G4int nbins = G4LossTableManager::Instance()->GetNumberOfBinsPerDecade();
+  G4int nbins = theParameters->NumberOfBinsPerDecade();
 
   // Access to materials
   const G4ProductionCutsTable* theCoupleTable=

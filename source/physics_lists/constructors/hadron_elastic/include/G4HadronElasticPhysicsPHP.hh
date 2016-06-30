@@ -63,8 +63,8 @@ private:
   G4HadronElasticPhysicsPHP(const G4HadronElasticPhysicsPHP&);
   G4HadronElasticPhysicsPHP& operator=(const G4HadronElasticPhysicsPHP&);
   G4int    verbose;
-  G4bool   wasActivated;
-  G4HadronElasticPhysics* mainElasticBuilder;
+  static G4ThreadLocal G4bool wasActivated;
+  static G4ThreadLocal G4HadronElasticPhysics* mainElasticBuilder;
 };
 
 

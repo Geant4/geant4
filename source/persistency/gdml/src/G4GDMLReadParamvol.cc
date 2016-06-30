@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadParamvol.cc 89243 2015-03-27 16:24:39Z gcosmo $
+// $Id: G4GDMLReadParamvol.cc 96190 2016-03-29 08:07:36Z gcosmo $
 //
 // class G4GDMLReadParamvol Implementation
 //
@@ -76,7 +76,11 @@ Box_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadParamvol::Box_dimensionsRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="x") { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="y") { parameter.dimension[1] = eval.Evaluate(attValue); } else
       if (attName=="z") { parameter.dimension[2] = eval.Evaluate(attValue); }
@@ -115,7 +119,11 @@ Trd_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue);
+      	if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	  G4Exception("G4GDMLReadParamvol::Trd_dimensionsRead()", "InvalidRead",
+		      FatalException, "Invalid unit for length!");  }
+      } else
       if (attName=="x1") { parameter.dimension[0]=eval.Evaluate(attValue); } else
       if (attName=="x2") { parameter.dimension[1]=eval.Evaluate(attValue); } else
       if (attName=="y1") { parameter.dimension[2]=eval.Evaluate(attValue); } else
@@ -160,9 +168,17 @@ Trap_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Trap_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Trap_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="z")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="theta")
@@ -230,9 +246,17 @@ Tube_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Tube_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Tube_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="InR")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="OutR")
@@ -282,9 +306,17 @@ Cone_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Cone_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Cone_dimensions()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="rmin1")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax1")
@@ -340,9 +372,17 @@ Sphere_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Sphere_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Sphere_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -393,7 +433,11 @@ Orb_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attName = Transcode(attribute->getName());
       const G4String attValue = Transcode(attribute->getValue());
 
-      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+      if (attName=="lunit") { lunit = G4UnitDefinition::GetValueOf(attValue); }
+      if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	G4Exception("G4GDMLReadParamvol::Orb_dimensionsRead()", "InvalidRead",
+		    FatalException, "Invalid unit for length!");  }
+      else
       if (attName=="r") { parameter.dimension[0] = eval.Evaluate(attValue); }
    }
 
@@ -430,9 +474,17 @@ Torus_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Torus_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Torus_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -480,7 +532,11 @@ Ellipsoid_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Ellipsoid_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="ax")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="by")
@@ -530,9 +586,17 @@ Para_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Para_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Para_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="x")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="y")
@@ -585,9 +649,17 @@ Hype_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
 
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Hype_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Hype_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="rmin")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="rmax")
@@ -639,9 +711,17 @@ Polycone_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Polycone_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Polycone_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="startPhi")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="openPhi")
@@ -712,9 +792,17 @@ Polyhedra_dimensionsRead( const xercesc::DOMElement* const element,
       const G4String attValue = Transcode(attribute->getValue());
     
       if (attName=="lunit")
-        { lunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { lunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Length") {
+	    G4Exception("G4GDMLReadParamvol::Polyhedra_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for length!");  }
+	} else
       if (attName=="aunit")
-        { aunit = G4UnitDefinition::GetValueOf(attValue); } else
+        { aunit = G4UnitDefinition::GetValueOf(attValue);
+	  if (G4UnitDefinition::GetCategory(attValue)!="Angle") {
+	    G4Exception("G4GDMLReadParamvol::Polyhedra_dimensionsRead()", "InvalidRead",
+			FatalException, "Invalid unit for angle!");  }
+	} else
       if (attName=="startPhi")
         { parameter.dimension[0] = eval.Evaluate(attValue); } else
       if (attName=="openPhi")

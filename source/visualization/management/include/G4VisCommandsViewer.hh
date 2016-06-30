@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VisCommandsViewer.hh 97316 2016-06-01 12:12:58Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -115,6 +115,18 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
+class G4VisCommandViewerClearVisAttributesModifiers: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerClearVisAttributesModifiers ();
+  virtual ~G4VisCommandViewerClearVisAttributesModifiers ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerClearVisAttributesModifiers (const G4VisCommandViewerClearVisAttributesModifiers&);
+  G4VisCommandViewerClearVisAttributesModifiers& operator = (const G4VisCommandViewerClearVisAttributesModifiers&);
+  G4UIcmdWithoutParameter* fpCommand;
+};
+
 class G4VisCommandViewerClone: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerClone ();
@@ -181,6 +193,20 @@ private:
   G4VisCommandViewerFlush& operator = (const G4VisCommandViewerFlush&);
   G4UIcmdWithAString* fpCommand;
 };
+
+#ifndef WIN32
+class G4VisCommandViewerInterpolate: public G4VVisCommandViewer {
+public:
+  G4VisCommandViewerInterpolate ();
+  virtual ~G4VisCommandViewerInterpolate ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandViewerInterpolate (const G4VisCommandViewerInterpolate&);
+  G4VisCommandViewerInterpolate& operator = (const G4VisCommandViewerInterpolate&);
+  G4UIcommand* fpCommand;
+};
+#endif
 
 class G4VisCommandViewerList: public G4VVisCommandViewer {
 public:

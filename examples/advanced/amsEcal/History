@@ -1,4 +1,4 @@
-$Id: History 84372 2014-10-14 12:52:34Z gcosmo $
+$Id: History 96602 2016-04-25 13:28:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+24-04-16 mma  (amsEcal-V10-02-00)
+- PhysListEmStandard: use G4EmParameters
+
 13-10-14 mma (amsEcal-V10-00-07) 
 - CmakeLists.txt : remove AIDA references
 	 

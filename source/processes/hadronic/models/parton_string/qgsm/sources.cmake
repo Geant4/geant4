@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 96952 2016-05-18 12:21:34Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_qgstring
         G4SingleDiffractiveExcitation.hh
         G4SoftStringBuilder.hh
         G4VAnnihilationCrossSection.hh
+        G4PomeronCrossSection.hh
     SOURCES
         G4ASCCrossSection.cc
         G4AnnihilationCrossSection.cc
@@ -85,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_qgstring
         G4SPBaryon.cc
         G4SingleDiffractiveExcitation.cc
         G4SoftStringBuilder.cc
+        G4PomeronCrossSection.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

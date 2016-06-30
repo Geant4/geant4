@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh 82922 2014-07-18 15:56:35Z gcosmo $
+// $Id: G4GDMLWriteSolids.hh 96133 2016-03-16 22:21:17Z gcosmo $
 //
 //
 // class G4GDMLWriteSolids
@@ -46,6 +46,7 @@
 #include "G4MultiUnion.hh"
 
 class G4BooleanSolid;
+class G4ScaledSolid;
 class G4Box;
 class G4Cons;
 class G4EllipticalCone;
@@ -108,6 +109,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
 
    void MultiUnionWrite(xercesc::DOMElement* solElement, const G4MultiUnion* const);
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
+   void ScaledWrite(xercesc::DOMElement*, const G4ScaledSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
    void ConeWrite(xercesc::DOMElement*, const G4Cons* const);
    void ElconeWrite(xercesc::DOMElement*, const G4EllipticalCone* const);

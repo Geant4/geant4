@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AnnihiToMuPair.cc 91869 2015-08-07 15:21:02Z gcosmo $
+// $Id: G4AnnihiToMuPair.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4AnnihiToMuPair physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, November 2002
@@ -60,10 +60,10 @@ G4AnnihiToMuPair::G4AnnihiToMuPair(const G4String& processName,
 {
  //e+ Energy threshold
  const G4double Mu_massc2 = G4MuonPlus::MuonPlus()->GetPDGMass();
- LowestEnergyLimit  = 2*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
+ LowestEnergyLimit  = 2.*Mu_massc2*Mu_massc2/electron_mass_c2 - electron_mass_c2;
  
  //modele ok up to 1000 TeV due to neglected Z-interference
- HighestEnergyLimit = 1000*TeV;
+ HighestEnergyLimit = 1000.*TeV;
  
  CurrentSigma = 0.0;
  CrossSecFactor = 1.;

@@ -55,6 +55,9 @@
 
 G4ParticleHPThermalScattering::G4ParticleHPThermalScattering()
                              :G4HadronicInteraction("NeutronHPThermalScattering")
+,coherentFSs(NULL)
+,incoherentFSs(NULL)
+,inelasticFSs(NULL)
 {
    theHPElastic = new G4ParticleHPElastic();
 
@@ -126,7 +129,8 @@ G4ParticleHPThermalScattering::~G4ParticleHPThermalScattering()
 */
 
    delete theHPElastic;
-   delete theXSection;
+   //TKDB 160506
+   //delete theXSection;
 }
 
 void G4ParticleHPThermalScattering::clearCurrentFSData() {
@@ -559,7 +563,7 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
          }
          else if (  tempLH.second == 0.0 )
          {
-            pvE_p_TL = coherentFSs->find( ielement )->second->find ( v_temp.back() )->second;
+            pvE_p_TH = coherentFSs->find( ielement )->second->find ( v_temp.back() )->second;
             std::vector< G4double >::iterator itv;
             itv = v_temp.end();
             itv--;

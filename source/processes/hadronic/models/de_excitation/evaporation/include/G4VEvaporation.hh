@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 88841 2015-03-12 10:34:14Z gcosmo $
+// $Id: G4VEvaporation.hh 96744 2016-05-03 08:04:28Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -48,11 +48,13 @@
 #include <vector>
 
 class G4VEvaporationChannel;
+class G4VFermiBreakUp;
 
 class G4VEvaporation 
 {
 public:
-  G4VEvaporation();
+
+  explicit G4VEvaporation();
   virtual ~G4VEvaporation(); 
 
   // primary fragment is copied to the new instance, the copy is deleted 
@@ -69,6 +71,9 @@ public:
 
   virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
+  inline void SetFermiBreakUp(G4VFermiBreakUp* ptr);
+
+  inline G4VFermiBreakUp* GetFermiBreakUp() const;
   inline G4VEvaporationChannel* GetPhotonEvaporation();
   inline G4VEvaporationChannel* GetFissionChannel();
 
@@ -82,6 +87,7 @@ protected:
   void CleanChannels();
 
   G4VEvaporationChannel* thePhotonEvaporation;
+  G4VFermiBreakUp* theFBU; 
 
   G4int OPTxs;
   G4bool useSICB;
@@ -90,12 +96,22 @@ protected:
   G4VEvaporationFactory * theChannelFactory;
 
 private:  
-  G4VEvaporation(const G4VEvaporation &right);
-  const G4VEvaporation & operator=(const G4VEvaporation &right);
-  G4bool operator==(const G4VEvaporation &right) const;
-  G4bool operator!=(const G4VEvaporation &right) const;
+  G4VEvaporation(const G4VEvaporation &right) = delete;
+  const G4VEvaporation & operator=(const G4VEvaporation &right) = delete;
+  G4bool operator==(const G4VEvaporation &right) const = delete;
+  G4bool operator!=(const G4VEvaporation &right) const = delete;
 
 };
+
+inline void G4VEvaporation::SetFermiBreakUp(G4VFermiBreakUp* ptr)
+{
+  theFBU = ptr;
+}
+
+inline G4VFermiBreakUp* G4VEvaporation::GetFermiBreakUp() const
+{
+  return theFBU;
+}
 
 inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 {

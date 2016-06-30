@@ -1,4 +1,4 @@
-svn log $Id: History 94578 2015-11-25 08:11:03Z gcosmo $
+svn log $Id: History 97771 2016-06-09 15:15:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+8th June 2016 Gunter Folger       (config-V10-02-04)
+- revert previous change for G4{,NO}STATIC_MODE
+
+8th June 2016 Gunter Folger       (config-V10-02-03)
+- delete G4STATIC_MODE and G4NOSTATIC_MODE options in sys/Darwin* and sys/linux*
+  This is not a complete removal of the option yet...
+
+25th April 2016  Gabriele Cosmo  (config-V10-02-02)
+- Added Linux-clang.gmk script for use of clang compiler on Linux system.
+
+14th April 2016  Gabriele Cosmo  (config-V10-02-01)
+- Added flags for partial use of USolids/VecGeom types.
+
+5th February 2016  Gabriele Cosmo  (config-V10-02-00)
+- Added settings for 14 and 17 C++ standards in platform specific scripts.
 
 24th November 2015  Gabriele Cosmo  (config-V10-01-08)
 - binmake.gmk: added "analysis/parameters/include" to INCFLAGS.

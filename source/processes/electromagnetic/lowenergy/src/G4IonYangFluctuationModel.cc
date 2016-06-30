@@ -32,22 +32,22 @@
 // File name:     G4IonYangFluctuationModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 18 August 2000
 //
-// Modifications: 
+// Modifications:
 // 18/08/2000  V.Ivanchenko First implementation
-// 04/09/2000  V.Ivanchenko Rename fluctuations            
+// 04/09/2000  V.Ivanchenko Rename fluctuations
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 //
 // -------------------------------------------------------------------
-// Class Description: 
+// Class Description:
 //
-// The aproximation of additional ion energy loss fluctuations 
+// The aproximation of additional ion energy loss fluctuations
 // Q.Yang et al., NIM B61(1991)149-155.
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +61,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -70,13 +71,13 @@ G4IonYangFluctuationModel::G4IonYangFluctuationModel(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonYangFluctuationModel::~G4IonYangFluctuationModel() 
+G4IonYangFluctuationModel::~G4IonYangFluctuationModel()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4IonYangFluctuationModel::TheValue(const G4DynamicParticle* particle,
-					     const G4Material* material) 
+					     const G4Material* material)
 {
   G4double energy = particle->GetKineticEnergy() ;
   G4double mass = particle->GetMass() ;
@@ -91,7 +92,7 @@ G4double G4IonYangFluctuationModel::TheValue(const G4DynamicParticle* particle,
 
 G4double G4IonYangFluctuationModel::TheValue(const G4ParticleDefinition* aParticle,
 					     const G4Material* material,
-					     G4double kineticEnergy) 
+					     G4double kineticEnergy)
 {
   G4double mass = aParticle->GetPDGMass() ;
   G4double charge = (aParticle->GetPDGCharge())/eplus ;
@@ -133,7 +134,7 @@ G4double G4IonYangFluctuationModel::LowEnergyLimit(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4bool G4IonYangFluctuationModel::IsInCharge(const G4DynamicParticle*,
 					     const G4Material* ) const
 {
@@ -141,7 +142,7 @@ G4bool G4IonYangFluctuationModel::IsInCharge(const G4DynamicParticle*,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4bool G4IonYangFluctuationModel::IsInCharge(const G4ParticleDefinition* ,
 					     const G4Material* ) const
 {
@@ -155,7 +156,7 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
 							 G4double particleMass,
 							 G4double charge) const
 {
-  // The aproximation of energy loss fluctuations 
+  // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
 
   // Reduced energy in MeV/AMU
@@ -177,7 +178,7 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
   {0.01273, 0.03458, 0.3951,  3.812}
   } ;
 
-  // protons (hadrons) 
+  // protons (hadrons)
   if(1.5 > charge) {
     if( kStateGas != material->GetState() ) i = 1 ;
 
@@ -188,7 +189,7 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
     factor = charge * std::pow(charge/zeff, 0.3333) ;
 
     if( kStateGas == material->GetState() ) {
-      energy /= (charge * std::sqrt(charge)) ;      
+      energy /= (charge * std::sqrt(charge)) ;
 
       if(1 == (material->GetNumberOfElements())) {
         i = 2 ;
@@ -197,21 +198,15 @@ G4double G4IonYangFluctuationModel::YangFluctuationModel(const G4Material* mater
       }
 
     } else {
-      energy /= (charge * std::sqrt(charge*zeff)) ;      
+      energy /= (charge * std::sqrt(charge*zeff)) ;
       i = 4 ;
     }
   }
 
-  G4double x = b[i][2] * (1.0 - std::exp( - energy * b[i][3] )) ;
+  G4double x = b[i][2] * (1.0 - G4Exp( - energy * b[i][3] )) ;
 
-  G4double q = factor * x * b[i][0] / 
+  G4double q = factor * x * b[i][0] /
              ((energy - b[i][1])*(energy - b[i][1]) + x*x) ;
 
-  return q ;    
+  return q ;
 }
-
-
-
-
-
-

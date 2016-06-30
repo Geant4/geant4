@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTJpegCoder.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4RTJpegCoder.cc 96733 2016-05-02 11:52:48Z gcosmo $
 //
 //
 //
@@ -262,13 +262,12 @@ G4JpegCoder::ForwardDCT(int* picData)
     for( int u=0; u<8; u++ ){
       double cu = u ? 1.0 : DisSqrt2;
       double sum = 0;
-
       for( int y=0; y<8; y++ )
         for( int x=0; x<8; x++ )
           sum += picData[ y * 8 + x ] * mCosT[u][x] * mCosT[v][y];
-          mDCTData[ v * 8 + u ] = int( sum * cu * cv / 4 );
-        }
+      mDCTData[ v * 8 + u ] = int( sum * cu * cv / 4 );
     }
+  }
 }
 
 

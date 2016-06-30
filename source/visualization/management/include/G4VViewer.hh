@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh 90651 2015-06-05 13:30:54Z gcosmo $
+// $Id: G4VViewer.hh 95006 2016-01-15 08:26:18Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -97,6 +97,8 @@ public: // With description
   // end of scene drawing; be aware hits and digi drawing may Follow.
   // It is not yet the end of all drawing; that is signalled by
   // ShowView ().)
+
+  std::vector<G4ThreeVector> ComputeFlyThrough(G4Vector3D*);
 
 #ifdef G4MULTITHREADED
   // In MT mode these functions are called in the following order for each run:
@@ -194,4 +196,26 @@ void G4VViewer::DrawView () {  // Default - concrete view usually overrides.
 
 *********************************************/
 
+class G4Spline
+{
+public:
+    
+    // Constructors and destructor
+    G4Spline();
+    ~G4Spline();
+    
+    // Operations
+    void AddSplinePoint(const G4Vector3D& v);
+    G4Vector3D GetInterpolatedSplinePoint(float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
+    int GetNumPoints();
+    G4Vector3D GetPoint(int);
+    // method for computing the Catmull-Rom parametric equation
+    // given a time (t) and a vector quadruple (p1,p2,p3,p4).
+    G4Vector3D CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2,
+                   const G4Vector3D& p3, const G4Vector3D& p4);
+    
+private:
+    std::vector<G4Vector3D> vp;
+    float delta_t;
+};
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombScattering.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4CoulombScattering.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -57,27 +57,27 @@ class G4CoulombScattering : public G4VEmProcess
 
 public:
 
-  G4CoulombScattering(const G4String& name = "CoulombScat");
+  explicit G4CoulombScattering(const G4String& name = "CoulombScat");
 
   virtual ~G4CoulombScattering();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) final;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*);
+                                    const G4Material*) final;
 
 private:
 
  // hide assignment operator
-  G4CoulombScattering & operator=(const G4CoulombScattering &right);
-  G4CoulombScattering(const G4CoulombScattering&);
+  G4CoulombScattering & operator=(const G4CoulombScattering &right) = delete;
+  G4CoulombScattering(const G4CoulombScattering&) = delete;
   
   G4double q2Max;
   G4bool isInitialised;

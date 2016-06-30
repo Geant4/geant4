@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 95832 2016-02-26 11:12:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +87,6 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   particle(0),
   minNumberInteractionsBohr(10.0),
-  theBohrBeta2(50.0*keV/proton_mass_c2),
   minLoss(10.*eV),
   nmaxCont(16.),
   rate(0.55),
@@ -228,11 +227,10 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
         }
     }
 
+  G4double a1, a2, a3;
   for (G4int istep=0; istep < nstep; ++istep) {
     
-    loss = 0.;
-
-    G4double a1 = 0. , a2 = 0., a3 = 0. ;
+    loss = a1 = a2 = a3 = 0.;
 
     if(tmax > ipotFluct) {
       G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
@@ -279,50 +277,21 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
     G4double emean = 0.;
-    G4double sig2e = 0., sige = 0.;
-    G4double p1 = 0., p2 = 0., p3 = 0.;
+    G4double sig2e = 0.;
  
     // excitation of type 1
-    if(a1 > nmaxCont)
-      {
-        emean += a1*e1;
-        sig2e += a1*e1*e1;
-      }
-    else if(a1 > 0.)
-      {
-        p1 = G4double(G4Poisson(a1));
-        loss += p1*e1;
-        if(p1 > 0.) {
-          loss += (1.-2.*rndmEngineF->flat())*e1;
-        }
-      }
+    AddExcitation(rndmEngineF, a1, e1, emean, loss, sig2e);
 
     // excitation of type 2
-    if(a2 > nmaxCont)
-      {
-        emean += a2*e2;
-        sig2e += a2*e2*e2;
-      }
-    else if(a2 > 0.)
-      {
-        p2 = G4double(G4Poisson(a2));
-        loss += p2*e2;
-        if(p2 > 0.) 
-          loss += (1.-2.*rndmEngineF->flat())*e2;
-      }
-    if(emean > 0.)
-      {
-        sige   = sqrt(sig2e);
-        loss += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
-      }
+    AddExcitation(rndmEngineF, a2, e2, emean, loss, sig2e);
+
+    if(emean > 0.0) { SampleGauss(rndmEngineF, emean, sig2e, loss); }
 
     // ionisation 
-    G4double lossc = 0.;
     if(a3 > 0.) {
       emean = 0.;
       sig2e = 0.;
-      sige = 0.;
-      p3 = a3;
+      G4double p3 = a3;
       G4double alfa = 1.;
       if(a3 > nmaxCont)
         {
@@ -336,26 +305,20 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
       G4double w2 = alfa*e0;
       G4double w  = (tmax-w2)/tmax;
-      const G4int nb = G4Poisson(p3);
-      if(nb > 0) {
-        if(nb > sizearray) {
-          sizearray = nb;
-          delete [] rndmarray;
-          rndmarray = new G4double[nb];
+      if(w > 0.0) {
+        const G4int nb = G4Poisson(p3);
+        if(nb > 0) {
+          if(nb > sizearray) {
+            sizearray = nb;
+            delete [] rndmarray;
+            rndmarray = new G4double[nb];
+          }
+          rndmEngineF->flatArray(nb, rndmarray);
+          for (G4int k=0; k<nb; ++k) { loss += w2/(1.-w*rndmarray[k]); }
         }
-        rndmEngineF->flatArray(nb, rndmarray);
-        for (G4int k=0; k<nb; ++k) { lossc += w2/(1.-w*rndmarray[k]); }
       }
-
-    if(emean > 0.)
-      {
-        sige   = sqrt(sig2e);
-        lossc += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
-      }
+      if(emean > 0.0) { SampleGauss(rndmEngineF, emean, sig2e, loss); }
     }
-
-    loss += lossc;
-
     losstot += loss;
   }
   //G4cout << "Vavilov: " << losstot << "  Nstep= " << nstep << G4endl;

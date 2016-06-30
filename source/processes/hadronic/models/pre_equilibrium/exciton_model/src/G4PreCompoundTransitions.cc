@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundTransitions.cc 89523 2015-04-16 09:56:35Z gcosmo $
+// $Id: G4PreCompoundTransitions.cc 96603 2016-04-25 13:29:51Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,21 +49,21 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
-#include "G4PreCompoundParameters.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4Fragment.hh"
 #include "G4Proton.hh"
 #include "G4Exp.hh"
 #include "G4Log.hh"
 
-static const G4double sixdpi2 = 6.0/CLHEP::pi2;
-
 G4PreCompoundTransitions::G4PreCompoundTransitions() 
 {
   proton = G4Proton::Proton();
-  G4PreCompoundParameters param;
-  FermiEnergy = param.GetFermiEnergy();
-  r0 = param.GetTransitionsr0();
-  aLDP = param.GetLevelDensity();
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters() ;
+  FermiEnergy = param->GetFermiEnergy();
+  r0 = param->GetTransitionsR0();
+  aLDP = param->GetLevelDensity();
 }
 
 G4PreCompoundTransitions::~G4PreCompoundTransitions() 
@@ -86,9 +86,11 @@ CalculateProbability(const G4Fragment & aFragment)
   G4double U = aFragment.GetExcitationEnergy();
   TransitionProb2 = 0.0;
   TransitionProb3 = 0.0;
-
-  //G4cout << aFragment << G4endl;
-  
+  /*
+  G4cout << "G4PreCompoundTransitions::CalculateProbability H/P/N/Z/A= " 
+	 << H << " " << P << " " << N << " " << Z << " " << A <<G4endl;
+  G4cout << aFragment << G4endl;
+  */
   if(U < 10*eV || 0==N) { return 0.0; }
   
   //J. M. Quesada (Feb. 08) new physics
@@ -96,6 +98,7 @@ CalculateProbability(const G4Fragment & aFragment)
   //       (original in G4PreCompound from VL) 
   // OPT=2 Transitions are calculated according to Gupta's formulae
   //
+  static const G4double sixdpi2 = 6.0/CLHEP::pi2;
   if (useCEMtr) {
     // Relative Energy (T_{rel})
     G4double RelativeEnergy = 1.6*FermiEnergy + U/G4double(N);

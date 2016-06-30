@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShortLivedConstructor.cc 83749 2014-09-12 12:14:59Z gcosmo $
+// $Id: G4ShortLivedConstructor.cc 95951 2016-03-03 10:44:16Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -811,7 +811,7 @@ void G4ShortLivedConstructor::ConstructMesons()
   particle->SetDecayTable(decayTable);
   // f0(1500)
   particle = new G4ExcitedMesons(            
-           "f0(1500)",      1505.0*MeV,     109.0*MeV,           0.0,
+           "f0(1500)",      1504.0*MeV,     109.0*MeV,           0.0,
                     0,              +1,            +1,          
                     0,               0,            +1,             
               "meson",               0,             0,       9030221,
@@ -831,7 +831,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // f0(1710)
   particle = new G4ExcitedMesons(            
-           "f0(1710)",      1722.0*MeV,     135.0*MeV,           0.0,
+           "f0(1710)",      1723.0*MeV,     139.0*MeV,           0.0,
                     0,              +1,            +1,          
                     0,               0,            +1,             
               "meson",               0,             0,         10331,

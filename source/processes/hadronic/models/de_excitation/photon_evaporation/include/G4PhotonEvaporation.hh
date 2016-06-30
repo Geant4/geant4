@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 94485 2015-11-19 08:32:53Z gcosmo $
+// $Id: G4PhotonEvaporation.hh 96744 2016-05-03 08:04:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,40 +58,41 @@
 const G4int MAXDEPOINT = 10;
 const G4int MAXGRDATA  = 300;
 
-class G4E1Probability;
 class G4GammaTransition;
 
 class G4PhotonEvaporation : public G4VEvaporationChannel {
 
 public:
 
-  G4PhotonEvaporation(G4GammaTransition* ptr=0);
+  explicit G4PhotonEvaporation(G4GammaTransition* ptr=nullptr);
 
   virtual ~G4PhotonEvaporation();
 
+  virtual void Initialise() final;
+
   // one photon or e- emission
-  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus) final;
 
   // returns "false", emitted gamma and e- are added to the results
   virtual G4bool 
-  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus) final;
 
   // emitted gamma and e- are added to the results
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
+  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus) final;
 
   // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus);
+  virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus) final;
 
   // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector* BreakItUp(const G4Fragment& theNucleus);
+  virtual G4FragmentVector* BreakItUp(const G4Fragment& theNucleus) final;
 
   // compute emission probability for both continum and discrete cases
   // must be called before any method above
-  virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
+  virtual G4double GetEmissionProbability(G4Fragment* theNucleus) final;
 
-  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy);
+  virtual G4double GetFinalLevelEnergy(G4int Z, G4int A, G4double energy) final;
 
-  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A);
+  virtual G4double GetUpperLevelEnergy(G4int Z, G4int A) final;
 
   void SetGammaTransition(G4GammaTransition*);
 
@@ -111,8 +112,8 @@ private:
 
   inline void InitialiseLevelManager(G4int Z, G4int A);
 
-  G4PhotonEvaporation(const G4PhotonEvaporation & right);
-  const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right);
+  G4PhotonEvaporation(const G4PhotonEvaporation & right) = delete;
+  const G4PhotonEvaporation & operator = (const G4PhotonEvaporation & right) = delete;
 
   G4NuclearLevelData*   fNuclearLevelData;
   const G4LevelManager* fLevelManager;
@@ -133,15 +134,18 @@ private:
 
   G4double fLevelEnergyMax;
   G4double fExcEnergy;
-  G4double fFermiEnergy;
   G4double fProbability;
   G4double fStep;
   G4double fTimeLimit;
   G4double fMaxLifeTime;
 
+  G4double LevelDensity;
+  G4double Tolerance;
+
   G4bool   fICM;
   G4bool   fRDM;
   G4bool   fSampleTime;
+  G4bool   isInitialised;
 };
 
 inline void G4PhotonEvaporation::SetVerboseLevel(G4int verbose)

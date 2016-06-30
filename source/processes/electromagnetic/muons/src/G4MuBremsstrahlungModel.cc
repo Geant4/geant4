@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.cc 91743 2015-08-04 11:49:58Z gcosmo $
+// $Id: G4MuBremsstrahlungModel.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,13 +91,13 @@ G4double G4MuBremsstrahlungModel::fDN[] = {0.0};
 G4MuBremsstrahlungModel::G4MuBremsstrahlungModel(const G4ParticleDefinition* p,
                                                  const G4String& nam)
   : G4VEmModel(nam),
-    particle(0),
+    particle(nullptr),
     sqrte(sqrt(G4Exp(1.))),
     bh(202.4),
     bh1(446.),
     btf(183.),
     btf1(1429.),
-    fParticleChange(0),
+    fParticleChange(nullptr),
     lowestKinEnergy(1.0*GeV),
     minThreshold(0.9*keV)
 {

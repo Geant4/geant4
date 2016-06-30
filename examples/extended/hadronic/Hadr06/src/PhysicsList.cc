@@ -42,6 +42,7 @@
 #include "G4HadronPhysicsINCLXX.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
+#include "G4StoppingPhysics.hh"
 #include "GammaPhysics.hh"
 
 #include "EmStandardPhysics.hh"
@@ -66,15 +67,18 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new HadronElasticPhysicsHP(verb) );
   
   // Hadron Inelastic Physics
-  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));        
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
   
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
-    
+  
+  // stopping Particles
+  RegisterPhysics( new G4StoppingPhysics(verb));
+      
   // Gamma-Nuclear Physics
   RegisterPhysics( new GammaPhysics("gamma"));
   

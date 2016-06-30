@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedMollerBhabhaModel.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedMollerBhabhaModel.hh 96114 2016-03-16 18:51:33Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -61,7 +61,7 @@ class G4PolarizedMollerBhabhaModel : public G4MollerBhabhaModel
 
 public:
 
-  G4PolarizedMollerBhabhaModel(const G4ParticleDefinition* p =0, 
+  explicit G4PolarizedMollerBhabhaModel(const G4ParticleDefinition* p = nullptr,
 			     const G4String& nam = "PolarizedMollerBhabha");
 
   virtual ~G4PolarizedMollerBhabhaModel();
@@ -70,13 +70,13 @@ public:
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double cut,
-                                      G4double emax);
+                                      G4double emax) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 
   // polarization access routines (may go if using a modified ParticleChange)
@@ -108,8 +108,9 @@ public:
 private:
 
   // copy constructor and hide assignment operator
-  G4PolarizedMollerBhabhaModel(G4PolarizedMollerBhabhaModel &);
-  G4PolarizedMollerBhabhaModel & operator=(const G4PolarizedMollerBhabhaModel &right);
+  G4PolarizedMollerBhabhaModel(G4PolarizedMollerBhabhaModel &) = delete;
+  G4PolarizedMollerBhabhaModel & 
+    operator=(const G4PolarizedMollerBhabhaModel &right) = delete;
 
   G4StokesVector theBeamPolarization;
   G4StokesVector theTargetPolarization;

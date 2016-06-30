@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmConfigurator.cc 91745 2015-08-04 11:51:12Z gcosmo $
+// $Id: G4EmConfigurator.cc 97432 2016-06-03 07:23:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,6 +82,7 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
                                        G4double emax,
                                        G4VEmFluctuationModel* fm)
 {
+  if(!mod) { return; }
   if(1 < verbose) {
     G4cout << " G4EmConfigurator::SetExtraEmModel " << mod->GetName()
            << " for " << particleName 
@@ -91,15 +92,12 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
            << " Emax(MeV)= " << emax/MeV
            << G4endl;
   }
-  if(mod) {
-    models.push_back(mod);
-    flucModels.push_back(fm);
-    emax = std::min(emax, mod->HighEnergyLimit());
-    mod->SetActivationHighEnergyLimit(emax);
-  } else {
-    models.push_back(new G4DummyModel());
-    flucModels.push_back(0);
-  }
+
+  models.push_back(mod);
+  flucModels.push_back(fm);
+  emin = std::max(emin, mod->LowEnergyLimit());
+  emax = std::min(emax, mod->HighEnergyLimit());
+  mod->SetActivationHighEnergyLimit(emax);
 
   particles.push_back(particleName);
   processes.push_back(processName);
@@ -198,7 +196,6 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
           G4cout << "### Added msc model order= " << index << " for " 
                  << particleName << " and " << processName << G4endl;
         }
-        return;
       } else if(2 <= ii && 4 >= ii) {
         G4VEnergyLossProcess* p = static_cast<G4VEnergyLossProcess*>(proc);
         if(!mod && fm) {
@@ -210,7 +207,6 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
                    << particleName << " and " << processName << G4endl;
           }
         }
-        return;
       } else if(mod) {
         G4VEmProcess* p = static_cast<G4VEmProcess*>(proc);
         p->AddEmModel(index,mod,reg);
@@ -218,10 +214,8 @@ void G4EmConfigurator::SetModelForRegion(G4VEmModel* mod,
           G4cout << "### Added em model order= " << index << " for " 
                  << particleName << " and " << processName << G4endl;
         }
-        return;
-      } else {
-        return;
-      }
+      } 
+      return;
     }
   }
 }

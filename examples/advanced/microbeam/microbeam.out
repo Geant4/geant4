@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -345,16 +345,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -367,7 +369,8 @@ Available colours:
 
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld
+          DefaultRegionForTheWorld  1  0  0
+### ===  Ignore cuts flag:   0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -809,7 +812,7 @@ Index : 12     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x24db110
+##### Create analysis manager   0x15b8e70
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -820,29 +823,27 @@ All Ntuples have been created
 
 -> Event # 3 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.29893655392339
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.05895416661847
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32778372413202
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.044733067737592
 
 -> Event # 4 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.297542698664
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.016812349299169
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.29451485847676
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.01845536721255
 
 -> Event # 5 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.30403628497508
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.051504478309795
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 7 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32679569925554
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.042253362060202
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32808202093148
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.012292198793424
 
 -> Event # 9 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -850,7 +851,7 @@ All Ntuples have been created
 -> Event # 10 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Total number of particles detected by the gas detector : 5
+-> Total number of particles detected by the gas detector : 3
 
 Graphics systems deleted.
 Visualization Manager deleting...

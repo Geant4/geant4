@@ -655,9 +655,9 @@ void B03PhysicsList::AddScoringProcess(){
     G4ProcessManager* pmanager = particle->GetProcessManager();
     pmanager->AddProcess(theParallelWorldProcess);
     if(theParallelWorldProcess->IsAtRestRequired(particle))
-    {pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999);}
+    {pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9900);}
     pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-    pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+    pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9900);
    }
   }
 

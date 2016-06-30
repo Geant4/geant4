@@ -25,7 +25,7 @@
 //
 // -------------------------------------------------------------------
 //
-// $Id: G4PolarizationMessenger.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizationMessenger.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // GEANT4 Class header file
 //
@@ -61,12 +61,12 @@ class G4UIcommand;
 class G4PolarizationMessenger: public G4UImessenger
 {
   public:
-    G4PolarizationMessenger(G4PolarizationManager* runMgr);
+    explicit G4PolarizationMessenger(G4PolarizationManager* runMgr);
     ~G4PolarizationMessenger();
 
   public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    void SetNewValue(G4UIcommand * command,G4String newValues) override;
+    G4String GetCurrentValue(G4UIcommand * command) override;
   private:
     G4PolarizationManager * polarizationManager;
     

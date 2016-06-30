@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4KL3DecayChannel.cc 91896 2015-08-10 09:54:06Z gcosmo $
+// $Id: G4KL3DecayChannel.cc 95906 2016-03-02 10:56:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -46,11 +46,8 @@
 
 G4KL3DecayChannel::G4KL3DecayChannel()
   :G4VDecayChannel(),
-   massK(0.0), pLambda(0.0), pXi0(0.0)
+   pLambda(0.0), pXi0(0.0)
 {
-  daughterM[idPi] = 0.0;
-  daughterM[idLepton] = 0.0;
-  daughterM[idNutrino] = 0.0;
 }
 
 
@@ -72,11 +69,6 @@ G4KL3DecayChannel::G4KL3DecayChannel(
   static const G4String E_plus("e+");
   static const G4String E_minus("e-");
   
-  massK = 0.0;
-  daughterM[idPi] = 0.0;
-  daughterM[idLepton] = 0.0;
-  daughterM[idNutrino] = 0.0;
-
   // check modes
   if ( ((theParentName == K_plus)&&(theLeptonName == E_plus)) ||
        ((theParentName == K_minus)&&(theLeptonName == E_minus))   ) {
@@ -118,13 +110,10 @@ G4KL3DecayChannel::~G4KL3DecayChannel()
 
 G4KL3DecayChannel::G4KL3DecayChannel(const G4KL3DecayChannel &right):
   G4VDecayChannel(right),
-  massK(right.massK), 
+  //massK(right.massK),
   pLambda(right.pLambda), 
   pXi0(right.pXi0)
 {
-  daughterM[idPi] = right.daughterM[idPi];
-  daughterM[idLepton] = right.daughterM[idLepton];
-  daughterM[idNutrino] = right.daughterM[idNutrino];
 }
 
 G4KL3DecayChannel & G4KL3DecayChannel::operator=(const G4KL3DecayChannel & right)
@@ -150,12 +139,9 @@ G4KL3DecayChannel & G4KL3DecayChannel::operator=(const G4KL3DecayChannel & right
           daughters_name[index] = new G4String(*right.daughters_name[index]);
       }
     }
-    massK = right.massK; 
+    //massK = right.massK;
     pLambda = right.pLambda; 
     pXi0 = right.pXi0;
-    daughterM[idPi] = right.daughterM[idPi];
-    daughterM[idLepton] = right.daughterM[idLepton];
-    daughterM[idNutrino] = right.daughterM[idNutrino];
   }
   return *this;
 }
@@ -171,15 +157,12 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
 #endif
 
   // fill parent particle and its mass
-  if (G4MT_parent == 0) {
-    FillParent();
-  }
-  massK = G4MT_parent->GetPDGMass();
+  CheckAndFillParent();
+  G4double massK = G4MT_parent->GetPDGMass();
 
   // fill daughter particles and their mass
-  if (G4MT_daughters == 0) {
-    FillDaughters();
-  }
+  CheckAndFillDaughters();
+  G4double daughterM[3];
   daughterM[idPi] = G4MT_daughters[idPi]->GetPDGMass();
   daughterM[idLepton] = G4MT_daughters[idLepton]->GetPDGMass();
   daughterM[idNutrino] = G4MT_daughters[idNutrino]->GetPDGMass();
@@ -193,7 +176,8 @@ G4DecayProducts* G4KL3DecayChannel::DecayIt(G4double)
   for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
     r = G4UniformRand();
     PhaseSpace(massK, &daughterM[0], &daughterE[0], &daughterP[0]);
-    w = DalitzDensity(daughterE[idPi],daughterE[idLepton],daughterE[idNutrino]);
+    w = DalitzDensity(massK,daughterE[idPi],daughterE[idLepton],daughterE[idNutrino],
+                      daughterM[idPi],daughterM[idLepton],daughterM[idNutrino]);
     if ( r <= w) break;
   }
 
@@ -328,7 +312,8 @@ void G4KL3DecayChannel::PhaseSpace(G4double parentM,
 }
 
 
-G4double G4KL3DecayChannel::DalitzDensity(G4double Epi, G4double El, G4double Enu)
+G4double G4KL3DecayChannel::DalitzDensity(G4double massK, G4double Epi, G4double El, G4double Enu,
+                                          G4double massPi, G4double massL , G4double massNu )
 {
   // KL3 decay   Dalitz Plot Density
   //               see Chounet et al Phys. Rep. 4, 201
@@ -344,11 +329,6 @@ G4double G4KL3DecayChannel::DalitzDensity(G4double Epi, G4double El, G4double En
   //    Epi: total energy of pion
   //    El:  total energy of lepton (e or mu)
   //    Enu: total energy of nutrino
-
-  // mass of daughters
-  G4double massPi = daughterM[idPi];
-  G4double massL  = daughterM[idLepton]; 
-  G4double massNu = daughterM[idNutrino];
 
   // calcurate total energy
   Epi = Epi + massPi;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4BetheBlochModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -74,15 +74,16 @@ class G4BetheBlochModel : public G4VEmModel
 
 public:
 
-  G4BetheBlochModel(const G4ParticleDefinition* p = nullptr,
-                    const G4String& nam = "BetheBloch");
+  explicit G4BetheBlochModel(const G4ParticleDefinition* p = nullptr,
+			     const G4String& nam = "BetheBloch");
 
   virtual ~G4BetheBlochModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple* couple);
+				const G4MaterialCutsCouple* couple) override;
 
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -95,43 +96,43 @@ public:
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 
   virtual G4double GetChargeSquareRatio(const G4ParticleDefinition* p,
 					const G4Material* mat,
-					G4double kineticEnergy);
+					G4double kineticEnergy) override;
 
   virtual G4double GetParticleCharge(const G4ParticleDefinition* p,
 				     const G4Material* mat,
-				     G4double kineticEnergy);
+				     G4double kineticEnergy) override;
 
   virtual void CorrectionsAlongStep(const G4MaterialCutsCouple* couple,
 				    const G4DynamicParticle* dp,
 				    G4double& eloss,
 				    G4double&,
-				    G4double length);
+				    G4double length) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy);
+				      G4double kinEnergy) override;
 
   inline G4double GetChargeSquareRatio() const;
 
@@ -146,8 +147,8 @@ private:
   inline void SetGenericIon(const G4ParticleDefinition* p);
 
   // hide assignment operator
-  G4BetheBlochModel & operator=(const  G4BetheBlochModel &right);
-  G4BetheBlochModel(const  G4BetheBlochModel&);
+  G4BetheBlochModel & operator=(const  G4BetheBlochModel &right) = delete;
+  G4BetheBlochModel(const  G4BetheBlochModel&) = delete;
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
@@ -163,11 +164,8 @@ private:
   G4double ratio;
   G4double formfact;
   G4double twoln10;
-  G4double bg2lim;
-  G4double taulim;
   G4double corrFactor;
   G4bool   isIon;
-  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,7 +174,7 @@ inline void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
   if(particle != p) {
     particle = p;
-    if(p->GetBaryonNumber() > 3 || p->GetPDGCharge() > 1.5*CLHEP::eplus) 
+    if(p->GetBaryonNumber() > 3 || p->GetPDGCharge() > CLHEP::eplus) 
       { isIon = true; }
     SetupParameters();
   }

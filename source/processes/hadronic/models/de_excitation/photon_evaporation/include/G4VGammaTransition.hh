@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VGammaTransition.hh 88709 2015-03-06 15:33:12Z gcosmo $
+// $Id: G4VGammaTransition.hh 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file 
@@ -54,9 +54,9 @@ class G4VGammaTransition
 {
 public:
 
-  G4VGammaTransition();
+  explicit G4VGammaTransition() {};
 
-  virtual ~G4VGammaTransition();
+  virtual ~G4VGammaTransition() {};
   
   virtual void SelectGamma() = 0;
   virtual G4double GetGammaEnergy() = 0;
@@ -65,11 +65,10 @@ public:
 
 private:  
 
-  G4VGammaTransition(const G4VGammaTransition &right);
-  
-  const G4VGammaTransition& operator=(const G4VGammaTransition &right);
-  G4bool operator==(const G4VGammaTransition &right) const;
-  G4bool operator!=(const G4VGammaTransition &right) const;
+  G4VGammaTransition(const G4VGammaTransition &right) = delete;
+  const G4VGammaTransition& operator=(const G4VGammaTransition &right) = delete;
+  G4bool operator==(const G4VGammaTransition &right) const = delete;
+  G4bool operator!=(const G4VGammaTransition &right) const = delete;
  
 };
 

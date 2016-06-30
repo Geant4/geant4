@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4TrajectoryModelFactories.hh 95593 2016-02-16 10:48:50Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 //
@@ -98,9 +98,21 @@ public: // With description
   G4TrajectoryDrawByOriginVolumeFactory();
 
   virtual ~G4TrajectoryDrawByOriginVolumeFactory();
-  
+
   ModelAndMessengers Create(const G4String& placement, const G4String& name);
-    
+
+};
+
+class G4TrajectoryDrawByTouchedVolumeFactory : public G4VModelFactory<G4VTrajectoryModel> {
+
+public: // With description
+
+  G4TrajectoryDrawByTouchedVolumeFactory();
+
+  virtual ~G4TrajectoryDrawByTouchedVolumeFactory();
+
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+
 };
 
 #endif

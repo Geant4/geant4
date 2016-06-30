@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id: G4NavigationHistory.cc 96346 2016-04-08 14:10:33Z gcosmo $
 //
 // 
 // G4NavigationHistory Implementation
@@ -68,7 +68,7 @@ G4NavigationHistory::~G4NavigationHistory()
 std::ostream&
 operator << (std::ostream& os, const G4NavigationHistory& nav)
 {
-  G4cout << "History depth=" << nav.GetDepth() << G4endl;
+  os << "History depth=" << nav.GetDepth() << G4endl;
   for ( G4int i=0; i<=nav.GetDepth(); i++ )
   {
     os << "Level=["<<i<<"]: ";

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MoleculeCounter.cc 94423 2015-11-16 08:25:40Z gcosmo $
+// $Id: G4MoleculeCounter.cc 96699 2016-05-02 07:20:47Z gcosmo $
 //
 #include "G4MoleculeCounter.hh"
 #include "G4MoleculeTable.hh"
@@ -100,6 +100,10 @@ void G4MoleculeCounter::Initialize()
       ->GetConfigurationIterator();
   while ((mol_iterator)())
   {
+    if(IsRegistered(mol_iterator.value()->GetDefinition()) == false)
+    {
+      continue;
+    }
     //    G4cout << "G4MoleculeCounter::Initialize" << G4endl;
     //    G4cout << mol_iterator->value()->GetName() << G4endl;
     fCounterMap[mol_iterator.value()]; // initialize the second map

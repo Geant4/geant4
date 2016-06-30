@@ -3,17 +3,19 @@
 #
 #
 /run/verbose     1
-#  PLOT: energy deposit distribution in absorber (g4.11)
 #
-/plots/sethistName g4.p11
-/plots/setnbinEn 65
-/plots/setEnlow 0.0 MeV
-/plots/setEnhigh 0.1  MeV
+/analysis/h1/set  1 100 0.00  0.1  MeV   # Edep
+/analysis/h1/set  2 100 0.00  0.1  MeV   # XTR gamma
+/analysis/h1/set  3 100 0.00  0.1  MeV   # all gamma
+/analysis/h1/set  4 100 0.00  0.1  MeV   # all e-
+/analysis/h1/set  1 65  0.00  0.1 MeV    # En (Edep with original limits)
+#
 /run/initialize
+/run/particle/dumpCutValues
 /gun/particle e-
 /gun/energy 2 GeV
+#
 /run/beamOn 1000
-/run/dumpCouples
 
 
 

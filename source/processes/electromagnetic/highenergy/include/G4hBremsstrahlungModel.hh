@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlungModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4hBremsstrahlungModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,7 +58,7 @@ class G4hBremsstrahlungModel : public G4MuBremsstrahlungModel
 
 public:
 
-  G4hBremsstrahlungModel(const G4ParticleDefinition* p = 0,
+  explicit G4hBremsstrahlungModel(const G4ParticleDefinition* p = nullptr,
 			 const G4String& nam = "hBrem");
 
   virtual ~G4hBremsstrahlungModel();
@@ -67,12 +67,13 @@ protected:
 
   virtual G4double ComputeDMicroscopicCrossSection(G4double tkin,
 						   G4double Z,
-						   G4double gammaEnergy);
+						   G4double gammaEnergy) override;
 private:
 
   // hide assignment operator
-  G4hBremsstrahlungModel & operator=(const  G4hBremsstrahlungModel &right);
-  G4hBremsstrahlungModel(const  G4hBremsstrahlungModel&);
+  G4hBremsstrahlungModel & 
+    operator=(const  G4hBremsstrahlungModel &right) = delete;
+  G4hBremsstrahlungModel(const  G4hBremsstrahlungModel&) = delete;
 
 };
 

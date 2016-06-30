@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc 91721 2015-08-03 12:06:54Z gcosmo $
+// $Id: G4VisCommandsSceneHandler.cc 95006 2016-01-15 08:26:18Z gcosmo $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -150,11 +150,12 @@ G4VisCommandSceneHandlerCreate::G4VisCommandSceneHandlerCreate (): fId (0) {
   const G4GraphicsSystemList& gslist =
     fpVisManager -> GetAvailableGraphicsSystems ();
   G4String candidates;
-  for (auto&& gs: gslist) {
+  for (const auto gs: gslist) {
     const G4String& name = gs -> GetName ();
     candidates += name + ' ';
-    for (auto&& nickname: gs -> GetNicknames ())
-      candidates += nickname + ' ';
+    for (const auto& nickname: gs -> GetNicknames ()) {
+      if (nickname != name) candidates += nickname + ' ';
+    }
   }
   candidates = candidates.strip ();
   parameter -> SetParameterCandidates(candidates);

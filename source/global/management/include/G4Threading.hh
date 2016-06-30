@@ -54,7 +54,7 @@
   // Multi-threaded build
   //===============================
 #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
-    ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) || \
+    ( defined(__MACH__) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__>=7 || __GNUC__>=5) ) || \
     defined(__linux__) || defined(_AIX)
     //
     // Multi-threaded build: for POSIX systems
@@ -119,7 +119,7 @@
     #define G4CONDITION_INITIALIZER PTHREAD_COND_INITIALIZER
 
     #define G4CONDITIONWAIT( cond, mutex ) pthread_cond_wait( cond , mutex );
-    #define G4CONDTIONBROADCAST( cond ) pthread_cond_broadcast( cond );
+    #define G4CONDITIONBROADCAST( cond ) pthread_cond_broadcast( cond );
 
   #elif defined(WIN32)
     //
@@ -158,7 +158,7 @@
     #define G4CONDITION_INITIALIZER CONDITION_VARIABLE_INIT
 
     #define G4CONDITIONWAIT( cond , criticalsectionmutex ) SleepConditionVariableCS( cond, criticalsectionmutex , INFINITE );
-    #define G4CONDTIONBROADCAST( cond ) WakeAllConditionVariable( cond );
+    #define G4CONDITIONBROADCAST( cond ) WakeAllConditionVariable( cond );
 
   #else
 
@@ -188,8 +188,8 @@
   typedef G4int G4Pid_t;
   typedef G4int G4Condition;
   #define G4CONDITION_INITIALIZER 1
-  #define G4CONDITIONWAIT( cond, mutex ) ;;
-  #define G4CONDTIONBROADCAST( cond ) ;;
+  #define G4CONDITIONWAIT( cond, mutex ) { ++(*cond); ++(*mutex); }
+  #define G4CONDITIONBROADCAST( cond ) { ++(*cond); }
 
 #endif //G4MULTITHREADING
 

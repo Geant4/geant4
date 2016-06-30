@@ -27,7 +27,6 @@
 #include "G4VBiasingOperator.hh"
 #include "G4VBiasingOperation.hh"
 #include "G4ParticleChangeForOccurenceBiasing.hh"
-#include "G4ParticleChange.hh"
 #include "G4ParticleChangeForNothing.hh"
 #include "G4VBiasingInteractionLaw.hh"
 #include "G4InteractionLawPhysical.hh"
@@ -42,19 +41,34 @@ G4MapCache< const G4ProcessManager*, G4BiasingProcessSharedData* > G4BiasingProc
 
 
 G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
-  :  G4VProcess                      ( name  ),
-     fWrappedProcess                 ( 0     ),
-     fIsPhysicsBasedBiasing          ( false ),
-     fWrappedProcessIsAtRest         ( false ),
-     fWrappedProcessIsAlong          ( false ),
-     fWrappedProcessIsPost           ( false ),
-     fWrappedProcessInteractionLength( -1.0  ),
-     fBiasingInteractionLaw          ( 0     ),
-     fPhysicalInteractionLaw         ( 0     ),
-     fOccurenceBiasingParticleChange ( 0     ),
-     fIamFirstGPIL                   ( false ),
-     fSharedData                     ( 0     )
-
+  :  G4VProcess                           ( name    ),
+     fCurrentTrack                        ( nullptr ),
+     fPreviousStepSize (-1.0), fCurrentMinimumStep( -1.0 ), fProposedSafety ( -1.0),
+             fOccurenceBiasingOperation( nullptr ),         fFinalStateBiasingOperation( nullptr ),         fNonPhysicsBiasingOperation( nullptr ),
+     fPreviousOccurenceBiasingOperation( nullptr ), fPreviousFinalStateBiasingOperation( nullptr ), fPreviousNonPhysicsBiasingOperation( nullptr ),
+     fResetWrappedProcessInteractionLength( true    ),
+     fWrappedProcess                      ( nullptr ),
+     fIsPhysicsBasedBiasing               ( false   ),
+     fWrappedProcessIsAtRest              ( false   ),
+     fWrappedProcessIsAlong               ( false   ),
+     fWrappedProcessIsPost                ( false   ),
+     fWrappedProcessPostStepGPIL          ( -1.0    ),
+     fBiasingPostStepGPIL                 ( -1.0    ),
+     fWrappedProcessInteractionLength     ( -1.0    ),
+     fWrappedProcessForceCondition        ( NotForced ),
+     fBiasingForceCondition               ( NotForced ),
+     fWrappedProcessAlongStepGPIL         ( -1.0    ),
+     fBiasingAlongStepGPIL                ( -1.0    ),
+     fWrappedProcessGPILSelection         ( NotCandidateForSelection ),
+     fBiasingGPILSelection                ( NotCandidateForSelection ),
+     fBiasingInteractionLaw               ( nullptr ),
+     fPreviousBiasingInteractionLaw       ( nullptr ),
+     fPhysicalInteractionLaw              ( nullptr ),
+     fOccurenceBiasingParticleChange      ( nullptr ),
+     fDummyParticleChange                 ( nullptr ),
+     fIamFirstGPIL                        ( false   ),
+     fProcessManager                      ( nullptr ),
+     fSharedData                          ( nullptr )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );
@@ -69,17 +83,32 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
 						     G4String useThisName)
   : G4VProcess( useThisName != "" ? useThisName : "biasWrapper("+wrappedProcess->GetProcessName()+")",
 	       wrappedProcess->GetProcessType()),
-    fWrappedProcess                 ( wrappedProcess     ),
-    fIsPhysicsBasedBiasing          ( true               ),
-    fWrappedProcessIsAtRest         ( wrappedIsAtRest    ),
-    fWrappedProcessIsAlong          ( wrappedIsAlongStep ),
-    fWrappedProcessIsPost           ( wrappedIsPostStep  ),
-    fWrappedProcessInteractionLength( -1.0               ),
-    fBiasingInteractionLaw          ( 0                  ),
-    fPhysicalInteractionLaw         ( 0                  ),
-    fOccurenceBiasingParticleChange ( 0                  ),
-    fIamFirstGPIL                   ( false              ),
-    fSharedData                     ( 0                  )
+    fCurrentTrack                         ( nullptr            ),
+    fPreviousStepSize (-1.0), fCurrentMinimumStep( -1.0 ), fProposedSafety ( -1.0),
+            fOccurenceBiasingOperation( nullptr ),         fFinalStateBiasingOperation( nullptr ),         fNonPhysicsBiasingOperation( nullptr ),
+    fPreviousOccurenceBiasingOperation( nullptr ), fPreviousFinalStateBiasingOperation( nullptr ), fPreviousNonPhysicsBiasingOperation( nullptr ),
+    fResetWrappedProcessInteractionLength ( false              ),
+    fWrappedProcess                       ( wrappedProcess     ),
+    fIsPhysicsBasedBiasing                ( true               ),
+    fWrappedProcessIsAtRest               ( wrappedIsAtRest    ),
+    fWrappedProcessIsAlong                ( wrappedIsAlongStep ),
+    fWrappedProcessIsPost                 ( wrappedIsPostStep  ),
+    fWrappedProcessPostStepGPIL           ( -1.0               ),
+    fBiasingPostStepGPIL                  ( -1.0               ),
+    fWrappedProcessInteractionLength      ( -1.0               ),
+    fWrappedProcessForceCondition         ( NotForced          ),
+    fBiasingForceCondition                ( NotForced          ),
+    fWrappedProcessAlongStepGPIL          ( -1.0               ),
+    fBiasingAlongStepGPIL                 ( -1.0               ),
+    fWrappedProcessGPILSelection          ( NotCandidateForSelection ),
+    fBiasingGPILSelection                 ( NotCandidateForSelection ),
+    fBiasingInteractionLaw                ( nullptr            ),
+    fPreviousBiasingInteractionLaw        ( nullptr            ),
+    fPhysicalInteractionLaw               ( nullptr            ),
+    fOccurenceBiasingParticleChange       ( nullptr            ),
+    fIamFirstGPIL                         ( false              ),
+    fProcessManager                       ( nullptr            ),
+    fSharedData                           ( nullptr            )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
   fResetInteractionLaws.Put( true );
@@ -93,7 +122,6 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
   fPhysicalInteractionLaw         = new            G4InteractionLawPhysical("PhysicalInteractionLawFor("+GetProcessName()+")");
   // -- instantiate particle change wrapper for occurence biaising:
   fOccurenceBiasingParticleChange = new G4ParticleChangeForOccurenceBiasing("biasingPCfor"+GetProcessName());
-  fParticleChange                 = new                    G4ParticleChange();
   // -- instantiate a "do nothing" particle change:
   fDummyParticleChange            = new          G4ParticleChangeForNothing();
 }
@@ -104,7 +132,6 @@ G4BiasingProcessInterface::~G4BiasingProcessInterface()
 {
   if ( fPhysicalInteractionLaw  != 0   ) delete fPhysicalInteractionLaw;
   if ( fOccurenceBiasingParticleChange ) delete fOccurenceBiasingParticleChange;
-  if ( fParticleChange                 ) delete fParticleChange;
   if ( fDummyParticleChange            ) delete fDummyParticleChange;
 }
 

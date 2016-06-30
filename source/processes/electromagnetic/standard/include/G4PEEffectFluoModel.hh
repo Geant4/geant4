@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PEEffectFluoModel.hh 84397 2014-10-15 07:19:14Z gcosmo $
+// $Id: G4PEEffectFluoModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,35 +60,35 @@ class G4PEEffectFluoModel : public G4VEmModel
 
 public:
 
-  G4PEEffectFluoModel(const G4String& nam = "PhotoElectric");
+  explicit G4PEEffectFluoModel(const G4String& nam = "PhotoElectric");
 
   virtual ~G4PEEffectFluoModel();
 
   virtual 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual 
   G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 				      G4double kinEnergy,
 				      G4double Z,
 				      G4double A,
-				      G4double, G4double);
+				      G4double, G4double) override;
 				      
   virtual G4double CrossSectionPerVolume(const G4Material*,
 					 const G4ParticleDefinition*,
 					 G4double kineticEnergy,
 					 G4double cutEnergy,
-					 G4double maxEnergy);
+					 G4double maxEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 private:
 
-  G4PEEffectFluoModel & operator=(const G4PEEffectFluoModel &right);
-  G4PEEffectFluoModel(const G4PEEffectFluoModel&);
+  G4PEEffectFluoModel & operator=(const G4PEEffectFluoModel &right) = delete;
+  G4PEEffectFluoModel(const G4PEEffectFluoModel&) = delete;
 
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;

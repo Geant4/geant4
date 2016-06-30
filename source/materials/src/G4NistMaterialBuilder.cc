@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 93568 2015-10-26 14:52:36Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 97248 2016-05-30 15:00:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,6 +77,10 @@
 #include "G4SystemOfUnits.hh"
 #include <iomanip>
 
+#ifdef G4MULTITHREADED
+G4Mutex G4NistMaterialBuilder::nistMaterialMutex = G4MUTEX_INITIALIZER;
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
@@ -84,8 +88,7 @@ G4NistMaterialBuilder::G4NistMaterialBuilder(G4NistElementBuilder* eb, G4int vb)
   verbose(vb),
   nMaterials(0),
   nComponents(0),
-  nCurrent(0),
-  first(true)
+  nCurrent(0)
 {
   Initialise();
 }
@@ -98,54 +101,49 @@ G4NistMaterialBuilder::~G4NistMaterialBuilder()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
-                                                       G4bool iso,
-						       G4bool warning)
+                                                       G4bool, G4bool warning)
 {
-  if(first) {
-    if(verbose > 0) {
-      G4cout << "### NIST DataBase for Materials is used" << G4endl;
-    }
-    first = false;
-  }
-
-  G4String name = matname;
-  if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
-  if("G4_NYLON-6/10" == matname) { name = "G4_NYLON-6-10";}
-
   if(verbose > 1) {
-    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " << name << G4endl;
+    G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial " 
+	   << matname << G4endl;
   }
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int nmat = theMaterialTable->size();
+  G4Material* mat = FindMaterial(matname);
+  if(mat != nullptr) { return mat; }
+  G4String name = matname;
+  if(name == "G4_NYLON-6/6" || name == "G4_NYLON-6/10") {
+    if("G4_NYLON-6/6" == matname)  { name = "G4_NYLON-6-6"; }
+    else { name = "G4_NYLON-6-10";}
+    mat = FindMaterial(name);
+  }
+  return (mat == nullptr) ? BuildNistMaterial(name, warning) : mat; 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name, 
+						     G4bool warning)
+{
+  G4Material* mat = nullptr;
   // Check if name inside DB
-  G4Material* mat = 0;
-
   for (G4int i=0; i<nMaterials; ++i) {
 
     if (name == names[i]) {
-      // Build new Nist material 
+#ifdef G4MULTITHREADED
+      G4MUTEXLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+#endif
       if(matIndex[i] == -1) { 
-	if(!iso && (warning || verbose > 0)) {
-	  G4cout << "G4NistMaterialBuilder::FindOrBuildMaterial warning for "
-		 << name 
-		 << " - since Geant4 9.6 isotopes are always built" << G4endl;
-	}
+	// Build new Nist material 
 	mat = BuildMaterial(i); 
+      } else { 
+	// Nist material was already built
+	const G4MaterialTable* theMaterialTable = 
+	  G4Material::GetMaterialTable();
+	mat = (*theMaterialTable)[matIndex[i]]; 
       }
-      // Nist material was already built
-      else                  { mat = (*theMaterialTable)[matIndex[i]]; }
+#ifdef G4MULTITHREADED
+      G4MUTEXUNLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+#endif
       return mat;
-    }
-  }
-
-  // Check the list of all materials
-  if (nmat > 0) {
-    for (G4int i=0; i<nmat; ++i) {
-      if(name == ((*theMaterialTable)[i])->GetName()) {
-        mat = (*theMaterialTable)[i];
-	return mat;
-      }
     }
   }
 
@@ -162,8 +160,10 @@ G4Material* G4NistMaterialBuilder::FindOrBuildMaterial(const G4String& matname,
 G4Material* 
 G4NistMaterialBuilder::FindOrBuildSimpleMaterial(G4int Z, G4bool warn)
 {
-  G4Material* mat = 0;
-  if(Z >= 1 && Z <= 98) { mat = FindOrBuildMaterial(names[Z-1], true, warn); }
+  G4Material* mat = FindSimpleMaterial(Z);
+  if(mat == nullptr) {
+    mat = BuildNistMaterial(names[Z], warn); 
+  }
   return mat;  
 }
 
@@ -230,8 +230,9 @@ G4Material* G4NistMaterialBuilder::BuildMaterial(G4int i)
   G4double exc1 = exc0;
   if(chFormulas[i] != "") {
     mat->SetChemicalFormula(chFormulas[i]);
-    exc1 = ion->FindMeanExcitationEnergy(chFormulas[i]);
+    exc1 = ion->FindMeanExcitationEnergy(mat);
   }
+  // If exists, NIST DB data always overwrites other data 
   if(ionPotentials[i] > 0.0) { exc1 = ionPotentials[i]; }
   if(exc0 != exc1) { ion->SetMeanExcitationEnergy(exc1); }
 
@@ -431,10 +432,10 @@ G4Material* G4NistMaterialBuilder::ConstructNewIdealGasMaterial(
   G4int Z = 0;
   for (G4int i=0; i<els; ++i) {
     Z = elmBuilder->GetZ(elm[i]);
-    massPerMole += nbAtoms[i] * elmBuilder->GetAtomicMassAmu(Z) * amu_c2;
+    massPerMole += nbAtoms[i]*elmBuilder->GetAtomicMassAmu(Z)*CLHEP::amu_c2;
   }
 
-  G4double dens = massPerMole / (Avogadro*k_Boltzmann*temp/pres);
+  G4double dens = massPerMole/(CLHEP::Avogadro*CLHEP::k_Boltzmann*temp/pres);
 
   if (els == 1) { AddMaterial(name,dens,Z,0.,els,state,stp); }
   else {
@@ -476,8 +477,8 @@ void G4NistMaterialBuilder::AddMaterial(const G4String& nameMat, G4double dens,
 
   names.push_back(nameMat);
   chFormulas.push_back("");
-  densities.push_back(dens*g/cm3);
-  ionPotentials.push_back(pot*eV);
+  densities.push_back(dens*CLHEP::g/CLHEP::cm3);
+  ionPotentials.push_back(pot*CLHEP::eV);
   states.push_back(state);
   components.push_back(ncomp);
   indexes.push_back(nComponents);
@@ -546,7 +547,7 @@ void G4NistMaterialBuilder::ListNistSimpleMaterials() const
   G4cout << "=======================================================" << G4endl;
   G4cout << " Z   Name   density(g/cm^3)  I(eV)                     " << G4endl;
   G4cout << "=======================================================" << G4endl;
-  for (G4int i=0; i<nElementary; ++i) {DumpElm(i);}
+  for (G4int i=1; i<nElementary; ++i) {DumpElm(i);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -559,6 +560,7 @@ void G4NistMaterialBuilder::ListNistCompoundMaterials() const
   G4cout << " Ncomp             Name      density(g/cm^3)  I(eV) ChFormula" << G4endl;
   G4cout << "=============================================================" << G4endl;
   for (G4int i=nElementary; i<nNIST; ++i) {DumpMix(i);}
+  DumpMix(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -721,6 +723,11 @@ void G4NistMaterialBuilder::Initialise()
 void G4NistMaterialBuilder::NistSimpleMaterials()
 {
   // density in g/cm3, mean ionisation potential in eV
+
+  AddMaterial("G4_WATER", 1.0,0, 78., 2);
+  AddElementByAtomCount("H" ,  2);
+  AddElementByAtomCount("O" ,  1);
+  chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_H" ,  8.37480e-5,  1,  19.2, 1, kStateGas);
   AddMaterial("G4_He",  1.66322e-4,  2,  41.8, 1, kStateGas);
@@ -1816,11 +1823,6 @@ void G4NistMaterialBuilder::NistCompoundMaterials2()
   AddElementByWeightFraction( 1, 0.009417);
   AddElementByWeightFraction( 6, 0.280555);
   AddElementByWeightFraction( 9, 0.710028);
-
-  AddMaterial("G4_WATER", 1.0,0, 78., 2);
-  AddElementByAtomCount("H" ,  2);
-  AddElementByAtomCount("O" ,  1);
-  chFormulas[nMaterials-1] = "H_2O";
 
   AddMaterial("G4_WATER_VAPOR", 0.000756182, 0, 71.6, 2, kStateGas);
   AddElementByAtomCount("H" ,  2);

@@ -79,6 +79,9 @@ G4PhotonEvaporationOLD::G4PhotonEvaporationOLD(const G4String & aName)
    verbose(0), myOwnProbAlgorithm(true),
    eOccupancy(0), vShellNumber(-1), gammaE(0.)
 { 
+  G4Exception ("G4PhotonEvaporationOLD: ", "had001", JustWarning,
+	       "This class is obsolete and will be removed for the next public release");
+  
   probAlgorithm = new G4E1Probability;
   contDeexcitation = new G4ContinuumGammaDeexcitation;
   G4DiscreteGammaDeexcitation* p = new G4DiscreteGammaDeexcitation();

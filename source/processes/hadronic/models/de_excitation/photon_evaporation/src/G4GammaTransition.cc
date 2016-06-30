@@ -71,10 +71,13 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   }
   G4double etrans = nucleus->GetExcitationEnergy() - newExcEnergy 
     - bond_energy;
-  //G4cout << "G4GammaTransition::GenerateGamma - Etrans(MeV)= " 
+  //  G4cout << "G4GammaTransition::GenerateGamma - Etrans(MeV)= " 
   //	 << etrans << "  Eexnew= " << newExcEnergy 
   //	 << " Ebond= " << bond_energy << G4endl; 
-  if(etrans <= 0.0) { return result; }
+  if(etrans <= 0.0) { 
+    etrans += bond_energy;
+    bond_energy = 0.0;
+  }
   
   // Do complete Lorentz computation 
   G4LorentzVector lv = nucleus->GetMomentum();
@@ -88,8 +91,7 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   if(isGamma) { part =  G4Gamma::Gamma(); }
   else {
     part = G4Electron::Electron();
-    G4int ne = nucleus->GetNumberOfElectrons() - 1;
-    if(ne < 0) { ne = 0; } 
+    G4int ne = std::max(nucleus->GetNumberOfElectrons() - 1, 0);
     nucleus->SetNumberOfElectrons(ne);
     lv += G4LorentzVector(0.0,0.0,0.0,
                           CLHEP::electron_mass_c2 - bond_energy);

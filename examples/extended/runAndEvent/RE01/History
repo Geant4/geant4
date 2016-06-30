@@ -1,4 +1,4 @@
-$Id: History 90679 2015-06-08 07:58:19Z gcosmo $
+$Id: History 97671 2016-06-07 08:25:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 06, 2016 M. Asai (exampleRE01-V10-02-01)
+- Add protection against a track sticks on the calorimeter inner
+  boundary.
+
+Jun 01, 2016 M. Asai (exampleRE01-V10-02-00)
+- Remove the obsolete use of readout geometry.
+- Use G4UnknownDecayPhysics constructor and remove hard-coded
+  physics RE01PhysicsList.
 
 Jun 06, 2015 M. Asai (exampleRE01-V10-01-00)
 - Reduce print out.

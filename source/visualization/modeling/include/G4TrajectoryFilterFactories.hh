@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.hh 68043 2013-03-13 14:27:49Z gcosmo $
+/// $Id: G4TrajectoryFilterFactories.hh 95593 2016-02-16 10:48:50Z gcosmo $
 //
 //
 // Trajectory filter model factories creating filters
@@ -97,9 +97,25 @@ public: // With description
   G4TrajectoryOriginVolumeFilterFactory();
 
   virtual ~G4TrajectoryOriginVolumeFilterFactory();
-  
+
   ModelAndMessengers Create(const G4String& placement, const G4String& name);
-    
+
+};
+
+// Touched volume filter
+class G4TrajectoryTouchedVolumeFilterFactory : public G4VModelFactory< G4VFilter<G4VTrajectory>  > {
+
+public: // With description
+
+  typedef std::vector<G4UImessenger*> Messengers;
+  typedef std::pair< G4VFilter<G4VTrajectory> *, Messengers > ModelAndMessengers;
+
+  G4TrajectoryTouchedVolumeFilterFactory();
+
+  virtual ~G4TrajectoryTouchedVolumeFilterFactory();
+
+  ModelAndMessengers Create(const G4String& placement, const G4String& name);
+
 };
 
 

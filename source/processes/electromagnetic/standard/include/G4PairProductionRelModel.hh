@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh 73607 2013-09-02 10:04:03Z gcosmo $
+// $Id: G4PairProductionRelModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,15 +63,16 @@ class G4PairProductionRelModel : public G4VEmModel
 
 public:
 
-  G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
-			   const G4String& nam = "BetheHeitlerLPM");
+  explicit G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
+				    const G4String& nam = "BetheHeitlerLPM");
  
   virtual ~G4PairProductionRelModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -79,19 +80,19 @@ public:
                                       G4double Z, 
                                       G4double A=0., 
                                       G4double cut=0.,
-                                      G4double emax=DBL_MAX);
+                                      G4double emax=DBL_MAX) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double);
+                                const G4Material*,G4double) override;
 
   // * fast inline functions *
-  inline void SetCurrentElement(G4double /*Z*/);
+  inline void SetCurrentElement(G4double Z);
 
   // set / get methods
   inline void SetLPMconstant(G4double val);
@@ -119,8 +120,9 @@ protected:
   G4double ComputeRelDXSectionPerAtom(G4double eplusEnergy, G4double totalEnergy, G4double Z);
 
   // hide assignment operator
-  G4PairProductionRelModel & operator=(const G4PairProductionRelModel &right);
-  G4PairProductionRelModel(const  G4PairProductionRelModel&);
+  G4PairProductionRelModel & operator=
+  (const G4PairProductionRelModel &right) = delete;
+  G4PairProductionRelModel(const  G4PairProductionRelModel&) = delete;
 
   G4NistManager*              nist;
 
@@ -150,7 +152,7 @@ protected:
   static const G4double facFel;
   static const G4double facFinel;
 
-  static const G4double preS1, logTwo;
+  static const G4double preS1, logTwo, xsfactor, Egsmall;
 
 };
 
@@ -194,7 +196,7 @@ inline void G4PairProductionRelModel::SetCurrentElement(G4double Z)
   if(Z != currentZ) {
     currentZ = Z;
 
-    G4int iz = G4int(Z);
+    G4int iz = G4lrint(Z);
     z13 = nist->GetZ13(iz);
     z23 = z13*z13;
     lnZ = nist->GetLOGZ(iz);

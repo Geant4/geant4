@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedAnnihilationModel.cc 91742 2015-08-04 11:48:51Z gcosmo $
+// $Id: G4PolarizedAnnihilationModel.cc 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,10 @@
 
 G4PolarizedAnnihilationModel::G4PolarizedAnnihilationModel(const G4ParticleDefinition* p, 
 							   const G4String& nam)
-  : G4eeToTwoGammaModel(p,nam),crossSectionCalculator(0),verboseLevel(0),gParticleChange(0),
+  : G4eeToTwoGammaModel(p,nam),
+    crossSectionCalculator(nullptr),
+    verboseLevel(0),
+    gParticleChange(nullptr),
     gIsInitialised(false)
 {
   crossSectionCalculator=new G4PolarizedAnnihilationCrossSection();
@@ -184,6 +187,11 @@ void G4PolarizedAnnihilationModel::SampleSecondaries(std::vector<G4DynamicPartic
   G4LogicalVolume*    aLVolume  = aPVolume->GetLogicalVolume();
   const G4bool targetIsPolarized = polarizationManager->IsPolarized(aLVolume);
   theTargetPolarization = polarizationManager->GetVolumePolarization(aLVolume);
+
+  if (verboseLevel >= 1) {
+    G4cout << "G4PolarizedComptonModel::SampleSecondaries in "
+           <<  aLVolume->GetName() << G4endl;
+  }
 
   // transfer target electron polarization in frame of positron
   if (targetIsPolarized)

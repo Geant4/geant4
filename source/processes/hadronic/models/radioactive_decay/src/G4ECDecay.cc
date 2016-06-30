@@ -71,10 +71,10 @@ G4ECDecay::~G4ECDecay()
 G4DecayProducts* G4ECDecay::DecayIt(G4double)
 {
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  if (G4MT_parent == 0) FillParent();
+  CheckAndFillParent();
 
   // Fill G4MT_daughters with alpha and residual nucleus (stored by SetDaughter)  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillDaughters();
 
   // Get shell number of captured electron
   G4int shellIndex = -1;

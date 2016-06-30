@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.hh 68035 2013-03-13 14:12:34Z gcosmo $
+// $Id: G4MuBetheBlochModel.hh 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,15 +71,16 @@ class G4MuBetheBlochModel : public G4VEmModel
 
 public:
 
-  G4MuBetheBlochModel(const G4ParticleDefinition* p = 0,
-                      const G4String& nam = "MuBetheBloch");
+  explicit G4MuBetheBlochModel(const G4ParticleDefinition* p = nullptr,
+                               const G4String& nam = "MuBetheBloch");
 
   virtual ~G4MuBetheBlochModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+                          const G4DataVector&) override;
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
-				const G4MaterialCutsCouple*);
+				const G4MaterialCutsCouple*) override;
 			
   virtual G4double ComputeCrossSectionPerElectron(
 				 const G4ParticleDefinition*,
@@ -92,37 +93,37 @@ public:
 				 G4double kineticEnergy,
 				 G4double Z, G4double A,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 				 				 
   virtual G4double CrossSectionPerVolume(const G4Material*,
 				 const G4ParticleDefinition*,
 				 G4double kineticEnergy,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                         const G4ParticleDefinition*,
                                         G4double kineticEnergy,
-                                        G4double cutEnergy);
+                                        G4double cutEnergy) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-				      G4double kinEnergy);
+				      G4double kinEnergy) override;
 
 private:
 
   inline void SetParticle(const G4ParticleDefinition* p);
 
   // hide assignment operator
-  G4MuBetheBlochModel & operator=(const  G4MuBetheBlochModel &right);
-  G4MuBetheBlochModel(const  G4MuBetheBlochModel&);
+  G4MuBetheBlochModel & operator=(const  G4MuBetheBlochModel &right) = delete;
+  G4MuBetheBlochModel(const  G4MuBetheBlochModel&) = delete;
 
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
@@ -135,8 +136,8 @@ private:
   G4double massSquare;
   G4double ratio;
   G4double twoln10;
-  G4double bg2lim;
-  G4double taulim;
+  //G4double bg2lim;
+  //G4double taulim;
   G4double alphaprime;
   static G4double xgi[8],wgi[8];
 };

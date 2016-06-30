@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 90969 2015-06-12 08:12:57Z gcosmo $
+// $Id: PhysicsList.cc 95227 2016-02-01 09:19:15Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,36 +113,25 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
-#include "G4Decay.hh"
 
 void PhysicsList::ConstructProcess()
 {
+  // Transportation
+  //
   AddTransportation();
 
   // electromagnetic Physics List
   //
   fEmPhysicsList->ConstructProcess();
 
-  // Add Decay Process
+  // decay Process
   //
-  G4Decay* fDecayProcess = new G4Decay();
+  AddDecay();
+  
+  // radioactive decay Process
+  //
+  ////AddRadioactiveDecay();  
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-    
   // stepLimitation (as a full process)
   //
   AddStepMax();  
@@ -236,6 +225,47 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4PhysicsListHelper.hh"
+#include "G4Decay.hh"
+
+void PhysicsList::AddDecay()
+{
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+    
+  // Decay Process
+  //
+  G4Decay* fDecayProcess = new G4Decay();
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    if (fDecayProcess->IsApplicable(*particle)) 
+      ph->RegisterProcess(fDecayProcess, particle);    
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4PhysicsListHelper.hh"
+#include "G4RadioactiveDecay.hh"
+#include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
+
+void PhysicsList::AddRadioactiveDecay()
+{  
+  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  
+  radioactiveDecay->SetARM(true);                //Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
+  
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

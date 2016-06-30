@@ -103,6 +103,12 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("graphite", 2.27*g/cm3, ncomponents=1,
                          kStateSolid, 293*kelvin, 1*atmosphere);
   graphite->AddElement(elC, natoms=1);
+  
+  //NE213
+  G4Material* ne213 = 
+  new G4Material("NE213", 0.874*g/cm3, ncomponents=2);
+  ne213->AddElement(H,    9.2*perCent);
+  ne213->AddElement(elC, 90.8*perCent);  
       
   // example of vacuum
   fWorldMat = new G4Material("Galactic", 1, 1.01*g/mole, universe_mean_density,

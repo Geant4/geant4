@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 94086 2015-11-05 15:09:08Z gcosmo $
+# $Id: sources.cmake 97179 2016-05-27 12:46:40Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -88,11 +88,13 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_ions
         G4IonBinaryCascadePhysics.hh
         G4IonINCLXXPhysics.hh
         G4IonPhysics.hh
+        G4IonPhysicsPHP.hh
         G4IonQMDPhysics.hh
     SOURCES
         G4IonBinaryCascadePhysics.cc
         G4IonINCLXXPhysics.cc
         G4IonPhysics.cc
+        G4IonPhysicsPHP.cc
         G4IonQMDPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons

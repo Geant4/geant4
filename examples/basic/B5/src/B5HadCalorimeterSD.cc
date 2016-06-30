@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5HadCalorimeterSD.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5HadCalorimeterSD.cc 96048 2016-03-10 15:34:12Z gcosmo $
 //
 /// \file B5HadCalorimeterSD.cc
 /// \brief Implementation of the B5HadCalorimeterSD class
@@ -80,11 +80,8 @@ G4bool B5HadCalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
     G4TouchableHistory* touchable
       = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
 
-    G4VPhysicalVolume* cellPhysical = touchable->GetVolume(2);
-    G4int rowNo = cellPhysical->GetCopyNo();
-
-    G4VPhysicalVolume* columnPhysical = touchable->GetVolume(3);
-    G4int columnNo = columnPhysical->GetCopyNo();
+    G4int rowNo = touchable->GetCopyNumber(2);
+    G4int columnNo = touchable->GetCopyNumber(3);
 
     G4int hitID = 2*columnNo+rowNo;
     B5HadCalorimeterHit* hit = (*fHitsCollection)[hitID];

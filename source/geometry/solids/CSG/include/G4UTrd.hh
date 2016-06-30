@@ -44,9 +44,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UTrd.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UTrd : public G4USolid 
@@ -69,21 +70,24 @@ class G4UTrd : public G4USolid
 
     inline UTrd* GetShape() const;
 
-    inline G4double GetXHalfLength1() const;
-    inline G4double GetXHalfLength2() const;
-    inline G4double GetYHalfLength1() const;
-    inline G4double GetYHalfLength2() const;
-    inline G4double GetZHalfLength()  const;
+    G4double GetXHalfLength1() const;
+    G4double GetXHalfLength2() const;
+    G4double GetYHalfLength1() const;
+    G4double GetYHalfLength2() const;
+    G4double GetZHalfLength()  const;
 
-    inline void SetXHalfLength1(G4double val);
-    inline void SetXHalfLength2(G4double val);
-    inline void SetYHalfLength1(G4double val);
-    inline void SetYHalfLength2(G4double val);
-    inline void SetZHalfLength(G4double val);
+    void SetXHalfLength1(G4double val);
+    void SetXHalfLength2(G4double val);
+    void SetYHalfLength1(G4double val);
+    void SetYHalfLength2(G4double val);
+    void SetZHalfLength(G4double val);
 
-    inline void SetAllParameters(G4double pdx1, G4double pdx2,
-                                 G4double pdy1, G4double pdy2,
-                                 G4double pdz);
+    void SetAllParameters(G4double pdx1, G4double pdx2,
+                          G4double pdy1, G4double pdy2, G4double pdz);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
 
@@ -106,58 +110,9 @@ inline UTrd* G4UTrd::GetShape() const
   return (UTrd*) fShape;
 }
 
-inline G4double G4UTrd::GetXHalfLength1() const
+inline G4GeometryType G4UTrd::GetEntityType() const
 {
-  return GetShape()->GetXHalfLength1();
-}
-inline G4double G4UTrd::GetXHalfLength2() const
-{
-  return GetShape()->GetXHalfLength2();
-}
-inline G4double G4UTrd::GetYHalfLength1() const
-{
-  return GetShape()->GetYHalfLength1();
-}
-inline G4double G4UTrd::GetYHalfLength2() const
-{
-  return GetShape()->GetYHalfLength2();
-}
-inline G4double G4UTrd::GetZHalfLength()  const
-{
-  return GetShape()->GetZHalfLength();
-}
-
-inline void G4UTrd::SetXHalfLength1(G4double val)
-{
-  GetShape()->SetXHalfLength1(val);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTrd::SetXHalfLength2(G4double val)
-{
-  GetShape()->SetXHalfLength2(val);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTrd::SetYHalfLength1(G4double val)
-{
-  GetShape()->SetYHalfLength1(val);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTrd::SetYHalfLength2(G4double val)
-{
-  GetShape()->SetYHalfLength2(val);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTrd::SetZHalfLength(G4double val)
-{
-  GetShape()->SetZHalfLength(val);
-  fRebuildPolyhedron = true;
-}
-inline void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
-                                     G4double pdy1, G4double pdy2,
-                                     G4double pdz)
-{
-  GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
-  fRebuildPolyhedron = true;
+  return "G4Trd";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

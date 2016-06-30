@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonModel.hh 93113 2015-10-07 07:49:04Z gcosmo $
+// $Id: G4PolarizedComptonModel.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,7 +63,7 @@ class G4PolarizedComptonModel : public G4KleinNishinaCompton
 
 public:
 
-  G4PolarizedComptonModel(const G4ParticleDefinition* p = 0, 
+  explicit G4PolarizedComptonModel(const G4ParticleDefinition* p = nullptr,
 			const G4String& nam = "Polarized-Compton");
 
   virtual G4double ComputeCrossSectionPerAtom(
@@ -72,7 +72,7 @@ public:
                                       G4double Z, 
                                       G4double A, 
                                       G4double cut,
-                                      G4double emax);
+                                      G4double emax) override;
   G4double ComputeAsymmetryPerAtom(G4double gammaEnergy, G4double Z);
   virtual ~G4PolarizedComptonModel();
 
@@ -80,7 +80,7 @@ public:
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   // polarized routines 
   inline void SetTargetPolarization(const G4ThreeVector & pTarget);
@@ -95,8 +95,8 @@ private:
 		    G4double onecos, G4double phi, const G4String) const;
 
   // hide assignment operator
-  G4PolarizedComptonModel & operator=(const  G4PolarizedComptonModel &right);
-  G4PolarizedComptonModel(const  G4PolarizedComptonModel&);
+  G4PolarizedComptonModel & operator=(const  G4PolarizedComptonModel &right) = delete;
+  G4PolarizedComptonModel(const  G4PolarizedComptonModel&) = delete;
 
   G4PolarizedComptonCrossSection * crossSectionCalculator;
   // incomming

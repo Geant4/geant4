@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMeltonAttachmentModel.hh 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNAMeltonAttachmentModel.hh 96606 2016-04-25 13:33:42Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,9 +43,7 @@
 
 class G4DNAMeltonAttachmentModel : public G4VEmModel
 {
-
 public:
-
   G4DNAMeltonAttachmentModel(const G4ParticleDefinition* p = 0, 
 		             const G4String& nam = "DNAMeltonAttachmentModel");
 
@@ -69,45 +67,33 @@ public:
   inline G4bool GetDissociationFlag();
 
 protected:
-
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
-  G4double lowEnergyLimitOfModel;
   G4bool isInitialised;
   G4int verboseLevel;
   G4bool fDissociationFlag;
   
   // Cross section
- 
-  typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
-
-  typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
-  MapData tableData;
+  G4DNACrossSectionDataSet* fData;
   
   //
-  
   G4DNAMeltonAttachmentModel & operator=(const  G4DNAMeltonAttachmentModel &right);
   G4DNAMeltonAttachmentModel(const  G4DNAMeltonAttachmentModel&);
-
 };
 
 inline void G4DNAMeltonAttachmentModel::SetDissociationFlag(G4bool flag)
 {
-    fDissociationFlag = flag;
+  fDissociationFlag = flag;
 }
 
 inline G4bool G4DNAMeltonAttachmentModel::GetDissociationFlag()
 {
-    return fDissociationFlag;
+  return fDissociationFlag;
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

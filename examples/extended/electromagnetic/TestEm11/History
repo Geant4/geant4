@@ -1,4 +1,4 @@
-$Id: History 94269 2015-11-10 07:55:24Z gcosmo $
+$Id: History 96377 2016-04-11 06:59:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,29 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+08-04-16 mma  (testem11-V10-02-05)
+- PhysicsList, PhysListEmStandard: remove G4EmProcessOptions.hh
+
+08-04-16 mma  (testem11-V10-02-04)
+- PhysicsList: use G4EmParameters
+
+06-04-16 mma  (testem11-V10-02-03)
+- update PhysicsList
+- remove G4DiscreteScattering
+
+21-03-16 mma  (testem11-V10-02-02)
+- PrimaryGeneratorMessenger : restaure command SetDefaultKinematic
+  update all macros
+
+22-02-16 mma  (testem11-V10-02-01)
+- PhysicsList: add radioactiveDecay process
+- macro radioactive.mac
+- Run : compute energy deposit per absorber
+- PrimaryGenerator : restaure SetDefaultKinematic()
+
+10-12-15 V.Ivant (testem11-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
 
 10-11-15 V.Ivanchenko (testem11-V10-01-03)
 - G4DiscreteScatteringModel- D.Dixon fixed for number of 

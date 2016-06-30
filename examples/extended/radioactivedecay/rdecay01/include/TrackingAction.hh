@@ -27,7 +27,7 @@
 /// \brief Definition of the TrackingAction class
 //
 //
-// $Id: TrackingAction.hh 78307 2013-12-11 10:55:57Z gcosmo $
+// $Id: TrackingAction.hh 96835 2016-05-12 09:20:14Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,6 +53,7 @@ class TrackingAction : public G4UserTrackingAction {
     virtual void PostUserTrackingAction(const G4Track*);
     
     void SetFullChain(G4bool flag) { fFullChain = flag;};
+    void SetTimeWindow(G4double , G4double);
     
   private:
     EventAction*        fEvent;
@@ -60,6 +61,9 @@ class TrackingAction : public G4UserTrackingAction {
     
     G4double fCharge, fMass;        
     G4bool   fFullChain;
+
+    G4double fTime_birth,  fTime_end;
+    G4double fTimeWindow1, fTimeWindow2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

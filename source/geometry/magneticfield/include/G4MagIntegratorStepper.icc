@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MagIntegratorStepper.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4MagIntegratorStepper.icc 97387 2016-06-02 10:03:42Z gcosmo $
 //
 
 inline
@@ -58,6 +58,7 @@ inline
 void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
 {
   fEquation_Rhs-> RightHandSide(y, dydx);
+  fNoRHSCalls++; // IncrementRHSCalls();
 }
 
 inline

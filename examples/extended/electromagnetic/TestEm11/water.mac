@@ -1,4 +1,4 @@
-# $Id: water.mac 82462 2014-06-23 10:45:28Z gcosmo $
+# $Id: water.mac 96172 2016-03-22 09:19:11Z gcosmo $
 #
 # no constraint on tracking step
 #
@@ -15,6 +15,7 @@
 #
 /run/setCut 100 um
 #
+/testem/gun/setDefault
 /gun/particle e-
 /gun/energy 4 MeV
 #

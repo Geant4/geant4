@@ -1,3 +1,24 @@
+ 1.27.4 :
+ - tools/value : Windows-64 : rm warnings when writing a void* in a string..
+
+ 1.27.3 :
+ - tools/typedefs, pointer, value.icc : Windows-64 : rm warnings when writing a void* in a string.
+ - tools/wroot/ntuple : delete columns in destructor.
+
+ 1.27.2 :
+ - tools/glutess/render : static_RenderTriangle : (void)size; at end to fix a warning.
+
+ 1.27.1 :
+ - hls, sg/style_colormap : correct some g++-6 (pedantic) warnings.
+
+ 1.27.0 : WARNING : change in the ROOT format for TTrees :
+ - tools/wroot/basket constructor : enforce m_version += 1000. This has to be considered as a change in the ROOT/IO
+   format (related to trees) compared to the one of CERN-ROOT/4.x that we followed up so fare. This change follows 
+   what is in CERN-ROOT/5.x/TBasket. It permits to produce files compatible with what CERN-ROOT/hadd program expects,
+   and which does not work properly for CERN-ROOT/4.x/TBasket versioning logic. Here we must point out that this
+   CERN-ROOT/hadd tool breaks some "golden rule" claiming that CERN-ROOT will "forever" handle old file format
+   properly.
+
  1.26.2 :
  - test/cpp/viewplot.cpp : more tests to check the sg::plotter nodes reset when producing more pages and files with
    the same viewer.

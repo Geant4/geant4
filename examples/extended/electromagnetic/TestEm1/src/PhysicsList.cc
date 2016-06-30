@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 // 
-// $Id: PhysicsList.cc 93735 2015-10-30 11:00:28Z gcosmo $
+// $Id: PhysicsList.cc 96420 2016-04-13 10:24:08Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,8 +115,6 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   // Transportation
@@ -129,10 +127,9 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(10*10);
-    
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetBuildCSDARange(true);
+  
   // Decay Process
   //
   AddDecay();
@@ -249,15 +246,20 @@ void PhysicsList::AddDecay()
 #include "G4PhysicsListHelper.hh"
 #include "G4RadioactiveDecay.hh"
 #include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
 
 void PhysicsList::AddRadioactiveDecay()
 {  
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  radioactiveDecay->SetHLThreshold(-1.*s);
+  
   radioactiveDecay->SetARM(true);                //Atomic Rearangement
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
   ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
+  
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

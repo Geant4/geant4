@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh 91612 2015-07-29 08:51:51Z gcosmo $
+// $Id: G4eCoulombScatteringModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,14 +80,15 @@ class G4eCoulombScatteringModel : public G4VEmModel
 
 public:
 
-  G4eCoulombScatteringModel(G4bool combined = true);
+  explicit G4eCoulombScatteringModel(G4bool combined = true);
  
   virtual ~G4eCoulombScatteringModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-                               G4VEmModel* masterModel);
+                               G4VEmModel* masterModel) override;
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -95,17 +96,17 @@ public:
 				G4double Z, 
 				G4double A, 
 				G4double cut,
-				G4double emax);
+				G4double emax) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
 				    const G4ParticleDefinition*,
-				    G4double);
+				    G4double) final;
 
   // defines low energy limit of the model
   inline void SetLowEnergyThreshold(G4double val);
@@ -128,8 +129,9 @@ protected:
 private:
 
   // hide assignment operator
-  G4eCoulombScatteringModel & operator=(const G4eCoulombScatteringModel &right);
-  G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&);
+  G4eCoulombScatteringModel & operator=
+  (const G4eCoulombScatteringModel &right) = delete;
+  G4eCoulombScatteringModel(const  G4eCoulombScatteringModel&) = delete;
 
   //protected:
  

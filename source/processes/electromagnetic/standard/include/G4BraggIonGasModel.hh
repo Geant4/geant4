@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BraggIonGasModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4BraggIonGasModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,24 +59,24 @@ class G4BraggIonGasModel : public G4BraggModel
 
 public:
 
-  G4BraggIonGasModel(const G4ParticleDefinition* p = 0,
-		     const G4String& nam = "BraggIonGas");
+  explicit G4BraggIonGasModel(const G4ParticleDefinition* p = 0,
+			      const G4String& nam = "BraggIonGas");
 
   virtual ~G4BraggIonGasModel();
 
   // Access ion effective charge square ratio to unit charge
-  virtual G4double ChargeSquareRatio(const G4Track&);
+  virtual G4double ChargeSquareRatio(const G4Track&) final;
 
   // Access ion effective charge 
   virtual G4double GetParticleCharge(const G4ParticleDefinition*,
 				     const G4Material* mat,
-				     G4double kineticEnergy);
+				     G4double kineticEnergy) final;
 
 private:
 
   // hide assignment operator
-  G4BraggIonGasModel & operator=(const  G4BraggIonGasModel &right);
-  G4BraggIonGasModel(const  G4BraggIonGasModel&);
+  G4BraggIonGasModel & operator=(const  G4BraggIonGasModel &right) = delete;
+  G4BraggIonGasModel(const  G4BraggIonGasModel&) = delete;
 
   G4double currentCharge;
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4mplIonisationModel.cc 91869 2015-08-07 15:21:02Z gcosmo $
+// $Id: G4mplIonisationModel.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +66,7 @@
 
 using namespace std;
 
-std::vector<G4double>* G4mplIonisationModel::dedx0 = 0;
+std::vector<G4double>* G4mplIonisationModel::dedx0 = nullptr;
 
 G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
@@ -83,8 +83,8 @@ G4mplIonisationModel::G4mplIonisationModel(G4double mCharge, const G4String& nam
   pi_hbarc2_over_mc2 = pi * hbarc * hbarc / electron_mass_c2;
   chargeSquare = magCharge * magCharge;
   dedxlim = 45.*nmpl*nmpl*GeV*cm2/g;
-  fParticleChange = 0;
-  monopole = 0;
+  fParticleChange = nullptr;
+  monopole = nullptr;
   mass = 0.0;
 }
 
@@ -102,9 +102,9 @@ void G4mplIonisationModel::SetParticle(const G4ParticleDefinition* p)
   monopole = p;
   mass     = monopole->GetPDGMass();
   G4double emin = 
-    std::min(LowEnergyLimit(),0.1*mass*(1/sqrt(1 - betalow*betalow) - 1)); 
+    std::min(LowEnergyLimit(),0.1*mass*(1./sqrt(1. - betalow*betalow) - 1.)); 
   G4double emax = 
-    std::max(HighEnergyLimit(),10*mass*(1/sqrt(1 - beta2lim) - 1)); 
+    std::max(HighEnergyLimit(),10.*mass*(1./sqrt(1. - beta2lim) - 1.)); 
   SetLowEnergyLimit(emin);
   SetHighEnergyLimit(emax);
 }
@@ -130,9 +130,9 @@ void G4mplIonisationModel::Initialise(const G4ParticleDefinition* p,
       const G4Material* material = 
 	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
       G4double eDensity = material->GetElectronDensity();
-      G4double vF = electron_Compton_length*pow(3*pi*pi*eDensity,0.3333333333);
+      G4double vF = electron_Compton_length*pow(3.*pi*pi*eDensity,0.3333333333);
       (*dedx0)[i] = pi_hbarc2_over_mc2*eDensity*nmpl*nmpl*
-	(G4Log(2*vF/fine_structure_const) - 0.5)/vF;
+	(G4Log(2.*vF/fine_structure_const) - 0.5)/vF;
     }
   }
 }
@@ -214,7 +214,7 @@ G4double G4mplIonisationModel::ComputeDEDXAhlen(const G4Material* material,
   // now compute the total ionization loss
   dedx *=  pi_hbarc2_over_mc2 * eDensity * nmpl * nmpl;
 
-  if (dedx < 0.0) dedx = 0;
+  if (dedx < 0.0) dedx = 0.;
   return dedx;
 }
 

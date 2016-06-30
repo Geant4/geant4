@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4hIonisation.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,28 +87,29 @@ class G4hIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4hIonisation(const G4String& name = "hIoni");
+  explicit G4hIonisation(const G4String& name = "hIoni");
 
   virtual ~G4hIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
-				    const G4Material*, G4double cut);
+				    const G4Material*, G4double cut) final;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() final;
 
 protected:
 
-  virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+  virtual void 
+  InitialiseEnergyLossProcess(const G4ParticleDefinition*,
+			      const G4ParticleDefinition*) override;
 
 private:
 
   // hide assignment operator
-  G4hIonisation & operator=(const G4hIonisation &right);
-  G4hIonisation(const G4hIonisation&);
+  G4hIonisation & operator=(const G4hIonisation &right) = delete;
+  G4hIonisation(const G4hIonisation&) = delete;
 
   G4bool     isInitialised;
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh 87137 2014-11-25 09:12:48Z gcosmo $
+// $Id: G4DNAChampionElasticModel.hh 97520 2016-06-03 14:23:17Z gcosmo $
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -48,7 +48,8 @@ public:
 
   virtual ~G4DNAChampionElasticModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
@@ -64,38 +65,46 @@ public:
 
   void SetKillBelowThreshold(G4double threshold);
 
-  G4double GetKillBelowThreshold()
+  inline G4double GetKillBelowThreshold()
   {
-    return killBelowEnergy;
+    G4ExceptionDescription errMsg;
+    errMsg << "The method G4DNAChampionElasticModel::"
+              "GetKillBelowThreshold is deprecated";
+    
+    G4Exception("G4DNAChampionElasticModel::GetKillBelowThreshold",
+                "deprecated",
+                JustWarning,
+                errMsg);
+    return 0.;
   }
 
-protected:
-
-  G4ParticleChangeForGamma* fParticleChangeForGamma;
-
 private:
+  // Cross section
+  typedef std::map<double, std::vector<double> > VecMap;
+  VecMap eVecm;
+  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  TriDimensionMap eDiffCrossSectionData;
+  std::vector<double> eTdummyVec;
+
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;
 
-  G4double killBelowEnergy;
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
-  G4bool isInitialised;
-  G4int verboseLevel;
-
   // Cross section
+  G4DNACrossSectionDataSet* fpData;
 
-  typedef std::map<G4String, G4String, std::less<G4String> > MapFile;
-  MapFile tableFile;
+protected:
+  G4ParticleChangeForGamma* fParticleChangeForGamma;
 
-  typedef std::map<G4String, G4DNACrossSectionDataSet*, std::less<G4String> > MapData;
-  MapData tableData;
-
+private:
+  G4int verboseLevel;
+  G4bool isInitialised;
+  
   // Final state
 
-  //G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double theta);
+  //G4double DifferentialCrossSection(G4ParticleDefinition* aParticle,
+  //                                  G4double k, G4double theta);
 
-  G4double Theta(G4ParticleDefinition * aParticleDefinition,
+  G4double Theta(//G4ParticleDefinition * aParticleDefinition,
                  G4double k,
                  G4double integrDiff);
 
@@ -130,21 +139,12 @@ private:
                             G4double t,
                             G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
-
-  TriDimensionMap eDiffCrossSectionData;
-  std::vector<double> eTdummyVec;
-
-  typedef std::map<double, std::vector<double> > VecMap;
-  VecMap eVecm;
-
   G4double RandomizeCosTheta(G4double k);
 
   //
 
   G4DNAChampionElasticModel & operator=(const G4DNAChampionElasticModel &right);
   G4DNAChampionElasticModel(const G4DNAChampionElasticModel&);
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

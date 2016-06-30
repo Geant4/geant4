@@ -50,6 +50,7 @@ public:
   {
     theIndex = aHash.theIndex;
     theData = aHash.theData;
+    prepared = aHash.prepared;
     if(aHash.theUpper != 0)
     {
       theUpper = new G4ParticleHPHash(*(aHash.theUpper));

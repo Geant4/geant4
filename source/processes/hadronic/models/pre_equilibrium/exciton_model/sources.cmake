@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 96527 2016-04-20 08:51:00Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -79,7 +79,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundModel.hh
         G4PreCompoundNeutron.hh
         G4PreCompoundNucleon.hh
-        G4PreCompoundParameters.hh
         G4PreCompoundProton.hh
         G4PreCompoundTransitions.hh
         G4PreCompoundTriton.hh
@@ -110,7 +109,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundModel.cc
         G4PreCompoundNeutron.cc
         G4PreCompoundNucleon.cc
-        G4PreCompoundParameters.cc
         G4PreCompoundProton.cc
         G4PreCompoundTransitions.cc
         G4PreCompoundTriton.cc

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.hh 91745 2015-08-04 11:51:12Z gcosmo $
+// $Id: G4EmModelManager.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -119,8 +119,8 @@ private:
     return theRegion;
   };
 
-  G4RegionModels(G4RegionModels &);
-  G4RegionModels & operator=(const G4RegionModels &right);
+  G4RegionModels(G4RegionModels &) = delete;
+  G4RegionModels & operator=(const G4RegionModels &right) = delete;
 
   const G4Region*    theRegion;
   G4int              nModelsForRegion;
@@ -162,22 +162,35 @@ public:
                         G4bool startFromNull = true, 
                         G4EmTableType t = fRestricted);
 
-  G4VEmModel* GetModel(G4int, G4bool ver = false);
+  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);  
 
-  void AddEmModel(G4int, G4VEmModel*, G4VEmFluctuationModel*, const G4Region*);
-  
-  void UpdateEmModel(const G4String&, G4double, G4double);
+  void UpdateEmModel(const G4String& model_name, G4double emin, G4double emax);
 
+  // Get model pointer from the model list
+  G4VEmModel* GetModel(G4int idx, G4bool ver = false);
+
+  // Get model pointer from the model list for a given material cuts couple
+  // no check on material cuts couple index
+  G4VEmModel* GetRegionModel(G4int idx, size_t index_couple);
+
+  // total number of models for material cut couples
+  // no check on material cuts couple index
+  G4int NumberOfRegionModels(size_t index_couple) const;
+
+  // Automatic documentation
   void DumpModelList(G4int verb);
 
+  // Select model for given material cuts couple index
   inline G4VEmModel* SelectModel(G4double& energy, size_t& index);
 
+  // Access to cuts
   inline const G4DataVector* Cuts() const;
-
   inline const G4DataVector* SubCutoff() const;
 
+  // Set flag of fluorescence
   inline void SetFluoFlag(G4bool val);
 
+  // total number of models
   inline G4int NumberOfModels() const;
 
 private:
@@ -190,8 +203,8 @@ private:
 
   // hide  assignment operator
 
-  G4EmModelManager(G4EmModelManager &);
-  G4EmModelManager & operator=(const G4EmModelManager &right);
+  G4EmModelManager(G4EmModelManager &) = delete;
+  G4EmModelManager & operator=(const G4EmModelManager &right) = delete;
 
 // =====================================================================
 

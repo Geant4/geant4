@@ -95,7 +95,8 @@ G4FFG_FUNCTIONENTER__
     }
 
     //TK modified 131108 add next line 
-    finalState->SetStatusChange(stopAndKill);
+    //TK 160112 fix for coverity #53481
+    if ( finalState != NULL ) finalState->SetStatusChange(stopAndKill);
 G4FFG_FUNCTIONLEAVE__
     return finalState;
 }

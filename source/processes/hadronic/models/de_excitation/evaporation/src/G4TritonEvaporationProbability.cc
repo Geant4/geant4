@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TritonEvaporationProbability.cc 89518 2015-04-15 14:43:30Z gcosmo $
+// $Id: G4TritonEvaporationProbability.cc 96634 2016-04-27 09:31:49Z gcosmo $
 //
 // J.M. Quesada (August2008). Based on:
 //
@@ -55,14 +55,10 @@ G4double G4TritonEvaporationProbability::CalcAlphaParam(const G4Fragment& fragme
   // C for triton is equal to C for protons divided by 3
 
   G4int aZ = fragment.GetZ_asInt()-GetZ();
-  G4double C;
-	
-  if (aZ >= 70) {
-    C = 0.10;
-  } else {
-    C = ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
-	 - 0.66612e-01)*aZ + 0.98375;
-  }
+  G4double C = (aZ >= 70) ? 0.10 :
+    ((((0.15417e-06*aZ) - 0.29875e-04)*aZ + 0.21071e-02)*aZ 
+     - 0.66612e-01)*aZ + 0.98375;
+
   return 1.0 + C/3.0;
 }
 	

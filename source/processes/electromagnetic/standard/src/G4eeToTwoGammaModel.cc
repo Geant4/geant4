@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4eeToTwoGammaModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,7 +91,7 @@ G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
     isInitialised(false)
 {
   theGamma = G4Gamma::Gamma();
-  fParticleChange = 0;
+  fParticleChange = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -177,7 +177,7 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
   if(PositKinEnergy == 0.0) {
     G4double cost = 2.*rndmEngine->flat()-1.;
     G4double sint = sqrt((1. - cost)*(1. + cost));
-    G4double phi  = twopi * G4UniformRand();
+    G4double phi  = twopi * rndmEngine->flat();
     G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
     phi = twopi * rndmEngine->flat();
     G4ThreeVector pol(cos(phi), sin(phi), 0.0);
@@ -239,7 +239,7 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4ThreeVector Phot1Direction(sint*cos(phi), sint*sin(phi), cost);
     Phot1Direction.rotateUz(PositDirection);
     aGamma1 = new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
-    phi = twopi * G4UniformRand();
+    phi = twopi * rndmEngine->flat();
     G4ThreeVector pol1(cos(phi), sin(phi), 0.0);
     pol1.rotateUz(Phot1Direction);
     aGamma1->SetPolarization(pol1.x(),pol1.y(),pol1.z());

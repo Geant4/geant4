@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateQtViewer.cc 94206 2015-11-09 08:11:59Z gcosmo $
+// $Id: G4OpenGLImmediateQtViewer.cc 97241 2016-05-30 12:06:54Z gcosmo $
 //
 //
 // Class G4OpenGLImmediateQtViewer : a class derived from G4OpenGLQtViewer and
@@ -317,6 +317,8 @@ void G4OpenGLImmediateQtViewer::ShowView (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  // Tentatively offered - JA
+  // glFlush ();
   fHasToRepaint = true;
   activateWindow();
 }

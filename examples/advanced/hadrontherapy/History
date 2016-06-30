@@ -7,6 +7,8 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
+19.05.2016 F. Romano, B. Jia Tag: hadrontherapy-V10-02-00
+           - new modulator class implemented
 31.10.2015 F. Romano, J. Pipek Tag: hadrontherapy-V10-01-03
            - general revisiion and commetns fixed
 21.01.2015 J. Apostolakis  Tag: hadrontherapy-V10-01-02

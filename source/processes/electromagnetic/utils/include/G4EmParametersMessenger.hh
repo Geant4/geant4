@@ -69,10 +69,10 @@ class G4EmParametersMessenger: public G4UImessenger
 {
 public:   // with description
   
-  G4EmParametersMessenger(G4EmParameters*);
+  explicit G4EmParametersMessenger(G4EmParameters*);
   virtual ~G4EmParametersMessenger();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String) override;
 
 private:
 
@@ -133,6 +133,17 @@ private:
   G4UIcmdWithAString*        meCmd;
   G4UIcommand*               dnaCmd;
   G4UIcommand*               dumpCmd;
+
+  G4UIcommand*               SubSecCmd;
+  G4UIcommand*               StepFuncCmd;
+  G4UIcommand*               StepFuncCmd1;
+  G4UIcmdWithABool*          IntegCmd;
+  G4UIcommand*               deexCmd;
+  G4UIcommand*               bfCmd;
+  G4UIcommand*               fiCmd;
+  G4UIcommand*               bsCmd;
+  G4UIcmdWithAString*        nffCmd;
+
 };
 
 #endif

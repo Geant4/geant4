@@ -24,14 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSensitiveDetector.cc 81087 2014-05-20 15:44:27Z gcosmo $
+// $Id: G4VSensitiveDetector.cc 94771 2015-12-09 09:44:05Z gcosmo $
 //
 // G4VSensitiveDetector
 #include "G4VSensitiveDetector.hh"
 #include "G4SDManager.hh"
 
 G4VSensitiveDetector::G4VSensitiveDetector(G4String name)
-:verboseLevel(0),active(true),ROgeometry(0),filter(0)
+:verboseLevel(0),active(true),
+ ROgeometry(nullptr),filter(nullptr)
 {
   size_t sLast = name.last('/');
   if(sLast==std::string::npos)
@@ -72,7 +73,7 @@ G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
     << "but Clone method called.\n"
     << "Cannot continue;";
     G4Exception("G4VSensitiveDetector::Clone","Det0010",FatalException,msg);
-    return NULL;
+    return nullptr;
 }
 
 G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)

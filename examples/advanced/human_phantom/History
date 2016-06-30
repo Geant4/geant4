@@ -1,4 +1,4 @@
-$Id: History 88764 2015-03-09 12:28:01Z gcosmo $
+$Id: History 97053 2016-05-23 12:03:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 23, 2016, G. Cosmo tag human_phantom-V10-02-01
+- More compilation warnings in gcc-6.1 fixed...
+
+May 19, 2016, G. Cosmo tag human_phantom-V10-02-00
+- Fixed compilation warning on gcc-6.1 in G4CustomFemalBuilder.
 
 Mar 7, 2015, A. Dotti tag human_phantom-V10-01-01
 - Fixing compilaiton warning from previous tag on clang35 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4hIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -111,7 +111,6 @@ G4hIonisation::G4hIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
     isInitialised(false)
 {
-  SetStepFunction(0.2, 0.1*mm);
   SetProcessSubType(fIonisation);
   SetSecondaryParticle(G4Electron::Electron());
   mass = 0.0;
@@ -151,7 +150,7 @@ void G4hIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
 
-    const G4ParticleDefinition* theBaseParticle = 0;
+    const G4ParticleDefinition* theBaseParticle = nullptr;
     G4String pname = part->GetParticleName();
     G4double q = part->GetPDGCharge();
 
@@ -165,10 +164,10 @@ void G4hIonisation::InitialiseEnergyLossProcess(
        pname == "kaon+" || pname == "kaon-" || pname == "GenericIon"
        || pname == "He3" || pname == "alpha") 
       { 
-	theBaseParticle = 0;
+	theBaseParticle = nullptr;
       }
     // select base particle 
-    else if(bpart == 0) {
+    else if(bpart == nullptr) {
 
       if(part->GetPDGSpin() == 0.0) {
 	if(q > 0.0) { theBaseParticle = G4KaonPlus::KaonPlus(); }

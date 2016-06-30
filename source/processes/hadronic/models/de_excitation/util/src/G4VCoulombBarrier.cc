@@ -23,27 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCoulombBarrier.cc 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4VCoulombBarrier.cc 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 #include "G4VCoulombBarrier.hh"
-#include "G4HadronicException.hh"
 
 G4VCoulombBarrier::G4VCoulombBarrier(G4int anA, G4int aZ)
 {
-  if (anA >= aZ && anA > 0) {
-    theA = anA;
-    theZ = aZ;
-  } else {
-    std::ostringstream errOs;
-    G4cout << "G4VCoulombBarrier::G4VCoulombBarrier: "
-	   << "Wrong values for "
-	   << "A= " << anA << " "
-	   << "and Z= " << aZ << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"FATAL Exception");
-  }
+  theA = anA;
+  theZ = aZ;
 }
 
 G4VCoulombBarrier::~G4VCoulombBarrier()

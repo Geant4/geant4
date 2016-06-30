@@ -74,34 +74,34 @@ class G4PolarizedCompton : public G4VEmProcess
 {
 public:  // with description
 
-  G4PolarizedCompton(const G4String& processName ="pol-compt",
+  explicit G4PolarizedCompton(const G4String& processName ="pol-compt",
 		     G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PolarizedCompton();
 
   // true for Gamma only.  
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) override;
 
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
   void SetModel(const G4String& name);
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
   // added for polarization treatment of polarized media:
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
   virtual G4double GetMeanFreePath(const G4Track& aTrack,     
 				   G4double   previousStepSize,
-				   G4ForceCondition* condition);
+				   G4ForceCondition* condition) override;
 
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
 private:
 
@@ -117,8 +117,8 @@ private:
 
   G4double ComputeSaturationFactor(const G4Track& aTrack);
   
-  G4PolarizedCompton& operator=(const G4PolarizedCompton &right);
-  G4PolarizedCompton(const G4PolarizedCompton& );
+  G4PolarizedCompton& operator=(const G4PolarizedCompton &right) = delete;
+  G4PolarizedCompton(const G4PolarizedCompton& ) = delete;
      
   G4bool          buildAsymmetryTable;
   G4bool          useAsymmetryTable;

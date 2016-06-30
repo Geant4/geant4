@@ -33,7 +33,7 @@
 #include "G4Box.hh"
 #include "G4UBox.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
 
@@ -96,6 +96,39 @@ G4UBox& G4UBox::operator = (const G4UBox& rhs)
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Accessors & modifiers
+
+G4double G4UBox::GetXHalfLength() const
+{
+  return GetShape()->GetXHalfLength();
+}
+G4double G4UBox::GetYHalfLength() const
+{
+  return GetShape()->GetYHalfLength();
+}
+G4double G4UBox::GetZHalfLength() const
+{
+  return GetShape()->GetZHalfLength();
+}
+
+void G4UBox::SetXHalfLength(G4double dx)
+{
+  GetShape()->SetXHalfLength(dx);
+  fRebuildPolyhedron = true;
+}
+void G4UBox::SetYHalfLength(G4double dy)
+{
+  GetShape()->SetYHalfLength(dy);
+  fRebuildPolyhedron = true;
+}
+void G4UBox::SetZHalfLength(G4double dz)
+{
+  GetShape()->SetZHalfLength(dz);
+  fRebuildPolyhedron = true;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -113,6 +146,17 @@ void G4UBox::ComputeDimensions(G4VPVParameterisation* p,
 G4VSolid* G4UBox::Clone() const
 {
   return new G4UBox(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+
+G4Polyhedron* G4UBox::CreatePolyhedron() const
+{
+  return new G4PolyhedronBox(GetXHalfLength(),
+                             GetYHalfLength(),
+                             GetZHalfLength());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

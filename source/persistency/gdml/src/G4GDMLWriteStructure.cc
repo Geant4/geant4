@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 91789 2015-08-06 08:14:46Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 96677 2016-04-29 12:20:20Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -54,6 +54,8 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
+
+#include "G4VSensitiveDetector.hh"
 
 G4GDMLWriteStructure::G4GDMLWriteStructure()
   : G4GDMLWriteParamvol(), cexport(false)
@@ -527,7 +529,10 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    if (cexport)  { ExportEnergyCuts(volumePtr); }
    // Add optional energy cuts
-       
+
+   if (sdexport)  { ExportSD(volumePtr); }
+   // Add optional SDs
+ 
    // Here write the auxiliary info
    //
    auxiter = auxmap.find(volumePtr);  
@@ -606,4 +611,25 @@ G4GDMLWriteStructure::ExportEnergyCuts(const G4LogicalVolume* const lvol)
   AddVolumeAuxiliary(eminusinfo, lvol);
   AddVolumeAuxiliary(eplusinfo, lvol);
   AddVolumeAuxiliary(protinfo, lvol);
+}
+
+void
+G4GDMLWriteStructure::SetSDExport(G4bool fsd)
+{
+  sdexport = fsd;
+}
+
+
+void
+G4GDMLWriteStructure::ExportSD(const G4LogicalVolume* const lvol)
+{
+  G4VSensitiveDetector* sd = lvol->GetSensitiveDetector();
+  
+  if(sd)
+    {
+      G4String SDname = sd->GetName();
+      
+      G4GDMLAuxStructType SDinfo = {"SensDet", SDname, "", 0};
+      AddVolumeAuxiliary(SDinfo, lvol);
+    }
 }

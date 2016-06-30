@@ -27,10 +27,10 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysListEmLivermore.cc 96379 2016-04-11 07:00:43Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmLivermore.hh"
 #include "G4ParticleDefinition.hh"
@@ -74,7 +74,6 @@
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
 
-#include "G4EmProcessOptions.hh"
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 

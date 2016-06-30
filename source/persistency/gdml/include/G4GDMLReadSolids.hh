@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh 82922 2014-07-18 15:56:35Z gcosmo $
+// $Id: G4GDMLReadSolids.hh 96133 2016-03-16 22:21:17Z gcosmo $
 //
 //
 // class G4GDMLReadSolids
@@ -87,6 +87,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void GenericPolyhedraRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* QuadrangularRead(const xercesc::DOMElement* const);
    void ReflectedSolidRead(const xercesc::DOMElement* const);
+   void ScaledSolidRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection SectionRead(const xercesc::DOMElement* const,G4double);
    void SphereRead(const xercesc::DOMElement* const);
    void TessellatedRead(const xercesc::DOMElement* const);

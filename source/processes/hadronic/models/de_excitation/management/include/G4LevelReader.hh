@@ -54,9 +54,7 @@ class G4LevelReader
 
 public:
 
-  G4LevelReader();
-
-  ~G4LevelReader();
+  explicit G4LevelReader();
 
   // create run manager using G4LEVELGAMMADATA data 
   const G4LevelManager* CreateLevelManager(G4int Z, G4int A);
@@ -75,10 +73,10 @@ private:
   
   const std::vector<G4float>* NormalizedICCProbability(G4int Z);
 
-  G4LevelReader(const G4LevelReader & right);  
-  const G4LevelReader& operator=(const G4LevelReader &right);
-  G4bool operator==(const G4LevelReader &right) const;
-  G4bool operator!=(const G4LevelReader &right) const;
+  G4LevelReader(const G4LevelReader & right) = delete;  
+  const G4LevelReader& operator=(const G4LevelReader &right) = delete;
+  G4bool operator==(const G4LevelReader &right) const = delete;
+  G4bool operator!=(const G4LevelReader &right) const = delete;
 
   G4double fMinProbability;
   G4double fTimeFactor;
@@ -90,9 +88,6 @@ private:
   G4double fTime;
   G4double fSpin;
   G4double fAlpha;
-  G4double fNorm1;
-  G4double fNorm2;
-  G4double fNorm3;
   G4double fICC[10];
 
   static G4String fTrans[10];
@@ -105,17 +100,21 @@ private:
 
   G4int    fVerbose;
 
+  G4float fNorm1;
+  G4float fNorm2;
+
   std::vector<G4float> vEnergy;
   std::vector<G4float> vTime;
   std::vector<G4float> vTimeg;
   std::vector<G4int>   vSpin;
   std::vector<const G4NucLevel*> vLevel;
 
-  std::vector<G4float>  vTransEnergy;
+  std::vector<size_t>   vIndex;
+  std::vector<G4int>    vTrans;
   std::vector<G4float>  vGammaCumProbability;
   std::vector<G4float>  vGammaECumProbability;
   std::vector<G4float>  vGammaProbability;
-  std::vector<G4int>    vTrans;
+  std::vector<G4float>  vMpRatio;
   std::vector<const std::vector<G4float>*> vShellProbability;
 };
 

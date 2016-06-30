@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 94079 2015-11-05 15:03:02Z gcosmo $
+// $Id: G4ElectroNuclearCrossSection.cc 94961 2016-01-08 16:31:48Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -2195,7 +2195,7 @@ lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMa
 G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
 {
      std::vector<cacheEl_t*>::iterator it = cache.begin();
-     while ( it != cache.end() )
+     while ( it != cache.end() )  /* Loop checking, 08.01.2016, W. Pokorski */
      {
          if ( *it ) {
              delete[] (*it)->J1; (*it)->J1 = 0;
@@ -2452,7 +2452,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
     if (ris < Y[lastL]) {               // Search the table
         G4int j = lastUsedCacheEl->F;
         G4double Yj = Y[j];               // It must be 0 (sometimes just very small)
-        while (ris > Yj && j < lastL) {   // Associative search
+        while (ris > Yj && j < lastL) {   // Associative search  /* Loop checking, 08.01.2016, W. Pokorski */
             j++;
             Yj = Y[j];                      // Yj is first value above ris
         }
@@ -2530,7 +2530,7 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonQ2(G4double nu)
     G4int maxTry=3;
     G4int cntTry=0;
     G4double Q2=Qi2;
-    while(cond&&cntTry<maxTry)             // The loop to avoid x>1.
+    while(cond&&cntTry<maxTry)             // The loop to avoid x>1.  /* Loop checking, 08.01.2016, W. Pokorski */
     {
         G4double R=G4UniformRand();           // Random number (0,1)
         Q2=Qi2*(ePy+1./(G4Exp(R*LyQa2-(1.-R)*Uy)-Fy));

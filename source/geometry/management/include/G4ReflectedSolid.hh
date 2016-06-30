@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ReflectedSolid.hh 96930 2016-05-18 08:56:58Z gcosmo $
 //
 //
 // class G4ReflectedSolid
@@ -37,16 +37,13 @@
 // History:
 //
 // 23.07.01 V.Grichine: created
-// 15.02.02 V.Grichine: get/set methods for fPtr(Direct)Transform3D
 // --------------------------------------------------------------------
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
 
 #include "G4VSolid.hh"
-#include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
 #include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
 
 class G4ReflectedSolid : public G4VSolid
 {
@@ -54,10 +51,10 @@ class G4ReflectedSolid : public G4VSolid
 
     G4ReflectedSolid( const G4String& pName,
                             G4VSolid* pSolid ,
-                      const G4Transform3D& transform  ) ;
+                      const G4Transform3D& transform ) ;
       // For use in instantiating a transient instance.
 
-    virtual ~G4ReflectedSolid() ;
+    virtual ~G4ReflectedSolid();
       // Virtual destructor.
 
   public:  // without description 
@@ -74,7 +71,7 @@ class G4ReflectedSolid : public G4VSolid
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
     G4double DistanceToIn( const G4ThreeVector& p,
-                           const G4ThreeVector& v  ) const;
+                           const G4ThreeVector& v ) const;
 
     G4double DistanceToIn( const G4ThreeVector& p) const;
 
@@ -82,9 +79,9 @@ class G4ReflectedSolid : public G4VSolid
                             const G4ThreeVector& v,
                             const G4bool calcNorm=false,
                                   G4bool *validNorm=0,
-                                  G4ThreeVector *n=0      ) const;
+                                  G4ThreeVector *n=0 ) const;
 
-    G4double DistanceToOut( const G4ThreeVector& p ) const ;
+    G4double DistanceToOut( const G4ThreeVector& p ) const;
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
@@ -103,12 +100,11 @@ class G4ReflectedSolid : public G4VSolid
       // If the Solid is a "G4ReflectedSolid",
       // return a self pointer else return 0.
 
-    G4VSolid*                GetConstituentMovedSolid() const;
+    G4VSolid* GetConstituentMovedSolid() const;
 
-    G4Transform3D        GetTransform3D() const; 
-    void       SetTransform3D(G4Transform3D&);
-    G4Transform3D        GetDirectTransform3D() const; 
-    void       SetDirectTransform3D(G4Transform3D&);
+    G4Transform3D GetTransform3D() const; 
+    G4Transform3D GetDirectTransform3D() const; 
+    void SetDirectTransform3D(G4Transform3D&);
       // Accessors methods.
 
     std::ostream& StreamInfo(std::ostream& os) const;
@@ -119,39 +115,18 @@ class G4ReflectedSolid : public G4VSolid
     G4ReflectedSolid& operator=(const G4ReflectedSolid& rhs);
       // Copy constructor and assignment operator.
 
-    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
-    G4Polyhedron* CreatePolyhedron () const ;
+    void DescribeYourselfTo ( G4VGraphicsScene& scene ) const;
+    G4Polyhedron* CreatePolyhedron () const;
     G4Polyhedron* GetPolyhedron    () const;
-      // For creating graphical representations (ie for visualisation).
+      // For creating graphical representations (i.e. for visualisation).
 
   protected:
 
-    G4AffineTransform        GetTransform() const; 
-    void       SetTransform(G4AffineTransform&);
-    G4AffineTransform        GetDirectTransform() const; 
-    void       SetDirectTransform(G4AffineTransform&);
-    G4RotationMatrix         GetFrameRotation() const;
-    void  SetFrameRotation(const G4RotationMatrix&);
-    G4ThreeVector            GetFrameTranslation() const; 
-    void  SetFrameTranslation(const G4ThreeVector&); 
-      // Get/Set the rotation/translation, as applied to the
-      // frame of reference.
+    G4VSolid*          fPtrSolid;
+    G4Transform3D*     fDirectTransform3D;
 
-    G4RotationMatrix         GetObjectRotation() const;
-    void  SetObjectRotation(const G4RotationMatrix&);
-    G4ThreeVector            GetObjectTranslation() const; 
-    void  SetObjectTranslation(const G4ThreeVector&); 
-      // Get/Set the rotation/translation, as applied to the object.
-
-    G4VSolid*          fPtrSolid        ;
-    G4AffineTransform* fPtrTransform    ;
-    G4AffineTransform* fDirectTransform ;
-
-    G4Transform3D*     fPtrTransform3D    ;
-    G4Transform3D*     fDirectTransform3D ;
-
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;  // Caches reflected G4Polyhedron.
-
-} ;
+};
 
 #endif

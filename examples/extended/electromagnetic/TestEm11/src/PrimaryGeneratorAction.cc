@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 68309 2013-03-21 17:42:10Z maire $
+// $Id: PrimaryGeneratorAction.cc 95740 2016-02-23 09:34:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,11 +50,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
  fDetector(det),fRndmBeam(0.), fGunMessenger(0)
 {
   fParticleGun  = new G4ParticleGun(1);
-  G4ParticleDefinition* particle
-           = G4ParticleTable::GetParticleTable()->FindParticle("e-");
-  fParticleGun->SetParticleDefinition(particle);
-  fParticleGun->SetParticleEnergy(500*keV);  
-  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  SetDefaultKinematic();
     
   //create a messenger for this class
   fGunMessenger = new PrimaryGeneratorMessenger(this);  
@@ -70,25 +66,39 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void PrimaryGeneratorAction::SetDefaultKinematic()
+{
+  G4ParticleDefinition* particle
+           = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleEnergy(500*keV);  
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  G4double position = -0.5*(fDetector->GetAbsorSizeX());
+  fParticleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-  //
-  G4double x0 = -0.5*(fDetector->GetAbsorSizeX());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
     
   //randomize the beam, if requested.
   //
   if (fRndmBeam > 0.) 
     {
+      G4ThreeVector oldPosition = fParticleGun->GetParticlePosition();
       if (fRndmBeam > fDetector->GetAbsorSizeYZ())
         fRndmBeam = fDetector->GetAbsorSizeYZ(); 
       G4double rbeam = 0.5*fRndmBeam;
-      y0 = (2*G4UniformRand()-1.)*rbeam;
-      z0 = (2*G4UniformRand()-1.)*rbeam;
+      G4double x0 = oldPosition.x();
+      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
+      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
+      fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+      fParticleGun->GeneratePrimaryVertex(anEvent);
+      fParticleGun->SetParticlePosition(oldPosition);      
     }
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));  
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+
+  else fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -72,7 +72,7 @@ class G4UCNMicroRoughnessHelper
 //         1) cos(theta)^2,
 //         2) (k_l/k)^2
 
-    G4double S2(G4double, G4double);
+    G4double S2(G4double, G4double) const;
 
 // Transmitted intensity with k-vector within the medium
 
@@ -80,7 +80,7 @@ class G4UCNMicroRoughnessHelper
 //         1) cos(theta')^2,
 //         2) (k_l/k')^2
 
-    G4double SS2(G4double, G4double);
+    G4double SS2(G4double, G4double) const;
 
 // Fourier-tranform of the autocorrelation function with k-vector in vacuum
 
@@ -94,7 +94,7 @@ class G4UCNMicroRoughnessHelper
 //         7) angular cut
 
     G4double Fmu(G4double, G4double, G4double,
-                 G4double, G4double, G4double, G4double);
+                 G4double, G4double, G4double, G4double) const;
 
 // Fourier-tranform of the autocorrelation function with k-vector within
 // the medium
@@ -111,7 +111,7 @@ class G4UCNMicroRoughnessHelper
 //         9) theta_refract
 
     G4double FmuS(G4double, G4double, G4double, G4double,
-                  G4double, G4double, G4double, G4double, G4double);
+                  G4double, G4double, G4double, G4double, G4double) const;
 
 // Integral probability for non-specular reflection
 
@@ -127,7 +127,7 @@ class G4UCNMicroRoughnessHelper
 //         9) angular cut
 
     G4double IntIplus(G4double, G4double, G4double, G4int, G4int,
-                      G4double, G4double, G4double*, G4double);
+                      G4double, G4double, G4double*, G4double) const;
 
 // Probability of non-specular reflection with the microroughness model
 
@@ -142,7 +142,7 @@ class G4UCNMicroRoughnessHelper
 //         8) angular cut
 
     G4double ProbIplus (G4double, G4double, G4double, G4double,
-                        G4double, G4double, G4double, G4double);
+                        G4double, G4double, G4double, G4double) const;
 
 // Integral probability for non-specular transmission
 
@@ -158,7 +158,7 @@ class G4UCNMicroRoughnessHelper
 //         9) angular cut
 
     G4double IntIminus(G4double, G4double, G4double, G4int, G4int,
-                       G4double, G4double, G4double*, G4double);
+                       G4double, G4double, G4double*, G4double) const;
 
 // Probability of non-specular transmission with the microroughness model
 
@@ -173,7 +173,7 @@ class G4UCNMicroRoughnessHelper
 //         8) angular cut
 
     G4double ProbIminus (G4double, G4double, G4double, G4double,
-                         G4double, G4double, G4double, G4double);
+                         G4double, G4double, G4double, G4double) const;
 
   private:
 

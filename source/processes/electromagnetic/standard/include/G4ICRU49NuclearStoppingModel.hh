@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.hh 67990 2013-03-13 10:56:28Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,42 +64,39 @@ class G4ICRU49NuclearStoppingModel : public G4VEmModel
 
 public:
 
-  G4ICRU49NuclearStoppingModel(const G4String& nam = "ICRU49NucStopping");
+  explicit G4ICRU49NuclearStoppingModel(const G4String& nam = 
+					"ICRU49NucStopping");
 
   virtual ~G4ICRU49NuclearStoppingModel();
 
   virtual void Initialise(const G4ParticleDefinition*, 
-			  const G4DataVector&);
+			  const G4DataVector&) final;
 
   // main method to compute dEdx
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
                                         const G4ParticleDefinition*,
                                         G4double kineticEnergy,
-                                        G4double cutEnergy = DBL_MAX);
+                                        G4double cutEnergy = DBL_MAX) final;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*, 
-				 G4double, G4double);
+				 G4double, G4double) final;
 
   inline void SetFluctuationFlag(G4bool);
 
 private:
-
-  void InitialiseNuclearStopping();
 
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
 				G4double A1, G4double A2);
 
   //  hide assignment operator
-  G4ICRU49NuclearStoppingModel & operator=(const  G4ICRU49NuclearStoppingModel &right);
-  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&);
+  G4ICRU49NuclearStoppingModel & operator=
+  (const  G4ICRU49NuclearStoppingModel &right) = delete;
+  G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
   G4Pow* g4pow;
-
-  static G4double ed[104];
-  static G4double ad[104];
 
   G4double theZieglerFactor;
 

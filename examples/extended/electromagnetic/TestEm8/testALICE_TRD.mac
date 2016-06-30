@@ -8,13 +8,13 @@
 /run/verbose 1
 /tracking/verbose 0
 #
-/testem/setGasThick 3.7 cm
+/testem/setGasThick 3.44 cm
 /testem/setGasRad   28. cm
 /testem/setGasMat   Xe15CO2
 /testem/setWindowMat  G4_KAPTON
 /testem/setWindowThick 25 um
 #/testem/setWindowMat  G4_Fe
-#/testem/setWindowThick 1 mm
+#/testem/setWindowThick 25 um
 /testem/setPairEnergy 28 eV
 #
 #  select EM PhysicsList
@@ -27,12 +27,12 @@
 #
 # normalisation of energy is done for PAI model at 3 GeV/c
 /testem/phys/setNbinsE  100
-/testem/phys/setMaxE    0.2591 MeV  
-/testem/phys/setEnergyPerChannel 1.0777 keV
+/testem/phys/setMaxE    0.25 MeV  
+/testem/phys/setEnergyPerChannel 1.0 keV
 /testem/phys/setNbinsCl 100
 /testem/phys/setMaxCl   2500  
-/testem/phys/setNormFactor 0.4106
-#/testem/phys/setEnergySmear 0.0737
+/testem/phys/setNormFactor 0.3686
+/testem/phys/setEnergySmear 1 keV
 #
 /run/initialize
 #
@@ -42,8 +42,7 @@
 #
 #/run/particle/dumpCutValues
 #
-/testem/stepmax   2. mm
-#/testem/stepmax   1. mm
+/testem/stepmax   17.2 mm
 #
 /gun/direction 0. 0.258819 0.965926
 #

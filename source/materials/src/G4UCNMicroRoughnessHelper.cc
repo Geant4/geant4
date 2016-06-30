@@ -44,7 +44,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
 
-G4UCNMicroRoughnessHelper* G4UCNMicroRoughnessHelper::fpInstance = 0;
+G4UCNMicroRoughnessHelper* G4UCNMicroRoughnessHelper::fpInstance = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -57,20 +57,21 @@ G4UCNMicroRoughnessHelper::G4UCNMicroRoughnessHelper() {;}
 G4UCNMicroRoughnessHelper::~G4UCNMicroRoughnessHelper()
 {
   delete fpInstance;
-  fpInstance = 0;
+  fpInstance = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UCNMicroRoughnessHelper* G4UCNMicroRoughnessHelper::GetInstance()
 {
-  if (fpInstance == NULL) fpInstance = new G4UCNMicroRoughnessHelper;
+  if (fpInstance == nullptr) fpInstance = new G4UCNMicroRoughnessHelper;
   return fpInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UCNMicroRoughnessHelper::S2(G4double costheta2, G4double klk2)
+G4double 
+G4UCNMicroRoughnessHelper::S2(G4double costheta2, G4double klk2) const
 {
   // case 1: radicand is positive,
   // case 2: radicand is negative, cf. p. 174 of the Steyerl paper
@@ -83,7 +84,8 @@ G4double G4UCNMicroRoughnessHelper::S2(G4double costheta2, G4double klk2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UCNMicroRoughnessHelper::SS2(G4double costhetas2, G4double klks2)
+G4double 
+G4UCNMicroRoughnessHelper::SS2(G4double costhetas2, G4double klks2) const
 {
   // cf. p. 175 of the Steyerl paper
 
@@ -96,7 +98,7 @@ G4double G4UCNMicroRoughnessHelper::SS2(G4double costhetas2, G4double klks2)
 G4double G4UCNMicroRoughnessHelper::Fmu(G4double k2, G4double thetai,
                                         G4double thetao, G4double phio,
                                         G4double b2, G4double w2,
-                                        G4double AngCut)
+                                        G4double AngCut) const
 {
   G4double mu_squared;
 
@@ -122,11 +124,12 @@ G4double G4UCNMicroRoughnessHelper::Fmu(G4double k2, G4double thetai,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UCNMicroRoughnessHelper::FmuS(G4double k, G4double kS,
-                                         G4double thetai, G4double thetaSo,
-                                         G4double phiSo,
-                                         G4double b2, G4double w2,
-                                         G4double AngCut, G4double thetarefract)
+G4double 
+G4UCNMicroRoughnessHelper::FmuS(G4double k, G4double kS,
+                                G4double thetai, G4double thetaSo,
+                                G4double phiSo,
+                                G4double b2, G4double w2,
+                                G4double AngCut, G4double thetarefract) const
 {
   G4double mu_squared;
 
@@ -152,11 +155,12 @@ G4double G4UCNMicroRoughnessHelper::FmuS(G4double k, G4double kS,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
-                                             G4double theta_i, G4int AngNoTheta,
-                                             G4int AngNoPhi, G4double b2,
-                                             G4double w2, G4double* max,
-                                             G4double AngCut)
+G4double 
+G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
+                                    G4double theta_i, G4int AngNoTheta,
+                                    G4int AngNoPhi, G4double b2,
+                                    G4double w2, G4double* max,
+                                    G4double AngCut) const
 {
   *max=0.;
 
@@ -281,7 +285,7 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
                                               G4int AngNoTheta,
                                               G4int AngNoPhi, G4double b2,
                                               G4double w2, G4double* max,
-                                              G4double AngCut)
+                                              G4double AngCut) const
 {
   G4double a_max_thetas_o, max_thetas_o = theta_i;
   G4double a_max_phis_o, max_phis_o = 0.;
@@ -402,7 +406,7 @@ G4double G4UCNMicroRoughnessHelper::ProbIplus(G4double E, G4double fermipot,
                                               G4double theta_o,
                                               G4double phi_o,
                                               G4double b, G4double w,
-                                              G4double AngCut)
+                                              G4double AngCut) const
 {
   //k_l^4/4
   G4double kl4d4=neutron_mass_c2/hbarc_squared*neutron_mass_c2/
@@ -428,7 +432,7 @@ G4double G4UCNMicroRoughnessHelper::ProbIminus(G4double E, G4double fermipot,
                                                G4double theta_i,
                                                G4double thetas_o,
                                                G4double phis_o, G4double b,
-                                               G4double w, G4double AngCut)
+                                               G4double w, G4double AngCut) const
 {
   //k_l^4/4
   G4double kl4d4=neutron_mass_c2/hbarc_squared*neutron_mass_c2/

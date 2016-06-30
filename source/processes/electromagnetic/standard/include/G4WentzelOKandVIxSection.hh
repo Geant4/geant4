@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh 80656 2014-05-06 08:31:39Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,13 +73,13 @@ class G4WentzelOKandVIxSection
 
 public:
 
-  G4WentzelOKandVIxSection(G4bool combined = true);
+  explicit G4WentzelOKandVIxSection(G4bool combined = true);
 
   virtual ~G4WentzelOKandVIxSection();
 
   void Initialise(const G4ParticleDefinition*, G4double CosThetaLim);
 
-  void SetupParticle(const G4ParticleDefinition*);
+  void SetupParticle(const G4ParticleDefinition*) ;
 
   // return cos(ThetaMax) for msc and cos(thetaMin) for single scattering
   // cut = DBL_MAX means no scattering off electrons 
@@ -114,8 +114,9 @@ private:
   void ComputeMaxElectronScattering(G4double cut);
 
   //  hide assignment operator
-  G4WentzelOKandVIxSection & operator=(const  G4WentzelOKandVIxSection &right);
-  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&);
+  G4WentzelOKandVIxSection & operator=
+  (const G4WentzelOKandVIxSection &right) = delete;
+  G4WentzelOKandVIxSection(const  G4WentzelOKandVIxSection&) = delete;
 
   const G4ParticleDefinition* theProton;
   const G4ParticleDefinition* theElectron;

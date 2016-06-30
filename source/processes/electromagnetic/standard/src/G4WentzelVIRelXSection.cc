@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelXSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4WentzelVIRelXSection.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,7 @@ G4WentzelVIRelXSection::G4WentzelVIRelXSection(G4bool combined) :
   lowEnergyLimit = 1.0*eV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff = twopi*p0*p0;
-  particle = 0;
+  particle = nullptr;
 
   // Thomas-Fermi screening radii
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
@@ -132,7 +132,7 @@ void G4WentzelVIRelXSection::Initialise(const G4ParticleDefinition* p,
   G4double a = G4EmParameters::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
-  currentMaterial = 0;
+  currentMaterial = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -147,7 +147,7 @@ void G4WentzelVIRelXSection::SetupParticle(const G4ParticleDefinition* p)
   chargeSquare = q*q;
   charge3 = chargeSquare*q;
   tkin = 0.0;
-  currentMaterial = 0;
+  currentMaterial = nullptr;
   targetZ = 0;
 }
 
@@ -349,7 +349,9 @@ G4WentzelVIRelXSection::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double mom22 = t1*(t1 + 2.0*mass);
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       if(ctm <  1.0) { cosTetMaxElec = ctm; }
-      if(particle == theElectron && cosTetMaxElec < 0.0) { cosTetMaxElec = 0.0; }
+      if(particle == theElectron && cosTetMaxElec < 0.0) { 
+	cosTetMaxElec = 0.0; 
+      }
     }
   }
 }

@@ -1337,7 +1337,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
      //      G4int je1 = je2 -1;
      //      je1 = je1 - 1;      // For array indexing
      //      je2 = je2 - 1;      // For array indexing
-
+     
       G4int je1 = 0;
       G4int je2 = NELAB - 1;
       do {
@@ -1346,7 +1346,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
            je2 = midBin;
          else
            je1 = midBin;
-      } while (je2 - je1 > 1); 
+      } while (je2 - je1 > 1); /* Loop checking, 08.01.2016, W. Pokorski */
 
       G4double delab = elab[je2] - elab[je1];
 
@@ -1369,7 +1369,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
            ja2 = midBin;
          else
            ja1 = midBin;
-      } while (ja2 - ja1 > 1); 
+      } while (ja2 - ja1 > 1); /* Loop checking, 08.01.2016, W. Pokorski */
 
       G4double dnlwat = cnlwat[ja2] - cnlwat[ja1];
 
@@ -1419,7 +1419,7 @@ G4HadronCrossSections::CalcScatteringCrossSections(
         je2 = midBin;
       else
         je1 = midBin;
-   } while (je2 - je1 > 1); 
+   } while (je2 - je1 > 1); /* Loop checking, 08.01.2016, W. Pokorski */
 
    G4int ipart1 = ipart - 1;      // For array indexing
 
@@ -1593,7 +1593,7 @@ G4HadronCrossSections::GetFissionCrossSection(const G4DynamicParticle* aParticle
       ie2 = midBin;
     else
       ie1 = midBin;
-  } while (ie2 - ie1 > 1); 
+  } while (ie2 - ie1 > 1); /* Loop checking, 08.01.2016, W. Pokorski */
   G4int i = ie2;
   if (ek < ekfiss[0]) i = 0;
 

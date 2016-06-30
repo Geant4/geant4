@@ -3,7 +3,7 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  TFile f = TFile("allproc.root");  
+  TFile f("allproc.root");  
   TCanvas* c1 = new TCanvas("c1", "  ");
 
   c1->Divide(3,1);
@@ -35,6 +35,6 @@
   hist13->SetLineColor(2);
   hist13->Draw("HIST SAME");          
 
-  c1.Print("allproc.gif");
-  c1.Close();
+  c1->Print("allproc.gif");
+  c1->Close();
 }  

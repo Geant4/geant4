@@ -34,6 +34,8 @@
 #include "G4RegionStore.hh"
 #include "G4GDMLParser.hh"
 #include "G4AutoDelete.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,12 +65,15 @@ G4VPhysicalVolume* Par02DetectorConstruction::Construct() {
         if ( ( myvol->GetName() ).find( "Tracker" ) != std::string::npos ) {
           fTrackerList.push_back( new G4Region( myvol->GetName() ) );
           fTrackerList.back()->AddRootLogicalVolume( myvol );
+          G4cout << G4endl << "tracker !!!" << G4endl;
         } else if ( ( myvol->GetName() ).find( "HCal" ) != std::string::npos ) {
           fHCalList.push_back( new G4Region( myvol->GetName() ) );
           fHCalList.back()->AddRootLogicalVolume( myvol );
+          G4cout << G4endl << "hcal !!!" << G4endl;
         } else if ( ( myvol->GetName() ).find( "ECal" ) != std::string::npos ) {
           fECalList.push_back( new G4Region( myvol->GetName() ) );
           fECalList.back()->AddRootLogicalVolume( myvol );
+          G4cout << G4endl << "ecal !!!" << G4endl;
         } else if ( ( myvol->GetName() ).find( "Muon" ) != std::string::npos ) {
           fMuonList.push_back( new G4Region( myvol->GetName() ) );
           fMuonList.back()->AddRootLogicalVolume( myvol );
@@ -117,7 +122,7 @@ void Par02DetectorConstruction::ConstructSDandField() {
     // to all the corresponding Geant4 regions
     Par02FastSimModelTracker* fastSimModelTracker
       = new Par02FastSimModelTracker( "fastSimModelTracker", fTrackerList[ iterTracker ],
-                                     Par02DetectorParametrisation::eCMS );
+                                      Par02DetectorParametrisation::eCMS );
                                      
     // Register the fast simulation model for deleting
     G4AutoDelete::Register(fastSimModelTracker);
@@ -127,7 +132,7 @@ void Par02DetectorConstruction::ConstructSDandField() {
     // to all the corresponding Geant4 regions
     Par02FastSimModelEMCal* fastSimModelEMCal
       = new Par02FastSimModelEMCal( "fastSimModelEMCal", fECalList[ iterECal ],
-                                  Par02DetectorParametrisation::eCMS );
+                                    Par02DetectorParametrisation::eCMS );
                                      
     // Register the fast simulation model for deleting
     G4AutoDelete::Register(fastSimModelEMCal);
@@ -137,15 +142,20 @@ void Par02DetectorConstruction::ConstructSDandField() {
     // to all the corresponding Geant4 regions
     Par02FastSimModelHCal* fastSimModelHCal
       = new Par02FastSimModelHCal( "fastSimModelHCal", fHCalList[ iterHCal ],
-                                 Par02DetectorParametrisation::eCMS );
+                                   Par02DetectorParametrisation::eCMS );
                                      
     // Register the fast simulation model for deleting
-    G4AutoDelete::Register(fastSimModelHCal);
+    G4AutoDelete::Register( fastSimModelHCal );
   }
   // Currently we don't have a fast muon simulation model to be bound
   // to all the corresponding Geant4 regions.
   // But it could be added in future, in a similar way as done above for
   // the tracker subdetector and the electromagnetic and hadronic calorimeters.
+
+  // Add global magnetic field
+  G4ThreeVector fieldValue = G4ThreeVector();
+  fMagFieldMessenger = new G4GlobalMagFieldMessenger( fieldValue );
+  fMagFieldMessenger->SetVerboseLevel(1);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

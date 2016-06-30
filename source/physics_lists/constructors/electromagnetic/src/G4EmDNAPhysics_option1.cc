@@ -33,6 +33,7 @@
 
 // *** Processes and models for Geant4-DNA
 
+#include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -153,6 +154,9 @@ void G4EmDNAPhysics_option1::ConstructProcess()
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
+      
+      ph->RegisterProcess(new G4DNAElectronSolvation("e-_G4DNAElectronSolvation"),
+                          particle);
 
       // *** Elastic scattering (two alternative models available) ***
       

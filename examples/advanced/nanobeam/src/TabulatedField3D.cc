@@ -29,6 +29,7 @@
 
 #include "TabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -481,23 +482,23 @@ if (fModel==3)
 
 	  P2 = 2*c2[i]/a0[i]/a0[i]; 	// d2P/fDz2
 
-	  cte = 1 + std::exp(c0[i]);   // (1+e^c0)
+	  cte = 1 + G4Exp(c0[i]);   // (1+e^c0)
 
-	  K1 = -cte*P1*std::exp(P0)/( (1+std::exp(P0))*(1+std::exp(P0)) );  // see (11) p1397 TNS 51
+	  K1 = -cte*P1*G4Exp(P0)/( (1+G4Exp(P0))*(1+G4Exp(P0)) );  // see (11) p1397 TNS 51
 
-	  K2 = -cte*std::exp(P0)*(					// see (12) p1397 TNS 51
-	   P2/( (1+std::exp(P0))*(1+std::exp(P0)) )
-	   +2*P1*K1/(1+std::exp(P0))/cte
-	   +P1*P1/(1+std::exp(P0))/(1+std::exp(P0))
+	  K2 = -cte*G4Exp(P0)*(					// see (12) p1397 TNS 51
+	   P2/( (1+G4Exp(P0))*(1+G4Exp(P0)) )
+	   +2*P1*K1/(1+G4Exp(P0))/cte
+	   +P1*P1/(1+G4Exp(P0))/(1+G4Exp(P0))
 	   );                                                            
  
-	  K3 = -cte*std::exp(P0)*(				// see (13) p1397 TNS 51	
-	   (3*P2*P1+P1*P1*P1)/(1+std::exp(P0))/(1+std::exp(P0))
-	   +4*K1*(P1*P1+P2)/(1+std::exp(P0))/cte
-	   +2*P1*(K1*K1/cte/cte+K2/(1+std::exp(P0))/cte)
+	  K3 = -cte*G4Exp(P0)*(				// see (13) p1397 TNS 51	
+	   (3*P2*P1+P1*P1*P1)/(1+G4Exp(P0))/(1+G4Exp(P0))
+	   +4*K1*(P1*P1+P2)/(1+G4Exp(P0))/cte
+	   +2*P1*(K1*K1/cte/cte+K2/(1+G4Exp(P0))/cte)
 	   );
 	  
-	  G0 = gradient[i]*cte/(1+std::exp(P0));    	// G = G0*K(z) see (7) p1397 TNS 51
+	  G0 = gradient[i]*cte/(1+G4Exp(P0));    	// G = G0*K(z) see (7) p1397 TNS 51
 	  G1 = gradient[i]*K1;				// dG/fDz
 	  G2 = gradient[i]*K2;				// d2G/fDz2
 	  G3 = gradient[i]*K3;				// d3G/fDz3

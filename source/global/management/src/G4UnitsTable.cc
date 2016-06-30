@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc 94074 2015-11-05 14:56:40Z gcosmo $
+// $Id: G4UnitsTable.cc 96706 2016-05-02 09:31:38Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -149,9 +149,9 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
           }
      }
   std::ostringstream message;
-  message << "The unit '" << str << "' does not exist in the Units Table.";
+  message << "The unit '" << str << "' does not exist in the Units Table!";
   G4Exception("G4UnitDefinition::GetValueOf()", "InvalidUnit",
-              JustWarning, message, "Returning Value = 0.");
+              FatalException, message);
   return 0.;             
 }
 
@@ -171,9 +171,9 @@ G4String G4UnitDefinition::GetCategory(const G4String& str)
           }
      }
   std::ostringstream message;
-  message << "The unit '" << str << "' does not exist in the Units Table.";
+  message << "The unit '" << str << "' does not exist in the Units Table!";
   G4Exception("G4UnitDefinition::GetCategory()", "InvalidUnit",
-              JustWarning, message, "Returning Value = 0.");
+              FatalException, message);
   name = "None";     
   return name;             
 }
@@ -237,7 +237,7 @@ void G4UnitDefinition::BuildUnitsTable()
  //Time
  new G4UnitDefinition(     "second","s"      ,"Time",second);
  new G4UnitDefinition("millisecond","ms"     ,"Time",millisecond);
- new G4UnitDefinition("microsecond","mus"    ,"Time",microsecond);
+ new G4UnitDefinition("microsecond","us"     ,"Time",microsecond);
  new G4UnitDefinition( "nanosecond","ns"     ,"Time",nanosecond);
  new G4UnitDefinition( "picosecond","ps"     ,"Time",picosecond);
  

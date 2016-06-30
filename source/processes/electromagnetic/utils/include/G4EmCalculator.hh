@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 90333 2015-05-26 08:28:09Z gcosmo $
+// $Id: G4EmCalculator.hh 96834 2016-05-12 09:19:10Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -76,6 +76,7 @@ class G4ionEffectiveCharge;
 class G4Region;
 class G4Element;
 class G4EmCorrections;
+class G4EmParameters;
 class G4IonTable;
 
 class G4EmCalculator
@@ -94,7 +95,7 @@ public:
 
   G4double GetDEDX(G4double kinEnergy, const G4ParticleDefinition*, 
 		   const G4Material*,
-                   const G4Region* r = 0);
+                   const G4Region* r = nullptr);
   inline G4double GetDEDX(G4double kinEnergy, const G4String& part, 
 		   const G4String& mat,
                    const G4String& s = "world");
@@ -102,7 +103,7 @@ public:
   G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 				     const G4ParticleDefinition*, 
 				     const G4Material*,
-				     const G4Region* r = 0);
+				     const G4Region* r = nullptr);
   inline G4double GetRangeFromRestricteDEDX(G4double kinEnergy, 
 					    const G4String& part, 
 					    const G4String& mat,
@@ -110,21 +111,21 @@ public:
 
   G4double GetCSDARange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetCSDARange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
 
   G4double GetRange(G4double kinEnergy, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetRange(G4double kinEnergy, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
 
   G4double GetKinEnergy(G4double range, const G4ParticleDefinition*, 
 			const G4Material*,
-			const G4Region* r = 0);
+			const G4Region* r = nullptr);
   inline G4double GetKinEnergy(G4double range, const G4String& part, 
 			const G4String& mat,
 			const G4String& s = "world");
@@ -132,7 +133,7 @@ public:
   G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4ParticleDefinition*,
                    const G4String& processName,  const G4Material*,
-		   const G4Region* r = 0);
+		   const G4Region* r = nullptr);
   inline G4double GetCrossSectionPerVolume(
                    G4double kinEnergy, const G4String& part, const G4String& proc,
                    const G4String& mat, const G4String& s = "world");
@@ -144,7 +145,7 @@ public:
 
   G4double GetMeanFreePath(G4double kinEnergy, const G4ParticleDefinition*,
 			   const G4String& processName,  const G4Material*,
-			   const G4Region* r = 0);
+			   const G4Region* r = nullptr);
   inline G4double GetMeanFreePath(G4double kinEnergy, const G4String& part, 
 				  const G4String& proc, const G4String& mat, 
 				  const G4String& s = "world");
@@ -225,7 +226,7 @@ public:
                    const G4String& part, G4int Z, 
 		   G4AtomicShellEnumerator shell,
                    G4double kinEnergy,
-                   const G4Material* mat = 0);
+                   const G4Material* mat = nullptr);
 
   G4double ComputeMeanFreePath(
                        G4double kinEnergy, const G4ParticleDefinition*,
@@ -255,7 +256,7 @@ public:
   const G4Region* FindRegion(const G4String&);
 
   const G4MaterialCutsCouple* FindCouple(const G4Material*, 
-					 const G4Region* r = 0);
+					 const G4Region* r = nullptr);
 
   G4VProcess* FindProcess(const G4ParticleDefinition* part,
 			  const G4String& processName);
@@ -300,12 +301,14 @@ private:
 
   void CheckMaterial(G4int Z);
 
-  G4EmCalculator & operator=(const  G4EmCalculator &right);
-  G4EmCalculator(const  G4EmCalculator&);
+  // hide copy and assign
+  G4EmCalculator & operator=(const  G4EmCalculator &right) = delete;
+  G4EmCalculator(const  G4EmCalculator&) = delete;
 
   std::vector<const G4Material*>            localMaterials;
   std::vector<const G4MaterialCutsCouple*>  localCouples;
 
+  G4EmParameters*              theParameters;
   G4LossTableManager*          manager;
   G4NistManager*               nist;
   G4IonTable*                  ionTable;
@@ -315,7 +318,7 @@ private:
 
   G4int                        verbose;
 
-  // cash
+  // cache
   G4int                        currentCoupleIndex;
   const G4MaterialCutsCouple*  currentCouple;
   const G4Material*            currentMaterial;
@@ -524,7 +527,7 @@ inline G4double G4EmCalculator::ComputeCrossSectionPerShell(
                        G4int shellIdx, G4double cut)
 {
   return ComputeCrossSectionPerShell(kinEnergy, FindParticle(part), 
-				     processName, G4lrint(elm->GetZ()), 
+				     processName, elm->GetZasInt(), 
 				     shellIdx, cut);
 }
 

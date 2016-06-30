@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAWaterDissociationDisplacer.cc 94289 2015-11-11 08:33:40Z gcosmo $
+// $Id: G4DNAWaterDissociationDisplacer.cc 95948 2016-03-03 10:40:33Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -50,6 +50,7 @@
 #include "G4Molecule.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4RandomDirection.hh"
+#include "G4Exp.hh"
 
 using namespace std;
 
@@ -68,7 +69,7 @@ const DisplacementType G4DNAWaterDissociationDisplacer::DissociativeAttachment =
 
 G4double G4DNAWaterDissociationDisplacer::ElectronProbaDistribution(G4double r)
 {
-  return (2*r+1)*exp(-2*r);
+  return (2*r+1)*G4Exp(-2*r);
 }
 
 //------------------------------------------------------------------------------

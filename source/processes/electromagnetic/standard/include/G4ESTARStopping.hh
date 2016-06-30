@@ -63,7 +63,7 @@ class G4ESTARStopping
 { 
 public: 
 
-  G4ESTARStopping(const G4String& datatype = "");
+  explicit G4ESTARStopping(const G4String& datatype = "");
 
   ~G4ESTARStopping();
 
@@ -80,8 +80,8 @@ private:
   void AddData(const G4double* e, const G4double* s, G4int idx);
 
   // hide assignment operator
-  G4ESTARStopping & operator=(const  G4ESTARStopping &right);
-  G4ESTARStopping(const  G4ESTARStopping&);
+  G4ESTARStopping & operator=(const  G4ESTARStopping &right) = delete;
+  G4ESTARStopping(const  G4ESTARStopping&) = delete;
 
   char* dirPath;
 

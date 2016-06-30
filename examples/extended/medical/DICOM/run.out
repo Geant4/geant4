@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -128,16 +128,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -330,56 +332,47 @@ EV: 99
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	1.11642e-06 Gy
+      TOTAL DOSE : 	9.49138e-07 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 200
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    8002     8.48299e-11 Gy
-    8003     2.23508e-08 Gy
-    8127     1.00446e-08 Gy
-    8130     1.10366e-07 Gy
-    8131     1.00286e-07 Gy
-    8254     8.46714e-11 Gy
-    8255     1.83198e-08 Gy
-    8256     6.01932e-09 Gy
-    8257     4.61277e-09 Gy
-    8258     8.0558e-08 Gy
-    8259     7.9113e-08 Gy
-    24002     1.45868e-09 Gy
-    24130     2.58639e-09 Gy
-    24258     1.57292e-09 Gy
-    24508     1.93428e-08 Gy
-    24509     1.06297e-10 Gy
-    24514     7.50494e-08 Gy
-    24515     9.30203e-08 Gy
-    24637     2.48446e-08 Gy
-    24638     2.11817e-08 Gy
-    24642     5.36576e-08 Gy
-    24643     7.58565e-08 Gy
-    40642     2.9554e-10 Gy
-    40770     4.64633e-09 Gy
-    40898     7.78397e-08 Gy
-    40899     8.49878e-08 Gy
-    41026     6.61027e-08 Gy
-    41027     7.62014e-08 Gy
-    41154     1.38578e-09 Gy
-    41282     2.41042e-09 Gy
-    41410     2.03699e-09 Gy
+    6704     3.1263e-09 Gy
+    6832     1.90159e-08 Gy
+    7880     4.581e-10 Gy
+    8130     5.72291e-08 Gy
+    8131     5.56063e-08 Gy
+    8258     9.45108e-08 Gy
+    8259     6.95383e-08 Gy
+    22959     4.9022e-09 Gy
+    23087     2.79564e-09 Gy
+    23088     1.91126e-10 Gy
+    24514     5.95054e-08 Gy
+    24515     6.14964e-08 Gy
+    24642     8.52529e-08 Gy
+    24643     8.6592e-08 Gy
+    39343     3.26774e-09 Gy
+    40898     6.03096e-08 Gy
+    40899     9.5625e-08 Gy
+    41026     8.29401e-08 Gy
+    41027     1.04105e-07 Gy
+    41028     2.21913e-09 Gy
+    41029     1.29736e-10 Gy
+    41401     3.21576e-10 Gy
 =============================================
  closed file dicom.out for dose output
 Finished : End of Run Action 0
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.036 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.032 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 Graphics systems deleted.

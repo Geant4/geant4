@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc 93289 2015-10-15 10:01:15Z gcosmo $
+// $Id: G4VoxelNavigation.cc 96743 2016-05-03 08:01:33Z gcosmo $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -40,10 +40,6 @@
 
 #include "G4AuxiliaryNavServices.hh"
 
-#ifdef G4DEBUG_NAVIGATION
-static int debugVerboseLevel= 5;    // Reports most about daughter volumes
-#endif
-
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -57,11 +53,12 @@ G4VoxelNavigation::G4VoxelNavigation()
     fVoxelHeaderStack(kNavigatorVoxelStackMax,(G4SmartVoxelHeader*)0),
     fVoxelNode(0), fpVoxelSafety(0), fCheck(false), fBestSafety(false)
 {
-  fLogger = new G4NavigationLogger("G4VoxelNavigation");
-  fpVoxelSafety = new G4VoxelSafety();
+  fLogger= new G4NavigationLogger("G4VoxelNavigation");
+  fpVoxelSafety= new G4VoxelSafety();
+  fHalfTolerance= 0.5*G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
 #ifdef G4DEBUG_NAVIGATION
-  SetVerboseLevel(debugVerboseLevel);   // Reports most about daughter volumes
+  SetVerboseLevel(5);   // Reports most about daughter volumes
 #endif
 }
 
@@ -163,6 +160,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
     if( (motherStep >= kInfinity) || (motherStep < 0.0) )
     {
       // Error - indication of being outside solid !!
+      //
       fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
     
       ourStep = 0.0;
@@ -321,22 +319,25 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
             {
               fLogger->CheckAndReportBadNormal(motherExitNormal,
                                               localPoint, localDirection, 
-                                              motherStep, motherSolid,                                    
+                                              motherStep, motherSolid,
                                         "From motherSolid::DistanceToOut" );
-            }          
+            }
           }
 #endif
           if( (motherStep >= kInfinity) || (motherStep < 0.0) )
           {
-            // Error - indication of being outside solid !!
-            //
-            fLogger->ReportOutsideMother(localPoint, localDirection, motherPhysical);
-             
+#ifdef G4VERBOSE
+            if( fCheck ) // Error - indication of being outside solid !!
+            {
+              fLogger->ReportOutsideMother(localPoint, localDirection,
+                                           motherPhysical);
+            }
+#endif
             motherStep = 0.0;
             ourStep = 0.0;
             exiting = true;
             entering = false;
-             
+
             // validExitNormal= motherValidExitNormal;
             // exitNormal= motherExitNormal;
             // Useful only if the point is very close to surface
@@ -374,8 +375,7 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
                                                     *rot,
                                                     // motherPhysical, 
                                                     "From RotationMatrix" );
-
-#endif                
+#endif
               }
             }
           }
@@ -510,8 +510,6 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
   G4bool isNewVoxel=false;
   
   G4double currentDistance = currentStep;
-  static const G4double sigma = 0.5*G4GeometryTolerance::GetInstance()
-                                    ->GetSurfaceTolerance();
 
   // Determine if end of Step within current voxel
   //
@@ -527,10 +525,10 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
     workCoord = targetPoint(workHeaderAxis);
     minVal = workMinExtent+workNodeNo*workNodeWidth;
 
-    if ( minVal<=workCoord+sigma )
+    if ( minVal<=workCoord+fHalfTolerance )
     {
       maxVal = minVal+workNodeWidth;
-      if ( maxVal<=workCoord-sigma )
+      if ( maxVal<=workCoord-fHalfTolerance )
       {
         // Must consider next voxel
         //
@@ -567,11 +565,11 @@ G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
     workCoord = targetPoint(workHeaderAxis);
     minVal = workMinExtent+fVoxelNode->GetMinEquivalentSliceNo()*workNodeWidth;
 
-    if ( minVal<=workCoord+sigma )
+    if ( minVal<=workCoord+fHalfTolerance )
     {
       maxVal = workMinExtent+(fVoxelNode->GetMaxEquivalentSliceNo()+1)
                             *workNodeWidth;
-      if ( maxVal<=workCoord-sigma )
+      if ( maxVal<=workCoord-fHalfTolerance )
       {
         newNodeNo = fVoxelNode->GetMaxEquivalentSliceNo()+1;
         newHeader = workHeader;

@@ -112,6 +112,8 @@ G4FFG_FUNCTIONENTER__
         IsHeavy = (Particle->GetAtomicMass() > HalfWeight_);
         IsNotFeasable = (Particle->GetAtomicMass() > RemainingA_ + 1
             || Particle->GetAtomicNumber() > RemainingZ_ + 1);
+        
+        Counter++;
     } while (IsHeavy || IsNotFeasable); // Loop checking, 11.05.2015, T. Koi
     
     // Something went wrong, so figure out how to fix it

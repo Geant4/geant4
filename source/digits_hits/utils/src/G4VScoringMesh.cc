@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.cc 83518 2014-08-27 12:57:10Z gcosmo $
+// $Id: G4VScoringMesh.cc 96535 2016-04-20 12:14:15Z gcosmo $
 //
 // ---------------------------------------------------------------------
 // Modifications                                                        
@@ -44,11 +44,11 @@
 #include "G4SDManager.hh"
 
 G4VScoringMesh::G4VScoringMesh(const G4String& wName)
-  : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),fShape(undefinedMesh),
-    fRotationMatrix(0), fMFD(new G4MultiFunctionalDetector(wName)),
+  : fWorldName(wName),fCurrentPS(nullptr),fConstructed(false),fActive(true),fShape(undefinedMesh),
+    fRotationMatrix(nullptr), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
-    fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(0),
-    fParallelWorldProcess(0), fGeometryHasBeenDestroyed(false)
+    fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(nullptr),
+    fParallelWorldProcess(nullptr), fGeometryHasBeenDestroyed(false)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -57,19 +57,19 @@ G4VScoringMesh::G4VScoringMesh(const G4String& wName)
   fDivisionAxisNames[0] = fDivisionAxisNames[1] = fDivisionAxisNames[2] = "";
 }
 
-G4VScoringMesh::~G4VScoringMesh()
-{
+G4VScoringMesh::~G4VScoringMesh() {
   ;
 }
 
 void G4VScoringMesh::ResetScore() {
   if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore() is called." << G4endl;
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
-  for(; itr != fMap.end(); itr++) {
-    if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore()" << itr->first << G4endl;
-    itr->second->clear();
+  for(auto mp : fMap)
+  {
+    if(verboseLevel > 9) G4cout << "G4VScoringMesh::ResetScore()" << mp.first << G4endl;
+    mp.second->clear();
   }
 }
+
 void G4VScoringMesh::SetSize(G4double size[3]) {
   if ( !sizeIsSet ){
     for(int i = 0; i < 3; i++) fSize[i] = size[i];
@@ -105,46 +105,47 @@ void G4VScoringMesh::GetNumberOfSegments(G4int nSegment[3]) {
   for(int i = 0; i < 3; i++) nSegment[i] = fNSegment[i];
 }
 void G4VScoringMesh::RotateX(G4double delta) {
-  if(fRotationMatrix == 0) fRotationMatrix = new G4RotationMatrix();
+  if(!fRotationMatrix) fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateX(delta);
 }
 
 void G4VScoringMesh::RotateY(G4double delta) {
-  if(fRotationMatrix == 0) fRotationMatrix = new G4RotationMatrix();
+  if(!fRotationMatrix) fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateY(delta);
 }
 
 void G4VScoringMesh::RotateZ(G4double delta) {
-  if(fRotationMatrix == 0) fRotationMatrix = new G4RotationMatrix();
+  if(!fRotationMatrix) fRotationMatrix = new G4RotationMatrix();
   fRotationMatrix->rotateZ(delta);
 }
 
-void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * ps) {
+void G4VScoringMesh::SetPrimitiveScorer(G4VPrimitiveScorer * prs) {
 
   if(!ReadyForQuantity())
   {
-    G4cerr << "ERROR : G4VScoringMesh::SetPrimitiveScorer() : " << ps->GetName() 
+    G4cerr << "ERROR : G4VScoringMesh::SetPrimitiveScorer() : "
+           << prs->GetName() 
            << " does not yet have mesh size or number of bins. Set them first." << G4endl
            << "This Method is ignored." << G4endl;
     return;
   }
   if(verboseLevel > 0) G4cout << "G4VScoringMesh::SetPrimitiveScorer() : "
-			      << ps->GetName() << " is registered."
+			      << prs->GetName() << " is registered."
 			      << " 3D size: ("
 			      << fNSegment[0] << ", "
 			      << fNSegment[1] << ", "
 			      << fNSegment[2] << ")" << G4endl;
 
-  ps->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
-  fCurrentPS = ps;
-  fMFD->RegisterPrimitive(ps);
-  G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, ps->GetName());
-  fMap[ps->GetName()] = map;
+  prs->SetNijk(fNSegment[0], fNSegment[1], fNSegment[2]);
+  fCurrentPS = prs;
+  fMFD->RegisterPrimitive(prs);
+  G4THitsMap<G4double> * map = new G4THitsMap<G4double>(fWorldName, prs->GetName());
+  fMap[prs->GetName()] = map;
 }
 
 void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
-  if(fCurrentPS == 0) {
+  if(!fCurrentPS) {
     G4cerr << "ERROR : G4VScoringMesh::SetSDFilter() : a quantity must be defined first. This method is ignored." << G4endl;
     return;
   }
@@ -164,7 +165,7 @@ void G4VScoringMesh::SetFilter(G4VSDFilter * filter) {
 
 void G4VScoringMesh::SetCurrentPrimitiveScorer(const G4String & name) {
   fCurrentPS = GetPrimitiveScorer(name);
-  if(fCurrentPS == 0) {
+  if(!fCurrentPS) {
     G4cerr << "ERROR : G4VScoringMesh::SetCurrentPrimitiveScorer() : The primitive scorer <"
 	   << name << "> does not found." << G4endl;
   }
@@ -186,8 +187,8 @@ G4String G4VScoringMesh::GetPSUnit(const G4String & psname) {
 }
 
 G4String G4VScoringMesh::GetCurrentPSUnit(){
-    G4String unit = "";
-  if(fCurrentPS == 0) {
+  G4String unit = "";
+  if(!fCurrentPS) {
       G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
       msg += " Current primitive scorer is null.";
       G4cerr << msg << G4endl;
@@ -198,7 +199,7 @@ G4String G4VScoringMesh::GetCurrentPSUnit(){
 }
 
 void  G4VScoringMesh::SetCurrentPSUnit(const G4String& unit){
-  if(fCurrentPS == 0) {
+  if(!fCurrentPS) {
       G4String msg = "ERROR : G4VScoringMesh::GetCurrentPSUnit() : ";
       msg += " Current primitive scorer is null.";
       G4cerr << msg << G4endl;
@@ -221,15 +222,15 @@ void G4VScoringMesh::GetDivisionAxisNames(G4String divisionAxisNames[3]) {
 }
 
 G4VPrimitiveScorer * G4VScoringMesh::GetPrimitiveScorer(const G4String & name) {
-  if(fMFD == 0) return 0;
+  if(!fMFD) return nullptr;
 
   G4int nps = fMFD->GetNumberOfPrimitives();
   for(G4int i = 0; i < nps; i++) {
-    G4VPrimitiveScorer * ps = fMFD->GetPrimitive(i);
-    if(name == ps->GetName()) return ps;
+    G4VPrimitiveScorer * prs = fMFD->GetPrimitive(i);
+    if(name == prs->GetName()) return prs;
   }
 
-  return 0;
+  return nullptr;
 }
 void G4VScoringMesh::List() const {
 
@@ -261,25 +262,22 @@ void G4VScoringMesh::List() const {
 
   G4cout << " registered primitve scorers : " << G4endl;
   G4int nps = fMFD->GetNumberOfPrimitives();
-  G4VPrimitiveScorer * ps;
+  G4VPrimitiveScorer * prs;
   for(int i = 0; i < nps; i++) {
-    ps = fMFD->GetPrimitive(i);
-    G4cout << "   " << i << "  " << ps->GetName();
-    if(ps->GetFilter() != 0) G4cout << "     with  " << ps->GetFilter()->GetName();
+    prs = fMFD->GetPrimitive(i);
+    G4cout << "   " << i << "  " << prs->GetName();
+    if(prs->GetFilter() != 0) G4cout << "     with  " << prs->GetFilter()->GetName();
     G4cout << G4endl;
   }
-
-
 }
 
 void G4VScoringMesh::Dump() {
   G4cout << "scoring mesh name: " << fWorldName << G4endl;
-
   G4cout << "# of G4THitsMap : " << fMap.size() << G4endl;
-  std::map<G4String, G4THitsMap<G4double>* >::iterator itr = fMap.begin();
-  for(; itr != fMap.end(); itr++) {
-    G4cout << "[" << itr->first << "]" << G4endl;
-    itr->second->PrintAllHits();
+  for(auto mp : fMap)
+  {
+    G4cout << "[" << mp.first << "]" << G4endl;
+    mp.second->PrintAllHits();
   }
   G4cout << G4endl;
 

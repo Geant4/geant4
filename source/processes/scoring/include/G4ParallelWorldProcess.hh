@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.hh 68733 2013-04-05 09:45:28Z gcosmo $
+// $Id: G4ParallelWorldProcess.hh 95193 2016-01-29 08:23:25Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 // 
@@ -79,7 +79,7 @@ public: // with description
   //------------------------
   
   G4ParallelWorldProcess(const G4String& processName = "ParaWorld",
-				 G4ProcessType theType = fParameterisation);
+				 G4ProcessType theType = fParallel);
   virtual ~G4ParallelWorldProcess();
   
   //--------------------------------------------------------------

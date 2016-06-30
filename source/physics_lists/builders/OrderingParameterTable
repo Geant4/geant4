@@ -8,7 +8,7 @@ Annih		2	5	 5	-1	5	0
 AnnihToMuMu	2	6	-1	-1	6	0
 AnnihToHad	2	7	-1	-1	7	0
 NuclearStopp	2	8	-1	 8	-1	0
-Msc		2	10	-1	 1	1	0
+Msc		2	10	-1	 1	-1	0
 Rayleigh	2	11	-1	-1	1000	0	
 PhotoElectric	2	12	-1	-1	1000	0	
 Compton		2	13	-1	-1	1000	0

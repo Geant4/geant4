@@ -53,9 +53,9 @@ std::string MixMaxRng::name() const { return "MixMaxRng"; } // N=" + N
 MixMaxRng::MixMaxRng()
 : HepRandomEngine()
 {
-   numberOfEngines++;
+   int numEngines = ++numberOfEngines;
    fRngState= rng_alloc();
-   setSeed(static_cast<long>(numberOfEngines));
+   setSeed(static_cast<long>(numEngines));
 }
 
 MixMaxRng::MixMaxRng(long seed)
@@ -135,7 +135,7 @@ void MixMaxRng::showStatus() const
 
 void MixMaxRng::setSeed(long longSeed, int /* extraSeed */)
 {
-   unsigned long seed0, seed1= 0, seed2= 0, seed3= 0;
+   unsigned long seed0;
 
    theSeed = longSeed;
    if( sizeof(long) > 4)  // C standard says long is at least 32-bits
@@ -143,7 +143,7 @@ void MixMaxRng::setSeed(long longSeed, int /* extraSeed */)
    else
      seed0= longSeed;
 
-   seed_uniquestream(this->fRngState, seed3, seed2, seed1, seed0 );
+   seed_spbox(fRngState, seed0);
 }
 
 //  Preferred Seeding method
@@ -174,7 +174,7 @@ void MixMaxRng::setSeeds(const long* Seeds, int seedNum)
    }
    theSeed = Seeds[0];
    theSeeds = Seeds;
-   seed_uniquestream(this->fRngState, seed3, seed2, seed1, seed0 );
+   seed_uniquestream(fRngState, seed3, seed2, seed1, seed0);
 }
 
 double MixMaxRng::flat()
@@ -182,9 +182,10 @@ double MixMaxRng::flat()
    return get_next_float(fRngState);
 }
 
-void MixMaxRng::flatArray(const int size, double* arrayDbl )
+void MixMaxRng::flatArray(const int size, double* vect )
 {
-   fill_array( fRngState, size, arrayDbl );
+   // fill_array( fRngState, size, arrayDbl );
+   for (int i=0; i<size; ++i) { vect[i] = flat(); }
 }
 
 MixMaxRng::operator unsigned int()
@@ -268,7 +269,7 @@ std::istream &  MixMaxRng::getState ( std::istream& is )
                  << "\nInput stream is probably mispositioned now.\n";
        return is;
    }
-   if ( fRngState->counter < 0 || fRngState->counter > N-1 ) {
+   if ( fRngState->counter < 0 || fRngState->counter > rng_get_N() ) {
        std::cerr << "\nMixMaxRng::getState(): "
                  << "vector read wrong value of counter from file!"
                  << "\nInput stream is probably mispositioned now.\n";

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuPairProduction.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -83,7 +83,7 @@ using namespace std;
 
 G4MuPairProduction::G4MuPairProduction(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
+    theParticle(nullptr),
     lowestKinEnergy(1.*GeV),
     isInitialised(false)
 {
@@ -124,16 +124,17 @@ void G4MuPairProduction::InitialiseEnergyLossProcess(
 
     theParticle = part;
 
-    if (!EmModel()) { SetEmModel(new G4MuPairProductionModel(part)); }
+    G4MuPairProductionModel* mod = new G4MuPairProductionModel(part); 
+    SetEmModel(mod, 1);
 
-    G4double limit = part->GetPDGMass()*8;
-    if(limit > lowestKinEnergy) { lowestKinEnergy = limit; }
+    lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
+    mod->SetLowestKineticEnergy(lowestKinEnergy);
 
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(), fm);
+    mod->SetLowEnergyLimit(param->MinKinEnergy());
+    mod->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, mod, fm);
   }
 }
 

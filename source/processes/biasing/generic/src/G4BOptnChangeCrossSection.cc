@@ -29,7 +29,8 @@
 
 
 G4BOptnChangeCrossSection::G4BOptnChangeCrossSection(G4String name)
-  : G4VBiasingOperation(name)
+  : G4VBiasingOperation( name  ),
+    fInteractionOccured( false )
 {
   fBiasedExponentialLaw = new G4InteractionLawPhysical("LawForOperation"+name);
 }

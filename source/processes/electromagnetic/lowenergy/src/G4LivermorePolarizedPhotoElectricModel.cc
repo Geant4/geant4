@@ -49,13 +49,13 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricModel::fCrossSection[] = {0};
-G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricModel::fCrossSectionLE[] = {0};
-std::vector<G4double>* G4LivermorePolarizedPhotoElectricModel::fParam[] = {0};
+G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricModel::fCrossSection[] = {nullptr};
+G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricModel::fCrossSectionLE[] = {nullptr};
+std::vector<G4double>* G4LivermorePolarizedPhotoElectricModel::fParam[] = {nullptr};
 G4int                  G4LivermorePolarizedPhotoElectricModel::fNShells[] = {0};
 G4int                  G4LivermorePolarizedPhotoElectricModel::fNShellsUsed[] = {0};
-G4ElementData*         G4LivermorePolarizedPhotoElectricModel::fShellCrossSection = 0;
-G4Material*            G4LivermorePolarizedPhotoElectricModel::fWater = 0;
+G4ElementData*         G4LivermorePolarizedPhotoElectricModel::fShellCrossSection = nullptr;
+G4Material*            G4LivermorePolarizedPhotoElectricModel::fWater = nullptr;
 G4double               G4LivermorePolarizedPhotoElectricModel::fWaterEnergyLimit = 0.0;
 
 using namespace std;
@@ -63,9 +63,9 @@ using namespace std;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedPhotoElectricModel::G4LivermorePolarizedPhotoElectricModel(const G4String& nam)
-  : G4VEmModel(nam),fParticleChange(0),maxZ(99),
+  : G4VEmModel(nam),fParticleChange(nullptr),maxZ(99),
     nShellLimit(100),fDeexcitationActive(false),isInitialised(false),
-    fAtomDeexcitation(0)
+    fAtomDeexcitation(nullptr)
 { 
   verboseLevel= 0;
   // Verbosity scale:

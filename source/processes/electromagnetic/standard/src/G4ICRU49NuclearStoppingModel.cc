@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,9 +62,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4ICRU49NuclearStoppingModel::ad[] = {0.0};
-G4double G4ICRU49NuclearStoppingModel::ed[] = {0.0};
-
 using namespace std;
 
 G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam) 
@@ -72,7 +69,6 @@ G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam)
 {
   theZieglerFactor = eV*cm2*1.0e-15;
   g4pow = G4Pow::GetInstance();
-  if(ad[0] == 0.0) { InitialiseNuclearStopping(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -152,41 +148,7 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
 
   G4double er = 32.536 * mass2 * energy / ( z12 * rm ) ;  // reduced energy
 
-  if (er >= ed[0]) { nloss = ad[0]; }
-  else {
-    // the table is inverse in energy
-    for (G4int i=102; i>=0; --i)
-    {
-      if (er <= ed[i]) {
-	nloss = (ad[i] - ad[i+1])*(er - ed[i+1])/(ed[i] - ed[i+1]) + ad[i+1];
-	break;
-      }
-    }
-  }
-
-  // Stragling
-  if(lossFlucFlag) {
-    // G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
-    // (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
-    G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
-				    (4.0 + 0.197/(er*er) + 6.584/er));
-
-    nloss *= G4RandGauss::shoot(1.0,sig);
-    lossFlucFlag = false;
-  }
-   
-  nloss *= 8.462 * z12 * mass1 / rm; // Return to [ev/(10^15 atoms/cm^2]
-
-  if ( nloss < 0.0) { nloss = 0.0; }
-
-  return nloss;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4ICRU49NuclearStoppingModel::InitialiseNuclearStopping()
-{
-  const G4double nuca[104][2] = {
+  static const G4double nuca[104][2] = {
   { 1.0E+8, 5.831E-8},
   { 8.0E+7, 7.288E-8},
   { 6.0E+7, 9.719E-8},
@@ -305,10 +267,34 @@ void G4ICRU49NuclearStoppingModel::InitialiseNuclearStopping()
   { 0.0, 3.166E-3}
   };
 
-  for(G4int i=0; i<104; ++i) {
-    ed[i] = nuca[i][0];
-    ad[i] = nuca[i][1];
+  if (er >= nuca[0][0]) { nloss = nuca[0][1]; }
+  else {
+    // the table is inverse in energy
+    for (G4int i=102; i>=0; --i) {
+      G4double edi = nuca[i][0];
+      if (er <= edi) {
+        G4double edi1 = nuca[i+1][0];
+        G4double ai   = nuca[i][1];
+        G4double ai1  = nuca[i+1][1];
+        nloss = (ai - ai1)*(er - edi1)/(edi - edi1) + ai1;
+        break;
+      }
+    }
   }
+
+  // Stragling
+  if(lossFlucFlag) {
+    G4double sig = 4.0 * mass1 * mass2 / ((mass1 + mass2)*(mass1 + mass2)*
+				    (4.0 + 0.197/(er*er) + 6.584/er));
+
+    nloss *= G4RandGauss::shoot(1.0,sig);
+    lossFlucFlag = false;
+  }
+   
+  nloss *= 8.462 * z12 * mass1 / rm; // Return to [ev/(10^15 atoms/cm^2]
+
+  nloss = std::max(nloss, 0.0);
+  return nloss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

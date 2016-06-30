@@ -7,9 +7,8 @@
 /w/det/setTrackingCut 7.4 eV
 #
 # Register physics constructor
-/w/phys/addPhysics  G4EmDNAPhysics	        
-#/w/phys/addPhysics  G4EmDNAPhysics_option4	
-
+/w/phys/addPhysics dna	        
+#/w/phys/addPhysics  dna_opt4	
 #
 /run/initialize
 #

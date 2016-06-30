@@ -64,6 +64,7 @@ private:
 	void InitParameters();
 	void DiffractiveSplitUp();
 	void SoftSplitUp();
+
 	G4ThreeVector GaussianPt(G4double widthSquare, G4double maxPtSquare);
 	void GetValenceQuarkFlavors(const G4ParticleDefinition * aPart,
 			G4Parton *& Parton1, G4Parton *& Parton2);
@@ -76,7 +77,12 @@ private:
 
 	std::deque<G4Parton *> Color;
 	std::deque<G4Parton *> AntiColor;
+//std::deque<G4Parton *>::iterator iP;      // Uzhi
+//std::deque<G4Parton *>::iterator iAP;     // Uzhi
+unsigned int iP;                            // Uzhi 5.06.2015
+unsigned int iAP;                           // Uzhi 5.06.2015
 private:
+
 	// associated classes
 	G4MesonSplitter theMesonSplitter;
 	G4BaryonSplitter theBaryonSplitter;
@@ -95,16 +101,29 @@ private:
 inline G4Parton* G4QGSMSplitableHadron::GetNextParton()
 {
 	if(Color.size()==0) return 0;
-	G4Parton * result = Color.back();
-	Color.pop_back();
+//Uzhi	G4Parton * result = Color.back();
+//Uzhi	Color.pop_back();
+/*
+        G4Parton * result = *iP;                        
+        iP++; if( iP == Color.end()) iP=Color.begin();
+*/
+
+        G4Parton * result = Color.operator[](iP);
+        iP++; if(iP == Color.size()) iP=0;
 	return result;
 }
 
 inline G4Parton* G4QGSMSplitableHadron::GetNextAntiParton()
 {
 	if(AntiColor.size() == 0) return 0;
-	G4Parton * result = AntiColor.front();
-	AntiColor.pop_front();
+//Uzhi	G4Parton * result = AntiColor.front();
+//Uzhi	AntiColor.pop_front();
+/*
+        G4Parton * result = *iAP; 
+        iAP++; if( iAP == AntiColor.end()) iAP=AntiColor.begin();
+*/
+        G4Parton * result = AntiColor.operator[](iAP);
+        iAP++; if(iAP == AntiColor.size()) iAP=0;
 	return result;
 }
 

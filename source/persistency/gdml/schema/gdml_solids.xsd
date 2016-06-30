@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE xs:schema>
-<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<!DOCTYPE xs:schema []>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" version="1.0" xmlns:gdml="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:include schemaLocation="gdml_core.xsd"></xs:include>
   <xs:include schemaLocation="gdml_define.xsd"></xs:include>
   <xs:include schemaLocation="gdml_extensions.xsd"/>
@@ -53,7 +53,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
   <xs:complexType name="multiUnionNode">
@@ -76,7 +75,6 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   
   <xs:element name="multiUnion" substitutionGroup="Solid">
@@ -96,7 +94,6 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>  
- 
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
   <xs:element name="reflectedSolid" substitutionGroup="Solid">
@@ -120,6 +117,28 @@
 	  <xs:attribute default="0.0" name="dx" type="ExpressionOrIDREFType"></xs:attribute>
 	  <xs:attribute default="0.0" name="dy" type="ExpressionOrIDREFType"></xs:attribute>
 	  <xs:attribute default="0.0" name="dz" type="ExpressionOrIDREFType"></xs:attribute>
+	</xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+  <xs:element name="scaledSolid" substitutionGroup="Solid">
+    <xs:annotation>
+      <xs:documentation>Scaled solid: 
+        For the scale component, values must be greater than zero.
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent>
+	<xs:extension base="SolidType">
+	  <xs:sequence>
+	    <xs:element name="solidref" type="ReferenceType"></xs:element>
+            <xs:choice minOccurs="1">
+              <xs:element name="scale" type="scaleType"></xs:element>
+              <xs:element name="scaleref" type="ReferenceType"></xs:element>
+            </xs:choice>
+	  </xs:sequence>
 	</xs:extension>
       </xs:complexContent>
     </xs:complexType>

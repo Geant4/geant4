@@ -38,18 +38,16 @@
 #include "G4Electron.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ParticleChangeForGamma.hh" 
-//#include "G4ProductionCutsTable.hh"
 
 #include <vector>
 
-
-G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricGDModel::fCrossSection[] = {0};
-G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricGDModel::fCrossSectionLE[] = {0};
+G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricGDModel::fCrossSection[] = {nullptr};
+G4LPhysicsFreeVector*  G4LivermorePolarizedPhotoElectricGDModel::fCrossSectionLE[] = {nullptr};
 std::vector<G4double>* G4LivermorePolarizedPhotoElectricGDModel::fParam[] = {0};
 G4int                  G4LivermorePolarizedPhotoElectricGDModel::fNShells[] = {0};
 G4int                  G4LivermorePolarizedPhotoElectricGDModel::fNShellsUsed[] = {0};
-G4ElementData*         G4LivermorePolarizedPhotoElectricGDModel::fShellCrossSection = 0;
-G4Material*            G4LivermorePolarizedPhotoElectricGDModel::fWater = 0;
+G4ElementData*         G4LivermorePolarizedPhotoElectricGDModel::fShellCrossSection = nullptr;
+G4Material*            G4LivermorePolarizedPhotoElectricGDModel::fWater = nullptr;
 G4double               G4LivermorePolarizedPhotoElectricGDModel::fWaterEnergyLimit = 0.0;
 
 
@@ -61,14 +59,10 @@ using namespace std;
 
 G4LivermorePolarizedPhotoElectricGDModel::G4LivermorePolarizedPhotoElectricGDModel(
    const G4String& nam)
-  :G4VEmModel(nam),fParticleChange(0),maxZ(99),
-   nShellLimit(100), fDeexcitationActive(false), isInitialised(false), fAtomDeexcitation(0)
-   //   crossSectionHandler(0), shellCrossSectionHandler(0)
+  :G4VEmModel(nam),fParticleChange(nullptr),maxZ(99),
+   nShellLimit(100), fDeexcitationActive(false), isInitialised(false), 
+   fAtomDeexcitation(nullptr)
 {
-
-  // lowEnergyLimit  = 10 * eV; // SI - Could be 10 eV ?
-  // highEnergyLimit = 100 * GeV;
-  
   verboseLevel= 0;
   // Verbosity scale:
   // 0 = nothing 
@@ -80,7 +74,6 @@ G4LivermorePolarizedPhotoElectricGDModel::G4LivermorePolarizedPhotoElectricGDMod
   theGamma    = G4Gamma::Gamma();
   theElectron = G4Electron::Electron();
 
-
   SetDeexcitationFlag(true);
   fSandiaCof.resize(4,0.0);
   fCurrSection = 0.0;
@@ -90,16 +83,12 @@ G4LivermorePolarizedPhotoElectricGDModel::G4LivermorePolarizedPhotoElectricGDMod
 	   << " nShellLimit "
 	   << nShellLimit << G4endl;
   }
-
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedPhotoElectricGDModel::~G4LivermorePolarizedPhotoElectricGDModel()
 {  
-  //  delete crossSectionHandler;
-  //delete shellCrossSectionHandler;
   if(IsMaster()) {
     delete fShellCrossSection;
     for(G4int i=0; i<maxZ; ++i) { 
@@ -123,8 +112,6 @@ G4LivermorePolarizedPhotoElectricGDModel::Initialise(
   if (verboseLevel > 2) {
     G4cout << "Calling G4LivermorePolarizedPhotoElectricGDModel::Initialise()" << G4endl;
   }
-
-
 
   if(IsMaster()) {
     
@@ -177,8 +164,6 @@ G4LivermorePolarizedPhotoElectricGDModel::Initialise(
 	   << G4endl;
   }
 }
-
-
   
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -400,13 +385,12 @@ void G4LivermorePolarizedPhotoElectricGDModel::SampleSecondaries(
   G4ThreeVector electronDirection(dirX, dirY, dirZ);
   SystemOfRefChange(photonDirection, electronDirection, gammaPolarization0);
   G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(), 
-							       electronDirection, 
-							       eKineticEnergy);
+						       electronDirection, 
+						       eKineticEnergy);
   fvect->push_back(electron);
   
-  
-// Deexcitation
-//  Sample deexcitation
+  // Deexcitation
+  //  Sample deexcitation
   if(shell) {
     G4int index = couple->GetIndex();
     if(fAtomDeexcitation->CheckDeexcitationActiveRegion(index)) {
@@ -443,9 +427,8 @@ void G4LivermorePolarizedPhotoElectricGDModel::SampleSecondaries(
   }
 }
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4LivermorePolarizedPhotoElectricGDModel::ReadData(G4int Z, const char* path)
 {
   if (verboseLevel > 1) 

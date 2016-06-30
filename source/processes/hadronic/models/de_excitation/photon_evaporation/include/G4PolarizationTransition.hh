@@ -60,7 +60,7 @@ class G4PolarizationTransition
   typedef std::vector< std::vector<G4complex> > POLAR;
 
   public:
-    G4PolarizationTransition();
+    explicit G4PolarizationTransition();
     ~G4PolarizationTransition();
 
     // generic static functions
@@ -86,11 +86,15 @@ class G4PolarizationTransition
 
   private:
 
+    G4PolarizationTransition(const G4PolarizationTransition &right) = delete;
+    const G4PolarizationTransition& operator=(const G4PolarizationTransition &right) = delete;
+
     inline G4double LnFactorial(int k) const { return G4Pow::GetInstance()->logfactorial(k); }
 
     G4int fTwoJ1, fTwoJ2;
     G4int fLbar, fL;
     G4double fDelta;
+    G4double kEps;
     G4PolynomialPDF kPolyPDF;
     G4LegendrePolynomial fgLegendrePolys;
 };

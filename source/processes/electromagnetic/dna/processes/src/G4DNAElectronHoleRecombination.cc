@@ -44,6 +44,7 @@
 #include "G4DNAMolecularMaterial.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4MoleculeCounter.hh"
+#include "G4Exp.hh"
 
 static double onsager_constant = e_squared / (4. * pi * epsilon0 * k_Boltzmann);
 
@@ -94,7 +95,7 @@ double D(double temp)
 
 double epsilon(double density, double temperature)
 {
-  return 1 + std::exp(std::log(10.)*
+  return 1 + G4Exp(std::log(10.)*
                  (Y(density) *
                      (C(temperature) + (S(temperature) - 1)*std::log(density)/std::log(10.))
                      + D(temperature) + std::log(density)/std::log(10.)));
@@ -269,7 +270,7 @@ G4bool G4DNAElectronHoleRecombination::FindReactant(const G4Track& track)
     if(reactants[i].fDistance != 0)
     {
       reactants[i].fProbability = 1.
-          - std::exp(-onsager_radius / reactants[i].fDistance);
+          - G4Exp(-onsager_radius / reactants[i].fDistance);
     }
     else
     {

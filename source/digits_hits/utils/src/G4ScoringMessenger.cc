@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc 81308 2014-05-26 14:28:07Z gcosmo $
+// $Id: G4ScoringMessenger.cc 94951 2016-01-07 11:58:57Z gcosmo $
 //
 // ---------------------------------------------------------------------
 
@@ -539,7 +539,7 @@ void G4ScoringMessenger::FillTokenVec(G4String newValues, G4TokenVec& token){
 
     G4Tokenizer next(newValues);
     G4String val;
-    while ( !(val = next()).isNull() ) {
+    while ( !(val = next()).isNull() ) { // Loop checking 12.18.2015 M.Asai
 	token.push_back(val);
     }
 }

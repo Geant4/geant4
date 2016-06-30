@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01EventAction.cc
 /// \brief Implementation of the RE01EventAction class
 //
-// $Id: RE01EventAction.cc 90679 2015-06-08 07:58:19Z gcosmo $
+// $Id: RE01EventAction.cc 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #include "RE01EventAction.hh"
@@ -47,17 +47,17 @@
 #include "G4PrimaryParticle.hh"
 #include "G4SystemOfUnits.hh"    
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01EventAction::RE01EventAction()
   :G4UserEventAction(),
    fTrackerCollID(-1),fCalorimeterCollID(-1)
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01EventAction::~RE01EventAction()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
@@ -69,10 +69,15 @@ void RE01EventAction::BeginOfEventAction(const G4Event*)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Summary of Event " << evt->GetEventID() << G4endl;
+  if(evt->GetNumberOfPrimaryVertex()==0)
+  {
+    G4cout << "Event is empty." << G4endl;
+    return;
+  }
   
   if(fTrackerCollID<0||fCalorimeterCollID<0) return;
 
@@ -160,7 +165,7 @@ void RE01EventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01EventAction::PrintPrimary(G4PrimaryParticle* pp,G4int ind)
 {
   for(G4int ii=0;ii<=ind;ii++)

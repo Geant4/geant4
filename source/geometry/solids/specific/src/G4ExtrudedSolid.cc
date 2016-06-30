@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 95956 2016-03-03 10:59:53Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -33,6 +33,11 @@
 // G4ExtrudedSolid.cc
 //
 // Author: Ivana Hrivnacova, IPN Orsay
+//
+// CHANGE HISTORY
+// --------------                                                                                                     
+// 02 March 2016,    E Tcherniaev, added CheckPolygon() to remove 
+//                   collinear and coincident points from polygon
 // --------------------------------------------------------------------
 
 #include "G4ExtrudedSolid.hh"
@@ -44,6 +49,7 @@
 #include <cmath>
 #include <iomanip>
 
+#include "G4GeometryTolerance.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VFacet.hh"
@@ -53,8 +59,8 @@
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
-                                        std::vector<G4TwoVector> polygon,
-                                        std::vector<ZSection> zsections)
+                                  const std::vector<G4TwoVector>& polygon,
+                                  const std::vector<ZSection>& zsections)
   : G4TessellatedSolid(pName),
     fNv(polygon.size()),
     fNz(zsections.size()),
@@ -69,15 +75,15 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 
   // First check input parameters
 
-  if ( fNv < 3 )
+  if (fNv < 3)
   {
     std::ostringstream message;
-    message << "Number of polygon vertices < 3 - " << pName;
+    message << "Number of vertices in polygon < 3 - " << pName;
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
                 FatalErrorInArgument, message);
   }
      
-  if ( fNz < 2 )
+  if (fNz < 2)
   {
     std::ostringstream message;
     message << "Number of z-sides < 2 - " << pName;
@@ -95,7 +101,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
       G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
                   FatalErrorInArgument, message);
     }
-    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarTolerance * 0.5 ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarToleranceHalf ) 
     {
       std::ostringstream message;
       message << "Z-sections with the same z position are not supported - "
@@ -105,35 +111,53 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
     }
   }  
   
+  // Copy polygon
+  //
+  fPolygon = polygon;
+
+  // Remove collinear and coincident vertices, if any
+  //
+  G4String removedVertices;
+  CheckPolygon(removedVertices);
+  if (fNv != G4int(polygon.size()))
+  {
+    std::ostringstream message;
+    message << "The following vertices have been removed from the polygon in "
+            << pName << G4endl
+            << "as collinear or coincident with other vertices: "
+            << removedVertices;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
+                JustWarning, message);
+  }
+  if (fNv < 3)
+  {
+    std::ostringstream message;
+    message << "Number of vertices in polygon after removal < 3 - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+		FatalErrorInArgument, message);
+  }
+
   // Check if polygon vertices are defined clockwise
   // (the area is positive if polygon vertices are defined anti-clockwise)
   //
   G4double area = 0.;
-  for ( G4int i=0; i<fNv; ++i ) {
-    G4int j = i+1;
-    if ( j == fNv ) j = 0;
-    area += 0.5 * ( polygon[i].x()*polygon[j].y() - polygon[j].x()*polygon[i].y());
+  for (G4int i=fNv-1, k=0; k<fNv; i=k++)
+  {
+    area += fPolygon[i].x()*fPolygon[k].y() - fPolygon[k].x()*fPolygon[i].y();
   }
- 
-  // Copy polygon
-  //
-  if  ( area < 0. ) {   
-    // Polygon vertices are defined clockwise, we just copy the polygon       
-    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
-  }
-  else {
+
+  if (area > 0.)
+  {   
     // Polygon vertices are defined anti-clockwise, we revert them
-    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
+    // G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
     //            JustWarning, 
-    //            "Polygon vertices defined anti-clockwise, reverting polygon");      
-    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
+    //            "Polygon vertices defined anti-clockwise, reverting polygon");
+    std::reverse(fPolygon.begin(),fPolygon.end());
   }
-    
-  
+
   // Copy z-sections
   //
-  for ( G4int i=0; i<fNz; ++i ) { fZSections.push_back(zsections[i]); }
-    
+  fZSections = zsections;
 
   G4bool result = MakeFacets();
   if (!result)
@@ -144,7 +168,6 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
                 FatalException, message);
   }
   fIsConvex = IsConvex();
-
   
   ComputeProjectionParameters();
 }
@@ -152,10 +175,10 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
-                                        std::vector<G4TwoVector> polygon,       
+                                  const std::vector<G4TwoVector>& polygon,       
                                         G4double dz,
-                                        G4TwoVector off1, G4double scale1,
-                                        G4TwoVector off2, G4double scale2 )
+                                  const G4TwoVector& off1, G4double scale1,
+                                  const G4TwoVector& off2, G4double scale2 )
   : G4TessellatedSolid(pName),
     fNv(polygon.size()),
     fNz(2),
@@ -170,40 +193,56 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 
   // First check input parameters
   //
-  if ( fNv < 3 )
+  if (fNv < 3)
   {
     std::ostringstream message;
-    message << "Number of polygon vertices < 3 - " << pName;
+    message << "Number of vertices in polygon < 3 - " << pName;
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
                 FatalErrorInArgument, message);
   }
      
-  // Check if polygon vertices are defined clockwise
-  // (the area is positive if polygon vertices are defined anti-clockwise)
-  
-  G4double area = 0.;
-  for ( G4int i=0; i<fNv; ++i )
-  {
-    G4int j = i+1;
-    if ( j == fNv )  { j = 0; }
-    area += 0.5 * ( polygon[i].x()*polygon[j].y()
-                  - polygon[j].x()*polygon[i].y());
-  }
- 
   // Copy polygon
   //
-  if  ( area < 0. )
-  {   
-    // Polygon vertices are defined clockwise, we just copy the polygon       
-    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[i]); }
+  fPolygon = polygon;
+
+  // Remove collinear and coincident vertices, if any
+  //
+  G4String removedVertices;
+  CheckPolygon(removedVertices);
+  if (fNv != G4int(polygon.size()))
+  {
+    std::ostringstream message;
+    message << "The following vertices have been removed from the polygon in "
+            << pName << G4endl
+            << "as collinear or coincident with other vertices: "
+            << removedVertices;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
+                JustWarning, message);
   }
-  else
+  if (fNv < 3)
+  {
+    std::ostringstream message;
+    message << "Number of vertices in polygon after removal < 3 - " << pName;
+    G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
+		FatalErrorInArgument, message);
+  }
+
+  // Check if polygon vertices are defined clockwise
+  // (the area is positive if polygon vertices are defined anti-clockwise)
+  //  
+  G4double area = 0.;
+  for (G4int i=fNv-1, k=0; k<fNv; i=k++)
+  {
+    area += fPolygon[i].x()*fPolygon[k].y() - fPolygon[k].x()*fPolygon[i].y();
+  }
+
+  if (area > 0.)
   {
     // Polygon vertices are defined anti-clockwise, we revert them
-    //G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
+    // G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
     //            JustWarning, 
-    //            "Polygon vertices defined anti-clockwise, reverting polygon");      
-    for ( G4int i=0; i<fNv; ++i ) { fPolygon.push_back(polygon[fNv-i-1]); }
+    //            "Polygon vertices defined anti-clockwise, reverting polygon");
+    std::reverse(fPolygon.begin(),fPolygon.end());
   }
   
   // Copy z-sections
@@ -275,6 +314,93 @@ G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs)
 G4ExtrudedSolid::~G4ExtrudedSolid()
 {
   // Destructor
+}
+
+//_____________________________________________________________________________
+
+void G4ExtrudedSolid::CheckPolygon(G4String & removedVertices)
+{ 
+  // Remove collinear and coincident vertices from 2D polygon
+
+  G4double delta = kCarTolerance; // dimension tolerance
+  G4double removeIt = kInfinity;  // special value to mark vertices for removal
+
+  // Main loop: check every three consecutive points, if the points 
+  // are collinear then mark middle point for removal
+  //
+  G4int icur, iprev=0, inext=0;
+  for (G4int i=0; i<fNv; ++i)
+  {
+    icur = i;
+
+    // Find index of previous point
+    for (G4int k=1; k<fNv+1; ++k)
+    {
+      iprev = icur - k;
+      if (iprev < 0) iprev += fNv;
+      if (fPolygon[iprev].x() != removeIt) break;
+    }
+
+    // Find index of next point
+    for (G4int k=1; k<fNv+1; ++k)
+    {
+      inext = icur + k;
+      if (inext >= fNv) inext -= fNv;
+      if (fPolygon[inext].x() != removeIt) break;
+    }
+
+    if (iprev == inext) break; // degenerate polygon, stop
+
+    // Calculate parameters of the triangle (iprev->icur->inext).
+    // If the triangle is too small or too narrow then
+    // mark current point for removal
+    G4TwoVector e1 = fPolygon[iprev] - fPolygon[icur];
+    G4TwoVector e2 = fPolygon[inext] - fPolygon[icur];
+
+    G4double leng1 = e1.mag();
+    G4double leng2 = e2.mag();
+    G4double leng3 = (e2-e1).mag();
+
+    G4double lmax = std::max(std::max(leng1,leng2),leng3);
+    G4double area = std::fabs(e1.x()*e2.y()-e1.y()*e2.x());
+
+    // Check length of edges, then check height of the triangle 
+    if (leng1 < delta || leng2 < delta || leng3 < delta)
+    {
+      fPolygon[icur].setX(removeIt);
+    }
+    else if (area/lmax < delta)
+    {
+      fPolygon[icur].setX(removeIt);
+    }
+  }
+
+  // Remove marked points
+  //
+  std::ostringstream message;
+  icur = 0;
+  for (G4int i=0; i<fNv; ++i)
+  {
+    if (fPolygon[i].x() != removeIt)
+    {
+      fPolygon[icur] = fPolygon[i];
+      icur++;
+    }
+    else
+    {
+      if (icur != i) message << ",";
+      message << i;
+    }
+  }
+
+  // Resize fPolygon, if required
+  //
+  if (icur != fNv)
+  {
+    fPolygon.resize(icur);
+    removedVertices = message.str();
+    fNv = icur;
+  }
 }
 
 //_____________________________________________________________________________
@@ -357,28 +483,29 @@ G4TwoVector G4ExtrudedSolid::ProjectPoint(const G4ThreeVector& point) const
 
 //_____________________________________________________________________________
 
-G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,  
-                                   G4TwoVector l1, G4TwoVector l2) const
+G4bool G4ExtrudedSolid::IsSameLine(const G4TwoVector& p,
+                                   const G4TwoVector& l1,
+                                   const G4TwoVector& l2) const
 {
   // Return true if p is on the line through l1, l2 
 
   if ( l1.x() == l2.x() )
   {
-    return std::fabs(p.x() - l1.x()) < kCarTolerance * 0.5; 
+    return std::fabs(p.x() - l1.x()) < kCarToleranceHalf; 
   }
-   G4double  slope= ((l2.y() - l1.y())/(l2.x() - l1.x())); 
+   G4double slope= ((l2.y() - l1.y())/(l2.x() - l1.x())); 
    G4double predy= l1.y() +  slope *(p.x() - l1.x()); 
    G4double dy= p.y() - predy; 
 
    // Calculate perpendicular distance
    //
    // G4double perpD= std::fabs(dy) / std::sqrt( 1 + slope * slope ); 
-   // G4bool   simpleComp= (perpD<0.5*kCarTolerance); 
+   // G4bool   simpleComp= (perpD<kCarToleranceHalf); 
 
    // Check perpendicular distance vs tolerance 'directly'
    //
-   const G4double tol= 0.5 * kCarTolerance ; 
-   G4bool    squareComp=  (dy*dy < (1+slope*slope) * tol * tol); 
+   G4bool squareComp = (dy*dy < (1+slope*slope)
+                     * kCarToleranceHalf * kCarToleranceHalf); 
 
    // return  simpleComp; 
    return squareComp;
@@ -386,16 +513,17 @@ G4bool G4ExtrudedSolid::IsSameLine(G4TwoVector p,
 
 //_____________________________________________________________________________
 
-G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,  
-                                   G4TwoVector l1, G4TwoVector l2) const
+G4bool G4ExtrudedSolid::IsSameLineSegment(const G4TwoVector& p,  
+                                          const G4TwoVector& l1,
+                                          const G4TwoVector& l2) const
 {
   // Return true if p is on the line through l1, l2 and lies between
   // l1 and l2 
 
-  if ( p.x() < std::min(l1.x(), l2.x()) - kCarTolerance * 0.5 || 
-       p.x() > std::max(l1.x(), l2.x()) + kCarTolerance * 0.5 ||
-       p.y() < std::min(l1.y(), l2.y()) - kCarTolerance * 0.5 || 
-       p.y() > std::max(l1.y(), l2.y()) + kCarTolerance * 0.5 )
+  if ( p.x() < std::min(l1.x(), l2.x()) - kCarToleranceHalf || 
+       p.x() > std::max(l1.x(), l2.x()) + kCarToleranceHalf ||
+       p.y() < std::min(l1.y(), l2.y()) - kCarToleranceHalf || 
+       p.y() > std::max(l1.y(), l2.y()) + kCarToleranceHalf )
   {
     return false;
   }
@@ -405,21 +533,25 @@ G4bool G4ExtrudedSolid::IsSameLineSegment(G4TwoVector p,
 
 //_____________________________________________________________________________
 
-G4bool G4ExtrudedSolid::IsSameSide(G4TwoVector p1, G4TwoVector p2, 
-                                   G4TwoVector l1, G4TwoVector l2) const
+G4bool G4ExtrudedSolid::IsSameSide(const G4TwoVector& p1,
+                                   const G4TwoVector& p2,
+                                   const G4TwoVector& l1,
+                                   const G4TwoVector& l2) const
 {
   // Return true if p1 and p2 are on the same side of the line through l1, l2 
 
   return   ( (p1.x() - l1.x()) * (l2.y() - l1.y())
-         - (l2.x() - l1.x()) * (p1.y() - l1.y()) )
+	 - (l2.x() - l1.x()) * (p1.y() - l1.y()) )
          * ( (p2.x() - l1.x()) * (l2.y() - l1.y())
          - (l2.x() - l1.x()) * (p2.y() - l1.y()) ) > 0;
 }       
 
 //_____________________________________________________________________________
 
-G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
-                                      G4TwoVector c, G4TwoVector p) const
+G4bool G4ExtrudedSolid::IsPointInside(const G4TwoVector& a,
+                                      const G4TwoVector& b,
+                                      const G4TwoVector& c,
+                                      const G4TwoVector& p) const
 {
   // Return true if p is inside of triangle abc or on its edges, 
   // else returns false 
@@ -447,7 +579,9 @@ G4bool G4ExtrudedSolid::IsPointInside(G4TwoVector a, G4TwoVector b,
 //_____________________________________________________________________________
 
 G4double 
-G4ExtrudedSolid::GetAngle(G4TwoVector po, G4TwoVector pa, G4TwoVector pb) const
+G4ExtrudedSolid::GetAngle(const G4TwoVector& po,
+                          const G4TwoVector& pa,
+                          const G4TwoVector& pb) const
 {
   // Return the angle of the vertex in po
 
@@ -537,6 +671,9 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
 
   typedef std::pair < G4TwoVector, G4int > Vertex;
 
+  static const G4double kAngTolerance =
+    G4GeometryTolerance::GetInstance()->GetAngularTolerance();
+
   // Fill one more vector
   //
   std::vector< Vertex > verticesToBeDone;
@@ -566,7 +703,7 @@ G4bool G4ExtrudedSolid::AddGeneralPolygonFacets()
     //G4cout << "angle " << angle  << G4endl;
 
     G4int counter = 0;
-    while ( angle >= pi )    // Loop checking, 13.08.2015, G.Cosmo
+    while ( angle >= (pi-kAngTolerance) )  // Loop checking, 13.08.2015, G.Cosmo
     {
       // G4cout << "Skipping concave vertex " << c2->second << G4endl;
 
@@ -773,12 +910,12 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
 
   // Check first if outside extent
   //
-  if ( p.x() < GetMinXExtent() - kCarTolerance * 0.5 ||
-       p.x() > GetMaxXExtent() + kCarTolerance * 0.5 ||
-       p.y() < GetMinYExtent() - kCarTolerance * 0.5 ||
-       p.y() > GetMaxYExtent() + kCarTolerance * 0.5 ||
-       p.z() < GetMinZExtent() - kCarTolerance * 0.5 ||
-       p.z() > GetMaxZExtent() + kCarTolerance * 0.5 )
+  if ( p.x() < GetMinXExtent() - kCarToleranceHalf ||
+       p.x() > GetMaxXExtent() + kCarToleranceHalf ||
+       p.y() < GetMinYExtent() - kCarToleranceHalf ||
+       p.y() > GetMaxYExtent() + kCarToleranceHalf ||
+       p.z() < GetMinZExtent() - kCarToleranceHalf ||
+       p.z() > GetMaxZExtent() + kCarToleranceHalf )
   {
     // G4cout << "G4ExtrudedSolid::Outside extent: " << p << G4endl;
     return kOutside;
@@ -817,8 +954,8 @@ EInside G4ExtrudedSolid::Inside (const G4ThreeVector &p) const
   {
     // Check if on surface of z sides
     //
-    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarTolerance * 0.5 ||
-         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarTolerance * 0.5 )
+    if ( std::fabs( p.z() - fZSections[0].fZ ) < kCarToleranceHalf ||
+         std::fabs( p.z() - fZSections[fNz-1].fZ ) < kCarToleranceHalf )
     {
       // G4cout << "G4ExtrudedSolid::Inside return Surface (on z side)"
       //        << G4endl;

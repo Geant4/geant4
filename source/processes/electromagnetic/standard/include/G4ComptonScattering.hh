@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4ComptonScattering.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 //------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
@@ -73,23 +73,26 @@ class G4ComptonScattering : public G4VEmProcess
 {
 public:  // with description
 
-  G4ComptonScattering(const G4String& processName ="compt",
-		      G4ProcessType type = fElectromagnetic);
+  explicit G4ComptonScattering(const G4String& processName ="compt",
+			       G4ProcessType type = fElectromagnetic);
 
   virtual ~G4ComptonScattering();
 
   // true for Gamma only.  
-  virtual G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) final;
   
   // Print few lines of informations about the process: validity range,
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
 protected:
 
-  virtual void InitialiseProcess(const G4ParticleDefinition*);
+  virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
      
+  G4ComptonScattering & operator=(const  G4ComptonScattering &right) = delete;
+  G4ComptonScattering(const  G4ComptonScattering&) = delete;
+
   G4bool       isInitialised;
 };
 

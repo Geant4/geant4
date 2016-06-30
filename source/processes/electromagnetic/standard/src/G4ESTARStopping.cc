@@ -50,8 +50,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-static const G4double fac = MeV*cm2/g;
-
 G4ESTARStopping::G4ESTARStopping(const G4String& datatype)
 {
   currentMaterial = 0;
@@ -963,6 +961,8 @@ void G4ESTARStopping::AddData(const G4double* ekin, const G4double* stop,
 {
   //G4cout << "G4ESTARStopping::AddData: idx= " << idx << G4endl;
   G4double x1, x2, x3, x4, x5, x6, x7;
+
+  static const G4double fac = MeV*cm2/g;
 
   // hardtyped data
   if(0 == type) {

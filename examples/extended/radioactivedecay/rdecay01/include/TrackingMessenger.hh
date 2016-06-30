@@ -26,7 +26,7 @@
 /// \file radioactivedecay/rdecay01/include/TrackingMessenger.hh
 /// \brief Definition of the TrackingMessenger class
 //
-// $Id: TrackingMessenger.hh 68017 2013-03-13 13:29:53Z gcosmo $
+// $Id: TrackingMessenger.hh 96835 2016-05-12 09:20:14Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,6 +39,7 @@
 
 class TrackingAction;
 class G4UIcmdWithABool;
+class G4UIcommand;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,6 +54,7 @@ class TrackingMessenger: public G4UImessenger
   private:
     TrackingAction*   fTrackingAction;    
     G4UIcmdWithABool* fTrackingCmd;
+    G4UIcommand*      fTimeWindowCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

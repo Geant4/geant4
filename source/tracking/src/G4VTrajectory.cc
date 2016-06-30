@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.cc 78003 2013-12-02 08:26:54Z gcosmo $
+// $Id: G4VTrajectory.cc 96231 2016-03-30 10:35:46Z gcosmo $
 //
 // ---------------------------------------------------------------
 //
@@ -109,7 +109,7 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 
     delete attValues;  // AttValues must be deleted after use.
   }
-  os << "\n";
+  os << std::endl;
 }
 
 void G4VTrajectory::DrawTrajectory() const

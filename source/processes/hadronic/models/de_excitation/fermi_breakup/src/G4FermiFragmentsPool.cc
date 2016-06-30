@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiBreakUp.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
+// $Id: G4FermiFragmentsPool.cc,v 1.5 2006-06-29 20:13:13 gunter Exp $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -51,7 +51,7 @@
 #include "G4He5FermiFragment.hh"
 #include "G4Li5FermiFragment.hh"
 
-G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
+G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = nullptr;
  
 G4FermiFragmentsPool* G4FermiFragmentsPool::Instance()
 {

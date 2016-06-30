@@ -1,4 +1,4 @@
-$Id: History 86443 2014-11-12 09:40:56Z gcosmo $
+$Id: History 96116 2016-03-16 18:56:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-03-16 D.Sawkey (expol01-V10-02-00)
+-  PhysicsList.cc - move to current method of ConstructParticle
 
 12-11-14 V.Ivanchenko (expol01-V10-00-02)
 - RunAction - fixed compillation at gcc 4.1

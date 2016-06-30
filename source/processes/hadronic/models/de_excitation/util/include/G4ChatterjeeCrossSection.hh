@@ -74,9 +74,9 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
     // parameterisation for neutron
     if(0 == Z) {
       G4double landa = paramC[idx][3]/resA13 + paramC[idx][4];
-      G4double mu = paramC[idx][5]*resA13 + paramC[idx][6]*resA13*resA13;
-      G4double nu = paramC[idx][7]*resA13*resA + paramC[idx][8]*resA13*resA13 
-	+ paramC[idx][9];
+      G4double mu = (paramC[idx][5] + paramC[idx][6]*resA13)*resA13;
+      G4double nu = std::abs((paramC[idx][7]*resA + paramC[idx][8]*resA13)*resA13 
+			     + paramC[idx][9]);
       sig = landa*Kc + mu + nu/Kc;
 
       // parameterisation for charged 

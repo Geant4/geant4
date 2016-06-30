@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGFlashSensitiveDetector.hh 68057 2013-03-13 14:46:00Z gcosmo $
+// $Id: G4VGFlashSensitiveDetector.hh 97674 2016-06-07 08:28:08Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -47,6 +47,8 @@
 #include "G4TouchableHistory.hh"
 #include "GFlashEnergySpot.hh"
 #include "G4GFlashSpot.hh"
+#include "G4VSensitiveDetector.hh"
+
 
 class G4VGFlashSensitiveDetector 
 {

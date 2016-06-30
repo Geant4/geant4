@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ePolarizedIonisation.hh 93113 2015-10-07 07:49:04Z gcosmo $
+// $Id: G4ePolarizedIonisation.hh 96114 2016-03-16 18:51:33Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class header file
@@ -68,34 +68,34 @@ class G4ePolarizedIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4ePolarizedIonisation(const G4String& name = "pol-eIoni");
+  explicit G4ePolarizedIonisation(const G4String& name = "pol-eIoni");
 
   virtual ~G4ePolarizedIonisation();
 
-  virtual G4bool IsApplicable(const G4ParticleDefinition& p);
+  virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
 
   // Print out of the class parameters
-  virtual void PrintInfo();
+  virtual void PrintInfo() override;
 
 protected:
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-					   const G4ParticleDefinition*);
+					   const G4ParticleDefinition*) override;
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition*,
-                                    const G4Material*, G4double cut);
+                                    const G4Material*, G4double cut) override;
 
   // for polarization
   virtual G4double PostStepGetPhysicalInteractionLength(
                              const G4Track& track,
                              G4double   previousStepSize,
-                             G4ForceCondition* condition);
+                             G4ForceCondition* condition) override;
 
   virtual G4double GetMeanFreePath(const G4Track& track,
                               G4double previousStepSize,
-                              G4ForceCondition* condition);
+                              G4ForceCondition* condition) override;
 
-  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
 
 protected:
 
@@ -115,8 +115,9 @@ private:
 
   G4double ComputeSaturationFactor(const G4Track& aTrack);
 
-  G4ePolarizedIonisation & operator=(const G4ePolarizedIonisation &right);
-  G4ePolarizedIonisation(const G4ePolarizedIonisation&);
+  G4ePolarizedIonisation & 
+    operator=(const G4ePolarizedIonisation &right) = delete;
+  G4ePolarizedIonisation(const G4ePolarizedIonisation&) = delete;
 
   G4ParticleDefinition* theElectron;
   G4VEmFluctuationModel* flucModel;

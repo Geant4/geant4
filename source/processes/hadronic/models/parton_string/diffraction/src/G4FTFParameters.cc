@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc 91775 2015-08-05 14:42:39Z gcosmo $
+// $Id: G4FTFParameters.cc 97394 2016-06-02 10:13:06Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -513,7 +513,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   // Parameters of elastic scattering
   // Gaussian parametrization of elastic scattering amplitude assumed
   SetAvaragePt2ofElasticScattering( 1.0/( Xtotal*Xtotal/16.0/pi/Xelastic/0.3894 )*GeV*GeV );
-  //G4cout << "AvaragePt2ofElasticScattering " << GetAvaragePt2ofElasticScattering() << G4endl;
+//  G4cout << "AvaragePt2ofElasticScattering " << GetAvaragePt2ofElasticScattering() << G4endl;
 
   // Parameters of excitations
 
@@ -522,12 +522,13 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
   if ( ProjectilePDGcode > 1000 ) {  // Projectile is baryon
     //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
-    SetParams( 1,      25.0, 1.0,           -50.34, 1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
+//    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
+    SetParams( 0,     13.71, 1.75,          -30.69, 3.0 , 0.0, 1.0  ,     0.93 );   // Qexchange without Exc.
+    SetParams( 1,     25.0 , 1.0 ,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );    // Qexchange with    Exc.
     if( Xinel > 0.) {
       SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Projectile diffraction
       SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Target diffraction
-      SetParams( 4,       1.0, 0.0 ,          -2.01 , 0.5 , 0.0, 0.0  ,     1.4 );// Qexchange with Exc. Additional multiply
+      SetParams( 4,      0.6 , 0.0 ,           -1.20, 0.5 , 0.0, 0.0  ,     1.4 );// Qexchange with Exc. Additional multiply
     } else {
       SetParams( 2, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
       SetParams( 3, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
@@ -550,9 +551,9 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( 1.16 );  // GeV 
     SetTarMinDiffMass( 1.16 );      // GeV
     SetTarMinNonDiffMass( 1.16 );   // GeV 
-    SetAveragePt2( 0.15 );          // GeV^2                     // Uzhi Oct  2014
-    SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct  2014 0.5
-    SetProbLogDistr(0.3 );                                       //                 0.5
+    SetAveragePt2( 0.3 );          // GeV^2                     // Uzhi Oct  2014
+    SetProbLogDistrPrD( 0.3 );                                  // Uzhi Oct  2014 0.5
+    SetProbLogDistr(0.3);                                       //                 0.5
 
   } else if( ProjectilePDGcode < -1000 ) {  // Projectile is anti_baryon
 
@@ -580,7 +581,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( ProjectileMass + 0.22 );  // GeV
     SetTarMinDiffMass( TargetMass + 0.22 );          // GeV
     SetTarMinNonDiffMass( TargetMass + 0.22 );       // GeV
-    SetAveragePt2( 0.15 );                           // GeV^2    // Uzhi Oct 2014
+    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct 2014
     SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
     SetProbLogDistr( 0.3 );
             
@@ -603,7 +604,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( 0.5 );         // (0.5)  // GeV 
     SetTarMinDiffMass( 1.16 );                      // GeV
     SetTarMinNonDiffMass( 1.16 );                   // GeV
-    SetAveragePt2( 0.15 );                          // GeV^2     // Uzhi Oct 2014
+    SetAveragePt2( 0.3 );                          // GeV^2     // Uzhi Oct 2014
     SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
     SetProbLogDistr( 0.3 );
 
@@ -626,14 +627,15 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( 0.7 );  // (1.4) // (0.7) // GeV 
     SetTarMinDiffMass( 1.16 );                       // GeV
     SetTarMinNonDiffMass( 1.16 );                    // GeV
-    SetAveragePt2( 0.15 );                           // GeV^2    // Uzhi Oct  2014
+    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct  2014
     SetProbLogDistrPrD( 0.5 );                                   // Uzhi Oct  2014
     SetProbLogDistr( 0.3 );                          // Uzhi 5.06.2012
 
    } else {  // Projectile is undefined, Nucleon assumed
 
     //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
+//    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc. May 2016
+    SetParams( 0,     13.71, 1.75,          -30.69, 3.0 , 0.0, 1.0  ,     0.93 );   // Qexchange without Exc.
     SetParams( 1,      25.0, 1.0,          -50.34,  1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
     if( Xinel > 0.) {
       SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,   0.93);  // Projectile diffraction
@@ -654,7 +656,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( ProjectileMass + 0.22 );  // GeV
     SetTarMinDiffMass( TargetMass + 0.22 );          // GeV
     SetTarMinNonDiffMass( TargetMass + 0.22 );       // GeV
-    SetAveragePt2( 0.15 );                           // GeV^2    // Uzhi Oct 2014
+    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct 2014
     SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
     SetProbLogDistr( 0.3 );
 

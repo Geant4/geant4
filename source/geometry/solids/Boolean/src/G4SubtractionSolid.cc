@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 92010 2015-08-13 10:07:52Z gcosmo $
+// $Id: G4SubtractionSolid.cc 95390 2016-02-08 14:46:28Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -169,12 +169,13 @@ EInside G4SubtractionSolid::Inside( const G4ThreeVector& p ) const
   }
   else
   {
+    static const G4double rtol
+      = 1000.0*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
     if(( positionA == kInside && positionB == kSurface) ||
        ( positionB == kOutside && positionA == kSurface) ||
        ( positionA == kSurface && positionB == kSurface &&
          ( fPtrSolidA->SurfaceNormal(p) - 
-           fPtrSolidB->SurfaceNormal(p) ).mag2() > 
-         1000.0*G4GeometryTolerance::GetInstance()->GetRadialTolerance() ) )
+           fPtrSolidB->SurfaceNormal(p) ).mag2() > rtol ) )
     {
       return kSurface;
     }

@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterSD.cc
 /// \brief Implementation of the RE01CalorimeterSD class
 //
-// $Id: RE01CalorimeterSD.cc 68761 2013-04-05 12:35:00Z gcosmo $
+// $Id: RE01CalorimeterSD.cc 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #include "RE01CalorimeterSD.hh"
@@ -78,23 +78,24 @@ void RE01CalorimeterSD::Initialize(G4HCofThisEvent* HCE)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*ROhist)
+G4bool RE01CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
-  if(!ROhist) return false;
+//***** RE05CalorimeterSD has been migrated to Geant4 version 10 that does not
+//***** support Readout Geometry in multi-threaded mode. Now RE05CalorimeterSD
+//***** is assigned to a dedicaed parallel world. The pointer "aStep" points to
+//***** a G4Step object for the parallel world.
+
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep==0.) return false;
 
-  G4VPhysicalVolume* physVol = ROhist->GetVolume();
-  //ROhist->MoveUpHistory();
-  //G4VPhysicalVolume* mothVol = ROhist->GetVolume(1);
+  const G4VTouchable* ROhist = aStep->GetPreStepPoint()->GetTouchable();
   G4int copyIDinZ = ROhist->GetReplicaNumber();
   G4int copyIDinPhi = ROhist->GetReplicaNumber(1);
 
   if(fCellID[copyIDinZ][copyIDinPhi]==-1)
   {
-    RE01CalorimeterHit* calHit
-      = new RE01CalorimeterHit
-            (physVol->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
+    RE01CalorimeterHit* calHit = new RE01CalorimeterHit
+            (ROhist->GetVolume()->GetLogicalVolume(),copyIDinZ,copyIDinPhi);
     calHit->SetEdep( edep );
     G4AffineTransform aTrans = ROhist->GetHistory()->GetTopTransform();
     aTrans.Invert();

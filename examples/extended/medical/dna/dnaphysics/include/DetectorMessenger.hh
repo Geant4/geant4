@@ -58,7 +58,6 @@ class DetectorMessenger: public G4UImessenger
   private:
     DetectorConstruction*      fpDetector;
     G4UIcmdWithAString*        fpMaterCmd;
-    G4UIcmdWithoutParameter*   fpUpdateCmd;
 };
 
 #endif

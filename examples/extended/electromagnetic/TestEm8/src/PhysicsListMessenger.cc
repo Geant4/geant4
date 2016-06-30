@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
-// $Id: PhysicsListMessenger.cc 92047 2015-08-14 07:23:37Z gcosmo $
+// $Id: PhysicsListMessenger.cc 95713 2016-02-22 08:08:38Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -105,9 +105,10 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
   fNorCmd->SetRange("nfac>0.");
   fNorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fSmCmd = new G4UIcmdWithADouble("/testem/phys/setEnergySmear",this);
+  fSmCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setEnergySmear",this);
   fSmCmd->SetGuidance("Set intrinsic width of detector response");
   fSmCmd->SetParameterName("sm",false,false);
+  fSmCmd->SetDefaultUnit("keV");
   fSmCmd->SetRange("sm>0.");
   fSmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }

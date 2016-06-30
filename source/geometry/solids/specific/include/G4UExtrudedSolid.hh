@@ -45,10 +45,11 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UExtrudedSolid.hh"
 #include "G4TwoVector.hh"
+#include "G4Polyhedron.hh"
 
 class G4UExtrudedSolid : public G4USolid 
 {
@@ -85,13 +86,15 @@ class G4UExtrudedSolid : public G4USolid
 
     inline UExtrudedSolid* GetShape() const;
 
-    inline G4int GetNofVertices() const;
-    inline G4TwoVector GetVertex(G4int index) const;
-    inline std::vector<G4TwoVector> GetPolygon() const;
-    inline G4int GetNofZSections() const;
-    inline ZSection GetZSection(G4int index) const;
-    inline std::vector<ZSection> GetZSections() const;
+    G4int GetNofVertices() const;
+    G4TwoVector GetVertex(G4int index) const;
+    std::vector<G4TwoVector> GetPolygon() const;
+    G4int GetNofZSections() const;
+    ZSection GetZSection(G4int index) const;
+    std::vector<ZSection> GetZSections() const;
   
+    inline G4GeometryType GetEntityType() const;
+
   public:  // without description
 
     G4UExtrudedSolid(__void__&);
@@ -102,6 +105,7 @@ class G4UExtrudedSolid : public G4USolid
     G4UExtrudedSolid( const G4UExtrudedSolid& source );
     G4UExtrudedSolid &operator=(const G4UExtrudedSolid& source);
       // Copy constructor and assignment operator.
+    G4Polyhedron* CreatePolyhedron() const;
 };
 
 // --------------------------------------------------------------------
@@ -113,44 +117,11 @@ inline UExtrudedSolid* G4UExtrudedSolid::GetShape() const
   return (UExtrudedSolid*) fShape;
 }
 
-inline G4int G4UExtrudedSolid::GetNofVertices() const
+inline G4GeometryType G4UExtrudedSolid::GetEntityType() const
 {
-  return GetShape()->GetNofVertices();
+  return "G4ExtrudedSolid";
 }
-inline G4TwoVector G4UExtrudedSolid::GetVertex(G4int i) const
-{
-  UVector2 v = GetShape()->GetVertex(i);
-  return G4TwoVector(v.x, v.y);
-}
-inline std::vector<G4TwoVector> G4UExtrudedSolid::GetPolygon() const
-{
-  std::vector<UVector2> pol = GetShape()->GetPolygon();
-  std::vector<G4TwoVector> v;
-  for (unsigned int i=0; i<pol.size(); ++i)
-  {
-    v.push_back(G4TwoVector(pol[i].x, pol[i].y));
-  }
-  return v;
-}
-inline G4int G4UExtrudedSolid::GetNofZSections() const
-{
-  return GetShape()->GetNofZSections();
-}
-inline G4UExtrudedSolid::ZSection G4UExtrudedSolid::GetZSection(G4int i) const
-{
-  return ZSection(GetShape()->GetZSection(i));
-}
-inline std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
-{
-  std::vector<UExtrudedSolid::ZSection> sv = GetShape()->GetZSections();
-  std::vector<G4UExtrudedSolid::ZSection> vec;
-  for (unsigned int i=0; i<sv.size(); ++i)
-  {
-    vec.push_back(ZSection(sv[i]));
-  }
-  return vec;
-}
-  
+
 #endif  // G4GEOM_USE_USOLIDS
 
 #endif

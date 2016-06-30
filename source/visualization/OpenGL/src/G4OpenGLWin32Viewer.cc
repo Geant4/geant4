@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLWin32Viewer.cc 97430 2016-06-03 07:20:11Z gcosmo $
 //
 // 
 // G4OpenGLWin32Viewer : Class to provide WindowsNT specific
@@ -136,7 +136,7 @@ void G4OpenGLWin32Viewer::CreateMainWindow (
 			   NULL);
   if(!fWindow) return;
 
-  ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG(this));
+  ::SetWindowLongPtr(fWindow,GWLP_USERDATA,LONG_PTR(this));
 
   // initialize OpenGL rendering :
   fHDC = ::GetDC(fWindow);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 93069 2015-10-02 09:54:27Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 96733 2016-05-02 11:52:48Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -1421,13 +1421,16 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
   switch (logoDirection) {
   case X:
   case minusX:
-    if (freeHeightFraction * (xmax - xmin) < height) room = false; break;
+    if (freeHeightFraction * (xmax - xmin) < height) room = false;
+    break;
   case Y:
   case minusY:
-    if (freeHeightFraction * (ymax - ymin) < height) room = false; break;
+    if (freeHeightFraction * (ymax - ymin) < height) room = false;
+    break;
   case Z:
   case minusZ:
-    if (freeHeightFraction * (zmax - zmin) < height) room = false; break;
+    if (freeHeightFraction * (zmax - zmin) < height) room = false;
+    break;
   }
   if (!room) {
     worried = true;
@@ -2029,11 +2032,14 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4bool room  = true;
   switch (scaleDirection) {
   case G4Scale::x:
-    if (freeLengthFraction * (xmax - xmin) < length) room = false; break;
+    if (freeLengthFraction * (xmax - xmin) < length) room = false;
+    break;
   case G4Scale::y:
-    if (freeLengthFraction * (ymax - ymin) < length) room = false; break;
+    if (freeLengthFraction * (ymax - ymin) < length) room = false;
+    break;
   case G4Scale::z:
-    if (freeLengthFraction * (zmax - zmin) < length) room = false; break;
+    if (freeLengthFraction * (zmax - zmin) < length) room = false;
+    break;
   }
   if (!room) {
     worried = true;
@@ -2826,6 +2832,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
     }
   }
 
+  // Get the world (the initial value of the iterator points to the mass world).
   G4VPhysicalVolume* world = *(transportationManager->GetWorldsIterator());
 
   if (!world) {
@@ -2835,32 +2842,6 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand*,
 	"\n  No world.  Maybe the geometry has not yet been defined."
 	"\n  Try \"/run/initialize\""
 	     << G4endl;
-    }
-    return;
-  }
-
-  const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
-  std::vector<G4Scene::Model>::const_iterator it;
-  for (it = rdModelList.begin(); it != rdModelList.end(); ++it) {
-    if (it->fpModel->GetGlobalDescription().find("G4PhysicalVolumeModel")
-	!= std::string::npos) {
-      if (((G4PhysicalVolumeModel*)(it->fpModel))->GetTopPhysicalVolume () == world) break;
-    }
-  }
-  if (it != rdModelList.end()) {
-    if (verbosity >= G4VisManager::warnings) {
-      G4cout << "WARNING: There is already a volume, \""
-             << it -> fpModel -> GetGlobalDescription()
-             << "\",\n in the run-duration model list of scene \""
-             << pScene -> GetName()
-             << "\".\n To get a clean scene:"
-	     << "\n  /vis/drawVolume " << name
-	     << "\n or"
-	     << "\n  /vis/scene/create"
-	     << "\n  /vis/scene/add/volume " << name
-	     << "\n  /vis/sceneHandler/attach"
-	     << "\n (and also, if necessary, /vis/viewer/flush)"
-             << G4endl;
     }
     return;
   }

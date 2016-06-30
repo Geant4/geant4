@@ -33,7 +33,7 @@
 #include "G4GenericPolycone.hh"
 #include "G4UGenericPolycone.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4Polyhedron.hh"
 
@@ -96,6 +96,30 @@ G4UGenericPolycone::operator=(const G4UGenericPolycone &source)
   G4USolid::operator=( source );
   
   return *this;
+}
+
+G4double G4UGenericPolycone::GetStartPhi() const
+{
+  return GetShape()->GetStartPhi();
+}
+G4double G4UGenericPolycone::GetEndPhi() const
+{
+  return GetShape()->GetEndPhi();
+}
+G4bool G4UGenericPolycone::IsOpen() const
+{
+  return GetShape()->IsOpen();
+}
+G4int G4UGenericPolycone::GetNumRZCorner() const
+{
+  return GetShape()->GetNumRZCorner();
+}
+G4PolyconeSideRZ G4UGenericPolycone::GetCorner(G4int index) const
+{
+  UPolyconeSideRZ pside = GetShape()->GetCorner(index);
+  G4PolyconeSideRZ psiderz = { pside.r, pside.z };
+
+  return psiderz;
 }
 
 G4Polyhedron* G4UGenericPolycone::CreatePolyhedron() const

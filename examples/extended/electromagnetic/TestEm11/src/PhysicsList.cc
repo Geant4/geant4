@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id: PhysicsList.cc 96377 2016-04-11 06:59:03Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "PhysicsListMessenger.hh"
 
 #include "PhysListEmStandard.hh"
-#include "PhysListEmStandardMP.hh"
 
 #include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option1.hh"
@@ -67,7 +66,7 @@ G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(), fNumAngles(1)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   fMessenger = new PhysicsListMessenger(this);
 
@@ -114,7 +113,6 @@ void PhysicsList::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
-#include "G4EmProcessOptions.hh"
 
 void PhysicsList::ConstructProcess()
 {
@@ -128,14 +126,17 @@ void PhysicsList::ConstructProcess()
   
   // Em options
   //
-  G4EmProcessOptions emOptions;
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetDEDXBinningForCSDARange(8*10);
-    
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetBuildCSDARange(true);
+
   // decay process
   //
   AddDecay();
-
+  
+  // radioactive decay Process
+  //
+  AddRadioactiveDecay();
+    
   // step limitation (as a full process)
   //  
   AddStepMax();
@@ -210,11 +211,6 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
-        
-  } else if (name == "emstandardMP") {
-    fEmName = name;
-    delete fEmPhysicsList;
-    fEmPhysicsList = new PhysListEmStandardMP(fNumAngles);
 
   } else {
 
@@ -249,6 +245,26 @@ void PhysicsList::AddDecay()
 
     }
   }
+}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4PhysicsListHelper.hh"
+#include "G4RadioactiveDecay.hh"
+#include "G4GenericIon.hh"
+#include "G4NuclideTable.hh"
+
+void PhysicsList::AddRadioactiveDecay()
+{  
+  G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
+  
+  radioactiveDecay->SetARM(true);                //Atomic Rearangement
+  
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();  
+  ph->RegisterProcess(radioactiveDecay, G4GenericIon::GenericIon());
+  
+  // mandatory for G4NuclideTable
+  //
+  G4NuclideTable::GetInstance()->SetThresholdOfHalfLife(0.1*picosecond);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

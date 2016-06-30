@@ -33,10 +33,10 @@
 #include "G4Cons.hh"
 #include "G4UCons.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4VPVParameterisation.hh"
- 
+
 //////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
@@ -98,6 +98,75 @@ G4UCons& G4UCons::operator = (const G4UCons& rhs)
 
 /////////////////////////////////////////////////////////////////////////
 //
+// Accessors and modifiers
+
+G4double G4UCons::GetInnerRadiusMinusZ() const
+{
+  return GetShape()->GetInnerRadiusMinusZ();
+}
+G4double G4UCons::GetOuterRadiusMinusZ() const
+{
+  return GetShape()->GetOuterRadiusMinusZ();
+}
+G4double G4UCons::GetInnerRadiusPlusZ() const
+{
+  return GetShape()->GetInnerRadiusPlusZ();
+}
+G4double G4UCons::GetOuterRadiusPlusZ() const
+{
+  return GetShape()->GetOuterRadiusPlusZ();
+}
+G4double G4UCons::GetZHalfLength() const
+{
+  return GetShape()->GetZHalfLength();
+}
+G4double G4UCons::GetStartPhiAngle() const
+{
+  return GetShape()->GetStartPhiAngle();
+}
+G4double G4UCons::GetDeltaPhiAngle() const
+{
+  return GetShape()->GetDeltaPhiAngle();
+}
+  
+void G4UCons::SetInnerRadiusMinusZ(G4double Rmin1)
+{
+  GetShape()->SetInnerRadiusMinusZ(Rmin1);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetOuterRadiusMinusZ(G4double Rmax1)
+{
+  GetShape()->SetOuterRadiusMinusZ(Rmax1);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetInnerRadiusPlusZ(G4double Rmin2)
+{
+  GetShape()->SetInnerRadiusPlusZ(Rmin2);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetOuterRadiusPlusZ(G4double Rmax2)
+{
+  GetShape()->SetOuterRadiusPlusZ(Rmax2);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetZHalfLength(G4double newDz)
+{
+  GetShape()->SetZHalfLength(newDz);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetStartPhiAngle(G4double newSPhi, G4bool trig)
+{
+  GetShape()->SetStartPhiAngle(newSPhi, trig);
+  fRebuildPolyhedron = true;
+}
+void G4UCons::SetDeltaPhiAngle(G4double newDPhi)
+{
+  GetShape()->SetDeltaPhiAngle(newDPhi);
+  fRebuildPolyhedron = true;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
@@ -115,6 +184,21 @@ void G4UCons::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4UCons::Clone() const
 {
   return new G4UCons(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Create polyhedron for visualization
+
+G4Polyhedron* G4UCons::CreatePolyhedron() const
+{
+  return new G4PolyhedronCons(GetInnerRadiusMinusZ(),
+                              GetOuterRadiusMinusZ(),
+                              GetInnerRadiusPlusZ(),
+                              GetOuterRadiusPlusZ(),
+                              GetZHalfLength(),
+                              GetStartPhiAngle(),
+                              GetDeltaPhiAngle());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

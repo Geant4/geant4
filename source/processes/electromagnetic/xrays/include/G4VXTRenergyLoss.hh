@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh 83661 2014-09-08 09:58:34Z gcosmo $
+// $Id: G4VXTRenergyLoss.hh 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
@@ -75,8 +75,8 @@ class G4VXTRenergyLoss : public G4VDiscreteProcess  // G4VContinuousProcess
 {
 public:
 
-  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
-                    G4double,G4double,G4int,
+  explicit G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4Material*,
+                    G4Material*, G4double,G4double,G4int,
                     const G4String & processName = "XTRenergyLoss",
                     G4ProcessType type = fElectromagnetic);
   virtual  ~G4VXTRenergyLoss ();
@@ -86,16 +86,16 @@ public:
   virtual  G4double GetStackFactor( G4double energy, G4double gamma,
                                                      G4double varAngle );
 
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  virtual G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
-				   const G4Step&  aStep);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
+				   const G4Step&  aStep) override;
 
-  G4double GetMeanFreePath(const G4Track& aTrack,
+  virtual G4double GetMeanFreePath(const G4Track& aTrack,
                            G4double previousStepSize,
-                           G4ForceCondition* condition);
+                           G4ForceCondition* condition) override;
 
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&) override;
   void BuildEnergyTable() ;
   void BuildAngleForEnergyBank() ;
 
@@ -237,8 +237,8 @@ protected:
 private:
 
   // copy constructor and hide assignment operator
-  G4VXTRenergyLoss(G4VXTRenergyLoss &);
-  G4VXTRenergyLoss & operator=(const G4VXTRenergyLoss &right);
+  G4VXTRenergyLoss(G4VXTRenergyLoss &) = delete;
+  G4VXTRenergyLoss & operator=(const G4VXTRenergyLoss &right) = delete;
 
 };
 

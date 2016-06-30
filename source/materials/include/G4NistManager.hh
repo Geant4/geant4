@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh 94234 2015-11-09 10:58:13Z gcosmo $
+// $Id: G4NistManager.hh 97248 2016-05-30 15:00:11Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,10 +89,11 @@ public:
 
   // Get G4Element by index
   //
-  inline G4Element* GetElement(size_t index);
+  inline G4Element* GetElement(size_t index) const;
   
   // Find or build G4Element by atomic number
   //
+  inline G4Element* FindElement(G4int Z) const;
   inline G4Element* FindOrBuildElement(G4int Z, G4bool isotopes=true);
   
   // Find or build G4Element by symbol
@@ -145,22 +146,22 @@ public:
 
   // Print element by Z
   //
-  inline void PrintElement(G4int Z);  
+  inline void PrintElement(G4int Z) const;
 
   // Print element from internal DB by symbol, if "all" - print all elements
   //
-  void PrintElement(const G4String&);    
+  void PrintElement(const G4String&) const;
 
   // Print G4Element by name, if "all" - print all G4Elements
   //
-  void PrintG4Element(const G4String&);  
+  void PrintG4Element(const G4String&) const;  
 
   // Access to the vector of Geant4 predefined element names 
   //
   inline const std::vector<G4String>& GetNistElementNames() const;
 
-  // Access mean ionisation energy for atoms (Z <= 98) 
-  //
+  // Access mean ionisation energy for atoms (Z <= 98) by its index 
+  // 
   inline G4double GetMeanIonisationEnergy(G4int Z) const;
 
   // Access nominal density by atomic number for simple materials and 
@@ -170,16 +171,18 @@ public:
 
   // Get G4Material by index 
   //
-  inline G4Material* GetMaterial(size_t index);
+  inline G4Material* GetMaterial(size_t index) const;
   
   // Find or build a G4Material by name, from the Geant4 dataBase
   //
+  inline G4Material* FindMaterial(const G4String& name) const; 
   inline G4Material* FindOrBuildMaterial(const G4String& name, 
 					 G4bool isotopes=true,
 					 G4bool warning=false);
 
   // Find or build a simple material via atomic number
   //
+  inline G4Material* FindSimpleMaterial(G4int Z) const; 
   inline G4Material* FindOrBuildSimpleMaterial(G4int Z, 
 					       G4bool warning=false);
   
@@ -236,15 +239,15 @@ public:
 				      
   // Get number of G4Materials
   //
-  inline size_t GetNumberOfMaterials();
+  inline size_t GetNumberOfMaterials() const;
   
-  inline G4int GetVerbose();
+  inline G4int GetVerbose() const;
 
   void SetVerbose(G4int);
 
   // Print G4Material by name
   //
-  void PrintG4Material(const G4String&);
+  void PrintG4Material(const G4String&) const;
 
   // Print predefined Geant4 materials:
   // "simple" - only pure materials in basic state (Z = 1, ..., 98)
@@ -253,7 +256,7 @@ public:
   // "bio" - bio-medical materials and compounds
   // "all" - all
   //
-  inline void ListMaterials(const G4String&);
+  inline void ListMaterials(const G4String&) const;
 
   // Access to the list of names of Geant4 predefined materials
   //
@@ -261,16 +264,17 @@ public:
 
   // Fast computation of Z^1/3
   //
-  inline G4double GetZ13(G4double Z);
-  inline G4double GetZ13(G4int Z);
+  inline G4double GetZ13(G4double Z) const;
+  inline G4double GetZ13(G4int Z) const;
 
   // Fast computation of A^0.27 for natuaral abundances
   //
-  inline G4double GetA27(G4int Z);
+  inline G4double GetA27(G4int Z) const;
 
   // Fast computation of log(A)
   //
-  inline G4double GetLOGZ(G4int Z);
+  inline G4double GetLOGZ(G4int Z) const;
+  inline G4double GetLOGAMU(G4int Z) const;
 
 private:
 
@@ -298,19 +302,25 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline size_t G4NistManager::GetNumberOfMaterials() 
+inline size_t G4NistManager::GetNumberOfMaterials() const
 {
   return nMaterials;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4Element* G4NistManager::GetElement(size_t index)
+inline G4Element* G4NistManager::GetElement(size_t index) const
 {
-  G4Element* elm = 0; 
   const G4ElementTable* theElementTable = G4Element::GetElementTable();
-  if(index < theElementTable->size()) { elm = (*theElementTable)[index]; }
-  return elm;
+  return (index < theElementTable->size()) ? (*theElementTable)[index] : nullptr; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4Element* G4NistManager::FindElement(G4int Z) const
+{
+  return elmBuilder->FindElement(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -418,38 +428,44 @@ const std::vector<G4String>& G4NistManager::GetNistElementNames() const
 
 inline G4double G4NistManager::GetMeanIonisationEnergy(G4int Z) const
 {
-  return matBuilder->GetMeanIonisationEnergy(Z-1);
+  return matBuilder->GetMeanIonisationEnergy(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4NistManager::GetNominalDensity(G4int Z) const
 {
-  return matBuilder->GetNominalDensity(Z-1);
+  return matBuilder->GetNominalDensity(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4NistManager::PrintElement(G4int Z)
+inline void G4NistManager::PrintElement(G4int Z) const
 {
   elmBuilder->PrintElement(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4Material* G4NistManager::GetMaterial(size_t index)
+inline G4Material* G4NistManager::GetMaterial(size_t index) const
 {
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4Material* mat = 0;
-  if(index < theMaterialTable->size()) { mat = (*theMaterialTable)[index]; }
-  return mat;
+  return (index < theMaterialTable->size()) ? (*theMaterialTable)[index] : nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4int G4NistManager::GetVerbose()
+inline G4int G4NistManager::GetVerbose() const
 {
   return verbose;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4Material* G4NistManager::FindMaterial(const G4String& name) const
+{
+  return matBuilder->FindMaterial(name);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -460,6 +476,14 @@ G4Material* G4NistManager::FindOrBuildMaterial(const G4String& name,
 					       G4bool warning)
 {
   return matBuilder->FindOrBuildMaterial(name, isotopes, warning);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline 
+G4Material* G4NistManager::FindSimpleMaterial(G4int Z) const
+{
+  return matBuilder->FindSimpleMaterial(Z);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -530,7 +554,7 @@ inline G4Material* G4NistManager::ConstructNewIdealGasMaterial(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4NistManager::ListMaterials(const G4String& list)
+inline void G4NistManager::ListMaterials(const G4String& list) const
 {
   matBuilder->ListMaterials(list);
 }
@@ -545,32 +569,37 @@ const std::vector<G4String>& G4NistManager::GetNistMaterialNames() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetZ13(G4double A)
+inline G4double G4NistManager::GetZ13(G4double A) const
 {
   return g4pow->A13(A);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetZ13(G4int Z)
+inline G4double G4NistManager::GetZ13(G4int Z) const
 {
   return g4pow->Z13(Z);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetA27(G4int Z)
+inline G4double G4NistManager::GetA27(G4int Z) const
 {
-  G4double res = 0.0;
-  if(Z < 101) { res = POWERA27[Z]; } 
-  return res;
+  return (0 <= Z && Z < 101) ? POWERA27[Z] : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4NistManager::GetLOGZ(G4int Z)
+inline G4double G4NistManager::GetLOGZ(G4int Z) const
 {
   return g4pow->logZ(Z);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4NistManager::GetLOGAMU(G4int Z) const
+{
+  return (0 <= Z && Z < 101) ? LOGAZ[Z] : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

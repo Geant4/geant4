@@ -14,6 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Apr-2016, Vladimir Ivanchenko    (phys-builders-V10-02-01)
+- OrderingParameterTable - disable msc PostStep
+
+18-Jan-2016, Alberto Ribon          (phys-builders-V10-02-00)
+- G4NeutronHPBuilder : used the name "NeutronHPInelastic" 
+  (instead of "ParticleHPInelastic")
+
 19-Nov-2015, Alberto Ribon          (phys-builders-V10-01-05)
 - G4NeutronHPBuilder : kept only the header file, with a 
   typedef to G4NeutronPHPBuilder

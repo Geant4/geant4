@@ -95,11 +95,11 @@ public:
   bool get (const std::vector<unsigned long> & v);
   bool getState (const std::vector<unsigned long> & v);
   
-  static const unsigned int VECTOR_STATE_SIZE = 516; // 2N+4 for MIXMAX
+  static const unsigned int VECTOR_STATE_SIZE = 2*N+4; // 2N+4 for MIXMAX
   
 private:
 
-  // Members defining the current status of the generator.
+  // Pointer to the current status of the generator.
   rng_state_st* fRngState;
 };
 

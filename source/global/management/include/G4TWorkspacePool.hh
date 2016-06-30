@@ -89,13 +89,13 @@ T* G4TWorkspacePool<T>::CreateWorkspace()
     if ( !fMyWorkspace ) {
         wrk = new T;
         if ( !wrk ) {
-            G4Exception("G4TWorspacePool<someType>::CreateWorkspace", "Run0035",
+            G4Exception("G4TWorspacePool<someType>::CreateWorkspace", "Workspace01",
                         FatalException, "Failed to create workspace.");
         } else {
             fMyWorkspace = wrk;
         }
     } else {
-        G4Exception("ParticlesWorspacePool::CreateWorkspace", "Run0035",
+        G4Exception("ParticlesWorspacePool::CreateWorkspace", "Workspace02",
                     FatalException,
                     "Cannot create workspace twice for the same thread.");
         wrk = fMyWorkspace;

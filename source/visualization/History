@@ -1,4 +1,4 @@
-$Id: History 94590 2015-11-25 11:12:46Z gcosmo $
+$Id: History 97430 2016-06-03 07:20:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,107 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+1st June 2016  Laurent Garnier (vis-V10-02-03)
+- gMocren-V10-02-01: Fixed coverity Win64 warning.
+
+1st June 2016  John Allison
+- visman-V10-02-11: Introduced /vis/viewer/interpolate.
+- visman-V10-02-12:
+  o Fixed compiler error on Windows. /vis/viewer/interpolate is not
+    available on Windows because it uses popen, a way of getting
+    output from a system command. _popen (with an underscore) is
+    said to be available in Windows but this has not been tried.
+- opengl-V10-02-06: Fixed bug in picking output text.
+- openinventor-V10-02-03: Fixed Coverity warning.
+
+30th May 2016  John Allison  (vis-V10-02-02)
+- visman-V10-02-10: Added some calls to SetView for security.
+- opengl-V10-02-05: G4OpenGLXViewer: Added thread awareness regarding
+  glXMakeCurrent.  NOTE: This will have to be done for Win32
+  for multithreading on Windows.
+- openinventor-V10-02-02:
+  o Fixed dispatching (Guy Barrand, Tom Roberts).
+  o setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD).
+
+19th May 2016  John Allison
+- VRML-V10-02-00, gMocren-V10-02-00
+  Fixed gcc-6.1 warnings.
+
+4th May 2016  John Allison
+- visman-V10-02-09: Win32 now opens with "/vis/open OGL" if Qt
+  is not built.
+
+2nd May 2016  John Allison  (vis-V10-02-01)
+- modeling-V10-02-04: Fixed gcc-6.1 warning.
+- visman-V10-02-08: Fixed gcc-6.1 warnings.
+- raytracer-V10-02-00: Fixed gcc-6.1 warning.
+
+2nd May 2016  John Allison  (vis-V10-02-00)
+- Tagged: consolidates the below improvements.
+
+2nd May 2016  John Allison
+- visman-V10-02-07:
+  MT mode: moved flush to end of vis thread.  This is so that all
+  trajectories are flushed from vis thread before switching back to
+  master thread.  Also fixes picking in MT mode.
+- opengl-V10-02-04: Xm: Ensure all items get flushed to screen, even
+  when eventsDrawInterval is set >1.
+
+23rd April 2016  John Allison
+- opengl-V10-02-03:
+  /vis/ogl/set/eventsDrawInterval and /vis/ogl/set/displayListLimit:
+  Fixed some inconsistencies.
+
+5th April 2016  John Allison
+- modeling-V10-02-03: Tidied #include statements.
+- vistree-V10-02-00:
+  o Prevented multiple writing of the informational header on
+    the output file.
+
+22 Mar 2016  Gabriele Cosmo
+- openinventor-V10-02-00
+  o Corrected delete statement in
+    G4OpenInventorXtExaminerViewer::sortBookmarksCB().
+  o Multiple improvements: 18 Dec 2015  Frederick Jones
+
+29th March 2016  John Allison
+- visman-V10-02-06: Fixed bug in /vis/scene/add/volume. It was
+  preventing parallel worlds being added individually.
+
+11th March 2016  John Allison
+- visman-V10-02-05:
+  o Inhibited use of BeginRun, BeginEvent, EndEvent and EndRun
+    when vis is not enabled, for example after /vis/disable.
+    In particular this prevents the start of the vis thread in
+    multithreading mode.
+
+15th February 2016  John Allison
+- modeling-V10-02-02:
+  Introduced drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+- visman-V10-02-04:
+  Registered drawing and filtering by touched volume.
+
+10th February 2016  John Allison, Laurent Garnier, Andrea Dotti
+- opengl-V10-02-00:
+  o Various small fixes and improvements.
+
+26th January 2016  John Allison
+- modeling-V10-02-01: Added some Set commands.
+- visXXX-V10-02-00: Improved CompareForKernelVisit.
+
+26th January 2016  John Allison
+- modeling-V10-02-00 and visman-V10-02-03:
+  Fix problem with OriginVolume drawing and filtering in
+  multithreading mode. 
+
+19th January 2016  John Allison
+- visman-V10-02-02: Improved /vis/viewer/save.
+
+14th January 2016  John Allison
+- visman-V10-02-01: Improved error tracking:
 
 25th November 2015  Laurent Garnier (vis-V10-01-19)
 - HepRep tagged : vis-HepRep-V10-01-02

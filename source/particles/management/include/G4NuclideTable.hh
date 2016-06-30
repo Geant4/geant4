@@ -93,19 +93,21 @@ public:
   G4double GetLevelTolerance() { return flevelTolerance; };
 
   void AddState(G4int,G4int,G4double,G4double,G4int ionJ=0,G4double ionMu=0.0);
-
+  void AddState(G4int,G4int,G4double,G4int,G4double,G4int ionJ=0,G4double ionMu=0.0);
    
   //G4bool Exists(G4double,G4double,G4double);
   
   //Use GetIsotope(G4int Z, G4int A, G4double E)
   //void FillProperty(G4ParticleDefinition*);
 
-  size_t GetSizeOfIsotopeList(){ return ( fIsotopeList ? fIsotopeList->size() : static_cast<size_t>(0)) ; };
+  size_t GetSizeOfIsotopeList()
+  { return ( fIsotopeList ? fIsotopeList->size() : static_cast<size_t>(0)) ; };
   
   //
   // with description
   //
-  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E);
+  virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat);
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
   //
   //   again it will replace the pure virtual one in the abstract base class.
@@ -113,6 +115,7 @@ public:
   //   Z: Atomic Number
   //   A: Atomic Mass
   //   E: Excitaion energy
+  //   flb: floating level base (enum defined in G4Ions.hh)
   //    or
   //   lvl: isomer level
   //  
@@ -159,8 +162,10 @@ private:
   G4IsotopeList*        fIsotopeList;
   G4double flevelTolerance;
   G4NuclideTableMessenger* fMessenger;
-};
 
+private:
+  G4double StripFloatLevelBase(G4double E, G4int& flbIndex);
+};
 
 inline
  size_t  G4NuclideTable::entries() const
@@ -174,4 +179,5 @@ inline
   if ( fIsotopeList && idx<fIsotopeList->size()) return (*fIsotopeList)[idx];
   else                          return 0;
 }
+
 #endif

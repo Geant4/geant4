@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr03/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 78398 2013-12-16 16:39:55Z gcosmo $
+// $Id: DetectorConstruction.cc 96284 2016-04-04 07:19:26Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -83,6 +83,14 @@ void DetectorConstruction::DefineMaterials()
  // define a Material from isotopes
  //
  MaterialWithSingleIsotope("Molybdenum98", "Mo98",  10.28*g/cm3, 42, 98);
+ 
+ //NE213
+ G4Element* H  = new G4Element("Hydrogen" ,"H" , 1.,  1.01*g/mole);
+ G4Element* C  = new G4Element("Hydrogen" ,"C" , 6., 12.00*g/mole);
+ G4Material* ne213 = 
+ new G4Material("NE213", 0.874*g/cm3, 2);
+ ne213->AddElement(H,    9.2*perCent);
+ ne213->AddElement(C,   90.8*perCent);   
     
  // or use G4-NIST materials data base
  //

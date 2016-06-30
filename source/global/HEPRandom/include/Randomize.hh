@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Randomize.hh 91902 2015-08-10 12:04:22Z gcosmo $
+// $Id: Randomize.hh 96593 2016-04-25 10:12:49Z gcosmo $
 //
 #ifndef randomize_h
 #define randomize_h 1
@@ -33,7 +33,7 @@
 
 #if __clang__
   #if ((defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-      !__has_feature(cxx_thread_local))
+      !__has_feature(cxx_thread_local)) || !__has_feature(c_atomic)
     #define CLANG_NOSTDTLS
   #endif
 #endif

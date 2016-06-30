@@ -1,4 +1,4 @@
-$Id: History 92598 2015-09-07 07:11:03Z gcosmo $
+$Id: History 96535 2016-04-20 12:14:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 20, 2016, G.Cosmo (digits_hits-V10-02-04)
+- Fixed shadowing compilation warnings in G4VScoringMesh for 'ps'.
+
+Apr 15, 2016, G.Cosmo (digits_hits-V10-02-03)
+- Fixed type in printing on cout in G4SDManager::AddNewDetector().
+
+Dec 18, 2015, M.Asai (digits_hits-V10-02-02)
+- While-loop check.
+
+Dec 8, 2015, M.Asai (digits_hits-V10-02-01)
+- Further code clean up with C++11 features
+
+Dec 7, 2015, M.Asai (digits_hits-V10-02-00)
+- Code clean up with C++11 features
 
 Sept 4, 2015, A.Dotti (digits_hits-V10-01-01)
 - Removing sporious cout

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScoreComposer.cc 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4CellScoreComposer.cc 94771 2015-12-09 09:44:05Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -45,8 +45,7 @@ G4CellScoreComposer::~G4CellScoreComposer()
 
 void G4CellScoreComposer::EstimatorCalculation(const G4Step &aStep){
 
-  G4StepPoint *p = 0;
-  p = aStep.GetPreStepPoint();
+  G4StepPoint *p = aStep.GetPreStepPoint();
   if (!p) {
     G4Exception("G4CellScoreComposer::EstimatorCalculation","Det0191",FatalException," no pointer to pre PreStepPoint!");
   }

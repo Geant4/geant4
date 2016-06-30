@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc 88761 2015-03-09 12:23:46Z gcosmo $
+// $Id: G4ASCIITreeSceneHandler.cc 96317 2016-04-06 07:25:03Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -77,15 +77,20 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
     fpOutFile = &fOutFile;
   }
 
-  G4cout << "G4ASCIITreeSceneHandler::BeginModeling: writing to ";
-  if (outFileName == "G4cout") {
-    G4cout << "G4 standard output (G4cout)";
-  } else {
-    G4cout << "file \"" << outFileName << "\"";
-  }
-  G4cout << G4endl;
+  static G4bool firstTime = true;
+  if (firstTime) {
+    firstTime = false;
+    G4cout << "G4ASCIITreeSceneHandler::BeginModeling: writing to ";
+    if (outFileName == "G4cout") {
+      G4cout << "G4 standard output (G4cout)";
+    } else {
+      G4cout << "file \"" << outFileName << "\"";
+    }
+    G4cout << G4endl;
 
-  WriteHeader (G4cout); G4cout << G4endl;
+    WriteHeader (G4cout); G4cout << G4endl;
+  }
+  
   if (outFileName != "G4cout") {
     WriteHeader (fOutFile); fOutFile << std::endl;
   }

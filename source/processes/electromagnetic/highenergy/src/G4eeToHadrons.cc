@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc 85013 2014-10-23 09:45:07Z gcosmo $
+// $Id: G4eeToHadrons.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,7 +59,7 @@ using namespace std;
 
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
   : G4VEmProcess(name),
-    multimodel(0),
+    multimodel(nullptr),
     csFactor(1.0), 
     isInitialised(false)
 {

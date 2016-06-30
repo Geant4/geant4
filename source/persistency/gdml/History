@@ -1,4 +1,4 @@
-$Id: History 93171 2015-10-09 09:04:09Z gcosmo $
+$Id: History 96677 2016-04-29 12:20:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 April 2016 Gabriele Cosmo (gdml-V10-02-06)
+- Added missing new dependency on digits_hits/detector in GNUmakefile.
+
+28 April 2016 Witek Pokorski (gdml-V10-02-05)
+- Added ability to automatically export the names of sensitive detectors
+  as the auxiliary information.
+
+22 March 2016 Witek Pokorski (gdml-V10-02-04)
+- adding check for correctness of the units
+
+21 March 2016 Witek Pokorski (gdml-V10-02-03)
+- increasing max_chars in the transcode() calls in G4GDLWrite (bug #1847)
+
+16 March 2016 Gabriele Cosmo (gdml-V10-02-02, 01)
+- Added ability to import and export scaled shapes.
+  Extended GDML schema by adding "scaledSolid" tag supporting scaled shapes.
+  New GDML schema version 3.1.4 (files: gdml.xsd, gdml_solids.xsd).
+  Requires tags "geommng-V10-02-00" and "geom-bool-V10-02-01".
+
+14 December 2015 Gabriele Cosmo (gdml-V10-02-00)
+- Corrected broken URLs and version number to schema.
 
 07 October 2015 Gabriele Cosmo (gdml-V10-01-24)
 - Protected compilation of G4MultiUnion wrapper with G4GEOM_USE_USOLIDS flag.

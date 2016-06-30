@@ -62,6 +62,8 @@
 #include "G4DNAVibExcitation.hh"
 #include "G4DNASancheExcitationModel.hh"
 
+#include "G4DNAElectronSolvation.hh"
+
 //
 
 #include "G4LossTableManager.hh"
@@ -177,7 +179,8 @@ void PhysicsList::ConstructEM()
 
       // STANDARD msc is active in the world
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      pmanager->AddProcess(msc, -1, 1, 1);
+      msc->AddEmModel(1,new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world
       G4eIonisation* eion = new G4eIonisation();
@@ -213,14 +216,16 @@ void PhysicsList::ConstructEM()
       // THE FOLLOWING PROCESS WILL KILL ALL ELECTRONS BELOW A
       // SELECTED ENERY THRESHOLD
       // Capture of low-energy e-
-      G4ElectronCapture* ecap = new G4ElectronCapture("Target", 5.1*eV);
+      G4ElectronCapture* ecap = new G4ElectronCapture("Target", 7.4*eV);
       pmanager->AddDiscreteProcess(ecap);
-
+      // 7.4 eV is compatible with the validity range of the Champion's model
+      
     } else if ( particleName == "proton" ) {
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      pmanager->AddProcess(msc, -1, 1, 1);
+      msc->AddEmModel(1,new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world 
       G4hIonisation* hion = new G4hIonisation();
@@ -260,7 +265,9 @@ void PhysicsList::ConstructEM()
     { // THIS IS NEEDED FOR STANDARD ALPHA G4ionIonisation PROCESS
 
       // STANDARD msc is active in the world 
-      pmanager->AddProcess(new G4hMultipleScattering, -1, 1, 1);
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world 
       G4ionIonisation* hion = new G4ionIonisation();
@@ -272,7 +279,8 @@ void PhysicsList::ConstructEM()
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      pmanager->AddProcess(msc, -1, 1, 1);
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      pmanager->AddProcess(msc, -1, 1, -1);
 
       // STANDARD ionisation is active in the world 
       G4ionIonisation* hion = new G4ionIonisation();
@@ -345,7 +353,7 @@ void PhysicsList::ConstructEM()
   // ---> STANDARD EM processes are inactivated below 1 MeV
 
   mod =  new G4UrbanMscModel();
-  mod->SetActivationLowEnergyLimit(1*MeV);
+  mod->SetActivationLowEnergyLimit(1.*MeV);
   em_config->SetExtraEmModel("e-","msc",mod,"Target");
 
   mod = new G4MollerBhabhaModel();
@@ -362,24 +370,26 @@ void PhysicsList::ConstructEM()
 
   mod = new G4DNAChampionElasticModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAElastic",
-                             mod,"Target",0.0,1*MeV);
+                             mod,"Target",7.4*eV,1.*MeV);
 
   mod = new G4DNABornIonisationModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAIonisation",
-                             mod,"Target",11*eV,1*MeV);
+                             mod,"Target",11.*eV,1.*MeV);
+  // Note: valid from 11 eV to 0.999.. MeV then switch to std models at
+  // higher energies ; same for other models
 
   mod = new G4DNABornExcitationModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAExcitation",
-                             mod,"Target",9*eV,1*MeV);
+                             mod,"Target",9.*eV,1.*MeV);
 
   mod = new G4DNAMeltonAttachmentModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAAttachment",
-                             mod,"Target",4*eV,13*eV);
+                             mod,"Target",4.*eV,13.*eV);
 
   mod = new G4DNASancheExcitationModel();
   em_config->SetExtraEmModel("e-","e-_G4DNAVibExcitation",
-                             mod,"Target",2*eV,100*eV);
-
+                             mod,"Target",2.*eV,100.*eV);
+  
   // *** proton
 
   // ---> STANDARD EM processes inactivated below standEnergyLimit

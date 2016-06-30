@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id: PhysListEmStandard.cc 96377 2016-04-11 06:59:03Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,14 +58,12 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
 #include "G4MscStepLimitType.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 
 #include "G4BuilderType.hh"
-#include "G4EmModelActivator.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -76,8 +74,11 @@ PhysListEmStandard::PhysListEmStandard(const G4String& name)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
-  param->SetFluo(true);
+  param->SetMinEnergy(10*eV);
+  param->SetMaxEnergy(10*TeV);
+  param->SetNumberOfBinsPerDecade(10);
   param->SetMscStepLimitType(fUseSafetyPlus);
+  param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -184,8 +185,6 @@ void PhysListEmStandard::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,0 +1,251 @@
+
+                 Geant4 10.2 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                            26 February 2016
+
+List of fixes included in this public patch since the public release 10.2:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Fixed configuration error occurring when using CLHEP-2.3.1.1 external
+        installation. Addressing problem report #1805.
+      o Updated data-sets to RadioactiveDecay-4.3.1 and G4ENSDFSTATE-1.2.1.
+    + GNUMake:
+      o Added settings for C++ standards in platform specific scripts.
+
+  o Analysis:
+    --------
+    + Fixed definition of /analysis/ntuple command directory which was created
+      implicitly with the commands and so defined without a guideline and not
+      deleted.
+
+  o Externals
+    ---------
+    + zlib:
+      o Fixed compilation warnings on clang-3.7 compiler.
+
+  o Geometry:
+    --------
+    + magnetic-field:
+      o Fix for spin tracking of particles with negative magnetic moment.
+        Addressing problem report #1831.
+    + navigation:
+      o Relaxed condition for zero or almost-zero steps in G4ReplicaNavigation
+        and G4Navigator, to allow for faster progression in case of stuck tracks
+        in 3D scoring meshes. Addressing old problem report #1432.
+      o Fix in G4ReplicaNavigation::ComputeStep() for correct setting of copyNo
+        for particle entering. Fixes issue of negative copyNo observed in nested
+        replica setups. Addressing problem report #1634.
+      o Moved check for overlaps in G4Navigator::ComputeStep() within G4VERBOSE.
+        Addressing problem report #1811.
+    + solids/Boolean:
+      o Minor optimisation in Inside(p) for G4UnionSolid and G4SubtractionSolid.
+    + solids/specific:
+      o Fix in G4GenericTrap for computation of extent.
+        Addressing problem report #1809.
+        Disabled debug warning in SurfaceNormal().
+      o Correction in G4ExtrudedSolid::AddGeneralPolygonFacets() for precision
+        treatment in construction of tessels to avoid cases of collinear points
+        and consequent degenerating triangles.
+        Addressing problem report #1777.
+      o Use pre-computed kCarToleranceHalf constant in G4ExtrudedSolid, now
+        protected in G4TessellatedSolid.
+
+  o Global:
+    ------
+    + Corrected conditions for proper treatment of gcc-5 in tls.hh and
+      G4Threading.hh.
+    + Removed unused and buggy operator=(const G4String&) in G4SubString.
+    + Updated date and version for 10.2.p01.
+
+  o Graphics Representations:
+    ------------------------
+    + Use "" instead of <> for internal header inclusion in
+      HepPolyhedronProcessor.h.
+
+  o Materials:
+    ---------
+    + Fixed rare data-race in G4MaterialPropertiesTable for optical physics.
+    + G4NistMaterialBuilder: added lock to build of new NIST material; needed,
+      as some physics processes may create a new NIST material from worker
+      thread.
+    + G4NistElementBuilder: fixed typo in printout.
+      Addressing problem report #1786.
+
+  o Particles:
+    ---------
+    + Fixed wrong argument order CreateIon(A,Z,LL,0.0) in G4IonTable to
+      CreateIon(Z,A,LL,0.0).
+    + Fixed setting of mass in decay parent particle.
+      Addressing problem report #1820.
+    + Fixed G4DecayTable::SelectADecayChannel() for decay channels all
+      kinematically forbidden.
+    + In G4IonTable removed static const tolerance and replaced with call to
+      G4NuclideTable; this recovers missed levels when they are closer together
+      than 2 keV. Reverted default value of level tolerance in G4NuclideTable
+      to 1 eV; turn out rounding of excitation energy to avoid potential
+      conservation problems.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o Corrected broken URLs and version number to schema.
+
+  o Physics Lists
+    -------------
+    + builders:
+      o G4NeutronHPBuilder: corrected name from "NeutronHPInelastic" to
+        "ParticleHPInelastic".
+    + constructors/limiters:
+      o G4ParallelWorldPhysics: fixed process order index for
+        G4ParallelWorldProcess to 9900 to make sure it is registered
+        prior to G4OpBoundaryProcess.
+    + constructors/electromagnetic:
+      o G4EmStandardPhysicsSS: do not compute cross-section tables
+        if experimental Mott cross-section is enabled (this provides a
+        significant increase in CPU, but only in this conditions Mott
+        corrections are valid).
+    + constructors/hadron_elastic:
+      o Added missing hadron elastic for He3 in G4HadronElasticPhysics,
+        using Glauber-Gribov elastic cross-section (Gheisha does not have
+        hadronic - elastic and inelastic - cross-sections for He3).
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o In ionisation models SampleSecondaries(), added protection on energy
+        in case of interpolation method change.
+    + lowenergy:
+      o Fixed inclusion guard in G4LivermorePolarizedPhotoElecticModel.hh.
+        Addressing problem report #1816.
+      o Code cleanup and fixed Coverity defects.
+    + standard:
+      o Fixed cases of floating-point exception in G4ScreeningMottCrossSection.
+        Some code cleanup and performance improvements.
+      o Fixed sampling of scattering angle in G4eSingleCoulombScatteringModel.
+        Addressing problem report #1823.
+      o G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable: updated step 
+        limitations. Fixed Coverity defects and improved comments.
+    + utils:
+      o G4EmSaturation: corrected method name from VisibleEnergyDeposition() to
+        VisibleEnergyDepositionAtAStep(), in order to allow overloading of
+        virtual method. Addressing problem report #1807.
+      o G4EmCalculator: fixed computation of dEdx and range for He3 and alpha.
+        Addressing problem report #1808.
+      o G4LossTableManager: avoid double addition of He3 and alpha to the loss
+        table map (should not have any effect on results).
+    + xrays:
+      o G4VTransitionRadiation, G4VXTRenergyLoss: fixed process sub-type.
+      o G4Scintillation: use new method introduced in G4EmSaturation
+        VisibleEnergyDepositionAtAStep() in order to fix overloading problem.
+
+  o Processes - Generic:
+    -------------------
+    + biasing:
+      o Code cleanup and Coverity fixes in 'generic' and 'management' modules.
+    + scoring:
+      o G4ParallelWorldProcess: fixed processType from 'fParameterized'
+        to 'fParallel' and set processSubType to 491.
+    + optical:
+      o Fix to DielectricLUT concerning the sequence of rotations.
+        Addressing problem report #1826.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/abla:
+      o Fixed bug in de-excitation of boosted nucleon remnants.
+    + models/de_excitation:
+      o G4GammaTransition: added protection against rare problem in sampling 
+        of internal conversion when transition energy is lower than atomic 
+        level energy: instead of stopping the cascade, set bound level energy
+        to zero and produce final e-; this allows to complete radioactive-decay
+        cascade. Addressing problem report #1806.
+      o G4PhotonEvaporation, G4LevelManager, G4LevelReader, G4NuclearLevelData:
+        fixed remaining cases of production of excited stated.
+        Addressing problem report #1806.
+      o G4PhotonEvaporation, G4LevelReader, G4NucLevel: fixed treatment of
+        X-levels (meta-stable nuclear levels which have forbidden gamma
+        transition but opened beta-transitions); this fix excludes creation of
+        very low-energy fake gamma and provides a correct nuclear decay
+        sequence.
+      o G4PhotonEvaporation: set limit on emitted gamma energy 0.1 keV (was
+        10 keV).
+    + models/lend:
+      o Fixed problem in prodcution of residual neutrons.
+      o Corrected use of isnan() to std::isnan() for compilers different than
+        Windows/VC++.
+      o Fixed Coverity defects.
+    + models/particle_hp:
+      o Fixes for problem on materials with hydrogen or helium.
+      o Fixed problems in deletion of cross-section data set in MT mode
+        and initialisation of cached data.
+      o Fixed Coverity defects.
+    + models/qmd:
+      o Fixed bug in handling forbidden decay in G4QMDCollision.
+    + models/radioactive_decay:
+      o G4BetaMinusDecay, G4RadioactiveDecay: added protection for case
+        when end point energy is 0 in beta- decay.
+        Addressing problem report #1766.
+    + models/util:
+      o G4KineticTrack: replaced G4cerr with a 'JustWarning' G4Exception.
+    + util:
+      o G4Nucleus: increased the max number of loops allowed in the method
+        GetBiasedThermalNucleus().
+
+  o Run:
+    ---
+    + G4PhysicsListHelper: added entry for G4ParallelWorldProcess.
+    + G4RunManager, G4WorkerRunManager: fixed process order index of
+      G4ParallelWorldProcess to 9900 to make sure it is registered
+      prior to G4OpBoundaryProcess.
+
+  o Tracking:
+    --------
+    + G4SteppingManager: fix to properly set 'OriginTouchableHandle' for the
+      primary track. Addressing problem report #1773.
+
+  o Data sets:
+    ---------
+    + Patched data set for nuclides properties G4ENSDFSTATE-1.2.1:
+      o Added missing data for RA228, SI24, SI25 and 193RN.
+    + Patched data set for radioactive-decay, G4RadioactiveDecay-4.3.1:
+      o Replace NaN values for intensity by 1 in z71.a157(Lu157),
+        z55.a136(Cs136) and z59.a129(Pr129).
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + basic:
+      o Added G4ENSDFSTATEDATA in the lists of mandatory data sets; updated
+        README files. Addressing problem report #1810.
+      o B4: restored the third parameter in G4UIsession construction, which
+        was lost when moving G4UIExecutive at the beginning of main().
+        Addressing problem report #1802.
+    + extended/biasing/B03:
+      o B03PhysicsList: corrected process order index of G4ParallelWorldProcess
+        to 9900 to make sure it is registered prior to G4OpBoundaryProcess.
+    + extended/electromagnetic:
+      o Fixed macros to allow to work both  with Root-5 and 6.
+    + extended/radioactivedecay/rdecay01:
+      o PhysicsList: SetLevelTolerance to 1*eV, there appears to already be a
+        level Ni60[1332.510] stored somewhere instead of Ni60[1332.514].
+        Setting the tolerance to 1 eV gets the right level.
+      o Improved printout in Run::EndOfRun().
+      o Updated references in it1.mac and it2.mac.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.2.
+  o  Technical notes distributed for release 10.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.2.p01 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

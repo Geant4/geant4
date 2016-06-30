@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh 72048 2013-07-04 12:39:58Z gcosmo $
+// $Id: G4BohrFluctuations.hh 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,28 +60,25 @@ class G4BohrFluctuations : public G4VEmFluctuationModel
 
 public:
 
-  G4BohrFluctuations(const G4String& nam = "BohrFluc");
+  explicit G4BohrFluctuations(const G4String& nam = "BohrFluc");
 
   virtual ~G4BohrFluctuations();
 
-  G4double SampleFluctuations(const G4MaterialCutsCouple*,
+  virtual G4double SampleFluctuations(const G4MaterialCutsCouple*,
+                                      const G4DynamicParticle*,
+                                      G4double, G4double, G4double) override;
+
+  virtual G4double Dispersion(const G4Material*,
                               const G4DynamicParticle*,
- 				    G4double,
-                                    G4double,
-                                    G4double);
+                              G4double, G4double) override;
 
-  G4double Dispersion(    const G4Material*,
-                          const G4DynamicParticle*,
- 				G4double,
-                                G4double);
-
-  void InitialiseMe(const G4ParticleDefinition*);
+  virtual void InitialiseMe(const G4ParticleDefinition*) override;
 
 private:
 
   // hide assignment operator
-  G4BohrFluctuations & operator=(const  G4BohrFluctuations &right);
-  G4BohrFluctuations(const  G4BohrFluctuations&);
+  G4BohrFluctuations & operator=(const  G4BohrFluctuations &right) = delete;
+  G4BohrFluctuations(const  G4BohrFluctuations&) = delete;
 
   const G4ParticleDefinition* particle;
 

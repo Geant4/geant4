@@ -138,8 +138,9 @@ G4ThreeVector XLatticeManager3::MapKtoVDir(G4VPhysicalVolume* Vol,
   for(int counter=0;counter<fTotalLattices;counter++){
     if(fLatticeList[counter]->GetVolume()==Vol) {
       if(counter!=0)
-          G4cout<<"\nLattiveManager2::MapKtoV:";
-          G4cout<<"returning group velocity from lattise position: "<<counter;
+          G4cout<<"\nLattiveManager2::MapKtoV:"
+                <<" Returning group velocity from lattice position "
+                <<counter;
       return fLatticeList[counter]->MapKtoVDir(polarizationState, k);
     }
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4alphaIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -65,13 +65,12 @@ using namespace std;
 
 G4alphaIonisation::G4alphaIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),
-    theParticle(0),
+    theParticle(nullptr),
     isInitialised(false)
 {
   G4Exception("G4alphaIonisation::G4alphaIonisation","em0007",JustWarning,
 	      " The process is not ready for use - incorrect results are expected");
   SetLinearLossLimit(0.02);
-  SetStepFunction(0.2, 0.01*mm);
   SetProcessSubType(fIonisation);
   mass = 0.0;
   ratio = 0.0;
@@ -114,7 +113,7 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     G4String pname = part->GetParticleName();
 
     // define base particle
-    const G4ParticleDefinition* theBaseParticle = 0;
+    const G4ParticleDefinition* theBaseParticle = nullptr;
     if(bpart == 0) { 
       if(pname != "alpha") { theBaseParticle = G4Alpha::Alpha(); }
     } else { theBaseParticle = bpart; }

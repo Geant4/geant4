@@ -94,12 +94,19 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   # - CLHEP
   if(GEANT4_USE_SYSTEM_CLHEP)
     set(G4_BUILTWITH_CLHEP "no")
+    #inc path
+    get_filename_component(G4_SYSTEM_CLHEP_INCLUDE_DIR "${CLHEP_INCLUDE_DIR}" ABSOLUTE)
+
     #libpath
     list(GET CLHEP_LIBRARIES 0 _zeroth_clhep_lib)
-    get_filename_component(_system_clhep_libdir "${_zeroth_clhep_lib}" PATH)
+    get_target_property(_system_clhep_libdir "${_zeroth_clhep_lib}" LOCATION)
+    get_filename_component(_system_clhep_libdir "${_system_clhep_libdir}" REALPATH)
+    get_filename_component(_system_clhep_libdir "${_system_clhep_libdir}" DIRECTORY)
     set(G4_SYSTEM_CLHEP_LIBRARIES "-L${_system_clhep_libdir}")
+
     foreach(_clhep_lib ${CLHEP_LIBRARIES})
-      get_filename_component(_curlib "${_clhep_lib}" NAME)
+      get_target_property(_curlib "${_clhep_lib}" LOCATION)
+      get_filename_component(_curlib "${_curlib}" NAME)
       string(REGEX REPLACE "^lib(.*)\\.(so|a|dylib|lib|dll)$" "\\1" _curlib "${_curlib}")
       set(G4_SYSTEM_CLHEP_LIBRARIES "${G4_SYSTEM_CLHEP_LIBRARIES} -l${_curlib}")
     endforeach()
@@ -144,13 +151,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   endif()
 
   # - USolids
-  if(GEANT4_USE_USOLIDS)
+  if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     set(G4_BUILTWITH_USOLIDS "yes")
     set(G4_USOLIDS_INCLUDE_DIRS ${USOLIDS_INCLUDE_DIRS})
     list(REMOVE_DUPLICATES G4_USOLIDS_INCLUDE_DIRS)
     list(REMOVE_ITEM G4_USOLIDS_INCLUDE_DIRS ${_cxx_compiler_dirs})
 
-    set(G4_USOLIDS_CFLAGS "-DG4GEOM_USE_USOLIDS")
+    string(REPLACE ";" " " G4_USOLIDS_CFLAGS "${GEANT4_USOLIDS_COMPILE_DEFINITIONS}")
     foreach(_dir ${G4_USOLIDS_INCLUDE_DIRS})
       set(G4_USOLIDS_CFLAGS "${G4_USOLIDS_CFLAGS} -I${_dir}")
     endforeach()

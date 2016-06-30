@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh 93616 2015-10-27 08:59:17Z gcosmo $
+// $Id: G4DNASancheExcitationModel.hh 96606 2016-04-25 13:33:42Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -44,15 +44,14 @@
 
 class G4DNASancheExcitationModel : public G4VEmModel
 {
-
 public:
-
   G4DNASancheExcitationModel(const G4ParticleDefinition* p = 0,
-                              const G4String& nam = "DNASancheExcitationModel");
+                             const G4String& nam = "DNASancheExcitationModel");
 
   virtual ~G4DNASancheExcitationModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*,
+                          const G4DataVector&);
 
   virtual G4double CrossSectionPerVolume(const G4Material* material,
                                          const G4ParticleDefinition* p,
@@ -86,8 +85,6 @@ private:
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
-  G4double lowEnergyLimit;
-  G4double highEnergyLimit;
   G4bool isInitialised;
   G4int verboseLevel;
 
@@ -120,11 +117,12 @@ private:
 
 inline void G4DNASancheExcitationModel::ExtendLowEnergyLimit(G4double threshold)
 {
-  lowEnergyLimit = threshold;
-  if(lowEnergyLimit < 2 * CLHEP::eV)
+  if(threshold < 2 * CLHEP::eV)
     G4Exception("*** WARNING : the G4DNASancheExcitationModel class is not "
                 "validated below 2 eV !",
                 "", JustWarning, "");
+  
+  SetLowEnergyLimit(threshold);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedComptonCrossSection.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedComptonCrossSection.cc 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -189,7 +189,7 @@ G4double G4PolarizedComptonCrossSection::TotalXSection(G4double /*xmin*/, G4doub
 {
   
   //  G4double k0 = gammaEnergy / electron_mass_c2 ;
-  G4double k1 = 1 + 2*k0 ;
+  G4double k1 = 1. + 2.*k0 ;
 
 //   // pi*re^2
 //   G4double re=2.81794e-15; //m

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4eBremsstrahlung.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -123,7 +123,7 @@ G4eBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
     G4double emin = param->MinKinEnergy();
     G4double emax = param->MaxKinEnergy();
     G4double energyLimit = std::min(emax, GeV);
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
 
     if (!EmModel(1)) { SetEmModel(new G4SeltzerBergerModel(), 1); }
     EmModel(1)->SetLowEnergyLimit(emin);

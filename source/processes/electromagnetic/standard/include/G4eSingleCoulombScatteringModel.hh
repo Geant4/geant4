@@ -68,11 +68,15 @@ class G4eSingleCoulombScatteringModel : public G4VEmModel
 
 public:
 
-  G4eSingleCoulombScatteringModel(const G4String& nam = "eSingleCoulombScat");
+  explicit G4eSingleCoulombScatteringModel(const G4String& nam = "eSingleCoulombScat");
  
   virtual ~G4eSingleCoulombScatteringModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, 
+			  const G4DataVector&) final;
+
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+			       G4VEmModel* masterModel) final;
  
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
@@ -80,13 +84,13 @@ public:
 				G4double Z, 
 				G4double A, 
 				G4double cut,
-				G4double emax);
+				G4double emax) final;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double tmin,
-				 G4double maxEnergy);
+				 G4double maxEnergy) final;
   	
   inline void SetRecoilThreshold(G4double eth);
 
@@ -97,8 +101,9 @@ private:
   inline void SetupParticle(const G4ParticleDefinition*);
 
   // hide assignment operator
-  G4eSingleCoulombScatteringModel & operator=(const G4eSingleCoulombScatteringModel &right);
-  G4eSingleCoulombScatteringModel(const  G4eSingleCoulombScatteringModel&);
+  G4eSingleCoulombScatteringModel & operator=
+  (const G4eSingleCoulombScatteringModel &right) = delete;
+  G4eSingleCoulombScatteringModel(const  G4eSingleCoulombScatteringModel&) = delete;
 
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange; 
@@ -118,9 +123,6 @@ private:
   const G4ParticleDefinition* particle;		
   G4double                  mass;		
   G4double                  lowEnergyLimit;
-
-  //private:
-  G4bool                    isInitialised;	
 
 };
 

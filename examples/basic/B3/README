@@ -1,4 +1,4 @@
-$Id: README 94093 2015-11-05 15:16:06Z gcosmo $
+$Id: README 94957 2016-01-08 13:27:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -41,6 +41,8 @@ $Id: README 94093 2015-11-05 15:16:06Z gcosmo $
    This physics list requires data files for:
    - low energy electromagnetic processes which path is defined via 
      the G4LEDATA envirnoment variable
+   - nuclides properties which path is defined via 
+     the G4ENSDFSTATEDATA envirnoment variable
    - radioactive decay hadronic processes which path is defined via 
      the G4RADIOACTIVEDATA envirnoment variable.
    

@@ -1,4 +1,4 @@
-$Id: History 93494 2015-10-23 10:05:09Z gcosmo $
+$Id: History 97008 2016-05-20 08:57:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 20, 2016 G.Cosmo                     geom-csg-V10-02-04
+- Moved accessors and modifiers in USolids wrappers to be not inlined.
+  Required modification in order to allow correct dispatching to VecGeom
+  types.
+
+April 15, 2016 G.Cosmo                   geom-csg-V10-02-03
+- Added flag in USolids wrappers for partial use of USolids/VecGeom types.
+
+April 5, 2016 J.Allison                  geom-csg-V10-02-02
+- G4Orb.cc: Fixed typo in G4Exception message.
+
+March 31, 2016 G.Cosmo                   geom-csg-V10-02-01
+- Added overloaded CreatePolyhedron() method to USolids wrappers.
+  It is now possible to visualize supported VecGeom shapes.
+
+March 10, 2016 G.Cosmo                   geom-csg-V10-02-00
+- Added overloaded GetEntityType() method to USolids wrappers.
 
 October 23, 2015 G.Cosmo                 geom-csg-V10-01-10
 - Fixed Coverity defect in G4CutTubs::GetMaxMinZ().

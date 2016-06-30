@@ -121,7 +121,7 @@ GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) 
   norm *= 5.;
   norm += velMag;
   norm /= velMag;
-  const G4int maxNumberOfLoops = 10000;
+  const G4int maxNumberOfLoops = 1000000;
   G4int loopCounter = -1;
   while ( (value/norm<random) && ++loopCounter < maxNumberOfLoops )  /* Loop checking, 02.11.2015, A.Ribon */
   {

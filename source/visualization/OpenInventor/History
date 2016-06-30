@@ -1,4 +1,4 @@
-$Id: History 91687 2015-07-31 09:44:16Z gcosmo $
+$Id: History 97317 2016-06-01 12:14:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,38 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+01 June 2016  John Allison (openinventor-V10-02-03)
+- G4OpenInventorXtExtendedViewer.hh:
+  Removed fPDFButton - not used.  Fixes Coverity warning.
+
+30 May 2016  John Allison (openinventor-V10-02-02)
+- G4OpenInventorWin.cc: Fixed dispatching (Guy Barrand, Tom Roberts).
+- G4OpenInventorXtViewer.cc, G4OpenInventorWinViewer.cc:
+  setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD).
+
+27 May 2016  Gabriele Cosmo (openinventor-V10-02-01)
+- Fixed compilation warnings on MacOS for conversion to char* in
+  G4OpenInventorXtExtendedViewer and G4OpenInventorXtViewer sources.
+
+22 Mar 2016  Gabriele Cosmo (openinventor-V10-02-00)
+- Corrected delete statement in G4OpenInventorXtExaminerViewer::sortBookmarksCB().
+
+18 Dec 2015  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  o Designed new icons (XPM) for the "Extended Pick Mode" and
+    "Pick Reference Trajectory" buttons.
+  o Modified the mouse-over-trajectory output to make it
+    more clear.
+  o Modifications for Coverity fault 48023 "Resource leak"
+  o Modifications for Coverity fault 48027 "Freed internal location"
+  o Improved diagnostics for Bookmark file handling.
+  o New approach for determining distance along the reference
+    path, using element centers instead of bounding boxes.
+    Solves problems with spurious bounding box warnings and
+    incorrect distance values.
+- G4OpenInventorXtExtended & G4OpenInventorXtExtendedViewer
+  o Suppressed some unwanted diagnostic output.
 
 30th July 2015  John Allison  (openinventor-V10-01-02)
 - G4OpenInventor:

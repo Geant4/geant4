@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 90233 2015-05-21 08:56:28Z gcosmo $
+// $Id: G4RunManagerKernel.cc 95232 2016-02-01 14:31:22Z gcosmo $
 //
 //
 
@@ -156,7 +156,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
     G4ExceptionDescription msg;
     msg<<"Geant4 code is compiled without multi-threading support (-DG4MULTITHREADED is set to off).";
     msg<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
-    G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msg);
+    G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0105",FatalException,msg);
 #endif
 
 #ifdef G4FPE_DEBUG
@@ -197,7 +197,7 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
         defaultRegionForParallelWorld = 0;
         G4ExceptionDescription msgx;
         msgx<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
-        G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msgx);
+        G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0106",FatalException,msgx);
     }
     runManagerKernelType = rmkType;
     

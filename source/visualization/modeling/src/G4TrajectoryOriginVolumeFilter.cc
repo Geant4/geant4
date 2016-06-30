@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryOriginVolumeFilter.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4TrajectoryOriginVolumeFilter.cc 95115 2016-01-26 16:33:29Z gcosmo $
 //
 // Filter trajectories according to volume name. Only registered 
 // volumes will pass the filter.
@@ -43,12 +43,14 @@ G4TrajectoryOriginVolumeFilter::~G4TrajectoryOriginVolumeFilter() {}
 bool
 G4TrajectoryOriginVolumeFilter::Evaluate(const G4VTrajectory& traj) const
 {
-  G4Navigator* navigator = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  
   G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
   assert (0 != aTrajectoryPoint);
+
+  G4Navigator* navigator =
+  G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
   
-  G4VPhysicalVolume* volume = navigator->LocateGlobalPointAndSetup(aTrajectoryPoint->GetPosition());
+  G4VPhysicalVolume* volume = navigator->LocateGlobalPointAndSetup
+  (aTrajectoryPoint->GetPosition(), nullptr,false,true);
 
   // Logical volume
   G4LogicalVolume* logicalVolume = volume->GetLogicalVolume();

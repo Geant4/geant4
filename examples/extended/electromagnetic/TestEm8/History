@@ -1,4 +1,4 @@
-$Id: History 93674 2015-10-28 09:58:36Z gcosmo $
+$Id: History 95713 2016-02-22 08:08:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-02-16 V.Ivant (testem8-V10-02-00)
+- TestParameters, Run, PrimaryGeneratorAction, 
+  PrimaryGeneratorMessenger - reorganized printout of beam 
+    particle; use energy smearing as an addition of noise,
+    so smeared noise should be added in units of energy
 
 27-10-15 D.Sawkey (testem8-V10-01-06)
 - spellcheck, synch README, .README

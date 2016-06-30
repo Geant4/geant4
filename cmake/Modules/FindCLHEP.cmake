@@ -205,7 +205,7 @@ find_path(CLHEP_INCLUDE_DIR CLHEP/Units/defs.h
 if(CLHEP_INCLUDE_DIR)
     set(CLHEP_VERSION 0)
     file(READ "${CLHEP_INCLUDE_DIR}/CLHEP/Units/defs.h" _CLHEP_DEFS_CONTENTS)
-    string(REGEX REPLACE ".*#define PACKAGE_VERSION \"([0-9.]+).*" "\\1"
+    string(REGEX REPLACE ".*#define (PACKAGE|CLHEP_UNITS)+_VERSION \"([0-9.]+).*" "\\2"
         CLHEP_VERSION "${_CLHEP_DEFS_CONTENTS}")
 
     if(NOT CLHEP_FIND_QUIETLY)
@@ -310,6 +310,40 @@ if(CLHEP_FOUND)
     list(APPEND CLHEP_LIBRARIES ${${__clhep_lib}})
   endforeach()
   set(CLHEP_INCLUDE_DIRS ${CLHEP_INCLUDE_DIR})
+
+  # Create imported targets
+  foreach(__clhep_lib ${__CLHEP_LIBRARY_SET})
+    # Construct imported target name
+    string(REPLACE "_LIBRARY" "" __clhep_imp_lib "${__clhep_lib}")
+    string(REPLACE "_" "::" __clhep_imp_lib "${__clhep_imp_lib}")
+    if(__clhep_imp_lib STREQUAL "CLHEP")
+      # Create both CLHEP and CLHEP::CLHEP targets
+      if(NOT TARGET CLHEP::CLHEP)
+        add_library(CLHEP::CLHEP UNKNOWN IMPORTED)
+        set_target_properties(CLHEP::CLHEP PROPERTIES
+          IMPORTED_LOCATION "${CLHEP_LIBRARY}"
+          INTERFACE_INCLUDE_DIRECTORIES "${CLHEP_INCLUDE_DIRS}"
+          )
+      endif()
+      if(NOT TARGET CLHEP)
+        add_library(CLHEP UNKNOWN IMPORTED)
+        set_target_properties(CLHEP PROPERTIES
+          IMPORTED_LOCATION "${CLHEP_LIBRARY}"
+          INTERFACE_INCLUDE_DIRECTORIES "${CLHEP_INCLUDE_DIRS}"
+          )
+       endif()
+    else()
+      # Have a component target - these are always namespaced
+      # Note that at present, link interfaces aren't created...
+      if(NOT TARGET ${__clhep_imp_lib})
+        add_library(${__clhep_imp_lib} UNKNOWN IMPORTED)
+        set_target_properties(${__clhep_imp_lib} PROPERTIES
+          IMPORTED_LOCATION "${${__clhep_lib}}"
+          INTERFACE_INCLUDE_DIRECTORIES "${CLHEP_INCLUDE_DIRS}"
+          )
+      endif()
+    endif()
+  endforeach()
 endif()
 
 #----------------------------------------------------------------------------

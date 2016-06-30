@@ -26,13 +26,11 @@
 /// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
 /// \brief Implementation of the RE01DetectorConstruction class
 //
-// $Id: RE01DetectorConstruction.cc 75598 2013-11-04 13:00:59Z gcosmo $
+// $Id: RE01DetectorConstruction.cc 97383 2016-06-02 09:56:35Z gcosmo $
 //
 
 #include "RE01DetectorConstruction.hh"
 #include "RE01TrackerSD.hh"
-#include "RE01CalorimeterSD.hh"
-#include "RE01CalorimeterROGeometry.hh"
 #include "RE01TrackerParametrisation.hh"
 #include "RE01CalorimeterParametrisation.hh"
 #include "RE01Field.hh"
@@ -60,36 +58,20 @@
 #include "G4RegionStore.hh"
 #include "G4SystemOfUnits.hh"    
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01DetectorConstruction::RE01DetectorConstruction()
   : G4VUserDetectorConstruction()
 {
 #include "RE01DetectorParameterDef.icc"
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01DetectorConstruction::~RE01DetectorConstruction()
 {;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* RE01DetectorConstruction::Construct()
 {
-  //-------------------------------------------------------------------------
-  // Magnetic field
-  //-------------------------------------------------------------------------
-  /******************************************************************
-  static G4bool fieldIsInitialized = false;
-  if(!fieldIsInitialized)
-  {
-    RE01Field* myField = new RE01Field;
-    G4FieldManager* fieldMgr
-      = G4TransportationManager::GetTransportationManager()
-        ->GetFieldManager();
-    fieldMgr->SetDetectorField(myField);
-    fieldMgr->CreateChordFinder(myField);
-    fieldIsInitialized = true;
-  }
-  *******************************************************************/
   //-------------------------------------------------------------------------
   // Materials
   //-------------------------------------------------------------------------
@@ -183,22 +165,19 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
   fCalorimeter_log
     = new G4LogicalVolume(calorimeter_tubs,scinti,"caloT_L",0,0,0);
   // G4VPhysicalVolume * calorimeter_phys =
-      new G4PVPlacement(0,G4ThreeVector(),fCalorimeter_log,"caloM_P",
+  new G4PVPlacement(0,G4ThreeVector(),fCalorimeter_log,"caloM_P",
                         experimentalHall_log,false,0);
   G4VisAttributes* calorimeter_logVisATT
     = new G4VisAttributes(G4Colour(1.0,1.0,0.0));
   calorimeter_logVisATT->SetForceWireframe(true);
   fCalorimeter_log->SetVisAttributes(calorimeter_logVisATT);
   G4Region* calorimeterRegion = new G4Region("CalorimeterRegion");
-  RE01RegionInformation* calorimeterInfo = new RE01RegionInformation();
+  RE01RegionInformation* calorimeterInfo
+    = new RE01RegionInformation();
   calorimeterInfo->SetCalorimeter();
   calorimeterRegion->SetUserInformation(calorimeterInfo);
   fCalorimeter_log->SetRegion(calorimeterRegion);
   calorimeterRegion->AddRootLogicalVolume(fCalorimeter_log);
-
-  G4String ROgeometryName = "CalorimeterROGeom";
-  fCalorimeterRO = new RE01CalorimeterROGeometry(ROgeometryName);
-  fCalorimeterRO->BuildROGeometry();
 
   //------------------------------- Lead layers
   // As an example for Parameterised volume 
@@ -212,7 +191,7 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
     = new RE01CalorimeterParametrisation;
   // dummy value : kXAxis -- modified by parameterised volume
   // G4VPhysicalVolume * caloLayer_phys =
-      new G4PVParameterised("caloLayer_phys",caloLayer_log,fCalorimeter_log,
+  new G4PVParameterised("caloLayer_phys",caloLayer_log,fCalorimeter_log,
                            kXAxis, fNocaloLayers, calorimeterParam);
   G4VisAttributes* caloLayer_logVisAtt
     = new G4VisAttributes(G4Colour(0.7,1.0,0.0));
@@ -224,23 +203,26 @@ G4VPhysicalVolume* RE01DetectorConstruction::Construct()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void RE01DetectorConstruction::ConstructSDandField() {
-
+void RE01DetectorConstruction::ConstructSDandField()
+{
   //------------------------------------------------------------------
   // Sensitive Detector
   //------------------------------------------------------------------
-  //G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
   G4String trackerSDname = "/mydet/tracker";
   RE01TrackerSD * trackerSD = new RE01TrackerSD(trackerSDname);
-  //SDman->AddNewDetector(trackerSD);
   SetSensitiveDetector(fTrackerLayer_log, trackerSD);
-  
-  G4String calorimeterSDname = "/mydet/calorimeter";
-  RE01CalorimeterSD * calorimeterSD = new RE01CalorimeterSD(calorimeterSDname);
-  calorimeterSD->SetROgeometry(fCalorimeterRO);
-  //SDman->AddNewDetector(calorimeterSD);
-  SetSensitiveDetector(fCalorimeter_log, calorimeterSD);
 
+  // N.B. Calorimeter SD is defined in the parallel world.
+
+  //-------------------------------------------------------------------------
+  // Magnetic field
+  //-------------------------------------------------------------------------
+  
+  RE01Field* myField = new RE01Field;
+  G4FieldManager* fieldMgr
+    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+  fieldMgr->SetDetectorField(myField);
+  fieldMgr->CreateChordFinder(myField);
 }
 

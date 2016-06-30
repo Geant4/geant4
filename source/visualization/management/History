@@ -1,4 +1,4 @@
-$Id: History 93811 2015-11-02 11:28:41Z gcosmo $
+$Id: History 97548 2016-06-03 15:56:56Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,6 +26,143 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+3rd June 2016  John Allison  (visman-V10-02-13)
+- G4ViewParameters.cc: Fixed compilation warnings on gcc-6.1.
+
+1st June 2016  John Allison  (visman-V10-02-12)
+- Fixed compiler error on Windows. /vis/viewer/interpolate is not
+  available on Windows because it uses popen, a way of getting
+  output from a system command. _popen (with an underscore) is
+  said to be available in Windows but this has not been tried.
+ 
+1st June 2016  John Allison  (visman-V10-02-11)
+- Introduced /vis/viewer/interpolate.  See History from development
+  branch visman-V10-02-02-branch as follows:
+17th February 2016  John Allison  (visman-V10-02-02-branch-12)
+- G4ViewParameters::CatmullRomCubicSplineInterpolation:
+  o Protected some parameters from going negative, as appropriate.
+- G4VisCommandsViewer.cc: /vis/viewer/interpolate:
+  o Changed first argument to Unix-style pattern.  From the guidance:
+    Interpolate views defined by the first argument, which can contain Unix-shell-style pattern matching characters such as '*', '?' and '[' - see "man sh" and look for "Pattern Matching". The contents of each file are assumed to be "/vis/viewer" commands that specify a particular view. The files are processed in alphanumeric order of filename. The files may be written by hand or produced by the "/vis/viewer/save" command.
+The default is to search the working directory for files with a .view extension. Another procedure is to assemble view files in a subdirectory, e.g., "myviews"; then they can be interpolated with
+"/vis/viewer/interpolate myviews/*".
+16th February 2016  John Allison  (visman-V10-02-02-branch-11)
+- /vis/viewer/interpolate:
+  Added safety check to while and do loops.
+- Restored mysteriously lost G4VisCommandViewerClearVisAttributesModifiers.
+28th January 2016  John Allison  (visman-V10-02-02-branch-10)
+- Interpolation: Added vis attributes modifiers (colours only).
+- Tidied.
+28th January 2016  John Allison  (visman-V10-02-02-branch-09)
+- Tidied.
+28th January 2016  John Allison  (visman-V10-02-02-branch-08)
+- Interpolation: Added cutaway planes.
+27th January 2016  John Allison  (visman-V10-02-02-branch-07)
+- Interpolation: Added planes and colours.
+27th January 2016  John Allison  (visman-V10-02-02-branch-06)
+- /vis/viewer/interpolate:
+  o Allow export of files for possible movie. Write \"export\" as
+    5th parameter (OpenGL only).
+27th January 2016  John Allison  (visman-V10-02-02-branch-05)
+- Needs modeling-V10-02-01.
+- G4VisManager.cc: Added instantiation of
+  G4VisCommandViewerClearVisAttributesModifiers.
+- G4VisCommandsViewer: Added /vis/viewer/clearVisAttributesModifiers.
+- G4VisCommandsTouchable.cc: Improved guidance.
+- G4ViewParameters:
+  o Added ClearVisAttributesModifiers.
+  o Augmented AddVisAttributesModifier so that if a target already
+    exists the modifier is not added, only the vis attributes of the
+    existing modifier are changed.
+26th January 2016  John Allison
+- Merged visman-V10-02-03: G4VisManager::G4VisSubThread:
+  GetNavigatorForTracking -> SetWorldVolume
+  This is required for OriginVolume drawing and filtering. 
+24th January 2016  John Allison  (visman-V10-02-02-branch-04)
+- Refinements.
+23rd January 2016  John Allison  (visman-V10-02-02-branch-01)
+- Improved /vis/viewer/interpolate.
+22nd January 2016  John Allison  (visman-V10-02-02-branch-00)
+- Introduced G4ViewParameters::CatmullRomCubicSplineInterpolation.
+- Moved the following:
+    #ifndef __MIC__
+    #define G4VIS_USE_STD11
+    #endif
+  from G4VisManager.cc to G4VisManager.hh.
+- G4VisManager.cc: Instantiated G4VisCommandViewerInterpolate.
+- G4VisCommandsViewer:
+  o Introduced /vis/viewer/interpolate.  Note this command is not
+    available on Windows.  Code is protected by #ifndef WIN32.
+    This is because popen, which allows one to retrieve output
+    from a system shell command, is not available on Windows.
+  o Improved guidance for /vis/viewer/save.
+
+30th May 2016  John Allison  (visman-V10-02-10)
+- G4VisManager::SetCurrentViewer: Added fpViewer->SetView().
+- G4VisCommandsViewer.cc:
+  o /vis/viewer/select: Added comment: Calling the above calls SetView().
+  o /vis/viewer/clear: Added viewer->SetView().
+
+4th May 2016  John Allison  (visman-V10-02-09)
+- G4VisExecutive.icc: Win32 now opens with "/vis/open OGL" if Qt
+  is not built.
+
+2nd May 2016  John Allison  (visman-V10-02-08)
+- G4VisCommandsSceneAdd.cc: Fixed gcc-6.1 warnings.
+
+2nd May 2016  John Allison  (visman-V10-02-07)
+- G4VisManager: MT mode: moved end of run instructions (ShowView,
+  etc.) to end of vis thread.  This is so that all trajectories are
+  flushed from vis thread before switching back to master thread.
+  Also fixes picking in MT mode.
+
+30th March 2016  John Allison
+- Gave fallback trajectory model the name "DefaultModel".
+
+29th March 2016  John Allison  (visman-V10-02-06)
+- G4VisManager.cc: Cosmetic. Change of name of fallback traj. model.
+- G4VisCommandsSceneAdd.cc:
+  o /vis/scene/add/volume: Removed incorrect check on existing models.
+    It was preventing parallel worlds being added individually.  There
+    are enough checks in G4Scene::AddRunDurationModel.
+
+11th March 2016  John Allison  (visman-V10-02-05)
+- Fixed mistake in introductory vis manager message.
+- Inhibited use of BeginRun, BeginEvent, EndEvent and EndRun
+  when vis is not enabled, for example after /vis/disable.
+  In particular this prevents the start of the vis thread in
+  multithreading mode.
+
+15th February 2016  John Allison  (visman-V10-02-04)
+- Requires modeling-V10-02-02.
+- G4VisExecutive.icc:
+  Registered drawing and filtering by touched volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByTouchedVolume
+    /vis/filtering/trajectories/create/touchedVolumeFilter
+
+26th January 2016  John Allison  (visman-V10-02-03)
+- G4VisManager::G4VisSubThread:
+  GetNavigatorForTracking -> SetWorldVolume
+  This is required for OriginVolume drawing and filtering. 
+
+14th January 2016  John Allison  (visman-V10-02-02)
+- Improved /vis/viewer/save.
+
+14th January 2016  John Allison  (visman-V10-02-01)
+- Fixed unused variable problem.
+
+14th January 2016  John Allison  (visman-V10-02-00)
+- Improved error tracking:
+  o G4VVisCommand: Introduced error code to track error conditions.
+  o G4VisCommandsCompound.cc: Tracked error conditions for
+    /vis/open and /vis/drawTree.
+- G4VisCommandsSceneHandler.cc: Code tidying.
+
+11th December 2015 Laurent Garnier
+- G4VViewer:
+  o Add ComputeFlyThrough method (beta)
+  o Add an G4Spline class for testing
+    
 1st November 2015  John Allison  (visman-V10-01-20)
 - Introduced (again!) <chrono> for queue handling in MT mode.
   o Except for Xeon Phi, which is protected by #ifndef __MIC__

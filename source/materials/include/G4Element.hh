@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh 87870 2015-01-16 08:27:07Z gcosmo $
+// $Id: G4Element.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -129,10 +129,11 @@ public:  // with description
 
   // Atomic number
   inline G4double GetZ()             const {return fZeff;}    
+  inline G4int GetZasInt()           const {return fZ;}    
 
   // Atomic weight in atomic units
   inline G4double GetN()             const {return fNeff;}     
-  inline G4double GetAtomicMassAmu() const {return fNeff;}     
+  inline G4double GetAtomicMassAmu() const {return fNeff;}      
 
   // Mass of a mole in Geant4 units for atoms with atomic shell
   inline G4double GetA()             const {return fAeff;}    
@@ -205,9 +206,6 @@ public:  // with description
 
 public:  // without description
 
-  G4int operator==(const G4Element&) const;
-  G4int operator!=(const G4Element&) const;
-
   G4Element(__void__&);
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
@@ -217,16 +215,16 @@ public:  // without description
 
 private:
 
-  G4Element(G4Element&);
-  const G4Element & operator=(const G4Element&);
-
   void InitializePointers();
   void ComputeDerivedQuantities();
   void ComputeCoulombFactor();
   void ComputeLradTsaiFactor();
   void AddNaturalIsotopes();
 
-private:
+  G4Element(G4Element&) = delete;
+  const G4Element & operator=(const G4Element&) = delete;
+  G4int operator==(const G4Element&) const = delete;
+  G4int operator!=(const G4Element&) const = delete;
 
   //
   // Basic data members (which define an Element)
@@ -236,6 +234,7 @@ private:
   G4double fZeff;              // Effective atomic number
   G4double fNeff;              // Effective number of nucleons
   G4double fAeff;              // Effective mass of a mole
+  G4int    fZ;
     
   G4int fNbOfAtomicShells;     // number  of atomic shells
   G4double* fAtomicShells ;    // Pointer to atomic shell binding energies

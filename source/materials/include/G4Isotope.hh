@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh 87870 2015-01-16 08:27:07Z gcosmo $
+// $Id: G4Isotope.hh 96794 2016-05-09 10:09:30Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -99,8 +99,6 @@ class G4Isotope
     // Isomer level      
     G4int    Getm()     const {return fm;}
         
-  //    G4int GetCountUse() const {return fCountUse;}
-    
     static  
     G4Isotope* GetIsotope(const G4String& name, G4bool warning=false);
     
@@ -132,8 +130,6 @@ class G4Isotope
       // persistifiable objects.
    
     void SetName(const G4String& name) {fName=name;}
-  //    void increaseCountUse()  {fCountUse++;}
-  //  void decreaseCountUse()  {fCountUse--;}
 
  private:
      
@@ -148,8 +144,6 @@ class G4Isotope
     G4double fA;                 // atomic mass of a mole
     G4int    fm;                 // isomer level
         
-  //    G4int    fCountUse;          // nb of elements which use this isotope
-
     static 
     G4IsotopeTable theIsotopeTable;
     

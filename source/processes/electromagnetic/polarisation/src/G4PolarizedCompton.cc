@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc 93113 2015-10-07 07:49:04Z gcosmo $
+// $Id: G4PolarizedCompton.cc 97175 2016-05-27 12:42:05Z gcosmo $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -175,26 +175,34 @@ G4double G4PolarizedCompton::PostStepGetPhysicalInteractionLength(
 				   G4double   previousStepSize,
 				   G4ForceCondition* condition)
 {
-  // save previous value
+  // save previous values
   G4double nLength = theNumberOfInteractionLengthLeft;
+  G4double iLength = currentInteractionLength;
 
-  // *** compute uppolarized step limit ***
+  // *** compute unpolarized step limit ***
+  // this changes theNumberOfInteractionLengthLeft and currentInteractionLength
   G4double x = G4VEmProcess::PostStepGetPhysicalInteractionLength(aTrack, 
 								  previousStepSize, 
 								  condition);
-
+  G4double x0 = x;
+  G4double satFact = 1.0;
+  
   // *** add corrections on polarisation ***
   if (theAsymmetryTable && useAsymmetryTable && x < DBL_MAX) {
-    G4double curLength = currentInteractionLength*ComputeSaturationFactor(aTrack);
+    satFact = ComputeSaturationFactor(aTrack);
+    G4double curLength = currentInteractionLength*satFact;
+    G4double prvLength = iLength*satFact;
     if(nLength > 0.0) {
       theNumberOfInteractionLengthLeft = 
-	std::max(nLength - previousStepSize/curLength, 0.0);
+        std::max(nLength - previousStepSize/prvLength, 0.0);
     }
     x = theNumberOfInteractionLengthLeft * curLength;
   }
   if (verboseLevel>=2) {
-    G4cout << "G4PolarizedCompton::PostStepGetPhysicalInteractionLength:  " 
-	   << x/mm << " mm " << G4endl;
+    G4cout << "G4PolarizedCompton::PostStepGPIL: " 
+           << std::setprecision(8) << x/mm  << " mm;" << G4endl 
+           << "               unpolarized value: " 
+           << std::setprecision(8) << x0/mm << " mm." << G4endl;
   }
   return x;
 }
@@ -297,8 +305,8 @@ void G4PolarizedCompton::BuildAsymmetryTable(const G4ParticleDefinition& part)
   G4int nbins = LambdaBinning();
   G4double emin = MinKinEnergy();
   G4double emax = MaxKinEnergy();
-  G4PhysicsLogVector* aVector = 0;
-  G4PhysicsLogVector* bVector = 0;
+  G4PhysicsLogVector* aVector = nullptr;
+  G4PhysicsLogVector* bVector = nullptr;
 
   for(size_t i=0; i<numOfCouples; ++i) {
     if (theAsymmetryTable->GetFlag(i)) {

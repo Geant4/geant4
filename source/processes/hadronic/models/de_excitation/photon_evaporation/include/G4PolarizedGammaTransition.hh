@@ -52,7 +52,7 @@ class G4PolarizedGammaTransition : public G4GammaTransition
 {
 public:
 
-  G4PolarizedGammaTransition();
+  explicit G4PolarizedGammaTransition();
 
   virtual ~G4PolarizedGammaTransition();
   
@@ -65,11 +65,10 @@ public:
 
 private:  
 
-  G4PolarizedGammaTransition(const G4PolarizedGammaTransition &right);
-  
-  const G4PolarizedGammaTransition& operator=(const G4PolarizedGammaTransition &right);
-  G4bool operator==(const G4PolarizedGammaTransition &right) const;
-  G4bool operator!=(const G4PolarizedGammaTransition &right) const;
+  G4PolarizedGammaTransition(const G4PolarizedGammaTransition &right) = delete;
+  const G4PolarizedGammaTransition& operator=(const G4PolarizedGammaTransition &right) = delete;
+  G4bool operator==(const G4PolarizedGammaTransition &right) const = delete;
+  G4bool operator!=(const G4PolarizedGammaTransition &right) const = delete;
 
   G4PolarizationTransition* fPolarization; 
 };

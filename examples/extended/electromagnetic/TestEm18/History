@@ -1,4 +1,4 @@
-$Id: History 82401 2014-06-18 14:43:54Z gcosmo $
+$Id: History 96374 2016-04-11 06:55:50Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+10-04-16 mma  (testem18-V10-02-01)
+- PhysListEmStandard: use G4EmParameters
+
+09-12-15 V.Ivant (testem18-V10-02-00)
+- H.Burkhardt fixed root macro allowing to work both with root5 and 6
 	 
 18-06-14 mma (testem18-V10-00-00)
 - remove PhysicsList::SetCuts()

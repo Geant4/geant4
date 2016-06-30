@@ -106,11 +106,11 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       if(resA < 40)       { signor =0.7 + resA*0.0075; }
       else if(resA > 210) { signor = 1. + (resA-210)*0.004; }
       lambda = paramK[idx][3]/resA13 + paramK[idx][4];
-      mu = paramK[idx][5]*resA13 + paramK[idx][6]*resA13*resA13;
+      mu = (paramK[idx][5] + paramK[idx][6]*resA13)*resA13;
       // JMQ 20.11.2008 very low energy behaviour corrected 
       //                (problem for A (apprx.)>60) fix for avoiding  
       //                neutron xs going to zero at very low energies
-      nu = std::abs(paramK[idx][7]*resA13*resA + paramK[idx][8]*resA13*resA13 
+      nu = std::abs((paramK[idx][7]*resA + paramK[idx][8]*resA13)*resA13 
 		    + paramK[idx][9]);
 
     } else { // parameterization for charged 
@@ -132,8 +132,8 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       G4double b = p*ecsq + mu + 2*nu/ec;
       G4double ecut;
       G4double det = a*a - 4*p*b;
-      if (det > 0.0) { ecut = (std::sqrt(det) - a)/(p + p); }
-      else           { ecut = a/(p + p); }
+      if (det > 0.0) { ecut = (std::sqrt(det) - a)/(2*p); }
+      else           { ecut = -a/(2*p); }
 
       // If ecut>0, sig=0 at elab=ecut
       if(elab > ecut) { 
@@ -161,8 +161,8 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       if(0 < Z) {
         etest = 0.0;
 	xnulam = nu / lambda;
-	if(xnulam > spill)       { xnulam= 0.0; }
-	else if (xnulam >= flow) { 
+	xnulam = std::min(xnulam, spill); 
+	if (xnulam >= flow) { 
 	  if(1 == idx) { etest = std::sqrt(xnulam) + 7.; }
 	  else         { etest = 1.2 *std::sqrt(xnulam); }
 	}

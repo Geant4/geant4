@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannel.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4GEMChannel.cc 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -36,6 +36,8 @@
 // J. M. Quesada (October 2009) fixed bug in CoulombBarrier calculation 
 
 #include "G4GEMChannel.hh"
+#include "G4VCoulombBarrier.hh"
+#include "G4GEMCoulombBarrier.hh"
 #include "G4PairingCorrection.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -44,16 +46,16 @@
 #include "G4Exp.hh"
 
 G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
-                           G4GEMProbability * aEmissionStrategy,
-                           G4VCoulombBarrier * aCoulombBarrier) :
+                           G4GEMProbability * aEmissionStrategy) :
   G4VEvaporationChannel(aName),
   A(theA),
   Z(theZ),
   theEvaporationProbabilityPtr(aEmissionStrategy),
-  theCoulombBarrierPtr(aCoulombBarrier),
   EmissionProbability(0.0),
   MaximalKineticEnergy(-CLHEP::GeV)
 { 
+  theCoulombBarrierPtr = new G4GEMCoulombBarrier(theA, theZ);
+  theEvaporationProbabilityPtr->SetCoulomBarrier(theCoulombBarrierPtr);
   theLevelDensityPtr = new G4EvaporationLevelDensityParameter;
   MyOwnLevelDensity = true;
   EvaporatedMass = G4NucleiProperties::GetNuclearMass(A, Z);
@@ -66,6 +68,7 @@ G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
 G4GEMChannel::~G4GEMChannel()
 {
   if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
+  delete theCoulombBarrierPtr;
 }
 
 G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)

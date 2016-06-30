@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VelocityTable.cc 69005 2013-04-15 09:26:47Z gcosmo $
+// $Id: G4VelocityTable.cc 96764 2016-05-04 13:09:31Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -43,6 +43,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
+#include "G4Log.hh"
 
 #include "G4ios.hh" 
 
@@ -72,17 +73,16 @@ G4VelocityTable::~G4VelocityTable()
 void G4VelocityTable::PrepareVelocityTable()
 ///////////////////
 {
+  const G4double g4log10 = std::log(10.); 
+  
   dataVector.clear();
   binVector.clear();
-
   dBin     =  std::log10(maxT/minT)/NbinT;
   baseBin  =  std::log10(minT)/dBin;
 
   numberOfNodes = NbinT + 1;
   dataVector.reserve(numberOfNodes);
   binVector.reserve(numberOfNodes);
-
-  const G4double g4log10 = std::log(10.); 
 
   binVector.push_back(minT);
   dataVector.push_back(0.0);
@@ -117,7 +117,8 @@ size_t G4VelocityTable::FindBinLocation(G4double theEnergy) const
   // not through pointers or references. In this case, the 'inline' will
   // be invoked. (See R.B.Murray, "C++ Strategies and Tactics", Chap.6.6)
 
-  return size_t( std::log10(theEnergy)/dBin - baseBin );
+  const G4double g4log10 = G4Log(10.); 
+  return size_t( G4Log(theEnergy)/dBin/g4log10 - baseBin );
 }
 
 G4double G4VelocityTable::Value(G4double theEnergy) 

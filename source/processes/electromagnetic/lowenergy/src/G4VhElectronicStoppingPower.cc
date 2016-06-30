@@ -32,25 +32,26 @@
 // File name:     G4VhElectronicStoppingPower
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 20 July 2000
 //
-// Modifications: 
+// Modifications:
 // 20/07/2000  V.Ivanchenko First implementation
 //
-// Class Description: 
+// Class Description:
 //
 // Low energy hadrons/ions electronic stopping power parametrisation
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VhElectronicStoppingPower.hh" 
+#include "G4VhElectronicStoppingPower.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,16 +61,16 @@ G4VhElectronicStoppingPower::G4VhElectronicStoppingPower():
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VhElectronicStoppingPower::~G4VhElectronicStoppingPower() 
+G4VhElectronicStoppingPower::~G4VhElectronicStoppingPower()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
-                                      const G4double z, 
+                                      const G4double z,
                                       const G4double kineticEnergyHe) const
 {
-  // The aproximation of He effective charge from: 
+  // The aproximation of He effective charge from:
   // J.F.Ziegler, J.P. Biersack, U. Littmark
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
@@ -77,7 +78,7 @@ G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
   static const G4double c[6] = {0.2865,  0.1266, -0.001429,
 				0.02402,-0.01135, 0.001475} ;
 
-  G4double e = std::log( std::max( 1.0, kineticEnergyHe/(keV*GetHeMassAMU()))) ; 
+  G4double e = std::log( std::max( 1.0, kineticEnergyHe/(keV*GetHeMassAMU()))) ;
   G4double x = c[0] ;
   G4double y = 1.0 ;
   for (G4int i=1; i<6; i++) {
@@ -86,7 +87,7 @@ G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
   }
 
   G4double w = 7.6 -  e ;
-  w = 1.0 + (0.007 + 0.00005*z) * std::exp( -w*w ) ;
-  w = 4.0 * (1.0 - std::exp(-x)) * w * w ;
+  w = 1.0 + (0.007 + 0.00005*z) * G4Exp( -w*w ) ;
+  w = 4.0 * (1.0 - G4Exp(-x)) * w * w ;
   return w;
 }

@@ -26,8 +26,8 @@
 // S. Incerti (incerti@cenbg.in2p3.fr)
 //
 
-#ifndef G4EmDNAPhysics_option5_h
-#define G4EmDNAPhysics_option5_h 1
+#ifndef G4EmDNAPhysics_option7_h
+#define G4EmDNAPhysics_option7_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"

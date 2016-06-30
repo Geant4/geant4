@@ -82,6 +82,8 @@
 #include "G4UniversalFluctuation.hh"
 #include "G4LowECapture.hh"
 #include "G4hMultipleScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
+#include "G4IonCoulombScatteringModel.hh"
 #include "G4ionIonisation.hh"
 
 // Processes and models for Geant4-DNA
@@ -89,7 +91,8 @@
 
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
-#include "G4DNAScreenedRutherfordElasticModel.hh"
+//#include "G4DNAScreenedRutherfordElasticModel.hh"
+#include "G4DNAUeharaScreenedRutherfordElasticModel.hh"
 #include "G4DNAIonElasticModel.hh"
 
 #include "G4DNAExcitation.hh"
@@ -101,6 +104,12 @@
 
 #include "G4SystemOfUnits.hh"
 #include <vector>
+
+#include "G4DNAChemistryManager.hh"
+#include "G4DNAElectronSolvation.hh"
+#include "G4DNAEmfietzoglouIonisationModel.hh"
+#include "G4DNAEmfietzoglouExcitationModel.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,11 +128,11 @@ G4EmModelActivator::~G4EmModelActivator()
 
 void G4EmModelActivator::ConstructParticle()
 {
-  const std::vector<G4String> regnamesDNA = theParameters->RegionsDNA();
-  if(regnamesDNA.size() > 0)
-  {
-    ConstructDNAParticles();
-  }
+  //  const std::vector<G4String> regnamesDNA = theParameters->RegionsDNA();
+  // if(regnamesDNA.size() > 0)
+  //{
+  ConstructDNAParticles();
+  //}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,7 +162,7 @@ void G4EmModelActivator::ActivatePAI()
 {
   const std::vector<G4String> regnamesPAI = theParameters->RegionsPAI();
   G4int nreg = regnamesPAI.size();
-  if(0 == nreg) return;
+  if(0 == nreg) { return; }
   G4int verbose = theParameters->Verbose() - 1;
   if(verbose > 0)
   {
@@ -366,7 +375,7 @@ void G4EmModelActivator::ActivateMicroElec()
                                reg,
                                0.0,
                                2 * MeV,
-                               new G4IonFluctuations());
+                               new G4UniversalFluctuation());
 
     mod = new G4BetheBlochModel();
     mod->SetActivationLowEnergyLimit(pmax);
@@ -470,10 +479,11 @@ void G4EmModelActivator::ActivateDNA()
   G4ProcessManager* a0man = alpha0->GetProcessManager();
   G4ProcessManager* h0man = h0->GetProcessManager();
 
-  G4bool emsc = HasMsc(eman);
-  //G4bool pmsc  = HasMsc(pman);
-  //G4bool a2msc = HasMsc(a2man);
-  //G4bool a1msc = HasMsc(a1man);
+  G4bool emsc  = HasMsc(eman);
+  G4bool pmsc  = HasMsc(pman);
+  G4bool a2msc = HasMsc(a2man);
+  G4bool a1msc = HasMsc(a1man);
+  G4bool imsc  = HasMsc(iman);
 
   // alpha+ standard processes
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
@@ -625,24 +635,46 @@ void G4EmModelActivator::ActivateDNA()
   G4VEmModel* mod;
 
   // limits for DNA model applicability
-  G4double elowest = 11 * eV;
+  G4double elowest = 4. * eV; // theParameters->LowestElectronEnergy();
+  
+  //  G4cout << "elowest = " << G4BestUnit(elowest, "Energy") << G4endl;
+  
   G4double elimel = 1 * MeV;
   G4double elimin = 1 * MeV;
   G4double elimvb = 100 * eV;
   G4double elimat = 13 * eV;
-  G4double pmin = 10 * keV;
+  G4double elim1  = 10 * keV;
+  G4double pmin   = 10 * keV;
+  G4double pminbb = 2 * MeV;
   G4double pminch = 100 * eV;
-  G4double mgmin = 1 * keV;
-  G4double gmmax = 500 * keV;
-  G4double pmax = 100 * MeV;
+  G4double mgmin  = 1 * keV;
+  G4double gmmax  = 500 * keV;
+  G4double pmax   = 100 * MeV;
   G4double ionmin = 10 * keV;
   G4double ionmax = 400 * MeV;
-  G4double hmax = 100 * MeV;
-  G4double gionmax = 1 * TeV;
+  G4double hmax   = 100 * MeV;
+  G4double gionmax= 1 * GeV;
 
   // low-energy capture
-  G4LowECapture* ecap = new G4LowECapture(elowest);
-  eman->AddDiscreteProcess(ecap);
+  G4LowECapture* ecap = nullptr;
+  if(G4DNAChemistryManager::IsActivated() == false)
+  {
+    // Note: G4DNAElectronSolvation could also be used instead of G4LowECapture
+    ecap = new G4LowECapture(elowest);
+    //    ecap->SetVerboseLevel(1);
+    eman->AddDiscreteProcess(ecap);
+  }
+  else
+  {
+    // When chemistry is activated: G4DNAElectronSolvation turns the electron
+    // to a solvated electron, otherwise it kills the electron at the
+    // corresponding high energy limit of the model
+    G4DNAElectronSolvation* solvatation =
+      new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+    solvatation->AddEmModel(0, new G4DummyModel());
+    eman->AddDiscreteProcess(solvatation);
+  }
+  
   G4LowECapture* pcap = new G4LowECapture(pmin);
   pman->AddDiscreteProcess(pcap);
   G4LowECapture* icap = new G4LowECapture(ionmin);
@@ -659,9 +691,8 @@ void G4EmModelActivator::ActivateDNA()
   // loop over regions
   for(G4int i = 0; i < nreg; ++i)
   {
-
     G4String reg = regnamesDNA[i];
-    if(0 < verbose)
+    if(1 < verbose)
     {
       G4cout << "### DNA models are activated for G4Region " << reg << G4endl
           << "    Energy limits for e- elastic:    " << elowest/eV << " eV - "
@@ -671,27 +702,70 @@ void G4EmModelActivator::ActivateDNA()
           << "    Energy limits for hadrons/ions:  " << pmin/MeV << " MeV - "
           << pmax/MeV << " MeV" << G4endl;
     }
+    
+    // ---
     // e-
-    if(emsc)
-    {
+
+    if(emsc) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       msc->SetActivationLowEnergyLimit(elimel);
-      em_config->SetExtraEmModel("e-", "msc", msc, reg);
+      em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, 100*MeV);
+    } else {
+      mod = new G4eCoulombScatteringModel();
+      mod->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, 10 * TeV);
+    }
+    
+    // cuts and solvation
+    if(G4DNAChemistryManager::IsActivated())
+    {
+      // For this condition to work, the chemistry list has to be called
+      // before any standard EM physics list
+      mod = new G4DNATransformElectronModel();
+      mod->SetHighEnergyLimit(elowest);
+      em_config->SetExtraEmModel("e-",
+				                 "e-_G4DNAElectronSolvation",
+				                 mod,
+				                 reg,
+				                 0.,
+				                 elowest+1.*eV);
+      
+      mod = new G4DNAUeharaScreenedRutherfordElasticModel();
+      mod->SetLowEnergyLimit(0.);
+      mod->SetActivationLowEnergyLimit(0.);
+      em_config->SetExtraEmModel("e-",
+                                 "e-_G4DNAElastic",
+                                 mod,
+                                 reg,
+                                 0.0,
+                                 7.4*eV);
+    }
+    else if(ecap)
+    {
+      ecap->AddRegion(reg);
     }
     else
     {
-      mod = new G4DummyModel();
-      em_config->SetExtraEmModel("e-", "CoulombScat", mod, reg, 0.0, elimel);
+      mod = new G4DNAOneStepThermalizationModel();
+      mod->SetHighEnergyLimit(elowest);
+      em_config->SetExtraEmModel("e-",
+                                 "e-_G4DNAElectronSolvation",
+                                 mod,
+                                 reg,
+                                 0.,
+                                 elowest);
     }
-
-    mod = new G4DNAScreenedRutherfordElasticModel();
+    
+    mod = new G4DNAChampionElasticModel();
     em_config->SetExtraEmModel("e-",
                                "e-_G4DNAElastic",
                                mod,
                                reg,
-                               elowest,
+                               7.4*eV,
                                elimel);
 
+    // ioni
+    
     mod = new G4MollerBhabhaModel();
     mod->SetActivationLowEnergyLimit(elimin);
     em_config->SetExtraEmModel("e-",
@@ -701,21 +775,38 @@ void G4EmModelActivator::ActivateDNA()
                                0.0,
                                10 * TeV,
                                new G4UniversalFluctuation());
-
+    
+    mod = new G4DNAEmfietzoglouIonisationModel();
+    em_config->SetExtraEmModel("e-",
+                               "e-_G4DNAIonisation",
+                               mod,
+                               reg,
+                               0.0,
+                               elim1);
+    
     mod = new G4DNABornIonisationModel();
     em_config->SetExtraEmModel("e-",
                                "e-_G4DNAIonisation",
                                mod,
                                reg,
-                               elowest,
+                               elim1,
                                elimin);
-
+    // exc
+    
+    mod = new G4DNAEmfietzoglouExcitationModel();
+    em_config->SetExtraEmModel("e-",
+                               "e-_G4DNAExcitation",
+                               mod,
+                               reg,
+                               0.0,
+                               elim1);
+    
     mod = new G4DNABornExcitationModel();
     em_config->SetExtraEmModel("e-",
                                "e-_G4DNAExcitation",
                                mod,
                                reg,
-                               elowest,
+                               elim1,
                                elimin);
 
     mod = new G4DNASancheExcitationModel();
@@ -723,7 +814,7 @@ void G4EmModelActivator::ActivateDNA()
                                "e-_G4DNAVibExcitation",
                                mod,
                                reg,
-                               elowest,
+                               0.0,
                                elimvb);
 
     mod = new G4DNAMeltonAttachmentModel();
@@ -731,19 +822,30 @@ void G4EmModelActivator::ActivateDNA()
                                "e-_G4DNAAttachment",
                                mod,
                                reg,
-                               elowest,
+                               0.0,
                                elimat);
-
+    
+    // ---
     // proton
+    if(pmsc) {
+      G4UrbanMscModel* msc = new G4UrbanMscModel();
+      msc->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("proton", "msc", msc, reg, 0.0, 100*MeV);
+    } else {
+      mod = new G4eCoulombScatteringModel();
+      mod->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("proton", "CoulombScat", mod, reg, 0.0, 10 * TeV);
+    }
+
     mod = new G4BraggModel();
-    mod->SetActivationHighEnergyLimit(0.0);
+    mod->SetActivationLowEnergyLimit(pminbb);
     em_config->SetExtraEmModel("proton",
                                "hIoni",
                                mod,
                                reg,
                                0.0,
-                               2 * MeV,
-                               new G4IonFluctuations());
+                               pminbb,
+                               new G4UniversalFluctuation());
 
     mod = new G4BetheBlochModel();
     mod->SetActivationLowEnergyLimit(pmax);
@@ -751,7 +853,7 @@ void G4EmModelActivator::ActivateDNA()
                                "hIoni",
                                mod,
                                reg,
-                               2 * MeV,
+                               pminbb,
                                10 * TeV,
                                new G4UniversalFluctuation());
 
@@ -776,7 +878,7 @@ void G4EmModelActivator::ActivateDNA()
                                "proton_G4DNAExcitation",
                                mod,
                                reg,
-                               elowest,
+                               0.0,
                                gmmax);
 
     mod = new G4DNABornExcitationModel();
@@ -797,21 +899,31 @@ void G4EmModelActivator::ActivateDNA()
 
     mod = new G4DNAIonElasticModel();
     em_config->SetExtraEmModel("proton",
-                               "proton_G4DNAIonElasticModel",
+                               "proton_G4DNAElasticModel",
                                mod,
                                reg,
                                0.0,
-                               1 * MeV);
+                               elimel);
 
-    // ions
+    // ---
+    // GenericIon
+    if(imsc) {
+      G4UrbanMscModel* msc = new G4UrbanMscModel();
+      msc->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("proton", "ionmsc", msc, reg, 0.0, 100*MeV);
+    } else {
+      mod = new G4IonCoulombScatteringModel();
+      mod->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("proton", "CoulombScat", mod, reg, 0.0, 10 * TeV);
+    }
     mod = new G4BraggIonModel();
-    mod->SetActivationHighEnergyLimit(0.0);
+    mod->SetActivationLowEnergyLimit(pminbb);
     em_config->SetExtraEmModel("GenericIon",
                                "ionIoni",
                                mod,
                                reg,
                                0.0,
-                               2 * MeV,
+                               pminbb,
                                new G4IonFluctuations());
 
     mod = new G4BetheBlochModel();
@@ -820,7 +932,7 @@ void G4EmModelActivator::ActivateDNA()
                                "ionIoni",
                                mod,
                                reg,
-                               2 * MeV,
+                               pminbb,
                                10 * TeV,
                                new G4IonFluctuations());
 
@@ -832,15 +944,21 @@ void G4EmModelActivator::ActivateDNA()
                                0.0,
                                gionmax);
 
+    // ---
     // alpha++
+    if(a2msc) {
+      G4UrbanMscModel* msc = new G4UrbanMscModel();
+      msc->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("alpha++", "msc", msc, reg, 0.0, 100*MeV);
+    }
     mod = new G4BraggIonModel();
-    mod->SetActivationHighEnergyLimit(0.0);
+    mod->SetActivationLowEnergyLimit(pminbb);
     em_config->SetExtraEmModel("alpha",
                                "ionIoni",
                                mod,
                                reg,
                                0.0,
-                               2 * MeV,
+                               pminbb,
                                new G4IonFluctuations());
 
     mod = new G4BetheBlochModel();
@@ -849,7 +967,7 @@ void G4EmModelActivator::ActivateDNA()
                                "ionIoni",
                                mod,
                                reg,
-                               2 * MeV,
+                               pminbb,
                                10 * TeV,
                                new G4IonFluctuations());
 
@@ -879,21 +997,27 @@ void G4EmModelActivator::ActivateDNA()
 
     mod = new G4DNAIonElasticModel();
     em_config->SetExtraEmModel("alpha",
-                               "alpha_G4DNAIonElasticModel",
+                               "alpha_G4DNAElasticModel",
                                mod,
                                reg,
                                0.0,
-                               1 * MeV);
+                               elimel);
 
+    // ---
     // alpha+
+    if(a1msc) {
+      G4UrbanMscModel* msc = new G4UrbanMscModel();
+      msc->SetActivationLowEnergyLimit(elimel);
+      em_config->SetExtraEmModel("alpha+", "msc", msc, reg, 0.0, 100*MeV);
+    }
     mod = new G4BraggIonModel();
-    mod->SetActivationHighEnergyLimit(0.0);
+    mod->SetActivationLowEnergyLimit(pminbb);
     em_config->SetExtraEmModel("alpha+",
                                "ionIoni",
                                mod,
                                reg,
                                0.0,
-                               2 * MeV,
+                               pminbb,
                                new G4IonFluctuations());
 
     mod = new G4BetheBlochModel();
@@ -902,7 +1026,7 @@ void G4EmModelActivator::ActivateDNA()
                                "ionIoni",
                                mod,
                                reg,
-                               2 * MeV,
+                               pminbb,
                                10 * TeV,
                                new G4IonFluctuations());
 
@@ -940,12 +1064,13 @@ void G4EmModelActivator::ActivateDNA()
 
     mod = new G4DNAIonElasticModel();
     em_config->SetExtraEmModel("alpha+",
-                               "alpha+_G4DNAIonElasticModel",
+                               "alpha+_G4DNAElasticModel",
                                mod,
                                reg,
                                0.0,
-                               1 * MeV);
+                               elimel);
 
+    // ---
     // helium
     mod = new G4DNARuddIonisationModel();
     em_config->SetExtraEmModel("helium",
@@ -973,11 +1098,11 @@ void G4EmModelActivator::ActivateDNA()
 
     mod = new G4DNAIonElasticModel();
     em_config->SetExtraEmModel("helium",
-                               "helium_G4DNAIonElasticModel",
+                               "helium_G4DNAElasticModel",
                                mod,
                                reg,
                                0.0,
-                               1 * MeV);
+                               elimel);
 
     // hydrogen
     mod = new G4DNARuddIonisationModel();
@@ -993,7 +1118,7 @@ void G4EmModelActivator::ActivateDNA()
                                "hydrogen_G4DNAExcitation",
                                mod,
                                reg,
-                               elowest,
+                               0.0,
                                gmmax);
 
     mod = new G4DNADingfelderChargeIncreaseModel();
@@ -1006,11 +1131,12 @@ void G4EmModelActivator::ActivateDNA()
 
     mod = new G4DNAIonElasticModel();
     em_config->SetExtraEmModel("hydrogen",
-                               "hydrogen_G4DNAIonElasticModel",
+                               "hydrogen_G4DNAElasticModel",
                                mod,
                                reg,
                                0.0,
-                               1 * MeV);
+                               elimel);
+    
   }
 }
 

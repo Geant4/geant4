@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 91686 2015-07-31 09:40:08Z gcosmo $
+// $Id: G4ViewParameters.cc 97548 2016-06-03 15:56:56Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -248,6 +248,22 @@ void G4ViewParameters::IncrementPan (G4double right, G4double up, G4double dista
   fCurrentTargetPoint += right * unitRight + up * unitUp + distance * fViewpointDirection;
 }
 
+void G4ViewParameters::AddVisAttributesModifier
+(const G4ModelingParameters::VisAttributesModifier& vam) {
+  // If target exists, just change vis attributes.
+  G4bool duplicateTarget = false;
+  auto i = fVisAttributesModifiers.begin();
+  for (; i < fVisAttributesModifiers.end(); ++i) {
+    if (vam.GetPVNameCopyNoPath() == (*i).GetPVNameCopyNoPath() &&
+        vam.GetVisAttributesSignifier() == (*i).GetVisAttributesSignifier()) {
+      duplicateTarget = true;
+      break;
+    }
+  }
+  if (duplicateTarget) (*i).SetVisAttributes(vam.GetVisAttributes());
+  else fVisAttributesModifiers.push_back(vam);
+}
+
 G4String G4ViewParameters::CameraAndLightingCommands
 (const G4Point3D standardTargetPoint) const
 {
@@ -464,7 +480,9 @@ G4String G4ViewParameters::TouchableCommands() const
 {
   std::ostringstream oss;
   
-  oss << "#\n# Touchable commands";
+  oss
+  << "#\n# Touchable commands"
+  << "\n/vis/viewer/clearVisAttributesModifiers";
   
   const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
     fVisAttributesModifiers;
@@ -1106,4 +1124,256 @@ G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
 	return (Result);
     else
  	return (-Result);
+}
+
+G4ViewParameters* G4ViewParameters::CatmullRomCubicSplineInterpolation
+(const std::vector<G4ViewParameters>& views,
+ G4int nInterpolationPoints)  // No of interpolations points per interval
+{
+  // Returns a null pointer when no more to be done.  For example:
+  // do {
+  //   G4ViewParameters* vp =
+  //   G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
+  //   if (!vp) break;
+  //     ...
+  // } while (true);
+
+  // See https://en.wikipedia.org/wiki/Cubic_Hermite_spline
+
+  // Assumes equal intervals
+
+  if (views.size() < 2) {
+    G4Exception
+    ("G4ViewParameters::CatmullRomCubicSplineInterpolation",
+     "visman0301", JustWarning,
+     "There must be at least two views.");
+    return 0;
+  }
+
+  if (nInterpolationPoints < 1) {
+    G4Exception
+    ("G4ViewParameters::CatmullRomCubicSplineInterpolation",
+     "visman0302", JustWarning,
+     "Number of interpolation points cannot be zero or negative.");
+    return 0;
+  }
+
+  const size_t nIntervals = views.size() - 1;
+  const G4double dt = 1./nInterpolationPoints;
+
+  static G4ViewParameters holdingValues;
+  static G4double t = 0.;  // 0. <= t <= 1.
+  static G4int iInterpolationPoint = 0;
+  static size_t iInterval = 0;
+
+//  G4cout << "Interval " << iInterval << ", t = " << t << G4endl;
+
+  // Hermite polynomials.
+  const G4double h00 = 2.*t*t*t - 3.*t*t +1;
+  const G4double h10 = t*t*t -2.*t*t + t;
+  const G4double h01 = -2.*t*t*t + 3.*t*t;
+  const G4double h11 = t*t*t - t*t;
+
+  // Aliases (to simplify code)
+  const size_t& n = nIntervals;
+  size_t& i = iInterval;
+  const std::vector<G4ViewParameters>& v = views;
+
+  // The Catmull-Rom cubic spline prescription is as follows:
+  // Slope at first way point is v[1] - v[0].
+  // Slope at last way point is v[n] - v[n-1].
+  // Otherwise slope at way point i is 0.5*(v[i+1] - v[i-1]).
+  // Result = h00*v[i] + h10*m[i] + h01*v[i+1] + h11*m[i+1],
+  // where m[i] amd m[i+1] are the slopes at the start and end
+  // of the interval for the particular value.
+  // If (n == 1), linear interpolation results.
+  // If (n == 2), quadratic interpolation results.
+
+  // Working variables
+  G4double mi, mi1, real, x, y, z;
+  
+  // First, a crude interpolation of all parameters.  Then, below, a
+  // smooth interpolation of those for which it makes sense.
+  holdingValues = t < 0.5? v[i]: v[i+1];
+
+  // Catmull-Rom cubic spline interpolation
+#define INTERPOLATE(param) \
+  /* This works out the interpolated param in i'th interval */ \
+  /* Assumes n >= 1 */ \
+  if (i == 0) { \
+    /* First interval */ \
+    mi = v[1].param - v[0].param; \
+    /* If there is only one interval, make start and end slopes equal */ \
+    /* (This results in a linear interpolation) */ \
+    if (n == 1) mi1 = mi; \
+    /* else the end slope of the interval takes account of the next waypoint along */ \
+    else mi1 = 0.5 * (v[2].param - v[0].param); \
+  } else if (i >= n - 1) { \
+    /* Similarly for last interval */ \
+    mi1 = v[i+1].param - v[i].param; \
+    /* If there is only one interval, make start and end slopes equal */ \
+    if (n == 1) mi = mi1; \
+    /* else the start slope of the interval takes account of the previous waypoint */ \
+    else mi = 0.5 * (v[i+1].param - v[i-1].param); \
+  } else { \
+    /* Full Catmull-Rom slopes use previous AND next waypoints */ \
+    mi = 0.5 * (v[i+1].param - v[i-1].param); \
+    mi1 = 0.5 * (v[i+2].param - v[i  ].param); \
+  } \
+  real = h00 * v[i].param + h10 * mi + h01 * v[i+1].param + h11 * mi1;
+
+  // Real parameters
+  INTERPOLATE(fVisibleDensity);
+  if (real < 0.) real = 0.;
+  holdingValues.fVisibleDensity       = real;
+  INTERPOLATE(fExplodeFactor);
+  if (real < 0.) real = 0.;
+  holdingValues.fExplodeFactor        = real;
+  INTERPOLATE(fFieldHalfAngle);
+  if (real < 0.) real = 0.;
+  holdingValues.fFieldHalfAngle       = real;
+  INTERPOLATE(fZoomFactor);
+  if (real < 0.) real = 0.;
+  holdingValues.fZoomFactor           = real;
+  INTERPOLATE(fDolly);
+  holdingValues.fDolly                = real;
+  INTERPOLATE(fGlobalMarkerScale);
+  if (real < 0.) real = 0.;
+  holdingValues.fGlobalMarkerScale    = real;
+  INTERPOLATE(fGlobalLineWidthScale);
+  if (real < 0.) real = 0.;
+  holdingValues.fGlobalLineWidthScale = real;
+
+  // Unit vectors
+#define INTERPOLATEUNITVECTOR(vector) \
+INTERPOLATE(vector.x()); x = real; \
+INTERPOLATE(vector.y()); y = real; \
+INTERPOLATE(vector.z()); z = real;
+  INTERPOLATEUNITVECTOR(fViewpointDirection);
+  holdingValues.fViewpointDirection          = G4Vector3D(x,y,z).unit();
+  INTERPOLATEUNITVECTOR(fUpVector);
+  holdingValues.fUpVector                    = G4Vector3D(x,y,z).unit();
+  INTERPOLATEUNITVECTOR(fRelativeLightpointDirection);
+  holdingValues.fRelativeLightpointDirection = G4Vector3D(x,y,z).unit();
+  INTERPOLATEUNITVECTOR(fActualLightpointDirection);
+  holdingValues.fActualLightpointDirection   = G4Vector3D(x,y,z).unit();
+
+  // Un-normalised vectors
+#define INTERPOLATEVECTOR(vector) \
+INTERPOLATE(vector.x()); x = real; \
+INTERPOLATE(vector.y()); y = real; \
+INTERPOLATE(vector.z()); z = real;
+  INTERPOLATEVECTOR(fScaleFactor);
+  holdingValues.fScaleFactor = G4Vector3D(x,y,z);
+
+  // Points
+#define INTERPOLATEPOINT(point) \
+INTERPOLATE(point.x()); x = real; \
+INTERPOLATE(point.y()); y = real; \
+INTERPOLATE(point.z()); z = real;
+  INTERPOLATEPOINT(fExplodeCentre);
+  holdingValues.fExplodeCentre      = G4Point3D(x,y,z);
+  INTERPOLATEPOINT(fCurrentTargetPoint);
+  holdingValues.fCurrentTargetPoint = G4Point3D(x,y,z);
+
+  // Colour
+  G4double red, green, blue, alpha;
+#define INTERPOLATECOLOUR(colour) \
+INTERPOLATE(colour.GetRed());   red   = real; \
+INTERPOLATE(colour.GetGreen()); green = real; \
+INTERPOLATE(colour.GetBlue());  blue  = real; \
+INTERPOLATE(colour.GetAlpha()); alpha = real;
+  INTERPOLATECOLOUR(fBackgroundColour);
+  // Components are clamped to 0. <= component <= 1.
+  holdingValues.fBackgroundColour = G4Colour(red,green,blue,alpha);
+
+  // For some parameters we need to check some continuity
+  G4bool continuous;
+#define CONTINUITY(quantity) \
+  continuous = false; \
+  /* This follows the logic of the INTERPOLATE macro above; see comments therein */ \
+  if (i == 0) { \
+    if (v[1].quantity == v[0].quantity) { \
+       if (n == 1) continuous = true; \
+       else if (v[2].quantity == v[0].quantity) \
+       continuous = true; \
+    } \
+  } else if (i >= n - 1) { \
+    if (v[i+1].quantity == v[i].quantity) { \
+      if (n == 1) continuous = true; \
+      else if (v[i+1].quantity == v[i-1].quantity) \
+      continuous = true; \
+    } \
+  } else { \
+    if (v[i-1].quantity == v[i].quantity && \
+        v[i+1].quantity == v[i].quantity && \
+        v[i+2].quantity == v[i].quantity) \
+    continuous = true; \
+  }
+
+  G4double a, b, c, d;
+#define INTERPOLATEPLANE(plane) \
+INTERPOLATE(plane.a()); a = real; \
+INTERPOLATE(plane.b()); b = real; \
+INTERPOLATE(plane.c()); c = real; \
+INTERPOLATE(plane.d()); d = real;
+
+  // Section plane
+  CONTINUITY(fSection);
+  if (continuous) {
+    INTERPOLATEPLANE(fSectionPlane);
+    holdingValues.fSectionPlane = G4Plane3D(a,b,c,d);
+  }
+
+  // Cutaway planes
+  if (v[i].fCutawayPlanes.size()) {
+    CONTINUITY(fCutawayPlanes.size());
+    if (continuous) {
+      for (size_t j = 0; j < v[i].fCutawayPlanes.size(); ++j) {
+        INTERPOLATEPLANE(fCutawayPlanes[j]);
+        holdingValues.fCutawayPlanes[j] = G4Plane3D(a,b,c,d);
+      }
+    }
+  }
+
+  // Vis attributes modifiers
+  // Really, we are only intersted in colour - other attributes can follow
+  // the "crude" interpolation that is guaranteed above.
+  if  (v[i].fVisAttributesModifiers.size()) {
+    CONTINUITY(fVisAttributesModifiers.size());
+    if (continuous) { \
+      for (size_t j = 0; j < v[i].fVisAttributesModifiers.size(); ++j) { \
+        CONTINUITY(fVisAttributesModifiers[j].GetPVNameCopyNoPath());
+        if (continuous) {
+          CONTINUITY(fVisAttributesModifiers[j].GetVisAttributesSignifier());
+          if (continuous) {
+            if (v[i].fVisAttributesModifiers[j].GetVisAttributesSignifier() ==
+                G4ModelingParameters::VASColour) {
+              INTERPOLATECOLOUR(fVisAttributesModifiers[j].GetVisAttributes().GetColour());
+              G4VisAttributes workingVA = v[i].fVisAttributesModifiers[j].GetVisAttributes();
+              workingVA.SetColour(G4Colour(red,green,blue,alpha));
+              holdingValues.fVisAttributesModifiers[j].SetVisAttributes(workingVA);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Increment counters
+  iInterpolationPoint++;
+  t += dt;
+  if (iInterpolationPoint > nInterpolationPoints) {
+    iInterpolationPoint = 1;  // Ready for next interval.
+    t = dt;
+    iInterval++;
+  }
+  if (iInterval >= nIntervals) {
+    iInterpolationPoint = 0;  // Ready for a complete restart.
+    t = 0.;
+    iInterval = 0;
+    return 0;
+  }
+
+  return &holdingValues;
 }

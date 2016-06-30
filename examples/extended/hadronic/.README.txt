@@ -49,6 +49,12 @@ the concrete physics list at the run time.
 This example demonstrates survey of energy deposition and particle's flux from 
 a hadronic cascade.
 
+\link ExampleHadr07 Hadr07 \endlink
+
+Survey energy deposition and particle's flux from an hadronic cascade.
+Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
+Show how to plot a depth dose profile in a rectangular box.
+
 \link ExampleFissionFragment FissionFragment \endlink
 
 This example demonstrates the Fission Fragment model as used within the

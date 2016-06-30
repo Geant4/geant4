@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionDataSetRegistry.cc 93904 2015-11-03 10:16:36Z gcosmo $
+// $Id: G4CrossSectionDataSetRegistry.cc 96096 2016-03-14 21:50:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -98,15 +98,15 @@ void G4CrossSectionDataSetRegistry::Clean()
   size_t n = xSections.size(); 
   for (size_t i=0; i<n; ++i) {
     if(xSections[i]) {
-      const char* xxx = (xSections[i]->GetName()).c_str();
-      G4int len = (xSections[i]->GetName()).length();
-      len = std::min(len, 9);
-      const G4String xname = G4String(xxx, len);
-      //std::cout << "G4CrossSectionDataSetRegistry::Clean " << xname 
-      //		<< "  " << xSections[i] << " " << this << std::endl;
-      if( (xname != "NeutronHP") && (xname != "ParticleH") ) {
+      //const char* xxx = (xSections[i]->GetName()).c_str();
+      //G4int len = (xSections[i]->GetName()).length();
+      //len = std::min(len, 9);
+      //const G4String xname = G4String(xxx, len);
+      ////std::cout << "G4CrossSectionDataSetRegistry::Clean " << xname 
+      ////		<< "  " << xSections[i] << " " << this << std::endl;
+      //if( (xname != "NeutronHP") && (xname != "ParticleH") ) {
 	delete xSections[i];
-      }
+      //}
       //std::cout << "  done" << " " << this  << std::endl;
     }
   }

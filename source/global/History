@@ -17,6 +17,61 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 3, 2016 G.Cosmo (global-V10-02-15)
+- Enabled new units 'us' and 'ps' in G4SystemOfUnits.hh.
+  Now requiring CLHEP-2.3.3.0.
+- Updated version ID for 10.3-Beta.
+
+May 2, 2016 G.Cosmo (global-V10-02-14)
+- Added 'us' and 'ps' units symbols for microsend and picosecond
+  respectively to G4UnitsTable. (M.Maire)
+  Commented out in G4SystemOfUnits.hh, pending installation of new
+  external CLHEP library.
+- Converted all units anc constants from "static const" to "static constexpr".
+- Coworks with tag "externals-V10-02-08".
+
+April 25, 2016 G.Cosmo (global-V10-02-13)
+- Added check for support of atomics for clang compiler in HEPRandom wrappers.
+
+April 14, 2016 G.Cosmo (global-V10-02-12)
+- Define G4GeometryTolerance singleton instance pointer as tread-local
+  to get rid of spurious race conflicts at initialisation.
+
+March 30, 2016 G.Cosmo (global-V10-02-11)
+- Added MixMax in unit tests for HepRandom.
+
+March 22, 2016 A.Dotti (global-V10-02-10)
+- Fixing compilation of unit test for HEPRandom. Only test
+  subdirectory touched to port to new G4 interfaces
+
+March 16, 2016 G.Cosmo (global-V10-02-09)
+- Improved algorithm for G4RandomDirection (E.Tcherniaev).
+- Turn warnings to fatal exceptions in G4UnitsTable for non existing
+  units or categories in the table. Addressing problem report #1843.
+
+February 17, 1016 A.Dotti (global-V10-02-08, 07, 06, 05)
+- Fixed sequential build and Windows builds for G4MTBarrier class.
+
+February 16, 2016 A.Dotti (global-V10-02-04)
+- Fixed typo CONDTIONBROADCAST for sequential mode.
+- Removed default move constructor to prevent compilation errors on Windows.
+
+February 16, 2016 A.Dotti (global-V10-02-03)
+- Introduced new utility class G4MTBarrier implementing a synchronization
+  point between threads.
+- Corrected typo for macro CONDITIONBROADCAST.
+
+January 28, 2016 A.Dotti (global-V10-02-02)
+- Changed exception code in G4TWorkspacePool from G4TWorkspacePool
+  to "WorkspaceNN".
+
+December 17, 2015 G.Cosmo (global-V10-02-01)
+- Corrected conditions for proper treatment of gcc-5 in tls.hh and
+  G4Threading.hh.
+
+December 10, 2015 G.Cosmo (global-V10-02-00)
+- Removed unused and buggy operator=(const G4String&) in G4SubString.
+
 November 5, 2015 G.Cosmo (global-V10-01-25)
 - Enabled units liter, L, dL, cL, mL in G4SystemOfUnits.hh and G4UnitsTable.
   Requires new CLHEP version 2.3.1.0.

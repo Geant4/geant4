@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CashKarpRKF45.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4CashKarpRKF45.cc 97598 2016-06-06 07:19:46Z gcosmo $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
 // order method (giving fifth-order accuracy) for the solution of an ODE.
@@ -50,23 +50,33 @@ G4CashKarpRKF45::G4CashKarpRKF45(G4EquationOfMotion *EqRhs,
   : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
     fLastStepLength(0.), fAuxStepper(0)
 {
-  const G4int numberOfVariables = noIntegrationVariables;
+  const G4int numberOfVariables =
+      std::max( noIntegrationVariables,
+               ( ( (noIntegrationVariables-1)/4 + 1 ) * 4 ) );
+  // For better alignment with cache-line
+  
+  ak2 = new G4double[numberOfVariables] ;
+  ak3 = new G4double[numberOfVariables] ;
+  ak4 = new G4double[numberOfVariables] ;
+  ak5 = new G4double[numberOfVariables] ;
+  ak6 = new G4double[numberOfVariables] ;
+  // ak7 = 0;
 
-  ak2 = new G4double[numberOfVariables] ;  
-  ak3 = new G4double[numberOfVariables] ; 
-  ak4 = new G4double[numberOfVariables] ; 
-  ak5 = new G4double[numberOfVariables] ; 
-  ak6 = new G4double[numberOfVariables] ; 
-  ak7 = 0;
-  yTemp = new G4double[numberOfVariables] ; 
-  yIn = new G4double[numberOfVariables] ;
+  // Must ensure space extra 'state' variables exists - i.e. yIn[7]
+  const G4int numStateMax  = std::max(GetNumberOfStateVariables(), 8);  
+  const G4int numStateVars = std::max(noIntegrationVariables,
+                                      numStateMax );
+                                   // GetNumberOfStateVariables() ); 
+                                      
+  yTemp = new G4double[numStateVars] ;
+  yIn = new G4double[numStateVars] ;
 
-  fLastInitialVector = new G4double[numberOfVariables] ;
-  fLastFinalVector = new G4double[numberOfVariables] ;
+  fLastInitialVector = new G4double[numStateVars] ;
+  fLastFinalVector = new G4double[numStateVars] ;
   fLastDyDx = new G4double[numberOfVariables];
 
-  fMidVector = new G4double[numberOfVariables];
-  fMidError =  new G4double[numberOfVariables];
+  fMidVector = new G4double[numStateVars];
+  fMidError =  new G4double[numStateVars];
   if( primary )
   { 
     fAuxStepper = new G4CashKarpRKF45(EqRhs, numberOfVariables, !primary);

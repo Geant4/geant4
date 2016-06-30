@@ -47,7 +47,6 @@
 #include "G4PolarizationTransition.hh"
 
 G4PolarizedGammaTransition::G4PolarizedGammaTransition() 
-  : G4GammaTransition()
 {
   fPolarization = new G4PolarizationTransition();
 }
@@ -84,8 +83,6 @@ G4PolarizedGammaTransition::SampleTransition(G4Fragment* nucleus,
   // Do complete Lorentz computation 
   G4LorentzVector lv = nucleus->GetMomentum();
   G4double mass = nucleus->GetGroundStateMass() + newExcEnergy;
-
-  //G4double e0 = lv.e();
 
   // select secondary
   G4ParticleDefinition* part;
@@ -147,7 +144,7 @@ G4PolarizedGammaTransition::SampleTransition(G4Fragment* nucleus,
   result = new G4Fragment(res4mom, part);
 
   //  G4cout << " DeltaE= " << e0 - lv.e() - res4mom.e() << G4endl;
-  //G4cout << "G4PolarizedGammaTransition::GenerateGamma : " << thePhoton << G4endl;
+  //G4cout << "G4PolarizedGammaTransition::GenerateGamma : "<<thePhoton<<G4endl;
   //G4cout << "       Left nucleus: " << aNucleus << G4endl;
   return result;
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc 84716 2014-10-20 07:38:47Z gcosmo $
+// $Id: G4VXTRenergyLoss.cc 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // History:
 // 2001-2002 R&D by V.Grichine
@@ -55,6 +55,7 @@
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsFreeVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4EmProcessSubType.hh"
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -66,17 +67,18 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
 				   G4int n,const G4String& processName,
 				   G4ProcessType type) :
   G4VDiscreteProcess(processName, type),
-  fGammaCutInKineticEnergy(0),
-  fGammaTkinCut(0),
-  fAngleDistrTable(0),
-  fEnergyDistrTable(0),
-  fPlatePhotoAbsCof(0),
-  fGasPhotoAbsCof(0),
-  fAngleForEnergyTable(0)
+  fGammaCutInKineticEnergy(nullptr),
+  fGammaTkinCut(0.0),
+  fAngleDistrTable(nullptr),
+  fEnergyDistrTable(nullptr),
+  fPlatePhotoAbsCof(nullptr),
+  fGasPhotoAbsCof(nullptr),
+  fAngleForEnergyTable(nullptr)
 {
   verboseLevel = 1;
+  SetProcessSubType(fTransitionRadiation);
 
-  fPtrGamma = 0;
+  fPtrGamma = nullptr;
   fMinEnergyTR = fMaxEnergyTR = fMaxThetaTR = fGamma = fEnergy = fVarAngle 
     = fLambda = fTotalDist = fPlateThick = fGasThick = fAlphaPlate = fAlphaGas = 0.0;
 
@@ -557,7 +559,7 @@ G4PhysicsFreeVector* G4VXTRenergyLoss::GetAngleVector(G4double energy, G4int n)
 
   G4PhysicsFreeVector* angleVector = new G4PhysicsFreeVector(n);
   
-  cofPHC  = 4*pi*hbarc;
+  cofPHC  = 4.*pi*hbarc;
   tmp     = (fSigma1 - fSigma2)/cofPHC/energy;
   cof1    = fPlateThick*tmp;
   cof2    = fGasThick*tmp;
@@ -992,10 +994,10 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
 	  * fPlateThick/(4*hbarc*energy1);
         tmp2 = std::sin(tmp1);
         tmp  = energy1*tmp2*tmp2;
-        tmp2 = fPlateThick/(4*tmp1);
+        tmp2 = fPlateThick/(4.*tmp1);
         tmp1 = hbarc*energy1/( energy1*energy1*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
-	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy1*energy1);
+	tmp1 = cof1/(4.*hbarc) - cof2/(4.*hbarc*energy1*energy1);
 	tmp2 = std::abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
         else continue;
@@ -1004,13 +1006,13 @@ G4double G4VXTRenergyLoss::AngleXTRdEdx(G4double varAngle)
       {
         if (energy2 > fTheMaxEnergyTR || energy2 < fTheMinEnergyTR) continue;
         tmp1 = ( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma1 )
-	  * fPlateThick/(4*hbarc*energy2);
+	  * fPlateThick/(4.*hbarc*energy2);
         tmp2 = std::sin(tmp1);
         tmp  = energy2*tmp2*tmp2;
-        tmp2 = fPlateThick/(4*tmp1);
+        tmp2 = fPlateThick/(4.*tmp1);
         tmp1 = hbarc*energy2/( energy2*energy2*(1./fGamma/fGamma + varAngle) + fSigma2 );
 	tmp *= (tmp1-tmp2)*(tmp1-tmp2);
-	tmp1 = cof1/(4*hbarc) - cof2/(4*hbarc*energy2*energy2);
+	tmp1 = cof1/(4.*hbarc) - cof2/(4.*hbarc*energy2*energy2);
 	tmp2 = std::abs(tmp1);
 	if(tmp2 > 0.) tmp /= tmp2;
         else continue;
@@ -1335,7 +1337,7 @@ G4double G4VXTRenergyLoss::GetComptonPerAtom(G4double GammaEnergy, G4double Z)
   {
     G4double dT0 = 1.*keV;
     X = (T0+dT0) / electron_mass_c2;
-    G4double sigma = p1Z*std::log(1.+2*X)/X
+    G4double sigma = p1Z*std::log(1.+2.*X)/X
                     + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
     G4double   c1 = -T0*(sigma-CrossSection)/(CrossSection*dT0);
     G4double   c2 = 0.150;

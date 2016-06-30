@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4StokesVector.cc 96114 2016-03-16 18:51:33Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -120,8 +120,8 @@ void G4StokesVector::InvRotateAz(G4ThreeVector nInteractionFrame,
   if (cosphi>1.+1.e-8 || cosphi<-1.-1.e-8) {
         G4cout<<" warning G4StokesVector::RotateAz  cosphi>1 or cosphi<-1\n";
   }
-  if (cosphi>1) cosphi=1.;
-  else if (cosphi<-1)cosphi=-1.;
+  if (cosphi>1.) cosphi=1.;
+  else if (cosphi<-1.)cosphi=-1.;
 
   // check sign once more!
   G4double hel=(yParticleFrame.cross(nInteractionFrame)*particleDirection)>0?1.:-1.;

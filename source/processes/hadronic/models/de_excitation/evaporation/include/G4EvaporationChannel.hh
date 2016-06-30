@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh 90273 2015-05-22 10:20:32Z gcosmo $
+// $Id: G4EvaporationChannel.hh 96402 2016-04-12 07:30:48Z gcosmo $
 //
 //
 //J.M. Quesada (August2008). Based on:
@@ -42,16 +42,16 @@
 #include "G4EvaporationProbability.hh"
 #include "G4VCoulombBarrier.hh"
 
-class G4EvaporationLevelDensityParameter;
 class G4PairingCorrection;
 
 class G4EvaporationChannel : public G4VEvaporationChannel
 {
 public:
 
-  G4EvaporationChannel(G4int theA, G4int theZ, const G4String & aName,
-		       G4EvaporationProbability * aEmissionStrategy,
-	               G4VCoulombBarrier * aCoulombBarrier);
+  explicit G4EvaporationChannel(G4int A, G4int Z, 
+                                const G4String & aName,
+		                G4EvaporationProbability*,
+	                        G4VCoulombBarrier*);
 
   virtual ~G4EvaporationChannel();
 
@@ -61,42 +61,33 @@ public:
   
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
+  virtual G4FragmentVector* BreakUp(const G4Fragment & theNucleus);
   
 private: 
   
-  // This has to be removed and put in Random Generator
-  G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
-
-  G4EvaporationChannel(const G4EvaporationChannel & right);
-  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right);
-  G4bool operator==(const G4EvaporationChannel & right) const;
-  G4bool operator!=(const G4EvaporationChannel & right) const;
+  G4EvaporationChannel(const G4EvaporationChannel & right) = delete;
+  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right) = delete;
+  G4bool operator==(const G4EvaporationChannel & right) const = delete;
+  G4bool operator!=(const G4EvaporationChannel & right) const = delete;
 
 private:
 
   // This data member define the channel. 
   // They are intializated at object creation (constructor) time.
 
-  // Atomic Number of ejectile
   G4int theA;
-
-  // Charge of ejectile
   G4int theZ;
 
-  G4double EvaporatedMass;
-  G4double ResidualMass;
+  G4double EvapMass;
+  G4double CoulombBarrier;
 
   // For evaporation probability calcualation
   G4EvaporationProbability * theProbability;
 
-  // For Level Density calculation
-  G4VLevelDensityParameter * theLevelDensityPtr;
-
   // For Coulomb Barrier calculation
   G4VCoulombBarrier * theCoulombBarrier;
-  G4double CoulombBarrier;
 
+  // For pairing correction calculation
   G4PairingCorrection* pairingCorrection;
    
   //---------------------------------------------------
@@ -106,17 +97,17 @@ private:
   // takes as parameters 
   // the atomic number, charge and excitation energy of nucleus.
 
-  // Residual Mass Number
-  G4int ResidualA;
+  G4int ResA;
+  G4int ResZ;
 
-  // Residual Charge
-  G4int ResidualZ;
+  G4double Mass;
 	
   // Emission Probability
   G4double EmissionProbability;
 
-  // Maximal Kinetic Energy that can be carried by fragment
-  G4double MaximalKineticEnergy;
+  // Kinetic Energy that can be carried by fragment
+  G4double MinKinEnergy;
+  G4double MaxKinEnergy;
 
 };
 

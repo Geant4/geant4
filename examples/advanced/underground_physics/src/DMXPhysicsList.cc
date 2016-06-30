@@ -264,16 +264,27 @@ void DMXPhysicsList::AddTransportation() {
 #include "G4IonParametrisedLossModel.hh"
 
 //em process options to allow msc step-limitation to be switched off
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
+#include "G4VAtomDeexcitation.hh"
+#include "G4UAtomicDeexcitation.hh"
+#include "G4LossTableManager.hh"
 
 void DMXPhysicsList::ConstructEM() {
   
   //set a finer grid of the physic tables in order to improve precision
   //former LowEnergy models have 200 bins up to 100 GeV
-  G4EmProcessOptions opt;
-  opt.SetMaxEnergy(100*GeV);
-  opt.SetDEDXBinning(200);
-  opt.SetLambdaBinning(200);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetMaxEnergy(100*GeV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->SetMscStepLimitType(fMinimal);
+  param->SetFluo(true);
+  param->SetPixe(true);
+  param->SetAuger(true);
+  G4LossTableManager* man = G4LossTableManager::Instance();
+  G4VAtomDeexcitation* ad = man->AtomDeexcitation();
+  if(!ad) {
+    man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
+  }
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -287,7 +298,6 @@ void DMXPhysicsList::ConstructEM() {
       {
 	//gamma
 	G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-	theRayleigh->SetEmModel(new G4LivermoreRayleighModel());  //not strictly necessary
 	pmanager->AddDiscreteProcess(theRayleigh);
 
 	G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
@@ -310,7 +320,7 @@ void DMXPhysicsList::ConstructEM() {
 	// Multiple scattering
 	G4eMultipleScattering* msc = new G4eMultipleScattering();
 	msc->SetStepLimitType(fUseDistanceToBoundary);
-	pmanager->AddProcess(msc,-1, 1, 1);
+	pmanager->AddProcess(msc,-1, 1, -1);
 
 	// Ionisation
 	G4eIonisation* eIonisation = new G4eIonisation();
@@ -412,15 +422,6 @@ void DMXPhysicsList::ConstructEM() {
       }
     
   }
-
-  // turn off msc step-limitation - especially as electron cut 1nm
-  opt.SetMscStepLimitation(fMinimal);
-
-  // switch on fluorescence, PIXE and Auger:
-  opt.SetFluo(true);
-  opt.SetPIXE(true);
-  opt.SetAuger(true);
-
 }
 
 

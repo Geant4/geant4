@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc 87702 2014-12-17 09:55:28Z gcosmo $
+// $Id: G4EmDNAPhysics.cc 97523 2016-06-03 14:25:30Z gcosmo $
 // add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysics.hh"
@@ -34,6 +34,7 @@
 
 // *** Processes and models for Geant4-DNA
 
+#include "G4DNAElectronSolvation.hh"
 #include "G4DNAElastic.hh"
 #include "G4DNAChampionElasticModel.hh"
 #include "G4DNAScreenedRutherfordElasticModel.hh"
@@ -87,6 +88,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics);
 G4EmDNAPhysics::G4EmDNAPhysics(G4int ver)
   : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
 {
+  G4EmParameters::Instance();
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -95,6 +97,7 @@ G4EmDNAPhysics::G4EmDNAPhysics(G4int ver)
 G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
 {
+  G4EmParameters::Instance();
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -149,6 +152,14 @@ void G4EmDNAPhysics::ConstructProcess()
 
     if (particleName == "e-") {
 
+      G4DNAElectronSolvation* solvation =
+        new G4DNAElectronSolvation("e-_G4DNAElectronSolvation");
+      G4DNAOneStepThermalizationModel* therm =
+        new G4DNAOneStepThermalizationModel();
+      therm->SetHighEnergyLimit(7.4*eV); // limit of the Champion's model
+      solvation->SetEmModel(therm);
+      ph->RegisterProcess(solvation, particle);
+      
       // *** Elastic scattering (two alternative models available) ***
       
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");

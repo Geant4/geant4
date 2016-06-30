@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.hh 93663 2015-10-28 09:50:49Z gcosmo $
+// $Id: G4GoudsmitSaundersonMscModel.hh 94933 2015-12-18 09:22:52Z gcosmo $
 //
 // ----------------------------------------------------------------------------
 //
@@ -158,7 +158,7 @@ private:
   G4double currentRange;
 
   G4double fr,rangeinit,geombig,geomlimit;
-  G4double lambdalimit,tlimit;
+  G4double lambdalimit,tlimit,tgeom;
   G4int    charge,currentMaterialIndex;
 
   G4bool   firstStep;
@@ -196,9 +196,11 @@ private:
   G4bool fIsEverythingWasDone;
   G4bool fIsNoScatteringInMSC;
   G4bool fIsNoDisplace;
+  G4bool fIsInsideSkin;
+  G4bool fIsWasOnBoundary;
+  G4bool fIsFirstRealStep;
   //
   static G4bool fgIsUseAccurate;
-  static G4bool fgIsCorrectRestriction;
   static G4bool fgIsOptimizationOn;
 };
 

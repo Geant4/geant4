@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 93264 2015-10-14 09:30:04Z gcosmo $
+// $Id: G4VEmModel.hh 97742 2016-06-08 09:24:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -106,7 +106,7 @@ class G4VEmModel
 
 public:
 
-  G4VEmModel(const G4String& nam);
+  explicit G4VEmModel(const G4String& nam);
 
   virtual ~G4VEmModel();
 
@@ -157,10 +157,9 @@ public:
 
   // method to get partial cross section
   virtual G4double GetPartialCrossSection(const G4Material*,
-                                          G4int /*level*/,
+                                          G4int level,
                                           const G4ParticleDefinition*,
-                                          G4double /*kineticEnergy*/)
-  { return 0;}
+                                          G4double kineticEnergy);
 
   // main method to compute cross section per atom
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
@@ -223,7 +222,7 @@ public:
   virtual void DefineForRegion(const G4Region*);
 
   // for automatic documentation
-  virtual void ModelDescription(std::ostream& outFile) const; //=0;
+  virtual void ModelDescription(std::ostream& outFile) const; 
 
 protected:
 
@@ -254,7 +253,7 @@ public:
   inline void SetElementSelectors(std::vector<G4EmElementSelector*>*);
 
   // dEdx per unit length
-  inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
+  virtual inline G4double ComputeDEDX(const G4MaterialCutsCouple*,
                               const G4ParticleDefinition*,
                               G4double kineticEnergy,
                               G4double cutEnergy = DBL_MAX);
@@ -304,7 +303,7 @@ public:
   // Get/Set methods
   //------------------------------------------------------------------------
 
-  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=0);
+  void SetParticleChange(G4VParticleChange*, G4VEmFluctuationModel* f=nullptr);
 
   void SetCrossSectionTable(G4PhysicsTable*, G4bool isLocal);
 
@@ -387,11 +386,11 @@ protected:
 private:
 
   //  hide assignment operator
-  G4VEmModel & operator=(const  G4VEmModel &right);
-  G4VEmModel(const  G4VEmModel&);
+  G4VEmModel & operator=(const  G4VEmModel &right) = delete;
+  G4VEmModel(const  G4VEmModel&) = delete;
 
   // ======== Parameters of the class fixed at construction =========
-
+ 
   G4VEmFluctuationModel* flucModel;
   G4VEmAngularDistribution* anglModel;
   const G4String   name;
@@ -415,6 +414,7 @@ private:
   G4bool          isLocked;
   G4int           nSelectors;
   std::vector<G4EmElementSelector*>* elmSelectors;
+  G4LossTableManager*  fEmManager;
 
 protected:
 
@@ -426,11 +426,10 @@ protected:
   size_t                       idxTable;
   const static G4double        inveplus;       
 
-  // ======== Cashed values - may be state dependent ================
+  // ======== Cached values - may be state dependent ================
 
 private:
 
-  G4LossTableManager*         fManager;
   const G4MaterialCutsCouple* fCurrentCouple;
   const G4Element*            fCurrentElement;
   const G4Isotope*            fCurrentIsotope;
@@ -459,7 +458,7 @@ inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   fCurrentElement = elm;
-  fCurrentIsotope = 0;
+  fCurrentIsotope = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -518,10 +517,8 @@ G4double G4VEmModel::ComputeMeanFreePath(const G4ParticleDefinition* part,
                                          G4double emin,
                                          G4double emax)
 {
-  G4double mfp = DBL_MAX;
   G4double cross = CrossSectionPerVolume(material,part,ekin,emin,emax);
-  if (cross > DBL_MIN) { mfp = 1./cross; }
-  return mfp;
+  return cross > 0.0 ? 1./cross : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -555,7 +552,7 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
     fCurrentElement = SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,
                                        cutEnergy,maxEnergy);
   }
-  fCurrentIsotope = 0;
+  fCurrentIsotope = nullptr;
   return fCurrentElement;
 }
 
@@ -567,14 +564,16 @@ inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
   // number electrons multiplied by number of atoms
   size_t nn = mat->GetNumberOfElements();
   const G4ElementVector* elmv = mat->GetElementVector();
-  G4int Z = G4lrint((*elmv)[0]->GetZ());
+  G4int Z = (*elmv)[0]->GetZasInt();
   if(1 < nn) {
     const G4double* at = mat->GetVecNbOfAtomsPerVolume();
     G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
     for( size_t i=0; i<nn; ++i) {
-      Z = G4lrint((*elmv)[0]->GetZ());
-      tot -= Z*at[i];
-      if(tot <= 0.0) { break; }
+      tot -= at[i];
+      if(tot <= 0.0) { 
+	Z = (*elmv)[i]->GetZasInt();
+	break; 
+      }
     }
   }
   return Z;
@@ -587,7 +586,7 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
   SetCurrentElement(elm);
   G4int N = G4lrint(elm->GetN());
   G4int ni = elm->GetNumberOfIsotopes();
-  fCurrentIsotope = 0;
+  fCurrentIsotope = nullptr;
   if(ni > 0) {
     G4int idx = 0;
     if(ni > 1) {

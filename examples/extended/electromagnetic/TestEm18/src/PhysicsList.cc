@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 82401 2014-06-18 14:43:54Z gcosmo $
+// $Id: PhysicsList.cc 96374 2016-04-11 06:55:50Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,34 +173,11 @@ void PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmProcessOptions.hh"
-
 void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   AddStepMax();
-  
-  // Em options
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(10*eV);        //default 100 eV    
-  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
-  emOptions.SetDEDXBinning(12*20);        //default=12*7  
-  emOptions.SetLambdaBinning(12*20);        //default=12*7
-          
-  //build CSDA range
-  //
-  emOptions.SetBuildCSDARange(true);
-  emOptions.SetMaxEnergyForCSDARange(10*TeV);  
-  emOptions.SetDEDXBinningForCSDARange(12*20);
-   
-  //ionization
-  //
-  emOptions.SetSubCutoff(false);        //default  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

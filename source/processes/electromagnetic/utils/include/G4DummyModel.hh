@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DummyModel.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4DummyModel.hh 96139 2016-03-17 14:10:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -56,23 +56,23 @@ class G4DummyModel :  public G4VMscModel
 
 public:
 
-  G4DummyModel(const G4String& nam = "DummyModel");
+  explicit G4DummyModel(const G4String& nam = "DummyModel");
 
   virtual ~G4DummyModel();
 
-  void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  void Initialise(const G4ParticleDefinition*, const G4DataVector&) final;
 
   void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 			 const G4MaterialCutsCouple*,
 			 const G4DynamicParticle*,
 			 G4double tmin,
-			 G4double tmax);
+			 G4double tmax) final;
 
-private: 
+private:
 
   //  hide assignment operator
-  G4DummyModel & operator=(const  G4DummyModel &right);
-  G4DummyModel(const  G4DummyModel&);
+  G4DummyModel & operator=(const  G4DummyModel &right) = delete;
+  G4DummyModel(const  G4DummyModel&) = delete;
 };
 
 #endif

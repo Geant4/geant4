@@ -65,7 +65,7 @@ G4double G4PiData::ReactionXSection(G4double kineticEnergy)
 {
   G4double result = 0;
   G4PiData::iterator it=begin();
-  while(it!=end()&&kineticEnergy>(*it).first) {it++;}
+  while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
   {
     throw G4HadronicException(__FILE__, __LINE__,
@@ -87,7 +87,7 @@ G4double G4PiData::ElasticXSection(G4double kineticEnergy)
 {
   G4double result = 0;
   G4PiData::iterator it=begin();
-  while(it!=end()&&kineticEnergy>(*it).first) {it++;}
+  while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
   {
     throw G4HadronicException(__FILE__, __LINE__,
@@ -109,7 +109,7 @@ G4double G4PiData::TotalXSection(G4double kineticEnergy)
 {
   G4double result = 0;
   G4PiData::iterator it=begin();
-  while(it!=end()&&kineticEnergy>(*it).first) {it++;}
+  while(it!=end()&&kineticEnergy>(*it).first) {it++;}  /* Loop checking, 08.01.2016, W. Pokorski */
   if(it==end()) 
   {
     throw G4HadronicException(__FILE__, __LINE__,

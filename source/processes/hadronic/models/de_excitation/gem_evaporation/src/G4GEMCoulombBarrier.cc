@@ -34,32 +34,26 @@
 #include "G4SystemOfUnits.hh"
 
 G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
-  G4VCoulombBarrier(anA,aZ) 
-{}
+  G4CoulombBarrier(anA,aZ) 
+{
+  AejectOneThird = g4pow->Z13(anA);
+}
 
 G4GEMCoulombBarrier::~G4GEMCoulombBarrier() 
 {}
 
-G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const 
+G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, 
+                                                G4double U) const 
 // Calculation of Coulomb potential energy (barrier) for outgoing fragment
 {
   G4double Barrier = 0.0;
-  if (ZRes > ARes || ARes < 1) {
-    G4cout << "G4GEMCoulombBarrier::GetCoulombBarrier: "
-	   << "Wrong values for "
-	   << "residual nucleus A = " << ARes << " "
-	   << "and residual nucleus Z = " << ZRes << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__,"FATAL error");
-  }
-  if (GetZ() == 0) {
-    Barrier = 0.0;   // If there is no charge there is neither barrier
+  if (GetZ() > 0 && ZRes > 0) {
 
-  } else {
     G4double CompoundRadius = CalcCompoundRadius(ARes);
-    Barrier = ( elm_coupling * GetZ() * ZRes)/CompoundRadius;
+    Barrier = CLHEP::elm_coupling * (GetZ() * ZRes)/CompoundRadius;
       
     // Barrier penetration coeficient
-    if(GetA() <= 4) { Barrier *= BarrierPenetrationFactor(G4double(ZRes)); }
+    if(GetA() <= 4) { Barrier *= BarrierPenetrationFactor(ZRes); }
   
     //JMQ 200709 effective decrease  of barrier with E* (Barashenkov)
     // (not inclued in original Furihata's formulation)
@@ -70,10 +64,8 @@ G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double
 
 G4double G4GEMCoulombBarrier::CalcCompoundRadius(G4int ARes) const
 {      
-  G4Pow* g4pow = G4Pow::GetInstance();
   G4double AresOneThird = g4pow->Z13(ARes);
   G4int A = GetA();
-  G4double AejectOneThird = g4pow->Z13(A);
 
   G4double Result = 0.0;
   if(A == 1){

@@ -1,4 +1,4 @@
-$Id: History 88035 2015-01-26 10:22:08Z gcosmo $
+$Id: History 96459 2016-04-15 12:28:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+15-04-16 mma  (electronScattering-V10-02-01)
+- PhysListEmStandard_WVI, SS: add SetMscThetaLimit()
+
+14-04-16 mma  (electronScattering-V10-02-00)
+- PhysListEmStandard: use G4EmParameters
 
 23-01-15 Laszlo Urban (electonScattering-V10-01-00)
 - plot 6 filling is corrected, the distance from scattering foil to detector

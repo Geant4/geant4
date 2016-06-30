@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,16 +38,18 @@ Registering model factories...
 You have successfully registered the following model factories.
 Registered model factories:
   generic
-  drawByCharge
-  drawByParticleID
-  drawByOriginVolume
   drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByTouchedVolume
 
 Registered filter factories:
-  chargeFilter
-  particleFilter
-  originVolumeFilter
   attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  touchedVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -123,7 +125,6 @@ hIoni:   for  proton    SubType= 2
          BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
     BetheBlochGasIon :  Emin=        2 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  Target ======
-         BraggIonGas :  Emin=      9.9 MeV   Emax=        2 MeV
     BetheBlochGasIon :  Emin=      9.9 MeV   Emax=       10 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
@@ -155,7 +156,7 @@ msc:   for GenericIon    SubType= 10
 ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
@@ -169,12 +170,11 @@ msc:   for alpha    SubType= 10
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          BraggIonGas :  Emin=        0 eV    Emax=   7.9452 MeV
     BetheBlochGasIon :  Emin=   7.9452 MeV   Emax=       10 TeV
       ===== EM models for the G4Region  Target ======
-         BraggIonGas :  Emin=      9.9 MeV   Emax=        2 MeV
     BetheBlochGasIon :  Emin=      9.9 MeV   Emax=       10 TeV
 
 alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
@@ -243,12 +243,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=76.97s Real=77.09s Sys=0.01s
+  User=45.57s Real=45.8s Sys=0.02s
 Number and type of particles created outside region "Target" :
-N e- : 4918
+N e- : 5034
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 45467
+N e- : 44907
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -260,9 +260,9 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 8
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00961 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB

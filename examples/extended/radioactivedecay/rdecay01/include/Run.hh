@@ -55,10 +55,13 @@ class Run : public G4Run
     void EventTiming(G4double);
     void PrimaryTiming(G4double);
     void EvisEvent(G4double);
+
+    void SetTimeWindow(G4double , G4double);
+    void CountInTimeWindow(G4String, G4bool,G4bool,G4bool);
         
     void SetPrimary(G4ParticleDefinition* particle, G4double energy);
     void EndOfRun(); 
-            
+
     virtual void Merge(const G4Run*);
 
   private:    
@@ -84,6 +87,20 @@ class Run : public G4Run
     G4double fEventTime[3];
     G4double fPrimaryTime;
     G4double fEvisEvent[3];
+
+private:    
+  struct ActivityData {
+   ActivityData()
+     : fNlife_t1(0), fNlife_t2(0), fNdecay_t1t2(0) {}
+   ActivityData(G4int n1, G4int n2, G4int nd)
+     : fNlife_t1(n1), fNlife_t2(n2), fNdecay_t1t2(nd) {}
+   G4int  fNlife_t1;
+   G4int  fNlife_t2;
+   G4int  fNdecay_t1t2;
+  };
+  
+  std::map<G4String,ActivityData>  fActivityMap;
+  G4double fTimeWindow1, fTimeWindow2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

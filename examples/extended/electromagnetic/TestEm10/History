@@ -1,4 +1,4 @@
-$Id: History 90463 2015-06-01 09:33:38Z gcosmo $
+$Id: History 94932 2015-12-18 09:21:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-12-15 I.Hrivnacova, V.Ivanchenko (testem10-V10-02-00)
+- Major example revision & clean-up:
+  - Removed Em10 prefix from class names to be consistent with other examples
+    in electromagnetic category
+  - Refactored detector construction & its messenger classes 
+  - Revised scoring: removed unused code and replaced own-defined
+    histograms with Geant4 analysis
+  - Added StackingAction which accounts XTR gamma, all gamma and all e-
+    spectra 
+  - PhysicsList changed to a modular physics list and introduced 
+    TransitionRadiationPhysics builder
+  - Clean-up primary generator action
+  - Added test_suite.sh script
 
 30-05-15 V.Ivanchenko (testem10-V10-01-00)
 - Em10PhysicsList - removed obsolete header

@@ -45,7 +45,7 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UPolycone.hh"
 #include "G4PolyconeSide.hh"
@@ -82,15 +82,17 @@ class G4UPolycone : public G4USolid
 
     inline UPolycone* GetShape() const;
 
-    inline G4double GetStartPhi()  const;
-    inline G4double GetEndPhi()    const;
-    inline G4bool IsOpen()         const;
-    inline G4int  GetNumRZCorner() const;
-    inline G4PolyconeSideRZ GetCorner(G4int index) const;
-    inline G4PolyconeHistorical* GetOriginalParameters() const;
-    inline void SetOriginalParameters(G4PolyconeHistorical* pars);
+    G4double GetStartPhi()  const;
+    G4double GetEndPhi()    const;
+    G4bool IsOpen()         const;
+    G4int  GetNumRZCorner() const;
+    G4PolyconeSideRZ GetCorner(G4int index) const;
+    G4PolyconeHistorical* GetOriginalParameters() const;
+    void SetOriginalParameters(G4PolyconeHistorical* pars);
 
-    inline G4bool Reset();
+    G4bool Reset();
+
+    inline G4GeometryType GetEntityType() const;
 
   public:  // without description
 
@@ -115,61 +117,9 @@ inline UPolycone* G4UPolycone::GetShape() const
   return (UPolycone*) fShape;
 }
 
-inline G4double G4UPolycone::GetStartPhi() const
+inline G4GeometryType G4UPolycone::GetEntityType() const
 {
-  return GetShape()->GetStartPhi();
-}
-inline G4double G4UPolycone::GetEndPhi() const
-{
-  return GetShape()->GetEndPhi();
-}
-inline G4bool G4UPolycone::IsOpen() const
-{
-  return GetShape()->IsOpen();
-}
-inline G4int G4UPolycone::GetNumRZCorner() const
-{
-  return GetShape()->GetNumRZCorner();
-}
-inline G4PolyconeSideRZ G4UPolycone::GetCorner(G4int index) const
-{
-  UPolyconeSideRZ pside = GetShape()->GetCorner(index);
-  G4PolyconeSideRZ psiderz = { pside.r, pside.z };
-
-  return psiderz;
-}
-inline G4PolyconeHistorical* G4UPolycone::GetOriginalParameters() const
-{
-  UPolyconeHistorical* pars = GetShape()->GetOriginalParameters();
-  G4PolyconeHistorical* pdata = new G4PolyconeHistorical(pars->fNumZPlanes);
-  pdata->Start_angle = pars->fStartAngle;
-  pdata->Opening_angle = pars->fOpeningAngle;
-  for (G4int i=0; i<pars->fNumZPlanes; ++i)
-  {
-    pdata->Z_values[i] = pars->fZValues[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
-  return pdata;
-}
-inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
-{
-  UPolyconeHistorical* pdata = GetShape()->GetOriginalParameters();
-  pdata->fStartAngle = pars->Start_angle;
-  pdata->fOpeningAngle = pars->Opening_angle;
-  pdata->fNumZPlanes = pars->Num_z_planes;
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
-  {
-    pdata->fZValues[i] = pars->Z_values[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
-  fRebuildPolyhedron = true;
-}
-inline G4bool G4UPolycone::Reset()
-{
-  GetShape()->Reset();
-  return 0;
+  return "G4Polycone";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

@@ -1,0 +1,83 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: G4VFSALIntegrationStepper.icc 97387 2016-06-02 10:03:42Z gcosmo $
+//
+
+inline
+G4EquationOfMotion* G4VFSALIntegrationStepper::GetEquationOfMotion()
+{
+  return  fEquation_Rhs;
+} 
+
+inline void
+ G4VFSALIntegrationStepper::SetEquationOfMotion(G4EquationOfMotion* newEquation)
+{
+  if( newEquation != 0 )
+  {
+    fEquation_Rhs= newEquation;
+  }
+} 
+
+inline
+G4int G4VFSALIntegrationStepper::GetNumberOfVariables() const
+{
+  return fNoIntegrationVariables;
+}
+
+
+inline
+G4int G4VFSALIntegrationStepper::GetNumberOfStateVariables() const
+{
+  return fNoStateVariables;
+}
+
+
+inline
+void G4VFSALIntegrationStepper::NormaliseTangentVector( G4double vec[6] )
+{
+  G4double drds2 = vec[3]*vec[3]+vec[4]*vec[4]+vec[5]*vec[5];
+
+  if( std::fabs(drds2 - 1.0) > 1.e-14 )
+  {
+    G4double normx = 1.0 / std::sqrt(drds2);
+    for(G4int i=3;i<6;i++) { vec[i] *= normx; }
+  }
+}
+
+inline
+void G4VFSALIntegrationStepper::NormalisePolarizationVector( G4double vec[12] )
+{
+  G4double drds2 = vec[9]*vec[9]+vec[10]*vec[10]+vec[11]*vec[11];
+
+  if( drds2 > 0. )
+  {
+    if( std::fabs(drds2 - 1.0) > 1.e-14 )
+    {
+      G4double normx = 1.0 / std::sqrt(drds2);
+      for(G4int i=9;i<12;i++)  { vec[i] *= normx; }
+    }
+  }
+}

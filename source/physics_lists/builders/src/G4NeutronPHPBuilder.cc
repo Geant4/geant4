@@ -90,7 +90,7 @@ Build(G4HadronCaptureProcess * aP)
 void G4NeutronPHPBuilder::
 Build(G4NeutronInelasticProcess * aP)
 {
-  if(theHPInelastic==0) theHPInelastic = new G4ParticleHPInelastic(G4Neutron::Neutron(),"ParticleHPInelastic");
+  if(theHPInelastic==0) theHPInelastic = new G4ParticleHPInelastic(G4Neutron::Neutron(),"NeutronHPInelastic");
   theHPInelastic->SetMinEnergy(theIMin);
   theHPInelastic->SetMaxEnergy(theIMax);
   if(theHPInelasticData==0) theHPInelasticData = new G4ParticleHPInelasticData(G4Neutron::Neutron());

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4PairProductionRelModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,9 +82,9 @@ const G4double G4PairProductionRelModel::wgi[]={ 0.0506, 0.1112, 0.1569, 0.1813,
 const G4double G4PairProductionRelModel::Fel_light[]  = {0., 5.31  , 4.79  , 4.74 ,  4.71};
 const G4double G4PairProductionRelModel::Finel_light[] = {0., 6.144 , 5.621 , 5.805 , 5.924};
 
-static const G4double xsfactor = 
+const G4double G4PairProductionRelModel::xsfactor = 
   4*fine_structure_const*classic_electr_radius*classic_electr_radius;
-static const G4double Egsmall=2.*MeV;
+const G4double G4PairProductionRelModel::Egsmall=2.*MeV;
 
 
 G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
@@ -95,7 +95,7 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
     lpmEnergy(0.),
     use_completescreening(false)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
@@ -192,7 +192,7 @@ G4PairProductionRelModel::ComputeDXSectionPerAtom(G4double eplusEnergy,
 
   G4double cross = 0.;
   if (use_completescreening) 
-    cross = (yp*yp + ym*ym + 2./3.*ym*yp)*(Fel - fCoulomb) + 1./9.*yp*ym;
+    cross = (yp*yp + ym*ym + 2./3.*ym*yp)*(Fel - fCoulomb) + yp*ym/9.;
   else {
     G4double delta = 0.25*DeltaMin(totalEnergy)/(yp*ym);
     cross = (yp*yp + ym*ym)*(0.25*Phi1(delta) - lnZ/3. - fCoulomb)
@@ -303,11 +303,9 @@ G4PairProductionRelModel::CalcLPMFunctions(G4double k, G4double eplusEnergy)
 
 G4double 
 G4PairProductionRelModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-						     G4double gammaEnergy, G4double Z,
-						     G4double, G4double, G4double)
+      G4double gammaEnergy, G4double Z, G4double, G4double, G4double)
 {
   G4double crossSection = 0.0 ;
-  //  if ( Z < 0.9 ) return crossSection;
   if ( gammaEnergy <= 2.0*electron_mass_c2 ) return crossSection;
 
   SetCurrentElement(Z);

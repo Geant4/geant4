@@ -43,21 +43,17 @@
 
 using namespace std;
 
-
 G4int G4LivermorePolarizedGammaConversionModel::maxZ = 99;
 G4LPhysicsFreeVector* G4LivermorePolarizedGammaConversionModel::data[] = {0};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermorePolarizedGammaConversionModel::G4LivermorePolarizedGammaConversionModel(
-										       const G4ParticleDefinition*, const G4String& nam)
+   const G4ParticleDefinition*, const G4String& nam)
   :G4VEmModel(nam), isInitialised(false),smallEnergy(2.*MeV)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   lowEnergyLimit = 2*electron_mass_c2;
-  //highEnergyLimit = 100 * GeV;
-  //SetLowEnergyLimit(lowEnergyLimit);
-  //SetHighEnergyLimit(highEnergyLimit);
   
   Phi=0.;
   Psi=0.;
@@ -88,8 +84,6 @@ G4LivermorePolarizedGammaConversionModel::~G4LivermorePolarizedGammaConversionMo
     }
   }  
 }
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -149,7 +143,7 @@ void G4LivermorePolarizedGammaConversionModel::Initialise(const G4ParticleDefini
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4LivermorePolarizedGammaConversionModel::InitialiseLocal(
-								 const G4ParticleDefinition*, G4VEmModel* masterModel)
+     const G4ParticleDefinition*, G4VEmModel* masterModel)
 {
   SetElementSelectors(masterModel->GetElementSelectors());
 }
@@ -157,8 +151,7 @@ void G4LivermorePolarizedGammaConversionModel::InitialiseLocal(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LivermorePolarizedGammaConversionModel::MinPrimaryEnergy(const G4Material*,
-								      const G4ParticleDefinition*,
-								       G4double)
+			     const G4ParticleDefinition*, G4double)
 {
   return lowEnergyLimit;
 }
@@ -222,10 +215,6 @@ void G4LivermorePolarizedGammaConversionModel::ReadData(size_t Z, const char* pa
   data[Z] ->SetSpline(true);  
   
 }
-
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -364,7 +353,7 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
 
       // Limits of the screening variable
       G4double screenFactor = 136. * epsilon0Local / (element->GetIonisation()->GetZ3()) ;
-      G4double screenMax = exp ((42.24 - fZ)/8.368) - 0.952 ;
+      G4double screenMax = G4Exp ((42.24 - fZ)/8.368) - 0.952 ;
       G4double screenMin = std::min(4.*screenFactor,screenMax) ;
 
       // Limits of the energy sampling
@@ -546,18 +535,7 @@ G4LivermorePolarizedGammaConversionModel::SampleSecondaries(std::vector<G4Dynami
   fvect->push_back(particle1);
   fvect->push_back(particle2);
 
-
-
   // Kill the incident photon
-
-
-
-  // Create lists of pointers to DynamicParticles (photons and electrons)
-  // (Is the electron vector necessary? To be checked)
-  //  std::vector<G4DynamicParticle*>* photonVector = 0;
-  //std::vector<G4DynamicParticle*> electronVector;
-
-  fParticleChange->ProposeMomentumDirection( 0., 0., 0. );
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
 
@@ -1009,7 +987,7 @@ G4double G4LivermorePolarizedGammaConversionModel::Finvtan(G4double* p_p1, G4dou
   G4double a = p_p1[0];
   G4double b = p_p1[1];
 
-  value = b*(1-exp(r*cnor/a));
+  value = b*(1-G4Exp(r*cnor/a));
 
   return value;
 }

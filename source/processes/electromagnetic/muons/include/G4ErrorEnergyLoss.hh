@@ -49,23 +49,23 @@ class G4ErrorEnergyLoss : public G4VContinuousProcess
 
 public: 
 
-  G4ErrorEnergyLoss(const G4String& processName = "G4ErrorEnergyLoss",
+  explicit G4ErrorEnergyLoss(const G4String& processName = "G4ErrorEnergyLoss",
 		    G4ProcessType type = fElectromagnetic);
 
   virtual ~G4ErrorEnergyLoss();	
 
 
-  G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
+  G4bool IsApplicable(const G4ParticleDefinition& aParticleType) override;
   // Returns true -> 'is applicable', for all charged particles.
 
   G4double GetContinuousStepLimit(const G4Track& aTrack,
 				  G4double     ,
 				  G4double currentMinimumStep,
-				  G4double& );
+				  G4double& ) override;
   // Returns DBL_MAX as continuous step limit
 
   G4VParticleChange* AlongStepDoIt(const G4Track& aTrack, 
-				   const G4Step&  aStep);
+				   const G4Step&  aStep) override;
   // This is the method implementing the energy loss process.
 
   // Get and Set methods
@@ -78,8 +78,8 @@ private:
   // Create the G4EnergyLossForExtrapolator
 
   // copy constructor and hide assignment operator
-  G4ErrorEnergyLoss(G4ErrorEnergyLoss &);
-  G4ErrorEnergyLoss & operator=(const G4ErrorEnergyLoss &right);
+  G4ErrorEnergyLoss(G4ErrorEnergyLoss &) = delete;
+  G4ErrorEnergyLoss & operator=(const G4ErrorEnergyLoss &right) = delete;
 
 private:
   G4EnergyLossForExtrapolator* theELossForExtrapolator;

@@ -212,7 +212,7 @@ void G4WorkerThread::SetPinAffinity(G4int affinity) const
   G4int offset = affinity;
   G4int cpuindex = 0;
   if ( std::abs(offset)>G4Threading::G4GetNumberOfCores() ) {
-      G4Exception("G4WorkerThread::SetPinAffinity","Run0035",
+      G4Exception("G4WorkerThread::SetPinAffinity","Run0100",
           JustWarning,
           "Cannot set thread affinity, affinity parameter larger than number of cores");
       return;
@@ -235,7 +235,7 @@ void G4WorkerThread::SetPinAffinity(G4int affinity) const
 #endif
   G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
   if ( ! success ) {
-      G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
+      G4Exception("G4MTRunManagerKernel::StarThread","Run0101",JustWarning,"Cannot set thread affinity.");
   }
 #endif
 }

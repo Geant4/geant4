@@ -34,7 +34,7 @@
 //
 // First implementation: 11. 03. 2009
 //
-// Modifications: 12. 11 .2009 - Function BuildDEDXTable: Using adapted build 
+// Modifications: 12. 11 .2009 - Function BuildDEDXTable: Using adapted build
 //                               methods of stopping power classes according
 //                               to interface change in G4VIonDEDXTable.
 //                               Function UpdateCacheValue: Using adapted
@@ -43,11 +43,11 @@
 //                               Algorithm (AL)
 //
 // Class description:
-//    Ion dE/dx table handler. 
+//    Ion dE/dx table handler.
 //
 // Comments:
 //
-// =========================================================================== 
+// ===========================================================================
 
 #include <iomanip>
 
@@ -58,6 +58,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
 #include "G4LPhysicsFreeVector.hh"
+#include "G4Exp.hh"
 
 //#define PRINT_DEBUG
 
@@ -78,19 +79,19 @@ G4IonDEDXHandler::G4IonDEDXHandler(
 
   if(table == 0) {
      G4cerr << "G4IonDEDXHandler::G4IonDEDXHandler() "
-            << " Pointer to G4VIonDEDXTable object is null-pointer." 
+            << " Pointer to G4VIonDEDXTable object is null-pointer."
             << G4endl;
   }
 
   if(algorithm == 0) {
      G4cerr << "G4IonDEDXHandler::G4IonDEDXHandler() "
-            << " Pointer to G4VIonDEDXScalingAlgorithm object is null-pointer." 
+            << " Pointer to G4VIonDEDXScalingAlgorithm object is null-pointer."
             << G4endl;
   }
 
   if(maxCacheEntries <= 0) {
      G4cerr << "G4IonDEDXHandler::G4IonDEDXHandler() "
-            << " Cache size <=0. Resetting to 5." 
+            << " Cache size <=0. Resetting to 5."
             << G4endl;
      maxCacheEntries = 5;
   }
@@ -104,7 +105,7 @@ G4IonDEDXHandler::~G4IonDEDXHandler() {
 
   // All stopping power vectors built according to Bragg's addivitiy rule
   // are deleted. All other stopping power vectors are expected to be
-  // deleted by their creator class (sub-class of G4VIonDEDXTable). 
+  // deleted by their creator class (sub-class of G4VIonDEDXTable).
   // DEDXTableBraggRule::iterator iter = stoppingPowerTableBragg.begin();
   // DEDXTableBraggRule::iterator iter_end = stoppingPowerTableBragg.end();
 
@@ -120,10 +121,10 @@ G4IonDEDXHandler::~G4IonDEDXHandler() {
 // #########################################################################
 
 G4bool G4IonDEDXHandler::IsApplicable(
-                 const G4ParticleDefinition* particle,  // Projectile (ion) 
-                 const G4Material* material) {          // Target material 
+                 const G4ParticleDefinition* particle,  // Projectile (ion)
+                 const G4Material* material) {          // Target material
 
-  G4bool isApplicable = true; 
+  G4bool isApplicable = true;
 
   if(table == 0 || algorithm == 0) {
      isApplicable = false;
@@ -131,36 +132,36 @@ G4bool G4IonDEDXHandler::IsApplicable(
   else {
 
      G4int atomicNumberIon = particle -> GetAtomicNumber();
-     G4int atomicNumberBase = 
+     G4int atomicNumberBase =
                 algorithm -> AtomicNumberBaseIon(atomicNumberIon, material);
 
      G4IonKey key = std::make_pair(atomicNumberBase, material);
 
      DEDXTable::iterator iter = stoppingPowerTable.find(key);
-     if(iter == stoppingPowerTable.end()) isApplicable = false; 
+     if(iter == stoppingPowerTable.end()) isApplicable = false;
   }
 
-  return isApplicable; 
+  return isApplicable;
 }
 
 // #########################################################################
 
 G4double G4IonDEDXHandler::GetDEDX(
-                 const G4ParticleDefinition* particle,  // Projectile (ion) 
-                 const G4Material* material,   // Target material 
+                 const G4ParticleDefinition* particle,  // Projectile (ion)
+                 const G4Material* material,   // Target material
                  G4double kineticEnergy) {     // Kinetic energy of projectile
 
   G4double dedx = 0.0;
 
-  G4CacheValue value = GetCacheValue(particle, material); 
-     
+  G4CacheValue value = GetCacheValue(particle, material);
+
   if(kineticEnergy <= 0.0) dedx = 0.0;
   else if(value.dedxVector != 0) {
- 
+
      G4bool b;
      G4double factor = value.density;
 
-     factor *= algorithm -> ScalingFactorDEDX(particle, 
+     factor *= algorithm -> ScalingFactorDEDX(particle,
                                              material,
                                              kineticEnergy);
      G4double scaledKineticEnergy = kineticEnergy * value.energyScaling;
@@ -178,10 +179,10 @@ G4double G4IonDEDXHandler::GetDEDX(
   else dedx = 0.0;
 
 #ifdef PRINT_DEBUG
-     G4cout << "G4IonDEDXHandler::GetDEDX() E = " 
+     G4cout << "G4IonDEDXHandler::GetDEDX() E = "
             << kineticEnergy / MeV << " MeV * "
             << value.energyScaling << " = "
-            << kineticEnergy * value.energyScaling / MeV 
+            << kineticEnergy * value.energyScaling / MeV
             << " MeV, dE/dx = " << dedx / MeV * cm << " MeV/cm"
             << ", material = " << material -> GetName()
             << G4endl;
@@ -193,8 +194,8 @@ G4double G4IonDEDXHandler::GetDEDX(
 // #########################################################################
 
 G4bool G4IonDEDXHandler::BuildDEDXTable(
-                 const G4ParticleDefinition* particle,  // Projectile (ion) 
-                 const G4Material* material) {          // Target material 
+                 const G4ParticleDefinition* particle,  // Projectile (ion)
+                 const G4Material* material) {          // Target material
 
   G4int atomicNumberIon = particle -> GetAtomicNumber();
 
@@ -207,20 +208,20 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 // #########################################################################
 
 G4bool G4IonDEDXHandler::BuildDEDXTable(
-                 G4int atomicNumberIon,                // Projectile (ion) 
-                 const G4Material* material) {         // Target material 
+                 G4int atomicNumberIon,                // Projectile (ion)
+                 const G4Material* material) {         // Target material
 
-  G4bool isApplicable = true; 
+  G4bool isApplicable = true;
 
   if(table == 0 || algorithm == 0) {
      isApplicable = false;
      return isApplicable;
   }
 
-  G4int atomicNumberBase = 
+  G4int atomicNumberBase =
                 algorithm -> AtomicNumberBaseIon(atomicNumberIon, material);
 
-  // Checking if vector is already built, and returns if this is indeed 
+  // Checking if vector is already built, and returns if this is indeed
   // the case
   G4IonKey key = std::make_pair(atomicNumberBase, material);
 
@@ -234,15 +235,15 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
   isApplicable = table -> BuildPhysicsVector(atomicNumberBase, chemFormula);
 
-  if(isApplicable) { 
-     stoppingPowerTable[key] = 
+  if(isApplicable) {
+     stoppingPowerTable[key] =
               table -> GetPhysicsVector(atomicNumberBase, chemFormula);
      return isApplicable;
   }
 
   isApplicable = table -> BuildPhysicsVector(atomicNumberBase, materialName);
-  if(isApplicable) { 
-     stoppingPowerTable[key] = 
+  if(isApplicable) {
+     stoppingPowerTable[key] =
               table -> GetPhysicsVector(atomicNumberBase, materialName);
      return isApplicable;
   }
@@ -260,9 +261,9 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
       isApplicable = table -> BuildPhysicsVector(atomicNumberBase, atomicNumberMat);
 
-      if(isApplicable) { 
+      if(isApplicable) {
 
-         G4PhysicsVector* dEdx = 
+         G4PhysicsVector* dEdx =
                   table -> GetPhysicsVector(atomicNumberBase, atomicNumberMat);
          dEdxTable.push_back(dEdx);
       }
@@ -272,7 +273,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
          break;
       }
   }
-     
+
   if(isApplicable) {
 
      if(dEdxTable.size() > 0) {
@@ -281,7 +282,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
         G4double lowerEdge = dEdxTable[0] -> GetLowEdgeEnergy(0);
         G4double upperEdge = dEdxTable[0] -> GetLowEdgeEnergy(nmbdEdxBins-1);
 
-        G4LPhysicsFreeVector* dEdxBragg = 
+        G4LPhysicsFreeVector* dEdxBragg =
                     new G4LPhysicsFreeVector(nmbdEdxBins,
                                              lowerEdge,
                                              upperEdge);
@@ -295,12 +296,12 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 
             G4double value = 0.0;
   	    for(size_t i = 0; i < nmbElements; i++) {
- 
+
                 value += (dEdxTable[i] -> GetValue(edge ,b)) *
                                                        massFractionVector[i];
 	    }
 
-            dEdxBragg -> PutValues(j, edge, value); 
+            dEdxBragg -> PutValues(j, edge, value);
 	}
         dEdxBragg -> SetSpline(useSplines);
 
@@ -316,7 +317,7 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 	stoppingPowerTable[key] = dEdxBragg;
 	stoppingPowerTableBragg[key] = dEdxBragg;
      }
-  }  
+  }
 
   ClearCache();
 
@@ -326,13 +327,13 @@ G4bool G4IonDEDXHandler::BuildDEDXTable(
 // #########################################################################
 
 G4CacheValue G4IonDEDXHandler::UpdateCacheValue(
-              const G4ParticleDefinition* particle,  // Projectile (ion) 
-              const G4Material* material) {          // Target material 
+              const G4ParticleDefinition* particle,  // Projectile (ion)
+              const G4Material* material) {          // Target material
 
   G4CacheValue value;
 
   G4int atomicNumberIon = particle -> GetAtomicNumber();
-  G4int atomicNumberBase = 
+  G4int atomicNumberBase =
                 algorithm -> AtomicNumberBaseIon(atomicNumberIon, material);
 
   G4IonKey key = std::make_pair(atomicNumberBase, material);
@@ -341,30 +342,30 @@ G4CacheValue G4IonDEDXHandler::UpdateCacheValue(
 
   if(iter != stoppingPowerTable.end()) {
      value.dedxVector = iter -> second;
- 
+
      G4double nmbNucleons = G4double(particle -> GetAtomicMass());
-     value.energyScaling = 
+     value.energyScaling =
            algorithm -> ScalingFactorEnergy(particle, material) / nmbNucleons;
 
      size_t nmbdEdxBins = value.dedxVector -> GetVectorLength();
      value.lowerEnergyEdge = value.dedxVector -> GetLowEdgeEnergy(0);
-   
-     value.upperEnergyEdge = 
+
+     value.upperEnergyEdge =
                        value.dedxVector -> GetLowEdgeEnergy(nmbdEdxBins-1);
      value.density = material -> GetDensity();
   }
   else {
      value.dedxVector = 0;
-     value.energyScaling = 0.0; 
+     value.energyScaling = 0.0;
      value.lowerEnergyEdge = 0.0;
      value.upperEnergyEdge = 0.0;
      value.density = 0.0;
   }
 
 #ifdef PRINT_DEBUG
-  G4cout << "G4IonDEDXHandler::UpdateCacheValue() for " 
+  G4cout << "G4IonDEDXHandler::UpdateCacheValue() for "
          << particle -> GetParticleName() << " in "
-         << material -> GetName() 
+         << material -> GetName()
          << G4endl;
 #endif
 
@@ -374,13 +375,13 @@ G4CacheValue G4IonDEDXHandler::UpdateCacheValue(
 // #########################################################################
 
 G4CacheValue G4IonDEDXHandler::GetCacheValue(
-              const G4ParticleDefinition* particle,  // Projectile (ion) 
-              const G4Material* material) {          // Target material 
+              const G4ParticleDefinition* particle,  // Projectile (ion)
+              const G4Material* material) {          // Target material
 
   G4CacheKey key = std::make_pair(particle, material);
 
   G4CacheEntry entry;
-  CacheEntryList::iterator* pointerIter = 
+  CacheEntryList::iterator* pointerIter =
                   (CacheEntryList::iterator*) cacheKeyPointers[key];
 
   if(!pointerIter) {
@@ -389,7 +390,7 @@ G4CacheValue G4IonDEDXHandler::GetCacheValue(
       entry.key = key;
       cacheEntries.push_front(entry);
 
-      CacheEntryList::iterator* pointerIter1 = 
+      CacheEntryList::iterator* pointerIter1 =
                                    new CacheEntryList::iterator();
       *pointerIter1 = cacheEntries.begin();
       cacheKeyPointers[key] = pointerIter1;
@@ -397,9 +398,9 @@ G4CacheValue G4IonDEDXHandler::GetCacheValue(
       if(G4int(cacheEntries.size()) > maxCacheEntries) {
 
   	 G4CacheEntry lastEntry = cacheEntries.back();
-	          
+
          void* pointerIter2 = cacheKeyPointers[lastEntry.key];
-         CacheEntryList::iterator* listPointerIter = 
+         CacheEntryList::iterator* listPointerIter =
                       	  (CacheEntryList::iterator*) pointerIter2;
 
          cacheEntries.erase(*listPointerIter);
@@ -410,7 +411,7 @@ G4CacheValue G4IonDEDXHandler::GetCacheValue(
   }
   else {
       entry = *(*pointerIter);
-      // Cache entries are currently not re-ordered. 
+      // Cache entries are currently not re-ordered.
       // Uncomment for activating re-ordering:
       //      cacheEntries.erase(*pointerIter);
       //      cacheEntries.push_front(entry);
@@ -425,15 +426,15 @@ void G4IonDEDXHandler::ClearCache() {
 
   CacheIterPointerMap::iterator iter = cacheKeyPointers.begin();
   CacheIterPointerMap::iterator iter_end = cacheKeyPointers.end();
-  
+
   for(;iter != iter_end; iter++) {
       void* pointerIter = iter -> second;
-      CacheEntryList::iterator* listPointerIter = 
+      CacheEntryList::iterator* listPointerIter =
                       	  (CacheEntryList::iterator*) pointerIter;
 
       delete listPointerIter;
   }
- 
+
   cacheEntries.clear();
   cacheKeyPointers.clear();
 }
@@ -441,7 +442,7 @@ void G4IonDEDXHandler::ClearCache() {
 // #########################################################################
 
 void G4IonDEDXHandler::PrintDEDXTable(
-                  const G4ParticleDefinition* particle,  // Projectile (ion) 
+                  const G4ParticleDefinition* particle,  // Projectile (ion)
                   const G4Material* material,  // Target material
                   G4double lowerBoundary,      // Minimum energy per nucleon
                   G4double upperBoundary,      // Maximum energy per nucleon
@@ -451,16 +452,16 @@ void G4IonDEDXHandler::PrintDEDXTable(
   G4double atomicMassNumber = particle -> GetAtomicMass();
   G4double materialDensity = material -> GetDensity();
 
-  G4cout << "# dE/dx table for " << particle -> GetParticleName() 
+  G4cout << "# dE/dx table for " << particle -> GetParticleName()
          << " in material " << material -> GetName()
          << " of density " << materialDensity / g * cm3
          << " g/cm3"
          << G4endl
          << "# Projectile mass number A1 = " << atomicMassNumber
          << G4endl
-         << "# Energy range (per nucleon) of tabulation: " 
+         << "# Energy range (per nucleon) of tabulation: "
          << GetLowerEnergyEdge(particle, material) / atomicMassNumber / MeV
-         << " - " 
+         << " - "
          << GetUpperEnergyEdge(particle, material) / atomicMassNumber / MeV
          << " MeV"
          << G4endl
@@ -481,32 +482,32 @@ void G4IonDEDXHandler::PrintDEDXTable(
          << "# ------------------------------------------------------"
          << G4endl;
 
-  //G4CacheValue value = GetCacheValue(particle, material); 
+  //G4CacheValue value = GetCacheValue(particle, material);
 
   G4double energyLowerBoundary = lowerBoundary * atomicMassNumber;
-  G4double energyUpperBoundary = upperBoundary * atomicMassNumber; 
+  G4double energyUpperBoundary = upperBoundary * atomicMassNumber;
 
   if(logScaleEnergy) {
 
      energyLowerBoundary = std::log(energyLowerBoundary);
-     energyUpperBoundary = std::log(energyUpperBoundary); 
+     energyUpperBoundary = std::log(energyUpperBoundary);
   }
 
-  G4double deltaEnergy = (energyUpperBoundary - energyLowerBoundary) / 
+  G4double deltaEnergy = (energyUpperBoundary - energyLowerBoundary) /
                                                            G4double(nmbBins);
 
   G4cout.precision(6);
   for(int i = 0; i < nmbBins + 1; i++) {
 
       G4double energy = energyLowerBoundary + i * deltaEnergy;
-      if(logScaleEnergy) energy = std::exp(energy);
+      if(logScaleEnergy) energy = G4Exp(energy);
 
       G4double loss = GetDEDX(particle, material, energy);
 
       G4cout << std::setw(14) << std::right << energy / MeV
              << std::setw(14) << energy / atomicMassNumber / MeV
              << std::setw(14) << loss / MeV * cm
-             << std::setw(14) << loss / materialDensity / (MeV*cm2/(0.001*g)) 
+             << std::setw(14) << loss / materialDensity / (MeV*cm2/(0.001*g))
              << G4endl;
   }
 }
@@ -514,14 +515,14 @@ void G4IonDEDXHandler::PrintDEDXTable(
 // #########################################################################
 
 G4double G4IonDEDXHandler::GetLowerEnergyEdge(
-                 const G4ParticleDefinition* particle,  // Projectile (ion) 
-                 const G4Material* material) {          // Target material 
+                 const G4ParticleDefinition* particle,  // Projectile (ion)
+                 const G4Material* material) {          // Target material
 
-  G4double edge = 0.0; 
+  G4double edge = 0.0;
 
-  G4CacheValue value = GetCacheValue(particle, material); 
-     
-  if(value.energyScaling > 0) 
+  G4CacheValue value = GetCacheValue(particle, material);
+
+  if(value.energyScaling > 0)
           edge = value.lowerEnergyEdge / value.energyScaling;
 
   return edge;
@@ -530,14 +531,14 @@ G4double G4IonDEDXHandler::GetLowerEnergyEdge(
 // #########################################################################
 
 G4double G4IonDEDXHandler::GetUpperEnergyEdge(
-                 const G4ParticleDefinition* particle,  // Projectile (ion) 
-                 const G4Material* material) {          // Target material 
+                 const G4ParticleDefinition* particle,  // Projectile (ion)
+                 const G4Material* material) {          // Target material
 
-  G4double edge = 0.0; 
+  G4double edge = 0.0;
 
-  G4CacheValue value = GetCacheValue(particle, material); 
-     
-  if(value.energyScaling > 0) 
+  G4CacheValue value = GetCacheValue(particle, material);
+
+  if(value.energyScaling > 0)
           edge = value.upperEnergyEdge / value.energyScaling;
 
   return edge;

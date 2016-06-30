@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NistMessenger.hh 66811 2013-01-12 16:04:23Z gcosmo $
+// $Id: G4NistMessenger.hh 96794 2016-05-09 10:09:30Z gcosmo $
 //
 // File name:     G4NistMessenger
 //
@@ -82,10 +82,10 @@ class G4NistMessenger: public G4UImessenger
 {
 public:
 
-  G4NistMessenger(G4NistManager* );
+  explicit G4NistMessenger(G4NistManager* );
   virtual ~G4NistMessenger();
 
-  void SetNewValue(G4UIcommand*, G4String);
+  virtual void SetNewValue(G4UIcommand*, G4String) final;
 
 private:
 

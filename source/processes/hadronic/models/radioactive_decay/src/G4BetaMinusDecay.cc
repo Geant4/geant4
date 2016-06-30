@@ -55,7 +55,7 @@ G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() + 1;
-  G4int daughterA = theParentNucleus->GetAtomicMass(); 
+  G4int daughterA = theParentNucleus->GetAtomicMass();
   SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
   SetDaughter(1, "e-");
   SetDaughter(2, "anti_nu_e");
@@ -66,17 +66,17 @@ G4BetaMinusDecay::G4BetaMinusDecay(const G4ParticleDefinition* theParentNucleus,
 
 G4BetaMinusDecay::~G4BetaMinusDecay()
 {
-	delete spectrumSampler;
+  delete spectrumSampler;
 }
 
 
 G4DecayProducts* G4BetaMinusDecay::DecayIt(G4double)
 {
   // Fill G4MT_parent with theParentNucleus (stored by SetParent in ctor)  
-  if (G4MT_parent == 0) FillParent();
+  CheckAndFillParent();
 
   // Fill G4MT_daughters with e-, nu and residual nucleus (stored by SetDaughter)  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillDaughters();
 
   G4double parentMass = G4MT_parent->GetPDGMass();
   G4double eMass = G4MT_daughters[1]->GetPDGMass();
@@ -166,23 +166,25 @@ G4BetaMinusDecay::SetUpBetaSpectrumSampler(const G4int& daughterZ,
 
   G4double e;  // Total electron energy in units of electron mass
   G4double p;  // Electron momentum in units of electron mass
-  G4double f;  // Spectral shap function
-  for (G4int ptn = 0; ptn < npti; ptn++) {
-    // Calculate simple phase space
-    e = 1. + e0*(ptn + 0.5)/G4double(npti);
-    p = std::sqrt(e*e - 1.);
-    f = p*e*(e0 - e + 1.)*(e0 - e + 1.);
+  G4double f;  // Spectral shape function
 
-    // Apply Fermi factor to get allowed shape
-    f *= corrections.FermiFunction(e);
+  if (e0 > 0) {
+    for (G4int ptn = 0; ptn < npti; ptn++) {
+      // Calculate simple phase space
+      e = 1. + e0*(G4double(ptn) + 0.5)/G4double(npti);
+      p = std::sqrt(e*e - 1.);
+      f = p*e*(e0 - e + 1.)*(e0 - e + 1.);
 
-    // Apply shape factor for forbidden transitions
-    f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
-    pdf[ptn] = f;
+      // Apply Fermi factor to get allowed shape
+      f *= corrections.FermiFunction(e);
+
+      // Apply shape factor for forbidden transitions
+      f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
+      pdf[ptn] = f;
+    }
+
+    spectrumSampler = new G4RandGeneral(pdf, npti);
   }
-
-  spectrumSampler = new G4RandGeneral(pdf, npti);
-
   delete[] pdf;
 }
 

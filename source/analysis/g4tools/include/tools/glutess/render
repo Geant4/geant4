@@ -214,8 +214,6 @@ inline/*static*/ void static_RenderTriangle( GLUtesselator *tess, GLUhalfEdge *e
    */
   assert( size == 1 );
   AddToTrail( e->Lface, tess->lonelyTriList );
-  // the following line should suppress compiler warning about unused parameter 'size'
-  // observed on MacOS/clang
   (void)size;
 }
 

@@ -4,14 +4,14 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-ref-00    (4-December-2015)
+ Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-***** Table : Nb of materials = 20 *****
+***** Table : Nb of materials = 21 *****
 
  Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
                        Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -244,6 +244,15 @@
           ElmMassFraction:   5.22 %  ElmAbundance  57.49 % 
 
 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
+                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:  0.011 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
  Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.920 cm 
                        Imean: 418.807 eV 
 
@@ -252,7 +261,7 @@
          --->  Isotope: Lu176   Z = 71   N = 176   A = 175.94 g/mole   abundance:  2.590 %
           ElmMassFraction:  76.40 %  ElmAbundance  25.00 % 
 
-   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
+   --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
          --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:  4.683 %
          --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:  3.087 %
@@ -324,40 +333,40 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.11s Real=3.11s Sys=0s
+  User=3.2s Real=3.21s Sys=0s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- total energy deposit: 99.818 MeV
+ total energy deposit: 99.823 MeV
 
- nb tracks/event   neutral:   25.37   charged:  137.86
- nb  steps/event   neutral:  131.25   charged:  203.51
+ nb tracks/event   neutral:  25.329   charged:   138.1
+ nb  steps/event   neutral:  131.58   charged:  203.97
 
  Process calls frequency :
-       Transportation=   1797               annihil=   2832                 compt= 211768
-                 conv=   2818                 eBrem=  46132                 eIoni= 357656
-                  msc=    393                  phot=  46131 
+       Transportation=   1794               annihil=   2815                 compt= 212509
+                 conv=   2802                 eBrem=  46102                 eIoni= 358682
+                  msc=    344                  phot=  46066 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.108 cm    rms = 3.7531 cm 
- proj Range = 9.6718 cm    rms = 3.5086 cm 
- proj/true  = 0.87069
- transverse dispersion at end = 1.5715 cm 
-      mass true Range from simulation = 29.992 g/cm2 
+ true Range = 10.962 cm    rms = 3.8646 cm 
+ proj Range = 9.5297 cm    rms = 3.5623 cm 
+ proj/true  = 0.86932
+ transverse dispersion at end = 1.5861 cm 
+      mass true Range from simulation = 29.598 g/cm2 
        from PhysicsTable (csda range) = 32.1 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1125509901, 1932947406
+ Current couple of seeds = 1031624495, 298128577
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.064 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.066 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

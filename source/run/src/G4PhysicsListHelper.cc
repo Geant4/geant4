@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsListHelper.cc 82663 2014-07-02 08:57:58Z gcosmo $
+// $Id: G4PhysicsListHelper.cc 97386 2016-06-02 10:01:40Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -676,7 +676,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processSubType  = 10;
   tmp.ordering[0]     = -1;
   tmp.ordering[1]     =  1;
-  tmp.ordering[2]     =  1;
+  tmp.ordering[2]     = -1;
   tmp.isDuplicable =  false;
   theTable->push_back(tmp);
   sizeOfTable +=1;  
@@ -1064,7 +1064,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName =  "DecayUnKnown";
   tmp.processType     = 6;
   tmp.processSubType  = 211;
-  tmp.ordering[0]     =  1000;
+  tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;
   tmp.isDuplicable =  false;
@@ -1108,6 +1108,16 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  1000;
   tmp.isDuplicable =  false;
+  theTable->push_back(tmp);
+  sizeOfTable +=1;  
+
+  tmp.processTypeName =  "ParallelWorld";
+  tmp.processType     = 10;
+  tmp.processSubType  = 491;
+  tmp.ordering[0]     = 9900;
+  tmp.ordering[1]     = 1;
+  tmp.ordering[2]     =  9900;
+  tmp.isDuplicable =  true;
   theTable->push_back(tmp);
   sizeOfTable +=1;  
 }

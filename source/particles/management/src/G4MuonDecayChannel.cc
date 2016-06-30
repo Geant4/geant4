@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuonDecayChannel.cc 94091 2015-11-05 15:13:52Z gcosmo $
+// $Id: G4MuonDecayChannel.cc 95906 2016-03-02 10:56:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -131,8 +131,8 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   if (GetVerboseLevel()>1) G4cout << "G4MuonDecayChannel::DecayIt ";
 #endif
 
-  if (G4MT_parent == 0) FillParent();  
-  if (G4MT_daughters == 0) FillDaughters();
+  CheckAndFillParent();
+  CheckAndFillDaughters();
  
   // parent mass
   G4double parentmass = G4MT_parent->GetPDGMass();

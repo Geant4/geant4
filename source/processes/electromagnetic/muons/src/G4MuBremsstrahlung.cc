@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc 85023 2014-10-23 09:56:39Z gcosmo $
+// $Id: G4MuBremsstrahlung.cc 97392 2016-06-02 10:10:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -116,7 +116,7 @@ void G4MuBremsstrahlung::InitialiseEnergyLossProcess(
 
     if (!EmModel()) { SetEmModel(new G4MuBremsstrahlungModel()); }
 
-    G4VEmFluctuationModel* fm = 0;
+    G4VEmFluctuationModel* fm = nullptr;
     G4EmParameters* param = G4EmParameters::Instance();
     EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());

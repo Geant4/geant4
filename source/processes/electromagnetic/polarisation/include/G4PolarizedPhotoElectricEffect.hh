@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedPhotoElectricEffect.hh 68046 2013-03-13 14:31:38Z gcosmo $
+// $Id: G4PolarizedPhotoElectricEffect.hh 96114 2016-03-16 18:51:33Z gcosmo $
 //
 //
 //------------------ G4PolarizedPhotoElectricEffect physics process ------------------
@@ -87,20 +87,20 @@ class G4PolarizedPhotoElectricEffect : public G4VEmProcess
 {
 public:  // with description
 
-  G4PolarizedPhotoElectricEffect(const G4String& processName ="pol-phot",
+  explicit G4PolarizedPhotoElectricEffect(const G4String& processName ="pol-phot",
 				 G4ProcessType type = fElectromagnetic);
 
   virtual ~G4PolarizedPhotoElectricEffect();
 
   // true for Gamma only.
-  G4bool IsApplicable(const G4ParticleDefinition&);
+  G4bool IsApplicable(const G4ParticleDefinition&) override;
 
   // Print few lines of informations about the process: validity range,
-  void PrintInfo();
+  void PrintInfo() override;
 
 protected:
 
-  void InitialiseProcess(const G4ParticleDefinition*);
+  void InitialiseProcess(const G4ParticleDefinition*) override;
 
 private:
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElementData.cc 83419 2014-08-21 15:31:56Z gcosmo $
+// $Id: G4ElementData.cc 96794 2016-05-09 10:09:30Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -49,8 +49,8 @@ G4ElementData::G4ElementData()
 {
   name = "";
   for(G4int i=0; i<maxNumElements; ++i) {
-    elmData[i] = 0;
-    elm2Data[i] = 0;
+    elmData[i] = nullptr;
+    elm2Data[i] = nullptr;
     compLength[i] = 0;
   }
 }
@@ -64,11 +64,9 @@ G4ElementData::~G4ElementData()
     delete elm2Data[i];
     size_t n = compLength[i]; 
     //G4cout << "Z= " << i << " L= " << n << G4endl;
-    if(n > 0) {
-      for(size_t j=0; j<n; ++j) {
-        //G4cout << "j= " << j << "  " << (compData[i])[j] << G4endl;
-        delete (compData[i])[j];
-      }
+    for(size_t j=0; j<n; ++j) {
+      //G4cout << "j= " << j << "  " << (compData[i])[j] << G4endl;
+      delete (compData[i])[j];
     }
   }
 }

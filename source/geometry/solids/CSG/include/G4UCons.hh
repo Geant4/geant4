@@ -45,9 +45,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UCons.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UCons : public G4USolid
@@ -71,21 +72,25 @@ class G4UCons : public G4USolid
 
     inline UCons* GetShape() const;
 
-    inline G4double GetInnerRadiusMinusZ() const;
-    inline G4double GetOuterRadiusMinusZ() const;
-    inline G4double GetInnerRadiusPlusZ()  const;
-    inline G4double GetOuterRadiusPlusZ()  const;
-    inline G4double GetZHalfLength()       const;
-    inline G4double GetStartPhiAngle()     const;
-    inline G4double GetDeltaPhiAngle()     const;
+    G4double GetInnerRadiusMinusZ() const;
+    G4double GetOuterRadiusMinusZ() const;
+    G4double GetInnerRadiusPlusZ()  const;
+    G4double GetOuterRadiusPlusZ()  const;
+    G4double GetZHalfLength()       const;
+    G4double GetStartPhiAngle()     const;
+    G4double GetDeltaPhiAngle()     const;
   
-    inline void SetInnerRadiusMinusZ (G4double Rmin1 );
-    inline void SetOuterRadiusMinusZ (G4double Rmax1 );
-    inline void SetInnerRadiusPlusZ  (G4double Rmin2 );
-    inline void SetOuterRadiusPlusZ  (G4double Rmax2 );
-    inline void SetZHalfLength       (G4double newDz );
-    inline void SetStartPhiAngle     (G4double newSPhi, G4bool trig=true);
-    inline void SetDeltaPhiAngle     (G4double newDPhi);
+    void SetInnerRadiusMinusZ (G4double Rmin1 );
+    void SetOuterRadiusMinusZ (G4double Rmax1 );
+    void SetInnerRadiusPlusZ  (G4double Rmin2 );
+    void SetOuterRadiusPlusZ  (G4double Rmax2 );
+    void SetZHalfLength       (G4double newDz );
+    void SetStartPhiAngle     (G4double newSPhi, G4bool trig=true);
+    void SetDeltaPhiAngle     (G4double newDPhi);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
        
@@ -108,69 +113,9 @@ inline UCons* G4UCons::GetShape() const
   return (UCons*) fShape;
 }
 
-inline G4double G4UCons::GetInnerRadiusMinusZ() const
+inline G4GeometryType G4UCons::GetEntityType() const
 {
-  return GetShape()->GetInnerRadiusMinusZ();
-}
-inline G4double G4UCons::GetOuterRadiusMinusZ() const
-{
-  return GetShape()->GetOuterRadiusMinusZ();
-}
-inline G4double G4UCons::GetInnerRadiusPlusZ() const
-{
-  return GetShape()->GetInnerRadiusPlusZ();
-}
-inline G4double G4UCons::GetOuterRadiusPlusZ() const
-{
-  return GetShape()->GetOuterRadiusPlusZ();
-}
-inline G4double G4UCons::GetZHalfLength() const
-{
-  return GetShape()->GetZHalfLength();
-}
-inline G4double G4UCons::GetStartPhiAngle() const
-{
-  return GetShape()->GetStartPhiAngle();
-}
-inline G4double G4UCons::GetDeltaPhiAngle() const
-{
-  return GetShape()->GetDeltaPhiAngle();
-}
-  
-inline void G4UCons::SetInnerRadiusMinusZ(G4double Rmin1)
-{
-  GetShape()->SetInnerRadiusMinusZ(Rmin1);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetOuterRadiusMinusZ(G4double Rmax1)
-{
-  GetShape()->SetOuterRadiusMinusZ(Rmax1);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetInnerRadiusPlusZ(G4double Rmin2)
-{
-  GetShape()->SetInnerRadiusPlusZ(Rmin2);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetOuterRadiusPlusZ(G4double Rmax2)
-{
-  GetShape()->SetOuterRadiusPlusZ(Rmax2);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetZHalfLength(G4double newDz)
-{
-  GetShape()->SetZHalfLength(newDz);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetStartPhiAngle(G4double newSPhi, G4bool trig)
-{
-  GetShape()->SetStartPhiAngle(newSPhi, trig);
-  fRebuildPolyhedron = true;
-}
-inline void G4UCons::SetDeltaPhiAngle(G4double newDPhi)
-{
-  GetShape()->SetDeltaPhiAngle(newDPhi);
-  fRebuildPolyhedron = true;
+  return "G4Cons";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

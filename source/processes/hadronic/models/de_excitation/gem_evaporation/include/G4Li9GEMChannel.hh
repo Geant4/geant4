@@ -24,47 +24,33 @@
 // ********************************************************************
 //
 //
-// $Id: G4Li9GEMChannel.hh 67983 2013-03-13 10:42:03Z gcosmo $
+// $Id: G4Li9GEMChannel.hh 97097 2016-05-25 07:50:31Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Sept. 2001)
 //
-
-
 #ifndef G4Li9GEMChannel_h
 #define G4Li9GEMChannel_h 1
 
 #include "G4GEMChannel.hh"
-#include "G4Li9GEMCoulombBarrier.hh"
 #include "G4Li9GEMProbability.hh"
 
 class G4Li9GEMChannel : public G4GEMChannel
 {
 public:
   // only available constructor
-  G4Li9GEMChannel() : G4GEMChannel(9,3,"Li9",
-				   &theEvaporationProbability,
-				   &theCoulombBarrier)
-  {
-    theEvaporationProbability.SetCoulomBarrier(&theCoulombBarrier);
-  }
+  explicit G4Li9GEMChannel() 
+    : G4GEMChannel(9,3,"Li9",&theEvaporationProbability) {}
   
   // destructor
   ~G4Li9GEMChannel() {};
   
 private:
-  const G4Li9GEMChannel & operator=(const G4Li9GEMChannel & right);  
+  const G4Li9GEMChannel & operator=(const G4Li9GEMChannel & right) = delete;  
+  G4Li9GEMChannel(const G4Li9GEMChannel & right) = delete;
+  G4bool operator==(const G4Li9GEMChannel & right) const = delete;
+  G4bool operator!=(const G4Li9GEMChannel & right) const = delete;
     
-  G4Li9GEMChannel(const G4Li9GEMChannel & right);
-  
-public:
-  G4bool operator==(const G4Li9GEMChannel & right) const;
-  G4bool operator!=(const G4Li9GEMChannel & right) const;
-    
-private:
-  
-  G4Li9GEMCoulombBarrier theCoulombBarrier;
-	
   G4Li9GEMProbability theEvaporationProbability;
   
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIRelModel.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4WentzelVIRelModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ using namespace std;
 G4WentzelVIRelModel::G4WentzelVIRelModel(G4bool combined) :
   G4VMscModel("WentzelVIRel"),
   numlimit(0.1),
-  currentCouple(0),
+  currentCouple(nullptr),
   cosThetaMin(1.0),
   isCombined(combined),
   inside(false),
@@ -96,9 +96,9 @@ G4WentzelVIRelModel::G4WentzelVIRelModel(G4bool combined) :
   currentMaterialIndex = 0;
   cosThetaMax = cosTetMaxNuc = 1.0;
 
-  fParticleChange = 0;
-  currentCuts = 0;
-  currentMaterial = 0;
+  fParticleChange = nullptr;
+  currentCuts = nullptr;
+  currentMaterial = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -149,17 +149,18 @@ G4double G4WentzelVIRelModel::ComputeCrossSectionPerAtom(
   if(!CurrentCouple()) {
     G4Exception("G4WentzelVIRelModel::ComputeCrossSectionPerAtom", "em0011",
                 FatalException, " G4MaterialCutsCouple is not defined");
-    return 0.0;
+    return cross;
   }
   DefineMaterial(CurrentCouple());
-  G4int iz = G4int(Z);
+  G4int iz = G4lrint(Z);
   G4double tmass = proton_mass_c2;
   if(1 < iz) {
     tmass = fNistManager->GetAtomicMassAmu(iz)*amu_c2;
   }
-  cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial, cutEnergy, tmass);
+  cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial, 
+				       cutEnergy, tmass);
   if(cosTetMaxNuc < 1.0) {
-    G4double cost = wokvi->SetupTarget(G4lrint(Z), cutEnergy);
+    G4double cost = wokvi->SetupTarget(iz, cutEnergy);
     cross = wokvi->ComputeTransportCrossSectionPerAtom(cost);
     /*
     if(p->GetParticleName() == "e-")      
@@ -303,7 +304,8 @@ G4double G4WentzelVIRelModel::ComputeGeomPathLength(G4double truelength)
         e1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
       }
       e1 = 0.5*(e1 + preKinEnergy);
-      cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial, 0.0, proton_mass_c2);
+      cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial, 0.0, 
+					   proton_mass_c2);
       lambdaeff = GetTransportMeanFreePath(particle,e1);
       zPathLength = lambdaeff*(1.0 - G4Exp(-tPathLength/lambdaeff));
     }
@@ -356,7 +358,8 @@ G4double G4WentzelVIRelModel::ComputeTrueStepLength(G4double geomStepLength)
           e1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
         }
         e1 = 0.5*(e1 + preKinEnergy);
-        cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial, 0.0, proton_mass_c2);
+        cosTetMaxNuc = wokvi->SetupKinematic(e1, currentMaterial, 0.0, 
+					     proton_mass_c2);
         lambdaeff = GetTransportMeanFreePath(particle,e1);
         tau = zPathLength/lambdaeff;
       
@@ -613,7 +616,7 @@ G4double G4WentzelVIRelModel::ComputeXSectionPerVolume()
   G4double xs = 0.0;
   for (G4int i=0; i<nelm; ++i) {
     G4double costm = 
-      wokvi->SetupTarget(G4lrint((*theElementVector)[i]->GetZ()), cut);
+      wokvi->SetupTarget((*theElementVector)[i]->GetZasInt(), cut);
     G4double density = theAtomNumDensityVector[i];
 
     G4double esec = 0.0;

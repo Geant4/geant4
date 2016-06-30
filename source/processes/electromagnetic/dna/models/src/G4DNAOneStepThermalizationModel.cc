@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.cc 94218 2015-11-09 08:24:48Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.cc 96861 2016-05-13 13:43:04Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -41,7 +41,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4ParticleChangeForGamma.hh"
-#include "G4Electron.hh"
 #include "G4NistManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
@@ -49,6 +48,9 @@
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 #include "G4ITNavigator.hh"
+#include "G4Exp.hh"
+
+//#define MODEL_VERBOSE
 
 G4DNAOneStepThermalizationModel::
 G4DNAOneStepThermalizationModel(const G4ParticleDefinition*,
@@ -82,18 +84,18 @@ void G4DNAOneStepThermalizationModel::
 Initialise(const G4ParticleDefinition* particleDefinition,
            const G4DataVector&)
 {
-#ifdef G4VERBOSE
+#ifdef MODEL_VERBOSE
   if(fVerboseLevel)
   G4cout << "Calling G4DNAOneStepThermalizationModel::Initialise()" << G4endl;
 #endif
-  if (particleDefinition != G4Electron::ElectronDefinition())
+  if (particleDefinition->GetParticleName() != "e-")
   {
-    G4ExceptionDescription exceptionDescription;
-    exceptionDescription << "G4DNAOneStepThermalizationModel can only be applied "
-        "to electrons";
+    G4ExceptionDescription errMsg;
+    errMsg << "G4DNAOneStepThermalizationModel can only be applied "
+              "to electrons";
     G4Exception("G4DNAOneStepThermalizationModel::CrossSectionPerVolume",
                 "G4DNAOneStepThermalizationModel001",
-                FatalErrorInArgument,exceptionDescription);
+                FatalErrorInArgument,errMsg);
     return;
   }
 
@@ -126,7 +128,7 @@ CrossSectionPerVolume(const G4Material* material,
                       G4double,
                       G4double)
 {
-#ifdef G4VERBOSE
+#ifdef MODEL_VERBOSE
   if(fVerboseLevel > 1)
     G4cout << "Calling CrossSectionPerVolume() of G4DNAOneStepThermalizationModel"
            << G4endl;
@@ -141,10 +143,7 @@ CrossSectionPerVolume(const G4Material* material,
 
   if(waterDensity!= 0.0)
   {
-//    if (ekin <= HighEnergyLimit()) // already tested
-    {
-      return DBL_MAX;
-    }
+    return DBL_MAX;
   }
   return 0.;
 }
@@ -160,7 +159,7 @@ RadialDistributionOfProducts(G4double expectationValue) const
   G4double fMaxValue = std::sqrt(2. / 3.14)
       * 1. / (sigma * sigma * sigma)
       * (XValueForfMax * XValueForfMax)
-      * std::exp(-1. / 2. * (XValueForfMax * XValueForfMax)
+      * G4Exp(-1. / 2. * (XValueForfMax * XValueForfMax)
       / (sigma * sigma));
 
   G4double R;
@@ -181,7 +180,7 @@ RadialDistributionOfProducts(G4double expectationValue) const
 
     R = expectationValue + sign*3.*sigma* G4UniformRand();
     G4double f = std::sqrt(2./3.14) * 1/std::pow(sigma, 3)
-                * R*R * std::exp(-1./2. * R*R/(sigma*sigma));
+                * R*R * G4Exp(-1./2. * R*R/(sigma*sigma));
 
     if(aRandomfValue < f)
     {
@@ -213,62 +212,68 @@ SampleSecondaries(std::vector<G4DynamicParticle*>*,
                   G4double,
                   G4double)
 {
-#ifdef G4VERBOSE
+#ifdef MODEL_VERBOSE
   if(fVerboseLevel)
   G4cout << "Calling SampleSecondaries() of G4DNAOneStepThermalizationModel"
          << G4endl;
 #endif
-       G4double k = particle->GetKineticEnergy();
+ 
+ G4double k = particle->GetKineticEnergy();
 
  if (k <= HighEnergyLimit())
  {
    G4double k_eV = k/eV;
-
-    G4double r_mean =
-          (-0.003*std::pow(k_eV,6)
-           + 0.0749*std::pow(k_eV,5)
-           - 0.7197*std::pow(k_eV,4)
-           + 3.1384*std::pow(k_eV,3)
-           - 5.6926*std::pow(k_eV,2)
-           + 5.6237*k_eV
-           - 0.7883)*nanometer;
-
-    G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);
-
-    //______________________________________________________________
-    const G4Track * theIncomingTrack =
-        fParticleChangeForGamma->GetCurrentTrack();
-    G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
-
-    fNavigator->SetWorldVolume(theIncomingTrack->GetTouchable()->
-                             GetVolume(theIncomingTrack->GetTouchable()->
-                                       GetHistoryDepth()));
-
-    double displacementMag = displacement.mag();
-    double safety = DBL_MAX;
-    G4ThreeVector direction = displacement/displacementMag;
-
-    fNavigator->ResetHierarchyAndLocate(theIncomingTrack->GetPosition(),
-                                       direction,
-                                       *((G4TouchableHistory*)
+   
+   fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
+   fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
+   
+   if(G4DNAChemistryManager::IsActivated())
+   {
+     
+     G4double r_mean =
+     (-0.003*std::pow(k_eV,6)
+      + 0.0749*std::pow(k_eV,5)
+      - 0.7197*std::pow(k_eV,4)
+      + 3.1384*std::pow(k_eV,3)
+      - 5.6926*std::pow(k_eV,2)
+      + 5.6237*k_eV
+      - 0.7883)*nanometer;
+     
+     G4ThreeVector displacement = RadialDistributionOfProducts (r_mean);
+     
+     //______________________________________________________________
+     const G4Track * theIncomingTrack =
+     fParticleChangeForGamma->GetCurrentTrack();
+     G4ThreeVector finalPosition(theIncomingTrack->GetPosition()+displacement);
+     
+     fNavigator->SetWorldVolume(theIncomingTrack->GetTouchable()->
+                                GetVolume(theIncomingTrack->GetTouchable()->
+                                          GetHistoryDepth()));
+     
+     double displacementMag = displacement.mag();
+     double safety = DBL_MAX;
+     G4ThreeVector direction = displacement/displacementMag;
+     
+     fNavigator->ResetHierarchyAndLocate(theIncomingTrack->GetPosition(),
+                                         direction,
+                                         *((G4TouchableHistory*)
                                            theIncomingTrack->GetTouchable()));
-
-    fNavigator->ComputeStep(theIncomingTrack->GetPosition(),
-                          displacement/displacementMag,
-                          displacementMag,
-                          safety);
-
-    if(safety <= displacementMag)
-    {
-      finalPosition = theIncomingTrack->GetPosition()
-                      + (displacement/displacementMag)*safety*0.80;
-    }
-
-    G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,
-                                                              &finalPosition);
-
-    fParticleChangeForGamma->SetProposedKineticEnergy(25.e-3*eV);
-    fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(k);
-  }
+     
+     fNavigator->ComputeStep(theIncomingTrack->GetPosition(),
+                             displacement/displacementMag,
+                             displacementMag,
+                             safety);
+     
+     if(safety <= displacementMag)
+     {
+       finalPosition = theIncomingTrack->GetPosition()
+       + (displacement/displacementMag)*safety*0.80;
+     }
+     
+     G4DNAChemistryManager::Instance()->CreateSolvatedElectron(theIncomingTrack,
+                                                               &finalPosition);
+     
+     fParticleChangeForGamma->SetProposedKineticEnergy(25.e-3*eV);
+   }
+ }
 }

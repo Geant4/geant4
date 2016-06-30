@@ -1,4 +1,4 @@
-$Id: History 93806 2015-11-02 11:21:01Z gcosmo $
+$Id: History 97812 2016-06-14 07:57:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,161 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+June 11, 2016 J.Apostolakis             - field-V10-02-21
+---------------------------
+- Restored G4ClassicalRK4 as default stepper for B-field,
+  (due to performance issues reported in benchmarking.)
+    
+June 10, 2016 G.Cosmo                   - field-V10-02-20
+---------------------
+- Fixed code indentation in G4HelixMixedStepper;
+  fixes compilation warnings on gcc-6.1.
+
+June 1, 2016 J.Apostolakis              - field-V10-02-19, 18, 17
+--------------------------
+- Fix in multiple steppers for the size of two C-arrays which hold
+  intermediate values;  they must be at least 8 and at least
+  'fNumberOfStateVariables' long.  
+  Changed: G4CashKarp, 
+           G4BogackiShampine 23 & 34
+           G4DormandPrince 745, RK56 & RK78
+	   G4DoLoMcPriRK34
+           G4FSALBogackiShampine45, G4FSALDormandPrince745
+- Made G4CashKarp the default stepper in G4ChordFinder.
+- Deleted trial class G4NewChordFinder.
+
+June 1, 2016 J.Apostolakis              - field-V10-02-16
+--------------------------
+- Deleted test code (RkTestRun) due to cmake issues
+
+June 1, 2016 J.Apostolakis              - field-V10-02-15 (also -14)
+--------------------------
+- Made G4ClassicalRK4 the default stepper again in G4ChordFinder
+- Fixes in test code (RkTestRun) for new names of classes.
+     
+May 31, 2016 J.Apostolakis              - field-V10-02-13 (also -12)
+--------------------------
+- New class G4NewChordFinder, that uses old G4MagIntegratorDriver or
+    the newer G4FSALIntegratorDriver -- first try, for testing FSAL.
+  Created new test testNewChordFinder.cc to checks this.
+
+- Renamed new Stepper classes to use 'G4' prefix, including
+    DormandPrince{745,RK56,RK67} TsitourasRK45 and DoLoMcPriRK34
+
+- Renamed FSAL base classes to use 'G4' prefix & 'Integrat-ion'
+     FSALMagIntegratorStepper to G4VFSALIntegrationStepper
+     FSALIntegratorDriver     to  G4FSALIntegrationDriver
+  and the experimental FSAL versions of steppers,
+     FBogackiShampine45.hh  to  G4FSALBogackiShampine45.hh
+     FDormandPrince745.hh   to  G4FSALDormandPrince745.hh
+( Note: FSAL steppers remain 'behind' the improved non-FSAL versions.)
+
+- Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
+    
+May 26, 2016 J.Apostolakis & Som. Banerjee   - field-V10-02-11
+------------------------------------------
+- First version of FSAL classes (as additional classes)
+    FSAL Integrator Driver  : New *concrete*, stand-alone driver 
+    FSAL Integrator Stepper : New base class (separate from G4MagIntegratorStepper)
+    FBogackiShampine45:  FSAL-version of BogackiShampine45 stepper
+    FDormandPrince745:   FSAL-version of FDormandPrince745 stepper
+  Developed by Somnath Banerjee in GSoC 2015
+
+Context:
+* FSAL Stepper's key 'Stepper()' method for Stepping has additional
+    argument to return the derivative at the end of a step.
+    If the step was successful, this estimate has the same order of
+    accuracy as the stepper (i.e. 5th order for a 5th order stepper.)
+
+- FSAL Driver method uses the revised Stepper interface, using
+    the final (endpoint) derivative for successful steps
+    as the start derivative for the next step, in case of
+    continuing of integration.
+
+- New test (RkTestRun.cc) covering FSAL methods, integration
+   Developed by Somnath Banerjee in GSoC 2015
+
+May 26, 2016 J.Apostolakis                   - field-V10-02-10
+--------------------------
+Preparation for addition of FSAL steppers (& driver)
+- G4MagIntegratorStepper: Added counter for calls to equation RHS, 
+    with Get/Reset methods.
+- Cosmetic fixes in sources.cmake (tabs to spaces)
+
+May 25, 2016 J.Apostolakis & Som. Banerjee   - field-V10-02-09
+------------------------------------------
+- Added new stepper classes embedded RK method:
+  * DoLoMcPriRK34,      6-stage 3/4 RK (interpolation)
+  * DormandPrinceRK56,  9-stage 5/6 RK (interpolation, FSAL-able) "6(5)"
+  * DormandPrinceRK78, 13-stage 7/8 RK (interpolation)        "8(7) 13M"
+  created by Somnath Banerjee as part of GSoC 2015.
+
+May 25, 2016 J.Apostolakis             - field-V10-02-08
+--------------------------
+- Revised testPropagateMagField, to reduce error severity for over-long
+    steps.  An error message is still written if move > (1.+1.0e-9) * step,
+    but test does not stop.
+
+- G4HelixMixedStepper: Fixes & added new (5th order) stepper choices.
+    Included (G4)Bogacki-Shampine 23/45 ,  DormandPrince745,
+    and newest TsitourasRK45.
+
+May 24, 2016 J.Apostolakis             - field-V10-02-06, 07
+--------------------------
+- Added TsitourasRK45 stepper.
+- Made Cash-Karp the default stepper (in G4ChordFinder).
+    
+May 23, 2016 J.Apostolakis             - field-V10-02-05
+--------------------------
+- Made DormandPrince745 (DP45) the default stepper (in G4ChordFinder).
+    
+May 20, 2016 J.Apostolakis             - field-V10-02-04
+-------------------------
+- Added steppers created by Somnath Banerjee as part of GSoC 2015,
+    G4BogackiShampine23 (BS23 below), G4BogackiShampine45 (BS45) and
+    DormandPrince745 (DP45).
+  These implement third order (BS23) and fifth order (BS45, DP45)
+    embedded RK tableaus.
+- DP45 includes interpolation method, to evaluate the interpolant
+    ('y') at intermediate points of a successful step.
+  BS45's interpolation method exists, but is not validated (fails).
+
+ References:
+  - BS45 is embedded pair from paper by P. Bogacki and L. F. Shampine:
+      “An efficient Runge-Kutta (4,5) pair,”
+      Comput. Math. with Appl., vol. 32, no. 6, pp. 15–28, Sep. 1996.
+  - BS23 is four stage RK method from the paper of P. Bogacki and L. F. Shampine,
+      “A 3(2) pair of Runge - Kutta formulas,” 
+      Appl. Math. Lett., vol 2, no 4, p.321 (1989).
+  - DP45 are from Table 2 of  J. R. Dormand and P. J. Prince's 
+      “A family of embedded Runge-Kutta formulae,”
+      Journal of comput. and applied Math., vol. 6, no. 1, pp. 19–26, 1980.    
+
+May 4, 2016 G.Cosmo                   - field-V10-02-03
+-------------------
+- Fixed Clone() signatures in derived Field classes.
+  More corrections on implementations of operator=() and copy-ctors.
+
+Apr 29, 2016 G.Cosmo                  - field-V10-02-02
+--------------------
+- Corrected implementation of operator=() and copy-ctor for G4Field,
+  G4ElectroMagneticField, G4ElectricField and G4CachedMagneticField.
+
+Feb 25, 2016 P.Gumplinger             - field-V10-02-01
+-------------------------
+- address Problem Report: 1831
+  change: G4Mag_SpinEqRhs, G4EqEMFieldWithSpin, G4EqEMFieldWithEDM and
+          G4RepleteEofM.cc from g_BMT = (magMoment/muB)/spin
+                           to   g_BMT = (std::abs(magMoment)/muB)/spin
+
+
+Dec 11, 2015 A.Dotti		      - field-V10-02-00
+--------------------------
+Fixing typo in tests/CMakeList.txt file: subdirecotry() 
+instead of add_subdirectory()
+
 Nov  2, 2015 J.Apostolakis             - field-V10-01-15 (fixed)
 Oct 22, 2015 J.Apostolakis             - field-V10-01-14
 --------------------------

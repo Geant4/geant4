@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.cc 96934 2016-05-18 09:10:41Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -80,7 +80,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   lowEnergyLimit = 1.0*eV;
   G4double p0 = electron_mass_c2*classic_electr_radius;
   coeff = twopi*p0*p0;
-  particle = 0;
+  particle = nullptr;
 
   // Thomas-Fermi screening radii
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
@@ -112,7 +112,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   ecut = etag = DBL_MAX;
   targetZ = 0;
   targetMass = proton_mass_c2;
-  particle = 0;
+  particle = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -136,7 +136,7 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   G4double a = G4EmParameters::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
-  currentMaterial = 0;
+  currentMaterial = nullptr;
   
   //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
   //         << "  " << p->GetParticleName() 

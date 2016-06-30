@@ -65,7 +65,7 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
    return theNew;
   }
   
-  inline G4double GetMass(){ return targetMass; }
+  inline G4double GetMass(){ return theFinalStateNeutrons.GetTargetMass(); }
   
   void SampleNeutronMult(G4int&all, 
 	  		 G4int&Prompt, 
@@ -95,7 +95,7 @@ class G4ParticleHPFSFissionFS : public G4ParticleHPFinalState
   private:
 
   G4HadFinalState * ApplyYourself(const G4HadProjectile & ) { return 0; }  
-  G4double targetMass;
+  //G4double targetMass;
   
   G4ParticleHPParticleYield theFinalStateNeutrons;
   G4ParticleHPEnergyDistribution thePromptNeutronEnDis;

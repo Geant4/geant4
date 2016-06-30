@@ -44,9 +44,10 @@
 
 #include "G4USolid.hh"
 
-#if defined(G4GEOM_USE_USOLIDS)
+#if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UTorus.hh"
+
 #include "G4Polyhedron.hh"
 
 class G4UTorus : public G4USolid
@@ -68,20 +69,24 @@ class G4UTorus : public G4USolid
 
     inline UTorus* GetShape() const;
 
-    inline G4double GetRmin() const;
-    inline G4double GetRmax() const;
-    inline G4double GetRtor() const;
-    inline G4double GetSPhi() const;
-    inline G4double GetDPhi() const;
+    G4double GetRmin() const;
+    G4double GetRmax() const;
+    G4double GetRtor() const;
+    G4double GetSPhi() const;
+    G4double GetDPhi() const;
 
-    inline void SetRmin(G4double arg);
-    inline void SetRmax(G4double arg);
-    inline void SetRtor(G4double arg);
-    inline void SetSPhi(G4double arg);
-    inline void SetDPhi(G4double arg);
+    void SetRmin(G4double arg);
+    void SetRmax(G4double arg);
+    void SetRtor(G4double arg);
+    void SetSPhi(G4double arg);
+    void SetDPhi(G4double arg);
 
-    inline void SetAllParameters(G4double arg1, G4double arg2,
-                                 G4double arg3, G4double arg4, G4double arg5);
+    void SetAllParameters(G4double arg1, G4double arg2,
+                          G4double arg3, G4double arg4, G4double arg5);
+
+    inline G4GeometryType GetEntityType() const;
+
+    G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description
 
@@ -104,70 +109,9 @@ inline UTorus* G4UTorus::GetShape() const
   return (UTorus*) fShape;
 }
 
-inline G4double G4UTorus::GetRmin() const
+inline G4GeometryType G4UTorus::GetEntityType() const
 {
-  return GetShape()->GetRmin();
-}
-
-inline G4double G4UTorus::GetRmax() const
-{
-  return GetShape()->GetRmax();
-}
-
-inline G4double G4UTorus::GetRtor() const
-{
-  return GetShape()->GetRtor();
-}
-
-inline G4double G4UTorus::GetSPhi() const
-{
-  return GetShape()->GetSPhi();
-}
-
-inline G4double G4UTorus::GetDPhi() const
-{
-  return GetShape()->GetDPhi();
-}
-
-inline void G4UTorus::SetRmin(G4double arg)
-{
-  GetShape()->SetRmin(arg);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTorus::SetRmax(G4double arg)
-{
-  GetShape()->SetRmax(arg);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTorus::SetRtor(G4double arg)
-{
-  GetShape()->SetRtor(arg);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTorus::SetSPhi(G4double arg)
-{
-  GetShape()->SetSPhi(arg);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTorus::SetDPhi(G4double arg)
-{
-  GetShape()->SetDPhi(arg);
-  fRebuildPolyhedron = true;
-}
-
-inline void G4UTorus::SetAllParameters(G4double arg1, G4double arg2,
-                        G4double arg3, G4double arg4, G4double arg5)
-{
-  GetShape()->SetRmin(arg1);
-  GetShape()->SetRmax(arg2);
-  GetShape()->SetRtor(arg3);
-  GetShape()->SetSPhi(arg4);
-  GetShape()->SetDPhi(arg5);
-  fRebuildPolyhedron = true;
+  return "G4Torus";
 }
 
 #endif  // G4GEOM_USE_USOLIDS

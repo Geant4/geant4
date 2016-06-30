@@ -40,9 +40,10 @@ namespace CLHEP {
 extern "C" {
 #endif
 	
-const int N = 256;
-/* The currently recommended N are 3150, 1260, 508, 256, 240, 88
-   Since the algorithm is linear in N, the cost per number is almost independent of N.
+const int N = 17;
+/* The currently recommended N are 3150, 1260, 508, 256, 240, 88, 17, 8
+   Since the algorithm is linear in N, the cost per number is
+   almost independent of N.
  */
 
 #ifndef __LP64__
@@ -79,7 +80,7 @@ void print_state(rng_state_t* X);
 
 typedef uint32_t myID_t;
 
-void seed_uniquestream(rng_state_t* X, myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID );
+void seed_uniquestream(rng_state_t* X, myID_t clusterID, myID_t machineID, myID_t runID, myID_t streamID);
 /*
  best choice: will make a state vector from which you can get at least 10^100 numbers 
  guaranteed mathematically to be non-colliding with any other stream prepared from another set of 32bit IDs,

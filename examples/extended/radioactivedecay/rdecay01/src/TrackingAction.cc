@@ -27,7 +27,7 @@
 /// \brief Implementation of the TrackingAction class
 //
 //
-// $Id: TrackingAction.cc 87827 2015-01-14 17:17:27Z gcosmo $
+// $Id: TrackingAction.cc 96835 2016-05-12 09:20:14Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,6 +43,9 @@
 #include "G4ParticleTypes.hh"
 #include "G4RunManager.hh"
 
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 TrackingAction::TrackingAction(EventAction* EA)
@@ -52,6 +55,8 @@ TrackingAction::TrackingAction(EventAction* EA)
  
 {
   fTrackMessenger = new TrackingMessenger(this);   
+  
+  fTimeWindow1 = fTimeWindow2 = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,6 +64,14 @@ TrackingAction::TrackingAction(EventAction* EA)
 TrackingAction::~TrackingAction()
 {
   delete fTrackMessenger;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TrackingAction::SetTimeWindow(G4double t1, G4double dt)
+{
+  fTimeWindow1 = t1;
+  fTimeWindow2 = fTimeWindow1 + dt;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,6 +118,8 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
     G4Track* tr = (G4Track*) track;
     if (fFullChain)  tr->SetTrackStatus(fStopButAlive);
       else if (ID>1) tr->SetTrackStatus(fStopAndKill);
+    //
+    fTime_birth = track->GetGlobalTime();
   }
   
   //example of saving random number seed of this fEvent, under condition
@@ -130,7 +145,8 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   //   
   G4double time = track->GetGlobalTime();
   G4int ID = track->GetTrackID();
-  if (ID == 1) run->PrimaryTiming(time);        //time of life of primary ion  
+  if (ID == 1) run->PrimaryTiming(time);        //time of life of primary ion
+  fTime_end = time;
       
   //energy and momentum balance (from secondaries)
   //
@@ -166,7 +182,19 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
   if (!nbtrk) {
     run->EventTiming(time);                     //total time of life
     analysis->FillH1(8,time);
+    fTime_end = DBL_MAX;
   }
+  
+  //count activity in time window
+  //
+  run->SetTimeWindow(fTimeWindow1, fTimeWindow2);
+  
+  G4String name   = track->GetDefinition()->GetParticleName();
+  G4bool life1(false), life2(false), decay(false);
+  if ((fTime_birth <= fTimeWindow1)&&(fTime_end > fTimeWindow1)) life1 = true;
+  if ((fTime_birth <= fTimeWindow2)&&(fTime_end > fTimeWindow2)) life2 = true;
+  if ((fTime_end   >  fTimeWindow1)&&(fTime_end < fTimeWindow2)) decay = true;
+  if (life1||life2||decay) run->CountInTimeWindow(name,life1,life2,decay);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

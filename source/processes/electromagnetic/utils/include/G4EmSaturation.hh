@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh 81936 2014-06-06 15:42:55Z gcosmo $
+// $Id: G4EmSaturation.hh 95657 2016-02-17 13:03:36Z gcosmo $
 //
 //
 #ifndef G4EmSaturation_h
@@ -73,7 +73,7 @@ class G4EmSaturation
 {
 public: 
 
-  G4EmSaturation(G4int verb);
+  explicit G4EmSaturation(G4int verb);
   virtual ~G4EmSaturation();
 
   // this method may be overwritten in the derived class
@@ -84,13 +84,8 @@ public:
 					   G4double edepTotal,
 					   G4double edepNIEL = 0.0);
 
-  // this method should not be overwitten
-  inline G4double VisibleEnergyDeposition(const G4Step*); 
-
   // find and Birks coefficient 
   G4double FindG4BirksCoefficient(const G4Material*);
-
-  inline void SetVerbose(G4int);
 
   // dump coeffitients used in run time
   void DumpBirksCoefficients();
@@ -98,11 +93,16 @@ public:
   // dump G4 list
   void DumpG4BirksCoefficients();
 
+  // this method should not be overwitten
+  inline G4double VisibleEnergyDepositionAtAStep(const G4Step*); 
+
+  inline void SetVerbose(G4int);
+
 private:
 
   // hide assignment operator
-  G4EmSaturation & operator=(const G4EmSaturation &right);
-  G4EmSaturation(const G4EmSaturation&);
+  G4EmSaturation & operator=(const G4EmSaturation &right) = delete;
+  G4EmSaturation(const G4EmSaturation&) = delete;
 
   inline G4double FindBirksCoefficient(const G4Material*);
 
@@ -115,7 +115,7 @@ private:
   G4LossTableManager*         manager;
   G4NistManager*              nist;
 
-  // cash
+  // cache
   const G4Material*           curMaterial;
   G4double                    curBirks;
   G4double                    curRatio;
@@ -146,7 +146,7 @@ inline void G4EmSaturation::SetVerbose(G4int val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4EmSaturation::VisibleEnergyDeposition(
+inline G4double G4EmSaturation::VisibleEnergyDepositionAtAStep(
                 const G4Step* step)
 {
   G4Track* track = step->GetTrack();

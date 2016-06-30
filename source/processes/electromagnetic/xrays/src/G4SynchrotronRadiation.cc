@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc 83424 2014-08-21 15:39:44Z gcosmo $
+// $Id: G4SynchrotronRadiation.cc 97385 2016-06-02 09:59:53Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -67,7 +67,7 @@ G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
   verboseLevel = 1;
   FirstTime    = true;
   FirstTime1   = true;
-  genAngle     = 0;
+  genAngle     = nullptr;
   SetAngularGenerator(new G4DipBustGenerator());
 }
 
@@ -127,18 +127,18 @@ G4SynchrotronRadiation::GetMeanFreePath(const G4Track& trackData,
   {
 
     G4ThreeVector  FieldValue;
-    const G4Field* pField = 0;
+    const G4Field* pField = nullptr;
     G4bool         fieldExertsForce = false;
 
 
     G4FieldManager* fieldMgr = 
 	fFieldPropagator->FindAndSetFieldManager(trackData.GetVolume());
 
-    if ( fieldMgr != 0 )
+    if ( fieldMgr != nullptr )
     {
       // If the field manager has no field, there is no field !
 
-      fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
+      fieldExertsForce = ( fieldMgr->GetDetectorField() != nullptr );
     }
    
     if ( fieldExertsForce )
@@ -227,16 +227,16 @@ G4SynchrotronRadiation::PostStepDoIt(const G4Track& trackData,
   }
 
   G4ThreeVector  FieldValue;
-  const G4Field*   pField = 0;
+  const G4Field*   pField = nullptr;
 
   G4bool          fieldExertsForce = false;
   G4FieldManager* fieldMgr = 
     fFieldPropagator->FindAndSetFieldManager(trackData.GetVolume());
 
-  if ( fieldMgr != 0 )
+  if ( fieldMgr != nullptr )
   {
     // If the field manager has no field, there is no field !
-    fieldExertsForce = ( fieldMgr->GetDetectorField() != 0 );
+    fieldExertsForce = ( fieldMgr->GetDetectorField() != nullptr );
   }
  
   if ( fieldExertsForce )

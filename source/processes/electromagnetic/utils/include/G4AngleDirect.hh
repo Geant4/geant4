@@ -66,13 +66,13 @@ public:
   // as the direction of primary 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
 					 G4double, G4int, 
-					 const G4Material*);
+					 const G4Material*) override;
 
 private:
 
   // hide assignment operator 
-  G4AngleDirect & operator=(const  G4AngleDirect &right);
-  G4AngleDirect(const  G4AngleDirect&);
+  G4AngleDirect & operator=(const  G4AngleDirect &right) = delete;
+  G4AngleDirect(const  G4AngleDirect&) = delete;
 
 };
 

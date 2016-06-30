@@ -49,18 +49,19 @@ class G4XTRTransparentRegRadModel : public G4VXTRenergyLoss
 {
 public:
 
-  G4XTRTransparentRegRadModel (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
-                        G4double,G4double,G4int,
+  explicit G4XTRTransparentRegRadModel (G4LogicalVolume *anEnvelope,G4Material*,
+                        G4Material*, G4double,G4double,G4int,
                         const G4String & processName = "XTRTransparentRegRadModel");
   ~G4XTRTransparentRegRadModel ();
 
   // reimplementation of base class function in analytical way
 
-  G4double SpectralXTRdEdx(G4double energy);
+  G4double SpectralXTRdEdx(G4double energy) override;
 
   // Pure virtual function from base class
 
-  G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
+  G4double GetStackFactor(G4double energy, G4double gamma, 
+                          G4double varAngle) override;
 };
 
 #endif

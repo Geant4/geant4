@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4LossTableBuilder.hh 96088 2016-03-14 16:03:38Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 
 class G4VEmModel;
 class G4ParticleDefinition;
+class G4EmParameters;
 
 class G4LossTableBuilder
 {
@@ -107,8 +108,10 @@ private:
 
   void InitialiseCouples();
 
-  G4LossTableBuilder & operator=(const  G4LossTableBuilder &right);
-  G4LossTableBuilder(const  G4LossTableBuilder&);
+  G4LossTableBuilder & operator=(const  G4LossTableBuilder &right) = delete;
+  G4LossTableBuilder(const  G4LossTableBuilder&) = delete;
+
+  G4EmParameters*        theParameters;
 
   G4bool splineFlag;
   G4bool isInitialized;
