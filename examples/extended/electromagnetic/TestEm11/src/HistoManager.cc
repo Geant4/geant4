@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/HistoManager.cc
+/// \file electromagnetic/TestEm11/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 95740 2016-02-23 09:34:37Z gcosmo $
+// $Id: HistoManager.cc 98749 2016-08-09 13:43:36Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -96,7 +96,7 @@ void HistoManager::Book()
   }
   
   G4String title2;
-  for (G4int k=1; k<MaxAbsor; k++) {
+  for (G4int k=1; k<kMaxAbsor; k++) {
     title2 = "Edep in absorber " + id[k];
     G4int ih 
       = analysisManager->CreateH1(id[kMaxHisto+k], title2, nbins, vmin, vmax);

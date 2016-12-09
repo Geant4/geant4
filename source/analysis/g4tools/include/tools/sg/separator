@@ -37,8 +37,10 @@ public: //node
   }
   virtual void bbox(bbox_action& a_action) {
     a_action.push_matrices();
+    a_action.push_state();
     parent::bbox(a_action);
     a_action.pop_matrices();
+    a_action.pop_state();
   }
   virtual void event(event_action& a_action) {
     a_action.push_matrices();
@@ -49,8 +51,10 @@ public: //node
   }
   virtual void get_matrix(get_matrix_action& a_action) {
     a_action.push_matrices();
+    a_action.push_state();
     parent::get_matrix(a_action);
     a_action.pop_matrices();
+    a_action.pop_state();
   }
   virtual bool write(write_action& a_action) {
     if(!a_action.beg_node(*this)) return false;
@@ -61,24 +65,26 @@ public: //node
   }
   virtual void is_visible(visible_action& a_action) {
     a_action.push_matrices();
+    a_action.push_state();
     parent::is_visible(a_action);
     a_action.pop_matrices();
+    a_action.pop_state();
   }
 public:
   separator():parent(){
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
   }
   virtual ~separator(){
 #ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
+    mem::decrement(s_class().c_str());
 #endif
   }
 public:
   separator(const separator& a_from):parent(a_from){
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
   }
   separator& operator=(const separator& a_from){

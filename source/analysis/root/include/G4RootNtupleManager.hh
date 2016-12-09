@@ -38,12 +38,22 @@
 
 #include "tools/wroot/ntuple"
 
+class G4RootMainNtupleManager;
+class G4RootFileManager;
 
 namespace tools {
 namespace wroot {
 class directory;
 }
 }
+
+enum class G4NtupleCreateMode {
+  kNoMergeBeforeOpen,
+  kNoMergeAfterOpen,
+  kMainBeforeOpen,
+  kMainAfterOpen,
+  kUndefined
+};
 
 // template specializations used by this class defined below
 
@@ -62,9 +72,11 @@ G4bool G4TNtupleManager<tools::wroot::ntuple>::FillNtupleTColumn(
 class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple> 
 {
   friend class G4RootAnalysisManager;
+  friend class G4RootMainNtupleManager;
 
   public:
-    explicit G4RootNtupleManager(const G4AnalysisManagerState& state);
+    explicit G4RootNtupleManager(const G4AnalysisManagerState& state, 
+                                 G4int nofMainManagers = 0);
     virtual ~G4RootNtupleManager();
 
    private:
@@ -75,6 +87,7 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     // Functions specific to the output type
 
     void SetNtupleDirectory(tools::wroot::directory* directory);
+    void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
     
     // Methods from the templated base class
     //
@@ -87,9 +100,28 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     virtual void FinishTNtuple(
                     NtupleDescriptionType*  ntupleDescription) final;
 
+    virtual G4bool Reset(G4bool deleteNtuple);
+
+    // Method for merging
+    //
+    G4bool Merge();
+
+    // Access functions
+    //
+    const std::vector<NtupleDescriptionType*>& GetNtupleDescriptionVector() const;
+    G4RootMainNtupleManager* GetMainNtupleManager(G4int index) const;
+    unsigned int GetBasketSize() const;
+
+    // Utility functions
+    //
+    void SetCreateMode();
+
     // data members
     //
+    G4NtupleCreateMode fCreateMode;
+    std::shared_ptr<G4RootFileManager> fFileManager;
     tools::wroot::directory*  fNtupleDirectory;
+    std::vector<G4RootMainNtupleManager*>  fMainNtupleManagers;
 };    
 
 // inline functions
@@ -97,6 +129,14 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
 inline void 
 G4RootNtupleManager::SetNtupleDirectory(tools::wroot::directory* directory) 
 { fNtupleDirectory = directory; }
+
+inline void 
+G4RootNtupleManager::SetFileManager(std::shared_ptr<G4RootFileManager> fileManager)
+{ fFileManager = fileManager; }
+
+inline const std::vector<G4TNtupleDescription<tools::wroot::ntuple>* >& 
+G4RootNtupleManager::GetNtupleDescriptionVector() const
+{ return fNtupleDescriptionVector; }
 
 //_____________________________________________________________________________
 template <>

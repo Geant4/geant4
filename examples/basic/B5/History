@@ -1,4 +1,4 @@
-$Id: History 96048 2016-03-10 15:34:12Z gcosmo $
+$Id: History 101159 2016-11-08 08:29:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 November 2016  Laurent Garnier (exampleB5-V10-02-04)
+- Fix a missing /gui/defaultIcons false
+
+03 November 2016 Ivana Hrivnacova (exampleB5-V10-02-03)
+- Added C++11 features
+- Code improvements
+
+10 October 2016 Ivana Hrivnacova (exampleB5-V10-02-02)
+- Activate merging of ntuples
+
+08 October 2016 Ivana Hrivnacova (exampleB5-V10-02-01)
+- Fix in gui.mac by Helmut Burkhard:
+  Replace undefined /globalField/setValue by  /B5/field/value
+- Updated B5ActionInitialization (Ivana)  
+  Event action is instantiated also on master - needed for ntuple merging
+  (as its deta define the vectors refernced from ntuple)
 
 10 March 2016 Alberto Ribon (exampleB5-V10-02-00)
 - Fixed wrong determination of the copy number in replicas

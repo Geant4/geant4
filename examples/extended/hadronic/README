@@ -69,3 +69,10 @@ neutron_hp model. It will demostrate the capability for fission product
 containmentby the cladding in a water moderated sub-critical assembly. It could
 also be further extended to calculate the effective multiplication factor of
 the subcritical assembly for various loading schemes.
+
+NeutronSource
+-------------
+NeutronSource is an example of neutrons production. It illustrates the cooperative work
+of nuclear reactions and radioactive decay processes.
+It survey energy deposition and particle's flux.
+It uses PhysicsConstructor objects.

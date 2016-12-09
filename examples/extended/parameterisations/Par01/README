@@ -1,4 +1,4 @@
-$Id: README 90093 2015-05-13 11:59:54Z gcosmo $
+$Id: README 101151 2016-11-08 08:06:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,6 @@ Geometry, sensitive detector, hits, processes are defined respectively in:
 	Par01DetectorConstruction
 	Par01CalorimeterSD
 	Par01CalorimeterHit
-	Par01PhysicsList
 
 The particularities are:
 
@@ -54,12 +53,6 @@ The particularities are:
 	      o Par01PiModel: just there to show how a parameterisation
 		can create secondaries, but not used.
 
-      o Par01PhysicsList::AddParameterisation(). A method which
-	sets the G4FastSimulationManagerProcess in the process
-	manager of all the particles. This process provides
-	the INTERFACE between the tracking and the parameterisation
-	models.
-
       o Par01DetectorConstruction::Construct: in this method, the parameterisation
 	models are built and bound to envelopes:
 
@@ -69,6 +62,12 @@ The particularities are:
 	      o Par01PionShowerModel is bound to a ghost volume
 		which encompasses the electromagnetic and
 		hadronic calorimters
+
+      o The Physics list used is FTFP_BERT which is augmented using the
+         G4FastSimulationPhysics physics constructor to insert the
+	 G4FastSimulationManagerProcess that is making the interface
+	 between the fast simulation and the tracking.
+	 The configuration is shown in examlePar01.cc.
 	
 
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc 85846 2014-11-05 15:45:28Z gcosmo $
+// $Id: G4PVReplica.cc 100429 2016-10-21 13:00:52Z gcosmo $
 //
 // 
 // class G4PVReplica Implementation
@@ -34,11 +34,6 @@
 #include "G4PVReplica.hh"
 #include "G4LogicalVolume.hh"
 
-// This static member is thread local. For each thread, it points to the
-// array of G4ReplicaData instances.
-//
-template <class G4ReplicaData> G4ThreadLocal
-G4ReplicaData* G4GeomSplitter<G4ReplicaData>::offset = 0;
 G4PVRManager G4PVReplica::subInstanceManager;
   // Helping in the use of the class G4PVRManager.
 

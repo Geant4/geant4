@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.hh 75179 2013-10-29 10:09:31Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -97,11 +97,18 @@ public:
   void AddSolid ( const G4Polyhedra& polyhedra) {
     G4VSceneHandler::AddSolid (polyhedra);
   }
+  void AddSolid ( const G4Orb& orb ) {
+    G4VSceneHandler::AddSolid (orb);
+  }
+  void AddSolid ( const G4Ellipsoid& ellipsoid) {
+    G4VSceneHandler::AddSolid (ellipsoid);
+  }
   void AddSolid ( const G4VSolid& solid  );
   void AddCompound ( const G4VTrajectory& traj);
   void AddCompound ( const G4VHit& hit);
   void AddCompound ( const G4VDigi& hit);
   void AddCompound ( const G4THitsMap<G4double> & hits);
+  void AddCompound ( const G4THitsMap<G4StatDouble> & hits);
 
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.

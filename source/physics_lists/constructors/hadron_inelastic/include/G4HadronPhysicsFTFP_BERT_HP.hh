@@ -44,9 +44,13 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4BertiniPionBuilder.hh"
+#include "G4FTFPPionBuilder.hh"
+
+#include "G4KaonBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
+#include "G4FTFPKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
 #include "G4BertiniProtonBuilder.hh"
@@ -86,9 +90,13 @@ class G4HadronPhysicsFTFP_BERT_HP : public G4VPhysicsConstructor
       G4FTFPNeutronBuilder * theFTFPNeutron;
       G4NeutronPHPBuilder * theHPNeutron;
  
-      G4PiKBuilder * thePiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
+      G4PionBuilder * thePion;
+      G4BertiniPionBuilder * theBertiniPion;
+      G4FTFPPionBuilder * theFTFPPion;
+
+      G4KaonBuilder * theKaon;
+      G4BertiniKaonBuilder * theBertiniKaon;
+      G4FTFPKaonBuilder * theFTFPKaon;
     
       G4ProtonBuilder * thePro;
       G4BertiniProtonBuilder * theBertiniPro;

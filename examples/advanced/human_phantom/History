@@ -1,4 +1,4 @@
-$Id: History 97053 2016-05-23 12:03:28Z gcosmo $
+$Id: History 101654 2016-11-21 08:52:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 19, 2016, A. Dotti tag human_phantom-V10-02-02
+- explicit set of SD to manager
 
 May 23, 2016, G. Cosmo tag human_phantom-V10-02-01
 - More compilation warnings in gcc-6.1 fixed...

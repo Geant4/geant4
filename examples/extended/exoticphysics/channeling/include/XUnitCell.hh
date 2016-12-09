@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XUnitCell.hh
+/// \brief Definition of the XUnitCell class
+//
 
 #ifndef XUnitCell_h
 #define XUnitCell_h

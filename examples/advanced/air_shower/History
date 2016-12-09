@@ -7,6 +7,22 @@
                            History file
                            ------------
 
+21.11.2016 - G. Cosmo (air_shower-V10-02-03)
+	     Fixed compilation warning for unused variable in
+             UltraDetectorConstruction.
+
+19.11.2016 - A. Dotti (air_shower-V10-02-02)
+	     Explicit set of SD to manager
+
+16.11.2016 - B. Tome
+	     Use modular physics lists.
+	     Remove drawing of step points from Visualisation.mac
+	     Update History, README, CMakeLists.txt and GNUmakefile.
+
+28.11.2016 - G. Folger  (air_shower-V10-02-01)
+             Replace direct use of theParticleIterator by GetParticleIterator().
+               fix required by clang39 on Windows and MAC
+
 03.03.2016 - L. Pandola (air_shower-V10-02-00)
              Replace std::log with G4Log
 

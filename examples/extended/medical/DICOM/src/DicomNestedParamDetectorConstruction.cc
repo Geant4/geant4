@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomNestedParamDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomNestedParamDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file medical/DICOM/src/DicomNestedParamDetectorConstruction.cc
 /// \brief Implementation of the DicomNestedParamDetectorConstruction class
@@ -75,7 +75,7 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     new G4PVReplica(yRepName,logYRep,fContainer_logic,kYAxis,
     fNVoxelY,fVoxelHalfDimY*2.);
 
-    logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    logYRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
     //--- X Slice
     G4String xRepName("RepX");
@@ -84,7 +84,7 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     G4LogicalVolume* logXRep = new G4LogicalVolume(solXRep,fAir,xRepName);
     new G4PVReplica(xRepName,logXRep,logYRep,kXAxis,fNVoxelX,fVoxelHalfDimX*2.);
 
-    logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    logXRep->SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
     
     //----- Voxel solid and logical volumes
     //--- Z Slice
@@ -93,7 +93,7 @@ void DicomNestedParamDetectorConstruction::ConstructPhantom()
     G4LogicalVolume* logicVoxel = new G4LogicalVolume(solVoxel,fAir,"phantom");
 
     logicVoxel->
-    SetVisAttributes(new G4VisAttributes(G4VisAttributes::Invisible));
+    SetVisAttributes(new G4VisAttributes(G4VisAttributes::GetInvisible()));
 
     //
     // Parameterisation for transformation of voxels.

@@ -6,6 +6,8 @@
 
 //same as OpenGL GL_[POINTS,etc...], but for the case we don't have OpenGL.
 
+#include <cstddef> //size_t
+
 namespace tools {
 namespace gl {
 
@@ -34,10 +36,10 @@ inline bool is_line(mode_t a_mode) {
   return false;
 }
 
-inline void cvt_2to3(unsigned int a_npt,const float* a_xys,float*& a_xyzs) {
+inline void cvt_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {
   const float* vpos = a_xys;
   float x,y;
-  for(unsigned int i=0;i<a_npt;i++) {
+  for(size_t i=0;i<a_npt;i++) {
     x = *vpos;vpos++;
     y = *vpos;vpos++;
     *a_xyzs = x;a_xyzs++;
@@ -47,11 +49,9 @@ inline void cvt_2to3(unsigned int a_npt,const float* a_xys,float*& a_xyzs) {
 }
 
 
-inline void triangle_fan_to_triangles(unsigned int a_npt,
-                                      const float* a_fxyzs,
-                                      const float* a_fnms,
-                                      float*& a_xyzs,
-                                      float*& a_nms) {
+inline void triangle_fan_to_triangles(size_t a_npt,
+                                      const float* a_fxyzs,const float* a_fnms,
+                                      float*& a_xyzs,float*& a_nms) {
 
  {const float* vpos = a_fxyzs;
 
@@ -64,7 +64,7 @@ inline void triangle_fan_to_triangles(unsigned int a_npt,
   float z2 = *vpos;vpos++;
 
   float x3,y3,z3;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
     z3 = *vpos;vpos++;
@@ -96,7 +96,7 @@ inline void triangle_fan_to_triangles(unsigned int a_npt,
   float z2 = *vpos;vpos++;
 
   float x3,y3,z3;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
     z3 = *vpos;vpos++;
@@ -118,11 +118,9 @@ inline void triangle_fan_to_triangles(unsigned int a_npt,
   }}
 }
 
-inline void triangle_strip_to_triangles(unsigned int a_npt,
-                                        const float* a_fxyzs,
-                                        const float* a_fnms,
-                                        float*& a_xyzs,
-                                        float*& a_nms) {
+inline void triangle_strip_to_triangles(size_t a_npt,
+                                        const float* a_fxyzs,const float* a_fnms,
+                                        float*& a_xyzs,float*& a_nms) {
 
  {const float* vpos = a_fxyzs;
 
@@ -136,7 +134,7 @@ inline void triangle_strip_to_triangles(unsigned int a_npt,
 
   float x3,y3,z3;
   bool flip = false;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
     z3 = *vpos;vpos++;
@@ -190,7 +188,7 @@ inline void triangle_strip_to_triangles(unsigned int a_npt,
 
   float x3,y3,z3;
   bool flip = false;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
     z3 = *vpos;vpos++;
@@ -232,9 +230,7 @@ inline void triangle_strip_to_triangles(unsigned int a_npt,
   }}
 }
 
-inline void triangle_fan_to_triangles_2to3(unsigned int a_npt,
-                                           const float* a_xys,
-                                           float*& a_xyzs) {
+inline void triangle_fan_to_triangles_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {
 
   const float* vpos = a_xys;
 
@@ -245,7 +241,7 @@ inline void triangle_fan_to_triangles_2to3(unsigned int a_npt,
   float y2 = *vpos;vpos++;
 
   float x3,y3;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
 
@@ -267,9 +263,7 @@ inline void triangle_fan_to_triangles_2to3(unsigned int a_npt,
 
 }
 
-inline void triangle_strip_to_triangles_2to3(unsigned int a_npt,
-                                             const float* a_xys,
-                                             float*& a_xyzs) {
+inline void triangle_strip_to_triangles_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {
 
   const float* vpos = a_xys;
 
@@ -281,7 +275,7 @@ inline void triangle_strip_to_triangles_2to3(unsigned int a_npt,
 
   float x3,y3;
   bool flip = false;
-  for(unsigned int i=2;i<a_npt;i++) {
+  for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
 
@@ -322,9 +316,7 @@ inline void triangle_strip_to_triangles_2to3(unsigned int a_npt,
 
 }
 
-inline void line_strip_to_lines_2to3(unsigned int a_npt,
-                                     const float* a_xys,
-                                     float*& a_xyzs) {
+inline void line_strip_to_lines_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {
 
   const float* vpos = a_xys;
 
@@ -332,7 +324,7 @@ inline void line_strip_to_lines_2to3(unsigned int a_npt,
   float y1 = *vpos;vpos++;
 
   float x2,y2;
-  for(unsigned int i=1;i<a_npt;i++) {
+  for(size_t i=1;i<a_npt;i++) {
     x2 = *vpos;vpos++;
     y2 = *vpos;vpos++;
 

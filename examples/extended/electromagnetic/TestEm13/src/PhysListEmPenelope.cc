@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPenelope class
 //
 //
-// $Id: PhysListEmPenelope.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysListEmPenelope.cc 100279 2016-10-17 08:34:54Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -94,9 +94,10 @@ void PhysListEmPenelope::ConstructProcess()
 {
   // Add standard EM Processes
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 

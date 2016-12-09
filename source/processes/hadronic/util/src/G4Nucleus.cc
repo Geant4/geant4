@@ -142,28 +142,29 @@ GetBiasedThermalNucleus(G4double aMass, G4ThreeVector aVelocity, G4double temp) 
 G4ReactionProduct
 G4Nucleus::GetThermalNucleus(G4double targetMass, G4double temp) const
 {
-    G4double currentTemp = temp;
-    if(currentTemp < 0) currentTemp = theTemp;
-    G4ReactionProduct theTarget;    
-    theTarget.SetMass(targetMass*G4Neutron::Neutron()->GetPDGMass());
-    G4double px, py, pz;
-    px = GetThermalPz(theTarget.GetMass(), currentTemp);
-    py = GetThermalPz(theTarget.GetMass(), currentTemp);
-    pz = GetThermalPz(theTarget.GetMass(), currentTemp);
-    theTarget.SetMomentum(px, py, pz);
-    G4double tMom = std::sqrt(px*px+py*py+pz*pz);
-    G4double tEtot = std::sqrt((tMom+theTarget.GetMass())*
-                          (tMom+theTarget.GetMass())-
-                          2.*tMom*theTarget.GetMass());
-    if(1-tEtot/theTarget.GetMass()>0.001)
-    {
-      theTarget.SetTotalEnergy(tEtot);
-    }
-    else
-    {
-      theTarget.SetKineticEnergy(tMom*tMom/(2.*theTarget.GetMass()));
-    }    
-    return theTarget;
+  G4double currentTemp = temp;
+  if (currentTemp < 0) currentTemp = theTemp;
+  G4ReactionProduct theTarget;    
+  theTarget.SetMass(targetMass*G4Neutron::Neutron()->GetPDGMass());
+  G4double px, py, pz;
+  px = GetThermalPz(theTarget.GetMass(), currentTemp);
+  py = GetThermalPz(theTarget.GetMass(), currentTemp);
+  pz = GetThermalPz(theTarget.GetMass(), currentTemp);
+  theTarget.SetMomentum(px, py, pz);
+  G4double tMom = std::sqrt(px*px+py*py+pz*pz);
+  G4double tEtot = std::sqrt((tMom+theTarget.GetMass())*
+                             (tMom+theTarget.GetMass())-
+                              2.*tMom*theTarget.GetMass());
+  //  if(1-tEtot/theTarget.GetMass()>0.001)  this line incorrect (Bug report 1911) 
+  if (tEtot/theTarget.GetMass() - 1. > 0.001) {
+    // use relativistic energy for higher energies
+    theTarget.SetTotalEnergy(tEtot);
+
+  } else {
+    // use p**2/2M for lower energies (to preserve precision?) 
+    theTarget.SetKineticEnergy(tMom*tMom/(2.*theTarget.GetMass()));
+  }    
+  return theTarget;
 }
 
  

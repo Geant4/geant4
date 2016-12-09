@@ -124,12 +124,17 @@ void DetectorConstruction::ConstructMaterials()
 
 void DetectorConstruction::CheckMaterials()
 {
-  if ( !fpDefaultMaterial || !fpWaterMaterial )
-  {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
-  }
+  if(!fpDefaultMaterial)
+    G4Exception("DetectorConstruction::CheckMaterials",
+                "DEFAULT_MATERIAL_NOT_INIT_1",
+                FatalException,
+                "Default material not initialized.");
+                
+  if(!fpWaterMaterial)
+    G4Exception("DetectorConstruction::CheckMaterials",
+                "WATER_MATERIAL_NOT_INIT",
+                FatalException,
+                "Water material not initialized.");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,9 +146,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructWorld()
 
   if ( !fpDefaultMaterial )
   {
-    G4cerr << "Cannot retrieve materials already defined. " << G4endl;
-    G4cerr << "Exiting application " << G4endl;
-    exit(1);
+     G4Exception("DetectorConstruction::ConstructWorld",
+                "DEFAULT_MATERIAL_NOT_INIT_2",
+                FatalException,
+                "Default material not initialized.");
   }
 
   //

@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/StepMax.cc
 /// \brief Implementation of the StepMax class
 //
-// $Id: StepMax.cc 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: StepMax.cc 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,17 +34,21 @@
 #include "StepMax.hh"
 #include "StepMaxMessenger.hh"
 
+#include "G4ParticleDefinition.hh"
+#include "G4Step.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 StepMax::StepMax(const G4String& processName)
- : G4VDiscreteProcess(processName),MaxChargedStep(DBL_MAX)
+ : G4VDiscreteProcess(processName),
+   fMaxChargedStep(DBL_MAX), fMessenger(0)
 {
-  pMess = new StepMaxMessenger(this);
+  fMessenger = new StepMaxMessenger(this);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-StepMax::~StepMax() { delete pMess; }
+StepMax::~StepMax() { delete fMessenger; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -55,7 +59,7 @@ G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
     
-void StepMax::SetMaxStep(G4double step) {MaxChargedStep = step;}
+void StepMax::SetMaxStep(G4double step) {fMaxChargedStep = step;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,10 +72,10 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
   
   G4double ProposedStep = DBL_MAX;
 
-  if((MaxChargedStep > 0.) &&
+  if((fMaxChargedStep > 0.) &&
      (aTrack.GetVolume() != 0) &&
      (aTrack.GetVolume()->GetName() != "World"))
-     ProposedStep = MaxChargedStep;
+     ProposedStep = fMaxChargedStep;
 
   return ProposedStep;
 }
@@ -86,5 +90,3 @@ G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

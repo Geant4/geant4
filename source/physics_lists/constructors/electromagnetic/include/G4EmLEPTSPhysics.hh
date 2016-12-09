@@ -36,7 +36,7 @@
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
 #include "G4ios.hh"
-// Geant461: #include "g4std/iomanip"
+
 #include "G4Decay.hh"
 #include "G4UserSpecialCuts.hh"
 #include "G4StepLimiter.hh"
@@ -46,14 +46,12 @@
 class G4EmLEPTSPhysics : public G4VPhysicsConstructor
 {
  public:
-  G4EmLEPTSPhysics(const G4String& name="G4EmLEPTSPhysics");
+
+  explicit G4EmLEPTSPhysics(const G4String& name="G4EmLEPTSPhysics");
   virtual ~G4EmLEPTSPhysics(){};
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-
- protected:
-  // Physics
 
 };
 

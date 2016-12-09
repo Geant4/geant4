@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc 92144 2015-08-19 14:25:18Z gcosmo $
+// $Id: G4StatMFChannel.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -165,9 +165,9 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
 // This gives the position of fragments at the breakup instant. 
 // Fragments positions are sampled inside prolongated ellipsoid.
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   const G4double R0 = G4StatMFParameters::Getr0();
-  G4double Rsys = 2.0*R0*g4pow->Z13(anA);
+  G4double Rsys = 2.0*R0*g4calc->Z13(anA);
 
   G4bool TooMuchIterations;
   do 
@@ -175,8 +175,8 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
       TooMuchIterations = false;
 	
       // Sample the position of the first fragment
-      G4double R = (Rsys - R0*g4pow->Z13(_theFragments[0]->GetA()))*
-	g4pow->A13(G4UniformRand());
+      G4double R = (Rsys - R0*g4calc->Z13(_theFragments[0]->GetA()))*
+	g4calc->A13(G4UniformRand());
       _theFragments[0]->SetPosition(IsotropicVector(R));
 	
 	
@@ -188,7 +188,7 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
 	  G4int counter = 0;
 	  do 
 	    {
-	      R = (Rsys - R0*g4pow->Z13((*i)->GetA()))*g4pow->A13(G4UniformRand());
+	      R = (Rsys - R0*g4calc->Z13((*i)->GetA()))*g4calc->A13(G4UniformRand());
 	      (*i)->SetPosition(IsotropicVector(R));
 		
 	      // Check that there are not overlapping fragments
@@ -197,8 +197,8 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
 		{
 		  G4ThreeVector FragToFragVector = 
 		    (*i)->GetPosition() - (*j)->GetPosition();
-		  G4double Rmin = R0*(g4pow->Z13((*i)->GetA()) +
-				      g4pow->Z13((*j)->GetA()));
+		  G4double Rmin = R0*(g4calc->Z13((*i)->GetA()) +
+				      g4calc->Z13((*j)->GetA()));
 		  if ( (ThereAreOverlaps = (FragToFragVector.mag2() < Rmin*Rmin))) 
 		    { break; }
 		}
@@ -348,10 +348,10 @@ void G4StatMFChannel::SolveEqOfMotion(G4int anA, G4int anZ, G4double T)
 // This method will find a solution of Newton's equation of motion
 // for fragments in the self-consistent time-dependent Coulomb field
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   G4double CoulombEnergy = 0.6*elm_coupling*anZ*anZ*
-    g4pow->A13(1.0+G4StatMFParameters::GetKappaCoulomb())/
-    (G4StatMFParameters::Getr0()*g4pow->Z13(anA)) - GetFragmentsCoulombEnergy();
+    g4calc->A13(1.0+G4StatMFParameters::GetKappaCoulomb())/
+    (G4StatMFParameters::Getr0()*g4calc->Z13(anA)) - GetFragmentsCoulombEnergy();
   if (CoulombEnergy <= 0.0) return;
   
   G4int Iterations = 0;

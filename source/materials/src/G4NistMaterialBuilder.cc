@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 97248 2016-05-30 15:00:11Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 99413 2016-09-21 09:02:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -1919,15 +1919,28 @@ void G4NistMaterialBuilder::SpaceMaterials()
   AddMaterial("G4_NEOPRENE" , 1.23, 0, 0.0, 3);   // POLYCLOROPRENE
   AddElementByAtomCount("C", 4);
   AddElementByAtomCount("H", 5);
-  AddElementByAtomCount("Cl", 1);
+  AddElementByAtomCount("Cl",1);
 
   nSpace = nMaterials;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+/**
+  Build biochemical materials used in G4DNA Applications.
+  Materials are defined in bonded and unbonded forms according to the
+  following schema:
+  G4_MATERIAL: Molecule in its free state
+  G4_DNA_MATERIAL: Molecule, considering atoms lost in bonding
+*/
+
 void G4NistMaterialBuilder::BioChemicalMaterials()
 {
+  // BEGIN MATERIALS IN THEIR UNBONDED FORM
+
+  // G4_ADENINE, G4_GUANINE are defined in
+  // G4NistMaterialBuilder::NistCompoundMaterials()
+
   AddMaterial("G4_CYTOSINE", 1.55, 0, 72., 4);
   AddElementByAtomCount("H", 5);
   AddElementByAtomCount("C", 4);
@@ -1946,13 +1959,31 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);
 
-  // DNA_Nucleobase (Nucleobase-1H)
+  AddMaterial("G4_DEOXYRIBOSE", 1, 0, 72, 3);
+  AddElementByAtomCount("H", 10);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("O", 3);
+
+  // END UNBONDED MATERIALS / BEGIN BONDED MATERIALS
+
+  // Deoxyribose loses 3 OH groups in bonding to bond with PO4 and a base pair
+  AddMaterial("G4_DNA_DEOXYRIBOSE", 1, 0, 72., 3);
+  AddElementByAtomCount("H", 7);
+  AddElementByAtomCount("C", 5);
+  AddElementByAtomCount("O", 1);
+
+  // Typically there are no H atoms considered in the Phosphate group
+  AddMaterial("G4_DNA_PHOSPHATE", 1, 0, 72., 2);
+  AddElementByAtomCount("P", 1);
+  AddElementByAtomCount("O", 4);
+
+  // GATCU bases bonded to a deoxyribose (they drop one H)
   AddMaterial("G4_DNA_ADENINE", 1, 0, 72., 3);
   AddElementByAtomCount("H",4 );
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
 
-  AddMaterial("G4_DNA_GUANINE", 1, 0, 72. ,4);
+  AddMaterial("G4_DNA_GUANINE", 1, 0, 72., 4);
   AddElementByAtomCount("H",4 );
   AddElementByAtomCount("C",5 );
   AddElementByAtomCount("N",5 );
@@ -1976,75 +2007,8 @@ void G4NistMaterialBuilder::BioChemicalMaterials()
   AddElementByAtomCount("N", 2);
   AddElementByAtomCount("O", 2);
 
-  // DNA_Nucleoside (Nucleoside-3H)
-  AddMaterial("G4_DNA_ADENOSINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 4);
+  // END BONDED MATERIALS
 
-  AddMaterial("G4_DNA_GUANOSINE", 1, 0, 72. ,4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_CYTIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 5);
-
-  AddMaterial("G4_DNA_URIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 9);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_METHYLURIDINE", 1, 0, 72., 4);
-  AddElementByAtomCount("H", 11);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 6);
-
-  AddMaterial("G4_DNA_MONOPHOSPHATE", 1, 0, 72., 2);
-  AddElementByAtomCount("P", 1);
-  AddElementByAtomCount("O", 3);
-
-  AddMaterial("G4_DNA_A", 1, 0, 72., 5);  //Adenine base
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 7);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_G", 1, 0, 72. ,5); //Guanine base 
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 5);
-  AddElementByAtomCount("O", 8);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_C", 1, 0, 72., 5); // Cytosine base
-  AddElementByAtomCount("H", 10);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 3);
-  AddElementByAtomCount("O", 8);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_U", 1, 0, 72., 5); // Uracil base
-  AddElementByAtomCount("H", 9);
-  AddElementByAtomCount("C", 9);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 9);
-  AddElementByAtomCount("P", 1);
-
-  AddMaterial("G4_DNA_MU", 1, 0, 72., 5);  // MethaUracil base
-  AddElementByAtomCount("H", 11);
-  AddElementByAtomCount("C", 10);
-  AddElementByAtomCount("N", 2);
-  AddElementByAtomCount("O", 9);
-  AddElementByAtomCount("P", 1);
   /*
   // Complete 70 kg body of adult men from en.wikipedia.org/ see References there
   AddMaterial("G4_BODY", 1.8, 0, 78, 12);

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XLatticeManager3.hh
+/// \brief Definition of the XLatticeManager3 class
+//
 
 #ifndef XLatticeManager3_h
 #define XLatticeManager3_h 1

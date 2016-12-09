@@ -8,18 +8,18 @@
 
 namespace tools {
 
-inline std::string suffix(const std::string& a_string,bool a_back = true) {
+inline void suffix(const std::string& a_string,std::string& a_value,bool a_back = true) {
   // If a_string = dir0/dir1/dir2/dir3/name.xxx
-  //   return xxx
+  //   a_value = xxx
   std::string::size_type pos = a_back?a_string.rfind('.'):a_string.find('.');
-  if(pos==std::string::npos) return "";
+  if(pos==std::string::npos) {a_value.clear();return;}
   pos++;
-  return a_string.substr(pos,a_string.size()-pos);
+  a_value = a_string.substr(pos,a_string.size()-pos);
 }
 
-inline std::string nosuffix(const std::string& a_string,bool a_back = true){
+inline void nosuffix(const std::string& a_string,std::string& a_value,bool a_back = true){
   // If a_string = dir0/dir1/dir2/dir3/name.xxx
-  //   return name
+  //   a_value = name
   // Start searching after the last / (or last \ for Windows).
   std::string::size_type pos = a_string.rfind('/');
   if(pos==std::string::npos) pos = a_string.rfind('\\');
@@ -27,8 +27,11 @@ inline std::string nosuffix(const std::string& a_string,bool a_back = true){
   else pos++;
   std::string s = a_string.substr(pos,a_string.size()-pos);
   std::string::size_type dot_pos = a_back?s.rfind('.'):s.find('.');
-  if(dot_pos==std::string::npos) return s;
-  return s.substr(0,dot_pos);
+  if(dot_pos==std::string::npos) {
+    a_value = s;
+  } else {
+    a_value = s.substr(0,dot_pos);
+  }
 }
 
 inline void base_name(const std::string& a_path,std::string& a_value) {
@@ -55,6 +58,18 @@ inline void base_name(const std::string& a_path,std::string& a_value) {
   if(pos==std::string::npos) {a_value = a_path;return;}
   pos++;
   a_value = a_path.substr(pos,a_path.size()-pos);
+}
+
+inline std::string suffix(const std::string& a_string,bool a_back = true) {
+  std::string value;
+  suffix(a_string,value,a_back);
+  return value;
+}
+
+inline std::string nosuffix(const std::string& a_string,bool a_back = true){
+  std::string value;
+  nosuffix(a_string,value,a_back);
+  return value;
 }
 
 inline std::string base_name(const std::string& a_path) { //deprecated.

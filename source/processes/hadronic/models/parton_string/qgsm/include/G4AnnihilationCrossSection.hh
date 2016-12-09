@@ -32,28 +32,30 @@
 
 class G4AnnihilationCrossSection
 {
-public:
-	G4AnnihilationCrossSection();
+  public:
+    G4AnnihilationCrossSection();
 
-	G4double GetCrossSection(int aCode, int bCode, G4double S);
-private:
+    G4double GetCrossSection(int aCode, int bCode, G4double S);
+  private:
 
-	std::vector<G4VAnnihilationCrossSection*> theDataSets;
+    std::vector<G4VAnnihilationCrossSection*> theDataSets;
 };
 
 inline G4double G4AnnihilationCrossSection::GetCrossSection(G4int aCode, G4int bCode, G4double S)
 {
-	G4double result = 0.;
-	typedef std::vector<G4VAnnihilationCrossSection*>::iterator iter;
-	iter i;
-	for(i=theDataSets.begin(); i!=theDataSets.end(); i++)
-	{
-		if((*i)->InCharge(aCode, bCode))
-		{
-			result = (*i)->GetXsec(S);
-			break;
-		}
-	}
-	return result;
+  G4double result = 0.;
+  typedef std::vector<G4VAnnihilationCrossSection*>::iterator iter;
+  iter i;
+  for(i=theDataSets.begin(); i!=theDataSets.end(); i++)
+  {
+    if((*i)->InCharge(aCode, bCode))
+    {
+      result = (*i)->GetXsec(S);
+      break;
+    }
+  }
+  return result;
 }
+
 #endif
+

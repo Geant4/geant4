@@ -1,4 +1,4 @@
-$Id: History 97548 2016-06-03 15:56:56Z gcosmo $
+$Id: History 101792 2016-11-28 16:47:50Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,6 +26,194 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+27th November 2016  John Allison (visman-V10-02-37)
+- G4VisManager.cc: Fix for OpenGLXm.  An extra refresh should come
+  BEFORE ShowView.  Should not affect other viewers.
+
+18th November 2016  John Allison (visman-V10-02-36)
+- Fixed the GetColour() problem.
+
+17th November 2016  John Allison (visman-V10-02-35)
+- G4VisManager.cc:
+  o Moved ShowView from end of vis thread to EndOfRun()
+    for MT mode, where it now becomes the same as sequential mode.
+    Fixes display problem at end of run in Qt.
+  o Added extra Refresh() for auto-refresh viewers.
+    Fixes display problem at end of run in X and Xm.
+
+3rd November 2016  John Allison (visman-V10-02-33)
+- G4ViewParameters.cc, G4VisCommandsViewerSet.cc:
+  Changed default number of line segments per circle from 24 to 72.
+- G4VisCommandsViewerSet.cc:
+  Limited WARNING about up-Vector to first time only.
+
+26th October 2016  John Allison (visman-V10-02-32)
+- G4VisManager.cc: Fixed inappropriate warning message in MT batch mode.
+
+2nd October 2016  John Allison (visman-V10-02-31)
+- G4VViewer.cc: Fixed warnings.  Tidied.
+
+29th September 2016  John Allison (visman-V10-02-30)
+- G4VSceneHandler::RequestPrimitives:
+  o Tidied and improved error message for the case that a polyhedron
+    pointer is null:
+"\n  This means it cannot be visualized on most systems (try RayTracer)."
+"\n  1) The solid may not have implemented the CreatePolyhedron method."
+"\n  2) For Boolean solids, the BooleanProcessor, which attempts to create"
+"\n     the resultant polyhedron, may have failed."
+- G4VViewer:
+  o Moved G4Spline into G4VViewer to avoid polluting global namespace.
+  o Fixed Coverity warnings.
+
+23rd September 2016  John Allison (visman-V10-02-29)
+- G4ViewParameters.cc: Removed accidental duplicate function, correctly
+  defined in G4ModelingParameters.
+std::ostream& operator <<
+(std::ostream& os,
+ const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
+
+20th September 2016  John Allison (visman-V10-02-28)
+- G4VisCommandsViewer.cc:
+  /vis/viewer/save and /vis/viewer/interpolate:
+  Default filename extension changed to .g4view.
+
+19th September 2016  John Allison (visman-V10-02-27)
+- Tidied and tagged.
+
+19th September 2016  John Allison (r99341)
+- Moved Vis Attributes Modifiers (VAMs) back to G4ModelingParameters,
+  reversing visman-V10-02-22.
+
+15th September 2016  John Allison (visman-V10-02-26)
+- G4VViewer:
+  o Introduced TouchableSetVisibility and TouchableSetColour.
+    They change the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+    (Used by Qt Viewer.)
+- G4Scene:
+  o Replaced warning reference to obsolete G4VisAttributes::Invisible to
+    G4VisAttributes::GetInvisible().  (B.Smith)
+
+13th September 2016  John Allison (visman-V10-02-25)
+- Replace all r-value references, e.g., auto&&, with simple
+  l-value references, e.g., const auto&, until I understand
+  r-value references.  I think we do not yet have a need for
+  r-value references!
+
+12th September 2016  John Allison (visman-V10-02-24)
+- G4VViewer:
+  o Introduced
+     void G4VViewer::SetTouchable
+     (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
+     fullPath)
+  // Set the touchable for /vis/touchable/set/... commands.
+  // This is harmless but useful if the user wishes immediately to
+  // change or undo an operation on a touchable.
+
+11th September 2016  John Allison (visman-V10-02-23)
+- GetColour/GetColor no longer takes an argument.
+- Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+  //   fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+9th September 2016  John Allison (visman-V10-02-22)
+- Needs modeling-V10-02-11.
+- Moved Vis Attributes Modifiers (VAMs) from G4ModelingParameters
+  to G4ViewParameters.
+
+8th September 2016  John Allison
+- G4VViewer::GetApplicableVisAttributes:
+  o Ported VAM code from G4PhysicalVolumeModel.
+
+31st August 2016  John Allison (visman-V10-02-21)
+- G4ViewParameters.cc: Fix warning.
+
+31st August 2016  John Allison (visman-V10-02-20)
+- Co-works greps-V10-02-05.
+- G4VisManager.cc: Minor improvement to an informational.
+- G4VSceneHandler:
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Implemented auxiliary edge drawing for:
+      G4Orb, G4Sphere, G4Torus and G4Ellipsoid
+    unless otherwise specified.
+  o Tidied.
+- G4ViewParameters.cc:
+  o G4ViewParameters::CatmullRomCubicSplineInterpolation:
+    Improved interpolation of vis attributes modifiers.
+    
+14th August 2016  John Allison (visman-V10-02-19)
+-  Ooops.  Now as stated.
+
+14th August 2016  John Allison (visman-V10-02-18)
+- G4VSceneHandler.cc:
+  o G4VSceneHandler:: AddSolid (const G4Sphere& sphere):
+    . Prototype code for drawing auxiliary edges (commented out).
+  o G4VSceneHandler::CreateCutawaySolid: Improved comments.
+- G4ViewParameters.cc: Fixed warning.
+- G4VisCommandsViewer.cc: Fixed warning.
+
+G4VisCommandViewerClone::SetNewValue
+7th August 2016  John Allison (visman-V10-02-17 needs greps-V10-02-02)
+- G4VSceneHandler.cc:
+  o Improved GetAuxEdgeVisible to take account of new flag
+    IsForceDrawingStyle.
+- G4ViewParameters.cc:
+  o Takes account of new flag IsForceDrawingStyle.
+  o G4ViewParameters::TouchableCommands:
+    Suppressed the saving of the following commands when not forced:
+    /vis/touchable/set/forceWireframe
+    /vis/touchable/set/forceSolid
+    /vis/touchable/set/forceAuxEdgeVisible
+    /vis/touchable/set/lineSegmentsPerCircle
+- G4VisCommandsGeometrySet.cc:
+  o Changed default to "true" for:
+    /vis/geometry/set/daughtersInvisible
+    /vis/geometry/set/forceAuxEdgeVisible
+    /vis/geometry/set/forceSolid
+    /vis/geometry/set/forceWireframe
+    /vis/geometry/set/visibility (default was already "true")
+  o Changed default from -1 to 0 for:
+    /vis/geometry/set/forceLineSegmentsPerCircle
+    (<= 0 means use global default value, so should not change anything.)
+- G4VisCommandsTouchableSet.cc:
+  o Changed default to "true" for:
+    /vis/touchable/set/daughtersInvisible
+    /vis/touchable/set/forceAuxEdgeVisible
+    /vis/touchable/set/forceSolid
+    /vis/touchable/set/forceWireframe
+    /vis/touchable/set/visibility
+  o Changed default from -1 to 0 for:
+    /vis/touchable/set/lineSegmentsPerCircle
+    (<= 0 means use global default value, so should not change anything.)
+
+20th July 2016  John Allison  (visman-V10-02-16)
+- G4VisExecutive.icc: Replaced TouchedVolume by EncounteredVolume
+  in trajectory drawing and filtering.  Functionally identical.
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/axes: Fixed bug in guidance.
+- G4VSceneHandler::AddPrimitive (const G4Scale& scale):
+  Scale annotations now pick up current text colour.
+
+30th June 2016  John Allison  (visman-V10-02-15)
+- G4VisCommandsSceneAdd.cc:
+  o Added comments to explain strategy for /vis/scene/add/logo.
+- G4VisCommandsViewer.cc: Fixed Coverity warning.
+
+14th June 2016  John Allison  (visman-V10-02-14)
+- G4VisManager.cc:  Improved informational printing:
+  o at end of run for reviewing kept events;
+  o for /vis/disable and /vis/enable.
+- G4VisCommandsViewer.cc:
+  o Improved /vis/viewer/list.
+- G4VisCommandsSceneAdd:
+  o Improved guidance regarding local axes for
+    /vis/scene/add/logicalVolume
+- G4VisCommandsCompound:
+  o Improved guidance regarding local axes for /vis/specify.
+
 3rd June 2016  John Allison  (visman-V10-02-13)
 - G4ViewParameters.cc: Fixed compilation warnings on gcc-6.1.
 
@@ -43,9 +231,18 @@ History file for visualization management sub-category
   o Protected some parameters from going negative, as appropriate.
 - G4VisCommandsViewer.cc: /vis/viewer/interpolate:
   o Changed first argument to Unix-style pattern.  From the guidance:
-    Interpolate views defined by the first argument, which can contain Unix-shell-style pattern matching characters such as '*', '?' and '[' - see "man sh" and look for "Pattern Matching". The contents of each file are assumed to be "/vis/viewer" commands that specify a particular view. The files are processed in alphanumeric order of filename. The files may be written by hand or produced by the "/vis/viewer/save" command.
-The default is to search the working directory for files with a .view extension. Another procedure is to assemble view files in a subdirectory, e.g., "myviews"; then they can be interpolated with
-"/vis/viewer/interpolate myviews/*".
+    Interpolate views defined by the first argument, which can
+    contain Unix-shell-style pattern matching characters such as
+    '*', '?' and '[' - see "man sh" and look for "Pattern Matching".
+    The contents of each file are assumed to be "/vis/viewer"
+    commands that specify a particular view. The files are
+    processed in alphanumeric order of filename. The files may be
+    written by hand or produced by the "/vis/viewer/save" command.
+    The default is to search the working directory for files with a
+    .view (updated to .g4view, visman-V10-02-28) extension. Another
+    procedure is to assemble view files in a subdirectory, e.g.,
+    "myviews"; then they can be interpolated with
+    "/vis/viewer/interpolate myviews/*".
 16th February 2016  John Allison  (visman-V10-02-02-branch-11)
 - /vis/viewer/interpolate:
   Added safety check to while and do loops.

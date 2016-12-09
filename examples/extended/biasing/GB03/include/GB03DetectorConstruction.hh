@@ -101,6 +101,5 @@ class GB03DetectorConstruction : public G4VUserDetectorConstruction
       
 };
 
-
 #endif
 

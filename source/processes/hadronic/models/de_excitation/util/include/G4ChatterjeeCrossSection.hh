@@ -65,8 +65,8 @@ static G4double ComputePowerParameter(G4int resA, G4int idx)
     return G4Pow::GetInstance()->powZ(resA, paramC[idx][6]);
   }
 
-static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1, 
-				    G4int idx, G4int Z, G4int resZ, G4int resA)
+  static G4double ComputeCrossSection(G4double K, G4double cb, G4double resA13, G4double amu1, 
+				      G4int idx, G4int Z, G4int resA)
   {
     G4double sig;
     G4double Kc  = std::min(K, emax);
@@ -82,7 +82,8 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       // parameterisation for charged 
     } else {
       //JMQ 20.04.2015 1.5 F
-      G4double ec = 1.44 * Z * resZ / (1.5*resA13 + paramC[idx][10]);
+      G4double ec = cb;
+      //G4double ec = 1.44 * Z * resZ / (1.5*resA13 + paramC[idx][10]);
       G4double ecsq = ec*ec;
       G4double p = paramC[idx][0] + paramC[idx][1]/ec + paramC[idx][2]/(ecsq); 
       G4double landa = paramC[idx][3]*resA + paramC[idx][4];

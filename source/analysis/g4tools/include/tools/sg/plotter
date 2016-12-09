@@ -32,8 +32,7 @@ class plotter : public node {
   TOOLS_NODE(plotter,tools::sg::plotter,node)
 private:
   static const std::string& s_infos_what_def() {
-    static const std::string s_v
-      ("name entries mean rms fit_quality fit_ndf fit_parameters fit_errors");
+    static const std::string s_v("name entries mean rms fit_quality fit_ndf fit_parameters fit_errors");
     return s_v;
   }
   static float default_infos_margin() {return 0.005f;} //0.005 or Wt
@@ -183,11 +182,22 @@ public:
       TOOLS_ADD_FIELD_DESC(down_margin)
       TOOLS_ADD_FIELD_DESC(up_margin)
 
+      TOOLS_ADD_FIELD_DESC(colormap_visible)
+      TOOLS_ADD_FIELD_DESC(colormap_axis_labeling)
+      TOOLS_ADD_FIELD_DESC_ENUM(cells)
+      TOOLS_ADD_FIELD_DESC_ENUM(min_max)
+      TOOLS_ADD_FIELD_DESC(colormap_attached)
+      TOOLS_ADD_FIELD_DESC(colormap_axis_visible)
+
       TOOLS_ADD_FIELD_DESC(title_up); 
       TOOLS_ADD_FIELD_DESC(title_to_axis); 
       TOOLS_ADD_FIELD_DESC(title_height); 
       TOOLS_ADD_FIELD_DESC(title_automated); 
       TOOLS_ADD_FIELD_DESC(title_hjust); 
+      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::left)
+      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::center)
+      TOOLS_ADD_FIELD_DESC_ENUM(tools::sg::right)
+
       TOOLS_ADD_FIELD_DESC(title)
 
       TOOLS_ADD_FIELD_DESC(x_axis_enforced)
@@ -222,6 +232,9 @@ public:
       TOOLS_ADD_FIELD_DESC(legends_visible)
       TOOLS_ADD_FIELD_DESC(legends_attached_to_infos)
       TOOLS_ADD_FIELD_DESC(legends_origin)
+      TOOLS_ADD_FIELD_DESC_ENUM(unit_percent)
+      TOOLS_ADD_FIELD_DESC_ENUM(unit_axis)
+
       TOOLS_ADD_FIELD_DESC(legends_origin_unit)
       TOOLS_ADD_FIELD_DESC(legends_size)
       TOOLS_ADD_FIELD_DESC(legends_automated)
@@ -229,7 +242,10 @@ public:
       TOOLS_ADD_FIELD_DESC(legends_color)
 
       TOOLS_ADD_FIELD_DESC(shape_automated)
+
       TOOLS_ADD_FIELD_DESC(shape)
+      TOOLS_ADD_FIELD_DESC_ENUM(xy)
+      TOOLS_ADD_FIELD_DESC_ENUM(xyz)
 
       TOOLS_ADD_FIELD_DESC(xy_depth)
     }
@@ -484,18 +500,18 @@ public: //style
     m_inner_frame_style = style();
     m_grid_style = style();
 
-    m_title_style.color = colorf::black();
+    m_title_style.color = colorf_black();
     m_title_style.font = font_hershey();
     m_title_style.encoding = encoding_PAW();
 
-    m_background_style.back_color = colorf::white();
+    m_background_style.back_color = colorf_white();
     m_background_style.line_width = 0; //no border
-    m_background_style.color = colorf::black(); //border
+    m_background_style.color = colorf_black(); //border
 
-    m_inner_frame_style.color = colorf::black();
+    m_inner_frame_style.color = colorf_black();
     m_inner_frame_style.line_pattern = line_solid;
 
-    m_grid_style.color = colorf::black();
+    m_grid_style.color = colorf_black();
     m_grid_style.line_pattern = line_dashed;
 
     m_infos_style.font = font_hershey();
@@ -1176,12 +1192,12 @@ public: //public
   text_style& title_box_style() {return m_title_box_style;}
 
   style& bins_style(unsigned int a_index) {
-    unsigned int sz = m_bins_style.size();
+    size_t sz = m_bins_style.size();
     if(a_index>=sz) {
       //012345 sz=6
       //         9 a_index wanted
       //      6789 loop
-      for(unsigned int index=sz;index<=a_index;index++) {
+      for(size_t index=sz;index<=a_index;index++) {
         m_bins_style.push_back(style());
         m_bins_style.back().modeling = modeling_top_lines();
         m_bins_style.back().marker_size = 5; //for profile.
@@ -1191,9 +1207,9 @@ public: //public
   }
 
   style& errors_style(unsigned int a_index) {
-    unsigned int sz = m_errors_style.size();
+    size_t sz = m_errors_style.size();
     if(a_index>=sz) {
-      for(unsigned int index=sz;index<=a_index;index++) {
+      for(size_t index=sz;index<=a_index;index++) {
         m_errors_style.push_back(style());
         m_errors_style.back().visible = false;
       }
@@ -1202,9 +1218,9 @@ public: //public
   }
 
   style& func_style(unsigned int a_index) {
-    unsigned int sz = m_func_style.size();
+    size_t sz = m_func_style.size();
     if(a_index>=sz) {
-      for(unsigned int index=sz;index<=a_index;index++) {
+      for(size_t index=sz;index<=a_index;index++) {
         m_func_style.push_back(style());
       }
     }
@@ -1212,12 +1228,12 @@ public: //public
   }
 
   style& points_style(unsigned int a_index) {
-    unsigned int sz = m_points_style.size();
+    size_t sz = m_points_style.size();
     if(a_index>=sz) {
       //012345 sz=6
       //         9 a_index wanted
       //      6789 loop
-      for(unsigned int index=sz;index<=a_index;index++) {
+      for(size_t index=sz;index<=a_index;index++) {
         m_points_style.push_back(style());
       }
     }
@@ -1226,12 +1242,12 @@ public: //public
 
 /*
   text_style& legend_style(unsigned int a_index) {
-    unsigned int sz = m_legend_style.size();
+    size_t sz = m_legend_style.size();
     if(a_index>=sz) {
       //012345 sz=6
       //         9 a_index wanted
       //      6789 loop
-      for(unsigned int index=sz;index<=a_index;index++) {
+      for(size_t index=sz;index<=a_index;index++) {
         m_legend_style.push_back(text_style());
       }
     }
@@ -2161,14 +2177,11 @@ public:
 
     m_cmap_axis.width = 0;
     m_cmap_cells_sep.clear();
-    if(m_bins_cmaps.size() && m_bins_cmaps[0] &&            
-       m_bins_cmaps[0]->valn()) {     //major_bins
+    if(m_bins_cmaps.size() && m_bins_cmaps[0] && m_bins_cmaps[0]->valn()) {     //major_bins
       update_cmap(a_out,*(m_bins_cmaps[0]));
-    } else if(m_points_cmaps.size() && m_points_cmaps[0] &&
-              m_points_cmaps[0]->valn()) { //major_points
+    } else if(m_points_cmaps.size() && m_points_cmaps[0] && m_points_cmaps[0]->valn()) { //major_points
       update_cmap(a_out,*(m_points_cmaps[0]));
-    } else if(m_func_cmaps.size() && m_func_cmaps[0] &&
-              m_func_cmaps[0]->valn()) { //major_func
+    } else if(m_func_cmaps.size() && m_func_cmaps[0] && m_func_cmaps[0]->valn()) { //major_func
       update_cmap(a_out,*(m_func_cmaps[0]));
     }
   }
@@ -2609,9 +2622,9 @@ public:
   void update_cmap(std::ostream& a_out,const base_colormap& a_cmap){
     if(!colormap_visible.value()) return;
   
-    unsigned int valn = a_cmap.valn();
+    size_t valn = a_cmap.valn();
     if(!valn) return;
-    unsigned int coln = a_cmap.colorn();
+    size_t coln = a_cmap.colorn();
     if(!coln) return;
   
     float XSIZ = width;
@@ -2674,7 +2687,7 @@ public:
 
     // surrounding box :
    {rgba* mat = new rgba();
-    mat->color = colorf::black();
+    mat->color = colorf_black();
     m_cmap_cells_sep.add(mat);
 
     draw_style* ds = new draw_style;
@@ -2730,7 +2743,7 @@ public:
         if((valn+1)==coln) { // <col> <num> <col> ... <num> <col>
           m_cmap_axis.width = hcmap-2*h;
           m_cmap_axis.modeling = tick_modeling_none();
-          m_cmap_axis.tick_number = valn;
+          m_cmap_axis.tick_number = uint32(valn);
           m_cmap_axis.labels.clear();
           m_cmap_axis.coords.clear();
           for(unsigned int index=0;index<valn;index++)        {
@@ -2743,7 +2756,7 @@ public:
         } else if((coln+1)==valn) { // <num> <col> <num> ... <col> <num>
           m_cmap_axis.width = hcmap;
           m_cmap_axis.modeling = tick_modeling_none();
-          m_cmap_axis.tick_number = valn;
+          m_cmap_axis.tick_number = uint32(valn);
           m_cmap_axis.labels.clear();
           m_cmap_axis.coords.clear();
           for(unsigned int index=0;index<valn;index++)        {
@@ -2762,13 +2775,13 @@ public:
         m_cmap_axis.modeling = tick_modeling_hippo();
         m_cmap_axis.width = hcmap;
         m_cmap_axis.minimum_value = a_cmap.value(0);
-        m_cmap_axis.maximum_value = a_cmap.value(valn-1);
+        m_cmap_axis.maximum_value = a_cmap.value(uint32(valn)-1);
       }
     } else { //grey_scale,grey_scale_inverse,violet_to_red
       m_cmap_axis.modeling = tick_modeling_hippo();
       m_cmap_axis.width = hcmap;
       m_cmap_axis.minimum_value = a_cmap.value(0);
-      m_cmap_axis.maximum_value = a_cmap.value(valn-1);
+      m_cmap_axis.maximum_value = a_cmap.value(uint32(valn)-1);
     }
   
    {text_style& style = m_cmap_axis.labels_style();
@@ -3032,7 +3045,7 @@ protected: //vis bins
           bins.push_back(rep_bin2D(xx,xe,yy,ye,val,ibin,jbin));
         }
       }}
-      unsigned int number = bins.size();
+      size_t number = bins.size();
 
       painting_policy painting = a_data_style.painting;
       if(painting==painting_by_value) {
@@ -3044,7 +3057,7 @@ protected: //vis bins
                  (painting==painting_violet_to_red) ){
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
-          for(unsigned int index=0;index<number;index++) {
+          for(size_t index=0;index<number;index++) {
             bins[index].m_ratio = bins[index].m_val/dbins;
           }
         }}
@@ -3206,7 +3219,7 @@ protected: //vis bins
 
     if(!a_style.visible) return;
 
-    unsigned int number = a_points.points();
+    size_t number = a_points.points();
     if(!number) return;
 
     const std::string& modeling = a_style.modeling;
@@ -3283,7 +3296,7 @@ protected: //vis bins
           bins.push_back(rep_bin2D(xx,xe,yy,ye,val,ibin,jbin));
         }
       }}
-      unsigned int number = bins.size();
+      size_t number = bins.size();
 
       float bmin;
       float bmax;
@@ -3302,7 +3315,7 @@ protected: //vis bins
                  (painting==painting_violet_to_red) ){
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
-          for(unsigned int index=0;index<number;index++) {
+          for(size_t index=0;index<number;index++) {
             bins[index].m_ratio = bins[index].m_val/dbins;
           }
         }}
@@ -3427,8 +3440,8 @@ protected: //vis bins
                (painting==painting_violet_to_red) ){
       float vmin = faces[0].m_v1;
       float vmax = faces[0].m_v1;
-      unsigned int number = faces.size();
-      for(unsigned int index=0;index<number;index++) {
+      size_t number = faces.size();
+      for(size_t index=0;index<number;index++) {
         float vmean  = faces[index].m_v1;
         vmean += faces[index].m_v2;
         vmean += faces[index].m_v3;
@@ -3443,7 +3456,7 @@ protected: //vis bins
 
      {float dbins = vmax-vmin;
       if(dbins!=0.0F) {
-        for(unsigned int index=0;index<number;index++) {
+        for(size_t index=0;index<number;index++) {
           faces[index].m_ratio /= dbins;
         }
       }}
@@ -3792,7 +3805,7 @@ protected: //vis bins
     for(it=m_plottables.begin();it!=m_plottables.end();++it) {
       plottable* object = *it;
       if(!object) continue;
-      if(object->cast(s_inlib_sg_fit2plot())) {
+      if(object->cast(s_tools_sg_fit2plot())) {
         if(a_s.size()) a_s += "\n";
         std::string _s;
         object->infos(opts,_s);
@@ -3817,7 +3830,7 @@ protected: //vis bins
     get_infos(sinfos);
     std::vector<std::string> ws;
     words(sinfos,"\n",false,ws);
-    unsigned int linen = ws.size()/2;
+    size_t linen = ws.size()/2;
 
     float zz = ZINFOS(); //xy
     if(m_shape==xyz) zz = depth*0.5f;
@@ -3832,7 +3845,7 @@ protected: //vis bins
 
     std::string infos_title;
     if(m_infos_style.modeling==infos_modeling_ROOT()) {
-      for(unsigned int index=0;index<linen;index++) {
+      for(size_t index=0;index<linen;index++) {
         const std::string& name = ws[2*index];
         if(name=="Name") {
           infos_title = ws[2*index+1];
@@ -3893,7 +3906,7 @@ protected: //vis bins
     infos->back_area::shadow = m_infos_style.back_shadow;
     infos->border_line_width = m_infos_style.line_width;
 
-   {for(unsigned int index=0;index<linen;index++) {
+   {for(size_t index=0;index<linen;index++) {
       const std::string& name = ws[2*index];
       const std::string& value = ws[2*index+1];
       infos->lstrings.add(name);
@@ -3991,8 +4004,8 @@ protected: //vis bins
       }
     }}
 
-    unsigned int number = m_legend_strings.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = m_legend_strings.size();
+    for(size_t index=0;index<number;index++) {
 
       separator* sep = new separator;
       m_legend_sep.add(sep);
@@ -4241,39 +4254,35 @@ protected: //vis bins
     if(draw_vertical) {
       float _width = m_y_axis.width;
       float xx;
-     {unsigned int _number = m_x_axis.coords.size();
+     {size_t _number = m_x_axis.coords.size();
       if(is_solid) {
         pts.reserve(_number*6);
-        for(unsigned int count=0;count<_number;count++) { 
+        for(size_t count=0;count<_number;count++) { 
           xx = m_x_axis.coords[count];
           vtxs->add(xx, 0    ,zz);
           vtxs->add(xx, _width,zz);
         }
       } else {
         pts.reserve(_number*100*6);
-        for(unsigned int count=0;count<_number;count++) { 
+        for(size_t count=0;count<_number;count++) { 
           xx = m_x_axis.coords[count];
-          vtxs->add_dashed_line(xx,0,    zz,
-                                xx,_width,zz,
-                                100);
+          vtxs->add_dashed_line(xx,0,zz,xx,_width,zz,100);
         }
       }}
       if(m_x_axis.is_log) {
-        unsigned int _number = m_x_axis.sub_coords.size();
+        size_t _number = m_x_axis.sub_coords.size();
         if(is_solid) {
           pts.reserve(_number*6);
-          for(unsigned int count=0;count<_number;count++) { 
+          for(size_t count=0;count<_number;count++) { 
             xx = m_x_axis.sub_coords[count];
             vtxs->add(xx, 0    ,zz);
             vtxs->add(xx, width,zz);
           }
         } else {
           pts.reserve(_number*100*6);
-          for(unsigned int count=0;count<_number;count++) { 
+          for(size_t count=0;count<_number;count++) { 
             xx = m_x_axis.sub_coords[count];
-            vtxs->add_dashed_line(xx,0    ,zz,
-                                  xx,width,zz,
-                                  100);
+            vtxs->add_dashed_line(xx,0,zz,xx,width,zz,100);
           }
         }
       }
@@ -4282,39 +4291,35 @@ protected: //vis bins
     if(draw_horizontal) {
       float _width = m_x_axis.width;
       float yy;
-     {unsigned int _number = m_y_axis.coords.size();
+     {size_t _number = m_y_axis.coords.size();
       if(is_solid) {
         pts.reserve(_number*6);
-        for(unsigned int count=0;count<_number;count++) {
+        for(size_t count=0;count<_number;count++) {
           yy = m_y_axis.coords[count];
           vtxs->add(0,yy    ,zz);
           vtxs->add(_width,yy,zz);
         }
       } else {
         pts.reserve(_number*100*6);
-        for(unsigned int count=0;count<_number;count++) {
+        for(size_t count=0;count<_number;count++) {
           yy = m_y_axis.coords[count];
-          vtxs->add_dashed_line(0,yy,    zz,
-                                _width,yy,zz,
-                                100);
+          vtxs->add_dashed_line(0,yy,zz,_width,yy,zz,100);
         }
       }}
       if(m_y_axis.is_log) {
-        unsigned int _number = m_y_axis.sub_coords.size();
+        size_t _number = m_y_axis.sub_coords.size();
         if(is_solid) {
           pts.reserve(_number*6);
-          for(unsigned int count=0;count<_number;count++) { 
+          for(size_t count=0;count<_number;count++) { 
             yy = m_y_axis.sub_coords[count];
             vtxs->add(0,yy,    zz);
             vtxs->add(_width,yy,zz);
           }
         } else {
           pts.reserve(_number*100*6);
-          for(unsigned int count=0;count<_number;count++) { 
+          for(size_t count=0;count<_number;count++) { 
             yy = m_y_axis.sub_coords[count];
-            vtxs->add_dashed_line(0,yy,    zz,
-                                  _width,yy,zz,
-                                  100);
+            vtxs->add_dashed_line(0,yy,zz,_width,yy,zz,100);
           }
         }
       }
@@ -4428,8 +4433,8 @@ protected: //rep
     colorf clr;
 
     float yp = 0;
-    int xnbin = a_bins.size();
-    for(int index=0;index<xnbin;index++) { 
+    size_t xnbin = a_bins.size();
+    for(size_t index=0;index<xnbin;index++) { 
       float xx = a_bins[index].m_x_min;
       float xe = a_bins[index].m_x_max;
       float y = a_bins[index].m_val;
@@ -4532,8 +4537,8 @@ protected: //rep
     bool empty = true;
     colorf clr;
 
-    int xnbin = a_bins.size();
-    for(int index=0;index<xnbin;index++) { 
+    size_t xnbin = a_bins.size();
+    for(size_t index=0;index<xnbin;index++) { 
       float x = (a_bins[index].m_x_min + a_bins[index].m_x_max)/2;
       float y = a_bins[index].m_val;
       float val = a_bins[index].m_val;
@@ -5014,9 +5019,9 @@ protected: //rep
     float dy = a_box_y.m_width;
     bool ylog = a_box_y.m_log;
   
-    int xnbin = a_bins.size();
+    size_t xnbin = a_bins.size();
 
-    for(int index=0;index<xnbin;index++) { 
+    for(size_t index=0;index<xnbin;index++) { 
             
       //Need all bins modeled for fitting.
                     
@@ -5113,9 +5118,9 @@ protected: //rep
     float dy = a_box_y.m_width;
     bool ylog = a_box_y.m_log;
   
-    int xnbin = a_bins.size();
+    size_t xnbin = a_bins.size();
 
-    for(int index=0;index<xnbin;index++) { 
+    for(size_t index=0;index<xnbin;index++) { 
             
       //Need all bins modeled for fitting.
                     
@@ -5453,9 +5458,10 @@ protected: //rep
     _sep->add(vtxs);
   
     colorf clr;
+    vec3f nm;
 
-    unsigned int number = a_faces.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = a_faces.size();
+    for(size_t index=0;index<number;index++) {
       float xx = a_faces[index].m_x_min;
       float xe = a_faces[index].m_x_max;
       float yy = a_faces[index].m_y_min;
@@ -5517,9 +5523,9 @@ protected: //rep
         vtxs->add_color(clr);
         vtxs->add_color(clr);
 
-        vec3f nm = direction(xx,ye,val4,
-                             xx,yy,val1,
-                             xe,yy,val2);
+        direction(xx,ye,val4,
+                  xx,yy,val1,
+                  xe,yy,val2,nm);
         nm.normalize();
         vtxs->add_normal(nm[0],nm[1],nm[2]);
         vtxs->add_normal(nm[0],nm[1],nm[2]);
@@ -5535,9 +5541,9 @@ protected: //rep
         vtxs->add_rgba(clr[0],clr[1],clr[2],clr[3]);
         vtxs->add_rgba(clr[0],clr[1],clr[2],clr[3]);
 
-        nm = direction(xe,yy,val2,
-                       xe,ye,val3,
-                       xx,ye,val4);
+        direction(xe,yy,val2,
+                  xe,ye,val3,
+                  xx,ye,val4,nm);
         nm.normalize();
         vtxs->add_normal(nm[0],nm[1],nm[2]);
         vtxs->add_normal(nm[0],nm[1],nm[2]);

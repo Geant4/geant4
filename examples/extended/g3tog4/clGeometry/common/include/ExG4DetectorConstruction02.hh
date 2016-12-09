@@ -80,6 +80,5 @@ class ExG4DetectorConstruction02 : public G4VUserDetectorConstruction
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #endif
 

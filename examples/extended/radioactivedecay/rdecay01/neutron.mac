@@ -1,0 +1,14 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 3 10
+#
+/rdecay01/fullChain false
+#
+/tracking/verbose 2
+/run/beamOn 1
+#
+/tracking/verbose 0
+/run/printProgress 10000
+/run/beamOn 100000

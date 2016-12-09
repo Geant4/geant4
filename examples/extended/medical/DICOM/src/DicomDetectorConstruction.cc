@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomDetectorConstruction.cc 101807 2016-11-30 13:42:28Z gunter $
 //
 /// \file  medical/DICOM/src/DicomDetectorConstruction.cc
 /// \brief Implementation of the DicomDetectorConstruction class
@@ -39,15 +39,25 @@
 #include "G4Element.hh"
 #include "G4UIcommand.hh"
 #include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4NistManager.hh"
+// #include "G4SystemOfUnits.hh"
+#include "CLHEP/Units/SystemOfUnits.h"
 
 #include "DicomDetectorConstruction.hh"
 #include "DicomPhantomZSliceHeader.hh"
 
 #include "DicomRunAction.hh"
 #include "DicomRun.hh"
-
+#ifdef G4_DCMTK
+#include "DicomFileMgr.hh"
+#endif
 #include "G4VisAttributes.hh"
+
+using CLHEP::m;
+using CLHEP::cm3;
+using CLHEP::mole;
+using CLHEP::g;
+using CLHEP::mg;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 DicomDetectorConstruction::DicomDetectorConstruction()
@@ -114,9 +124,14 @@ G4VPhysicalVolume* DicomDetectorConstruction::Construct()
                                     false,
                                     0 );
 
+#ifdef G4_DCMTK
+    ReadPhantomDataNew();
+    ConstructPhantomContainerNew();
+#else
     ReadPhantomData();
-
     ConstructPhantomContainer();
+#endif
+    
     ConstructPhantom();
   }
     return fWorld_phys;
@@ -312,6 +327,202 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomDetectorConstruction::ReadPhantomDataNew()
+{
+#ifdef G4_DCMTK
+  G4String fileName = DicomFileMgr::GetInstance()->GetFileOutName();
+  
+  std::ifstream fin(fileName);
+  std::vector<G4String> wl;
+  G4int nMaterials;
+  fin >> nMaterials;
+  G4String mateName;
+  G4int nmate;
+  for( G4int ii = 0; ii < nMaterials; ii++ ){
+    fin >> nmate;
+    fin >> mateName;
+    if( mateName[0] == '"' && mateName[mateName.length()-1] == '"' ) {
+      mateName = mateName.substr(1,mateName.length()-2);
+    }
+    G4cout << "GmReadPhantomG4Geometry::ReadPhantomData reading nmate " << ii << " = " << nmate 
+           << " mate " << mateName << G4endl;
+    if( ii != nmate ) G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                                  "Wrong argument",
+                                  FatalErrorInArgument,
+                      "Material number should be in increasing order: wrong material number ");
+
+    G4Material* mate = 0;
+    const G4MaterialTable* matTab = G4Material::GetMaterialTable();
+    std::vector<G4Material*>::const_iterator matite;
+    for( matite = matTab->begin(); matite != matTab->end(); ++matite ) {
+      if( (*matite)->GetName() == mateName ) {
+        mate = *matite;
+      }
+    }
+    if( mate == 0 ) {
+      mate = G4NistManager::Instance()->FindOrBuildMaterial(mateName);
+    }
+    if( !mate ) G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                            "Wrong argument",
+                            FatalErrorInArgument,
+                            ("Material not found" + mateName).c_str());
+    thePhantomMaterialsOriginal[nmate] = mate;
+  }
+
+  fin >> fNVoxelX >> fNVoxelY >> fNVoxelZ;
+  G4cout << "GmReadPhantomG4Geometry::ReadPhantomData fNVoxel X/Y/Z " << fNVoxelX << " " 
+         << fNVoxelY << " " << fNVoxelZ << G4endl;
+  fin >> fMinX >> fMaxX;
+  fin >> fMinY >> fMaxY;
+  fin >> fMinZ >> fMaxZ;
+  fVoxelHalfDimX = (fMaxX-fMinX)/fNVoxelX/2.;
+  fVoxelHalfDimY = (fMaxY-fMinY)/fNVoxelY/2.;
+  fVoxelHalfDimZ = (fMaxZ-fMinZ)/fNVoxelZ/2.;
+#ifdef G4VERBOSE
+  G4cout << " Extension in X " << fMinX << " " << fMaxX << G4endl
+         << " Extension in Y " << fMinY << " " << fMaxY << G4endl
+         << " Extension in Z " << fMinZ << " " << fMaxZ << G4endl;
+#endif
+
+  fMateIDs = new size_t[fNVoxelX*fNVoxelY*fNVoxelZ];
+  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+        G4int mateID;
+        fin >> mateID; 
+        G4int nnew = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+        if( mateID < 0 || mateID >= nMaterials ) {
+          G4Exception("GmReadPhantomG4Geometry::ReadPhantomData",
+                      "Wrong index in phantom file",
+                      FatalException,
+                      G4String("It should be between 0 and "
+                               + G4UIcommand::ConvertToString(nMaterials-1) 
+                               + ", while it is " 
+                               + G4UIcommand::ConvertToString(mateID)).c_str());
+        }
+        fMateIDs[nnew] = mateID;
+      }
+    }
+  }
+
+  ReadVoxelDensities( fin );
+
+  fin.close();
+#endif
+
+}
+
+
+void DicomDetectorConstruction::ReadVoxelDensities( std::ifstream& fin )
+{
+  G4String stemp;
+  std::map<G4int, std::pair<G4double,G4double> > densiMinMax;
+  std::map<G4int, std::pair<G4double,G4double> >::iterator mpite;
+  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+    densiMinMax[ii] = std::pair<G4double,G4double>(DBL_MAX,-DBL_MAX);
+  }
+
+  char* part = getenv( "DICOM_CHANGE_MATERIAL_DENSITY" );
+  G4double densityDiff = -1.;
+  if( part ) densityDiff = G4UIcommand::ConvertToDouble(part);
+
+  std::map<G4int,G4double> densityDiffs;
+  for( size_t ii = 0; ii < thePhantomMaterialsOriginal.size(); ii++ ){
+    densityDiffs[ii] = densityDiff; //currently all materials with same step
+  }
+  //  densityDiffs[0] = 0.0001; //air
+
+  //--- Calculate the average material density for each material/density bin
+  std::map< std::pair<G4Material*,G4int>, matInfo* > newMateDens;
+
+  //---- Read the material densities
+  G4double dens;
+  for( G4int iz = 0; iz < fNVoxelZ; iz++ ) {
+    for( G4int iy = 0; iy < fNVoxelY; iy++ ) {
+      for( G4int ix = 0; ix < fNVoxelX; ix++ ) {
+        fin >> dens; 
+        //        G4cout << ix << " " << iy << " " << iz << " density " << dens << G4endl;
+        G4int copyNo = ix + (iy)*fNVoxelX + (iz)*fNVoxelX*fNVoxelY;
+
+        if( densityDiff != -1. ) continue; 
+
+        //--- store the minimum and maximum density for each material (just for printing)
+        mpite = densiMinMax.find( fMateIDs[copyNo] );
+        if( dens < (*mpite).second.first ) (*mpite).second.first = dens;
+        if( dens > (*mpite).second.second ) (*mpite).second.second = dens;
+        //--- Get material from original list of material in file
+        int mateID = fMateIDs[copyNo];
+        std::map<G4int,G4Material*>::const_iterator imite = 
+         thePhantomMaterialsOriginal.find(mateID);
+        //        G4cout << copyNo << " mateID " << mateID << G4endl;
+        //--- Check if density is equal to the original material density
+        if( std::fabs(dens - (*imite).second->GetDensity()/CLHEP::g*CLHEP::cm3 ) < 1.e-9 ) continue;
+        
+        //--- Build material name with thePhantomMaterialsOriginal name + density
+        //        float densityBin = densityDiffs[mateID] * (G4int(dens/densityDiffs[mateID])+0.5);
+        G4int densityBin = (G4int(dens/densityDiffs[mateID]));
+
+        G4String mateName = (*imite).second->GetName()+G4UIcommand::ConvertToString(densityBin);
+        //--- Look if it is the first voxel with this material/densityBin
+        std::pair<G4Material*,G4int> matdens((*imite).second, densityBin );
+
+        std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite = 
+         newMateDens.find( matdens );
+        if( mppite != newMateDens.end() ){
+          matInfo* mi = (*mppite).second;
+          mi->fSumdens += dens;
+          mi->fNvoxels++;
+          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+        } else {
+          matInfo* mi = new matInfo;
+          mi->fSumdens = dens;
+          mi->fNvoxels = 1;
+          mi->fId = newMateDens.size()+1;
+          newMateDens[matdens] = mi;
+          fMateIDs[copyNo] = thePhantomMaterialsOriginal.size()-1 + mi->fId;
+        }
+      }
+    }
+  }
+
+  if( densityDiff != -1. ) { 
+    for( mpite = densiMinMax.begin(); mpite != densiMinMax.end(); mpite++ ){
+#ifdef G4VERBOSE
+      G4cout << "DicomDetectorConstruction::ReadVoxelDensities ORIG MATERIALS DENSITY " 
+             << (*mpite).first << " MIN " << (*mpite).second.first << " MAX " 
+             << (*mpite).second.second << G4endl;
+#endif
+    }
+  }
+
+  //----- Build the list of phantom materials that go to Parameterisation
+  //--- Add original materials
+  std::map<G4int,G4Material*>::const_iterator mimite;
+  for( mimite = thePhantomMaterialsOriginal.begin(); mimite != thePhantomMaterialsOriginal.end(); 
+   mimite++ ){
+    fMaterials.push_back( (*mimite).second );
+  }
+  // 
+  //---- Build and add new materials
+std::map< std::pair<G4Material*,G4int>, matInfo* >::iterator mppite;
+  for( mppite= newMateDens.begin(); mppite != newMateDens.end(); mppite++ ){
+    G4double averdens = (*mppite).second->fSumdens/(*mppite).second->fNvoxels;
+    G4double saverdens = G4int(1000.001*averdens)/1000.;
+#ifndef G4VERBOSE
+    G4cout << "DicomDetectorConstruction::ReadVoxelDensities AVER DENS " << averdens << " -> " 
+           << saverdens << " -> " << G4int(1000*averdens) << " " << G4int(1000*averdens)/1000 
+           << " " <<  G4int(1000*averdens)/1000. << G4endl;
+#endif
+
+      G4String mateName = ((*mppite).first).first->GetName() + "_"
+       + G4UIcommand::ConvertToString(saverdens);
+    fMaterials.push_back( BuildMaterialWithChangingDensity( 
+     (*mppite).first.first, averdens, mateName ) );
+  }
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ReadPhantomData()
 {
 
@@ -347,6 +558,8 @@ void DicomDetectorConstruction::ReadPhantomData()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
 {
+  G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " 
+         << fname << G4endl; //GDEB
 #ifdef G4VERBOSE
   G4cout << " DicomDetectorConstruction::ReadPhantomDataFile opening file " 
          << fname << G4endl;
@@ -379,7 +592,7 @@ void DicomDetectorConstruction::ReadPhantomDataFile(const G4String& fname)
   //----- Read data header
   DicomPhantomZSliceHeader* sliceHeader = new DicomPhantomZSliceHeader( fin );
   fZSliceHeaders.push_back( sliceHeader );
-  
+ 
   //----- Read material indices
   G4int nVoxels = sliceHeader->GetNoVoxels();
   
@@ -535,6 +748,49 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
   //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void DicomDetectorConstruction::ConstructPhantomContainerNew()
+{
+#ifdef G4_DCMTK
+  //---- Extract number of voxels and voxel dimensions
+#ifdef G4VERBOSE
+  G4cout << " fNVoxelX " << fNVoxelX << " fVoxelHalfDimX " << fVoxelHalfDimX 
+         <<G4endl;
+  G4cout << " fNVoxelY " << fNVoxelY << " fVoxelHalfDimY " << fVoxelHalfDimY 
+         <<G4endl;
+  G4cout << " fNVoxelZ " << fNVoxelZ << " fVoxelHalfDimZ " << fVoxelHalfDimZ 
+         <<G4endl;
+  G4cout << " totalPixels " << fNVoxelX*fNVoxelY*fNVoxelZ <<  G4endl;
+#endif
+  
+  //----- Define the volume that contains all the voxels
+  fContainer_solid = new G4Box("phantomContainer",fNVoxelX*fVoxelHalfDimX,
+                               fNVoxelY*fVoxelHalfDimY,
+                               fNVoxelZ*fVoxelHalfDimZ);
+  fContainer_logic =
+    new G4LogicalVolume( fContainer_solid,
+   //the material is not important, it will be fully filled by the voxels
+                         fMaterials[0],
+                         "phantomContainer",
+                         0, 0, 0 );
+
+  G4ThreeVector posCentreVoxels((fMinX+fMaxX)/2.,(fMinY+fMaxY)/2.,(fMinZ+fMaxZ)/2.);
+#ifdef G4VERBOSE
+  G4cout << " placing voxel container volume at " << posCentreVoxels << G4endl;
+#endif
+  fContainer_phys =
+    new G4PVPlacement(0,  // rotation
+                      posCentreVoxels,
+                      fContainer_logic,     // The logic volume
+                      "phantomContainer",  // Name
+                      fWorld_logic,  // Mother
+                      false,           // No op. bool.
+                      1);              // Copy number
+  
+  //fContainer_logic->SetVisAttributes(new G4VisAttributes(G4Colour(1.,0.,0.)));
+#endif
+}
+
 #include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSDoseDeposit.hh"
@@ -543,9 +799,10 @@ void DicomDetectorConstruction::ConstructPhantomContainer()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 {
-  
-  G4cout << "\n\n\n\n\t SET SCORER : " << voxel_logic->GetName() 
-         << " \n\n\n" << G4endl;
+
+#ifdef G4VERBOSE
+  G4cout << "\t SET SCORER : " << voxel_logic->GetName() << G4endl;
+#endif
   
   fScorers.insert(voxel_logic);
   
@@ -556,7 +813,9 @@ void DicomDetectorConstruction::SetScorer(G4LogicalVolume* voxel_logic)
 void DicomDetectorConstruction::ConstructSDandField()
 {
   
-  G4cout << "\n\n\n\n\t CONSTRUCT SD AND FIELD \n\n\n" << G4endl;
+#ifdef G4VERBOSE
+  G4cout << "\t CONSTRUCT SD AND FIELD" << G4endl;
+#endif
   
   //G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
@@ -575,7 +834,7 @@ void DicomDetectorConstruction::ConstructSDandField()
   // declare MFDet as a MultiFunctionalDetector scorer
   G4MultiFunctionalDetector* MFDet = 
     new G4MultiFunctionalDetector(concreteSDname);
-  //SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
+  G4SDManager::GetSDMpointer()->AddNewDetector( MFDet );
   //G4VPrimitiveScorer* dosedep = new G4PSDoseDeposit("DoseDeposit");
   G4VPrimitiveScorer* dosedep = 
     new G4PSDoseDeposit3D("DoseDeposit", fNVoxelX, fNVoxelY, fNVoxelZ);

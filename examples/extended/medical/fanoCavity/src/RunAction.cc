@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
+// $Id: RunAction.cc 98764 2016-08-09 14:12:17Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,7 +72,6 @@ G4Run* RunAction::GenerateRun()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
@@ -84,7 +83,6 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 void RunAction::EndOfRunAction(const G4Run* )
 {

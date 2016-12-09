@@ -19,12 +19,8 @@ public:
 public:
   virtual const std::string& name() const {return m_name;}
   virtual const std::string& title() const {return m_title;}
-  virtual const std::string& store_class_name() const {
-    return m_store_cls;
-  }
-  virtual bool stream(buffer& a_buffer) const {
-    return a_buffer.write_fast_array(m_buffer,length());
-  }
+  virtual const std::string& store_class_name() const {return m_store_cls;}
+  virtual bool stream(buffer& a_buffer) const {return a_buffer.write_fast_array(m_buffer,length());}
 public:
   bufobj(std::ostream& a_out,bool a_byte_swap,uint32 a_size,
          const std::string& a_name,

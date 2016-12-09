@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Molecule.cc 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id: G4Molecule.cc 100802 2016-11-02 14:55:27Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -53,7 +53,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
-#include "G4MoleculeCounter.hh"
+#include "G4VMoleculeCounter.hh"
 
 using namespace std;
 
@@ -154,10 +154,12 @@ G4Molecule::~G4Molecule()
 {
   if (fpTrack != NULL)
   {
-    if (G4MoleculeCounter::GetMoleculeCounter()->InUse())
+    if (G4VMoleculeCounter::Instance()->InUse())
     {
-      G4MoleculeCounter::GetMoleculeCounter()->RemoveAMoleculeAtTime(
-          fpMolecularConfiguration, fpTrack->GetGlobalTime());
+      G4VMoleculeCounter::Instance()->
+        RemoveAMoleculeAtTime(fpMolecularConfiguration,
+                              fpTrack->GetGlobalTime(),
+                              &(fpTrack->GetPosition()));
     }
     fpTrack = 0;
   }
@@ -174,7 +176,8 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
 //////////////////////////
 {
   fpMolecularConfiguration =
-      G4MolecularConfiguration::GetOrCreateMolecularConfiguration(moleculeDefinition);
+      G4MolecularConfiguration::
+        GetOrCreateMolecularConfiguration(moleculeDefinition);
 }
 
 //______________________________________________________________________________
@@ -182,8 +185,9 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition) :
 G4Molecule::G4Molecule(G4MoleculeDefinition* moleculeDefinition, int charge)
 {
   fpMolecularConfiguration =
-      G4MolecularConfiguration::GetOrCreateMolecularConfiguration(moleculeDefinition,
-                                                          charge);
+      G4MolecularConfiguration::
+        GetOrCreateMolecularConfiguration(moleculeDefinition,
+                                          charge);
 }
 
 //______________________________________________________________________________
@@ -380,8 +384,7 @@ void G4Molecule::PrintState() const
 G4Track * G4Molecule::BuildTrack(G4double globalTime,
                                  const G4ThreeVector& position)
 {
-  if (fpTrack != 0)
-  {
+  if (fpTrack != 0){
     G4Exception("G4Molecule::BuildTrack", "Molecule001", FatalErrorInArgument,
                 "A track was already assigned to this molecule");
   }
@@ -403,10 +406,11 @@ G4Track * G4Molecule::BuildTrack(G4double globalTime,
       fpMolecularConfiguration->GetDefinition(), MomentumDirection,
       KineticEnergy);
 
-  if (G4MoleculeCounter::InUse())
-  {
-    G4MoleculeCounter::GetMoleculeCounter()->AddAMoleculeAtTime(fpMolecularConfiguration,
-                                                                globalTime);
+  if (G4VMoleculeCounter::InUse()){
+    G4VMoleculeCounter::Instance()->
+      AddAMoleculeAtTime(fpMolecularConfiguration,
+                         globalTime,
+                         &(fpTrack->GetPosition()));
   }
 
   //Set the Track

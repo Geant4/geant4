@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChPhysListEmStandardSS.hh
+/// \brief Definition of the ExExChPhysListEmStandardSS class
+//
 
 #ifndef ExExChPhysListEmStandardSS_h
 #define ExExChPhysListEmStandardSS_h 1

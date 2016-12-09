@@ -1,4 +1,4 @@
-$Id: History 97179 2016-05-27 12:46:40Z gcosmo $
+$Id: History 101029 2016-11-04 08:40:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-Nov-2016, Alberto Ribon              (phys-ctor-ions-V10-02-02)
+- Written first draft of the README
+- G4IonINCLXXPhysics : corrected transition regions between INCLXX
+  and FTF, now 3 GeV/nucleon.
+
+16-Oct-2016, Michel Maire               (phys-ctor-ions-V10-02-01)
+- Added README.
 
 26-May-2016, Alberto Ribon              (phys-ctor-ions-V10-02-00)
 - Created G4IonPhysicsPHP.

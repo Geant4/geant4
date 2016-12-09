@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/ProcessesCount.hh
 /// \brief Definition of the ProcessesCount class
 //
-// $Id: ProcessesCount.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: ProcessesCount.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,30 +39,24 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class OneProcessCount
+class ProcessCount
 {
 public:
-    OneProcessCount(G4String name) {Name=name; Counter=0;};
-   ~OneProcessCount() {};
+    ProcessCount(G4String name) {fName=name; fCounter=0;};
+   ~ProcessCount() {};
    
 public:
-    G4String  GetName()       {return Name;};
-    G4int     GetCounter()    {return Counter;};        
-    void      Count()         {Counter++;};
+    G4String  GetName()      {return fName;};
+    G4int     GetCounter()   {return fCounter;};        
+    void      Count()        {fCounter++;};
     
 private:
-    G4String Name;            // process name
-    G4int    Counter;         // process counter
+    G4String fName;            // process name
+    G4int    fCounter;         // process counter
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-typedef std::vector<OneProcessCount*> ProcessesCount;
+typedef std::vector<ProcessCount*> ProcessesCount;
 
 #endif
-
-
-
-
-
-

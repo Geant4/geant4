@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChDetectorConstruction.cc
+/// \brief Implementation of the ExExChDetectorConstruction class
+//
 //
 
 #include "ExExChDetectorConstruction.hh"
@@ -77,7 +80,7 @@ ExExChDetectorConstruction::ExExChDetectorConstruction():
 fWorldLogic(0),fXtalLogic(0){
     
     //SiSD standard parameters
-    bSiSD = true;
+    fSiSD = true;
     fSSDSize = G4ThreeVector(3.8 * CLHEP::centimeter,
                              3.8 * CLHEP::centimeter,
                              640. * CLHEP::micrometer);
@@ -92,10 +95,10 @@ fWorldLogic(0),fXtalLogic(0){
     fSSDBoxThickness = 4. * CLHEP::millimeter;
 
     //Beampipe standard parameters
-    bBeamPipe = false;
+    fBeamPipe = false;
     fBeamPipeThickness = (0.3) * CLHEP::centimeter;
     fBeamPipeRadius = (15.6) * CLHEP::centimeter;
-    bXtal = true;
+    fXtal = true;
     fXtalAngle = G4ThreeVector(0.,0.,0.);
     fXtalSize = G4ThreeVector(1. * CLHEP::millimeter,
                               70. * CLHEP::millimeter,
@@ -159,7 +162,7 @@ G4VPhysicalVolume* ExExChDetectorConstruction::Construct(){
     
     //** SiSD **//
 
-    if(bSiSD){
+    if(fSiSD){
         for(unsigned int i1=0;i1<3;i1++){
                 G4LogicalVolume* fSSDBoxLogic = ConstructSiSD(i1);
 
@@ -177,7 +180,7 @@ G4VPhysicalVolume* ExExChDetectorConstruction::Construct(){
         }
     }
     //** BeamPipe **//
-    if(bBeamPipe){
+    if(fBeamPipe){
         G4double fBeamPipeFromSiSDDistance = 20. * CLHEP::centimeter;
 
         G4ThreeVector fBeamPipeA0Position =
@@ -228,7 +231,7 @@ G4VPhysicalVolume* ExExChDetectorConstruction::Construct(){
     }
 #endif
     //** Crystal **//
-    if(bXtal){
+    if(fXtal){
             ConstructXtalTarget();
     }
     

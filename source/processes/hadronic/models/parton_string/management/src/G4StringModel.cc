@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StringModel.cc 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4StringModel.cc 100828 2016-11-02 15:25:59Z gcosmo $
 //
 // G4StringModel
 #include "G4StringModel.hh"
@@ -33,7 +33,6 @@ G4StringModel::G4StringModel() :  G4VHighEnergyGenerator(),
 the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
 {
 }
-
 
 G4StringModel::~G4StringModel()
 {
@@ -47,7 +46,8 @@ the3DNucleus(0), theStringFragmentationModel(0),theGenerator(0)
 
 const G4StringModel & G4StringModel::operator=(const G4StringModel &)
 {
-  throw G4HadronicException(__FILE__, __LINE__, "G4StringModel::operator= meant to not be accessable");
+  throw G4HadronicException(__FILE__, __LINE__, 
+                            "G4StringModel::operator= meant to not be accessable");
   return *this;
 }
 
@@ -61,3 +61,4 @@ int G4StringModel::operator!=(const G4StringModel &) const
 {
   return 1;
 }
+

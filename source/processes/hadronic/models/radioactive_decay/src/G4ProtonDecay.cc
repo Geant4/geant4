@@ -43,9 +43,10 @@
 #include <iomanip>
 
 G4ProtonDecay::G4ProtonDecay(const G4ParticleDefinition* theParentNucleus,
-                            const G4double& branch, const G4double& Qvalue,
-                            const G4double& excitationE)
- : G4NuclearDecay("proton decay", Proton, excitationE), transitionQ(Qvalue)
+                             const G4double& branch, const G4double& Qvalue,
+                             const G4double& excitationE,
+                             const G4Ions::G4FloatLevelBase& flb)
+ : G4NuclearDecay("proton decay", Proton, excitationE, flb), transitionQ(Qvalue)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent
   SetBR(branch);
@@ -55,7 +56,7 @@ G4ProtonDecay::G4ProtonDecay(const G4ParticleDefinition* theParentNucleus,
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 1;
   G4int daughterA = theParentNucleus->GetAtomicMass() - 1;
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetDaughter(1, "proton");
 }
 

@@ -56,12 +56,8 @@ public:
 
   virtual ~G4PolarizedGammaTransition();
   
-  virtual G4Fragment* SampleTransition(G4Fragment* nucleus,
-				       G4double newExcEnergy,
-                                       G4int  deltaS,
-                                       size_t shell,
-                                       G4bool isGamma,
-				       G4bool isLongLived);
+  virtual void SampleDirection(G4Fragment* nuc, G4double ratio,
+			       G4int twoJ1, G4int twoJ2, G4int mp);
 
 private:  
 

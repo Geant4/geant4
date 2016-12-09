@@ -1,4 +1,4 @@
-$Id: History 96677 2016-04-29 12:20:20Z gcosmo $
+$Id: History 101687 2016-11-21 09:43:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 November 2016 Witek Pokorski (gdml-V10-02-09)
+- Fixing check for correctness of the units for replicas in case of angular axis.
+
+13 September Gabriele Cosmo (gdml-V10-02-08)
+- Replaced obsolete call to 'Invisible' with 'G4VisAttributes::GetInvisible()'
+  in G4GDMLReadStructure::GetWorldVolume().
+
+26 July 2016 Witek Pokorski (gdml-V10-02-07)
+- Fixing check for correctness of the units for divisions along angular axis.
 
 29 April 2016 Gabriele Cosmo (gdml-V10-02-06)
 - Added missing new dependency on digits_hits/detector in GNUmakefile.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/EventAction.cc
+/// \file EventAction.cc
 /// \brief Implementation of the EventAction class
 //
 // $Id: EventAction.cc 95740 2016-02-23 09:34:37Z gcosmo $
@@ -56,7 +56,7 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event*)
 {
   //energy deposited per event
-  for (G4int k=0; k<MaxAbsor; k++) { fEdepAbsor[k] = 0.0; }
+  for (G4int k=0; k<kMaxAbsor; k++) { fEdepAbsor[k] = 0.0; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,5 +84,4 @@ void EventAction::EndOfEventAction(const G4Event*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

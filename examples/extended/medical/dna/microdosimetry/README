@@ -19,7 +19,7 @@ b. G4AI Ltd, UK
 
 ---->0. INTRODUCTION.                                                    
                                                                        
-The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
+The microdosimetry example simulates the track of two 5 MeV protons in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
 are used in a Target volume, declared as a Region.
 
@@ -29,7 +29,8 @@ These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 We also suggest these other references related to this example:
@@ -37,12 +38,11 @@ Nucl. Instrum. and Meth. B 273 (2012) 95-97
 Prog. Nucl. Sci. Tec. 2 (2011) 898-903
 
 ---->1. GEOMETRY SET-UP.
- 
+  
 The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
 water, which dimensions are twenty times smaller than the dimensions of the World volume.
 
-
-6--->2. SET-UP 
+--->2. SET-UP 
                                                                         
 Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
@@ -54,7 +54,11 @@ It works in MT mode.
 
 Normal mode, run:
 
-./microdosimetry -mt 4 -out myRootFile
+./microdosimetry -mt 2 -out microdosimetry
+
+(or more generally
+./microdosimetry -mt 2 -out myRootFile
+)
 
 The macro microdosimetry.in is executed by default to select another one:
 
@@ -79,7 +83,6 @@ A simple electron capture process is also provided in order to kill electrons
 below a chosen energy threshold, set in the Physics list.
 
 Look at the PhyscisList.cc file.
-A
 
 ---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
@@ -110,6 +113,7 @@ alpha+   : 5
 helium   : 6
 
 -processes:
+msc				10
 e-_G4DNAElastic			11
 e-_G4DNAExcitation		12
 e-_G4DNAIonisation		13

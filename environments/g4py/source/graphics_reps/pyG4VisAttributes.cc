@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4VisAttributes.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4VisAttributes.cc 101892 2016-12-07 08:07:30Z gcosmo $
 // ====================================================================
 //   pyG4VisAttributes.cc
 //
@@ -75,7 +75,6 @@ void export_G4VisAttributes()
     .def(init<const G4Colour&>())
     .def(init<G4bool, const G4Colour&>())
     // ---
-    .def_readonly("Invisible",     &G4VisAttributes::Invisible)
     .def("GetInvisible",           &G4VisAttributes::GetInvisible,
 	 return_value_policy<reference_existing_object>())
     .staticmethod("GetInvisible")

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.icc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4OpenGLSceneHandler.icc 99076 2016-09-01 12:40:47Z gcosmo $
 //
 // 
 // Andrew Walkden  20th January 1998
@@ -67,6 +67,14 @@ inline void G4OpenGLSceneHandler::AddSolid (const G4Polycone& polycone) {
 
 inline void G4OpenGLSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
   G4VSceneHandler::AddSolid (polyhedra);
+}
+
+inline void G4OpenGLSceneHandler::AddSolid (const G4Orb& orb) {
+  G4VSceneHandler::AddSolid (orb);
+}
+
+inline void G4OpenGLSceneHandler::AddSolid (const G4Ellipsoid& ellipsoid) {
+  G4VSceneHandler::AddSolid (ellipsoid);
 }
 
 inline void G4OpenGLSceneHandler::AddSolid (const G4VSolid& vsolid) {

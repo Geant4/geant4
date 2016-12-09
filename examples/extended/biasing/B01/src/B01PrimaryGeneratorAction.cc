@@ -27,7 +27,7 @@
 /// \brief Implementation of the B01PrimaryGeneratorAction class
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc 70237 2013-05-27 11:57:04Z gcosmo $
+// $Id: B01PrimaryGeneratorAction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 #include "globals.hh"
@@ -39,7 +39,6 @@
 #include "G4Neutron.hh"
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

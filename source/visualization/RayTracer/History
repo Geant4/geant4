@@ -1,4 +1,4 @@
-$Id: History 96733 2016-05-02 11:52:48Z gcosmo $
+$Id: History 99076 2016-09-01 12:40:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+31st August 2016  John Allison (raytracer-V10-02-01)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
 
 2nd May 2016  John Allison (raytracer-V10-02-00)
 - G4RTJpegCoder.cc: Fixed gcc-6.1 warning.

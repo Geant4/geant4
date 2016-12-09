@@ -46,7 +46,6 @@ set(EXAMPLECOMPOSITECALORIMETER_SCRIPTS
   gui.mac
   test.g4mac
   vis.mac
-  icons.mac
   dataconf/g4testbeamhcal96.conf
   dataconf/testbeamhcal96.conf
   datageom/tbhcal96.geom

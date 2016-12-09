@@ -140,6 +140,9 @@ virtual
   G4double GetNucleusRadius(const G4DynamicParticle*, const G4Element*);
   G4double GetNucleusRadius(G4int At);
 
+  G4double GetAxsc2piR2(){return fAxsc2piR2;};
+  G4double GetModelInLog(){return fModelInLog;};
+
   virtual void CrossSectionDescription(std::ostream&) const;
 
   inline G4double GetElasticGlauberGribov(const G4DynamicParticle*, G4int Z, G4int A);
@@ -176,6 +179,7 @@ private:
   static const G4double fPionMinusBarCorrectionIn[93];
 
   G4double fTotalXsc, fElasticXsc, fInelasticXsc, fProductionXsc, fDiffractionXsc;
+  G4double fAxsc2piR2, fModelInLog;
 //  G4double fHadronNucleonXsc;
  
   G4ParticleDefinition* theGamma;

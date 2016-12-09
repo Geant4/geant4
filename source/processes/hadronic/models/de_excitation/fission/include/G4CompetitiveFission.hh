@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh 89550 2015-04-17 08:38:15Z gcosmo $
+// $Id: G4CompetitiveFission.hh 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -50,8 +50,6 @@ public:
   
   G4CompetitiveFission();
   virtual ~G4CompetitiveFission();
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
 
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 

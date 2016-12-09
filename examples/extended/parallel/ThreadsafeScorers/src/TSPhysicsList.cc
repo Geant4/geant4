@@ -157,13 +157,14 @@ void TSPhysicsList::ConstructProcess()
     step_limit_particles.insert("mu+");
     step_limit_particles.insert("mu-");
 
-    theParticleIterator->reset();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
 
     G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-    while( (*theParticleIterator)() )
+    while( (*particleIterator)() )
     {
-        G4ParticleDefinition* particle = theParticleIterator->value();
+        G4ParticleDefinition* particle = particleIterator->value();
         G4String pname = particle->GetParticleName();
 
         if(step_limit_particles.find(pname) != step_limit_particles.end() ||

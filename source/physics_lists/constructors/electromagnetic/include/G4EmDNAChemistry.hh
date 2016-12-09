@@ -37,7 +37,8 @@ class G4EmDNAChemistry : public G4VUserChemistryList,
 {
 
 public:
-  G4EmDNAChemistry();
+
+  explicit G4EmDNAChemistry();
   virtual ~G4EmDNAChemistry();
 
   virtual void ConstructParticle()

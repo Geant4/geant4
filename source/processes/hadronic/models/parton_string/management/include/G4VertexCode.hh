@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VertexCode.hh 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VertexCode.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1
@@ -32,14 +32,12 @@
 
 class G4VertexCode
 {
-
   public:
     G4VertexCode(G4String & aCode);
 
     void SetCode(G4String & aCode);
     G4String GetCode();
   private:
-
     G4String theCode;
 };
 
@@ -54,3 +52,4 @@ inline G4String G4VertexCode::GetCode()
 }
 
 #endif
+

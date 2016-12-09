@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/savalue/svalue.cc
+/// \file medical/dna/svalue/svalue.cc
 /// \brief Main program of the medical/dna/svalue example
 //
 // $Id: svalue.cc 85260 2014-10-27 08:53:35Z gcosmo $
@@ -65,22 +65,18 @@ int main(int argc,char** argv) {
     
   //Construct the default run manager
 #ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  G4MTRunManager* runManager = new G4MTRunManager();
   G4int nThreads = G4Threading::G4GetNumberOfCores();
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
-  G4RunManager* runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager();
 #endif  
 
   //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction;
-  runManager->SetUserInitialization(det);
-     
-  PhysicsList* phys = new PhysicsList;
-  runManager->SetUserInitialization(phys);
-
+  runManager->SetUserInitialization(new DetectorConstruction());
+  runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new ActionInitialization());
 
   //get the pointer to the User Interface manager 

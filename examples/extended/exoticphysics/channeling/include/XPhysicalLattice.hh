@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XPhysicalLattice.hh
+/// \brief Definition of the XPhysicalLattice class
+//
 
 #ifndef XPhysicalLattice_h
 #define XPhysicalLattice_h 1

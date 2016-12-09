@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: field02.cc 77484 2013-11-25 10:11:57Z gcosmo $
+// $Id: field02.cc 98066 2016-07-01 16:31:42Z gcosmo $
 //
 /// \file field/field02/field02.cc
 /// \brief Main program of the field/field02 example
@@ -41,13 +41,12 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "F02PhysicsList.hh"
 #include "F02DetectorConstruction.hh"
-
 #include "F02ActionInitialization.hh"
 
 #include "G4UImanager.hh"
-
+#include "FTFP_BERT.hh"
+#include "G4StepLimiterPhysics.hh"
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -81,7 +80,9 @@ int main(int argc,char** argv)
   F02DetectorConstruction* detector = new F02DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  runManager->SetUserInitialization(new F02PhysicsList(detector));
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  physicsList->RegisterPhysics(new G4StepLimiterPhysics());
+  runManager->SetUserInitialization(physicsList);
   // User action initialization
   runManager->SetUserInitialization(new F02ActionInitialization(detector));
 

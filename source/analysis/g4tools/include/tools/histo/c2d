@@ -47,8 +47,8 @@ public:
   bool convert(const std::vector<double>&,const std::vector<double>&);
   const histo::h2d& histogram() const;
   bool fill_histogram(histo::h2d& a_histo) const {
-    unsigned int number = m_xs.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = m_xs.size();
+    for(size_t index=0;index<number;index++) {
       if(!a_histo.fill(m_xs[index],m_ys[index],m_ws[index])) return false;
     }
     return true;
@@ -248,8 +248,8 @@ bool c2d::scale(double a_scale) {
   if(m_histo) {
     return m_histo->scale(a_scale);
   } else {
-    unsigned int number = m_ws.size();
-    for(unsigned int index=0;index<number;index++) m_ws[index] *= a_scale;
+    size_t number = m_ws.size();
+    for(size_t index=0;index<number;index++) m_ws[index] *= a_scale;
     m_Sw *= a_scale;
     m_Sxw *= a_scale;
     m_Sx2w *= a_scale;
@@ -305,10 +305,10 @@ bool c2d::fill(double aX,double aY,double aW){
 }
 
 inline
-bool c2d::convert(const std::vector<double>& aEdgesX,const std::vector<double>& aEdgesY) { 
+bool c2d::convert(const std::vector<double>& a_edges_x,const std::vector<double>& a_edges_y) { 
   if(m_histo) return true;
   m_histo = new histo::h2d(base_cloud::title(),
-                           aEdgesX,aEdgesY);
+                           a_edges_x,a_edges_y);
   if(!m_histo) return false;
   bool status = fill_histogram(*m_histo);
   clear();
@@ -337,7 +337,7 @@ const h2d& c2d::histogram() const {
 
 inline
 unsigned int c2d::entries() const { 
-  return m_histo ? m_histo->all_entries() : m_ws.size();
+  return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();
 }
 
 inline

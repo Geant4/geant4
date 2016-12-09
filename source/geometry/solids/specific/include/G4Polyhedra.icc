@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Polyhedra.icc 100819 2016-11-02 15:17:36Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -50,6 +50,30 @@ inline
 G4double G4Polyhedra::GetEndPhi() const
 {
   return endPhi;
+}
+
+inline
+G4double G4Polyhedra::GetSinStartPhi() const
+{
+  return std::sin(startPhi);
+}
+
+inline
+G4double G4Polyhedra::GetCosStartPhi() const
+{
+  return std::cos(startPhi);
+}
+
+inline
+G4double G4Polyhedra::GetSinEndPhi() const
+{
+  return std::sin(endPhi);
+}
+
+inline
+G4double G4Polyhedra::GetCosEndPhi() const
+{
+  return std::cos(endPhi);
 }
 
 inline

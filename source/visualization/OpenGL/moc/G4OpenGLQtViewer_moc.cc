@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtViewer.hh'
 **
-** Created: Fri Jun 3 09:32:38 2016
+** Created: Tue Nov 22 09:56:58 2016
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_G4OpenGLQtViewer[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-      31,   14, // methods
+      29,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -53,15 +53,13 @@ static const uint qt_meta_data_G4OpenGLQtViewer[] = {
      465,   17,   17,   17, 0x08,
      495,  487,   17,   17, 0x08,
      547,   17,   17,   17, 0x08,
-     576,   17,   17,   17, 0x08,
-     618,   17,   17,   17, 0x08,
-     657,   17,   17,   17, 0x08,
-     698,   17,   17,   17, 0x08,
-     714,   17,   17,   17, 0x08,
-     743,   17,   17,   17, 0x08,
-     771,   17,   17,   17, 0x08,
-     804,  795,   17,   17, 0x08,
-     853,   17,   17,   17, 0x08,
+     588,   17,   17,   17, 0x08,
+     604,   17,   17,   17, 0x08,
+     629,   17,   17,   17, 0x08,
+     658,   17,   17,   17, 0x08,
+     686,   17,   17,   17, 0x08,
+     719,  710,   17,   17, 0x08,
+     768,   17,   17,   17, 0x08,
 
        0        // eod
 };
@@ -80,11 +78,9 @@ static const char qt_meta_stringdata_G4OpenGLQtViewer[] = {
     "toggleFullScreen(bool)\0processEncodeFinished()\0"
     "processLookForFinished()\0processEncodeStdout()\0"
     "item,id\0sceneTreeComponentItemChanged(QTreeWidgetItem*,int)\0"
-    "toggleSceneTreeViewerInfos()\0"
-    "toggleSceneTreeComponentTreeWidgetInfos()\0"
-    "toggleSceneTreeComponentPickingInfos()\0"
     "toggleSceneTreeComponentPickingCout(int)\0"
-    "togglePicking()\0sceneTreeComponentSelected()\0"
+    "togglePicking()\0currentTabActivated(int)\0"
+    "sceneTreeComponentSelected()\0"
     "changeDepthInSceneTree(int)\0"
     "changeSearchSelection()\0item,val\0"
     "changeColorAndTransparency(QTreeWidgetItem*,int)\0"
@@ -118,16 +114,14 @@ void G4OpenGLQtViewer::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 18: _t->processLookForFinished(); break;
         case 19: _t->processEncodeStdout(); break;
         case 20: _t->sceneTreeComponentItemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 21: _t->toggleSceneTreeViewerInfos(); break;
-        case 22: _t->toggleSceneTreeComponentTreeWidgetInfos(); break;
-        case 23: _t->toggleSceneTreeComponentPickingInfos(); break;
-        case 24: _t->toggleSceneTreeComponentPickingCout((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 25: _t->togglePicking(); break;
-        case 26: _t->sceneTreeComponentSelected(); break;
-        case 27: _t->changeDepthInSceneTree((*reinterpret_cast< int(*)>(_a[1]))); break;
-        case 28: _t->changeSearchSelection(); break;
-        case 29: _t->changeColorAndTransparency((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
-        case 30: _t->tableWidgetViewerSetItemChanged((*reinterpret_cast< QTableWidgetItem*(*)>(_a[1]))); break;
+        case 21: _t->toggleSceneTreeComponentPickingCout((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 22: _t->togglePicking(); break;
+        case 23: _t->currentTabActivated((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 24: _t->sceneTreeComponentSelected(); break;
+        case 25: _t->changeDepthInSceneTree((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 26: _t->changeSearchSelection(); break;
+        case 27: _t->changeColorAndTransparency((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 28: _t->tableWidgetViewerSetItemChanged((*reinterpret_cast< QTableWidgetItem*(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -167,9 +161,9 @@ int G4OpenGLQtViewer::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 31)
+        if (_id < 29)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 31;
+        _id -= 29;
     }
     return _id;
 }

@@ -1,0 +1,19 @@
+# $Id: GNUmakefile 73889 2013-09-16 12:23:02Z ihrivnac $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
+
+
+name := exampleGB05
+G4TARGET := $(name)
+G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../..
+endif
+
+.PHONY: all
+all: lib bin
+
+include $(G4INSTALL)/config/binmake.gmk
+

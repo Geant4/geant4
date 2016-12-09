@@ -334,7 +334,8 @@ namespace G4INCL {
   }
 
   G4double CrossSectionsINCL46::elastic(Particle const * const p1, Particle const * const p2) {
-    if(!p1->isPion() && !p2->isPion())
+//	  if(!p1->isPion() && !p2->isPion())
+	  if((p1->isNucleon()||p1->isDelta()) && (p2->isNucleon()||p2->isDelta()))
       //    return elasticNN(p1, p2); // New implementation
       return elasticNNLegacy(p1, p2); // Translated from INCL4.6 FORTRAN
     else
@@ -367,10 +368,118 @@ namespace G4INCL {
     G4double CrossSectionsINCL46::NNToxPiNN(const G4int, Particle const * const, Particle const * const) {
         return 0.;
     }
-
+	
     G4double CrossSectionsINCL46::piNToxPiN(const G4int, Particle const * const, Particle const * const) {
         return 0.;
     }
+	
+    G4double CrossSectionsINCL46::piNToEtaN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing Eta cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::piNToOmegaN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing Omega cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::piNToEtaPrimeN(Particle const * const, Particle const * const) {
+		//
+		//     Pion-Nucleon producing EtaPrime cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::etaNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     Eta-Nucleon producing Pion cross sections
+		//
+		      return 0.;
+    }
 
+	
+	   G4double CrossSectionsINCL46::etaNToPiPiN(Particle const * const, Particle const * const) {
+		//
+		//     Eta-Nucleon producing Two Pions cross sections
+		//
+		      return 0.;
+	   }
+	
+    G4double CrossSectionsINCL46::omegaNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     Omega-Nucleon producing Pion cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::omegaNToPiPiN(Particle const * const, Particle const * const) {
+		//
+		//     Omega-Nucleon producing Two Pions cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::etaPrimeNToPiN(Particle const * const, Particle const * const) {
+		//
+		//     EtaPrime-Nucleon producing Pion cross sections
+		//
+        return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::NNToNNEta(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Eta cross sections
+		//
+        return 0.;
+    }
+	
+	   G4double CrossSectionsINCL46::NNToNNEtaExclu(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Eta cross sections
+		//
+							 return 0.;
+	   }
+	
+   	G4double CrossSectionsINCL46::NNToNNEtaxPi(const G4int, Particle const * const, Particle const * const) {
+	      	return 0.;
+   	}
+
+	   G4double CrossSectionsINCL46::NNToNDeltaEta(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing N-Delta-Eta cross sections
+		//
+		      return 0.;
+	}
+ 
+    G4double CrossSectionsINCL46::NNToNNOmega(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Omega cross sections
+		//
+     return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::NNToNNOmegaExclu(Particle const * const, Particle const * const) {
+		//
+		//     Nucleon-Nucleon producing Omega cross sections
+		//
+     return 0.;
+    }
+	
+    G4double CrossSectionsINCL46::NNToNNOmegaxPi(const G4int, Particle const * const, Particle const * const) {
+     return 0.;
+    }
+ 
+    G4double CrossSectionsINCL46::NNToNDeltaOmega(Particle const * const, Particle const * const) {
+  //
+  //     Nucleon-Nucleon producing N-Delta-Omega cross sections
+  //
+     return 0.;
+    }
+	
+	
 } // namespace G4INCL
 

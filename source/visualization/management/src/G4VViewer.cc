@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.cc 95006 2016-01-15 08:26:18Z gcosmo $
+// $Id: G4VViewer.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -41,6 +41,7 @@
 #include "G4Scene.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Transform3D.hh"
+#include "G4UImanager.hh"
 
 G4VViewer::G4VViewer (G4VSceneHandler& sceneHandler,
 		      G4int id, const G4String& name):
@@ -74,15 +75,6 @@ void G4VViewer::SetName (const G4String& name) {
   fShortName.strip ();
 }
 
-const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
-(const G4VisAttributes* pVisAttribs) const {
-  // If pVisAttribs is zero, pick up the default vis attributes from
-  // the view parameters.
-  if (!pVisAttribs)
-    pVisAttribs = GetViewParameters ().GetDefaultVisAttributes ();
-  return pVisAttribs;
-}
-
 void G4VViewer::NeedKernelVisit () {
 
   fNeedKernelVisit = true;
@@ -98,13 +90,11 @@ void G4VViewer::NeedKernelVisit () {
   // }
   // ??...but, there's a problem in OpenGL Stored which seems to
   // require *all* viewers to revisit the kernel, so...
-  /*
-  const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
-  G4ViewerListConstIterator i;
-  for (i = viewerList.begin(); i != viewerList.end(); i++) {
-    (*i) -> SetNeedKernelVisit (true);
-  }
-  */
+  //  const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
+  //  G4ViewerListConstIterator i;
+  //  for (i = viewerList.begin(); i != viewerList.end(); i++) {
+  //    (*i) -> SetNeedKernelVisit (true);
+  //  }
   // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
 }
 
@@ -131,7 +121,87 @@ void G4VViewer::SetViewParameters (const G4ViewParameters& vp) {
   fVP = vp;
 }
 
+void G4VViewer::SetTouchable
+(const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath)
+{
+  // Set the touchable for /vis/touchable/set/... commands.
+  std::ostringstream oss;
+  for (const auto& pvNodeId: fullPath) {
+    oss
+    << ' ' << pvNodeId.GetPhysicalVolume()->GetName()
+    << ' ' << pvNodeId.GetCopyNo();
+  }
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/set/touchable" + oss.str());
+}
 
+void G4VViewer::TouchableSetVisibility
+(const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+ G4bool visibiity)
+{
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  std::ostringstream oss;
+  oss << "/vis/touchable/set/visibility ";
+  if (visibiity) oss << "true"; else oss << "false";
+
+  // The following is equivalent to
+  //  G4UImanager::GetUIpointer()->ApplyCommand(oss.str());
+  // (assuming the touchable has already been set), but avoids view rebuild.
+
+  // Instantiate a working copy of a G4VisAttributes object...
+  G4VisAttributes workingVisAtts;
+  // and set the visibility.
+  workingVisAtts.SetVisibility(visibiity);
+
+  fVP.AddVisAttributesModifier
+  (G4ModelingParameters::VisAttributesModifier
+   (workingVisAtts,
+    G4ModelingParameters::VASVisibility,
+    fullPath));
+  // G4ModelingParameters::VASVisibility (VAS = Vis Attribute Signifier)
+  // signifies that it is the visibility that should be picked out
+  // and merged with the touchable's normal vis attributes.
+
+  // Record on G4cout (with #) for information.
+  if (G4UImanager::GetUIpointer()->GetVerboseLevel() >= 2) {
+    G4cout << "# " << oss.str() << G4endl;
+  }
+}
+
+void G4VViewer::TouchableSetColour
+(const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+ const G4Colour& colour)
+{
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  std::ostringstream oss;
+  oss << "/vis/touchable/set/colour "
+  << colour.GetRed() << ' ' << colour.GetGreen()
+  << ' ' << colour.GetBlue() << ' ' << colour.GetAlpha();
+
+  // The following is equivalent to
+  //  G4UImanager::GetUIpointer()->ApplyCommand(oss.str());
+  // (assuming the touchable has already been set), but avoids view rebuild.
+
+  // Instantiate a working copy of a G4VisAttributes object...
+  G4VisAttributes workingVisAtts;
+  // and set the colour.
+  workingVisAtts.SetColour(colour);
+
+  fVP.AddVisAttributesModifier
+  (G4ModelingParameters::VisAttributesModifier
+   (workingVisAtts,
+    G4ModelingParameters::VASColour,
+    fullPath));
+  // G4ModelingParameters::VASColour (VAS = Vis Attribute Signifier)
+  // signifies that it is the colour that should be picked out
+  // and merged with the touchable's normal vis attributes.
+
+  // Record on G4cout (with #) for information.
+  if (G4UImanager::GetUIpointer()->GetVerboseLevel() >= 2) {
+    G4cout << "# " << oss.str() << G4endl;
+  }
+}
 
 std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
 {
@@ -140,33 +210,33 @@ std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
         G4SplineTest};
     
     // Choose a curve type (for testing)
-    int myCurveType = Bezier;
+//    int myCurveType = Bezier;
 
     // number if step points
     int stepPoints = 500;
 
     
-    G4Spline* spline = new G4Spline();
+    G4Spline spline;
 
     
     // At the moment we don't use the aVect parameters, but build it here :
     // Good step points for exampleB5
-    spline->AddSplinePoint(G4Vector3D(0,1000,-14000));
-    spline->AddSplinePoint(G4Vector3D(0,1000,0));
-    spline->AddSplinePoint(G4Vector3D(-4000,1000,4000));
+    spline.AddSplinePoint(G4Vector3D(0,1000,-14000));
+    spline.AddSplinePoint(G4Vector3D(0,1000,0));
+    spline.AddSplinePoint(G4Vector3D(-4000,1000,4000));
 
     
     std::vector <G4ThreeVector> viewVect;
 
-    if(myCurveType == Bezier) {
-        
+//    if(myCurveType == Bezier) {
+
         
         // Draw the spline
         
         for (int i = 0; i < stepPoints; i++) {
             float t = (float)i / (float)stepPoints;
-            G4Vector3D cameraPosition = spline->GetInterpolatedSplinePoint(t);
-            //        G4Vector3D targetPoint = spline->GetInterpolatedSplinePoint(t);
+            G4Vector3D cameraPosition = spline.GetInterpolatedSplinePoint(t);
+            //        G4Vector3D targetPoint = spline.GetInterpolatedSplinePoint(t);
             
             //        viewParam->SetViewAndLights(G4ThreeVector (cameraPosition.x(), cameraPosition.y(), cameraPosition.z()));
             //        viewParam->SetCurrentTargetPoint(targetPoint);
@@ -174,7 +244,7 @@ std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
             viewVect.push_back(G4ThreeVector (cameraPosition.x(), cameraPosition.y(), cameraPosition.z()));
         }
         
-    } else if (myCurveType == G4SplineTest) {
+//    } else if (myCurveType == G4SplineTest) {
         /*
          This method is a inspire from a Bezier curve. The problem of the Bezier curve is that the path does not go straight between two waypoints.
          This method add "stay straight" parameter which could be between 0 and 1 where the pass will follow exactly the line between the waypoints
@@ -198,87 +268,87 @@ std::vector <G4ThreeVector> G4VViewer::ComputeFlyThrough(G4Vector3D* /*aVect*/)
          P0                     P2
          
          */
-        G4Vector3D a;
-        G4Vector3D b;
-        G4Vector3D m1;
-        G4Vector3D m2;
-        G4Vector3D P0;
-        G4Vector3D P1;
-        G4Vector3D P2;
-        G4double stayStraight = 0;
-        G4double bezierSpeed = 0.4; // Spend 40% time in bezier curve (time between m1-m2 is 40% of time between P0-P1)
-        
-        G4Vector3D firstPoint;
-        G4Vector3D lastPoint;
-        
-        float nbBezierSteps = (stepPoints * bezierSpeed*(1-stayStraight)) * (2./spline->GetNumPoints());
-        float nbFirstSteps = ((stepPoints/2-nbBezierSteps/2) /(1+stayStraight)) * (2./spline->GetNumPoints());
-        
-        // First points
-        firstPoint = spline->GetPoint(0);
-        lastPoint = (firstPoint + spline->GetPoint(1))/2;
-        
-        for( float j=0; j<1; j+= 1/nbFirstSteps) {
-            G4ThreeVector pt = firstPoint + (lastPoint - firstPoint) * j;
-            viewVect.push_back(pt);
-            G4cout << "FLY Bezier A1("<< viewVect.size()<< "):" << pt << G4endl;
-        }
-        
-        for (int i = 0; i < spline->GetNumPoints()-2; i++) {
-            P0 = spline->GetPoint(i);
-            P1 = spline->GetPoint(i+1);
-            P2 = spline->GetPoint(i+2);
-            
-            m1 = P1 - (P1-P0)*(1-stayStraight)/2;
-            m2 = P1 + (P2-P1)*(1-stayStraight)/2;
-            
-            // We have to get straight path from (middile of P0-P1) to (middile of P0-P1 + (dist P0-P1) * stayStraight/2)
-            if (stayStraight >0) {
-                
-                firstPoint = (P0 + P1)/2;
-                lastPoint = (P0 + P1)/2 + (P1-P0)*stayStraight/2;
-                
-                for( float j=0; j<1; j+= 1/(nbFirstSteps*stayStraight)) {
-                    G4ThreeVector pt = firstPoint + (lastPoint - firstPoint)* j;
-                    viewVect.push_back(pt);
-                    G4cout << "FLY Bezier A2("<< viewVect.size()<< "):" << pt << G4endl;
-                }
-            }
-            // Compute Bezier curve
-            for( float delta = 0 ; delta < 1 ; delta += 1/nbBezierSteps)
-            {
-                // The Green Line
-                a = m1 + ( (P1 - m1) * delta );
-                b = P1 + ( (m2 - P1) * delta );
-                
-                // Final point
-                G4ThreeVector pt = a + ((b-a) * delta );
-                viewVect.push_back(pt);
-                G4cout << "FLY Bezier("<< viewVect.size()<< "):" << pt << G4endl;
-            }
-            
-            // We have to get straight path
-            if (stayStraight >0) {
-                firstPoint = (P1 + P2)/2 - (P2-P1)*stayStraight/2;
-                lastPoint = (P1 + P2)/2;
-                
-                for( float j=0; j<1; j+= 1/(nbFirstSteps*stayStraight)) {
-                    G4ThreeVector pt = firstPoint + (lastPoint - firstPoint)* j;
-                    viewVect.push_back(pt);
-                    G4cout << "FLY Bezier B1("<< viewVect.size()<< "):" << pt << G4endl;
-                }
-            }
-        }
-        
-        // last points
-        firstPoint = spline->GetPoint(spline->GetNumPoints()-2);
-        lastPoint = spline->GetPoint(spline->GetNumPoints()-1);
-        for( float j=1; j>0; j-= 1/nbFirstSteps) {
-            G4ThreeVector pt = lastPoint - ((lastPoint-firstPoint)*((1-stayStraight)/2) * j );
-            viewVect.push_back(pt);
-            G4cout << "FLY Bezier B2("<< viewVect.size()<< "):" << pt << G4endl;
-        }
-    }
+//        G4Vector3D a;
+//        G4Vector3D b;
+//        G4Vector3D m1;
+//        G4Vector3D m2;
+//        G4Vector3D P0;
+//        G4Vector3D P1;
+//        G4Vector3D P2;
+//        G4double stayStraight = 0;
+//        G4double bezierSpeed = 0.4; // Spend 40% time in bezier curve (time between m1-m2 is 40% of time between P0-P1)
+//        
+//        G4Vector3D firstPoint;
+//        G4Vector3D lastPoint;
+//        
+//        float nbBezierSteps = (stepPoints * bezierSpeed*(1-stayStraight)) * (2./spline.GetNumPoints());
+//        float nbFirstSteps = ((stepPoints/2-nbBezierSteps/2) /(1+stayStraight)) * (2./spline.GetNumPoints());
+//        
+//        // First points
+//        firstPoint = spline.GetPoint(0);
+//        lastPoint = (firstPoint + spline.GetPoint(1))/2;
+//        
+//        for( float j=0; j<1; j+= 1/nbFirstSteps) {
+//            G4ThreeVector pt = firstPoint + (lastPoint - firstPoint) * j;
+//            viewVect.push_back(pt);
+//            G4cout << "FLY Bezier A1("<< viewVect.size()<< "):" << pt << G4endl;
+//        }
+//        
+//        for (int i = 0; i < spline.GetNumPoints()-2; i++) {
+//            P0 = spline.GetPoint(i);
+//            P1 = spline.GetPoint(i+1);
+//            P2 = spline.GetPoint(i+2);
+//            
+//            m1 = P1 - (P1-P0)*(1-stayStraight)/2;
+//            m2 = P1 + (P2-P1)*(1-stayStraight)/2;
+//            
+//            // We have to get straight path from (middile of P0-P1) to (middile of P0-P1 + (dist P0-P1) * stayStraight/2)
+//            if (stayStraight >0) {
+//                
+//                firstPoint = (P0 + P1)/2;
+//                lastPoint = (P0 + P1)/2 + (P1-P0)*stayStraight/2;
+//                
+//                for( float j=0; j<1; j+= 1/(nbFirstSteps*stayStraight)) {
+//                    G4ThreeVector pt = firstPoint + (lastPoint - firstPoint)* j;
+//                    viewVect.push_back(pt);
+//                    G4cout << "FLY Bezier A2("<< viewVect.size()<< "):" << pt << G4endl;
+//                }
+//            }
+//            // Compute Bezier curve
+//            for( float delta = 0 ; delta < 1 ; delta += 1/nbBezierSteps)
+//            {
+//                // The Green Line
+//                a = m1 + ( (P1 - m1) * delta );
+//                b = P1 + ( (m2 - P1) * delta );
+//                
+//                // Final point
+//                G4ThreeVector pt = a + ((b-a) * delta );
+//                viewVect.push_back(pt);
+//                G4cout << "FLY Bezier("<< viewVect.size()<< "):" << pt << G4endl;
+//            }
+//            
+//            // We have to get straight path
+//            if (stayStraight >0) {
+//                firstPoint = (P1 + P2)/2 - (P2-P1)*stayStraight/2;
+//                lastPoint = (P1 + P2)/2;
+//                
+//                for( float j=0; j<1; j+= 1/(nbFirstSteps*stayStraight)) {
+//                    G4ThreeVector pt = firstPoint + (lastPoint - firstPoint)* j;
+//                    viewVect.push_back(pt);
+//                    G4cout << "FLY Bezier B1("<< viewVect.size()<< "):" << pt << G4endl;
+//                }
+//            }
+//        }
+//        
+//        // last points
+//        firstPoint = spline.GetPoint(spline.GetNumPoints()-2);
+//        lastPoint = spline.GetPoint(spline.GetNumPoints()-1);
+//        for( float j=1; j>0; j-= 1/nbFirstSteps) {
+//            G4ThreeVector pt = lastPoint - ((lastPoint-firstPoint)*((1-stayStraight)/2) * j );
+//            viewVect.push_back(pt);
+//            G4cout << "FLY Bezier B2("<< viewVect.size()<< "):" << pt << G4endl;
+//        }
+//    }
     return viewVect;
 }
 
@@ -320,17 +390,17 @@ std::ostream& operator << (std::ostream& os, const G4VViewer& v) {
 
 // ===== G4Spline class =====
 
-G4Spline::G4Spline()
+G4VViewer::G4Spline::G4Spline()
 : vp(), delta_t(0)
 {
 }
 
 
-G4Spline::~G4Spline()
+G4VViewer::G4Spline::~G4Spline()
 {}
 
 // Solve the Catmull-Rom parametric equation for a given time(t) and vector quadruple (p1,p2,p3,p4)
-G4Vector3D G4Spline::CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2, const G4Vector3D& p3, const G4Vector3D& p4)
+G4Vector3D G4VViewer::G4Spline::CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2, const G4Vector3D& p3, const G4Vector3D& p4)
 {
     float t2 = t * t;
     float t3 = t2 * t;
@@ -343,24 +413,24 @@ G4Vector3D G4Spline::CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector
     return (p1*b1 + p2*b2 + p3*b3 + p4*b4);
 }
 
-void G4Spline::AddSplinePoint(const G4Vector3D& v)
+void G4VViewer::G4Spline::AddSplinePoint(const G4Vector3D& v)
 {
     vp.push_back(v);
     delta_t = (float)1 / (float)vp.size();
 }
 
 
-G4Vector3D G4Spline::GetPoint(int a)
+G4Vector3D G4VViewer::G4Spline::GetPoint(int a)
 {
     return vp[a];
 }
 
-int G4Spline::GetNumPoints()
+int G4VViewer::G4Spline::GetNumPoints()
 {
     return vp.size();
 }
 
-G4Vector3D G4Spline::GetInterpolatedSplinePoint(float t)
+G4Vector3D G4VViewer::G4Spline::GetInterpolatedSplinePoint(float t)
 {
     // Find out in which interval we are on the spline
     int p = (int)(t / delta_t);
@@ -375,5 +445,3 @@ G4Vector3D G4Spline::GetInterpolatedSplinePoint(float t)
     // Interpolate
     return CatmullRom_Eq(lt, vp[p0], vp[p1], vp[p2], vp[p3]);
 }
-
-

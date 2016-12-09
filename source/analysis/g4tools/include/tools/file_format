@@ -34,6 +34,11 @@ TOOLS_GLOBAL_STRING(format_mac)
 TOOLS_GLOBAL_STRING(format_cmnd)
 TOOLS_GLOBAL_STRING(format_aida)
 TOOLS_GLOBAL_STRING(format_bsg)
+TOOLS_GLOBAL_STRING(format_jive)
+TOOLS_GLOBAL_STRING(format_heprep)
+TOOLS_GLOBAL_STRING(format_zheprep)
+TOOLS_GLOBAL_STRING(format_lua)
+TOOLS_GLOBAL_STRING(format_py)
 
 #define TOOLS_GLOBAL_EXT(a_name)\
 inline const std::string& s_ext_##a_name() {\
@@ -64,6 +69,11 @@ TOOLS_GLOBAL_EXT(mac)
 TOOLS_GLOBAL_EXT(cmnd)
 TOOLS_GLOBAL_EXT(aida)
 TOOLS_GLOBAL_EXT(bsg)
+TOOLS_GLOBAL_EXT(jive)
+TOOLS_GLOBAL_EXT(heprep)
+TOOLS_GLOBAL_EXT(zheprep)
+TOOLS_GLOBAL_EXT(lua)
+TOOLS_GLOBAL_EXT(py)
 
 #undef TOOLS_GLOBAL_EXT
 
@@ -91,6 +101,11 @@ inline void formats(std::vector<std::string>& a_v) {
   a_v.push_back(s_format_mac());
   a_v.push_back(s_format_cmnd());
   a_v.push_back(s_format_aida());
+  a_v.push_back(s_format_jive());
+  a_v.push_back(s_format_heprep());
+  a_v.push_back(s_format_zheprep());
+  a_v.push_back(s_format_lua());
+  a_v.push_back(s_format_py());
 }
 
 inline std::string ext_fmt(const std::string& a_ext) {
@@ -117,6 +132,11 @@ inline std::string ext_fmt(const std::string& a_ext) {
   if(a_ext==s_ext_gdml()) return s_format_gdml();
   if(a_ext==s_ext_mac()) return s_format_mac();
   if(a_ext==s_ext_cmnd()) return s_format_cmnd();
+  if(a_ext==s_ext_jive()) return s_format_jive();
+  if(a_ext==s_ext_heprep()) return s_format_heprep();
+  if(a_ext==s_ext_zheprep()) return s_format_zheprep();
+  if(a_ext==s_ext_lua()) return s_format_lua();
+  if(a_ext==s_ext_py()) return s_format_py();
   return s_format_guessed();
 }
 

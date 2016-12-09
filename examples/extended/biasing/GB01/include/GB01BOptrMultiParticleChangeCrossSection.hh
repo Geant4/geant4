@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/include/GB01BOptrMultiParticleChangeCrossSection.hh
+/// \brief Definition of the GB01BOptrMultiParticleChangeCrossSection class
+//
 // $Id: $
 //-----------------------------------------------------------------
 //
@@ -93,7 +96,6 @@ private:
                                  G4double                         weightForOccurenceInteraction,
                                  G4VBiasingOperation*                finalStateOperationApplied, 
                                  const G4VParticleChange*                particleChangeProduced );
-
 
 public:
   // -- Optionnal base class method. It is called at the time a tracking of a particle starts:

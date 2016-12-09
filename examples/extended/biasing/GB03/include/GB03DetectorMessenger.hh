@@ -59,6 +59,5 @@ class GB03DetectorMessenger: public G4UImessenger
     G4UIcmdWithAnInteger*      fVerboseCmd;
 };
 
-
 #endif
 

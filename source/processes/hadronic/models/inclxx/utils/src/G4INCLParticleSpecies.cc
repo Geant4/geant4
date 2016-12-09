@@ -101,6 +101,22 @@ namespace G4INCL {
       theA = 4;
       theZ = 2;
       theType = G4INCL::Composite;
+    } else if(pS=="eta") {
+      theA = 0;
+      theZ = 0;
+      theType = G4INCL::Eta;
+    } else if(pS=="omega") {
+      theA = 0;
+      theZ = 0;
+      theType = G4INCL::Omega;
+    } else if(pS=="etaprime" || pS=="etap") {
+      theA = 0;
+      theZ = 0;
+      theType = G4INCL::EtaPrime;
+    } else if(pS=="photon") {
+      theA = 0;
+      theZ = 0;
+      theType = G4INCL::Photon;
     } else
       parseNuclide(pS);
   }
@@ -252,6 +268,57 @@ namespace G4INCL {
       return false;
     else
       return true;
+  }
+	
+  G4int ParticleSpecies::getPDGCode() const {
+    switch (theType) {
+		case Proton:
+		    return 2212;
+			break;
+		case Neutron:
+		    return 2112;
+			break;
+		case DeltaPlusPlus:
+		    return 2224;
+			break;
+		case DeltaPlus:
+		    return 2214;
+			break;
+		case DeltaZero:
+		    return 2114;
+			break;
+		case DeltaMinus:
+		    return 1114;
+			break;
+		case PiPlus:
+		    return 211;
+			break;
+		case PiZero:
+		    return 111;
+			break;
+		case PiMinus:
+		    return -211;
+			break;
+		case Eta:
+		    return 221;
+			break;
+		case Omega:
+		    return 223;
+			break;
+		case EtaPrime:
+		    return 331;
+			break;
+		case Photon:
+		    return 22;
+			break;
+		case Composite:
+		    return theA+theZ*1000;
+			break;
+		default:
+			INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');
+			return 0;
+			break;
+	}	
   }
 }
 

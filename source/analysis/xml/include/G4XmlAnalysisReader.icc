@@ -34,7 +34,7 @@ inline
 tools::aida::ntuple* G4XmlAnalysisReader::GetNtuple() const
 {
   //return fNtupleManager->GetNtuple();
-  return 0;
+  return nullptr;
 }  
 
 //_____________________________________________________________________________
@@ -42,5 +42,5 @@ inline
 tools::aida::ntuple* G4XmlAnalysisReader::GetNtuple(G4int /*ntupleId*/) const
 {
   //return fNtupleManager->GetNtuple(ntupleId);
-  return 0;
+  return nullptr;
 }  

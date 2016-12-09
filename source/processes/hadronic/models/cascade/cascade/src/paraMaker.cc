@@ -36,6 +36,8 @@
 #include "G4CascadeInterpolator.hh"
 
 
+// Interpolation constants for calculating k factors for Coulomb energy
+// calculation.  AP: proton,  AA: alpha 
 namespace {
   static const G4double Z1[5] = {10.0, 20.0, 30.0, 50.0, 70.0};
   static const G4double AP[5] = {0.42, 0.58, 0.68, 0.77, 0.80};

@@ -23,11 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.hh 85244 2014-10-27 08:24:13Z gcosmo $
+// $Id: G4DNAMolecularMaterial.hh 101354 2016-11-15 08:27:51Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros
 //
 // We would be very happy hearing from you, send us your feedback! :)
 //
@@ -54,6 +52,7 @@
 #include "G4VStateDependent.hh"
 
 class G4Material;
+class G4MolecularConfiguration;
 
 struct CompareMaterial
 {
@@ -75,16 +74,32 @@ public:
   void Clear();
 
   virtual G4bool Notify(G4ApplicationState requestedState);
+  
+  //----------------------------------------------------------------------------
 
-  inline const std::vector<ComponentMap>* GetMassFractionTable() const;
-  inline const std::vector<ComponentMap>* GetDensityTable() const;
-//    const std::vector<double>* GetMassFractionTableFor(const G4Material*) const;
   const std::vector<double>* GetDensityTableFor(const G4Material*) const;
   const std::vector<double>* GetNumMolPerVolTableFor(const G4Material*) const;
+  
+  inline const std::vector<ComponentMap>* GetMassFractionTable() const{
+    return fpCompFractionTable;
+  }
+  inline const std::vector<ComponentMap>* GetDensityTable() const{
+    return fpCompDensityTable;
+  }
+  
+  //----------------------------------------------------------------------------
+  
+  G4MolecularConfiguration* GetMolecularConfiguration(const G4Material*) const;
+  void SetMolecularConfiguration(const G4Material*,
+                                 G4MolecularConfiguration*);
+  void SetMolecularConfiguration(const G4Material*,
+                                 const G4String&);
+  
+  void SetMolecularConfiguration(const G4String& materialName,
+                                 const G4String& molUserIF);
 
 protected:
   static G4DNAMolecularMaterial* fInstance;
-//    static G4ThreadLocal G4DNAMolecularMaterial* fInstance;
   G4DNAMolecularMaterial();
   G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
   G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);
@@ -113,21 +128,12 @@ protected:
   mutable std::map<const G4Material*, std::vector<double>*, CompareMaterial>
             fAskedNumPerVolTable;
   mutable std::map<const G4Material*, bool, CompareMaterial> fWarningPrinted;
+  
+  std::map<int /*Material ID*/,
+           G4MolecularConfiguration*> fMaterialToMolecularConf;
 
   G4bool fIsInitialized;
   size_t fNMaterials;
 };
-
-inline const std::vector<ComponentMap>*
-G4DNAMolecularMaterial::GetMassFractionTable() const
-{
-  return fpCompFractionTable;
-}
-
-inline const std::vector<ComponentMap>*
-G4DNAMolecularMaterial::GetDensityTable() const
-{
-  return fpCompDensityTable;
-}
 
 #endif // G4DNAMolecularMaterial_HH

@@ -1,0 +1,15 @@
+
+/control/verbose  2
+/run/verbose 2
+#
+/placement/setMethod WithDirectMatrix
+###/placement/setMethod WithInverseMatrix
+###/placement/setMethod WithAxialRotations
+###/placement/setMethod WithEulerAngles
+###/placement/setMethod WithReflections
+#
+/gun/direction 1.732 1. 0.
+#
+/tracking/verbose 1
+#
+/run/beamOn 1

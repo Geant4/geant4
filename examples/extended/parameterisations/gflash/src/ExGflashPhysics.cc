@@ -67,9 +67,10 @@ void ExGflashPhysics::ConstructProcess()
     = new G4FastSimulationManagerProcess();
   G4cout << "FastSimulationManagerProcess constructed" <<G4endl;
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     // The fast simulation process becomes a discrete process only since 9.0:
     pmanager->AddDiscreteProcess(fastSimulationManagerProcess);

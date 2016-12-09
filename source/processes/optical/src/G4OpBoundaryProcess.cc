@@ -1155,7 +1155,7 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      Done = (NewMomentum * theGlobalNormal <= 0.0);
 	   } 
 	   else {
-	      Done = (NewMomentum * theGlobalNormal >= 0.0);
+	      Done = (NewMomentum * theGlobalNormal >= -kCarTolerance);
 	   }
 
           // Loop checking, 13-Aug-2015, Peter Gumplinger

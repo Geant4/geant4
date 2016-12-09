@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XLogicalBase.hh
+/// \brief Definition of the XLogicalBase class
+//
 
 #ifndef XLogicalBase_h
 #define XLogicalBase_h

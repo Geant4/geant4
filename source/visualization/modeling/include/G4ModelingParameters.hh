@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 95224 2016-02-01 09:14:18Z gcosmo $
+// $Id: G4ModelingParameters.hh 99418 2016-09-21 09:18:42Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -87,20 +87,21 @@ public: // With description
     G4String fName;
     G4int fCopyNo;
   };
+
   typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
   typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
 
   class VisAttributesModifier {
   public:
     VisAttributesModifier
-      (const G4VisAttributes& visAtts,
-       VisAttributesSignifier signifier,
-       const PVNameCopyNoPath& path):
-      fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
+    (const G4VisAttributes& visAtts,
+     VisAttributesSignifier signifier,
+     const PVNameCopyNoPath& path):
+    fVisAtts(visAtts), fSignifier(signifier), fPVNameCopyNoPath(path) {}
     VisAttributesModifier
-      (const G4VisAttributes& visAtts,
-       VisAttributesSignifier signifier,
-       const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
+    (const G4VisAttributes& visAtts,
+     VisAttributesSignifier signifier,
+     const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path);
     const G4VisAttributes& GetVisAttributes() const
     {return fVisAtts;}
     VisAttributesSignifier GetVisAttributesSignifier() const
@@ -115,13 +116,13 @@ public: // With description
     {fPVNameCopyNoPath = PVNameCopyNoPath;}
     G4bool operator!=(const VisAttributesModifier&) const;
     G4bool operator==(const VisAttributesModifier& rhs) const
-      {return !operator!=(rhs);}
+    {return !operator!=(rhs);}
   private:
     G4VisAttributes fVisAtts;
     VisAttributesSignifier fSignifier;
     PVNameCopyNoPath fPVNameCopyNoPath;
   };
-  
+
   G4ModelingParameters ();
 
   G4ModelingParameters (const G4VisAttributes* pDefaultVisAttributes,

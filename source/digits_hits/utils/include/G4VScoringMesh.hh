@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VScoringMesh.hh 94772 2015-12-09 09:46:45Z gcosmo $
+// $Id: G4VScoringMesh.hh 99154 2016-09-07 08:06:30Z gcosmo $
 //
 
 #ifndef G4VScoringMesh_h
@@ -33,6 +33,7 @@
 #include "globals.hh"
 #include "G4THitsMap.hh"
 #include "G4RotationMatrix.hh"
+#include "G4StatDouble.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
@@ -45,7 +46,9 @@ class G4ParallelWorldProcess;
 #include <map>
 
 enum MeshShape { boxMesh, cylinderMesh, sphereMesh , undefinedMesh = -1};
-typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
+typedef G4THitsMap< G4double > EventScore;
+typedef G4THitsMap< G4StatDouble > RunScore;
+typedef std::map< G4String, RunScore* > MeshScoreMap;
 // class description:
 //
 //  This class represents a parallel world for interactive scoring purposes.
@@ -85,6 +88,7 @@ class G4VScoringMesh
   { return fShape; }
   // accumulate hits in a registered primitive scorer
   void Accumulate(G4THitsMap<G4double> * map);
+  void Accumulate(G4THitsMap<G4StatDouble> * map);
   // merge same kind of meshes
   void Merge(const G4VScoringMesh * scMesh);
   // dump information of primitive socrers registered in this mesh
@@ -94,9 +98,9 @@ class G4VScoringMesh
   // draw a column of a quantity on a current viewer
   void DrawMesh(const G4String& psName,G4int idxPlane,G4int iColumn,G4VScoreColorMap* colorMap);
   // draw a projected quantity on a current viewer
-  virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
+  virtual void Draw(RunScore * map, G4VScoreColorMap* colorMap, G4int axflg=111) = 0;
   // draw a column of a quantity on a current viewer
-  virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap,
+  virtual void DrawColumn(RunScore * map, G4VScoreColorMap* colorMap,
 			  G4int idxProj, G4int idxColumn) = 0;
   // reset registered primitive scorers
   void ResetScore();
@@ -180,7 +184,7 @@ protected:
   G4RotationMatrix * fRotationMatrix;
   G4int fNSegment[3];
 
-  std::map<G4String, G4THitsMap<G4double>* > fMap;
+  MeshScoreMap fMap;
   G4MultiFunctionalDetector * fMFD;
 
   G4int verboseLevel;

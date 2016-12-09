@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm11/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 95740 2016-02-23 09:34:37Z gcosmo $
+// $Id: EventAction.hh 98749 2016-08-09 13:43:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ class EventAction : public G4UserEventAction
   private:
     DetectorConstruction* fDetector;
 
-    G4double  fEdepAbsor[MaxAbsor];
+    G4double  fEdepAbsor[kMaxAbsor];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

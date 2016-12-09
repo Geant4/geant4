@@ -38,6 +38,7 @@
 #include "G4INCLDecayAvatar.hh"
 
 #include "G4INCLDeltaDecayChannel.hh"
+#include "G4INCLPionResonanceDecayChannel.hh"
 #include "G4INCLPauliBlocking.hh"
 #include <sstream>
 #include <string>
@@ -61,6 +62,10 @@ namespace G4INCL {
       INCL_DEBUG("DeltaDecayChannel chosen." << '\n');
       return new DeltaDecayChannel(particle1, incidentDirection);
     }
+	else if(particle1->isEta() || particle1->isOmega()) {
+	  INCL_DEBUG("PionResonanceDecayChannel chosen." << '\n');
+	  return new PionResonanceDecayChannel(particle1, incidentDirection);
+    }  
     else
       return NULL;
   }

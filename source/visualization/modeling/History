@@ -1,4 +1,4 @@
-$Id: History 96733 2016-05-02 11:52:48Z gcosmo $
+$Id: History 101035 2016-11-04 08:48:17Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,94 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+3rd November 2016  John Allison (modeling-V10-02-17)
+- G4ModelingParameters and G4PhysicalVolumeModel:
+  Changed default number of line segments per circle from 24 to 72.
+
+2nd November 2016  John Allison (modeling-V10-02-16)
+- G4ArrowModel: Default lines per circle = 6.
+  But... there is no way to change this at run time with a
+  UI command.  The following commands would have to be augmented:
+    /vis/scene/add/arrow
+    /vis/scene/add/axes
+    /vis/scene/add/magneticField
+  or a new general command added such as
+    /vis/set/arrowLineSegmentsPerCircle
+
+29th September 2016  John Allison (modeling-V10-02-15)
+- G4PhysicalVolumeModel:
+  o Delayed creation of modifiedVisAtts so that not created at all
+    if there are no vis attributes modifiers.
+  o Added std::ostream& operator<< (std::ostream& os,
+    const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& path)
+  o Modified so path can be copied and pasted into
+   /vis/set/touchable command:
+    std::ostream& operator<< (std::ostream& os,
+    const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& node)
+
+19th September 2016  John Allison (modeling-V10-02-14)
+- G4PhysicalVolumeModel.cc:
+  o Used static to ensure a plausible vis attributes pointer.
+    Note: G4VSceneHandler::PreAddSolid requires a G4VisAttributes
+    object, so we have to provide one - we choose the default
+    G4VisAttributes if no other is specified.
+
+19th September 2016  John Allison (modeling-V10-02-13)
+- Moved Vis Attributes Modifiers (VAMs) back from G4ViewParameters,
+  reversing modeling-V10-02-11.
+- Reversed modeling-V10-02-12.
+
+12th September 2016  John Allison (modeling-V10-02-12)
+- G4ModelingParameters.cc:
+  o Changed output of 
+    std::ostream& operator <<
+    (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
+    to correspond to arguments of /vis/set/touchable.
+
+11th September 2016  John Allison (modeling-V10-02-11)
+- G4ModelingParameters:
+  o Removed Vis Attributes Modifiers (VAMs).
+  o VAMs are now entirely in G4ViewParameters and dealt with
+    in G4VViewer::GetApplicableVisAttributes.
+- G4PhysicalVolumeModel.cc: Removed VAM code.
+
+8th September 2016  John Allison
+- G4PhysicalVolumeModel.cc: Commented out VAM code.
+
+31st August 2016  John Allison (modeling-V10-02-10)
+- Co-works greps-V10-02-05.
+- G4PseudoScene.hh:
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+- G4PhysicalVolumeMassScene:
+  o Changed to inherit G4PseudoScene.
+  o Changed AccrueMass to ProcessVolume to conform to G4PseudoScene.
+  o Added
+      void AddSolid (const G4Orb&);
+      void AddSolid (const G4Ellipsoid&);
+    to conform to greps-V10-02-05.
+  o Tidied.
+
+14th August 2016  John Allison  (modeling-V10-02-07)
+- G4TrajectoriesModel::DescribeYourselfTo:
+  o Return if run or event not found.
+
+7th August 2016  John Allison  (modeling-V10-02-06 needs greps-V10-02-02)
+- G4ModelingParameters:
+  o Added changes in Vis Att Modifiers for new flag IsForceDrawingStyle.
+- G4PhysicalVolumeModel:
+  o Takes account of new flag IsForceDrawingStyle.
+
+20th July 2016  John Allison  (modeling-V10-02-05)
+- Introduced drawing and filtering by encountered volume.  I.e.,
+    /vis/modeling/trajectories/create/drawByEncounteredVolume
+    /vis/filtering/trajectories/create/encounteredVolumeFilter
+  and their associated commands.  They replace the TouchedVolume
+  commands introduced in modeling-V10-02-02.
 
 2nd May 2016  John Allison  (modeling-V10-02-04)
 - G4PhysicalVolumeModel.cc: Fixed gcc-6.1 warning.

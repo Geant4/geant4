@@ -42,6 +42,7 @@
 #include "G4INCLCrossSectionsINCL46.hh"
 #include "G4INCLCrossSectionsMultiPions.hh"
 #include "G4INCLCrossSectionsTruncatedMultiPions.hh"
+#include "G4INCLCrossSectionsMultiPionsAndResonances.hh"
 // #include <cassert>
 
 namespace G4INCL {
@@ -67,18 +68,82 @@ namespace G4INCL {
       return theCrossSections->NNToNDelta(p1,p2);
     }
 
-      G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
-          return theCrossSections->NNToxPiNN(xpi,p1,p2);
-      }
+	G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+		return theCrossSections->NNToxPiNN(xpi,p1,p2);
+	}
 
-      G4double piNToDelta(Particle const * const p1, Particle const * const p2) {
+	G4double piNToDelta(Particle const * const p1, Particle const * const p2) {
           return theCrossSections->piNToDelta(p1,p2);
-      }
+	}
 
-      G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+	G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2) {
           return theCrossSections->piNToxPiN(xpi,p1,p2);
-      }
-
+	}
+	  
+	G4double piNToEtaN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->piNToEtaN(p1,p2);
+	}
+	  
+	G4double piNToOmegaN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->piNToOmegaN(p1,p2);
+	}
+	  
+	G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->piNToEtaPrimeN(p1,p2);
+	}
+	  
+	G4double etaNToPiN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->etaNToPiN(p1,p2);
+	}
+	  
+	G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->etaNToPiPiN(p1,p2);
+	}
+	  
+	G4double omegaNToPiN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->omegaNToPiN(p1,p2);
+	}
+	  
+ G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->omegaNToPiPiN(p1,p2);
+ }
+	  
+	G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->etaPrimeNToPiN(p1,p2);
+	}
+	  
+	G4double NNToNNEta(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNNEta(p1,p2);
+	}
+	  
+	G4double NNToNNEtaExclu(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNNEtaExclu(p1,p2);
+	}
+			
+	G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+				return theCrossSections->NNToNNEtaxPi(xpi,p1,p2);
+	}
+	  
+	G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNDeltaEta(p1,p2);
+	}
+	  
+   G4double NNToNNOmega(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNNOmega(p1,p2);
+   }
+	  
+   G4double NNToNNOmegaExclu(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNNOmegaExclu(p1,p2);
+   }
+			
+   G4double NNToNNOmegaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2) {
+				return theCrossSections->NNToNNOmegaxPi(xpi,p1,p2);
+   }
+	  
+   G4double NNToNDeltaOmega(Particle const * const p1, Particle const * const p2) {
+		  return theCrossSections->NNToNDeltaOmega(p1,p2);
+   }
+	  
     G4double calculateNNAngularSlope(G4double energyCM, G4int iso) {
       return theCrossSections->calculateNNAngularSlope(energyCM, iso);
     }
@@ -156,22 +221,23 @@ namespace G4INCL {
       theCrossSections = NULL;
     }
 
-    void initialize(Config const * const theConfig) {
-      CrossSectionsType crossSections = theConfig->getCrossSectionsType();
-      if(crossSections == INCL46CrossSections)
-        setCrossSections(new CrossSectionsINCL46);
-      else if(crossSections == MultiPionsCrossSections)
-        setCrossSections(new CrossSectionsMultiPions);
-      else if(crossSections == TruncatedMultiPionsCrossSections) {
-        const G4int nMaxPi = theConfig->getMaxNumberMultipions();
-        if(nMaxPi>0)
-          setCrossSections(new CrossSectionsTruncatedMultiPions(nMaxPi));
-        else {
-          INCL_WARN("Truncated multipion cross sections were requested, but the specified maximum\n"
-                    << "number of pions is <=0. Falling back to standard multipion cross-sections.\n");
-          setCrossSections(new CrossSectionsMultiPions);
-        }
-      }
-    }
+	  void initialize(Config const * const theConfig) {
+		  CrossSectionsType crossSections = theConfig->getCrossSectionsType();
+		  if(crossSections == INCL46CrossSections)
+			  setCrossSections(new CrossSectionsINCL46);
+		  else if(crossSections == MultiPionsCrossSections)
+			  setCrossSections(new CrossSectionsMultiPions);
+		  else if(crossSections == TruncatedMultiPionsCrossSections) {
+			  const G4int nMaxPi = theConfig->getMaxNumberMultipions();
+			  if(nMaxPi>0)
+				  setCrossSections(new CrossSectionsTruncatedMultiPions(nMaxPi));
+			  else {
+				  INCL_WARN("Truncated multipion cross sections were requested, but the specified maximum\n"
+							<< "number of pions is <=0. Falling back to standard multipion cross-sections.\n");
+				  setCrossSections(new CrossSectionsMultiPions);
+			  }
+		  } else if(crossSections == MultiPionsAndResonancesCrossSections)
+			  setCrossSections(new CrossSectionsMultiPionsAndResonances);
+	  }
   }
 }

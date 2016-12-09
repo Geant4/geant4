@@ -33,7 +33,7 @@ public:
 public:
   virtual bool write(io::iwbuf& a_buffer) {
     const std::vector<T>& vec = parent::m_values;
-    return a_buffer.write_vec(vec.size(),vec_data(vec));
+    return a_buffer.write_vec((uint32)vec.size(),vec_data(vec));
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<T>& vec = parent::m_values;
@@ -128,7 +128,7 @@ public:
     std::vector<int16> v; //an enum can be negative.
     typedef typename std::vector<T>::const_iterator cit_t;
     for(cit_t it=vec.begin();it!=vec.end();++it) v.push_back(*it);
-    return a_buffer.write_vec(v.size(),vec_data(v));
+    return a_buffer.write_vec((uint32)v.size(),vec_data(v));
   }
   virtual bool read(io::irbuf& a_buffer) {
     std::vector<int16> v; //an enum can be negative.
@@ -206,11 +206,11 @@ public:
     for(cit_t it=vec.begin();it!=vec.end();++it) {
 
       const T& v = (*it);
-      unsigned int num = v.size();
+      size_t num = v.size();
       const TT* d = get_data(v);
 
       std::vector<TT> std_vec(num);
-      for(unsigned int i=0;i<num;i++) std_vec[i] = d[i];
+      for(size_t i=0;i<num;i++) std_vec[i] = d[i];
 
       vec_vec.push_back(std_vec);
     }

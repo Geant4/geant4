@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XLatticeManager3.cc
+/// \brief Implementation of the XLatticeManager3 class
+//
 
 #include "XLatticeManager3.hh"
 #include "G4VPhysicalVolume.hh"

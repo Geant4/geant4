@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungFS.cc 95950 2016-03-03 10:42:48Z gcosmo $
+// $Id: G4PenelopeBremsstrahlungFS.cc 101820 2016-12-01 08:34:05Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -43,9 +43,10 @@
 #include "G4PhysicsTable.hh"
 #include "G4Material.hh"
 #include "Randomize.hh"
+#include "G4AutoDelete.hh"
+#include "G4Exp.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,16 +77,15 @@ G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
   ClearTables();
 
   //The G4Physics*Vector pointers contained in the fCache are automatically deleted by
-  //the G4Allocator, so there is no need to take care of them manually
+  //the G4AutoDelete so there is no need to take care of them manually
 
   //Clear manually theElementData
   if (theElementData)
     {
-      std::map<G4int,G4DataVector*>::iterator i;
-      for (i=theElementData->begin(); i != theElementData->end(); i++)
-	delete i->second;
+      for (auto& item : (*theElementData)) 
+	delete item.second;
       delete theElementData;
-      theElementData = 0;
+      theElementData = nullptr;
     }
 
 }
@@ -100,30 +100,29 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
     G4Exception("G4PenelopeBremsstrahlungFS::ClearTables()",
 		"em0100",FatalException,"Worker thread in this method");
 
-  std::map< std::pair<const G4Material*,G4double> ,G4PhysicsTable*>::iterator j;
 
   if (theReducedXSTable)
     {
-      for (j=theReducedXSTable->begin(); j != theReducedXSTable->end(); j++)
+      for (auto& item : (*theReducedXSTable))
 	{
-	  G4PhysicsTable* tab = j->second;
+	  //G4PhysicsTable* tab = item.second;
 	  //tab->clearAndDestroy();
-          delete tab;
+	  delete item.second;
 	}
       delete theReducedXSTable;
-      theReducedXSTable = 0;
+      theReducedXSTable = nullptr;
     }
 
   if (theSamplingTable)
     {
-      for (j=theSamplingTable->begin(); j != theSamplingTable->end(); j++)
+      for (auto& item : (*theSamplingTable))
 	{
-	  G4PhysicsTable* tab = j->second;
+	  //G4PhysicsTable* tab = item.second;
 	  // tab->clearAndDestroy();
-          delete tab;
+          delete item.second;
 	}
       delete theSamplingTable;
-      theSamplingTable = 0;
+      theSamplingTable = nullptr;
     }
   if (thePBcut)
     {
@@ -133,14 +132,14 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
 	delete kk->second;
       */
       delete thePBcut;
-      thePBcut = 0;
+      thePBcut = nullptr;
     }
 
 
   if (theEffectiveZSq)
     {
       delete theEffectiveZSq;
-      theEffectiveZSq = 0;
+      theEffectiveZSq = nullptr;
     }
 
  return;
@@ -666,10 +665,10 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
   G4PhysicsFreeVector* theTempVec = fCache.Get();
   if (!theTempVec) //First time this thread gets the cache
     {
-      theTempVec = new G4PhysicsFreeVector(nBinsX);
-      //The G4Physics*Vector pointers are automatically deleted by the G4Allocator,
-      //so there is no need to take care of it manually
+      theTempVec = new G4PhysicsFreeVector(nBinsX);   
       fCache.Put(theTempVec);
+      // The G4AutoDelete takes care here to clean up the vectors
+      G4AutoDelete::Register(theTempVec);
       if (fVerbosity > 4)
 	G4cout << "Creating new instance of G4PhysicsFreeVector() on the worker" << G4endl;
     }

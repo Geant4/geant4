@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02Run class
 //
 //
-// $Id: B02Run.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B02Run.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -159,7 +159,6 @@ void B02Run::RecordEvent(const G4Event* aEvent)
       //======================================================
     }
   }
-
   
 }
 
@@ -215,7 +214,6 @@ void B02Run::DumpAllScorer(){
   }
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B02Run::Merge(const G4Run* aRun)
@@ -235,4 +233,3 @@ void B02Run::Merge(const G4Run* aRun)
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

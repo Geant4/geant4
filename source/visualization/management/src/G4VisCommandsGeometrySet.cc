@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc 86865 2014-11-19 14:41:25Z gcosmo $
+// $Id: G4VisCommandsGeometrySet.cc 98797 2016-08-09 15:12:22Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -194,7 +194,7 @@ G4VisCommandGeometrySetDaughtersInvisible::G4VisCommandGeometrySetDaughtersInvis
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("daughtersInvisible", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -267,7 +267,7 @@ G4VisCommandGeometrySetForceAuxEdgeVisible::G4VisCommandGeometrySetForceAuxEdgeV
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceAuxEdgeVisible", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -322,8 +322,8 @@ G4VisCommandGeometrySetForceLineSegmentsPerCircle::G4VisCommandGeometrySetForceL
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("lineSegmentsPerCircle", 'd', omitable = true);
   parameter->SetGuidance
-    ("< 0 means not forced, i.e., under control of viewer.");
-  parameter->SetDefaultValue(-1);
+    ("<= 0 means not forced, i.e., under control of viewer.");
+  parameter->SetDefaultValue(0);
   fpCommand->SetParameter(parameter);
 }
 
@@ -373,7 +373,7 @@ G4VisCommandGeometrySetForceSolid::G4VisCommandGeometrySetForceSolid()
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceSolid", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 
@@ -424,7 +424,7 @@ G4VisCommandGeometrySetForceWireframe::G4VisCommandGeometrySetForceWireframe()
     ("Depth of propagation (-1 means unlimited depth).");
   fpCommand->SetParameter(parameter);
   parameter = new G4UIparameter("forceWireframe", 'b', omitable = true);
-  parameter->SetDefaultValue(false);
+  parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
 }
 

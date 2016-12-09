@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/RunAction.hh
+/// \file medical/dna/wvalue/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
 // $Id: RunAction.hh 78723 2014-01-20 10:32:17Z gcosmo $

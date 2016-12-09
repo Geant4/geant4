@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01EnergySpot.cc
+/// \brief Implementation of the Par01EnergySpot class
 //
-// $Id: Par01EnergySpot.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01EnergySpot.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 #include "Par01EnergySpot.hh"
 
@@ -35,8 +38,12 @@
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01EnergySpot::Par01EnergySpot()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01EnergySpot::Par01EnergySpot(const G4ThreeVector& point, G4double E)
 {
@@ -44,9 +51,12 @@ Par01EnergySpot::Par01EnergySpot(const G4ThreeVector& point, G4double E)
   fEnergy = E;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01EnergySpot::~Par01EnergySpot()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Par01EnergySpot::Draw(G4Colour *color)
 {
@@ -80,12 +90,9 @@ void Par01EnergySpot::Draw(G4Colour *color)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01EnergySpot::Print()
 {
   G4cout << " Par01EnergySpot {E = " << fEnergy << "; Position = " << fPoint << " }"<< G4endl;
 }
-
-
-
-
-

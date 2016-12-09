@@ -337,7 +337,7 @@ void Collimator80BeamLine::ConstructCollimator80BeamLine()
  
 
   // The treatment room is invisible in the Visualisation
-  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+  logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
  
   // Components of the Collimator Beam Line
 
@@ -842,7 +842,7 @@ void Collimator80BeamLine::IortBeamLineJunctions()
 					   "Giunz3FinalCollIORT", logicsolidGiunz3FinalCollIORT, physicalTreatmentRoom, false, 0); 
 
   logicsolidGiunz3FinalCollIORT -> SetVisAttributes(yellow);
-  //  logicsolidGiunz3FinalCollIORT -> SetVisAttributes (G4VisAttributes::Invisible);
+  //  logicsolidGiunz3FinalCollIORT -> SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
 
@@ -948,7 +948,7 @@ void Collimator80BeamLine::IortBeamLineFinalCollimator()
   physiFinalCollimatorIORT = new G4PVPlacement(G4Transform3D(rm6, G4ThreeVector((finalCollimatorXPositionIORT),0.,0.)),
 					   "FinalCollimatorIORT", logFinalCollimatorIORT, physicalTreatmentRoom, false, 0); 
 
-  //  logFinalCollimatorIORT -> SetVisAttributes(G4VisAttributes::Invisible); 
+  //  logFinalCollimatorIORT -> SetVisAttributes(G4VisAttributes::GetInvisible()); 
   logFinalCollimatorIORT -> SetVisAttributes(red); 
 }
 

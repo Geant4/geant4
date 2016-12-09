@@ -102,7 +102,7 @@ public:
     return *this;
   }
 public: //AIDA/Idata_point
-  unsigned int dimension() const {return m_measurements.size();}
+  size_t dimension() const {return m_measurements.size();}
   measurement& coordinate(unsigned int a_coord) {
     //WARNING : no check done on a_coord vs m_dim.
     return m_measurements[a_coord];
@@ -150,7 +150,7 @@ public:
 
   unsigned int dimension() const {return m_dim;}
   void clear() {m_points.clear();}
-  unsigned int size() const {return m_points.size();}
+  size_t size() const {return m_points.size();}
 
   const data_point& point(unsigned int a_index) const { 
     //WARNING : no check done on a_index.

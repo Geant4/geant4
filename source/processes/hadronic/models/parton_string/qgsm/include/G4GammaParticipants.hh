@@ -36,14 +36,12 @@
 
 class G4GammaParticipants : public G4QGSParticipants
 {
-public:
-	virtual ~G4GammaParticipants(){}
+  public:
+    virtual ~G4GammaParticipants(){}
 
-private:
-	virtual G4VSplitableHadron* SelectInteractions(const G4ReactionProduct  &thePrimary);
-
+  private:
+    virtual G4VSplitableHadron* SelectInteractions(const G4ReactionProduct  &thePrimary);
 };
 
 #endif
-
 

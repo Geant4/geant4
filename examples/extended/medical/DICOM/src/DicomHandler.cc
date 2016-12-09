@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomHandler.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomHandler.cc 101109 2016-11-07 08:14:53Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomHandler.cc
 /// \brief Implementation of the DicomHandler class
@@ -581,8 +581,8 @@ void DicomHandler::ReadMaterialIndices( std::ifstream& finData)
   for( unsigned int ii = 0; ii < nMate; ii++ ){
     finData >> mateName >> densityMax;
     fMaterialIndices[densityMax] = mateName;
-    G4cout << ii << " ReadMaterialIndices " << mateName << " " 
-           << densityMax << G4endl;
+    //    G4cout << ii << " ReadMaterialIndices " << mateName << " " 
+    //     << densityMax << G4endl;
   }
   
 }

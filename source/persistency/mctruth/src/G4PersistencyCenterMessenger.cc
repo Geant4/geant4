@@ -204,7 +204,7 @@ G4String G4PersistencyCenterMessenger::GetCurrentValue(G4UIcommand* command)
 {
   G4String ustr="Undefined";
 
-  if (command==select)
+  if (command==verboseCmd)
   {
     return pc->VerboseLevel();
   }

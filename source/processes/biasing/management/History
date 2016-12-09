@@ -1,4 +1,4 @@
-$Id: History 97276 2016-05-31 14:21:35Z gcosmo $
+$Id: History 101028 2016-11-04 08:40:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 3rd, 2016, M. Verderi
+- remove obsolete BAC_DenyInteraction value in G4BiasingAppliedCase
+  enum and clean up of obsolete (and commeted out) portion of codes
+  related to this case.
+- tag :  : proc-biasmng-V10-02-02
 
 May 30th, 2016, M. Verderi
 - check for unbounded while loop in G4ProcessPlacer.cc

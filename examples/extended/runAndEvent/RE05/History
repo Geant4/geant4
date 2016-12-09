@@ -1,4 +1,4 @@
-$Id: History 83391 2014-08-21 14:35:11Z gcosmo $
+$Id: History 101676 2016-11-21 09:25:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-11-16 A. Dotti      (exampleRE05-V10-02-01)
+- Explicit setting of SD to manager
+
+19-07-16 I. Hrivnacova (exampleRE05-V10-02-00)
+- Coding guidelines and code clean-up
+- Renamed RE05CalorimeterROGeometry in E05CalorimeterParallelWorld
+- Updated README
 
 18-08-14 M.Asai (exampleRE05-V10-00-00)
 - Reduce the amount of print-out.

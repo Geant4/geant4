@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.cc 96458 2016-04-15 10:15:24Z gcosmo $
+// $Id: G4ReplicaNavigation.cc 100372 2016-10-19 10:37:52Z gcosmo $
 //
 //
 // class G4ReplicaNavigation Implementation
@@ -355,7 +355,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
     compS = -sinSPhi*localDirection.x()+cosSPhi*localDirection.y();
     compE = -sinSPhi*localDirection.x()-cosSPhi*localDirection.y();
 
-    if ( (pDistS<=0)&&(pDistE<=0) )
+    if ( (pDistS<=halfkCarTolerance)&&(pDistE<=halfkCarTolerance) )
     {
       // Inside both phi *full* planes
       //
@@ -402,14 +402,14 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
         }
       }
     }
-    else if ( (pDistS>=0)&&(pDistE>=0) )
+    else if ( (pDistS>halfkCarTolerance)&&(pDistE>halfkCarTolerance) )
     {
       // Outside both *full* phi planes
       // if towards both >=0 then once inside will remain inside
       //
       Dist = ((compS>=0)&&(compE>=0)) ? kInfinity : 0;
     }
-    else if ( (pDistS>0)&&(pDistE<0) )
+    else if ( (pDistS>halfkCarTolerance)&&(pDistE<=halfkCarTolerance) )
     {
       // Outside full starting plane, inside full ending plane
       //
@@ -431,7 +431,7 @@ G4ReplicaNavigation::DistanceToOutPhi(const G4ThreeVector &localPoint,
     }
     else
     {
-      // Must be (pDistS<0)&&(pDistE>0)
+      // Must be (pDistS<=halfkCarTolerance)&&(pDistE>halfkCarTolerance)
       // Inside full starting plane, outside full ending plane
       //
       if ( compE>=0 )
@@ -615,24 +615,30 @@ G4ReplicaNavigation::DistanceToOutRad(const G4ThreeVector &localPoint,
    
   if( sideR != G4ExitNormal::kNull ) // if ((side == kRMax) || (side==kRMin))
   {
-     // Note: returned vector not explicitly normalised
-     // (divided by fRMax for unit vector)
-     G4double xi, yi;
-     xi = localPoint.x() + srd*localDirection.x() ;
-     yi = localPoint.y() + srd*localDirection.y() ;
-     G4ThreeVector normalR = G4ThreeVector(xi,yi,0.0);
+    // Note: returned vector not explicitly normalised
+    // (divided by fRMax for unit vector)
+
+    G4double xi, yi;
+    xi = localPoint.x() + srd*localDirection.x();
+    yi = localPoint.y() + srd*localDirection.y();
+    G4ThreeVector normalR = G4ThreeVector(xi,yi,0.0);
      
-     if( sideR == G4ExitNormal::kRMax ){
-        normalR *=   1.0/rmax;
-     }else{
-        normalR *= (-1.0)/rmin;
-     }
-     foundNormal.exitNormal= normalR;
-     foundNormal.calculated= true;
-     foundNormal.validConvex = (sideR == G4ExitNormal::kRMax);
-     foundNormal.exitSide = sideR;
-  }else{
-     foundNormal.calculated= false;
+    if( sideR == G4ExitNormal::kRMax )
+    {
+      normalR *=   1.0/rmax;
+    }
+    else
+    {
+      normalR *= (-1.0)/rmin;
+    }
+    foundNormal.exitNormal= normalR;
+    foundNormal.calculated= true;
+    foundNormal.validConvex = (sideR == G4ExitNormal::kRMax);
+    foundNormal.exitSide = sideR;
+  }
+  else
+  {
+    foundNormal.calculated= false;
   }
    
   return srd;
@@ -827,9 +833,10 @@ G4ReplicaNavigation::ComputeStep(const G4ThreeVector &globalPoint,
     }
   }
   const G4int secondDepth= topDepth;
-  depth = secondDepth;
-  
-  while ( history.GetVolumeType(depth)==kReplica )
+  depth = secondDepth;  
+
+  // Loop checking, 07.10.2016, J.Apostolakis -- Need to add: assert(depth>0)
+  while ( history.GetVolumeType(depth)==kReplica )  
   {
     const G4AffineTransform& GlobalToLocal= history.GetTransform(depth);
     repPoint    = GlobalToLocal.TransformPoint(globalPoint);
@@ -1179,8 +1186,10 @@ G4ReplicaNavigation::ComputeSafety(const G4ThreeVector &globalPoint,
   }
 
   depth = history.GetDepth()-1;
+
+  // Loop checking, 07.10.2016, J.Apostolakis -- need to add: assert(depth>0)
   while ( history.GetVolumeType(depth)==kReplica )
-  {
+  {      
     repPoint = history.GetTransform(depth).TransformPoint(globalPoint);
     sampleSafety = DistanceToOut(history.GetVolume(depth),
                                  history.GetReplicaNo(depth),

@@ -11,7 +11,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan \n
 (CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France \n
 * e-mail:incerti@cenbg.in2p3.fr
 
-\section dnaphysics_s1 INTRODUCTION.                                                    
+\section wvalue_s1 INTRODUCTION.                                                    
                                                  
 The wvalue example shows how to calculate w in liquid water
 for e- using the Geant4-DNA physics processes and models. 
@@ -30,12 +30,13 @@ http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
 cite the following Geant4-DNA collaboration publication:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 This example is presented in the following paper, which shall also be cited:
 Med. Phys. 42 (2015) 3870-3876 
 
-\section dnaphysics_s2 GEOMETRY SET-UP
+\section wvalue_s2 GEOMETRY SET-UP
 
 The geometry is a 1 m radius sphere of liquid water (G4_WATER
 material). Particles are shot randomly from the sphere centre.
@@ -47,7 +48,7 @@ The PrimaryGeneratorAction class is adapted (G4 state dependent)
 in order to enable generic physics list usage 
 (empty modular physics list).
 
-\section dnaphysics_s3 SET-UP 
+\section wvalue_s3 SET-UP 
 
 Make sure G4LEDATA points to the low energy electromagnetic data files.
 
@@ -55,7 +56,7 @@ The code can be compiled with cmake.
 
 It works in MT mode.
 
-\section dnaphysics_s4 HOW TO RUN THE EXAMPLE                                         
+\section wvalue_s4 HOW TO RUN THE EXAMPLE                                         
 
 In interactive mode, run:
 
@@ -65,13 +66,13 @@ In interactive mode, run:
 
 The wvalue.in macro allows a full control of the simulation.
 
-\section dnaphysics_s5 PHYSICS
+\section wvalue_s5 PHYSICS
 
-You can select Geant4-DNA physics in wvalue.in.
+You can select Geant4-DNA physics constructor in wvalue.in.
 
 A tracking cut can be applied if requested.
 
-\section dnaphysics_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+\section wvalue_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consist in a text file (wvalue.txt), containing :
 - the energy of incident particles (in eV)
@@ -79,6 +80,8 @@ The output results consist in a text file (wvalue.txt), containing :
 - its rms
 - the w value (in eV)
 - its rms (in eV)
+
+Note: rms values correspond to standard deviation.
 
 In addition, another macro (histo.in) is also provided including 
 a series of histograms :

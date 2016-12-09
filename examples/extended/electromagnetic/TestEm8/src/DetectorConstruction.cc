@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 92047 2015-08-14 07:23:37Z gcosmo $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -318,7 +318,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
   fRegGasDet->AddRootLogicalVolume(fLogicDetector);
 
   // visualisation
-  fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* color1 = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
   fLogicContainer->SetVisAttributes(color1);
   G4VisAttributes* color2 = new G4VisAttributes(G4Colour(0.0, 0.3, 0.7));
@@ -333,8 +333,10 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
-{  
-  SetSensitiveDetector(fLogicDetector, new TargetSD("GasSD")); 
+{ 
+  auto sd = new TargetSD("GasSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(sd);
+  SetSensitiveDetector(fLogicDetector, sd); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

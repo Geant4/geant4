@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pythia6Decayer.hh 72244 2013-07-12 08:49:56Z gcosmo $
+// $Id: G4Pythia6Decayer.hh 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/include/G4Pythia6Decayer.hh
 /// \brief Definition of the G4Pythia6Decayer class
@@ -39,7 +39,7 @@
 
 #include "globals.hh"
 
-class Pythia6Particle;
+struct Pythia6Particle;
 class G4Track;
 class G4DecayProducts;
 

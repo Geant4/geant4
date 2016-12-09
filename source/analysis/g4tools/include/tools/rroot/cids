@@ -4,6 +4,8 @@
 #ifndef tools_rroot_cids
 #define tools_rroot_cids
 
+//NOTE : logic must be in sync with wroot/cids.
+
 #include "../cid"
 
 namespace tools {
@@ -33,6 +35,8 @@ inline cid StreamerInfo_cid()      {return base_cid()+13;}
 inline cid streamer_element_cid()  {return base_cid()+14;}
 
 inline cid stl_vector_string_cid() {return base_cid()+16;}
+
+inline cid Named_cid()             {return base_cid()+17;}
 
 //base for templates :
 inline cid base_leaf_cid()         {return base_cid()+20;} //+12=32

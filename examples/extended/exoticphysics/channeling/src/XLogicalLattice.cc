@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XLogicalLattice.cc
+/// \brief Implementation of the XLogicalLattice class
+//
 
 #include "XLogicalLattice.hh"
 #include "G4PhysicalConstants.hh"

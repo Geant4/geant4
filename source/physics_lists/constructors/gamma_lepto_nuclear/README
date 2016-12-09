@@ -1,0 +1,49 @@
+$Id:$
+-------------------------------------------------------------------
+
+
+ G4BertiniElectroNuclearBuilder
+ ------------------------------
+ It includes gamma-nuclear, electron-nuclear and positron-nuclear
+ processes.
+ For gamma-nuclear, it uses Bertini (BERT) model for gamma below 3.5 GeV,
+ and Quark-Gluon-String (QGS) model above 3.0 GeV.
+ For electron-nuclear and positron-nuclear, it uses the equivalent photon
+ approximation in which the incoming lepton generates a virtual photon, 
+ and then the virtual photon is converted to a real photon. This real
+ photon is handled by BERT if its energy is below 10 GeV; if it is above
+ 10 GeV, then the real photon is transformed into a (on-shell) pi0 and
+ then handled by Fritiof (FTF) string model.
+
+ 
+ G4EmExtraPhysics
+ ----------------
+ It uses G4BertiniElectroNuclearBuilder for gamma-nuclear, electron-nuclear
+ and positron-nuclear.
+ Moreover, it includes muon-nuclear process (for mu- and mu+), and 
+ synchrotron process (either for electron & positron, or for all
+ charged particles).
+ The muon-nuclear process is treated similarly as for electrons and
+ positrons (i.e. the equivalent photon approximation in which the incoming
+ lepton generates a virtual photon, and then the virtual photon is converted
+ to a real photon, which is handled by BERT below 10 GeV or by FTF as a pi0
+ above 10 GeV).
+ By default, gamma-nuclear, electron-nuclear, positron-nuclear, and
+ muon-nuclear are switched on, whereas synchrotron process is switched off
+ for all particles. It is however possible, at run time via macro commands,
+ to change this default (see G4EmMessenger below).
+
+
+ G4EmMessenger
+ -------------
+ Used by G4EmExtraPhysics to be able to switch on/off: 
+ -  synchrotron radiation for electron and positron
+    (note: electron and positron together, not individually)
+ -  synchrotron radiation for all charged particles
+    (note: all charged particles together, not individually)
+ -  gamma-nuclear, electron-nuclear and positron-nuclear
+    (note: all these three particles together, not individually)
+ -  muon-nuclear
+    (note: mu- and mu+ together, not individually)
+ at run time, via macro commands.
+

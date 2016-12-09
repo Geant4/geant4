@@ -96,6 +96,11 @@ namespace G4INCL {
       separationEnergy[PiPlus] = 0.;
       separationEnergy[PiZero] = 0.;
       separationEnergy[PiMinus] = 0.;
+		
+	  separationEnergy[Eta]      = 0.;
+	  separationEnergy[Omega]    = 0.;
+	  separationEnergy[EtaPrime] = 0.;
+	  separationEnergy[Photon]   = 0.;
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -106,7 +111,11 @@ namespace G4INCL {
             << "  delta-:  " << separationEnergy[DeltaMinus] << '\n'
             << "  pi+:     " << separationEnergy[PiPlus] << '\n'
             << "  pi0:     " << separationEnergy[PiZero] << '\n'
-            << "  pi-:     " << separationEnergy[PiMinus] << '\n'
+			<< "  pi-:     " << separationEnergy[PiMinus] << '\n'
+			<< "  eta:     " << separationEnergy[Eta] << '\n'
+			<< "  omega:   " << separationEnergy[Omega] << '\n'
+			<< "  etaprime:" << separationEnergy[EtaPrime] << '\n'
+			<< "  photon:  " << separationEnergy[Photon] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -139,7 +148,17 @@ namespace G4INCL {
           return computePionPotentialEnergy(particle);
           break;
 
-        case DeltaPlusPlus:
+        case Eta:
+        case Omega:
+		case EtaPrime:
+          return computePionResonancePotentialEnergy(particle);
+          break;
+			  
+		case Photon:
+		  return 0.0;
+		  break;
+
+		case DeltaPlusPlus:
         case DeltaPlus:
         case DeltaZero:
         case DeltaMinus:

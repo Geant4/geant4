@@ -27,8 +27,8 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed by:S. Guatelli, D. Cutajar
+// Past developers: S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano
 //
 //
 //    ****************************************
@@ -54,8 +54,9 @@
 #include "G4VisAttributes.hh"
 #include "BrachyMaterial.hh"
 #include "BrachyFactoryLeipzig.hh"
-#include "BrachyFactoryIr.hh"
+#include "BrachyFactoryTG186.hh"
 #include "BrachyFactoryI.hh"
+#include "BrachyFactoryFlexi.hh"
 #include "BrachyDetectorMessenger.hh"
 #include "BrachyDetectorConstruction.hh"
 
@@ -79,8 +80,8 @@ BrachyDetectorConstruction::BrachyDetectorConstruction():
  // It is possible to modify geometrical parameters through UI
  detectorMessenger = new BrachyDetectorMessenger(this);
 
-  // Define the Iridium source as default source modelled in the geometry
- factory = new BrachyFactoryIr();
+  // Define the Flexi source as default source modelled in the geometry
+ factory = new BrachyFactoryFlexi();
 
   // BrachyMaterial defined the all the materials necessary
   // for the experimental set-up 
@@ -123,10 +124,13 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
       factory = new BrachyFactoryLeipzig();
       break;
    case 3:
-      factory = new BrachyFactoryIr();
+      factory = new BrachyFactoryTG186();
+      break;
+   case 4:
+      factory = new BrachyFactoryFlexi();
       break;
    default:
-      factory = new BrachyFactoryIr();
+      factory = new BrachyFactoryFlexi();
       break;
    }
 
@@ -140,14 +144,17 @@ void BrachyDetectorConstruction::SwitchBrachytherapicSeed()
 
 void BrachyDetectorConstruction::SelectBrachytherapicSeed(G4String val)
 {
-  if (val == "Iodium") detectorChoice = 1;
+  if (val == "Iodine") detectorChoice = 1;
   else{
        if(val=="Leipzig") detectorChoice = 2;
        else{
-            if(val=="Iridium") detectorChoice = 3;
-             else G4cout << val <<  "is not available!!!!"  <<G4endl;              
+            if(val=="TG186") detectorChoice = 3;
+             else{ 
+		  if(val=="Flexi") detectorChoice = 4;
+                  else G4cout << val <<  "is not available!!!!"  <<G4endl;              
             }
        }
+  }
  G4cout << "Now the source is " << val << G4endl;
 }
 
@@ -178,7 +185,7 @@ void BrachyDetectorConstruction::ConstructPhantom()
                                   PhantomLog, // Associated logical volume
                                   WorldPhys, // Mother volume
                                   false,0);
-  WorldLog -> SetVisAttributes (G4VisAttributes::Invisible);
+  WorldLog -> SetVisAttributes (G4VisAttributes::GetInvisible());
 
   // Visualization attributes of the phantom
   G4VisAttributes* simpleBoxVisAtt = new G4VisAttributes(lblue);

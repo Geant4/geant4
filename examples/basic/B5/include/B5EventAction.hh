@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.hh 94486 2015-11-19 08:33:37Z gcosmo $
+// $Id: B5EventAction.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5EventAction.hh
 /// \brief Definition of the B5EventAction class
@@ -52,12 +52,12 @@ public:
     std::vector<G4double>& GetHadCalEdep() { return fEmCalEdep; }
     
 private:
-    G4int fHHC1ID;
-    G4int fHHC2ID;
-    G4int fDHC1ID;
-    G4int fDHC2ID;
-    G4int fECHCID;
-    G4int fHCHCID;
+    G4int fHodHC1ID;
+    G4int fHodHC2ID;
+    G4int fDriftHC1ID;
+    G4int fDriftHC2ID;
+    G4int fEmCalHCID;
+    G4int fHadCalHCID;
     std::vector<G4double> fEmCalEdep;
     std::vector<G4double> fHadCalEdep;
 };

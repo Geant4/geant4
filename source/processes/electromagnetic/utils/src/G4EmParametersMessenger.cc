@@ -167,11 +167,23 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   delCmd->SetDefaultValue(false);
   delCmd->AvailableForStates(G4State_PreInit);
 
+  IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
+  IntegCmd->SetGuidance("Switch true/false the integral option");
+  IntegCmd->SetParameterName("integ",true);
+  IntegCmd->SetDefaultValue(true);
+  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   mottCmd = new G4UIcmdWithABool("/process/msc/UseMottCorrection",this);
   mottCmd->SetGuidance("Enable usage of Mott corrections for e- elastic scattering");
   mottCmd->SetParameterName("mott",true);
   mottCmd->SetDefaultValue(false);
   mottCmd->AvailableForStates(G4State_PreInit);
+
+  birksCmd = new G4UIcmdWithABool("/process/msc/UseG4EmSaturation",this);
+  birksCmd->SetGuidance("Enable usage of built-in Birks saturation");
+  birksCmd->SetParameterName("birks",true);
+  birksCmd->SetDefaultValue(false);
+  birksCmd->AvailableForStates(G4State_PreInit);
 
   minSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
   minSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
@@ -345,16 +357,28 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   meCmd->AvailableForStates(G4State_PreInit);
 
   dnaCmd = new G4UIcommand("/process/em/AddDNARegion",this);
-  dnaCmd->SetGuidance("Activate DNA in the G4Region.");
+  dnaCmd->SetGuidance("Activate DNA in a G4Region.");
   dnaCmd->SetGuidance("  regName   : G4Region name");
-  dnaCmd->SetGuidance("  dnaType   : opt0, opt1, opt2");
+  dnaCmd->SetGuidance("  dnaType   : DNA_opt0, DNA_opt1, DNA_opt2");
   dnaCmd->AvailableForStates(G4State_PreInit);
 
   G4UIparameter* regName = new G4UIparameter("regName",'s',false);
   dnaCmd->SetParameter(regName);
 
-  G4UIparameter* type = new G4UIparameter("type",'s',false);
+  G4UIparameter* type = new G4UIparameter("dnaType",'s',false);
   dnaCmd->SetParameter(type);
+
+  mscoCmd = new G4UIcommand("/process/em/AddEmRegion",this);
+  mscoCmd->SetGuidance("Add optional EM configuration for a G4Region.");
+  mscoCmd->SetGuidance("  regName   : G4Region name");
+  mscoCmd->SetGuidance("  mscType   : G4EmStandard, G4EmStandard_opt1, ...");
+  mscoCmd->AvailableForStates(G4State_PreInit);
+
+  G4UIparameter* mregName = new G4UIparameter("regName",'s',false);
+  mscoCmd->SetParameter(mregName);
+
+  G4UIparameter* mtype = new G4UIparameter("mscType",'s',false);
+  mscoCmd->SetParameter(mtype);
 
   dumpCmd = new G4UIcommand("/process/em/printParameters",this);
   dumpCmd->SetGuidance("Print all EM parameters.");
@@ -407,12 +431,6 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   unitPrm1->SetDefaultValue("mm");
   StepFuncCmd1->SetParameter(unitPrm1);
 
-  IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
-  IntegCmd->SetGuidance("Switch true/false the integral option");
-  IntegCmd->SetParameterName("integ",true);
-  IntegCmd->SetDefaultValue(true);
-  IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   deexCmd = new G4UIcommand("/process/em/deexcitation",this);
   deexCmd->SetGuidance("Set deexcitation flags per G4Region.");
   deexCmd->SetGuidance("  regName   : G4Region name");
@@ -438,7 +456,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   bfCmd->SetGuidance("  procName   : process name");
   bfCmd->SetGuidance("  procFact   : factor");
   bfCmd->SetGuidance("  flagFact   : flag to change weight");
-  bfCmd->AvailableForStates(G4State_Idle,G4State_Idle);
+  bfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   G4UIparameter* procName = new G4UIparameter("procName",'s',false);
   bfCmd->SetParameter(procName);
@@ -456,7 +474,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fiCmd->SetGuidance("  tlength    : fixed target length");
   fiCmd->SetGuidance("  unitT      : length unit");
   fiCmd->SetGuidance("  tflag      : flag to change weight");
-  fiCmd->AvailableForStates(G4State_Idle,G4State_Idle);
+  fiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   G4UIparameter* procNam = new G4UIparameter("procNam",'s',false);
   fiCmd->SetParameter(procNam);
@@ -528,7 +546,9 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete mulatCmd;
   delete catCmd;
   delete delCmd;
+  delete IntegCmd;
   delete mottCmd;
+  delete birksCmd;
 
   delete minSubSecCmd;
   delete minEnCmd;
@@ -562,12 +582,12 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete paiCmd;
   delete meCmd;
   delete dnaCmd;
+  delete mscoCmd;
   delete dumpCmd;
 
   delete SubSecCmd;
   delete StepFuncCmd;
   delete StepFuncCmd1;
-  delete IntegCmd;
   delete deexCmd;
   delete bfCmd;
   delete fiCmd;
@@ -626,8 +646,13 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == delCmd) {
     theParameters->ActivateAngularGeneratorForIonisation(delCmd->GetNewBoolValue(newValue));
+  } else if (command == IntegCmd) {
+    theParameters->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+    physicsModified = true;
   } else if (command == mottCmd) {
     theParameters->SetUseMottCorrection(mottCmd->GetNewBoolValue(newValue));
+  } else if (command == birksCmd) {
+    theParameters->SetBirksActive(birksCmd->GetNewBoolValue(newValue));
 
   } else if (command == minSubSecCmd) {
     theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));
@@ -729,6 +754,11 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     std::istringstream is(newValue);
     is >> s1 >> s2;
     theParameters->AddDNA(s1, s2);
+  } else if (command == mscoCmd) {
+    G4String s1(""),s2("");
+    std::istringstream is(newValue);
+    is >> s1 >> s2;
+    theParameters->AddMsc(s1, s2);
   } else if (command == dumpCmd) {
     theParameters->Dump();
   } else if (command == SubSecCmd) {
@@ -749,9 +779,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     } else {
       theParameters->SetStepFunctionMuHad(v1,v2);
     }
-    physicsModified = true;
-  } else if (command == IntegCmd) {
-    theParameters->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
     physicsModified = true;
   } else if (command == deexCmd) {
     G4String s1 (""), s2(""), s3(""), s4("");

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB02/exampleGB02.cc
+/// \brief Main program of the GB02 example
+//
 // $Id: $
 //
 
@@ -49,7 +52,6 @@
 #include "G4UIExecutive.hh"
 #endif
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace {
@@ -63,7 +65,6 @@ namespace {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 int main(int argc,char** argv)
 {
@@ -103,7 +104,6 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
   G4cout << "      ********** Run Manager constructed in sequential mode ************ " << G4endl;
 #endif
-
 
   // -- Set mandatory initialization classes
   GB02DetectorConstruction* detector = new GB02DetectorConstruction();
@@ -163,7 +163,6 @@ int main(int argc,char** argv)
       delete ui;
 #endif
     }
-
 
 #ifdef G4VIS_USE
   delete visManager;

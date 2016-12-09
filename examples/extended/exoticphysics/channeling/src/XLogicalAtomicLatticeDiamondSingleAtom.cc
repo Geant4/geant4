@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XLogicalAtomicLatticeDiamondSingleAtom.cc
+/// \brief Implementation of the XLogicalAtomicLatticeDiamondSingleAtom class
+//
 
 #include "XLogicalAtomicLatticeSingleAtom.hh"
 #include "G4PhysicalConstants.hh"

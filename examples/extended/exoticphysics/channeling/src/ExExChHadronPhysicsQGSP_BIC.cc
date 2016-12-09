@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChHadronPhysicsQGSP_BIC.cc
+/// \brief Implementation of the ExExChHadronPhysicsQGSP_BIC class
+//
 
 #include <iomanip>
 
@@ -77,6 +80,8 @@ ExExChHadronPhysicsQGSP_BIC::ExExChHadronPhysicsQGSP_BIC(G4int)
 //    , QuasiElastic(true)
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChHadronPhysicsQGSP_BIC::ExExChHadronPhysicsQGSP_BIC(
                             const G4String& name, G4bool /* quasiElastic */)
 :  G4VPhysicsConstructor(name)
@@ -99,6 +104,8 @@ ExExChHadronPhysicsQGSP_BIC::ExExChHadronPhysicsQGSP_BIC(
  , xsNeutronCaptureXS(0)*/
 //    , QuasiElastic(quasiElastic)
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChHadronPhysicsQGSP_BIC::CreateModels()
 {
@@ -150,10 +157,14 @@ void ExExChHadronPhysicsQGSP_BIC::CreateModels()
                                 new G4FTFPAntiBarionBuilder(quasiElasticFTF));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChHadronPhysicsQGSP_BIC::~ExExChHadronPhysicsQGSP_BIC()
 {
     if(tpdata) delete tpdata;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChHadronPhysicsQGSP_BIC::ConstructParticle()
 {
@@ -169,6 +180,8 @@ void ExExChHadronPhysicsQGSP_BIC::ConstructParticle()
     G4IonConstructor pIonConstructor;
     pIonConstructor.ConstructParticle();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
 void ExExChHadronPhysicsQGSP_BIC::ConstructProcess()

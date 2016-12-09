@@ -111,7 +111,7 @@ G4VPhysicalVolume* XrayTelDetectorConstruction::Construct( )
 				    0);               // copy number
 
   // Make Invisible
-  logicalWorld -> SetVisAttributes(G4VisAttributes::Invisible);
+  logicalWorld -> SetVisAttributes(G4VisAttributes::GetInvisible());
 
   // Construct geometry
   ConstructTelescope();
@@ -228,9 +228,9 @@ void XrayTelDetectorConstruction::ConstructTelescope()
   // Make Mirror Invisible
 
   for ( i=0; i<4; i++ ) {
-    //   MirrorLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
-    //   MirrorAuCoatingLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
-    BaffleLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::Invisible);
+    //   MirrorLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::GetInvisible());
+    //   MirrorAuCoatingLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::GetInvisible());
+    BaffleLogicalVolume[i] -> SetVisAttributes(G4VisAttributes::GetInvisible());
   }
 
 
@@ -327,10 +327,10 @@ void XrayTelDetectorConstruction::ConstructTelescope()
   
   //--- Make Bench Invisible
 
-  // BenchFrontEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible)
+  // BenchFrontEndLogicalVolume -> SetVisAttributes(G4VisAttributes::GetInvisible())
 
-  // BenchBackEndLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
-  BenchMainLogicalVolume -> SetVisAttributes(G4VisAttributes::Invisible);
+  // BenchBackEndLogicalVolume -> SetVisAttributes(G4VisAttributes::GetInvisible());
+  BenchMainLogicalVolume -> SetVisAttributes(G4VisAttributes::GetInvisible());
 
   return;
 }
@@ -388,7 +388,7 @@ void XrayTelDetectorConstruction::ConstructFocalPlane()
   
   //--- Make Invisible
 
-  // DetectorBaffleLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
+  // DetectorBaffleLogicalVolume -> SetVisAttributes( G4VisAttributes::GetInvisible() );
 
   // Construct Detector
 
@@ -416,7 +416,7 @@ void XrayTelDetectorConstruction::ConstructFocalPlane()
 		    physicalWorld, false, 0 );
   
   //--- Make Invisible
-  // DetectorLogicalVolume -> SetVisAttributes( G4VisAttributes::Invisible );
+  // DetectorLogicalVolume -> SetVisAttributes( G4VisAttributes::GetInvisible() );
 
   return;
 }

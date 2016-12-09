@@ -17,6 +17,100 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th December 2016  Gabriele Cosmo (examples-V10-03-00)
+- Updated reference outputs according to reference tag geant4-10-03-ref-00.
+- Includes tags: doxygen-V10-02-03, air_shower-V10-02-03, brachy-V10-02-02,
+                 ChargeExchangeMC-V10-02-00, ccal-V10-02-02, XrayFluo-V10-02-02,
+                 gammaknife-V10-02-02, gammaraytel-V10-02-02, DMX-V10-02-02,
+                 hadrontherapy-V10-02-05, human_phantom-V10-02-02,
+                 lAr_calorimeter-V10-02-00, microelectronics-V10-02-03,
+                 microbeam-V10-02-04, radioprotection-V10-02-01,
+                 exampleB2-V10-02-01, exampleB3-V10-02-04, exampleB4-V10-02-04,
+                 exampleB5-V10-02-04, exbiasing-V10-02-02, GB03-V10-02-00,
+                 biasingGB05-V10-02-02, biasingGB06-V10-02-01, ExUCN-V10-02-02,
+                 ReverseMC01-V10-02-03, testem5-V10-02-07, testem7-V10-02-07,
+                 testem8-V10-02-05, testem9-V10-02-03, testem10-V10-02-03,
+                 testem16-V10-02-04, channelingExample-V10-02-04,
+                 phononExample-V10-02-08, fieldex01-V10-02-05, DICOM-V10-02-04,
+                 fieldex02-V10-02-03, fieldex03-V10-02-04, fieldex05-V10-02-01,
+                 fieldex06-V10-02-02, exhadr00-V10-02-00, exhadr01-V10-02-03,
+                 exhadr02-V10-02-00, exdna-V10-02-00, exampleES2-V10-02-01,
+                 gtherapy-V10-02-01, tbbex-V10-02-03, OpNovice-V10-02-01,
+                 ThreadsafeScorers-V10-02-05, LXe-V10-02-03, WLS-V10-02-05,
+                 expar01-V10-02-03, exampleP03-V10-02-00, rdecay01-V10-02-09,
+                 exRunAndEvent-V10-02-01, exampleRE01-V10-02-02,
+                 exampleRE05-V10-02-01, exampleRE06-V10-02-00.
+
+2nd November 2016  Gabriele Cosmo (examples-V10-02-10)
+- Updated reference outputs according to reference tag geant4-10-02-ref-10.
+- Includes tags: air_shower-V10-02-01, amsEcal-V10-02-01, gammaraytel-V10-02-01,
+                 iort_therapy-V10-02-00, medical_linac-V10-02-00,
+                 purmag-V10-02-00, microbeam-V10-02-02, nanobeam-V10-02-01,
+                 microelectronics-V10-02-02, radioprotection-V10-02-00,
+                 DMX-V10-02-01, XrayFluo-V10-02-01, xraytel-V10-02-00,
+                 exampleB4-V10-02-01, exampleB5-V10-02-02, AnaEx01-V10-02-03,
+                 AnaEx02-V10-02-02, AnaEx03-V10-02-02, B03-V10-02-01,
+                 ReverseMC01-V10-02-00, testem0-V10-02-06, testem1-V10-02-08,
+                 testem2-V10-02-04, testem3-V10-02-06, testem4-V10-02-05,
+                 testem5-V10-02-06, testem6-V10-02-02, testem7-V10-02-04,
+                 testem8-V10-02-04, testem9-V10-02-02, testem10-V10-02-02,
+                 testem11-V10-02-09, testem12-V10-02-06, testem13-V10-02-03,
+                 testem14-V10-02-03, testem15-V10-02-02, testem16-V10-02-03,
+                 testem17-V10-02-04, testem18-V10-02-03, mctruthex-V10-02-00,
+                 particleGunExample-V10-02-03, channelingExample-V10-02-03,
+                 p6decayer-V10-02-05, phononExample-V10-02-07, ExUCN-V10-02-01,
+                 fieldex01-V10-02-03, fieldex04-V10-02-02, exhadr05-V10-02-00,
+                 exTransforms-V10-02-04, exhadr06-V10-02-04, exhadr07-V10-02-07,
+                 NeutronSource-V10-02-01, chem4-V10-02-03, dnaphysics-V10-02-05,
+                 microdosimetry-V10-02-04, range-V10-02-05, svalue-V10-02-05,
+                 wvalue-V10-02-05, electronScattering-V10-02-03, fano-V10-02-02,
+                 exampleES2-V10-02-00, fano2-V10-02-01, gtherapy-V10-02-00,
+                 LXe-V10-02-01, WLS-V10-02-01, ThreadsafeScorers-V10-02-04,
+                 MPI-V10-02-02, ParN02-V10-02-00, exgflash-V10-02-01,
+                 expar01-V10-02-01, expar02-V10-02-01, expol01-V10-02-03,
+                 rdecay01-V10-02-08, rdecay02-V10-02-01.
+
+30th September 2016  Gabriele Cosmo (examples-V10-02-09)
+- Updated reference outputs according to reference tag geant4-10-02-ref-09.
+- Includes tags: doxygen-V10-02-01, exampleB1-V10-02-01, exampleB3-V10-02-02,
+                 AnaEx01-V10-02-02, testem0-V10-02-05, testem1-V10-02-07,
+                 testem4-V10-02-04, testem12-V10-02-04, exHadronic-V10-02-03,
+                 chem4-V10-02-02, WLS-V10-02-00.
+
+9th September 2016  Gabriele Cosmo (examples-V10-02-08)
+- Updated reference outputs according to reference tag geant4-10-02-ref-08.
+- Includes tags: brachy-V10-02-01, gammaknife-V10-02-01, microbeam-V10-02-01,
+                 testem0-V10-02-04, testem8-V10-02-03, testem9-V10-02-01,
+                 testem17-V10-02-02, exhadr01-V10-02-00, exhadr07-V10-02-04,
+                 clustering-V10-02-03, exampleRE03-V10-02-00.
+
+19th August 2016  Gabriele Cosmo (examples-V10-02-07)
+- Updated reference outputs according to reference tag geant4-10-02-ref-07.
+- Includes tags: doxygen-V10-02-00, AnaEx01-V10-02-01, AnaEx02-V10-02-01,
+                 AnaEx03-V10-02-01, analysisShared-V10-02-01, exgps-V10-02-00,
+                 exbiasing-V10-02-00, excommon-V10-02-01, testem0-V10-02-03,
+                 testem1-V10-02-06, testem2-V10-02-03, testem3-V10-02-05,
+                 testem4-V10-02-03, testem5-V10-02-05, testem6-V10-02-01,
+                 testem7-V10-02-03, testem8-V10-02-01, testem9-V10-02-00,
+                 testem10-V10-02-01, testem11-V10-02-07, testem12-V10-02-03,
+                 testem13-V10-02-02, testem14-V10-02-02, testem15-V10-02-01,
+                 testem16-V10-02-02, testem17-V10-02-01, testem18-V10-02-02
+                 particleGunExample-V10-02-01, userPrimaryGenerator-V10-02-00,
+                 p6decayer-V10-02-03, phononExample-V10-02-06, ExUCN-V10-02-00,
+                 fieldex02-V10-02-01, fieldex03-V10-02-02, fieldex05-V10-02-00,
+                 fieldex06-V10-02-01, g3tog4Tests-V10-02-01, MPI-V10-02-01,
+                 exTransforms-V10-02-00, exHadronic-V10-02-01, LXe-V10-02-00,
+                 exhadr03-V10-02-01, exhadr04-V10-02-00, exhadr06-V10-02-02,
+                 exhadr07-V10-02-03, DICOM-V10-02-00, clustering-V10-02-02,
+                 chem1-V10-02-01, chem2-V10-02-01, chem3-V10-02-01,
+                 dnaphysics-V10-02-04, microdosimetry-V10-02-03, fano-V10-02-01.
+                 fano2-V10-02-00, microyz-V10-02-00, pdb4dna-V10-02-02,
+                 range-V10-02-02, svalue-V10-02-04, wholeNuclearDNA-V10-02-01,
+                 wvalue-V10-02-02, electronScattering-V10-02-02, G01-V10-02-02,
+                 ThreadsafeScorers-V10-02-03, exRadioactivedecay-V10-02-00,
+                 exgflash-V10-02-00, exampleP01-V10-02-00, expol01-V10-02-02,
+                 exampleRE05-V10-02-00.
+
 30th June 2016  Gabriele Cosmo (examples-V10-02-06)
 - Updated reference outputs according to reference tag geant4-10-02-ref-06.
 - Includes tags: microelectronics-V10-02-01, DMX-V10-02-00, testem7-V10-02-02,

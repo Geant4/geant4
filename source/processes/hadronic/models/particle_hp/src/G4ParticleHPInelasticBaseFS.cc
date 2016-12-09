@@ -297,6 +297,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
 
+    if ( !getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) {
       //141017 Fix BEGIN 
       //Adjust A and Z in the case of miss much between selected data and target nucleus 
       if ( tmpHadrons != NULL ) {
@@ -322,7 +323,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
          }
       }
       //141017 Fix END
-
+    }
   }
   else if(theAngularDistribution!= 0)
   {

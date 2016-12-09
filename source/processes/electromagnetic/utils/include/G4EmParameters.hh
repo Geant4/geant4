@@ -60,6 +60,7 @@
 #include "G4ios.hh"
 #include "G4MscStepLimitType.hh"
 #include "G4NuclearFormfactorType.hh"
+#include "G4EmSaturation.hh"
 #include <vector>
 
 class G4EmParametersMessenger;
@@ -137,6 +138,12 @@ public:
 
   void SetIntegral(G4bool val);
   G4bool Integral() const;
+
+  void SetBirksActive(G4bool val);
+  G4bool BirksActive() const;
+
+  void SetEmSaturation(G4EmSaturation*);
+  G4EmSaturation* GetEmSaturation();
 
   // double parameters with values
   void SetMinSubRange(G4double val);
@@ -232,6 +239,10 @@ public:
   const std::vector<G4String>& RegionsDNA() const;
   const std::vector<G4String>& TypesDNA() const;
 
+  void AddMsc(const G4String& region, const G4String& type);
+  const std::vector<G4String>& RegionsMsc() const;
+  const std::vector<G4String>& TypesMsc() const;
+
   void SetSubCutoff(G4bool val, const G4String& region = "");
 
   void SetDeexActiveRegion(const G4String& region, G4bool fdeex,
@@ -258,7 +269,12 @@ public:
 
 private:
 
+  G4EmParameters(G4EmParameters &) = delete;
+  G4EmParameters & operator=(const G4EmParameters &right) = delete;  
+
   G4EmParameters();
+
+  void Initialise();
 
   G4bool IsLocked() const;
 
@@ -271,6 +287,8 @@ private:
   G4EmParametersMessenger* theMessenger;
 
   G4StateManager* fStateManager;
+
+  G4EmSaturation* emSaturation;
 
   G4bool lossFluctuation;
   G4bool buildCSDARange;
@@ -290,6 +308,7 @@ private:
   G4bool useAngGeneratorForIonisation;
   G4bool useMottCorrection;
   G4bool integral;
+  G4bool birks;
 
   G4double minSubRange;
   G4double minKinEnergy;
@@ -331,6 +350,9 @@ private:
 
   std::vector<G4String>  m_regnamesDNA;
   std::vector<G4String>  m_typesDNA;
+
+  std::vector<G4String>  m_regnamesMsc;
+  std::vector<G4String>  m_typesMsc;
 
   std::vector<G4String>  m_regnamesSubCut;
   std::vector<G4bool>    m_subCuts;

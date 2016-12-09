@@ -34,7 +34,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 ExG4PhysicsList00::ExG4PhysicsList00()
   : G4VUserPhysicsList()
 {}

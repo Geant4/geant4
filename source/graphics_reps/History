@@ -1,4 +1,4 @@
-$Id: History 95881 2016-03-01 08:46:20Z gcosmo $
+$Id: History 101022 2016-11-04 08:25:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,59 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+3rd November 2016  John Allison  (greps-V10-02-10)
+- Fix typo in previous tag.
+
+3rd November 2016  John Allison  (greps-V10-02-09)
+- BooleanProcessor.src: Fix warnings on -O3 on Linux.
+
+3rd November 2016  John Allison  (greps-V10-02-08)
+- HepPolyhedron.h: Changed default number of line segments per circle:
+  #define DEFAULT_NUMBER_OF_STEPS 72
+
+6th September 2016  Makoto Asai (greps-V10-02-07)
+- Co-works with digits_hits-V10-02-06, vis-V10-02-12
+- include/G4VGraphicsScene.hh
+     It accepts both G4TMitsMap<G4StatDouble> and G4THitsMap<G4double>.
+  
+2nd September 2016  Makoto Asai (greps-V10-02-06)
+- Co-works with digits_hits-V10-02-05, vis-V10-02-10
+- include/G4VGraphicsScene.hh
+     Build-in scorer now uses G4TMitsMap<G4StatDouble> instead of
+     G4THitsMap<G4double>.
+  
+31st August 2016  John Allison  (greps-V10-02-05)
+- Co-works vis-V10-02-09.
+- G4VGraphicsScene.hh:
+  o Added
+    virtual void AddSolid (const G4Orb&) = 0;
+    virtual void AddSolid (const G4Ellipsoid&) = 0;
+  o Tidied.
+
+7th August 2016  John Allison  (greps-V10-02-03)
+- G4VisAttributes.icc: Removed extraneous semi-colon.
+
+7th August 2016  John Allison  (greps-V10-02-02)
+- G4VisAttributes:
+  o Added flag for force auxiliary edge visibility, i.e., to record
+    if the user has asked for forcing, while the value forced - visible
+    or invisible - is recorded in another flag.
+  o Introduced default argument - "true" - for:
+    SetVisibility, SetDaughtersInvisible, SetForceWireframe,
+    SetForceSolid, SetForceAuxEdgeVisible.
+  o Improved logic for setting force drawing style and auxiliary edge
+    visibility.
+  o Moved above methods from .icc to .cc.
+  o Moved static inline method GetMinLineSegmentsPerCircle to .icc.
+
+14th July 2016  John Allison  (greps-V10-02-01)
+- G4VisAttributes::GetInvisible():
+  o Changed to use a static instance instead of G4VisAttributes::Invisible.
+  o Moved implementation to .cc file.  Now it is non-inline.
+- G4VisAttributes::Invisible:
+  o Deprecated. It is a static instance and does not always instantiate
+    properly on Windows.
 
 1st March 2016  Gabriele Cosmo  (greps-V10-02-00)
 - Use "" instead of <> for internal header inclusion in

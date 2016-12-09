@@ -286,7 +286,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   // o containing volume found
   //
 
-  while (notKnownContained)
+  while (notKnownContained)  // Loop checking, 07.10.2016, J.Apostolakis
   {
     if ( fHistory.GetTopVolumeType()!=kReplica )
     {
@@ -538,7 +538,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       }
 #endif
     }
-  } while (noResult);
+  } while (noResult);  // Loop checking, 07.10.2016, J.Apostolakis
 
   fLastLocatedPointLocal = localPoint;
 
@@ -1007,8 +1007,10 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
                  << "          Track stuck, not moving for " 
                  << fNumberZeroSteps << " steps" << G4endl
                  << "          in volume -" << motherPhysical->GetName()
-                 << "- at point " << pGlobalpoint << G4endl
-                 << "          direction: " << pDirection << "." << G4endl
+                 << "- at point " << pGlobalpoint
+                 << " (local point " << newLocalPoint << ")" << G4endl
+                 << "          direction: " << pDirection
+                 << " (local direction: " << localDirection << ")." << G4endl
                  << "          Potential geometry or navigation problem !"
                  << G4endl
                  << "          Trying pushing it of " << Step << " mm ...";
@@ -1031,7 +1033,10 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
               << "- at point " << pGlobalpoint << G4endl
               << "        direction: " << pDirection << ".";
 #ifdef G4VERBOSE
-      motherPhysical->CheckOverlaps(5000, false);
+      if ( fWarnPush )
+      {
+         motherPhysical->CheckOverlaps(5000, false);
+      }
 #endif
       G4Exception("G4Navigator::ComputeStep()", "GeomNav0003",
                   EventMustBeAborted, message);
@@ -1666,16 +1671,26 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
      if( validNormal && (std::fabs(localMag2-1.0)) > CLHEP::perMillion )
      {
        G4ExceptionDescription edN;
-
+       edN.precision(10); 
        edN << "G4Navigator::GetGlobalExitNormal: "
            << "  Using Local Normal - from call to GetLocalExitNormalAndCheck. "
            << G4endl
            << "  Local  Exit Normal : " << " || = " << std::sqrt(localMag2) 
            << " vec = " << localNormal << G4endl
            << "  Global Exit Normal : " << " || = " << globalNormal.mag() 
-           << " vec = " << globalNormal << G4endl;
-       edN << "  Calculated It      = " << fCalculatedExitNormal << G4endl;
-
+           << " vec = " << globalNormal << G4endl
+           << "  Global point: " << IntersectPointGlobal << G4endl;
+       edN << "  Calculated It      = " << fCalculatedExitNormal << G4endl
+           << "  Volume: " << fHistory.GetTopVolume()->GetName() << G4endl;
+#ifdef G4VERBOSE
+       G4LogicalVolume* candLog = fHistory.GetTopVolume()->GetLogicalVolume();
+       if ( candLog )
+       {
+         edN << "  Solid: " << candLog->GetSolid()->GetName()
+             << ", Type: " << candLog->GetSolid()->GetEntityType() << G4endl
+             << *candLog->GetSolid();
+       }
+#endif
        G4Exception("G4Navigator::GetGlobalExitNormal()",
                    "GeomNav0003",JustWarning, edN,
                    "Value obtained from new local *solid* is incorrect.");
@@ -1711,7 +1726,11 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     }
   }
 #endif
-   
+
+  // Synchronise stored global exit normal as possibly re-computed here
+  //
+  fExitNormalGlobalFrame = globalNormal;
+
   return globalNormal;
 }
 

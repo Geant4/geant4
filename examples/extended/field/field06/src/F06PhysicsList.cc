@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06PhysicsList.cc 75296 2013-10-30 09:34:21Z gcosmo $
+// $Id: F06PhysicsList.cc 98776 2016-08-09 14:32:00Z gcosmo $
 //
 /// \file field/field06/src/F06PhysicsList.cc
 /// \brief Implementation of the F06PhysicsList class
@@ -31,28 +31,26 @@
 //
 #include "F06PhysicsList.hh"
 
-#include "F06ExtraPhysics.hh"
-
-#include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
-#include "G4ParticleTable.hh"
-
 #include "G4DecayPhysics.hh"
-#include "G4ProcessTable.hh"
+#include "G4StepLimiterPhysics.hh"
 
-#include "G4PionDecayMakeSpin.hh"
-#include "G4DecayWithSpin.hh"
-
-#include "G4DecayTable.hh"
-#include "G4MuonDecayChannelWithSpin.hh"
-#include "G4MuonRadiativeDecayChannelWithSpin.hh"
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4Electron.hh"
+#include "G4AntiNeutrinoE.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4GenericIon.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F06PhysicsList::F06PhysicsList() : G4VModularPhysicsList() 
 {
     RegisterPhysics(new G4DecayPhysics());
-    RegisterPhysics(new F06ExtraPhysics());
+
+    G4StepLimiterPhysics* stepLimiterPhysics = new G4StepLimiterPhysics();
+    stepLimiterPhysics->SetApplyToAll(true);
+    RegisterPhysics(stepLimiterPhysics);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

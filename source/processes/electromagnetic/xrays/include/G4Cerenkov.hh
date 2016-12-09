@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4Cerenkov.hh 98002 2016-06-30 13:03:36Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -175,6 +175,15 @@ public:
   // Returns the maximum number of Cerenkov photons allowed to be
   // generated during a tracking step.
 
+  void SetStackPhotons(const G4bool );
+  // Call by the user to set the flag for stacking the scint. photons
+
+  G4bool GetStackPhotons() const;
+  // Return the boolean for whether or not the scint. photons are stacked
+
+  G4int GetNumPhotons() const;
+  // Returns the current number of scint. photons (after PostStepDoIt)
+
   G4PhysicsTable* GetPhysicsTable() const;
   // Returns the address of the physics table.
 
@@ -210,6 +219,10 @@ private:
   G4bool fTrackSecondariesFirst;
   G4double fMaxBetaChange;
   G4int  fMaxPhotons;
+
+  G4bool fStackingFlag;
+
+  G4int fNumPhotons;
 };
 
   ////////////////////
@@ -232,6 +245,24 @@ inline
 G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
 {
   return fMaxPhotons;
+}
+
+inline
+void G4Cerenkov::SetStackPhotons(const G4bool stackingFlag)
+{
+        fStackingFlag = stackingFlag;
+}
+
+inline
+G4bool G4Cerenkov::GetStackPhotons() const
+{
+        return fStackingFlag;
+}
+
+inline
+G4int G4Cerenkov::GetNumPhotons() const
+{
+        return fNumPhotons;
 }
 
 inline

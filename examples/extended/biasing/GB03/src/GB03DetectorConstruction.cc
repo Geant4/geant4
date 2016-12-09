@@ -28,7 +28,6 @@
 /// \file GB03DetectorConstruction.cc
 /// \brief Implementation of the GB03DetectorConstruction class
 
-
 #include "GB03DetectorConstruction.hh"
 
 #include "G4RunManager.hh"
@@ -252,7 +251,7 @@ void GB03DetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  fWorldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  fWorldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   fCalorLogical->SetVisAttributes(simpleBoxVisAtt);
@@ -283,7 +282,7 @@ void GB03DetectorConstruction::SetupDetectors()
     else
     { detName += "_gap"; }
     G4MultiFunctionalDetector* det = new G4MultiFunctionalDetector(detName);
-
+    G4SDManager::GetSDMpointer()->AddNewDetector(det);
     // The second argument in each primitive means the "level" of geometrical 
     // hierarchy, the copy number of that level is used as the key of the 
     // G4THitsMap.

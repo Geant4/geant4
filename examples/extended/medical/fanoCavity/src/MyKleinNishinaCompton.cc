@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/MyKleinNishinaCompton.cc
 /// \brief Implementation of the MyKleinNishinaCompton class
 //
-// $Id: MyKleinNishinaCompton.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: MyKleinNishinaCompton.cc 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -159,5 +159,4 @@ void MyKleinNishinaCompton::SampleSecondaries(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

@@ -50,7 +50,8 @@
 class G4EmStandardPhysicsSS : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysicsSS(G4int ver = 1);
+
+  explicit G4EmStandardPhysicsSS(G4int ver = 1);
 
   virtual ~G4EmStandardPhysicsSS();
 

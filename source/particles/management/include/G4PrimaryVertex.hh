@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4PrimaryVertex.hh 99159 2016-09-07 08:11:50Z gcosmo $
 //
 //
 
@@ -78,6 +78,7 @@ class G4PrimaryVertex
   void SetPrimary(G4PrimaryParticle * pp);
   G4PrimaryParticle* GetPrimary(G4int i=0) const;
   void SetNext(G4PrimaryVertex* nv);
+  void ClearNext();
   G4PrimaryVertex* GetNext() const;
   G4double GetWeight() const;
   void SetWeight(G4double w);
@@ -149,12 +150,17 @@ inline void G4PrimaryVertex::SetPrimary(G4PrimaryParticle * pp)
   numberOfParticle++;
 }
 
-
 inline void G4PrimaryVertex::SetNext(G4PrimaryVertex* nv)
 { 
   if(nextVertex == 0) { nextVertex = nv; }
   else                { tailVertex->SetNext(nv); }
   tailVertex = nv;
+}
+
+inline void G4PrimaryVertex::ClearNext()
+{
+  nextVertex = nullptr;
+  tailVertex = nullptr;
 }
 
 inline G4PrimaryVertex* G4PrimaryVertex::GetNext() const

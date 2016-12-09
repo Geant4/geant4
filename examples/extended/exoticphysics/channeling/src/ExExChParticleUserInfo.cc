@@ -23,11 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChParticleUserInfo.cc
+/// \brief Implementation of the ExExChParticleUserInfo class
+//
 
 #include "ExExChParticleUserInfo.hh"
 
 ExExChParticleUserInfo::ExExChParticleUserInfo(){
-    bHasBeenUnderCoherentEffect = 0;
+    fHasBeenUnderCoherentEffect = 0;
     
     fNucleiDensity = 1.0;
     fNucleiDensityPreviousStep = 1.0;
@@ -53,13 +56,13 @@ ExExChParticleUserInfo::~ExExChParticleUserInfo(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChParticleUserInfo::SetCoherentEffect(G4int flag){
-    bHasBeenUnderCoherentEffect = flag;
+    fHasBeenUnderCoherentEffect = flag;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int ExExChParticleUserInfo::HasBeenUnderCoherentEffect(){
-    return bHasBeenUnderCoherentEffect;
+    return fHasBeenUnderCoherentEffect;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

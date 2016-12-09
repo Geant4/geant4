@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 81776 2014-06-05 08:41:01Z gcosmo $
+// $Id: SteppingAction.cc 98759 2016-08-09 14:03:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -80,5 +80,4 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

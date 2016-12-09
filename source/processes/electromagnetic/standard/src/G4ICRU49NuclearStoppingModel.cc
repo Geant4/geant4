@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.cc 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,7 +68,7 @@ G4ICRU49NuclearStoppingModel::G4ICRU49NuclearStoppingModel(const G4String& nam)
   : G4VEmModel(nam),lossFlucFlag(false)
 {
   theZieglerFactor = eV*cm2*1.0e-15;
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -143,8 +143,8 @@ G4ICRU49NuclearStoppingModel::NuclearStoppingPower(G4double kineticEnergy,
   G4int iz2 = G4lrint(z2);
   
   G4double rm;
-  if(iz1 > 1) { rm = (mass1 + mass2)*(g4pow->Z23(iz1) + g4pow->Z23(iz2)); }
-  else        { rm = (mass1 + mass2)*g4pow->Z13(iz2); }
+  if(iz1 > 1) { rm = (mass1 + mass2)*(g4calc->Z23(iz1) + g4calc->Z23(iz2)); }
+  else        { rm = (mass1 + mass2)*g4calc->Z13(iz2); }
 
   G4double er = 32.536 * mass2 * energy / ( z12 * rm ) ;  // reduced energy
 

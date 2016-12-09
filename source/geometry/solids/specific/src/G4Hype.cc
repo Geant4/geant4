@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4Hype.cc 100819 2016-11-02 15:17:36Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -47,7 +47,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
-#include "G4SolidExtentList.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4ClippablePolygon.hh"
 
 #include "G4VPVParameterisation.hh"
@@ -216,299 +216,51 @@ void G4Hype::ComputeDimensions(G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
 
-//
-// CalculateExtent
-//
-G4bool G4Hype::CalculateExtent( const EAxis axis,
-                                const G4VoxelLimits &voxelLimit,
-                                const G4AffineTransform &transform,
-                                G4double &min, G4double &max ) const
+void G4Hype::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
-  G4SolidExtentList  extentList( axis, voxelLimit );
-  
+  pMin.set(-endOuterRadius,-endOuterRadius,-halfLenZ);
+  pMax.set( endOuterRadius, endOuterRadius, halfLenZ);
+
+  // Check correctness of the bounding box
   //
-  // Choose phi size of our segment(s) based on constants as
-  // defined in meshdefs.hh
-  //
-  G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = twopi/numPhi;
-  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
-  
-  //
-  // We work around in phi building polygons along the way.
-  // As a reasonable compromise between accuracy and
-  // complexity (=cpu time), the following facets are chosen:
-  //
-  //   1. If outerRadius/endOuterRadius > 0.95, approximate
-  //      the outer surface as a cylinder, and use one
-  //      rectangular polygon (0-1) to build its mesh.
-  //
-  //      Otherwise, use two trapazoidal polygons that 
-  //      meet at z = 0 (0-4-1)
-  //
-  //   2. If there is no inner surface, then use one
-  //      polygon for each entire endcap.  (0) and (1)
-  //
-  //      Otherwise, use a trapazoidal polygon for each
-  //      phi segment of each endcap.    (0-2) and (1-3)
-  //
-  //   3. For the inner surface, if innerRadius/endInnerRadius > 0.95,
-  //      approximate the inner surface as a cylinder of
-  //      radius innerRadius and use one rectangular polygon
-  //      to build each phi segment of its mesh.   (2-3)
-  //
-  //      Otherwise, use one rectangular polygon centered
-  //      at z = 0 (5-6) and two connecting trapazoidal polygons
-  //      for each phi segment (2-5) and (3-6).
-  //
-  
-  G4bool splitOuter = (outerRadius/endOuterRadius < 0.95);
-  G4bool splitInner = 0;
-  if (InnerSurfaceExists())
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
   {
-    splitInner = (innerRadius/endInnerRadius < 0.95);
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Hype::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
   }
-  
-  //
-  // Vertex assignments (v and w arrays)
-  // [0] and [1] are mandatory
-  // the rest are optional
-  //
-  //     +                     -
-  //      [0]------[4]------[1]      <--- outer radius
-  //       |                 |       
-  //       |                 |       
-  //      [2]---[5]---[6]---[3]      <--- inner radius
-  //
+}
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
 
-  G4ClippablePolygon endPoly1, endPoly2;
-  
-  G4double phi = 0, 
-     cosPhi = std::cos(phi),
-     sinPhi = std::sin(phi);
-  G4ThreeVector v0( rFudge*endOuterRadius*cosPhi,
-                    rFudge*endOuterRadius*sinPhi,
-                    +halfLenZ ),
-                v1( rFudge*endOuterRadius*cosPhi,
-                    rFudge*endOuterRadius*sinPhi,
-                    -halfLenZ ),
-                v2, v3, v4, v5, v6,
-                w0, w1, w2, w3, w4, w5, w6;
-  transform.ApplyPointTransform( v0 );
-  transform.ApplyPointTransform( v1 );
-  
-  G4double zInnerSplit=0.;
-  if (InnerSurfaceExists())
-  {
-    if (splitInner)
-    {
-      v2 = transform.TransformPoint( 
-        G4ThreeVector( endInnerRadius*cosPhi,
-                       endInnerRadius*sinPhi, +halfLenZ ) );
-      v3 = transform.TransformPoint( 
-        G4ThreeVector( endInnerRadius*cosPhi,
-                       endInnerRadius*sinPhi, -halfLenZ ) );
-      //
-      // Find intersection of line normal to inner
-      // surface at z = halfLenZ and line r=innerRadius
-      //
-      G4double rn = halfLenZ*tanInnerStereo2;
-      G4double zn = endInnerRadius;
+G4bool G4Hype::CalculateExtent(const EAxis pAxis,
+                               const G4VoxelLimits& pVoxelLimit,
+                               const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
 
-      zInnerSplit = halfLenZ + (innerRadius - endInnerRadius)*zn/rn;
+  // Get bounding box
+  Extent(bmin,bmax);
 
-      //
-      // Build associated vertices
-      //      
-      v5 = transform.TransformPoint( 
-        G4ThreeVector( innerRadius*cosPhi,
-                       innerRadius*sinPhi, +zInnerSplit ) );
-      v6 = transform.TransformPoint( 
-        G4ThreeVector( innerRadius*cosPhi,
-                       innerRadius*sinPhi, -zInnerSplit ) );
-    }
-    else
-    {
-      v2 = transform.TransformPoint( 
-        G4ThreeVector( innerRadius*cosPhi,
-                       innerRadius*sinPhi, +halfLenZ ) );
-      v3 = transform.TransformPoint( 
-        G4ThreeVector( innerRadius*cosPhi,
-                       innerRadius*sinPhi, -halfLenZ ) );
-    }
-  }
-  
-  if (splitOuter)
-  {
-    v4 = transform.TransformPoint( 
-      G4ThreeVector( rFudge*outerRadius*cosPhi,
-                     rFudge*outerRadius*sinPhi, 0 ) );
-  }
-  
-  //
-  // Loop over phi segments
-  //
-  do    // Loop checking, 13.08.2015, G.Cosmo
-  {
-    phi += sigPhi;
-    if (numPhi == 1) phi = 0;  // Try to avoid roundoff
-          cosPhi = std::cos(phi), 
-    sinPhi = std::sin(phi);
-    
-    G4double r(rFudge*endOuterRadius);
-    w0 = G4ThreeVector( r*cosPhi, r*sinPhi, +halfLenZ );
-    w1 = G4ThreeVector( r*cosPhi, r*sinPhi, -halfLenZ );
-    transform.ApplyPointTransform( w0 );
-    transform.ApplyPointTransform( w1 );
-  
-    //
-    // Outer hyperbolic surface
-    //
-    if (splitOuter)
-    {
-      r = rFudge*outerRadius;
-      w4 = G4ThreeVector( r*cosPhi, r*sinPhi, 0 );
-      transform.ApplyPointTransform( w4 );
-      
-      AddPolyToExtent( v0, v4, w4, w0, voxelLimit, axis, extentList );
-      AddPolyToExtent( v4, v1, w1, w4, voxelLimit, axis, extentList );
-    }
-    else
-    {
-      AddPolyToExtent( v0, v1, w1, w0, voxelLimit, axis, extentList );
-    }
-  
-    if (InnerSurfaceExists())
-    {
-      //
-      // Inner hyperbolic surface
-      //
-      if (splitInner)
-      {
-        w2 = G4ThreeVector( endInnerRadius*cosPhi,
-                            endInnerRadius*sinPhi, +halfLenZ );
-        w3 = G4ThreeVector( endInnerRadius*cosPhi,
-                            endInnerRadius*sinPhi, -halfLenZ );
-        transform.ApplyPointTransform( w2 );
-        transform.ApplyPointTransform( w3 );
-
-        w5 = G4ThreeVector( innerRadius*cosPhi,
-                            innerRadius*sinPhi, +zInnerSplit );
-        w6 = G4ThreeVector( innerRadius*cosPhi,
-                            innerRadius*sinPhi, -zInnerSplit );
-        transform.ApplyPointTransform( w5 );
-        transform.ApplyPointTransform( w6 );
-        AddPolyToExtent( v3, v6, w6, w3, voxelLimit, axis, extentList );
-        AddPolyToExtent( v6, v5, w5, w6, voxelLimit, axis, extentList );
-        AddPolyToExtent( v5, v2, w2, w5, voxelLimit, axis, extentList );
-      }
-      else
-      {
-        w2 = G4ThreeVector( innerRadius*cosPhi,
-                            innerRadius*sinPhi, +halfLenZ );
-        w3 = G4ThreeVector( innerRadius*cosPhi,
-                            innerRadius*sinPhi, -halfLenZ );
-        transform.ApplyPointTransform( w2 );
-        transform.ApplyPointTransform( w3 );
-
-        AddPolyToExtent( v3, v2, w2, w3, voxelLimit, axis, extentList );
-      }
-
-      //
-      // Endplate segments
-      //
-      AddPolyToExtent( v1, v3, w3, w1, voxelLimit, axis, extentList );
-      AddPolyToExtent( v2, v0, w0, w2, voxelLimit, axis, extentList );
-    }
-    else
-    {
-      //
-      // Continue building endplate polygons
-      //
-      endPoly1.AddVertexInOrder( v0 );
-      endPoly2.AddVertexInOrder( v1 );
-    }
-
-    //
-    // Next phi segments
-    //    
-    v0 = w0;
-    v1 = w1;
-    if (InnerSurfaceExists())
-    {
-      v2 = w2;
-      v3 = w3;
-      if (splitInner)
-      {
-        v5 = w5;
-        v6 = w6;
-      }
-    }
-    if (splitOuter) v4 = w4;
-    
-  } while( --numPhi > 0 );
-  
-  
-  //
-  // Don't forget about the endplate polygons, if
-  // we use them
-  //
-  if (!InnerSurfaceExists())
-  {
-    if (endPoly1.PartialClip( voxelLimit, axis ))
-    {
-      static const G4ThreeVector normal(0,0,+1);
-      endPoly1.SetNormal( transform.TransformAxis(normal) );
-      extentList.AddSurface( endPoly1 );
-    }
-
-    if (endPoly2.PartialClip( voxelLimit, axis ))
-    {
-      static const G4ThreeVector normal(0,0,-1);
-      endPoly2.SetNormal( transform.TransformAxis(normal) );
-      extentList.AddSurface( endPoly2 );
-    }
-  }
-  
-  //
-  // Return min/max value
-  //
-  return extentList.GetExtent( min, max );
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 
 //
-// AddPolyToExtent (static)
-//
-// Utility function for CalculateExtent
-//
-void G4Hype::AddPolyToExtent( const G4ThreeVector &v0,
-                              const G4ThreeVector &v1,
-                              const G4ThreeVector &w1,
-                              const G4ThreeVector &w0,
-                              const G4VoxelLimits &voxelLimit,
-                              const EAxis axis,
-                              G4SolidExtentList &extentList ) 
-{
-  G4ClippablePolygon phiPoly;
-
-  phiPoly.AddVertexInOrder( v0 );
-  phiPoly.AddVertexInOrder( v1 );
-  phiPoly.AddVertexInOrder( w1 );
-  phiPoly.AddVertexInOrder( w0 );
-
-  if (phiPoly.PartialClip( voxelLimit, axis ))
-  {
-    phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
-    extentList.AddSurface( phiPoly );
-  }
-}
-
-
-//
-// Decides whether point is inside,outside or on the surface
+// Decides whether point is inside, outside or on the surface
 //
 EInside G4Hype::Inside(const G4ThreeVector& p) const
 {
@@ -711,7 +463,7 @@ G4double G4Hype::DistanceToIn( const G4ThreeVector& p,
             // surface is a cylinder
             //
             if ( (innerStereo < DBL_MIN)
-              && ((std::fabs(v.x()) > DBL_MIN) || (std::fabs(v.y()) > DBL_MIN)) )
+              && ((std::fabs(v.x()) > DBL_MIN) || (std::fabs(v.y()) > DBL_MIN)))
               cantMissInnerCylinder = true;
           }
         }
@@ -1226,7 +978,8 @@ G4int G4Hype::IntersectHype( const G4ThreeVector &p, const G4ThreeVector &v,
     // The trajectory is parallel to the asympotic limit of
     // the surface: single solution
     //
-    if (std::fabs(b) < DBL_MIN) return 0;  // Unless we travel through exact center
+    if (std::fabs(b) < DBL_MIN) return 0;
+    // Unless we travel through exact center
     
     ss[0] = c/b;
     return 1;
@@ -1451,13 +1204,13 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
   if(outerStereo == 0.) {aOne = std::fabs(2.*pi*outerRadius*2.*halfLenZ);}
   if(innerStereo == 0.) {aTwo = std::fabs(2.*pi*innerRadius*2.*halfLenZ);}
   
-  phi = RandFlat::shoot(0.,2.*pi);
+  phi = G4RandFlat::shoot(0.,2.*pi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
-  sinhu = RandFlat::shoot(-1.*halfLenZ*tanOuterStereo/outerRadius,
+  sinhu = G4RandFlat::shoot(-1.*halfLenZ*tanOuterStereo/outerRadius,
                           halfLenZ*tanOuterStereo/outerRadius);
 
-  chose = RandFlat::shoot(0.,aOne+aTwo+2.*aThree);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+2.*aThree);
   if(chose>=0. && chose < aOne)
   {
     if(outerStereo != 0.)
@@ -1470,15 +1223,15 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     else
     {
       return G4ThreeVector(outerRadius*cosphi,outerRadius*sinphi,
-                           RandFlat::shoot(-halfLenZ,halfLenZ));
+                           G4RandFlat::shoot(-halfLenZ,halfLenZ));
     }
   }
   else if(chose>=aOne && chose<aOne+aTwo)
   {
     if(innerStereo != 0.)
     {
-      sinhu = RandFlat::shoot(-1.*halfLenZ*tanInnerStereo/innerRadius,
-                              halfLenZ*tanInnerStereo/innerRadius);
+      sinhu = G4RandFlat::shoot(-1.*halfLenZ*tanInnerStereo/innerRadius,
+                                halfLenZ*tanInnerStereo/innerRadius);
       zRand = innerRadius*sinhu/tanInnerStereo;
       xRand = std::sqrt(sqr(sinhu)+1)*innerRadius*cosphi;
       yRand = std::sqrt(sqr(sinhu)+1)*innerRadius*sinphi;
@@ -1487,7 +1240,7 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     else 
     {
       return G4ThreeVector(innerRadius*cosphi,innerRadius*sinphi,
-                           RandFlat::shoot(-1.*halfLenZ,halfLenZ));
+                           G4RandFlat::shoot(-1.*halfLenZ,halfLenZ));
     }
   }
   else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
@@ -1498,8 +1251,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
  
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      xRand = RandFlat::shoot(-rOut,rOut) ;
-      yRand = RandFlat::shoot(-rOut,rOut) ;
+      xRand = G4RandFlat::shoot(-rOut,rOut) ;
+      yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
     } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
 
@@ -1514,8 +1267,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
  
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      xRand = RandFlat::shoot(-rOut,rOut) ;
-      yRand = RandFlat::shoot(-rOut,rOut) ;
+      xRand = G4RandFlat::shoot(-rOut,rOut) ;
+      yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
     } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
 

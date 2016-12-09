@@ -35,7 +35,11 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -147,6 +151,53 @@ G4VSolid* G4UBox::Clone() const
 {
   return new G4UBox(*this);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UBox::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double dx = GetXHalfLength();
+  G4double dy = GetYHalfLength();
+  G4double dz = GetZHalfLength();
+  pMin.set(-dx,-dy,-dz);
+  pMax.set( dx, dy, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UBox::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UBox::CalculateExtent(const EAxis pAxis,
+                        const G4VoxelLimits& pVoxelLimit,
+                        const G4AffineTransform& pTransform,
+                              G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+
+  // Get bounding box
+  Extent(bmin,bmax);
+
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+}
+
 
 //////////////////////////////////////////////////////////////////////////
 //

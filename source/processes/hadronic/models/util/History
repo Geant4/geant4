@@ -1,4 +1,4 @@
-$Id: History 97799 2016-06-13 12:13:11Z gcosmo $
+$Id: History 100680 2016-10-31 10:52:13Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,19 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+25 October 2016 V. Uzhinsky (hadr-mod-util-V10-02-08)
+- New method - void SetDefinition(G4ParticleDefinition * aDefinition);
+  was added to G4Parton class. It is needed for an implementation of
+  quark exchange processes in QGSM.
+
+16 August 2016 Alberto Ribon (hadr-mod-util-V10-02-07)
+- G4KineticTrack : improved the decay part, by checking whether the
+  sampled decay channel is kinematically below threshold; if this is so,
+  then the sampling is repeated (but not more than a max number of times).
+
+12 August 2016 Alberto Ribon (hadr-mod-util-V10-02-06)
+- G4GeneralPhaseSpaceDecay : added "throw" to hadronic exception
+  (fix suggested by the PVS-Studio static code analyzer)
 
 10 June 2016 Vladimir Ivanchenko (hadr-mod-util-V10-02-05)
 - G4Fragment - real fix of the Coverity warning

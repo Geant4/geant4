@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/RMC01SD.cc
 /// \brief Implementation of the RMC01SD class
 //
-// $Id: RMC01SD.cc 70966 2013-06-07 15:22:09Z gcosmo $
+// $Id: RMC01SD.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //      Class Name:        RMC01SD
@@ -51,7 +51,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4VPhysicalVolume.hh"
-
 
 //#include "G4AdjointAnalysisManager.hh"
 #include "G4THitsCollection.hh"
@@ -163,5 +162,4 @@ void RMC01SD::PrintAll()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

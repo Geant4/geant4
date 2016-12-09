@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc 96706 2016-05-02 09:31:38Z gcosmo $
+// $Id: G4UnitsTable.cc 99523 2016-09-26 10:25:48Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -51,17 +51,47 @@
 
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 
-G4ThreadLocal G4UnitsTable *G4UnitDefinition::pUnitsTable = 0;
+G4ThreadLocal G4UnitsTable* G4UnitDefinition::pUnitsTable = 0;
+G4ThreadLocal G4bool G4UnitDefinition::unitsTableDestroyed = false;
+
+#ifdef G4MULTITHREADED
+G4UnitsTable* G4UnitDefinition::pUnitsTableShadow = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4UnitsTable::G4UnitsTable() {;}
+G4UnitsTable::~G4UnitsTable() 
+{
+  G4UnitsTable::iterator itr = begin();
+  for(;itr!=end();itr++)
+  { delete *itr; }
+  clear();
+}
+
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::G4UnitDefinition(const G4String& name,
                                    const G4String& symbol,
                                    const G4String& category, G4double value)
-  : Name(name),SymbolName(symbol),Value(value)   
+  : Name(name),SymbolName(symbol),Value(value)
 {
-    if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+    if (!pUnitsTable)
+    {
+      if(unitsTableDestroyed)
+      {
+        G4Exception("G4UnitDefinition::G4UnitDefinition","UnitsTable0000",
+                    FatalException,"G4UnitsTable had already deleted.");
+      }
+      pUnitsTable = new G4UnitsTable;
+#ifdef G4MULTITHREADED
+      if(G4Threading::IsMasterThread())
+      { pUnitsTableShadow = pUnitsTable; }
+#endif
+    }
 
     // Does the Category objet already exist ?
     //
@@ -85,9 +115,7 @@ G4UnitDefinition::G4UnitDefinition(const G4String& name,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4UnitDefinition::~G4UnitDefinition()
-{
-    if (!pUnitsTable) { delete pUnitsTable; pUnitsTable = 0; }
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -130,22 +158,42 @@ G4UnitsTable& G4UnitDefinition::GetUnitsTable()
 {
   if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
   if(pUnitsTable->size()==0)  { BuildUnitsTable(); }
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsMasterThread() && !pUnitsTableShadow)
+  { pUnitsTableShadow = pUnitsTable; }
+#endif
   return *pUnitsTable;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
+G4bool G4UnitDefinition::IsUnitDefined(const G4String& str)
+{
+  G4String name, symbol;
+  for (size_t i=0;i<(GetUnitsTable()).size();++i)
+  {
+    G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
+    for (size_t j=0;j<units.size();++j)
+    {
+      name=units[j]->GetName(); symbol=units[j]->GetSymbol();
+      if(str==name||str==symbol) { return true; }
+    }
+  }
+  return false;             
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 G4double G4UnitDefinition::GetValueOf(const G4String& str)
 {
-  G4String name,symbol;
-  for (size_t i=0;i<(GetUnitsTable()).size();i++)
+  G4String name, symbol;
+  for (size_t i=0;i<(GetUnitsTable()).size();++i)
      {
        G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
-       for (size_t j=0;j<units.size();j++)
+       for (size_t j=0;j<units.size();++j)
           {
             name=units[j]->GetName(); symbol=units[j]->GetSymbol();
-            if(str==name||str==symbol) 
-              { return units[j]->GetValue(); }
+            if(str==name||str==symbol) { return units[j]->GetValue(); }
           }
      }
   std::ostringstream message;
@@ -159,15 +207,14 @@ G4double G4UnitDefinition::GetValueOf(const G4String& str)
   
 G4String G4UnitDefinition::GetCategory(const G4String& str)
 {
-  G4String name,symbol;
-  for (size_t i=0;i<(GetUnitsTable()).size();i++)
+  G4String name, symbol;
+  for (size_t i=0;i<(GetUnitsTable()).size();++i)
      {
        G4UnitsContainer& units = (*pUnitsTable)[i]->GetUnitsList();
-       for (size_t j=0;j<units.size();j++)
+       for (size_t j=0;j<units.size();++j)
           {
             name=units[j]->GetName(); symbol=units[j]->GetSymbol();
-            if(str==name||str==symbol) 
-              { return (*pUnitsTable)[i]->GetName(); }
+            if(str==name||str==symbol) { return (*pUnitsTable)[i]->GetName(); }
           }
      }
   std::ostringstream message;
@@ -296,7 +343,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("newton","N","Force",newton);
  
  //Pressure
- new G4UnitDefinition(    "pascal","Pa" ,"Pressure",pascal);
+ new G4UnitDefinition(    "pascal","Pa" ,"Pressure",hep_pascal);
  new G4UnitDefinition(       "bar","bar","Pressure",bar); 
  new G4UnitDefinition("atmosphere","atm","Pressure",atmosphere);
  
@@ -312,8 +359,10 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("megavolt","MV","Electric potential",megavolt);
  
  //Electric field
- new G4UnitDefinition(  "volt/m","V/m","Electric field",volt/m);
-   
+ new G4UnitDefinition(    "volt/m","V/m" ,"Electric field",volt/m);
+ new G4UnitDefinition("kilovolt/m","kV/m","Electric field",kilovolt/m);
+ new G4UnitDefinition("megavolt/m","MV/m","Electric field",megavolt/m);
+
  //Magnetic flux
  new G4UnitDefinition("weber","Wb","Magnetic flux",weber);
  
@@ -353,12 +402,19 @@ void G4UnitDefinition::PrintUnitsTable()
 
 void G4UnitDefinition::ClearUnitsTable()
 {
-  if (!pUnitsTable)  { pUnitsTable = new G4UnitsTable; }
+#ifdef G4MULTITHREADED
+  delete pUnitsTable;
+  pUnitsTable = nullptr;
+  if(G4Threading::IsMasterThread())
+  { pUnitsTableShadow = nullptr; }
+#else
   for (size_t i=0;i<pUnitsTable->size();i++)
   {
     delete (*pUnitsTable)[i];
   }
   pUnitsTable->clear();
+#endif
+  unitsTableDestroyed = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -534,3 +590,56 @@ std::ostream& operator<<(std::ostream& flux, G4BestUnit a)
 }       
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#ifdef G4MULTITHREADED
+
+void G4UnitsTable::Synchronize()
+{
+  G4UnitsTable* orig = &(G4UnitDefinition::GetUnitsTableShadow());
+  if(this==orig) return;
+
+  G4UnitsTable::iterator utItr = orig->begin();
+  for(;utItr!=orig->end();utItr++)
+  {
+    G4UnitsCategory* category = *utItr;
+    G4String catName = category->GetName();
+    G4UnitsContainer* units = &(category->GetUnitsList());
+    G4UnitsContainer::iterator ucItr = units->begin();
+    for(;ucItr!=units->end();ucItr++)
+    {
+      G4UnitDefinition* unit = *ucItr;
+      if(!Contains(unit,catName))
+      {
+        new G4UnitDefinition(unit->GetName(),unit->GetSymbol(),
+                               catName,unit->GetValue());
+      }
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4UnitsTable::Contains(const G4UnitDefinition* unit,
+                              const G4String& categoryName)
+{
+  G4UnitsTable::iterator utItr = begin();
+  for(;utItr!=end();utItr++)
+  {
+    G4UnitsCategory* category = *utItr;
+    G4String catName = category->GetName();
+    if(catName!=categoryName) continue;
+    G4UnitsContainer* units = &(category->GetUnitsList());
+    G4UnitsContainer::iterator ucItr = units->begin();
+    for(;ucItr!=units->end();ucItr++)
+    {
+      if((*ucItr)->GetName()==unit->GetName() &&
+         (*ucItr)->GetSymbol()==unit->GetSymbol())
+      { return true; }
+    }
+  }
+  return false;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+ 

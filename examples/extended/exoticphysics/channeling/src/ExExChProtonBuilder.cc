@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChProtonBuilder.cc
+/// \brief Implementation of the ExExChProtonBuilder class
+//
 
 #include "ExExChProtonBuilder.hh"
 #include "G4ParticleDefinition.hh"
@@ -47,11 +50,15 @@ void ExExChProtonBuilder::Build()
     theProcMan->AddDiscreteProcess(theProtonInelastic_wrapper);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChProtonBuilder::
 ExExChProtonBuilder(): wasActivated(false)
 {
     theProtonInelastic=new G4ProtonInelasticProcess;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExExChProtonBuilder::
 ~ExExChProtonBuilder()

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.hh 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -96,7 +96,7 @@ private:
   (const  G4ICRU49NuclearStoppingModel &right) = delete;
   G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 
   G4double theZieglerFactor;
 

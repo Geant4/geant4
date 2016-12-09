@@ -48,6 +48,7 @@
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "UPolycone.hh"
+#include "G4TwoVector.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
 #include "G4Polyhedron.hh"
@@ -82,10 +83,14 @@ class G4UPolycone : public G4USolid
 
     inline UPolycone* GetShape() const;
 
-    G4double GetStartPhi()  const;
-    G4double GetEndPhi()    const;
-    G4bool IsOpen()         const;
-    G4int  GetNumRZCorner() const;
+    G4double GetStartPhi()    const;
+    G4double GetEndPhi()      const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi()   const;
+    G4double GetCosEndPhi()   const;
+    G4bool IsOpen()           const;
+    G4int  GetNumRZCorner()   const;
     G4PolyconeSideRZ GetCorner(G4int index) const;
     G4PolyconeHistorical* GetOriginalParameters() const;
     void SetOriginalParameters(G4PolyconeHistorical* pars);
@@ -104,8 +109,21 @@ class G4UPolycone : public G4USolid
     G4UPolycone( const G4UPolycone &source );
     G4UPolycone &operator=( const G4UPolycone &source );
       // Copy constructor and assignment operator.
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
-    
+
+  private:
+
+    G4double wrStart;
+    G4double wrDelta;
+    std::vector<G4TwoVector> rzcorners;
 };
 
 // --------------------------------------------------------------------

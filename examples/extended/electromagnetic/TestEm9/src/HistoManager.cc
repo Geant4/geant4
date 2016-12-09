@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 92690 2015-09-14 07:03:58Z gcosmo $
+// $Id: HistoManager.cc 100809 2016-11-02 15:02:53Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -90,7 +90,7 @@ HistoManager::HistoManager()
   fNHisto = 13;
 
   fHisto   = new Histo();
-  bookHisto();
+  BookHisto();
 
   fGamma = G4Gamma::Gamma();
   fElectron = G4Electron::Electron();
@@ -106,7 +106,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::bookHisto()
+void HistoManager::BookHisto()
 {
   fHisto->Add1D("10","Evis/E0 in central crystal",fBinsED,0.0,1,1.0);
   fHisto->Add1D("11","Evis/E0 in 3x3",fBinsED,0.0,1.0,1.0);
@@ -228,7 +228,8 @@ void HistoManager::EndOfRun(G4int runID)
     G4cout << G4endl;
   }
   if(fLimittrue[0] < 10. || fLimittrue[1] < 10. || fLimittrue[2] < 10.) {
-    G4cout<<"===========  Mean values without trancating ====================="<<G4endl;
+    G4cout
+      <<"===========  Mean values without trancating ====================="<<G4endl;
     for(j=0; j<fNmax; j++) {
       G4double ex = fEdep[j];
       G4double sx = fErms[j];
@@ -240,7 +241,8 @@ void HistoManager::EndOfRun(G4int runID)
       G4cout << G4endl;
     }
   }
-  G4cout<<"===========  Ratios without trancating ==========================="<<G4endl;
+  G4cout
+    <<"===========  Ratios without trancating ==========================="<<G4endl;
   for(j=3; j<6; j++) {
     G4double e = fEdep[j];
     G4double xx= G4double(fStat[j]);
@@ -253,10 +255,11 @@ void HistoManager::EndOfRun(G4int runID)
            << " +- " << r;
     G4cout << G4endl;
   }
-  G4cout << std::setprecision(4) << "Beam Energy                  " << fBeamEnergy/GeV 
+  G4cout << std::setprecision(4) << "Beam Energy                  " << fBeamEnergy/GeV
          << " GeV" << G4endl;
   if(fLowe > 0)          G4cout << "Number of events E/E0<0.8    " << fLowe << G4endl; 
-  G4cout<<"=================================================================="<<G4endl;
+  G4cout
+    <<"=================================================================="<<G4endl;
   G4cout<<G4endl;
 
   // normalise histograms

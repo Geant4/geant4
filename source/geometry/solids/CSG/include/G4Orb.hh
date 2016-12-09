@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Orb.hh 100820 2016-11-02 15:18:48Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -82,6 +82,8 @@ class G4Orb : public G4CSGSolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

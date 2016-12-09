@@ -44,8 +44,6 @@ set(OpNovice_SCRIPTS
     OpNovice.in
     optPhoton.mac
     gui.mac
-    icons.mac
-    run.png
     vis.mac
   )
 

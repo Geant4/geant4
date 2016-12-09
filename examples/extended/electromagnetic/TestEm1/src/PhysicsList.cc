@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 // 
-// $Id: PhysicsList.cc 96420 2016-04-13 10:24:08Z gcosmo $
+// $Id: PhysicsList.cc 100290 2016-10-17 08:47:55Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,9 +67,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList(DetectorConstruction* det) 
-: G4VModularPhysicsList(), fEmPhysicsList(0), fDet(0), fMessenger(0)
+  : G4VModularPhysicsList(), fDet(det)
 {
-  fDet = det;
   fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
 
@@ -124,12 +123,7 @@ void PhysicsList::ConstructProcess()
   // Electromagnetic physics list
   //
   fEmPhysicsList->ConstructProcess();
-  
-  // Em options
-  //
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetBuildCSDARange(true);
-  
+    
   // Decay Process
   //
   AddDecay();
@@ -233,9 +227,10 @@ void PhysicsList::AddDecay()
   //
   G4Decay* fDecayProcess = new G4Decay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     if (fDecayProcess->IsApplicable(*particle)) 
       ph->RegisterProcess(fDecayProcess, particle);    
   }
@@ -272,9 +267,10 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle))
@@ -306,5 +302,4 @@ void PhysicsList::GetRange(G4double val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4UnitsTable.hh 98932 2016-08-18 13:26:49Z gcosmo $
 //
 // 
 // -----------------------------------------------------------------
@@ -57,13 +57,29 @@
 #include "G4ThreeVector.hh"
 
 class G4UnitsCategory;
+class G4UnitDefinition;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#ifdef G4MULTITHREADED
+class G4UnitsTable : public std::vector<G4UnitsCategory*>
+{
+  public:
+    G4UnitsTable();
+    ~G4UnitsTable(); 
+    
+  public:
+    void Synchronize();
+    G4bool Contains(const G4UnitDefinition*,const G4String&);
+};
+#else
 typedef std::vector<G4UnitsCategory*> G4UnitsTable;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class G4UnitDefinition
 {
-public:  // with description
+  public:  // with description
 
     G4UnitDefinition(const G4String& name, const G4String& symbol,
                      const G4String& category, G4double value);
@@ -88,6 +104,7 @@ public:  // with description
     
     static G4UnitsTable& GetUnitsTable();
 
+    static G4bool IsUnitDefined(const G4String&);
     static G4double GetValueOf (const G4String&);
     static G4String GetCategory(const G4String&);
 
@@ -103,8 +120,16 @@ public:  // with description
     G4double Value;           // value in the internal system of units
     
     static G4ThreadLocal G4UnitsTable *pUnitsTable;   // table of Units
+    static G4ThreadLocal G4bool unitsTableDestroyed;
 
     size_t CategoryIndex;                // category index of this unit
+
+#ifdef G4MULTITHREADED
+    static G4UnitsTable *pUnitsTableShadow;   // shadow of table of Units
+  public:
+    inline static G4UnitsTable& GetUnitsTableShadow()
+    {return *pUnitsTableShadow;}
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

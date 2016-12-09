@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
 // $Id: EventAction.hh 95740 2016-02-23 09:34:37Z gcosmo $
@@ -55,7 +55,7 @@ class EventAction : public G4UserEventAction
   private:
     DetectorConstruction* fDetector;
 
-    G4double  fEdepAbsor[MaxAbsor];
+    G4double  fEdepAbsor[kMaxAbsor];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

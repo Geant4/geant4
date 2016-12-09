@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -36,35 +36,36 @@ PhysicsList::AddPhysicsList: <dna>
 ---------------------------------------------------------
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld  1  0  0
-### ===  Ignore cuts flag:   0
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   1
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        1 GeV   Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
+       Klein-Nishina :  Emin=        1 GeV   Emax=      100 TeV
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
         BetheHeitler :  Emin=        1 GeV   Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
-      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV   CullenGenerator
-   LivermoreRayleigh :  Emin=        1 GeV   Emax=       10 TeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        1 GeV   Emax=      100 TeV   CullenGenerator
 
 e-_G4DNAElectronSolvation:   for  e-    SubType= 58  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -98,26 +99,26 @@ DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
@@ -265,178 +266,178 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
  The run is 1000 e- of 800.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 232.309 eV  +- 234.787 eV 
+ Total Energy deposited        = 232.961 eV  +- 234.730 eV 
 
- S value                       = 1110.703 Gy/Bq.s  +- 1122.548 Gy/Bq.s 
+ S value                       = 1113.819 Gy/Bq.s  +- 1122.279 Gy/Bq.s 
 
- Track length of primary track = 18.235 nm  +- 13.885 nm 
- Projected range               = 10.324 nm  +- 8.350 nm 
+ Track length of primary track = 18.236 nm  +- 13.910 nm 
+ Projected range               = 10.401 nm  +- 8.331 nm 
 
- Nb of steps of primary track  = 15.03 +- 21.49
+ Nb of steps of primary track  = 14.89 +- 21.25
 
- Step size                     = 1.655 nm  +- 9.126 Ang
+ Step size                     = 1.660 nm  +- 9.124 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 215.733 eV  +- 241.834 eV 
+ Total Energy deposited        = 214.223 eV  +- 239.369 eV 
 
- S value                       = 1031.450 Gy/Bq.s  +- 1156.242 Gy/Bq.s 
+ S value                       = 1024.230 Gy/Bq.s  +- 1144.455 Gy/Bq.s 
 
- Track length of primary track = 17.965 nm  +- 14.562 nm 
- Projected range               = 11.323 nm  +- 7.626 nm 
+ Track length of primary track = 18.040 nm  +- 14.218 nm 
+ Projected range               = 11.413 nm  +- 7.653 nm 
 
- Nb of steps of primary track  = 12.72 +- 17.18
+ Nb of steps of primary track  = 12.83 +- 18.06
 
- Step size                     = 1.873 nm  +- 1.084 nm 
+ Step size                     = 1.864 nm  +- 1.040 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 203.039 eV  +- 242.793 eV 
+ Total Energy deposited        = 197.055 eV  +- 244.003 eV 
 
- S value                       = 970.760 Gy/Bq.s  +- 1160.829 Gy/Bq.s 
+ S value                       = 942.149 Gy/Bq.s  +- 1166.616 Gy/Bq.s 
 
- Track length of primary track = 18.110 nm  +- 14.181 nm 
- Projected range               = 11.849 nm  +- 6.997 nm 
+ Track length of primary track = 17.564 nm  +- 14.224 nm 
+ Projected range               = 11.872 nm  +- 6.933 nm 
 
- Nb of steps of primary track  = 11.68 +- 18.61
+ Nb of steps of primary track  = 11.22 +- 18.05
 
- Step size                     = 2.091 nm  +- 1.107 nm 
+ Step size                     = 2.064 nm  +- 1.109 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 2.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 103.990 eV  +- 142.686 eV 
+ Total Energy deposited        = 97.284 eV  +- 136.192 eV 
 
- S value                       = 497.192 Gy/Bq.s  +- 682.203 Gy/Bq.s 
+ S value                       = 465.127 Gy/Bq.s  +- 651.153 Gy/Bq.s 
 
- Track length of primary track = 15.864 nm  +- 10.575 nm 
- Projected range               = 14.112 nm  +- 5.131 nm 
+ Track length of primary track = 15.234 nm  +- 10.576 nm 
+ Projected range               = 14.015 nm  +- 5.328 nm 
 
- Nb of steps of primary track  = 4.86 +- 3.38
+ Nb of steps of primary track  = 4.71 +- 3.42
 
- Step size                     = 3.581 nm  +- 2.231 nm 
+ Step size                     = 3.537 nm  +- 2.250 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 67.625 eV  +- 110.592 eV 
+ Total Energy deposited        = 64.751 eV  +- 103.980 eV 
 
- S value                       = 323.326 Gy/Bq.s  +- 528.758 Gy/Bq.s 
+ S value                       = 309.582 Gy/Bq.s  +- 497.142 Gy/Bq.s 
 
- Track length of primary track = 15.298 nm  +- 9.982 nm 
- Projected range               = 14.573 nm  +- 4.547 nm 
+ Track length of primary track = 15.352 nm  +- 9.973 nm 
+ Projected range               = 14.605 nm  +- 4.346 nm 
 
- Nb of steps of primary track  = 3.60 +- 2.41
+ Nb of steps of primary track  = 3.65 +- 2.43
 
- Step size                     = 4.721 nm  +- 3.238 nm 
+ Step size                     = 4.634 nm  +- 3.144 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 50.945 eV  +- 89.389 eV 
+ Total Energy deposited        = 52.982 eV  +- 89.506 eV 
 
- S value                       = 243.575 Gy/Bq.s  +- 427.383 Gy/Bq.s 
+ S value                       = 253.314 Gy/Bq.s  +- 427.940 Gy/Bq.s 
 
- Track length of primary track = 15.465 nm  +- 10.191 nm 
- Projected range               = 14.861 nm  +- 4.028 nm 
+ Track length of primary track = 15.756 nm  +- 10.164 nm 
+ Projected range               = 14.913 nm  +- 4.031 nm 
 
- Nb of steps of primary track  = 3.07 +- 2.01
+ Nb of steps of primary track  = 3.11 +- 2.00
 
- Step size                     = 5.566 nm  +- 3.757 nm 
+ Step size                     = 5.607 nm  +- 3.717 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 5.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 49.646 eV  +- 98.200 eV 
+ Total Energy deposited        = 49.596 eV  +- 99.758 eV 
 
- S value                       = 237.362 Gy/Bq.s  +- 469.509 Gy/Bq.s 
+ S value                       = 237.126 Gy/Bq.s  +- 476.958 Gy/Bq.s 
 
- Track length of primary track = 15.825 nm  +- 10.126 nm 
- Projected range               = 15.011 nm  +- 4.048 nm 
+ Track length of primary track = 16.011 nm  +- 10.140 nm 
+ Projected range               = 15.172 nm  +- 3.902 nm 
 
- Nb of steps of primary track  = 2.75 +- 1.76
+ Nb of steps of primary track  = 2.75 +- 1.75
 
- Step size                     = 6.386 nm  +- 4.608 nm 
+ Step size                     = 6.559 nm  +- 4.886 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 6.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 39.729 eV  +- 92.569 eV 
+ Total Energy deposited        = 38.178 eV  +- 80.411 eV 
 
- S value                       = 189.952 Gy/Bq.s  +- 442.587 Gy/Bq.s 
+ S value                       = 182.535 Gy/Bq.s  +- 384.458 Gy/Bq.s 
 
- Track length of primary track = 15.245 nm  +- 9.871 nm 
- Projected range               = 14.810 nm  +- 4.021 nm 
+ Track length of primary track = 15.121 nm  +- 9.810 nm 
+ Projected range               = 14.724 nm  +- 4.100 nm 
 
- Nb of steps of primary track  = 2.45 +- 1.55
+ Nb of steps of primary track  = 2.45 +- 1.57
 
- Step size                     = 6.861 nm  +- 4.731 nm 
+ Step size                     = 6.870 nm  +- 4.837 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 7.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 32.831 eV  +- 71.998 eV 
+ Total Energy deposited        = 34.397 eV  +- 77.108 eV 
 
- S value                       = 156.969 Gy/Bq.s  +- 344.234 Gy/Bq.s 
+ S value                       = 164.456 Gy/Bq.s  +- 368.663 Gy/Bq.s 
 
- Track length of primary track = 15.100 nm  +- 9.796 nm 
- Projected range               = 14.865 nm  +- 4.029 nm 
+ Track length of primary track = 15.217 nm  +- 9.831 nm 
+ Projected range               = 14.908 nm  +- 4.022 nm 
 
- Nb of steps of primary track  = 2.22 +- 1.39
+ Nb of steps of primary track  = 2.24 +- 1.41
 
- Step size                     = 7.661 nm  +- 5.637 nm 
+ Step size                     = 7.694 nm  +- 5.639 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 8.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 28.072 eV  +- 60.526 eV 
+ Total Energy deposited        = 27.952 eV  +- 57.510 eV 
 
- S value                       = 134.214 Gy/Bq.s  +- 289.381 Gy/Bq.s 
+ S value                       = 133.642 Gy/Bq.s  +- 274.962 Gy/Bq.s 
 
- Track length of primary track = 15.047 nm  +- 9.658 nm 
- Projected range               = 15.029 nm  +- 3.877 nm 
+ Track length of primary track = 15.046 nm  +- 9.736 nm 
+ Projected range               = 15.051 nm  +- 3.873 nm 
 
- Nb of steps of primary track  = 2.09 +- 1.27
+ Nb of steps of primary track  = 2.08 +- 1.25
 
- Step size                     = 7.930 nm  +- 5.515 nm 
+ Step size                     = 7.889 nm  +- 5.489 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 9.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 28.615 eV  +- 70.473 eV 
+ Total Energy deposited        = 27.046 eV  +- 60.502 eV 
 
- S value                       = 136.813 Gy/Bq.s  +- 336.940 Gy/Bq.s 
+ S value                       = 129.311 Gy/Bq.s  +- 289.267 Gy/Bq.s 
 
- Track length of primary track = 15.087 nm  +- 9.554 nm 
- Projected range               = 15.030 nm  +- 3.938 nm 
+ Track length of primary track = 15.214 nm  +- 9.557 nm 
+ Projected range               = 15.082 nm  +- 3.907 nm 
 
- Nb of steps of primary track  = 2.00 +- 1.18
+ Nb of steps of primary track  = 2.01 +- 1.19
 
- Step size                     = 8.424 nm  +- 5.991 nm 
+ Step size                     = 8.496 nm  +- 6.004 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 10.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 25.880 eV  +- 73.835 eV 
+ Total Energy deposited        = 25.098 eV  +- 61.016 eV 
 
- S value                       = 123.734 Gy/Bq.s  +- 353.015 Gy/Bq.s 
+ S value                       = 119.995 Gy/Bq.s  +- 291.728 Gy/Bq.s 
 
- Track length of primary track = 15.081 nm  +- 10.084 nm 
- Projected range               = 14.867 nm  +- 4.026 nm 
+ Track length of primary track = 15.248 nm  +- 10.142 nm 
+ Projected range               = 14.862 nm  +- 4.017 nm 
 
- Nb of steps of primary track  = 1.88 +- 1.10
+ Nb of steps of primary track  = 1.90 +- 1.12
 
- Step size                     = 8.887 nm  +- 6.808 nm 
+ Step size                     = 8.862 nm  +- 6.714 nm 

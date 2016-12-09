@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 100340 2016-10-18 07:50:12Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -30,7 +30,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadrons/ions/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 
 #
@@ -42,13 +43,15 @@ GEANT4_DEFINE_MODULE(NAME G4decay
         G4Decay.hh
         G4DecayProcessType.hh
         G4DecayWithSpin.hh
+	G4MuonicAtomDecay.hh
         G4PionDecayMakeSpin.hh
         G4UnknownDecay.hh
         G4VExtDecayer.hh
     SOURCES
         G4Decay.cc
         G4DecayWithSpin.cc
-        G4PionDecayMakeSpin.cc
+	G4MuonicAtomDecay.cc
+	G4PionDecayMakeSpin.cc
         G4UnknownDecay.cc
     GRANULAR_DEPENDENCIES
         G4csg

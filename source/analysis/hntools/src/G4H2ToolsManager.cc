@@ -453,7 +453,7 @@ G4double G4H2ToolsManager::GetH2Xmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h2d = GetTInFunction(id, "GetH2Xmin");
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetMin(*h2d, kX);
 }  
@@ -462,7 +462,7 @@ G4double G4H2ToolsManager::GetH2Xmin(G4int id) const
 G4double G4H2ToolsManager::GetH2Xmax(G4int id) const
 {
   auto h2d = GetTInFunction(id, "GetH2Xmax");
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetMax(*h2d, kX);
 }  
@@ -471,7 +471,7 @@ G4double G4H2ToolsManager::GetH2Xmax(G4int id) const
 G4double G4H2ToolsManager::GetH2XWidth(G4int id) const
 {
   auto h2d = GetTInFunction(id, "GetH2XWidth", true, false);
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetWidth(*h2d, kX, fHnManager->GetHnType());
 }  
@@ -491,7 +491,7 @@ G4double G4H2ToolsManager::GetH2Ymin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h2d = GetTInFunction(id, "GetH2Ymin");
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetMin(*h2d, kY);
 }  
@@ -500,7 +500,7 @@ G4double G4H2ToolsManager::GetH2Ymin(G4int id) const
 G4double G4H2ToolsManager::GetH2Ymax(G4int id) const
 {
   auto h2d = GetTInFunction(id, "GetH2Ymax");
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetMax(*h2d, kY);
 }  
@@ -509,7 +509,7 @@ G4double G4H2ToolsManager::GetH2Ymax(G4int id) const
 G4double G4H2ToolsManager::GetH2YWidth(G4int id) const
 {
   auto h2d = GetTInFunction(id, "GetH2YWidth", true, false);
-  if ( ! h2d ) return 0;
+  if ( ! h2d ) return 0.;
   
   return GetWidth(*h2d, kY, fHnManager->GetHnType());
 }  

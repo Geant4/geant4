@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Box.hh 99469 2016-09-22 15:04:36Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -75,10 +75,12 @@ class G4Box : public G4CSGSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                                 G4double& pmin, G4double& pmax) const;
+                                 G4double& pMin, G4double& pMax) const;
 
   // Accessors and modifiers
 
@@ -127,13 +129,6 @@ class G4Box : public G4CSGSolid
     G4Box(const G4Box& rhs);
     G4Box& operator=(const G4Box& rhs); 
       // Copy constructor and assignment operator.
-
-  protected:  // with description
-
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
   protected:  // without description
 

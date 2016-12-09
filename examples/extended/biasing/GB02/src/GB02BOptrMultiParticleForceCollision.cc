@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB02/src/GB02BOptrMultiParticleForceCollision.cc
+/// \brief Implementation of the GB02BOptrMultiParticleForceCollision class
+//
 #include "GB02BOptrMultiParticleForceCollision.hh"
 #include "G4BiasingProcessInterface.hh"
 
@@ -30,10 +33,14 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 GB02BOptrMultiParticleForceCollision::GB02BOptrMultiParticleForceCollision()
 : G4VBiasingOperator("TestManyForceCollision")
 {
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
 {
@@ -58,6 +65,8 @@ void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VBiasingOperation* 
 GB02BOptrMultiParticleForceCollision::
 ProposeOccurenceBiasingOperation(const G4Track* track, 
@@ -67,6 +76,8 @@ ProposeOccurenceBiasingOperation(const G4Track* track,
                             GetProposedOccurenceBiasingOperation(track, callingProcess);
   else                    return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VBiasingOperation*
 GB02BOptrMultiParticleForceCollision::
@@ -78,6 +89,8 @@ ProposeNonPhysicsBiasingOperation(const G4Track* track,
   else                    return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VBiasingOperation*
 GB02BOptrMultiParticleForceCollision::
 ProposeFinalStateBiasingOperation(const G4Track* track,
@@ -88,6 +101,7 @@ ProposeFinalStateBiasingOperation(const G4Track* track,
   else                    return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB02BOptrMultiParticleForceCollision::StartTracking( const G4Track* track )
 {
@@ -97,6 +111,8 @@ void GB02BOptrMultiParticleForceCollision::StartTracking( const G4Track* track )
   fCurrentOperator = 0;
   if ( it != fBOptrForParticle.end() ) fCurrentOperator = (*it).second;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
 GB02BOptrMultiParticleForceCollision::
@@ -111,6 +127,8 @@ OperationApplied( const G4BiasingProcessInterface*         callingProcess,
                                                                     particleChangeProduced );
   
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void
 GB02BOptrMultiParticleForceCollision::
@@ -129,6 +147,8 @@ OperationApplied( const G4BiasingProcessInterface*        callingProcess,
                                                                     particleChangeProduced );
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void
 GB02BOptrMultiParticleForceCollision::
 ExitBiasing( const G4Track*                           track,
@@ -137,4 +157,4 @@ ExitBiasing( const G4Track*                           track,
   if ( fCurrentOperator ) fCurrentOperator->ExitingBiasing( track, callingProcess );
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

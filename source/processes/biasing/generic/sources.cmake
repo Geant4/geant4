@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94220 2015-11-09 08:26:57Z gcosmo $
+# $Id: sources.cmake 100675 2016-10-31 10:44:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -57,11 +57,13 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4ILawForceFreeFlight.hh
         G4ILawTruncatedExp.hh
         G4InteractionLawPhysical.hh
+	G4ParallelGeometriesLimiterProcess.hh
         G4ParticleChangeForNothing.hh
         G4ParticleChangeForOccurenceBiasing.hh
     SOURCES
         G4BiasingHelper.cc
         G4BiasingProcessInterface.cc
+	G4BiasingProcessSharedData.cc
         G4BOptnChangeCrossSection.cc
         G4BOptnCloning.cc
         G4BOptnForceCommonTruncatedExp.cc
@@ -72,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
         G4ILawForceFreeFlight.cc
         G4ILawTruncatedExp.cc
         G4InteractionLawPhysical.cc
+	G4ParallelGeometriesLimiterProcess.cc
         G4ParticleChangeForOccurenceBiasing.cc
     GRANULAR_DEPENDENCIES
         G4cuts

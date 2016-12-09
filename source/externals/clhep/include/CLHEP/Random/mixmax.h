@@ -133,13 +133,13 @@ void branch_inplace( rng_state_t* Xin, myID_t* ID ); // almost the same as apply
 // the charpoly is irreducible for the combinations of N and SPECIAL and has maximal period for N=508, 256, half period for 1260, and 1/12 period for 3150
 
 // #if (N==256)
-#define SPECIALMUL 0
-#define SPECIAL 487013230256099064ULL // s=487013230256099064, m=1 -- good old MIXMAX
-#define MOD_MULSPEC(k) fmodmulM61( 0, SPECIAL , (k) );
-/*    
-#elif (N==17)
-#define SPECIALMUL 36 // m=2^37+1
-
+// #define SPECIALMUL 0
+// #define SPECIAL 487013230256099064ULL // s=487013230256099064, m=1 -- good old MIXMAX
+// #define MOD_MULSPEC(k) fmodmulM61( 0, SPECIAL , (k) );
+    
+// #elif (N==17)
+#define SPECIALMUL 36 // m=2^36+1
+/*
 #elif (N==8)
 #define SPECIALMUL 53 // m=2^53+1
 

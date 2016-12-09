@@ -91,41 +91,38 @@ public:
     return true;
   }
 public: //base_leaf
-  virtual bool read_basket(buffer& a_buffer) {
+  virtual bool read_buffer(buffer& a_buffer) {
     if(!m_leaf_count && (m_ndata == 1)) {
 /*
       if(!aBuffer.read(m_value[0])) {
-        std::ostream& out = base_leaf::branch().out();
-        out << "Rio::Leaf::readBasket : \"" << name() << "\" :"
+        m_out << "Rio::Leaf::readBasket : \"" << name() << "\" :"
             << " read value failed."
             << std::endl;
         return false;
       }
       return true;
 */
-      m_out << "tools::rroot::leaf::read_basket :"
+      m_out << "tools::rroot::leaf::read_buffer :"
             << " case(1) not yet handled."
             << std::endl;
       return false;
     }else {
       if(m_leaf_count) {
-        m_out << "tools::rroot::leaf::read_basket :"
+        m_out << "tools::rroot::leaf::read_buffer :"
               << " case(2) not yet handled."
               << std::endl;
         return false;
 /*
         int len = m_leaf_count->number();
         if (len > m_leaf_count->maximum()) {
-	  std::ostream& out = base_leaf::branch().out();
-          out << "Rio::Leaf::readBasket : \"" 
+          m_out << "Rio::Leaf::readBasket : \"" 
               << name() << "\", len = " << len << " and max = " 
               << m_leaf_count->maximum() << std::endl;
           len = m_leaf_count->maximum();
         }
         m_ndata = len * fLength;
         if(!aBuffer.readFastArray(m_value,len * fLength)) {
-          std::ostream& out = base_leaf::branch().out();
-          out << "Rio::Leaf::readBasket : \"" << name() << "\" :"
+          m_out << "Rio::Leaf::readBasket : \"" << name() << "\" :"
               << " readFastArray failed."
               << std::endl;
           return false;
@@ -139,14 +136,14 @@ public: //base_leaf
             m_value = new T[m_length]; //we assume m_length is constant.
           }
           if(!a_buffer.read_fast_array<T>(m_value,m_length)) {
-            m_out << "tools::rroot::leaf::read_basket :"
+            m_out << "tools::rroot::leaf::read_buffer :"
                   << " read_fast_array failed. m_length " << m_length
                   << std::endl;
             return false;
           }
           return true;
         } else {
-          m_out << "tools::rroot::leaf::read_basket :"
+          m_out << "tools::rroot::leaf::read_buffer :"
                 << " read_fast_array failed. m_length is zero."
                 << std::endl;
           return false;
@@ -163,8 +160,8 @@ public: //base_leaf
   }
   virtual uint32 num_elem() const {return m_length;}
 public:
-  leaf(std::ostream& a_out,rroot::branch& a_branch,ifac& a_fac)
-  :base_leaf(a_out,a_branch,a_fac)
+  leaf(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac)
   ,m_min(T()),m_max(T())
   ,m_value(0)
   {}
@@ -221,13 +218,13 @@ public:
     return true;
   }
 public: //base_leaf
-  virtual bool read_basket(buffer& a_buffer) {
+  virtual bool read_buffer(buffer& a_buffer) {
     delete [] m_value;
     m_value = 0;
 
     unsigned char lenchar;
     if(!a_buffer.read(lenchar)) {
-      m_out << "tools::rroot::leaf_string::read_basket :"
+      m_out << "tools::rroot::leaf_string::read_buffer :"
             << " read(uchar) failed."
             << std::endl;
       return false;
@@ -237,7 +234,7 @@ public: //base_leaf
       len = lenchar;
     } else {
       if(!a_buffer.read(len)) {
-        m_out << "tools::rroot::leaf_string::read_basket :"
+        m_out << "tools::rroot::leaf_string::read_buffer :"
               << " read(int) failed."
               << std::endl;
         return false;
@@ -246,7 +243,7 @@ public: //base_leaf
     if(len) {
 
       if(!m_length) {
-        m_out << "tools::rroot::leaf_string::read_basket :"
+        m_out << "tools::rroot::leaf_string::read_buffer :"
               << " m_length is zero."
               << std::endl;
         return false;
@@ -257,7 +254,7 @@ public: //base_leaf
       m_value = new char[len+1];
 
       if(!a_buffer.read_fast_array(m_value,len)) {
-        m_out << "tools::rroot::leaf_string::read_basket :"
+        m_out << "tools::rroot::leaf_string::read_buffer :"
               << " read_fast_array failed."
               << std::endl;
         delete [] m_value;
@@ -276,8 +273,8 @@ public: //base_leaf
   }
   virtual uint32 num_elem() const {return 1;}
 public:
-  leaf_string(std::ostream& a_out,rroot::branch& a_branch,ifac& a_fac)
-  :base_leaf(a_out,a_branch,a_fac)
+  leaf_string(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac)
   ,m_min(0),m_max(0),m_value(0){}
   virtual ~leaf_string(){
     delete [] m_value;
@@ -330,8 +327,8 @@ public:
     return true;
   }
 public: //base_leaf
-  virtual bool read_basket(buffer&) {
-    m_out << "tools::rroot::leaf_element::read_basket :"
+  virtual bool read_buffer(buffer&) {
+    m_out << "tools::rroot::leaf_element::read_buffer :"
           << " dummy."
           << std::endl;
     return false;
@@ -339,8 +336,8 @@ public: //base_leaf
   virtual bool print_value(std::ostream&,uint32) const {return true;}
   virtual uint32 num_elem() const {return 0;}
 public:
-  leaf_element(std::ostream& a_out,rroot::branch& a_branch,ifac& a_fac)
-  :base_leaf(a_out,a_branch,a_fac),fID(0),fType(0){}
+  leaf_element(std::ostream& a_out,ifac& a_fac)
+  :base_leaf(a_out,a_fac),fID(0),fType(0){}
   virtual ~leaf_element(){}
 protected:
   leaf_element(const leaf_element& a_from)
@@ -353,6 +350,10 @@ protected:
   int fID;           //element serial number in fInfo
   int fType;         //leaf type
 };
+
+// for SWIG :
+inline leaf<float>* cast_leaf_float(base_leaf& a_leaf) {return safe_cast<base_leaf, leaf<float> >(a_leaf);}
+inline leaf<int>*   cast_leaf_int(base_leaf& a_leaf) {return safe_cast<base_leaf, leaf<int> >(a_leaf);}
 
 }}
 

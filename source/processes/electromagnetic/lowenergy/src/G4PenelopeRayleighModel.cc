@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeRayleighModel.cc 97098 2016-05-25 08:04:17Z gcosmo $
+// $Id: G4PenelopeRayleighModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -97,23 +97,20 @@ G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
   if (IsMaster() || fLocalTable)
     {
-      std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
 	{
-	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	    if (i->second) delete i->second;
-
+	  for (auto& item : (*logAtomicCrossSection))
+	    if (item.second) delete item.second;
 	  delete logAtomicCrossSection;
-	  logAtomicCrossSection = 0;
+	  logAtomicCrossSection = nullptr;
 	}
       if (atomicFormFactor)
 	{
-	  for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
-	    if (i->second) delete i->second;
+	  for (auto& item : (*atomicFormFactor))
+	    if (item.second) delete item.second;
 	  delete atomicFormFactor;
-	  atomicFormFactor = 0;
+	  atomicFormFactor = nullptr;
 	}
-
       ClearTables();
     }
 }
@@ -128,31 +125,28 @@ void G4PenelopeRayleighModel::ClearTables()
 		"em0100",FatalException,"Worker thread in this method");
   */
 
-  std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;
-
    if (logFormFactorTable)
      {
-       for (i=logFormFactorTable->begin(); i != logFormFactorTable->end(); i++)
-	 if (i->second) delete i->second;
+       for (auto& item : (*logFormFactorTable))
+	 if (item.second) delete item.second;
        delete logFormFactorTable;
-       logFormFactorTable = 0; //zero explicitely
+       logFormFactorTable = nullptr; //zero explicitely
      }
 
    if (pMaxTable)
      {
-       for (i=pMaxTable->begin(); i != pMaxTable->end(); i++)
-	 if (i->second) delete i->second;
+       for (auto& item : (*pMaxTable))
+	 if (item.second) delete item.second;
        delete pMaxTable;
-       pMaxTable = 0; //zero explicitely
+       pMaxTable = nullptr; //zero explicitely
      }
 
-   std::map<const G4Material*,G4PenelopeSamplingData*>::iterator ii;
    if (samplingTable)
      {
-       for (ii=samplingTable->begin(); ii != samplingTable->end(); ii++)
-	 if (ii->second) delete ii->second;
+       for (auto& item : (*samplingTable))
+	 if (item.second) delete item.second;
        delete samplingTable;
-       samplingTable = 0; //zero explicitely
+       samplingTable = nullptr; //zero explicitely
      }
 
    return;

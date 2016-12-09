@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
 // $Id: RunAction.hh 78560 2014-01-07 10:06:52Z gcosmo $

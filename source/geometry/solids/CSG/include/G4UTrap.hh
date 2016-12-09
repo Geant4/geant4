@@ -126,6 +126,13 @@ class G4UTrap : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
 
   public:  // without description

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -47,40 +47,40 @@
 #ifndef G4VMolecularDecayDisplacer_h
 #define G4VMolecularDecayDisplacer_h 1
 
+#include <vector>
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include <vector>
+#include "G4CTCounter.hh"
 
 class G4Molecule;
 class G4MolecularDissociationChannel;
 
 typedef int DisplacementType;
 
+//------------------------------------------------------------------------------
+
 class G4VMolecularDecayDisplacer
 {
-public :
-    virtual std::vector<G4ThreeVector> GetProductsDisplacement(const G4MolecularDissociationChannel*) const = 0;
-    virtual G4ThreeVector GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const = 0;
-    inline void SetVerbose(G4int);
-    virtual ~G4VMolecularDecayDisplacer();
-
-#if defined G4EM_ALLOC_EXPORT
-    G4DLLEXPORT static const DisplacementType NoDisplacement;
-#else
-    G4DLLIMPORT static const DisplacementType NoDisplacement;
-#endif
-
-protected :
-    G4VMolecularDecayDisplacer();
-    G4int fVerbose ;
-    static DisplacementType AddDisplacement();
-    static /*G4ThreadLocal*/ DisplacementType *Last;
-};
-
-void G4VMolecularDecayDisplacer :: SetVerbose(G4int verbose)
-{
+  public :
+  virtual ~G4VMolecularDecayDisplacer();
+  
+  virtual std::vector<G4ThreeVector>
+  GetProductsDisplacement(const G4MolecularDissociationChannel*) const=0;
+  virtual G4ThreeVector
+  GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel*) const=0;
+  
+  inline void SetVerbose(G4int verbose){
     fVerbose = verbose ;
-}
+  }
+  
+  protected :
+  G4VMolecularDecayDisplacer();
+  G4int fVerbose ;
+  
+public:
+  G4CT_COUNT_INIT_DEF(0)
+  G4CT_COUNT_DEF(NoDisplacement)
+};
 #endif
 
 

@@ -126,7 +126,7 @@ tools::rroot::buffer* G4RootAnalysisReader::GetBuffer(
   //char* charBuffer 
   //  = ( ! key ) ? 0 : key->get_object_buffer(size);
   char* charBuffer = 0;
-  if ( key ) charBuffer = key->get_object_buffer(size);
+  if ( key ) charBuffer = key->get_object_buffer(*rfile, size);
   
   if ( ! charBuffer ) {
     G4ExceptionDescription description;
@@ -387,7 +387,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   }
 
   unsigned int size;
-  char* charBuffer = key->get_object_buffer(size);
+  char* charBuffer = key->get_object_buffer(*rfile, size);
   if ( ! charBuffer ) {
     G4ExceptionDescription description;
     description 
@@ -402,7 +402,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   auto buffer
     = new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                                key->key_length(), verbose);
-  auto fac = new tools::rroot::fac(*rfile);
+  auto fac = new tools::rroot::fac(G4cout);
 
   auto tree = new tools::rroot::tree(*rfile, *fac);
   if ( ! tree->stream(*buffer) ) {

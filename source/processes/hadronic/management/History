@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)
+---------------------------------------------------
+- G4EnergyRangeManager - fixed Coverity warning
+
+24 June 2016  Alberto Ribon  (hadr-man-V10-02-02)
+---------------------------------------------------
+- G4HadronicProcess - added check on the final-state secondaries to see
+  if kaon0 or anti_kaon0 are present: if this the case, they are transformed
+  into either kaon0S or kaon0L, with equal (50%) probability.
+
 27 May 2016 V. Ivanchenko (hadr-man-V10-02-01)
 ---------------------------------------------------
 - G4HadronicProcess - added flag of "integral" approach to take into

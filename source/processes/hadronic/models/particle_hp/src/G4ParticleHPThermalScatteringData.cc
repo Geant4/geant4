@@ -535,8 +535,13 @@ G4double G4ParticleHPThermalScatteringData::GetX ( const G4DynamicParticle* aP, 
    for ( it = amapTemp_EnergyCross->begin() ; it != amapTemp_EnergyCross->end() ; it++ ) {
        if ( aT < it->first ) break;
    } 
-   if ( it == amapTemp_EnergyCross->begin() && it != amapTemp_EnergyCross->end() ) it++;  // lower than the first
-   if ( it != amapTemp_EnergyCross->begin() && it == amapTemp_EnergyCross->end() ) it--;  // upper than the last
+   //if ( it == amapTemp_EnergyCross->begin() && it != amapTemp_EnergyCross->end() ) it++;  // lower than the first
+   //if ( it != amapTemp_EnergyCross->begin() && it == amapTemp_EnergyCross->end() ) it--;  // upper than the last
+   if ( it == amapTemp_EnergyCross->begin() ) {
+      it++;  // lower than the first
+   } else if ( it == amapTemp_EnergyCross->end() ) {
+      it--;  // upper than the last
+   }
 
    G4double TH = it->first;
    G4double XH = it->second->GetXsec ( eKinetic ); 

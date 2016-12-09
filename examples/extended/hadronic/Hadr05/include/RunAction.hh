@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
 // $Id: RunAction.hh 75731 2013-11-05 17:46:30Z vnivanch $

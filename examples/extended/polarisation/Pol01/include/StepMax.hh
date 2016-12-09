@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: StepMax.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,10 +36,10 @@
 
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Step.hh"
 
 class StepMaxMessenger;
+class G4ParticleDefinition;
+class G4Step;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,23 +50,23 @@ class StepMax : public G4VDiscreteProcess
      StepMax(const G4String& processName ="stepMax");
     ~StepMax();
 
-     G4bool   IsApplicable(const G4ParticleDefinition&);    
+     virtual G4bool   IsApplicable(const G4ParticleDefinition&);    
      void     SetMaxStep(G4double);
-     G4double GetMaxStep() {return MaxChargedStep;};
+     G4double GetMaxStep() {return fMaxChargedStep;};
      
-     G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
+     virtual G4double PostStepGetPhysicalInteractionLength( const G4Track& track,
                                              G4double   previousStepSize,
                                              G4ForceCondition* condition);
 
-     G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+     virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
-     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+     virtual G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
        {return 0.;};     // it is not needed here !
 
   private:
 
-     G4double    MaxChargedStep;
-     StepMaxMessenger* pMess;
+     G4double    fMaxChargedStep;
+     StepMaxMessenger* fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

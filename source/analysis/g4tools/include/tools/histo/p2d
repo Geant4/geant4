@@ -32,16 +32,16 @@ public:
   {}
 
   p2d(const std::string& a_title,
-      const std::vector<double>& aEdgesX,
-      const std::vector<double>& aEdgesY)
-  :parent(a_title,aEdgesX,aEdgesY)
+      const std::vector<double>& a_edges_x,
+      const std::vector<double>& a_edges_y)
+  :parent(a_title,a_edges_x,a_edges_y)
   {}
 
   p2d(const std::string& a_title,
-      const std::vector<double>& aEdgesX,
-      const std::vector<double>& aEdgesY,
+      const std::vector<double>& a_edges_x,
+      const std::vector<double>& a_edges_y,
       double aVmin,double aVmax)
-  :parent(a_title,aEdgesX,aEdgesY,aVmin,aVmax)
+  :parent(a_title,a_edges_x,a_edges_y,aVmin,aVmax)
   {}
 
   virtual ~p2d(){}

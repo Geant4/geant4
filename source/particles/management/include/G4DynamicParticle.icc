@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc 72152 2013-07-11 12:49:58Z gcosmo $
+// $Id: G4DynamicParticle.icc 98352 2016-07-08 08:21:00Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -33,7 +33,6 @@
 //	History: first implementation, based on object model of
 //                             17 AUg. 1999   H.Kurashige  
 // ------------------------------------------------------------
-
 extern G4PART_DLL G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator;
 
 // ------------------------
@@ -143,11 +142,6 @@ inline G4double G4DynamicParticle::GetMagneticMoment() const
 inline void  G4DynamicParticle::SetMagneticMoment(G4double magneticMoment)
 {
    theDynamicalMagneticMoment = magneticMoment;  
-}
-
-inline void G4DynamicParticle::SetMass(G4double newMass)
-{
-  theDynamicalMass = newMass;
 }
 
 inline const G4ThreeVector& G4DynamicParticle::GetMomentumDirection() const

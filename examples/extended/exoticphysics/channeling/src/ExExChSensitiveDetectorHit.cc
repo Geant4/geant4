@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChSensitiveDetectorHit.cc
+/// \brief Implementation of the ExExChSensitiveDetectorHit class
+//
 
 #include "ExExChSensitiveDetectorHit.hh"
 #include "G4ios.hh"

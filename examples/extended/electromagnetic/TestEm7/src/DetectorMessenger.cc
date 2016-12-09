@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: DetectorMessenger.cc 101250 2016-11-10 08:54:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,16 +46,16 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),    
- fMaterCmd(0),
- fSizeXCmd(0),
- fSizeYZCmd(0),    
- fMagFieldCmd(0),
- fTalNbCmd(0),    
- fTalDefCmd(0),
- fTalPosiCmd(0),                
- fUpdateCmd(0)
+ fTestemDir(nullptr),
+ fDetDir(nullptr),    
+ fMaterCmd(nullptr),
+ fWMaterCmd(nullptr),
+ fSizeXCmd(nullptr),
+ fSizeYZCmd(nullptr),    
+ fMagFieldCmd(nullptr),
+ fTalNbCmd(nullptr),    
+ fTalDefCmd(nullptr),
+ fTalPosiCmd(nullptr)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -68,19 +68,24 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fMaterCmd->SetParameterName("choice",false);
   fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
+  fWMaterCmd = new G4UIcmdWithAString("/testem/det/setWorldMat",this);
+  fWMaterCmd->SetGuidance("Select material of the world.");
+  fWMaterCmd->SetParameterName("choice",false);
+  fWMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
   fSizeXCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeX",this);
   fSizeXCmd->SetGuidance("Set sizeX of the absorber");
   fSizeXCmd->SetParameterName("SizeX",false);
   fSizeXCmd->SetRange("SizeX>0.");
   fSizeXCmd->SetUnitCategory("Length");
-  fSizeXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeXCmd->AvailableForStates(G4State_PreInit);
   
   fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
   fSizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
   fSizeYZCmd->SetParameterName("SizeYZ",false);
   fSizeYZCmd->SetRange("SizeYZ>0.");
   fSizeYZCmd->SetUnitCategory("Length");
-  fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeYZCmd->AvailableForStates(G4State_PreInit);
         
   fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
   fMagFieldCmd->SetGuidance("Define magnetic field.");
@@ -96,20 +101,16 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTalNbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fTalDefCmd = new G4UIcommand("/testem/det/tallyDefinition",this);
-  fTalDefCmd->SetGuidance("Set tally nb, material, box dimensions.");
-  fTalDefCmd->SetGuidance("  tally number : from 1 to tallyNumber");
+  fTalDefCmd->SetGuidance("Set tally nb, box dimensions.");
+  fTalDefCmd->SetGuidance("  tally number : from 0 to tallyNumber");
   fTalDefCmd->SetGuidance("  material name");
   fTalDefCmd->SetGuidance("  dimensions (3-vector with unit)");
   //
   G4UIparameter* fTalNbPrm = new G4UIparameter("tallyNb",'i',false);
   fTalNbPrm->SetGuidance("tally number : from 1 to tallyNumber");
-  fTalNbPrm->SetParameterRange("tallyNb>0");
+  fTalNbPrm->SetParameterRange("tallyNb>=0");
   fTalDefCmd->SetParameter(fTalNbPrm);
   //
-  G4UIparameter* MatPrm = new G4UIparameter("material",'s',false);
-  MatPrm->SetGuidance("material name");
-  fTalDefCmd->SetParameter(MatPrm);
-  //    
   G4UIparameter* SizeXPrm = new G4UIparameter("sizeX",'d',false);
   SizeXPrm->SetGuidance("sizeX");
   SizeXPrm->SetParameterRange("sizeX>0.");
@@ -131,16 +132,16 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   unitPrm->SetParameterCandidates(unitList);
   fTalDefCmd->SetParameter(unitPrm);
   //
-  fTalDefCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTalDefCmd->AvailableForStates(G4State_PreInit);
 
   fTalPosiCmd = new G4UIcommand("/testem/det/tallyPosition",this);
   fTalPosiCmd->SetGuidance("Set tally nb, position");
-  fTalPosiCmd->SetGuidance("  tally number : from 1 to tallyNumber");
+  fTalPosiCmd->SetGuidance("  tally number : from 0 to tallyNumber");
   fTalPosiCmd->SetGuidance("  position (3-vector with unit)");
   //
   G4UIparameter* fTalNumPrm = new G4UIparameter("tallyNum",'i',false);
   fTalNumPrm->SetGuidance("tally number : from 1 to tallyNumber");
-  fTalNumPrm->SetParameterRange("tallyNum>0");
+  fTalNumPrm->SetParameterRange("tallyNum>=0");
   fTalPosiCmd->SetParameter(fTalNumPrm);
   //    
   G4UIparameter* PosiXPrm = new G4UIparameter("posiX",'d',false);
@@ -160,13 +161,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   unitPr->SetParameterCandidates(unitList);
   fTalPosiCmd->SetParameter(unitPr);
   //
-  fTalPosiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fTalPosiCmd->AvailableForStates(G4State_PreInit);
         
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -174,13 +170,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
+  delete fWMaterCmd;
   delete fSizeXCmd;
   delete fSizeYZCmd; 
   delete fMagFieldCmd;
   delete fTalNbCmd;
   delete fTalDefCmd;
   delete fTalPosiCmd;
-  delete fUpdateCmd;
   delete fDetDir;  
   delete fTestemDir;
 }
@@ -191,6 +187,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fMaterCmd )
    { fDetector->SetMaterial(newValue);}
+   
+  if( command == fWMaterCmd )
+   { fDetector->SetWorldMaterial(newValue);}
    
   if( command == fSizeXCmd )
    { fDetector->SetSizeX(fSizeXCmd->GetNewDoubleValue(newValue));}
@@ -207,15 +206,12 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if (command == fTalDefCmd)
    {
      G4int num; G4double v1, v2, v3;
-     G4String unt, mat;
+     G4String unt;
      std::istringstream is(newValue);
-     is >> num >> mat >> v1 >> v2 >> v3 >> unt;
-     G4String material=mat;
-     v1 *= G4UIcommand::ValueOf(unt);
-     v2 *= G4UIcommand::ValueOf(unt);
-     v3 *= G4UIcommand::ValueOf(unt);          
-     fDetector->SetTallyMaterial (num,material);
-     fDetector->SetTallySize(num,G4ThreeVector(v1,v2,v3));
+     is >> num >> v1 >> v2 >> v3 >> unt;
+     G4ThreeVector vec(v1,v2,v3);
+     vec *= G4UIcommand::ValueOf(unt);
+     fDetector->SetTallySize(num,vec);
    }
    
   if (command == fTalPosiCmd)
@@ -224,14 +220,10 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      G4String unt;
      std::istringstream is(newValue);
      is >> num >> v1 >> v2 >> v3 >> unt;
-     v1 *= G4UIcommand::ValueOf(unt);
-     v2 *= G4UIcommand::ValueOf(unt);
-     v3 *= G4UIcommand::ValueOf(unt);          
-     fDetector->SetTallyPosition(num,G4ThreeVector(v1,v2,v3));
+     G4ThreeVector vec(v1,v2,v3);
+     vec *= G4UIcommand::ValueOf(unt);
+     fDetector->SetTallyPosition(num,vec);
    }      
-
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry();}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

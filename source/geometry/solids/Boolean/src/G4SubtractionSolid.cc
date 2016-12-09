@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 95390 2016-02-08 14:46:28Z gcosmo $
+// $Id: G4SubtractionSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -134,9 +134,36 @@ G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// CalculateExtent
+// Get bounding box
+
+void
+G4SubtractionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  // Since it is unclear how the shape of the first solid will be changed
+  // after subtraction, just return its original bounding box.
+  //
+  fPtrSolidA->Extent(pMin,pMax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4SubtractionSolid::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
@@ -146,7 +173,7 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
                                            G4double& pMax ) const 
 {
   // Since we cannot be sure how much the second solid subtracts 
-  // from the first,    we must use the first solid's extent!
+  // from the first, we must use the first solid's extent!
 
   return fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
                                       pTransform, pMin, pMax );
@@ -259,7 +286,7 @@ G4double
 G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist = 0.0,disTmp = 0.0 ;
+  G4double dist = 0.0, dist2 = 0.0, disTmp = 0.0;
     
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -297,8 +324,10 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 
           if( Inside(p+dist*v) == kOutside )
           {
-            disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
-            dist += disTmp ;
+            disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
+            dist2 = dist+disTmp;
+            if (dist == dist2)  { return dist; }   // no progress
+            dist = dist2 ;
             count1++;
             if( count1 > 1000 )  // Infinite loop detected
             {
@@ -352,7 +381,9 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             {  
               return kInfinity ;
             }                 
-            dist += disTmp ;
+            dist2 = dist+disTmp;
+            if (dist == dist2)  { return dist; }   // no progress
+            dist = dist2 ;
             count2++;
             if( count2 > 1000 )  // Infinite loop detected
             {

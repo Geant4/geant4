@@ -142,9 +142,9 @@ void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
   double z = point[2];
 
   // Check that the point is within the defined region 
-  if ( x>=minx && x<maxx &&
-       y>=miny && y<maxy && 
-       z>=minz && z<maxz ) {
+  if ( x>minx && x<maxx &&
+       y>miny && y<maxy && 
+       z>minz && z<maxz ) {
     // Position of given point within region, normalized to the range
     // [0,1]
     double xfraction = (x - minx) / dx;
@@ -167,9 +167,9 @@ void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
     
     // The indices of the nearest tabulated point whose coordinates
     // are all less than those of the given point
-    int xindex = static_cast<int>(xdindex);
-    int yindex = static_cast<int>(ydindex);
-    int zindex = static_cast<int>(zdindex);
+    int xindex = static_cast<int>(std::floor(xdindex));
+    int yindex = static_cast<int>(std::floor(ydindex));
+    int zindex = static_cast<int>(std::floor(zdindex));
     
 
 #ifdef DEBUG_INTERPOLATING_FIELD

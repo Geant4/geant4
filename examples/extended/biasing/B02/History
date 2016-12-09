@@ -1,4 +1,4 @@
-$Id: History 77475 2013-11-25 09:38:51Z gcosmo $
+$Id: History 98774 2016-08-09 14:28:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines)
+- Removed unused B02DetectorConstruction::aIstore and its getter
 
 Nov 22nd, 2013 A.Howard - B02-V09-06-10
 - Removed non-english variable names!

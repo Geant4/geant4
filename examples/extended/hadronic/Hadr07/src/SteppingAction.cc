@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/SteppingAction.cc
+/// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
 // $Id: SteppingAction.cc 95740 2016-02-23 09:34:37Z gcosmo $
@@ -88,5 +88,4 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

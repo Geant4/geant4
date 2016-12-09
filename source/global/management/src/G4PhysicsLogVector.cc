@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLogVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsLogVector.cc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -54,29 +54,13 @@ G4PhysicsLogVector::G4PhysicsLogVector()
   type = T_G4PhysicsLogVector;
 }
 
-G4PhysicsLogVector::G4PhysicsLogVector(size_t theNbin)
-  : G4PhysicsVector()
-{
-  type = T_G4PhysicsLogVector;
-
-  numberOfNodes = theNbin + 1;
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);      
-
-  for (size_t i=0; i<numberOfNodes; ++i)
-  {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-  }
-}  
-
 G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin, 
                                        G4double theEmax, size_t theNbin)
   : G4PhysicsVector()
 {
   type = T_G4PhysicsLogVector;
 
-  dBin     =  G4Log(theEmax/theEmin)/theNbin;
+  dBin     =  G4Log(theEmax/theEmin)/(G4double)theNbin;
   baseBin  =  G4Log(theEmin)/dBin;
 
   numberOfNodes = theNbin + 1;
@@ -99,17 +83,15 @@ G4PhysicsLogVector::G4PhysicsLogVector(G4double theEmin,
 }  
 
 G4PhysicsLogVector::~G4PhysicsLogVector()
-{
-}
+{}
 
 G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    G4double theEmin = binVector[0];
-    dBin = G4Log(binVector[1]/theEmin);
-    baseBin = G4Log(theEmin)/dBin;
+    dBin = G4Log(binVector[1]/edgeMin);
+    baseBin = G4Log(edgeMin)/dBin;
   }
   return success;
 }
@@ -117,7 +99,6 @@ G4bool G4PhysicsLogVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 void G4PhysicsLogVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  G4double theEmin = binVector[0];
-  dBin = G4Log(binVector[1]/theEmin);
-  baseBin = G4Log(theEmin)/dBin;
+  dBin = G4Log(binVector[1]/edgeMin);
+  baseBin = G4Log(edgeMin)/dBin;
 }

@@ -727,7 +727,7 @@ void LaserDrivenBeamLine::ConstructLaserDrivenBeamLine()
 	
 	
     // The treatment room is invisible in the Visualisation
-    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
      
     // The various components of the energyselector are constructed calling
     // the following methods
@@ -1049,7 +1049,7 @@ G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupB
                                                           logicVirtualWindow,
                                                           physicVirtualMag,
                                                           true,0);
-  logicVirtualWindow->SetVisAttributes (G4VisAttributes::Invisible);
+  logicVirtualWindow->SetVisAttributes (G4VisAttributes::GetInvisible());
 
                                           ///// GuardRing /////
 
@@ -1094,7 +1094,7 @@ G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupB
                                                           physicVirtualMag,
                                                           true,0);
 
-  logicVirtualMiddle->SetVisAttributes (G4VisAttributes::Invisible);
+  logicVirtualMiddle->SetVisAttributes (G4VisAttributes::GetInvisible());
 
                                      ///// FaradayCupBottom /////
 
@@ -1135,7 +1135,7 @@ G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupB
                                                           physicVirtualMag,
                                                           true,0);
 
-  logicVirtualBottom->SetVisAttributes (G4VisAttributes::Invisible);
+  logicVirtualBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
 
                                            ///// Cup /////
 
@@ -1177,7 +1177,7 @@ G4double VirtualLateralPosX=GuardRingPosX+GuardRingThickness/2+1*cm+(FaradayCupB
                                                          
                                                           physicVirtualMag,
                                                           true,0);
-logicVirtualOverBottom->SetVisAttributes (G4VisAttributes::Invisible);
+logicVirtualOverBottom->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
                                           ///// Virtual Lateral /////
@@ -1202,7 +1202,7 @@ logicVirtualLateral=new G4LogicalVolume(                  VirtualLateral,
 
 
 
-   logicVirtualLateral->SetVisAttributes (G4VisAttributes::Invisible);
+   logicVirtualLateral->SetVisAttributes (G4VisAttributes::GetInvisible());
  }
 
 /////////////////////////////////////////////////////////////////////////////

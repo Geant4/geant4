@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremParametrizedModel.hh 74581 2013-10-15 12:03:25Z gcosmo $
+// $Id: G4eBremParametrizedModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04 $
 //
 // -------------------------------------------------------------------
@@ -63,38 +63,38 @@ class G4eBremParametrizedModel : public G4VEmModel
 
 public:
 
-  G4eBremParametrizedModel(const G4ParticleDefinition* p = 0, 
-			   const G4String& nam = "eBremParam");
+  explicit G4eBremParametrizedModel(const G4ParticleDefinition* p = nullptr, 
+				    const G4String& nam = "eBremParam");
 
   virtual ~G4eBremParametrizedModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double MinEnergyCut(const G4ParticleDefinition*, 
-				const G4MaterialCutsCouple*);
+				const G4MaterialCutsCouple*) override;
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 					
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double tkin, 
 					      G4double Z,   G4double,
 					      G4double cutEnergy,
-					      G4double maxEnergy = DBL_MAX);
+					      G4double maxEnergy = DBL_MAX) override;
   
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double);
+                                const G4Material*,G4double) override;
 
 
 private:
@@ -121,8 +121,8 @@ private:
   inline void SetCurrentElement(const G4double);
 
   // hide assignment operator
-  G4eBremParametrizedModel & operator=(const  G4eBremParametrizedModel &right);
-  G4eBremParametrizedModel(const  G4eBremParametrizedModel&);
+  G4eBremParametrizedModel & operator=(const  G4eBremParametrizedModel &right) = delete;
+  G4eBremParametrizedModel(const  G4eBremParametrizedModel&) = delete;
 
 protected:
 
@@ -163,7 +163,7 @@ private:
 
 inline void G4eBremParametrizedModel::SetCurrentElement(const G4double Z)
 {
-  std::cout<<"SetCurrentElement Z="<<Z<<std::endl;
+  //std::cout<<"SetCurrentElement Z="<<Z<<std::endl;
   if(Z != currentZ) {
     currentZ = Z;
 

@@ -44,7 +44,7 @@ class G4AlphaDecay : public G4NuclearDecay
   public:
     G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
                  const G4double& theBR, const G4double& Qvalue,
-                 const G4double& excitation);
+                 const G4double& excitation, const G4Ions::G4FloatLevelBase& flb);
 
     virtual ~G4AlphaDecay();
 

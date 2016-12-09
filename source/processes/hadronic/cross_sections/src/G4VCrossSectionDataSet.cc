@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCrossSectionDataSet.cc 89024 2015-03-18 08:17:25Z gcosmo $
+// $Id: G4VCrossSectionDataSet.cc 98738 2016-08-09 12:53:25Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -143,9 +143,8 @@ G4VCrossSectionDataSet::GetElementCrossSection(const G4DynamicParticle* dynPart,
 	 << "  E(MeV)= "  << dynPart->GetKineticEnergy()/MeV;
   if(mat) { G4cout << "  inside " << mat->GetName(); }
   G4cout << " for Z= " << Z << G4endl;
-  throw G4HadronicException(__FILE__, __LINE__,
+  throw G4HadronicException(__FILE__, __LINE__, 
         "G4VCrossSectionDataSet::GetElementCrossSection is absent");
-  return 0.0;
 }
 
 G4double 
@@ -164,7 +163,6 @@ G4VCrossSectionDataSet::GetIsoCrossSection(const G4DynamicParticle* dynPart,
   G4cout << "  Z= " << Z << " A= " << A << G4endl;
   throw G4HadronicException(__FILE__, __LINE__,
         "G4VCrossSectionDataSet::GetIsoCrossSection is absent");
-  return 0.0;
 }
 
 G4Isotope* 

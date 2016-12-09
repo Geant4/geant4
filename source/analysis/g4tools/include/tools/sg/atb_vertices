@@ -43,6 +43,7 @@ protected: //gstos
     //::printf("debug : atb_vertices : %lu : create_gsto : %u\n",this,npt);
 
     std::vector<float> gsto_data;  
+
     if(rgbas.size()) {
       if(nms.size()) {
         if(do_back.value()) {
@@ -87,26 +88,25 @@ public:
         a_action.begin_gsto(_id);
         if(rgbas.size()) {
           if(nms.size()) {
-            unsigned int npt = xyzs.values().size()/3;
+            size_t npt = xyzs.values().size()/3;
             bufpos pos_xyzs = 0;
             bufpos pos_nms = 0;
             bufpos pos_back_xyzs = 0;
             bufpos pos_back_nms = 0;
             bufpos pos_rgbas = 0;
-           {unsigned int sz = npt*3;
+           {size_t sz = npt*3;
             if(do_back.value()) {
               pos_xyzs = 0;
-              pos_nms = sz*sizeof(float);  //bytes
-              pos_back_xyzs = 2*sz*sizeof(float);
-              pos_back_nms = 3*sz*sizeof(float);
-              pos_rgbas = 4*sz*sizeof(float);
+              pos_nms = pos_xyzs+sz*sizeof(float);  //bytes
+              pos_back_xyzs = pos_nms+sz*sizeof(float);
+              pos_back_nms = pos_back_xyzs+sz*sizeof(float);
+              pos_rgbas = pos_back_nms+sz*sizeof(float);
             } else {
               pos_xyzs = 0;
-              pos_nms = sz*sizeof(float);
-              pos_rgbas = 2*sz*sizeof(float);
+              pos_nms = pos_xyzs+sz*sizeof(float);
+              pos_rgbas = pos_nms+sz*sizeof(float);
             }}
-  
-            if(tools::gl::is_line(mode.value())) {
+            if(gl::is_line(mode.value())) {
               //Same logic as Inventor SoLightModel.model = BASE_COLOR.
               a_action.set_lighting(false);
               if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
@@ -118,10 +118,10 @@ public:
             }
     
           } else {
-            unsigned int npt = xyzs.values().size()/3;
+            size_t npt = xyzs.values().size()/3;
             bufpos pos_xyzs = 0;
             bufpos pos_rgbas = npt*3*sizeof(float);
-            if(tools::gl::is_line(mode.value())) {
+            if(gl::is_line(mode.value())) {
               //Same logic as Inventor SoLightModel.model = BASE_COLOR.
               a_action.set_lighting(false);
               a_action.draw_gsto_vc(mode.value(),npt,pos_xyzs,pos_rgbas);
@@ -132,10 +132,10 @@ public:
           }    
         } else { //rgbas.empty()
           if(nms.size()) {
-            unsigned int npt = xyzs.values().size()/3;
+            size_t npt = xyzs.values().size()/3;
             bufpos pos_xyzs = 0;
             bufpos pos_nms = npt*3*sizeof(float);
-            if(tools::gl::is_line(mode.value())) {
+            if(gl::is_line(mode.value())) {
               //Same logic as Inventor SoLightModel.model = BASE_COLOR.
               a_action.set_lighting(false);
               a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
@@ -144,9 +144,9 @@ public:
               a_action.draw_gsto_vn(mode.value(),npt,pos_xyzs,pos_nms);
             }
           } else {
-            unsigned int npt = xyzs.values().size()/3;
+            size_t npt = xyzs.values().size()/3;
             bufpos pos = 0;
-            if(tools::gl::is_line(mode.value())) {
+            if(gl::is_line(mode.value())) {
               //Same logic as Inventor SoLightModel.model = BASE_COLOR.
               a_action.set_lighting(false);
               a_action.draw_gsto_v(mode.value(),npt,pos);
@@ -170,10 +170,11 @@ public:
     // immediate rendering :
     if(rgbas.size()) {
       if(nms.size()) {
-          if(tools::gl::is_line(mode.value())) {
+          if(gl::is_line(mode.value())) {
             //Same logic as Inventor SoLightModel.model = BASE_COLOR.
             a_action.set_lighting(false);
-            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            if(do_back.value()) 
+              a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
             a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
             a_action.set_lighting(state.m_GL_LIGHTING);
           } else {
@@ -183,7 +184,7 @@ public:
   
   
       } else {
-          if(tools::gl::is_line(mode.value())) {
+          if(gl::is_line(mode.value())) {
             //Same logic as Inventor SoLightModel.model = BASE_COLOR.
             a_action.set_lighting(false);
             a_action.draw_vertex_color_array(mode.value(),xyzs.values(),rgbas.values());
@@ -195,7 +196,7 @@ public:
 
     } else { //rgbas.empty()
       if(nms.size()) {
-          if(tools::gl::is_line(mode.value())) {
+          if(gl::is_line(mode.value())) {
             //Same logic as Inventor SoLightModel.model = BASE_COLOR.
             a_action.set_lighting(false);
             a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
@@ -204,7 +205,7 @@ public:
             a_action.draw_vertex_normal_array(mode.value(),xyzs.values(),nms.values());
           }
       } else {
-          if(tools::gl::is_line(mode.value())) {
+          if(gl::is_line(mode.value())) {
             //Same logic as Inventor SoLightModel.model = BASE_COLOR.
             a_action.set_lighting(false);
             a_action.draw_vertex_array(mode.value(),xyzs.values());
@@ -222,15 +223,18 @@ public:
   :parent()
   ,do_back(false)
   ,epsilon(0)
+  ,m_xyzs_pos(0)
+  ,m_rgbas_pos(0)
+  ,m_nms_pos(0)
   {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
   virtual ~atb_vertices(){
 #ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
+    mem::decrement(s_class().c_str());
 #endif
   }
 public:
@@ -241,9 +245,12 @@ public:
   ,nms(a_from.nms)
   ,do_back(a_from.do_back)
   ,epsilon(a_from.epsilon)
+  ,m_xyzs_pos(a_from.m_xyzs_pos)
+  ,m_rgbas_pos(a_from.m_rgbas_pos)
+  ,m_nms_pos(a_from.m_nms_pos)
   {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }
@@ -254,9 +261,22 @@ public:
     nms = a_from.nms;
     do_back = a_from.do_back;
     epsilon = a_from.epsilon;
+    m_xyzs_pos = a_from.m_xyzs_pos;
+    m_rgbas_pos = a_from.m_rgbas_pos;
+    m_nms_pos = a_from.m_nms_pos;
     return *this;
   }
 public:
+  void add_pos_color(float a_x,float a_y,float a_z,float a_r,float a_g,float a_b,float a_a) {
+    xyzs.add(a_x);
+    xyzs.add(a_y);
+    xyzs.add(a_z);
+    rgbas.add(a_r);
+    rgbas.add(a_g);
+    rgbas.add(a_b);
+    rgbas.add(a_a);
+  }
+
   template <class VEC,class COLOR>
   void add_pos_color(const VEC& a_pos,const COLOR& a_col) {
     xyzs.add(a_pos.x());
@@ -267,6 +287,29 @@ public:
     rgbas.add(a_col.b());
     rgbas.add(a_col.a());
   }
+
+  void allocate_pos_color(size_t a_npt) {
+    xyzs.values().resize(a_npt*3);
+    rgbas.values().resize(a_npt*4);
+    m_xyzs_pos = 0;
+    m_rgbas_pos = 0;
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color_allocated(const VEC& a_pos,const COLOR& a_col) {
+   {std::vector<float>& v = xyzs.values();
+    v[m_xyzs_pos] = a_pos.x();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.y();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.z();m_xyzs_pos++;
+    xyzs.touch();}
+   {std::vector<float>& v = rgbas.values();
+    v[m_rgbas_pos] = a_col.r();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.g();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.b();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.a();m_rgbas_pos++;
+    rgbas.touch();}
+  }
+
   template <class VEC,class COLOR>
   void add_pos_color_normal(const VEC& a_pos,const COLOR& a_col,const VEC& a_nm) {
     xyzs.add(a_pos.x());
@@ -280,6 +323,36 @@ public:
     nms.add(a_nm.y());
     nms.add(a_nm.z());
   }
+
+  void allocate_pos_color_normal(size_t a_npt) {
+    xyzs.values().resize(a_npt*3);
+    rgbas.values().resize(a_npt*4);
+    nms.values().resize(a_npt*3);
+    m_xyzs_pos = 0;
+    m_rgbas_pos = 0;
+    m_nms_pos = 0;
+  }
+
+  template <class VEC,class COLOR>
+  void add_pos_color_normal_allocated(const VEC& a_pos,const COLOR& a_col,const VEC& a_nm) {
+   {std::vector<float>& v = xyzs.values();
+    v[m_xyzs_pos] = a_pos.x();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.y();m_xyzs_pos++;
+    v[m_xyzs_pos] = a_pos.z();m_xyzs_pos++;
+    xyzs.touch();}
+   {std::vector<float>& v = rgbas.values();
+    v[m_rgbas_pos] = a_col.r();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.g();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.b();m_rgbas_pos++;
+    v[m_rgbas_pos] = a_col.a();m_rgbas_pos++;
+    rgbas.touch();}
+   {std::vector<float>& v = nms.values();
+    v[m_nms_pos] = a_nm.x();m_nms_pos++;
+    v[m_nms_pos] = a_nm.y();m_nms_pos++;
+    v[m_nms_pos] = a_nm.z();m_nms_pos++;
+    nms.touch();}
+  }
+
   void add_rgba(float a_r,float a_g,float a_b,float a_a) {
     rgbas.add(a_r);
     rgbas.add(a_g);
@@ -292,12 +365,20 @@ public:
     rgbas.add(a_col.b());
     rgbas.add(a_col.a());
   }
+
   void add_normal(float a_x,float a_y,float a_z) {
     nms.add(a_x);
     nms.add(a_y);
     nms.add(a_z);
   }
-  void add_rgba_allocated(unsigned int& a_pos,float a_r,float a_g,float a_b,float a_a) {
+  template <class VEC>
+  void add_normal(const VEC& a_nm) {
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+
+  void add_rgba_allocated(size_t& a_pos,float a_r,float a_g,float a_b,float a_a) {
     std::vector<float>& v = rgbas.values();
     v[a_pos] = a_r;a_pos++;
     v[a_pos] = a_g;a_pos++;
@@ -305,13 +386,36 @@ public:
     v[a_pos] = a_a;a_pos++;
     rgbas.touch();
   }
-  void add_normal_allocated(unsigned int& a_pos,float a_x,float a_y,float a_z) {
+  void add_normal_allocated(size_t& a_pos,float a_x,float a_y,float a_z) {
     std::vector<float>& v = nms.values();
     v[a_pos] = a_x;a_pos++;
     v[a_pos] = a_y;a_pos++;
     v[a_pos] = a_z;a_pos++;
     nms.touch();
   }
+
+  template <class VEC>
+  void add_pos_normal(const VEC& a_pos,const VEC& a_nm) {
+    xyzs.add(a_pos.x());
+    xyzs.add(a_pos.y());
+    xyzs.add(a_pos.z());
+    nms.add(a_nm.x());
+    nms.add(a_nm.y());
+    nms.add(a_nm.z());
+  }
+
+  bool add_dashed_line_rgba(float a_bx,float a_by,float a_bz,
+                            float a_ex,float a_ey,float a_ez,
+                            unsigned int a_num_dash,
+                            float a_r,float a_g,float a_b,float a_a) {
+    if(!parent::add_dashed_line(a_bx,a_by,a_bz,a_ex,a_ey,a_ez,a_num_dash)) return false;
+    for(unsigned int index=0;index<a_num_dash;index++) {
+      add_rgba(a_r,a_g,a_b,a_a);
+      add_rgba(a_r,a_g,a_b,a_a);
+    }
+    return true;
+  }
+  
   void clear() {
     rgbas.clear();
     nms.clear();
@@ -386,9 +490,15 @@ protected:
   
     }
   }
+
 protected:
   std::vector<float> m_back_xyzs;
   std::vector<float> m_back_nms;
+  std::vector<float> m_edges;
+protected:
+  size_t m_xyzs_pos;
+  size_t m_rgbas_pos;
+  size_t m_nms_pos;
 };
 
 }}

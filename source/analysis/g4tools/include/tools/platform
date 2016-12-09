@@ -85,6 +85,125 @@ inline unsigned int tex_mem_limit() {
 
 }}
 
+///////////////////////////////////////////////////////////////////
+/// backcomp : for OnX/source/Core/atat.cxx : /////////////////////
+///////////////////////////////////////////////////////////////////
+
+//NOTE : we avoid to have std includes here to be sure
+//       that in the below ifdef things come only from the compiler.
+
+namespace tools {
+
+inline const char* os() {
+
+#if TARGET_OS_IPHONE
+  static const char s_s[] = "iOS";
+#elif defined(ANDROID)
+  static const char s_s[] = "Android";
+#elif defined(_WIN32)
+  static const char s_s[] = "Windows_NT";
+#elif __APPLE__
+  static const char s_s[] = "Darwin";
+#elif defined(__linux)
+  static const char s_s[] = "Linux";
+#elif defined(__alpha)
+  static const char s_s[] = "OSF1";
+#elif defined(__CYGWIN__)
+  static const char s_s[] = "CYGWIN";
+#else
+  static const char s_s[] = "unknown";
+#endif
+  return s_s;
+}
+
+inline const char* processor() {
+
+#if defined(__GNUC__)
+
+#if defined(__ppc__)
+  static const char s_s[] = "ppc";
+#elif defined(__ppc64__)
+  static const char s_s[] = "ppc64";
+#elif defined(__i386__)
+  static const char s_s[] = "i386";
+#elif defined(__x86_64__)
+  static const char s_s[] = "x86_64";
+#elif defined(__ia64__)
+  static const char s_s[] = "ia64";
+#else
+  static const char s_s[] = "unknown";
+#endif
+
+#elif defined(_MSC_VER)
+
+#if defined(_M_IX86)
+  static const char s_s[] = "ix86";
+#elif defined(_M_X64)
+  static const char s_s[] = "x64";
+#else
+  static const char s_s[] = "unknown";
+#endif
+
+#elif defined(__alpha)
+  static const char s_s[] = "alpha";
+
+#else
+  static const char s_s[] = "unknown";
+#endif
+  return s_s;
+}
+
+inline const char* compiler_name() {
+
+#if defined(__clang__)
+  static const char s_s[] = "clang";
+#elif defined(__GNUC__)
+  static const char s_s[] = "gcc";
+#elif defined(_MSC_VER)
+  static const char s_s[] = "cl";
+#elif defined(__alpha)
+  static const char s_s[] = "cxx";
+#else
+  static const char s_s[] = "unknown";
+#endif
+  return s_s;
+}
+
+}
+
+#include "tosu" //does not bring any std include.
+
+namespace tools {
+
+inline char* compiler() {
+  static char s_s[128];
+  char* pos = s_s;
+  unsigned int l;
+  toss(compiler_name(),pos,l);pos += l;
+
+#if defined(__clang__)
+  *pos++ = '_';
+  tosu<unsigned int>(__clang_major__,pos,l);pos += l;  
+  tosu<unsigned int>(__clang_minor__,pos,l);pos += l;
+  tosu<unsigned int>(__clang_patchlevel__,pos,l);pos += l;
+#elif defined(__GNUC__)
+  *pos++ = '_';
+  tosu<unsigned int>(__GNUC__,pos,l);pos += l;  
+  tosu<unsigned int>(__GNUC_MINOR__,pos,l);pos += l;
+  tosu<unsigned int>(__GNUC_PATCHLEVEL__,pos,l);pos += l;
+#elif defined(_MSC_VER)
+  *pos++ = '_';
+  tosu<unsigned int>(_MSC_VER,pos,l);pos += l;  
+  //_mfc_
+  //tosu<unsigned int>(_MFC_VER,pos,l);pos += l;
+#elif defined(__alpha)
+#else
+#endif
+  return s_s;
+}
+
+}
+
 #endif
 
 

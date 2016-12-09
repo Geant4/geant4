@@ -9,7 +9,7 @@
 
 /process/em/auger true
 /process/em/deexcitationIgnoreCut true 
-/process/em/AddDNARegion World Opt0
+/process/em/AddDNARegion World DNA_Opt0
 
 /run/initialize 
 

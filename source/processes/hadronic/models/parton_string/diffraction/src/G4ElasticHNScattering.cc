@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElasticHNScattering.cc 96935 2016-05-18 09:12:22Z gcosmo $
+// $Id: G4ElasticHNScattering.cc 100828 2016-11-02 15:25:59Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -74,6 +74,7 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   if ( Pprojectile.z() < 0.0 ) return false;
   G4bool PutOnMassShell( false );
   G4double M0projectile = Pprojectile.mag();       
+  //if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {
 
   G4double MminProjectile=BrW.GetMinimumMass(projectile->GetDefinition());
 
@@ -87,6 +88,7 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   // Target parameters
   G4LorentzVector Ptarget = target->Get4Momentum();
   G4double M0target = Ptarget.mag();
+  //if ( M0target < target->GetDefinition()->GetPDGMass() ) {
 
   G4double MminTarget=BrW.GetMinimumMass(target->GetDefinition());
 
@@ -102,7 +104,7 @@ G4bool G4ElasticHNScattering::ElasticScattering( G4VSplitableHadron* projectile,
   G4LorentzRotation toCms( -1*Psum.boostVector() );
   G4LorentzVector Ptmp = toCms*Pprojectile;
   if ( Ptmp.pz() <= 0.0 ) return false;                                 
-  // "String" moving backwards in  CMS, abort collision !
+  //"String" moving backwards in  CMS, abort collision !
   //G4cout << " abort Collision! " << G4endl;
   toCms.rotateZ( -1*Ptmp.phi() );
   toCms.rotateY( -1*Ptmp.theta() );
@@ -257,3 +259,4 @@ int G4ElasticHNScattering::operator!=( const G4ElasticHNScattering& ) const {
   throw G4HadronicException( __FILE__, __LINE__, 
                             "G4ElasticHNScattering != operator not meant to be called" );
 }
+

@@ -1,0 +1,18 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_eqT
+#define tools_eqT
+
+namespace tools {
+
+template <class NUMBER,class PREC>
+inline bool numbers_are_equals(const NUMBER& a_left,const NUMBER& a_right,const PREC& a_prec,PREC(*a_fabs)(const NUMBER&)) {
+  NUMBER diff = a_left - a_right;
+  if(a_fabs(diff)>=a_prec) return false;
+  return true;
+}
+
+}
+
+#endif

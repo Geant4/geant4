@@ -1,0 +1,34 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_fsize
+#define tools_fsize
+
+#include <string>
+#include <cstdio>
+
+namespace tools {
+namespace file {
+
+inline bool size(const std::string& a_file,long& a_size){
+  FILE* file = ::fopen(a_file.c_str(),"rb");
+  if(!file) {
+    a_size = 0L;
+    return false;
+  }
+  //::rewind(file);
+  ::fseek(file,0L,SEEK_END);
+  a_size = ::ftell(file);
+  ::fclose(file);
+  return true;
+}
+
+inline bool is_empty(const std::string& a_file){
+  long sz;
+  if(!size(a_file,sz)) return true; //if not existing, consider it empty.
+  return (sz==0L)?true:false;  
+}
+
+}}
+
+#endif

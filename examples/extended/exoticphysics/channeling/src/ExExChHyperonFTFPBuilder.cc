@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChHyperonFTFPBuilder.cc
+/// \brief Implementation of the ExExChHyperonFTFPBuilder class
+//
 
 #include "ExExChHyperonFTFPBuilder.hh"
 
@@ -90,6 +93,7 @@ wasActivated(false)
         G4ChipsHyperonInelasticXS::Default_Name());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExExChHyperonFTFPBuilder::~ExExChHyperonFTFPBuilder()
 {
@@ -117,6 +121,8 @@ ExExChHyperonFTFPBuilder::~ExExChHyperonFTFPBuilder()
         delete theAntiOmegaMinusInelastic;
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChHyperonFTFPBuilder::Build()
 {

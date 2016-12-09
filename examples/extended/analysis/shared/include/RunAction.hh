@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/include/RunAction.hh
+/// \file RunAction.hh
 /// \brief Definition of the RunAction class
 //
 //
-// $Id: RunAction.hh 68015 2013-03-13 13:27:27Z gcosmo $
+// $Id: RunAction.hh 98244 2016-07-04 17:21:15Z gcosmo $
 //
 // 
 
@@ -54,7 +54,7 @@ public:
   virtual void BeginOfRunAction(const G4Run*);
   virtual void   EndOfRunAction(const G4Run*);
     
-  void fillPerEvent(G4double, G4double, G4double, G4double); 
+  void FillPerEvent(G4double, G4double, G4double, G4double); 
 
 private:
   HistoManager* fHistoManager;

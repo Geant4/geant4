@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
 // $Id: PhysicsList.cc 70268 2013-05-28 14:17:50Z maire $
@@ -43,9 +43,10 @@
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
 #include "G4StoppingPhysics.hh"
-#include "GammaPhysics.hh"
+#include "GammaNuclearPhysics.hh"
 
-#include "EmStandardPhysics.hh"
+#include "ElectromagneticPhysics.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
@@ -82,11 +83,12 @@ PhysicsList::PhysicsList()
   ////RegisterPhysics( new G4StoppingPhysics(verb));
       
   // Gamma-Nuclear Physics
-  RegisterPhysics( new GammaPhysics("gamma"));
+  RegisterPhysics( new GammaNuclearPhysics("gamma"));
   
   // EM physics
-  RegisterPhysics(new EmStandardPhysics());
-  ////egisterPhysics(new G4EmStandardPhysics_option3());
+  RegisterPhysics(new ElectromagneticPhysics());
+  ////RegisterPhysics(new G4EmStandardPhysics());
+  ////RegisterPhysics(new G4EmStandardPhysics_option3());
   
   // Decay
   RegisterPhysics(new G4DecayPhysics());

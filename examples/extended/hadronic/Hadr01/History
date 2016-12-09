@@ -1,4 +1,4 @@
-$Id: History 92421 2015-09-01 07:38:57Z gcosmo $
+$Id: History 101216 2016-11-09 13:54:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-16  V.Ivanchenko (exhadr01-V10-02-03)
+- PhysicsList - synchronisation with physics_list library of 10.3
+- G4EmUserPhysics - removed as obsolete
+
+01-11-16  I. Hrivnacova (exhadr01-V10-02-01)
+- Coding guidelines (class member names)
+
+30-08-16  I. Hrivnacova (exhadr01-V10-02-00)
+- Removed data. functions and commands to define cuts
+  from PhysicsList and PhysicsListMessenger;
+  using Geant4 commands 
 
 31-08-15  V.Ivanchenko (exhadr01-V10-01-00)
 - PhysicsList - syncronisation with physics_list library

@@ -47,6 +47,9 @@ public:
   virtual ~G4GenericBiasingPhysics();
 
 public:
+  // ------------------------------
+  // -- Biasing activation methods:
+  // ------------------------------
   // -- Used to select particles and processes to be under biasing:
   // ---- Put under biasing all physics processes of given particleName:
   void PhysicsBias(const G4String& particleName);
@@ -76,6 +79,28 @@ public:
   void    PhysicsBiasAllNeutral( G4bool includeShortLived = false );
   void NonPhysicsBiasAllNeutral( G4bool includeShortLived = false );
   void           BiasAllNeutral( G4bool includeShortLived = false );
+
+  
+  // -------------------------------------------------------------
+  // -- Activation of parallel geometries used by generic biasing:
+  // -------------------------------------------------------------
+  // -- Each method can be called several times:
+  // --    - on a same particle type :
+  // --        myBiasingPhysics->AddParallelGeometry("neutron", "geometry1");
+  // --        myBiasingPhysics->AddParallelGeometry("neutron", "geometry2");
+  // --    - on a range of PDG particle:
+  // --        myBiasingPhysics->AddParallelGeometry(PDG1, PDG2, "geometryXX");
+  // --        myBiasingPhysics->AddParallelGeometry(PDG3, PDG4, vectorOfGeometries);
+  // -- etc.
+  void AddParallelGeometry( const G4String& particleName, const G4String&                parallelGeometryName  );
+  void AddParallelGeometry( const G4String& particleName, const std::vector< G4String >& parallelGeometryNames );
+  void AddParallelGeometry( G4int PDGlow, G4int PDGhigh,  const G4String&                parallelGeometryName , G4bool includeAntiParticle = true );
+  void AddParallelGeometry( G4int PDGlow, G4int PDGhigh,  const std::vector< G4String >& parallelGeometryNames, G4bool includeAntiParticle = true );
+  void AddParallelGeometryAllCharged(                     const G4String&                parallelGeometryName , G4bool includeShortLived = false );
+  void AddParallelGeometryAllCharged(                     const std::vector< G4String >& parallelGeometryNames, G4bool includeShortLived = false );
+  void AddParallelGeometryAllNeutral(                     const G4String&                parallelGeometryName , G4bool includeShortLived = false );
+  void AddParallelGeometryAllNeutral(                     const std::vector< G4String >& parallelGeometryNames, G4bool includeShortLived = false );
+  
 
 
   // -- Information about biased particles:
@@ -110,8 +135,21 @@ private:
   std::vector< G4int > fNonPhysBiasByPDGRangeLow, fNonPhysBiasByPDGRangeHigh;
   G4bool fPhysBiasAllCharged, fNonPhysBiasAllCharged;
   G4bool fPhysBiasAllChargedISL, fNonPhysBiasAllChargedISL;
-  G4bool fPhysBiasAllNeutral, fNonPhysBiasAllNeutral;
+  G4bool fPhysBiasAllNeutral,    fNonPhysBiasAllNeutral;
   G4bool fPhysBiasAllNeutralISL, fNonPhysBiasAllNeutralISL;
+
+  
+  // -- Particles associated with parallel geometries:
+  std::vector< G4String >                       fParticlesWithParallelGeometries;
+  std::map< G4String, std::vector< G4String > > fParallelGeometriesForParticle;
+  std::vector< G4int >                          fPDGlowParallelGeometries, fPDGhighParallelGeometries;
+  std::map< G4int,    std::vector< G4String > > fPDGrangeParallelGeometries;
+  std::vector< G4String >                       fParallelGeometriesForCharged,    fParallelGeometriesForNeutral;
+  std::vector< G4bool >                         fAllChargedParallelGeometriesISL, fAllNeutralParallelGeometriesISL;
+
+  
+  void AssociateParallelGeometries();
+
   
   // -- Report:
   G4bool fVerbose;

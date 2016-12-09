@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.hh 88061 2015-01-26 16:57:09Z gcosmo $
+// $Id: G4PolyconeSide.hh 99392 2016-09-20 13:33:55Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -92,10 +92,6 @@ class G4PlSideData
 //
 typedef G4GeomSplitter<G4PlSideData> G4PlSideManager;
 
-// This macro changes the references to fields that are now encapsulated
-// in the class G4PlSideData.
-//
-#define G4MT_pcphi ((subInstanceManager.offset[instanceID]).fPhi)
 //
 // ----------------------------------------------------------------------------
 

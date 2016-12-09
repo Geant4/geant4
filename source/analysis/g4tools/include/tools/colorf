@@ -9,18 +9,19 @@
 namespace tools {
 
 class colorf : public vec4f {  
+  typedef vec4f parent;
 public: //for swig
   typedef unsigned char uchar;
 public:
   TOOLS_SCLASS(tools::colorf) //for stype()
 public:
-  colorf():vec4f(0,0,0,1){}
-  colorf(float a_r,float a_g,float a_b,float a_a = 1):vec4f(a_r,a_g,a_b,a_a){}
+  colorf():parent(0,0,0,1){}
+  colorf(float a_r,float a_g,float a_b,float a_a = 1,bool a_inc = true):parent(a_r,a_g,a_b,a_a,a_inc){}
   virtual ~colorf() {}
 public:
-  colorf(const colorf& a_from):vec4f(a_from){}
+  colorf(const colorf& a_from):parent(a_from){}
   colorf& operator=(const colorf& a_from){
-    vec4f::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 public:
@@ -39,6 +40,11 @@ public:
   uchar bchar() const {return uchar(255.0f*m_data[2]);}
 
 public:
+//#define tools_stat_colorfs
+#ifdef tools_stat_colorfs
+  //NOTE : the below are deprecated, use functions in inlib/colorfs.
+  //       tools::colorf::white() replaced by tools::colorf_white()
+
   // our forever 65 named colors taken long time ago from X11.
 
   //NOTE : don't handle a static object because of mem balance.
@@ -120,6 +126,7 @@ public:
   static colorf white() {return colorf(1,1,1);}
   static colorf yellow() {return colorf(1,1,0);}
   static colorf greenyellow() {return colorf(0.675792F,0.996109F,0.18359F);}
+#endif
 };
 
 struct cmp_colorf {

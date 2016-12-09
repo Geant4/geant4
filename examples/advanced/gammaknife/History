@@ -7,6 +7,15 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+04.11.2016 F.Romano         Tag: gammaknife-V10-02-02
+           - macro files modifeid for correct scorer rotation
+
+06.09.2016 M.Asai         Tag: gammaknife-V10-02-01
+           - Modify sdt::map<G4int, G4double*> to sdt::map<G4int, G4StatDouble*>
+
+04.09.2016 M.Asai         Tag: gammaknife-V10-02-00
+           - Modify sdt::map<G4int, G4double*> to sdt::map<G4int, G4StatDouble*>
+
 06.03.2015 A.Dotti        Tag: gammaknife-V10-01-00
 	   - Moving of GPS defaults to master
 

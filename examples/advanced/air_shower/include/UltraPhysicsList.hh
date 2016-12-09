@@ -42,9 +42,9 @@
 #define UltraPhysicsList_H 1
 
 #include "globals.hh"
-#include "G4VUserPhysicsList.hh"
+#include "G4VModularPhysicsList.hh"
 
-class UltraPhysicsList : public G4VUserPhysicsList
+class UltraPhysicsList : public G4VModularPhysicsList
 {
   public:
     UltraPhysicsList();
@@ -54,23 +54,28 @@ class UltraPhysicsList : public G4VUserPhysicsList
     // Construct particles and processes
     void ConstructParticle();
     void ConstructProcess();
-
-    //
     void SetCuts();
 
-  protected:
-    // these methods Construct particles
-    void ConstructBosons();
-    void ConstructLeptons();
-    void ConstructMesons();
-    void ConstructBaryons();
+  private:
 
-  protected:
-    // these methods Construct physics processes and register them
-    void ConstructGeneral();
-    void ConstructEM();
-    void ConstructOp();
+  // hide assignment operator
+  UltraPhysicsList & operator=(const UltraPhysicsList &right);
+  UltraPhysicsList(const UltraPhysicsList&);
 
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4VPhysicsConstructor*  fOpPhysicsList;
+  G4VPhysicsConstructor*  fDecayPhysicsList;
+
+  std::vector<G4VPhysicsConstructor*> fHadronPhys;
+  G4String fEmName;
+
+  G4int fVerboseLebel;
+  G4int fMaxNumPhotonStep;
+
+  G4bool fHelIsRegisted;
+  G4bool fBicIsRegisted;
+  G4bool fGnucIsRegisted;
+  G4bool fStopIsRegisted;
 };
 
 #endif

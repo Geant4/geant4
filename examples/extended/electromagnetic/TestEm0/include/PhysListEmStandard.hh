@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysListEmStandard class
 //
 //
-// $Id: PhysListEmStandard.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PhysListEmStandard.hh 98757 2016-08-09 13:58:01Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,11 +59,4 @@ class PhysListEmStandard : public G4VPhysicsConstructor
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
 

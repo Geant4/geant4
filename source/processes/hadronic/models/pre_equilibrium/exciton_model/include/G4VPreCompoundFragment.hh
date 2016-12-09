@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.hh 96527 2016-04-20 08:51:00Z gcosmo $
+// $Id: G4VPreCompoundFragment.hh 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -139,7 +139,7 @@ private:
 protected:
 
   G4DeexPrecoParameters* theParameters;
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 
   G4int theA;
   G4int theZ;
@@ -150,6 +150,7 @@ protected:
 
   G4double theResA13;
   G4double theBindingEnergy;
+  G4double theMinKinEnergy;
   G4double theMaxKinEnergy;
   G4double theResMass;
   G4double theReducedMass;

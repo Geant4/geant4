@@ -1,4 +1,4 @@
-$Id: README 94957 2016-01-08 13:27:26Z gcosmo $
+$Id: README 99559 2016-09-27 07:02:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -92,15 +92,15 @@ $Id: README 94957 2016-01-08 13:27:26Z gcosmo $
    
    At the end of event, the values acummulated in B3aEventAction are passed 
    in B3aRunAction and summed over the whole run (see B3aEventAction::EndOfevent()). 
-   In multi-threading mode the data accumulated in G4Parameter objects per
+   In multi-threading mode the data accumulated in G4Accumulable objects per
    workers is merged to the master in B3aRunAction::EndOfRunAction() and the final
    result is printed on the screen.
    
-   G4Parameter<> type instead of G4double and G4int types is used for the B3aRunAction
+   G4Accumulable<> type instead of G4double and G4int types is used for the B3aRunAction
    data members in order to facilitate merging of the values accumulated on workers 
-   to the master.  Currently the parameters have to be registered to G4ParametersManager
-   and G4ParametersManager::Merge() has to be called from the users code. This is planned
-   to be further simplified with a closer integration of G4Parameter classes in
+   to the master.  Currently the accumulables have to be registered to G4AccumulablesManager
+   and G4AccumulablesManager::Merge() has to be called from the users code. This is planned
+   to be further simplified with a closer integration of G4Accumulable classes in
    the Geant4 kernel next year.
 
    B3b:

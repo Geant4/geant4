@@ -60,6 +60,7 @@
 G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile )
 {  
   theAngular = 0;
+  if ( fCache.Get() == NULL ) cacheInit();
   fCache.Get()->currentMeanEnergy = -2;
   fCache.Get()->fresh = true;
   adjustResult = true;
@@ -68,6 +69,11 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   theMinEner = DBL_MAX;
   theMaxEner = -DBL_MAX;
   theProjectile = projectile; 
+
+  theEnergy = 0.0;
+  nEnergies = 0;
+  nDiscreteEnergies = 0;
+  nAngularParameters = 0;
 }
 
   void G4ParticleHPContAngularPar::Init(std::istream & aDataFile, G4ParticleDefinition* projectile)
@@ -849,7 +855,12 @@ void G4ParticleHPContAngularPar::BuildByInterpolation(G4double anEnergy, G4Inter
 					  angpar1.theEnergy, angpar2.theEnergy,
 					  val1,
 					  val2);
-      value /= (theMaxEner-theMinEner); 
+      //value /= (theMaxEner-theMinEner); 
+      if ( theMaxEner != theMinEner ) {
+         value /= (theMaxEner-theMinEner); 
+      } else if ( value != 0 ) {
+         throw G4HadronicException(__FILE__, __LINE__, "G4ParticleHPContAngularPar::PrepareTableInterpolation theMaxEner == theMinEner and  value != 0.");
+      }
       if( getenv("G4PHPTEST2") ) G4cout << ie << " " << ip << " G4ParticleHPContAngularPar::Merge val1 " << val1 << " val2 " << val2 << " value " << value << G4endl; //GDEB
       //-      val1 = angpar1.theAngular[ie1-1].GetValue(ip) * (maxEner1-minEner1); 
       //-      val2 = angpar2.theAngular[ie2-1].GetValue(ip) * (maxEner2-minEner2); 

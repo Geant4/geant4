@@ -24,7 +24,7 @@ inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
   }
 
   unsigned int sz;    
-  char* buf = key->get_object_buffer(sz); //we don't have ownership of buf.
+  char* buf = key->get_object_buffer(a_file,sz); //we don't have ownership of buf.
   if(!buf) {
     out << "tools::rroot::find_tree :"
         << " can't get data buffer of "
@@ -37,7 +37,7 @@ inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
   //    << " get data buffer size " << sz << "."
   //    << std::endl;
 
-  buffer b(out,key->file().byte_swap(),sz,buf,key->key_length(),false);
+  buffer b(out,a_file.byte_swap(),sz,buf,key->key_length(),false);
   
   if(key->object_class()!=TTree_cls()) {
     out << "tools::rroot::find_tree :"
@@ -83,11 +83,11 @@ inline branch_element* find_be(tree& a_tree,const std::string& a_name){
 }
 
 template <class T>
-inline stl_vector<T>* find_vec(branch_element& a_be,unsigned int a_event){
-  std::ostream& out = a_be.file().out();
+inline stl_vector<T>* find_vec(ifile& a_file,branch_element& a_be,unsigned int a_event){
+  std::ostream& out = a_file.out();
 
   unsigned int n;
-  if(!a_be.find_entry(a_event,n)) {
+  if(!a_be.find_entry(a_file,a_event,n)) {
     out << "tools::rroot::find_vec :"
         << " find event failed."
         << std::endl;

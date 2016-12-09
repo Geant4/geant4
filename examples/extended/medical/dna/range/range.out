@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -36,35 +36,36 @@ PhysicsList::AddPhysicsList: <dna>
 ---------------------------------------------------------
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld  1  0  0
-### ===  Ignore cuts flag:   0
+          DefaultRegionForTheWorld  1  1  0
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   1
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
-       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        1 GeV   Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
     LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
-       Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
+       Klein-Nishina :  Emin=        1 GeV   Emax=      100 TeV
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
         BetheHeitler :  Emin=        1 GeV   Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
 
 Rayl:   for  gamma    SubType= 11  BuildTable= 1
       Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
-      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
    LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV   CullenGenerator
-   LivermoreRayleigh :  Emin=        1 GeV   Emax=       10 TeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        1 GeV   Emax=      100 TeV   CullenGenerator
 
 e-_G4DNAElectronSolvation:   for  e-    SubType= 58  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -98,26 +99,26 @@ DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
  Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
@@ -360,102 +361,102 @@ DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 
  The run is 1000 e- of 700.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 54.491 nm  +- 21.624 nm 
- Projected range               = 15.847 nm  +- 12.717 nm 
- Penetration                   = 24.199 nm  +- 9.585 nm 
+ Track length of primary track = 54.660 nm  +- 21.029 nm 
+ Projected range               = 15.670 nm  +- 12.870 nm 
+ Penetration                   = 24.212 nm  +- 9.711 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 800.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 63.072 nm  +- 21.717 nm 
- Projected range               = 19.763 nm  +- 15.072 nm 
- Penetration                   = 29.645 nm  +- 11.847 nm 
+ Track length of primary track = 62.849 nm  +- 21.948 nm 
+ Projected range               = 19.772 nm  +- 15.267 nm 
+ Penetration                   = 29.715 nm  +- 11.643 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 72.614 nm  +- 24.830 nm 
- Projected range               = 22.933 nm  +- 17.477 nm 
- Penetration                   = 35.445 nm  +- 13.535 nm 
+ Track length of primary track = 69.858 nm  +- 23.177 nm 
+ Projected range               = 22.205 nm  +- 17.838 nm 
+ Penetration                   = 34.621 nm  +- 13.534 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 79.813 nm  +- 24.176 nm 
- Projected range               = 27.463 nm  +- 20.120 nm 
- Penetration                   = 40.623 nm  +- 15.501 nm 
+ Track length of primary track = 79.675 nm  +- 24.318 nm 
+ Projected range               = 27.518 nm  +- 20.353 nm 
+ Penetration                   = 40.693 nm  +- 15.939 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 2.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 203.304 nm  +- 54.812 nm 
- Projected range               = 83.195 nm  +- 56.894 nm 
- Penetration                   = 120.642 nm  +- 42.572 nm 
+ Track length of primary track = 205.455 nm  +- 52.807 nm 
+ Projected range               = 80.728 nm  +- 56.866 nm 
+ Penetration                   = 119.355 nm  +- 41.177 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 378.904 nm  +- 95.343 nm 
- Projected range               = 160.664 nm  +- 105.314 nm 
- Penetration                   = 231.372 nm  +- 80.831 nm 
+ Track length of primary track = 378.618 nm  +- 97.789 nm 
+ Projected range               = 159.716 nm  +- 102.880 nm 
+ Penetration                   = 232.479 nm  +- 80.696 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 602.276 nm  +- 144.353 nm 
- Projected range               = 257.411 nm  +- 172.656 nm 
- Penetration                   = 380.732 nm  +- 127.490 nm 
+ Track length of primary track = 600.675 nm  +- 139.261 nm 
+ Projected range               = 270.259 nm  +- 163.700 nm 
+ Penetration                   = 382.853 nm  +- 122.907 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 5.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 852.369 nm  +- 199.058 nm 
- Projected range               = 415.865 nm  +- 224.812 nm 
- Penetration                   = 565.576 nm  +- 170.946 nm 
+ Track length of primary track = 851.305 nm  +- 192.875 nm 
+ Projected range               = 401.755 nm  +- 231.070 nm 
+ Penetration                   = 558.080 nm  +- 170.905 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 6.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 1.158 um  +- 260.845 nm 
- Projected range               = 558.889 nm  +- 309.374 nm 
- Penetration                   = 766.982 nm  +- 241.536 nm 
+ Track length of primary track = 1.153 um  +- 270.119 nm 
+ Projected range               = 553.877 nm  +- 314.618 nm 
+ Penetration                   = 766.990 nm  +- 236.201 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 7.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 1.509 um  +- 339.425 nm 
- Projected range               = 712.308 nm  +- 419.759 nm 
- Penetration                   = 1.002 um  +- 298.420 nm 
+ Track length of primary track = 1.492 um  +- 338.590 nm 
+ Projected range               = 708.312 nm  +- 419.888 nm 
+ Penetration                   = 992.030 nm  +- 305.703 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 8.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 1.886 um  +- 398.439 nm 
- Projected range               = 940.921 nm  +- 497.066 nm 
- Penetration                   = 1.292 um  +- 377.044 nm 
+ Track length of primary track = 1.896 um  +- 418.809 nm 
+ Projected range               = 946.512 nm  +- 513.542 nm 
+ Penetration                   = 1.291 um  +- 391.349 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 9.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 2.297 um  +- 490.928 nm 
- Projected range               = 1.161 um  +- 627.456 nm 
- Penetration                   = 1.578 um  +- 456.248 nm 
+ Track length of primary track = 2.286 um  +- 502.654 nm 
+ Projected range               = 1.120 um  +- 629.664 nm 
+ Penetration                   = 1.548 um  +- 464.026 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 10.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 2.713 um  +- 619.404 nm 
- Projected range               = 1.359 um  +- 722.279 nm 
- Penetration                   = 1.857 um  +- 555.149 nm 
+ Track length of primary track = 2.724 um  +- 594.216 nm 
+ Projected range               = 1.395 um  +- 712.546 nm 
+ Penetration                   = 1.886 um  +- 528.650 nm 

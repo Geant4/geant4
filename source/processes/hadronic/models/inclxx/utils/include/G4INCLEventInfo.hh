@@ -92,6 +92,7 @@ namespace G4INCL {
         deltasInside(false),
         forcedDeltasInside(false),
         forcedDeltasOutside(false),
+        forcedPionResonancesOutside(false),
         clusterDecay(false),
         firstCollisionTime((Float_t)0.0),
         firstCollisionXSec((Float_t)0.0),
@@ -108,6 +109,7 @@ namespace G4INCL {
       {
         std::fill_n(A, maxSizeParticles, 0);
         std::fill_n(Z, maxSizeParticles, 0);
+        std::fill_n(PDGCode, maxSizeParticles, 0);
         std::fill_n(EKin, maxSizeParticles, (Float_t)0.0);
         std::fill_n(px, maxSizeParticles, (Float_t)0.0);
         std::fill_n(py, maxSizeParticles, (Float_t)0.0);
@@ -149,6 +151,8 @@ namespace G4INCL {
       Short_t A[maxSizeParticles];
       /** \brief Particle charge number */
       Short_t Z[maxSizeParticles];
+      /** \brief PDG numbering of the particles */
+      Int_t PDGCode[maxSizeParticles];
       /** \brief Particle kinetic energy [MeV] */
       Float_t EKin[maxSizeParticles];
       /** \brief Particle momentum, x component [MeV/c] */
@@ -263,6 +267,8 @@ namespace G4INCL {
       Bool_t forcedDeltasInside;
       /** \brief Event involved forced delta decays outside the nucleus */
       Bool_t forcedDeltasOutside;
+      /** \brief Event involved forced eta/omega decays outside the nucleus */
+      Bool_t forcedPionResonancesOutside;
       /** \brief Event involved cluster decay */
       Bool_t clusterDecay;
       /** \brief Time of the first collision [fm/c] */
@@ -323,6 +329,7 @@ namespace G4INCL {
         deltasInside = false;
         forcedDeltasInside = false;
         forcedDeltasOutside = false;
+        forcedPionResonancesOutside = false;
         clusterDecay = false;
         firstCollisionTime = (Float_t)0.0;
         firstCollisionXSec = (Float_t)0.0;

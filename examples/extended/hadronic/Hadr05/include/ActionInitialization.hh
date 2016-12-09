@@ -54,7 +54,7 @@ public:
 
 private:
 
-  RunAction* masterRunAction;
+  RunAction* fMasterRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

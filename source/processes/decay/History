@@ -1,4 +1,4 @@
-$Id: History 97800 2016-06-13 12:14:40Z gcosmo $
+$Id: History 100340 2016-10-18 07:50:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- October 18, 2016 Gabriele Cosmo (decay-V10-02-03)
+- Corrected CMake and GNUMake scripts to include new dependency on
+  particles/hadrons/ions submodule...
+
+- October 17, 2016 Kevin Lynch (for Lynch and Genser) (decay-V10-02-02)
+- Add G4MuonicAtomDecay for decay of muonic atoms
+
 - June 10, 16 Gunter Folger     (decay-V10-02-01)
   - G4Decay::DecayIt(): better format and info on IsOK... in exception DECAY003
   

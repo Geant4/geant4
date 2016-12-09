@@ -5,8 +5,8 @@
 
 /*! \page Examplemicroyz Example microyz
 
-Author: S. Incerti et al.
-Date: 17 Apr. 2015
+\author Incerti et al. \n
+Date: 17 Apr. 2015     \n
 Email: incerti@cenbg.in2p3.fr
 
 ****************************************************************
@@ -14,6 +14,16 @@ WARNING: This is a beta example, still buggy and under testing !
 ****************************************************************
 
 (c) The Geant4-DNA collaboration.
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications: \n
+Phys. Med. 31 (2015) 861-874    \n
+Med. Phys. 37 (2010) 4692-4708
 
 This examples shows how to compute microdosimetry 
 distributions in liquid water using exclusively Geant4-DNA

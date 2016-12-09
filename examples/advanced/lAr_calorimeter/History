@@ -1,5 +1,5 @@
 Hi-------------------------------------------------------------------
-$Id: History 89572 2015-04-20 07:18:15Z gcosmo $
+$Id: History 100937 2016-11-03 11:08:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History 89572 2015-04-20 07:18:15Z gcosmo $
 
                       Category History file
                       ---------------------
+
+02.11.2016 - L. Garnier (lAr_calorimeter-V10-02-00)
+             Remove icons.mac. Automatically include since interfaces-V10-02-07
 
 20.04.2015 - V.Ivanhenko Tag (lAr_calorimeter-V10-01-00)
              Fixed internal array overflow in FCALTestSetupSD, which

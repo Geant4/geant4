@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh 95832 2016-02-26 11:12:31Z gcosmo $
+// $Id: G4UniversalFluctuation.hh 101807 2016-11-30 13:42:28Z gunter $
 //
 // -------------------------------------------------------------------
 //
@@ -162,7 +162,7 @@ G4UniversalFluctuation::SampleGauss(CLHEP::HepRandomEngine* rndm,
 {
   G4double x = eav;
   if(esig2 > 0.0) { 
-    G4double sig = sqrt(esig2);
+    G4double sig = std::sqrt(esig2);
     G4double deltae = std::min(4.*sig, eav);
     if(deltae < 0.25*sig) {
       x += (2.*rndm->flat() - 1.)*deltae;

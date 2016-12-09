@@ -66,7 +66,7 @@ G4EmParameters* G4EmParameters::theInstance = nullptr;
 
 G4EmParameters* G4EmParameters::Instance()
 {
-  if(0 == theInstance) {
+  if(nullptr == theInstance) {
     static G4EmParameters manager;
     theInstance = &manager;
   }
@@ -78,6 +78,7 @@ G4EmParameters* G4EmParameters::Instance()
 G4EmParameters::~G4EmParameters()
 {
   delete theMessenger;
+  delete emSaturation;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -88,13 +89,17 @@ G4EmParameters::G4EmParameters()
   theMessenger = new G4EmParametersMessenger(this);
 
   fStateManager = G4StateManager::GetStateManager();
-  SetDefaults();
+  Initialise();
+  emSaturation = nullptr;
 }
 
 void G4EmParameters::SetDefaults()
 {
-  if(IsLocked()) { return; }
-  
+  if(!IsLocked()) { Initialise(); }
+}
+
+void G4EmParameters::Initialise()
+{
   lossFluctuation = true;
   buildCSDARange = false;
   flagLPM = true;
@@ -113,10 +118,11 @@ void G4EmParameters::SetDefaults()
   useAngGeneratorForIonisation = false;
   useMottCorrection = false;
   integral = true;
+  birks = false;
 
   minSubRange = 1.0;
   minKinEnergy = 0.1*CLHEP::keV;
-  maxKinEnergy = 10.0*CLHEP::TeV;
+  maxKinEnergy = 100.0*CLHEP::TeV;
   maxKinEnergyCSDA = 1.0*CLHEP::GeV;
   lowestElectronEnergy = 1.0*CLHEP::keV;
   lowestMuHadEnergy = 1.0*CLHEP::keV;
@@ -346,6 +352,35 @@ void G4EmParameters::SetIntegral(G4bool val)
 G4bool G4EmParameters::Integral() const
 {
   return integral;
+}
+
+void G4EmParameters::SetBirksActive(G4bool val)
+{
+  if(IsLocked()) { return; }
+  birks = val;
+  if(birks) {
+    if(!emSaturation) { emSaturation = new G4EmSaturation(1); }
+    emSaturation->InitialiseG4Saturation();
+  }
+}
+
+G4bool G4EmParameters::BirksActive() const
+{
+  return birks;
+}
+
+void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
+{
+  if(emSaturation != ptr) {
+    delete emSaturation;
+    emSaturation = ptr;
+  }
+}
+
+G4EmSaturation* G4EmParameters::GetEmSaturation()
+{
+  if(!emSaturation) { SetBirksActive(true); }
+  return emSaturation;
 }
 
 void G4EmParameters::SetMinSubRange(G4double val)
@@ -856,6 +891,27 @@ const std::vector<G4String>& G4EmParameters::TypesDNA() const
   return m_typesDNA;
 }
 
+void G4EmParameters::AddMsc(const G4String& region, const G4String& type)
+{
+  G4String r = CheckRegion(region);
+  G4int nreg =  m_regnamesMsc.size();
+  for(G4int i=0; i<nreg; ++i) {
+    if(r == m_regnamesMsc[i]) { return; }
+  }
+  m_regnamesMsc.push_back(r);
+  m_typesMsc.push_back(type);
+}
+
+const std::vector<G4String>& G4EmParameters::RegionsMsc() const
+{
+  return m_regnamesMsc;
+}
+
+const std::vector<G4String>& G4EmParameters::TypesMsc() const
+{
+  return m_typesMsc;
+}
+
 void G4EmParameters::SetSubCutoff(G4bool val, const G4String& region)
 {
   if(IsLocked()) { return; }
@@ -876,8 +932,16 @@ G4EmParameters::SetDeexActiveRegion(const G4String& region, G4bool fdeex,
                                     G4bool fauger, G4bool fpixe)
 {
   if(IsLocked()) { return; }
+  if(fdeex) { fluo = true; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesDeex.size();
+  if(0 == nreg && r != "DefaultRegionForTheWorld") {
+    m_regnamesDeex.push_back("DefaultRegionForTheWorld");
+    m_fluo.push_back(false);
+    m_auger.push_back(false);
+    m_pixe.push_back(false);
+    nreg = 1;
+  }
   for(G4int i=0; i<nreg; ++i) {
     if(r == m_regnamesDeex[i]) { 
       m_fluo[i] = fdeex;
@@ -1083,6 +1147,8 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
      <<useMottCorrection << "\n";
   os << "Use integral approach for tracking                 " 
      <<integral << "\n";
+  os << "Use built-in Birks satuaration                     " 
+     << birks << "\n";
 
   os << "Factor of cut reduction for sub-cutoff method      " <<minSubRange << "\n";
   os << "Min kinetic energy for tables                      " 
@@ -1142,8 +1208,9 @@ std::ostream& operator<< (std::ostream& os, const G4EmParameters& par)
 
 G4bool G4EmParameters::IsLocked() const
 {
-  return (G4Threading::IsWorkerThread() ||
+  return (!G4Threading::IsMasterThread() ||
 	  (fStateManager->GetCurrentState() != G4State_PreInit &&
+	   fStateManager->GetCurrentState() != G4State_Init &&
 	   fStateManager->GetCurrentState() != G4State_Idle));
 }
 

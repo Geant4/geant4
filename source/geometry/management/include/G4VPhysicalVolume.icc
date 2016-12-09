@@ -24,20 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.icc 74466 2013-10-07 15:36:32Z gcosmo $
+// $Id: G4VPhysicalVolume.icc 99379 2016-09-20 09:45:19Z gcosmo $
 //
 //
 // class G4VPhysicalVolume Inline Implementation
 //
 // --------------------------------------------------------------------
-
-// These macros change the references to fields that are now encapsulated
-// in the class G4PVData.
-//
-#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
-#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
-
-#define G4MT_pvdata (subInstanceManager.offset[instanceID])
 
 inline
 G4bool G4VPhysicalVolume::operator == (const G4VPhysicalVolume& right) const
@@ -49,37 +41,6 @@ inline
 G4int G4VPhysicalVolume::GetInstanceID() const
 {
   return instanceID;
-}
-
-
-inline
-const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
-{
-  return G4MT_trans;
-}
-
-inline
-void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
-{
-  G4MT_trans=vec;
-}
-
-inline
-const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
-{
-  return G4MT_rot;
-}
-
-inline
-G4RotationMatrix* G4VPhysicalVolume::GetRotation()
-{
-  return G4MT_rot;
-}
-
-inline
-void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
-{
-  G4MT_rot=pRot;
 }
 
 inline
@@ -137,37 +98,3 @@ EVolume G4VPhysicalVolume::VolumeType() const
   }
   return type;
 }
-
-inline
-G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
-{
-  G4RotationMatrix  aRotM;   // Initialised to identity
-
-  // Insure against G4MT_rot being a null pointer
-  if(G4MT_rot)
-  {
-     aRotM= G4MT_rot->inverse();
-  }
-  return aRotM;
-}
-
-inline
-G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
-{
-  return G4MT_trans;
-}
-
-inline
-const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
-{
-  return G4MT_rot;
-}
-
-inline
-G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
-{
-  return -G4MT_trans;
-}
-
-#undef G4MT_rot
-#undef G4MT_trans

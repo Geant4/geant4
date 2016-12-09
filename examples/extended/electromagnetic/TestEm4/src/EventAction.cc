@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm4/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 75839 2013-11-06 17:27:26Z gcosmo $
+// $Id: EventAction.cc 98767 2016-08-09 14:18:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -67,5 +67,4 @@ void EventAction::EndOfEventAction( const G4Event*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

@@ -69,9 +69,7 @@ public:
     file_sz = m_reader.tellg();
     m_reader.seekg(0,std::ios::beg);
     if(!file_sz) {
-      a_out << "tools::rcsv::histo::read :"
-            << " stream is empty."
-            << std::endl;
+      a_out << "tools::rcsv::histo::read : stream is empty." << std::endl;
       return false;
     }
     if(a_verbose) a_out << "file size is " << file_sz << std::endl;
@@ -94,24 +92,18 @@ public:
       std::vector<std::string> _words;
       tools::words(line," ",false,_words);
       if(!_words.size()) {
-        a_out << "tools::rcsv::histo::read :"
-              << " syntax error : empty header line."
-              << std::endl;
+        a_out << "tools::rcsv::histo::read : syntax error : empty header line." << std::endl;
         return false;
       }
       if((_words[0]=="#class")) {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         _class = _words[1];
       } else if(_words[0]=="#title") {
         if(_words.size()<1) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(_words.size()==1)  {
@@ -123,17 +115,13 @@ public:
         }
       } else if(_words[0]=="#dimension") {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         to(_words[1],hdata.m_dimension);
       } else if(_words[0]=="#annotation") {
         if(_words.size()<2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(_words.size()==2) {
@@ -145,44 +133,32 @@ public:
         }
       } else if(_words[0]=="#axis") {
         if(_words.size()<2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(_words[1]=="fixed") {
           if(_words.size()!=5) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " syntax error in " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
             return false;
           }
           unsigned int number_of_bins;
           if(!to(_words[2],number_of_bins)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " syntax error in " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
             return false;
           }
           double minimum_value;
           if(!to(_words[3],minimum_value)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " syntax error in " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
             return false;
           }
           double maximum_value;
           if(!to(_words[4],maximum_value)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " syntax error in " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
             return false;
           }
           axis_t axis;
           if(!axis.configure(number_of_bins,minimum_value,maximum_value)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " bad axis values in line " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : bad axis values in line " << sout(line) << std::endl;
             return false;
           }
           hdata.m_axes.push_back(axis);
@@ -191,25 +167,19 @@ public:
           double value;
           for(unsigned int index=2;index<_words.size();index++) {
             if(!to(_words[index],value)) {
-              a_out << "tools::rcsv::histo::read :"
-                    << " syntax error in " << sout(line)
-                    << std::endl;
+              a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
               return false;
             }
             edges.push_back(value);
           }
           axis_t axis;
           if(!axis.configure(edges)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " bad axis values in line " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : bad axis values in line " << sout(line) << std::endl;
             return false;
           }
           hdata.m_axes.push_back(axis);
         } else {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
 
@@ -218,9 +188,7 @@ public:
         double value;
         for(unsigned int index=1;index<_words.size();index++) {
           if(!to(_words[index],value)) {
-            a_out << "tools::rcsv::histo::read :"
-                  << " syntax error in " << sout(line)
-                  << std::endl;
+            a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
             return false;
           }
           planes.push_back(value);
@@ -229,56 +197,40 @@ public:
 
       } else if(_words[0]=="#bin_number") {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         to(_words[1],hdata.m_bin_number);
       } else if(_words[0]=="#cut_v") {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(!to(_words[1],_cut_v)) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         is_profile = true;
       } else if(_words[0]=="#min_v") {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(!to(_words[1],_min_v)) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
       } else if(_words[0]=="#max_v") {
         if(_words.size()!=2) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
         if(!to(_words[1],_max_v)) {
-          a_out << "tools::rcsv::histo::read :"
-                << " syntax error in " << sout(line)
-                << std::endl;
+          a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
           return false;
         }
       } else {
-        a_out << "tools::rcsv::histo::read :"
-              << " syntax error in " << sout(line)
-              << std::endl;
+        a_out << "tools::rcsv::histo::read : syntax error in " << sout(line) << std::endl;
         return false;
       }
     }}
@@ -292,9 +244,7 @@ public:
     }
 
     if(!hdata.m_dimension) {
-      a_out << "tools::rcsv::histo::read :"
-            << " null dimension."
-            << std::endl;
+      a_out << "tools::rcsv::histo::read : null dimension." << std::endl;
       return false;
     }
 
@@ -359,16 +309,13 @@ public:
       nline++;
     }
     if(nline!=hdata.m_bin_number) {
-      a_out << "tools::rcsv::histo::read :"
-            << " bad data line number " << nline << ". Expected " << hdata.m_bin_number << "."
+      a_out << "tools::rcsv::histo::read : bad data line number " << nline << ". Expected " << hdata.m_bin_number << "."
             << std::endl;
       return false;
     }}
 
     if(hdata.m_axes.size()!=hdata.m_dimension) {
-      a_out << "tools::rcsv::histo::read :"
-            << " inconsistent axes data."
-            << std::endl;
+      a_out << "tools::rcsv::histo::read : inconsistent axes data." << std::endl;
       return false;
     }
 
@@ -508,9 +455,7 @@ public:
 */
 
     } else {
-      a_out << "tools::rcsv::histo::read :"
-            << " unknown class " << sout(_class)
-            << std::endl;
+      a_out << "tools::rcsv::histo::read : unknown class " << sout(_class) << std::endl;
       return false;
     }
 
@@ -548,9 +493,9 @@ protected:
     return true;
   }
 
-  static bool read_data_line(std::istream& a_reader,std::streampos a_sz,unsigned int a_number,std::vector<double>& a_vals) {
+  static bool read_data_line(std::istream& a_reader,std::streampos a_sz,size_t a_number,std::vector<double>& a_vals) {
     a_vals.clear();
-    for(unsigned int index=0;index<a_number;index++) {
+    for(size_t index=0;index<a_number;index++) {
       double v;
       if(!_read(a_reader,v)) return false;
       a_vals.push_back(v);

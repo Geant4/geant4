@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/include/StepMaxMessenger.hh
 /// \brief Definition of the StepMaxMessenger class
 //
-// $Id: StepMaxMessenger.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: StepMaxMessenger.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,11 +48,11 @@ class StepMaxMessenger: public G4UImessenger
     StepMaxMessenger(StepMax*);
    ~StepMaxMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+    virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StepMax* pStepMax;
-    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
+    StepMax* fStepMax;
+    G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

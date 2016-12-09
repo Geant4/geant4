@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.hh 96698 2016-05-02 07:19:24Z gcosmo $
+// $Id: G4VAtomDeexcitation.hh 98985 2016-08-29 07:01:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,7 +84,7 @@ public:
                                    G4bool valDeexcitation,
                                    G4bool valAuger,
                                    G4bool valPIXE);
-  
+
   // Activation of deexcitation
   inline void SetFluo(G4bool);
   inline G4bool IsFluoActive() const;
@@ -261,14 +261,13 @@ inline G4int G4VAtomDeexcitation::GetVerboseLevel() const
 inline G4bool 
 G4VAtomDeexcitation::CheckDeexcitationActiveRegion(G4int coupleIndex)
 {
-  return (isActive || activeDeexcitationMedia[coupleIndex]);
+  return (activeDeexcitationMedia[coupleIndex]);
 }
 
 inline G4bool 
 G4VAtomDeexcitation::CheckAugerActiveRegion(G4int coupleIndex)
 {
-
-  return (flagAuger || activeAugerMedia[coupleIndex]);
+  return (activeAugerMedia[coupleIndex]);
 }
 
 inline void 

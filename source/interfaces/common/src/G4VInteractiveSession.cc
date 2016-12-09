@@ -52,6 +52,11 @@ void G4VInteractiveSession::AddButton (const char*,const char*,const char*)
 }
 
 /***************************************************************************/
+void G4VInteractiveSession::DefaultIcons (bool)
+{
+}
+
+/***************************************************************************/
 void G4VInteractiveSession::AddIcon (const char*,const char*,const char*,const char*)
 {
 }

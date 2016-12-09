@@ -54,6 +54,8 @@ class G4ParticleHPInelasticBaseFS : public G4ParticleHPFinalState
     theEnergyAngData = 0;
     theAngularDistribution = 0;
 
+    theNuclearMassDifference = 0.0;
+
   }
   virtual ~G4ParticleHPInelasticBaseFS()
   {

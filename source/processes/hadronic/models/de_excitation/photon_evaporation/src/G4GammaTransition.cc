@@ -39,6 +39,7 @@
 #include "G4GammaTransition.hh"
 #include "G4AtomicShells.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4LorentzVector.hh"
@@ -46,6 +47,7 @@
 #include "G4PhysicalConstants.hh"
 
 G4GammaTransition::G4GammaTransition() 
+  : polarFlag(false), fDirection(0.,0.,0.)
 {}
 
 G4GammaTransition::~G4GammaTransition() 
@@ -54,11 +56,16 @@ G4GammaTransition::~G4GammaTransition()
 G4Fragment* 
 G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 				    G4double newExcEnergy,
-				    G4int, size_t shell,
+				    G4double mpRatio,
+				    G4int  JP1,
+				    G4int  JP2,
+				    G4int  MP,
+				    size_t shell,
+				    G4bool isDiscrete,
 				    G4bool isGamma,
 				    G4bool isLongLived)
 {
-  G4Fragment* result = 0;
+  G4Fragment* result = nullptr;
   G4double bond_energy = 0.;
 
   if (!isGamma) { 
@@ -83,8 +90,6 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   G4LorentzVector lv = nucleus->GetMomentum();
   G4double mass = nucleus->GetGroundStateMass() + newExcEnergy;
 
-  //G4double e0 = lv.e();
-
   // select secondary
   G4ParticleDefinition* part;
 
@@ -96,10 +101,16 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
     lv += G4LorentzVector(0.0,0.0,0.0,
                           CLHEP::electron_mass_c2 - bond_energy);
   }
-
-  G4double cosTheta = 1. - 2. * G4UniformRand(); 
-  G4double sinTheta = std::sqrt(1. - cosTheta * cosTheta);
-  G4double phi = twopi * G4UniformRand();
+  /*
+  G4cout << "New GammaTransition: polarFlag: " << polarFlag 
+	 << " isDiscrete: " << isDiscrete << " isGamma: " << isGamma
+	 << " isLongLived: " << isLongLived << G4endl;
+  */
+  if(polarFlag && isDiscrete && isGamma && !isLongLived) {
+    SampleDirection(nucleus, mpRatio, JP1, JP2, MP);
+  } else {
+    fDirection = G4RandomDirection();
+  }
 
   G4double emass = part->GetPDGMass();
 
@@ -115,9 +126,9 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 
   G4double mom = std::sqrt((energy - emass)*(energy + emass));
 
-  G4LorentzVector res4mom(mom * sinTheta * std::cos(phi),
-			  mom * sinTheta * std::sin(phi),
-			  mom * cosTheta, energy);
+  G4LorentzVector res4mom(mom * fDirection.x(),
+			  mom * fDirection.y(),
+			  mom * fDirection.z(), energy);
 
   // Lab system transform for short lived level
   if(!isLongLived) { 
@@ -147,4 +158,50 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   //G4cout << "G4GammaTransition::GenerateGamma : " << thePhoton << G4endl;
   //G4cout << "       Left nucleus: " << aNucleus << G4endl;
   return result;
+}
+
+void G4GammaTransition::SampleDirection(G4Fragment* nuc, G4double ratio, 
+					G4int twoJ1, G4int twoJ2, G4int mp)
+{
+  //G4cout << "G4GammaTransition::SampleDirection" << G4endl;
+  G4NuclearPolarization* np = nuc->GetNuclearPolarization();
+
+  // initial state is non-polarized - create polarization
+  if(!np) {
+    np = new G4NuclearPolarization();
+    nuc->SetNuclearPolarization(np);
+    fDirection = G4RandomDirection();
+    fPolTrans.UpdatePolarizationToFinalState(fDirection.z(), fDirection.phi(), nuc);
+    return;
+  }
+
+  // PhotonEvaporation dataset:
+  // The multipolarity number with 1,2,3,4,5,6,7 representing E1,M1,E2,M2,E3,M3
+  // monopole transition and 100*Nx+Ny representing multipolarity transition with
+  // Ny and Ny taking the value 1,2,3,4,5,6,7 referring to E1,M1,E2,M2,E3,M3,..
+  // For example a M1+E2 transition would be written 203.
+  //
+  // In M1+E2, M1 is the primary transition (L) and E2 is the secondary (L')
+  // So mp = 203 means L0 = 1, Lp = 2 while mp = 2 means L0 = 1, Lp = 0
+  G4int L0 = 0, Lp = 0;
+  if(mp >= 100) {
+    L0 = mp / 200;
+    Lp = (mp - 200*L0)/2;
+
+  } else {
+    L0 = mp / 2;
+    //if(ratio != 0.0) {
+    //  G4cout << "Warning: Got ratio = " << ratio 
+    //         << " when 0 was expected... Setting to zero." << G4endl;
+    ratio = 0.;
+  }
+
+  fPolTrans.SetGammaTransitionData(twoJ1, twoJ2, L0, ratio, Lp);
+
+  G4double cosTheta = fPolTrans.GenerateGammaCosTheta(np->GetPolarization());
+  G4double phi = fPolTrans.GenerateGammaPhi(cosTheta, np->GetPolarization());
+  fPolTrans.UpdatePolarizationToFinalState(cosTheta, phi, nuc);
+
+  G4double sinTheta = std::sqrt((1.-cosTheta)*(1.+cosTheta));
+  fDirection.set(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
 }

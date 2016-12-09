@@ -3,6 +3,9 @@
 # the icon menu bar of the G4UIQt sessions not yet implemented other UI drivers (geant4-09-05-ref-09)
 # It has no effect with G4UIterminal.
 
+# disable default icons
+/gui/defaultIcons false
+
 # open/save icons
 /gui/addIcon "Open macro file" open /control/execute
 /gui/addIcon "Save viewer state" save /vis/viewer/save

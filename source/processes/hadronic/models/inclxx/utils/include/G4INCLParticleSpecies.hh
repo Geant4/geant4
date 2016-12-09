@@ -64,7 +64,14 @@ namespace G4INCL {
 
       ParticleType theType;
       G4int theA, theZ;
-
+	  
+      /** \brief Set a PDG Code (MONTE CARLO PARTICLE NUMBERING)
+       *
+       * \param 
+       * \return integer (identifying number for each particle)
+       */
+      G4int getPDGCode() const;
+	  
     private:
       /** \brief Parse a nuclide name
        *
@@ -91,7 +98,7 @@ namespace G4INCL {
        * \return true if the parsing succeeded
        */
       G4bool parseIUPACElement(std::string const &s);
-
+	  
   };
 
 }

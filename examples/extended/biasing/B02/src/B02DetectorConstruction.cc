@@ -27,7 +27,7 @@
 /// \brief Implementation of the B02DetectorConstruction class
 //
 //
-// $Id: B02DetectorConstruction.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B02DetectorConstruction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 #include "G4Types.hh"
 #include "globals.hh"
@@ -133,21 +133,7 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   Concrete->AddElement(elCa , fractionmass= 0.044);
   Concrete->AddElement(elFe , fractionmass= 0.014);
   Concrete->AddElement(elC , fractionmass= 0.001);
-   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
   /////////////////////////////
   // world cylinder volume
   ////////////////////////////
@@ -178,7 +164,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   name = "shieldWorld";
   fWorldVolume = new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log
                                   ,name, 0, false, 0);
-
 
   // creating 18 slobs of 10 cm thick concrete
 
@@ -221,7 +206,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
                     false, 
                     0);
   
-
   return fWorldVolume;
 }
 

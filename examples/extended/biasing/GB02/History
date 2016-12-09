@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 02, 2016 I. Hrivnacova
+- Added files description (for Doxygen)
+
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines 
+  (redundant empty lines, class data member names, separators)
+
 Nov 6, 2015, M. Verderi
 - some clean up
 - requires proc-biasmng-V10-01-00 and proc-biasgen-V10-01-01

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VAtomDeexcitation.cc 97432 2016-06-03 07:23:39Z gcosmo $
+// $Id: G4VAtomDeexcitation.cc 101248 2016-11-10 08:51:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -92,6 +92,8 @@ G4VAtomDeexcitation::~G4VAtomDeexcitation()
 
 void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 {
+  theParameters->DefineRegParamForDeex(this);
+
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
   G4int numOfCouples = theCoupleTable->GetTableSize();
@@ -111,12 +113,12 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   if(!isPIXELocked)         { flagPIXE  = theParameters->Pixe(); }
   ignoreCuts = theParameters->DeexcitationIgnoreCut();
 
-  // check if deexcitation is active for the given run
-  if( !isActive ) { return; }
-
   // Define list of regions
   size_t nRegions = deRegions.size();
+  // check if deexcitation is active for the given run
+  if(!isActive && 0 == nRegions) { return; }
 
+  // if no active regions add a world
   if(0 == nRegions) {
     SetDeexcitationActiveRegion("World",isActive,flagAuger,flagPIXE);
     nRegions = deRegions.size();
@@ -195,23 +197,23 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   if(rname == "DefaultRegionForParallelWorld") { return; }
 
   G4String ss = rname;
-  //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
-  //         << "  " << valDeexcitation << "  " << valAuger
-  //         << "  " << valPIXE << G4endl;
+  /*  
+  G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
+         << "  " << valDeexcitation << "  " << valAuger
+         << "  " << valPIXE << G4endl;
+  */
   if(ss == "world" || ss == "World" || ss == "WORLD") {
     ss = "DefaultRegionForTheWorld";
   }
   size_t n = deRegions.size();
-  if(n > 0) {
-    for(size_t i=0; i<n; ++i) {
+  for(size_t i=0; i<n; ++i) {
  
-      // Region already exist
-      if(ss == activeRegions[i]) {
-        deRegions[i] = valDeexcitation;
-        AugerRegions[i] = valAuger;
-        PIXERegions[i] = valPIXE;
-        return; 
-      } 
+    // Region already exist
+    if(ss == activeRegions[i]) {
+      deRegions[i] = valDeexcitation;
+      AugerRegions[i] = valAuger;
+      PIXERegions[i] = valPIXE;
+      return;  
     }
   }
   // New region
@@ -220,12 +222,13 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   AugerRegions.push_back(valAuger);
   PIXERegions.push_back(valPIXE);
 
-  // if de-excitation defined fo rthe world volume 
-  // it should be active everywhere
+  // if de-excitation defined for the world volume 
+  // it should be active for all G4Regions
   if(ss == "DefaultRegionForTheWorld") {
     G4RegionStore* regions = G4RegionStore::GetInstance();
     G4int nn = regions->size();
     for(G4int i=0; i<nn; ++i) {
+      if(ss == (*regions)[i]->GetName()) { continue; }
       SetDeexcitationActiveRegion((*regions)[i]->GetName(), valDeexcitation,
                                   valAuger, valPIXE);
                                   

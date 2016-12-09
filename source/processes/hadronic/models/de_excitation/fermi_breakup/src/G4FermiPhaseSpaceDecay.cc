@@ -41,7 +41,7 @@
 
 G4FermiPhaseSpaceDecay::G4FermiPhaseSpaceDecay()
 {
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 G4FermiPhaseSpaceDecay::~G4FermiPhaseSpaceDecay()

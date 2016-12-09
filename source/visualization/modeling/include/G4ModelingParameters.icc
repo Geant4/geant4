@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.icc 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4ModelingParameters.icc 99418 2016-09-21 09:18:42Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -142,4 +142,3 @@ inline void G4ModelingParameters::SetVisAttributesModifiers
 (const std::vector<G4ModelingParameters::VisAttributesModifier>& vams) {
   fVisAttributesModifiers = vams;
 }
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4bRunData.hh 69223 2013-04-23 12:36:10Z gcosmo $
+// $Id: B4bRunData.hh 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4bRunData.hh
 /// \brief Definition of the B4bRunData class
@@ -34,13 +34,13 @@
 #include "G4Run.hh"
 #include "globals.hh"
 
+#include <array>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-enum {
-  kAbs = 0,
-  kGap = 1,
-  kDim = 2
-};  
+const G4int kAbs = 0;
+const G4int kGap = 1;
+const G4int kDim = 2;
 
 ///  Run data class
 ///
@@ -72,9 +72,9 @@ public:
   G4double  GetTrackLength(G4int id) const; 
 
 private:
-  G4String  fVolumeNames[kDim];
-  G4double  fEdep[kDim];
-  G4double  fTrackLength[kDim]; 
+  std::array<G4String, kDim>  fVolumeNames;
+  std::array<G4double, kDim>  fEdep;
+  std::array<G4double, kDim>  fTrackLength; 
 };
 
 // inline functions

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4ExcitedStringDecay.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1
@@ -61,5 +61,4 @@ class G4ExcitedStringDecay: public G4VStringFragmentation
 };
 
 #endif
-
 

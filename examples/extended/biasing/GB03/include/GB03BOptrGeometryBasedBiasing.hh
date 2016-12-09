@@ -73,7 +73,6 @@ private:
   ProposeFinalStateBiasingOperation( const G4Track*,
                                      const G4BiasingProcessInterface* ) { return 0; }
 
-
 private:
   GB03BOptnSplitOrKillOnBoundary* fSplitAndKillOperation;
   G4int    fSplittingFactor;

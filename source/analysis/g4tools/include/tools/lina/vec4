@@ -4,10 +4,10 @@
 #ifndef tools_vec4
 #define tools_vec4
 
-#include <cmath> //sqrt
+#include <cstddef> //size_t
 
 #ifdef TOOLS_MEM
-#include "mem"
+#include "../mem"
 #endif
 
 namespace tools {
@@ -15,6 +15,7 @@ namespace tools {
 template <class T>
 class vec4 {
 #ifdef TOOLS_MEM
+public:
   static const std::string& s_class() {
     static const std::string s_v("tools::vec4");
     return s_v;
@@ -24,6 +25,7 @@ protected:
   static T zero() {return T();}
   static T minus_one() {return T(-1);}
 public:
+  typedef T elem_t;
   unsigned int dimension() const {return 4;}
 public:
   vec4(){
@@ -78,10 +80,10 @@ public:
     return *this;
   }
 public:
-  T v0() const { return m_data[0];}
-  T v1() const { return m_data[1];}
-  T v2() const { return m_data[2];}
-  T v3() const { return m_data[3];}
+  const T& v0() const { return m_data[0];}
+  const T& v1() const { return m_data[1];}
+  const T& v2() const { return m_data[2];}
+  const T& v3() const { return m_data[3];}
 
   void v0(const T& a_value) { m_data[0] = a_value;}
   void v1(const T& a_value) { m_data[1] = a_value;}
@@ -117,15 +119,12 @@ public:
     return true;
   }
 
-  T length() const {
-    return (T)::sqrt(m_data[0]*m_data[0]
-                    +m_data[1]*m_data[1]
-                    +m_data[2]*m_data[2]
-                    +m_data[3]*m_data[3]);
+  T length(T(*a_sqrt)(T)) const {
+    return a_sqrt(m_data[0]*m_data[0]+m_data[1]*m_data[1]+m_data[2]*m_data[2]+m_data[3]*m_data[3]);
   }
 
-  T normalize() {
-    T norme = length();
+  T normalize(T(*a_sqrt)(T)) {
+    T norme = length(a_sqrt);
     if(norme==T()) return T();
     divide(norme);
     return norme;
@@ -219,11 +218,11 @@ public:
   }    
 
 public: //operators
-  T& operator[](unsigned int a_index) {
+  T& operator[](size_t a_index) {
     //WARNING : no check on a_index.
     return m_data[a_index];
   }
-  const T& operator[](unsigned int a_index) const {
+  const T& operator[](size_t a_index) const {
     //WARNING : no check on a_index.
     return m_data[a_index];
   }

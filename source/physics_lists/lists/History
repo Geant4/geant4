@@ -1,4 +1,4 @@
-$Id: History 97750 2016-06-08 12:20:28Z gcosmo $
+$Id: History 99975 2016-10-13 07:23:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,24 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-October-2016 G.Folger  (phys-lists-V10-02-10)
+- remove direct use of theParticleIterator, get this from G4ParticleTable.
+    fix required by clang39 on Windows and MAC
+
+29-Sep-2016, Robert Hatcher               (phys-lists-V10-02-09)
+- Reviewed changes in current context, propose w/ minimal changes
+
+03-Jun-2016, Robert Hatcher               (phys-lists-V10-02-08)
+- Require use of declaring and referencing macros to have
+  a trailing semicolon; for case where macro expands to a
+  namespace block, deal with eating up the ";"
+
+26-May-2016, Robert Hatcher               (phys-lists-V10-02-07)
+- Fix issue where G4PhysListRegistry didn't properly exit if
+  a requested extension didn't exist in its list. 
+- Add G4_REFERENCE_PHYSLIST_FACTORY[_NS] for pulling in lists
+  from static libraries.
 
 26-May-2016, Alberto Ribon                (phys-lists-V10-02-06)
 - QGSP_BIC_AllHP : use new, specialized ion constructor, G4IonPhysicsPHP.

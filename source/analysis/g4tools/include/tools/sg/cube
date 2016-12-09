@@ -47,9 +47,9 @@ protected: //gstos
     //bool draw_edges = state.m_GL_LIGHTING?false:true;
     //if(draw_edges) {
 
-   {unsigned int nsegs = 24;  //4 segs * 6 faces.
-    unsigned int ngsto = nsegs*2*3; //2 points * 3 coords.
-    unsigned int sz = gsto_data.size();
+   {size_t nsegs = 24;  //4 segs * 6 faces.
+    size_t ngsto = nsegs*2*3; //2 points * 3 coords.
+    size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
     float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
     floatp lines;
@@ -57,10 +57,10 @@ protected: //gstos
     ::memcpy(pxyz,lines,ngsto*sizeof(float));
     m_gsto_segs_sz = ngsto;}
 
-   {unsigned int ntris = 12;
-    unsigned int nxyzs = ntris*3*3; //3 points * 3 coords
-    unsigned int ngsto = nxyzs*2;     //xyz+nms
-    unsigned int sz = gsto_data.size();
+   {size_t ntris = 12;
+    size_t nxyzs = ntris*3*3; //3 points * 3 coords
+    size_t ngsto = nxyzs*2;     //xyz+nms
+    size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
     float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
     floatp tris,nms;
@@ -730,8 +730,8 @@ protected:
   }   
 
 protected:
-  unsigned int m_gsto_segs_sz;
-  unsigned int m_gsto_tris_sz;
+  size_t m_gsto_segs_sz;
+  size_t m_gsto_tris_sz;
 /*
   enum draw_style {
     draw_point = 0,

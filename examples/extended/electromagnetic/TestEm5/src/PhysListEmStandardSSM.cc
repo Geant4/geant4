@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/PhysListEmStandardSSM.cc
 /// \brief Implementation of the PhysListEmStandardSSM class
 //
-// $Id: PhysListEmStandardSSM.cc 96400 2016-04-12 07:26:33Z gcosmo $
+// $Id: PhysListEmStandardSSM.cc 100286 2016-10-17 08:43:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,9 +76,10 @@ void PhysListEmStandardSSM::ConstructProcess()
 {
   // Add standard EM Processes
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      

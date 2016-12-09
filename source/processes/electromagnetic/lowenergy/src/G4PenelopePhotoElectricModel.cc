@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopePhotoElectricModel.cc 95950 2016-03-03 10:42:48Z gcosmo $
+// $Id: G4PenelopePhotoElectricModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -97,14 +97,13 @@ G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 {
   if (IsMaster() || fLocalTable)
     {
-      std::map <G4int,G4PhysicsTable*>::iterator i;
       if (logAtomicShellXS)
 	{
-	  for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
+	  for (auto& item : (*logAtomicShellXS))
 	    {
-	      G4PhysicsTable* tab = i->second;
+	      //G4PhysicsTable* tab = item.second;
 	      //tab->clearAndDestroy();
-	      delete tab;
+	      delete item.second;
 	    }
 	}
       delete logAtomicShellXS;

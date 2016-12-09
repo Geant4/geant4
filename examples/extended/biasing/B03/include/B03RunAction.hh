@@ -71,7 +71,6 @@ private:
   //  G4int fFieldName;
   G4int fFieldValue;
 
-
 };
 
 //

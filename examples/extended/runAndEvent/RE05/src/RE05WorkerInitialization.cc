@@ -32,11 +32,18 @@
 #include "RE05WorkerInitialization.hh"
 #include "RE05SteppingVerbose.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05WorkerInitialization::RE05WorkerInitialization()
-{;}
+: G4UserWorkerInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05WorkerInitialization::~RE05WorkerInitialization()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05WorkerInitialization::WorkerInitialize() const
 {
@@ -44,3 +51,4 @@ void RE05WorkerInitialization::WorkerInitialize() const
   G4VSteppingVerbose::SetInstance(verbosity);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

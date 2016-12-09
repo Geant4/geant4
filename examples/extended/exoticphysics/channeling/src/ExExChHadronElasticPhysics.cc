@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChHadronElasticPhysics.cc
+/// \brief Implementation of the ExExChHadronElasticPhysics class
+//
 
 #include "ExExChHadronElasticPhysics.hh"
 
@@ -68,6 +71,7 @@ G4ThreadLocal G4HadronElastic*
 G4ThreadLocal G4HadronicProcess*
     ExExChHadronElasticPhysics::neutronProcess = 0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExExChHadronElasticPhysics::ExExChHadronElasticPhysics(G4int ver)
 : G4VPhysicsConstructor("hElasticWEL_CHIPS"), verbose(ver)
@@ -78,8 +82,12 @@ ExExChHadronElasticPhysics::ExExChHadronElasticPhysics(G4int ver)
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChHadronElasticPhysics::~ExExChHadronElasticPhysics()
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChHadronElasticPhysics::ConstructParticle()
 {
@@ -92,6 +100,8 @@ void ExExChHadronElasticPhysics::ConstructParticle()
     G4IonConstructor pConstructor;
     pConstructor.ConstructParticle();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChHadronElasticPhysics::ConstructProcess()
 {
@@ -125,10 +135,11 @@ void ExExChHadronElasticPhysics::ConstructProcess()
     G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE();
     he->SetMinEnergy(elimitPi);
 
-    aParticleIterator->reset();
-    while( (*aParticleIterator)() )
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while( (*particleIterator)() )
     {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String pname = particle->GetParticleName();
         if(pname == "anti_lambda"  ||

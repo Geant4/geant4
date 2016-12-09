@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05EventAction.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05EventAction.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05EventAction.cc
 /// \brief Implementation of the RE05EventAction class
@@ -47,33 +47,41 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05EventAction::RE05EventAction()
-{
-  trackerCollID = -1;
-  calorimeterCollID = -1;
-  muonCollID = -1;
-}
+: G4UserEventAction(),
+  fTrackerCollID(-1),
+  fCalorimeterCollID(-1),
+  fMuonCollID(-1)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05EventAction::~RE05EventAction()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05EventAction::BeginOfEventAction(const G4Event*)
 {
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
-  if(trackerCollID<0||calorimeterCollID<0||muonCollID<0)
+  if(fTrackerCollID<0||fCalorimeterCollID<0||fMuonCollID<0)
   {
     G4String colNam;
-    trackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
-    calorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
-    muonCollID = SDman->GetCollectionID(colNam="muonCollection");
+    fTrackerCollID = SDman->GetCollectionID(colNam="trackerCollection");
+    fCalorimeterCollID = SDman->GetCollectionID(colNam="calCollection");
+    fMuonCollID = SDman->GetCollectionID(colNam="muonCollection");
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05EventAction::EndOfEventAction(const G4Event* evt)
 {
   G4cout << ">>> Event " << evt->GetEventID() << G4endl;
   
-  if(trackerCollID<0||calorimeterCollID<0||muonCollID<0) return;
+  if(fTrackerCollID<0||fCalorimeterCollID<0||fMuonCollID<0) return;
 
   G4HCofThisEvent * HCE = evt->GetHCofThisEvent();
   RE05TrackerHitsCollection* THC = 0;
@@ -81,9 +89,9 @@ void RE05EventAction::EndOfEventAction(const G4Event* evt)
   RE05MuonHitsCollection* MHC = 0;
   if(HCE)
   {
-    THC = (RE05TrackerHitsCollection*)(HCE->GetHC(trackerCollID));
-    CHC = (RE05CalorimeterHitsCollection*)(HCE->GetHC(calorimeterCollID));
-    MHC = (RE05MuonHitsCollection*)(HCE->GetHC(muonCollID));
+    THC = (RE05TrackerHitsCollection*)(HCE->GetHC(fTrackerCollID));
+    CHC = (RE05CalorimeterHitsCollection*)(HCE->GetHC(fCalorimeterCollID));
+    MHC = (RE05MuonHitsCollection*)(HCE->GetHC(fMuonCollID));
   }
 
   if(THC)
@@ -111,3 +119,4 @@ void RE05EventAction::EndOfEventAction(const G4Event* evt)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

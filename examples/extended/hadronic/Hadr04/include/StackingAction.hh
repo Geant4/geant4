@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/StackingAction.hh
+/// \file StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
 // $Id: StackingAction.hh 66241 2012-12-13 18:34:42Z gunter $

@@ -27,7 +27,7 @@
 /// \brief Main program of the analysis/AnaEx01 example
 //
 //
-// $Id: AnaEx01.cc 81444 2014-05-28 14:28:20Z gcosmo $
+// $Id: AnaEx01.cc 100674 2016-10-31 10:43:40Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,18 +45,20 @@
 #include "G4UImanager.hh"
 #include "FTFP_BERT.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {     
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
@@ -73,43 +75,31 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new FTFP_BERT);
   runManager->SetUserInitialization(new ActionInitialization(detector));
-      
-  // Initialize G4 kernel
+
+  // Initialize visualization
   //
-  runManager->Initialize();
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
 
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
-  else
-    {  // interactive mode : define visualization and UI terminal
-#ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#endif
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
-
-#ifdef G4UI_USE
-      ui->SessionStart();
-      delete ui;
-#endif
-
-#ifdef G4VIS_USE
-      delete visManager;
-#endif
-    }
+  if ( ! ui ) {
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);    
+  }
+  else {  
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");     
+    ui->SessionStart();
+    delete ui;
+  }
   
   // Job termination
+  delete visManager;
   delete runManager;
 
   return 0;

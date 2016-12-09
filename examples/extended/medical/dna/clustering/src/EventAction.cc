@@ -38,7 +38,6 @@
 
 #include "Analysis.hh"
 #include "ClusteringAlgo.hh"
-#include "EventActionMessenger.hh"
 
 #include "G4Event.hh"
 #include "G4LogicalVolume.hh"
@@ -51,11 +50,7 @@
 EventAction::EventAction():G4UserEventAction()
 {
   //default parameter values
-  fPrintModulo=250;
   fEdep=0.;
-
-  //create commands
-  fpEventMessenger = new EventActionMessenger(this);
 
   // Create clustering algorithm
   // These default values have been tuned for the Physics List G4EmDNAPhysics
@@ -69,22 +64,13 @@ EventAction::EventAction():G4UserEventAction()
 EventAction::~EventAction()
 {
   delete fpClustering;
-  delete fpEventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction( const G4Event* pEvt)
+void EventAction::BeginOfEventAction( const G4Event*)
 {
   fEdep=0.;
-
-  G4int evtNb = pEvt->GetEventID();
-
-  //printing survey
-  //
-  if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-
   fpClustering->Purge();
 }
 

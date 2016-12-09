@@ -39,8 +39,8 @@ inline void add_string(
   vec3f Y = a_Y;
   X.normalize();
   Y.normalize();
-  vec3f Z = X.cross(Y);
-  Y = Z.cross (X);
+  vec3f Z;X.cross(Y,Z);
+  Z.cross(X,Y);
   mat4f r(X.v0(),Y.v0(),Z.v0(),0, //first row
                  X.v1(),Y.v1(),Z.v1(),0,
                  X.v2(),Y.v2(),Z.v2(),0,

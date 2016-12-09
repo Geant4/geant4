@@ -44,8 +44,9 @@
 
 G4NeutronDecay::G4NeutronDecay(const G4ParticleDefinition* theParentNucleus,
                             const G4double& branch, const G4double& Qvalue,
-                            const G4double& excitationE)
- : G4NuclearDecay("neutron decay", Neutron, excitationE), transitionQ(Qvalue)
+                            const G4double& excitationE,
+                            const G4Ions::G4FloatLevelBase& flb)
+ : G4NuclearDecay("neutron decay", Neutron, excitationE, flb), transitionQ(Qvalue)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent
   SetBR(branch);
@@ -55,7 +56,7 @@ G4NeutronDecay::G4NeutronDecay(const G4ParticleDefinition* theParentNucleus,
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber();
   G4int daughterA = theParentNucleus->GetAtomicMass() - 1;
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetDaughter(1, "neutron");
 }
 

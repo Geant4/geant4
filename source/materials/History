@@ -1,4 +1,4 @@
-$Id: History 97673 2016-06-07 08:27:00Z gcosmo $
+$Id: History 101178 2016-11-08 12:50:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,42 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-11-16 E.Bagli (materials-V10-02-20)
+- Fixed Coverity warnings
+
+07-11-16 E.Bagli (materials-V10-02-19)
+- Moved G4CrystalMaterial to G4CrystalExtension
+
+28-10-16 M.Asai (materials-V10-02-18)
+- Fix G4ExtendedMaterial to be correctly printed.
+
+24-10-16 E.Bagli (materials-V10-02-17)
+- Introduction of G4CrystalMaterial as a derived class of G4ExtendedMaterial.
+- Introduction of G4CrystalUnitCell with the crystalline unit cell parameters.
+- Introduction of G4AtomicFormFactor for the calculation of the form factor.
+- Introduction of G4AtomicBond for the G4CrystalUnitCell.
+
+21-10-16 M.Asai (materials-V10-02-16)
+- G4ExtendedMaterial now uses std::hash and std::unordered_map.
+
+20-10-16 M.Asai (materials-V10-02-15)
+- Introduing G4ExtendedMaterial and G4VMaterialExtension.
+
+04-10-16 P.Gumplinger (materials-V10-02-14)
+- Fix incorrectly calculated index for MicroRoughness lookup table
+  in G4UCNMaterialPropertiesTable.cc
+  (thanks to W. Schreyer/Technische Universität München)
+- Fix incorrectly calculated MicroRoughness amplitude
+  in G4UCNMicroRoughnessHelper.cc
+  (thanks to W. Schreyer/Technische Universität München)
+
+20-09-16 V.Ivanchenko (materials-V10-02-13)
+- G4NistMaterialBuilder - (Nathanael Lampe) reviewed and updated 
+    BioChemicalMaterials() method, which now instantiate two
+    type of materials: 
+       G4_XXXXX - molecule in its free state;
+       G4_DNA_XXXXX - molecule, considering atoms lost in bonding
 
 06-06-16 V.Ivanchenko (materials-V10-02-12)
 - G4DensityEffectData - fixed initialisation 

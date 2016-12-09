@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm10/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 94932 2015-12-18 09:21:29Z gcosmo $
+// $Id: PhysicsList.cc 100281 2016-10-17 08:37:40Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -220,10 +220,11 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   fStepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)())
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fStepMaxProcess->IsApplicable(*particle))

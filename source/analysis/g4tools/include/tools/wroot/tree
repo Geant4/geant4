@@ -6,6 +6,7 @@
 
 #include "itree"
 #include "iobject"
+#include "idir"
 
 #include "branch_element"
 
@@ -76,14 +77,12 @@ public: //iobject
     return true;
   }    
 public: //itree
-  virtual void add_tot_bytes(uint32 a_n) {m_tot_bytes += a_n;}
-  virtual void add_zip_bytes(uint32 a_n) {m_zip_bytes += a_n;}
+  //virtual void add_tot_bytes(uint32 a_n) {m_tot_bytes += a_n;}
+  //virtual void add_zip_bytes(uint32 a_n) {m_zip_bytes += a_n;}
   virtual idir& dir() {return m_dir;}
   virtual const idir& dir() const {return m_dir;}
 public:
-  tree(idir& a_dir, //for branch/baskets(which are keys)
-       const std::string& a_name,
-       const std::string& a_title)
+  tree(idir& a_dir,const std::string& a_name,const std::string& a_title)
   :m_dir(a_dir)
   ,m_out(a_dir.file().out())
   ,m_name(a_name)
@@ -104,23 +103,30 @@ public:
   }
 protected:
   tree(const tree& a_from)
-  : iobject(a_from),itree(a_from)
+  :iobject(a_from),itree(a_from)
   ,m_dir(a_from.m_dir)
   ,m_out(a_from.m_out)
   {}
   tree& operator=(const tree&){return *this;}
 public:
-  //const std::vector<branch*>& branches() const {return m_branches;}
+  const std::vector<branch*>& branches() const {return m_branches;}
+  //uint64 tot_bytes() const {return m_tot_bytes;}
+  //uint64 zip_bytes() const {return m_zip_bytes;}
+  uint64 entries() const {return m_entries;}
 
   branch* create_branch(const std::string& a_name){
-    branch* br = new branch(*this,a_name,m_name);
+    const ifile& _file = m_dir.file();
+    branch* br = new branch(m_out,_file.byte_swap(),_file.compression(),
+                            m_dir.seek_directory(),a_name,m_name,_file.verbose());
     m_branches.push_back(br);
     return br;
   }
 
   template <class T>
   std_vector_be<T>* create_std_vector_be(const std::string& a_name,std::vector<T>& a_vec){
-    std_vector_be<T>* br = new std_vector_be<T>(*this,a_name,m_name,a_vec);
+    const ifile& _file = m_dir.file();
+    std_vector_be<T>* br = new std_vector_be<T>(m_out,_file.byte_swap(),_file.compression(),
+                                                m_dir.seek_directory(),a_name,m_name,a_vec,_file.verbose());
     m_branches.push_back(br);
     return br;
   }
@@ -135,9 +141,11 @@ public:
     a_nbytes = 0;
     tools_vforcit(branch*,m_branches,it) {
       //FIXME if ((*it)->testBit(kDoNotProcess)) continue;
-      uint32 n;
-      if(!(*it)->fill(n)) {a_nbytes = 0;return false;}
+      uint32 n,add_bytes,nout;
+      if(!(*it)->fill(m_dir.file(),n,add_bytes,nout)) {a_nbytes = 0;return false;}
       a_nbytes += n;
+      m_tot_bytes += add_bytes;
+      m_zip_bytes += nout;
     } 
 
     m_entries++;

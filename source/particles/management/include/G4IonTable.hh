@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh 96314 2016-04-06 07:21:51Z gcosmo $
+// $Id: G4IonTable.hh 99621 2016-09-29 10:14:44Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -150,7 +150,8 @@ class G4IonTable
    //   E: Excitaion energy
    //   lvl:  Isomer Level 0: ground state)
    //   flb:  Floating level base (enum defined in G4Ions.hh)
-   //   flbChar:  Floating level base denoted bya character (X,Y,Z,U,V,W)
+   //   flbChar:  Floating level base denoted by a character
+   //             (<null>,X,Y,Z,U,V,W,R,S,T,A,B,C,D,E)
    //   J: Total Angular momentum (in unit of 1/2) : not used
 
    G4ParticleDefinition* GetIon(G4int encoding);
@@ -177,7 +178,8 @@ class G4IonTable
    //   E: Excitaion energy
    //   lvl:  Isomer Level 0: ground state)
    //   flb:  Floating level base (enum defined in G4Ions.hh)
-   //   flbChar:  Floating level base denoted bya character (X,Y,Z,U,V,W)
+   //   flbChar:  Floating level base denoted by a character
+   //             (<null>,X,Y,Z,U,V,W,R,S,T,A,B,C,D,E)
    //   J: Total Angular momentum (in unit of 1/2) : not used
 
    static G4bool        IsIon(const G4ParticleDefinition*);
@@ -189,9 +191,9 @@ class G4IonTable
 
    const G4String&  GetIonName(G4int Z, G4int A, G4int lvl=0) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4double E,
-          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat) const;
+          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4double E,
-          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat) const;
+          G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
    const G4String&  GetIonName(G4int Z, G4int A, G4int L, G4int  lvl) const;
    // get ion name
   
@@ -233,7 +235,7 @@ class G4IonTable
  
    G4double   GetLifeTime(const G4ParticleDefinition*) const;
    G4double   GetLifeTime(G4int Z, G4int A, G4double E,
-                G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat) const;
+                G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float) const;
    G4double   GetLifeTime(G4int Z, G4int A, G4double E, char flbChar) const;
    // Returns a life time of an ion. -1 for stable ion, and -1001 for ion
    // that is not listed in G4NuclideTable.
@@ -330,6 +332,10 @@ class G4IonTable
 
  private:
    G4int n_error;
+
+ public:
+   G4ParticleDefinition* GetMuonicAtom(G4Ions const*);
+   G4ParticleDefinition* GetMuonicAtom(G4int Z, G4int A);
 
 #ifdef G4MULTITHREADED
  public:

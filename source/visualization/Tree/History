@@ -1,5 +1,5 @@
 
-$Id: History 96317 2016-04-06 07:25:03Z gcosmo $
+$Id: History 99076 2016-09-01 12:40:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,17 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+31st August 2016  John Allison (vistree-V10-02-02)
+- G4ASCIITreeSceneHandler.cc:
+  o Overall mass(es) now calculated for any specified top volume,
+    not just for the case of the world volume.
+- G4ASCIITreeMessenger.cc:
+  o Improved guidance.
+
+14th August 2016  John Allison (vistree-V10-02-01)
+- G4ASCIITree.cc and G4ASCIITreeMessenger.cc:
+  o Changed default verbosity to 1 (shows logical volume names).
 
 5th April 2016  John Allison  (vistree-V10-02-00)
 - G4ASCIITreeSceneHandler.cc:

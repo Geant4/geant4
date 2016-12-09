@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 93936 2015-11-04 09:37:59Z gcosmo $
+# $Id: sources.cmake 101354 2016-11-15 08:27:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -74,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
         G4DNAOneStepThermalizationModel.hh
+        G4DNAOneStepThermalizationModel.hpp
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNATransformElectronModel.hh
         G4DNAUeharaScreenedRutherfordElasticModel.hh

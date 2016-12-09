@@ -44,7 +44,6 @@ set(EXAMPLELARCALORIMETER_SCRIPTS
   gui.mac
   run1.mac
   vis.mac
-  icons.mac
   prerunlArcal.mac
   lArCal.cc
   )

@@ -90,6 +90,8 @@ void G4XmlNtupleManager::CreateTNtupleFromBooking(
 void G4XmlNtupleManager::FinishTNtuple(
   G4TNtupleDescription<tools::waxml::ntuple>* ntupleDescription)
 {
+  if ( ! ntupleDescription->fNtuple ) return;
+
   G4String path = "/";
   path.append(fFileManager->GetNtupleDirectoryName());
   ntupleDescription->fNtuple

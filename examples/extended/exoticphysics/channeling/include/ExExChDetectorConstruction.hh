@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file channeling/include/ExExChDetectorConstruction.hh
+/// \brief Definition of the ExExChDetectorConstruction class
 // --------------------------------------------------------------
 //
 
@@ -69,7 +72,7 @@ private:
 private:
     void ConstructSiliconStripDetectors();
     G4LogicalVolume* ConstructSiSD(G4int);
-    G4bool bSiSD;
+    G4bool fSiSD;
     G4ThreeVector fSSDSize;
     G4double fSSDXtalDistance[3];
     G4LogicalVolume* fSSDLogic[3];
@@ -85,13 +88,13 @@ private:
 
 private:
     G4LogicalVolume* ConstructBeamPipe(G4double);
-    G4bool bBeamPipe;
+    G4bool fBeamPipe;
     G4double fBeamPipeRadius;
     G4double fBeamPipeThickness;
     //** Xtal **//
 public:
     void AddXtalTarget() {
-        bXtal = true;
+        fXtal = true;
         G4RunManager::GetRunManager()->GeometryHasBeenModified();
     };
     void SetXtalMaterial(const G4String& name);
@@ -113,7 +116,7 @@ public:
     
 private:
     void ConstructXtalTarget();
-    G4bool bXtal;
+    G4bool fXtal;
     
     G4ThreeVector fXtalCurvatureRadius;
     

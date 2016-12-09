@@ -24,12 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.cc 82799 2014-07-10 13:18:29Z gcosmo $
+// $Id: G4VisCommandsTouchableSet.cc 99418 2016-09-21 09:18:42Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
 #include "G4VisCommandsTouchableSet.hh"
 
+#include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithADouble.hh"
@@ -74,7 +75,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetDaughtersInvisible->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetDaughtersInvisible->SetParameterName("daughtersInvisible", omitable = true);
-  fpCommandSetDaughtersInvisible->SetDefaultValue(false);
+  fpCommandSetDaughtersInvisible->SetDefaultValue(true);
 
   fpCommandSetForceAuxEdgeVisible = new G4UIcmdWithABool
   ("/vis/touchable/set/forceAuxEdgeVisible", this);
@@ -83,7 +84,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceAuxEdgeVisible->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetForceAuxEdgeVisible->SetParameterName("forceAuxEdgeVisible", omitable = true);
-  fpCommandSetForceAuxEdgeVisible->SetDefaultValue(false);
+  fpCommandSetForceAuxEdgeVisible->SetDefaultValue(true);
 
   fpCommandSetLineSegmentsPerCircle = new G4UIcmdWithAnInteger
   ("/vis/touchable/set/lineSegmentsPerCircle", this);
@@ -95,7 +96,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetLineSegmentsPerCircle->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetLineSegmentsPerCircle->SetParameterName("lineSegmentsPerCircle", omitable = true);
-  fpCommandSetLineSegmentsPerCircle->SetDefaultValue(-1);
+  fpCommandSetLineSegmentsPerCircle->SetDefaultValue(0);
   
   fpCommandSetForceSolid = new G4UIcmdWithABool
   ("/vis/touchable/set/forceSolid", this);
@@ -104,7 +105,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceSolid->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetForceSolid->SetParameterName("forceSolid", omitable = true);
-  fpCommandSetForceSolid->SetDefaultValue(false);
+  fpCommandSetForceSolid->SetDefaultValue(true);
 
   fpCommandSetForceWireframe = new G4UIcmdWithABool
   ("/vis/touchable/set/forceWireframe", this);
@@ -113,7 +114,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceWireframe->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetForceWireframe->SetParameterName("forceWireframe", omitable = true);
-  fpCommandSetForceWireframe->SetDefaultValue(false);
+  fpCommandSetForceWireframe->SetDefaultValue(true);
 
   fpCommandSetLineStyle = new G4UIcmdWithAString
   ("/vis/touchable/set/lineStyle", this);
@@ -139,7 +140,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetVisibility->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetVisibility->SetParameterName("visibility", omitable = true);
-  fpCommandSetVisibility->SetDefaultValue(false);
+  fpCommandSetVisibility->SetDefaultValue(true);
 }
 
 G4VisCommandsTouchableSet::~G4VisCommandsTouchableSet() {
@@ -296,4 +297,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   }
 
   SetViewParameters(currentViewer,workingVP);
+
+  // To update all views
+  G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }

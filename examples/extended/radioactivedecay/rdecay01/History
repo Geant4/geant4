@@ -1,4 +1,4 @@
-$Id: History 97882 2016-06-16 16:11:41Z gcosmo $
+$Id: History 100676 2016-10-31 10:45:48Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26-10-16 mma (rdecay01-V10-02-08)
+- add neutron.mac proton.mac
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
 
 16-06-16 V.Ivanchenko (rdecay01-V10-02-07)
 - PhysicsList::ConstructProcess - return back initialisation of 

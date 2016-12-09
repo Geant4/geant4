@@ -36,6 +36,8 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -47,10 +49,19 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
 :  G4VPhysicsConstructor("G4RadioactiveDecay")//, theRadioactiveDecay(0)
-{}
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetFluo(true);
+  param->SetAuger(true);
+  param->SetAugerCascade(true);
+  param->SetDeexcitationIgnoreCut(true);
+  param->AddMsc("world","G4RadioactiveDecay");
 
-G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String& name)
-:  G4VPhysicsConstructor(name)//, theRadioactiveDecay(0)
+  G4NuclearLevelData::GetInstance()->GetParameters()->SetUseFilesNEW(true);
+}
+
+G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)
+  : G4RadioactiveDecayPhysics(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,11 +85,10 @@ void G4RadioactiveDecayPhysics::ConstructProcess()
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4VAtomDeexcitation* ad = man->AtomDeexcitation();
   if(!ad) {
-    man->SetAtomDeexcitation(new G4UAtomicDeexcitation());
+    ad = new G4UAtomicDeexcitation();
+    man->SetAtomDeexcitation(ad);
+    ad->InitialiseAtomicDeexcitation();
   }
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetFluo(true);
-  param->SetAuger(true);
 
   G4PhysicsListHelper::GetPhysicsListHelper()->
     RegisterProcess(new G4RadioactiveDecay(), G4GenericIon::GenericIon());

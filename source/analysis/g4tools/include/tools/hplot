@@ -148,7 +148,7 @@ private:
 
   static void TGaxis_LabelsLimits(std::ostream& a_out,const char *label,
                                          int &first,int &last) {
-    last = ::strlen(label)-1;
+    last = int(::strlen(label))-1;
     for (int i=0; i<=last; i++) {
       if (::strchr("1234567890-+.", label[i]) ) { first = i; return; }
     }
@@ -457,9 +457,8 @@ public:
      double timeoffset = 0;
      if (OptionTime) {
         if (IdF!=std::string::npos) {
-           int LnF = fTimeFormat.size();
-           std::string stringtimeoffset =
-             fTimeFormat.substr(IdF+2,LnF-(IdF+2));
+           int LnF = int(fTimeFormat.size());
+           std::string stringtimeoffset = fTimeFormat.substr(IdF+2,LnF-(IdF+2));
            int yy, mm, dd, hh, mi, ss;
            if (::sscanf(stringtimeoffset.c_str(), 
                    "%d-%d-%d %d:%d:%d", &yy, &mm, &dd, &hh, &mi, &ss) == 6) {
@@ -482,7 +481,7 @@ public:
               std::string::size_type Ids   = stringtimeoffset.find("s");
               if (Ids != std::string::npos) {
                  float dp;
-                 int Lns   = stringtimeoffset.size();
+                 size_t Lns   = stringtimeoffset.size();
                  std::string sdp = stringtimeoffset.substr(Ids+1,Lns-(Ids+1));
                  ::sscanf(sdp.c_str(),"%g",&dp);
                  timeoffset += dp;
@@ -1268,7 +1267,7 @@ public:
   
               snpf(CHTEMP,sizeof(CHTEMP),"%g",DWlabel);
 
-              int ndecimals = 0;
+              size_t ndecimals = 0;
               if (OptionDecimals) {
                  char *dot = ::strchr(CHTEMP,'.');
                  if (dot) ndecimals = CHTEMP + ::strlen(CHTEMP) -dot;
@@ -1299,13 +1298,13 @@ public:
                        ::strcpy(CHTEMP, "0");
                        ::strcat(CHTEMP, &LABEL[first]);
                        ::strcpy(LABEL, CHTEMP);
-                       first = 1; last = ::strlen(LABEL);
+                       first = 1; last = int(::strlen(LABEL));
                     }
                     if (LABEL[first] == '-' && LABEL[first+1] == '.') {
                        ::strcpy(CHTEMP, "-0");
                        ::strcat(CHTEMP, &LABEL[first+1]);
                        ::strcpy(LABEL, CHTEMP);
-                       first = 1; last = ::strlen(LABEL);
+                       first = 1; last = int(::strlen(LABEL));
                     }
   
                     // We eliminate the non significant 0 after '.'
@@ -1339,9 +1338,8 @@ public:
                     // Appends fractionnal part if seconds displayed
                     if (DWlabel<0.9) {
                        double tmpdb;
-                       int tmplast;
-                       snpf(LABEL,sizeof(LABEL),
-                            "%%S%7.5f",modf(timed,&tmpdb));
+                       size_t tmplast;
+                       snpf(LABEL,sizeof(LABEL),"%%S%7.5f",modf(timed,&tmpdb));
                        tmplast = ::strlen(LABEL)-1;
   
                        // We eliminate the non significiant 0 after '.'
@@ -1357,7 +1355,7 @@ public:
   
                     ::strftime(LABEL,256,timeformattmp.c_str(),utctis);
                     ::strcpy(CHTEMP,&LABEL[0]);
-                    first = 0; last=::strlen(LABEL)-1;
+                    first = 0; last=int(::strlen(LABEL))-1;
                     Wlabel = wTimeIni + (k+1)*DWlabel;
                  }
   
@@ -1793,7 +1791,7 @@ public:
   
      std::string::size_type IdF = fTimeFormat.find("%F");
      if (IdF!=std::string::npos) {
-        int LnF = fTimeFormat.size();
+        size_t LnF = fTimeFormat.size();
         std::string stringtimeoffset = fTimeFormat.substr(IdF,LnF-IdF);
         fTimeFormat = a_format;
         fTimeFormat += stringtimeoffset;

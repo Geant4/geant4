@@ -66,10 +66,11 @@ void ExUCNExtraPhysics::ConstructParticle() {;}
 
 void ExUCNExtraPhysics::ConstructProcess()
 {
-    aParticleIterator->reset();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
 
-    while ((*aParticleIterator)()) {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+    while ((*particleIterator)()) {
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
 
@@ -94,11 +95,12 @@ void ExUCNExtraPhysics::ConstructProcess()
 
 void ExUCNExtraPhysics::ConstructUCN()
 {
-    aParticleIterator->reset();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
     G4ProcessManager* pmanager = NULL;
 
-    while ((*aParticleIterator)()) {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+    while ((*particleIterator)()) {
+        G4ParticleDefinition* particle = particleIterator->value();
         pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
 

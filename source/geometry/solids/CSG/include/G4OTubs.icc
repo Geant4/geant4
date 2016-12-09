@@ -64,6 +64,30 @@ G4double G4OTubs::GetDeltaPhiAngle () const
   return fDPhi;
 }
 
+inline
+G4double G4OTubs::GetSinStartPhi () const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4OTubs::GetCosStartPhi () const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4OTubs::GetSinEndPhi () const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4OTubs::GetCosEndPhi () const
+{
+  return cosEPhi;
+}
+
 inline 
 void G4OTubs::Initialize()
 {

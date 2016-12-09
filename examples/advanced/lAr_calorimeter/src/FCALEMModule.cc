@@ -128,7 +128,7 @@ G4LogicalVolume * FCALEMModule::Construct()
   LogicalEmModule->SetSmartless(FCALEmSmart);
 
    LogicalEmModule->SetVisAttributes(ColorOfEMModule);
-  //  LogicalEmModule->SetVisAttributes(G4VisAttributes::Invisible);
+  //  LogicalEmModule->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
 //---------------------
@@ -156,7 +156,7 @@ G4LogicalVolume * FCALEMModule::Construct()
     }
 
   LogicalF1CableTroff->SetVisAttributes(ColorOfEMModule);
-  // LogicalF1CableTroff->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalF1CableTroff->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
    //----------------------
@@ -178,7 +178,7 @@ G4LogicalVolume * FCALEMModule::Construct()
    };
 
    // LogicalF1LArGap->SetVisAttributes(ColorOfLArg);
-   LogicalF1LArGap->SetVisAttributes(G4VisAttributes::Invisible);
+   LogicalF1LArGap->SetVisAttributes(G4VisAttributes::GetInvisible());
    
 
     // Sensitive Volumes

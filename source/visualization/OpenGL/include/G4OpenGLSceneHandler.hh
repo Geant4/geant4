@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh 96733 2016-05-02 11:52:48Z gcosmo $
+// $Id: G4OpenGLSceneHandler.hh 99440 2016-09-22 08:34:04Z gcosmo $
 //
 //
 // Andrew Walkden  27th March 1996
@@ -77,15 +77,33 @@ public:
   void AddSolid (const G4Torus&);
   void AddSolid (const G4Polycone&);
   void AddSolid (const G4Polyhedra&);
+  void AddSolid (const G4Orb&);
+  void AddSolid (const G4Ellipsoid&);
   void AddSolid (const G4VSolid&);
   void AddCompound (const G4VTrajectory&);
   void AddCompound (const G4VHit&);
   void AddCompound (const G4VDigi&);
   void AddCompound (const G4THitsMap<G4double>&);
+  void AddCompound (const G4THitsMap<G4StatDouble>&);
   
-  static G4int GetEventsDrawInterval() {return fEventsDrawInterval;}
-  static void SetEventsDrawInterval(G4int interval) {fEventsDrawInterval = interval;}
-  
+  // enum for /vis/ogl/flushAt.
+  enum FlushAction {
+    endOfEvent,
+    endOfRun,
+    eachPrimitive,
+    NthPrimitive,
+    NthEvent,
+    never
+  };
+  static G4int GetEntitiesFlushInterval()
+  {return fEntitiesFlushInterval;}
+  static FlushAction GetFlushAction()
+  {return fFlushAction;}
+  static void SetEntitiesFlushInterval(G4int interval)
+  {fEntitiesFlushInterval = interval;}
+  static void SetFlushAction(FlushAction action)
+  {fFlushAction = action;}
+
 #ifdef G4OPENGL_VERSION_2
   private :
   // vertex vector to be given to the graphic card
@@ -148,10 +166,9 @@ protected:
   // Shared code to wait until we make a single glFlush
   void ScaledFlush () ;
   // Static so that they apply to all OGL scene handlers...
-  // Number of events to wait until we make a single glFlush
-  static G4int fEventsDrawInterval;
-  // Number of events waiting to be flushed
-  static G4int fEventsWaitingToBeFlushed;
+  static FlushAction fFlushAction;
+  // Number of entities between flushes
+  static G4int fEntitiesFlushInterval;
 
   // True if caller of primitives is capable of processing three passes.
   G4bool fThreePassCapable;

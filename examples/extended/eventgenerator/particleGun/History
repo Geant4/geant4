@@ -1,4 +1,4 @@
-$Id: History 89707 2015-04-28 07:38:57Z gcosmo $
+$Id: History 99721 2016-10-03 08:11:44Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -13,6 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 	 
+03-10-2016 mma (particleGunExample-V10-02-03)
+- cosmetic in PrimaryGeneratorAction2
+
+01-10-2016 mma (particleGunExample-V10-02-02)
+- PrimaryGeneratorAction2: more on coding conventions
+
+06-08-2016 mma (particleGunExample-V10-02-01)
+- PrimaryGeneratorAction2: apply coding conventions
+
+05-07-16 I. Hrivnacova  (particleGunExample-V10-02-00)
+- Fixes for Doxygen documentation
+
 27-04-2015 mma (particleGunExample-V10-01-01)
 - PrimaryGeneratorAction1: add randomization of time zero of each event
 	 

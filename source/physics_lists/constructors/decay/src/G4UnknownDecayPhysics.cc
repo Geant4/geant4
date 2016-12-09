@@ -75,12 +75,13 @@ void G4UnknownDecayPhysics::ConstructProcess()
 
   // Add Decay Process
   fDecayProcess = new G4UnknownDecay();
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
   G4ParticleDefinition* particle=0;
 
-  while( (*aParticleIterator)() )
+  while( (*myParticleIterator)() )
   {
-    particle = aParticleIterator->value();
+    particle = myParticleIterator->value();
     if( fDecayProcess->IsApplicable(*particle) ) 
     { 
       if(verbose > 1) {

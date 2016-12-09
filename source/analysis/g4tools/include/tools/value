@@ -208,7 +208,7 @@ public:
 
 #ifdef TOOLS_MEM
 #define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
-  value(const std::vector<a_what>& a_v){\
+  value(const std::vector<a_what>& a_v):m_label(0){\
     mem::increment(s_class().c_str());\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
@@ -218,7 +218,7 @@ public:
   }
 #else
 #define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
-  value(const std::vector<a_what>& a_v){\
+  value(const std::vector<a_what>& a_v):m_label(0){\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
     is[0] = (unsigned int)a_v.size();\
@@ -241,6 +241,36 @@ public:
   TOOLS_VALUE_CSTOR(std::string,m_array_string,ARRAY_STRING)
 
 #undef TOOLS_VALUE_CSTOR
+
+#ifdef TOOLS_MEM
+#define TOOLS_VALUE_CSTORA(a_what,a_m_what,a_type) \
+  value(const tools::array<a_what>& a_a):m_label(0){\
+    mem::increment(s_class().c_str());\
+    m_type = a_type;\
+    u.a_m_what = new tools::array<a_what>(a_a);\
+  }
+#else
+#define TOOLS_VALUE_CSTORA(a_what,a_m_what,a_type) \
+  value(const tools::array<a_what>& a_a):m_label(0){\
+    m_type = a_type;\
+    u.a_m_what = new tools::array<a_what>(a_a);\
+  }
+#endif
+
+//TOOLS_VALUE_CSTORA(unsigned char,m_array_unsigned_char,ARRAY_UNSIGNED_CHAR)
+//TOOLS_VALUE_CSTORA(char,m_array_char,ARRAY_CHAR)
+  TOOLS_VALUE_CSTORA(unsigned short,m_array_unsigned_short,ARRAY_UNSIGNED_SHORT)
+  TOOLS_VALUE_CSTORA(short,m_array_short,ARRAY_SHORT)
+  TOOLS_VALUE_CSTORA(unsigned int,m_array_unsigned_int,ARRAY_UNSIGNED_INT)
+  TOOLS_VALUE_CSTORA(int,m_array_int,ARRAY_INT)
+  TOOLS_VALUE_CSTORA(uint64,m_array_unsigned_int64,ARRAY_UNSIGNED_INT64)
+  TOOLS_VALUE_CSTORA(int64,m_array_int64,ARRAY_INT64)
+  TOOLS_VALUE_CSTORA(float,m_array_float,ARRAY_FLOAT)
+  TOOLS_VALUE_CSTORA(double,m_array_double,ARRAY_DOUBLE)
+  TOOLS_VALUE_CSTORA(bool,m_array_bool,ARRAY_BOOL)
+  TOOLS_VALUE_CSTORA(std::string,m_array_string,ARRAY_STRING)
+
+#undef TOOLS_VALUE_CSTORA
 
   virtual ~value() {
     delete m_label;
@@ -276,15 +306,13 @@ public:
       u.m_array_short = new array<short>(*a_from.u.m_array_short);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_INT) {
-      u.m_array_unsigned_int = 
-        new array<unsigned int>(*a_from.u.m_array_unsigned_int);
+      u.m_array_unsigned_int = new array<unsigned int>(*a_from.u.m_array_unsigned_int);
 
     } else if(a_from.m_type==ARRAY_INT) {
       u.m_array_int = new array<int>(*a_from.u.m_array_int);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_INT64) {
-      u.m_array_unsigned_int64 = 
-        new array<uint64>(*a_from.u.m_array_unsigned_int64);
+      u.m_array_unsigned_int64 = new array<uint64>(*a_from.u.m_array_unsigned_int64);
 
     } else if(a_from.m_type==ARRAY_INT64) {
       u.m_array_int64 = new array<int64>(*a_from.u.m_array_int64);
@@ -327,22 +355,19 @@ public:
     //  u.m_array_char = new array<char>(*a_from.u.m_array_char);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_SHORT) {
-      u.m_array_unsigned_short = 
-        new array<unsigned short>(*a_from.u.m_array_unsigned_short);
+      u.m_array_unsigned_short = new array<unsigned short>(*a_from.u.m_array_unsigned_short);
 
     } else if(a_from.m_type==ARRAY_SHORT) {
       u.m_array_short = new array<short>(*a_from.u.m_array_short);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_INT) {
-      u.m_array_unsigned_int = 
-        new array<unsigned int>(*a_from.u.m_array_unsigned_int);
+      u.m_array_unsigned_int = new array<unsigned int>(*a_from.u.m_array_unsigned_int);
 
     } else if(a_from.m_type==ARRAY_INT) {
       u.m_array_int = new array<int>(*a_from.u.m_array_int);
 
     } else if(a_from.m_type==ARRAY_UNSIGNED_INT64) {
-      u.m_array_unsigned_int64 = 
-        new array<uint64>(*a_from.u.m_array_unsigned_int64);
+      u.m_array_unsigned_int64 = new array<uint64>(*a_from.u.m_array_unsigned_int64);
 
     } else if(a_from.m_type==ARRAY_INT64) {
       u.m_array_int64 = new array<int64>(*a_from.u.m_array_int64);
@@ -568,8 +593,7 @@ public:
   const std::string& get_string() const {return *u.m_string;}
 
 #define TOOLS_VALUE_SET(a_what,a_m_what,a_type) \
-  void set(const std::vector<unsigned int>& a_orders,\
-           const std::vector<a_what>& a_v){\
+  void set(const std::vector<unsigned int>& a_orders,const std::vector<a_what>& a_v){\
     reset();\
     m_type = a_type;\
     u.a_m_what = new tools::array<a_what>(a_orders);\

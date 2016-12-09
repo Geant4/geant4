@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.cc 97429 2016-06-03 07:16:13Z gcosmo $
+// $Id: G4DNAChemistryManager.cc 100802 2016-11-02 14:55:27Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -48,7 +48,7 @@
 #include "G4DNAWaterIonisationStructure.hh"
 #include "G4Electron_aq.hh"
 #include "G4MolecularConfiguration.hh"
-#include "G4MoleculeCounter.hh"
+#include "G4VMoleculeCounter.hh"
 #include "G4VUserChemistryList.hh"
 #include "G4AutoLock.hh"
 #include "G4UIcmdWithABool.hh"
@@ -203,7 +203,7 @@ void G4DNAChemistryManager::Clear()
   G4DNAMolecularReactionTable::DeleteInstance();
   //G4MoleculeHandleManager::DeleteInstance();
   G4MolecularConfiguration::DeleteManager();
-  G4MoleculeCounter::DeleteInstance();
+  G4VMoleculeCounter::DeleteInstance();
 }
 
 void G4DNAChemistryManager::DeleteInstance()
@@ -316,7 +316,7 @@ void G4DNAChemistryManager::Run()
     G4Scheduler::Instance()->Process();
     if(fResetCounterWhenRunEnds)
     {
-      G4MoleculeCounter::Instance()->ResetCounter();
+      G4VMoleculeCounter::Instance()->ResetCounter();
     }
     CloseFile();
   }
@@ -457,7 +457,7 @@ void G4DNAChemistryManager::InitializeThread()
                   FatalException, description);
     }
 
-    G4MoleculeCounter::InitializeInstance();
+    G4VMoleculeCounter::InitializeInstance();
   }
 
   InitializeFile();

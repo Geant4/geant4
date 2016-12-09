@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 95232 2016-02-01 14:31:22Z gcosmo $
+// $Id: G4RunManager.cc 99345 2016-09-19 06:51:23Z gcosmo $
 //
 // 
 
@@ -562,9 +562,12 @@ void G4RunManager::Initialize()
     return;
   }
 
+  stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
   initializedAtLeastOnce = true;
+  if(stateManager->GetCurrentState()!=G4State_Idle)
+  { stateManager->SetNewState(G4State_Idle); }
 }
 
 void G4RunManager::InitializeGeometry()
@@ -578,16 +581,25 @@ void G4RunManager::InitializeGeometry()
 
   if(verboseLevel>1) G4cout << "userDetector->Construct() start." << G4endl;
 
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState==G4State_PreInit || currentState==G4State_Idle)
+  { stateManager->SetNewState(G4State_Init); }
   kernel->DefineWorldVolume(userDetector->Construct(),false);
   userDetector->ConstructSDandField();
   nParallelWorlds = userDetector->ConstructParallelGeometries();
   userDetector->ConstructParallelSD();
   kernel->SetNumberOfParallelWorld(nParallelWorlds);
   geometryInitialized = true;
+  stateManager->SetNewState(currentState); 
 }
 
 void G4RunManager::InitializePhysics()
 {
+  G4StateManager* stateManager = G4StateManager::GetStateManager();
+  G4ApplicationState currentState = stateManager->GetCurrentState();
+  if(currentState==G4State_PreInit || currentState==G4State_Idle)
+  { stateManager->SetNewState(G4State_Init); }
   if(physicsList)
   {
     kernel->InitializePhysics();
@@ -598,6 +610,7 @@ void G4RunManager::InitializePhysics()
                 FatalException, "G4VUserPhysicsList is not defined!");
   }
   physicsInitialized = true;
+  stateManager->SetNewState(currentState); 
 
 }
 

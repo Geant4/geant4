@@ -1,4 +1,4 @@
-$Id: History 97674 2016-06-07 08:28:08Z gcosmo $
+$Id: History 100944 2016-11-03 11:18:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+Nov 2nd, 2016, M. Verderi (gflash-V10-02-02)
+-----------------------
+- Removend redundant condition in GFlashHitMaker::make().
+  Addressing problem report #1876.
+
+Jul 7th, 2016, G. Cosmo (gflash-V10-02-01)
+-----------------------
+- Removend redundant condition in GFlashHitMaker::make().
+  Addressing problem report #1876.
 
 Jun 6th, 2016, M. Verderi (gflash-V10-02-00)
 -------------------------

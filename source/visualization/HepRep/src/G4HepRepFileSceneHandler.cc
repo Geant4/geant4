@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepFileSceneHandler.cc 68043 2013-03-13 14:27:49Z gcosmo $
+// $Id: G4HepRepFileSceneHandler.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 //
 // Joseph Perl  27th January 2002
@@ -168,6 +168,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Box& box) {
 	
 	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 	
+	// Get and check applicable vis attributes.
+	fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
@@ -245,6 +247,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Cons& cons) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
+		// Get and check applicable vis attributes.
+		fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
@@ -310,6 +314,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Tubs& tubs) {
 		haveVisible = false;
 		AddHepRepInstance("Cylinder", NULL);
 		
+		// Get and check applicable vis attributes.
+		fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
 		if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 			return;
 		
@@ -358,6 +364,8 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Trd& trd) {
 	
 	G4HepRepMessenger* messenger = G4HepRepMessenger::GetInstance();
 	
+	// Get and check applicable vis attributes.
+	fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
 	if (fpVisAttribs && (fpVisAttribs->IsVisible()==0) && messenger->getCullInvisibles())
 		return;
 	
@@ -448,25 +456,49 @@ void G4HepRepFileSceneHandler::AddSolid(const G4Torus& torus) {
 
 void G4HepRepFileSceneHandler::AddSolid(const G4Polycone& polycone) {
 #ifdef G4HEPREPFILEDEBUG
-	G4cout <<
-    "G4HepRepFileSceneHandler::AddSolid(const G4Polycone& polycone) called for "
-	<< polycone.GetName()
-	<< G4endl;
-	PrintThings();
+  G4cout <<
+  "G4HepRepFileSceneHandler::AddSolid(const G4Polycone& polycone) called for "
+  << polycone.GetName()
+  << G4endl;
+  PrintThings();
 #endif
-	G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polycone);  // Invoke default action.
 }
 
 
 void G4HepRepFileSceneHandler::AddSolid(const G4Polyhedra& polyhedra) {
 #ifdef G4HEPREPFILEDEBUG
-	G4cout <<
-    "G4HepRepFileSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
-	<< polyhedra.GetName()
-	<< G4endl;
-	PrintThings();
+  G4cout <<
+  "G4HepRepFileSceneHandler::AddSolid(const G4Polyhedra& polyhedra) called for "
+  << polyhedra.GetName()
+  << G4endl;
+  PrintThings();
 #endif
-	G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
+  G4VSceneHandler::AddSolid(polyhedra);  // Invoke default action.
+}
+
+
+void G4HepRepFileSceneHandler::AddSolid(const G4Orb& orb) {
+#ifdef G4HEPREPFILEDEBUG
+  G4cout <<
+  "G4HepRepFileSceneHandler::AddSolid(const G4Orb& orb) called for "
+  << orb.GetName()
+  << G4endl;
+  PrintThings();
+#endif
+  G4VSceneHandler::AddSolid(orb);  // Invoke default action.
+}
+
+
+void G4HepRepFileSceneHandler::AddSolid(const G4Ellipsoid& ellipsoid) {
+#ifdef G4HEPREPFILEDEBUG
+  G4cout <<
+  "G4HepRepFileSceneHandler::AddSolid(const G4Ellipsoid& ellipsoid) called for "
+  << ellipsoid.GetName()
+  << G4endl;
+  PrintThings();
+#endif
+  G4VSceneHandler::AddSolid(ellipsoid);  // Invoke default action.
 }
 
 
@@ -1276,7 +1308,7 @@ G4HepRepFileXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {
 
 
 void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
-												 const G4Visible visible) {
+                                                 const G4Visible visible) {
 #ifdef G4HEPREPFILEDEBUG
 	G4cout <<
     "G4HepRepFileSceneHandler::AddHepRepInstance called."
@@ -1465,11 +1497,11 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 			colour = fpVisAttribs->GetColour();
 			isVisible = fpVisAttribs->IsVisible();
 		} else {
-			colour = GetColour(visible);
+			colour = visible.GetVisAttributes()->GetColour();
 			isVisible = fpViewer->
-				GetApplicableVisAttributes(visible.GetVisAttributes())->IsVisible();
+			GetApplicableVisAttributes(visible.GetVisAttributes())->IsVisible();
 		}
-		
+
 		redness = colour.GetRed();
 		greenness = colour.GetGreen();
 		blueness = colour.GetBlue();

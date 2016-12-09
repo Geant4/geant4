@@ -117,6 +117,26 @@ G4String G4BaseFileManager::GetNtupleFileName(const G4String& ntupleName) const
 }  
 
 //_____________________________________________________________________________
+G4String G4BaseFileManager::GetNtupleFileName(G4int ntupleFileNumber) const 
+{  
+  G4String name(fFileName);
+
+  // Take out file extension
+  auto extension = TakeOffExtension(name);
+    
+  // Add _M followed by ntupleFileNumber
+  std::ostringstream os;
+  os << ntupleFileNumber;
+  name.append("_m");
+  name.append(os.str());
+
+  // Add (back if it was present) file extension
+  name.append(extension);
+  
+  return name;
+}  
+
+//_____________________________________________________________________________
 G4String G4BaseFileManager::GetHnFileName(const G4String& hnType,
                                           const G4String& hnName) const
 {

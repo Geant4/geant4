@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Polycone.icc 100819 2016-11-02 15:17:36Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -44,6 +44,30 @@ inline
 G4double G4Polycone::GetEndPhi() const
 {
   return endPhi;
+}
+
+inline
+G4double G4Polycone::GetSinStartPhi() const
+{
+  return IsOpen() ? std::sin(startPhi) : 0;
+}
+
+inline
+G4double G4Polycone::GetCosStartPhi() const
+{
+  return IsOpen() ? std::cos(startPhi) : 1;
+}
+
+inline
+G4double G4Polycone::GetSinEndPhi() const
+{
+  return IsOpen() ? std::sin(endPhi) : 0;
+}
+
+inline
+G4double G4Polycone::GetCosEndPhi() const
+{
+  return IsOpen() ? std::cos(endPhi) : 1;
 }
 
 inline

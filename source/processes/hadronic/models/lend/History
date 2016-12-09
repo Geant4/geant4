@@ -1,4 +1,4 @@
-# $Id: History 96401 2016-04-12 07:27:44Z gcosmo $
+# $Id: History 101153 2016-11-08 08:19:11Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,18 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+07 November 2016 Tatsumi Koi (hadr-lend-V10-02-06)
+-----------------------------------------------
+-Fix warning messages from compiler(gcc6.2 -O3)
+
+02 November 2016 Tatsumi Koi (hadr-lend-V10-02-05)
+-----------------------------------------------
+-Improve memory consumption in MT library
+
+02 September 2016 Tatsumi Koi (hadr-lend-V10-02-04)
+-----------------------------------------------
+-Migrate to use G4Rand
 
 11 April 2016 Tatsumi Koi (hadr-lend-V10-02-03)
 -----------------------------------------------

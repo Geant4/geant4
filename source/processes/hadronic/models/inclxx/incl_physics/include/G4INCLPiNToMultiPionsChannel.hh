@@ -61,7 +61,7 @@ namespace G4INCL {
 
       void isospinRepartition(G4int ipi);
 
-      INCL_DECLARE_ALLOCATION_POOL(PiNToMultiPionsChannel);
+      INCL_DECLARE_ALLOCATION_POOL(PiNToMultiPionsChannel)
   };
 }
 

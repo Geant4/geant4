@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 92499 2015-09-02 07:25:02Z gcosmo $
+// $Id: EventAction.hh 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

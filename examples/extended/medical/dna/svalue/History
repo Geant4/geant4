@@ -14,7 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+14-10-16 G.Folger (svalue-V10-02-06)
+         tagged only on 07-Nov-16
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+14-10-2016 S. Incerti (svalue-V10-02-05)
+- updated README
+
+28-07-2016 S. Incerti (svalue-V10-02-04)
+- updated plot.C
+
+27-07-2016 S. Incerti (svalue-V10-02-03)
+- added plot.C
+
+09-07-2016 S. Incerti (svalue-V10-02-02)
+- updated README
+
+04-07-2016 I.Hrivnacova  (svalue-V10-02-01)
+- Fixes for Doxygen documentation
+
+28-05-2016 MK (svalue-V10-02-00)
+- DetectorConstruction.cc: G4RunManager::GetRunManager()->GeometryHasBeenModified()
+- PhysicsList.cc: add other DNA constructors
+- svalue.cc: code clean up
+
 17-09-15 SI (svalue-V10-01-08)
 - applied coding guidelines
 

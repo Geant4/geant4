@@ -48,7 +48,7 @@ fCenterX(0),fCenterY(0),fCenterZ(0),fNbAtom(0),fpNext(0),fpFirst(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Residue::Residue(string rN,int rS)
+Residue::Residue(const std::string& rN,int rS)
 {
   fResName=rN;// Residue name
   fResSeq=rS; // Residue sequence number

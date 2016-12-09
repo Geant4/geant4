@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/StepMaxBuilder.cc
+/// \file StepMaxBuilder.cc
 /// \brief Implementation of the StepMaxBuilder class
 //
 // $Id: StepMaxBuilder.cc 66587 2012-12-21 11:06:44Z ihrivnac $
@@ -58,9 +58,10 @@ void StepMaxBuilder::ConstructProcess()
   // Step limitation seen as a process
   StepMaxProcess* process = new StepMaxProcess();
 
-  aParticleIterator->reset();
-  while ((*aParticleIterator)()){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (process->IsApplicable(*particle)) pmanager->AddDiscreteProcess(process);
   }

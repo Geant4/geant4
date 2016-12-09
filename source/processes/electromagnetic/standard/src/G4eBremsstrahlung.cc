@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4eBremsstrahlung.cc 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -154,7 +154,7 @@ void G4eBremsstrahlung::PrintInfo()
     G4cout << "      LPM flag: " << param->LPM() << " for E > " 
 	   << EmModel(1)->HighEnergyLimit()/GeV << " GeV";
     if(eth < DBL_MAX) { 
-      G4cout << ",  HighEnergyThreshold(GeV)= " << eth/GeV; 
+      G4cout << ",  VertexHighEnergyTh(GeV)= " << eth/GeV; 
     }
     G4cout << G4endl;
   }

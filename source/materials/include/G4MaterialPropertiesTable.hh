@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.hh 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4MaterialPropertiesTable.hh 99765 2016-10-05 08:49:47Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -97,10 +97,10 @@ class G4MaterialPropertiesTable
     inline void RemoveProperty(const char *key);
     // Remove a property from the table.
 
-    G4double GetConstProperty(const char *key);
+    G4double GetConstProperty(const char *key) const;
     // Get the constant property from the table corresponding to the key-name
 
-    G4bool ConstPropertyExists(const char *key);
+    G4bool ConstPropertyExists(const char *key) const;
     // Return true if a const property 'key' exists.
 
     G4MaterialPropertyVector* GetProperty(const char *key);
@@ -128,11 +128,11 @@ class G4MaterialPropertiesTable
 
     std::map<G4String, G4MaterialPropertyVector*, std::less<G4String> > MPT;
     typedef std::map< G4String, G4MaterialPropertyVector*,
-                      std::less<G4String> >::iterator MPTiterator;
+                      std::less<G4String> >::const_iterator MPTiterator;
 
     std::map< G4String, G4double, std::less<G4String> > MPTC;
     typedef std::map< G4String, G4double,
-                      std::less<G4String> >::iterator MPTCiterator;
+                      std::less<G4String> >::const_iterator MPTCiterator;
 };
 
 /////////////////////

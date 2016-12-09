@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XVCrystalIntegratedDensity.hh
+/// \brief Definition of the XVCrystalIntegratedDensity class
+//
 
 #ifndef XVCrystalIntegratedDensity_h
 #define XVCrystalIntegratedDensity_h

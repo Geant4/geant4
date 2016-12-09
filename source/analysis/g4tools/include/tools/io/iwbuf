@@ -59,7 +59,7 @@ public:
   virtual bool write_std_vec_vec(const std_vec_vec_string_t&) = 0;
 public:
   virtual const char* buf() const = 0;
-  virtual uint32 length() const = 0;
+  virtual size_t length() const = 0;
 };
 
 }}

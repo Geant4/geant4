@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EmCalorimeterHit.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5EmCalorimeterHit.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5EmCalorimeterHit.hh
 /// \brief Definition of the B5EmCalorimeterHit class
@@ -51,9 +51,9 @@ class G4AttValue;
 
 class B5EmCalorimeterHit : public G4VHit
 {
-public:
+  public:
     B5EmCalorimeterHit();
-    B5EmCalorimeterHit(G4int z);
+    B5EmCalorimeterHit(G4int cellID);
     B5EmCalorimeterHit(const B5EmCalorimeterHit &right);
     virtual ~B5EmCalorimeterHit();
 
@@ -84,7 +84,7 @@ public:
     void SetLogV(G4LogicalVolume* val) { fPLogV = val; }
     const G4LogicalVolume* GetLogV() const { return fPLogV; }
     
-private:
+  private:
     G4int fCellID;
     G4double fEdep;
     G4ThreeVector fPos;
@@ -92,20 +92,21 @@ private:
     const G4LogicalVolume* fPLogV;
 };
 
-typedef G4THitsCollection<B5EmCalorimeterHit> B5EmCalorimeterHitsCollection;
+using B5EmCalorimeterHitsCollection = G4THitsCollection<B5EmCalorimeterHit>;
 
 extern G4ThreadLocal G4Allocator<B5EmCalorimeterHit>* B5EmCalorimeterHitAllocator;
 
 inline void* B5EmCalorimeterHit::operator new(size_t)
 {
-    if (!B5EmCalorimeterHitAllocator)
-        B5EmCalorimeterHitAllocator = new G4Allocator<B5EmCalorimeterHit>;
-    return (void*)B5EmCalorimeterHitAllocator->MallocSingle();
+  if (!B5EmCalorimeterHitAllocator) {
+       B5EmCalorimeterHitAllocator = new G4Allocator<B5EmCalorimeterHit>;
+  }
+  return (void*)B5EmCalorimeterHitAllocator->MallocSingle();
 }
 
 inline void B5EmCalorimeterHit::operator delete(void* aHit)
 {
-    B5EmCalorimeterHitAllocator->FreeSingle((B5EmCalorimeterHit*) aHit);
+  B5EmCalorimeterHitAllocator->FreeSingle((B5EmCalorimeterHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 96115 2016-03-16 18:53:00Z gcosmo $
+// $Id: G4LossTableManager.hh 99151 2016-09-07 08:03:17Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -295,7 +295,6 @@ private:
   G4bool isMaster;
   G4LossTableBuilder*         tableBuilder;
   G4EmCorrections*            emCorrections;
-  G4EmSaturation*             emSaturation;
   G4EmConfigurator*           emConfigurator;
   G4ElectronIonPair*          emElectronIonPair;
   G4VAtomDeexcitation*        atomDeexcitation;

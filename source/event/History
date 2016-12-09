@@ -1,4 +1,4 @@
-$Id: History 96903 2016-05-17 09:10:58Z gcosmo $
+$Id: History 101916 2016-12-08 08:04:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 7, 2016 M.Asai (event-V10-02-09)
+- Set polarization to pre-assigned decay products. Addressing to
+  bug report #1914.
+
+September 2, 2016 M.Asai (event-V10-02-08)
+- Changed the way of deleting G4PrimaryVertex objects to avoid
+  stack overflow for very large number of primary vertices.
+
+July 27, 2016 M.Asai (event-V10-02-06, -07)
+- Particle gun now can shoot ions with floating level base.
+
+July 22, 2016 L.Desorgher  (event-V10-02-05)
+- Modification of G4AdjointStackingAction to remove compilation error on Windows.
+
+July 21, 2016 L.Desorgher  (event-V10-02-04)
+- Modification of G4AdjointStackingAction 
+for the implementation of the splitting of the reverse MC tracking.
 
 May 16th, 2016 A.Dotti (event-V10-02-03)
 - Fix typos and bug from bugzilla #1860

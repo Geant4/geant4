@@ -13,10 +13,17 @@ extern "C" {
 typedef void* MPI_Comm;
 typedef void* MPI_Datatype;
 
-#define MPI_UNSIGNED      0
-#define MPI_DOUBLE        0
-#define MPI_UNSIGNED_CHAR 0
-#define MPI_CHAR          0
+#define MPI_UNSIGNED           0
+#define MPI_DOUBLE             0
+#define MPI_UNSIGNED_CHAR      0
+#define MPI_CHAR               0
+#define MPI_LONG               0
+#define MPI_INT                0
+#define MPI_UNSIGNED_LONG      0
+#define MPI_LONG_LONG          0
+#define MPI_UNSIGNED_LONG_LONG 0
+
+#define MPI_ANY_SOURCE 0
 
 #define MPI_SUCCESS 1
 
@@ -32,7 +39,11 @@ inline int MPI_Unpack(const void*,int,int*,void*,int,MPI_Datatype,MPI_Comm){retu
 /// to pass h2mpi, hs2mpi /////////////////////////////////////
 ///////////////////////////////////////////////////////////////
 
-typedef int MPI_Status;
+struct _MPI_Status {
+  int MPI_SOURCE;
+  int MPI_TAG;
+};
+typedef _MPI_Status MPI_Status;
 
 inline int MPI_Probe(int,int,MPI_Comm,MPI_Status*){return 0;}
 inline int MPI_Get_count(const MPI_Status*,MPI_Datatype,int*){return 0;}

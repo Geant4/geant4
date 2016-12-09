@@ -1,3 +1,73 @@
+ 2.3.0 :
+ - test/cpp/mpi_ntuple.cpp : use a maximum tools::impi interface which does not bring mpi.h.
+ - tools/mpi/pntuple : have the code using only the tools::impi interface.
+ - tools/mpi/wrmpi : pack_reset(), send_buffer() virtual methods implementations.
+ - tools/impi : pack_reset(), send_buffer() virtual methods.
+
+ 2.2.0 :
+ - sg/vertices : supress m_xyzs_pos field to correct a Coverity issue.
+ - sg/atb_vertices : m_[xyzs,rgbas,nms]_pos protected. To correct Coverity issues.
+ - rroot/ntuple : initialize() : if(!_branch) => if(!_be) : seen by coverity.
+ - wroot/to : add code to write annotations.
+ - rroot/rall : 
+ - add touplow.
+ 
+ 2.1.0 : for parallel ntuple : handle properly the user std::vector for column of vector.
+ - ntuple_booking : add the set_user_obj() method and non-const columns() getter. 
+ - rroot/branch_element : implement a show() method to show the m_obj address.
+ - rroot/branch : make virtual the show() method.
+ - test/cpp : pwroot.cpp, wroot_pntuple.cpp, mpi_ntuple.cpp : example of a vector column.
+
+ 2.0.0 :
+ wroot : parallel ntuple : on a same booked nutple, pass baskets from threads or mpi ranks to a "main ntuple" tied to a file.
+ rroot : modifs to be in sync with the logic of wroot.
+ remove hbook, fortran and cernlib related things.
+
+ - tools/wroot,rroot : base_leaf, branch, key, basket, fac : remove ifile& relationship in constructors.
+ - tools/wroot,rroot : base_leaf, branch, basket : remove relationship to "manager" (exa remove m_branch in base_leaf).      
+ - realloc, wps, tos, smatch, xml/tree, args, array, rcsv_histo, rcsv_ntuple, b2s, cmemT, glprims, hplot,
+   xml/loader : use size_t instead of unsigned int.
+ - viewplot, wps : a_anonymous arg to write ps file without date. It permits to compare files.
+ - snpf : _MSC_VER < 1900 : handle "_TWO_DIGIT_EXPONENT".
+ - rtausmeui : mem count.
+ - randT, randd, randf : pass templated math_func in arg to shoot (a_sqrt, a_log).
+ - path : suffix, nosuffix : avoid return of a std::string.
+ - mathd, mathf : rad2deg, deg2rad : use a static to do the computation once.
+ - cmathT : rm _conj functions.
+ - forit : vfor : reverse.
+ - impi, mpi/wrmpi : pack, unpack(int64).
+ - histo/base_histo, c1d, c2d, c3d, dps : unsigned int -> size_t.
+ - xml/loader : handle a_take_ctrl.
+
+
+ - io/iwbuf, sg/bmf, mf, line_set, group, axis, style_parser, cube, colormap, plots, atb_vertices,
+   text_freetype, text_hershey, pick_action, plotter : unsigned int -> size_t.
+ - sg/gl_manager, manage_zb, render_zb, primitive_visitor, render_action : unsigned int -> size_t.
+ - sg/primitive_visitor : *pos++ -> *pos;pos++.
+
+ - colorf : remove static color functions. They are put in colorfs.
+ - sg/vertices : is_visible().
+ - sg/field, field_desc : editable field.
+ - sg/legend, text, rgba, torche, infos_box, colormap, axis, text_style, back_area, style, style_colormap, line_style.
+
+ - test/cpp/viewplot.cpp : colorf::<color>() -> colorf_<color>().
+ - test/cpp/wroot.cpp : -megas option.
+ - test/cpp/mpi.cpp -> mpi_histos.cpp.
+ - test/cpp/rroot.cpp, rxrayfluo.cpp : 
+     tools::rroot::key_to_<obj>(rfile,*key);       : add the rfile at first argument.
+     char* buf = key->get_object_buffer(rfile,sz); : add the rfile at first argument.
+     tools::rroot::fac fac(std::cout);             : replace rfile arg by std::cout.
+
+ - histo : cosmetic aEdges => a_edges.
+ - rroot : cosmetic rm not needed tools::rroot:: prefix.
+ - lina/qrot (rotf) : pass a_sqrt, a_fabs, a_sin, a_cos,... in arg.
+ - args : use mem::inc,dec.
+ - file, file_format, fileis, fsize : handle py, lua, jive. Isolate size() in a standalone file.
+ - raxml, xml/aidas : separate the xml parsing logic (in a xml/aidas file) from the expat reader.
+   (Have something similar than the xml style reading).
+ - sg : gl_manager, manager_zb : begin_render() : have two more args to pass the area size to render.
+ - sg : axis : pick() : use nodekit_pick(). It permits to pick and move an axis (in interactive apps).
+
  1.27.4 :
  - tools/value : Windows-64 : rm warnings when writing a void* in a string..
 

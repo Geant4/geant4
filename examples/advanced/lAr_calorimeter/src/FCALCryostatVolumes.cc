@@ -92,7 +92,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 			"CryostatLogical");
  
   // LogicalCryostat->SetVisAttributes(ColorOfIron);
-  LogicalCryostat->SetVisAttributes(G4VisAttributes::Invisible);
+  LogicalCryostat->SetVisAttributes(G4VisAttributes::GetInvisible());
  
 
   //------------------------------
@@ -109,7 +109,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 		      LogicalCryostat, 0, 0);
   
   LogicalInsulation->SetVisAttributes(ColorOfAir);
-  // LogicalInsulation->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalInsulation->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   //-------------------------------------
@@ -127,7 +127,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 		      LogicalCryostat, 0, 0);
 
    LogicalAirCryostat->SetVisAttributes(ColorOfAir);
-  // LogicalAirCryostat->SetVisAttributes(G4VisAttributes::Invisible);	 
+  // LogicalAirCryostat->SetVisAttributes(G4VisAttributes::GetInvisible());	 
   */
 
 
@@ -144,7 +144,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 			LogicalLArg, "LArgPhysical", LogicalCryostat, 0,0);
 
     // LogicalLArg->SetVisAttributes(ColorOfLarg);
-    LogicalLArg->SetVisAttributes(G4VisAttributes::Invisible);
+    LogicalLArg->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //-------------------
   // Front Excluder
@@ -162,7 +162,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 		      LogicalFrontExcluder, PhysicalLArg, 0,0);
 
   LogicalFrontExcluder->SetVisAttributes(ColorOfLead);
-  // LogicalFrontExcluder->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalFrontExcluder->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   //--------------------
@@ -185,7 +185,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 		      PhysicalLArg, 0,0);
 
   LogicalBackExcluder->SetVisAttributes(ColorOfLead);
-  // LogicalBackExcluder->SetVisAttributes(G4VisAttributes::Invisible);
+  // LogicalBackExcluder->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   //------------------------
@@ -209,7 +209,7 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
 		      , LogicalFCALEnvelope, "FCALEnvelopePhysical", LogicalLArg, 0,0);
 
   //LogicalFCALEnvelope->SetVisAttributes(ColorOfIron);
-  LogicalFCALEnvelope->SetVisAttributes(G4VisAttributes::Invisible);
+  LogicalFCALEnvelope->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //-----------------------------
   // FCAL electromagnetic Module

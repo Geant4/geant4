@@ -20,10 +20,12 @@ public:
   field_desc():m_offset(0){} //touchy
   field_desc(const std::string& a_name,
              const std::string& a_class,
-             offset_t a_offset)
+             offset_t a_offset,
+             bool a_editable)
   :m_name(a_name)
   ,m_class(a_class)
   ,m_offset(a_offset)
+  ,m_editable(a_editable)
   {}
   virtual ~field_desc(){}
 public:
@@ -31,6 +33,7 @@ public:
   :m_name(a_from.m_name)
   ,m_class(a_from.m_class)
   ,m_offset(a_from.m_offset)
+  ,m_editable(a_from.m_editable)
   ,m_enums(a_from.m_enums)
   ,m_opts(a_from.m_opts)
   {}
@@ -38,6 +41,7 @@ public:
     m_name = a_from.m_name;
     m_class = a_from.m_class;
     m_offset = a_from.m_offset;
+    m_editable = a_from.m_editable;
     m_enums = a_from.m_enums;
     m_opts = a_from.m_opts;
     return *this;
@@ -53,10 +57,13 @@ public:
 
   void add_opt(const std::string& a_value) {m_opts.push_back(a_value);}
   const std::vector<std::string>& opts() const {return m_opts;}
+
+  bool editable() const {return m_editable;}
 protected:
   std::string m_name;
   std::string m_class;
   offset_t m_offset;
+  bool m_editable;
   std::vector<enum_t> m_enums;
   std::vector<std::string> m_opts;
 };

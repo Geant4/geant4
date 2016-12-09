@@ -17,7 +17,10 @@ This directory contains a set of dna examples.
        models are used in a Target volume, declared as a Region.
 
    - microyz 
-       Simulation of microdosimetry spectra (beta version)
+       Simulation of microdosimetry spectra (beta version only, not finalized yet).
+
+   - range 
+       Simulation of ranges.
 
    - svalue
        This example shows how to simulate S-values in spheres of liquid water
@@ -30,13 +33,17 @@ This directory contains a set of dna examples.
    - chem1   Simple activation of the chemistry module.
    - chem2   Usage of TimeStepAction in the chemistry module.
    - chem3   Activate the full interactivity with the chemistry module.
+   - chem4   Simulation of radiochemical yields with the chemistry module.
+
+   - pdb4dna         
+       Usage of the Protein Data Bank (PDB) file format to build geometries.
 
    - wholenucleardna 
-       Description of the full nucleus
+       Geometrical description of a full simplified cell nucleus.
    
-   - pdb4dna         
-       Usage of the Protein Data Bank (PDB) file format to build geometries
-
+   - clustering 
+       Clustering application for direct damage extraction.
+   
 See the README page inside each example for more detail.
 
 

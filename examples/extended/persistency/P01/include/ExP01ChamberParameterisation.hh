@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01ChamberParameterisation class
 //
 //
-// $Id: ExP01ChamberParameterisation.hh 73396 2013-08-27 09:29:21Z gcosmo $
+// $Id: ExP01ChamberParameterisation.hh 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //
 //  A parameterisation that describes a series of boxes along Z
@@ -111,5 +111,4 @@ class ExP01ChamberParameterisation : public G4VPVParameterisation
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
 

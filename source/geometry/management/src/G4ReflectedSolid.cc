@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc 97686 2016-06-07 09:27:32Z gcosmo $
+// $Id: G4ReflectedSolid.cc 100906 2016-11-03 09:59:32Z gcosmo $
 //
 //
 // Implementation for G4ReflectedSolid class
@@ -34,7 +34,6 @@
 // --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
-#include "G4BoundingEnvelope.hh"
 
 #include <sstream>
 
@@ -42,6 +41,7 @@
 #include "G4Vector3D.hh"
 
 #include "G4AffineTransform.hh"
+#include "G4Transform3D.hh"
 #include "G4VoxelLimits.hh"
 
 #include "G4VPVParameterisation.hh"
@@ -129,6 +129,7 @@ G4VSolid* G4ReflectedSolid::GetConstituentMovedSolid() const
 } 
 
 /////////////////////////////////////////////////////////////////////////////
+//
 
 G4Transform3D  G4ReflectedSolid::GetTransform3D() const
 {
@@ -147,37 +148,113 @@ void G4ReflectedSolid::SetDirectTransform3D(G4Transform3D& transform)
   fRebuildPolyhedron = true;
 }
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4ReflectedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  fPtrSolid->Extent(pMin,pMax);
+  G4double xmin = pMin.x(), ymin = pMin.y(), zmin = pMin.z();
+  G4double xmax = pMax.x(), ymax = pMax.y(), zmax = pMax.z();
+  G4double xx = fDirectTransform3D->xx();
+  G4double yy = fDirectTransform3D->yy();
+  G4double zz = fDirectTransform3D->zz();
+
+  if (std::abs(xx) == 1 && std::abs(yy) == 1 && std::abs(zz) == 1)
+  {
+    // Special case of reflection in axis and pure translation
+    //
+    if (xx == -1) { G4double tmp = -xmin; xmin = -xmax; xmax = tmp; }
+    if (yy == -1) { G4double tmp = -ymin; ymin = -ymax; ymax = tmp; }
+    if (zz == -1) { G4double tmp = -zmin; zmin = -zmax; zmax = tmp; }
+    xmin += fDirectTransform3D->dx();
+    xmax += fDirectTransform3D->dx();
+    ymin += fDirectTransform3D->dy();
+    ymax += fDirectTransform3D->dy();
+    zmin += fDirectTransform3D->dz();
+    zmax += fDirectTransform3D->dz();
+  }
+  else
+  {
+    // Use additional reflection in Z to set up affine transformation
+    //
+    G4Transform3D transform3D = G4ReflectZ3D()*(*fDirectTransform3D);
+    G4AffineTransform transform(transform3D.getRotation().inverse(),
+                                transform3D.getTranslation());
+  
+    // Find bounding box
+    //
+    G4VoxelLimits unLimit;
+    fPtrSolid->CalculateExtent(kXAxis,unLimit,transform,xmin,xmax);
+    fPtrSolid->CalculateExtent(kYAxis,unLimit,transform,ymin,ymax);
+    fPtrSolid->CalculateExtent(kZAxis,unLimit,transform,zmin,zmax); 
+  }
+
+  pMin.set(xmin,ymin,-zmax);
+  pMax.set(xmax,ymax,-zmin);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4ReflectedSolid::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
-     
+// Calculate extent under transform and specified limit
+
 G4bool 
 G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
-                                   const G4VoxelLimits& pVoxelLimit,
+                                   const G4VoxelLimits& pVoxelLimits,
                                    const G4AffineTransform& pTransform,
                                          G4double& pMin, 
                                          G4double& pMax ) const 
 {
-  G4VoxelLimits unLimit;
-  G4AffineTransform unTransform;
+  // Separation of transformations. Calculation of the extent is done
+  // in a reflection of the global space. In such way, the voxel is
+  // reflected, but the solid is transformed just by G4AffineTransform.
+  // It allows to use CalculateExtent() of the solid.
 
-  // Find bounding box
-  G4double x1,x2,y1,y2,z1,z2;
-  fPtrSolid->CalculateExtent(kXAxis,unLimit,unTransform,x1,x2);
-  fPtrSolid->CalculateExtent(kYAxis,unLimit,unTransform,y1,y2);
-  fPtrSolid->CalculateExtent(kZAxis,unLimit,unTransform,z1,z2);
-  G4BoundingEnvelope bbox(G4Point3D(x1,y1,z1),
-                          G4Point3D(x2,y2,z2),kCarTolerance);
+  // Reflect voxel limits in Z
+  //
+  G4VoxelLimits limits;
+  limits.AddLimit(kXAxis, pVoxelLimits.GetMinXExtent(),
+                          pVoxelLimits.GetMaxXExtent());
+  limits.AddLimit(kYAxis, pVoxelLimits.GetMinYExtent(),
+                          pVoxelLimits.GetMaxYExtent());
+  limits.AddLimit(kZAxis,-pVoxelLimits.GetMaxZExtent(),
+                         -pVoxelLimits.GetMinZExtent());
 
-  // Set combined transformation
-  G4Transform3D transform3D =
-    G4Transform3D(pTransform.NetRotation().inverse(),
-                  pTransform.NetTranslation())*(*fDirectTransform3D);
+  // Set affine transformation
+  //
+  G4Transform3D transform3D = G4ReflectZ3D()*pTransform*(*fDirectTransform3D);
+  G4AffineTransform transform(transform3D.getRotation().inverse(),
+                              transform3D.getTranslation());
 
   // Find extent
-  return bbox.CalculateExtent(pAxis,pVoxelLimit,transform3D,pMin,pMax);
+  //
+  if (!fPtrSolid->CalculateExtent(pAxis, limits, transform, pMin, pMax))
+  {
+    return false;
+  }
+  if (pAxis == kZAxis)
+  {
+    G4double tmp= -pMin; pMin= -pMax; pMax= tmp;
+  }
+
+  return true;
 }
- 
+
 //////////////////////////////////////////////////////////////
 //
 // 

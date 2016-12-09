@@ -9,6 +9,15 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 Oct 2016 A. Dotti (MPI-V10-02-02)
+- Porting of scoring merging to new G4StatDouble based hits
+ 
+20 Jul 2016 I. Hrivnacova (MPI-V10-02-01)
+- Coding guidelines (class data member names, separators)
+
+04 Jul 2016 I. Hrivnacova (MPI-V10-02-00) 
+- Fixes for Doxygen documentation
+
 18 Nov 2015 A.Dotti (MPI-V10-01-23) 
 - Support for both static and shared at the same time
 

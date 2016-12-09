@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.hh 91775 2015-08-05 14:42:39Z gcosmo $
+// $Id: G4FTFParameters.hh 100828 2016-11-02 15:25:59Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 #ifndef G4FTFParameters_h
@@ -40,7 +40,6 @@
 
 
 class G4FTFParameters {
-
   public:
     G4FTFParameters( const G4ParticleDefinition* , G4int theA, G4int theZ, G4double s );
     ~G4FTFParameters();
@@ -72,12 +71,12 @@ class G4FTFParameters {
 
     void SetProjMinDiffMass( const G4double aValue );
     void SetProjMinNonDiffMass( const G4double aValue );
-//    void SetProbabilityOfProjDiff( const G4double aValue );    // Uzhi Oct 2014
+    //void SetProbabilityOfProjDiff( const G4double aValue );
     void SetProbLogDistrPrD( const G4double aValue );
 
     void SetTarMinDiffMass( const G4double aValue ); 
     void SetTarMinNonDiffMass( const G4double aValue );
-//    void SetProbabilityOfTarDiff( const G4double aValue );     // Uzhi Oct 2014
+    //void SetProbabilityOfTarDiff( const G4double aValue );
 
     void SetAveragePt2( const G4double aValue );
     void SetProbLogDistr( const G4double aValue );
@@ -91,7 +90,7 @@ class G4FTFParameters {
     void SetMaxNumberOfCollisions( const G4double aValue, const G4double bValue );
     void SetProbOfInteraction( const G4double aValue );
 
-    void SetCofNuclearDestructionPr( const G4double aValue ); // Uzhi May 2015
+    void SetCofNuclearDestructionPr( const G4double aValue );
     void SetCofNuclearDestruction( const G4double aValue );
     void SetR2ofNuclearDestruction( const G4double aValue );
 
@@ -139,7 +138,7 @@ class G4FTFParameters {
     G4double GetMaxNumberOfCollisions();
     G4double GetProbOfInteraction();
 
-    G4double GetCofNuclearDestructionPr();            // Uzhi May 2015
+    G4double GetCofNuclearDestructionPr();
     G4double GetCofNuclearDestruction();
     G4double GetR2ofNuclearDestruction();
 
@@ -178,7 +177,7 @@ class G4FTFParameters {
 
     G4double ProjMinDiffMass;
     G4double ProjMinNonDiffMass;
-    G4double ProbLogDistrPrD;                                    // Uzhi Oct 2014
+    G4double ProbLogDistrPrD;
     G4double TarMinDiffMass;  
     G4double TarMinNonDiffMass;
 
@@ -193,7 +192,7 @@ class G4FTFParameters {
     G4double MaxNumberOfCollisions;
     G4double ProbOfInelInteraction;
 
-    G4double CofNuclearDestructionPr; // Cnd of nuclear destruction of projectile nucleus, May 2015.
+    G4double CofNuclearDestructionPr; // Cnd of nuclear destruction of projectile nucleus
     G4double CofNuclearDestruction;   // Cnd of nuclear destruction
     G4double R2ofNuclearDestruction;  // R2nd
 
@@ -207,7 +206,6 @@ class G4FTFParameters {
   private:
     static G4ThreadLocal bool chipsComponentXSisInitialized;
     static G4ThreadLocal G4ChipsComponentXS* chipsComponentXSinstance;
-
 };
 
 
@@ -307,7 +305,7 @@ inline void G4FTFParameters::SetAveragePt2( const G4double aValue ) {
   AveragePt2 = aValue*CLHEP::GeV*CLHEP::GeV;
 }
 
-inline void G4FTFParameters::SetProbLogDistrPrD( const G4double aValue ) {  // Uzhi Oct 2014
+inline void G4FTFParameters::SetProbLogDistrPrD( const G4double aValue ) {
   ProbLogDistrPrD = aValue;
 }
 
@@ -347,7 +345,7 @@ inline void G4FTFParameters::SetProbOfInteraction( const G4double aValue ) {
   ProbOfInelInteraction = aValue;
 }
 
-inline void G4FTFParameters::SetCofNuclearDestructionPr( const G4double aValue ) { // Uzhi May 2015
+inline void G4FTFParameters::SetCofNuclearDestructionPr( const G4double aValue ) {
   CofNuclearDestructionPr = aValue;
 }
 
@@ -448,7 +446,7 @@ inline G4double G4FTFParameters::GetAveragePt2() {
   return AveragePt2;
 }
 
-inline G4double G4FTFParameters::GetProbLogDistrPrD() {          // Uzhi Oct 2014
+inline G4double G4FTFParameters::GetProbLogDistrPrD() {
   return ProbLogDistrPrD;
 }
 
@@ -476,7 +474,7 @@ inline G4double G4FTFParameters::GetProbOfInteraction() {
   return ProbOfInelInteraction;
 }
 
-inline G4double G4FTFParameters::GetCofNuclearDestructionPr() {   // Uzhi May 2015
+inline G4double G4FTFParameters::GetCofNuclearDestructionPr() {
   return CofNuclearDestructionPr;
 }
 
@@ -505,3 +503,4 @@ inline G4double G4FTFParameters::GetMaxPt2ofNuclearDestruction() {
 }
 
 #endif
+

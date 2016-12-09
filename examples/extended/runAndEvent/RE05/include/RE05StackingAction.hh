@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05StackingAction.hh 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05StackingAction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05StackingAction.hh
 /// \brief Definition of the RE05StackingAction class
@@ -57,26 +57,25 @@ class RE05StackingAction : public G4UserStackingAction
     G4bool InsideRoI(const G4Track * aTrack,G4double ang);
     G4VHitsCollection* GetCollection(G4String colName);
     
-    RE05TrackerHitsCollection* trkHits;
-    RE05MuonHitsCollection* muonHits;
-    RE05StackingActionMessenger* theMessenger;
+    RE05TrackerHitsCollection* fTrkHits;
+    RE05MuonHitsCollection* fMuonHits;
+    RE05StackingActionMessenger* fMessenger;
 
-    G4int stage;
-    G4int reqMuon;
-    G4int reqIsoMuon;
-    G4int reqIso;
-    G4double angRoI;
+    G4int fStage;
+    G4int fReqMuon;
+    G4int fReqIsoMuon;
+    G4int fReqIso;
+    G4double fAngRoI;
   
   public:
-    inline void SetNRequestMuon(G4int val) { reqMuon = val; }
-    inline G4int GetNRequestMuon() const { return reqMuon; }
-    inline void SetNRequestIsoMuon(G4int val) { reqIsoMuon = val; }
-    inline G4int GetNRequestIsoMuon() const { return reqIsoMuon; }
-    inline void SetNIsolation(G4int val) { reqIso = val; }
-    inline G4int GetNIsolation() const { return reqIso; }
-    inline void SetRoIAngle(G4double val) { angRoI = val; }
-    inline G4double GetRoIAngle() const { return angRoI; }
+    inline void SetNRequestMuon(G4int val) { fReqMuon = val; }
+    inline G4int GetNRequestMuon() const { return fReqMuon; }
+    inline void SetNRequestIsoMuon(G4int val) { fReqIsoMuon = val; }
+    inline G4int GetNRequestIsoMuon() const { return fReqIsoMuon; }
+    inline void SetNIsolation(G4int val) { fReqIso = val; }
+    inline G4int GetNIsolation() const { return fReqIso; }
+    inline void SetRoIAngle(G4double val) { fAngRoI = val; }
+    inline G4double GetRoIAngle() const { return fAngRoI; }
 };
 
 #endif
-

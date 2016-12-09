@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc 71534 2013-06-17 16:07:53Z gcosmo $
+// $Id: G4HepRepSceneHandler.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 
 /**
@@ -722,17 +722,27 @@ void G4HepRepSceneHandler::AddSolid (const G4Torus& torus) {
     G4VSceneHandler::AddSolid (torus); 
 }
 
-void G4HepRepSceneHandler::AddSolid (const G4Polycone& polycone) { 
-    if (dontWrite()) return;
-    G4VSceneHandler::AddSolid (polycone); 
+void G4HepRepSceneHandler::AddSolid (const G4Polycone& polycone) {
+  if (dontWrite()) return;
+  G4VSceneHandler::AddSolid (polycone);
 }
 
-void G4HepRepSceneHandler::AddSolid (const G4Polyhedra& polyhedra) { 
-    if (dontWrite()) return;
-    G4VSceneHandler::AddSolid (polyhedra); 
+void G4HepRepSceneHandler::AddSolid (const G4Polyhedra& polyhedra) {
+  if (dontWrite()) return;
+  G4VSceneHandler::AddSolid (polyhedra);
 }
 
-void G4HepRepSceneHandler::AddSolid (const G4VSolid& solid) { 
+void G4HepRepSceneHandler::AddSolid (const G4Orb& orb) {
+  if (dontWrite()) return;
+  G4VSceneHandler::AddSolid (orb);
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4Ellipsoid& ellipsoid) {
+  if (dontWrite()) return;
+  G4VSceneHandler::AddSolid (ellipsoid);
+}
+
+void G4HepRepSceneHandler::AddSolid (const G4VSolid& solid) {
     if (dontWrite()) return;
     G4VSceneHandler::AddSolid(solid); 
 }
@@ -761,7 +771,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     addAttributes(instance, getTrajectoryType());
 
-    setColor(instance, GetColor(line));
+    fpVisAttribs = line.GetVisAttributes();
+    setColor(instance, GetColor());
 
     setVisibility(instance, line);
 
@@ -797,7 +808,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
     addAttributes(instance, getHitType());
 
-    setColor(instance, GetColor(line));
+    fpVisAttribs = line.GetVisAttributes();
+    setColor(instance, GetColor());
 
     setVisibility(instance, line);
 
@@ -809,7 +821,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     // Cannot be case statement since line.xxx is not a constant
     if (mtype == line.dots) {
         setAttribute(instance, "Fill", true);
-        setColor(instance, GetColor(line), G4String("FillColor"));
+        setColor(instance, GetColor(), G4String("FillColor"));
     } else if (mtype == line.circles) {
     } else if (line.squares) {
         setAttribute(instance, "MarkName", G4String("Box"));
@@ -849,7 +861,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     G4Point3D center = transform * circle.GetPosition();
 
-    setColor (instance, GetColor(circle));
+    fpVisAttribs = circle.GetVisAttributes();
+    setColor (instance, GetColor());
 
     setVisibility(instance, circle);
 
@@ -906,8 +919,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         }
         
         setLine(face, polyhedron);
-        setColor(face, GetColor(polyhedron));
-        if (isEventData()) setColor(face, GetColor(polyhedron), G4String("FillColor"));
+        fpVisAttribs = polyhedron.GetVisAttributes();
+        setColor(face, GetColor());
+        if (isEventData()) setColor(face, GetColor(), G4String("FillColor"));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
@@ -1063,11 +1077,13 @@ void G4HepRepSceneHandler::setColor (HepRepAttribute *attribute,
 }
 
 G4Color G4HepRepSceneHandler::getColorFor (const G4VSolid& /* solid */) {
-    return fpVisAttribs ? fpVisAttribs->GetColor() : GetColor(NULL);    
+    // fpVisAttribs has been set for solids.
+    return GetColor();
 }
 
 G4Color G4HepRepSceneHandler::getColorFor (const G4Visible& visible) {
-    return GetColor(visible);
+  fpVisAttribs = visible.GetVisAttributes();
+  return GetColor();
 }
 
 void G4HepRepSceneHandler::setVisibility (HepRepAttribute *attribute, const G4VSolid& /* solid */) {
@@ -1114,7 +1130,8 @@ void G4HepRepSceneHandler::setMarker (HepRepAttribute *attribute, const G4VMarke
     if (marker.GetFillStyle() == G4VMarker::noFill) {
         setAttribute(attribute, "Fill", false);
     } else {
-        setColor(attribute, GetColor(marker), G4String("FillColor"));
+        fpVisAttribs = marker.GetVisAttributes();
+        setColor(attribute, GetColor(), G4String("FillColor"));
     }
 }
 

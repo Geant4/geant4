@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExTGDetectorConstructionWithSD.cc 92819 2015-09-17 15:21:25Z gcosmo $
+// $Id: ExTGDetectorConstructionWithSD.cc 101674 2016-11-21 09:23:15Z gcosmo $
 //
 /// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithSD class
@@ -76,6 +76,7 @@ void ExTGDetectorConstructionWithSD::ConstructSDandField()
 
   G4String trackerChamberSDname = "ExTextGeom/TrackerChamberSD";
   ExTGTrackerSD* aTrackerSD = new ExTGTrackerSD( trackerChamberSDname );
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
   G4LogicalVolume * logicChamber =
     G4tgbVolumeMgr::GetInstance()->FindG4LogVol("Chamber",0);
   if(logicChamber)

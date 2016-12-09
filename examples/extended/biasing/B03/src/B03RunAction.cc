@@ -159,7 +159,6 @@ void B03RunAction::EndOfRunAction(const G4Run* aRun)
     G4cout << "=============================================================" 
            <<G4endl;
 
-
     std::ostream *myout = &G4cout;
     PrintHeader(myout);
 

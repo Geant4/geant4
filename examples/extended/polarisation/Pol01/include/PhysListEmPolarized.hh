@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.hh 68753 2013-04-05 10:26:04Z gcosmo $
+// $Id: PhysListEmPolarized.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,22 +48,14 @@ class PhysListEmPolarized : public G4VPhysicsConstructor
 
   public: 
     // This method is dummy for physics
-    void ConstructParticle() {};
+    virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    void ConstructProcess();
+    virtual void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
-

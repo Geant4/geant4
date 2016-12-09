@@ -179,11 +179,11 @@ inline T sum(const std::vector<T>& a_vec) {
 }
 
 template <class T>  
-inline void filter(std::vector<T>& a_vec,unsigned int a_mn,unsigned int a_mx){
+inline void filter(std::vector<T>& a_vec,unsigned int a_min,unsigned int a_max){
   unsigned int imx = a_vec.size()-1;
-  unsigned int mx = a_mx<imx?a_mx:imx;
+  unsigned int mx = a_max<imx?a_max:imx;
   unsigned int i = 0;
-  for(unsigned int index=a_mn;index<=mx;index++) {
+  for(unsigned int index=a_min;index<=mx;index++) {
     a_vec[i] = a_vec[index];i++;
   }
   a_vec.resize(i);
@@ -270,6 +270,54 @@ inline std::vector<TO> convert(const std::vector<FROM>& a_from){
   return to;
 }
 
+template <class T>  
+inline bool min_max(const std::vector<T>& a_vec,T& a_min,T& a_max) {
+  if(a_vec.empty()) {a_min=T();a_max=T();return false;}
+  a_min = *(a_vec.begin());
+  a_max = a_min;
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_min = *it<a_min?*it:a_min;
+    a_max = *it>a_max?*it:a_max;
+  }
+  return true;
+}
+
+template <class T>  
+inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms,T(*a_sqrt)(T),T(*a_fabs)(T)) {
+  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
+template <class T>  
+inline bool min_max_mean_rms(const std::vector<T>& a_vec,T& a_min,T& a_max,T& a_mean,T& a_rms,
+                             T(*a_sqrt)(T),T(*a_fabs)(T)) {
+  if(a_vec.empty()) {a_min=T();a_max=T();a_mean=T();a_rms=T();return false;}
+  a_min = *(a_vec.begin());
+  a_max = a_min;
+  T S = T();
+  T S2 = T();
+  typedef typename std::vector<T>::const_iterator it_t;
+  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
+    a_min = *it<a_min?*it:a_min;
+    a_max = *it>a_max?*it:a_max;
+    S += *it;
+    S2 += (*it) * (*it);
+  }
+  a_mean = S/T(a_vec.size());
+  a_rms = a_sqrt(a_fabs(S2/T(a_vec.size()) - a_mean * a_mean));
+  return true;
+}
+
 }
 
 ///////////////////////////////////////////////////////////
@@ -287,28 +335,6 @@ inline void dump(const std::vector<T>& a_vec,std::ostream& a_out){
   for(it=a_vec.begin();it!=a_vec.end();++it) {
     a_out << *it << std::endl;
   }
-}
-
-}
-
-#include <cmath>
-
-namespace tools {
-
-template <class T>  
-inline bool mean_rms(const std::vector<T>& a_vec,T& a_mean,T& a_rms) {
-  if(a_vec.empty()) {a_mean=T();a_rms=T();return false;}
-  T S = T();
-  T S2 = T();
-  typedef typename std::vector<T>::const_iterator it_t;
-  for(it_t it = a_vec.begin();it!=a_vec.end();++it) {
-    S += *it;
-    S2 += (*it) * (*it);
-  }
-  a_mean = S/T(a_vec.size());
-  //NOTE : should use a templated sqrt and fabs.
-  a_rms = ::sqrt(::fabs(S2/T(a_vec.size()) - a_mean * a_mean));
-  return true;
 }
 
 }

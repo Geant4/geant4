@@ -1,4 +1,4 @@
-svn log $Id: History 97771 2016-06-09 15:15:27Z gcosmo $
+svn log $Id: History 101512 2016-11-18 15:28:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,12 +16,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8th June 2016 Gunter Folger       (config-V10-02-04)
-- revert previous change for G4{,NO}STATIC_MODE
+18th November 2016 Gunter Folger   (config-V10-02-07)
+- add include for analysis/accumulables
+- revert change forcing load of libraries
 
-8th June 2016 Gunter Folger       (config-V10-02-03)
-- delete G4STATIC_MODE and G4NOSTATIC_MODE options in sys/Darwin* and sys/linux*
-  This is not a complete removal of the option yet...
+9th November 2016 Gunter Folger   (config-V10-02-06)  *tag REJECTED*
+- Force loading of symbols for physics_lists/constructor and builders 
+   libraries in granular mode for static libs
+	
+17th October 2016 Gabriele Cosmo  (config-V10-02-05)
+- Changed default optimisation settings to -O3 for g++, clang and icc.
+- Added -fno-trapping-math -ftree-vectorize -fno-math-errno to g++ and
+  clang settings.
+- Better factorise -std options in scripts.
+
+8th June 2016 Gunter Folger  (config-V10-02-04)
+- Reverted previous change for G4{,NO}STATIC_MODE
+
+8th June 2016 Gunter Folger  (config-V10-02-03)
+- Deleted G4STATIC_MODE and G4NOSTATIC_MODE options in sys/Darwin*
+  and sys/linux*. This is not a complete removal of the option yet...
 
 25th April 2016  Gabriele Cosmo  (config-V10-02-02)
 - Added Linux-clang.gmk script for use of clang compiler on Linux system.

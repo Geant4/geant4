@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalPlanarMoliereTempPotential.cc
+/// \brief Implementation of the XCrystalPlanarMoliereTempPotential class
+//
 
 #include "XCrystalPlanarMoliereTempPotential.hh"
 #include "G4PhysicalConstants.hh"

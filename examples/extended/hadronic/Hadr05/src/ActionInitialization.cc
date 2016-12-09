@@ -39,7 +39,7 @@
 
 ActionInitialization::ActionInitialization()
 {
-  masterRunAction = new RunAction();
+  fMasterRunAction = new RunAction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void ActionInitialization::Build() const
 #ifdef G4MULTITHREADED
   RunAction* run = new RunAction();
 #else
-  RunAction* run = masterRunAction;
+  RunAction* run = fMasterRunAction;
 #endif
 
   SetUserAction(run);
@@ -67,7 +67,7 @@ void ActionInitialization::Build() const
 
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(masterRunAction);
+  SetUserAction(fMasterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

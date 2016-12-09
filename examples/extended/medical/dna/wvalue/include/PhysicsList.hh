@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/PhysicsList.hh
+/// \file medical/dna/wvalue/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
 //
 //

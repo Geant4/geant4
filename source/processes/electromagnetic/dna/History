@@ -14,6 +14,55 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+27-11-2016, MK, tag emdna-V10-02-36
+- G4Electron_aq: correct charge
+- G4DNADamages -> G4DNADamage
+
+17-11-2016, MK, tag emdna-V10-02-35
+- G4ManyFastLists.hh: iterator::GetTrackList() correct type returned
+
+16-11-2016, MK, tag emdna-V10-02-34
+- G4VMolecularDissociationDisplacer & G4DNAWaterDissociationDisplacer: 
+   displacement types can be thread shared
+- G4TrackState: Move implementation of static function 
+                G4VTrackStateID::Create() to cc file - windows crash
+
+15-11-2016, MK, tag emdna-V10-02-33
+- G4VMolecularDissociationDisplacer.cc: add missing initializer
+
+14-11-2016, MK, tag emdna-V10-02-32
+- Separate def and impl of dissociation flag to prevent issue with 
+  windows platforms
+
+14-11-2016, MK, tag emdna-V10-02-31
+- G4DNAOneStepThermalizationModel.cc: 
+ tag init constexpr factor with number rather than expression
+
+14-11-2016, MK, tag emdna-V10-02-30
+- Use CLHEP::pi instead of M_PI
+
+14-11-2016, MK, tag emdna-V10-02-29
+- Correct bracket enclosing
+
+14-11-2016, MK, tag emdna-V10-02-28
+- G4VMoleculeCounter: move imp of static methods to cc to avoid crash on win
+- Update displacers, oneStepTherm
+- WaterDisplacer: change the electron thermalization distribution
+- OneStepTherm: two inner thermalization models can be chosen as template argument
+- Adds and use G4CTCounter
+
+02-11-2016, MK, tag emdna-V10-02-27
+- add G4VMoleculeCounter & enable using custom molecule counter 
+- pass location information to molecule counter
+- G4ITNavigator2: relocate voxelNavigator before every call to 
+  computeStep & computeSafety 
+
+07-08-2016, SI, tag emdna-V10-02-26
+- added stationnary mode to sub-excitation electron processes
+
+23-06-2016, MK
+- G4Scheduler: move G4IosFlagsSaver to Process()
+
 3-06-2016, MK, tag emdna-V10-02-25
 - G4DNAScreenedRutherfordElasticModel: modify handling of energy boundaries
 at init time

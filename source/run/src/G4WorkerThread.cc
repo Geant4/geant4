@@ -27,6 +27,13 @@
 #include "G4WorkerRunManager.hh"
 #include "G4MTRunManager.hh"
 
+#include "G4GeometryWorkspace.hh"
+#include "G4GeometryWorkspacePool.hh"
+#include "G4SolidsWorkspace.hh"
+#include "G4SolidsWorkspacePool.hh"
+#include "G4ParticlesWorkspace.hh"
+#include "G4PhysicsListWorkspace.hh"
+
 void G4WorkerThread::SetThreadId(G4int tid)
 {
     threadId = tid;
@@ -46,13 +53,6 @@ G4int G4WorkerThread::GetNumberThreads() const
 {
     return numThreads;
 }
-
-#include "G4GeometryWorkspace.hh"
-#include "G4GeometryWorkspacePool.hh"
-#include "G4SolidsWorkspace.hh"
-#include "G4SolidsWorkspacePool.hh"
-#include "G4ParticlesWorkspace.hh"
-#include "G4PhysicsListWorkspace.hh"
 
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
 {

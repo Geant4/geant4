@@ -98,7 +98,9 @@ private:
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
+  G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
+  G4UIcmdWithABool*          birksCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
@@ -132,12 +134,12 @@ private:
   G4UIcommand*               paiCmd;
   G4UIcmdWithAString*        meCmd;
   G4UIcommand*               dnaCmd;
+  G4UIcommand*               mscoCmd;
   G4UIcommand*               dumpCmd;
 
   G4UIcommand*               SubSecCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               StepFuncCmd1;
-  G4UIcmdWithABool*          IntegCmd;
   G4UIcommand*               deexCmd;
   G4UIcommand*               bfCmd;
   G4UIcommand*               fiCmd;

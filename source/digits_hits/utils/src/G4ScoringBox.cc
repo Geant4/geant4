@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringBox.cc 89031 2015-03-18 08:40:48Z gcosmo $
+// $Id: G4ScoringBox.cc 99154 2016-09-07 08:06:30Z gcosmo $
 //
 
 #include "G4ScoringBox.hh"
@@ -46,6 +46,7 @@
 #include "G4Polyhedron.hh"
 
 #include "G4ScoringManager.hh"
+#include "G4StatDouble.hh"
 
 #include <map>
 #include <fstream>
@@ -236,7 +237,7 @@ void G4ScoringBox::List() const {
   G4VScoringMesh::List();
 }
 
-void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
+void G4ScoringBox::Draw(RunScore * map,
                         G4VScoreColorMap* colorMap, G4int axflg) {
   
   G4VVisManager * pVisManager = G4VVisManager::GetConcreteInstance();
@@ -263,13 +264,13 @@ void G4ScoringBox::Draw(std::map<G4int, G4double*> * map,
     
     // projections
     G4int q[3];
-    std::map<G4int, G4double*>::iterator itr = map->begin();
-    for(; itr != map->end(); itr++) {
+    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    for(; itr != map->GetMap()->end(); itr++) {
       GetXYZ(itr->first, q);
       
-      xycell[q[0]][q[1]] += *(itr->second)/fDrawUnitValue;
-      yzcell[q[1]][q[2]] += *(itr->second)/fDrawUnitValue;
-      xzcell[q[0]][q[2]] += *(itr->second)/fDrawUnitValue;
+      xycell[q[0]][q[1]] += (itr->second->sum_wx())/fDrawUnitValue;
+      yzcell[q[1]][q[2]] += (itr->second->sum_wx())/fDrawUnitValue;
+      xzcell[q[0]][q[2]] += (itr->second->sum_wx())/fDrawUnitValue;
     }
     
     // search max. & min. values in each slice
@@ -518,7 +519,7 @@ G4int G4ScoringBox::GetIndex(G4int x, G4int y, G4int z) const {
   return x + y*fNSegment[0] + z*fNSegment[0]*fNSegment[1];
 }
 
-void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
+void G4ScoringBox::DrawColumn(RunScore * map,
                               G4VScoreColorMap* colorMap,
                               G4int idxProj, G4int idxColumn)
 {
@@ -555,18 +556,18 @@ void G4ScoringBox::DrawColumn(std::map<G4int, G4double*> * map,
     
     // projections
     G4int q[3];
-    std::map<G4int, G4double*>::iterator itr = map->begin();
-    for(; itr != map->end(); itr++) {
+    std::map<G4int, G4StatDouble*>::iterator itr = map->GetMap()->begin();
+    for(; itr != map->GetMap()->end(); itr++) {
       GetXYZ(itr->first, q);
       
       if(idxProj == 0 && q[2] == idxColumn) { // xy plane
-        xycell[q[0]][q[1]] += *(itr->second)/fDrawUnitValue;
+        xycell[q[0]][q[1]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
       if(idxProj == 1 && q[0] == idxColumn) { // yz plane
-        yzcell[q[1]][q[2]] += *(itr->second)/fDrawUnitValue;
+        yzcell[q[1]][q[2]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
       if(idxProj == 2 && q[1] == idxColumn) { // zx plane
-        xzcell[q[0]][q[2]] += *(itr->second)/fDrawUnitValue;
+        xzcell[q[0]][q[2]] += (itr->second->sum_wx())/fDrawUnitValue;
       }
     }
     

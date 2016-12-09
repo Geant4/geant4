@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryModelFactories.cc 95593 2016-02-16 10:48:50Z gcosmo $
+// $Id: G4TrajectoryModelFactories.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl October 2005
 
@@ -34,7 +34,7 @@
 #include "G4TrajectoryDrawByCharge.hh"
 #include "G4TrajectoryDrawByOriginVolume.hh"
 #include "G4TrajectoryDrawByParticleID.hh"
-#include "G4TrajectoryDrawByTouchedVolume.hh"
+#include "G4TrajectoryDrawByEncounteredVolume.hh"
 #include "G4TrajectoryGenericDrawer.hh"
 #include "G4TrajectoryModelFactories.hh"
 #include "G4VisTrajContext.hh"
@@ -171,29 +171,29 @@ G4TrajectoryDrawByOriginVolumeFactory::Create(const G4String& placement, const G
   return ModelAndMessengers(model, messengers);
 }
 
-//Draw by touched volume
-G4TrajectoryDrawByTouchedVolumeFactory::G4TrajectoryDrawByTouchedVolumeFactory()
-:G4VModelFactory<G4VTrajectoryModel>("drawByTouchedVolume")
+//Draw by encountered volume
+G4TrajectoryDrawByEncounteredVolumeFactory::G4TrajectoryDrawByEncounteredVolumeFactory()
+:G4VModelFactory<G4VTrajectoryModel>("drawByEncounteredVolume")
 {}
 
-G4TrajectoryDrawByTouchedVolumeFactory::~G4TrajectoryDrawByTouchedVolumeFactory() {}
+G4TrajectoryDrawByEncounteredVolumeFactory::~G4TrajectoryDrawByEncounteredVolumeFactory() {}
 
 ModelAndMessengers
-G4TrajectoryDrawByTouchedVolumeFactory::Create(const G4String& placement, const G4String& name)
+G4TrajectoryDrawByEncounteredVolumeFactory::Create(const G4String& placement, const G4String& name)
 {
   Messengers messengers;
 
   // Create default context and model
   G4VisTrajContext* context = new G4VisTrajContext("default");
-  G4TrajectoryDrawByTouchedVolume* model = new G4TrajectoryDrawByTouchedVolume(name, context);
+  G4TrajectoryDrawByEncounteredVolume* model = new G4TrajectoryDrawByEncounteredVolume(name, context);
 
   // Create messengers for default context configuration
   G4ModelCommandUtils::AddContextMsgrs(context, messengers, placement+"/"+name);
 
   // Create messengers for drawer
-  messengers.push_back(new G4ModelCmdSetStringColour<G4TrajectoryDrawByTouchedVolume>(model, placement));
-  messengers.push_back(new G4ModelCmdSetDefaultColour<G4TrajectoryDrawByTouchedVolume>(model, placement));
-  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryDrawByTouchedVolume>(model, placement));
+  messengers.push_back(new G4ModelCmdSetStringColour<G4TrajectoryDrawByEncounteredVolume>(model, placement));
+  messengers.push_back(new G4ModelCmdSetDefaultColour<G4TrajectoryDrawByEncounteredVolume>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryDrawByEncounteredVolume>(model, placement));
 
   return ModelAndMessengers(model, messengers);
 }

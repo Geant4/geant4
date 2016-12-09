@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc 95006 2016-01-15 08:26:18Z gcosmo $
+// $Id: G4VisCommandsSceneHandler.cc 99418 2016-09-21 09:18:42Z gcosmo $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
 
@@ -223,14 +223,14 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
   G4int iGS;  // Selector index.
   G4bool found = false;
   for (iGS = 0; iGS < nSystems; iGS++) {
-    auto&& gs = gsl[iGS];
+    const auto& gs = gsl[iGS];
     if (graphicsSystem.compareTo(gs->GetName(), G4String::ignoreCase) == 0) {
       found = true;
       break;  // Match found
     } else {
-      auto&& nicknames = gs->GetNicknames();
+      const auto& nicknames = gs->GetNicknames();
       for (size_t i = 0; i < nicknames.size(); ++i) {
-        auto&& nickname = nicknames[i];
+        const auto& nickname = nicknames[i];
         if (graphicsSystem.compareTo (nickname, G4String::ignoreCase) == 0) {
           found = true;
           break;  // Match found
@@ -262,9 +262,9 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand*,
     fallback = false;
     G4String fallbackNickname = gsl[iGS]->GetNickname() + "_FALLBACK";
     for (iGS = 0; iGS < nSystems; iGS++) {
-      auto&& nicknames = gsl[iGS]->GetNicknames();
+      const auto& nicknames = gsl[iGS]->GetNicknames();
       for (size_t i = 0; i < nicknames.size(); ++i) {
-        auto&& nickname = nicknames[i];
+        const auto& nickname = nicknames[i];
         if (fallbackNickname.compareTo (nickname, G4String::ignoreCase) == 0) {
           fallback = true;
           break;  // Match found

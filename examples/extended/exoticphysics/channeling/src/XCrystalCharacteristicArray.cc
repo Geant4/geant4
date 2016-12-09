@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalCharacteristicArray.cc
+/// \brief Implementation of the XCrystalCharacteristicArray class
+//
 
 #include "XCrystalCharacteristicArray.hh"
 

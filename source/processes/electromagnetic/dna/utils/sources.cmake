@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94010 2015-11-05 10:08:33Z gcosmo $
+# $Id: sources.cmake 101790 2016-11-28 15:33:44Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
     HEADERS
         G4DNAChemistryManager.hh
         G4DNACrossSectionDataSet.hh
-        G4DNADamages.hh
+        G4DNADamage.hh
         G4DNAGenericIonsManager.hh
         G4DNAIons.hh
         G4DNAMolecularMaterial.hh
@@ -68,7 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-utils
     SOURCES
         G4DNAChemistryManager.cc
         G4DNACrossSectionDataSet.cc
-        G4DNADamages.cc
+        G4DNADamage.cc
         G4DNAGenericIonsManager.cc
         G4DNAIons.cc
         G4DNAMolecularMaterial.cc

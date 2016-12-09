@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm17 example
 //
 //
-// $Id: TestEm17.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TestEm17.cc 99017 2016-08-31 08:24:29Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -41,7 +41,6 @@
 #include "PrimaryGeneratorAction.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
@@ -80,7 +79,6 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(run,histo));
   runManager->SetUserAction(new StackingAction);
   

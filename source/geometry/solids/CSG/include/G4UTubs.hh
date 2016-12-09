@@ -79,6 +79,10 @@ class G4UTubs : public G4USolid
     G4double GetZHalfLength   () const;
     G4double GetStartPhiAngle () const;
     G4double GetDeltaPhiAngle () const;
+    G4double GetSinStartPhi   () const;
+    G4double GetCosStartPhi   () const;
+    G4double GetSinEndPhi     () const;
+    G4double GetCosEndPhi     () const;
 
     void SetInnerRadius   (G4double newRMin);
     void SetOuterRadius   (G4double newRMax);
@@ -87,6 +91,13 @@ class G4UTubs : public G4USolid
     void SetDeltaPhiAngle (G4double newDPhi);
     
     inline G4GeometryType GetEntityType() const;
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                           G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 

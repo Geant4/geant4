@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.cc 81373 2014-05-27 13:06:32Z gcosmo $
+// $Id: G4DynamicParticle.cc 98352 2016-07-08 08:21:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -73,7 +73,7 @@
 
 G4ThreadLocal G4Allocator<G4DynamicParticle> *pDynamicParticleAllocator = 0;
 
-static const G4double EnergyMomentumRelationAllowance = keV;
+static const G4double EnergyMomentumRelationAllowance = 1.0e-2*keV;
 
 ////////////////////
 G4DynamicParticle::G4DynamicParticle():
@@ -126,7 +126,7 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   theParticleDefinition(aParticleDefinition),
 		   theKineticEnergy(aKineticEnergy),
  		   theProperTime(0.0),
-		   theDynamicalMass(dynamicalMass),
+		   theDynamicalMass(aParticleDefinition->GetPDGMass()),
 		   theDynamicalCharge(aParticleDefinition->GetPDGCharge()),
 		   theDynamicalSpin(aParticleDefinition->GetPDGSpin()),
 		   theDynamicalMagneticMoment(aParticleDefinition->GetPDGMagneticMoment()),
@@ -137,6 +137,10 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
 		   primaryParticle(0),
                    thePDGcode(0)
 {
+  if (std::abs(theDynamicalMass-dynamicalMass)> EnergyMomentumRelationAllowance) {
+    if (dynamicalMass>EnergyMomentumRelationAllowance) theDynamicalMass= dynamicalMass;
+    else  theDynamicalMass= 0.0;
+  } 
 }
 
 ////////////////////
@@ -201,13 +205,18 @@ G4DynamicParticle::G4DynamicParticle(const G4ParticleDefinition * aParticleDefin
   G4double pModule2 = aParticleMomentum.mag2();
   if (pModule2>0.0) {
     G4double mass2 = totalEnergy*totalEnergy - pModule2;
-    if(mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
+    G4double PDGmass2 = (aParticleDefinition->GetPDGMass())*(aParticleDefinition->GetPDGMass());
+    SetMomentumDirection(aParticleMomentum.unit());
+    if (mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
       theDynamicalMass = 0.;
-      SetMomentumDirection(aParticleMomentum.unit());
       SetKineticEnergy(totalEnergy);
     } else {
+      if (std::abs(PDGmass2-mass2)>EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance){
       theDynamicalMass = std::sqrt(mass2);
-      SetMomentum(aParticleMomentum);
+      SetKineticEnergy(totalEnergy-theDynamicalMass);
+      } else {
+	SetKineticEnergy(totalEnergy-theDynamicalMass);
+      }
     }
   } else {
     SetMomentumDirection(1.0,0.0,0.0);
@@ -380,13 +389,13 @@ void G4DynamicParticle::Set4Momentum(const G4LorentzVector &momentum )
     SetMomentumDirection(momentum.vect().unit());
     G4double totalenergy = momentum.t();
     G4double mass2 = totalenergy*totalenergy - pModule2;
-    if(mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
+    G4double PDGmass2 = (theParticleDefinition->GetPDGMass())*(theParticleDefinition->GetPDGMass());
+    if (mass2 < EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance) {
       theDynamicalMass = 0.;
-      SetKineticEnergy(totalenergy);
-    } else {
+    } else if (std::abs(PDGmass2-mass2)>EnergyMomentumRelationAllowance*EnergyMomentumRelationAllowance){
       theDynamicalMass = std::sqrt(mass2);
-      SetKineticEnergy(totalenergy-theDynamicalMass);
     }
+    SetKineticEnergy(totalenergy-theDynamicalMass);
   } else {
     SetMomentumDirection(1.0,0.0,0.0);
     SetKineticEnergy(0.0);
@@ -431,7 +440,14 @@ void G4DynamicParticle::DumpInfo(G4int) const
   return;
 }
 #endif
-
+///////////////////////
+//
+void G4DynamicParticle::SetMass(G4double newMass)
+{
+  if(std::abs(newMass-theParticleDefinition->GetPDGMass())>EnergyMomentumRelationAllowance*0.1) {
+    theDynamicalMass = newMass;
+  }
+}
 ////////////////////////
 G4double  G4DynamicParticle::GetElectronMass() const
 {

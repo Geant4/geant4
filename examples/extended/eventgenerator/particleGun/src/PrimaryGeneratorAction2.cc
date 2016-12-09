@@ -27,10 +27,10 @@
 /// \brief Implementation of the PrimaryGeneratorAction2 class
 //
 //
-// $Id: PrimaryGeneratorAction2.cc 68024 2013-03-13 13:42:01Z gcosmo $
+// $Id: PrimaryGeneratorAction2.cc 99721 2016-10-03 08:11:44Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PrimaryGeneratorAction2.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -46,7 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction2::PrimaryGeneratorAction2(G4ParticleGun* gun)
-: particleGun(gun)
+: fParticleGun(gun)
 {    
   // energy distribution
   //
@@ -68,56 +68,56 @@ void PrimaryGeneratorAction2::GeneratePrimaries(G4Event* anEvent)
   G4double psi      = twopi*G4UniformRand();  //psi uniform in [0, 2*pi]  
   G4ThreeVector dir(sinAlpha*std::cos(psi),sinAlpha*std::sin(psi),cosAlpha);
 
-  particleGun->SetParticleMomentumDirection(dir);
+  fParticleGun->SetParticleMomentumDirection(dir);
   
   //set energy from a tabulated distribution
   //
   //G4double energy = RejectAccept();
   G4double energy = InverseCumul();  
-  particleGun->SetParticleEnergy(energy);    
+  fParticleGun->SetParticleEnergy(energy);    
 
   //create vertex
   //   
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PrimaryGeneratorAction2::InitFunction()
 {
   // tabulated function 
-  // f is assumed positive, linear per segment, continuous
+  // Y is assumed positive, linear per segment, continuous
   //
-  nPoints = 16;
+  fNPoints = 16;
   const G4double xx[] = 
     { 37*keV, 39*keV, 45*keV,  51*keV,  57*keV,  69*keV,  71*keV,  75*keV, 
       83*keV, 91*keV, 97*keV, 107*keV, 125*keV, 145*keV, 159*keV, 160*keV }; 
       
-  const G4double ff[] =
+  const G4double yy[] =
     { 0.000,  0.077,  0.380,  2.044, 5.535, 15.077, 12.443, 14.766,
      17.644, 18.518, 17.772, 14.776, 8.372,  3.217,  0.194,  0.000 };
   
   //copy arrays in std::vector and compute fMax
   //
-  x.resize(nPoints); f.resize(nPoints);
-  fMax = 0.;
-  for (G4int j=0; j<nPoints; j++) {
-    x[j] = xx[j]; f[j] = ff[j];
-    if (fMax < f[j]) fMax = f[j];
+  fX.resize(fNPoints); fY.resize(fNPoints);
+  fYmax = 0.;
+  for (G4int j=0; j<fNPoints; j++) {
+    fX[j] = xx[j]; fY[j] = yy[j];
+    if (fYmax < fY[j]) fYmax = fY[j];
   };
      
   //compute slopes
   //
-  a.resize(nPoints);
-  for (G4int j=0; j<nPoints-1; j++) { 
-    a[j] = (f[j+1] - f[j])/(x[j+1] - x[j]);
+  fSlp.resize(fNPoints);
+  for (G4int j=0; j<fNPoints-1; j++) { 
+    fSlp[j] = (fY[j+1] - fY[j])/(fX[j+1] - fX[j]);
   };
   
   //compute cumulative function
   //
-  Fc.resize(nPoints);  
-  Fc[0] = 0.;
-  for (G4int j=1; j<nPoints; j++) {
-    Fc[j] = Fc[j-1] + 0.5*(f[j] + f[j-1])*(x[j] - x[j-1]);
+  fYC.resize(fNPoints);  
+  fYC[0] = 0.;
+  for (G4int j=1; j<fNPoints; j++) {
+    fYC[j] = fYC[j-1] + 0.5*(fY[j] + fY[j-1])*(fX[j] - fX[j-1]);
   };     
 }
 
@@ -126,21 +126,21 @@ void PrimaryGeneratorAction2::InitFunction()
 G4double PrimaryGeneratorAction2::RejectAccept()
 {
   // tabulated function 
-  // f is assumed positive, linear per segment, continuous
+  // Y is assumed positive, linear per segment, continuous
   //  
-  G4double x_rndm = 0., y_rndm = 0., f_inter = -1.;
+  G4double Xrndm = 0., Yrndm = 0., Yinter = -1.;
   
-  while (y_rndm > f_inter) {
+  while (Yrndm > Yinter) {
     //choose a point randomly
-    x_rndm = x[0] + G4UniformRand()*(x[nPoints-1] - x[0]);
-    y_rndm = G4UniformRand()*fMax;
+    Xrndm = fX[0] + G4UniformRand()*(fX[fNPoints-1] - fX[0]);
+    Yrndm = G4UniformRand()*fYmax;
     //find bin
-    G4int j = nPoints-2;
-    while ((x[j] > x_rndm) && (j > 0)) j--;
-    //compute f(x_rndm) by linear interpolation
-    f_inter = f[j] + a[j]*(x_rndm - x[j]);
+    G4int j = fNPoints-2;
+    while ((fX[j] > Xrndm) && (j > 0)) j--;
+    //compute Y(x_rndm) by linear interpolation
+    Yinter = fY[j] + fSlp[j]*(Xrndm - fX[j]);
   };
-  return x_rndm;
+  return Xrndm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,26 +148,26 @@ G4double PrimaryGeneratorAction2::RejectAccept()
 G4double PrimaryGeneratorAction2::InverseCumul()
 {
   // tabulated function
-  // f is assumed positive, linear per segment, continuous 
+  // Y is assumed positive, linear per segment, continuous 
   // --> cumulative function is second order polynomial
   
   //choose y randomly
-  G4double y_rndm = G4UniformRand()*Fc[nPoints-1];
+  G4double Yrndm = G4UniformRand()*fYC[fNPoints-1];
   //find bin
-  G4int j = nPoints-2;
-  while ((Fc[j] > y_rndm) && (j > 0)) j--;
-  //y_rndm --> x_rndm :  Fc(x) is second order polynomial
-  G4double x_rndm = x[j];
-  G4double aa = a[j];
-  if (aa != 0.) {
-    G4double b = f[j]/aa, c = 2*(y_rndm - Fc[j])/aa;
+  G4int j = fNPoints-2;
+  while ((fYC[j] > Yrndm) && (j > 0)) j--;
+  //y_rndm --> x_rndm :  fYC(x) is second order polynomial
+  G4double Xrndm = fX[j];
+  G4double a = fSlp[j];
+  if (a != 0.) {
+    G4double b = fY[j]/a, c = 2*(Yrndm - fYC[j])/a;
     G4double delta = b*b + c;
-    G4int sign = 1; if (aa < 0.) sign = -1;
-    x_rndm += sign*std::sqrt(delta) - b;    
-  } else if (f[j] > 0.) {
-    x_rndm += (y_rndm - Fc[j])/f[j];
+    G4int sign = 1; if (a < 0.) sign = -1;
+    Xrndm += sign*std::sqrt(delta) - b;    
+  } else if (fY[j] > 0.) {
+    Xrndm += (Yrndm - fYC[j])/fY[j];
   };
-  return x_rndm;
+  return Xrndm;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

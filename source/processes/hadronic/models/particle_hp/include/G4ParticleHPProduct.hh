@@ -78,6 +78,12 @@ class G4ParticleHPProduct
     } else {
       theMultiplicityMethod = G4HPMultiPoisson;
     }
+    theMassCode = 0.0;
+    theMass = 0.0;
+    theIsomerFlag = 0;
+    theGroundStateQValue = 0.0;
+    theActualStateQValue = 0.0;
+    theDistLaw = -1;
   }
   ~G4ParticleHPProduct()
   { 

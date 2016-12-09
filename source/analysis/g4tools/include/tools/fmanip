@@ -61,11 +61,11 @@ inline bool find_with_dirs(std::ostream& a_out,
 
 namespace tools {
 
-inline bool find_with_path(std::ostream& a_out,
-                           const std::string& a_env,
-                           const std::string& a_file,
-                           std::string& a_path,
-                           bool a_verbose = false ) {
+inline bool find_with_env(std::ostream& a_out,
+                          const std::string& a_env,
+                          const std::string& a_file,
+                          std::string& a_path,
+                          bool a_verbose = false ) {
   std::string PATH;
   if(!tools::getenv(a_env,PATH)) {
     //look for a a_file in current directory.

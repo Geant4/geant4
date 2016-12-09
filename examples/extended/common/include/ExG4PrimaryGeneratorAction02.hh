@@ -66,4 +66,3 @@ class ExG4PrimaryGeneratorAction02 : public G4VUserPrimaryGeneratorAction
 
 #endif
 
-

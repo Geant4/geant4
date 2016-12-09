@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveExcitation.hh 86646 2014-11-14 13:29:39Z gcosmo $
+// $Id: G4DiffractiveExcitation.hh 100828 2016-11-02 15:25:59Z gcosmo $
 
 #ifndef G4DiffractiveExcitation_h
 #define G4DiffractiveExcitation_h 1
@@ -49,7 +49,6 @@ class G4ExcitedString;
 
 
 class G4DiffractiveExcitation {
-
   public:
     G4DiffractiveExcitation();
     virtual ~G4DiffractiveExcitation();
@@ -64,6 +63,7 @@ class G4DiffractiveExcitation {
                                 G4ExcitedString*& FirstString, 
                                 G4ExcitedString*& SecondString,
                                 G4FTFParameters* theParameters ) const;
+
   private:
     G4DiffractiveExcitation( const G4DiffractiveExcitation& right );
     const G4DiffractiveExcitation& operator=( const G4DiffractiveExcitation& right );
@@ -78,7 +78,7 @@ class G4DiffractiveExcitation {
     void UnpackMeson( G4int IdPDG, G4int& Q1, G4int& Q2 ) const;
     void UnpackBaryon( G4int IdPDG, G4int& Q1, G4int& Q2, G4int& Q3 ) const;
     G4int NewNucleonId( G4int Q1, G4int Q2, G4int Q3 ) const;
-
 };
 
 #endif
+

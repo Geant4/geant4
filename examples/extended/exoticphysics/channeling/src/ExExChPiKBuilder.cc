@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChPiKBuilder.cc
+/// \brief Implementation of the ExExChPiKBuilder class
+//
 
 #include "ExExChPiKBuilder.hh"
 #include "G4ParticleDefinition.hh"
@@ -43,6 +46,8 @@ ExExChPiKBuilder(): wasActivated(false)
     theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChPiKBuilder::
 ~ExExChPiKBuilder(){
     delete thePionPlusInelastic;
@@ -52,6 +57,8 @@ ExExChPiKBuilder::
     delete theKaonZeroLInelastic;
     delete theKaonZeroSInelastic;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChPiKBuilder::
 Build()

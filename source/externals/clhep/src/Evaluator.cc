@@ -129,7 +129,7 @@ static int function(const string & name, stack<double> & par,
   if (iter == dictionary.end()) return EVAL::ERROR_UNKNOWN_FUNCTION;
   Item item = iter->second;
 
-  double pp[MAX_N_PAR];
+  double pp[MAX_N_PAR] = {0.0};
   for(int i=0; i<npar; i++) { pp[i] = par.top(); par.pop(); }
   errno = 0;
   if (item.function == 0)       return EVAL::ERROR_CALCULATION_ERROR;

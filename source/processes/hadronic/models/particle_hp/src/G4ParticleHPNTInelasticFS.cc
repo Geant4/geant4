@@ -67,8 +67,8 @@ Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType, G
      ResidualA = A-1;
      ResidualZ = Z;
    } else if( projectile == G4He3::He3() ) {
-     ResidualA = A+1;
-     ResidualZ = Z;
+     ResidualA = A-1;
+     ResidualZ = Z+1;
    } else if( projectile == G4Alpha::Alpha() ) {
      ResidualA = A;
      ResidualZ = Z+1;

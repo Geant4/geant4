@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalIntegratedDensityHub.cc
+/// \brief Implementation of the XCrystalIntegratedDensityHub class
+//
 
 #include "XCrystalIntegratedDensityHub.hh"
 

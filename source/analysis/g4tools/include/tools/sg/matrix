@@ -54,27 +54,29 @@ public:
   }
   virtual void get_matrix(get_matrix_action& a_action) {
     a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
   }
   virtual void is_visible(visible_action& a_action) {
     a_action.model_matrix().mul_mtx(mtx.value(),m_tmp);
+    a_action.state().m_model = a_action.model_matrix();
   }
 public:
   matrix():parent(),mtx(tools::mat4f()) {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
     mtx.set_identity();
   }
   virtual ~matrix(){
 #ifdef TOOLS_MEM
-    tools::mem::decrement(s_class().c_str());
+    mem::decrement(s_class().c_str());
 #endif
   }
 public:
   matrix(const matrix& a_from):parent(a_from),mtx(a_from.mtx) {
 #ifdef TOOLS_MEM
-    tools::mem::increment(s_class().c_str());
+    mem::increment(s_class().c_str());
 #endif
     add_fields();
   }

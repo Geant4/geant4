@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/TestEm16.cc
 /// \brief Main program of the electromagnetic/TestEm16 example
 //
-// $Id: TestEm16.cc 85257 2014-10-27 08:50:30Z gcosmo $
+// $Id: TestEm16.cc 98758 2016-08-09 13:59:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -98,6 +98,7 @@ int main(int argc,char** argv) {
 
 #ifdef G4UI_USE
   G4UIExecutive * ui = new G4UIExecutive(argc,argv);      
+  if (ui->IsGUI()) UI->ApplyCommand("/control/execute gui.mac"); // define icons before SessionStart
   ui->SessionStart();
   delete ui;
 #endif

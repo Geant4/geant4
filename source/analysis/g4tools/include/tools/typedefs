@@ -105,7 +105,7 @@ typedef char* cstr_t;
 typedef const char* const_cstr_t;
 
 class fits_bit {public:char m_c;}; //for exlib/cfitsio
-class csv_time {public:long m_l;}; //for tools/rcsv_ntuple
+class csv_time {public:long m_l;}; //for rcsv_ntuple
 
 inline unsigned int size_char()   {return 1;}
 inline unsigned int size_short()  {return 2;}

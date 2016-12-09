@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/PrimaryGeneratorMessenger.hh
+/// \file PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
 // $Id: PrimaryGeneratorMessenger.hh 96158 2016-03-21 11:08:26Z maire $

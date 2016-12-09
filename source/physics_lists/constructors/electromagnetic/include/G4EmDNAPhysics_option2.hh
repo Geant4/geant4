@@ -38,10 +38,7 @@ class G4EmDNAPhysics_option2 : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmDNAPhysics_option2(G4int ver = 1);
-
-  // obsolete
-  G4EmDNAPhysics_option2(G4int ver, const G4String& name);
+  explicit G4EmDNAPhysics_option2(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmDNAPhysics_option2();
 

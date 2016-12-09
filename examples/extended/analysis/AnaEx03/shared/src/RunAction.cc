@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/src/RunAction.cc
+/// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
 //
-// $Id: RunAction.cc 92321 2015-08-27 14:53:09Z gcosmo $
+// $Id: RunAction.cc 98243 2016-07-04 16:58:38Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4double EAbs, G4double EGap,
+void RunAction::FillPerEvent(G4double EAbs, G4double EGap,
                                   G4double LAbs, G4double LGap)
 {
   //accumulate statistic

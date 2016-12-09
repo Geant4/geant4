@@ -63,7 +63,7 @@ struct lend_target
 class G4LENDManager 
 {
 
-      static G4ThreadLocal G4LENDManager* lend_manager;
+      static G4LENDManager* lend_manager;
    
    //protected: 
    private: 

@@ -37,6 +37,8 @@
 //      Creation date: 27 February 2015
 //
 //      Modifications: 
+// 05.11.2016 J. Detviller added sampling of corelation between
+//            spin of a nucleus and gamma direction
 //
 //      
 // -------------------------------------------------------------------
@@ -46,6 +48,7 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+#include "G4PolarizationTransition.hh"
 
 class G4GammaTransition 
 {
@@ -57,10 +60,19 @@ public:
   
   virtual G4Fragment* SampleTransition(G4Fragment* nucleus,
 				       G4double newExcEnergy,
-                                       G4int  deltaS,
+                                       G4double mpRatio,
+                                       G4int  JP1,
+                                       G4int  JP2,
+                                       G4int  MP,
                                        size_t shell,
+                                       G4bool isDiscrete,
                                        G4bool isGamma,
 				       G4bool isLongLived);
+
+  virtual void SampleDirection(G4Fragment* nuc, G4double ratio, 
+			       G4int twoJ1, G4int twoJ2, G4int mp);
+
+  inline void SetPolarizationFlag(G4bool val) { polarFlag = val; };
 
 private:  
 
@@ -69,6 +81,12 @@ private:
   G4bool operator==(const G4GammaTransition &right) const = delete;
   G4bool operator!=(const G4GammaTransition &right) const = delete;
  
+  G4bool polarFlag;
+
+protected:
+
+  G4ThreeVector fDirection;
+  G4PolarizationTransition fPolTrans;
 };
 
 

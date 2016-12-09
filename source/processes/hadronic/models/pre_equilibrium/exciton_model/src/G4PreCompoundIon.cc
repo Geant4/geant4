@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundIon.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4PreCompoundIon.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -91,8 +91,8 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double pA = fact*eKin*xs*rj 
     * CoalescenceFactor(theFragA) * FactorialFactor(N,P)
     * std::sqrt(2.0/(theReducedMass*efinal)) 
-    * g4pow->powN(g1*E1/(g0*E0), N-A-1)
-    * g4pow->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
+    * g4calc->powN(g1*E1/(g0*E0), N-A-1)
+    * g4calc->powN(gj*Ej/(g0*E0), A-1)*gj*g1/(g0*g0*E0*theResA); 
    
   return pA;
 }

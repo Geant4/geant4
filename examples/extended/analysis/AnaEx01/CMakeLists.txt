@@ -32,30 +32,6 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
                   ${PROJECT_SOURCE_DIR}/shared/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Find HBOOK (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/hbook/cmake ${CMAKE_MODULE_PATH})
-find_package(HBOOK QUIET)
-if(NOT HBOOK_FOUND)
-  message(STATUS "G4 Examples: HBOOK package not found. --> g4tools/hbook analysis disabled")  
-else()
-  message(STATUS "G4 Examples: HBOOK package found. --> g4tools/hbook analysis enabled")  
-  add_definitions(-DG4_USE_HBOOK)  
-endif()
-
-#----------------------------------------------------------------------------
-# Add g4tools/hbook sources
-#
-
-if (HBOOK_FOUND)
-  enable_language(Fortran)
-  include_directories(${PROJECT_SOURCE_DIR}/hbook/include)
-  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/hbook/src/*.cc)
-  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/hbook/src/*.f)
-  file(GLOB add_headers ${PROJECT_SOURCE_DIR}/hbook/include/*.hh)
-endif()       
-
-#----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(AnaEx01 AnaEx01.cc 
@@ -69,7 +45,7 @@ target_link_libraries(AnaEx01 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(AnaEx01_SCRIPTS
-    AnaEx01.in run.mac vis.mac
+    AnaEx01.in run.mac init_vis.mac vis.mac
   )
 
 foreach(_script ${AnaEx01_SCRIPTS})

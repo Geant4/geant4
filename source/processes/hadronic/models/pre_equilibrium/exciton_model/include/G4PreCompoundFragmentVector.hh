@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragmentVector.hh 90337 2015-05-26 08:34:27Z gcosmo $
+// $Id: G4PreCompoundFragmentVector.hh 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // Hadronic Process: Nuclear Preequilibrium
 // by V. Lara
@@ -53,7 +53,7 @@ class G4PreCompoundFragmentVector
 {
 public:
 
-  G4PreCompoundFragmentVector(pcfvector * avector);
+  explicit G4PreCompoundFragmentVector(pcfvector * avector);
 
   ~G4PreCompoundFragmentVector();
 
@@ -69,17 +69,16 @@ public:
 		  
 private:
 
-  G4PreCompoundFragmentVector(const G4PreCompoundFragmentVector &right);
+  G4PreCompoundFragmentVector(const G4PreCompoundFragmentVector &right) = delete;
   const G4PreCompoundFragmentVector& 
-  operator=(const G4PreCompoundFragmentVector &right);
-  G4bool operator==(const G4PreCompoundFragmentVector &right) const;
-  G4bool operator!=(const G4PreCompoundFragmentVector &right) const;	
+  operator=(const G4PreCompoundFragmentVector &right) = delete;
+  G4bool operator==(const G4PreCompoundFragmentVector &right) const = delete;
+  G4bool operator!=(const G4PreCompoundFragmentVector &right) const = delete;
   
   pcfvector * theChannels;
   G4DataVector probabilities;
 
   G4int nChannels;
-
 };
 
 inline G4double 

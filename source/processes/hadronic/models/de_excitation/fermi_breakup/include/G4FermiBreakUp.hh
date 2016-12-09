@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FermiBreakUp.hh 96744 2016-05-03 08:04:28Z gcosmo $
+// $Id: G4FermiBreakUp.hh 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -52,10 +52,6 @@ public:
 
   virtual G4bool IsApplicable(G4int Z, G4int A, G4double mass) const final;
 
-  // primary fragment is copied to the new instance, the copy is deleted 
-  // or is added to the list of products 
-  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) final;
-
   // new interface - vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
@@ -83,7 +79,7 @@ private:
   G4double ConstCoeff;
   size_t   nmax;
   
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 
   const G4FermiPhaseSpaceDecay*        thePhaseSpace;
   std::vector<G4double>                massRes;

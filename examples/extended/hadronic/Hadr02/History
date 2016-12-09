@@ -1,4 +1,4 @@
-$Id: History 88154 2015-02-02 12:25:20Z gcosmo $
+$Id: History 100812 2016-11-02 15:06:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-11-16  I. Hrivnacova (exhadr02-V10-02-00)
+- Coding guidelines (class data member names)
 
 30-01-15  V.Ivanchenko (exhadr02-V10-01-00)
 - DPMJET interface is dropped according to decision of the

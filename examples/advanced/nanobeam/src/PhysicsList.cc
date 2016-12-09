@@ -138,11 +138,12 @@ void PhysicsList::ConstructEM()
 // Identical to G4EmStandardPhysics but added G4StepLimiter process
 // ****************************************************************
 
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() ){
+  while( (*particleIterator)() ){
 
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {

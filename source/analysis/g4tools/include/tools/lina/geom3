@@ -6,6 +6,7 @@
 
 #include "line"
 #include "plane"
+#include "vec3"
 
 namespace tools {
 

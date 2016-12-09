@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 91266 2015-06-29 06:48:42Z gcosmo $
+// $Id: PhysListEmStandard.cc 101250 2016-11-10 08:54:02Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -61,19 +61,34 @@
 #include "G4IonParametrisedLossModel.hh"
 #include "G4NuclearStopping.hh"
 
-#include "G4EmProcessOptions.hh"
+#include "G4EmParameters.hh"
 #include "G4MscStepLimitType.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4BuilderType.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListEmStandard::PhysListEmStandard(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{}
+PhysListEmStandard::PhysListEmStandard(const G4String&)
+   :  G4VPhysicsConstructor("local")
+{
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetVerbose(1);
+  param->SetMinEnergy(100*eV);
+  param->SetMaxEnergy(10*TeV);
+  param->SetLowestElectronEnergy(100*eV);
+  param->SetNumberOfBinsPerDecade(20);
+  param->ActivateAngularGeneratorForIonisation(true);
+  param->SetMscRangeFactor(0.04);
+  param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetMuHadLateralDisplacement(true);
+  param->SetFluo(true);
+  SetPhysicsType(bElectromagnetic);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -88,19 +103,20 @@ void PhysListEmStandard::ConstructProcess()
   
   // Add standard EM Processes
   //
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
 
-      ////ph->RegisterProcess(new G4RayleighScattering, particle);      
       ph->RegisterProcess(new G4PhotoElectricEffect, particle);      
       G4ComptonScattering* cs   = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel());
       ph->RegisterProcess(cs, particle);
       ph->RegisterProcess(new G4GammaConversion, particle);
+      ph->RegisterProcess(new G4RayleighScattering, particle);      
      
     } else if (particleName == "e-") {
     
@@ -172,31 +188,10 @@ void PhysListEmStandard::ConstructProcess()
       ph->RegisterProcess(new G4hIonisation(), particle);
     }
   }
-
-  // Em options
-  //
-  // Main options and setting parameters are shown here.
-  // Several of them have default values.
-  //
-  G4EmProcessOptions emOptions;
-  
-  //physics tables
-  //
-  emOptions.SetMinEnergy(10*eV);        //default 100 eV   
-  emOptions.SetMaxEnergy(10*TeV);        //default 100 TeV 
-  emOptions.SetDEDXBinning(12*10);        //default=12*7
-  emOptions.SetLambdaBinning(12*10);        //default=12*7
-  
-  //multiple coulomb scattering
-  //
-  emOptions.SetMscStepLimitation(fUseDistanceToBoundary);  //default=fUseSafety
     
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(false);   
-  de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 

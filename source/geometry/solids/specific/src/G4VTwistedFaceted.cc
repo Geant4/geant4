@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4VTwistedFaceted.cc 99781 2016-10-05 10:18:54Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4SolidExtentList.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VPVParameterisation.hh"
@@ -210,6 +211,7 @@ G4VTwistedFaceted::G4VTwistedFaceted( __void__& a )
 {
 }
 
+
 //=====================================================================
 //* destructor --------------------------------------------------------
 
@@ -224,6 +226,7 @@ G4VTwistedFaceted::~G4VTwistedFaceted()
   if (fSide270)     { delete fSide270 ; }
   if (fpPolyhedron) { delete fpPolyhedron; fpPolyhedron = 0; }
 }
+
 
 //=====================================================================
 //* Copy constructor --------------------------------------------------
@@ -282,6 +285,7 @@ G4VTwistedFaceted& G4VTwistedFaceted::operator = (const G4VTwistedFaceted& rhs)
    return *this;
 }
 
+
 //=====================================================================
 //* ComputeDimensions -------------------------------------------------
 
@@ -294,6 +298,19 @@ void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
               "G4VTwistedFaceted does not support Parameterisation.");
 }
 
+
+//=====================================================================
+//* Extent ------------------------------------------------------------
+
+void G4VTwistedFaceted::Extent(G4ThreeVector &pMin,
+                               G4ThreeVector &pMax) const
+{
+  G4double maxRad = std::sqrt(fDx*fDx + fDy*fDy);
+  pMin.set(-maxRad,-maxRad,-fDz);
+  pMax.set( maxRad, maxRad, fDz);
+}
+
+
 //=====================================================================
 //* CalculateExtent ---------------------------------------------------
 
@@ -304,223 +321,16 @@ G4VTwistedFaceted::CalculateExtent( const EAxis              pAxis,
                                           G4double          &pMin,
                                           G4double          &pMax ) const
 {
-  G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
+  G4ThreeVector bmin, bmax;
 
-  if (!pTransform.IsRotated())
-    {
-      // Special case handling for unrotated boxes
-      // Compute x/y/z mins and maxs respecting limits, with early returns
-      // if outside limits. Then switch() on pAxis
-      
-      G4double xoffset,xMin,xMax;
-      G4double yoffset,yMin,yMax;
-      G4double zoffset,zMin,zMax;
+  // Get bounding box
+  Extent(bmin,bmax);
 
-      xoffset = pTransform.NetTranslation().x() ;
-      xMin    = xoffset - maxRad ;
-      xMax    = xoffset + maxRad ;
-
-      if (pVoxelLimit.IsXLimited())
-        {
-          if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
-               xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance  ) return false;
-          else
-            {
-              if (xMin < pVoxelLimit.GetMinXExtent())
-                {
-                  xMin = pVoxelLimit.GetMinXExtent() ;
-                }
-              if (xMax > pVoxelLimit.GetMaxXExtent())
-                {
-                  xMax = pVoxelLimit.GetMaxXExtent() ;
-                }
-            }
-        }
-      yoffset = pTransform.NetTranslation().y() ;
-      yMin    = yoffset - maxRad ;
-      yMax    = yoffset + maxRad ;
-      
-      if (pVoxelLimit.IsYLimited())
-        {
-          if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-               yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance  ) return false;
-          else
-            {
-              if (yMin < pVoxelLimit.GetMinYExtent())
-                {
-                  yMin = pVoxelLimit.GetMinYExtent() ;
-                }
-              if (yMax > pVoxelLimit.GetMaxYExtent())
-                {
-                  yMax = pVoxelLimit.GetMaxYExtent() ;
-                }
-            }
-        }
-      zoffset = pTransform.NetTranslation().z() ;
-      zMin    = zoffset - fDz ;
-      zMax    = zoffset + fDz ;
-      
-      if (pVoxelLimit.IsZLimited())
-        {
-          if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-               zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance  ) return false;
-          else
-            {
-              if (zMin < pVoxelLimit.GetMinZExtent())
-                {
-                  zMin = pVoxelLimit.GetMinZExtent() ;
-                }
-              if (zMax > pVoxelLimit.GetMaxZExtent())
-                {
-                  zMax = pVoxelLimit.GetMaxZExtent() ;
-                }
-            }
-        }
-      switch (pAxis)
-        {
-        case kXAxis:
-          pMin = xMin ;
-          pMax = xMax ;
-          break ;
-        case kYAxis:
-          pMin=yMin;
-          pMax=yMax;
-          break;
-        case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-        default:
-          break;
-        }
-      pMin -= kCarTolerance ;
-      pMax += kCarTolerance ;
-      
-      return true;
-  }
-  else  // General rotated case - create and clip mesh to boundaries
-    {
-      G4bool existsAfterClip = false ;
-      G4ThreeVectorList* vertices ;
-
-      pMin = +kInfinity ;
-      pMax = -kInfinity ;
-    
-    // Calculate rotated vertex coordinates
-      
-      vertices = CreateRotatedVertices(pTransform) ;
-      ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
-      ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
-      ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
-      
-      if (pVoxelLimit.IsLimited(pAxis) == false) 
-        {  
-          if ( pMin != kInfinity || pMax != -kInfinity ) 
-            {
-              existsAfterClip = true ;
-
-              // Add 2*tolerance to avoid precision troubles
-
-              pMin           -= kCarTolerance;
-              pMax           += kCarTolerance;
-            }
-        }      
-      else
-        {
-          G4ThreeVector clipCentre(
-            ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-            ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-            ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 );
-          
-      if ( pMin != kInfinity || pMax != -kInfinity )
-        {
-          existsAfterClip = true ;
-          
-          // Check to see if endpoints are in the solid
-          
-          clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
-          
-          if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-              != kOutside)
-            {
-              pMin = pVoxelLimit.GetMinExtent(pAxis);
-            }
-          else
-            {
-              pMin -= kCarTolerance;
-            }
-          clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
-          
-          if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-              != kOutside)
-            {
-              pMax = pVoxelLimit.GetMaxExtent(pAxis);
-            }
-          else
-            {
-              pMax += kCarTolerance;
-            }
-        }
-      
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-      
-      else if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-               != kOutside)
-        {
-          existsAfterClip = true ;
-          pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-          pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
-        }
-        } 
-      delete vertices;
-      return existsAfterClip;
-    } 
-  
-  
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
-G4ThreeVectorList* G4VTwistedFaceted::
-CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-
-  G4ThreeVectorList* vertices = new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    vertices->reserve(8);
-
-    G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
-
-    G4ThreeVector vertex0(-maxRad,-maxRad,-fDz) ;
-    G4ThreeVector vertex1(maxRad,-maxRad,-fDz) ;
-    G4ThreeVector vertex2(maxRad,maxRad,-fDz) ;
-    G4ThreeVector vertex3(-maxRad,maxRad,-fDz) ;
-    G4ThreeVector vertex4(-maxRad,-maxRad,fDz) ;
-    G4ThreeVector vertex5(maxRad,-maxRad,fDz) ;
-    G4ThreeVector vertex6(maxRad,maxRad,fDz) ;
-    G4ThreeVector vertex7(-maxRad,maxRad,fDz) ;
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4VTwistedFaceted::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
-}
 
 //=====================================================================
 //* Inside ------------------------------------------------------------
@@ -619,6 +429,7 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
 
 }
 
+
 //=====================================================================
 //* SurfaceNormal -----------------------------------------------------
 
@@ -672,6 +483,7 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
    
    return fLastNormal.vec;
 }
+
 
 //=====================================================================
 //* DistanceToIn (p, v) -----------------------------------------------
@@ -774,6 +586,9 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    return fLastDistanceToInWithV.value;
 }
 
+
+//=====================================================================
+//* DistanceToIn (p) --------------------------------------------------
 
 G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
 {
@@ -1120,6 +935,7 @@ void G4VTwistedFaceted::DescribeYourselfTo (G4VGraphicsScene& scene) const
 {
   scene.AddSolid (*this);
 }
+
 
 //=====================================================================
 //* GetExtent ---------------------------------------------------------

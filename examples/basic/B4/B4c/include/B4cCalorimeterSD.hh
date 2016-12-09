@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cCalorimeterSD.hh 68058 2013-03-13 14:47:43Z gcosmo $
+// $Id: B4cCalorimeterSD.hh 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file B4cCalorimeterSD.hh
 /// \brief Definition of the B4cCalorimeterSD class
@@ -63,7 +63,7 @@ class B4cCalorimeterSD : public G4VSensitiveDetector
 
   private:
     B4cCalorHitsCollection* fHitsCollection;
-    G4int     fNofCells;
+    G4int  fNofCells;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

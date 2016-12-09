@@ -49,4 +49,3 @@ class B03ActionInitialization : public G4VUserActionInitialization
 
 #endif
 
-

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: SteppingAction.cc 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,7 +95,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //longitudinal profile of edep per absorber
   if (edep>0.) {
-    G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
+    G4AnalysisManager::Instance()->FillH1(kMaxAbsor+absorNum, 
                                           G4double(layerNum+1), edep);
   }
   //energy flow

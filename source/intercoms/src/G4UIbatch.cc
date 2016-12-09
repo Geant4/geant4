@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UIbatch.cc 83401 2014-08-21 15:03:26Z gcosmo $
+// $Id: G4UIbatch.cc 98731 2016-08-09 10:49:49Z gcosmo $
 //
 // ====================================================================
 //   G4UIbatch.cc
@@ -67,7 +67,8 @@ static void Tokenize(const G4String& str, std::vector<G4String>& tokens)
 
 ////////////////////////////////////////////////////////////////////
 G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
-  : previousSession(prevSession), isOpened(false)
+  : G4UIsession(1),
+    previousSession(prevSession), isOpened(false)
 ////////////////////////////////////////////////////////////////////
 {
   macroStream.open(fileName, std::ios::in);

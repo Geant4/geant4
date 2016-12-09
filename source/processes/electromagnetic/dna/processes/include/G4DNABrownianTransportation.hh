@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNABrownianTransportation.hh 90232 2015-05-21 08:54:54Z gcosmo $
+// $Id: G4DNABrownianTransportation.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -69,41 +69,41 @@ public:
 
 
 /* \brief {The transportation method implemented is the one from
- *         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978).
- *         To compute time and space intervals to reach a volume boundary,
- *         there are two alternative methods proposed by this process.
+ *  Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978).
+ *  To compute time and space intervals to reach a volume boundary,
+ *  there are two alternative methods proposed by this process.
  *
- *         ** Method 1 selects a minimum distance to the next
- *         boundary using to the following formula:
+ *  ** Method 1 selects a minimum distance to the next
+ *  boundary using to the following formula:
  *
- *         --> t_min = (safety* safety) / (8 * diffusionCoefficient);
- *         this corresponds to 5% probability of the Brownian particle to cross
- *         the boundary - isotropic distance to nearest boundary (safety) is used
+ *  --> t_min = (safety* safety) / (8 * diffusionCoefficient);
+ *  this corresponds to 5% probability of the Brownian particle to cross
+ *  the boundary - isotropic distance to nearest boundary (safety) is used
  *
- *         OR if the flag "speed me up" is on:
+ *  OR if the flag "speed me up" is on:
  *
- *         --> t_min = (geometryStepLength * geometryStepLength) / diffusionCoefficient;
- *         this corresponds to 50% probability of the Brownian particle to cross
- *         the boundary - distance along current direction to nearest boundary is used
+ *  --> t_min = (geometryStepLength * geometryStepLength) / diffusionCoefficient;
+ *  this corresponds to 50% probability of the Brownian particle to cross
+ *  the boundary - distance along current direction to nearest boundary is used
  *
- *         NB: By default, method 1 with the flag "speed me up is used".
- *         In addition, one may want to used the minimum time step limit defined
- *         in G4Scheduler through the G4UserTimeStepAction. If so, speed level might
- *         be set to 2. But minimum time steps have to be set in the user class.
+ *  NB: By default, method 1 with the flag "speed me up is used".
+ *  In addition, one may want to used the minimum time step limit defined
+ *  in G4Scheduler through the G4UserTimeStepAction. If so, speed level might
+ *  be set to 2. But minimum time steps have to be set in the user class.
  *
- *         ** Method 2 can randomly compute the time to the next boundary using the
- *         following formula:
+ *  ** Method 2 can randomly compute the time to the next boundary using the
+ *  following formula:
  *
- *         t_random = 1 / (4 * diffusionCoefficient)* pow(geometryStepLength /
- *                         InvErfc(G4UniformRand()),2);
- *         For release 10.1, this is using the 1D cumulative density function.
+ *  t_random = 1 / (4 * diffusionCoefficient)* pow(geometryStepLength /
+ *                  InvErfc(G4UniformRand()),2);
+ *  For release 10.1, this is using the 1D cumulative density function.
  *
- *         At each diffusion step, the direction of the particle is randomly selected.
- *         For now, the geometryStepLength corresponds to the distance to the
- *         nearest boundary along the direction of diffusion which selected randomly.
+ *  At each diffusion step, the direction of the particle is randomly selected.
+ *  For now, the geometryStepLength corresponds to the distance to the
+ *  nearest boundary along the direction of diffusion which selected randomly.
  *
- *         Method 2 is currently deactivated by default.
- *         }
+ *  Method 2 is currently deactivated by default.
+ *  }
  */
 
 class G4DNABrownianTransportation : public G4ITTransportation
@@ -114,8 +114,8 @@ public:
                               G4int verbosityLevel = 0);
   G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
   virtual ~G4DNABrownianTransportation();
-  G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
-  G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
+  G4DNABrownianTransportation(const G4DNABrownianTransportation&);
+  G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation&);
 
   inline void SetBrownianAction(G4BrownianAction*);
 
@@ -128,11 +128,13 @@ public:
                            const double,
                            double&);
 
-  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track& /*track*/,
-                                                         G4double /*previousStepSize*/,
-                                                         G4double /*currentMinimumStep*/,
-                                                         G4double& /*currentSafety*/,
-                                                         G4GPILSelection* /*selection*/);
+  virtual G4double
+  AlongStepGetPhysicalInteractionLength(const G4Track& /*track*/,
+                                        G4double /*previousStepSize*/,
+                                        G4double /*currentMinimumStep*/,
+                                        G4double& /*currentSafety*/,
+                                        G4GPILSelection* /*selection*/);
+  
   virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&);
 
   virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);

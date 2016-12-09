@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4LossTableManager.cc 99151 2016-09-07 08:03:17Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -158,7 +158,6 @@ G4LossTableManager::~G4LossTableManager()
   Clear();
   delete tableBuilder;
   delete emCorrections;
-  delete emSaturation;
   delete emConfigurator;
   delete emElectronIonPair;
   delete atomDeexcitation;
@@ -188,7 +187,6 @@ G4LossTableManager::G4LossTableManager()
   }  
   tableBuilder = new G4LossTableBuilder();
   emCorrections= new G4EmCorrections(verbose);
-  emSaturation = nullptr;
   emConfigurator = nullptr;
   emElectronIonPair = nullptr;
   atomDeexcitation = nullptr;
@@ -252,7 +250,6 @@ void G4LossTableManager::ResetParameters()
   tableBuilder->SetSplineFlag(theParameters->Spline());
   tableBuilder->SetInitialisationFlag(false); 
   emCorrections->SetVerbose(verbose); 
-  if(emSaturation) { emSaturation->SetVerbose(verbose); } 
   if(emConfigurator) { emConfigurator->SetVerbose(verbose); };
   if(emElectronIonPair) { emElectronIonPair->SetVerbose(verbose); };
   if(atomDeexcitation) {
@@ -515,7 +512,7 @@ void G4LossTableManager::LocalPhysicsTables(
   if(1 < verbose) {
     G4cout << "### G4LossTableManager::LocalPhysicsTable() for "
            << aParticle->GetParticleName()
-             << " and process " << p->GetProcessName()
+	   << " and process " << p->GetProcessName()
            << G4endl;
   }
 
@@ -530,7 +527,6 @@ void G4LossTableManager::LocalPhysicsTables(
       G4cout << "===== G4LossTableManager::LocalPhysicsTable() for run "
              << run << " =====" << G4endl;
     }
-    if(0 < verbose) { emSaturation->DumpG4BirksCoefficients(); }
     currentParticle = nullptr;
     startInitialisation = false;
     for (G4int i=0; i<n_loss; ++i) {
@@ -968,8 +964,7 @@ G4LossTableManager::GetMultipleScatteringVector()
 
 G4EmSaturation* G4LossTableManager::EmSaturation()
 {
-  if(!emSaturation) { emSaturation = new G4EmSaturation(verbose); }
-  return emSaturation;
+  return theParameters->GetEmSaturation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4SubtractionSolid.hh 101046 2016-11-04 10:44:26Z gcosmo $
 //
 //
 // class G4SubtractionSolid
@@ -85,6 +85,8 @@ class G4SubtractionSolid : public G4BooleanSolid
     G4SubtractionSolid(const G4SubtractionSolid& rhs);
     G4SubtractionSolid& operator=(const G4SubtractionSolid& rhs);
       // Copy constructor and assignment operator.
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

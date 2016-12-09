@@ -51,7 +51,23 @@ namespace G4INCL {
       G4double NNToxPiNN(const G4int xpi, Particle const * const p1, Particle const * const p2);
       G4double piNToDelta(Particle const * const p1, Particle const * const p2);
       G4double piNToxPiN(const G4int xpi, Particle const * const p1, Particle const * const p2);
-
+      G4double piNToEtaN(Particle const * const p1, Particle const * const p2);
+      G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
+      G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
+		   	G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
+		   	G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);
+      G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
+      G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);
+      G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNEta(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNEtaExclu(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+      G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNOmega(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNOmegaExclu(Particle const * const p1, Particle const * const p2);
+      G4double NNToNNOmegaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+      G4double NNToNDeltaOmega(Particle const * const p1, Particle const * const p2);
+   
       /** \brief Calculate the slope of the NN DDXS.
        *
        * \param energyCM energy in the CM frame, in MeV

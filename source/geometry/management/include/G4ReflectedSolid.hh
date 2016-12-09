@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh 96930 2016-05-18 08:56:58Z gcosmo $
+// $Id: G4ReflectedSolid.hh 100906 2016-11-03 09:59:32Z gcosmo $
 //
 //
 // class G4ReflectedSolid
@@ -62,6 +62,8 @@ class G4ReflectedSolid : public G4VSolid
     // Includes all the methods that a solid requires.
 
     EInside Inside( const G4ThreeVector& p ) const; 
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

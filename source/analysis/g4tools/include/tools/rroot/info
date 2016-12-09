@@ -189,7 +189,7 @@ public: //iro
                      << std::endl;
       return false;
     }
-    m_elements.operator=(*obj);
+    if(obj) m_elements.operator=(*obj);
     delete obj;}
 
     return a_buffer.check_byte_count(s,c,s_store_class());

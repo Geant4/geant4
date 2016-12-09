@@ -9,12 +9,11 @@
 #include "enums"
 #include "style_colormap"
 
-#include "../cstr" //for get_lines
 #include "../mathf"
 #include "../lina/vec3f"
 #include "../sout"
-
-#include <string>
+#include "../colorfs"
+#include "../get_lines"
 
 namespace tools {
 namespace sg {
@@ -231,9 +230,9 @@ public:
   }
 
   virtual void reset(){ //virtual because of SoGC
-    m_color = colorf::black();
-    m_highlight_color = colorf::lightgrey();
-    m_back_color = colorf::white();
+    m_color = colorf_black();
+    m_highlight_color = colorf_lightgrey();
+    m_back_color = colorf_white();
     m_line_width = 1;
     m_marker_size = 1;
     m_font_size = 10;
@@ -871,7 +870,7 @@ public:
       }
       std::vector<std::string> words;
       tools::words(line," ",false,words);
-      unsigned int wordn = words.size();
+      size_t wordn = words.size();
       if(!wordn) {
         a_out << "style_parser::parse :"
               << " in " << tools::sout(a_s)
@@ -1465,9 +1464,9 @@ public:
   }
 
 protected:
-  static bool check_2(unsigned int a_n,
-                const std::string& a_s,
-                const std::string& a_line,std::ostream& a_out) {
+  static bool check_2(size_t a_n,
+                      const std::string& a_s,
+                      const std::string& a_line,std::ostream& a_out) {
     if(a_n!=2) {
       a_out << "style_parser::parse :"
             << " in " << tools::sout(a_s)
@@ -1529,37 +1528,6 @@ protected:
       return false;
     }
     return true;
-  }
-
-  static void get_lines(const std::string& a_string,
-                        std::vector<std::string>& a_lines){
-    // a_string is a list separated by "\n" or "\\n".
-    // For "xxx\n\nxxx", {"xxx","","xxx"} will be created.
-    // WARNING : if a_string is a Windows file name, it may 
-    //  contains a \n which is not a delimiter ; like ..\data\ntuples.hbook.
-    a_lines.clear();
-    int length = a_string.length();
-    if(length<=0) return;
-    char* cstring = tools::str_dup(a_string.c_str());
-    if(!cstring) return;
-    int pos = 0;
-    length++;
-    for(int count=0;count<length;count++) {
-      if( (cstring[count]=='\n') || 
-          (cstring[count]=='\0') || 
-          ( (cstring[count]=='\\') && (cstring[count+1]=='n') ) ) { 
-        char shift_one = (cstring[count]=='\n' ? 1 : 0);
-        cstring[count] = '\0';
-        a_lines.push_back(cstring+pos);
-        if(shift_one==1) {
-          pos = count+1;
-        } else {
-          pos = count+2;
-          count++;
-        }
-      }
-    }
-    tools::str_del(cstring);
   }
 
 protected: 

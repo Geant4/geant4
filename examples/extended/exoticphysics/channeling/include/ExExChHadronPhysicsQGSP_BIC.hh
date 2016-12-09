@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChHadronPhysicsQGSP_BIC.hh
+/// \brief Definition of the ExExChHadronPhysicsQGSP_BIC class
+//
 // $Id: ExExChHadronPhysicsQGSP_BIC.hh 76703 2013-11-14 10:29:11Z gcosmo $
 //
 

@@ -621,7 +621,8 @@ class G4VAnalysisManager
     std::unique_ptr<G4VH3Manager>  fVH3Manager;
     std::unique_ptr<G4VP1Manager>  fVP1Manager;
     std::unique_ptr<G4VP2Manager>  fVP2Manager;
-    std::unique_ptr<G4VNtupleManager> fVNtupleManager;
+    // std::shared_ptr<G4VNtupleManager> fVNtupleManager;
+    G4VNtupleManager* fVNtupleManager;
 };
 
 // inline functions

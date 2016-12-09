@@ -34,7 +34,7 @@ public:
     return true;
   }
   unsigned int entries() const { 
-    return m_histo ? m_histo->all_entries() : m_ws.size();
+    return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();
   }
 public:
   double sum_of_weights() const { 
@@ -56,8 +56,8 @@ public:
     if(m_histo) {
       return m_histo->scale(a_scale);
     } else {
-      unsigned int number = m_ws.size();
-      for(unsigned int index=0;index<number;index++) m_ws[index] *= a_scale;
+      size_t number = m_ws.size();
+      for(size_t index=0;index<number;index++) m_ws[index] *= a_scale;
       m_Sw *= a_scale;
       m_Sxw *= a_scale;
       m_Sx2w *= a_scale;
@@ -132,9 +132,9 @@ public:
     return status;
   }
 
-  bool convert(const std::vector<double>& aEdges) {
+  bool convert(const std::vector<double>& a_edges) {
     if(m_histo) return true;
-    m_histo = new histo::h1d(base_cloud::title(),aEdges);
+    m_histo = new histo::h1d(base_cloud::title(),a_edges);
     if(!m_histo) return false;
     bool status = fill_histogram(*m_histo);
     clear();
@@ -146,8 +146,8 @@ public:
     return *m_histo;
   }
   bool fill_histogram(histo::h1d& a_histo) const {
-    unsigned int number = m_xs.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = m_xs.size();
+    for(size_t index=0;index<number;index++) {
       if(!a_histo.fill(m_xs[index],m_ws[index])) return false;
     }
     return true;

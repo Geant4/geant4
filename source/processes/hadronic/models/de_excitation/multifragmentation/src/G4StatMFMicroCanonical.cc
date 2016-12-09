@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMicroCanonical.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4StatMFMicroCanonical.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -66,7 +66,7 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
   G4int A = theFragment.GetA_asInt();
   G4int Z = theFragment.GetZ_asInt();
   G4double x = 1.0 - 2.0*Z/G4double(A);
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
     
   // Configuration temperature
   G4double TConfiguration = std::sqrt(8.0*U/G4double(A));
@@ -79,9 +79,9 @@ void G4StatMFMicroCanonical::Initialize(const G4Fragment & theFragment)
 			G4StatMFParameters::GetGamma0()*x*x 
 			) + 
     // Surface term (for T = 0)
-    G4StatMFParameters::GetBeta0()*g4pow->Z23(A) + 
+    G4StatMFParameters::GetBeta0()*g4calc->Z23(A) + 
     // Coulomb term 
-    elm_coupling*0.6*Z*Z/(G4StatMFParameters::Getr0()*g4pow->Z13(A));
+    elm_coupling*0.6*Z*Z/(G4StatMFParameters::Getr0()*g4calc->Z13(A));
   
   // Statistical weight
   G4double W = 0.0;

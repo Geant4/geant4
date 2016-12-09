@@ -43,6 +43,9 @@ class G4ParticleHPLegendreTable
   {
     nCoeff=0; 
     theCoeff = 0;
+    theRep = 0;
+    theEnergy = 0.0;
+    theTemp = 0.0;
   }
   ~G4ParticleHPLegendreTable(){if(theCoeff!=0) delete [] theCoeff;}
   

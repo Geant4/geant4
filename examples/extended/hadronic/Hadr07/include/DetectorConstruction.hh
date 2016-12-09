@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/DetectorConstruction.hh
+/// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
 // $Id: DetectorConstruction.hh 78560 2014-01-07 10:06:52Z gcosmo $
@@ -44,7 +44,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class DetectorMessenger;
 
-const G4int MaxAbsor = 10;                        // 0 + 9
+const G4int kMaxAbsor = 10;                        // 0 + 9
 
 class G4GlobalMagFieldMessenger;
 
@@ -89,9 +89,9 @@ public:
 private:
 
   G4int              fNbOfAbsor;
-  G4Material*        fAbsorMaterial [MaxAbsor];
-  G4double           fAbsorThickness[MaxAbsor];
-  G4double           fXfront[MaxAbsor];  
+  G4Material*        fAbsorMaterial [kMaxAbsor];
+  G4double           fAbsorThickness[kMaxAbsor];
+  G4double           fXfront[kMaxAbsor];  
 
   G4double           fAbsorSizeX;
   G4double           fAbsorSizeYZ;

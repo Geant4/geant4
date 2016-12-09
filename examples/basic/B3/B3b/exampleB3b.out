@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,14 +41,14 @@ Registered model factories:
   drawByCharge
   drawByOriginVolume
   drawByParticleID
-  drawByTouchedVolume
+  drawByEncounteredVolume
 
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
-  touchedVolumeFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -205,9 +205,7 @@ Checking overlaps for volume Patient ... OK!
 
 
 G4SDManager::AddNewCollection : the collection <crystal/edep> is registered at 1
-New sensitive detector <crystal> is registered at /
 G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
-New sensitive detector <patient> is registered at /
 #
 /run/beamOn 10000
 ### Run 0 start.
@@ -215,8 +213,8 @@ New sensitive detector <patient> is registered at /
 ---> end of event: 0
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1249
- Total dose in patient : 290.467 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1242
+ Total dose in patient : 289.201 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

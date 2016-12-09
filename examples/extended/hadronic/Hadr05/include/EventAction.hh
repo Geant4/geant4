@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
 // $Id: EventAction.hh 70747 2013-06-05 11:56:02Z ihrivnac $

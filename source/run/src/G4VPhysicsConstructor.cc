@@ -35,18 +35,6 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-// This static member is thread local. For each thread, it holds the array
-// size of G4VPCData instances.
-//
-template <class G4VPCData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VPCData>::workertotalspace = 0;
-
-// This static member is thread local. For each thread, it points to the
-// array of G4VPCData instances.
-//
-template <class G4VPCData> G4ThreadLocal
-G4VPCData* G4VUPLSplitter<G4VPCData>::offset = 0;
-
 // This field helps to use the class G4VPCManager
 //
 G4VPCManager G4VPhysicsConstructor::subInstanceManager;
@@ -86,3 +74,9 @@ G4VPhysicsConstructor::G4VPhysicsConstructor(const G4String& name, G4int type)
 G4VPhysicsConstructor::~G4VPhysicsConstructor()
 {
 }
+
+G4ParticleTable::G4PTblDicIterator* G4VPhysicsConstructor::GetParticleIterator() const
+{
+	return (subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator;
+}
+

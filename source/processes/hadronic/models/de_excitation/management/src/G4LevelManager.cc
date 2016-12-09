@@ -43,17 +43,37 @@
 #include "G4LevelManager.hh"
 #include "G4HadronicException.hh"
 
-G4LevelManager::G4LevelManager(const std::vector<G4float>& energies,
+G4String G4LevelManager::fFloatingLevels[] = {
+  "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
+
+G4LevelManager::G4LevelManager(size_t ntrans,
+                               const std::vector<G4float>& energies,
 			       const std::vector<G4float>& lifetime,
 			       const std::vector<G4float>& lifetimegamma,
 			       const std::vector<G4int>& spin,
+			       const std::vector<G4int>& fll,
 			       const std::vector<const G4NucLevel*>& levels)
-  : fLevelEnergy(energies),fLifeTime(lifetime),
-    fLifeTimeGamma(lifetimegamma),fSpin(spin),fLevels(levels)
+  : nTransitions(0)
 { 
-  nTransitions = fLevelEnergy.size() - 1; 
-  //G4cout << "New G4LevelManager N= " << nTransitions << " " << fLevelEnergy.size() 
-  //	 << " <" << this << ">" << G4endl;
+  if(0 < ntrans) {
+    nTransitions = ntrans - 1;
+    fLevelEnergy.reserve(ntrans);
+    fLifeTime.reserve(ntrans);
+    fLifeTimeGamma.reserve(ntrans);
+    fSpin.reserve(ntrans);
+    fFloating.reserve(ntrans);
+    fLevels.reserve(ntrans);
+    for(size_t i=0; i<ntrans; ++i) {
+      fLevelEnergy.push_back(energies[i]);
+      fLifeTime.push_back(lifetime[i]);
+      fLifeTimeGamma.push_back(lifetimegamma[i]);
+      fSpin.push_back(spin[i]);
+      fLevels.push_back(levels[i]);
+      fFloating.push_back(fll[i]); 
+    }
+    //G4cout << "New G4LevelManager N= " << nTransitions << " " << fLevelEnergy.size() 
+    //	   << " <" << this << ">" << G4endl;
+  }
 }
 
 G4LevelManager::~G4LevelManager()
@@ -66,35 +86,36 @@ G4LevelManager::NearestLevelIndex(G4double ener, size_t index) const
 {
   //G4cout<< "index= " << index << " max= " << nTransitions << " exc= " << ener 
   //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
-  size_t idx = nTransitions;
+  size_t idx = std::min(index, nTransitions);
   G4float energy = (G4float)ener;
-  // always (nTransitions > 0)
-  if(energy < fLevelEnergy[nTransitions]) {
-    // ground state
-    if(energy <= tolerance)  
-      { idx = 0; }
-    // take next level
-    else if(energy <= fLevelEnergy[1])  
-      { idx = 1; }
-    else {
-      idx = std::min(idx, index);
-      if(std::fabs(energy - fLevelEnergy[idx]) > tolerance) {
-	// take top level
-	if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
-	  { idx = nTransitions; }
+  static const G4float tolerance = 1.0f-6;
+  if(0 == nTransitions || std::fabs(energy - fLevelEnergy[idx]) <= tolerance) {
+    return idx;
+  }
+  // ground state
+  if(energy <= fLevelEnergy[1]*0.5f)  
+    { idx = 0; }
+  // take top level
+  else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
+    { idx = nTransitions; }
 
-	// if shortcuts are not working, make binary search
-	else {
-	  idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
-	    - fLevelEnergy.begin() - 1;
-	  if(energy - fLevelEnergy[idx] > fLevelEnergy[idx+1] - energy) { ++idx; }
-	  //G4cout << "E= " << energy << " " << fLevelEnergy[idx-1] 
-	  //<< " " << fLevelEnergy[idx] << G4endl;
-	}
-      }
-    }
+  // if shortcuts are not working, make binary search
+  else {
+    idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
+      - fLevelEnergy.begin() - 1;
+    if(energy - fLevelEnergy[idx] > fLevelEnergy[idx+1] - energy) { ++idx; }
+    //G4cout << "E= " << energy << " " << fLevelEnergy[idx-1] 
+    //<< " " << fLevelEnergy[idx] << G4endl;
   }
   return idx;
+}
+
+const G4String& G4LevelManager::FloatingType(size_t i) const
+{
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "Meta"); }
+#endif
+  return fFloatingLevels[fFloating[i]]; 
 }
 
 #ifdef G4VERBOSE

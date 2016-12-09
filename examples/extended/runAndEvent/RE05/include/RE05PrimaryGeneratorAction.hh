@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05PrimaryGeneratorAction.hh 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05PrimaryGeneratorAction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05PrimaryGeneratorAction.hh
 /// \brief Definition of the RE05PrimaryGeneratorAction class
@@ -49,18 +49,16 @@ class RE05PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     virtual void GeneratePrimaries(G4Event* anEvent);
 
   private:
-    static G4VPrimaryGenerator* HEPEvt;
-    G4VPrimaryGenerator* particleGun;
-    RE05PrimaryGeneratorMessenger* messenger;
-    G4bool useHEPEvt;
+    static G4VPrimaryGenerator* fHEPEvt;
+    G4VPrimaryGenerator* fParticleGun;
+    RE05PrimaryGeneratorMessenger* fMessenger;
+    G4bool fUseHEPEvt;
 
   public:
-    inline void SetHEPEvtGenerator(G4bool f)
-    { useHEPEvt = f; }
+    inline void SetHEPEvtGenerator(G4bool option)
+    { fUseHEPEvt = option; }
     inline G4bool GetHEPEvtGenerator()
-    { return useHEPEvt; }
+    { return fUseHEPEvt; }
 };
 
 #endif
-
-

@@ -73,12 +73,12 @@ T*  G4THnManager<T>::GetTInFunction(G4int id,
       description << "      " << "histogram " << id << " does not exist.";
       G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
-    return 0;         
+    return nullptr;         
   }
   
   // Do not return histogram if inactive 
   if ( fState.GetIsActivation() && onlyIfActive && ( ! fHnManager->GetActivation(id) ) ) {
-    return 0; 
+    return nullptr; 
   }  
   
   return fTVector[index];

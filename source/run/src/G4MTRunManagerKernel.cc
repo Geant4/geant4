@@ -117,7 +117,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 //#ifdef G4MULTITHREADED
 //    turnontpmalloc();
 //#endif
-
+  G4Threading::WorkerThreadJoinsPool();
   wThreadContext = static_cast<G4WorkerThread*>(context);  
   G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
 
@@ -215,6 +215,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   wThreadContext->DestroyGeometryAndPhysicsVector();
   wThreadContext = 0;
 
+  G4Threading::WorkerThreadLeavesPool();
   return static_cast<void*>(0);
 }
 

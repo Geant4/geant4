@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4eeToTwoGammaModel.cc 101198 2016-11-09 09:34:52Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -162,6 +162,9 @@ G4double G4eeToTwoGammaModel::CrossSectionPerVolume(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// Polarisation of gamma according to M.H.L.Pryce and J.C.Ward, 
+// Nature 4065 (1947) 435.
+
 void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
 					    const G4MaterialCutsCouple*,
 					    const G4DynamicParticle* dp,
@@ -180,12 +183,16 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     G4double phi  = twopi * rndmEngine->flat();
     G4ThreeVector dir(sint*cos(phi), sint*sin(phi), cost);
     phi = twopi * rndmEngine->flat();
-    G4ThreeVector pol(cos(phi), sin(phi), 0.0);
+    G4double cosphi = cos(phi);
+    G4double sinphi = sin(phi);
+    G4ThreeVector pol(cosphi, sinphi, 0.0);
     pol.rotateUz(dir);
     aGamma1 = new G4DynamicParticle(theGamma, dir, electron_mass_c2);
     aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
     aGamma2 = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-    aGamma1->SetPolarization(-pol.x(),-pol.y(),-pol.z());
+    pol.set(-sinphi, cosphi, 0.0);
+    pol.rotateUz(dir);
+    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
 
   } else {
 
@@ -240,9 +247,11 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     Phot1Direction.rotateUz(PositDirection);
     aGamma1 = new G4DynamicParticle (theGamma,Phot1Direction, Phot1Energy);
     phi = twopi * rndmEngine->flat();
-    G4ThreeVector pol1(cos(phi), sin(phi), 0.0);
-    pol1.rotateUz(Phot1Direction);
-    aGamma1->SetPolarization(pol1.x(),pol1.y(),pol1.z());
+    G4double cosphi = cos(phi);
+    G4double sinphi = sin(phi);
+    G4ThreeVector pol(cosphi, sinphi, 0.0);
+    pol.rotateUz(Phot1Direction);
+    aGamma1->SetPolarization(pol.x(),pol.y(),pol.z());
 
     G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
     G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
@@ -253,7 +262,12 @@ void G4eeToTwoGammaModel::SampleSecondaries(vector<G4DynamicParticle*>* vdp,
     aGamma2 = new G4DynamicParticle (theGamma,Phot2Direction, Phot2Energy);
 
     //!!! likely problematic direction to be checked
-    aGamma2->SetPolarization(-pol1.x(),-pol1.y(),-pol1.z());
+    pol.set(-sinphi, cosphi, 0.0);
+    pol.rotateUz(Phot1Direction);
+    cost = pol*Phot2Direction;
+    pol -= cost*Phot2Direction;
+    pol = pol.unit();
+    aGamma2->SetPolarization(pol.x(),pol.y(),pol.z());
   }
   /*
     G4cout << "Annihilation in fly: e0= " << PositKinEnergy

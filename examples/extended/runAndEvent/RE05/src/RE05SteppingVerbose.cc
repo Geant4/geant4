@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05SteppingVerbose.cc 66521 2012-12-19 12:22:01Z ihrivnac $
+// $Id: RE05SteppingVerbose.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05SteppingVerbose.cc
 /// \brief Implementation of the RE05SteppingVerbose class
@@ -40,6 +40,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05SteppingVerbose::RE05SteppingVerbose()
+: G4SteppingVerbose()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

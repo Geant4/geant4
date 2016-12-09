@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc 96797 2016-05-09 10:13:42Z gcosmo $
+// $Id: G4IonTable.cc 99621 2016-09-29 10:14:44Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -43,6 +43,7 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Modified Element Name for Z>103  06 Apr. 01 H.Kurashige
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
+//      Added initial support for Muonic Atoms   1 Jul 16  K.Lynch
 
 #include <iostream>               
 #include <iomanip>               
@@ -65,6 +66,9 @@
 #include "G4VIsotopeTable.hh"
 #include "G4NuclideTable.hh"
 
+#include "G4MuonicAtom.hh"
+#include "G4MuonicAtomHelper.hh"
+
 // It is very important for multithreaded Geant4 to keep only one copy of the
 // particle table pointer and the ion table pointer. However, we try to let 
 // each worker thread hold its own copy of the particle dictionary and the 
@@ -78,19 +82,19 @@ G4IonTable::G4IonList* G4IonTable::fIonListShadow = 0;
 std::vector<G4VIsotopeTable*> *G4IonTable::fIsotopeTableListShadow = 0;
 
 namespace lightions {
-    static const G4ParticleDefinition* p_proton=0;
-    static const G4ParticleDefinition* p_deuteron=0;
-    static const G4ParticleDefinition* p_triton=0;
-    static const G4ParticleDefinition* p_alpha=0;
-    static const G4ParticleDefinition* p_He3=0;
-    void Init() {
-        if ( p_proton ) return;
-        p_proton   = G4ParticleTable::GetParticleTable()-> FindParticle("proton"); // proton
-        p_deuteron = G4ParticleTable::GetParticleTable()-> FindParticle("deuteron"); // deuteron
-        p_triton   = G4ParticleTable::GetParticleTable()-> FindParticle("triton"); // tritoon
-        p_alpha    = G4ParticleTable::GetParticleTable()-> FindParticle("alpha"); // alpha
-        p_He3      = G4ParticleTable::GetParticleTable()-> FindParticle("He3"); // He3
-    }
+  static const G4ParticleDefinition* p_proton=0;
+  static const G4ParticleDefinition* p_deuteron=0;
+  static const G4ParticleDefinition* p_triton=0;
+  static const G4ParticleDefinition* p_alpha=0;
+  static const G4ParticleDefinition* p_He3=0;
+  void Init() {
+    if ( p_proton ) return;
+    p_proton   = G4ParticleTable::GetParticleTable()-> FindParticle("proton"); // proton
+    p_deuteron = G4ParticleTable::GetParticleTable()-> FindParticle("deuteron"); // deuteron
+    p_triton   = G4ParticleTable::GetParticleTable()-> FindParticle("triton"); // tritoon
+    p_alpha    = G4ParticleTable::GetParticleTable()-> FindParticle("alpha"); // alpha
+    p_He3      = G4ParticleTable::GetParticleTable()-> FindParticle("He3"); // He3
+  }
 }
 
 namespace antilightions {
@@ -289,7 +293,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E,
       G4ExceptionDescription ed;
       ed << "G4IonTable::CreateIon() : G4IsotopeProperty object was not found for"
          << " Z = " << Z << " A = " << A << " E = " << E/keV << " (keV)";
-      if(flb!=G4Ions::G4FloatLevelBase::noFloat)
+      if(flb!=G4Ions::G4FloatLevelBase::no_Float)
       { ed << " FloatingLevel +" << G4Ions::FloatLevelBaseChar(flb); }
       ed << ".\n"
          << " Physics quantities such as life are not set for this ion.";
@@ -307,7 +311,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E,
   // ion name
   G4String name =""; 
   /////////////if (lvl<9) name = GetIonName(Z, A, lvl);
-  if (lvl==0) name = GetIonName(Z, A, lvl);
+  if (lvl==0 && flb==G4Ions::G4FloatLevelBase::no_Float) name = GetIonName(Z, A, lvl);
   else       name = GetIonName(Z, A, Eex, flb);
 
   // PDG encoding 
@@ -469,7 +473,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int LL, G4double
 ////////////////////////////////
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
 {
-  if(lvl == 0) return CreateIon(Z,A,0.0,G4Ions::G4FloatLevelBase::noFloat);
+  if(lvl == 0) return CreateIon(Z,A,0.0,G4Ions::G4FloatLevelBase::no_Float);
   G4Exception( "G4IonTable::CreateIon()","PART105", JustWarning, 
       "Ion cannot be created by an isomer level. Use excitation energy.");
   return 0;
@@ -480,7 +484,7 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int lvl)
 G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4int LL, G4int lvl)
 {
   if (LL==0) return CreateIon(Z,A,lvl);
-  if(lvl == 0) return CreateIon(Z,A,0.0,G4Ions::G4FloatLevelBase::noFloat);
+  if(lvl == 0) return CreateIon(Z,A,0.0,G4Ions::G4FloatLevelBase::no_Float);
   
   if (lvl>0) {
     G4ExceptionDescription ed;
@@ -594,7 +598,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int LL, G4int lvl)
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E, G4int J)
-{ return GetIon(Z,A,E,G4Ions::G4FloatLevelBase::noFloat,J); }
+{ return GetIon(Z,A,E,G4Ions::G4FloatLevelBase::no_Float,J); }
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E,
@@ -642,7 +646,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E,
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int LL, G4double E, G4int J)
-{ return GetIon(Z,A,LL,E,G4Ions::G4FloatLevelBase::noFloat,J); }
+{ return GetIon(Z,A,LL,E,G4Ions::G4FloatLevelBase::no_Float,J); }
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int LL, G4double E,
@@ -724,7 +728,7 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int encoding)
 // -- FindIon methods  ------
 /////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E, G4int J)
-{ return FindIon(Z,A,E,G4Ions::G4FloatLevelBase::noFloat,J); }
+{ return FindIon(Z,A,E,G4Ions::G4FloatLevelBase::no_Float,J); }
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E,
@@ -785,7 +789,7 @@ G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4double E,
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int LL, G4double E, G4int J)
-{ return FindIon(Z,A,LL,E,G4Ions::G4FloatLevelBase::noFloat,J); }
+{ return FindIon(Z,A,LL,E,G4Ions::G4FloatLevelBase::no_Float,J); }
 
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int LL, G4double E,
@@ -1056,12 +1060,12 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E,
   name = GetIonName(Z, A);
 
   //excited energy
-  if ( E>0 ){
+  if ( E>0  || flb!=G4Ions::G4FloatLevelBase::no_Float){
     os->str("");
     std::ostringstream& oo = *os;
     // Excited nucleus
     oo<<'['<<E/keV;
-    if(flb!=G4Ions::G4FloatLevelBase::noFloat)
+    if(flb!=G4Ions::G4FloatLevelBase::no_Float)
     { oo<<G4Ions::FloatLevelBaseChar(flb); }
     oo<< ']';
     name += os->str();
@@ -1863,6 +1867,93 @@ G4double G4IonTable::GetLifeTime(G4int Z, G4int A, G4double E,
 }
 
 
+////////////////////
+G4ParticleDefinition* G4IonTable::GetMuonicAtom(G4Ions const* base)
+{
+  if (base==0 || !IsIon(base))
+    G4Exception("G4IonTable::GetMuonicAtom()", "PART987654321",FatalException,"Constructor argument is not a G4Ions");
+
+  // We're assuming here that we get a base that is actually
+  // constructed and unexcited ... strip excitations, Lambdas, and
+  // isomers from the encoding
+
+  auto const Z = base->GetAtomicNumber();
+  auto const A = base->GetAtomicMass();
+  auto const baseenc = GetNucleusEncoding(Z,A);
+  auto const encoding = baseenc+1000000000;
+
+  // We have to do all the MT manipulations manually, because the
+  // convenience functions assume a G4Ions with canonical PDG codes;
+  // they recalculate the encoding from particle properties rather
+  // than using the carried member function values.  Thus, they will
+  // do operations on the base ion, rather than the passed in
+  // G4MuonicAtom
+
+  auto i = fIonList->find(encoding);
+  if(i!=fIonList->end()){
+    return const_cast<G4ParticleDefinition*>(i->second);
+  }
+  // not in threadlocal list; check global list ... 
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()){
+    G4MUTEXLOCK(&G4IonTable::ionTableMutex);
+    i = fIonListShadow->find(encoding);
+    auto end = fIonListShadow->end();
+    G4MUTEXUNLOCK(&G4IonTable::ionTableMutex);
+    if(i!=end){
+      // we found it, stuff it into the threadlocal list
+      fIonList->insert(*i);
+      // and then return it ... 
+      return const_cast<G4ParticleDefinition*>(i->second);
+    }
+  }
+#endif
+
+  // not found in either list; create and potentially insert 
+  auto const name = "Mu"+GetIonName(Z,A);
+
+  G4MuonicAtom* muatom = 
+    G4MuonicAtomHelper::ConstructMuonicAtom(name, encoding, base);
+
+  // Not sure this is doing the right thing...
+  AddProcessManager(muatom);
+
+  // Now, we have to push the muatom into the appropriate IonTables
+  // first, recheck global list, in case another thread came along
+  // before us and created this same muatom
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread()){
+    G4MUTEXLOCK(&G4IonTable::ionTableMutex);
+    // first, we need to make sure it hasn't been inserted by some
+    // other thread
+    auto j = fIonListShadow->find(encoding);
+    if( j!= fIonListShadow->end() ){
+      // oops ... someone else built a copy when we weren't looking;
+      // cleanup our instantiation, and take a handle to the one in
+      // the global list
+      delete muatom;
+      muatom = const_cast<G4MuonicAtom*>(static_cast<G4MuonicAtom const*>(j->second));
+    } else {
+      // otherwise, push onto the global list first
+      fIonListShadow->insert(std::make_pair(encoding, muatom));
+    }
+    G4MUTEXUNLOCK(&G4IonTable::ionTableMutex);
+  }
+#endif  
+  // in either case, push onto the the threadlocal list
+  fIonList->insert(std::make_pair(encoding,muatom));
+
+  return muatom; 
+}
+
+////////////////////
+G4ParticleDefinition* G4IonTable::GetMuonicAtom(G4int Z, G4int A)
+{
+  // Need the cast because we need a G4Ions* to pass into the
+  // function, but GetIon returns a G4ParticleDefinition* 
+  auto base = static_cast<G4Ions const*>(GetIon(Z,A, 0.0));
+  return GetMuonicAtom(base);
+}
 
 
 

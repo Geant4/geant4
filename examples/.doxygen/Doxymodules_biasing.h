@@ -1,4 +1,4 @@
-// $Id: Doxymodules_biasing.h 86514 2014-11-13 09:10:24Z gcosmo $
+// $Id: Doxymodules_biasing.h 101330 2016-11-14 15:38:27Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_biasing.h
@@ -117,6 +117,37 @@
   class GB04BOptrBremSplitting {};
   class GB04DetectorConstruction {};
   class GB04PrimaryGeneratorAction {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB05 GB05
+ *  Biasing example GB05
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB05ActionInitialization {};
+  class GB05BOptnSplitAndKillByCrossSection {};
+  class GB05BOptrSplitAndKillByCrossSection {};
+  class GB05DetectorConstruction {};
+  class GB05PrimaryGeneratorAction {};
+  class GB05SD {};
+
+/** @} */
+
+/** @defgroup extended_biasing_GB06 GB06
+ *  Biasing example GB06
+ *  @ingroup extended_biasing
+ *  @{
+ */
+
+  class GB06ActionInitialization {};
+  class GB06BOptnSplitAndKillByImportance {};
+  class GB06BOptrSplitAndKillByImportance {};
+  class GB06DetectorConstruction {};
+  class GB06ParallelWorldForSlices {};
+  class GB06PrimaryGeneratorAction {};
+  class GB06SD {};
 
 /** @} */
 

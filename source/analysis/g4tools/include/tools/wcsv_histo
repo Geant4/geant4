@@ -76,9 +76,7 @@ inline bool hto(std::ostream& a_writer,const std::string& a_class,const HIST& a_
   const std::vector< std::vector<coordinate_t> >& _bin_Sx2w = a_h.bins_sum_x2w();
 
   for(unsigned int i=0;i<_bins;i++) {
-    a_writer << _bin_entries[i]
-             << a_sep << _bin_Sw[i]
-             << a_sep << _bin_Sw2[i];
+    a_writer << _bin_entries[i] << a_sep << _bin_Sw[i] << a_sep << _bin_Sw2[i];
     for(unsigned int iaxis=0;iaxis<_dim;iaxis++) {
       a_writer << a_sep << _bin_Sxw[i][iaxis] << a_sep << _bin_Sx2w[i][iaxis];
     }
@@ -134,11 +132,8 @@ inline bool pto(std::ostream& a_writer,const std::string& a_class,const PROF& a_
   const vs_t& _bin_Sv2w = a_prof.bins_sum_v2w();
 
   for(unsigned int i=0;i<_bins;i++) {
-    a_writer << _bin_entries[i]
-             << a_sep << _bin_Sw[i]
-             << a_sep << _bin_Sw2[i]
-             << a_sep << _bin_Svw[i]
-             << a_sep << _bin_Sv2w[i];
+    a_writer << _bin_entries[i] << a_sep << _bin_Sw[i] << a_sep << _bin_Sw2[i]
+             << a_sep << _bin_Svw[i] << a_sep << _bin_Sv2w[i];
     for(unsigned int iaxis=0;iaxis<_dim;iaxis++) {
       a_writer << a_sep << _bin_Sxw[i][iaxis] << a_sep << _bin_Sx2w[i][iaxis];
     }

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChPrimaryGeneratorAction.cc
+/// \brief Implementation of the ExExChPrimaryGeneratorAction class
+//
 
 #include "ExExChPrimaryGeneratorAction.hh"
 
@@ -39,32 +42,6 @@
 ExExChPrimaryGeneratorAction::ExExChPrimaryGeneratorAction()
 {
     fParticleGun = new G4GeneralParticleSource();
-    
-    fParticleGun->SetParticleDefinition(G4ParticleTable::
-                        GetParticleTable()->FindParticle("proton"));
-    
-    // Position distribution
-    G4SPSPosDistribution *vPosDist =
-        fParticleGun->GetCurrentSource()->GetPosDist();
-    vPosDist->SetPosDisType("Beam");
-    vPosDist->SetPosDisShape("Circle");
-    vPosDist->SetCentreCoords(G4ThreeVector(0.,0.,(- 10.5) * CLHEP::meter));
-    vPosDist->SetBeamSigmaInR(0.0 * CLHEP::mm);
-    
-    // Angular distribution
-    G4SPSAngDistribution *vAngDist =
-        fParticleGun->GetCurrentSource()->GetAngDist();
-    vAngDist->DefineAngRefAxes("angref1",G4ThreeVector(1.,0.,0));
-    vAngDist->DefineAngRefAxes("angref2",G4ThreeVector(0.,-1.,0));
-    vAngDist->SetAngDistType("beam2d");
-    vAngDist->SetBeamSigmaInAngX(13.36E-6 * CLHEP::rad);
-    vAngDist->SetBeamSigmaInAngY(11.25E-6 * CLHEP::rad);
-
-    // Energy distribution
-    G4SPSEneDistribution *vEneDist =
-        fParticleGun->GetCurrentSource()->GetEneDist();
-    vEneDist->SetEnergyDisType("Mono");
-    vEneDist->SetMonoEnergy(400. * CLHEP::GeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

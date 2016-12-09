@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StoppingPhysics.cc 71041 2013-06-10 09:27:06Z gcosmo $
+// $Id: G4StoppingPhysics.cc 99939 2016-10-12 08:08:23Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -127,11 +127,12 @@ void G4StoppingPhysics::ConstructProcess() {
   G4ParticleDefinition* particle = 0;
   G4ProcessManager* pmanager = 0;
 
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while ( (*aParticleIterator)() ) {
+  while ( (*myParticleIterator)() ) {
 
-    particle = aParticleIterator->value();
+    particle = myParticleIterator->value();
     pmanager = particle->GetProcessManager();
 
     if ( particle == G4MuonMinus::MuonMinus() ) {

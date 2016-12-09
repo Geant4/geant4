@@ -186,6 +186,35 @@ namespace G4INCL {
         }
 
       protected:
+        /// \brief Compute the potential energy for the given pion resonances (Eta, Omega and EtaPrime and Gamma also).
+        G4double computePionResonancePotentialEnergy(const Particle * const p) const {
+// assert(p->getType()==Eta || p->getType()==Omega || p->getType()==EtaPrime || p->getType()==Photon);
+          if(pionPotential && !p->isOutOfWell()) {
+            switch( p->getType() ) {
+              case Eta:
+//jcd             return vPiZero;
+//jcd              return vPiZero*1.5;
+                return 0.0; // (JCD: seems to give better results)
+                break;
+              case Omega:
+                return 15.0; // S.Friedrich et al., Physics Letters B736(2014)26-32. (V. Metag in Hyperfine Interact (2015) 234:25-31 gives 29 MeV)
+                break;
+              case EtaPrime:
+                return 37.0; // V. Metag in Hyperfine Interact (2015) 234:25-31
+                break;
+              case Photon:
+                return 0.0;
+                break;
+              default: 
+                return 0.0;
+                break;
+            }
+          }
+          else
+            return 0.0;
+        }
+
+      protected:
         /// \brief The mass number of the nucleus
         const G4int theA;
         /// \brief The charge number of the nucleus

@@ -21,7 +21,7 @@ inline float _fabs(const float& a_x) {return ::fabsf(a_x);}
 inline float _tan(const float& a_x) {return ::tanf(a_x);}
 inline void _half_pi(float& a_v) {a_v = float(1.5707963267948965580E0);}
 inline void _pi(float& a_v) {a_v = float(3.1415926535897931160E0);}
-inline float _conj(const float& a_x) {return a_x;}
+//inline float _conj(const float& a_x) {return a_x;}
 
 //double
 inline double _pow(const double& a_x,const double& a_y) {return ::pow(a_x,a_y);}
@@ -34,7 +34,7 @@ inline double _fabs(const double& a_x) {return ::fabs(a_x);}
 inline double _tan(const double& a_x) {return ::tan(a_x);}
 inline void _half_pi(double& a_v) {a_v = 1.5707963267948965580E0;}
 inline void _pi(double& a_v) {a_v = 3.1415926535897931160E0;}
-inline double _conj(const double& a_x) {return a_x;}
+//inline double _conj(const double& a_x) {return a_x;}
 
 //long double
 #ifndef ANDROID
@@ -48,7 +48,7 @@ inline long double _fabs(const long double& a_x) {return ::fabsl(a_x);}
 inline long double _tan(const long double& a_x) {return ::tanl(a_x);}
 inline void _half_pi(long double& a_v) {a_v = 1.5707963267948965580E0;}
 inline void _pi(long double& a_v) {a_v = 3.1415926535897931160E0;}
-inline long double _conj(const long double& a_x) {return a_x;}
+//inline long double _conj(const long double& a_x) {return a_x;}
 #endif
 
 }

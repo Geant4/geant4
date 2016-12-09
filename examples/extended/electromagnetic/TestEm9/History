@@ -1,4 +1,4 @@
-$Id:$
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-11-16  I. Hrivnacova (testem9-V10-02-03)
+- Coding guidelines (class member names)
+
+14-10-16 G.Folger (testem9-V10-02-02)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+12-06-14 V.Ivant (testem9-V10-02-01)
+- TestEm9.in - add validation of EM physics per region
+
+04-07-16 I. Hrivnacova  (testem9-V10-02-00)
+- Fixes for Doxygen documentation
 
 27-10-15 D.Sawkey (testem9-V10-01-01)
 - Add physics lists G4EmStandardPhysicsGS, SS, WVI

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ActionInitialization.cc 76340 2013-11-08 15:21:09Z gcosmo $
+// $Id: ActionInitialization.cc 98767 2016-08-09 14:18:40Z gcosmo $
 //
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
@@ -52,7 +52,6 @@ void ActionInitialization::BuildForMaster() const
 {
  SetUserAction(new RunAction);
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

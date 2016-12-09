@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/src/Run.cc
+/// \file medical/fanoCavity/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71035 2013-06-10 09:17:35Z gcosmo $
@@ -45,9 +45,6 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include <iomanip>
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,7 +116,6 @@ void Run::EndOfRun()
 { // Only call by Master thread
     std::ios::fmtflags mode = G4cout.flags();
     G4cout.setf(std::ios::fixed,std::ios::floatfield);
-
 
     if (numberOfEvent == 0) return;
 
@@ -308,7 +304,6 @@ void Run::EndOfRun()
     }
     delete fProcCounter;
 
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -380,7 +375,6 @@ void Run::Merge(const G4Run* run) {
   fNbStepWall       += localRun->fNbStepWall;
   fNbStepCavity     += localRun->fNbStepCavity;
 
-
   fEsecondary      += localRun->fEsecondary;
   fEsecondary2     += localRun->fEsecondary2;
 
@@ -398,9 +392,6 @@ void Run::Merge(const G4Run* run) {
     for ( G4int i = 0; i < process->GetCounter() ; i++)
       this->CountProcesses(process->GetName());
   }
-
-
-
 
   G4Run::Merge(run);
 

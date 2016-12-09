@@ -51,15 +51,12 @@
  'sensitive detector' (SD), see F03CalorimeterSD, which means they can contribute to the hit.
 
  
-\section field03_s4 PHYSICS DEMO
+\subsection field01_s4 PHYSICS LIST
  
  The particle's type and the physic processes which will be available
- in this example are set in F03PhysicsList class.
- 
- The  messenger classes, F03PhysicsListMessenger, introduce interactive commands . Using these
- commands the geometry of the detector, the data of the primary
- particle, etc. can be changed.
- 
+ in this example are set in the FTFP_BERT physics list. This physics list 
+ requires data files for electromagnetic and hadronic processes.
+ See more on installation of the datasets in Geant4 Installation Guide, 
 
 \section field03_s5 HOW TO START ?
  

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4BetheHeitlerModel.hh 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -97,7 +97,7 @@ private:
   G4BetheHeitlerModel & operator=(const G4BetheHeitlerModel &right) = delete;
   G4BetheHeitlerModel(const  G4BetheHeitlerModel&) = delete;
 
-  G4Pow*                    g4pow;
+  G4Pow*                    g4calc;
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;

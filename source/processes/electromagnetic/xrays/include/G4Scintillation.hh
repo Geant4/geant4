@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4Scintillation.hh 98002 2016-06-30 13:03:36Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -216,6 +216,15 @@ public:
         // Return the boolean for whether or not the
         // G4ScintillationTrackInformation is set to the scint. photon track
 
+        void SetStackPhotons(const G4bool );
+        // Call by the user to set the flag for stacking the scint. photons
+
+        G4bool GetStackPhotons() const;
+        // Return the boolean for whether or not the scint. photons are stacked
+
+        G4int GetNumPhotons() const;
+        // Returns the current number of scint. photons (after PostStepDoIt)
+
         void DumpPhysicsTable() const;
         // Prints the fast and slow scintillation integral tables.
 
@@ -244,6 +253,10 @@ private:
         G4bool fScintillationByParticleType;
 
         G4bool fScintillationTrackInfo;
+
+        G4bool fStackingFlag;
+
+        G4int fNumPhotons;
 
 #ifdef G4DEBUG_SCINTILLATION
         G4double ScintTrackEDep, ScintTrackYield;
@@ -366,6 +379,24 @@ inline
 G4bool G4Scintillation::GetScintillationTrackInfo() const
 {
         return fScintillationTrackInfo;
+}
+
+inline
+void G4Scintillation::SetStackPhotons(const G4bool stackingFlag)
+{
+        fStackingFlag = stackingFlag;
+}
+
+inline
+G4bool G4Scintillation::GetStackPhotons() const
+{
+        return fStackingFlag;
+}
+
+inline
+G4int G4Scintillation::GetNumPhotons() const
+{
+        return fNumPhotons;
 }
 
 inline

@@ -40,8 +40,8 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
   G4double ElenUnit= cm;
   G4double EfieldUnit= volt/m; 
   G4cout << "\n-----------------------------------------------------------"
-	 << "\n      Electric field"
-	 << "\n-----------------------------------------------------------";
+	     << "\n      Electric field"
+         << "\n-----------------------------------------------------------";
     
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl;
   G4AutoLock lock(&MyHadrontherapyLockEField);
@@ -143,9 +143,9 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
   G4double z1 = Epoint[2] + feZoffset;
 
   // Check that the point is within the defined region 
-  if ( x1>=Eminx && x1<Emaxx &&
-       y1>=Eminy && y1<Emaxy && 
-       z1>=Eminz && z1<Emaxz ) {
+  if ( x1>Eminx && x1<Emaxx &&
+       y1>Eminy && y1<Emaxy && 
+       z1>Eminz && z1<Emaxz ) {
     
     // Position of given point within region, normalized to the range
     // [0,1]
@@ -169,9 +169,9 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
     
     // The indices of the nearest tabulated point whose coordinates
     // are all less than those of the given point
-    G4int exindex = static_cast<G4int>(exdindex);
-    G4int eyindex = static_cast<G4int>(eydindex);
-    G4int ezindex = static_cast<G4int>(ezdindex);
+    G4int exindex = static_cast<G4int>(std::floor(exdindex));
+    G4int eyindex = static_cast<G4int>(std::floor(eydindex));
+    G4int ezindex = static_cast<G4int>(std::floor(ezdindex));
     
 /*
 #ifdef DEBUG_G4intERPOLATING_FIELD

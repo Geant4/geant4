@@ -27,25 +27,6 @@ inline bool exists(const std::string& a_string) {
   return true;
 }
 
-inline bool size(const std::string& a_file,long& a_size){
-  FILE* file = ::fopen(a_file.c_str(),"rb");
-  if(!file) {
-    a_size = 0L;
-    return false;
-  }
-  //::rewind(file);
-  ::fseek(file,0L,SEEK_END);
-  a_size = ::ftell(file);
-  ::fclose(file);
-  return true;
-}
-
-inline bool is_empty(const std::string& a_file){
-  long sz;
-  if(!size(a_file,sz)) return true; //if not existing, consider it empty.
-  return (sz==0L)?true:false;  
-}
-
 inline bool write(const std::string& a_file,const std::string& a_string) {
   // a_string could contain \n separated lines.
   FILE* file = ::fopen(a_file.c_str(),"wb");
@@ -198,20 +179,6 @@ inline bool write_bytes(const std::string& a_file,const char* a_buffer,size_t a_
   return (nitem!=1?false:true);
 }  
 
-inline bool is_aida(const std::string& a_file,bool& a_is){
-  long sz;
-  if(!size(a_file,sz)) {a_is = false;return false;}
-
-  //NOTE : it assumes that the file is not compressed.
-  unsigned char head[1024];
- {unsigned int num = 1024;
-  if(!signature(a_file,head,num)) {a_is = false;return false;}
-  if(num!=1024) {a_is = false;return true;}}
-  head[1023] = 0; //to have a C string.
-  a_is = ::strstr((const char*)head,"<aida")?true:false;
-  return true;
-}
-
 inline bool num_csv_doubles(const std::string& a_string,char& a_sep,unsigned int& a_number){
   if(a_string.empty()) {a_sep=0;a_number=0;return true;} //it is ok.
 
@@ -352,6 +319,22 @@ inline bool is_csv(const std::string& a_file,bool& a_is){
   std::vector<std::string> txt;
   if(!file::read_num(a_file,3,txt,"#")) {a_is=false;return false;}
   return is_csv(txt,a_is);
+}
+
+inline bool is_lua(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="lua") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
+}
+
+inline bool is_py(const std::string& a_file,bool& a_is){
+  // look at suffix. Some file can't be guessed.
+  if(suffix(a_file)=="py") {a_is = true;return true;}
+  //try to guess ?
+  a_is = false;
+  return true;
 }
 
 }}
@@ -616,5 +599,6 @@ protected:
 }
 
 #include "file_format" //backcomp
+#include "fsize"       //backcomp
 
 #endif

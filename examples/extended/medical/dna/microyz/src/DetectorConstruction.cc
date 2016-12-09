@@ -35,6 +35,7 @@
 /// \brief Implementation of the DetectorConstruction class
  
 #include "DetectorConstruction.hh"
+#include "G4SDManager.hh"
 #include "TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -135,7 +136,7 @@ void DetectorConstruction::ConstructSDandField()
   
   TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
-  
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD); 
   // Setting aTrackerSD to all logical volumes with the same name 
   // of "Chamber_LV".
   SetSensitiveDetector("World_LV", aTrackerSD, true);

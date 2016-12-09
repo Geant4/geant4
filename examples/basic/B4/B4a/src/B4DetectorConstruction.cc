@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4DetectorConstruction.cc 87359 2014-12-01 16:04:27Z gcosmo $
+// $Id: B4DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 // 
 /// \file B4DetectorConstruction.cc
 /// \brief Implementation of the B4DetectorConstruction class
@@ -54,14 +54,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ThreadLocal 
-G4GlobalMagFieldMessenger* B4DetectorConstruction::fMagFieldMessenger = 0; 
+G4GlobalMagFieldMessenger* B4DetectorConstruction::fMagFieldMessenger = nullptr; 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B4DetectorConstruction::B4DetectorConstruction()
  : G4VUserDetectorConstruction(),
-   fAbsorberPV(0),
-   fGapPV(0),
+   fAbsorberPV(nullptr),
+   fGapPV(nullptr),
    fCheckOverlaps(true)
 {
 }
@@ -88,7 +88,7 @@ G4VPhysicalVolume* B4DetectorConstruction::Construct()
 void B4DetectorConstruction::DefineMaterials()
 { 
   // Lead material defined using NIST Manager
-  G4NistManager* nistManager = G4NistManager::Instance();
+  auto nistManager = G4NistManager::Instance();
   nistManager->FindOrBuildMaterial("G4_Pb");
   
   // Liquid argon material
@@ -116,15 +116,15 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   G4double gapThickness =  5.*mm;
   G4double calorSizeXY  = 10.*cm;
 
-  G4double layerThickness = absoThickness + gapThickness;
-  G4double calorThickness = nofLayers * layerThickness;
-  G4double worldSizeXY = 1.2 * calorSizeXY;
-  G4double worldSizeZ  = 1.2 * calorThickness; 
+  auto layerThickness = absoThickness + gapThickness;
+  auto calorThickness = nofLayers * layerThickness;
+  auto worldSizeXY = 1.2 * calorSizeXY;
+  auto worldSizeZ  = 1.2 * calorThickness; 
   
   // Get materials
-  G4Material* defaultMaterial = G4Material::GetMaterial("Galactic");
-  G4Material* absorberMaterial = G4Material::GetMaterial("G4_Pb");
-  G4Material* gapMaterial = G4Material::GetMaterial("liquidArgon");
+  auto defaultMaterial = G4Material::GetMaterial("Galactic");
+  auto absorberMaterial = G4Material::GetMaterial("G4_Pb");
+  auto gapMaterial = G4Material::GetMaterial("liquidArgon");
   
   if ( ! defaultMaterial || ! absorberMaterial || ! gapMaterial ) {
     G4ExceptionDescription msg;
@@ -136,17 +136,17 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //     
   // World
   //
-  G4VSolid* worldS 
+  auto worldS 
     = new G4Box("World",           // its name
                  worldSizeXY/2, worldSizeXY/2, worldSizeZ/2); // its size
                          
-  G4LogicalVolume* worldLV
+  auto worldLV
     = new G4LogicalVolume(
                  worldS,           // its solid
                  defaultMaterial,  // its material
                  "World");         // its name
                                    
-  G4VPhysicalVolume* worldPV
+  auto worldPV
     = new G4PVPlacement(
                  0,                // no rotation
                  G4ThreeVector(),  // at (0,0,0)
@@ -160,11 +160,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //                               
   // Calorimeter
   //  
-  G4VSolid* calorimeterS
+  auto calorimeterS
     = new G4Box("Calorimeter",     // its name
                  calorSizeXY/2, calorSizeXY/2, calorThickness/2); // its size
                          
-  G4LogicalVolume* calorLV
+  auto calorLV
     = new G4LogicalVolume(
                  calorimeterS,     // its solid
                  defaultMaterial,  // its material
@@ -183,11 +183,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //                                 
   // Layer
   //
-  G4VSolid* layerS 
+  auto layerS 
     = new G4Box("Layer",           // its name
                  calorSizeXY/2, calorSizeXY/2, layerThickness/2); // its size
                          
-  G4LogicalVolume* layerLV
+  auto layerLV
     = new G4LogicalVolume(
                  layerS,           // its solid
                  defaultMaterial,  // its material
@@ -204,11 +204,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //                               
   // Absorber
   //
-  G4VSolid* absorberS 
+  auto absorberS 
     = new G4Box("Abso",            // its name
                  calorSizeXY/2, calorSizeXY/2, absoThickness/2); // its size
                          
-  G4LogicalVolume* absorberLV
+  auto absorberLV
     = new G4LogicalVolume(
                  absorberS,        // its solid
                  absorberMaterial, // its material
@@ -228,11 +228,11 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //                               
   // Gap
   //
-  G4VSolid* gapS 
+  auto gapS 
     = new G4Box("Gap",             // its name
                  calorSizeXY/2, calorSizeXY/2, gapThickness/2); // its size
                          
-  G4LogicalVolume* gapLV
+  auto gapLV
     = new G4LogicalVolume(
                  gapS,             // its solid
                  gapMaterial,      // its material
@@ -264,9 +264,9 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //                                        
   // Visualization attributes
   //
-  worldLV->SetVisAttributes (G4VisAttributes::Invisible);
+  worldLV->SetVisAttributes (G4VisAttributes::GetInvisible());
 
-  G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+  auto simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   calorLV->SetVisAttributes(simpleBoxVisAtt);
 
@@ -283,7 +283,7 @@ void B4DetectorConstruction::ConstructSDandField()
   // Create global magnetic field messenger.
   // Uniform magnetic field is then created automatically if
   // the field value is not zero.
-  G4ThreeVector fieldValue = G4ThreeVector();
+  G4ThreeVector fieldValue;
   fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
   fMagFieldMessenger->SetVerboseLevel(1);
   

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 88768 2015-03-09 12:34:15Z gcosmo $
+$Id: History 101653 2016-11-21 08:50:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,13 @@ $Id: History 88768 2015-03-09 12:34:15Z gcosmo $
 
                       Category History file
                       ---------------------
+
+19.11.2016 - A. Dotti   tag radioprotection-V10-02-01
+	    Explicit set of SD to manager
+
+28.10.2016 - G. Folger  tag radioprotection-V10-02-00
+            Remove direct use of theParticleIterator, use GetParticleTableIterator().
+             fix required by clang39 on Linux and MAC
 
 06.03.2015 - A. Dotti. tag radioprotection-V10-01-00
              removing unnecessary GPS in master

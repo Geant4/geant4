@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 89244 2015-03-27 16:27:51Z gcosmo $
+// $Id: G4VUserPhysicsList.cc 101155 2016-11-08 08:21:41Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -81,14 +81,11 @@
 // This static member is thread local. For each thread, it holds the array
 // size of G4VUPLData instances.
 //
-template <class G4VUPLData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VUPLData>::workertotalspace = 0;
-
-// This static member is thread local. For each thread, it points to the
-// array of G4VUPLData instances.
-//
-template <class G4VUPLData> G4ThreadLocal
-G4VUPLData* G4VUPLSplitter<G4VUPLData>::offset = 0;
+#define G4MT_theMessenger ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theMessenger)
+#define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
+#define fIsPhysicsTableBuilt ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fIsPhysicsTableBuilt)
+#define fDisplayThreshold ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold)
+#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 
 // This field helps to use the class G4VUPLManager
 //
@@ -969,6 +966,12 @@ G4bool G4VUserPhysicsList::RegisterProcess(G4VProcess*            process,
 					  G4ParticleDefinition*  particle)
 {
   return G4MT_thePLHelper->RegisterProcess(process, particle);
+}
+
+////////////////////////////////////////////////////////
+G4ParticleTable::G4PTblDicIterator* G4VUserPhysicsList::GetParticleIterator() const
+{
+	return (subInstanceManager.offset[g4vuplInstanceID])._theParticleIterator;
 }
 
 ////////////////////////////////////////////////////////

@@ -61,7 +61,7 @@ void B4aActionInitialization::Build() const
 {
   SetUserAction(new B4PrimaryGeneratorAction);
   SetUserAction(new B4RunAction);
-  B4aEventAction* eventAction = new B4aEventAction;
+  auto eventAction = new B4aEventAction;
   SetUserAction(eventAction);
   SetUserAction(new B4aSteppingAction(fDetConstruction,eventAction));
 }  

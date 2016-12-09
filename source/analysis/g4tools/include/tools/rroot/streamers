@@ -147,12 +147,12 @@ inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double,unsigned int>
     std::vector<double> edges;
     if(!Array_stream<double>(a_buffer,edges)) return false; //fXbins TArrayD
 
-    int edgen = edges.size();
-    if(edgen<=0) {
+    size_t edgen = edges.size();
+    if(!edgen) {
       a_fAxis.configure(number,min,max);
     } else {
       std::vector<double> vedges;
-      for(int index=0;index<edgen;index++) {
+      for(size_t index=0;index<edgen;index++) {
         vedges.push_back(edges[index]);
       }
       a_fAxis.configure(vedges);
@@ -227,8 +227,7 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
     if(a_data.m_dimension==2) {
       if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
-      a_data.m_axes[1].m_offset =
-        a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
+      a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
 
       tools::histo::axis<double,unsigned int> dummy;
       if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
@@ -839,14 +838,10 @@ class TDirectory : public tools::rroot::directory {
 //public:
 //  static const std::string& store_class() {return TDirectory_cls();}
 public:
-  TDirectory(ifile& a_file)
-  :tools::rroot::directory(a_file)
-  {}
+  TDirectory(ifile& a_file):tools::rroot::directory(a_file){}
   virtual ~TDirectory(){}
 protected:
-  TDirectory(const TDirectory& a_from)
-  :tools::rroot::directory(a_from)
-  {}
+  TDirectory(const TDirectory& a_from):tools::rroot::directory(a_from){}
   TDirectory& operator=(const TDirectory&){return *this;}
 public:
   bool stream(buffer& a_buffer){
@@ -860,7 +855,7 @@ public:
     //m_date_M.setDate(_date);
     if(!a_buffer.read(m_nbytes_keys)) return false;
     if(!a_buffer.read(m_nbytes_name)) return false;
-    if(version>1000) {
+    if((uint32)version>big_file_version_tag()) {
       if(!a_buffer.read(m_seek_directory)) return false;
       if(!a_buffer.read(m_seek_parent)) return false;
       if(!a_buffer.read(m_seek_keys)) return false;
@@ -877,7 +872,7 @@ public:
       if(!a_buffer.read(i)) return false;
       m_seek_keys = i;}
     }
-    //short v = version%1000;
+    //short v = version%big_file_version_tag();
 
     if (m_seek_keys) {
       uint32 n;
@@ -935,7 +930,7 @@ inline void dump(std::ostream& a_out,
     if(!a_recursive) continue;
 
     uint32 sz;
-    char* buf = k.get_object_buffer(sz);
+    char* buf = k.get_object_buffer(a_file,sz);
     //we don't have ownership of buf.
     if(!buf) {
       a_out  << "tools::rroot::dump :"
@@ -959,7 +954,7 @@ inline void dump(std::ostream& a_out,
 
 inline bool read_sinfos(tools::rroot::ifile& a_file){
   key& k = a_file.sinfos_key();
-  std::ostream& out = k.file().out();
+  std::ostream& out = k.out();
   if(k.object_class()!=tools::rroot::TList_cls()) {
     out << "tools::rroot::read_sinfos :"
         << " key not a TList."
@@ -967,14 +962,14 @@ inline bool read_sinfos(tools::rroot::ifile& a_file){
     return false;
   }
   unsigned int sz;
-  char* buf = k.get_object_buffer(sz); //we don't have ownership of buf.
+  char* buf = k.get_object_buffer(a_file,sz); //we don't have ownership of buf.
   if(!buf) {
     out << "tools::rroot::read_sinfos :"
         << " can't get data buffer of " << k.object_name() << "."
         << std::endl;
     return false;
   }
-  tools::rroot::buffer b(out,k.file().byte_swap(),sz,buf,k.key_length(),false);
+  tools::rroot::buffer b(out,a_file.byte_swap(),sz,buf,k.key_length(),false);
   dummy_fac fac(out);
   List infos(fac,true);
   if(!infos.stream(b)) return false;

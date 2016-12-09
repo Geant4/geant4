@@ -1,4 +1,4 @@
-$Id: History 97098 2016-05-25 08:04:17Z gcosmo $
+$Id: History 101820 2016-12-01 08:34:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24.05.2015 L. Pandola, emlowen-V10-02-06
+01.12.2016 L.Pandola, emlowen-V10-02-11
+- Fix memory leak in G4PenelopeBremsstrahlungFS 
+
+27.10.2016 M.Raine, emlowen-V10-02-10
+- G4MicroElecInelasticModel - changes to allow faster computation
+- needs G4EMLOW6.50
+
+20.09.2016 L.Pandola, emlowen-V10-02-09
+- Include C++11 features in the Penelope models (nullptr, 
+  range-based loops)
+
+15.08.2016 V.Ivanchenko, emlowen-V10-02-08
+- G4hParameterisedLossModel - fixed PVS-Studio warning (A.Karpov)
+
+04.07.2016 S. Incerti, emlowen-V10-02-07
+- removed verbosity in G4AtomicTransitionManager (see bugzilla 1874)
+
+24.05.2016 L. Pandola, emlowen-V10-02-06
 - fix compiler warning in G4PenelopeRayleighModel by gcc-6.1
 
 10.05.2016 JMCBrown, SI, emlowen-V10-02-05

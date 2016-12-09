@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 95281 2016-02-03 11:43:18Z gcosmo $
+// $Id: G4Scintillation.cc 98002 2016-06-30 13:03:36Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -93,6 +93,7 @@
 //G4double G4Scintillation::fExcitationRatio = 1.0;
 //G4bool G4Scintillation::fScintillationByParticleType = false;
 //G4bool G4Scintillation::fScintillationTrackInfo = false;
+//G4bool G4Scintillation::fStackingFlag = true;
 //G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
 
         //////////////
@@ -116,6 +117,8 @@ G4Scintillation::G4Scintillation(const G4String& processName,
     fExcitationRatio(1.0),
     fScintillationByParticleType(false),
     fScintillationTrackInfo(false),
+    fStackingFlag(true),
+    fNumPhotons(0),
     fEmSaturation(nullptr)
 {
         SetProcessSubType(fScintillation);
@@ -264,19 +267,17 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         else
            MeanNumberOfPhotons = ScintillationYield*TotalEnergyDeposit;
 
-        G4int NumPhotons;
-
         if (MeanNumberOfPhotons > 10.)
         {
           G4double sigma = ResolutionScale * std::sqrt(MeanNumberOfPhotons);
-          NumPhotons = G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
+          fNumPhotons=G4int(G4RandGauss::shoot(MeanNumberOfPhotons,sigma)+0.5);
         }
         else
         {
-          NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
+          fNumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
         }
 
-        if (NumPhotons <= 0)
+        if ( fNumPhotons <= 0 || !fStackingFlag )
         {
            // return unchanged particle and no secondaries
 
@@ -287,7 +288,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         ////////////////////////////////////////////////////////////////
 
-        aParticleChange.SetNumberOfSecondaries(NumPhotons);
+        aParticleChange.SetNumberOfSecondaries(fNumPhotons);
 
         if (fTrackSecondariesFirst) {
            if (aTrack.GetTrackStatus() == fAlive )
@@ -301,7 +302,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         // Retrieve the Scintillation Integral for this material
         // new G4PhysicsOrderedFreeVector allocated to hold CII's
 
-        G4int Num = NumPhotons;
+        G4int Num = fNumPhotons;
 
         for (G4int scnt = 1; scnt <= nscnt; scnt++) {
 
@@ -341,10 +342,10 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  G4double yieldRatio = aMaterialPropertiesTable->
                                           GetConstProperty("YIELDRATIO");
                  if ( fExcitationRatio == 1.0 || fExcitationRatio == 0.0) {
-                    Num = G4int (std::min(yieldRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(yieldRatio,1.0) * fNumPhotons);
                  }
                  else {
-                    Num = G4int (std::min(fExcitationRatio,1.0) * NumPhotons);
+                    Num = G4int (std::min(fExcitationRatio,1.0) * fNumPhotons);
                  }
                  ScintillationTime   = aMaterialPropertiesTable->
                                           GetConstProperty("FASTTIMECONSTANT");
@@ -359,7 +360,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                }
             }
             else {
-               Num = NumPhotons - Num;
+               Num = fNumPhotons - Num;
                ScintillationTime   =   aMaterialPropertiesTable->
                                           GetConstProperty("SLOWTIMECONSTANT");
                if (fFiniteRiseTime) {

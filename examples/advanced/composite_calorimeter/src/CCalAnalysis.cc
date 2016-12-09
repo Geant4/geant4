@@ -66,7 +66,7 @@ CCalAnalysis::CCalAnalysis() :
   // Create a tuple :
   // Create ntuple
   analysisManager->CreateNtuple("ntuple1", "Event info");
-  char tupleid[6];
+  char tupleid[7];
   for (int i=0;i<28;i++)
     {
       sprintf(tupleid,"hcal%d",i);

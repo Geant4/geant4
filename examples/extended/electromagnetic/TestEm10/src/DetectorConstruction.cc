@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.cc 94932 2015-12-18 09:21:29Z gcosmo $
+// $Id: DetectorConstruction.cc 101309 2016-11-14 11:26:17Z gcosmo $
 //
 //
 
@@ -40,10 +40,15 @@
 #include "DetectorBarr90.hh"
 #include "DetectorMessenger.hh"
 #include "Materials.hh"
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
 
 #include "G4LogicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
+
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,58 +73,68 @@ DetectorConstruction::~DetectorConstruction()
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
+  G4VPhysicalVolume* world = nullptr;
   if( fSetUp == "simpleALICE" )
   {
     DetectorSimpleALICE  simpleALICE;
-    G4VPhysicalVolume* world = simpleALICE.Construct();
+    world = simpleALICE.Construct();
     fRadiatorDescription = simpleALICE.GetRadiatorDescription();
-    return world;
   }
   else if( fSetUp == "alice06" )
   {
     DetectorALICE06  alice06;
-    G4VPhysicalVolume* world = alice06.Construct();
+    world = alice06.Construct();
     fRadiatorDescription = alice06.GetRadiatorDescription();
-    return world;
   }
   else if( fSetUp == "bari05" )
   {
     DetectorBari05  bari05;
-    G4VPhysicalVolume* world = bari05.Construct();
+    world = bari05.Construct();
     fRadiatorDescription = bari05.GetRadiatorDescription();
-    return world;
   }
   else if( fSetUp == "harris73" )
   {
     DetectorHarris73  harris73;
-    G4VPhysicalVolume* world = harris73.Construct();
+    world = harris73.Construct();
     fRadiatorDescription = harris73.GetRadiatorDescription();
-    return world;
   }
   else if( fSetUp == "watase86" )
   {
     DetectorWatase86  watase86;
-    G4VPhysicalVolume* world = watase86.Construct();
+    world = watase86.Construct();
     fRadiatorDescription = watase86.GetRadiatorDescription();
-    return world;
   }
   else if( fSetUp == "barr90" )
   {
     DetectorBarr90  barr90;
-    G4VPhysicalVolume* world = barr90.Construct();
+    world = barr90.Construct();
     fRadiatorDescription = barr90.GetRadiatorDescription();
-    return world;
   }
   else
   {
-    G4cout << "Experimental setup is unsupported. Check /XTRdetector/setup " <<G4endl;
+    G4cout << "Experimental setup is unsupported. Check /XTRdetector/setup " 
+           <<G4endl;
     G4cout << "Run default: simpleALICE"<<G4endl;
 
     DetectorSimpleALICE  simpleALICE;
-    G4VPhysicalVolume* world = simpleALICE.Construct();
+    world = simpleALICE.Construct();
     fRadiatorDescription = simpleALICE.GetRadiatorDescription();
-    return world;
   }
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  size_t nRegions = regionStore->size();
+  G4double cut = 1.*CLHEP::mm;
+  for(size_t i=0; i<nRegions; ++i) {
+    G4Region* reg = (*regionStore)[i];
+    if(!reg->GetProductionCuts()) {
+      G4ProductionCuts* cuts = new G4ProductionCuts();
+      cuts->SetProductionCut(cut,"gamma");
+      cuts->SetProductionCut(cut,"e-");
+      cuts->SetProductionCut(cut,"e+");
+      cuts->SetProductionCut(cut,"proton");
+      reg->SetProductionCuts(cuts);
+    }
+  }
+  return world;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,7 +142,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 RadiatorDescription* DetectorConstruction::GetRadiatorDescription() const
 {
   if ( ! fRadiatorDescription ) {
-    G4cerr << "RadiatorDescription is not defined" << G4endl;
+    G4cout << "RadiatorDescription is not defined" << G4endl;
   }
   return fRadiatorDescription;
 }

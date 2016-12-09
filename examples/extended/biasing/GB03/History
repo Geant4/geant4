@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 19, 2016 A. Dotti
+- explicit set of SD to manager
+- tag GB03-V10-02-00
+
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines(redundant empty lines)
+
 Nov 29, 2014, I. Hrivnacova
 - Fixed .README
 - tag GB03-V10-00-05

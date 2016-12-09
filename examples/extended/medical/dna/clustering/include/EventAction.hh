@@ -41,7 +41,6 @@
 #include "globals.hh"
 
 class ClusteringAlgo;
-class EventActionMessenger;
 
 class EventAction : public G4UserEventAction
 {
@@ -53,8 +52,6 @@ public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
 
-  void SetPrintModulo(G4int pVal)  {fPrintModulo = pVal;};
-
   G4double GetEdep() {return fEdep;};
   void SetEdep(G4double pVal) {fEdep=pVal;};
   void AddEdep(G4double pVal) {fEdep+=pVal;};
@@ -62,9 +59,7 @@ public:
   ClusteringAlgo* fpClustering;
 
 private:
-  G4int                     fPrintModulo;
-  G4double                  fEdep;
-  EventActionMessenger*     fpEventMessenger;
+  G4double  fEdep;
 };
 
 #endif

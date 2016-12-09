@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4RayTracerSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
 
 // John Allison  17th March 2000
 
@@ -59,11 +59,14 @@ public:
   void AddSolid(const G4Torus&){}
   void AddSolid(const G4Polycone&){}
   void AddSolid(const G4Polyhedra&){}
+  void AddSolid(const G4Orb&){}
+  void AddSolid(const G4Ellipsoid&){}
   void AddSolid(const G4VSolid&){}
   void AddCompound(const G4VTrajectory&){}
   void AddCompound(const G4VHit&){}
   void AddCompound(const G4VDigi&){}
   void AddCompound(const G4THitsMap<G4double>&) {}
+  void AddCompound(const G4THitsMap<G4StatDouble>&) {}
 
 private:
   static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.

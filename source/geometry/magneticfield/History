@@ -1,4 +1,4 @@
-$Id: History 97812 2016-06-14 07:57:41Z gcosmo $
+$Id: History 101384 2016-11-16 11:03:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct   7, 2016 J.Apostolakis             - field-V10-02-24, 25
+---------------------------
+- Checked loops for termination for infinite loops and annotated 
+   them with "Loop checking" comment
 
+Oct   7, 2016 D.Sorokin                 - field-V10-02-23
+-----------------------  Commit: J. Apostolakis
+- Protection for multiple inclusion of G4ClassicalRK4 
+   (thanks to Dmitrii Sorokin, GSoC 2016 student. )
+
+Aug  16, 2016 J.Apostolakis             - field-V10-02-22
+---------------------------
+- Added initialization of fAuxStepper in constructor of 
+  G4DoLoMcPriRK34, G4DormandPrince745 & G4DormandPrinceRK56.
 
 June 11, 2016 J.Apostolakis             - field-V10-02-21
 ---------------------------

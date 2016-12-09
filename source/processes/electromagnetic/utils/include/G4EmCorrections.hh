@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh 96698 2016-05-02 07:19:24Z gcosmo $
+// $Id: G4EmCorrections.hh 100363 2016-10-19 09:24:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,13 +60,13 @@
 #include "G4ionEffectiveCharge.hh"
 #include "G4Material.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Pow.hh"
 
 class G4VEmModel;
 class G4PhysicsVector;
 class G4IonTable;
 class G4MaterialCutsCouple;
 class G4LPhysicsFreeVector;
+class G4Pow;
 
 class G4EmCorrections
 {
@@ -197,7 +197,7 @@ private:
   G4EmCorrections & operator=(const G4EmCorrections &right) = delete;
   G4EmCorrections(const G4EmCorrections&) = delete;
 
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 
   static const G4double inveplus;
   static const G4double ZD[11];

@@ -51,7 +51,7 @@ fpNext(0),fpFirst(0)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Molecule::Molecule(string mN,int mNum)
+Molecule::Molecule(const std::string& mN,int mNum)
 {
   fMolName=mN;  //Molecule name
   fMolNum=mNum; //Molecule number

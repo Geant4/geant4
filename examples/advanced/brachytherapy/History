@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 88769 2015-03-09 12:35:11Z gcosmo $
+$Id: History 100821 2016-11-02 15:21:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,15 @@ $Id: History 88769 2015-03-09 12:35:11Z gcosmo $
 
                       Category History file
                       ---------------------
+1.11.2016  - S. Guatelli; brachy-V10-02-02
+             Added comparison to reference data for the Flexisource
+             Added Flexisurce and TG186 reference source; added method to calculate relative dose rate to compare to reference data
+
+06.09.2016 -  M. Asai; brachy-V10-02-01
+
+04.09.2016 -  M. Asai; brachy-V10-02-00
+              Modify std::map<G4int, G4double*> to
+              std::map<G4int, G4StatDouble*>
 
 06.03.2015 -  A. Dotti; brachy-V10-01-00
               Removing unnecessary instantiation of GPS in master

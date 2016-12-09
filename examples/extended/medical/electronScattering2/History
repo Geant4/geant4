@@ -1,4 +1,4 @@
-$Id: History 93734 2015-10-30 10:59:21Z gcosmo $
+$Id: History 101670 2016-11-21 09:17:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-11-16 A.Dotti  (exampleES2-V10-02-01)
+- explicit set of SD to manager
+
+14-10-16 G.Folger (exampleES2-V10-02-00)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 28 October 2015 Daren Sawkey       (exampleES2-V10-01-05)
 - Remove local physics lists

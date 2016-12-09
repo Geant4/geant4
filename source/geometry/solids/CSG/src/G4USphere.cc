@@ -35,7 +35,12 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4GeomTools.hh"
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -123,6 +128,50 @@ G4double G4USphere::GetDeltaThetaAngle() const
 {
   return GetShape()->GetDeltaThetaAngle();
 }
+G4double G4USphere::GetSinStartPhi() const
+{
+  G4double phi = GetShape()->GetStartPhiAngle();
+  return std::sin(phi);
+}
+G4double G4USphere::GetCosStartPhi() const
+{
+  G4double phi = GetShape()->GetStartPhiAngle();
+  return std::cos(phi);
+}
+G4double G4USphere::GetSinEndPhi() const
+{
+  G4double phi = GetShape()->GetStartPhiAngle() +
+    GetShape()->GetDeltaPhiAngle();
+  return std::sin(phi);
+}
+G4double G4USphere::GetCosEndPhi() const
+{
+  G4double phi = GetShape()->GetStartPhiAngle() +
+    GetShape()->GetDeltaPhiAngle();
+  return std::cos(phi);
+}
+G4double G4USphere::GetSinStartTheta() const
+{
+  G4double theta = GetShape()->GetStartThetaAngle();
+  return std::sin(theta);
+}
+G4double G4USphere::GetCosStartTheta() const
+{
+  G4double theta = GetShape()->GetStartThetaAngle();
+  return std::cos(theta);
+}
+G4double G4USphere::GetSinEndTheta() const
+{
+  G4double theta = GetShape()->GetStartThetaAngle() +
+                   GetShape()->GetDeltaThetaAngle();
+  return std::sin(theta);
+}
+G4double G4USphere::GetCosEndTheta() const
+{
+  G4double theta = GetShape()->GetStartThetaAngle() +
+                   GetShape()->GetDeltaThetaAngle();
+  return std::cos(theta);
+}
 
 void G4USphere::SetInnerRadius(G4double newRMin)
 {
@@ -174,6 +223,106 @@ void G4USphere::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4USphere::Clone() const
 {
   return new G4USphere(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4USphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  static G4bool checkBBox = true;
+
+  G4double rmin = GetInnerRadius();
+  G4double rmax = GetOuterRadius();
+
+  // Find bounding box
+  //
+  if (GetDeltaThetaAngle() >= pi && GetDeltaPhiAngle() >= twopi)
+  {
+    pMin.set(-rmax,-rmax,-rmax);
+    pMax.set( rmax, rmax, rmax);
+  }
+  else
+  {
+    G4double sinStart = GetSinStartTheta();
+    G4double cosStart = GetCosStartTheta();
+    G4double sinEnd   = GetSinEndTheta();
+    G4double cosEnd   = GetCosEndTheta();
+
+    G4double stheta = GetStartThetaAngle();
+    G4double etheta = stheta + GetDeltaThetaAngle();
+    G4double rhomin = rmin*std::min(sinStart,sinEnd);
+    G4double rhomax = rmax;
+    if (stheta > halfpi) rhomax = rmax*sinStart;
+    if (etheta < halfpi) rhomax = rmax*sinEnd;
+
+    G4TwoVector xymin,xymax;
+    G4GeomTools::DiskExtent(rhomin,rhomax,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            xymin,xymax);
+
+    G4double zmin = std::min(rmin*cosEnd,rmax*cosEnd);
+    G4double zmax = std::max(rmin*cosStart,rmax*cosStart);
+    pMin.set(xymin.x(),xymin.y(),zmin);
+    pMax.set(xymax.x(),xymax.y(),zmax);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4USphere::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  // Check consistency of bounding boxes
+  //
+  if (checkBBox)
+  {
+    UVector3 vmin, vmax;
+    GetShape()->Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
+        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
+        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
+        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
+        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
+        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Inconsistency in bounding boxes for solid: "
+              << GetName() << " !"
+              << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
+              << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
+      G4Exception("G4USphere::Extent()", "GeomMgt0001", JustWarning, message);
+      checkBBox = false;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool G4USphere::CalculateExtent(const EAxis pAxis,
+                                  const G4VoxelLimits& pVoxelLimit,
+                                  const G4AffineTransform& pTransform,
+                                        G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+
+  // Get bounding box
+  Extent(bmin,bmax);
+
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 //////////////////////////////////////////////////////////////////////////

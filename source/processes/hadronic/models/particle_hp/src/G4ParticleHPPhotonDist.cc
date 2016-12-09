@@ -138,7 +138,7 @@ if ( repFlag == 2 ) G4cout << "G4ParticleHPPhotonDist: repFlag == 2 && isoFlag !
       std::vector < G4int > vct_primary_par; 
       std::vector < G4int > vct_distype_par; 
       std::vector < G4ParticleHPVector* > vct_pXS_par;
-      if ( theGammas != NULL ) 
+      if ( theGammas != NULL && theShells != NULL ) 
       {
          //copy the cross section data 
          for ( i = 0 ; i < nDiscrete ; i++ )
@@ -401,6 +401,8 @@ G4int maxEnergyIndex = 0;
                     
                     break;
                  }
+/*
+160910 TK makes commented out sructurally dead code
                  G4cout << "NeutronHPPhotonDist could not find fitted energy set for multiplicity of " <<  actualMult.Get()->at(0) << "." << G4endl; 
                  G4cout << "NeutronHPPhotonDist will use the best set." << G4endl; 
                  for ( std::vector< G4double >::iterator 
@@ -408,6 +410,7 @@ G4int maxEnergyIndex = 0;
                  {
                      thePhotons->operator[](count)->SetKineticEnergy( *it );
                  }
+*/
                  //G4cout << "Not Good " << actualMult[0] << " j " << j << " total photons E  " 
                  //       << best/eV << " ratio " << best / maximumE 
                  //       << G4endl;

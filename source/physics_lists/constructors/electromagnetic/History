@@ -1,4 +1,4 @@
-$Id: History 97606 2016-06-06 09:21:51Z gcosmo $
+$Id: History 101864 2016-12-02 12:50:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,70 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-December-2016 V.Ivanchenko (phys-ctor-em-V10-02-38)
+- G4EmModelActivator - added initialisation of atomic deexcitation
+    for radioactive decay (also for the cases when radioactive
+    decay is registered before EM physics or is the only process)
+
+15-November-2016 V.Ivanchenko (phys-ctor-em-V10-02-37)
+- G4EmModelActivator - fixed PAI model activation (disable for ions)
+
+03-November-2016 V.Ivanchenko (phys-ctor-em-V10-02-36)
+- G4EmModelActivator - added SS PhysList per region
+
+20-October-2016 M.Maire   (phys-ctor-em-V10-02-35)
+- README : start to fill
+
+17-October-2016 M.Maire   (phys-ctor-em-V10-02-34)
+- add README
+
+11-October-2016 G.Folger  (phys-ctor-em-V10-02-33)
+- replace direct use of aParticleIterator by GetParticleIterator().
+
+11-October-2016 S.Incerti (phys-ctor-em-V10-02-32)
+- G4EmDNAPhysics* - retry of activation of atomic deex. conf.
+
+05-October-2016 V.Ivanchenko (phys-ctor-em-V10-02-31)
+- G4EmStandardPhysics_option4 - disable lateral displacement 
+    beyond safety
+
+05-October-2016 S.Incerti (phys-ctor-em-V10-02-30)
+- G4EmDNAPhysics* - reconfigured activation of atomic deexcitation
+
+03-October-2016 S.Incerti (phys-ctor-em-V10-02-29)
+- G4EmDNAPhysics - added G4EmParameters::Instance()->SetDefaults();
+
+23-September-2016 V.Ivanchenko (phys-ctor-em-V10-02-28)
+- G4EmStandardPhysicsWVI - disable lateral displacement beyond safety
+
+26-August-2016 V.Ivanchenko (phys-ctor-em-V10-02-27)
+25-August-2016 V.Ivanchenko (phys-ctor-em-V10-02-26)
+- G4EmModelActivator - added configuration of EM physics per G4Region 
+    via UI commands
+- G4EmLivermorePhysics, G4EmPenelopePhysics, G4EmStandardPhysicsGS,
+  G4EmLivermorePolarizedPhysics, G4EmStandardPhysicsWVI - use the same 
+    style names for EM physics constructors
+
+10-August-2016 V.Ivanchenko (phys-ctor-em-V10-02-25)
+- G4EmModelActivator - simplified interface, removed not needed methods
+
+03-August-2016 V.Ivanchenko (phys-ctor-em-V10-02-24)
+- Opt3, Livermore and Penelope enable sampling of lateral displacement 
+  for hadrons
+
+28-July-2016 V.Ivanchenko (phys-ctor-em-V10-02-23)
+- G4EmDNAPhysicsActivator - introduced new methods for DNA configuration
+    per particle type
+
+25-July-2016 V.Ivanchenko (phys-ctor-em-V10-02-22)
+- In all EM builders only one explicit constructor is left
+- Livermore and Penelope physics defined below 1 TeV (default 100 TeV)
+
+22-July-2016 V.Ivanchenko (phys-ctor-em-V10-02-21)
+- G4EmDNAPhysicsActivator - new class for DNA models configuration
+- G4EmModelActivator - take out DNA physics and move it to the new 
+    class G4EmDNAPhysicsActivator
 
 06-June-2016 M. Karamitros (phys-ctor-em-V10-02-20)
 - G4EmModelActivator: Correct elastic process name for ions

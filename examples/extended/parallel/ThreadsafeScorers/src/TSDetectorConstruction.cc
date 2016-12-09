@@ -69,6 +69,7 @@
 #include "G4UnitsTable.hh"
 #include "G4UserLimits.hh"
 
+#include "G4SDManager.hh"
 #include "G4MultiFunctionalDetector.hh"
 #include "G4PSEnergyDeposit.hh"
 #include "G4PSNofStep.hh"
@@ -280,7 +281,7 @@ void TSDetectorConstruction::ConstructSDandField()
     //------------------------------------------------//
     // Define MultiFunctionalDetector with name.
     G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(fMfdName);
-
+    G4SDManager::GetSDMpointer()->AddNewDetector(MFDet);
     G4VPrimitiveScorer* edep = new G4PSEnergyDeposit("EnergyDeposit");
     MFDet->RegisterPrimitive(edep);
     G4VPrimitiveScorer* nstep = new G4PSNofStep("NumberOfSteps");

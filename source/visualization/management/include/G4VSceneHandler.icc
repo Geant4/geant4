@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.icc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4VSceneHandler.icc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // 
 // John Allison  19th July 1996.
@@ -130,9 +130,14 @@ inline void G4VSceneHandler::SetObjectTransformation (const G4Transform3D& t) {
   fObjectTransformation = t;
 }
 
+inline const G4Colour& G4VSceneHandler::GetColour () {
+  fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  const G4Colour& colour = fpVisAttribs -> GetColour ();
+  return colour;
+}
 
-inline const G4Colour& G4VSceneHandler::GetColor (const G4Visible& visible) {
-  return GetColour (visible);
+inline const G4Colour& G4VSceneHandler::GetColor () {
+  return GetColour ();
 }
 
 inline const G4Colour& G4VSceneHandler::GetTextColor (const G4Text& text) {

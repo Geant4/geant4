@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularDissociation.hh 93936 2015-11-04 09:37:59Z gcosmo $
+// $Id: G4DNAMolecularDissociation.hh 101354 2016-11-15 08:27:51Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -103,6 +103,10 @@ public:
     //__________________________________________________________________
     void SetDecayDisplacer(const G4ParticleDefinition*, G4VMolecularDecayDisplacer*);
     G4VMolecularDecayDisplacer* GetDecayDisplacer(const G4ParticleDefinition*);
+  
+  //__________________________________________________________________
+  void SetDisplacer(const G4ParticleDefinition*, G4VMolecularDecayDisplacer*);
+  G4VMolecularDecayDisplacer* GetDisplacer(const G4ParticleDefinition*);
 
 protected:
     //__________________________________________________________________
@@ -124,8 +128,8 @@ private:
 private:
     G4bool fDecayAtFixedTime ;
 
-    typedef std::map<const G4ParticleDefinition*, G4VMolecularDecayDisplacer*>  DecayDisplacementMap;
-    DecayDisplacementMap fDecayDisplacementMap;
+    typedef std::map<const G4ParticleDefinition*, G4VMolecularDecayDisplacer*>  DisplacementMap;
+    DisplacementMap fDisplacementMap;
 
     G4int fVerbose;
 };

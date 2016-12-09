@@ -75,6 +75,8 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4RayleighScattering.hh" 
 #include "G4LivermoreRayleighModel.hh"
+
+#include "G4EmParameters.hh"
 // end of warning
 
 #include "G4LossTableManager.hh"
@@ -89,17 +91,16 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option7);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmDNAPhysics_option7::G4EmDNAPhysics_option7(G4int ver) :
-    G4VPhysicsConstructor("G4EmDNAPhysics_option7"), verbose(ver)
-{
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4EmDNAPhysics_option7::G4EmDNAPhysics_option7(G4int ver, const G4String&) :
     G4VPhysicsConstructor("G4EmDNAPhysics_option7"), verbose(ver)
 {
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetFluo(true);  
+  param->SetAuger(true);  
+  param->SetAugerCascade(true);  
+  param->SetDeexcitationIgnoreCut(true);
+
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -144,10 +145,11 @@ void G4EmDNAPhysics_option7::ConstructProcess()
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-")
@@ -329,7 +331,6 @@ void G4EmDNAPhysics_option7::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

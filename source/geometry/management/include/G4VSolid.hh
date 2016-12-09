@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh 92695 2015-09-14 08:49:44Z gcosmo $
+// $Id: G4VSolid.hh 100906 2016-11-03 09:59:32Z gcosmo $
 //
 // 
 // class G4VSolid
@@ -107,6 +107,9 @@ class G4VSolid
 
     inline G4double GetTolerance() const;
       // Returns the cached geometrical tolerance.
+
+    virtual void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+      // Returns the bounding box of the solid.
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
 				   const G4VoxelLimits& pVoxelLimit,

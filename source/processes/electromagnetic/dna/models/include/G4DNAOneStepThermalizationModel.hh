@@ -23,9 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.hh 96932 2016-05-18 09:07:51Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.hh 101354 2016-11-15 08:27:51Z gcosmo $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //
@@ -50,25 +50,61 @@
 #include "G4VEmModel.hh"
 
 class G4ITNavigator;
+class G4Navigator;
+
+namespace DNA{
+  namespace Penetration{
+    //-----------------------
+    /*
+     * Article: Jintana Meesungnoen, Jean-Paul Jay-Gerin,
+     *          Abdelali Filali-Mouhim, and Samlee Mankhetkorn (2002)
+     *          Low-Energy Electron Penetration Range in Liquid Water.
+     *          Radiation Research: November 2002, Vol. 158, No. 5, pp.657-660.
+     */
+    struct Meesungnoen2002{
+      static void GetPenetration(G4double energy,
+                                 G4ThreeVector& displacement);
+      static double GetRmean(double energy);
+      //-----
+      // Polynomial fit of Meesungnoen, 2002
+      static const double gCoeff[13];
+    };
+    
+    //-----------------------
+    /*
+     * Article: Terrissol M, Beaudre A (1990) Simulation of space and time 
+     *          evolution of radiolytic species induced by electrons in water.
+     *          Radiat Prot Dosimetry 31:171–175
+     */
+    struct Terrisol1990{
+      static void GetPenetration(G4double energy,
+                                 G4ThreeVector& displacement);
+      static double GetRmean(double energy);
+      static double Get3DStdDeviation(double energy);
+      //-----
+      // Terrisol, 1990
+      static const double gEnergies_T1990[11];
+      static const double gStdDev_T1990[11];
+    };
+  }
+}
 
 /**
- * When an electron reaches the highest energy domain of G4DNAOneStepThermalizationModel,
- * it is then automatically converted into a solvated electron and displace from its original
- * position using a published thermalization statistic.
- *
- * Article: Jintana Meesungnoen, Jean-Paul Jay-Gerin,
- *          Abdelali Filali-Mouhim, and Samlee Mankhetkorn (2002)
- *          Low-Energy Electron Penetration Range in Liquid Water.
- *          Radiation Research: November 2002, Vol. 158, No. 5, pp. 657-660.
+ * When an electron reaches the highest energy domain of
+ * G4DNAOneStepThermalizationModel,
+ * it is then automatically converted into a solvated electron and displace 
+ * from its original position using a published thermalization statistic.
  */
 
-class G4DNAOneStepThermalizationModel : public G4VEmModel
+template<typename MODEL=DNA::Penetration::Meesungnoen2002>
+class G4TDNAOneStepThermalizationModel : public G4VEmModel
 {
 public:
-  G4DNAOneStepThermalizationModel(const G4ParticleDefinition* p = 0,
+  typedef MODEL Model;
+  G4TDNAOneStepThermalizationModel(const G4ParticleDefinition* p = 0,
                                   const G4String& nam =
                                       "DNAOneStepThermalizationModel");
-  virtual ~G4DNAOneStepThermalizationModel();
+  virtual ~G4TDNAOneStepThermalizationModel();
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
@@ -84,27 +120,35 @@ public:
                                  G4double tmin,
                                  G4double maxEnergy);
 
-  inline void SetVerbose(int);
+  inline void SetVerbose(int flag){
+    fVerboseLevel = flag;
+  }
+  
+  void GetPenetration(G4double energy,
+                      G4ThreeVector& displacement);
+  
+  double GetRmean(double energy);
 
 protected:
   const std::vector<G4double>* fpWaterDensity;
-
-  G4ThreeVector RadialDistributionOfProducts(G4double Rrms) const;
+  
   G4ParticleChangeForGamma* fParticleChangeForGamma;
-
   G4bool fIsInitialised;
   G4int fVerboseLevel;
-  G4ITNavigator* fNavigator;
+  G4Navigator* fNavigator;
 
 private:
-  G4DNAOneStepThermalizationModel&
-  operator=(const G4DNAOneStepThermalizationModel &right);
-  G4DNAOneStepThermalizationModel(const G4DNAOneStepThermalizationModel&);
+  G4TDNAOneStepThermalizationModel&
+  operator=(const G4TDNAOneStepThermalizationModel &right);
+  G4TDNAOneStepThermalizationModel(const G4TDNAOneStepThermalizationModel&);
 };
 
-inline void G4DNAOneStepThermalizationModel::SetVerbose(int flag)
-{
-  fVerboseLevel = flag;
-}
+#include "G4DNAOneStepThermalizationModel.hpp"
 
+typedef G4TDNAOneStepThermalizationModel<DNA::Penetration::Meesungnoen2002> G4DNAOneStepThermalizationModel;
+
+// typedef G4TDNAOneStepThermalizationModel<DNA::Penetration::Terrisol1990> G4DNAOneStepThermalizationModel;
+// Note: if you use the above distribution, it would be
+// better to follow the electrons down to 6 eV and only then apply
+// the one step thermalization
 #endif

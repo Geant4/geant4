@@ -73,7 +73,8 @@ class G4VUPLSplitter
 {
   public:
 
-    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {
+    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0)
+    {
     	G4MUTEXINIT(mutex);
     }
 
@@ -88,7 +89,8 @@ class G4VUPLSplitter
         totalobj++;
         //If the number of objects is larger than the available spaces,
         //a re-allocation is needed
-        if (totalobj > workertotalspace)  {
+        if (totalobj > workertotalspace)
+        {
         	l.unlock();
         	NewSubInstances();
         	l.lock();
@@ -140,18 +142,9 @@ class G4VUPLSplitter
         // Use recycled work area - which was created previously
         if( offset && offset!=newOffset )
         {
-            if( newOffset != offset )
-            {
-                G4Exception("G4VUPLSplitter::UseWorkspace()",
-                            "TwoWorkspaces", FatalException,
-                            "Thread already has workspace - cannot use another.");
-            }
-            else
-            {
-                G4Exception("G4VUPLSplitter::UseWorkspace()",
-                            "TwoWorkspaces", JustWarning,
-                            "Thread already has a workspace - trying to set the same again.");
-            }
+           G4Exception("G4VUPLSplitter::UseWorkspace()",
+                       "TwoWorkspaces", FatalException,
+                       "Thread already has workspace - cannot use another.");
         }
         offset= newOffset;
         // totalobj= numObjects;
@@ -200,5 +193,8 @@ class G4VUPLSplitter
     T* sharedOffset;
     G4Mutex mutex;
 };
+
+template<typename T> G4ThreadLocal G4int G4VUPLSplitter<T>::workertotalspace=0;
+template<typename T> G4ThreadLocal T* G4VUPLSplitter<T>::offset=0;
 
 #endif

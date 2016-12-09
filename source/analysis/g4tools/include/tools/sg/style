@@ -145,9 +145,9 @@ private:
 public:
   style()
   :parent()
-  ,color(colorf::black())
-  ,highlight_color(colorf::black())
-  ,back_color(colorf::white())
+  ,color(colorf_black())
+  ,highlight_color(colorf_black())
+  ,back_color(colorf_white())
   ,line_width(1)
   ,marker_size(1)
   ,font_size(10)

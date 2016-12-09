@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 67644 2013-02-28 14:57:35Z ihrivnac $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -319,10 +319,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
   fMuonRegion->AddRootLogicalVolume(logicYV);
 
   // color regions
-  logicVV-> SetVisAttributes(G4VisAttributes::Invisible);
-  logicV-> SetVisAttributes(G4VisAttributes::Invisible);
-  logicECal-> SetVisAttributes(G4VisAttributes::Invisible);
-  logicYV-> SetVisAttributes(G4VisAttributes::Invisible);
+  logicVV-> SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicV-> SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicECal-> SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicYV-> SetVisAttributes(G4VisAttributes::GetInvisible());
 
   G4VisAttributes* regWcolor = new G4VisAttributes(G4Colour(0.3, 0.3, 0.3));
   fLogicWorld->SetVisAttributes(regWcolor);

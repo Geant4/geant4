@@ -125,7 +125,7 @@ G4int G4TNtupleManager<TNTUPLE>::CreateNtupleTColumn(
   }  
 #endif
   
-  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "CreateNtupleIColumn");
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "CreateNtupleTColumn");
   if ( ! ntupleDescription )  return G4Analysis::kInvalidId;   
     
   // Save column info in booking
@@ -412,8 +412,9 @@ void G4TNtupleManager<TNTUPLE>::FinishNtuple(
 #endif
 
   // check that ntuple was really created
-  auto ntuple = GetNtupleInFunction(ntupleId, "FinishNtuple", false);
-  if ( ! ntuple )  return;   
+  // auto ntuple = GetNtupleInFunction(ntupleId, "FinishNtuple", false);
+  // if ( ! ntuple )  return;   
+      // The test has to be now done in the FinishTNtuple implementations
 
   FinishTNtuple(ntupleDescription);
 

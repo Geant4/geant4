@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 96380 2016-04-11 07:01:31Z gcosmo $
+// $Id: PhysicsList.cc 100335 2016-10-18 07:37:53Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,12 +66,11 @@
 #include "G4ShortLivedConstructor.hh"
 #include "G4DNAGenericIonsManager.hh"
 
-G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0), fMessenger(0)
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   fMessenger = new PhysicsListMessenger(this);
 
@@ -79,11 +78,12 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
 
   // EM physics
   fEmPhysicsList = new PhysListEmStandard(fEmName = "local");
-  
-  G4LossTableManager::Instance();
-  SetDefaultCutValue(1.*mm);
 
-  fStepMaxProcess  = 0;
+  // Em options
+  //
+  G4EmParameters::Instance()->SetBuildCSDARange(true);
+
+  SetDefaultCutValue(1.*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -139,11 +139,6 @@ void PhysicsList::ConstructProcess()
   //
   fEmPhysicsList->ConstructProcess();
   
-  // Em options
-  //
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetBuildCSDARange(true);
-
   // decay process
   //
   AddDecay();
@@ -254,6 +249,7 @@ void PhysicsList::AddPhysicsList(const G4String& name)
            << " is not defined"
            << G4endl;
   }
+  G4EmParameters::Instance()->SetBuildCSDARange(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -266,9 +262,10 @@ void PhysicsList::AddDecay()
   //
   G4Decay* fDecayProcess = new G4Decay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
@@ -292,9 +289,10 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   fStepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (fStepMaxProcess->IsApplicable(*particle))

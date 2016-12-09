@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 02, 2016 I. Hrivnacova
+- Added files description (for Doxygen)
+
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines 
+  (redundant empty lines, class data member names, separators)
+
 Nov 14, 2014, M. Verderi
 - Fix in GB01BOptrChangeCrossSection, which was not properly using the
   new cross-section value in case of an UpdateForStep(...). A trick

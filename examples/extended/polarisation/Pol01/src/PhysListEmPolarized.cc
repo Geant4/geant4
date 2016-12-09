@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.cc 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: PhysListEmPolarized.cc 100257 2016-10-17 08:00:06Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,15 +36,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
-
 #include "G4eMultipleScattering.hh"
-
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
 
 #include "G4PolarizedCompton.hh"
 #include "G4PolarizedGammaConversion.hh"
@@ -70,9 +62,10 @@ void PhysListEmPolarized::ConstructProcess()
 {
   // Add standard EM Processes
   
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -96,4 +89,3 @@ void PhysListEmPolarized::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

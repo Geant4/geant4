@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 78723 2014-01-20 10:32:17Z gcosmo $
+// $Id: DetectorMessenger.cc 99442 2016-09-22 08:36:14Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,7 +73,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fNbLayersCmd->SetGuidance("Set number of layers");
   fNbLayersCmd->SetParameterName("NbLayers",false);
   fNbLayersCmd->SetRange("NbLayers>0");
-  fNbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNbLayersCmd->AvailableForStates(G4State_PreInit);
   fNbLayersCmd->SetToBeBroadcasted(false);  
 }
 

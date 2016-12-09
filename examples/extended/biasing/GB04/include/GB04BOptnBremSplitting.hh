@@ -39,13 +39,11 @@
 //---------------------------------------------------------------
 //   Initial version                         Nov. 2014 M. Verderi
 
-
 #ifndef GB04BOptnBremSplitting_hh
 #define GB04BOptnBremSplitting_hh 1
 
 #include "G4VBiasingOperation.hh"
 #include "G4ParticleChange.hh"
-
 
 class GB04BOptnBremSplitting : public G4VBiasingOperation {
 public:

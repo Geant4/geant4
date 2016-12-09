@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMChannel.cc 97097 2016-05-25 07:50:31Z gcosmo $
+// $Id: G4GEMChannel.cc 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -142,16 +142,6 @@ G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
   theNucleus->SetMomentum(ResidualMomentum);
 
   return evFragment; 
-} 
-
-G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
-{
-  G4FragmentVector * theResult = new G4FragmentVector();
-  G4Fragment* frag0 = new G4Fragment(theNucleus);
-  G4Fragment* frag1 = EmittedFragment(frag0);
-  if(frag1) { theResult->push_back(frag1); }
-  theResult->push_back(frag0);
-  return theResult;
 } 
 
 G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)

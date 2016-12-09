@@ -1,0 +1,31 @@
+$Id: History 71654 2013-06-19 18:20:04Z maire $
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    NeutronSourcd History file
+                    --------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+14-10-16 G.Folger (NeutronSource-V10-02-01)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+	 
+26-09-16 mma (NeutronSource-V10-02-00)
+- change name : AmBe --> NeutronSource
+
+22-09-16 mma (AmBe-V10-02-02)
+- update GNUmakefile
+
+18-09-16 mma (AmBe-V10-02-01)
+- decrease statistic
+
+01-07-16 Michel Maire (AmBe-V10-02-00)
+- created from Hadr06

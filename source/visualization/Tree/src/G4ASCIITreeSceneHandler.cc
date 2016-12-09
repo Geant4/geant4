@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc 96317 2016-04-06 07:25:03Z gcosmo $
+// $Id: G4ASCIITreeSceneHandler.cc 99076 2016-09-01 12:40:47Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -148,38 +148,34 @@ void G4ASCIITreeSceneHandler::EndModeling () {
       G4PhysicalVolumeModel* pvModel =
 	dynamic_cast<G4PhysicalVolumeModel*>(i->fpModel);
       if (pvModel) {
-	if (pvModel->GetTopPhysicalVolume() ==
-	    G4TransportationManager::GetTransportationManager()
-	    ->GetNavigatorForTracking()->GetWorldVolume()) {
-	  const G4ModelingParameters* tempMP =
-	    pvModel->GetModelingParameters();
-	  G4ModelingParameters mp;  // Default - no culling.
-	  pvModel->SetModelingParameters (&mp);
-	  G4PhysicalVolumeMassScene massScene(pvModel);
-	  pvModel->DescribeYourselfTo (massScene);
-	  G4double volume = massScene.GetVolume();
-	  G4double mass = massScene.GetMass();
+        const G4ModelingParameters* tempMP =
+        pvModel->GetModelingParameters();
+        G4ModelingParameters mp;  // Default - no culling.
+        pvModel->SetModelingParameters (&mp);
+        G4PhysicalVolumeMassScene massScene(pvModel);
+        pvModel->DescribeYourselfTo (massScene);
+        G4double volume = massScene.GetVolume();
+        G4double mass = massScene.GetMass();
 
-	  G4cout << "Overall volume of \""
-		 << pvModel->GetTopPhysicalVolume()->GetName()
-		 << "\":"
-		 << pvModel->GetTopPhysicalVolume()->GetCopyNo()
-		 << ", is "
-		 << G4BestUnit (volume, "Volume")
-		 << " and the daughter-included mass";
-	  G4int requestedDepth = pvModel->GetRequestedDepth();
-	  if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
-	    G4cout << " to unlimited depth";
-	  } else {
-	    G4cout << ", ignoring daughters at depth "
-		   << requestedDepth
-		   << " and below,";
-	  }
-	  G4cout << " is " << G4BestUnit (mass, "Mass")
-		 << G4endl;
-
-	  pvModel->SetModelingParameters (tempMP);
-	}
+        G4cout << "Overall volume of \""
+        << pvModel->GetTopPhysicalVolume()->GetName()
+        << "\":"
+        << pvModel->GetTopPhysicalVolume()->GetCopyNo()
+        << ", is "
+        << G4BestUnit (volume, "Volume")
+        << " and the daughter-included mass";
+        G4int requestedDepth = pvModel->GetRequestedDepth();
+        if (requestedDepth == G4PhysicalVolumeModel::UNLIMITED) {
+          G4cout << " to unlimited depth";
+        } else {
+          G4cout << ", ignoring daughters at depth "
+          << requestedDepth
+          << " and below,";
+        }
+        G4cout << " is " << G4BestUnit (mass, "Mass")
+        << G4endl;
+        
+        pvModel->SetModelingParameters (tempMP);
       }
     }
   }

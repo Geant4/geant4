@@ -1,4 +1,4 @@
-# $Id: tallies.mac 82280 2014-06-13 14:45:31Z gcosmo $
+# $Id: tallies.mac 101250 2016-11-10 08:54:02Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -13,14 +13,14 @@
 /testem/det/setSizeYZ 20 cm
 #
 /testem/det/tallyNumber 4
+/testem/det/tallyDefinition 0 Water 2. 2. 2. mm
 /testem/det/tallyDefinition 1 Water 2. 2. 2. mm
 /testem/det/tallyDefinition 2 Water 2. 2. 2. mm
 /testem/det/tallyDefinition 3 Water 2. 2. 2. mm
-/testem/det/tallyDefinition 4 Water 2. 2. 2. mm
-/testem/det/tallyPosition 1 -9.9 0. 0. cm
-/testem/det/tallyPosition 2 -5.  0. 0. cm
-/testem/det/tallyPosition 3  0.  0. 0. cm
-/testem/det/tallyPosition 4  5.  0. 0. cm
+/testem/det/tallyPosition 0 -9.9 0. 0. cm
+/testem/det/tallyPosition 1 -5.  0. 0. cm
+/testem/det/tallyPosition 2  0.  0. 0. cm
+/testem/det/tallyPosition 3  5.  0. 0. cm
 #
 /testem/phys/addPhysics  local	# em physics  
 #

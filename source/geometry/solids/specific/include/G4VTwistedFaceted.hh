@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4VTwistedFaceted.hh 99781 2016-10-05 10:18:54Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -79,6 +79,8 @@ class G4VTwistedFaceted: public G4VSolid
                                  const G4int,
                                  const G4VPhysicalVolume*  );
  
+  virtual void Extent(G4ThreeVector &pMin, G4ThreeVector &pMax) const;
+
   virtual G4bool CalculateExtent(const EAxis               pAxis,
                                  const G4VoxelLimits      &pVoxelLimit,
                                  const G4AffineTransform  &pTransform,
@@ -151,11 +153,6 @@ class G4VTwistedFaceted: public G4VSolid
     // Copy constructor and assignment operator.
 
  protected:  // with description
-
-  G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
   mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis

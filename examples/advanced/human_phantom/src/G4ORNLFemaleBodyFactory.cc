@@ -85,7 +85,7 @@ G4VPhysicalVolume* G4ORNLFemaleBodyFactory::CreateOrgan(const G4String& gdmlFile
        (gdmlFile == "LeftLeg" ) ||
        (gdmlFile == "RightLeg" ))
     {
-    logicOrgan->SetVisAttributes(G4VisAttributes::Invisible);
+    logicOrgan->SetVisAttributes(G4VisAttributes::GetInvisible());
     }
   else
   {

@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/savalue/w.cc
-/// \brief Main program of the medical/dna/w example
+/// \file medical/dna/wvalue/wvalue.cc
+/// \brief Main program of the medical/dna/wvalue example
 //
 // $Id: w.cc 85260 2014-10-27 08:53:35Z gcosmo $
 // 

@@ -45,7 +45,7 @@ G4RadioactiveDecayRate::G4RadioactiveDecayRate(const G4RadioactiveDecayRate& rig
   generation = right.generation;
   decayRateC = right.decayRateC;
   taos = right.taos;
-  //  verboseLevel = right.verboseLevel;
+  verboseLevel = right.verboseLevel;
 }
 
 G4RadioactiveDecayRate & G4RadioactiveDecayRate::operator=(const G4RadioactiveDecayRate &right)

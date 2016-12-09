@@ -21,9 +21,7 @@ public:
   virtual bool visit(const std::string&,short a_v){return m_buf.write(a_v);}
   virtual bool visit(const std::string&,int a_v){return m_buf.write(a_v);}
 
-  virtual bool visit(const std::string&,unsigned int a_v){
-    return m_buf.write(a_v);
-  }
+  virtual bool visit(const std::string&,unsigned int a_v) {return m_buf.write(a_v);}
 
   virtual bool visit(const std::string&,int64){
     m_buf.out() << "tools::wroot::member_writer::visit(int64) :"
@@ -40,60 +38,43 @@ public:
   virtual bool visit(const std::string&,float a_v){return m_buf.write(a_v);}
   virtual bool visit(const std::string&,double a_v){return m_buf.write(a_v);}
 
-  virtual bool visit(const std::string&,const std::string& a_v){
-    return m_buf.write(a_v);
-  }
+  virtual bool visit(const std::string&,const std::string& a_v) {return m_buf.write(a_v);}
+
   //virtual bool visit(const std::string&,const char* a_v){
   //  return m_buf.write(std::string(a_v));
   //}
 
   virtual bool visit(const std::string&,const std::vector<bool>& a_v){
-    unsigned int number = a_v.size();
+    size_t number = a_v.size();
     std::vector<unsigned char> data(number);
-    for(unsigned int index=0;index<number;index++) {
+    for(size_t index=0;index<number;index++) {
       data[index] = (unsigned char)a_v[index];  
     }
     return m_buf.write_array<unsigned char>(data);
   }
 
-  virtual bool visit(const std::string&,const std::vector<char>& a_v){
-    return m_buf.write_array(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<char>& a_v) {return m_buf.write_array(a_v);}
 
-  virtual bool visit(const std::string&,const std::vector<short>& a_v){
-    return m_buf.write_array(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<short>& a_v) {return m_buf.write_array(a_v);}
 
-  virtual bool visit(const std::string&,const std::vector<int>& a_v){
-    return m_buf.write_array(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<int>& a_v) {return m_buf.write_array(a_v);}
 
-  virtual bool visit(const std::string&,
-                     const std::vector<int64>& /*a_v*/){
+  virtual bool visit(const std::string&,const std::vector<int64>& /*a_v*/){
     //FIXME return ::Rio::writeArray<Slash::int64>(fBuffer,a_v);
     m_buf.out() << "tools::wroot::member_writer::visit(vector<int64>) :"
                 << " dummy." << std::endl;
     return false;
   }
 
-  virtual bool visit(const std::string&,const std::vector<float>& a_v){
-    return m_buf.write_array(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<float>& a_v) {return m_buf.write_array(a_v);}
 
-  virtual bool visit(const std::string&,const std::vector<double>& a_v){
-    return m_buf.write_array(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<double>& a_v) {return m_buf.write_array(a_v);}
 
-//virtual bool visit(const std::string&,const std::vector<unsigned char>& a_v){
-//  return m_buf.write_array(a_v);
-//}
+//virtual bool visit(const std::string&,const std::vector<unsigned char>& a_v) {return m_buf.write_array(a_v);}
 
-  virtual bool visit(const std::string&,const std::vector<std::string>& a_v){
-    return m_buf.write(a_v);
-  }
+  virtual bool visit(const std::string&,const std::vector<std::string>& a_v) {return m_buf.write(a_v);}
 
-  virtual bool visit(const std::string&,
-                     const std::vector< std::vector<double> >& a_v){
+  virtual bool visit(const std::string&,const std::vector< std::vector<double> >& a_v){
     return m_buf.write_array2(a_v);
   }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackerSD.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05TrackerSD.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05TrackerSD.cc
 /// \brief Implementation of the RE05TrackerSD class
@@ -36,24 +36,34 @@
 #include "G4TouchableHistory.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05TrackerSD::RE05TrackerSD(G4String name)
-:G4VSensitiveDetector(name)
+: G4VSensitiveDetector(name),
+  fTrackerCollection(0)
 {
   G4String HCname;
   collectionName.insert(HCname="trackerCollection");
 }
 
-RE05TrackerSD::~RE05TrackerSD(){;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RE05TrackerSD::~RE05TrackerSD()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerSD::Initialize(G4HCofThisEvent* HCE)
 {
   static int HCID = -1;
-  trackerCollection = new RE05TrackerHitsCollection
+  fTrackerCollection = new RE05TrackerHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,trackerCollection);
+  HCE->AddHitsCollection(HCID,fTrackerCollection);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool RE05TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
@@ -63,23 +73,29 @@ G4bool RE05TrackerSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   RE05TrackerHit* newHit = new RE05TrackerHit();
   newHit->SetEdep( edep );
   newHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  trackerCollection->insert( newHit );
+  fTrackerCollection->insert( newHit );
 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05TrackerSD::EndOfEvent(G4HCofThisEvent*)
-{
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerSD::clear()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerSD::DrawAll()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackerSD::PrintAll()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

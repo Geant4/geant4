@@ -44,6 +44,7 @@
 #include "G4LevelManager.hh"
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
+#include "G4DeexPrecoParameters.hh"
 
 G4NuclearLevelData* G4NuclearLevelData::theInstance = nullptr;
 
@@ -327,7 +328,7 @@ G4NuclearLevelData::G4NuclearLevelData()
   G4MUTEXLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
 #endif
   fDeexPrecoParameters = new G4DeexPrecoParameters();
-  fLevelReader = new G4LevelReader();
+  fLevelReader = new G4LevelReader(this);
   for(G4int Z=0; Z<ZMAX; ++Z) {
     (fLevelManagers[Z]).resize(AMAX[Z]-AMIN[Z]+1,nullptr);
     (fLevelManagerFlags[Z]).resize(AMAX[Z]-AMIN[Z]+1,false);
@@ -371,8 +372,12 @@ G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
 {
   G4bool res = false; 
   if(A >= AMIN[Z] && A <= AMAX[Z]) { 
-    const G4LevelManager* newman = 
-      fLevelReader->MakeLevelManager(Z, A, filename);
+    const G4LevelManager* newman = nullptr;
+    if(fDeexPrecoParameters->UseFilesNEW()) {
+      newman = fLevelReader->MakeLevelManagerNEW(Z, A, filename);
+    } else {
+      newman = fLevelReader->MakeLevelManager(Z, A, filename);
+    }
     if(newman) { 
       delete (fLevelManagers[Z])[A - AMIN[Z]]; 
       (fLevelManagers[Z])[A - AMIN[Z]] = newman;
@@ -398,10 +403,18 @@ void G4NuclearLevelData::InitialiseForIsotope(G4int Z, G4int A)
 #ifdef G4MULTITHREADED
   G4MUTEXLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
 #endif
-  if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
-    (fLevelManagers[Z])[A - AMIN[Z]] = 
-      fLevelReader->CreateLevelManager(Z, A);
-    (fLevelManagerFlags[Z])[A - AMIN[Z]] = true;
+  if(fDeexPrecoParameters->UseFilesNEW()) {
+    if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
+      (fLevelManagers[Z])[A - AMIN[Z]] = 
+	fLevelReader->CreateLevelManagerNEW(Z, A);
+      (fLevelManagerFlags[Z])[A - AMIN[Z]] = true;
+    }
+  } else {
+    if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
+      (fLevelManagers[Z])[A - AMIN[Z]] = 
+	fLevelReader->CreateLevelManager(Z, A);
+      (fLevelManagerFlags[Z])[A - AMIN[Z]] = true;
+    }
   }
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
@@ -445,7 +458,7 @@ G4NuclearLevelData::FindLevel(G4int Z, G4int A, G4double resMass,
 {
   G4double T = ekin;
   G4double E2 = (Mass - partMass)*(Mass - partMass);
-  G4double Eex = sqrt(E2 - 2.0*Mass*T) - resMass;
+  G4double Eex = std::sqrt(E2 - 2.0*Mass*T) - resMass;
   if(Eex <= GetMaxLevelEnergy(Z, A)) {
     if(Eex <= 0.0) { 
       Eex = 0.0;
@@ -471,3 +484,4 @@ G4DeexPrecoParameters* G4NuclearLevelData::GetParameters()
 {
   return fDeexPrecoParameters;
 }
+

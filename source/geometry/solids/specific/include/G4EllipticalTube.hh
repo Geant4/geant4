@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4EllipticalTube.hh 99781 2016-10-05 10:18:54Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -65,6 +65,8 @@ class G4EllipticalTube : public G4VSolid
     virtual ~G4EllipticalTube();
 
     // Standard solid methods
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

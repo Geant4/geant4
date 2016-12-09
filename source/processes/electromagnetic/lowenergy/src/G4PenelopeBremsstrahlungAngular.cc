@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc 95950 2016-03-03 10:42:48Z gcosmo $
+// $Id: G4PenelopeBremsstrahlungAngular.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // --------------------------------------------------------------
 //
@@ -85,35 +85,33 @@ void G4PenelopeBremsstrahlungAngular::Initialize()
 
 void G4PenelopeBremsstrahlungAngular::ClearTables()
 {
-  std::map<G4double,G4PhysicsTable*>::iterator j;
-
   if (theLorentzTables1)
     {
-      for (j=theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
+      for (auto j = theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
           //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables1;
-      theLorentzTables1 = 0;
+      theLorentzTables1 = nullptr;
     }
 
   if (theLorentzTables2)
     {
-      for (j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
+      for (auto j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
           //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables2;
-      theLorentzTables2 = 0;
+      theLorentzTables2 = nullptr;
     }
   if (theEffectiveZSq)
     {
       delete theEffectiveZSq;
-      theEffectiveZSq = 0;
+      theEffectiveZSq = nullptr;
     }
 }
 
@@ -335,7 +333,7 @@ G4ThreeVector& G4PenelopeBremsstrahlungAngular::SampleDirection(const G4DynamicP
   if (!material)
     {
       G4Exception("G4PenelopeBremsstrahlungAngular::SampleDirection()",
-		  "em2040",FatalException,"The pointer to G4Material* is NULL");
+		  "em2040",FatalException,"The pointer to G4Material* is nullptr");
       return fLocalDirection;
     }
 

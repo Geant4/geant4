@@ -162,7 +162,6 @@ void B03Run::RecordEvent(const G4Event* aEvent)
   
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //  Access method for HitsMap of the RUN

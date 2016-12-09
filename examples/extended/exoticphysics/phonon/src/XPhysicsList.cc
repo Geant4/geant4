@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/src/XPhysicsList.cc
 /// \brief Implementation of the XPhysicsList class
 //
-// $Id: XPhysicsList.cc 76938 2013-11-19 09:51:36Z gcosmo $
+// $Id: XPhysicsList.cc 100272 2016-10-17 08:25:49Z gcosmo $
 //
 
 #include "XPhysicsList.hh"
@@ -79,9 +79,10 @@ void XPhysicsList::ConstructProcess() {
   phRefl->SetVerboseLevel(verboseLevel);
   phDown->SetVerboseLevel(verboseLevel);
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     // WARNING!  CHANGING ORDER OF REGISTRATION CAN CHANGE PHYSICS RESULTS

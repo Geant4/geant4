@@ -18,7 +18,7 @@
 
 // in TOOLS_STL, we don't have (yet) a performant map.
 
-#ifdef inlib_stl_vector
+#ifdef tools_stl_vector
 #define TOOLS_RROOT_OBJ_MAP_HASH_TABLE
 //#define TOOLS_RROOT_OBJ_MAP_OMAP
 #else
@@ -40,6 +40,8 @@ namespace tools {
 namespace rroot {
 
 class buffer : public rbuf {
+  typedef rbuf parent;
+
   static const std::string& s_class() {
     static const std::string s_v("tools::rroot::buffer");
     return s_v;
@@ -76,7 +78,7 @@ class buffer : public rbuf {
 public:
   buffer(std::ostream& a_out,bool a_byte_swap,
          uint32 a_size,char* a_buffer,uint32 a_klen,bool a_verbose)
-  : rbuf(a_out,a_byte_swap,a_buffer+a_size,m_pos)
+  :parent(a_out,a_byte_swap,a_buffer+a_size,m_pos)
   ,m_byte_swap(a_byte_swap)
   ,m_verbose(a_verbose)
   ,m_size(a_size)     //expect a not zero size.
@@ -97,7 +99,7 @@ public:
   }
 protected:
   buffer(const buffer& a_from)
-  : rbuf(a_from.m_out,a_from.m_byte_swap,0,m_pos)
+  :parent(a_from.m_out,a_from.m_byte_swap,0,m_pos)
   ,m_byte_swap(a_from.m_byte_swap)
   ,m_map_objs(a_from.m_map_objs)
   {
@@ -107,6 +109,9 @@ protected:
   }
   buffer& operator=(const buffer&){return *this;}
 public:
+  bool byte_swap() const {return m_byte_swap;}
+  bool verbose() const {return m_verbose;}
+
   void set_offset(unsigned int a_off) {m_pos = m_buffer+a_off;}
 
   //char* buffer() const {return m_buffer;}
@@ -128,7 +133,7 @@ protected:
     a_class.clear();
 
     uint32 tag;
-    if(!rbuf::read(tag)) return false;
+    if(!parent::read(tag)) return false;
 
     if(tag==kNewClassTag()) {
       char s[80];
@@ -186,7 +191,7 @@ protected:
 
     // read byte count and/or tag (older files don't have byte count)
     uint32 first_int = 0;
-    if(!rbuf::read(first_int)) return false;
+    if(!parent::read(first_int)) return false;
 
     if(m_verbose) {
       std::ios::fmtflags old_flags = m_out.flags();
@@ -317,7 +322,7 @@ public:
       m_pos = m_buffer + obj_offset;
 
       uint32 first_int;
-      if(!rbuf::read(first_int)) return false;
+      if(!parent::read(first_int)) return false;
       if(first_int & kByteCountMask()) {
         std::string scls;
         if(!read_class_tag(scls)) return false;
@@ -466,12 +471,12 @@ public:
     a_version = 0;
     short version = 0;
     // not interested in byte count
-    if(!rbuf::read(version)) return false;
+    if(!parent::read(version)) return false;
       
     // if this is a byte count, then skip next short and read version
     if(version & kByteCountVMask()) {
-      if(!rbuf::read(version)) return false;
-      if(!rbuf::read(version)) return false;
+      if(!parent::read(version)) return false;
+      if(!parent::read(version)) return false;
     }
     
     a_version = version;
@@ -500,11 +505,11 @@ public:
     } v;
 
     if(m_byte_swap) {
-      if(!rbuf::read(v.vers[1])) return false;
-      if(!rbuf::read(v.vers[0])) return false;
+      if(!parent::read(v.vers[1])) return false;
+      if(!parent::read(v.vers[0])) return false;
     } else {
-      if(!rbuf::read(v.vers[0])) return false;
-      if(!rbuf::read(v.vers[1])) return false;
+      if(!parent::read(v.vers[0])) return false;
+      if(!parent::read(v.vers[1])) return false;
     }
     
     // no bytecount, backup and read version
@@ -514,7 +519,7 @@ public:
     } else {
       m_pos -= sizeof(unsigned int);
     }
-    if(!rbuf::read(version)) return false;
+    if(!parent::read(version)) return false;
     //printf("Reading version=%d at pos=%d, bytecount=%d\n",
     //version,*startpos,*bcnt);
     
@@ -567,7 +572,7 @@ protected:
     int nr = 0;
     while (nr < int(a_max-1)) {
       char ch;
-      if(!rbuf::read(ch)) return false;
+      if(!parent::read(ch)) return false;
       // stop when 0 read
       if(ch == 0) break;
       a_string[nr++] = ch;

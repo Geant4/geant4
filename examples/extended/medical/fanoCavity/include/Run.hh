@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/include/RunAction.hh
+/// \file medical/fanoCavity/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
 // $Id: RunAction.hh 68999 2013-04-15 09:23:17Z gcosmo $
@@ -38,14 +38,11 @@
 #include "ProcessesCount.hh"
 #include "globals.hh"
 
-
 class G4Run;
 class G4Material;
 class G4ParticleDefinition;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,14 +53,13 @@ class Run : public G4Run
    ~Run();
 
   public:
-       virtual void Merge(const G4Run*);
-       void SurveyConvergence(G4int);
+    virtual void Merge(const G4Run*);
+    void SurveyConvergence(G4int);
 
     void EndOfRun();
-    
 
     void CountProcesses(G4String);
-    void sumEsecond(G4double e)    { fEsecondary += e; fEsecondary2 += e*e;
+    void SumEsecond(G4double e)    { fEsecondary += e; fEsecondary2 += e*e;
                     fNbSec++;};
 
     void FlowInCavity(G4int k, G4double e) { fEnerFlowCavity[k] += e;
@@ -78,40 +74,39 @@ class Run : public G4Run
     void StepInCavity (G4double s)  { fStepCavity += s; fStepCavity2 += s*s;
                       fNbStepCavity++;};
 
-
   private:
     DetectorConstruction*   fDetector;
     PrimaryGeneratorAction* fKinematic;
     ProcessesCount*         fProcCounter;
 
     G4double                fEsecondary, fEsecondary2;
-  G4long                  fNbSec;
+    G4long                  fNbSec;
 
-  G4long                  fPartFlowCavity[2];
-  G4double                fEnerFlowCavity[2];
-  G4double                fEdepCavity, fEdepCavity2;
-  G4double                fTrkSegmCavity;
-  G4long                  fNbEventCavity;
+    G4long                  fPartFlowCavity[2];
+    G4double                fEnerFlowCavity[2];
+    G4double                fEdepCavity, fEdepCavity2;
+    G4double                fTrkSegmCavity;
+    G4long                  fNbEventCavity;
 
-  G4double                fOldEmean, fOldDose;
+    G4double                fOldEmean, fOldDose;
 
-  G4double                fStepWall,   fStepWall2;
-  G4double                fStepCavity, fStepCavity2;
-  G4long                  fNbStepWall, fNbStepCavity;
+    G4double                fStepWall,   fStepWall2;
+    G4double                fStepCavity, fStepCavity2;
+    G4long                  fNbStepWall, fNbStepCavity;
 
- private:
-  G4double                fWallThickness;
-  G4double                fWallRadius;
-  G4Material*             fMateWall;
-  G4double                fDensityWall;
+  private:
+    G4double                fWallThickness;
+    G4double                fWallRadius;
+    G4Material*             fMateWall;
+    G4double                fDensityWall;
 
-  G4double                fCavityThickness;
-  G4double                fCavityRadius;
-  G4double                fSurfaceCavity;
-  G4double                fVolumeCavity;
-  G4Material*             fMateCavity;
-  G4double                fDensityCavity;
-  G4double                fMassCavity;
+    G4double                fCavityThickness;
+    G4double                fCavityRadius;
+    G4double                fSurfaceCavity;
+    G4double                fVolumeCavity;
+    G4Material*             fMateCavity;
+    G4double                fDensityCavity;
+    G4double                fMassCavity;
 
 };
 

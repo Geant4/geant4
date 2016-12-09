@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: geomdefs.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: geomdefs.hh 100299 2016-10-17 09:53:54Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -56,6 +56,7 @@ enum EAxis {kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi,kUndefined};
 // G4VSolid::Inside return codes
 // kSurface => within tolerance of exact surface
 enum EInside {kOutside,kSurface,kInside};
+// enum EInside {kInside=1, kSurface=2, kOutside=3};
 
 // kNormal = (G4PVPlacement) Conventional positioning
 // kReplica = (G4PVReplica)  Consumed parameterised case

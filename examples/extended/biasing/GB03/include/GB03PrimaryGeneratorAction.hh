@@ -49,7 +49,5 @@ class GB03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* fParticleGun;
 };
 
-
 #endif
-
 

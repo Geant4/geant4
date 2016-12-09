@@ -889,7 +889,7 @@ nfu_status ptwXY_setValueAtX_overrideIfClose( ptwXYPoints *ptwXY, double x, doub
     ptwXYPoint *point = NULL, newPoint = { x, y };
     ptwXYOverflowPoint *overflowPoint, *p, *overflowHeader = &(ptwXY->overflowHeader);
     ptwXYOverflowPoint lessThanEqualXPoint, greaterThanXPoint;
-    ptwXYPoint *closePoint;
+    ptwXYPoint *closePoint = NULL;
 
     if( ptwXY->status != nfu_Okay ) return( ptwXY->status );
 

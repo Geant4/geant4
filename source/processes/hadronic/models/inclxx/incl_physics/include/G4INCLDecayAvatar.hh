@@ -74,7 +74,7 @@ namespace G4INCL {
     G4bool forced;
     ThreeVector const incidentDirection;
 
-    INCL_DECLARE_ALLOCATION_POOL(DecayAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(DecayAvatar)
   };
 
 }

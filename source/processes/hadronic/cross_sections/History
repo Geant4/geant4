@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 August 2016 - Alberto Ribon (hadr-cross-V10-02-04)
+-----------------------------------------------------
+- G4CrossSectionDataStore : added "throw" to hadronic exception;
+- G4ComponentGGHadronNucleusXsc, G4ComponentGGNuclNuclXsc.cc : comment out
+  redundant if-statement.
+(fixes suggested by the PVS-Studio static code analyzer)
+
+03 August 2016 - Alberto Ribon (hadr-cross-V10-02-03)
+-----------------------------------------------------
+- G4ComponentGGHadronNucleusXsc : two new fields were added by V. Grichine
+  to be used by final string generators.
+
+1 July 2016 - Vladimir Ivanchenko (hadr-cross-V10-02-02)
+-----------------------------------------------------------
+- G4VCrossSectionDataSet, G4CrossSectionDataStore - fixed minor Coverity report
+
 2 March 2016 - Tatsumi Koi (hadr-cross-V10-02-01)
 -----------------------------------------------------------
 - G4CrossSectionDataSetRegistry - Deleted ad-hoc trick which was added in "hadr-cross-V10-01-29"

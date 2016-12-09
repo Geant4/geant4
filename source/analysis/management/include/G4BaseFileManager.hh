@@ -50,7 +50,7 @@ class G4BaseFileManager
       // Return the base file name (without extension)
 
     G4String GetFullFileName(const G4String& baseFileName = "",
-                           G4bool isPerThread = true) const;
+                             G4bool isPerThread = true) const;
       // Compose and return the full file name:
       // - add _tN suffix to the file base name if isPerThread
       // - add file extension if not present
@@ -65,6 +65,11 @@ class G4BaseFileManager
       // Compose and return the ntuple specific file name:
       // - add _nt_ntupleName suffix to the file base name
       // - add _tN suffix if called on thread worker
+      // - add file extension if not present
+    
+    G4String GetNtupleFileName(G4int ntupleFileNumber) const;
+      // Compose and return the ntuple specific file name:
+      // - add _mN suffix to the file base name 
       // - add file extension if not present
     
     G4String GetPlotFileName() const;

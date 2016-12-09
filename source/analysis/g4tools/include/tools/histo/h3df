@@ -31,10 +31,10 @@ public:
   {}
 
   h3df(const std::string& a_title,
-      const std::vector<double>& aEdgesX,
-      const std::vector<double>& aEdgesY,
-      const std::vector<double>& aEdgesZ)
-  :parent(a_title,aEdgesX,aEdgesY,aEdgesZ)
+      const std::vector<double>& a_edges_x,
+      const std::vector<double>& a_edges_y,
+      const std::vector<double>& a_edges_z)
+  :parent(a_title,a_edges_x,a_edges_y,a_edges_z)
   {}
 
   virtual ~h3df(){}

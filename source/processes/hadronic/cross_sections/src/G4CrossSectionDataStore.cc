@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc 94008 2015-11-05 10:06:41Z gcosmo $
+// $Id: G4CrossSectionDataStore.cc 98827 2016-08-12 12:37:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -361,8 +361,6 @@ G4CrossSectionDataStore::GetIsoCrossSection(const G4DynamicParticle* part,
 	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
   throw G4HadronicException(__FILE__, __LINE__, 
                       " no applicable data set found for the isotope");
-  return 0.0;
-  //return dataSetList[idx]->ComputeCrossSection(part, elm, mat);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -388,8 +386,7 @@ G4CrossSectionDataStore::GetCrossSection(const G4DynamicParticle* part,
 	 << " Z= " << Z << " A= " << A
 	 << " E(MeV)= " << part->GetKineticEnergy()/MeV << G4endl; 
   throw G4HadronicException(__FILE__, __LINE__, 
-                      " no applicable data set found for the isotope");
-  return 0.0;
+                  " no applicable data set found for the isotope");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -539,7 +536,7 @@ void G4CrossSectionDataStore::ActivateFastPath( const G4ParticleDefinition* pdef
 		std::ostringstream msg;
 		msg<<"Attempting to request FastPath for couple: "<<pdef->GetParticleName()<<","<<mat->GetName();
 		msg<<" but combination already exists";
-		G4HadronicException(__FILE__,__LINE__,msg.str());
+		throw G4HadronicException(__FILE__,__LINE__,msg.str());
 	}
 }
 

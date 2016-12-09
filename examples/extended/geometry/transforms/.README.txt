@@ -27,7 +27,7 @@ $Id$
  visually. 
 
  The method of placement can be selected interactively via the command
- (see DetectorMessenger and debug.mac):
+ (see DetectorMessenger and transforms.in):
 \verbatim 
 /placement/setMethod method
 \endverbatim
@@ -38,7 +38,7 @@ $Id$
          	
 \section Transforms_s3 Primary generator
 
- Default kinematic is a geantino, at rest, at coordinate origin.
+ Default kinematic is a geantino, at coordinate origin.
  Can be changed with particleGun commands.
          	
 \section Transforms_s4 Physics
@@ -59,9 +59,8 @@ $Id$
 % transforms
 ....
 Idle>   ---> type your commands. For instance:
-Idle> /control/execute debug.mac 
-....
-Idle> /placement/setMethod WithInverseMatrix 	
+Idle> /placement/setMethod WithInverseMatrix
+Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
 ....				
 Idle> exit
@@ -69,7 +68,7 @@ Idle> exit
 
   - Execute transforms in 'batch' mode from macro files
 \verbatim     
-% transforms   debug.mac	
+% transforms   transforms.in	
 \endverbatim
  
 */

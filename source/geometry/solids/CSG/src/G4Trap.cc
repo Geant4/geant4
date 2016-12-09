@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4Trap.cc 101121 2016-11-07 09:18:01Z gcosmo $
 //
 // class G4Trap
 //
@@ -32,6 +32,9 @@
 //
 // History:
 //
+// 23.09.16 E.Tcherniaev: added Extent(pmin,pmax),
+//                      use G4BoundingEnvelope for CalculateExtent(),
+//                      removed CreateRotatedVertices()
 // 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
 // 26.04.05 V.Grichine: new SurfaceNormal is default 
 // 19.04.05 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
@@ -55,6 +58,7 @@
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -809,6 +813,52 @@ void G4Trap::ComputeDimensions(       G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4Trap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double dz  = GetZHalfLength();
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dx3 = GetXHalfLength3();
+  G4double dx4 = GetXHalfLength4();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+
+  G4double x0 = dz*fTthetaCphi;
+  G4double x1 = dy1*GetTanAlpha1();
+  G4double x2 = dy2*GetTanAlpha2();
+  G4double xmin =
+    std::min(
+    std::min(
+    std::min(-x0-x1-dx1,-x0+x1-dx2),x0-x2-dx3),x0+x2-dx4);
+  G4double xmax =
+    std::max(
+    std::max(
+    std::max(-x0-x1+dx1,-x0+x1+dx2),x0-x2+dx3),x0+x2+dx4);
+
+  G4double y0 = dz*fTthetaSphi;
+  G4double ymin = std::min(-y0-dy1,y0-dy2);
+  G4double ymax = std::max(-y0+dy1,y0+dy2);
+
+  pMin.set(xmin,ymin,-dz);
+  pMax.set(xmax,ymax, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Trap::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -819,288 +869,55 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
                                 const G4AffineTransform& pTransform,
                                       G4double& pMin, G4double& pMax) const
 {
-  G4double xMin, xMax, yMin, yMax, zMin, zMax;
-  G4bool flag;
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
 
-  if (!pTransform.IsRotated())
-  {  
-    // Special case handling for unrotated trapezoids
-    // Compute z/x/y/ mins and maxs respecting limits, with early returns
-    // if outside limits. Then switch() on pAxis
-
-    G4int i ; 
-    G4double xoffset;
-    G4double yoffset;
-    G4double zoffset;
-    G4double temp[8] ;     // some points for intersection with zMin/zMax
-    G4ThreeVector pt[8];   // vertices after translation
-    
-    xoffset=pTransform.NetTranslation().x();      
-    yoffset=pTransform.NetTranslation().y();
-    zoffset=pTransform.NetTranslation().z();
- 
-    pt[0]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-                        yoffset-fDz*fTthetaSphi-fDy1,zoffset-fDz);
-    pt[1]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-                        yoffset-fDz*fTthetaSphi-fDy1,zoffset-fDz);
-    pt[2]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-                        yoffset-fDz*fTthetaSphi+fDy1,zoffset-fDz);
-    pt[3]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-                        yoffset-fDz*fTthetaSphi+fDy1,zoffset-fDz);
-    pt[4]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-                        yoffset+fDz*fTthetaSphi-fDy2,zoffset+fDz);
-    pt[5]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-                        yoffset+fDz*fTthetaSphi-fDy2,zoffset+fDz);
-    pt[6]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-                        yoffset+fDz*fTthetaSphi+fDy2,zoffset+fDz);
-    pt[7]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-                        yoffset+fDz*fTthetaSphi+fDy2,zoffset+fDz);
-    zMin=zoffset-fDz;
-    zMax=zoffset+fDz;
-
-    if ( pVoxelLimit.IsZLimited() )
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance)
-        || (zMax < pVoxelLimit.GetMinZExtent() - kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if ( zMin < pVoxelLimit.GetMinZExtent() )
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if ( zMax > pVoxelLimit.GetMaxZExtent() )
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
-      }
-    }
-    temp[0] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMin-pt[0].z())
-                       /(pt[4].z()-pt[0].z()) ;
-    temp[1] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMax-pt[0].z())
-                       /(pt[4].z()-pt[0].z()) ;
-    temp[2] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMin-pt[2].z())
-                       /(pt[6].z()-pt[2].z()) ;
-    temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMax-pt[2].z())
-                       /(pt[6].z()-pt[2].z()) ;
-
-    yMax = yoffset - std::fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
-    yMin = -yMax ;
-
-    for( i = 0 ; i < 4 ; i++ )
-    {
-      if( temp[i] > yMax ) yMax = temp[i] ;
-      if( temp[i] < yMin ) yMin = temp[i] ;
-    }    
-    if ( pVoxelLimit.IsYLimited() )
-    {
-      if ( (yMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance)
-        || (yMax < pVoxelLimit.GetMinYExtent() - kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if ( yMin < pVoxelLimit.GetMinYExtent() )
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if ( yMax > pVoxelLimit.GetMaxYExtent() )
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
-      }
-    }
-    temp[0] = pt[0].x()+(pt[4].x()-pt[0].x())
-                       *(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-    temp[1] = pt[0].x()+(pt[4].x()-pt[0].x())
-                       *(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-    temp[2] = pt[2].x()+(pt[6].x()-pt[2].x())
-                       *(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-    temp[3] = pt[2].x()+(pt[6].x()-pt[2].x())
-                       *(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-    temp[4] = pt[3].x()+(pt[7].x()-pt[3].x())
-                       *(zMin-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-    temp[5] = pt[3].x()+(pt[7].x()-pt[3].x())
-                       *(zMax-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-    temp[6] = pt[1].x()+(pt[5].x()-pt[1].x())
-                       *(zMin-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-    temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())
-                       *(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-      
-    xMax = xoffset - std::fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
-    xMin = -xMax ;
-
-    for( i = 0 ; i < 8 ; i++ )
-    {
-      if( temp[i] > xMax) xMax = temp[i] ;
-      if( temp[i] < xMin) xMin = temp[i] ;
-    }                                            
-    if (pVoxelLimit.IsXLimited())   // xMax/Min = f(yMax/Min) ?
-    {
-      if ( (xMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance)
-        || (xMax < pVoxelLimit.GetMinXExtent() - kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if ( xMin < pVoxelLimit.GetMinXExtent() )
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if ( xMax > pVoxelLimit.GetMaxXExtent() )
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
-      }
-    }
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin=xMin;
-        pMax=xMax;
-        break;
-
-      case kYAxis:
-        pMin=yMin;
-        pMax=yMax;
-        break;
-
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-
-      default:
-        break;
-    }
-    pMin -= kCarTolerance;
-    pMax += kCarTolerance;
-
-    flag = true;
-  }
-  else    // General rotated case -
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    G4bool existsAfterClip = false ;
-    G4ThreeVectorList*       vertices;
-    pMin                   = +kInfinity;
-    pMax                   = -kInfinity;
-      
-    // Calculate rotated vertex coordinates. Operator 'new' is called
-
-    vertices = CreateRotatedVertices(pTransform);
-      
-    xMin = +kInfinity; yMin = +kInfinity; zMin = +kInfinity;
-    xMax = -kInfinity; yMax = -kInfinity; zMax = -kInfinity;
-      
-    for( G4int nv = 0 ; nv < 8 ; nv++ )
-    { 
-      if( (*vertices)[nv].x() > xMax ) xMax = (*vertices)[nv].x();
-      if( (*vertices)[nv].y() > yMax ) yMax = (*vertices)[nv].y();
-      if( (*vertices)[nv].z() > zMax ) zMax = (*vertices)[nv].z();
-      
-      if( (*vertices)[nv].x() < xMin ) xMin = (*vertices)[nv].x();
-      if( (*vertices)[nv].y() < yMin ) yMin = (*vertices)[nv].y();
-      if( (*vertices)[nv].z() < zMin ) zMin = (*vertices)[nv].z();
-    }
-    if ( pVoxelLimit.IsZLimited() )
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance)
-        || (zMax < pVoxelLimit.GetMinZExtent() - kCarTolerance) )
-      {
-        delete vertices ;    //  'new' in the function called
-        return false;
-      }
-      else
-      {
-        if ( zMin < pVoxelLimit.GetMinZExtent() )
-        {
-          zMin = pVoxelLimit.GetMinZExtent() ;
-        }
-        if ( zMax > pVoxelLimit.GetMaxZExtent() )
-        {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
-        }
-      }
-    } 
-    if ( pVoxelLimit.IsYLimited() )
-    {
-      if ( (yMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance)
-        || (yMax < pVoxelLimit.GetMinYExtent() - kCarTolerance) )
-      {
-        delete vertices ;    //  'new' in the function called
-        return false;
-      }
-      else
-      {
-        if ( yMin < pVoxelLimit.GetMinYExtent() )
-        {
-          yMin = pVoxelLimit.GetMinYExtent() ;
-        }
-        if ( yMax > pVoxelLimit.GetMaxYExtent() )
-        {
-          yMax = pVoxelLimit.GetMaxYExtent() ;
-        }
-      }
-    }
-    if ( pVoxelLimit.IsXLimited() )
-    {
-      if ( (xMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance)
-        || (xMax < pVoxelLimit.GetMinXExtent() - kCarTolerance) )
-      {
-        delete vertices ;    //  'new' in the function called
-        return false ;
-      } 
-      else
-      {
-        if ( xMin < pVoxelLimit.GetMinXExtent() )
-        {
-          xMin = pVoxelLimit.GetMinXExtent() ;
-        }
-        if ( xMax > pVoxelLimit.GetMaxXExtent() )
-        {
-          xMax = pVoxelLimit.GetMaxXExtent() ;
-        }
-      }
-    }
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin=xMin;
-        pMax=xMax;
-        break;
-
-      case kYAxis:
-        pMin=yMin;
-        pMax=yMax;
-        break;
-
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-
-      default:
-        break;
-    }
-    if ( (pMin != kInfinity) || (pMax != -kInfinity) )
-    {
-      existsAfterClip=true;
-        
-      // Add tolerance to avoid precision troubles
-      //
-      pMin -= kCarTolerance ;
-      pMax += kCarTolerance ;      
-    }
-    delete vertices ;          //  'new' in the function called
-    flag = existsAfterClip ;
+    return exist = (pMin < pMax) ? true : false;
   }
-  return flag;
-}
 
+  // Set bounding envelope (benv) and calculate extent
+  //
+  G4double dz  = GetZHalfLength();
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dx3 = GetXHalfLength3();
+  G4double dx4 = GetXHalfLength4();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+
+  G4double x0 = dz*fTthetaCphi;
+  G4double x1 = dy1*GetTanAlpha1();
+  G4double x2 = dy2*GetTanAlpha2();
+  G4double y0 = dz*fTthetaSphi;
+
+  G4ThreeVectorList baseA(4), baseB(4);
+  baseA[0].set(-x0-x1-dx1,-y0-dy1,-dz);
+  baseA[1].set(-x0-x1+dx1,-y0-dy1,-dz);
+  baseA[2].set(-x0+x1+dx2,-y0+dy1,-dz);
+  baseA[3].set(-x0+x1-dx2,-y0+dy1,-dz);
+
+  baseB[0].set( x0-x2-dx3, y0-dy2, dz);
+  baseB[1].set( x0-x2+dx3, y0-dy2, dz);
+  baseB[2].set( x0+x2+dx4, y0+dy2, dz);
+  baseB[3].set( x0+x2-dx4, y0+dy2, dz);
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1742,59 +1559,6 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-
-G4ThreeVectorList*
-G4Trap::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
-{
-  G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList();
-  if (vertices)
-  {
-    vertices->reserve(8);
-    G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
-                          -fDz*fTthetaSphi-fDy1,-fDz);
-    G4ThreeVector vertex1(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
-                          -fDz*fTthetaSphi-fDy1,-fDz);
-    G4ThreeVector vertex2(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
-                          -fDz*fTthetaSphi+fDy1,-fDz);
-    G4ThreeVector vertex3(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
-                          -fDz*fTthetaSphi+fDy1,-fDz);
-    G4ThreeVector vertex4(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
-                          +fDz*fTthetaSphi-fDy2,+fDz);
-    G4ThreeVector vertex5(+fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
-                          +fDz*fTthetaSphi-fDy2,+fDz);
-    G4ThreeVector vertex6(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
-                          +fDz*fTthetaSphi+fDy2,+fDz);
-    G4ThreeVector vertex7(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
-                          +fDz*fTthetaSphi+fDy2,+fDz);
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Trap::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // GetEntityType
 
 G4GeometryType G4Trap::GetEntityType() const
@@ -1881,19 +1645,19 @@ G4ThreeVector G4Trap::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
   
   area = aOne + aTwo;
   
-  chose = RandFlat::shoot(0.,aOne+aTwo);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo);
 
   if( (chose>=0.) && (chose < aOne) )
   {
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
+    lambda1 = G4RandFlat::shoot(0.,1.);
+    lambda2 = G4RandFlat::shoot(0.,lambda1);
     return (p2+lambda1*v+lambda2*w);    
   }
   
   // else
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
 
   return (p0+lambda1*t+lambda2*u);    
 }
@@ -1934,7 +1698,7 @@ G4ThreeVector G4Trap::GetPointOnSurface() const
   Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
   Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
  
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
   if( (chose>=0.) && (chose<aOne) )                    
     { return One; }
   else if( (chose>=aOne) && (chose<aOne+aTwo) )  

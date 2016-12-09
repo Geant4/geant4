@@ -1,4 +1,4 @@
-$Id: History 97430 2016-06-03 07:20:11Z gcosmo $
+$Id: History 101714 2016-11-22 08:53:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,234 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+21th November 2016  Laurent Garnier (vis-V10-02-30)
+- opengl-V10-02-26: Go back on the glCheckFramebufferStatus(): comment out this command
+
+21th November 2016  Laurent Garnier (vis-V10-02-29)
+- opengl-V10-02-25 :Fix the glCheckFramebufferStatus() :
+
+20th November 2016  John Allison
+- opengl-V10-02-24: Safer fix to colour problem with transparent
+  volumes in DrawDisplayLists (DEV-261). Fixes the same problem
+  as tag opengl-V10-02-22.
+
+19th November 2016  John Allison
+- DAWN-V10-02-02, VRML-V10-02-03:
+  Fixed the GetColour() problem.
+
+19th November 2016  Laurent Garnier (vis-V10-02-28)
+- opengl-V10-02-23:
+  o Fix the gray/white/black screen when launching a new viewer.
+  o Fix DEV-176 and perhaps a few others
+
+19th November 2016  Laurent Garnier (vis-V10-02-27)
+- opengl-V10-02-22 : Fis a color problem on transparent volumes (DEV-261)
+
+18th November 2016  John Allison
+- visman-V10-02-36, vis-HepRep-V10-02-04:
+  Fixed the GetColour() problem.
+
+18th November 2016  Laurent Garnier (vis-V10-02-26)
+- visman-V10-02-35: Fixes display at end of run in Qt/Extra refresh for auto-refresh viewers. Fixes same in X and Xm.
+
+17th November 2016  Laurent Garnier  (vis-V10-02-25)
+ vis-HepRep-V10-02-03, opengl-V10-02-21 : restore color to trajectories in HepRep, avoid two different OpenGL version
+ in case of Qt+X
+
+7th November 2016  John Allison
+- vis-HepRep-V10-02-02: Fixed Coverity warning.
+
+6th November 2016 Laurent Garnier (vis-V10-02-24)
+- Fix a CDash warning in gl2ps
+
+4th November 2016 Laurent Garnier (vis-V10-02-23)
+- Co-works with interfaces-V10-02-09
+- Remove (multiple) scene tree/pick and viewer parameters from a tab to put it in a single, auto-update widget
+- Fix a bad signal/slot connection for the filter of the scene tree (perhaps a bug in some cases)
+
+3rd November 2016  John Allison (vis-V10-02-22)
+- modeling-V10-02-17, visman-V10-02-33:
+  Changed default number of line segments per circle from 24 to 72.
+- visman-V10-02-33:
+  Limited WARNING about up-Vector to first time only.
+
+2nd November 2016  John Allison
+- modeling-V10-02-16: G4ArrowModel: Default lines per circle = 6.
+
+26th October 2016  John Allison
+- visman-V10-02-32: Fixed inappropriate warning message in MT batch mode.
+
+2nd October 2016  John Allison (vis-V10-02-21)
+- visman-V10-02-31: Fixed warnings.
+
+29th September 2016  John Allison (vis-V10-02-20)
+- modeling-V10-02-15:
+  o G4PhysicalVolumeModel:
+    . Improved efficiency for the case that there are no vis attributes
+      modifiers.
+    . Added new operator<< for vector<G4PhysicalVolumeNodeID>.
+- visman-V10-02-30:
+  o G4VSceneHandler::RequestPrimitives:
+    . Tidied and improved error message for the case that a polyhedron
+      pointer is null:
+  o G4VViewer: Fixed Coverity warnings.
+
+23rd September 2016  John Allison (vis-V10-02-19)
+- visman-V10-02-29: Removed duplicate operator<<.
+- opengl-V10-02-19: Tidied.
+
+21st September 2016  John Allison (vis-V10-02-18)
+- opengl-V10-02-17: Fix warnings on Windows.
+
+21st September 2016  John Allison (vis-V10-02-17)
+- opengl-V10-02-16: Introduced /vis/ogl/flushAt.
+
+19th September 2016  John Allison
+- modeling-V10-02-14:
+  o G4PhysicalVolumeModel.cc:
+    Use static to ensure a plausible vis attributes pointer.
+- visman-V10-02-28:
+  o /vis/viewer/save and /vis/viewer/interpolate:
+    Default filename extension changed to .g4view.
+
+19th September 2016  John Allison (vis-V10-02-16)
+- modeling-V10-02-13:
+  o Moved Vis Attributes Modifiers (VAMs) back from G4ViewParameters.
+- visman-V10-02-27:
+  o Moved Vis Attributes Modifiers (VAMs) back to G4ModelingParameters.
+- opengl-V10-02-15:
+  o Adapted to the move of Vis Attributes Modifiers back to
+    G4ModelingParameters.
+  o Added flag to handle scene tree interaction better.
+
+15th September 2016  John Allison
+- visman-V10-02-26:
+  o G4VViewer: Introduced TouchableSetVisibility and TouchableSetColour.
+  o G4Scene: Replaced warning reference to obsolete
+    G4VisAttributes::Invisible to G4VisAttributes::GetInvisible()
+   (B.Smith)
+- opengl-V10-02-14:
+  o Re-instated G4OpenGLStoredQtViewer::CompareForKernelVisit:
+  o Uses G4VViewer::TouchableSetVisibility and TouchableSetColour.
+
+13th September 2016  John Allison
+- visman-V10-02-25:
+  o Replace all r-value references, e.g., auto&&, with simple
+    l-value references, e.g., const auto&, until I understand
+    r-value references.  I think we do not yet have a need for
+    r-value references!
+
+12th September 2016  John Allison (vis-V10-02-15)
+- modeling-V10-02-12:
+  o G4ModelingParameters.cc: Improved output of PVNameCopyNoPath.
+- visman-V10-02-24:
+  o Introduced
+      void G4VViewer::SetTouchable
+    to set the touchable for /vis/touchable/set/... commands.
+- opengl-V10-02-13:
+  o Added calls to SetTouchable.
+
+11th September 2016  John Allison (vis-V10-02-14)
+- modeling-V10-02-11:
+  o Removed Vis Attributes Modifiers (VAMs).
+  o VAMs are now entirely in G4ViewParameters and dealt with
+    in G4VViewer::GetApplicableVisAttributes.
+- visman-V10-02-22:
+  o Needs modeling-V10-02-11.
+  o Moved Vis Attributes Modifiers (VAMs) from G4ModelingParameters
+    to G4ViewParameters.
+- visman-V10-02-23, DAWN-V10-02-01, vis-HepRep-V10-01-03,
+  VRML-V10-02-02, opengl-V10-02-12:
+  o GetColour/GetColor no longer takes an argument.
+  o Make sure applicable vis attributes are obtained.
+  // Get and check applicable vis attributes.
+       fpVisAttribs = fpViewer->GetApplicableVisAttributes(fpVisAttribs);
+  // Note: the vis attributes may have been modified by the viewer.  See
+  // code in G4VViewer::GetApplicableVisAttributes.
+
+7th September 2016  Gabriele Cosmo (vis-V10-02-13)
+- Fixed GNUmakefile in management, modeling and gMocren for missing
+  dependency on global/HEPNumerics, now required.
+
+6th September 2016  Makoto Asai (vis-V10-02-12)
+- Further refinements. Co-works greps-V10-02-07, digits_hits-V10-02-06
+
+2nd September 2016  Makoto Asai (vis-V10-02-11)
+- Co-works greps-V10-02-06, digits_hits-V10-02-05
+- Build-in scorer now uses G4THitsMap<G4StatDouble> instead of
+  G4THitsMap<G4double>. Affected files are :
+     management/include/G4VSceneHandler.hh
+     management/sources.cmake
+     management/src/G4VSceneHandler.cc
+     modeling/include/G4PSHitsModel.hh
+     modeling/include/G4PseudoScene.hh
+     modeling/sources.cmake
+     VRML/include/G4VRML1FileSceneHandler.hh
+     VRML/include/G4VRML1SceneHandler.hh
+     VRML/include/G4VRML2FileSceneHandler.hh
+     VRML/include/G4VRML2SceneHandler.hh
+     HepRep/include/G4HepRepFileSceneHandler.hh
+     HepRep/include/G4HepRepSceneHandler.hh
+     OpenGL/include/G4OpenGLSceneHandler.hh
+     OpenGL/src/G4OpenGLSceneHandler.cc
+     FukuiRenderer/include/G4DAWNFILESceneHandler.hh
+     gMocren/include/G4GMocrenFileSceneHandler.hh
+     gMocren/sources.cmake
+     gMocren/src/G4GMocrenFileSceneHandler.cc
+     RayTracer/include/G4RayTracerSceneHandler.hh
+     XXX/include/G4XXXFileSceneHandler.hh
+     XXX/include/G4XXXSGSceneHandler.hh
+     XXX/include/G4XXXStoredSceneHandler.hh
+
+31st August 2016  John Allison (vis-V10-02-10)
+- visman-V10-02-21: Fix warning.
+- DAWN-V10-02-00, vis-HepRep-V10-02-00, opengl-V10-02-10,
+  raytracer-V10-02-01, VRML-V10-02-01, visXXX-V10-02-01,
+  gMocren-V10-02-02
+  o Fix G4Orb and G4Ellipsoid hiding warnings.
+
+31st August 2016  John Allison (vis-V10-02-09)
+- Co-works greps-V10-02-05.
+- modeling-V10-02-10: Conform to greps-V10-02-05.
+- visman-V10-02-20:
+  o Conform to greps-V10-02-05.
+  o Implemented auxiliary edge drawing for:
+      G4Orb, G4Sphere, G4Torus and G4Ellipsoid
+    unless otherwise specified.
+- vistree-V10-02-02: Improved printing and guidance.
+
+14th August 2016  John Allison (vis-V10-02-08)
+- modeling-V10-02-07: Improved safety.
+- visman-V10-02-19: Improved comments.
+- opengl-V10-02-09: Improved comments.
+- vistree-V10-02-01: G4ASCIITree:
+  o Changed default verbosity to 1 (shows logical volume names).
+
+9th August 2016  John Allison (vis-V10-02-06 needs greps-V10-02-03)
+- Tagged.
+
+7th August 2016  John Allison (vis-V10-02-05 needs greps-V10-02-02)
+- modeling-V10-02-06: Takes account of new flag IsForceDrawingStyle.
+- visman-V10-02-17:
+  o Takes account of new flag IsForceDrawingStyle.
+  o Changed defaults of some command parameters to reflect obvious
+    meaning in the command name.
+
+20th July 2016  John Allison (vis-V10-02-04)
+- modeling-V10-02-05 and visman-V10-02-16:
+  Replaced TouchedVolume by EncounteredVolume in trajectory drawing
+  and filtering.  Functionally identical.
+- visman-V10-02-16: Minor improvements to scale and axes.
+
+30th June 2016  John Allison
+- visman-V10-02-15: Added comments and fixed Coverity warning.
+
+14th June 2016  John Allison
+- visman-V10-02-14: Improved informationals and guidance.
+
+3rd June 2016  John Allison
+- visman-V10-02-13: Fixed compilation warnings on gcc-6.1.
 
 1st June 2016  Laurent Garnier (vis-V10-02-03)
 - gMocren-V10-02-01: Fixed coverity Win64 warning.

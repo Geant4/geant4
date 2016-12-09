@@ -11,12 +11,31 @@
 namespace tools {
 namespace wroot {
 
+//typedef std::map<std::string,std::string> annotations_t;
+inline bool to(directory& a_dir,const std::map<std::string,std::string>& a_annotations,const std::string& a_histo_name) {
+  //if(a_annotations.empty()) return true;
+  std::string sas;
+  tools_mforcit(std::string,std::string,a_annotations,it) {
+    if(it!=a_annotations.begin()) sas += "\n";
+    sas += (*it).first;  
+    sas += "\n";
+    sas += (*it).second;  
+  }
+  std::string key_name = "annotations_"+a_histo_name;
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,key_name,"annotations","TNamed");
+  if(!Named_stream(*bo,a_histo_name,sas)) {
+    a_dir.file().out() << "tools::wroot::to : Named_stream failed." << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
 inline bool to(directory& a_dir,const histo::h1d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1D");
   if(!TH1D_stream(*bo,a_histo,a_name)) {
-    a_dir.file().out() << "tools::wroot::to :"
-                       << " TH1D_stream failed."
-                       << std::endl;
+    a_dir.file().out() << "tools::wroot::to : TH1D_stream failed." << std::endl;
     delete bo;
     return false;
   }
@@ -27,9 +46,7 @@ inline bool to(directory& a_dir,const histo::h1d& a_histo,const std::string& a_n
 inline bool to(directory& a_dir,const histo::h1df& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1F");
   if(!TH1F_stream(*bo,a_histo,a_name)) {
-    a_dir.file().out() << "tools::wroot::to :"
-                       << " TH1F_stream failed."
-                       << std::endl;
+    a_dir.file().out() << "tools::wroot::to : TH1F_stream failed." << std::endl;
     delete bo;
     return false;
   }
@@ -38,12 +55,9 @@ inline bool to(directory& a_dir,const histo::h1df& a_histo,const std::string& a_
 }
 
 inline bool to(directory& a_dir,const histo::h2d& a_histo,const std::string& a_name) {
-  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
-                          a_name,a_histo.title(),"TH2D");
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH2D");
   if(!TH2D_stream(*bo,a_histo,a_name)) {
-    a_dir.file().out() << "tools::wroot::to :"
-                       << " TH2D_stream failed."
-                       << std::endl;
+    a_dir.file().out() << "tools::wroot::to : TH2D_stream failed." << std::endl;
     delete bo;
     return false;
   }

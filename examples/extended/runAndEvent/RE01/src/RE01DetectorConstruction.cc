@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01DetectorConstruction.cc
 /// \brief Implementation of the RE01DetectorConstruction class
 //
-// $Id: RE01DetectorConstruction.cc 97383 2016-06-02 09:56:35Z gcosmo $
+// $Id: RE01DetectorConstruction.cc 101677 2016-11-21 09:26:55Z gcosmo $
 //
 
 #include "RE01DetectorConstruction.hh"
@@ -211,6 +211,7 @@ void RE01DetectorConstruction::ConstructSDandField()
   
   G4String trackerSDname = "/mydet/tracker";
   RE01TrackerSD * trackerSD = new RE01TrackerSD(trackerSDname);
+  G4SDManager::GetSDMpointer()->AddNewDetector(trackerSD);
   SetSensitiveDetector(fTrackerLayer_log, trackerSD);
 
   // N.B. Calorimeter SD is defined in the parallel world.

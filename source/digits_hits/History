@@ -1,4 +1,4 @@
-$Id: History 96535 2016-04-20 12:14:15Z gcosmo $
+$Id: History 101678 2016-11-21 09:28:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,32 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
+- Fix bug #1908, remove implicit addition to manager of 
+  SD passed via G4MultiSD proxy
+
+Sep 8, 2016, G.Cosmo (digits_hits-V10-02-08)
+- G4THitsMap, G4VScoringMesh : further clean up with C++11 template
+
+Sep 7, 2016, G.Cosmo (digits_hits-V10-02-07)
+- Fixed utils/GNUmakefile for missing dependency on global/HEPNumerics,
+  now required.
+
+Sep 6, 2016, M.Asai (digits_hits-V10-02-06)
+- Further refinements.
+
+Sep 2, 2016, M.Asai (digits_hits-V10-02-05)
+- Built-in scorer now uses G4StatDouble.
+  Files modified :
+        utils/include/G4ScoringBox.hh
+        utils/include/G4ScoringCylinder.hh
+        utils/include/G4VScoringMesh.hh
+        utils/sources.cmake
+        utils/src/G4ScoringBox.cc
+        utils/src/G4ScoringCylinder.cc
+        utils/src/G4VScoreWriter.cc
+        utils/src/G4VScoringMesh.cc
 
 Apr 20, 2016, G.Cosmo (digits_hits-V10-02-04)
 - Fixed shadowing compilation warnings in G4VScoringMesh for 'ps'.

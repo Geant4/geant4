@@ -37,7 +37,6 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ExG4DetectorConstruction02::ExG4DetectorConstruction02(

@@ -1,4 +1,4 @@
-$Id: History 96399 2016-04-12 07:25:24Z gcosmo $
+$Id: History 100289 2016-10-17 08:46:50Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+14-10-16 G.Folger (testem2-V10-02-04)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+23-07-16 mma  (testem2-V10-02-03)
+- coding convention : MaxBin -> kMaxBin
+
+04-07-16 I. Hrivnacova  (testem2-V10-02-02)
+- Fixes for Doxygen documentation
+
 11-04-16 mma  (testem2-V10-02-01)
 - PhysListEmStandard: use G4EmParameters
 - remove geant3 subdirectory

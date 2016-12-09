@@ -73,6 +73,15 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetDefaultValue("");
   addButton->SetParameter (parameter);
 
+  // /gui/defaultIcons :
+  defaultIcons = new G4UIcommand("/gui/defaultIcons",this);
+  defaultIcons->SetGuidance("Set the Geant4 defaults icons in Qt driver.");
+  defaultIcons->SetGuidance("By default, Geant4 icons are enable.");
+
+  parameter = new G4UIparameter("bool",'b',true);
+  parameter->SetDefaultValue("true");
+  defaultIcons->SetParameter (parameter);
+  
   // /gui/addIcon :
   addIcon = new G4UIcommand("/gui/addIcon",this);
   addIcon->SetGuidance
@@ -145,6 +154,8 @@ void G4InteractorMessenger::SetNewValue (
       session->AddButton((const char*)params[0],(const char*)params[1],(const char*)params[2]);
     } else if(command==addIcon) {
       session->AddIcon((const char*)params[0],(const char*)params[1],(const char*)params[2],(const char*)params[3]);
+    } else if(command==defaultIcons) {
+      session->DefaultIcons(command->ConvertToBool(newValue));
     } else if(command==sys) {
       system((const char*)params[0]);
     }

@@ -1,4 +1,4 @@
-# $Id: run.mac 68015 2013-03-13 13:27:27Z gcosmo $
+# $Id: run.mac 100672 2016-10-31 10:42:11Z gcosmo $
 #
 # Macro file for "AnaEx03.cc"
 # 
@@ -9,6 +9,9 @@
 /run/verbose 2
 /event/verbose 0
 /tracking/verbose 0
+#
+# initialize
+/run/initialize
 #
 /gun/particle e-
 /gun/energy 500 MeV

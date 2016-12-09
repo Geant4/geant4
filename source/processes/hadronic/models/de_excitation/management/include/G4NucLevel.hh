@@ -53,7 +53,8 @@ class G4NucLevel
 {
 public:
 
-  explicit G4NucLevel(const std::vector<size_t>&  idxTrans,
+  explicit G4NucLevel(size_t ntrans,
+                      const std::vector<size_t>&  idxTrans,
 	              const std::vector<G4int>&   vTrans,
 	              const std::vector<G4float>& wLevelGamma,
 	              const std::vector<G4float>& wLevelGammaE,
@@ -70,6 +71,8 @@ public:
   inline size_t FinalExcitationIndex(size_t idx) const;
 
   inline G4int TransitionType(size_t idx) const;
+
+  inline G4float MixingRatio(size_t idx) const;
 
   inline G4float GammaProbability(size_t idx) const;
 
@@ -98,7 +101,7 @@ private:
   std::vector<G4float>  fGammaECumProbability;
   std::vector<G4float>  fGammaProbability;
   std::vector<G4float>  fMpRatio;
-  const std::vector<const std::vector<G4float>*> fShellProbability;
+  std::vector<const std::vector<G4float>*> fShellProbability;
   size_t length;
 };
 
@@ -126,6 +129,14 @@ inline G4int G4NucLevel::TransitionType(size_t idx) const
   if(idx >= length) { PrintError(idx, "TransitionType"); }
 #endif
   return fTrans[idx];
+}
+
+inline G4float G4NucLevel::MixingRatio(size_t idx) const
+{
+#ifdef G4VERBOSE
+  if(idx >= length) { PrintError(idx, "MixingRatio"); }
+#endif
+  return fMpRatio[idx];
 }
 
 inline G4float G4NucLevel::GammaProbability(size_t idx) const

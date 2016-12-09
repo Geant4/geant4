@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94332 2015-11-12 09:56:46Z gcosmo $
+# $Id: sources.cmake 101025 2016-11-04 08:36:30Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,14 +48,19 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4MuonDecayChannel.hh
         G4MuonDecayChannelWithSpin.hh
         G4MuonRadiativeDecayChannelWithSpin.hh
+        G4MuonicAtom.hh
+        G4MuonicAtomDIODecayChannel.hh
+        G4MuonicAtomHelper.hh
+        G4MuonicAtomNuclearCaptureChannel.hh
         G4NeutronBetaDecayChannel.hh
         G4NucleiProperties.hh
         G4NucleiPropertiesTableAME03.hh
+        G4NucleiPropertiesTableAME12.hh
         G4NucleiPropertiesTheoreticalTable.hh
-	G4NuclideTable.hh
-	G4NuclideTableMessenger.hh
+        G4NuclideTable.hh
+        G4NuclideTableMessenger.hh
         G4PDGCodeChecker.hh
-        G4PDefSplitter.hh
+        G4PDefManager.hh
         G4ParticleDefinition.hh
         G4ParticleDefinition.icc
         G4ParticleMessenger.hh
@@ -79,7 +84,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4VUserPrimaryParticleInformation.hh
         G4VUserPrimaryVertexInformation.hh
         pwdefs.hh
-    SOURCES
+	SOURCES
         G4DalitzDecayChannel.cc
         G4DecayProducts.cc
         G4DecayTable.cc
@@ -93,15 +98,21 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4KL3DecayChannel.cc
         G4MuonDecayChannel.cc
         G4MuonDecayChannelWithSpin.cc
+        G4MuonicAtom.cc
+        G4MuonicAtomDIODecayChannel.cc
+        G4MuonicAtomHelper.cc
+        G4MuonicAtomNuclearCaptureChannel.cc
         G4MuonRadiativeDecayChannelWithSpin.cc
         G4NeutronBetaDecayChannel.cc
         G4NucleiProperties.cc
         G4NucleiPropertiesTableAME03.cc
+        G4NucleiPropertiesTableAME12.cc
         G4NucleiPropertiesTheoreticalTableA.cc
         G4NucleiPropertiesTheoreticalTableB.cc
-	G4NuclideTable.cc
-	G4NuclideTableMessenger.cc
+        G4NuclideTable.cc
+        G4NuclideTableMessenger.cc
         G4PDGCodeChecker.cc
+        G4PDefManager.cc
         G4ParticleDefinition.cc
         G4ParticleMessenger.cc
         G4ParticlePropertyData.cc
@@ -118,18 +129,25 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4VIsotopeTable.cc
         G4VUserPrimaryParticleInformation.cc
         G4VUserPrimaryVertexInformation.cc
-    GRANULAR_DEPENDENCIES
+	GRANULAR_DEPENDENCIES
         G4geometrymng
         G4globman
         G4intercoms
         G4materials
-    GLOBAL_DEPENDENCIES
+	GLOBAL_DEPENDENCIES
         G4geometry
         G4global
         G4intercoms
         G4materials
-    LINK_LIBRARIES
-)
+	LINK_LIBRARIES
+	)
 
-# List any source specific properties here
+      # List any source specific properties here
+      if("$ENV{G4NucleiProperties_USE_OLD_AME_TABLE}")
+	set_source_files_properties(
+	  ${G4partman_SOURCES}
+	  PROPERTIES COMPILE_DEFINITIONS G4NucleiProperties_USE_OLD_AME_TABLE
+	  )
+      endif()
+
 

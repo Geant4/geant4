@@ -42,7 +42,6 @@
 #include "G4NucleiProperties.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4PhotonEvaporation.hh"
-#include "G4PhotonEvaporationOLD.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -75,10 +74,7 @@ void G4NeutronRadCapture::InitialiseModel()
     G4NuclearLevelData::GetInstance()->GetParameters();
   minExcitation = param->GetMinExcitation();
 
-  char* env = getenv("G4UsePhotonEvaporationOLD"); 
-  if(!env) { photonEvaporation = new G4PhotonEvaporation(); } 
-  else     { photonEvaporation = new G4PhotonEvaporationOLD(); }
- 
+  photonEvaporation = new G4PhotonEvaporation();
   photonEvaporation->Initialise();
   photonEvaporation->SetICM(true);
 }
@@ -143,7 +139,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     else if (Z == 1 && A == 3) {theDef = G4Triton::Triton();}
     else if (Z == 2 && A == 3) {theDef = G4He3::He3();}
     else if (Z == 2 && A == 4) {theDef = G4Alpha::Alpha();}
-    else {  theDef = theTableOfIons->GetIon(Z,A,0.0); }
+    else {  theDef = theTableOfIons->GetIon(Z,A,0.0,noFloat,0); }
 
     if (verboseLevel > 1) {
       G4cout << "Gamma 4-mom: " << lv2 << "   " 
@@ -203,9 +199,9 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       else {
         G4double eexc = f->GetExcitationEnergy();
 	if(eexc <= minExcitation) { eexc = 0.0; }
-	theDef = theTableOfIons->GetIon(Z, A, eexc);
-	/*
-	G4cout << "### Find ion Z= " << Z << " A= " << A
+	theDef = theTableOfIons->GetIon(Z, A, eexc, noFloat, 0);
+	/*	
+	G4cout << "### NC Find ion Z= " << Z << " A= " << A
 	       << " Eexc(MeV)= " << eexc/MeV << "  " 
 	       << theDef << G4endl;
 	*/
@@ -230,6 +226,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     }
     delete fv;
   }
+  //G4cout << "Capture done" << G4endl;
   return &theParticleChange;
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSUserTrackInformation.hh 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSUserTrackInformation.hh 99622 2016-09-29 10:16:04Z gcosmo $
 //
 /// \file optical/wls/include/WLSUserTrackInformation.hh
 /// \brief Definition of the WLSUserTrackInformation class
@@ -76,7 +76,7 @@ class WLSUserTrackInformation : public G4VUserTrackInformation
     G4bool AddStatusFlag(TrackStatus s);
 
     // Check if a certain flag is on
-    G4bool isStatus(TrackStatus s)
+    G4bool IsStatus(TrackStatus s)
        { return s == undefined ? !(fStatus &= defined) : fStatus & s; }
 
   private:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05StackingActionMessenger.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05StackingActionMessenger.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05StackingActionMessenger.hh
 /// \brief Definition of the RE05StackingActionMessenger class
@@ -50,16 +50,13 @@ class RE05StackingActionMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    RE05StackingAction * myAction;
+    RE05StackingAction * fMyAction;
     
-  private: //commands
-    G4UIcmdWithAnInteger * muonCmd;
-    G4UIcmdWithAnInteger * isomuonCmd;
-    G4UIcmdWithAnInteger * isoCmd;
-    G4UIcmdWithADoubleAndUnit * roiCmd;
-    
+    //commands
+    G4UIcmdWithAnInteger* fMuonCmd;
+    G4UIcmdWithAnInteger* fIsoMuonCmd;
+    G4UIcmdWithAnInteger* fIsoCmd;
+    G4UIcmdWithADoubleAndUnit* fRoiCmd;  
 };
 
 #endif
-
-

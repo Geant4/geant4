@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96527 2016-04-20 08:51:00Z gcosmo $
+# $Id: sources.cmake 100378 2016-10-19 15:03:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -73,7 +73,6 @@ GEANT4_DEFINE_MODULE(NAME G4had_preequ_exciton
         G4PreCompoundEmissionFactory.hh
         G4PreCompoundFragment.hh
         G4PreCompoundFragmentVector.hh
-        G4PreCompoundFragmentVector.icc
         G4PreCompoundHe3.hh
         G4PreCompoundIon.hh
         G4PreCompoundModel.hh

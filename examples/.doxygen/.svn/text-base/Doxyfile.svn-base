@@ -848,7 +848,9 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr04/.README.txt \
                          ../extended/hadronic/Hadr05/.README.txt \
                          ../extended/hadronic/Hadr06/.README.txt \
+                         ../extended/hadronic/Hadr07/.README.txt \
                          ../extended/hadronic/FissionFragment \
+                         ../extended/hadronic/NeutronSource/.README.txt \
                          ../extended/medical/.README.txt \
                          ../extended/medical/DICOM \
                          ../extended/medical/electronScattering/.README.txt \
@@ -860,10 +862,13 @@ INPUT                  = Doxymain.h \
                          ../extended/medical/dna/chem1/.README.txt \
                          ../extended/medical/dna/chem2/.README.txt \
                          ../extended/medical/dna/chem3/.README.txt \
+                         ../extended/medical/dna/chem4/.README.txt \
+                         ../extended/medical/dna/clustering/.README.txt \
                          ../extended/medical/dna/dnaphysics/.README.txt \
                          ../extended/medical/dna/microdosimetry/.README.txt \
                          ../extended/medical/dna/microyz/.README.txt \
                          ../extended/medical/dna/pdb4dna/.README.txt \
+                         ../extended/medical/dna/range/.README.txt \
                          ../extended/medical/dna/svalue/.README.txt \
                          ../extended/medical/dna/wholeNuclearDNA/.README.txt \
                          ../extended/medical/dna/wvalue/.README.txt \
@@ -944,6 +949,14 @@ EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
                          ../basic/B2/B2b/src/B2RunAction.cc \
                          ../basic/B2/B2b/src/B2TrackerHit.cc \
                          ../basic/B2/B2b/src/B2TrackerSD.cc \
+                         ../basic/B3/B3b/include/B3DetectorConstruction.hh \
+                         ../basic/B3/B3b/include/B3PhysicsList.hh \
+                         ../basic/B3/B3b/include/B3PrimaryGeneratorAction.hh \
+                         ../basic/B3/B3b/include/B3StackingAction.hh \
+                         ../basic/B3/B3b/src/B3DetectorConstruction.cc \
+                         ../basic/B3/B3b/src/B3PhysicsList.cc \
+                         ../basic/B3/B3b/src/B3PrimaryGeneratorAction.cc \
+                         ../basic/B3/B3b/src/B3StackingAction.cc \
                          ../basic/B4/B4b/include/B4Analysis.hh \
                          ../basic/B4/B4c/include/B4Analysis.hh \
                          ../basic/B4/B4d/include/B4Analysis.hh \
@@ -991,6 +1004,7 @@ EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
                          ../extended/eventgenerator/HepMC/MCTruth/src/PhysicsList.cc \
                          ../extended/eventgenerator/HepMC/MCTruth/src/PrimaryGeneratorAction.cc \
                          ../extended/eventgenerator/pythia/decayer6/common \
+                         ../extended/parallel/TBB/B2b/exampleB2b.cc \
                          ../extended/parallel/TBB/B2b/include/B2ActionInitialization.hh \
                          ../extended/parallel/TBB/B2b/include/B2bChamberParameterisation.hh \
                          ../extended/parallel/TBB/B2b/include/B2bDetectorConstruction.hh \

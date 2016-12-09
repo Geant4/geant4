@@ -49,6 +49,7 @@ public:
   :m_factory(a_factory)
   ,m_out(a_out)
   ,m_verbose(a_verbose)
+  ,m_take_cntrl(false)
 
   ,m_errors(0)
   ,m_top(0) // Used to cleanup in case XML parsing failed.
@@ -75,6 +76,7 @@ protected:
   :m_factory(a_from.m_factory)
   ,m_out(a_from.m_out)
   ,m_verbose(a_from.m_verbose)
+  ,m_take_cntrl(a_from.m_take_cntrl)
 
   ,m_errors(0)
   ,m_top(0) // Used to cleanup in case XML parsing failed.
@@ -91,6 +93,7 @@ protected:
     if(&a_from==this) return *this;
 
     m_verbose = a_from.m_verbose;
+    m_take_cntrl = a_from.m_take_cntrl;
 
     m_errors = 0;
     m_top = 0;
@@ -109,6 +112,8 @@ public:
   }
 
 public:
+  void set_take_cntrl_chars(bool a_value) {m_take_cntrl = a_value;}
+
   std::ostream& out() const {return m_out;}
   void set_compressed_reader(tools::file::reader* aReader){
     delete m_compressed_reader;
@@ -145,7 +150,7 @@ public:
     return true;
   }
   
-  bool load_buffer(unsigned int aSize,const char* aBuffer){
+  bool load_buffer(size_t aSize,const char* aBuffer){
     clear();
     if(!parse_buffer(aSize,aBuffer,
                     (XML_StartElementHandler)start_element,
@@ -164,8 +169,8 @@ public:
   void empty(){m_top = 0;m_current = 0;}
 
   bool is_tag(const std::string& a_string) const {
-    unsigned int number = m_tags.size();
-    for(unsigned int index=0;index<number;index++) {
+    size_t number = m_tags.size();
+    for(size_t index=0;index<number;index++) {
       if(a_string==m_tags[index]) return true;
     }
     return false;
@@ -179,7 +184,7 @@ protected:
     m_current = 0;
   }
 
-  bool parse_buffer(unsigned int aSize,const char* aBuffer,
+  bool parse_buffer(size_t aSize,const char* aBuffer,
                     XML_StartElementHandler a_start,XML_EndElementHandler a_end,
                     void* a_tag){
     m_errors = 0;
@@ -202,24 +207,24 @@ protected:
     XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
   //XML_SetProcessingInstructionHandler(_parser,processingInstructionHandler);
     char* buf = (char*)aBuffer;
-    unsigned int l = aSize;
+    size_t l = aSize;
     int done = 0;
     do {
-      size_t len = tools::mn<unsigned int>(l,BUFSIZ); //BUFSIZ in cstdio
+      size_t len = tools::mn<size_t>(l,BUFSIZ); //BUFSIZ in cstdio
       done = len < BUFSIZ ? 1 : 0;
-      if(XML_Parse(_parser, buf, len, done)==XML_STATUS_ERROR) {
+      if(XML_Parse(_parser, buf, (int)len, done)==XML_STATUS_ERROR) {
         m_out << "parse_buffer :" 
             << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 
             << " at line " << (int)XML_GetCurrentLineNumber(_parser) 
             << " at byte index " << (int)XML_GetCurrentByteIndex(_parser)
             << std::endl; 
-       {int pos = XML_GetCurrentByteIndex(_parser);
-        int pmn = tools::mx<int>(pos-10,0);
-        int pmx = tools::mn<int>(pos+10,aSize-1);
+       {XML_Index pos = XML_GetCurrentByteIndex(_parser);
+        XML_Index pmn = tools::mx<XML_Index>(pos-10,0);
+        XML_Index pmx = tools::mn<XML_Index>(pos+10,XML_Index(aSize)-1);
         std::string c = " ";
-       {for(int p=pmn;p<=pmx;p++) {c[0] = *(aBuffer+p);m_out << c;}
+       {for(XML_Index p=pmn;p<=pmx;p++) {c[0] = *(aBuffer+p);m_out << c;}
         m_out << std::endl;}
-       {for(int p=pmn;p<pos;p++) m_out << " ";
+       {for(XML_Index p=pmn;p<pos;p++) m_out << " ";
         m_out << "^" << std::endl;}}
         XML_ParserFree(_parser);
         return false;
@@ -301,8 +306,7 @@ protected:
 
     XML_SetUserData(_parser,a_tag);
     XML_SetElementHandler(_parser,a_start,a_end);
-    XML_SetCharacterDataHandler(_parser,
-                (XML_CharacterDataHandler)character_data_handler);
+    XML_SetCharacterDataHandler(_parser,(XML_CharacterDataHandler)character_data_handler);
     //XML_SetProcessingInstructionHandler(_parser,
     //      processingInstructionHandler);
   
@@ -319,7 +323,7 @@ protected:
         return false;
       }
       done = len < sizeof(buf) ? 1 : 0;
-      if(XML_Parse(_parser, buf, len, done)==XML_STATUS_ERROR) {
+      if(XML_Parse(_parser, buf, (int)len, done)==XML_STATUS_ERROR) {
         m_out << "parse_file :" 
             << " in file " << tools::sout(a_file)
             << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 
@@ -348,22 +352,20 @@ protected:
   }
 
 protected:
-  static void character_data_handler(void* aUserData,
-                                     const XML_Char* a_string,
-                                     int aLength){
+  static void character_data_handler(void* aUserData,const XML_Char* a_string,int aLength){
+    loader* This = (loader*)aUserData;
     std::string s;
     s.resize(aLength);
-    unsigned int count = 0;
+    size_t count = 0;
     char* p = (char*)a_string;
     for (int i = 0; i < aLength; i++, p++) {
-      if(!iscntrl(*p)) {
+      if(This->m_take_cntrl || (!iscntrl(*p))) {
         s[count] = *p;
         count++;
       }
     }  
     if(count) {
       s.resize(count);
-      loader* This = (loader*)aUserData;
       This->m_value += s;
     }
   }
@@ -562,6 +564,7 @@ protected:
   std::ostream& m_out;
 protected:
   bool m_verbose;
+  bool m_take_cntrl;
   unsigned int m_errors;
   std::vector<std::string> m_tags;
   tools::xml::tree* m_top;
@@ -577,5 +580,3 @@ protected:
 }}
 
 #endif
-
-//exlib_build_use inlib expat

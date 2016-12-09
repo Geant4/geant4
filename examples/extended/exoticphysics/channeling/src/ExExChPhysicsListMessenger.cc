@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChPhysicsListMessenger.cc
+/// \brief Implementation of the ExExChPhysicsListMessenger class
+//
 
 #include "ExExChPhysicsListMessenger.hh"
 #include "ExExChPhysicsList.hh"

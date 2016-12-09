@@ -353,6 +353,12 @@ namespace G4INCL {
 
     G4bool getInverseKinematics() const { return inverseKinematics; }
 
+    /// \brief Get the hadronization time
+    G4double getDecayTimeThreshold() const { return decayTimeThreshold; }
+
+    /// \brief Set the hadronization time
+    void setDecayTimeThreshold(const G4double t) { decayTimeThreshold=t; }
+
   private:
 
     G4int verbosity;
@@ -470,6 +476,8 @@ namespace G4INCL {
 #endif
 
     G4bool inverseKinematics;
+
+    G4double decayTimeThreshold;
 
     friend class ::ConfigParser;
   };

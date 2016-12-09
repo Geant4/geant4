@@ -11,7 +11,14 @@ namespace tools {
 
 inline int vsnpf(char* a_s,size_t a_n,const char* a_fmt,va_list args){
 #ifdef _MSC_VER
+#if _MSC_VER < 1900
+  unsigned int old = _set_output_format(_TWO_DIGIT_EXPONENT);
+  int status = _vsnprintf(a_s,a_n,a_fmt,args);
+  _set_output_format(old);
+  return status;
+#else
   return _vsnprintf(a_s,a_n,a_fmt,args);
+#endif
 #else
   return ::vsnprintf(a_s,a_n,a_fmt,args);
 #endif

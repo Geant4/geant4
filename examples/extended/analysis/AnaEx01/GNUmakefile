@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 85989 2014-11-06 15:40:05Z gcosmo $
+# $Id: GNUmakefile 99607 2016-09-28 13:33:42Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,28 +11,16 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-# HBOOK support
-#
-#### G4_USE_HBOOK := true
-
 .PHONY: setup clean_setup all
-all: hbook lib bin
+all: lib bin
 
 setup:
-	@echo "Copying files from shared and hbook"
+	@echo "Copying files from shared"
 	@./shared/scripts/copy_files.sh shared
-ifdef G4_USE_HBOOK
-	@./shared/scripts/copy_files.sh hbook
-endif
         
 clean_setup:
-	@echo "Removing files copied from shared and hbook"
+	@echo "Removing files copied from shared"
 	@./shared/scripts/clean_files.sh shared
-ifdef G4_USE_HBOOK
-	@./shared/scripts/clean_files.sh hbook
-endif
-
-include hbook/GNUmakefile.tools_hbook
 
 include $(G4INSTALL)/config/binmake.gmk
 
@@ -44,4 +32,3 @@ visclean:
 
 histclean:
 	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/HistoManager.o
-	rm ${G4WORKDIR}/tmp/${G4SYSTEM}/${G4TARGET}/ExG4HbookAnalysisManager.o

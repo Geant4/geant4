@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/fanoCavity2/include/RunAction.hh
+/// \file medical/fanoCavity2/include/Run.hh
 /// \brief Definition of the RunAction class
 //
 // $Id: RunAction.hh 68999 2013-04-15 09:23:17Z gcosmo $

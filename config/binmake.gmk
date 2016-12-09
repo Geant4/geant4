@@ -1,4 +1,4 @@
-# $Id: binmake.gmk 94578 2015-11-25 08:11:03Z gcosmo $
+# $Id: binmake.gmk 101512 2016-11-18 15:28:47Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -52,6 +52,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/analysis/root/include \
               -I$(G4BASE)/analysis/xml/include \
               -I$(G4BASE)/analysis/parameters/include \
+	      -I$(G4BASE)/analysis/accumulables/include \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
               -I$(G4BASE)/global/HEPGeometry/include \

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMeltonAttachmentModel.hh 96606 2016-04-25 13:33:42Z gcosmo $
+// $Id: G4DNAMeltonAttachmentModel.hh 98733 2016-08-09 10:51:58Z gcosmo $
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,10 +66,14 @@ public:
   inline void SetDissociationFlag(G4bool);
   inline G4bool GetDissociationFlag();
 
+  inline void SelectStationary(G4bool input); 
+
 protected:
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+  G4bool statCode;
+
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
@@ -94,6 +98,13 @@ inline G4bool G4DNAMeltonAttachmentModel::GetDissociationFlag()
 {
   return fDissociationFlag;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNAMeltonAttachmentModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

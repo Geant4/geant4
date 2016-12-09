@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4Material.hh 100406 2016-10-21 08:18:05Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -277,6 +277,9 @@ public:  // with description
     // persistifiable objects.
 
   inline void SetName (const G4String& name) {fName=name;}
+
+public:
+  virtual G4bool IsExtended() const;
 
 private:
 

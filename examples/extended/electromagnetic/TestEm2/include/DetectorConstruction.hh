@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm2/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 78550 2014-01-07 09:43:41Z gcosmo $
+// $Id: DetectorConstruction.hh 98761 2016-08-09 14:07:11Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +46,7 @@ class G4LogicalVolume;
 class DetectorMessenger;
 class G4GlobalMagFieldMessenger;
 
-const G4int MaxBin = 500;
+const G4int kMaxBin = 500;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

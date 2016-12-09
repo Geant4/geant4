@@ -1,4 +1,4 @@
-$Id: History 90093 2015-05-13 11:59:54Z gcosmo $
+$Id: History 101151 2016-11-08 08:06:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-11-2016 M. Verderi (expar01-V10-02-03)
+- Use new G4FastSimulationPhysics physics constructor to configure
+  the physics list for fast simulation
+- Suppress Par01PhysicsList.
+
+02-11-2016 I. Hrivnacova (expar01-V10-02-02)
+- Added file descriptions for Doxygen documentation
+
+27-10-2016 M. Verderi (expar01-V10-02-01)
+- apply coding guidelines
+
+14-10-16 G.Folger (expar01-V10-02-00)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 29-11-2013 M. Verderi (expar01-V09-06-02)
 - fix of src/Par01EMShowerModel.cc of spurious remaing CLHEP:: :

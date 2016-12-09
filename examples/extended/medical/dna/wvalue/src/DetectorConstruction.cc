@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/src/DetectorConstruction.cc
+/// \file medical/dna/wvalue/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 // $Id: DetectorConstruction.cc 78723 2014-01-20 10:32:17Z gcosmo $

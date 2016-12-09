@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh 96626 2016-04-27 08:36:27Z gcosmo $
+// $Id: G4ionEffectiveCharge.hh 100363 2016-10-19 09:24:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,7 +84,7 @@ private:
   G4ionEffectiveCharge(const G4ionEffectiveCharge&) = delete;
 
   static const G4double       inveplus;
-  G4Pow*                      g4pow;
+  G4Pow*                      g4calc;
 
   const G4ParticleDefinition* lastPart;
   const G4Material*           lastMat;

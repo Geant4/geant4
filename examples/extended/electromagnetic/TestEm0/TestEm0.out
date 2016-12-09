@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -257,6 +257,59 @@
 
 
 
+PhysicsList::AddPhysicsList: <emstandard_opt3>
+=======================================================================
+======                 Electromagnetic Physics Parameters      ========
+=======================================================================
+Fluctuations of dE/dx are enabled                  1
+Build CSDA range enabled                           1
+LPM effect enabled                                 1
+Spline of EM tables enabled                        1
+Use cut as a final range enabled                   1
+Apply cuts on all EM processes                     0
+Fluorescence enabled                               1
+Fluorescence Bearden data files enabled            0
+Auger electron production enabled                  0
+Auger cascade enabled                              0
+PIXE atomic de-excitation enabled                  0
+De-excitation module ignores cuts                  0
+Msc lateraral displacement for e+- enabled         1
+Msc lateraral displacement for muons and hadrons   1
+Msc lateraral displacement beyond geometry safety  0
+Enable angular generator interface                 0
+Use Mott correction for e- scattering              0
+Use integral approach for tracking                 1
+Use built-in Birks satuaration                     0
+Factor of cut reduction for sub-cutoff method      1
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Max kinetic energy for CSDA tables                 1 GeV
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Linear loss limit 0.01
+Bremsstrahlung energy threshold above which 
+  primary is added to the list of secondary        100 TeV
+X-section factor for integral approach             0.8
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Skin parameter for msc step limitation of e+-      1
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Number of bins in tables                           260
+Number of bins per decade of a table               20
+Verbose level                                      0
+Verbose level for worker thread                    0
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Type of nuclear form-factor                        1
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -272,19 +325,19 @@ Index : 0     used in the geometry : Yes
 
  gamma (300 keV) in Germanium (density: 5.323 g/cm3    radiation length: 2.30121 cm )
 
-  processes :                	         phot		        compt		         conv		        total
+  processes :                	         phot		        compt		         conv		         Rayl		        total
  
-  cross section per atom    : 	      1.71686 barn  	      11.0976 barn  	            0 pbarn 	      12.8145 barn  
+  cross section per atom    : 	       1.7336 barn  	      11.0976 barn  	            0 pbarn 	      767.816 mbarn 	       13.599 barn  
 
  
-  compCrossSectionPerVolume : 	     0.075796 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.565733 cm^-1
-  cross section per volume : 	     0.075796 cm^-1	     0.489921 cm^-1	            0 cm^-1	     0.565717 cm^-1
-  cross section per mass   : 	      1.42393 mm2/g 	      9.20385 mm2/g 	            0 um2/mg	      10.6278 mm2/g 
+  compCrossSectionPerVolume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0338975 cm^-1	     0.600369 cm^-1
+  cross section per volume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.271098 cm^-1	     0.837569 cm^-1
+  cross section per mass   : 	      1.43782 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      5.09295 mm2/g 	      15.7349 mm2/g 
  
-  mean free path           : 	      13.1933 cm 	      2.04115 cm 	 5.82593e+288 pc 	      1.76767 cm 
-        (g/cm2)            : 	       70.228 g/cm2 	       10.865 g/cm2 	 2.88022e+285 kg/cm2	       9.4093 g/cm2 
+  mean free path           : 	      13.0659 cm 	      2.04108 cm 	 5.82593e+288 pc 	      3.68871 cm 	      1.19393 cm 
+        (g/cm2)            : 	      69.5499 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	       19.635 g/cm2 	      6.35529 g/cm2 
 
--------------------------------------------------------------
+-----------------------------------------------------------
 
 
 ========= Table of registered couples ==============================
@@ -309,28 +362,28 @@ Index : 1     used in the geometry : Yes
   Range cuts : 	 gamma      100 um 	 e-      100 um 
  Energy cuts : 	 gamma  1.11344 keV	 e-  85.1138 keV
 
-  Max_energy _transferable  : 10 MeV (4.93186 cm )
+  Max_energy _transferable  : 5 MeV (2.53529 cm )
 
-  processes :                	        eIoni		        eBrem		        total
+  processes :                	        eIoni		        eBrem		    ePairProd		        total
  
-  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.325102 cm^-1	      1.31986 cm^-1
-  cross section per volume : 	     0.994763 cm^-1	     0.324959 cm^-1	      1.31972 cm^-1
-  cross section per mass   : 	      99.4763 mm2/g 	      32.4959 mm2/g 	      1.31972 cm2/g 
+  compCrossSectionPerVolume : 	     0.994761 cm^-1	     0.325102 cm^-1	            0 cm^-1	      1.31986 cm^-1
+  cross section per volume : 	     0.994761 cm^-1	     0.325094 cm^-1	            0 cm^-1	      1.31985 cm^-1
+  cross section per mass   : 	      99.4761 mm2/g 	      32.5094 mm2/g 	            0 um2/mg	      1.31985 cm2/g 
  
-  mean free path           : 	      1.00526 cm 	      3.07731 cm 	      7.57735 mm 
-        (g/cm2)            : 	      1.00526 g/cm2 	      3.07731 g/cm2 	      757.735 mg/cm2
+  mean free path           : 	      1.00527 cm 	      3.07604 cm 	 5.82593e+288 pc 	      7.57659 mm 
+        (g/cm2)            : 	      1.00527 g/cm2 	      3.07604 g/cm2 	 2.88022e+285 kg/cm2	      757.659 mg/cm2
 
  
-  restricted dE/dx         : 	      1.61328 MeV/cm	      25.6439 eV/cm 	       1.6133 MeV/cm
-      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      25.6439  eV*cm2/g	       1.6133 MeV*cm2/g
+  restricted dE/dx         : 	      1.61328 MeV/cm	      25.6439 eV/cm 	            0 eV/cm 	       1.6133 MeV/cm
+      (MeV/g/cm2)          : 	      1.61328 MeV*cm2/g	      25.6439  eV*cm2/g	            0  eV*cm2/g	       1.6133 MeV*cm2/g
  
-  unrestricted dE/dx       : 	      1.99147 MeV/cm	      181.698 keV/cm	      2.17317 MeV/cm
-      (MeV/g/cm2)          : 	      1.99147 MeV*cm2/g	      181.698 keV*cm2/g	      2.17317 MeV*cm2/g
+  unrestricted dE/dx       : 	      1.99147 MeV/cm	      181.698 keV/cm	            0 eV/cm 	      2.17317 MeV/cm
+      (MeV/g/cm2)          : 	      1.99147 MeV*cm2/g	      181.698 keV*cm2/g	            0  eV*cm2/g	      2.17317 MeV*cm2/g
  
-  range from restrict dE/dx: 	 6.07227 cm  ( 6.07227 g/cm2 )
-  range from full dE/dx    : 	 4.93186 cm  ( 4.93186 g/cm2 )
+  range from restrict dE/dx: 	 6.07217 cm  ( 6.07217 g/cm2 )
+  range from full dE/dx    : 	 4.93182 cm  ( 4.93182 g/cm2 )
  
-  transport mean free path : 	 2.82437 mm  ( 282.437 mg/cm2)
+  transport mean free path : 	 2.79107 mm  ( 279.107 mg/cm2)
  
   critical energy (Rossi)  : 	 78.7732 MeV
   Moliere radius           : 	0.269193 X0 =  9.71583 cm 

@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Tet.cc 101118 2016-11-07 09:10:59Z gcosmo $
 //
 // class G4Tet
 //
@@ -51,6 +51,8 @@
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
 //  20061112 - MHM added code for G4VSolid GetSurfaceArea()
 //  20100920 - Gabriele Cosmo added copy-ctor and operator=()
+//  20160924 - Evgueni Tcherniaev, added Extent(pmin,pmax),
+//             use G4BoundingEnvelope for CalculateExtent()
 //
 // --------------------------------------------------------------------
 
@@ -58,10 +60,11 @@
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 83572 2014-09-01 15:23:27Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 101118 2016-11-07 09:10:59Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -296,6 +299,29 @@ void G4Tet::ComputeDimensions(G4VPVParameterisation* ,
 
 //////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4Tet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  pMin.set(fXMin,fYMin,fZMin);
+  pMax.set(fXMax,fYMax,fZMax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Tet::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 
 G4bool G4Tet::CalculateExtent(const EAxis pAxis,
@@ -303,91 +329,41 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
                               const G4AffineTransform& pTransform,
                                     G4double& pMin, G4double& pMax) const
 {
-  G4double xMin,xMax;
-  G4double yMin,yMax;
-  G4double zMin,zMax;
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
 
-  if (pTransform.IsRotated())
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    G4ThreeVector pp0=pTransform.TransformPoint(fAnchor);
-    G4ThreeVector pp1=pTransform.TransformPoint(fP2);
-    G4ThreeVector pp2=pTransform.TransformPoint(fP3);
-    G4ThreeVector pp3=pTransform.TransformPoint(fP4);
-
-    xMin    = std::min(std::min(std::min(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    xMax    = std::max(std::max(std::max(pp0.x(), pp1.x()),pp2.x()),pp3.x());
-    yMin    = std::min(std::min(std::min(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    yMax    = std::max(std::max(std::max(pp0.y(), pp1.y()),pp2.y()),pp3.y());
-    zMin    = std::min(std::min(std::min(pp0.z(), pp1.z()),pp2.z()),pp3.z());
-    zMax    = std::max(std::max(std::max(pp0.z(), pp1.z()),pp2.z()),pp3.z());
-
-  }
-  else
-  {
-    G4double xoffset = pTransform.NetTranslation().x() ;
-    xMin    = xoffset + fXMin;
-    xMax    = xoffset + fXMax;
-    G4double yoffset = pTransform.NetTranslation().y() ;
-    yMin    = yoffset + fYMin;
-    yMax    = yoffset + fYMax;
-    G4double zoffset = pTransform.NetTranslation().z() ;
-    zMin    = zoffset + fZMin;
-    zMax    = zoffset + fZMax;
+    return exist = (pMin < pMax) ? true : false;
   }
 
-  if (pVoxelLimit.IsXLimited())
-  {
-    if ( (xMin > pVoxelLimit.GetMaxXExtent()+fTol) || 
-         (xMax < pVoxelLimit.GetMinXExtent()-fTol)  )  { return false; }
-    else
-    {
-      xMin = std::max(xMin, pVoxelLimit.GetMinXExtent());
-      xMax = std::min(xMax, pVoxelLimit.GetMaxXExtent());
-    }
-  }
+  // Set bounding envelope (benv) and calculate extent
+  //
+  std::vector<G4ThreeVector> vec = GetVertices();
 
-  if (pVoxelLimit.IsYLimited())
-  {
-    if ( (yMin > pVoxelLimit.GetMaxYExtent()+fTol) ||
-         (yMax < pVoxelLimit.GetMinYExtent()-fTol)  )  { return false; }
-    else
-    {
-      yMin = std::max(yMin, pVoxelLimit.GetMinYExtent());
-      yMax = std::min(yMax, pVoxelLimit.GetMaxYExtent());
-    }
-    }
+  G4ThreeVectorList anchor(1);
+  anchor[0].set(vec[0].x(),vec[0].y(),vec[0].z());
 
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin > pVoxelLimit.GetMaxZExtent()+fTol) ||
-           (zMax < pVoxelLimit.GetMinZExtent()-fTol)  )  { return false; }
-    else
-    {
-      zMin = std::max(zMin, pVoxelLimit.GetMinZExtent());
-      zMax = std::min(zMax, pVoxelLimit.GetMaxZExtent());
-    }
-  }
+  G4ThreeVectorList base(3);
+  base[0].set(vec[1].x(),vec[1].y(),vec[1].z());
+  base[1].set(vec[2].x(),vec[2].y(),vec[2].z());
+  base[2].set(vec[3].x(),vec[3].y(),vec[3].z());
 
-  switch (pAxis)
-  {
-    case kXAxis:
-      pMin=xMin;
-      pMax=xMax;
-      break;
-    case kYAxis:
-      pMin=yMin;
-      pMax=yMax;
-      break;
-    case kZAxis:
-      pMin=zMin;
-      pMax=zMax;
-      break;
-    default:
-      break;
-  }
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &anchor;
+  polygons[1] = &base;
 
-  return true;
-} 
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
+}
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -661,39 +637,6 @@ G4double G4Tet::DistanceToOut(const G4ThreeVector& p) const
   return (tmin < fTol)? 0:tmin;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Note: Caller has deletion responsibility
-
-G4ThreeVectorList*
-G4Tet::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  G4ThreeVectorList* vertices = new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    vertices->reserve(4);
-    G4ThreeVector vertex0(fAnchor);
-    G4ThreeVector vertex1(fP2);
-    G4ThreeVector vertex2(fP3);
-    G4ThreeVector vertex3(fP4);
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Tet::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
-}
-
 //////////////////////////////////////////////////////////////////////////
 //
 // GetEntityType
@@ -754,8 +697,8 @@ G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
   v = p3 - p1;
   w = p1 - p2;
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
 
   area = 0.5*(v.cross(w)).mag();
 
@@ -776,7 +719,7 @@ G4ThreeVector G4Tet::GetPointOnSurface() const
   p3 = GetPointOnFace(fAnchor,fP4,fP2,aThree);
   p4 = GetPointOnFace(fP4,fP3,fP2,aFour);
   
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
   if( (chose>=0.) && (chose <aOne) ) {return p1;}
   else if( (chose>=aOne) && (chose < aOne+aTwo) ) {return p2;}
   else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) ) {return p3;}

@@ -45,39 +45,52 @@ class G4TheoFSGenerator;
 class G4LundStringFragmentation;
 class G4ExcitedStringDecay;
 class G4KokoulinMuonNuclearXS;
+class G4ElementData; 
 
 class G4MuonVDNuclearModel : public G4HadronicInteraction
 {
-  public:
+public:
     
-    G4MuonVDNuclearModel();
-    ~G4MuonVDNuclearModel();
+  explicit G4MuonVDNuclearModel();
+  virtual ~G4MuonVDNuclearModel();
+
+  virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
+					 G4Nucleus& targetNucleus);
+
+  virtual void ModelDescription(std::ostream& outFile) const;
+
+private:
     
-    G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-                                   G4Nucleus& targetNucleus);
+  G4DynamicParticle* CalculateEMVertex(const G4HadProjectile& aTrack,
+				       G4Nucleus& targetNucleus);
 
-  private:
-    
-    G4DynamicParticle* CalculateEMVertex(const G4HadProjectile& aTrack,
-                                         G4Nucleus& targetNucleus);
+  void CalculateHadronicVertex(G4DynamicParticle* incident,
+			       G4Nucleus& target);
 
-    void CalculateHadronicVertex(G4DynamicParticle* incident,
-                                 G4Nucleus& target);
+  void MakeSamplingTable();
 
-    void MakeSamplingTable();
+  G4MuonVDNuclearModel & operator=(const G4MuonVDNuclearModel &right) = delete;
+  G4MuonVDNuclearModel(const  G4MuonVDNuclearModel&) = delete;
 
-    G4double CutFixed;
-    G4int NBIN;
+  static const G4int NBIN = 800;
+  static const G4int nzdat = 5;
+  static const G4int ntdat = 73;
 
-    G4double proba[5][8][1001];
-    G4double ya[1001];
+  static const G4int zdat[nzdat];
+  static const G4double adat[nzdat];
+  static const G4double tdat[ntdat];
+  
+  static G4ElementData* fElementData;             
 
-    G4KokoulinMuonNuclearXS* muNucXS;
+  G4double CutFixed;
+  G4bool isMaster;
 
-    G4TheoFSGenerator* ftfp;
-    G4LundStringFragmentation* theFragmentation;
-    G4ExcitedStringDecay* theStringDecay;
-    G4CascadeInterface* bert;
+  G4KokoulinMuonNuclearXS* muNucXS;
+
+  G4TheoFSGenerator* ftfp;
+  G4LundStringFragmentation* theFragmentation;
+  G4ExcitedStringDecay* theStringDecay;
+  G4CascadeInterface* bert;
 };
  
 #endif

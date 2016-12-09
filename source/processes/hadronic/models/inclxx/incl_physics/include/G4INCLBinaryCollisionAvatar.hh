@@ -87,7 +87,7 @@ namespace G4INCL {
     G4bool isParticle2Spectator;
     G4bool isElastic;
 
-    INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar)
   };
 
 }

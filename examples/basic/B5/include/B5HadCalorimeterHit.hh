@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5HadCalorimeterHit.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5HadCalorimeterHit.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5HadCalorimeterHit.hh
 /// \brief Definition of the B5HadCalorimeterHit class
@@ -51,7 +51,7 @@ class G4AttValue;
 
 class B5HadCalorimeterHit : public G4VHit
 {
-public:
+  public:
     B5HadCalorimeterHit();
     B5HadCalorimeterHit(G4int iCol,G4int iRow);
     B5HadCalorimeterHit(const B5HadCalorimeterHit &right);
@@ -84,7 +84,7 @@ public:
     void SetRot(G4RotationMatrix rmat) { fRot = rmat; }
     G4RotationMatrix GetRot() const { return fRot; }
     
-private:
+  private:
     G4int fColumnID;
     G4int fRowID;
     G4double fEdep;
@@ -92,20 +92,21 @@ private:
     G4RotationMatrix fRot;
 };
 
-typedef G4THitsCollection<B5HadCalorimeterHit> B5HadCalorimeterHitsCollection;
+using B5HadCalorimeterHitsCollection = G4THitsCollection<B5HadCalorimeterHit>;
 
 extern G4ThreadLocal G4Allocator<B5HadCalorimeterHit>* B5HadCalorimeterHitAllocator;
 
 inline void* B5HadCalorimeterHit::operator new(size_t)
 {
-    if (!B5HadCalorimeterHitAllocator)
-        B5HadCalorimeterHitAllocator = new G4Allocator<B5HadCalorimeterHit>;
-    return (void*)B5HadCalorimeterHitAllocator->MallocSingle();
+  if (!B5HadCalorimeterHitAllocator) {
+       B5HadCalorimeterHitAllocator = new G4Allocator<B5HadCalorimeterHit>;
+  }
+  return (void*)B5HadCalorimeterHitAllocator->MallocSingle();
 }
 
 inline void B5HadCalorimeterHit::operator delete(void* aHit)
 {
-    B5HadCalorimeterHitAllocator->FreeSingle((B5HadCalorimeterHit*) aHit);
+  B5HadCalorimeterHitAllocator->FreeSingle((B5HadCalorimeterHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GVFlashShowerParameterisation.cc 93079 2015-10-02 14:43:41Z gcosmo $
+// $Id: GVFlashShowerParameterisation.cc 100944 2016-11-03 11:18:29Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -54,6 +54,7 @@ GVFlashShowerParameterisation::GVFlashShowerParameterisation()
 
 GVFlashShowerParameterisation::~GVFlashShowerParameterisation()
 {
+  delete fGamma;
 }
 
 G4double GVFlashShowerParameterisation::GetEffZ(const G4Material * mat  )

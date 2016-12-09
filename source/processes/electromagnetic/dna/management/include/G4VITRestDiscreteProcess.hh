@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VITRestDiscreteProcess.hh 93883 2015-11-03 08:25:04Z gcosmo $
+// $Id: G4VITRestDiscreteProcess.hh 100802 2016-11-02 14:55:27Z gcosmo $
 //
 /// \brief Identical to G4VRestDiscreteProcess with dependency from G4VITProcess
 //
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //

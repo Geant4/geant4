@@ -44,8 +44,6 @@ set(wls_SCRIPTS
     wls.in
     init.in
     gui.mac
-    icons.mac
-    run.png
     Sr90.mac
     vis.mac
    )

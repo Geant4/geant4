@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT.cc 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT.cc 101872 2016-12-02 14:02:40Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -73,9 +73,12 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(G4int)
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , thePiK(0)
-    , theBertiniPiK(0)
-    , theFTFPPiK(0)
+    , thePion(0)
+    , theBertiniPion(0)
+    , theFTFPPion(0)
+    , theKaon(0)
+    , theBertiniKaon(0)
+    , theFTFPKaon(0)
     , thePro(0)
     , theBertiniPro(0)
     , theFTFPPro(0)
@@ -93,9 +96,12 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
 /*    , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , thePiK(0)
-    , theBertiniPiK(0)
-    , theFTFPPiK(0)
+    , thePion(0)
+    , theBertiniPion(0)
+    , theFTFPPion(0)
+    , theKaon(0)
+    , theBertiniKaon(0)
+    , theFTFPKaon(0)
     , thePro(0)
     , theBertiniPro(0)
     , theFTFPPro(0)
@@ -110,30 +116,56 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
 
 void G4HadronPhysicsFTFP_BERT::CreateModels()
 {
+  G4double minFTFP_pion = 3.0 * GeV;
+  G4double maxBERT_pion = 12.0 * GeV;
+  G4double minFTFP_kaon = 3.0 * GeV;
+  G4double maxBERT_kaon = 12.0 * GeV;
+  G4double minFTFP_proton = 3.0 * GeV;
+  G4double maxBERT_proton = 12.0 * GeV;
+  G4double minFTFP_neutron = 3.0 * GeV;
+  G4double maxBERT_neutron = 12.0 * GeV;
+
+  G4cout << G4endl
+         << " FTFP_BERT : new threshold between BERT and FTFP is over the interval " << G4endl
+         << " for pions :   " << minFTFP_pion/GeV << " to " << maxBERT_pion/GeV  << " GeV" << G4endl
+         << " for kaons :   " << minFTFP_kaon/GeV << " to " << maxBERT_kaon/GeV  << " GeV" << G4endl
+         << " for proton :  " << minFTFP_proton/GeV << " to " << maxBERT_proton/GeV  << " GeV" << G4endl
+         << " for neutron : " << minFTFP_neutron/GeV << " to " << maxBERT_neutron/GeV  << " GeV" << G4endl
+         << G4endl;
 
   tpdata->theNeutrons=new G4NeutronBuilder;
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(QuasiElastic);
   tpdata->theNeutrons->RegisterMe(tpdata->theFTFPNeutron);
+  tpdata->theFTFPNeutron->SetMinEnergy(minFTFP_neutron);
   tpdata->theNeutrons->RegisterMe(tpdata->theBertiniNeutron=new G4BertiniNeutronBuilder);
   tpdata->theBertiniNeutron->SetMinEnergy(0.0*GeV);
-  tpdata->theBertiniNeutron->SetMaxEnergy(5*GeV);
+  tpdata->theBertiniNeutron->SetMaxEnergy(maxBERT_neutron);
 
   tpdata->thePro=new G4ProtonBuilder;
   tpdata->theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
   tpdata->thePro->RegisterMe(tpdata->theFTFPPro);
+  tpdata->theFTFPPro->SetMinEnergy(minFTFP_proton);
   tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
-  tpdata->theBertiniPro->SetMaxEnergy(5*GeV);
+  tpdata->theBertiniPro->SetMaxEnergy(maxBERT_proton);
 
-  tpdata->thePiK=new G4PiKBuilder;
-  tpdata->theFTFPPiK=new G4FTFPPiKBuilder(QuasiElastic);
-  tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK);
-  tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
-  tpdata->theBertiniPiK->SetMaxEnergy(5*GeV);
+  tpdata->thePion=new G4PionBuilder;
+  tpdata->theFTFPPion=new G4FTFPPionBuilder(QuasiElastic);
+  tpdata->thePion->RegisterMe(tpdata->theFTFPPion);
+  tpdata->theFTFPPion->SetMinEnergy(minFTFP_pion);
+  tpdata->thePion->RegisterMe(tpdata->theBertiniPion=new G4BertiniPionBuilder);
+  tpdata->theBertiniPion->SetMaxEnergy(maxBERT_pion);
+
+  tpdata->theKaon=new G4KaonBuilder;
+  tpdata->theFTFPKaon=new G4FTFPKaonBuilder(QuasiElastic);
+  tpdata->theKaon->RegisterMe(tpdata->theFTFPKaon);
+  tpdata->theFTFPKaon->SetMinEnergy(minFTFP_kaon);
+  tpdata->theKaon->RegisterMe(tpdata->theBertiniKaon=new G4BertiniKaonBuilder);
+  tpdata->theBertiniKaon->SetMaxEnergy(maxBERT_kaon);
   
   tpdata->theHyperon=new G4HyperonFTFPBuilder;
     
   tpdata->theAntiBaryon=new G4AntiBarionBuilder;
-  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new  G4FTFPAntiBarionBuilder(QuasiElastic));
+  tpdata->theAntiBaryon->RegisterMe(tpdata->theFTFPAntiBaryon=new G4FTFPAntiBarionBuilder(QuasiElastic));
 }
 
 G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
@@ -144,10 +176,14 @@ G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;
 
-  delete tpdata->thePiK;
-  delete tpdata->theBertiniPiK;
-  delete tpdata->theFTFPPiK;
+  delete tpdata->thePion;
+  delete tpdata->theBertiniPion;
+  delete tpdata->theFTFPPion;
     
+  delete tpdata->theKaon;
+  delete tpdata->theBertiniKaon;
+  delete tpdata->theFTFPKaon;
+
   delete tpdata->thePro;
   delete tpdata->theBertiniPro;
   delete tpdata->theFTFPPro;    
@@ -181,7 +217,8 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
   CreateModels();
   tpdata->theNeutrons->Build();
   tpdata->thePro->Build();
-  tpdata->thePiK->Build();
+  tpdata->thePion->Build();
+  tpdata->theKaon->Build();
 
   // --- Kaons ---
   tpdata->xsKaon = new G4ComponentGGHadronNucleusXsc();

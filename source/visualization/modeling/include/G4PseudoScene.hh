@@ -36,12 +36,14 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
+#include "G4Orb.hh"
 #include "G4Para.hh"
+#include "G4Sphere.hh"
 #include "G4Torus.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4Tubs.hh"
+#include "G4Ellipsoid.hh"
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 
@@ -55,21 +57,27 @@ public:
 		    const G4VisAttributes&)
   {fpCurrentObjectTransformation = &objectTransformation;}
   void PostAddSolid () {}
+  // From geometry/solids/CSG
   void AddSolid (const G4Box& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Cons & solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Tubs& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Trd& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Trap& solid) {ProcessVolume (solid);}
-  void AddSolid (const G4Sphere& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Cons& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Orb& solid) {ProcessVolume (solid);}
   void AddSolid (const G4Para& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Sphere& solid) {ProcessVolume (solid);}
   void AddSolid (const G4Torus& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Trap& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Trd& solid) {ProcessVolume (solid);}
+  void AddSolid (const G4Tubs& solid) {ProcessVolume (solid);}
+  // From geometry/solids/specific
+  void AddSolid (const G4Ellipsoid& solid) {ProcessVolume (solid);}
   void AddSolid (const G4Polycone& solid) {ProcessVolume (solid);}
   void AddSolid (const G4Polyhedra& solid) {ProcessVolume (solid);}
+  // For solids not above.
   void AddSolid (const G4VSolid& solid) {ProcessVolume (solid);}
   void AddCompound (const G4VTrajectory&) {}
   void AddCompound (const G4VHit&) {}
   void AddCompound (const G4VDigi&) {}
   void AddCompound (const G4THitsMap<G4double>&) {}
+  void AddCompound (const G4THitsMap<G4StatDouble>&) {}
   void BeginPrimitives (const G4Transform3D&) {}
   void EndPrimitives () {}
   void BeginPrimitives2D (const G4Transform3D&) {}

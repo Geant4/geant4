@@ -70,8 +70,9 @@ class G4Parton
       int operator!=(const G4Parton &right) const;
       
       G4int GetPDGcode() const;
-      
+    
       G4ParticleDefinition * GetDefinition();
+      void SetDefinition(G4ParticleDefinition * aDefinition);  // Uzhi
 
       void DefineMomentumInZ(G4double aLightConeMomentum, G4bool aDirection);      
       void DefineMomentumInZ(G4double aLightConeMomentum,G4double aLightConeE, G4bool aDirection);      
@@ -97,9 +98,11 @@ class G4Parton
    private:
       G4double GetMass();
       
-    private:  
+   public:  
       G4int PDGencoding;
       G4ParticleDefinition * theDefinition;
+
+   private:  
       G4LorentzVector theMomentum;
       G4ThreeVector   thePosition;
       
@@ -158,6 +161,12 @@ inline
 G4ParticleDefinition * G4Parton::GetDefinition()
 {
 	return theDefinition;
+}
+
+inline void G4Parton::SetDefinition(G4ParticleDefinition * aDefinition) // Uzhi
+{
+	theDefinition = aDefinition;
+	PDGencoding = theDefinition->GetPDGEncoding();
 }
 
 

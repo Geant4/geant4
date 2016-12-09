@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CoulombBarrier.cc 97097 2016-05-25 07:50:31Z gcosmo $
+// $Id: G4CoulombBarrier.cc 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -36,10 +36,23 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
-G4CoulombBarrier::G4CoulombBarrier(G4int anA, G4int aZ)
-  : G4VCoulombBarrier(anA,aZ) 
+G4CoulombBarrier::G4CoulombBarrier(G4int A, G4int Z)
+  : G4VCoulombBarrier(A, Z) 
 {
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
+  if(Z > 0) {
+    G4double rho = 1.2*CLHEP::fermi; 
+    G4double r0  = 1.5*CLHEP::fermi; 
+    if(1 == A) {
+      rho = 0.0;
+    } else if(A <= 3) {
+      rho = 0.8*CLHEP::fermi; 
+      r0  = 1.7*CLHEP::fermi;
+    } else {
+      r0  = 1.7*CLHEP::fermi;
+    }
+    SetParameters(rho, r0);
+  }
 }
 
 G4CoulombBarrier::~G4CoulombBarrier() 
@@ -47,25 +60,7 @@ G4CoulombBarrier::~G4CoulombBarrier()
 
 G4double G4CoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes, G4double) const 
 {
-  G4double Barrier = 0.0;
-  if (GetZ() > 0 && ZRes > 0) {
-    // JMQ: old coulomb barrier commented since it does not agree with 
-    //      Dostrovski's prescription
-    //      and too low  barriers are obtained (for protons at least)
-
-    ///New coulomb Barrier according to original Dostrovski's paper 
-    static const G4double rho0 = 1.2*CLHEP::fermi; 
-    G4double rho = (GetA()==1 && GetZ()==1) ?  0.0 : rho0;  
-
-    static const G4double RN = 1.5*fermi;  
-    // VI cleanup 
-    Barrier = CLHEP::elm_coupling*(GetZ()*ZRes)/(RN * g4pow->Z13(ARes) + rho);
-
-    // Barrier penetration coeficient
-    Barrier *= BarrierPenetrationFactor(ZRes);
-
-  }
-  return Barrier;
+  return CLHEP::elm_coupling*(GetZ()*ZRes)/(GetR0()*g4calc->Z13(ARes) + GetRho());
 }
 
 G4double G4CoulombBarrier::BarrierPenetrationFactor(G4int aZ) const 

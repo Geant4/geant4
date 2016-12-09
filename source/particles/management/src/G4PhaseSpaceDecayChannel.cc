@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 96797 2016-05-09 10:13:42Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 98352 2016-07-08 08:21:00Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -199,8 +199,10 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
 		    "Can not create decay products: sum of daughter mass is larger than parent mass");
 	return products;
       }
-      G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
-      G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+      G4double dm1=daughtermass[0];
+      if (daughterwidth[0] > 0.) dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      G4double dm2= daughtermass[1];
+      if (daughterwidth[1] > 0.) dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
       while (dm1+dm2>parentmass){ // Loop checking, 09.08.2015, K.Kurashige
 	dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
 	dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
@@ -307,9 +309,12 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
 		    "Can not create decay products: sum of daughter mass is larger than parent mass");
 	return products;
       }
-      G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
-      G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
-      G4double dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
+      G4double dm1=daughtermass[0];
+      if (daughterwidth[0] > 0.) dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      G4double dm2= daughtermass[1];
+      if (daughterwidth[1] > 0.) dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+      G4double dm3= daughtermass[2];
+      if (daughterwidth[2] > 0.) dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
       while (dm1+dm2+dm3>parentmass){ // Loop checking, 09.08.2015, K.Kurashige
 	dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
 	dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);

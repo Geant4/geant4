@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics_option2.hh 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4EmStandardPhysics_option2.hh 98736 2016-08-09 10:55:12Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -56,10 +56,7 @@ class G4EmStandardPhysics_option2 : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmStandardPhysics_option2(G4int ver = 1);
-
-  // obsolete
-  G4EmStandardPhysics_option2(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysics_option2(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmStandardPhysics_option2();
 

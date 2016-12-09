@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 97172 2016-05-27 12:37:57Z gcosmo $
+// $Id: G4HadronicProcess.cc 98000 2016-06-30 13:01:05Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -387,6 +387,36 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     }
   }
   while(!result);  /* Loop checking, 30-Oct-2015, G.Folger */
+
+  // Check whether kaon0 or anti_kaon0 are present between the secondaries: 
+  // if this is the case, transform them into either kaon0S or kaon0L,
+  // with equal, 50% probability, keeping their dynamical masses (and
+  // the other kinematical properties). 
+  // When this happens - very rarely - a "JustWarning" exception is thrown.
+  G4int nSec = result->GetNumberOfSecondaries();
+  if ( nSec > 0 ) {
+    for ( G4int i = 0; i < nSec; ++i ) {
+      G4DynamicParticle* dynamicParticle = result->GetSecondary(i)->GetParticle();
+      const G4ParticleDefinition* particleDefinition = dynamicParticle->GetParticleDefinition();
+      if ( particleDefinition == G4KaonZero::Definition() || 
+           particleDefinition == G4AntiKaonZero::Definition() ) {
+        G4ParticleDefinition* newParticleDefinition = G4KaonZeroShort::Definition();
+        if ( G4UniformRand() > 0.5 ) newParticleDefinition = G4KaonZeroLong::Definition();
+        G4double dynamicMass = dynamicParticle->GetMass();
+        dynamicParticle->SetDefinition( newParticleDefinition );
+        dynamicParticle->SetMass( dynamicMass );               
+        G4ExceptionDescription ed;
+        ed << " Hadronic model " << theInteraction->GetModelName() << G4endl;
+        ed << " created " << particleDefinition->GetParticleName() << G4endl;
+        ed << " -> forced to be " << newParticleDefinition->GetParticleName() << G4endl;
+        G4Exception( "G4HadronicProcess::PostStepDoIt", "had007", JustWarning, ed );
+        //if ( std::abs( dynamicMass - particleDefinition->GetPDGMass() ) > 0.1*CLHEP::eV ) {
+        //  G4cout << "\t dynamicMass=" << dynamicMass << " != PDGMass=" 
+        //         << particleDefinition->GetPDGMass() << G4endl;
+        //}
+      }
+    }
+  }
 
   result->SetTrafoToLab(thePro.GetTrafoToLab());
 

@@ -109,13 +109,13 @@ public:
   }
   bool configure(const uints_t& a_orders) {
     m_orders = a_orders;
-    unsigned int dim = m_orders.size();
+    size_t dim = m_orders.size();
     if(dim==0) {
       clear();
       return false;
     }
     unsigned int _size = 1;
-    for(unsigned int index=0;index<dim;index++) {
+    for(size_t index=0;index<dim;index++) {
       //if(m_orders[index]<0) {
       //clear();
       //return false;
@@ -126,15 +126,15 @@ public:
     m_vector.assign(_size,zero());
     m_offsets.resize(dim,0);
     m_offsets[0] = 1;
-    for(unsigned int iaxis=1;iaxis<dim;iaxis++) 
+    for(size_t iaxis=1;iaxis<dim;iaxis++) 
       m_offsets[iaxis] = m_offsets[iaxis-1] * m_orders[iaxis-1];
     m_is.resize(dim);
     m_is.assign(dim,0);
     return true;
   }
-  unsigned int dimension() const { return m_orders.size();}
+  size_t dimension() const { return m_orders.size();}
   const uints_t& orders() const { return m_orders;}
-  unsigned int size() const {return m_vector.size();}
+  size_t size() const {return m_vector.size();}
   bool set_value(const uints_t& a_is,const T& a_value) {
     unsigned int off = 0;
     if(!offset(a_is,off)) return false;
@@ -161,8 +161,8 @@ public:
   const std::vector<T>& vector() const { return m_vector;}
   std::vector<T>& vector() { return m_vector;}
   bool fill(const std::vector<T>& a_values,cut_t* a_cut = 0) {
-    unsigned int dsize = a_values.size();
-    unsigned int di = 0;
+    size_t dsize = a_values.size();
+    size_t di = 0;
     unsigned int index = 0;
     for(vec_it_t it=m_vector.begin();it!=m_vector.end();++it,index++) {
       if(!a_cut || (a_cut && accept(index,*a_cut)) ) {
@@ -312,11 +312,11 @@ public:
     return status;
   }
   bool offset(const uints_t& a_is,unsigned int& a_offset) const {
-    unsigned int dim = m_orders.size();
+    size_t dim = m_orders.size();
     a_offset = 0;
     if(a_is.size()!=dim) return false;
     if(dim==0) return false;
-    for(unsigned int iaxis=0;iaxis<dim;iaxis++) { 
+    for(size_t iaxis=0;iaxis<dim;iaxis++) { 
       unsigned int i = a_is[iaxis];
       if(i>=m_orders[iaxis]) {
         a_offset = 0;
@@ -328,20 +328,20 @@ public:
   }
   bool indices(unsigned int a_offset,uints_t& a_is) const {
     if(a_offset>=m_vector.size()) return false;
-    unsigned int dim = m_orders.size();
+    size_t dim = m_orders.size();
     unsigned int off = a_offset;
-    for(int iaxis=dim-1;iaxis>=0;iaxis--) { 
+    for(int iaxis=int(dim)-1;iaxis>=0;iaxis--) { 
       a_is[iaxis] = off/m_offsets[iaxis];
       off -= a_is[iaxis] * m_offsets[iaxis];
     }
     return true;
   }
   bool accept(unsigned int a_index,const cut_t& a_cut) const {
-    unsigned int dim = m_orders.size();
+    size_t dim = m_orders.size();
     if(a_cut.size()!=dim) return false;
     if(!indices(a_index,const_cast<uints_t&>(m_is))) return false;
     bool good = true;
-    for(unsigned int iaxis=0;iaxis<dim;iaxis++) { 
+    for(size_t iaxis=0;iaxis<dim;iaxis++) { 
       if(m_is[iaxis]<a_cut[iaxis].first) {good = false;break;}
       if(m_is[iaxis]>a_cut[iaxis].second) {good = false;break;}
     }

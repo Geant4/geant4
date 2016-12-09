@@ -49,7 +49,7 @@ if(!fHousing_log || fUpdated){
 SetLogicalVolume(fHousing_log);
 \endverbatim
 
-\subsection LXe_subs11 Modifying the geometry at runtime
+\subsection LXe_subs10 Modifying the geometry at runtime
 
 This example allows the user to modify the geometry definition at runtime. This
 is accomplished through LXeDetectorMessenger, a derived class of G4UImessenger.

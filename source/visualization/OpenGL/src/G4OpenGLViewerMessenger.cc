@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewerMessenger.cc 96669 2016-04-29 12:03:24Z gcosmo $
+// $Id: G4OpenGLViewerMessenger.cc 101105 2016-11-07 08:09:26Z gcosmo $
 
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
@@ -60,6 +60,59 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
 
   fpDirectory = new G4UIdirectory("/vis/ogl/");
   fpDirectory->SetGuidance("G4OpenGLViewer commands.");
+
+  fpCommandExport =
+  new G4UIcommand("/vis/ogl/export", this);
+  fpCommandExport->SetGuidance ("export a screenshot of current OpenGL viewer");
+  fpCommandExport->SetGuidance ("If name is \"\", filename and extension will have the default value");
+  fpCommandExport->SetGuidance ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\". No incremented suffix is added.");
+  fpCommandExport->SetGuidance ("If name is \"toto\", set the name to \"toto\" and the format to default (or current format if specify). Will also add an incremented suffix at the end of the file, except if name is the same as previous it will not reset incremented suffix.");
+  fpCommandExport->SetGuidance ("Setting size is available only on eps/pdf/svg/ps formats");
+  G4UIparameter* parameterExport;
+  parameterExport = new G4UIparameter ("name", 's', omitable = true);
+  parameterExport->SetDefaultValue("!");
+  parameterExport->SetGuidance("by default, will take a default value or the last /vis/ogl/set/printFilename value if set");
+  fpCommandExport->SetParameter(parameterExport);
+  parameterExport = new G4UIparameter ("width", 'd', omitable = true);
+  parameterExport->SetGuidance("By default, will take the current width of the viewer or /vis/ogl/set/printSize if set");
+  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetDefaultValue(-1);
+  fpCommandExport->SetParameter(parameterExport);
+  parameterExport = new G4UIparameter ("height", 'd', omitable = true);
+  parameterExport->SetGuidance("By default, will take the current height of the viewer or /vis/ogl/set/printSize if set");
+  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
+  parameterExport->SetDefaultValue(-1);
+  fpCommandExport->SetParameter(parameterExport);
+
+  fpCommandFlushAt = new G4UIcommand("/vis/ogl/flushAt", this);
+  fpCommandFlushAt->SetGuidance
+  ("Controls the rate at which graphics primitives are flushed to screen.");
+  fpCommandFlushAt->SetGuidance
+  ("Flushing to screen is an expensive operation so to speed drawing choose"
+   "\nan action suitable for your application.  Note that detectors are flushed"
+   "\nto screen anyway at end of drawing, and events are flushed to screen"
+   "\nanyway depending on /vis/scene/endOfEventAction and endOfRunAction.");
+  fpCommandFlushAt->SetGuidance
+  ("For NthPrimitive and NthEvent the second parameter N is operative.");
+  fpCommandFlushAt->SetGuidance
+  ("For \"never\", detectors and events are still flushed as described above.");
+  G4UIparameter* parameterFlushAt;
+  parameterFlushAt = new G4UIparameter ("action", 's', omitable = true);
+  parameterFlushAt->SetParameterCandidates
+  ("endOfEvent endOfRun eachPrimitive NthPrimitive NthEvent never");
+  parameterFlushAt->SetDefaultValue("NthEvent");
+  fpCommandFlushAt->SetParameter(parameterFlushAt);
+  parameterFlushAt = new G4UIparameter ("N", 'i', omitable = true);
+  parameterFlushAt->SetDefaultValue(100);
+  fpCommandFlushAt->SetParameter(parameterFlushAt);
+
+  fpCommandPrintEPS =
+  new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
+  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
+  fpCommandPrintEPS->SetGuidance
+  ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
+   "\nnumber, starting at 0."
+   "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpDirectorySet = new G4UIdirectory ("/vis/ogl/set/");
   fpDirectorySet->SetGuidance("G4OpenGLViewer set commands.");
@@ -173,12 +226,10 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandEventsDrawInterval =
     new G4UIcmdWithAnInteger("/vis/ogl/set/eventsDrawInterval", this);
   fpCommandEventsDrawInterval->SetGuidance
-    ("Set number of events allowed in drawing pipeline - speeds drawing.");
+  ("Deprecated.  Use /vis/ogl/flushAt.");
   fpCommandEventsDrawInterval->SetGuidance
-    ("By default, the screen is updated at the end of every event."
-     "\nAllowing OpenGL to buffer several events can make a big improvement"
-     "\nin drawing speed.");
-  fpCommandEventsDrawInterval->SetParameterName("interval", omitable = true);
+  ("(This is equivalent to \"/vis/ogl/flushAt NthPrimitive N\"");
+  fpCommandEventsDrawInterval->SetParameterName("N", omitable = true);
   fpCommandEventsDrawInterval->SetDefaultValue(1);
 
   fpCommandFade = new G4UIcmdWithADouble("/vis/ogl/set/fade", this);
@@ -187,14 +238,6 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   fpCommandFade->SetParameterName("fadefactor", omitable = false);
   fpCommandFade->SetRange("fadefactor>=0.&&fadefactor<=1.");
   fpCommandFade->SetDefaultValue(0.);
-
-  fpCommandPrintEPS =
-    new G4UIcmdWithoutParameter("/vis/ogl/printEPS", this);
-  fpCommandPrintEPS->SetGuidance("Print Encapsulated PostScript file.");
-  fpCommandPrintEPS->SetGuidance
-    ("Generates files with names G4OpenGL_n.eps, where n is a sequence"
-     "\nnumber, starting at 0."
-     "\nCan be \"vectored\" or \"pixmap\" - see \"/vis/ogl/set/printMode\".");
 
   fpCommandPrintFilename =
     new G4UIcommand("/vis/ogl/set/printFilename", this);
@@ -218,30 +261,6 @@ G4OpenGLViewerMessenger::G4OpenGLViewerMessenger()
   parameterExportFormat = new G4UIparameter ("format", 's', omitable = true);
   parameterExportFormat->SetDefaultValue("");
   fpCommandExportFormat->SetParameter(parameterExportFormat);
-  
-  fpCommandExport =
-  new G4UIcommand("/vis/ogl/export", this);
-  fpCommandExport->SetGuidance ("export a screenshot of current OpenGL viewer");
-  fpCommandExport->SetGuidance ("If name is \"\", filename and extension will have the default value");
-  fpCommandExport->SetGuidance ("If name is \"toto.png\", set the name to \"toto\" and the format to \"png\". No incremented suffix is added.");
-  fpCommandExport->SetGuidance ("If name is \"toto\", set the name to \"toto\" and the format to default (or current format if specify). Will also add an incremented suffix at the end of the file, except if name is the same as previous it will not reset incremented suffix.");
-  fpCommandExport->SetGuidance ("Setting size is available only on eps/pdf/svg/ps formats");
-
-  G4UIparameter* parameterExport;
-  parameterExport = new G4UIparameter ("name", 's', omitable = true);
-  parameterExport->SetDefaultValue("!");
-  parameterExport->SetGuidance("by default, will take a default value or the last /vis/ogl/set/printFilename value if set");
-  fpCommandExport->SetParameter(parameterExport);
-  parameterExport = new G4UIparameter ("width", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current width of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
-  parameterExport->SetDefaultValue(-1);
-  fpCommandExport->SetParameter(parameterExport);
-  parameterExport = new G4UIparameter ("height", 'd', omitable = true);
-  parameterExport->SetGuidance("By default, will take the current height of the viewer or /vis/ogl/set/printSize if set");
-  parameterExport->SetGuidance("This parameter is only useful for eps/pdf/svg/ps formats !");
-  parameterExport->SetDefaultValue(-1);
-  fpCommandExport->SetParameter(parameterExport);
   
   fpCommandPrintMode = new G4UIcmdWithAString
     ("/vis/ogl/set/printMode",this);
@@ -295,16 +314,17 @@ G4OpenGLViewerMessenger::~G4OpenGLViewerMessenger ()
   delete fpCommandPrintSize;
   delete fpCommandPrintMode;
   delete fpCommandPrintFilename;
-  delete fpCommandExport;
-  delete fpCommandPrintEPS;
-  delete fpCommandExportFormat;
   delete fpCommandFade;
+  delete fpCommandExportFormat;
   delete fpCommandEventsDrawInterval;
   delete fpCommandEndTime;
   delete fpCommandDisplayListLimit;
   delete fpCommandDisplayLightFront;
   delete fpCommandDisplayHeadTime;
   delete fpDirectorySet;
+  delete fpCommandPrintEPS;
+  delete fpCommandFlushAt;
+  delete fpCommandExport;
   delete fpDirectory;
 
   delete fpInstance;
@@ -430,9 +450,32 @@ void G4OpenGLViewerMessenger::SetNewValue
 
   if (command == fpCommandEventsDrawInterval)
   {
-    G4int eventsDrawInterval =
+    G4int entitiesFlushInterval =
     fpCommandEventsDrawInterval->GetNewIntValue(newValue);
-    pOGLSceneHandler->SetEventsDrawInterval(eventsDrawInterval);
+    pOGLSceneHandler->SetFlushAction(G4OpenGLSceneHandler::NthPrimitive);
+    pOGLSceneHandler->SetEntitiesFlushInterval(entitiesFlushInterval);
+    return;
+  }
+
+  if (command == fpCommandFlushAt)
+  {
+//    G4bool firstTime = true;
+    std::map<G4String,G4OpenGLSceneHandler::FlushAction> actionMap;
+//    if (firstTime) {
+      actionMap["endOfEvent"]    = G4OpenGLSceneHandler::endOfEvent;
+      actionMap["endOfRun"]      = G4OpenGLSceneHandler::endOfRun;
+      actionMap["eachPrimitive"] = G4OpenGLSceneHandler::eachPrimitive;
+      actionMap["NthPrimitive"]  = G4OpenGLSceneHandler::NthPrimitive;
+      actionMap["NthEvent"]      = G4OpenGLSceneHandler::NthEvent;
+      actionMap["never"]         = G4OpenGLSceneHandler::never;
+//      firstTime = false;
+//    }
+    G4String action;
+    G4int entitiesFlushInterval;
+    std::istringstream iss(newValue);
+    iss >> action >> entitiesFlushInterval;
+    pOGLSceneHandler->SetFlushAction(actionMap[action]);
+    pOGLSceneHandler->SetEntitiesFlushInterval(entitiesFlushInterval);
     return;
   }
 

@@ -46,8 +46,6 @@ class G4LogicalVolume;
 class G4VIStore;
 class G4VWeightWindowStore;
 
-
-
 class B02ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
 public:
@@ -74,11 +72,8 @@ public:
     // create an weight window  store, caller is responsible for 
     // deleting it
 
-
 private:
   B02PVolumeStore fPVolumeStore;
-
-
 
   //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
   std::vector< G4LogicalVolume * > fLogicalVolumeVector;

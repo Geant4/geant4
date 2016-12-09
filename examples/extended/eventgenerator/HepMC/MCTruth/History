@@ -1,4 +1,4 @@
-$Id: History 82281 2014-06-13 14:47:16Z gcosmo $
+$Id: History 99841 2016-10-07 10:09:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 October 2016 W. Pokorski (mctruthex-V10-02-00)
+- changes to comply with coding conventions
 
 11 June 2014 W. Pokorski (mctruthex-V10-00-00)
 - changes to comply with coding conventions

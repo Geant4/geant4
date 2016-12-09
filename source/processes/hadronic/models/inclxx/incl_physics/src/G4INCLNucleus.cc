@@ -55,6 +55,7 @@
 #include "G4INCLCluster.hh"
 #include "G4INCLClusterDecay.hh"
 #include "G4INCLDeJongSpin.hh"
+#include "G4INCLParticleSpecies.hh"
 #include <iterator>
 #include <cstdlib>
 #include <sstream>
@@ -404,6 +405,74 @@ namespace G4INCL {
     return true;
   }
 
+	G4bool Nucleus::decayOutgoingPionResonances(G4double timeThreshold) {
+		ParticleList const &out = theStore->getOutgoingParticles();
+		ParticleList pionResonances;
+		for(ParticleIter i=out.begin(), e=out.end(); i!=e; ++i) {
+//			if((*i)->isEta() || (*i)->isOmega()) pionResonances.push_back((*i));
+			if(((*i)->isEta() && timeThreshold > ParticleTable::getWidth(Eta)) || ((*i)->isOmega() && timeThreshold > ParticleTable::getWidth(Omega))) pionResonances.push_back((*i));
+		}
+		if(pionResonances.empty()) return false;
+		
+		for(ParticleIter i=pionResonances.begin(), e=pionResonances.end(); i!=e; ++i) {
+			INCL_DEBUG("Decay outgoing pionResonances particle:" << '\n'
+					   << (*i)->print() << '\n');
+			const ThreeVector beta = -(*i)->boostVector();
+			const G4double pionResonanceMass = (*i)->getMass();
+			
+			// Set the pionResonance momentum to zero and sample the decay in the CM frame.
+			// This makes life simpler if we are using real particle masses.
+			(*i)->setMomentum(ThreeVector());
+			(*i)->setEnergy((*i)->getMass());
+			
+			// Use a DecayAvatar
+			IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+			FinalState *fs = decay->getFinalState();
+			
+			Particle * const theModifiedParticle = fs->getModifiedParticles().front();
+			ParticleList const &created = fs->getCreatedParticles();
+			Particle * const theCreatedParticle1 = created.front();
+							
+			if (created.size() == 1) {
+				
+				// Adjust the decay momentum if we are using the real masses
+				const G4double decayMomentum = KinematicsUtils::momentumInCM(pionResonanceMass,theModifiedParticle->getTableMass(),theCreatedParticle1->getTableMass());
+				ThreeVector newMomentum = theCreatedParticle1->getMomentum();
+				newMomentum *= decayMomentum / newMomentum.mag();
+				
+				theCreatedParticle1->setTableMass();
+				theCreatedParticle1->setMomentum(newMomentum);
+				theCreatedParticle1->adjustEnergyFromMomentum();
+				//theCreatedParticle1->setEmissionTime(nucleon->getEmissionTime());
+				theCreatedParticle1->boost(beta);
+				
+				theModifiedParticle->setTableMass();
+				theModifiedParticle->setMomentum(-newMomentum);
+				theModifiedParticle->adjustEnergyFromMomentum();
+				theModifiedParticle->boost(beta);
+				
+				theStore->addToOutgoing(theCreatedParticle1);
+			}
+			else if (created.size() == 2) {
+				Particle * const theCreatedParticle2 = created.back();
+				
+				theCreatedParticle1->boost(beta);
+				theCreatedParticle2->boost(beta);
+				theModifiedParticle->boost(beta);
+				
+				theStore->addToOutgoing(theCreatedParticle1);
+				theStore->addToOutgoing(theCreatedParticle2);
+			}
+			else {
+				INCL_ERROR("Wrong number (< 2) of created particles during the decay of a pion resonance");
+			}
+			delete fs;
+			delete decay;
+		}
+		
+		return true;
+	}	
+	
   G4bool Nucleus::decayOutgoingClusters() {
     ParticleList const &out = theStore->getOutgoingParticles();
     ParticleList clusters;
@@ -699,8 +768,16 @@ namespace G4INCL {
       eventInfo->phi[eventInfo->nParticles] = Math::toDegrees(mom.phi());
       eventInfo->origin[eventInfo->nParticles] = -1;
       eventInfo->history.push_back("");
-      eventInfo->nParticles++;
-    }
+	  if ((*i)->getType() != Composite) {
+		ParticleSpecies pt((*i)->getType());
+		eventInfo->PDGCode[eventInfo->nParticles] = pt.ParticleSpecies::getPDGCode();
+	  }
+	  else {
+		ParticleSpecies pt((*i)->getA(), (*i)->getZ());
+		eventInfo->PDGCode[eventInfo->nParticles] = pt.ParticleSpecies::getPDGCode();
+	  }
+		eventInfo->nParticles++;
+	}
     eventInfo->nucleonAbsorption = isNucleonAbsorption;
     eventInfo->pionAbsorption = isPionAbsorption;
     eventInfo->nCascadeParticles = eventInfo->nParticles;

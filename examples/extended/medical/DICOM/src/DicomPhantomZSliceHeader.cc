@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceHeader.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomPhantomZSliceHeader.cc 101109 2016-11-07 08:14:53Z gcosmo $
 //
 /// \file DicomPhantomZSliceHeader.cc
 /// \brief Implementation of the DicomPhantomZSliceHeader class
@@ -34,6 +34,7 @@
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4NistManager.hh"
 
 #include "DicomPhantomZSliceHeader.hh"
 
@@ -89,8 +90,8 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
     for( G4int im = 0; im < nmate; im++ ){
         fin >> mateindex >> matename;
 #ifdef G4VERBOSE
-        G4cout << " DicomPhantomZSliceHeader reading material " << im << " : "
-        << mateindex << "  " << matename << G4endl;
+        //G4cout << " DicomPhantomZSliceHeader reading material " << im << " : "
+        //        << mateindex << "  " << matename << G4endl;
 #endif
 
         if( ! CheckMaterialExists( matename ) ) {
@@ -131,7 +132,12 @@ G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
         if( (*matite)->GetName() == mateName ) { return true; }
     }
 
-    return false;
+    G4Material* g4mate = G4NistManager::Instance()->FindOrBuildMaterial(mateName);
+    if( g4mate ) {
+      return false;
+    } else {
+      return true;
+    }
 
 }
 
@@ -171,7 +177,7 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+(
                     FatalErrorInArgument,"");
     }
 
-    //----- Check that both slices has the same materials
+    //----- Check that both slices have the same materials
     std::vector<G4String> fMaterialNames2 = rhs.GetMaterialNames();
     if( fMaterialNames.size() != fMaterialNames2.size() ) {
         G4cerr << "DicomPhantomZSliceHeader error adding two slice headers:\

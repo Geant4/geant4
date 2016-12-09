@@ -14,6 +14,13 @@
 #set gps properties
 /gps/ene/mono 400. GeV
 /gps/particle proton
+
+/gps/pos/type Point
+/gps/pos/centre 0 0 -10.5 m
+
+/gps/ang/type beam2d
+/gps/ang/rot1 1  0  0
+/gps/ang/rot2 0 -1  0
 /gps/ang/sigma_x 13.36E-6 rad
 /gps/ang/sigma_y 11.25E-6 rad
 

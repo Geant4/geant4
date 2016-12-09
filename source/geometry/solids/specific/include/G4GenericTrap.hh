@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.hh 95592 2016-02-16 10:48:01Z gcosmo $
+// $Id: G4GenericTrap.hh 99781 2016-10-05 10:18:54Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -120,6 +120,7 @@ class G4GenericTrap : public G4VSolid
                                  G4bool *validNorm = 0,
                                  G4ThreeVector *n = 0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -165,8 +166,6 @@ class G4GenericTrap : public G4VSolid
                           const G4TwoVector& c, const G4TwoVector& d) const;
     G4bool  IsSegCrossingZ(const G4TwoVector& a, const G4TwoVector& b, 
                            const G4TwoVector& c, const G4TwoVector& d) const;
-    G4ThreeVectorList* CreateRotatedVertices(const 
-                         G4AffineTransform& pTransform) const;
     void ReorderVertices(std::vector<G4ThreeVector>& vertices) const;
     void ComputeBBox();
     inline G4ThreeVector GetMinimumBBox() const;

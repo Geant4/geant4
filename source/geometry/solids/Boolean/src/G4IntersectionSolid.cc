@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc 95390 2016-02-08 14:46:28Z gcosmo $
+// $Id: G4IntersectionSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -134,9 +134,43 @@ G4IntersectionSolid::operator = (const G4IntersectionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void
+G4IntersectionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4ThreeVector minA,maxA, minB,maxB;
+  fPtrSolidA->Extent(minA,maxA);
+  fPtrSolidB->Extent(minB,maxB);
+
+  pMin.set(std::max(minA.x(),minB.x()),
+           std::max(minA.y(),minB.y()),
+           std::max(minA.z(),minB.z()));
+
+  pMax.set(std::min(maxA.x(),maxB.x()),
+           std::min(maxA.y(),maxB.y()),
+           std::min(maxA.z(),maxB.z()));
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4IntersectionSolid::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
@@ -159,7 +193,10 @@ G4IntersectionSolid::CalculateExtent(const EAxis pAxis,
     pMax = std::min( maxA, maxB );
     out  = (pMax > pMin); // true;
   }
-  else out = false;
+  else
+  {
+    out = false;
+  }
 
   return out; // It exists in this slice only if both exist in it.
 }

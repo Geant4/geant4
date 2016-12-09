@@ -44,7 +44,7 @@ inline bool match(const std::string& a_string,const std::string& a_pattern,bool 
   // tricky case :
   char* token = (char*)a_string.c_str();
  {for(unsigned int count=0;count<wn;count++) { 
-    unsigned int lword = wls[count];
+    size_t lword = wls[count];
     if(!lword) continue;//should never happen !
     //WARNING : ws_pos does not have a null char at ws_pos+lword !
     char* ws_pos = (char*)(a_pattern.c_str()+wps[count]);

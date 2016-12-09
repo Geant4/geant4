@@ -86,6 +86,13 @@ class G4UGenericTrap : public G4USolid
     G4UGenericTrap &operator=(const G4UGenericTrap& source);
       // Copy constructor and assignment operator.
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
+
     G4Polyhedron* CreatePolyhedron() const;
 };
 

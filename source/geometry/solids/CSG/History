@@ -1,4 +1,4 @@
-$Id: History 97008 2016-05-20 08:57:10Z gcosmo $
+$Id: History 101519 2016-11-18 15:43:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,67 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 18, 2016 E.Tcherniaev geom-csg-V10-02-19
+- Added consistency checks for extent computation in USolids wrappers.
+
+November 7, 2016 E.Tcherniaev geom-csg-V10-02-18
+- Added optional debug flag G4BBOX_EXTENT in GNUMake build to compare
+  extent calculation by simply using bounding-box.
+
+November 3, 2016 E.Tcherniaev geom-csg-V10-02-17
+- Disabled check for intersection of cut planes in G4CutTubs constructor,
+  as too strict and not necessary. Addressing problem report #1887.
+
+October 31, 2016 E.Tcherniaev geom-csg-V10-02-16
+- Re-implemented CalculateExtent() to make use of G4BoundingEnvelope and
+  removed no-longer used method CreateRotatedVertices() in G4Sphere, G4OTubs,
+  G4Torus, G4Orb, and related USolids wrappers.
+- Use G4GeomTools::DiskExtent() for calculation of bounding box in Extent()
+  for G4Tubs, G4Cons and related USolids wrappers.
+- Use G4RandFlat instead of RandFlat.
+
+October 5, 2016 E.Tcherniaev geom-csg-V10-02-15
+- G4Cons, G4UCons: re-implemented CalculateExtent() to make use of
+  G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices().
+- G4Tubs, G4UTubs: revised implementation of CalculateExtent() to avoid use
+  of addresses to vectors elements. Attempting fix for reported Coverity defect.
+
+September 27, 2016 G.Cosmo geom-csg-V10-02-14
+- Reduced number of segments in G4Tubs and G4UTubs for CalculateExtent() from
+  48 to 24.
+
+September 27, 2016 E.Tcherniaev geom-csg-V10-02-13
+- Corrected vertices order for definition of bounding envelope in
+  G4Trap, G4UTrap and G4Para.
+
+September 26, 2016 E.Tcherniaev geom-csg-V10-02-12
+- More corrections in G4Trap and G4UTrap in Extent() for use of 'alpha'
+  accessors.
+
+September 26, 2016 G.Cosmo, E.Tcherniaev geom-csg-V10-02-11, 10
+- Re-implemented CalculateExtent() of G4Para, G4Trd, G4Trap to make use of
+  G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices()
+  implementation. Use same algorithm in G4UTrd and G4UTrap wrappers.
+- Fix in G4UBox in computation of the extent for problem introduced in
+  previous tags.
+
+September 22, 2016 E.Tcherniaev          geom-csg-V10-02-09, 08, 07
+- G4Box, G4Tubs: added Extent() method and checks on extent validity.
+- G4UBox, G4UTubs: use same CalculateExtent() technique as for G4Box
+  and G4Tubs.
+
+August 30, 2016 E.Tcherniaev             geom-csg-V10-02-06
+- G4Tubs: added construction of bounding envelope in CalculateExtent().
+
+August 29, 2016 G.Cosmo                  geom-csg-V10-02-05
+- Removed no-longer used method CreateRotatedVertices() implementation in
+  G4Box and G4Tubs. Simplified code in G4Tubs::CalculateExtent().
+
+August 26, 2016 E.Tcherniaev
+- Re-implemented CalculateExtent() of G4Box and G4Tubs to make use of
+  G4BoundingEnvelope. Implemented bounding-box in G4Tubs to take into
+  consideration cuts in phi.
 
 May 20, 2016 G.Cosmo                     geom-csg-V10-02-04
 - Moved accessors and modifiers in USolids wrappers to be not inlined.

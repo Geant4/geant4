@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/HistoManager.hh
+/// \file medical/fanoCavity2/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
 //
-// $Id: HistoManager.hh 68999 2013-04-15 09:23:17Z gcosmo $
+// $Id: HistoManager.hh 98253 2016-07-04 17:30:44Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 

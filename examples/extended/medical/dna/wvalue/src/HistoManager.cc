@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/src/HistoManager.cc
+/// \file medical/dna/wvalue/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 //

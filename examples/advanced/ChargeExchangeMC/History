@@ -7,6 +7,9 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+02.11.2016 - L. Garnier, Tag ChargeExchangeMC-V10-02-00
+             Remove icons.mac. Automatically include since interfaces-V10-02-07
+
 09.12.2014 - A. Radkov, Tag ChargeExchangeMC-V10-01-00
              CERN ROOT histograming binding. Bug fix for online histogram 
              redrawing and easy online histogram showing from a dedicated 

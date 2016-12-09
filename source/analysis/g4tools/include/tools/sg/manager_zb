@@ -13,7 +13,7 @@ namespace sg {
 
 class manager_zb : public virtual gl_manager {
 public:
-  virtual void begin_render(unsigned int,unsigned int,float,float,float,float) {}
+  virtual bool begin_render(int,int,unsigned int,unsigned int,float,float,float,float,bool = true) {return true;}
   virtual void end_render() {}
 
   virtual unsigned int create_texture(const tools::img_byte& a_img) {    
@@ -22,7 +22,7 @@ public:
     return m_gen_id;
   }
 
-  virtual unsigned int create_gsto_from_data(unsigned int,const float*) {return 0;}
+  virtual unsigned int create_gsto_from_data(size_t,const float*) {return 0;}
 
   virtual bool is_gsto_id_valid(unsigned int a_id) const {
     gstos_t::const_iterator it = m_gstos.find(a_id);
@@ -39,21 +39,23 @@ public:
   virtual void set_gsto_mode(tools::sg::gsto_mode) {}
   virtual void available_gsto_modes(std::vector<std::string>& a_v) {a_v.clear();}
   virtual void available_not_memory_gsto_mode(std::string& a_s) const {a_s.clear();}
-  virtual unsigned int used_texture_memory() const {return 0;}
-  virtual unsigned int gstos_size() const {return 0;}
+  virtual size_t used_texture_memory() const {return 0;}
+  virtual size_t gstos_size() const {return 0;}
 public:
   manager_zb():m_gen_id(0){}
-  virtual ~manager_zb(){}
+  virtual ~manager_zb(){
+    m_gstos.clear();
+  }
 public:
   manager_zb(const manager_zb& a_from)
   :gl_manager(a_from)
   ,m_gen_id(0)
-  ,m_gstos(a_from.m_gstos)
+  ,m_gstos()
   {}
   manager_zb& operator=(const manager_zb& a_from){
     if(&a_from==this) return *this;
     m_gen_id = 0;
-    m_gstos = a_from.m_gstos;
+    m_gstos.clear();
     return *this;
   }
 public:
@@ -63,7 +65,10 @@ public:
     a_img = (*it).second;
     return true;
   }
-  void cleanup() {}
+  //void cleanup() {}
+  void delete_gstos() {
+    m_gstos.clear();
+  }
 protected:
   unsigned int m_gen_id;
   typedef std::map<unsigned int,tools::img_byte> gstos_t;

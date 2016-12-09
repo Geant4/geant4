@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm1/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: PrimaryGeneratorMessenger.hh 98759 2016-08-09 14:03:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,11 +53,11 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
+    PrimaryGeneratorAction* fAction;
     
-    G4UIdirectory*             fGunDir; 
-    G4UIcmdWithAnInteger*      fDefaultCmd;
-    G4UIcmdWithADouble*        fRndmCmd;
+    G4UIdirectory*          fGunDir; 
+    G4UIcmdWithAnInteger*   fDefaultCmd;
+    G4UIcmdWithADouble*     fRndmCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

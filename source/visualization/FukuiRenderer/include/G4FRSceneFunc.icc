@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRSceneFunc.icc 77479 2013-11-25 10:01:22Z gcosmo $
+// $Id: G4FRSceneFunc.icc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 
 #include <CLHEP/Units/PhysicalConstants.h>
@@ -201,7 +201,8 @@ void G4FRSCENEHANDLER::AddPrimitive ( const G4Circle& mark_circle )
 	FRBeginModeling();
 
 		//----- send color
-        const G4Color&	color     = GetColor (mark_circle) ;
+        fpVisAttribs = mark_circle.GetVisAttributes();
+        const G4Color&	color     = GetColor () ;
 	SendStrDouble3(	FR_COLOR_RGB    ,
 			color.GetRed  (), 
 			color.GetGreen(),
@@ -256,7 +257,8 @@ void G4FRSCENEHANDLER::AddPrimitive (const G4Square& mark_square )
 	FRBeginModeling();
 
 		//----- send color
-        const G4Color&	color     = GetColor (mark_square) ;
+        fpVisAttribs = mark_square.GetVisAttributes();
+        const G4Color&	color     = GetColor () ;
 	SendStrDouble3(	FR_COLOR_RGB    ,
 			color.GetRed  (), 
 			color.GetGreen(),
@@ -489,6 +491,7 @@ void G4FRSCENEHANDLER::AddSolid( const G4Box& box )
   if (G4VisManager::GetVerbosity() >= G4VisManager::errors)
 	G4cout << "***** AddSolid ( box )\n";
 #endif
+
 		//----- skip drawing invisible primitive
 	if( !IsVisible() ) { return ; }
 

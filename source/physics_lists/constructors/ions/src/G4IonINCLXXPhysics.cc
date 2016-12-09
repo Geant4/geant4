@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonINCLXXPhysics.cc 80671 2014-05-06 13:59:16Z gcosmo $
+// $Id: G4IonINCLXXPhysics.cc 101029 2016-11-04 08:40:51Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -91,11 +91,11 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(G4int ver) :
   verbose(ver)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
-  emax_d     = 2 * 3.0 * GeV;
-  emax_t     = 3 * 3.0 * GeV;
-  emax_he3   = 3 * 3.0 * GeV;
-  emax_alpha = 4 * 3.0 * GeV;
-  emax       = 18 * 3.0 * GeV;
+  emax_d     = 3.0 * GeV;
+  emax_t     = 3.0 * GeV;
+  emax_he3   = 3.0 * GeV;
+  emax_alpha = 3.0 * GeV;
+  emax       = 3.0 * GeV;
   emaxFTFP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);
@@ -108,11 +108,11 @@ G4IonINCLXXPhysics::G4IonINCLXXPhysics(const G4String& name,
   verbose(ver)
 {
   // INCLXX light ion maximum energy is 3.0 GeV/nucleon
-  emax_d     = 2 * 3.0 * GeV;
-  emax_t     = 3 * 3.0 * GeV;
-  emax_he3   = 3 * 3.0 * GeV;
-  emax_alpha = 4 * 3.0 * GeV;
-  emax       = 18 * 3.0 * GeV;
+  emax_d     = 3.0 * GeV;
+  emax_t     = 3.0 * GeV;
+  emax_he3   = 3.0 * GeV;
+  emax_alpha = 3.0 * GeV;
+  emax       = 3.0 * GeV;
   emaxFTFP   = 1.*TeV;
   emin       = 0.*MeV;
   SetPhysicsType(bIons);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh 96867 2016-05-13 13:50:58Z gcosmo $
+// $Id: G4EvaporationProbability.hh 99962 2016-10-12 14:09:03Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -39,8 +39,6 @@
 
 class G4VCoulombBarrier;
 class G4NuclearLevelData;
-
-const G4int NPOINTSGL = 10;
 
 class G4EvaporationProbability : public G4VEmissionProbability
 {
@@ -62,14 +60,17 @@ public:
 
   G4double TotalProbability(const G4Fragment& fragment,
 			    G4double minKineticEnergy,
-			    G4double maxKineticEnergy);
+			    G4double maxKineticEnergy,
+			    G4double CoulombBarrier = 0.0);
 
-  G4double ProbabilityDistributionFunction(G4double K);
+  G4double ProbabilityDistributionFunction(G4double K, 
+					   G4double CoulombBarrier = 0.0);
 
   // Samples fragment kinetic energy and excitation energy 
   // of the residual nucleaus
   G4double SampleKineticEnergy(G4double minKineticEnergy,
-			       G4double maxKineticEnergy);
+			       G4double maxKineticEnergy,
+			       G4double CoulombBarrier = 0.0);
 
 protected:
 
@@ -79,14 +80,16 @@ protected:
 
 private:
 
-  G4double IntegrateEmissionProbability(G4double low, G4double up);
+  G4double IntegrateEmissionProbability(G4double low, G4double up,
+					G4double CoulombBarrier);
 
-  G4double CrossSection(G4double K);  
+  G4double CrossSection(G4double K, G4double CoulombBarrier);  
 
   // Copy constructor
   G4EvaporationProbability(const G4EvaporationProbability &right) = delete;
 
-  const G4EvaporationProbability & operator=(const G4EvaporationProbability &right) = delete;
+  const G4EvaporationProbability & operator=
+  (const G4EvaporationProbability &right) = delete;
   G4bool operator==(const G4EvaporationProbability &right) const = delete;
   G4bool operator!=(const G4EvaporationProbability &right) const = delete;
 
@@ -99,7 +102,6 @@ private:
   G4int resA;
   G4int resZ;
   G4int index;
-  G4int nbins;
 
   G4double resA13;
   G4double muu;
@@ -111,12 +113,9 @@ private:
   // Gamma is A_f(2S_f+1) factor, where A_f is fragment atomic 
   // number and S_f is fragment spin
   G4double Gamma;
+  G4double pcoeff;
 
   G4double probmax;
-
-  static const G4double ws[NPOINTSGL];
-  static const G4double xs[NPOINTSGL];
-
 };
 
 #endif

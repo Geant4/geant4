@@ -7,7 +7,7 @@
 # Koichi Murakami (KEK/CRC)
 # ==================================================================
 from Geant4 import *
-import g4py.ExN03pl
+import g4py.EMSTDpl
 import g4py.emcalculator
 import EmPlot
 import ROOT
@@ -19,7 +19,7 @@ from cStringIO import StringIO
 # ==================================================================
 def g4_configure() :
   EmPlot.Configure()
-  g4py.ExN03pl.Construct()
+  g4py.EMSTDpl.Construct()
 
 # -------------------------------------------------------------------
 # plot for chaged particles

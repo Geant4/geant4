@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4bEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
+// $Id: B4bEventAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4bEventAction.cc
 /// \brief Implementation of the B4bEventAction class
@@ -73,7 +73,7 @@ void B4bEventAction::PrintEventStatistics(
 
 void B4bEventAction::BeginOfEventAction(const G4Event* /*event*/)
 {  
-  B4bRunData* runData 
+  auto runData 
     = static_cast<B4bRunData*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   runData->Reset();  
@@ -83,15 +83,15 @@ void B4bEventAction::BeginOfEventAction(const G4Event* /*event*/)
 
 void B4bEventAction::EndOfEventAction(const G4Event* event)
 {
-  B4bRunData* runData 
+  auto runData 
     = static_cast<B4bRunData*>(
         G4RunManager::GetRunManager()->GetNonConstCurrentRun());
   runData->FillPerEvent();
 
   //print per event (modulo n)
   //
-  G4int eventID = event->GetEventID();
-  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  auto eventID = event->GetEventID();
+  auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 

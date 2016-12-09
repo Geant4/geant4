@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh 80641 2014-05-05 15:10:28Z gcosmo $
+// $Id: G4UIcontrolMessenger.hh 98731 2016-08-09 10:49:49Z gcosmo $
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -67,6 +67,12 @@ class G4UIcommand;
 //   /control/subtract
 //   /control/multiply
 //   /control/divide
+//   /control/strif
+//   /control/strdoif
+//   /control/ifBatch
+//   /control/ifInteractive
+//   /control/doifBatch
+//   /control/doifInteractive
 
 class G4UIcontrolMessenger : public G4UImessenger 
 {
@@ -103,6 +109,12 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcommand * multiplyCommand;
       G4UIcommand * divideCommand;
       G4UIcommand * remainderCommand;
+      G4UIcommand * strifCommand;
+      G4UIcommand * strdoifCommand;
+      G4UIcmdWithAString * ifBatchCommand;
+      G4UIcmdWithAString * ifInteractiveCommand;
+      G4UIcmdWithAString * doifBatchCommand;
+      G4UIcmdWithAString * doifInteractiveCommand;
 };
 
 #endif

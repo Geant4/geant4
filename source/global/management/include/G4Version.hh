@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Version.hh 97990 2016-06-30 10:04:56Z gcosmo $
+// $Id: G4Version.hh 101827 2016-12-01 10:16:01Z gcosmo $
 // GEANT4 tag $Name:$
 //
 // Version information
@@ -50,7 +50,7 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-03-beta-01 $"
+#define G4VERSION_TAG "$Name: geant4-10-03 $"
 #endif
 
 // as variables
@@ -58,10 +58,10 @@
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-03-beta-01 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-03 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-03-beta-01 $";
+static const G4String G4Version = "$Name: geant4-10-03 $";
 #endif
-static const G4String G4Date    = "(30-June-2016)";
+static const G4String G4Date    = "(9-December-2016)";
 
 #endif

@@ -23,11 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/src/PhysicsList.cc
+/// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-//
-// $Id: PhysicsList.cc 97882 2016-06-16 16:11:41Z gcosmo $
+// $Id: PhysicsList.cc 101866 2016-12-02 13:10:44Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,12 +41,20 @@
 #include "G4NuclideTable.hh"
 #include "G4LossTableManager.hh"
 #include "G4UAtomicDeexcitation.hh"
+#include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
 : G4VUserPhysicsList()
 {
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetFluo(true);
+  param->SetAuger(true);
+  param->SetAugerCascade(true);
+  param->SetDeexcitationIgnoreCut(true);
+  G4NuclearLevelData::GetInstance()->GetParameters()->SetUseFilesNEW(true);
   //add new units for radioActive decays
   // 
   const G4double minute = 60*second;
@@ -110,8 +117,6 @@ void PhysicsList::ConstructProcess()
   if (!p) {
      G4UAtomicDeexcitation* atomDeex = new G4UAtomicDeexcitation();
      theManager->SetAtomDeexcitation(atomDeex);
-     atomDeex->SetFluo(true);
-     atomDeex->SetAuger(true);
      atomDeex->InitialiseAtomicDeexcitation();
   }
   //

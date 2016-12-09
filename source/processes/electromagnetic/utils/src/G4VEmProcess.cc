@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 96115 2016-03-16 18:53:00Z gcosmo $
+// $Id: G4VEmProcess.cc 98778 2016-08-09 14:41:08Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -111,7 +111,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   // Size of tables assuming spline
   minKinEnergy = 0.1*keV;
-  maxKinEnergy = 10.0*TeV;
+  maxKinEnergy = 100.0*TeV;
   nLambdaBins  = 77;
   minKinEnergyPrim = DBL_MAX;
   actBinning = actSpline = actMinKinEnergy = actMaxKinEnergy = false;
@@ -468,9 +468,10 @@ void G4VEmProcess::BuildLambdaTable()
   G4PhysicsLogVector* aVectorPrim = nullptr;
   G4PhysicsLogVector* bVectorPrim = nullptr;
 
-  G4double scale = 
-    G4Log(theParameters->MaxKinEnergy()/theParameters->MinKinEnergy()); 
-  G4int nbin = theParameters->NumberOfBins();
+  G4double scale = theParameters->MaxKinEnergy()/theParameters->MinKinEnergy();
+  G4int nbin = theParameters->NumberOfBinsPerDecade()
+    *G4lrint(std::log10(scale));
+  scale = G4Log(scale);
   if(actBinning) { nbin = std::max(nbin, nLambdaBins); }
   G4double emax1 = std::min(maxKinEnergy, minKinEnergyPrim);
     

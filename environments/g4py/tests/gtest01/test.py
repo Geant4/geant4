@@ -8,7 +8,6 @@
 from Geant4 import *
 import gtest01
 import random
-#import thread
 
 # ==================================================================
 # user actions in python
@@ -70,7 +69,7 @@ class MyField(G4MagneticField):
     bfield.y= 5.*tesla
     bfield.z= 0.
     return bfield
-    
+
 # ==================================================================
 # main
 # ==================================================================
@@ -90,7 +89,7 @@ gRunManager.SetUserAction(myPGA)
 
 #myRA= MyRunAction()
 #gRunManager.SetUserAction(myRA)
-  
+
 myEA= MyEventAction()
 gRunManager.SetUserAction(myEA)
 
@@ -114,10 +113,5 @@ fieldMgr.CreateChordFinder(myField)
 
 gRunManager.Initialize()
 
-# visualization
-gControlExecute("vis.mac")
-  
 # beamOn
 gRunManager.BeamOn(10)
-#thread.start_new_thread(gRunManager.BeamOn, (100000))
-

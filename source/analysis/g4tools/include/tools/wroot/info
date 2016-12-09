@@ -51,9 +51,7 @@ public:
     tools_vforcit(streamer_element*,fElements,it) (*it)->out(a_out);
   }
 public:
-  StreamerInfo(const std::string& a_cls_store_name,
-               int a_cls_vers,
-               unsigned int a_cls_check_sum)
+  StreamerInfo(const std::string& a_cls_store_name,int a_cls_vers,unsigned int a_cls_check_sum)
   :fName(a_cls_store_name)
   ,fTitle("")
   ,fCheckSum(a_cls_check_sum)
@@ -70,7 +68,7 @@ public:
   }
 protected:
   StreamerInfo(const StreamerInfo& a_from)
-  : ibo(a_from)
+  :ibo(a_from)
   ,fName(a_from.fName)
   ,fTitle(a_from.fName)
   ,fCheckSum(a_from.fCheckSum)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4TwistedTubs.hh 100819 2016-11-02 15:17:36Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -103,12 +103,14 @@ class G4TwistedTubs : public G4VSolid
   void ComputeDimensions(G4VPVParameterisation   *  /* p  */ ,
                          const G4int                /* n  */ ,
                          const G4VPhysicalVolume *  /* prep */ );
- 
-  G4bool CalculateExtent(const EAxis               paxis,
-                         const G4VoxelLimits      &pvoxellimit,
-                         const G4AffineTransform  &ptransform,
-                               G4double           &pmin,
-                               G4double           &pmax ) const;
+
+  void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const; 
+
+  G4bool CalculateExtent(const EAxis               pAxis,
+                         const G4VoxelLimits      &pVoxelLimit,
+                         const G4AffineTransform  &pTransform,
+                               G4double           &pMin,
+                               G4double           &pMax ) const;
 
   G4double DistanceToIn (const G4ThreeVector &p,
                          const G4ThreeVector &v ) const;
@@ -198,13 +200,6 @@ class G4TwistedTubs : public G4VSolid
                      
   void         CreateSurfaces();
 
-  static void  AddPolyToExtent( const G4ThreeVector     &v0,
-                                const G4ThreeVector     &v1,
-                                const G4ThreeVector     &w1,
-                                const G4ThreeVector     &w0,
-                                const G4VoxelLimits     &voxellimit,
-                                const EAxis              axis,
-                                      G4SolidExtentList &extentlist );
  private:
  
   G4double fPhiTwist;       // Twist angle from -fZHalfLength to fZHalfLength

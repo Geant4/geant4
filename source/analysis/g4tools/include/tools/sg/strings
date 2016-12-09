@@ -136,32 +136,28 @@ inline const std::string& font_hershey() {
   static const std::string s_v("hershey");
   return s_v;
 }
-inline const std::string& font_arial_ttf() {
-  static const std::string s_v("arial.ttf");
-  return s_v;
+
+#define TOOLS_FONT_TTF(a__name) \
+inline const std::string& font_##a__name##_ttf() {\
+  static const std::string s_v(std::string(#a__name)+".ttf");\
+  return s_v;\
 }
-inline const std::string& font_arialbd_ttf() {
-  static const std::string s_v("arialbd.ttf");
-  return s_v;
-}
-inline const std::string& font_timesbd_ttf() {
-  static const std::string s_v("timesbd.ttf");
-  return s_v;
-}
-inline const std::string& font_symbol_ttf() {
-  static const std::string s_v("symbol.ttf");
-  return s_v;
-}
+
+TOOLS_FONT_TTF(arial)
+TOOLS_FONT_TTF(arialbd)
+TOOLS_FONT_TTF(timesbd)
+TOOLS_FONT_TTF(symbol)
+TOOLS_FONT_TTF(helvetica)
+TOOLS_FONT_TTF(times_roman)
+TOOLS_FONT_TTF(cour)
+TOOLS_FONT_TTF(courbd)
+TOOLS_FONT_TTF(couri)
+TOOLS_FONT_TTF(courbi)
+
+#undef TOOLS_FONT_TTF
+
 inline const std::string& font_stixgeneral_otf() {
   static const std::string s_v("stixgeneral.otf");
-  return s_v;
-}
-inline const std::string& font_helvetica_ttf() {
-  static const std::string s_v("helvetica.ttf");
-  return s_v;
-}
-inline const std::string& font_times_roman_ttf() {
-  static const std::string s_v("times_roman.ttf");
   return s_v;
 }
 

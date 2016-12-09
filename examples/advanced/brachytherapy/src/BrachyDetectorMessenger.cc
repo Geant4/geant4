@@ -34,7 +34,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc 69765 2013-05-14 10:11:22Z gcosmo $
+// $Id: BrachyDetectorMessenger.cc 100821 2016-11-02 15:21:34Z gcosmo $
 //
 // 
 
@@ -58,7 +58,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   sourceCmd -> SetGuidance("Assign the selected geometry to G4RunManager."); 
   sourceCmd -> SetParameterName("choice",true);
   sourceCmd -> SetDefaultValue(" ");
-  sourceCmd -> SetCandidates("Iridium Iodium Leipzig ");
+  sourceCmd -> SetCandidates("TG186 Flexi Iodine Leipzig");
   sourceCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
@@ -78,7 +78,7 @@ void BrachyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   // Switch the source in the phantom
   if( command == sourceCmd )
    {
-    if(newValue=="Iodium" || newValue=="Iridium"|| newValue=="Leipzig")
+    if(newValue=="Iodine" || newValue=="TG186"|| newValue=="Leipzig" || newValue== "Flexi")
      { 
        detector -> SelectBrachytherapicSeed(newValue); 
        detector -> SwitchBrachytherapicSeed();

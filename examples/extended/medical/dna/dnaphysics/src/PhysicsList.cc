@@ -37,6 +37,7 @@
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAPhysics.hh"
+#include "G4EmDNAPhysicsActivator.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
 
@@ -47,9 +48,19 @@ PhysicsList::PhysicsList()
 {
   SetDefaultCutValue(1.0*micrometer);
   SetVerboseLevel(1);
+  
+  // FIRST METHOD TO ACTIVATE Geant4-DNA Physics, 
+  //  using a Geant4-DNA Physics constructor only
+  //
   //  RegisterPhysics(new G4EmDNAPhysics());
+  
+  // or SECOND METHOD TO ACTIVATE Geant4-DNA Physics
+  // (this includes combination with Geant4 EM Physics)
+  
   RegisterPhysics(new G4EmStandardPhysics_option4());
   RegisterPhysics(new G4DecayPhysics());
+  RegisterPhysics(new G4EmDNAPhysicsActivator());
+
   G4ProductionCutsTable::GetProductionCutsTable()->
       SetEnergyRange(100*eV, 1*GeV);
 }

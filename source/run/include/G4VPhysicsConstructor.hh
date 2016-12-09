@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicsConstructor.hh 68802 2013-04-05 13:54:41Z gcosmo $
+// $Id: G4VPhysicsConstructor.hh 101155 2016-11-08 08:21:41Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -116,7 +116,7 @@ typedef G4VPCManager G4VPhyscicsConstructorManager;
 //        this base class (all examples). However one should note comment
 //        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
 
-#define aParticleIterator ((subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator)
+//#define aParticleIterator ((subInstanceManager.offset[g4vpcInstanceID])._aParticleIterator)
 
 class G4VPhysicsConstructor
 {
@@ -165,6 +165,7 @@ class G4VPhysicsConstructor
     G4ParticleTable* theParticleTable;
     G4int g4vpcInstanceID;
     G4RUN_DLL static G4VPCManager subInstanceManager;
+    G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
 public:
     inline G4int GetInstanceID() const;
     static const G4VPCManager& GetSubInstanceManager();

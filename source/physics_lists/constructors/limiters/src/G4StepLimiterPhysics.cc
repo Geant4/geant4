@@ -55,7 +55,8 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterPhysics::G4StepLimiterPhysics(const G4String& name)
-  :  G4VPhysicsConstructor(name),fStepLimiter(0),fUserSpecialCuts(0)
+  :  G4VPhysicsConstructor(name),fStepLimiter(0),fUserSpecialCuts(0), 
+     fApplyToAll(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,24 +76,25 @@ void G4StepLimiterPhysics::ConstructParticle()
 
 void G4StepLimiterPhysics::ConstructProcess()
 {
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
   fStepLimiter = new G4StepLimiter();
   fUserSpecialCuts = new G4UserSpecialCuts();
-  while ((*aParticleIterator)()) {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  while ((*myParticleIterator)()) {
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4double charge = particle->GetPDGCharge();
 
     if(!particle->IsShortLived()) {
-      if (charge != 0.0) {
-	// All charged particles should have a step limiter
-	// to make sure that the steps do not get too long.
-	pmanager->AddDiscreteProcess(fStepLimiter);
-	pmanager->AddDiscreteProcess(fUserSpecialCuts);
+      if (charge != 0.0 || fApplyToAll) {
+	      // All charged particles should have a step limiter
+	      // to make sure that the steps do not get too long.
+	      pmanager->AddDiscreteProcess(fStepLimiter);
+	      pmanager->AddDiscreteProcess(fUserSpecialCuts);
       } else {
-	// Energy cuts for all other neutral particles
-	pmanager->AddDiscreteProcess(fUserSpecialCuts);
+	      // Energy cuts for all other neutral particles
+	      pmanager->AddDiscreteProcess(fUserSpecialCuts);
       }
     }
   }

@@ -9,6 +9,19 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+07 Nov 2016 - S.Incerti - tag microbeam-V10-02-04
+- correct warnings from clang compilers
+
+21 Oct 2016 - S.Incerti - tag microbeam-V10-02-03
+- correct use of particleIterator as required by clang39
+
+19 Oct 2016 - S.Incerti - tag microbeam-V10-02-02
+- relaxed conditions on max step size and magnetic
+  field parameters in DetectorConstruction
+
+25 Aug 2016 - S.Incerti - tag microbeam-V10-02-01
+- updated plot.C foor ROOT v6
+
 02 Mar 2016 - S.Incerti - tag microbeam-V10-02-00
 - removed exp
 

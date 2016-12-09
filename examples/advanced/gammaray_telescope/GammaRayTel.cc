@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc 82630 2014-07-01 09:43:00Z gcosmo $
+// $Id: GammaRayTel.cc 100697 2016-10-31 11:32:35Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -83,10 +83,10 @@ int main(int argc, char** argv)
   // POSSIBILITY TO SELECT ANOTHER PHYSICS LIST
   //  do not use   GammaRayTelPhysicsList, this is old style and crashes at 
   //    program exit   
-  //runManager->SetUserInitialization(new GammaRayTelPhysicsList);
+  runManager->SetUserInitialization(new GammaRayTelPhysicsList);
   
   //  runManager->SetUserInitialization(new QGSP_BIC);
-  runManager->SetUserInitialization(new FTFP_BERT);
+  //runManager->SetUserInitialization(new FTFP_BERT);
 
   //Initialize actions
   runManager->SetUserInitialization(new GammaRayTelActionInitializer());

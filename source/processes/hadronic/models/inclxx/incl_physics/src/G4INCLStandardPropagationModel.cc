@@ -55,6 +55,7 @@
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLCoulombDistortion.hh"
 #include "G4INCLDeltaDecayChannel.hh"
+#include "G4INCLPionResonanceDecayChannel.hh"
 #include "G4INCLParticleEntryAvatar.hh"
 #include "G4INCLIntersection.hh"
 
@@ -462,13 +463,20 @@ namespace G4INCL {
 
     void StandardPropagationModel::generateDecays(const ParticleList &particles) {
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
-	if((*i)->isDelta()) {
+	       if((*i)->isDelta()) {
           G4double decayTime = DeltaDecayChannel::computeDecayTime((*i));
-	  G4double time = currentTime + decayTime;
-	  if(time <= maximumTime) {
-	    registerAvatar(new DecayAvatar((*i), time, theNucleus));
-	  }
-	}
+	         G4double time = currentTime + decayTime;
+	         if(time <= maximumTime) {
+	           registerAvatar(new DecayAvatar((*i), time, theNucleus));
+	         }
+	       }
+/*        if((*i)->isOmega()) {
+          G4double decayTimeOmega = PionResonanceDecayChannel::computeDecayTime((*i));
+          G4double timeOmega = currentTime + decayTimeOmega;
+          if(timeOmega <= maximumTime) {
+            registerAvatar(new DecayAvatar((*i), timeOmega, theNucleus));
+          }
+        }*/
       }
     }
 

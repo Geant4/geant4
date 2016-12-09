@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMeltonAttachmentModel.cc 96606 2016-04-25 13:33:42Z gcosmo $
+// $Id: G4DNAMeltonAttachmentModel.cc 98733 2016-08-09 10:51:58Z gcosmo $
 //
 
 // Created by Z. Francis
@@ -73,6 +73,10 @@ G4DNAMeltonAttachmentModel::G4DNAMeltonAttachmentModel(const G4ParticleDefinitio
   fParticleChangeForGamma = 0;
   fDissociationFlag = true;
   fData = 0;
+
+  // Selection of stationary mode
+
+  statCode = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -243,9 +247,19 @@ SampleSecondaries(std::vector<G4DynamicParticle*>* /*fvect*/,
   // Electron is killed
   
   G4double electronEnergy0 = aDynamicElectron->GetKineticEnergy();
-  fParticleChangeForGamma->SetProposedKineticEnergy(0.);
-  fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
-  fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
+
+  if (!statCode)     
+  {     
+      fParticleChangeForGamma->SetProposedKineticEnergy(0.);
+      fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
+  }
+
+  else 
+  {
+      fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
+  }
   
   if(fDissociationFlag)
   {

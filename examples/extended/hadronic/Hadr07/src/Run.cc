@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -53,7 +53,7 @@ Run::Run(DetectorConstruction* detector)
 {
   for (G4int i=0; i<3; ++i) { fStatus[i] = 0; fTotEdep[i] = 0.; }
   fTotEdep[1] = joule;
-  for (G4int i=0; i<MaxAbsor; ++i) {
+  for (G4int i=0; i<kMaxAbsor; ++i) {
     fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
   }  
 }

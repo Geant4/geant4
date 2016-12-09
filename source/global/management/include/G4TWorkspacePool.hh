@@ -42,6 +42,7 @@
 #define G4TWORKSPACEPOOL_HH
 
 #include "tls.hh"
+#include "globals.hh"
 
 template<class T>
 class G4TWorkspacePool
@@ -80,7 +81,7 @@ private:
     
 };
 
-#include "globals.hh"
+template<typename T> G4ThreadLocal T* G4TWorkspacePool<T>::fMyWorkspace=0;
 
 template<class T>
 T* G4TWorkspacePool<T>::CreateWorkspace()

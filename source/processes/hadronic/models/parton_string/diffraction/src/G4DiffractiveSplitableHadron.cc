@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 91914 2015-08-11 07:00:39Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.cc 100828 2016-11-02 15:25:59Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -44,7 +44,8 @@
 
 //============================================================================
 
-G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron() {
+G4DiffractiveSplitableHadron::G4DiffractiveSplitableHadron() 
+{
   PartonIndex = -1;
   Parton[0] = new G4Parton( 1 );
   Parton[1] = new G4Parton(-1 );
@@ -106,7 +107,7 @@ void G4DiffractiveSplitableHadron::SplitUp() {
   Parton[0] = new G4Parton( stringStart );
   Parton[1] = new G4Parton( stringEnd );
 
-/*                                        // Inversion of a string
+  /*                                        // Inversion of a string
   if ( G4UniformRand() < 1.75 ) {  //0.75
     Parton[0] = new G4Parton( stringStart );
     Parton[1] = new G4Parton( stringEnd );
@@ -114,7 +115,8 @@ void G4DiffractiveSplitableHadron::SplitUp() {
     Parton[0] = new G4Parton( stringEnd );
     Parton[1] = new G4Parton( stringStart );
   }
-*/
+  */
+
   PartonIndex = -1;
 }
 
@@ -238,8 +240,7 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
       *aEnd = j10; *bEnd = Diquark( j1000, j100, 1 );  // Just something acceptable, without any physics consideration.
     }
 
-//
-/*
+    /*
     if ( std::abs( j100 ) >= std::abs( j10 ) ) {
       if ( random < udspin1 ) {
         *aEnd = j1000;
@@ -266,7 +267,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
         *bEnd = Diquark( j1000, j10, 1 );
       }
     }
-*/
+    */
+
   }
 }
 
@@ -279,3 +281,4 @@ G4int G4DiffractiveSplitableHadron::Diquark( G4int aquark, G4int bquark, G4int S
                      2*Spin + 1;
   return ( aquark > 0  &&  bquark > 0 ) ? diquarkPDG : -1*diquarkPDG;
 }
+

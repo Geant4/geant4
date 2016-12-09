@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.cc 85358 2014-10-28 10:02:44Z gcosmo $
+// $Id: G4VModularPhysicsList.cc 100421 2016-10-21 12:49:57Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -39,12 +39,6 @@
 // This macros change the references to fields that are now encapsulated
 // in the class G4VMPLData.
 #define G4MT_physicsVector ((G4VMPLsubInstanceManager.offset[g4vmplInstanceID]).physicsVector)
-
-template <class G4VMPLData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VMPLData>::workertotalspace = 0;
-
-template <class G4VMPLData> G4ThreadLocal
-G4VMPLData* G4VUPLSplitter<G4VMPLData>::offset = 0;
 
 G4VMPLManager G4VModularPhysicsList::G4VMPLsubInstanceManager;
 
@@ -88,8 +82,12 @@ G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysics
     fIsCheckedForRetrievePhysicsTable = right.fIsCheckedForRetrievePhysicsTable;
     fIsRestoredCutValues = right.fIsRestoredCutValues;
     directoryPhysicsTable = right.directoryPhysicsTable;
-    fDisplayThreshold = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
-    fIsPhysicsTableBuilt = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+    //fDisplayThreshold = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
+    (this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold=
+    		static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fDisplayThreshold;
+    //fIsPhysicsTableBuilt = static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
+    (this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold=
+    		static_cast<const G4VUserPhysicsList&>(right).GetSubInstanceManager().offset[right.GetInstanceID()]._fIsPhysicsTableBuilt;
     //fDisplayThreshold = right.fDisplayThreshold;
     fDisableCheckParticleList = right.fDisableCheckParticleList;
     verboseLevel = right.verboseLevel;

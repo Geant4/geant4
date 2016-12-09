@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 14th, 2016 G.Folger   - B03-V10-02-01
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines)
+
 Jan 27th, 2016 M. Asai - B03-V10-02-00
 - B03PhysicsList.cc : change process order index of G4ParallelWorldProcess
   to 9900 to make sure it is registered prior to G4OpBoundaryProcess.

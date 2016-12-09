@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFermiBreakUp.hh 96744 2016-05-03 08:04:28Z gcosmo $
+// $Id: G4VFermiBreakUp.hh 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Nov 1998)
@@ -46,16 +46,16 @@ public:
 
   virtual void Initialise() = 0;
 
+  // check if the Fermi Break Up model can be used 
+  // mass is an effective mass of a fragment
   virtual G4bool IsApplicable(G4int Z, G4int A, G4double mass) const = 0;
 
-  // primary fragment is copied to the new instance, the copy is deleted 
-  // or is added to the list of products 
-  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
-
-  // new interface - vector of products is added to the provided vector
-  // primary fragment is deleted or is modified and added to the list
-  // of products
-  virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus) = 0;
+  // vector of products is added to the provided vector
+  // if no decay channel is found out for the primary fragment 
+  // then it is added to the results vector
+  // if primary decays then it is deleted 
+  virtual void BreakFragment(G4FragmentVector* results, 
+			     G4Fragment* theNucleus) = 0;
 
 private:
 

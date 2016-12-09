@@ -17,20 +17,35 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
+# Add dicomReader subdirectory
+#
+if("$ENV{DICOM_USE_DCMTK}")
+  find_package(DCMTK REQUIRED)
+  add_definitions(-DG4_DCMTK)
+  add_subdirectory(dicomReader)
+  set(DICOM_READER_LIBRARY dicomReader)
+endif()
+
+#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR})
+                    ${PROJECT_SOURCE_DIR}/dicomReader/include 
+                    ${Geant4_INCLUDE_DIR}
+                    ${DCMTK_INCLUDE_DIRS})
                     
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
+
+# List any source specific properties here
+
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(DICOM DICOM.cc ${headers} ${sources})
 
-target_link_libraries(DICOM ${Geant4_LIBRARIES} )
+target_link_libraries(DICOM ${Geant4_LIBRARIES} ${DICOM_READER_LIBRARY} ${DCMTK_LIBRARIES})
 
 
 #----------------------------------------------------------------------------
@@ -83,6 +98,15 @@ foreach(_script ${DICOM_MACROS})
     COPYONLY
     )
 endforeach()
+
+if("$ENV{DICOM_USE_DCMTK}")
+
+set_source_files_properties(
+     ${sources}
+     PROPERTIES COMPILE_DEFINITIONS G4_DCMTK 
+
+)
+endif()
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX

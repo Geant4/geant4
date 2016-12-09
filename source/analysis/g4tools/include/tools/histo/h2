@@ -160,8 +160,8 @@ public:
   h2(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax,bn_t aYnumber,TC aYmin,TC aYmax)
   :parent(a_title,aXnumber,aXmin,aXmax,aYnumber,aYmin,aYmax)
   {}
-  h2(const std::string& a_title,const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY)
-  :parent(a_title,aEdgesX,aEdgesY)
+  h2(const std::string& a_title,const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y)
+  :parent(a_title,a_edges_x,a_edges_y)
   {}
 
   virtual ~h2(){}

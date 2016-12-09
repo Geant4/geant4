@@ -58,10 +58,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoLowEnergy = 0.1*CLHEP::MeV; 
   fPhenoFactor = 1.0; 
   fMinExcitation = 0.1*CLHEP::keV;
-  fMaxLifeTime = DBL_MAX;
+  fMaxLifeTime = 0.01*CLHEP::second;
   fMinExPerNucleounForMF = 100*CLHEP::GeV;
-  fMaxZForFermiBreakUp = 9;
-  fMaxAForFermiBreakUp = 17;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
   fPrecoType = 3;
@@ -72,6 +70,9 @@ void G4DeexPrecoParameters::SetDefaults()
   fUseGNASH = false;
   fUseHETC = false;
   fUseAngularGen = true;
+  fUseLongFiles = false;
+  fCorrelatedGamma = false;
+  fStoreAllLevels = false;
   fDeexChannelType = fEvaporation;
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
@@ -130,18 +131,6 @@ void G4DeexPrecoParameters::SetMinExPerNucleounForMF(G4double val)
 {
   if(IsLocked()) { return; }
   fMinExPerNucleounForMF = val;
-}
-
-void G4DeexPrecoParameters::SetMaxZForFermiBreakUp(G4int n)
-{
-  if(IsLocked()) { return; }
-  fMaxZForFermiBreakUp = n;
-}
-
-void G4DeexPrecoParameters::SetMaxAForFermiBreakUp(G4int n)
-{
-  if(IsLocked()) { return; }
-  fMaxAForFermiBreakUp = n;
 }
 
 void G4DeexPrecoParameters::SetMinZForPreco(G4int n)
@@ -204,7 +193,25 @@ void G4DeexPrecoParameters::SetUseAngularGen(G4bool val)
   fUseAngularGen = val;
 }
 
-void G4DeexPrecoParameters::SetDeexChannels(G4DeexChannelType val)
+void G4DeexPrecoParameters::SetUseFilesNEW(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fUseLongFiles = val;
+}
+
+void G4DeexPrecoParameters::SetCorrelatedGamma(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fCorrelatedGamma = val;
+}
+
+void G4DeexPrecoParameters::SetStoreAllLevels(G4bool val)
+{
+  if(IsLocked()) { return; }
+  fStoreAllLevels = val;
+}
+
+void G4DeexPrecoParameters::SetDeexChannelsType(G4DeexChannelType val)
 {
   if(IsLocked()) { return; }
   fDeexChannelType = val;
@@ -222,6 +229,9 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fMinExcitation/CLHEP::keV << "\n";
   os << "Level density (1/MeV)                               " 
      << fLevelDensity*CLHEP::MeV << "\n";
+  os << "Time limit for long lived isomeres (ns)             " 
+     << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);
   return os;
@@ -229,7 +239,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
 
 void G4DeexPrecoParameters::Dump() const
 {
-  StreamInfo(G4cout);
+  if (G4Threading::IsMasterThread()) { StreamInfo(G4cout); }
 }
 
 std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)

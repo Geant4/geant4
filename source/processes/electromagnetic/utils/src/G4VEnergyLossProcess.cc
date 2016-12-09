@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 96115 2016-03-16 18:53:00Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 98778 2016-08-09 14:41:08Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -208,7 +208,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   // Size of tables assuming spline
   minKinEnergy     = 0.1*keV;
-  maxKinEnergy     = 10.0*TeV;
+  maxKinEnergy     = 100.0*TeV;
   nBins            = 77;
   maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
@@ -528,7 +528,10 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   rndmStepFlag = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
-  if(!actBinning) { nBins = theParameters->NumberOfBins(); }
+  if(!actBinning) { 
+    nBins = theParameters->NumberOfBinsPerDecade()
+      *G4lrint(std::log10(maxKinEnergy/minKinEnergy));
+  }
   maxKinEnergyCSDA = theParameters->MaxEnergyForCSDARange();
   nBinsCSDA = theParameters->NumberOfBinsPerDecade()
     *G4lrint(std::log10(maxKinEnergyCSDA/minKinEnergy));

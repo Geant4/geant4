@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh 89632 2015-04-23 12:19:33Z gcosmo $
+// $Id: G4FTFParticipants.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 
 #ifndef G4FTFParticipants_h
@@ -49,7 +49,6 @@
 
 
 class G4FTFParticipants : public G4VParticipants {
-
   public:
     G4FTFParticipants();
     const G4FTFParticipants& operator=( const G4FTFParticipants& right );
@@ -69,7 +68,6 @@ class G4FTFParticipants : public G4VParticipants {
   private:
     G4FTFParticipants( const G4FTFParticipants& right );
     G4int currentInteraction;
-
 };
 
 
@@ -88,3 +86,4 @@ inline G4InteractionContent& G4FTFParticipants::GetInteraction() {
 }
 
 #endif
+

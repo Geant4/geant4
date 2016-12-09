@@ -52,10 +52,8 @@
 class G4EmStandardPhysicsGS : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysicsGS(G4int ver = 0);
 
-  // obsolete
-  G4EmStandardPhysicsGS(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysicsGS(G4int ver=0, const G4String& name="");
 
   virtual ~G4EmStandardPhysicsGS();
 

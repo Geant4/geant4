@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/DetectorMessenger.hh
+/// \file medical/dna/wvalue/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
 // $Id: DetectorMessenger.hh 78723 2014-01-20 10:32:17Z gcosmo $

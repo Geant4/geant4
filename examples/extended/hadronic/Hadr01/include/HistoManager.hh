@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 73016 2013-08-15 08:59:51Z gcosmo $
+// $Id: HistoManager.hh 100811 2016-11-02 15:05:20Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ public:
 
   ~HistoManager();
 
-  void bookHisto();
+  void BookHisto();
 
   void BeginOfRun();
   void EndOfRun();

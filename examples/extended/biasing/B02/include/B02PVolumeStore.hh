@@ -27,7 +27,7 @@
 /// \brief Definition of the B02PVolumeStore class
 //
 //
-// $Id: B02PVolumeStore.hh 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B02PVolumeStore.hh 98774 2016-08-09 14:28:06Z gcosmo $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -63,7 +63,5 @@ public:
 private:
   B02SetGeometryCell fSetGeometryCell;
 };
-
-
 
 #endif

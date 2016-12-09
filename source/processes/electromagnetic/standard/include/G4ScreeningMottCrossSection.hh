@@ -98,13 +98,11 @@ public:
 
 	G4double GetScreeningAngle();
 	void SetScreeningCoefficient();
-
-
                
   	inline void SetupParticle(const G4ParticleDefinition*);
- 	void SetupKinematic(G4double kinEnergy ,G4int Z);
+ 	void SetupKinematic(G4double kinEnergy ,G4double Z);
 
-        G4double NuclearCrossSection();
+        G4double NuclearCrossSection(G4int form);
         G4ThreeVector GetNewDirection();
 
 	inline G4double GetMom2CM()const;
@@ -113,20 +111,18 @@ public:
         inline G4double GetScreeningCoefficient() const;
         inline G4double GetTotalCross() const;
 
-
-
         G4double McFcorrection(G4double);
-	G4double RatioMottRutherford(G4double);//.....new
+	G4double RatioMottRutherford(G4double);
         G4double FormFactor2ExpHof(G4double);
-        G4double GetScatteringAngle();
+        G4double FormFactor2Gauss(G4double);
+	G4double FormFactor2UniformHelm(G4double);
+	G4double GetScatteringAngle();
         G4double AngleDistribution(G4double);
-
 
 private:
 
- 	G4ScreeningMottCrossSection & operator=(const  G4ScreeningMottCrossSection &right);
-  	G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&);
-
+ 	G4ScreeningMottCrossSection & operator=(const  G4ScreeningMottCrossSection &right) = delete;
+  	G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&) = delete;
 
   	G4NistManager*  fNistManager;	
 	G4Pow*          fG4pow;	
@@ -140,7 +136,6 @@ private:
 
 	G4double      		cosTetMinNuc;
         G4double		cosTetMaxNuc;
-
 
 	//energy cut
   	G4double                ecut;	    
@@ -165,9 +160,8 @@ private:
 	G4double		beta;
 	G4double		gamma;
 
-
   	// target nucleus
-  	G4int                   targetZ;    
+  	G4double                targetZ;    
 	G4double 		targetA;
   	G4double                targetMass; 
 	G4double 		Trec;

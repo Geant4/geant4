@@ -5,7 +5,6 @@
 #define tools_wroot_branch_element
 
 #include "branch"
-#include "leaf"
 
 namespace tools {
 namespace wroot {
@@ -39,10 +38,9 @@ public: //ibo
   }
 
 public:
-  branch_element(itree& a_tree,
-                 const std::string& a_name,
-                 const std::string& a_title)
-  :parent(a_tree,a_name,a_title)
+  branch_element(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,
+                 seek a_seek_directory,const std::string& a_name,const std::string& a_title,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
   ,fClassVersion(0)
   ,fID(0)
   ,fType(0)
@@ -58,18 +56,11 @@ public:
 #endif
   }
 protected:
-  branch_element(const branch_element& a_from)
-  :ibo(a_from)
-  ,parent(a_from)
-  {}
-  branch_element& operator=(const branch_element& a_from){
-    parent::operator=(a_from);
-    return *this;
-  }
+  branch_element(const branch_element& a_from):ibo(a_from),parent(a_from) {}
+  branch_element& operator=(const branch_element& a_from){parent::operator=(a_from);return *this;}
 public:
-  leaf_element* create_leaf_element(const std::string& a_name,
-                                    const std::string& a_title){
-    leaf_element* lf = new leaf_element(m_out,*this,a_name,a_title,fID,fType);
+  leaf_element* create_leaf_element(const std::string& a_name,const std::string& a_title){
+    leaf_element* lf = new leaf_element(m_out,a_name,a_title,fID,fType);
     m_leaves.push_back(lf);
     return lf;
   }
@@ -93,11 +84,10 @@ class std_vector_be : public branch_element {
   }
 #endif
 public:
-  std_vector_be(itree& a_tree,
-                const std::string& a_name,
-                const std::string& a_title,
-                std::vector<T>& a_vec)
-  :parent(a_tree,a_name,a_title)
+  std_vector_be(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,
+                seek a_seek_directory,
+                const std::string& a_name,const std::string& a_title,std::vector<T>& a_vec,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_verbose)
   ,m_vec(a_vec)
   {
 #ifdef TOOLS_MEM

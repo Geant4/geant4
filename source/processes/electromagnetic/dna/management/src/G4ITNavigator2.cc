@@ -982,6 +982,7 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
       case kNormal:
         if ( motherLogical->GetVoxelHeader() )
         {
+          LocateGlobalPointWithinVolume(pGlobalpoint);
           Step = fvoxelNav.ComputeStep(fLastLocatedPointLocal,
                                        localDirection,
                                        pCurrentProposedStepLength,
@@ -1980,6 +1981,7 @@ G4double G4ITNavigator2::ComputeSafety( const G4ThreeVector &pGlobalpoint,
             newSafety= safetyTwo;   // Faster and best available
 #else
             G4double safetyOldVoxel;
+            LocateGlobalPointWithinVolume(pGlobalpoint);
             safetyOldVoxel =
               fvoxelNav.ComputeSafety(localPoint,fHistory,pMaxLength);
             newSafety= safetyOldVoxel;

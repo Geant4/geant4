@@ -78,7 +78,7 @@ private:
   G4bool operator==(const G4FermiPhaseSpaceDecay&);
   G4bool operator!=(const G4FermiPhaseSpaceDecay&);
 
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 };
 
 inline G4double 
@@ -106,11 +106,11 @@ G4FermiPhaseSpaceDecay::BetaKopylov(G4int K,
   G4double xN = G4double(N);
   G4double F;
   // VI variant
-  G4double Fmax = std::sqrt(g4pow->powN(xN/(xN + 1),N)/(xN + 1)); 
+  G4double Fmax = std::sqrt(g4calc->powN(xN/(xN + 1),N)/(xN + 1)); 
   G4double chi;
   do {
     chi = rndmEngine->flat();
-    F = std::sqrt(g4pow->powN(chi,N)*(1-chi));      
+    F = std::sqrt(g4calc->powN(chi,N)*(1-chi));      
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
    } while ( Fmax*rndmEngine->flat() > F);  
   return chi;

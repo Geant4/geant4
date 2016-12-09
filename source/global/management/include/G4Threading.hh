@@ -210,6 +210,9 @@ namespace G4Threading
   G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
   void SetMultithreadedApplication(G4bool value);
   G4bool IsMultithreadedApplication();
+  int WorkerThreadLeavesPool();
+  int WorkerThreadJoinsPool();
+  G4int GetNumberOfRunningWorkerThreads();
 }
 
 #endif //G4Threading_hh

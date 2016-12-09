@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthTrackInformation class
 //
 //
-// $Id: MCTruthTrackInformation.hh 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthTrackInformation.hh 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -59,7 +59,7 @@ public:
 
 private:
 
-  G4bool directParent;
+  G4bool fDirectParent;
 
 };
 

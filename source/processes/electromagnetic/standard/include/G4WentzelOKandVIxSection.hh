@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.hh 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -61,6 +61,7 @@
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
 #include "G4NistManager.hh"
+#include "G4NuclearFormfactorType.hh"
 #include "G4ThreeVector.hh"
 #include "G4Pow.hh"
 
@@ -113,6 +114,8 @@ private:
 
   void ComputeMaxElectronScattering(G4double cut);
 
+  inline G4double FlatFormfactor(G4double x);
+
   //  hide assignment operator
   G4WentzelOKandVIxSection & operator=
   (const G4WentzelOKandVIxSection &right) = delete;
@@ -133,6 +136,8 @@ private:
   // integer parameters
   G4int    nwarnings;
   G4int    nwarnlimit;
+
+  G4NuclearFormfactorType fNucFormfactor;
 
   G4bool   isCombined;
 
@@ -254,6 +259,12 @@ G4WentzelOKandVIxSection::ComputeElectronCrossSection(G4double cosTMin,
   }
   return xsec;
 }
+
+inline G4double G4WentzelOKandVIxSection::FlatFormfactor(G4double x)
+{
+  return 3*(std::sin(x) - x*std::cos(x))/(x*x*x);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIsotopeTable.hh 96314 2016-04-06 07:21:51Z gcosmo $
+// $Id: G4VIsotopeTable.hh 98732 2016-08-09 10:50:57Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -64,7 +64,7 @@ class G4VIsotopeTable
  public: // With Description
   // pure virtual method
   virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-              G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat)=0;
+              G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float)=0;
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int level=0);
   // Search the isotope in the G4VIsotopeTable. 
   // The isotope is desingated by 

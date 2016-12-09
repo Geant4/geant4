@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParameters.cc 97394 2016-06-02 10:13:06Z gcosmo $
+// $Id: G4FTFParameters.cc 101902 2016-12-07 08:40:04Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -513,34 +513,33 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   // Parameters of elastic scattering
   // Gaussian parametrization of elastic scattering amplitude assumed
   SetAvaragePt2ofElasticScattering( 1.0/( Xtotal*Xtotal/16.0/pi/Xelastic/0.3894 )*GeV*GeV );
-//  G4cout << "AvaragePt2ofElasticScattering " << GetAvaragePt2ofElasticScattering() << G4endl;
+  //G4cout << "AvaragePt2ofElasticScattering " << GetAvaragePt2ofElasticScattering() << G4endl;
 
   // Parameters of excitations
 
-  G4double Xinel = Xtotal - Xelastic;  // Uzhi 25.04.2012
+  G4double Xinel = Xtotal - Xelastic;
   //G4cout << "Param ProjectilePDGcode " << ProjectilePDGcode << G4endl;
 
   if ( ProjectilePDGcode > 1000 ) {  // Projectile is baryon
     //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-//    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
-    SetParams( 0,     13.71, 1.75,          -30.69, 3.0 , 0.0, 1.0  ,     0.93 );   // Qexchange without Exc.
-    SetParams( 1,     25.0 , 1.0 ,          -50.34, 1.5 , 0.0, 0.0  ,     1.4 );    // Qexchange with    Exc.
+    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
+    SetParams( 1,      25.0, 1.0,           -50.34, 1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
     if( Xinel > 0.) {
       SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Projectile diffraction
       SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93);// Target diffraction
-      SetParams( 4,      0.6 , 0.0 ,           -1.20, 0.5 , 0.0, 0.0  ,     1.4 );// Qexchange with Exc. Additional multiply
+      SetParams( 4,       1.0, 0.0 ,          -2.01 , 0.5 , 0.0, 0.0  ,     1.4 );// Qexchange with Exc. Additional multiply
     } else {
       SetParams( 2, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
       SetParams( 3, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
       SetParams( 4, 0.0, 0.0 ,0.0, 0.0 , 0.0, 0.0  ,     0.0);
     }
-//
+
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
-// It is not decided what to do with diffraction dissociation in Had-Nucl and Nucl-Nucl interactions
+      // It is not decided what to do with diffraction dissociation in Had-Nucl and Nucl-Nucl interactions
       SetParams( 2,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Projectile diffraction
-//      SetParams( 3,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Target diffraction
+      //SetParams( 3,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Target diffraction
     }
-//
+
     SetDeltaProbAtQuarkExchange( 0.0 );
     if ( NumberOfTargetNucleons > 26 ) {
       SetProbOfSameQuarkExchange( 1.0);
@@ -551,9 +550,9 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( 1.16 );  // GeV 
     SetTarMinDiffMass( 1.16 );      // GeV
     SetTarMinNonDiffMass( 1.16 );   // GeV 
-    SetAveragePt2( 0.3 );          // GeV^2                     // Uzhi Oct  2014
-    SetProbLogDistrPrD( 0.3 );                                  // Uzhi Oct  2014 0.5
-    SetProbLogDistr(0.3);                                       //                 0.5
+    SetAveragePt2( 0.15 );          // GeV^2
+    SetProbLogDistrPrD( 0.3 );      // Before it was: 0.5
+    SetProbLogDistr(0.3 );          // Before it was: 0.5
 
   } else if( ProjectilePDGcode < -1000 ) {  // Projectile is anti_baryon
 
@@ -572,17 +571,17 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
       SetParams( 2,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
-
+      //SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
     }
+
     SetDeltaProbAtQuarkExchange( 0.0 );
     SetProbOfSameQuarkExchange( 0.0 );
     SetProjMinDiffMass( ProjectileMass + 0.22 );     // GeV 
     SetProjMinNonDiffMass( ProjectileMass + 0.22 );  // GeV
     SetTarMinDiffMass( TargetMass + 0.22 );          // GeV
     SetTarMinNonDiffMass( TargetMass + 0.22 );       // GeV
-    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct 2014
-    SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
+    SetAveragePt2( 0.15 );                           // GeV^2
+    SetProbLogDistrPrD( 0.3 );
     SetProbLogDistr( 0.3 );
             
   } else if ( ProjectileabsPDGcode == 211  ||  ProjectilePDGcode ==  111 ) {  // Projectile is Pion 
@@ -596,7 +595,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
       SetParams( 2,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
+      //SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
     }
 
     SetDeltaProbAtQuarkExchange( 0.56 );  // (0.35)
@@ -604,8 +603,8 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( 0.5 );         // (0.5)  // GeV 
     SetTarMinDiffMass( 1.16 );                      // GeV
     SetTarMinNonDiffMass( 1.16 );                   // GeV
-    SetAveragePt2( 0.3 );                          // GeV^2     // Uzhi Oct 2014
-    SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
+    SetAveragePt2( 0.15 );                          // GeV^2
+    SetProbLogDistrPrD( 0.3 );
     SetProbLogDistr( 0.3 );
 
   } else if ( ProjectileabsPDGcode == 321  ||  ProjectileabsPDGcode == 311  || 
@@ -620,22 +619,22 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
       SetParams( 2,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
+      //SetParams( 3,      0.0 , 0.0 ,           0.0  , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
     }
+
     SetDeltaProbAtQuarkExchange( 0.6 );
     SetProjMinDiffMass( 0.7 );     // (1.4) // (0.7) // GeV 
     SetProjMinNonDiffMass( 0.7 );  // (1.4) // (0.7) // GeV 
     SetTarMinDiffMass( 1.16 );                       // GeV
     SetTarMinNonDiffMass( 1.16 );                    // GeV
-    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct  2014
-    SetProbLogDistrPrD( 0.5 );                                   // Uzhi Oct  2014
-    SetProbLogDistr( 0.3 );                          // Uzhi 5.06.2012
+    SetAveragePt2( 0.15 );                           // GeV^2
+    SetProbLogDistrPrD( 0.5 );
+    SetProbLogDistr( 0.3 );
 
    } else {  // Projectile is undefined, Nucleon assumed
 
     //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-//    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc. May 2016
-    SetParams( 0,     13.71, 1.75,          -30.69, 3.0 , 0.0, 1.0  ,     0.93 );   // Qexchange without Exc.
+    SetParams( 0,     13.71, 1.75,          -214.5, 4.25, 0.0, 0.5  ,     1.1 );  // Qexchange without Exc.
     SetParams( 1,      25.0, 1.0,          -50.34,  1.5 , 0.0, 0.0  ,     1.4 );  // Qexchange with    Exc.
     if( Xinel > 0.) {
       SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,   0.93);  // Projectile diffraction
@@ -648,7 +647,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     }
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
       SetParams( 2,      0.0 , 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0  );  // Projectile diffraction
-//      SetParams( 3,      0.0 , 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
+      //SetParams( 3,      0.0 , 0.0 ,            0.0 , 0.0 , 0.0, 0.0  ,  -100.0  );  // Target diffraction
     }
     SetDeltaProbAtQuarkExchange( 0.0 );              // 7 June 2011
     SetProbOfSameQuarkExchange( 0.0 );
@@ -656,98 +655,101 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetProjMinNonDiffMass( ProjectileMass + 0.22 );  // GeV
     SetTarMinDiffMass( TargetMass + 0.22 );          // GeV
     SetTarMinNonDiffMass( TargetMass + 0.22 );       // GeV
-    SetAveragePt2( 0.3 );                           // GeV^2    // Uzhi Oct 2014
-    SetProbLogDistrPrD( 0.3 );                                   // Uzhi Oct 2014
+    SetAveragePt2( 0.15 );                           // GeV^2
+    SetProbLogDistrPrD( 0.3 );
     SetProbLogDistr( 0.3 );
 
   }
 
   // Set parameters of a string kink
-//  SetPt2Kink( 6.0*GeV*GeV );                                   // Uzhi Oct 2014
- SetPt2Kink( 0.0*GeV*GeV );                                      // Uzhi Oct 2014   // Uzhi to switch off kinky strings
+  //  SetPt2Kink( 6.0*GeV*GeV );
+  SetPt2Kink( 0.0*GeV*GeV );  // Uzhi Oct 2014 to switch off kinky strings
   G4double Puubar( 1.0/3.0 ), Pddbar( 1.0/3.0 ), Pssbar( 1.0/3.0 );  // SU(3) symmetry
-//  G4double Puubar( 0.41 ), Pddbar( 0.41 ), Pssbar( 0.18 );  // Broken SU(3) symmetry
+  //G4double Puubar( 0.41 ), Pddbar( 0.41 ), Pssbar( 0.18 );  // Broken SU(3) symmetry
   SetQuarkProbabilitiesAtGluonSplitUp( Puubar, Pddbar, Pssbar );
 
- // Set parameters of nuclear destruction
- if ( ProjectileabsPDGcode < 1000 ) {  // Meson projectile
-   SetMaxNumberOfCollisions( Plab, 2.0 );  //  3.0 )
-   SetCofNuclearDestruction( 0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
-           G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
-   SetR2ofNuclearDestruction( 1.5*fermi*fermi );
-   SetDofNuclearDestruction( 0.3 );
-   SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
+  // Set parameters of nuclear destruction
+  if ( ProjectileabsPDGcode < 1000 ) {  // Meson projectile
+    SetMaxNumberOfCollisions( Plab, 2.0 );  //  3.0 )
+    //AR-18May2016  SetCofNuclearDestruction( 0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
+    SetCofNuclearDestruction( 1.0*                                                                  // AR-18May2016
+            G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
+    SetR2ofNuclearDestruction( 1.5*fermi*fermi );
+    SetDofNuclearDestruction( 0.3 );
+    SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
                                          ( 1.0 + G4Exp( 4.0*(Ylab - 2.5) ) ) )*GeV*GeV );
-   SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
-   SetExcitationEnergyPerWoundedNucleon( 40.0*MeV ); // Uzhi March 2015: 100 -> 40
- } else if ( ProjectilePDGcode < -1000 ) {  // for anti-baryon projectile
-   SetMaxNumberOfCollisions( Plab, 2.0 );  // 3.0 )
-   SetCofNuclearDestruction( 0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
+    SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
+    SetExcitationEnergyPerWoundedNucleon( 40.0*MeV );
+  } else if ( ProjectilePDGcode < -1000 ) {  // for anti-baryon projectile
+    SetMaxNumberOfCollisions( Plab, 2.0 );  // 3.0 )
+    //AR-18May2016  SetCofNuclearDestruction( 0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
+    SetCofNuclearDestruction( 1.0*                                                                  // AR-18May2016
            G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
-   SetR2ofNuclearDestruction( 1.5*fermi*fermi );
-   SetDofNuclearDestruction( 0.3 );
-   SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
+    SetR2ofNuclearDestruction( 1.5*fermi*fermi );
+    SetDofNuclearDestruction( 0.3 );
+    SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
                                          ( 1.0 + G4Exp( 4.0*(Ylab - 2.5) ) ) )*GeV*GeV );
-   SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
-   SetExcitationEnergyPerWoundedNucleon( 40.0*MeV ); // Uzhi March 2015: 100 -> 20
-   if ( Plab < 2.0 ) {  // 2 GeV/c
-     // For slow anti-baryon we have to garanty putting on mass-shell
-     SetCofNuclearDestruction( 0.0 );
-     SetR2ofNuclearDestruction( 1.5*fermi*fermi );
-     SetDofNuclearDestruction( 0.01 );
-     SetPt2ofNuclearDestruction( 0.035*GeV*GeV );
-     SetMaxPt2ofNuclearDestruction( 0.04*GeV*GeV );
-     //SetExcitationEnergyPerWoundedNucleon( 0.0 );   // ?????
-   }
- } else {  // Projectile baryon assumed
-   SetMaxNumberOfCollisions( Plab, 2.0 ); // 3.0 )
-   SetCofNuclearDestructionPr( 0.00481*G4double(AbsProjectileBaryonNumber)*           // Uzhi 3.05.2015
-           G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
-   SetCofNuclearDestruction(   0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
-           G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
-   SetR2ofNuclearDestruction( 1.5*fermi*fermi );
-   SetDofNuclearDestruction( 0.3 );
-   SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
+    SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
+    SetExcitationEnergyPerWoundedNucleon( 40.0*MeV );
+    if ( Plab < 2.0 ) {  // 2 GeV/c
+      // For slow anti-baryon we have to garanty putting on mass-shell
+      SetCofNuclearDestruction( 0.0 );
+      SetR2ofNuclearDestruction( 1.5*fermi*fermi );
+      SetDofNuclearDestruction( 0.01 );
+      SetPt2ofNuclearDestruction( 0.035*GeV*GeV );
+      SetMaxPt2ofNuclearDestruction( 0.04*GeV*GeV );
+      //SetExcitationEnergyPerWoundedNucleon( 0.0 );   // ?????
+    }
+  } else {  // Projectile baryon assumed
+    SetMaxNumberOfCollisions( Plab, 2.0 ); // 3.0 )
+    //AR-18May2016  SetCofNuclearDestructionPr( 0.00481*G4double(AbsProjectileBaryonNumber)*           // Uzhi 3.05.2015
+    SetCofNuclearDestructionPr( 1.0*                                                                   // AR-18May2016  
+            G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
+    //AR-18May2016  SetCofNuclearDestruction(   0.00481*G4double(NumberOfTargetNucleons)*             // Uzhi 3.05.2015
+    SetCofNuclearDestruction(   1.0*                                                                  // AR-18May2016
+            G4Exp( 4.0*(Ylab - 2.1) )/( 1.0 + G4Exp( 4.0*(Ylab - 2.1) ) ) );
+    SetR2ofNuclearDestruction( 1.5*fermi*fermi );
+    SetDofNuclearDestruction( 0.3 );
+    SetPt2ofNuclearDestruction( ( 0.035 + 0.04*G4Exp( 4.0*(Ylab - 2.5) )/
                                          ( 1.0 + G4Exp( 4.0*(Ylab - 2.5) ) ) )*GeV*GeV );
-   SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
-   SetExcitationEnergyPerWoundedNucleon( 40.0*MeV ); // Uzhi March 2015: 100 -> 40
- }
+    SetMaxPt2ofNuclearDestruction( 1.0*GeV*GeV );
+    SetExcitationEnergyPerWoundedNucleon( 40.0*MeV );
+  }
 
- //SetCofNuclearDestruction( 0.47*G4Exp( 2.0*(Ylab - 2.5) )/( 1.0 + G4Exp( 2.0*(Ylab - 2.5) ) ) ); 
- //SetPt2ofNuclearDestruction( ( 0.035 + 0.1*G4Exp( 4.0*(Ylab - 3.0) )/( 1.0 + G4Exp( 4.0*(Ylab - 3.0) ) ) )*GeV*GeV );
+  //SetCofNuclearDestruction( 0.47*G4Exp( 2.0*(Ylab - 2.5) )/( 1.0 + G4Exp( 2.0*(Ylab - 2.5) ) ) ); 
+  //SetPt2ofNuclearDestruction( ( 0.035 + 0.1*G4Exp( 4.0*(Ylab - 3.0) )/( 1.0 + G4Exp( 4.0*(Ylab - 3.0) ) ) )*GeV*GeV );
 
- //SetMagQuarkExchange( 120.0 );       // 210.0 PipP
- //SetSlopeQuarkExchange( 2.0 );
- //SetDeltaProbAtQuarkExchange( 0.6 );
- //SetProjMinDiffMass( 0.7 );          // GeV 1.1
- //SetProjMinNonDiffMass( 0.7 );       // GeV
- //SetProbabilityOfProjDiff( 0.0);     // 0.85*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.5 ) ); // 40/32 X-dif/X-inel
- //SetTarMinDiffMass( 1.1 );           // GeV
- //SetTarMinNonDiffMass( 1.1 );        // GeV
- //SetProbabilityOfTarDiff( 0.0 );     // 0.85*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.5 ) ); // 40/32 X-dif/X-inel
+  //SetMagQuarkExchange( 120.0 );       // 210.0 PipP
+  //SetSlopeQuarkExchange( 2.0 );
+  //SetDeltaProbAtQuarkExchange( 0.6 );
+  //SetProjMinDiffMass( 0.7 );          // GeV 1.1
+  //SetProjMinNonDiffMass( 0.7 );       // GeV
+  //SetProbabilityOfProjDiff( 0.0);     // 0.85*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.5 ) ); // 40/32 X-dif/X-inel
+  //SetTarMinDiffMass( 1.1 );           // GeV
+  //SetTarMinNonDiffMass( 1.1 );        // GeV
+  //SetProbabilityOfTarDiff( 0.0 );     // 0.85*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.5 ) ); // 40/32 X-dif/X-inel
 
-//SetAveragePt2( 0.0 );               // GeV^2   0.3
- //------------------------------------
-//SetProbabilityOfElasticScatt( 1.0, 1.0);                            //(Xtotal, Xelastic);
-//SetProbabilityOfProjDiff( 1.0*0.62*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.51 ) );  // 0->1
-//SetProbabilityOfTarDiff( 4.0*0.62*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.51 ) );   // 2->4
-//SetAveragePt2( 0.3 );                                               // (0.15)
-//SetAvaragePt2ofElasticScattering( 0.0 );
+  //SetAveragePt2( 0.0 );               // GeV^2   0.3
+  //------------------------------------
+  //SetProbabilityOfElasticScatt( 1.0, 1.0);                            //(Xtotal, Xelastic);
+  //SetProbabilityOfProjDiff( 1.0*0.62*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.51 ) );  // 0->1
+  //SetProbabilityOfTarDiff( 4.0*0.62*G4Pow::GetInstance()->powA( s/GeV/GeV, -0.51 ) );   // 2->4
+  //SetAveragePt2( 0.3 );                                               // (0.15)
+  //SetAvaragePt2ofElasticScattering( 0.0 );
 
-//SetMaxNumberOfCollisions( Plab, 6.0 ); //(4.0*(Plab + 0.01), Plab); // 6.0 );
-//SetAveragePt2( 0.15 );
-//SetCofNuclearDestruction(-1.);//( 0.75 );                           // (0.25)             
-//SetExcitationEnergyPerWoundedNucleon(0.);//( 30.0*MeV );                    // (75.0*MeV) 
-//SetDofNuclearDestruction(0.);//( 0.2 ); //0.4                                     // 0.3 0.5
+  //SetMaxNumberOfCollisions( Plab, 6.0 ); //(4.0*(Plab + 0.01), Plab); // 6.0 );
+  //SetAveragePt2( 0.15 );
+  //SetCofNuclearDestruction(-1.);//( 0.75 );                           // (0.25)             
+  //SetExcitationEnergyPerWoundedNucleon(0.);//( 30.0*MeV );            // (75.0*MeV) 
+  //SetDofNuclearDestruction(0.);//( 0.2 ); //0.4                       // 0.3 0.5
 
-//SetPt2ofNuclearDestruction(0.);//(2.*0.075*GeV*GeV); //( 0.3*GeV*GeV ); // (0.168*GeV*GeV) 
-//SetMaxNumberOfCollisions( Plab, 78.0 ); // 3.0 )
+  //SetPt2ofNuclearDestruction(0.);//(2.*0.075*GeV*GeV); //( 0.3*GeV*GeV ); // (0.168*GeV*GeV) 
+  //SetMaxNumberOfCollisions( Plab, 78.0 ); // 3.0 )
 
-//G4cout << "Cnd " << GetCofNuclearDestruction() << G4endl;
-//G4cout << "Dnd " << GetDofNuclearDestruction() << G4endl;
-//G4cout << "Pt2 " << GetPt2ofNuclearDestruction()/GeV/GeV << G4endl;
-//G4int Uzhi; G4cin >> Uzhi;
-
+  //G4cout << "Cnd " << GetCofNuclearDestruction() << G4endl;
+  //G4cout << "Dnd " << GetDofNuclearDestruction() << G4endl;
+  //G4cout << "Pt2 " << GetPt2ofNuclearDestruction()/GeV/GeV << G4endl;
+  //G4int Uzhi; G4cin >> Uzhi;
 } 
 
 
@@ -757,12 +759,12 @@ G4double G4FTFParameters::GetProcProb( const G4int ProcN, const G4double y ) {
   G4double Prob( 0.0 );
   if ( y < ProcParams[ProcN][6] ) {
     Prob = ProcParams[ProcN][5]; 
-    if(Prob < 0.) Prob=0.;                                       // Uzhi Oct 2014
+    if(Prob < 0.) Prob=0.;
     return Prob;
   }
   Prob = ProcParams[ProcN][0] * G4Exp( -ProcParams[ProcN][1]*y ) +
          ProcParams[ProcN][2] * G4Exp( -ProcParams[ProcN][3]*y ) +
          ProcParams[ProcN][4];
-  if(Prob < 0.) Prob=0.;                                         // Uzhi Oct 2014
+  if(Prob < 0.) Prob=0.;
   return Prob;
 }

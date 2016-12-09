@@ -409,6 +409,8 @@ void G4Scheduler::Process()
 
 #ifdef G4VERBOSE
   G4bool trackFound = false;
+  G4IosFlagsSaver iosfs(G4cout);
+  G4cout.precision(5);
 #endif
 
   //===========================================================================
@@ -647,7 +649,6 @@ void G4Scheduler::DoProcess()
 
 void G4Scheduler::Stepping()
 {
-  G4IosFlagsSaver iosfs(G4cout);
   fTimeStep = fMaxTimeStep;
 
   fTSTimeStep = DBL_MAX;

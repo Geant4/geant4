@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr06/include/HadronElasticPhysicsHP.hh
+/// \file HadronElasticPhysicsHP.hh
 /// \brief Definition of the HadronElasticPhysicsHP class
 //
 // $Id: HadronElasticPhysicsHP.hh 71037 2013-06-10 09:20:54Z gcosmo $
@@ -61,11 +61,4 @@ class HadronElasticPhysicsHP : public G4HadronElasticPhysics
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
 

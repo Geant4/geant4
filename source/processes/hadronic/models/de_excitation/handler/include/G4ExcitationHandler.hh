@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 96931 2016-05-18 09:06:52Z gcosmo $
+// $Id: G4ExcitationHandler.hh 98808 2016-08-11 08:35:24Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -53,6 +53,7 @@
 #include "G4Fragment.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4IonTable.hh"
+#include "G4DeexPrecoParameters.hh"
 
 class G4VMultiFragmentation;
 class G4VFermiBreakUp;
@@ -80,6 +81,7 @@ public:
   void SetMultiFragmentation(G4VMultiFragmentation* ptr);
   void SetFermiModel(G4VFermiBreakUp* ptr);
   void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
+  void SetDeexChannelsType(G4DeexChannelType val);
 
   //======== Obsolete methods to be removed =====
 

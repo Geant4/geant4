@@ -223,7 +223,7 @@ private:
   
   // FROM NANOBEAM EX. TUNINGS
   
-  G4PropagatorInField * fPropInField;
+  // G4PropagatorInField * fPropInField;
 
   //
   

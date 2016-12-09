@@ -70,6 +70,10 @@ class G4OTubs : public G4CSGSolid
     inline G4double GetZHalfLength   () const;
     inline G4double GetStartPhiAngle () const;
     inline G4double GetDeltaPhiAngle () const;
+    inline G4double GetSinStartPhi   () const;
+    inline G4double GetCosStartPhi   () const;
+    inline G4double GetSinEndPhi     () const;
+    inline G4double GetCosEndPhi     () const;
 
     // Modifiers
 
@@ -83,6 +87,8 @@ class G4OTubs : public G4CSGSolid
 
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -134,12 +140,6 @@ class G4OTubs : public G4CSGSolid
     inline G4double GetDPhi() const;
 
   protected:
-
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
     inline void Initialize();
       //

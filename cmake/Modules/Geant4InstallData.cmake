@@ -185,6 +185,8 @@ function(geant4_export_datasets _type _output)
     else()
       message(FATAL_ERROR "incorrect argument to geant4_export_datasets")
     endif()
+    # Ensure CMake paths
+    file(TO_CMAKE_PATH "${_tmpprop}" _tmpprop)
     list(APPEND _tuple ${_tmpprop})
 
     get_property(_fname GLOBAL PROPERTY ${_ds}_FILENAME)

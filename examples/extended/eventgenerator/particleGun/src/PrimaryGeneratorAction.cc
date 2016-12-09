@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/fParticleGun/src/PrimaryGeneratorfAction.cc
-/// \brief Implementation of the PrimaryGeneratorfAction class
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction.cc
+/// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 83919 2014-09-23 08:40:35Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 98304 2016-07-05 15:29:08Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

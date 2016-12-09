@@ -31,7 +31,7 @@
 //
 // $Id$
 //
-/// \file main.cc
+/// \file clustering.cc
 /// \brief clustering example
 
 #include "DetectorConstruction.hh"

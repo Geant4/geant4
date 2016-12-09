@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5CellParameterisation.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5CellParameterisation.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5CellParameterisation.hh
 /// \brief Definition of the B5CellParameterisation class
@@ -31,24 +31,29 @@
 #ifndef B5CellParameterisation_H
 #define B5CellParameterisation_H 1
 
+#include "B5Constants.hh"
+
 #include "globals.hh"
 #include "G4VPVParameterisation.hh"
+
+#include <array>
+
 class G4VPhysicalVolume;
 
 /// EM Calorimeter cell parameterisation
 
 class B5CellParameterisation : public G4VPVParameterisation
 {
-public:
+  public:
     B5CellParameterisation();
     virtual ~B5CellParameterisation();
     
     virtual void ComputeTransformation(
                    const G4int copyNo,G4VPhysicalVolume *physVol) const;
     
-private:
-    G4double fXCell[80];
-    G4double fYCell[80];
+  private:
+    std::array<G4double, kNofEmCells> fXCell;
+    std::array<G4double, kNofEmCells> fYCell;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

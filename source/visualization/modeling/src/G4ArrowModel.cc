@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ArrowModel.cc 76285 2013-11-08 13:01:44Z gcosmo $
+// $Id: G4ArrowModel.cc 100807 2016-11-02 15:00:41Z gcosmo $
 //
 // 
 // John Allison  15th July 2012
@@ -52,7 +52,8 @@ G4ArrowModel::G4ArrowModel
 (G4double x1, G4double y1, G4double z1,
  G4double x2, G4double y2, G4double z2,
  G4double width, const G4Colour& colour,
- const G4String& description)
+ const G4String& description,
+ G4int lineSegmentsPerCircle)
 {
   fType = "G4ArrowModel";
   fGlobalTag = fType;
@@ -64,6 +65,10 @@ G4ArrowModel::G4ArrowModel
      std::max(y1,y2),
      std::min(z1,z2),
      std::max(z1,z2));
+
+  // Force number of line segments per circle (aka number of rotation steps)
+  G4int tempN = G4Polyhedron::GetNumberOfRotationSteps();
+  G4Polyhedron::SetNumberOfRotationSteps(lineSegmentsPerCircle);
 
   // Make a cylinder slightly shorter than the arrow length so that it
   // doesn't stick out of the head.
@@ -106,6 +111,9 @@ G4ArrowModel::G4ArrowModel
   va.SetForceSolid(true);
   fpShaftPolyhedron->SetVisAttributes(va);
   fpHeadPolyhedron->SetVisAttributes(va);
+
+  // Restore number of line segments per circle
+  G4Polyhedron::SetNumberOfRotationSteps(tempN);
 }
 
 void G4ArrowModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)

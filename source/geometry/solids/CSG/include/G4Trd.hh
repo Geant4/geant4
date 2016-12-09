@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Trd.hh 99509 2016-09-26 07:48:56Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -109,6 +109,8 @@ class G4Trd : public G4CSGSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
@@ -165,12 +167,6 @@ class G4Trd : public G4CSGSolid
     G4Trd(const G4Trd& rhs);
     G4Trd& operator=(const G4Trd& rhs); 
       // Copy constructor and assignment operator.
-
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4CSGSolid:: ClipCrossSection and ClipBetweenSections
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original

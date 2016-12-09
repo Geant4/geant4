@@ -1,4 +1,4 @@
-$Id: History 97670 2016-06-07 08:22:37Z gcosmo $
+$Id: History 101419 2016-11-17 10:36:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,111 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 17, 2016 I. Hrivnacova (analysis-V10-02-25)
+- Fixed compiler warning issued when G4VERBOSE is not set.
+- Updated to g4tools 2.3.0 (Guy Barrand):
+  Adding methods to tools/impi for passing ntuple data.
+  See History_tools for the complete list of modifications.
+  
+November 03, 2016 I. Hrivnacova (analysis-V10-02-24)
+- Updated to g4tools 2.2.0 (Guy Barrand):
+  Coverity fixes,
+  See History_tools for the complete list of modifications.
+- Added prefix, postfix increment operators to G4Accumulable
+
+October 30, 2016 I. Hrivnacova (analysis-V10-02-23)
+- Simplified G4RootAnalysisManager::GetNtupleFileNumber() to avoid using
+  G4Threading::GetNumberOfRunningWorkerThreads() which seems to be failing 
+  on gcc and icc plaftorms
+- Added temporary debug printing from this method
+
+October 28, 2016 I. Hrivnacova (analysis-V10-02-22)
+- Merging ntuples in a selected number of output files
+
+October 24, 2016 I. Hrivnacova (analysis-V10-02-21)
+- Set back not merging ntuples by default.
+- Fixed resetting ntuples (which was failing in case when
+  a new file is written per event and ntuples are created
+  after file is open (examples/advanced/gammaray_telescope
+  use case).
+
+October 14, 2016 I. Hrivnacova (analysis-V10-02-20)
+- Merging ntuples improvements:
+  - now working also when ntuples are booked after OpenFile (use case in AnaEx01)
+  - use directory if directory name is set
+  - added basketSize parameter in the SetNtupleMerging() public function
+
+October 10, 2016 I. Hrivnacova (analysis-V10-02-19)
+- Do not merge ntuples by default.
+  Merging ntuples requires the application to call CreateNtuple both on master
+  and workers, what is not done in all examples.
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-18)
+- Disabled code using the number of threads in G4RootAnalysisManager
+  untill this function is available in G4Threading;
+  user setting of numbert of reduced ntuple files is ignored.
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-17)
+- Fixed case in included file name
+
+October 08, 2016 I. Hrivnacova (analysis-V10-02-16)
+- Implemented merging of ntuples in MT mode:
+  - Added G4RootAnalysisManager::SetMerging(G4bool mergeNtuples, G4int nofReducedNtupleFile)
+  - Added G4RootPNtupleManager, G4RootMainNtupleManager classes
+- Updated to g4tools 2.1.0 (Guy Barrand)
+  For parallel ntuple : handle properly the user std::vector for column of vector.
+  See History_tools for the complete list of modifications.
+
+October 3, 2016 I. Hrivnacova (analysis-V10-02-15)
+- Removing dependencies of accumulables on other analysis categories
+
+October 3, 2016 G. Cosmo (analysis-V10-02-14)
+- Fixed again GNUmakefile in "accumulables" module...
+
+September 30, 2016 I. Hrivnacova (analysis-V10-02-13)
+- Updated to g4tools 2.0.0 (Guy Barrand)
+  Added parallel ntuple : on a same booked nutple, pass baskets from threads
+  or mpi ranks to a "main ntuple" tied to a file.
+  See History_tools for the complete list of modifications.
+
+September 27, 2016 G. Cosmo (analysis-V10-02-12)
+- Fixed GNUmakefile in new "accumulables" module.
+
+September 26, 2016 I. Hrivnacova (analysis-V10-02-11)
+- Renamed G4Parameter in G4Accumulable (as suggested in CM in Ferrara)
+  including all related classes and the subdirectory parameters
+  in accumulables
+
+September 8, 2016 I. Hrivnacova (analysis-V10-02-10)
+- Enable creating/configurion profiles without cut values (vmin, vmax).
+  This feature was disabled by a check for the values in G4VAnalysisManager; 
+  these values are now treated in a special way.
+- Fixed duplicating Csv ntuple header
+
+September 6, 2016 I. Hrivnacova (analysis-V10-02-09)
+- Fixed writing CSV profiles
+  (to be propagated in the patch to 10.2)
+
+July 4, 2016 I. Hrivnacova (analysis-V10-02-08)
+- Adding missing inline keyword to functions defined in 
+  G4ParameterManager.icc
+
+June 24, 2016 I. Hrivnacova (analysis-V10-02-07)
+- Fixing compilation with gcc: added missing include <functional>
+
+June 23, 2016 I. Hrivnacova (analysis-V10-02-06)
+- Extended and improved current implementation of parameters:
+  - The parameters names are optional
+  - Extended merge mode with kMaximum, kMinimum
+    and removed kUser (not needed anymore)
+  - Added access to paremeters via iterators and ids
+    (defined by the order of registering)
+  - Introduced G4MergeFunction<T> type and apply merging via a function 
+    defined accorting to the merge mode
+    (thanks to Jonathan Madsen for providing an example of the code)
+- Return 0. instead of 0 when the return type is double
+- Return nullptr instead of 0
 
 June 7, 2016 I. Hrivnacova (analysis-V10-02-05)
 - Updated to g4tools 1.27.4 (Guy Barrand):

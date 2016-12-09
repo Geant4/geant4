@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 96669 2016-04-29 12:03:24Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 99503 2016-09-26 07:17:29Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -56,9 +56,11 @@
 #include "G4VisExtent.hh"
 #include "G4AttHolder.hh"
 #include "G4PhysicalConstants.hh"
-
-G4int G4OpenGLSceneHandler::fEventsDrawInterval = 1;
-G4int G4OpenGLSceneHandler::fEventsWaitingToBeFlushed = 0;
+#include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#endif
+#include "G4Run.hh"
 
 const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
   0x55,0x55,0x55,0x55,0x55,0x55,0x55,0x55,
@@ -87,8 +89,6 @@ G4VSceneHandler (system, id, name),
 fEmulate_GL_QUADS(false),
 #endif
 fPickName(0),
-// glFlush take about 90% time.  Dividing glFlush number by 100 will
-// change the first vis time from 100% to 10+90/100 = 10,9%.
 fThreePassCapable(false),
 fSecondPassForTransparencyRequested(false),
 fSecondPassForTransparency(false),
@@ -110,12 +110,138 @@ void G4OpenGLSceneHandler::ClearAndDestroyAtts()
   fPickMap.clear();
 }
 
+G4int G4OpenGLSceneHandler::fEntitiesFlushInterval = 100;
+G4OpenGLSceneHandler::FlushAction
+G4OpenGLSceneHandler::fFlushAction = G4OpenGLSceneHandler::NthEvent;
+
 void G4OpenGLSceneHandler::ScaledFlush()
 {
-  fEventsWaitingToBeFlushed++;
-  if (fEventsWaitingToBeFlushed < fEventsDrawInterval) return;
-  glFlush();
-  fEventsWaitingToBeFlushed = 0;
+  if (fReadyForTransients) {
+
+    // Drawing transients, e.g., trajectories.
+
+    switch (fFlushAction) {
+      case endOfEvent:
+        // If "/vis/scene/endOfEventAction refresh", primitives are flushed at
+        // end of event anyway.
+        // But if "/vis/scene/endOfEventAction accumulate", ShowView is not
+        // called until end of run, so we have to watch for a new event.
+        if (fpScene->GetRefreshAtEndOfEvent()) return;
+        else {
+          // Get event from modeling parameters
+          const G4Event* thisEvent = fpModel->GetModelingParameters()->GetEvent();
+          if (!thisEvent) {glFlush(); return;}
+          G4int thisEventID = thisEvent->GetEventID();
+          static G4int lastEventID = 0;
+          if (thisEventID != lastEventID) {
+            glFlush();
+            lastEventID = thisEventID;
+          }
+        }
+        break;
+      case endOfRun:
+        // If "/vis/scene/endOfRunAction refresh", primitives are flushed at
+        // end of run anyway.
+        // If "/vis/scene/endOfRunAction accumulate", ShowView is never called
+        // so we have to watch for a new run.
+        if (fpScene->GetRefreshAtEndOfRun()) return;
+        else {
+          G4RunManager* runMan = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+          if (G4Threading::IsMultithreadedApplication()) {
+            runMan = G4MTRunManager::GetMasterRunManager();
+          }
+#endif
+          if (!runMan) {glFlush(); return;}
+          const G4Run* thisRun = runMan->GetCurrentRun();
+          if (!thisRun) {glFlush(); return;}
+          G4int thisRunID = thisRun->GetRunID();
+          static G4int lastRunID = 0;
+          if (thisRunID != lastRunID) {
+            glFlush();
+            lastRunID = thisRunID;
+          }
+        }
+        break;
+      case eachPrimitive:
+        // This is equivalent to numeric with fEntitiesFlushInterval == 1.
+        fEntitiesFlushInterval = 1;
+        // Fall through to NthPrimitive.
+      case NthPrimitive:
+      { // Encapsulate in scope {} brackets to satisfy Windows.
+        static G4int primitivesWaitingToBeFlushed = 0;
+        primitivesWaitingToBeFlushed++;
+        if (primitivesWaitingToBeFlushed < fEntitiesFlushInterval) return;
+        glFlush();
+        primitivesWaitingToBeFlushed = 0;
+        break;
+      }
+      case NthEvent:
+        // If "/vis/scene/endOfEventAction refresh", primitives are flushed at
+        // end of event anyway.
+        if (fpScene->GetRefreshAtEndOfEvent()) return;
+        else {
+          // Get event from modeling parameters
+          const G4Event* thisEvent = fpModel->GetModelingParameters()->GetEvent();
+          G4int thisEventID = thisEvent->GetEventID();
+          static G4int lastEventID = 0;
+          if (thisEventID != lastEventID) {
+            static G4int eventsWaitingToBeFlushed = 0;
+            eventsWaitingToBeFlushed++;
+            if (eventsWaitingToBeFlushed < fEntitiesFlushInterval) return;
+            glFlush();
+            eventsWaitingToBeFlushed = 0;
+            lastEventID = thisEventID;
+          }
+        }
+        break;
+      case never:
+        break;
+      default:
+        break;
+    }
+
+  }
+
+  else
+
+  {
+
+    // For run duration model drawing (detector drawing):
+    // Immediate mode: a huge speed up is obtained if flushes are scaled.
+    // Stored mode: no discernable difference since drawing is done to the
+    //   back buffer and then swapped.
+    // So eachPrimitive and NthPrimitive make sense.  But endOfEvent and
+    // endOfRun are treated as "no action", i.e., a flush will only be issued,
+    // as happens anyway, when drawing is complete.
+
+    switch (fFlushAction) {
+      case endOfEvent:
+        break;
+      case endOfRun:
+        break;
+      case eachPrimitive:
+        // This is equivalent to NthPrimitive with fEntitiesFlushInterval == 1.
+        fEntitiesFlushInterval = 1;
+        // Fall through to NthPrimitive.
+      case NthPrimitive:
+      { // Encapsulate in scope {} brackets to satisfy Windows.
+        static G4int primitivesWaitingToBeFlushed = 0;
+        primitivesWaitingToBeFlushed++;
+        if (primitivesWaitingToBeFlushed < fEntitiesFlushInterval) return;
+        glFlush();
+        primitivesWaitingToBeFlushed = 0;
+        break;
+      }
+      case NthEvent:
+        break;
+      case never:
+        break;
+      default:
+        break;
+    }
+
+  }
 }
 
 void G4OpenGLSceneHandler::ProcessScene()
@@ -174,22 +300,17 @@ void G4OpenGLSceneHandler::EndPrimitives2D ()
 
 G4VSolid* G4OpenGLSceneHandler::CreateSectionSolid ()
 {
-  // Clipping done in G4OpenGLViewer::SetView.
-  // return 0;
-
-  // But...OpenGL no longer seems to reconstruct clipped edges, so,
-  // when the BooleanProcessor is up to it, abandon this and use
-  // generic clipping in G4VSceneHandler::CreateSectionSolid...
   return G4VSceneHandler::CreateSectionSolid();
+  // If clipping done in G4OpenGLViewer::SetView
+  // return 0;
 }
 
 G4VSolid* G4OpenGLSceneHandler::CreateCutawaySolid ()
 {
   // Cutaway done in G4OpenGLViewer::SetView.
-  // return 0;
-
-  // But...if not, when the BooleanProcessor is up to it...
-  return G4VSceneHandler::CreateCutawaySolid();
+  return 0;
+  // Else
+  // return G4VSceneHandler::CreateCutawaySolid();
 }
 
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
@@ -203,11 +324,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glDisable (GL_LIGHTING);
 #endif
   
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (line.GetVisAttributes ());
-
-  G4double lineWidth = GetLineWidth(pVA);
+  G4double lineWidth = GetLineWidth(fpVisAttribs);
   // Need access to method in G4OpenGLViewer.  static_cast doesn't
   // work with a virtual base class, so use dynamic_cast.  No need to
   // test the outcome since viewer is guaranteed to be a
@@ -259,10 +376,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   glDisable (GL_LIGHTING);
 #endif
   
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (polymarker.GetVisAttributes ());
-
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize(polymarker, sizeType);
 
@@ -274,7 +387,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
   if (!pGLViewer) return;
 
   if (sizeType == world) {  // Size specified in world coordinates.
-    G4double lineWidth = GetLineWidth(pVA);
+    G4double lineWidth = GetLineWidth(fpVisAttribs);
     pGLViewer->ChangeLineWidth(lineWidth);
   
     G4VMarker::FillStyle style = polymarker.GetFillStyle();
@@ -316,7 +429,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
       size = 1.;
       // Drop through to circles
     case G4Polymarker::circles:
-      nSides = GetNoOfSides(pVA);
+      nSides = GetNoOfSides(fpVisAttribs);
       startPhi = 0.;
       break;
     case G4Polymarker::squares:
@@ -443,13 +556,9 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
   G4OpenGLViewer* pGLViewer = dynamic_cast<G4OpenGLViewer*>(fpViewer);
   if (!pGLViewer) return;
   
-  // Get vis attributes - pick up defaults if none.
-  const G4VisAttributes* pVA =
-    fpViewer -> GetApplicableVisAttributes (polyhedron.GetVisAttributes ());
-
   // Get view parameters that the user can force through the vis
   // attributes, thereby over-riding the current view parameter.
-  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (pVA);
+  G4ViewParameters::DrawingStyle drawing_style = GetDrawingStyle (fpVisAttribs);
 
   // Note that in stored mode, because this call gets embedded in a display
   //  list, it is the colour _at the time of_ creation of the display list, so
@@ -474,10 +583,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     painting_colour = current_colour;
   }
 
-  G4double lineWidth = GetLineWidth(pVA);
+  G4double lineWidth = GetLineWidth(fpVisAttribs);
   pGLViewer->ChangeLineWidth(lineWidth);
 
-  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (pVA);
+  G4bool isAuxEdgeVisible = GetAuxEdgeVisible (fpVisAttribs);
 
   G4bool clipping = pGLViewer->fVP.IsSection() || pGLViewer->fVP.IsCutaway();
 
@@ -884,6 +993,10 @@ void G4OpenGLSceneHandler::AddCompound(const G4VDigi& digi) {
 }
 
 void G4OpenGLSceneHandler::AddCompound(const G4THitsMap<G4double>& hits) {
+  G4VSceneHandler::AddCompound(hits);  // For now.
+}
+
+void G4OpenGLSceneHandler::AddCompound(const G4THitsMap<G4StatDouble>& hits) {
   G4VSceneHandler::AddCompound(hits);  // For now.
 }
 

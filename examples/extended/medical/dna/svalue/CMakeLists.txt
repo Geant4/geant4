@@ -40,7 +40,7 @@ target_link_libraries(svalue ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(svalue_SCRIPTS
-    svalue.in
+    svalue.in plot.C
   )
 
 foreach(_script ${svalue_SCRIPTS})

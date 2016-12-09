@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4BetheHeitlerModel.cc 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,7 +76,7 @@ G4BetheHeitlerModel::G4BetheHeitlerModel(const G4ParticleDefinition*,
   theGamma    = G4Gamma::Gamma();
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -222,7 +222,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > rndmEngine->flat()) {
-	epsil = 0.5 - epsilrange*g4pow->A13(rndmEngine->flat());
+	epsil = 0.5 - epsilrange*g4calc->A13(rndmEngine->flat());
 	screenvar = screenfac/(epsil*(1-epsil));
 	greject = (ScreenFunction1(screenvar) - FZ)/F10;
               

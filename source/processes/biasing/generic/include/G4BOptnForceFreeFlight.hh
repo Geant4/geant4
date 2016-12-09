@@ -65,7 +65,6 @@ public:
   // -------------------------------------------
   // -- Used:
   virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& );
-  virtual G4bool                                        DenyProcessPostStepDoIt( const G4BiasingProcessInterface*, const G4Track*, const G4Step*, G4double& );
   virtual void                                                      AlongMoveBy( const G4BiasingProcessInterface*, const G4Step*, G4double );
   virtual G4VParticleChange*                             ApplyFinalStateBiasing( const G4BiasingProcessInterface*, const G4Track*, const G4Step*, G4bool&);
 

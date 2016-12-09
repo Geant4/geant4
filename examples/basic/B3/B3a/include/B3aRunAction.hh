@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B3aRunAction.hh 94031 2015-11-05 11:54:38Z ihrivnac $
+// $Id: B3aRunAction.hh 99559 2016-09-27 07:02:21Z gcosmo $
 //
 /// \file B3aRunAction.hh
 /// \brief Definition of the B3aRunAction class
@@ -32,7 +32,7 @@
 #define B3aRunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "G4Parameter.hh"
+#include "G4Accumulable.hh"
 #include "globals.hh"
 
 /// Run action class
@@ -50,8 +50,8 @@ class B3aRunAction : public G4UserRunAction
     void SumDose(G4double dose) { fSumDose += dose; };  
 
 private:
-    G4Parameter<G4int>    fGoodEvents;
-    G4Parameter<G4double> fSumDose;  
+    G4Accumulable<G4int>    fGoodEvents;
+    G4Accumulable<G4double> fSumDose;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -80,10 +80,6 @@ public:
 
   inline G4double GetMinExPerNucleounForMF() const;
 
-  inline G4int GetMaxZForFermiBreakUp() const;
-
-  inline G4int GetMaxAForFermiBreakUp() const;
-
   inline G4int GetMinZForPreco() const;
 
   inline G4int GetMinAForPreco() const;
@@ -104,7 +100,13 @@ public:
 
   inline G4bool UseAngularGen() const;
 
-  inline G4DeexChannelType GetDeexChannels() const;
+  inline G4bool UseFilesNEW() const;
+
+  inline G4bool CorrelatedGamma() const;
+
+  inline G4bool StoreAllLevels() const;
+
+  inline G4DeexChannelType GetDeexChannelsType() const;
 
   // Set methods 
 
@@ -128,10 +130,6 @@ public:
 
   void SetMinEForMultiFrag(G4double);
 
-  void SetMaxZForFermiBreakUp(G4int);
-
-  void SetMaxAForFermiBreakUp(G4int);
-
   void SetMinZForPreco(G4int);
 
   void SetMinAForPreco(G4int);
@@ -152,7 +150,13 @@ public:
 
   void SetUseAngularGen(G4bool);
 
-  void SetDeexChannels(G4DeexChannelType);
+  void SetUseFilesNEW(G4bool);
+
+  void SetCorrelatedGamma(G4bool);
+
+  void SetStoreAllLevels(G4bool);
+
+  void SetDeexChannelsType(G4DeexChannelType);
 
 private:
 
@@ -190,10 +194,6 @@ private:
   // Multi-fragmentation model
   G4double fMinExPerNucleounForMF;
 
-  // Fermi Break-up model
-  G4int fMaxZForFermiBreakUp;
-  G4int fMaxAForFermiBreakUp;
-
   // Preco model
   G4int fMinZForPreco;
   G4int fMinAForPreco;
@@ -210,7 +210,10 @@ private:
   G4bool fUseHETC;
   G4bool fUseAngularGen;
 
-  // De-excitation flag
+  // Deex flags
+  G4bool fUseLongFiles;
+  G4bool fCorrelatedGamma;
+  G4bool fStoreAllLevels;
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -265,16 +268,6 @@ inline G4double G4DeexPrecoParameters::GetMinExPerNucleounForMF() const
   return fMinExPerNucleounForMF;
 }
 
-inline G4int G4DeexPrecoParameters::GetMaxZForFermiBreakUp() const
-{
-  return fMaxZForFermiBreakUp;
-}
-
-inline G4int G4DeexPrecoParameters::GetMaxAForFermiBreakUp() const
-{
-  return fMaxAForFermiBreakUp;
-}
-
 inline G4int G4DeexPrecoParameters::GetMinZForPreco() const
 {
   return fMinZForPreco;
@@ -325,7 +318,22 @@ inline G4bool G4DeexPrecoParameters::UseAngularGen() const
   return fUseAngularGen;
 }
 
-inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannels() const
+inline G4bool G4DeexPrecoParameters::UseFilesNEW() const
+{
+  return fUseLongFiles;
+}
+
+inline G4bool G4DeexPrecoParameters::CorrelatedGamma() const
+{
+  return fCorrelatedGamma;
+}
+
+inline G4bool G4DeexPrecoParameters::StoreAllLevels() const
+{
+  return fStoreAllLevels;
+}
+
+inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const
 {
   return fDeexChannelType;
 }

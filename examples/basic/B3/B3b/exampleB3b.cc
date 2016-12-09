@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleB3b.cc 94031 2015-11-05 11:54:38Z ihrivnac $
+// $Id: exampleB3b.cc 100941 2016-11-03 11:14:13Z gcosmo $
 //
-/// \file exampleB3.cc
-/// \brief Main program of the B3 example
+/// \file exampleB3b.cc
+/// \brief Main program of the B3b example
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"

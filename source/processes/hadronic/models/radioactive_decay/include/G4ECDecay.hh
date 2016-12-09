@@ -44,7 +44,8 @@ class G4ECDecay : public G4NuclearDecay
   public:
     G4ECDecay(const G4ParticleDefinition* theParentNucleus,
               const G4double& theBR, const G4double& Qvalue,
-              const G4double& excitation, const G4RadioactiveDecayMode& mode);
+              const G4double& excitation, const G4Ions::G4FloatLevelBase& flb,
+              const G4RadioactiveDecayMode& mode);
 
     virtual ~G4ECDecay();
 

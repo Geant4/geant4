@@ -88,7 +88,7 @@ void GB04BOptrBremSplitting::StartRun()
 void GB04BOptrBremSplitting::StartTracking( const G4Track* /* track */ )
 {
   // -- reset the number of times the brem. splitting was applied:
-  nInteractions = 0;
+  fNInteractions = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -103,10 +103,10 @@ ProposeFinalStateBiasingOperation(const G4Track* track,
   if ( fBiasPrimaryOnly && ( track->GetParentID() !=0 ) ) return 0;
   // -- Check if brem. splitting should be applied only once to the track,
   // -- and if so, and if brem. splitting already occured, don't ask for biasing:
-  if ( fBiasOnlyOnce    && ( nInteractions > 0 )        ) return 0;
+  if ( fBiasOnlyOnce    && ( fNInteractions > 0 )        ) return 0;
   
   // -- Count the number of times the brem. splitting is applied:
-  nInteractions++;
+  fNInteractions++;
   // -- Return the brem. splitting operation:
   return fBremSplittingOperation;
 }

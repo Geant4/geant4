@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc 81175 2014-05-22 07:39:10Z gcosmo $
+// $Id: G4MagIntegratorDriver.cc 101384 2016-11-16 11:03:44Z gcosmo $
 //
 // 
 //
@@ -389,6 +389,8 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
       }
     }
   } while ( ((nstp++)<=fMaxNoSteps) && (x < x2) && (!lastStep) );
+  // Loop checking, 07.10.2016, J. Apostolakis
+
      // Have we reached the end ?
      // --> a better test might be x-x2 > an_epsilon
 

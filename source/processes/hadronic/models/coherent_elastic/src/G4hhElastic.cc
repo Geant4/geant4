@@ -179,7 +179,6 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   thePionMinus= G4PionMinus::PionMinus();
 
   fTarget  = G4Proton::Proton(); // later vmg
-  fProjectile  = 0;
   fMassTarg   = fTarget->GetPDGMass();
   fMassProj   = fProjectile->GetPDGMass();
   fMassSum2   = (fMassTarg+fMassProj)*(fMassTarg+fMassProj);

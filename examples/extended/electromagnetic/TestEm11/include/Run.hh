@@ -79,11 +79,11 @@ class Run : public G4Run
     G4double   fStepSize,  fStepSize2;
     G4int      fStatus[3];
     
-    G4double   fEdeposit[MaxAbsor];
-    G4double   fEmin[MaxAbsor], fEmax[MaxAbsor];
+    G4double   fEdeposit[kMaxAbsor];
+    G4double   fEmin[kMaxAbsor], fEmax[kMaxAbsor];
     G4double   fTotEdep[3];
-    G4double   fCsdaRange[MaxAbsor];
-    G4double   fXfrontNorm[MaxAbsor];    
+    G4double   fCsdaRange[kMaxAbsor];
+    G4double   fXfrontNorm[kMaxAbsor];    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

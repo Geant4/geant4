@@ -12,11 +12,6 @@
 
 namespace tools {
 namespace rroot {
-class branch;
-}}
-
-namespace tools {
-namespace rroot {
 
 class base_leaf : public virtual iro {
 public:
@@ -63,7 +58,6 @@ public:
     if(!a_buffer.read(fIsUnsigned)) return false;
 
    {ifac::args args;
-    args[ifac::arg_branch()] = &m_branch;
     iro* obj;
     if(!a_buffer.read_object(m_fac,args,obj)) {
       m_out << "tools::rroot::base_leaf::stream :"
@@ -97,13 +91,12 @@ public:
     return true;
   }
 public:
-  virtual bool read_basket(buffer&) = 0;
+  virtual bool read_buffer(buffer&) = 0;
   virtual bool print_value(std::ostream&,uint32) const = 0;
   virtual uint32 num_elem() const = 0;
 public:
-  base_leaf(std::ostream& a_out,rroot::branch& a_branch,ifac& a_fac)
+  base_leaf(std::ostream& a_out,ifac& a_fac)
   :m_out(a_out)
-  ,m_branch(a_branch)
   ,m_fac(a_fac)
   ,m_name("")
   ,m_title("")
@@ -134,7 +127,6 @@ protected:
   base_leaf(const base_leaf& a_from)
   :iro(a_from)
   ,m_out(a_from.m_out)
-  ,m_branch(a_from.m_branch)
   ,m_fac(a_from.m_fac)
   ,m_ndata(0)
   ,m_length(0)
@@ -142,7 +134,6 @@ protected:
   {}
   base_leaf& operator=(const base_leaf&){return *this;}
 public:
-  rroot::branch& branch() {return m_branch;}
   const std::string& name() const {return m_name;}
   const std::string& title() const {return m_title;}
 /*
@@ -171,7 +162,6 @@ public:
 */
 protected:
   std::ostream& m_out;
-  rroot::branch& m_branch;
   ifac& m_fac;
 protected: //Named
   std::string m_name;

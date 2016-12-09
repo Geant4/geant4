@@ -49,10 +49,6 @@
 
 #include "PDBresidue.hh"
 
-#include <iostream>
-
-using namespace std;
-
 class Residue;
 
 //! Molecule Class
@@ -65,7 +61,7 @@ public:
   //! First constructor
   Molecule();
   //! Second constructor
-  Molecule(string resName,int mNum);
+  Molecule(const std::string& resName,int mNum);
   //! Destructor
   ~Molecule() {};
 
@@ -82,7 +78,7 @@ public:
   //! Set the first Residue
   void SetFirst(Residue *);
 
-  string fMolName;   //!< Molecule name
+  std::string fMolName;   //!< Molecule name
   int fMolNum;       //!< Molecule number
 
   double fMinGlobZ;   //Cylinder length => min Z

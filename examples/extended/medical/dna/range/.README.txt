@@ -4,22 +4,14 @@
 ///\brief Example range README page
 
 
-/*! \page ExampleW Example w
-     =========================================================
- 		  Geant4 - range example
-     =========================================================
+/*! \page Examplerange Example range
 
-                                README file
-                          ----------------------
-
-                           CORRESPONDING AUTHOR 
-
-S. Incerti et al. (a, *)
-a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
-(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France
+\author S. Incerti et al. (a, *)  \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan  \n
+(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France  \n
 * e-mail:incerti@cenbg.in2p3.fr
 
-\section dnaphysics_s1 INTRODUCTION.                                                    
+\section range_s1 INTRODUCTION.                                                    
                                                  
 The range example shows how to calculate range of electrons 
 in liquid water using the Geant4-DNA physics processes and models. 
@@ -34,10 +26,11 @@ These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
-Med. Phys. 37 (2010) 4692-4708
+cite the following Geant4-DNA collaboration publications: \n
+Phys. Med. 31 (2015) 861-874    \n
+Med. Phys. 37 (2010) 4692-4708  \n
 
-\section dnaphysics_s2 GEOMETRY SET-UP
+\section range_s2 GEOMETRY SET-UP
 
 The geometry is a 1 m radius sphere of liquid water (G4_WATER
 material). Particles are shot randomly from the sphere centre.
@@ -49,7 +42,7 @@ The PrimaryGeneratorAction class is adapted (G4 state dependent)
 in order to enable generic physics list usage 
 (empty modular physics list).
 
-\section dnaphysics_s3 SET-UP 
+\section range_s3 SET-UP 
 
 Make sure G4LEDATA points to the low energy electromagnetic data files.
 
@@ -57,11 +50,13 @@ The code can be compiled with cmake.
 
 It works in MT mode.
 
-\section dnaphysics_s4 HOW TO RUN THE EXAMPLE                                         
+\section range_s4 HOW TO RUN THE EXAMPLE                                         
 
 In interactive mode, run:
 
+\verbatim
 ./range range.in
+\endverbatim
 
 The range.in macro allows a full control of the simulation.
 
@@ -73,13 +68,13 @@ for electrons uses the primary particle track length and the computation
 for incident particles undergoing Geant4-DNA charge exchange processes, such
 as protons, hydrogen, alpha particles and their charge states, is specific.
 
-\section dnaphysics_s5 PHYSICS
+\section range_s5 PHYSICS
 
 You can select Geant4-DNA physics in range.in.
 
 A tracking cut can be applied if requested.
 
-\section dnaphysics_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+\section range_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consist in a text file (range.txt), containing :
 - energy of incident particles (in eV)
@@ -90,10 +85,14 @@ The output results consist in a text file (range.txt), containing :
 - penetration of primary particle (in nm)
 - rms of penetration of primary particle (in nm)
 
-Results in this file can be displayed using the ROOT macro plot.C:
-root plot.C
+Note: rms values correspond to standard deviation.
 
----------------------------------------------------------------------------
+Results in this file can be displayed using the ROOT macro plot.C:
+\verbatim
+root plot.C
+\endverbatim
+
+<hr>
 
 Should you have any enquiry, please do not hesitate to contact: 
 incerti@cenbg.in2p3.fr

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc 81774 2014-06-05 08:36:37Z gcosmo $
+// $Id: G4AdjointSteppingAction.cc 101439 2016-11-17 14:54:08Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -44,7 +44,7 @@
 G4AdjointSteppingAction::G4AdjointSteppingAction()
   : ext_sourceEMax(0.), start_event(false),
     did_adj_part_reach_ext_source(false), last_ekin(0.), last_weight(0.),
-    prim_weight(0.), last_part_def(0), theUserAdjointSteppingAction(0),
+    prim_weight(1.), last_part_def(0), theUserAdjointSteppingAction(0),
     theUserFwdSteppingAction(0)
 { 
   theG4AdjointCrossSurfChecker = G4AdjointCrossSurfChecker::GetInstance();
@@ -59,6 +59,7 @@ G4AdjointSteppingAction::~G4AdjointSteppingAction()
 void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   G4Track* aTrack =aStep->GetTrack();
+  //G4cout<<"Ste weight "<<<<std:.endl;
   //forward tracking mode
    if(!is_adjoint_tracking_mode){
      //check if last adjoint did reach the external source
@@ -72,6 +73,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
    }
   //Apply first the user adjoint stepping action
   //---------------------------
+  did_adj_part_reach_ext_source=false;
   if (theUserAdjointSteppingAction) theUserAdjointSteppingAction->UserSteppingAction(aStep);
 
 
@@ -88,15 +90,17 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 	did_adj_part_reach_ext_source=false;
 	return;
   }
-
-  G4double weight_factor = aTrack->GetWeight()/prim_weight;
+  //G4cout<<"Weight adjoint "<<aTrack->GetWeight()<<std::endl;
+  /*G4double weight_factor = aTrack->GetWeight()/prim_weight;
   if ( (weight_factor>0 && weight_factor<=0) || weight_factor<= 1e-290 || weight_factor>1.e200)
   {
 	//std::cout<<"Weight_factor problem! Value = "<<weight_factor<<std::endl;
 	aTrack->SetTrackStatus(fStopAndKill);
 	did_adj_part_reach_ext_source=false;
+	//G4cout<<thePartDef->GetParticleName()<<std::endl;
 	return;	
   }
+  */
   
   
   //Kill conditions for surface crossing

@@ -52,9 +52,12 @@ namespace G4INCL {
   {}
 
   G4double CrossSectionsTruncatedMultiPions::elastic(Particle const * const p1, Particle const * const p2) {
-    if(!p1->isPion() && !p2->isPion()) {
+//    if(!p1->isPion() && !p2->isPion()) {
+     if((p1->isNucleon()||p1->isDelta()) && (p2->isNucleon()||p2->isDelta())){
       return NNElastic(p1, p2);
-    } else if (p1->isNucleon() || p2->isNucleon()) {
+    } 
+//  else if (p1->isNucleon() || p2->isNucleon()) {
+     else if ((p1->isNucleon() && p2->isPion()) || (p2->isNucleon() && p1->isPion())){
       G4double pielas = piNTot(p1,p2) - piNIne(p1,p2) - CrossSectionsMultiPions::piNToDelta(p1,p2);
       if (pielas < 0.)
         pielas = 0.;

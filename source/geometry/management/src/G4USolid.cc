@@ -43,6 +43,7 @@
 #include "G4VisExtent.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4AutoLock.hh"
 
@@ -194,154 +195,27 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
                                  const G4AffineTransform& pTransform,
                                  G4double& pMin, G4double& pMax) const
 {
-  if (!pTransform.IsRotated())
+  UVector3 vmin, vmax;
+  fShape->Extent(vmin,vmax);
+  G4ThreeVector bmin(vmin.x(),vmin.y(),vmin.z());
+  G4ThreeVector bmax(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (bmin.x() >= bmax.x() || bmin.y() >= bmax.y() || bmin.z() >= bmax.z())
   {
-    VUSolid::EAxisType eAxis = VUSolid::eXaxis;
-    G4double offset = pTransform.NetTranslation().x();
-    if (pAxis == kYAxis)
-    {
-      eAxis = VUSolid::eYaxis;
-      offset = pTransform.NetTranslation().y();
-    }
-    if (pAxis == kZAxis)
-    {
-      eAxis = VUSolid::eZaxis;
-      offset = pTransform.NetTranslation().z();
-    }
-    fShape->ExtentAxis(eAxis, pMin, pMax);
-
-    pMin += offset;
-    pMax += offset;
-
-    if (pVoxelLimit.IsLimited())
-    {
-      switch (pAxis)
-      {
-        case kXAxis:
-          if ((pMin > pVoxelLimit.GetMaxXExtent() + kCarTolerance) ||
-              (pMax < pVoxelLimit.GetMinXExtent() - kCarTolerance))
-          {
-            return false;
-          }
-          else
-          {
-            pMin = std::max(pMin, pVoxelLimit.GetMinXExtent());
-            pMax = std::min(pMax, pVoxelLimit.GetMaxXExtent());
-          }
-          break;
-        case kYAxis:
-          if ((pMin > pVoxelLimit.GetMaxYExtent() + kCarTolerance) ||
-              (pMax < pVoxelLimit.GetMinYExtent() - kCarTolerance))
-          {
-            return false;
-          }
-          else
-          {
-            pMin = std::max(pMin, pVoxelLimit.GetMinYExtent());
-            pMax = std::min(pMax, pVoxelLimit.GetMaxYExtent());
-          }
-          break;
-        case kZAxis:
-          if ((pMin > pVoxelLimit.GetMaxZExtent() + kCarTolerance) ||
-              (pMax < pVoxelLimit.GetMinZExtent() - kCarTolerance))
-          {
-            return false;
-          }
-          else
-          {
-            pMin = std::max(pMin, pVoxelLimit.GetMinZExtent());
-            pMax = std::min(pMax, pVoxelLimit.GetMaxZExtent());
-          }
-          break;
-        default:
-          break;
-      }
-      pMin -= kCarTolerance ;
-      pMax += kCarTolerance ;
-    }
-    return true;
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " - " << GetEntityType() << " !"
+            << "\nmin = " << bmin
+            << "\nmax = " << bmax;
+    G4Exception("G4USolid::CalculateExtent()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
   }
-  else  // General rotated case - create and clip mesh to boundaries
-  {
-    // Rotate BoundingBox and Calculate Extent as for BREPS
 
-    G4bool existsAfterClip = false ;
-    G4ThreeVectorList* vertices ;
-
-    pMin = +kInfinity ;
-    pMax = -kInfinity ;
-
-    // Calculate rotated vertex coordinates
-
-    vertices = CreateRotatedVertices(pTransform) ;
-    ClipCrossSection(vertices, 0, pVoxelLimit, pAxis, pMin, pMax) ;
-    ClipCrossSection(vertices, 4, pVoxelLimit, pAxis, pMin, pMax) ;
-    ClipBetweenSections(vertices, 0, pVoxelLimit, pAxis, pMin, pMax) ;
-
-    if (pVoxelLimit.IsLimited(pAxis) == false)
-    {
-      if ((pMin != kInfinity) || (pMax != -kInfinity))
-      {
-        existsAfterClip = true ;
-
-        // Add 2*tolerance to avoid precision troubles
-
-        pMin -= kCarTolerance;
-        pMax += kCarTolerance;
-      }
-    }
-    else
-    {
-      G4ThreeVector clipCentre(
-        (pVoxelLimit.GetMinXExtent() + pVoxelLimit.GetMaxXExtent()) * 0.5,
-        (pVoxelLimit.GetMinYExtent() + pVoxelLimit.GetMaxYExtent()) * 0.5,
-        (pVoxelLimit.GetMinZExtent() + pVoxelLimit.GetMaxZExtent()) * 0.5);
-
-      if ((pMin != kInfinity) || (pMax != -kInfinity))
-      {
-        existsAfterClip = true ;
-
-
-        // Check to see if endpoints are in the solid
-
-        clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
-
-        if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-        {
-          pMin = pVoxelLimit.GetMinExtent(pAxis);
-        }
-        else
-        {
-          pMin -= kCarTolerance;
-        }
-        clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
-
-        if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
-        {
-          pMax = pVoxelLimit.GetMaxExtent(pAxis);
-        }
-        else
-        {
-          pMax += kCarTolerance;
-        }
-      }
-
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-
-      else if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
-               != kOutside)
-      {
-        existsAfterClip = true ;
-        pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
-        pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 void G4USolid::ComputeDimensions(G4VPVParameterisation*,
@@ -410,47 +284,6 @@ G4VSolid* G4USolid::Clone() const
   return 0;
 }
 
-G4ThreeVectorList*
-G4USolid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
-{
-  G4double xMin, xMax, yMin, yMax, zMin, zMax;
-
-  fShape->ExtentAxis(VUSolid::eXaxis, xMin, xMax);
-  fShape->ExtentAxis(VUSolid::eYaxis, yMin, yMax);
-  fShape->ExtentAxis(VUSolid::eZaxis, zMin, zMax);
-
-  G4ThreeVectorList* vertices;
-  vertices = new G4ThreeVectorList();
-
-  if (vertices)
-  {
-    vertices->reserve(8);
-    G4ThreeVector vertex0(xMin, yMin, zMin);
-    G4ThreeVector vertex1(xMax, yMin, zMin);
-    G4ThreeVector vertex2(xMax, yMax, zMin);
-    G4ThreeVector vertex3(xMin, yMax, zMin);
-    G4ThreeVector vertex4(xMin, yMin, zMax);
-    G4ThreeVector vertex5(xMax, yMin, zMax);
-    G4ThreeVector vertex6(xMax, yMax, zMax);
-    G4ThreeVector vertex7(xMin, yMax, zMax);
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
-  {
-    G4Exception("G4VUSolid::CreateRotatedVertices()", "FatalError",
-                FatalException, "Out of memory - Cannot allocate vertices!");
-  }
-  return vertices;
-}
-
 G4Polyhedron* G4USolid::CreatePolyhedron() const
 {
   // Must be implemented in concrete wrappers...
@@ -479,22 +312,13 @@ G4Polyhedron* G4USolid::GetPolyhedron() const
   return fPolyhedron;
 }
 
-G4VisExtent G4USolid:: GetExtent() const
+G4VisExtent G4USolid::GetExtent() const
 {
-  G4VisExtent extent;
-  G4VoxelLimits voxelLimits;  // Defaults to "infinite" limits.
-  G4AffineTransform affineTransform;
-  G4double vmin, vmax;
-  CalculateExtent(kXAxis, voxelLimits, affineTransform, vmin, vmax);
-  extent.SetXmin(vmin);
-  extent.SetXmax(vmax);
-  CalculateExtent(kYAxis, voxelLimits, affineTransform, vmin, vmax);
-  extent.SetYmin(vmin);
-  extent.SetYmax(vmax);
-  CalculateExtent(kZAxis, voxelLimits, affineTransform, vmin, vmax);
-  extent.SetZmin(vmin);
-  extent.SetZmax(vmax);
-  return extent;
+  UVector3 vmin, vmax;
+  fShape->Extent(vmin,vmax);
+  return G4VisExtent(vmin.x(),vmax.x(),
+                     vmin.y(),vmax.y(),
+                     vmin.z(),vmax.z());
 }
 
 #endif  // G4GEOM_USE_USOLIDS

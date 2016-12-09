@@ -76,7 +76,9 @@ Different G4Adjoint classes have been implemented into the Geant4
 toolkit to run an adjoint/reverse simulation in a Geant4 application.
 In this implementation an adjoint run is divided in a succession 
 of alternative adjoint and forward tracking  of adjoint and normal particles.
-One Geant4 event treats one of this tracking phase.
+One Geant4 event treats the reverse tracking of an adjoint primary particle 
+and its secondaries, and the forward tracking of a primary particle euqivalent 
+to the adjoint primary as well as its secondaries.
 
 
 2.1. Reverse tracking phase:
@@ -112,7 +114,7 @@ modified to adapt it for an adjoint simulation. Indeed  the computation of the s
 is done by the same user actions or analysis classes that the one used in the forward 
 simulation mode. Before the G4.10.0 release the reverse and forward tracking mode 
 took place  in separated  events. Since the G4.10.0 release, 
-in order to preapre to  the migration of the 
+in order to prepare to  the migration of the 
 ReverseMC to the G4 Multiple Threading mode, the reverse and forward tracking
 phase of corresponding adjoint and forward primaries have been merged in the same 
 event.
@@ -129,8 +131,13 @@ The Reverse processes that  are available at the moment in Geant4 are the:
 	- Reverse photoelectric effect 
 	- Reverse Compton scattering
 	- Approximated multiple scattering (MS) (see section 5.3)
-		
 
+For the gamma reverse physics an adjoint gamma reverse forced interaction process has been implemented 
+since GEANT4.10.3. THis process splits a new created gamma in two tracks.
+The first tracks is used to force a free flight of the adjoint gamma through the geometry.
+The second track is used to force a reverse bremsstrahlung or a reverse compton at some random
+position along the free flight track.
+		
 It is important to note that the electromagnetic reverse processes are cut dependent 
 as their equivalent forward processes. The implementation of the reverse processes is
  based on the forward processes
@@ -147,7 +154,7 @@ physics list. For example if only the e- and gamma electromagnetic processes are
 adjoint event will be divided in two G4 events. The first event will  consist 
 into  the coupled  reverse and forward  tracking of an adjoint e- and its equivalent 
 forward e-, while the second events will process the reverse and forward trackings
-of corresponsing adjoint and forward primary gamms. In this case a 
+of corresponsing adjoint and forward primary gammas. In this case a 
 run of 100 adjoint events will consist into 200 Geant4 events. If the proton ionization is
 also considered adjoint and forward protons  are also generated as primaries 
 and 300 Geant4 events are processed for 100 adjoint events.
@@ -162,7 +169,8 @@ to an existing  Geant4 application in order to adapt it for the use of the rever
 Except in the physics list where all the reverse processes and their forward equivalent 
 have to be declared, the principal code modifications  are needed only in the analysis phase at the end 
 of the forward tracking where computed signals have to be multiplied by the weight 
-of the last reverse tracks and then normalized to different user defined spectra and angular distribution representing 
+of the reverse tracks that have reached the external surface of the simulatrion 
+and then normalized to different user defined spectra and angular distribution representing 
 the external source.
 The weight of the adjoint tracks is computed by the G4Adjoint classes and the user needs
 only to multiply them to the primary differential, directional spectrum of its choice. 
@@ -175,24 +183,29 @@ its code as such:
 	  example. 
   - Create an instance of    G4AdjointSimManager somewhere in the main code.
   
-  - Modify the analysis part of the code to normalize the signal computed during the forward phase to the weight of the last adjoint particle
-	 that reaches the external surface. This is done by using the following method of G4AdjointSimManager.
-			 
-	    G4int GetIDOfLastAdjParticleReachingExtSource()				     
-  	    G4ThreeVector GetPositionAtEndOfLastAdjointTrack(){ return last_pos;}
-	    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(){ return last_direction;}
-	    G4double GetEkinAtEndOfLastAdjointTrack(){ return last_ekin;} 
-	    G4double GetEkinNucAtEndOfLastAdjointTrack(){ return last_ekin_nuc;}
-	    G4double GetWeightAtEndOfLastAdjointTrack(){return last_weight;}
-            G4double GetCosthAtEndOfLastAdjointTrack(){return last_cos_th;}
-   	    G4String GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
-   	    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){return last_fwd_part_PDGEncoding;}
-            G4int GetFwdParticleIndexAtEndOfLastAdjointTrack().
+  - Modify the analysis part of the code to normalize the signal computed during the forward phase to the weight 
+         of adjoint particle that reached the external surface during the last tracking phase.
+         This is done by using the following method of G4AdjointSimManager.
+	    size_t GetNbOfAdointTracksReachingTheExternalSurface()		 
+	    G4int GetIDOfLastAdjParticleReachingExtSource(size_t i)				     
+  	    G4ThreeVector GetPositionAtEndOfLastAdjointTrack(size_t i)
+	    G4ThreeVector GetDirectionAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetEkinAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetEkinNucAtEndOfLastAdjointTrack(size_t i)
+	    G4double GetWeightAtEndOfLastAdjointTrack(size_t i)
+            G4double GetCosthAtEndOfLastAdjointTrack(size_t i)
+   	    G4String GetFwdParticleNameAtEndOfLastAdjointTrack(size_t i)
+   	    G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(size_t i)
+            G4int GetFwdParticleIndexAtEndOfLastAdjointTrack(size_t i).
+    Since the version Geant4.10.3 several adjoint tracks can arrive on the external surface during the same events.
+    It is therefore important to loop over alll these tracks when normalizing the weights at the end of the event. 
+    The method GetNbOfAdointTracksReachingTheExternalSurface() returns the number of adjoint tracks that reached the 
+    external surface. Ine the other methods the input parameter i allows to get the information of the ith track.
 
-     In order to have a code working for both forward and adjoint simulation mode, the extra code needed in user actions for the adjoint
-     simulation mode can be separated to the code needed only for the normal forward  simulation by using the following method
+    In order to have a code working for both forward and adjoint simulation mode, the extra code needed in user actions for the adjoint
+    simulation mode can be separated to the code needed only for the normal forward  simulation by using the following method
 	             
-	   G4bool GetAdjointSimMode() that return true if   an adjoint simulation is running and false if not!
+	   G4bool GetAdjointSimMode() that return true if an adjoint simulation is running and false if not!
 
 
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05MuonHit.cc 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05MuonHit.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05MuonHit.cc
 /// \brief Implementation of the RE05MuonHit class
@@ -41,25 +41,36 @@
 
 G4ThreadLocal G4Allocator<RE05MuonHit>* RE05MuonHitAllocator=0;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05MuonHit::RE05MuonHit()
-{;}
+: G4VHit(),fEdep(0.),fPos()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05MuonHit::~RE05MuonHit()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05MuonHit::RE05MuonHit(const RE05MuonHit &right)
   : G4VHit()
 {
-  edep = right.edep;
-  pos = right.pos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const RE05MuonHit& RE05MuonHit::operator=(const RE05MuonHit &right)
 {
-  edep = right.edep;
-  pos = right.pos;
+  fEdep = right.fEdep;
+  fPos = right.fPos;
   return *this;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int RE05MuonHit::operator==(const RE05MuonHit &right) const
 {
@@ -68,12 +79,14 @@ G4int RE05MuonHit::operator==(const RE05MuonHit &right) const
 
 std::map<G4String,G4AttDef> RE05MuonHit::fAttDefs;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05MuonHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
-    G4Circle circle(pos);
+    G4Circle circle(fPos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -82,6 +95,8 @@ void RE05MuonHit::Draw()
     pVVisManager->Draw(circle);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const std::map<G4String,G4AttDef>* RE05MuonHit::GetAttDefs() const
 {
@@ -93,6 +108,8 @@ const std::map<G4String,G4AttDef>* RE05MuonHit::GetAttDefs() const
   return &fAttDefs;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 std::vector<G4AttValue>* RE05MuonHit::CreateAttValues() const
 {
   // Create expendable G4AttsValues for picking...
@@ -103,7 +120,9 @@ std::vector<G4AttValue>* RE05MuonHit::CreateAttValues() const
   return attValues;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05MuonHit::Print()
-{;}
+{}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

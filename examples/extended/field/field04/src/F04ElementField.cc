@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04ElementField.cc 78551 2014-01-07 09:45:08Z gcosmo $
+// $Id: F04ElementField.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file field/field04/src/F04ElementField.cc
 /// \brief Implementation of the F04ElementField class
@@ -135,7 +135,7 @@ G4VisAttributes* F04ElementField::GetVisAttribute(G4String color)
         }
    }
 
-   if (!p) p = new G4VisAttributes(G4VisAttributes::Invisible);
+   if (!p) p = new G4VisAttributes(G4VisAttributes::GetInvisible());
    p->SetDaughtersInvisible(false);
 
    return p;

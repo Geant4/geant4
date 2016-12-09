@@ -46,6 +46,7 @@
 #include "G4StepLimiter.hh"
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ProcessManager.hh"
 
 #include "G4IonFluctuations.hh"
@@ -211,11 +212,12 @@ void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while ((*theParticleIterator)())
+  while ((*particleIterator)())
 {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
         pmanager -> AddProcess(new G4StepLimiter(),  -1,-1,3);
   }

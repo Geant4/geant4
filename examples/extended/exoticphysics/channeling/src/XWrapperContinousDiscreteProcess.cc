@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XWrapperContinousDiscreteProcess.cc
+/// \brief Implementation of the XWrapperContinousDiscreteProcess class
+//
 
 #include "XWrapperContinuousDiscreteProcess.hh"
 

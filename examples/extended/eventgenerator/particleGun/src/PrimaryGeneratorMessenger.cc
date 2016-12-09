@@ -26,7 +26,7 @@
 /// \file eventgenerator/particleGun/src/PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.cc 83919 2014-09-23 08:40:35Z gcosmo $
+// $Id: PrimaryGeneratorMessenger.cc 98734 2016-08-09 10:53:12Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,7 @@
 PrimaryGeneratorMessenger::PrimaryGeneratorMessenger
                                                   (PrimaryGeneratorAction* Gun)
 :G4UImessenger(),
- Action(Gun),
+ fAction(Gun),
  fDir(0), 
  fSelectActionCmd(0)
 {
@@ -73,7 +73,7 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                                G4String newValue)
 { 
   if (command == fSelectActionCmd)
-    Action->SelectAction(fSelectActionCmd->GetNewIntValue(newValue));      
+    fAction->SelectAction(fSelectActionCmd->GetNewIntValue(newValue));      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -8,35 +8,29 @@
 
 #include "qrot"
 #include "vec3f"
+#include "vec4f"
+#include "mat4f"
 
 namespace tools {
 
-class rotf : public qrot<float> {
-  rotf(float a_q0,float a_q1,float a_q2,float a_q3)
-  :qrot<float>(a_q0,a_q1,a_q2,a_q3)
-  {}
+class rotf : public qrot<vec3f,vec4f> {
+  typedef qrot<vec3f,vec4f> parent;
+private:
+  rotf(float a_q0,float a_q1,float a_q2,float a_q3):parent(a_q0,a_q1,a_q2,a_q3) {}
 public:
-  rotf()
-  :qrot<float>()   //zero rotation around the positive Z axis.
-  {}
-  rotf(const vec3f& a_axis,float a_radians)
-  :qrot<float>(a_axis,a_radians)
-  {}
-  rotf(const vec3f& a_from,const vec3f& a_to)
-  :qrot<float>(a_from,a_to)
-  {}
+  rotf():parent() {} //zero rotation around the positive Z axis.
+  rotf(const vec3f& a_axis,float a_radians):parent(a_axis,a_radians,::sinf,::cosf) {}
+  rotf(const vec3f& a_from,const vec3f& a_to):parent(a_from,a_to,::sqrtf,::fabsf) {}
   virtual ~rotf(){}
 public:
-  rotf(const rotf& a_from)
-  :qrot<float>(a_from)
-  {}
+  rotf(const rotf& a_from):parent(a_from) {}
   rotf& operator=(const rotf& a_from){
-    qrot<float>::operator=(a_from);
+    parent::operator=(a_from);
     return *this;
   }
 public:
   rotf& operator*=(const rotf& a_q) {
-    qrot<float>::operator*=(a_q);
+    parent::operator*=(a_q);
     return *this;
   }
   rotf operator*(const rotf& a_r) const {
@@ -46,11 +40,16 @@ public:
   }
 public:
   bool set_value(const vec3f& a_from,const vec3f& a_to){
-    return qrot<float>::set_value(a_from,a_to);
+    return parent::set_value(a_from,a_to,::sqrtf,::fabsf);
   }
   bool set_value(const vec3f& a_from,float a_a){
-    return qrot<float>::set_value(a_from,a_a);
+    return parent::set_value(a_from,a_a,::sinf,::cosf);
   }
+  bool value(vec3f& a_from,float a_a) const {
+    return parent::value(a_from,a_a,::sinf,::acosf); //WARNING acos and not cos
+  }
+  void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
+  void value(mat4f& a_m) const {parent::value(a_m);}
 
   //NOTE : don't handle a static object because of mem balance.
   //static const rotf& identity() {
@@ -67,7 +66,7 @@ namespace tools {
 
 inline bool tos(const rotf& a_v,std::string& a_s) {
   vec3f axis;
-  float angle;
+  float angle = 0;
   if(!a_v.value(axis,angle)) {a_s.clear();return false;}
   std::ostringstream strm;
   strm << axis[0] << " "

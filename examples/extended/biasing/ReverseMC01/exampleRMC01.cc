@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/ReverseMC01 example
 //
 //
-// $Id: exampleRMC01.cc 76253 2013-11-08 11:26:50Z gcosmo $
+// $Id: exampleRMC01.cc 101303 2016-11-14 11:21:18Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -39,7 +39,6 @@
 // This example intends to show how to use the adjoint/reverse simulation mode.
 // 
 // --------------------------------------------------------------
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +63,6 @@
 #include "RMC01RunAction.hh"
 #include "G4AdjointPhysicsList.hh"
 
-
 #include "G4AdjointSimManager.hh"
 #include "RMC01AdjointEventAction.hh"
 
@@ -84,19 +82,17 @@ int main(int argc,char** argv) {
   //--------------------------------------------
   theRunManager->SetUserInitialization(detector);
   theRunManager->SetUserInitialization(new G4AdjointPhysicsList);
-                        
-                                                          
-  
+
   theRunManager->SetUserAction(new RMC01PrimaryGeneratorAction);
   theRunManager->SetUserAction(new RMC01EventAction);
   RMC01RunAction* theRunAction = new RMC01RunAction;
   theRunManager->SetUserAction(theRunAction);
  
-  
   //The adjoint simulation manager will control the Reverse MC mode 
   //---------------------------------------------------------------
   
-  G4AdjointSimManager* theAdjointSimManager = G4AdjointSimManager::GetInstance();
+  G4AdjointSimManager* theAdjointSimManager
+                            = G4AdjointSimManager::GetInstance();
   
   //It is possible to define action that will be used during
   //                                        the adjoint tracking phase

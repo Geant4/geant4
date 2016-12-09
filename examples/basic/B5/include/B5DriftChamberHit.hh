@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5DriftChamberHit.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5DriftChamberHit.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5DriftChamberHit.hh
 /// \brief Definition of the B5DriftChamberHit class
@@ -51,9 +51,9 @@ class G4AttValue;
 
 class B5DriftChamberHit : public G4VHit
 {
-public:
+  public:
     B5DriftChamberHit();
-    B5DriftChamberHit(G4int z);
+    B5DriftChamberHit(G4int layerID);
     B5DriftChamberHit(const B5DriftChamberHit &right);
     virtual ~B5DriftChamberHit();
 
@@ -80,27 +80,28 @@ public:
     void SetWorldPos(G4ThreeVector xyz) { fWorldPos = xyz; }
     G4ThreeVector GetWorldPos() const { return fWorldPos; }
     
-private:
+  private:
     G4int fLayerID;
     G4double fTime;
     G4ThreeVector fLocalPos;
     G4ThreeVector fWorldPos;
 };
 
-typedef G4THitsCollection<B5DriftChamberHit> B5DriftChamberHitsCollection;
+using B5DriftChamberHitsCollection = G4THitsCollection<B5DriftChamberHit>;
 
 extern G4ThreadLocal G4Allocator<B5DriftChamberHit>* B5DriftChamberHitAllocator;
 
 inline void* B5DriftChamberHit::operator new(size_t)
 {
-    if (!B5DriftChamberHitAllocator)
-        B5DriftChamberHitAllocator = new G4Allocator<B5DriftChamberHit>;
-    return (void*)B5DriftChamberHitAllocator->MallocSingle();
+  if (!B5DriftChamberHitAllocator) {
+       B5DriftChamberHitAllocator = new G4Allocator<B5DriftChamberHit>;
+  }
+  return (void*)B5DriftChamberHitAllocator->MallocSingle();
 }
 
 inline void B5DriftChamberHit::operator delete(void* aHit)
 {
-    B5DriftChamberHitAllocator->FreeSingle((B5DriftChamberHit*) aHit);
+  B5DriftChamberHitAllocator->FreeSingle((B5DriftChamberHit*) aHit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

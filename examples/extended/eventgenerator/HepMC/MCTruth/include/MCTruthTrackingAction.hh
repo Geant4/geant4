@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthTrackingAction class
 //
 //
-// $Id: MCTruthTrackingAction.hh 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthTrackingAction.hh 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -58,7 +58,7 @@ public:
 private:
 
   G4LorentzVector fmom;
-  G4bool trackToBeStored(const G4Track*);
+  G4bool TrackToBeStored(const G4Track*);
 
 };
 

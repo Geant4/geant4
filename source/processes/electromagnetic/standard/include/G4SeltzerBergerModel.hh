@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SeltzerBergerModel.hh 93362 2015-10-19 13:45:19Z gcosmo $
+// $Id: G4SeltzerBergerModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -63,26 +63,26 @@ class G4SeltzerBergerModel : public G4eBremsstrahlungRelModel
 
 public:
 
-  G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr, 
-		       const G4String& nam = "eBremSB");
+  explicit G4SeltzerBergerModel(const G4ParticleDefinition* p = nullptr, 
+				const G4String& nam = "eBremSB");
 
   virtual ~G4SeltzerBergerModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z) override;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   inline void SetBicubicInterpolationFlag(G4bool);
 
 protected:
 
-  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
+  virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy) override;
 
   virtual G4String DirectoryPath() const;
 
@@ -91,8 +91,8 @@ private:
   void ReadData(G4int Z, const char* path = 0);
 
   // hide assignment operator
-  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right);
-  G4SeltzerBergerModel(const  G4SeltzerBergerModel&);
+  G4SeltzerBergerModel & operator=(const  G4SeltzerBergerModel &right) = delete;
+  G4SeltzerBergerModel(const  G4SeltzerBergerModel&) = delete;
 
   static G4Physics2DVector* dataSB[101];
   static G4double ylimit[101];

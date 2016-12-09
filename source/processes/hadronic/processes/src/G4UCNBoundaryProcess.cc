@@ -390,13 +390,14 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                              theGlobalNormal, Energy, FermiPotDiff, Enew);
 
         if (Enew == 0.) {
-           aParticleChange.ProposeTrackStatus(fStopAndKill);
-           aParticleChange.ProposeLocalEnergyDeposit(Energy);
-           return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+          aParticleChange.ProposeTrackStatus(fStopAndKill);
+          aParticleChange.ProposeLocalEnergyDeposit(Energy);
+          return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
         } else {
-           aParticleChange.ProposeEnergy(Enew);
-           aParticleChange.ProposeMomentumDirection(NewMomentum);
-           aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
+          aParticleChange.ProposeEnergy(Enew);
+          aParticleChange.ProposeMomentumDirection(NewMomentum);
+          aParticleChange.ProposeVelocity(std::sqrt(2*Enew/neutron_mass_c2)*c_light);
+          aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
         }
 
      } else {
@@ -408,43 +409,44 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if (G4UniformRand() < reflectivity) { 
 
-           // Reflect from surface
+          // Reflect from surface
 
-           NewMomentum = Reflect(pDiffuse, OldMomentum, theGlobalNormal);
-           aParticleChange.ProposeMomentumDirection(NewMomentum);
+          NewMomentum = Reflect(pDiffuse, OldMomentum, theGlobalNormal);
+          aParticleChange.ProposeMomentumDirection(NewMomentum);
 
         } else {
 
-           // --- Transmission because it is faster than the critical velocity 
+          // --- Transmission because it is faster than the critical velocity 
 
-           G4double Enew = Transmit(FermiPotDiff, Energy);
+          G4double Enew = Transmit(FermiPotDiff, Energy);
 
-           // --- Change of the normal momentum component
-           //     p = sqrt(2*m*Ekin)
+          // --- Change of the normal momentum component
+          //     p = sqrt(2*m*Ekin)
 
-           G4double mass = -std::sqrt(theMomentumNormal*theMomentumNormal - 
-                                 neutron_mass_c2*2.*FermiPotDiff);
+          G4double mass = -std::sqrt(theMomentumNormal*theMomentumNormal - 
+                                neutron_mass_c2*2.*FermiPotDiff);
 
-           // --- Momentum direction in new media
+          // --- Momentum direction in new media
 
-           NewMomentum = 
-                theNeutronMomentum - (theMomentumNormal-mass)*theGlobalNormal;
+          NewMomentum = 
+               theNeutronMomentum - (theMomentumNormal-mass)*theGlobalNormal;
 
-           nSnellTransmit++;
-           theStatus = SnellTransmit;
-           if ( verboseLevel > 0 ) BoundaryProcessVerbose();
+          nSnellTransmit++;
+          theStatus = SnellTransmit;
+          if ( verboseLevel > 0 ) BoundaryProcessVerbose();
 
-           aParticleChange.ProposeEnergy(Enew);
-           aParticleChange.ProposeMomentumDirection(NewMomentum.unit());
-           aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
+          aParticleChange.ProposeEnergy(Enew);
+          aParticleChange.ProposeMomentumDirection(NewMomentum.unit());
+          aParticleChange.ProposeVelocity(std::sqrt(2*Enew/neutron_mass_c2)*c_light);
+          aParticleChange.ProposeLocalEnergyDeposit(Energy-Enew);
 
-           if (verboseLevel > 1) { 
-              G4cout << "Energy: " << Energy/neV << "neV, Enormal: " 
-                     << Enormal/neV << "neV, fpdiff " << FermiPotDiff/neV 
-                     << "neV, Enew " << Enew/neV << "neV" << G4endl;
-	      G4cout << "UCNBoundaryProcess: Transmit and set the new Energy "
-                     << aParticleChange.GetEnergy()/neV << "neV" << G4endl;
-           }
+          if (verboseLevel > 1) { 
+             G4cout << "Energy: " << Energy/neV << "neV, Enormal: " 
+                    << Enormal/neV << "neV, fpdiff " << FermiPotDiff/neV 
+                    << "neV, Enew " << Enew/neV << "neV" << G4endl;
+	     G4cout << "UCNBoundaryProcess: Transmit and set the new Energy "
+                    << aParticleChange.GetEnergy()/neV << "neV" << G4endl;
+          }
         }
      }
   }
@@ -486,8 +488,8 @@ G4bool G4UCNBoundaryProcess::Loss(G4double pUpScatter,
 
         // cf. Golub's book p. 35, eq. 2.103
 
-        pLoss *= 1+2*b*b*vBound*vBound/
-                    (hdm*hdm+0.85*hdm*vBound*w+2*vBound*vBound*w*w);
+        pLoss *= std::sqrt(1+2*b*b*vBound*vBound/
+                    (hdm*hdm+0.85*hdm*vBound*w+2*vBound*vBound*w*w));
      }
   }
 

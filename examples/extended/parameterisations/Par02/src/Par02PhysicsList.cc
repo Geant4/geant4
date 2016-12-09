@@ -146,9 +146,10 @@ void Par02PhysicsList::AddTransportation() {
 
 void Par02PhysicsList::ConstructGeneral() {
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while ( (*theParticleIterator)() ) {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ( (*particleIterator)() ) {
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if ( theDecayProcess->IsApplicable( *particle ) ) {
       pmanager->AddProcess( theDecayProcess );
@@ -169,9 +170,10 @@ void Par02PhysicsList::AddParameterisation() {
   // continuous process (this works in all cases; in the case that parallel
   // geometries are not used, as in this example, it would be enough to
   // add it as a discrete process).
-  theParticleIterator->reset();
-  while ( (*theParticleIterator)() ) {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ( (*particleIterator)() ) {
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     //pmanager->AddDiscreteProcess( fastSimProcess );    // No parallel geometry
     pmanager->AddProcess( fastSimProcess, -1, 0, 0 );  // General

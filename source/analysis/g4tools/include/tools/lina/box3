@@ -16,6 +16,7 @@ class box3 {
 protected:
   typedef typename VEC3::elem_t T_t;
   //static T_t num_max() {return std::numeric_limits<T_t>::max();} //max is a forever pain on Windows.
+  static T_t zero() {return T_t();}
 protected:
   box3(){
     //make_empty();
@@ -118,6 +119,29 @@ public:
                       tools::mx<T_t>(a_y,m_max[1]),
                       tools::mx<T_t>(a_z,m_max[2]));
     }
+  }
+
+  bool get_cube_size(T_t& a_dx,T_t& a_dy,T_t& a_dz,T_t(*a_sqrt)(T_t)) const {
+    if(!get_size(a_dx,a_dy,a_dz)) return false;    
+    if((a_dx<=zero())&&(a_dy<=zero())&&(a_dz<=zero())) return false;
+    if((a_dx<=zero())&&(a_dy<=zero())) { //dz not 0 :
+      a_dx = T_t(0.1)*a_dz;
+      a_dy = T_t(0.1)*a_dz;
+    } else if((a_dy<=zero())&&(a_dz<=zero())) { //dx not 0 :
+      a_dy = T_t(0.1)*a_dx;
+      a_dz = T_t(0.1)*a_dx;
+    } else if((a_dz<=zero())&&(a_dx<=zero())) { //dy not 0 :
+      a_dz = T_t(0.1)*a_dy;
+      a_dx = T_t(0.1)*a_dy;
+
+    } else if(a_dx<=zero()) { //dy,dz not 0 :
+      a_dx = T_t(0.1)*a_sqrt(a_dy*a_dy+a_dz*a_dz);
+    } else if(a_dy<=zero()) { //dx,dz not 0 :
+      a_dy = T_t(0.1)*a_sqrt(a_dx*a_dx+a_dz*a_dz);
+    } else if(a_dz<=zero()) { //dx,dy not 0 :
+      a_dz = T_t(0.1)*a_sqrt(a_dx*a_dx+a_dy*a_dy);
+    }
+    return true;
   }
 
   //NOTE : print is a Python keyword.

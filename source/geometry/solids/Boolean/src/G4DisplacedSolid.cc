@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc 97300 2016-06-01 09:27:19Z gcosmo $
+// $Id: G4DisplacedSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -261,9 +261,52 @@ void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
   fRebuildPolyhedron = true;
 }
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4DisplacedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  if (!fDirectTransform->IsRotated())
+  {
+    // Special case of pure translation
+    //
+    fPtrSolid->Extent(pMin,pMax);
+    G4ThreeVector offset = fDirectTransform->NetTranslation();
+    pMin += offset;
+    pMax += offset;
+  }
+  else
+  {
+    // General case, use CalculateExtent() to find bounding box
+    //
+    G4VoxelLimits unLimit;
+    G4double xmin,xmax,ymin,ymax,zmin,zmax;
+    fPtrSolid->CalculateExtent(kXAxis,unLimit,*fDirectTransform,xmin,xmax);
+    fPtrSolid->CalculateExtent(kYAxis,unLimit,*fDirectTransform,ymin,ymax);
+    fPtrSolid->CalculateExtent(kZAxis,unLimit,*fDirectTransform,zmin,zmax);
+    pMin.set(xmin,ymin,zmin);
+    pMax.set(xmax,ymax,zmax);
+  }
+  
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4DisplacedSolid::Extent()", "GeomMgt0001",
+               JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4DisplacedSolid::CalculateExtent( const EAxis pAxis,

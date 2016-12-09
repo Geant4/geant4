@@ -264,5 +264,3 @@ protected:
 }}
 
 #endif
-
-//exlib_build_use inlib mpi

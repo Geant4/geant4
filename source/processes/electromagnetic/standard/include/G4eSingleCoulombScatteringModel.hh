@@ -118,6 +118,7 @@ private:
 
   G4double                  cosThetaMin;
   G4double                  recoilThreshold;
+  G4int                     FormFactor;
 				
   // projectile
   const G4ParticleDefinition* particle;		

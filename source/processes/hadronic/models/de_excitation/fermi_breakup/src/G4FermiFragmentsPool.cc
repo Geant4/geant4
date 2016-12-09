@@ -451,6 +451,7 @@ void G4FermiFragmentsPool::Initialise()
 
 G4bool G4FermiFragmentsPool::IsApplicable(G4int Z, G4int A, G4double mass) const
 {
+  if(Z >= maxZ || A >= maxA || A <= 0) { return false; }
   // look into pair list
   size_t nz = list2[A].size();
   if(0 < nz) {

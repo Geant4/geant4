@@ -47,18 +47,24 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
   : G4VCrossSectionDataSet("")
 {
   const char* dataDirVariable;
+  G4String particleName;
   if( projectile == G4Neutron::Neutron() ) {
       dataDirVariable = "G4NEUTRONHPDATA";
   }else if( projectile == G4Proton::Proton() ) {
     dataDirVariable = "G4PROTONHPDATA";
+    particleName = "Proton";
   }else if( projectile == G4Deuteron::Deuteron() ) {
     dataDirVariable = "G4DEUTERONHPDATA";
+    particleName = "Deuteron";
   }else if( projectile == G4Triton::Triton() ) {
     dataDirVariable = "G4TRITONHPDATA";
+    particleName = "Triton";
   }else if( projectile == G4He3::He3() ) {
     dataDirVariable = "G4HE3HPDATA";
+    particleName = "He3";
   }else if( projectile == G4Alpha::Alpha() ) {
     dataDirVariable = "G4ALPHAHPDATA";
+    particleName = "Alpha";
   } else {
     G4String message("G4ParticleHPInelasticData may only be called for neutron, proton, deuteron, triton, He3 or alpha, while it is called for " + projectile->GetParticleName());
     throw G4HadronicException(__FILE__, __LINE__,message.c_str());
@@ -68,12 +74,19 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
   dataName.at(0) = toupper(dataName.at(0)) ;
   SetName( dataName );
 
-  if(!getenv(dataDirVariable)){
-    G4String message("Please setenv " + G4String(dataDirVariable) + " to point to the " + projectile->GetParticleName() + " cross-section files.");
-    throw G4HadronicException(__FILE__, __LINE__,message.c_str());
+  if ( !getenv(dataDirVariable) && !getenv( "G4PARTICLEHPDATA" ) ){
+     G4String message("Please setenv " + G4String(dataDirVariable) + " to point to the " + projectile->GetParticleName() + " cross-section files.");
+     throw G4HadronicException(__FILE__, __LINE__,message.c_str());
   }
 
-  G4cout << "@@@ G4ParticleHPInelasticData instantiated for particle " << projectile->GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << getenv(dataDirVariable) << G4endl;
+  G4String dirName;
+  if ( getenv(dataDirVariable) ) {
+     dirName = getenv(dataDirVariable);
+  } else {
+     G4String baseName = getenv( "G4PARTICLEHPDATA" );
+     dirName = baseName + "/" + particleName;
+  }
+  G4cout << "@@@ G4ParticleHPInelasticData instantiated for particle " << projectile->GetParticleName() << " data directory variable is " << dataDirVariable << " pointing to " << dirName << G4endl;
 
   SetMinKinEnergy( 0*CLHEP::MeV );                                   
   SetMaxKinEnergy( 20*CLHEP::MeV );                                   
@@ -89,6 +102,10 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
    } else {
       instanceOfWorker = true;
    }
+   element_cache = NULL;
+   material_cache = NULL;
+   ke_cache = 0.0; 
+   xs_cache = 0.0; 
 }
    
 G4ParticleHPInelasticData::~G4ParticleHPInelasticData()
@@ -97,6 +114,10 @@ G4ParticleHPInelasticData::~G4ParticleHPInelasticData()
      theCrossSections->clearAndDestroy();
      delete theCrossSections;
      theCrossSections = NULL;
+   }
+   if ( theHPData != NULL && instanceOfWorker != true ) {
+     delete theHPData;
+     theHPData = NULL;
    }
 }
 
@@ -119,9 +140,14 @@ G4double G4ParticleHPInelasticData::GetIsoCrossSection( const G4DynamicParticle*
                                    const G4Element* element ,
                                    const G4Material* material )
 {
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
    G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
    return xs;
-   //return GetCrossSection( dp , element , material->GetTemperature() );
 }
 
 /*

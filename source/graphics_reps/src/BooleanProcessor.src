@@ -422,7 +422,8 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
  *                                                                     *
  ***********************************************************************/
 {
-  int i, k, nnode, iNodes[5], iVis[4], iFaces[4];
+  int i = 0, k = 0, nnode = 0, iNodes[5] = {0,0,0,0,0}, iVis[4] = {0,0,0,0},
+  iFaces[4] = {0,0,0,0};
   int dnode = nodes.size() - 1;
   int dface = faces.size() - 1;
 
@@ -1939,7 +1940,7 @@ HepPolyhedron BooleanProcessor::createPolyhedron()
 
   //   S E T   F A C E S
 
-  int k, v[4], f[4];
+  int k = 0, v[4] = {0,0,0,0}, f[4] = {0,0,0,0};
   for (i=1; i<(int)faces.size(); i++) {
     if (faces[i].inew == 0) continue;
     v[3] = f[3] = k = 0;

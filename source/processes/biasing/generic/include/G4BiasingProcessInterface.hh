@@ -273,15 +273,7 @@ private:
 
   // -- the data shared among processes attached to a same process manager:
   G4BiasingProcessSharedData*                                 fSharedData;
-  // -- thread local:
-  // -- Map between process managers and shared data. This map is made of
-  // -- pointers of G4BiasingSharedData instead of objects themselves :
-  // -- each process needs to keep a valid pointer of a shared data object
-  // -- but a map of object will make pointers invalid when map is increaded.
-  static G4MapCache< const G4ProcessManager*, 
-		     G4BiasingProcessSharedData* >         fSharedDataMap;
 
-  
 };
 
 #endif

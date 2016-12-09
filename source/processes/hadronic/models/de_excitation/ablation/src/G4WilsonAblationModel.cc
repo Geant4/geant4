@@ -261,9 +261,9 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   
   if (AF > 0)
   {
-    G4Pow* g4pow = G4Pow::GetInstance(); 
+    G4Pow* g4calc = G4Pow::GetInstance(); 
     G4double AFd = (G4double) AF;
-    G4double R = 11.8 / g4pow->powZ(AF, 0.45);
+    G4double R = 11.8 / g4calc->powZ(AF, 0.45);
     G4int minZ = std::max(1, Z - DAabl);
 //
 //
@@ -274,7 +274,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
     G4double sum = 0.0;
     for (ZF=minZ; ZF<=zmax; ++ZF)
     {
-      sum += G4Exp(-R*g4pow->powA(std::abs(ZF - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
+      sum += G4Exp(-R*g4calc->powA(std::abs(ZF - 0.486*AFd + 3.8E-04*AFd*AFd),1.5));
       fSig[ZF] = sum;
     }
 //
@@ -533,12 +533,10 @@ void G4WilsonAblationModel::SelectSecondariesByEvaporation
       }
       if (ii >= nChannels) { ii = nChannels - 1; }
       G4FragmentVector *evaporationResult = theChannels1[ii]->
-        BreakUp(*intermediateNucleus);
+        BreakUpFragment(intermediateNucleus);
       fragmentVector->push_back((*evaporationResult)[0]);
-      *intermediateNucleus = *(*evaporationResult)[1];
-      //delete evaporationResult->back();
+      intermediateNucleus = (*evaporationResult)[1];
       delete evaporationResult;
-      //evapType.erase(iters[ii]);
     }
     else
     {

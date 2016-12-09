@@ -1,4 +1,4 @@
-$Id: History 96938 2016-05-18 09:24:55Z gcosmo $
+$Id: History 101727 2016-11-23 08:49:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,73 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23, 2016 - G.Cosmo (geomnav-V10-02-21)
+--------------------------
+- Fixed recursion test in G4GeomTestVolume to iterate on all daughters.
+
+October 19, 2016 - G.Cosmo (geomnav-V10-02-20)
+--------------------------
+- G4ReplicaNavigation: use Cartesian tolerance in distance evaluation
+  in DistanceToOutPhi(). Addressing problem report #1902.
+- G4Navigator: extended printout in ComputeStep() for stuck tracks, to
+  show also local coordinates.
+- Fixed shadowing compilation warnings in unit tests.
+
+October 11, 2016 - G.Cosmo (geomnav-V10-02-19)
+--------------------------
+- Code formatting and fixed compilation error for left-over includes
+  in G4PhantomParameterisation.
+
+October 11, 2016 - P.Arce (geomnav-V10-02-18)
+-------------------------
+- G4PhantomParameterisation: revisiting precision checks.
+
+October 7, 2016 - J.Apostolakis (geomnav-V10-02-17, 16)
+-------------------------------
+- Checked loops for terminationof infinite loops and annotated them with
+  "Loop checking" comment.
+  A number of files were not included, as they require complex multi-method 
+  analysis: G4ParameterisedNavigation, G4RegularNavigation, G4VoxelNavigation,
+  G4VoxelSafety.
+
+October 5, 2016 - G.Cosmo (geomnav-V10-02-15)
+-------------------------
+- G4Navigator: still force abortion of event if track gets really stuck,
+  but avoid check for overlaps if push-verbosity is set to false.
+
+October 5, 2016 - G.Cosmo (geomnav-V10-02-14)
+-------------------------
+- G4Navigator: allow to disable overlap checks and warnings in ComputeStep()
+  by setting push-verbosity to false with SetPushVerbosity().
+- G4PhantomParameterisation: correction in use of std::copysign()
+  introduced in previous tag.
+
+October 4, 2016 - P.Arce (geomnav-V10-02-13)
+------------------------
+- G4PhantomParameterisation: revisiting precision checks (some were
+  unreasonably tight).
+
+August 30, 2016 - G.Cosmo (geomnav-V10-02-12)
+-------------------------
+- G4Navigator: more diagnostics in G4VERBOSE mode in GetGlobalExitNormal().
+
+August 25, 2016 - D.Sorokin (geomnav-V10-02-11)
+---------------------------
+- G4PropagatorInField: fix to pass accuracy values to Intersection Locator
+   after re-evaluating epsilon (not before.)
+   [ Dmitrii Sorokin was supported by Google during GSoC 2016. ]
+   [ Recorded by J. Apostolakis ]
+
+August 15, 2016 - G.Cosmo (geomnav-V10-02-10)
+-------------------------
+- G4Navigator: more diagnostics in G4VERBOSE mode in GetGlobalExitNormal().
+
+July 8, 2016 - G.Cosmo (geomnav-V10-02-09)
+----------------------
+- Fix in G4Navigator::GetGlobalExitNormal() to synchronise caching of
+  'fExitNormalGlobalFrame' before returning (thanks to P.Gumplinger for
+  spotting this). Addressing problem report #1750.
 
 May 18, 2016 - G.Cosmo (geomnav-V10-02-08)
 ----------------------

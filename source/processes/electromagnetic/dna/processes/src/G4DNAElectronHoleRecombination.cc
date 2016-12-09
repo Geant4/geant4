@@ -43,7 +43,7 @@
 #include "G4DNAWaterDissociationDisplacer.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4MoleculeCounter.hh"
+#include "G4VMoleculeCounter.hh"
 #include "G4Exp.hh"
 
 static double onsager_constant = e_squared / (4. * pi * epsilon0 * k_Boltzmann);
@@ -189,16 +189,18 @@ void G4DNAElectronHoleRecombination::MakeReaction(const G4Track& track)
     //    G4cout << " Will react with TID = " << selected_reactant->GetTrackID()
     //           << G4endl;
 
-    if(G4MoleculeCounter::InUse())
-      G4MoleculeCounter::Instance()->
+    if(G4VMoleculeCounter::InUse())
+      G4VMoleculeCounter::Instance()->
         RemoveAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),
-                              track.GetGlobalTime());
+                              track.GetGlobalTime(),
+                              &(track.GetPosition()));
     GetMolecule(track)->ChangeConfigurationToLabel("H2Ovib");
 
-    if(G4MoleculeCounter::InUse())
-      G4MoleculeCounter::Instance()->
+    if(G4VMoleculeCounter::InUse())
+      G4VMoleculeCounter::Instance()->
         AddAMoleculeAtTime(GetMolecule(track)->GetMolecularConfiguration(),
-                           track.GetGlobalTime());
+                           track.GetGlobalTime(),
+                           &(track.GetPosition()));
 
     //  fParticleChange.ProposeTrackStatus(fStopAndKill);
     fParticleChange.ProposeTrackStatus(fStopButAlive);

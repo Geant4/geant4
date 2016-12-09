@@ -409,7 +409,7 @@ public:
       }      
 */
       std::string name = a_suffix;
-      if(!numas<uint32>(m_cols.size(),name)){}
+      if(!numas<uint64>(m_cols.size(),name)){}
       if(m_hippo) {
         if(index>=labels.size()) {
           a_out << "tools::rcsv::ntuple::initialize :"
@@ -438,7 +438,7 @@ public:
         }
       }
     }
-    unsigned int num = m_cols.size();
+    size_t num = m_cols.size();
     if(!num) {
       a_out << "tools::rcsv::ntuple::initialize :"
             << " zero columns."
@@ -615,7 +615,7 @@ public:
 
     }
 
-    unsigned int num = m_cols.size();
+    size_t num = m_cols.size();
     if(!num) {
       a_out << "tools::rcsv::ntuple::initialize(booking) :"
             << " zero columns."
@@ -915,8 +915,8 @@ protected:
     std::istringstream iss;
     std::vector<std::string> tmp;
 
-    unsigned int index = 0;
-    unsigned int num = m_cols.size();
+    size_t index = 0;
+    size_t num = m_cols.size();
     std::vector<icol_t*>::const_iterator it;
     for(it=m_cols.begin();it!=m_cols.end();++it,index++) {
 

@@ -646,9 +646,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
 				    		    
   // USER LIMITS ON STEP LENGTH
   
+/*
   fLogicWorld->SetUserLimits(new G4UserLimits(100*mm));
   fLogicVol->SetUserLimits(new G4UserLimits(100*mm));
   fLogicBoite->SetUserLimits(new G4UserLimits(10*mm));
+*/
+
+  // relaxed 
+  fLogicWorld->SetUserLimits(new G4UserLimits(1*mm));
+  fLogicVol->SetUserLimits(new G4UserLimits(1*mm));
+  fLogicBoite->SetUserLimits(new G4UserLimits(1*mm));
 
 /*
   logicPhantom->SetUserLimits (new G4UserLimits(0.5*micrometer));
@@ -732,13 +739,15 @@ void DetectorConstruction::ConstructSDandField()
   fEquation = new G4EqMagElectricField(fField);
   fStepper = new G4ClassicalRK4 (fEquation,8);
   fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
+  // relaxed
+  // fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
+  fIntgrDriver = new G4MagInt_Driver(1*mm,fStepper,fStepper->GetNumberOfVariables() );
   fChordFinder = new G4ChordFinder(fIntgrDriver);
   fFieldMgr->SetChordFinder(fChordFinder);
   fFieldMgr->SetDetectorField(fField);
 
   // FOLLOWING PARAMETERS TUNED FROM RAY-TRACING SIMULATIONS OF THE AIFIRA NANOBEAM LINE
-  
+  /*
   fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
   fFieldMgr->SetDeltaIntersection(1e-9*m);
   fFieldMgr->SetDeltaOneStep(1e-9*m);     
@@ -747,5 +756,5 @@ void DetectorConstruction::ConstructSDandField()
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
   fPropInField->SetMinimumEpsilonStep(1e-16); // instead of 11
   fPropInField->SetMaximumEpsilonStep(1e-15); // instead of 10
-
+  */
 }

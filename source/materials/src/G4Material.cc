@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4Material.cc 100662 2016-10-31 10:21:14Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -645,6 +645,7 @@ G4double G4Material::GetA() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4ExtendedMaterial.hh"
 
 std::ostream& operator<<(std::ostream& flux, const G4Material* material)
 {
@@ -688,7 +689,10 @@ std::ostream& operator<<(std::ostream& flux, const G4Material* material)
   }
   flux.precision(prec);    
   flux.setf(mode,std::ios::floatfield);
-            
+
+  if(material->IsExtended())
+  { static_cast<const G4ExtendedMaterial*>(material)->Print(flux); }
+
   return flux;
 }
 
@@ -714,5 +718,10 @@ std::ostream& operator<<(std::ostream& flux, G4MaterialTable MaterialTable)
 
   return flux;
 }      
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4Material::IsExtended() const
+{ return false; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

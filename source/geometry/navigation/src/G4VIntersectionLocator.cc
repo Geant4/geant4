@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc 93482 2015-10-23 08:25:26Z gcosmo $
+// $Id: G4VIntersectionLocator.cc 99915 2016-10-11 09:24:43Z gcosmo $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -204,7 +204,8 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
 
 
   G4double endCurveLen= EstimatedEndStateB.GetCurveLength();
-  do
+
+  do  // Loop checking, 07.10.2016, J.Apostolakis
   {
     G4double currentCurveLen= newEndPoint.GetCurveLength();
     G4double advanceLength= endCurveLen - currentCurveLen ; 

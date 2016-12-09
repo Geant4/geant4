@@ -112,8 +112,8 @@ protected:
   G4ParticleHPDeExGammas theGammas;
   G4String gammaPath;
   
-  G4double theCurrentA;
-  G4double theCurrentZ;
+  //G4double theCurrentA;
+  //G4double theCurrentZ;
 
    protected:
       std::vector < G4double >  QI;

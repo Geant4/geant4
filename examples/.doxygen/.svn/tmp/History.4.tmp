@@ -1,0 +1,72 @@
+$Id$
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+        
+        Configuration files for Examples Doxygen documentation
+     ----------------------------------------------------------
+                    
+                    
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+28/09/16 I.Hrivnacova (doxygen-V10-02-01)
+- Added new examples:
+  extended/hadronic/NeutronSource
+  extended/medical/dna/chem4
+
+05/07/16 I.Hrivnacova (doxygen-V10-02-00)
+- Updated configuration files (suppressed warnings from files present in more examples)
+- Added new example hadronic/Hadr07
+
+27/11/15 I.Hrivnacova (doxygen-V10-01-03)
+- Added extended/parallel/MPI/source classes in the documentation
+
+23/11/15 I.Hrivnacova (doxygen-V10-01-02)
+- Updated configuration files for 10.2 release
+- Upgraded Doxyfiles to Doxygen 1.8.9.1
+
+09/03/15 I.Hrivnacova (doxygen-V10-01-01)
+- Added new example extended/medical/dna/microyz
+
+23/01/15 I.Hrivnacova (doxygen-V10-01-00)
+- Fixes in configuration files for 10.1 release
+
+26/11/14 I.Hrivnacova (doxygen-V10-00-02)
+- Updated link to the advanced examples page which has been moved
+
+12/11/14 I.Hrivnacova (doxygen-V10-00-01)
+- Updated configuration files for 10.1 release
+
+06/06/14 P.Gumplinger (doxygen-V10-00-00)
+- Updated Doxyfile, Doxymodules_category.h adding new
+  exoticphysics channeling and ucn examples
+
+29/11/12 I.Hrivnacova (doxygen-V09-06-01)
+- Updated configuration files for 10.0 release
+
+17/11/12 I.Hrivnacova (doxygen-V09-06-00)
+- Updated configuration files for 10.0 release
+
+26/11/12 I.Hrivnacova (doxygen-V09-05-02)
+- Updated Doxyfile for removing .README.HowToRunTestEm1
+
+26/11/12 I.Hrivnacova (doxygen-V09-05-01)
+- Completed extended examples
+
+27/06/12 I.Hrivnacova (doxygen-V09-05-00)
+- First tag on Doxygen configuration files which now included
+  extended examples in the generated documentation.
+  See README file how to process to generate complete examples
+  (basic & extended) documentation.
+
+
+

@@ -176,10 +176,6 @@ class G4USolid : public G4VSolid
       return fShape;
     }
 
-  protected:
-
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT) const;
-
   protected:  // data
 
     VUSolid* fShape;

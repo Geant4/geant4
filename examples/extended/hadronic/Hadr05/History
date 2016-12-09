@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 October 2016 W. Pokorski (exhadr05-V10-02-00)
+- changes to comply with coding conventions
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+- Fixed directory name in scripts and ROOT macros (call macros of this example 
+  and not Hadr00)
+
 28-11-13 I. Hrivnacova (exhadr05-V09-06-01)
 - Upadeted for changes in Hadr00 (exhadr00-V09-06-05,06)
 - Fixed README  

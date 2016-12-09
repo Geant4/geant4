@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChStackingAction.cc
+/// \brief Implementation of the ExExChStackingAction class
+//
 
 #include "ExExChStackingAction.hh"
 #include "ExExChStackingActionMessenger.hh"

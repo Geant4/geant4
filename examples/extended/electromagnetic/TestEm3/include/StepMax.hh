@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/StepMax.hh
 /// \brief Definition of the StepMax class
 //
-// $Id: StepMax.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: StepMax.hh 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +69,7 @@ public:
 
 private:
 
-  G4double fStepMax[MaxAbsor];
+  G4double fStepMax[kMaxAbsor];
      
   StepMaxMessenger* fMess;
 };
@@ -85,7 +85,7 @@ G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
   
   G4double limit = DBL_MAX; 
   G4int n = aTrack.GetVolume()->GetCopyNo();
-  if (n < MaxAbsor) limit = fStepMax[n];
+  if (n < kMaxAbsor) limit = fStepMax[n];
   return limit;
 }
 

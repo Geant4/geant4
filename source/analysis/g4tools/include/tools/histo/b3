@@ -328,15 +328,15 @@ public:
   }
 
   b3(const std::string& a_title,
-     const std::vector<TC>& aEdgesX,
-     const std::vector<TC>& aEdgesY,
-     const std::vector<TC>& aEdgesZ)
+     const std::vector<TC>& a_edges_x,
+     const std::vector<TC>& a_edges_y,
+     const std::vector<TC>& a_edges_z)
   {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(3);
-    edges[0] = aEdgesX;
-    edges[1] = aEdgesY;
-    edges[2] = aEdgesZ;
+    edges[0] = a_edges_x;
+    edges[1] = a_edges_y;
+    edges[2] = a_edges_z;
     parent::configure(3,edges);
   }
 
@@ -363,13 +363,13 @@ public:
     return parent::configure(3,nbins,mins,maxs);
   }
 
-  bool configure(const std::vector<TC>& aEdgesX,
-                 const std::vector<TC>& aEdgesY,
-                 const std::vector<TC>& aEdgesZ){
+  bool configure(const std::vector<TC>& a_edges_x,
+                 const std::vector<TC>& a_edges_y,
+                 const std::vector<TC>& a_edges_z){
     std::vector< std::vector<TC> > edges(3);
-    edges[0] = aEdgesX;
-    edges[1] = aEdgesY;
-    edges[2] = aEdgesZ;
+    edges[0] = a_edges_x;
+    edges[1] = a_edges_y;
+    edges[2] = a_edges_z;
     return parent::configure(3,edges);
   }
 

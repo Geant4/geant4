@@ -14,6 +14,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 November 2016 V. Ivantchenko  (hadr-stopping-V10-02-02)
+--------------------------------------------------------------------
+- G4EmCaptureCascade - added C++11 keywords, an attempt to remove 
+    bound check warning
+
+11 October 2016 K.L. Genser  (hadr-stopping-V10-02-01)
+--------------------------------------------------------------------
+- added G4MuonMinusAtomicCapture
+
 12 November 2015 V. Ivantchenko  (hadr-stopping-V10-01-05)
 --------------------------------------------------------------------
 - G4HadronStoppingProcess - removed call to DeRegistration to avoid

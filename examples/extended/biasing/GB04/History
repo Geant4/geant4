@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jul 20, 2016 I. Hrivnacova
+- Coding guidelines(redundant empty lines, class data member names)
+
 Jun 05, 2015, M. Verderi (GB04-V10-01-00)
 - Bug fix in GB04BOptnBremSplitting.cc : missing 
   fParticleChange.SetSecondaryWeightByProcess(true);

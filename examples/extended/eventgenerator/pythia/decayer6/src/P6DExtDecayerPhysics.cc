@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: P6DExtDecayerPhysics.cc 72244 2013-07-12 08:49:56Z gcosmo $
+// $Id: P6DExtDecayerPhysics.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/P6DExtDecayerPhysics.cc
 /// \brief Implementation of the P6DExtDecayerPhysics class
@@ -75,15 +75,16 @@ void P6DExtDecayerPhysics::ConstructProcess()
   extDecayer->SetVerboseLevel(1); 
      // The extDecayer will be deleted in G4Decay destructor
 
-  aParticleIterator->reset();
-  while ((*aParticleIterator)())
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
   {    
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     
     if ( verboseLevel > 1 ) {
       G4cout << "Setting ext decayer for: " 
-             <<  aParticleIterator->value()->GetParticleName() 
+             <<  particleIterator->value()->GetParticleName()
              << G4endl;
     } 
     

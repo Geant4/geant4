@@ -29,15 +29,16 @@
 #include "globals.hh"
 
 class G4QGSMParameters 
-    {
-public:
-      G4QGSMParameters();
-      ~G4QGSMParameters();
+{
+  public:
+    G4QGSMParameters();
+    ~G4QGSMParameters();
       
-private:
-      G4QGSMParameters(const G4QGSMParameters &right);
-      int operator==(const G4QGSMParameters &right) const;
-      int operator!=(const G4QGSMParameters &right) const;
-     };
+  private:
+    G4QGSMParameters(const G4QGSMParameters &right);
+    int operator==(const G4QGSMParameters &right) const;
+    int operator!=(const G4QGSMParameters &right) const;
+};
 
-#endif     
+#endif
+

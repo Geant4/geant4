@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoulombBarrier.hh 97097 2016-05-25 07:50:31Z gcosmo $
+// $Id: G4CoulombBarrier.hh 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
@@ -50,6 +50,8 @@ public:
 
   G4double GetCoulombBarrier(G4int ARes, G4int ZRes, G4double U) const;
 
+  virtual G4double BarrierPenetrationFactor(G4int Eexc) const;
+
 private:
 
   G4CoulombBarrier(const G4CoulombBarrier & right) = delete;
@@ -59,8 +61,6 @@ private:
   
 protected:
 
-  virtual G4double BarrierPenetrationFactor(G4int Eexc) const;
-
-  G4Pow* g4pow;
+  G4Pow* g4calc;
 };
 #endif

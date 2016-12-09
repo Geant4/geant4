@@ -27,7 +27,7 @@
 /// \brief Implementation of the B01DetectorConstruction class
 //
 //
-// $Id: B01DetectorConstruction.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B01DetectorConstruction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 //
 
 #include "G4Types.hh"
@@ -173,7 +173,6 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   fWorldVolume = new 
     G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
                   name, 0, false, 0);
-
 
   fPhysicalVolumeVector.push_back(fWorldVolume);
 
@@ -423,13 +422,11 @@ void B01DetectorConstruction::ConstructSDandField()
                          new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
-
   G4String fltName,particleName;
   G4SDParticleFilter* neutronFilter = 
       new G4SDParticleFilter(fltName="neutronFilter", particleName="neutron");
 
   MFDet->SetFilter(neutronFilter);
-
 
   for (std::vector<G4LogicalVolume *>::iterator it = 
                                                 fLogicalVolumeVector.begin();
@@ -442,11 +439,9 @@ void B01DetectorConstruction::ConstructSDandField()
   G4PSNofCollision*   scorer0 = new G4PSNofCollision(psName="Collisions");  
   MFDet->RegisterPrimitive(scorer0);
 
-
   G4PSNofCollision*   scorer1 = new G4PSNofCollision(psName="CollWeight");  
   scorer1->Weighted(true);
   MFDet->RegisterPrimitive(scorer1);
-
 
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);

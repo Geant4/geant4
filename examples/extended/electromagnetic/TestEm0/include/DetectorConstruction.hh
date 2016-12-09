@@ -27,7 +27,7 @@
 /// \brief Definition of the DetectorConstruction class
 //
 //
-// $Id: DetectorConstruction.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: DetectorConstruction.hh 99373 2016-09-20 07:13:41Z gcosmo $
 //
 // 
 
@@ -51,39 +51,35 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   public:
   
     DetectorConstruction();
-   ~DetectorConstruction();
+    virtual ~DetectorConstruction();
 
   public:
-    
+
      virtual
-     G4VPhysicalVolume* Construct();             
-     void SetMaterial (G4String);            
+     G4VPhysicalVolume* Construct();
+     void SetMaterial (const G4String&);
      
-  public:
-  
      const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};                               
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
-     
-     void               PrintParameters();
+     G4VPhysicalVolume* GetWorld() const     {return fBox;};
+     G4double           GetSize()  const     {return fBoxSize;};
+     const G4Material*  GetMaterial() const  {return fMaterial;};
+
+     void               PrintParameters() const;
                        
   private:
   
-     G4VPhysicalVolume*    fBox;     
+     G4VPhysicalVolume*    fBox;
      G4double              fBoxSize;
-     G4Material*           fMaterial;     
+     G4Material*           fMaterial;
      
      DetectorMessenger*    fDetectorMessenger;
 
   private:
     
      void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

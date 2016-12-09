@@ -289,14 +289,22 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
           extraName = testExtra;
           extraKnown = true;
 #ifdef G4VERBOSE
-          if ( verb > 3 ) { G4cout << "  physextra current best guess: " << testExtra << G4endl; }
+          if ( verb > 3 ) { 
+            G4cout << "  physextra current best guess: " 
+                   << testExtra << G4endl; 
+          }
         } else {
-          if ( verb > 3 ) { G4cout << "  physextra match but shorter: " << testExtra << G4endl; }
+          if ( verb > 3 ) { 
+            G4cout << "  physextra match but shorter: " 
+                   << testExtra << G4endl;
+          }
 #endif
         }
       } else {
 #ifdef G4VERBOSE
-        if ( verb > 3 ) { G4cout << "  physextra reject: " << testExtra << G4endl; }
+        if ( verb > 3 ) { 
+          G4cout << "  physextra reject: " << testExtra << G4endl; 
+        }
 #endif
       }
     }
@@ -329,7 +337,16 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
       // and remove it so we can look for the next bit
       workingName.erase(0,extraName.size());
     } else {
+#ifdef G4VERBOSE
+      if ( verb > 2 ) { 
+        G4cout << "  workingName \"" << workingName << "\"" 
+               << " couldn't be found in the extensions list"
+               << G4endl;
+      }
+#endif
       allKnown = false;
+      // found a pattern that we can't map
+      return allKnown;
     }
   } // workingName not empty
 

@@ -6,9 +6,10 @@
 
 // An ntuple class to write at the CERN-ROOT format.
 // It inherits wroot::tree and each column is mapped
-// on a wroot::branch. Each add_row() does a tree::fill().
+// on a (wroot::branch,wroot::leaf). Each add_row() does a tree::fill().
 
 #include "tree"
+#include "icol"
 
 #include "../vfind"
 #include "../vmanip"
@@ -17,27 +18,25 @@
 #include "../scast"
 #include "../forit"
 
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
 namespace tools {
 namespace wroot {
 
 class ntuple : public tree {
 public:
-  class icol {
-  public:
-    virtual ~icol(){}
-  public:
-    virtual void* cast(cid) const = 0;
-    virtual cid id_cls() const = 0;
-  public:
-    virtual void add() = 0;
-    virtual void set_def() = 0;
-    virtual const std::string& name() const = 0;
-    virtual void set_basket_size(uint32) = 0;
-  };
-  
+//typedef tools::wroot::icol icol; //for backward compatibility.
 public:
   template <class T>
   class column : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column<"+stype(T())+">");
+      return s_v;
+    }
+#endif
   public:
     static cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -52,28 +51,37 @@ public:
     virtual void add() {m_leaf->fill(m_tmp);}
     virtual void set_def() {m_tmp = m_def;}
     virtual const std::string& name() const {return m_leaf->name();}
-    virtual void set_basket_size(uint32 a_size) {
-      m_leaf->branch().set_basket_size(a_size);
-    }
+    virtual void set_basket_size(uint32 a_size) {m_branch->set_basket_size(a_size);}
+    virtual branch* get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
   public:
     column(tree& a_tree,const std::string& a_name,const T& a_def)
-    :m_tree(a_tree),m_leaf(0)
+    :m_tree(a_tree),m_branch(0),m_leaf(0)
     ,m_def(a_def),m_tmp(a_def)
     {
-      branch* br = m_tree.create_branch(a_name);
-      m_leaf = br->create_leaf<T>(a_name,a_name);
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+      m_branch = m_tree.create_branch(a_name);
+      m_leaf = m_branch->create_leaf<T>(a_name,a_name);
     }
-    virtual ~column(){}
+    virtual ~column(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
   protected:
     column(const column& a_from)
     :icol(a_from)
     ,m_tree(a_from.m_tree)
+    ,m_branch(0)
     ,m_leaf(0)
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
     column& operator=(const column& a_from){
       if(&a_from==this) return *this;
+      m_branch = 0;
       m_leaf = 0;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
@@ -83,12 +91,19 @@ public:
     bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
     tree& m_tree;
+    branch* m_branch;
     leaf<T>* m_leaf;
     T m_def;
     T m_tmp;
   };
 
   class column_string : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_string");
+      return s_v;
+    }
+#endif
   public:
     static cid id_class() {
       static const std::string s_v;
@@ -103,28 +118,37 @@ public:
     virtual void add() {m_leaf->fill(m_tmp);}
     virtual void set_def() {m_tmp = m_def;}
     virtual const std::string& name() const {return m_leaf->name();}
-    virtual void set_basket_size(uint32 a_size) {
-      m_leaf->branch().set_basket_size(a_size);
-    }
+    virtual void set_basket_size(uint32 a_size) {m_branch->set_basket_size(a_size);}
+    virtual branch* get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
   public:
     column_string(tree& a_tree,const std::string& a_name,const std::string& a_def)
-    :m_tree(a_tree),m_leaf(0)
+    :m_tree(a_tree),m_branch(0),m_leaf(0)
     ,m_def(a_def),m_tmp(a_def)
     {
-      branch* br = m_tree.create_branch(a_name);
-      m_leaf = br->create_leaf_string(a_name,a_name);
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+      m_branch = m_tree.create_branch(a_name);
+      m_leaf = m_branch->create_leaf_string(a_name,a_name);
     }
-    virtual ~column_string(){}
+    virtual ~column_string(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
   protected:
     column_string(const column_string& a_from)
     :icol(a_from)
     ,m_tree(a_from.m_tree)
+    ,m_branch(0)
     ,m_leaf(0)
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
     column_string& operator=(const column_string& a_from){
       if(&a_from==this) return *this;
+      m_branch = 0;
       m_leaf = 0;
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
@@ -134,6 +158,7 @@ public:
     bool fill(const std::string& a_value) {m_tmp = a_value;return true;}
   protected:
     tree& m_tree;
+    branch* m_branch;
     leaf_string* m_leaf;
     std::string m_def;
     std::string m_tmp;
@@ -141,6 +166,12 @@ public:
 
   template <class T>
   class std_vector_column : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::std_vector_column<"+stype(T())+">");
+      return s_v;
+    }
+#endif
   public:
     static cid id_class() {return _cid_std_vector<T>();}
     virtual void* cast(cid a_class) const {
@@ -152,43 +183,53 @@ public:
     virtual void add() {}
     virtual void set_def() {}
     virtual const std::string& name() const {return m_leaf->name();}
-    virtual void set_basket_size(uint32 a_size) {
-      m_leaf->branch().set_basket_size(a_size);
-    }
+    virtual void set_basket_size(uint32 a_size) {m_branch->set_basket_size(a_size);}
+    virtual branch* get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
   public:
     std_vector_column(tree& a_tree,const std::string& a_name,std::vector<T>& a_user_vec)
     :m_tree(a_tree)
     ,m_user_vec(a_user_vec)
+    ,m_branch(0)
     ,m_leaf(0)
     {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
       std_vector_be<T>* br = m_tree.create_std_vector_be<T>(a_name,m_user_vec);
       m_leaf = br->create_leaf_element(a_name,a_name);
+      m_branch = br;
     }
-    virtual ~std_vector_column(){}
+    virtual ~std_vector_column(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
   protected:
     std_vector_column(const std_vector_column& a_from)
     :icol(a_from)
     ,m_tree(a_from.m_tree) 
     ,m_user_vec(a_from.m_user_vec)
+    ,m_branch(0)
     ,m_leaf(0)
     {}
     std_vector_column& operator=(const std_vector_column& a_from){
       if(&a_from==this) return *this;
+      m_branch = 0;
       m_leaf = 0;
       return *this;
     }
   protected:
     tree& m_tree;
     std::vector<T>& m_user_vec;
+    branch* m_branch;
     leaf_element* m_leaf;
   };
 
 public:
-  ntuple(idir& a_dir,const std::string& a_name,const std::string& a_title)
-  :tree(a_dir,a_name,a_title){}
+  ntuple(idir& a_dir,const std::string& a_name,const std::string& a_title):tree(a_dir,a_name,a_title){}
 
-  ntuple(idir& a_dir,const ntuple_booking& a_bkg)
-  :tree(a_dir,a_bkg.name(),a_bkg.title()){
+  ntuple(idir& a_dir,const ntuple_booking& a_bkg):tree(a_dir,a_bkg.name(),a_bkg.title()) {
     const std::vector<column_booking>& cols = a_bkg.columns();
     tools_vforcit(column_booking,cols,it){
 
@@ -290,12 +331,11 @@ public:
     tools::clear<icol>(m_cols);
   }
 protected:
-  ntuple(const ntuple& a_from)
-  :iobject(a_from),itree(a_from),tree(a_from)
-  {}
+  ntuple(const ntuple& a_from):iobject(a_from),itree(a_from),tree(a_from){}
   ntuple& operator=(const ntuple&){return *this;}
 public:
   const std::vector<icol*>& columns() const {return m_cols;}
+  std::vector<icol*>& columns() {return m_cols;}
 
   template <class T>
   column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
@@ -345,8 +385,35 @@ public:
     tools_vforit(icol*,m_cols,it) (*it)->set_def();
     return status;
   }
-  void set_basket_size(uint32 a_size) {
-    tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);
+
+  void set_basket_size(uint32 a_size) {tools_vforit(icol*,m_cols,it) (*it)->set_basket_size(a_size);}
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// for parallelization : /////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////////////////////
+  void get_branches(std::vector<branch*>& a_vec) const {
+    a_vec.clear();
+    tools_vforcit(icol*,m_cols,it) a_vec.push_back((*it)->get_branch());
+  }
+
+  bool merge_number_of_entries() {
+    m_entries = 0; //it should be zero!
+    m_tot_bytes = 0;
+    m_zip_bytes = 0;
+    bool status = true;
+    tools_vforit(icol*,m_cols,it) {
+      if(it==m_cols.begin()) {
+        m_entries = (*it)->get_branch()->entries();
+      } else if(m_entries!=(*it)->get_branch()->entries()) {
+        m_out << "tools::wroot::ntuple::merge_number_of_entries :"
+              << " branches do not have same number of entries."
+              << std::endl;
+        status = false;
+      }
+      m_tot_bytes += (*it)->get_branch()->tot_bytes();
+      m_zip_bytes += (*it)->get_branch()->zip_bytes();
+    }
+    return status;
   }
 protected:
   std::vector<icol*> m_cols;

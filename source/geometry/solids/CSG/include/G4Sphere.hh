@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Sphere.hh 100820 2016-11-02 15:18:48Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -108,6 +108,14 @@ class G4Sphere : public G4CSGSolid
     inline G4double GetDeltaPhiAngle  () const;
     inline G4double GetStartThetaAngle() const;
     inline G4double GetDeltaThetaAngle() const;
+    inline G4double GetSinStartPhi    () const;
+    inline G4double GetCosStartPhi    () const;
+    inline G4double GetSinEndPhi      () const;
+    inline G4double GetCosEndPhi      () const;
+    inline G4double GetSinStartTheta  () const;
+    inline G4double GetCosStartTheta  () const;
+    inline G4double GetSinEndTheta    () const;
+    inline G4double GetCosEndTheta    () const;
 
     // Modifiers
 
@@ -126,6 +134,8 @@ class G4Sphere : public G4CSGSolid
     void ComputeDimensions(      G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -188,13 +198,6 @@ class G4Sphere : public G4CSGSolid
 
   private:
  
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                G4int& noPolygonVertices) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
-
     inline void Initialize();
       //
       // Reset relevant values to zero

@@ -7,9 +7,9 @@
 #  This package contains a set of Python interface with Geant4.
 # ==================================================================
 """
-# $Id: __init__.py 94382 2015-11-13 10:18:01Z gcosmo $
-__version__ ='10.2'
-__date__ = 'November/2015'
+# $Id: __init__.py 101648 2016-11-21 08:42:14Z gcosmo $
+__version__ ='10.3'
+__date__ = 'November/2016'
 __author__ = 'K.Murakami (Koichi.Murakami@kek.jp)'
 
 # import submodules
@@ -35,7 +35,7 @@ from colortable import *
 def print_version():
   print """=============================================================
   Welcome to Geant4Py (A Geant4-Python Bridge)
-  
+
   Version : %s
   Date    : %s
   Contact : %s
@@ -86,9 +86,6 @@ gParticleIterator = PyG4ParticleList()
 
 # gProcessTable
 gProcessTable = G4ProcessTable.GetProcessTable()
-
-# gLossTableManager
-gLossTableManager = G4LossTableManager.Instance()
 
 # gProductionCutsTable
 gProductionCutsTable = G4ProductionCutsTable.GetProductionCutsTable()
@@ -153,7 +150,7 @@ if G4VisManager.GetConcreteInstance() == None:
   gVisManager.RegisterGraphicsSystem(_heprep_file)
   gVisManager.RegisterGraphicsSystem(_atree)
   gVisManager.RegisterGraphicsSystem(_raytracer)
-    
+
   gVisManager.Initialize()
 
 # version information
@@ -243,5 +240,3 @@ def _run_abort(signum, frame):
 
 if (threading.activeCount() == 1):
   signal.signal(signal.SIGINT, _run_abort)
-
-

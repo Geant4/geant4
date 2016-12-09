@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XVCrystalPlanarAnalytical.hh
+/// \brief Definition of the XVCrystalPlanarAnalytical class
+//
 
 #ifndef XVCrystalPlanarAnalytical_h
 #define XVCrystalPlanarAnalytical_h

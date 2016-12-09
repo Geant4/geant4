@@ -14,7 +14,25 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-10-16 SI (range-V10-02-05)
+- updated README (bis)
+
+14-10-16 G.Folger (range-V10-02-04)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 	 
+14-10-16 SI (range-V10-02-03)
+- updated README
+
+09-07-16 SI (range-V10-02-02)
+- added positron test in TrackingAction
+- updated README
+
+28-05-16 MK (range-V10-02-01)
+- PhysicsList.cc: add other DNA constructors
+- range.cc: range.cc: some code cleanup
+
 14-03-16 SI (range-V10-02-00)
 - changed physics constructor selection
 

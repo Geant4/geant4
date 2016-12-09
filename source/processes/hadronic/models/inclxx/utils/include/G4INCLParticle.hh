@@ -199,6 +199,10 @@ namespace G4INCL {
           theZ = 1;
           break;
         case PiZero:
+		case Eta:
+		case Omega:
+		case EtaPrime:
+		case Photon:
           theA = 0;
           theZ = 0;
           break;
@@ -266,6 +270,15 @@ namespace G4INCL {
 
     /** \brief Is this a pion? */
     G4bool isPion() const { return (theType == PiPlus || theType == PiZero || theType == PiMinus); }
+
+    /** \brief Is this a eta? */
+    G4bool isEta() const { return (theType == Eta); }
+
+    /** \brief Is this a omega? */
+    G4bool isOmega() const { return (theType == Omega); }
+
+    /** \brief Is this a etaprime? */
+    G4bool isEtaPrime() const { return (theType == EtaPrime); }
 
     /** \brief Is it a resonance? */
     inline G4bool isResonance() const { return isDelta(); }
@@ -342,6 +355,10 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getINCLMass(theType);
           break;
 
@@ -371,6 +388,10 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getTableParticleMass(theType);
           break;
 
@@ -400,6 +421,10 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return ParticleTable::getRealMass(theType);
           break;
 
@@ -805,7 +830,7 @@ namespace G4INCL {
     G4double theMass;
     static G4ThreadLocal long nextID;
 
-    INCL_DECLARE_ALLOCATION_POOL(Particle);
+    INCL_DECLARE_ALLOCATION_POOL(Particle)
   };
 }
 

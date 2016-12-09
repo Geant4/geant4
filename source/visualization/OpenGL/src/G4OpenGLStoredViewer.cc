@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredViewer.cc 95635 2016-02-17 08:06:22Z gcosmo $
+// $Id: G4OpenGLStoredViewer.cc 101714 2016-11-22 08:53:13Z gcosmo $
 //
 //
 // Andrew Walkden  7th February 1997
@@ -140,7 +140,6 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   G4bool thirdPassForNonHiddenMarkersRequested = false;
   fDepthTestEnable = true;
   glEnable (GL_DEPTH_TEST); glDepthFunc (GL_LEQUAL);
-  fOldDisplayListColor = G4Colour();
   do {
     for (size_t iCutaway = 0; iCutaway < nCutaways; ++iCutaway) {
       
@@ -183,13 +182,10 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
             }
           }
           if (isPicking) glLoadName(po.fPickName);
-          if ((iPO == 0) || (c != fOldDisplayListColor)) {
-            fOldDisplayListColor = c;
-            if (transparency_enabled) {
-              glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
-            } else {
-              glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
-            }
+          if (transparency_enabled) {
+            glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+          } else {
+            glColor3d(c.GetRed(),c.GetGreen(),c.GetBlue());
           }
           if (po.fMarkerOrPolyline && fVP.IsMarkerNotHidden()) {
             if (fDepthTestEnable !=false) {

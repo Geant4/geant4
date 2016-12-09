@@ -40,7 +40,8 @@ target_link_libraries(Hadr07 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(Hadr07_SCRIPTS
-   hadr07.in Na22.mac multiLayers.mac proton.mac vis.mac water.mac plotHisto.C plot2.C
+   hadr07.in Na22.mac alpha.mac ionC12.mac multiLayers.mac proton.mac vis.mac water.mac 
+   plotHisto.C plot2.C
   )
   
 foreach(_script ${Hadr07_SCRIPTS})

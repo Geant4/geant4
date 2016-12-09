@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePhysics.hh 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4EmLivermorePhysics.hh 98736 2016-08-09 10:55:12Z gcosmo $
 
 #ifndef G4EmLivermorePhysics_h
 #define G4EmLivermorePhysics_h 1
@@ -37,10 +37,7 @@ class G4EmLivermorePhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmLivermorePhysics(G4int ver = 1);
-
-  // obsolete
-  G4EmLivermorePhysics(G4int ver, const G4String& name);
+  explicit G4EmLivermorePhysics(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmLivermorePhysics();
 

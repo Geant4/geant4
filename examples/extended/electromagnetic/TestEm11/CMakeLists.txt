@@ -40,8 +40,8 @@ target_link_libraries(TestEm11 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(TestEm11_SCRIPTS
-    multiLayers.mac radioactive.mac range.mac run01.mac run02.mac sandia.mac 
-    TestEm11.in TestEm11.out vis.mac water.mac
+    alpha.mac ionC12.mac multiLayers.mac radioactive.mac range.mac run01.mac 
+    run02.mac sandia.mac TestEm11.in TestEm11.out vis.mac water.mac
   )
   
 foreach(_script ${TestEm11_SCRIPTS})

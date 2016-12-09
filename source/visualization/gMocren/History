@@ -1,4 +1,4 @@
-$Id: History 97389 2016-06-02 10:05:52Z gcosmo $
+$Id: History 99263 2016-09-09 13:19:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+8th September 2016  Akinori Kimura (gMocren-V10-02-03)
+- G4GMocrenFileSceneHandler.cc: Fixed a bug in AddSolid(const G4Box&).
+
+31st August 2016  John Allison (gMocren-V10-02-02)
+- Fix G4Orb and G4Ellipsoid hiding warnings.
 
 1st June 2016  Laurent Garnier  (gMocren-V10-02-01)
 - Fixed Win64 warning.

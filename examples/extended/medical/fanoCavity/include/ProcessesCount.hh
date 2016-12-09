@@ -27,7 +27,7 @@
 /// \brief Definition of the ProcessesCount class
 //
 //
-// $Id: ProcessesCount.hh 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: ProcessesCount.hh 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,9 +66,4 @@ private:
 typedef std::vector<OneProcessCount*> ProcessesCount;
 
 #endif
-
-
-
-
-
 

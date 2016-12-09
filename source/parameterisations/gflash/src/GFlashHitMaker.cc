@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GFlashHitMaker.cc 68057 2013-03-13 14:46:00Z gcosmo $
+// $Id: GFlashHitMaker.cc 98338 2016-07-07 08:20:39Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -99,8 +99,7 @@ void GFlashHitMaker::make(GFlashEnergySpot * aSpot, const G4FastTrack * aT)
     {
       gflashSensitive->Hit(&theSpot);
     }
-    else if ( (!gflashSensitive ) && 
-             ( pSensitive ) && 
+    else if (( pSensitive ) && 
              ( pCurrentVolume->GetLogicalVolume()->GetFastSimulationManager() )
             ) // Using gflash without implementing the 
               // gflashSensitive detector interface -> not allowed!

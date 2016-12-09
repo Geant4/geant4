@@ -59,6 +59,11 @@ inline const std::string& TList_cls(){
   return s_v;
 }
 
+inline const std::string& TNamed_cls(){
+  static const std::string s_v("TNamed");
+  return s_v;
+}
+
 }}
 
 #endif

@@ -213,9 +213,10 @@ template<class T> TLBE<T>::~TLBE()
   
   G4VUserPhysicsList::AddTransportation();
   
-  theParticleIterator->reset();
-  while( (*(theParticleIterator))() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while( (*(myParticleIterator))() ){
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     // time cuts for ONLY neutrons:
@@ -285,9 +286,10 @@ template<class T> TLBE<T>::~TLBE()
  // models for higher energy
  G4double LivermoreHighEnergyLimit = 20*CLHEP::MeV;
  //
-  theParticleIterator->reset();
-  while( (*(theParticleIterator))() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while( (*(myParticleIterator))() ){
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     G4String particleType = particle->GetParticleType();
@@ -470,10 +472,11 @@ template<class T> TLBE<T>::~TLBE()
   // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
 
-  theParticleIterator->reset();
-  while( (*(theParticleIterator))() )
+  auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while( (*(myParticleIterator))() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = myParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
       if (theScintProcessDef->IsApplicable(*particle)) {
@@ -641,15 +644,17 @@ template<class T> TLBE<T>::~TLBE()
   theIonBC->SetMinEnergy( theIonBCMin );
   theIonBC->SetMaxEnergy( theIonBCMax );
 
-  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV );
+  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG(
+  (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*CLHEP::GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
   G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
   G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
 
-  theParticleIterator->reset();
-  while ((*(theParticleIterator))()) 
+  auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while ((*(myParticleIterator))()) 
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = myParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
 
@@ -868,7 +873,7 @@ template<class T> TLBE<T>::~TLBE()
 	  theInelasticProcess->RegisterMe( theIonBC );
 	  pmanager->AddDiscreteProcess( theInelasticProcess );
 	}
-    }	// while ((*(theParticleIterator))()) 
+    }	// while ((*(myParticleIterator))()) 
 
   // Add stopping processes with builder
   stoppingPhysics->ConstructProcess();
@@ -886,10 +891,11 @@ template<class T> TLBE<T>::~TLBE()
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
   G4bool theDecayProcessNeverUsed = true; //Check if theDecayProcess will be used
-  theParticleIterator->reset();
-  while( (*(theParticleIterator))() )
+  auto myParticleIterator=G4ParticleTable::GetParticleTable()->GetIterator();
+  myParticleIterator->reset();
+  while( (*(myParticleIterator))() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = myParticleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       
       if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 

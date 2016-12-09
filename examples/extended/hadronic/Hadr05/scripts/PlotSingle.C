@@ -12,7 +12,7 @@ else  hh[ixs]->GetXaxis()->SetTitle(axtit[0]);
 leg[ixs] = new TLegend(0.9, 0.6, 1.1, 0.9);
  
 for(itarg=0; itarg<ntarg; itarg++) {
-gROOT->ProcessLine(".x $G4INSTALL/examples/extended/hadronic/Hadr00/scripts/AddMC.C");
+gROOT->ProcessLine(".x $G4INSTALL/examples/extended/hadronic/Hadr05/scripts/AddMC.C");
 cout << "Target# " << itarg << "  max# " << ntarg << endl;
 }
 cout << "Loop is completed ixs= " << ixs << endl;

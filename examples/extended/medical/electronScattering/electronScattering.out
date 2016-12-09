@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -288,16 +288,17 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=9.42s Real=9.59s Sys=0.01s
+  User=15.83s Real=15.89s Sys=0s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 13 MeV through 0 fm  of Air (density: 1.21 mg/cm3)
 ... write Root file : eScattering.root - done
+... close Root file : eScattering.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2059786096, 2037104680
+ Current couple of seeds = 1486323506, 1626161219
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

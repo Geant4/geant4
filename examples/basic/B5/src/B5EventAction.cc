@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.cc 94486 2015-11-19 08:33:37Z gcosmo $
+// $Id: B5EventAction.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class
@@ -33,6 +33,7 @@
 #include "B5DriftChamberHit.hh"
 #include "B5EmCalorimeterHit.hh"
 #include "B5HadCalorimeterHit.hh"
+#include "B5Constants.hh"
 #include "B5Analysis.hh"
 
 #include "G4Event.hh"
@@ -49,21 +50,17 @@
 
 B5EventAction::B5EventAction()
 : G4UserEventAction(), 
-  fHHC1ID(-1),
-  fHHC2ID(-1),
-  fDHC1ID(-1),
-  fDHC2ID(-1),
-  fECHCID(-1),
-  fHCHCID(-1),
-  fEmCalEdep(), 
-  fHadCalEdep()
+  fHodHC1ID(-1),
+  fHodHC2ID(-1),
+  fDriftHC1ID(-1),
+  fDriftHC2ID(-1),
+  fEmCalHCID(-1),
+  fHadCalHCID(-1),
+  fEmCalEdep(kNofEmCells, 0.), 
+  fHadCalEdep(kNofHadCells, 0.)
 {
   // set printing per each event
   G4RunManager::GetRunManager()->SetPrintProgress(1);
-
-  // initialize the vectors
-  fEmCalEdep.resize(80, 0.);
-  fHadCalEdep.resize(20, 0.);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,204 +72,187 @@ B5EventAction::~B5EventAction()
 
 void B5EventAction::BeginOfEventAction(const G4Event*)
 {
-    if (fHHC1ID==-1) {
-      G4SDManager* sdManager = G4SDManager::GetSDMpointer();
-      fHHC1ID = sdManager->GetCollectionID("hodoscope1/hodoscopeColl");
-      fHHC2ID = sdManager->GetCollectionID("hodoscope2/hodoscopeColl");
-      fDHC1ID = sdManager->GetCollectionID("chamber1/driftChamberColl");
-      fDHC2ID = sdManager->GetCollectionID("chamber2/driftChamberColl");
-      fECHCID = sdManager->GetCollectionID("EMcalorimeter/EMcalorimeterColl");
-      fHCHCID = sdManager->GetCollectionID("HadCalorimeter/HadCalorimeterColl");
-    }
+  if (fHodHC1ID==-1) {
+    auto sdManager = G4SDManager::GetSDMpointer();
+    fHodHC1ID = sdManager->GetCollectionID("hodoscope1/hodoscopeColl");
+    fHodHC2ID = sdManager->GetCollectionID("hodoscope2/hodoscopeColl");
+    fDriftHC1ID = sdManager->GetCollectionID("chamber1/driftChamberColl");
+    fDriftHC2ID = sdManager->GetCollectionID("chamber2/driftChamberColl");
+    fEmCalHCID = sdManager->GetCollectionID("EMcalorimeter/EMcalorimeterColl");
+    fHadCalHCID = sdManager->GetCollectionID("HadCalorimeter/HadCalorimeterColl");
+  }
 }     
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void B5EventAction::EndOfEventAction(const G4Event* event)
 {
-    G4HCofThisEvent* hce = event->GetHCofThisEvent();
-    if (!hce) 
-    {
-        G4ExceptionDescription msg;
-        msg << "No hits collection of this event found." << G4endl; 
-        G4Exception("B5EventAction::EndOfEventAction()",
-                    "B5Code001", JustWarning, msg);
-        return;
-    }   
+  auto hce = event->GetHCofThisEvent();
+  if (!hce) {
+      G4ExceptionDescription msg;
+      msg << "No hits collection of this event found." << G4endl; 
+      G4Exception("B5EventAction::EndOfEventAction()",
+                  "B5Code001", JustWarning, msg);
+      return;
+  }
 
-
-    // Get hits collections 
-    B5HodoscopeHitsCollection* hHC1 
-      = static_cast<B5HodoscopeHitsCollection*>(hce->GetHC(fHHC1ID));
-      
-    B5HodoscopeHitsCollection* hHC2 
-      = static_cast<B5HodoscopeHitsCollection*>(hce->GetHC(fHHC2ID));
-      
-    B5DriftChamberHitsCollection* dHC1 
-      = static_cast<B5DriftChamberHitsCollection*>(hce->GetHC(fDHC1ID));
-      
-    B5DriftChamberHitsCollection* dHC2 
-      = static_cast<B5DriftChamberHitsCollection*>(hce->GetHC(fDHC2ID));
-      
-    B5EmCalorimeterHitsCollection* ecHC 
-      = static_cast<B5EmCalorimeterHitsCollection*>(hce->GetHC(fECHCID));
-      
-    B5HadCalorimeterHitsCollection* hcHC 
-      = static_cast<B5HadCalorimeterHitsCollection*>(hce->GetHC(fHCHCID));
-      
-    if ( (!hHC1) || (!hHC2) || (!dHC1) || (!dHC2) || (!ecHC) || (!hcHC) ) 
-    {
-        G4ExceptionDescription msg;
-        msg << "Some of hits collections of this event not found." << G4endl; 
-        G4Exception("B5EventAction::EndOfEventAction()",
-                    "B5Code001", JustWarning, msg);
-        return;
-    }   
+  // Get hits collections 
+  auto hHC1 
+    = static_cast<B5HodoscopeHitsCollection*>(hce->GetHC(fHodHC1ID));
     
-    //
-    // Fill histograms & ntuple
-    // 
+  auto hHC2 
+    = static_cast<B5HodoscopeHitsCollection*>(hce->GetHC(fHodHC2ID));
     
-    // Get analysis manager
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto dHC1 
+    = static_cast<B5DriftChamberHitsCollection*>(hce->GetHC(fDriftHC1ID));
+    
+  auto dHC2 
+    = static_cast<B5DriftChamberHitsCollection*>(hce->GetHC(fDriftHC2ID));
+    
+  auto ecHC 
+    = static_cast<B5EmCalorimeterHitsCollection*>(hce->GetHC(fEmCalHCID));
+    
+  auto hcHC 
+    = static_cast<B5HadCalorimeterHitsCollection*>(hce->GetHC(fHadCalHCID));
+    
+  if ( (!hHC1) || (!hHC2) || (!dHC1) || (!dHC2) || (!ecHC) || (!hcHC) ) {
+      G4ExceptionDescription msg;
+      msg << "Some of hits collections of this event not found." << G4endl; 
+      G4Exception("B5EventAction::EndOfEventAction()",
+                  "B5Code001", JustWarning, msg);
+      return;
+  }   
+  
+  //
+  // Fill histograms & ntuple
+  // 
+  
+  // Get analysis manager
+  auto analysisManager = G4AnalysisManager::Instance();
  
-    // Fill histograms
+  // Fill histograms
  
-    G4int n_hit = dHC1->entries();
-    analysisManager->FillH1(0, n_hit);
+  auto nhit  = dHC1->entries();
+  analysisManager->FillH1(0, nhit );
 
-    for (G4int i=0;i<n_hit;i++)
-    {
-       B5DriftChamberHit* hit = (*dHC1)[i];
-       G4ThreeVector localPos = hit->GetLocalPos();
-       analysisManager->FillH2(0, localPos.x(), localPos.y());
-    }
+  for (auto i=0;i<nhit ;i++) {
+    auto hit = (*dHC1)[i];
+    auto localPos = hit->GetLocalPos();
+    analysisManager->FillH2(0, localPos.x(), localPos.y());
+  }
  
-    n_hit = dHC2->entries();
-    analysisManager->FillH1(1, n_hit);
+  nhit  = dHC2->entries();
+  analysisManager->FillH1(1, nhit );
 
-    for (G4int i=0;i<n_hit;i++)
-    {
-       B5DriftChamberHit* hit = (*dHC2)[i];
-       G4ThreeVector localPos = hit->GetLocalPos();
-       analysisManager->FillH2(1, localPos.x(), localPos.y());
-    }
-    
-        
-    // Fill ntuple
-    
-    // Dc1Hits
-    analysisManager->FillNtupleIColumn(0, dHC1->entries());
-    // Dc2Hits
-    analysisManager->FillNtupleIColumn(1, dHC1->entries());
-    
-    // ECEnergy
-    G4int totalEmHit = 0;
-    G4double totalEmE = 0.;
-    for (G4int i=0;i<80;i++)
-    {
-        B5EmCalorimeterHit* hit = (*ecHC)[i];
-        G4double eDep = hit->GetEdep();
-        if (eDep>0.)
-        {
-            totalEmHit++;
-            totalEmE += eDep;
-        }
-        fEmCalEdep[i] = eDep;
-    }
-    analysisManager->FillNtupleDColumn(2, totalEmE);
-
-    // HCEnergy
-    G4int totalHadHit = 0;
-    G4double totalHadE = 0.;
-    for (G4int i=0;i<20;i++)
-    {
-        B5HadCalorimeterHit* hit = (*hcHC)[i];
-        G4double eDep = hit->GetEdep();
-        if (eDep>0.)
-        {
-            totalHadHit++;
-            totalHadE += eDep;
-        }
-        fHadCalEdep[i] = eDep;
-    }
-    analysisManager->FillNtupleDColumn(3, totalHadE);
-
-    // Time 1
-    for (G4int i=0;i<hHC1->entries();i++)
-    {
-      analysisManager->FillNtupleDColumn(4,(*hHC1)[i]->GetTime());
-    }
+  for (auto i=0;i<nhit ;i++) {
+    auto hit = (*dHC2)[i];
+    auto localPos = hit->GetLocalPos();
+    analysisManager->FillH2(1, localPos.x(), localPos.y());
+  }
       
-    // Time 2
-    for (G4int i=0;i<hHC2->entries();i++)
-    {
-      analysisManager->FillNtupleDColumn(5,(*hHC2)[i]->GetTime());
+  // Fill ntuple
+  
+  // Dc1Hits
+  analysisManager->FillNtupleIColumn(0, dHC1->entries());
+  // Dc2Hits
+  analysisManager->FillNtupleIColumn(1, dHC1->entries());
+  
+  // ECEnergy
+  G4int totalEmHit = 0;
+  G4double totalEmE = 0.;
+  for (auto i=0;i<kNofEmCells;i++) {
+    auto hit = (*ecHC)[i];
+    auto edep = hit->GetEdep();
+    if (edep>0.) {
+      totalEmHit++;
+      totalEmE += edep;
     }
-    
-    analysisManager->AddNtupleRow();  
-    
-    //
-    // Print diagnostics
-    // 
-    
-    G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
-    if ( printModulo==0 || event->GetEventID() % printModulo != 0) return;
-    
-    G4PrimaryParticle* primary = event->GetPrimaryVertex(0)->GetPrimary(0);
-    G4cout << G4endl
-           << ">>> Event " << event->GetEventID() << " >>> Simulation truth : "
-           << primary->GetG4code()->GetParticleName()
-           << " " << primary->GetMomentum() << G4endl;
-    
-    // Hodoscope 1
-    n_hit = hHC1->entries();
-    G4cout << "Hodoscope 1 has " << n_hit << " hits." << G4endl;
-    for (G4int i=0;i<n_hit;i++)
-    {
-        B5HodoscopeHit* hit = (*hHC1)[i];
-        hit->Print();
-    }
+    fEmCalEdep[i] = edep;
+  }
+  analysisManager->FillNtupleDColumn(2, totalEmE);
 
-    // Hodoscope 2
-    n_hit = hHC2->entries();
-    G4cout << "Hodoscope 2 has " << n_hit << " hits." << G4endl;
-    for (G4int i=0;i<n_hit;i++)
-    {
-        B5HodoscopeHit* hit = (*hHC2)[i];
-        hit->Print();
+  // HCEnergy
+  G4int totalHadHit = 0;
+  G4double totalHadE = 0.;
+  for (auto i=0;i<kNofHadCells;i++) {
+    auto hit = (*hcHC)[i];
+    auto edep = hit->GetEdep();
+    if (edep>0.) {
+        totalHadHit++;
+        totalHadE += edep;
     }
+    fHadCalEdep[i] = edep;
+  }
+  analysisManager->FillNtupleDColumn(3, totalHadE);
 
-    // Drift chamber 1
-    n_hit = dHC1->entries();
-    G4cout << "Drift Chamber 1 has " << n_hit << " hits." << G4endl;
-    for (G4int i2=0;i2<5;i2++)
-    {
-        for (G4int i=0;i<n_hit;i++)
-        {
-            B5DriftChamberHit* hit = (*dHC1)[i];
-            if (hit->GetLayerID()==i2) hit->Print();
-        }
+  // Time 1
+  for (auto i=0;i<hHC1->entries();i++) {
+    analysisManager->FillNtupleDColumn(4,(*hHC1)[i]->GetTime());
+  }
+    
+  // Time 2
+  for (auto i=0;i<hHC2->entries();i++) {
+    analysisManager->FillNtupleDColumn(5,(*hHC2)[i]->GetTime());
+  }
+  
+  analysisManager->AddNtupleRow();  
+  
+  //
+  // Print diagnostics
+  // 
+  
+  auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  if ( printModulo==0 || event->GetEventID() % printModulo != 0) return;
+  
+  auto primary = event->GetPrimaryVertex(0)->GetPrimary(0);
+  G4cout 
+    << G4endl
+    << ">>> Event " << event->GetEventID() << " >>> Simulation truth : "
+    << primary->GetG4code()->GetParticleName()
+    << " " << primary->GetMomentum() << G4endl;
+  
+  // Hodoscope 1
+  nhit  = hHC1->entries();
+  G4cout << "Hodoscope 1 has " << nhit  << " hits." << G4endl;
+  for (auto i=0;i<nhit ;i++) {
+    auto hit = (*hHC1)[i];
+    hit->Print();
+  }
+
+  // Hodoscope 2
+  nhit  = hHC2->entries();
+  G4cout << "Hodoscope 2 has " << nhit  << " hits." << G4endl;
+  for (auto i=0;i<nhit ;i++) {
+    auto hit = (*hHC2)[i];
+    hit->Print();
+  }
+
+  // Drift chamber 1
+  nhit  = dHC1->entries();
+  G4cout << "Drift Chamber 1 has " << nhit  << " hits." << G4endl;
+  for (auto layer=0;layer<kNofChambers;layer++) {
+    for (auto i=0;i<nhit ;i++) {
+      auto hit = (*dHC1)[i];
+      if (hit->GetLayerID()==layer) hit->Print();
     }
+  }
 
-    // Drift chamber 2
-    n_hit = dHC2->entries();
-    G4cout << "Drift Chamber 2 has " << n_hit << " hits." << G4endl;
-    for (G4int i2=0;i2<5;i2++)
-    {
-        for (G4int i=0;i<n_hit;i++)
-        {
-            B5DriftChamberHit* hit = (*dHC2)[i];
-            if (hit->GetLayerID()==i2) hit->Print();
-        }
+  // Drift chamber 2
+  nhit  = dHC2->entries();
+  G4cout << "Drift Chamber 2 has " << nhit  << " hits." << G4endl;
+  for (auto layer=0;layer<kNofChambers;layer++) {
+    for (auto i=0;i<nhit ;i++) {
+      auto hit = (*dHC2)[i];
+      if (hit->GetLayerID()==layer) hit->Print();
     }
+  }
 
-    // EM calorimeter
-    G4cout << "EM Calorimeter has " << totalEmHit << " hits. Total Edep is "
+  // EM calorimeter
+  G4cout << "EM Calorimeter has " << totalEmHit << " hits. Total Edep is "
     << totalEmE/MeV << " (MeV)" << G4endl;
 
-    // Had calorimeter
-    G4cout << "Hadron Calorimeter has " << totalHadHit << " hits. Total Edep is "
+  // Had calorimeter
+  G4cout << "Hadron Calorimeter has " << totalHadHit << " hits. Total Edep is "
     << totalHadE/MeV << " (MeV)" << G4endl;
 }
 

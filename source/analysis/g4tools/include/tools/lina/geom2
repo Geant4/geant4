@@ -1,0 +1,94 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_geom2
+#define tools_geom2
+
+#include <vector>
+#include <cstddef>
+
+namespace tools {
+
+template <class VEC2>
+inline double is_left(const VEC2& P0,const VEC2& P1,const VEC2& P2){
+  return ( (P1.v0() - P0.v0()) * (P2.v1() - P0.v1())
+         - (P2.v0() - P0.v0()) * (P1.v1() - P0.v1()) );
+}
+
+template <class VEC2>
+inline bool is_inside(const VEC2& a_P,const std::vector<VEC2>& a_V) {
+  // V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
+
+  // From :
+  //   http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
+  // Copyright 2001, softSurfer (www.softsurfer.com)
+  // This code may be freely used and modified for any purpose
+  // providing that this copyright notice is included with it.
+  // SoftSurfer makes no warranty for this code, and cannot be held
+  // liable for any real or imagined damage resulting from its use.
+  // Users of this code must verify correctness for their application.
+
+  size_t n = a_V.size()-1;
+
+  int    wn = 0;    // the winding number counter
+
+  // loop through all edges of the polygon
+  for (size_t i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+    if (a_V[i].v1() <= a_P.v1()) {         // start y <= P[1]
+      if (a_V[i+1].v1() > a_P.v1())      // an upward crossing
+        if (is_left( a_V[i], a_V[i+1], a_P) > 0)  // P left of edge
+          ++wn;            // have a valid up intersect
+    } else {                       // start y > P[1] (no test needed)
+      if (a_V[i+1].v1() <= a_P.v1())     // a downward crossing
+        if (is_left( a_V[i], a_V[i+1], a_P) < 0)  // P right of edge
+          --wn;            // have a valid down intersect
+    }
+  }
+  
+  return ((wn!=0)?true:false);
+}
+
+// the same done with std::pair.
+
+template <class T>
+inline double is_left(const std::pair<T,T>& P0,const std::pair<T,T>& P1,const std::pair<T,T>& P2){
+  return ( (P1.first - P0.first) * (P2.second - P0.second)
+         - (P2.first - P0.first) * (P1.second - P0.second) );
+}
+
+template <class T>
+inline bool inside(const std::pair<T,T>& a_P,const std::vector< std::pair<T,T> >& a_V) {
+  // V[] = vertex points of a polygon V[n+1] with V[n]=V[0]
+
+  // From :
+  //   http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
+  // Copyright 2001, softSurfer (www.softsurfer.com)
+  // This code may be freely used and modified for any purpose
+  // providing that this copyright notice is included with it.
+  // SoftSurfer makes no warranty for this code, and cannot be held
+  // liable for any real or imagined damage resulting from its use.
+  // Users of this code must verify correctness for their application.
+
+  size_t n = a_V.size()-1;
+
+  int    wn = 0;    // the winding number counter
+
+  // loop through all edges of the polygon
+  for (size_t i=0; i<n; i++) {   // edge from V[i] to V[i+1]
+    if (a_V[i].second <= a_P.second) {         // start y <= P[1]
+      if (a_V[i+1].second > a_P.second)      // an upward crossing
+        if (is_left( a_V[i], a_V[i+1], a_P) > 0)  // P left of edge
+          ++wn;            // have a valid up intersect
+    } else {                       // start y > P[1] (no test needed)
+      if (a_V[i+1].second <= a_P.second)     // a downward crossing
+        if (is_left( a_V[i], a_V[i+1], a_P) < 0)  // P right of edge
+          --wn;            // have a valid down intersect
+    }
+  }
+  
+  return ((wn!=0)?true:false);
+}
+
+}
+
+#endif

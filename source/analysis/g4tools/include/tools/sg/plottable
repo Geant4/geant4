@@ -193,7 +193,7 @@ public:
 //  virtual void* cast(const char*) const = 0;
 //};
 
-inline const std::string& s_inlib_sg_fit2plot() {
+inline const std::string& s_tools_sg_fit2plot() {
   static const std::string s_v("tools::sg::fit2plot");
   return s_v;
 }

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 91686 2015-07-31 09:40:08Z gcosmo $
+# $Id: sources.cmake 99440 2016-09-22 08:34:04Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -20,15 +20,25 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/basic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/interfaces/common/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/externals/gl2ps/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/visualization/management/include)
@@ -336,10 +346,17 @@ GEANT4_DEFINE_MODULE(NAME G4OpenGL
         G4UIbasic
         G4UIcommon
         G4csg
+        G4event
+        G4run
+        G4particles
+        G4processes
+        G4track
+        G4materials
         G4geometrymng
         G4gl2ps
         G4globman
         G4graphics_reps
+        G4digits
         G4hits
         G4intercoms
         G4modeling
@@ -348,6 +365,12 @@ GEANT4_DEFINE_MODULE(NAME G4OpenGL
         G4vis_management
     GLOBAL_DEPENDENCIES
         G4digits_hits
+        G4event
+        G4run
+        G4particles
+        G4processes
+        G4track
+        G4materials
         G4geometry
         G4gl2ps
         G4global

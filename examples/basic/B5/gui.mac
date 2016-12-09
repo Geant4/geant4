@@ -33,9 +33,9 @@
 #
 # Field menu :
 /gui/addMenu field Field
-/gui/addButton field "off"       "/globalField/setValue 0   0 0 tesla"
-/gui/addButton field "0.2 tesla" "/globalField/setValue 0.2 0 0 tesla"
-/gui/addButton field "2.0 tesla" "/globalField/setValue 2.0 0 0 tesla"
+/gui/addButton field "off"       "/B5/field/value 0   tesla"
+/gui/addButton field "0.2 tesla" "/B5/field/value 0.2 tesla"
+/gui/addButton field "2.0 tesla" "/B5/field/value 2.0 tesla"
 #
 # Viewer menu :
 /gui/addMenu viewer Viewer

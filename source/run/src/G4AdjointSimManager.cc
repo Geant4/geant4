@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.cc 97327 2016-06-01 14:24:40Z gcosmo $
+// $Id: G4AdjointSimManager.cc 98735 2016-08-09 10:54:06Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -80,8 +80,8 @@ G4AdjointSimManager::G4AdjointSimManager():
  //----------------------
  theAdjointPrimaryGeneratorAction = new G4AdjointPrimaryGeneratorAction(); 
  theAdjointSteppingAction = new G4AdjointSteppingAction();
- theAdjointStackingAction = new G4AdjointStackingAction();
  theAdjointTrackingAction = new G4AdjointTrackingAction(theAdjointSteppingAction);
+ theAdjointStackingAction = new G4AdjointStackingAction(theAdjointTrackingAction);
  theAdjointTrackingAction->SetListOfPrimaryFwdParticles(
  theAdjointPrimaryGeneratorAction->GetListOfPrimaryFwdParticles());
  //Create messenger
@@ -158,7 +158,6 @@ void G4AdjointSimManager::RunAdjointSimulation(G4int nb_evt)
   //------------
   
   nb_evt_of_last_run =nb_evt;
-  G4cout<<"Test Sim Adjoint1"<<std::endl;
   G4RunManager::GetRunManager()->BeamOn(nb_evt*theAdjointPrimaryGeneratorAction->GetNbOfAdjointPrimaryTypes());
   //G4RunManager::GetRunManager()->BeamOn(theAdjointPrimaryGeneratorAction->GetNbOfAdjointPrimaryTypes()*2*nb_evt);
 
@@ -351,8 +350,9 @@ void G4AdjointSimManager::SetAdjointTrackingMode(G4bool aBool)//could be removed
 //
 G4bool G4AdjointSimManager::GetDidAdjParticleReachTheExtSource()
 {
-  return theAdjointSteppingAction->GetDidAdjParticleReachTheExtSource();
+  return (GetNbOfAdointTracksReachingTheExternalSurface()>0);
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 //
 std::vector<G4ParticleDefinition*>*  G4AdjointSimManager::GetListOfPrimaryFwdParticles()
@@ -368,34 +368,34 @@ size_t G4AdjointSimManager::GetNbOfPrimaryFwdParticles()
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4ThreeVector  G4AdjointSimManager::GetPositionAtEndOfLastAdjointTrack(){
-   return theAdjointTrackingAction->GetPositionAtEndOfLastAdjointTrack();
+G4ThreeVector  G4AdjointSimManager::GetPositionAtEndOfLastAdjointTrack(size_t i){
+   return theAdjointTrackingAction->GetPositionAtEndOfLastAdjointTrack(i);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4ThreeVector G4AdjointSimManager::GetDirectionAtEndOfLastAdjointTrack(){
-   return theAdjointTrackingAction->GetDirectionAtEndOfLastAdjointTrack();
+G4ThreeVector G4AdjointSimManager::GetDirectionAtEndOfLastAdjointTrack(size_t i){
+   return theAdjointTrackingAction->GetDirectionAtEndOfLastAdjointTrack(i);
 }
 //////////////////////////////////////////////////////////////////////////////
 //
-G4double G4AdjointSimManager::GetEkinAtEndOfLastAdjointTrack(){
- return theAdjointTrackingAction->GetEkinAtEndOfLastAdjointTrack();
+G4double G4AdjointSimManager::GetEkinAtEndOfLastAdjointTrack(size_t i){
+ return theAdjointTrackingAction->GetEkinAtEndOfLastAdjointTrack(i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4AdjointSimManager::GetEkinNucAtEndOfLastAdjointTrack(){
- return theAdjointTrackingAction->GetEkinNucAtEndOfLastAdjointTrack();
+G4double G4AdjointSimManager::GetEkinNucAtEndOfLastAdjointTrack(size_t i){
+ return theAdjointTrackingAction->GetEkinNucAtEndOfLastAdjointTrack(i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4AdjointSimManager::GetWeightAtEndOfLastAdjointTrack(){
- return theAdjointTrackingAction->GetWeightAtEndOfLastAdjointTrack();
+G4double G4AdjointSimManager::GetWeightAtEndOfLastAdjointTrack(size_t i){
+ return theAdjointTrackingAction->GetWeightAtEndOfLastAdjointTrack(i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4double G4AdjointSimManager::GetCosthAtEndOfLastAdjointTrack(){
- return theAdjointTrackingAction->GetCosthAtEndOfLastAdjointTrack();
+G4double G4AdjointSimManager::GetCosthAtEndOfLastAdjointTrack(size_t i){
+ return theAdjointTrackingAction->GetCosthAtEndOfLastAdjointTrack(i);
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -404,14 +404,25 @@ const G4String& G4AdjointSimManager::GetFwdParticleNameAtEndOfLastAdjointTrack()
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4int G4AdjointSimManager::GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){
- return theAdjointTrackingAction->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack();
+G4int G4AdjointSimManager::GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(size_t i){
+ return theAdjointTrackingAction->GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(i);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 //
-G4int G4AdjointSimManager::GetFwdParticleIndexAtEndOfLastAdjointTrack()
-{return theAdjointTrackingAction->GetLastFwdParticleIndex();
+G4int G4AdjointSimManager::GetFwdParticleIndexAtEndOfLastAdjointTrack(size_t i)
+{return theAdjointTrackingAction->GetLastFwdParticleIndex(i);
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+size_t G4AdjointSimManager::GetNbOfAdointTracksReachingTheExternalSurface()
+{
+  return theAdjointTrackingAction->GetNbOfAdointTracksReachingTheExternalSurface();
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointSimManager::ClearEndOfAdjointTrackInfoVectors()
+{theAdjointTrackingAction->ClearEndOfAdjointTrackInfoVectors();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -447,6 +458,24 @@ void G4AdjointSimManager::RegisterAtEndOfAdjointTrack()
 
   last_weight = theAdjointSteppingAction->GetLastWeight(); 
   
+
+
+  last_pos_vec.push_back(last_pos);
+  last_direction_vec.push_back(last_direction);
+  last_ekin_vec.push_back(last_ekin);
+  last_ekin_nuc_vec.push_back(last_ekin_nuc);
+  last_cos_th_vec.push_back(last_cos_th);
+  last_weight_vec.push_back(last_weight);
+  last_fwd_part_PDGEncoding_vec.push_back(last_fwd_part_PDGEncoding);
+  last_fwd_part_index_vec.push_back(last_fwd_part_index);
+  ID_of_last_particle_that_reach_the_ext_source++;
+  ID_of_last_particle_that_reach_the_ext_source_vec.push_back(ID_of_last_particle_that_reach_the_ext_source);
+
+
+
+
+
+
   /* G4PhysicsLogVector* theWeightVector=0;
   if (last_fwd_part_name =="e-")  theWeightVector=electron_last_weight_vector;
   else if (last_fwd_part_name =="gamma") theWeightVector=gamma_last_weight_vector;
@@ -472,7 +501,7 @@ void G4AdjointSimManager::RegisterAtEndOfAdjointTrack()
   }
   */
  
-   ID_of_last_particle_that_reach_the_ext_source++;
+
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -619,9 +648,20 @@ void G4AdjointSimManager::SetNbOfPrimaryFwdGammasPerEvent(G4int nb)
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
+void G4AdjointSimManager::SetNbAdjointPrimaryGammasPerEvent(G4int nb)
+{
+  theAdjointPrimaryGeneratorAction->SetNbAdjointPrimaryGammasPerEvent(nb);
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointSimManager::SetNbAdjointPrimaryElectronsPerEvent(G4int nb)
+{
+  theAdjointPrimaryGeneratorAction->SetNbAdjointPrimaryElectronsPerEvent(nb);
+}
+///////////////////////////////////////////////////////////////////////////////
+//
 void G4AdjointSimManager::BeginOfRunAction(const G4Run* aRun)
 {
-
 /*
  if (!adjoint_sim_mode){
   if(fUserRunAction) fUserRunAction->BeginOfRunAction(aRun);
@@ -631,7 +671,6 @@ void G4AdjointSimManager::BeginOfRunAction(const G4Run* aRun)
  }
  */
 fUserRunAction->BeginOfRunAction(aRun);
-
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -649,3 +688,10 @@ void G4AdjointSimManager::EndOfRunAction(const G4Run* aRun)
 */
 
 }
+///////////////////////////////////////////////////////////////////////////////
+//
+G4ParticleDefinition* G4AdjointSimManager::GetLastGeneratedFwdPrimaryParticle(){
+   	return theAdjointPrimaryGeneratorAction->GetLastGeneratedFwdPrimaryParticle();
+}
+
+

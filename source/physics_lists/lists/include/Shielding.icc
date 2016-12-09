@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc 83413 2014-08-21 15:21:43Z gcosmo $
+// $Id: Shielding.icc 101813 2016-11-30 18:05:43Z gunter $
 //
 //---------------------------------------------------------------------------
 //
@@ -129,9 +129,9 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model,
   G4HadronPhysicsShielding* hps;
   // Hadron Physics
   if (HadrPhysVariant == "M") {
-    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 9.5*GeV, 9.9*GeV);
+    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
   } else {
-    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 4.0*GeV, 5.0*GeV);
+    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
   }
   if ( LEN_model == "HP" ) 
   {

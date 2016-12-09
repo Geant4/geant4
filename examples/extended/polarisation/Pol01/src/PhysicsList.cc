@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 96116 2016-03-16 18:56:02Z gcosmo $
+// $Id: PhysicsList.cc 100257 2016-10-17 08:00:06Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,22 +39,20 @@
 #include "PhysListEmPolarized.hh"
 
 #include "G4EmParameters.hh"
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
-: G4VModularPhysicsList()
+: G4VModularPhysicsList(),
+  fEmPhysicsList(0), fEmName("polarized"), fMessenger(0)
 {
-  pMessenger = new PhysicsListMessenger(this);
+  fMessenger = new PhysicsListMessenger(this);
 
   G4EmParameters::Instance();
 
   SetVerboseLevel(1);
 
-  emName = "polarized";
-  emPhysicsList = new PhysListEmPolarized();
+  fEmPhysicsList = new PhysListEmPolarized();
 
 }
 
@@ -62,7 +60,7 @@ PhysicsList::PhysicsList()
 
 PhysicsList::~PhysicsList()
 {
-  delete pMessenger;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,7 +109,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  emPhysicsList->ConstructProcess();
+  fEmPhysicsList->ConstructProcess();
     
   // step limitation (as a full process)
   //  
@@ -126,19 +124,19 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
   
-  if (name == emName) return;
+  if (name == fEmName) return;
 
   if (name == "standard") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmStandardPhysics();
             
   } else if (name == "polarized") {
 
-    emName = name;
-    delete emPhysicsList;
-    emPhysicsList = new PhysListEmPolarized();
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new PhysListEmPolarized();
 
   } else {
     G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -157,9 +155,10 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle) && pmanager)

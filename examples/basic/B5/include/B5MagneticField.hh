@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5MagneticField.hh 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5MagneticField.hh 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5MagneticField.hh
 /// \brief Definition of the B5MagneticField class
@@ -40,7 +40,7 @@ class G4GenericMessenger;
 
 class B5MagneticField : public G4MagneticField
 {
-public:
+  public:
     B5MagneticField();
     virtual ~B5MagneticField();
     
@@ -49,7 +49,7 @@ public:
     void SetField(G4double val) { fBy = val; }
     G4double GetField() const { return fBy; }
     
-private:
+  private:
     void DefineCommands();
 
     G4GenericMessenger* fMessenger;

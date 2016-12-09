@@ -394,6 +394,13 @@ namespace G4INCL {
       theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
       theEventInfo.forcedDeltasInside = nucleus->decayInsideDeltas();
 
+	  // Take care of any remaining etas and/or omegas
+/*	  if (theConfig->getDecayTimeThreshold() > 7.e-19) {
+		  theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances();
+	  }*/
+	  G4double timeThreshold=theConfig->getDecayTimeThreshold();
+	  theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
+		
       // Apply Coulomb distortion, if appropriate
       // Note that this will apply Coulomb distortion also on pions emitted by
       // unphysical remnants (see decayInsideDeltas). This is at variance with
@@ -590,6 +597,10 @@ namespace G4INCL {
       // Take care of any remaining deltas
       theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
 
+	  // Take care of any remaining etas and/or omegas
+	  G4double timeThreshold=theConfig->getDecayTimeThreshold();
+      theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
+		
       // Cluster decay
       theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
 

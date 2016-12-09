@@ -1,4 +1,4 @@
-$Id: README 92318 2015-08-27 14:49:47Z gcosmo $
+$Id: README 99607 2016-09-28 13:33:42Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -102,21 +102,9 @@ $Id: README 92318 2015-08-27 14:49:47Z gcosmo $
  One can control the name of the histograms file and its format:
  default name     : AnaEx01   
  The format of the histogram file can be : root (default),
- hbook, xml, csv. Include correct g4nnn.hh in HistoManager.hh 
+ xml, csv. Include correct g4nnn.hh in HistoManager.hh 
  
- Using hbook format
- ------------------
- 
- This example provides the implementation of G4AnalysisManager for
- Hbook in hbook directory. As this package requires CERNLIB libraries, 
- its compilation is optional. To build it, the following environment variables
- must be defined:
-    G4_USE_HBOOK = 1
-    CERNLIB = path to the CERNLIB installation
- 
- Then, *before* compiling, activate g4hbook.hh in HistoManager.hh
-
- 6- How to build
+  6- How to build
  --------------- 
 
  An additional step is needed when building the example with GNUmake

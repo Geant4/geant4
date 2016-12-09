@@ -76,7 +76,7 @@ private:
   G4int                          fSplittingFactor;
   G4bool                         fBiasPrimaryOnly;
   G4bool                            fBiasOnlyOnce;
-  G4int                             nInteractions;
+  G4int                            fNInteractions;
   // Messengers to change the 
   G4GenericMessenger*  fSplittingFactorMessenger;
   G4GenericMessenger*  fBiasPrimaryOnlyMessenger;

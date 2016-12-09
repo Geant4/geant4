@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4CompetitiveFission.cc 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -90,16 +90,6 @@ G4double G4CompetitiveFission::GetEmissionProbability(G4Fragment* fragment)
     FissionProbability = 0.0;
   }
   return FissionProbability;
-}
-
-G4FragmentVector * G4CompetitiveFission::BreakUp(const G4Fragment & theNucleus)
-{
-  G4FragmentVector * theResult = new G4FragmentVector();
-  G4Fragment* frag0 = new G4Fragment(theNucleus);
-  G4Fragment* frag1 = EmittedFragment(frag0);
-  if(frag1) { theResult->push_back(frag1); }
-  theResult->push_back(frag0);
-  return theResult;
 }
 
 G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)

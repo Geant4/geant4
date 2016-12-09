@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChPhysicsList.cc
+/// \brief Implementation of the ExExChPhysicsList class
+//
 
 #include "ExExChPhysicsList.hh"
 
@@ -195,9 +198,10 @@ void ExExChPhysicsList::AddChanneling(){
         channeling->SetFileCharacteristicsName(fFilePotentialName);
     }
     
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while( (*particleIterator)() ){
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pManager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
         

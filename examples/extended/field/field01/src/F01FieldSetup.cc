@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.cc 90341 2015-05-26 08:38:36Z gcosmo $
+// $Id: F01FieldSetup.cc 100688 2016-10-31 11:21:51Z gcosmo $
 //
 //   User Field setup class implementation.
 //
@@ -60,6 +60,11 @@
 #include "G4NystromRK4.hh"
 #include "G4HelixMixedStepper.hh"
 #include "G4ExactHelixStepper.hh"
+
+// Newest steppers - from Release 10.3-beta (June 2013)
+#include "G4BogackiShampine23.hh"
+#include "G4BogackiShampine45.hh"
+#include "G4DormandPrince745.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -214,10 +219,27 @@ void F01FieldSetup::SetStepper()
       fStepper = new G4NystromRK4( fEquation );
       G4cout<<" G4NystromRK4 Stepper is chosen"<<G4endl;
       break;
-    default: // fStepper = 4;
+    case 14:      
+    case 23:
+      fStepper = new G4BogackiShampine23( fEquation );
+      G4cout<<"G4BogackiShampine23 Stepper is chosen"<<G4endl;
+      break;
+    case 15:
+    case 45:       
+      fStepper = new G4BogackiShampine45( fEquation );
+      G4cout<<"G4BogackiShampine45 Stepper is chosen"<<G4endl;
+      break;
+    case 457:
+    case 745:
+      fStepper = new G4DormandPrince745( fEquation );
+      G4cout<<"G4DormandPrince745 Stepper is chosen"<<G4endl;       
+      break;
+    default:
       fStepper = new G4ClassicalRK4( fEquation );
       G4cout<<"G4ClassicalRK4 Stepper (default) is chosen"<<G4endl;
-      break;
+      // fStepper = new G4DormandPrince745( fEquation );
+      // G4cout<<"G4DormandPrince745 (default) Stepper is chosen"<<G4endl;             
+      break;      
   }
 }
 

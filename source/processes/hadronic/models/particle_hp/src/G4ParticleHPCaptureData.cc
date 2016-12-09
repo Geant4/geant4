@@ -60,6 +60,12 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
    if ( G4Threading::IsWorkerThread() ) {
       instanceOfWorker = true;
    }
+
+   element_cache = NULL;
+   material_cache = NULL;
+   ke_cache = 0.0; 
+   xs_cache = 0.0; 
+    
    //BuildPhysicsTable(*G4Neutron::Neutron());
 }
    
@@ -91,7 +97,13 @@ G4double G4ParticleHPCaptureData::GetIsoCrossSection( const G4DynamicParticle* d
                                    const G4Element* element ,
                                    const G4Material* material )
 {
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
    G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
    return xs;
 }
 

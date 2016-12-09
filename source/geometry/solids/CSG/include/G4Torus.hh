@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh 92393 2015-08-31 14:07:30Z gcosmo $
+// $Id: G4Torus.hh 100820 2016-11-02 15:18:48Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -56,15 +56,6 @@
 //     - Construct a torus with the given name and dimensions.
 //       The angles are provided is radians. pRtor >= pRmax
 //
-//
-//   Protected:
-//
-//     G4ThreeVectorList*
-//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
-//
-//     - Create the List of transformed vertices in the format required
-//       for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-//   
 //   Member Data:
 //
 //  fRmin  Inside radius
@@ -129,6 +120,10 @@ class G4Torus : public G4CSGSolid
     inline G4double GetRtor() const;
     inline G4double GetSPhi() const;
     inline G4double GetDPhi() const;
+    inline G4double GetSinStartPhi () const;
+    inline G4double GetCosStartPhi () const;
+    inline G4double GetSinEndPhi   () const;
+    inline G4double GetCosEndPhi   () const;
 
     // Methods of solid
 
@@ -136,6 +131,7 @@ class G4Torus : public G4CSGSolid
     inline G4double GetSurfaceArea();
 
     EInside Inside(const G4ThreeVector& p) const;
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -189,10 +185,6 @@ class G4Torus : public G4CSGSolid
                             const G4ThreeVector& v,
                                   G4double r,
                                   G4bool IsDistanceToIn) const;
-
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform,
-                                G4int& noPolygonVertices) const;
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p) const;
       // Algorithm for SurfaceNormal() following the original

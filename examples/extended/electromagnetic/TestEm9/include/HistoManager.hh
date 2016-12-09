@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm9/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id: HistoManager.hh 73029 2013-08-15 09:19:37Z gcosmo $
+// $Id: HistoManager.hh 100809 2016-11-02 15:02:53Z gcosmo $
 
 #ifndef HistoManager_h
 #define HistoManager_h 1
@@ -76,7 +76,7 @@ public: // Without description
 
   ~HistoManager();
 
-  void bookHisto();
+  void BookHisto();
 
   void BeginOfRun();
   void EndOfRun(G4int runID);

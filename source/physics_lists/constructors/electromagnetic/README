@@ -1,0 +1,92 @@
+$Id:$
+-------------------------------------------------------------------
+
+
+ G4EmDNAChemistry
+ ----------------
+ 
+ G4EmDNAPhysics
+ --------------
+ 
+ G4EmDNAPhysicsActivator
+ -----------------------
+ 
+ G4EmDNAPhysics_option1
+ ----------------------
+ 
+ G4EmDNAPhysics_option2
+ ----------------------
+ 
+ G4EmDNAPhysics_option3
+ ----------------------
+ 
+ G4EmDNAPhysics_option4
+ ----------------------
+ 
+ G4EmDNAPhysics_option5
+ ----------------------
+ 
+ G4EmDNAPhysics_option7
+ ----------------------
+ 
+ G4EmLEPTSPhysics
+ ----------------
+ 
+ G4EmLivermorePhysics
+ --------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmLivermorePolarizedPhysics
+ -----------------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+  
+ G4EmLowEPPhysics
+ ----------------
+ 
+ G4EmModelActivator
+ ------------------
+ 
+ G4EmPenelopePhysics
+ -------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysics
+ -------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysicsGS
+ ---------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysicsSS
+ ---------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysicsWVI
+ ----------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysics_option1
+ ---------------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysics_option2
+ ---------------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysics_option3
+ ---------------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4EmStandardPhysics_option4
+ ---------------------------
+  see https://geant4.web.cern.ch/geant4/collaboration/working_groups/electromagnetic/physlist.shtml
+ 
+ G4OpticalPhysics
+ ----------------
+ 
+ G4OpticalPhysicsMessenger
+ -------------------------
+ 
+ G4OpticalProcessIndex
+ ---------------------

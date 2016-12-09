@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XPhysicalLattice.cc
+/// \brief Implementation of the XPhysicalLattice class
+//
 
 #include "XPhysicalLattice.hh"
 #include "G4VPhysicalVolume.hh"

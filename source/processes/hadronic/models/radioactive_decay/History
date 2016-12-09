@@ -14,6 +14,63 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+7 November 2016  Dennis Wright  radioactive_decay-V10-02-15
+-----------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix segfault by removing deletion of 
+  empty decay table 
+
+4 November 2016  Dennis Wright  radioactive_decay-V10-02-14
+-----------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix bug which ignores IT decay when no
+  entries found in database
+ 
+30 September 2016  Dennis Wright  radioactive_decay-V10-02-13
+-------------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable: fix unexpected behavior when decay file
+  is not found
+
+26 September 2016  Dennis Wright  radioactive_decay-V10-02-12
+-------------------------------------------------------------
+- G4BetaMinusDecay::DecayIt: add protection for spectrumSampler to try and avoid 
+  unitialized read error 
+- G4BetaMinusDecay::SetUpBetaSpectrumSampler: put array creation inside (e0 > 0)
+  block
+ 
+23 September 2016  Dennis Wright  radioactive_decay-V10-02-11
+-------------------------------------------------------------
+- G4BetaMinusDecay::SetUpBetaSpectrumSampler: add missing initialization of 
+  spectrumSampler
+
+- G4RadioactiveDecayRate copy ctor: restore verboseLevel initialization as
+  per Coverity
+
+ 7 September 2016  Dennis Wright  radioactive_decay-V10-02-10
+------------------------------------------------------------
+- G4NuclearDecay.hh: fixed compilation error by adding Get() method for
+  floating level
+
+16 August 2016  Dennis Wright  radioactive_decay-V10-02-09
+----------------------------------------------------------
+- remove obsolete class G4NuclearDecayChannel and all classes based on it:
+  G4AlphaDecayChannel, G4BetaMinusDecayChannel, G4BetaPlusDecayChannel,
+  G4ITDecayChannel, G4KshellECDecayChannel, G4LshellECDecayChannel,
+  G4MshellECDecayChannel and G4ProtonDecayChannel.hh
+
+- G4RadioactiveDecay: enable reading of floating levels and entry as unique 
+  nuclides into decay tables
+
+- G4RadioactiveDecay and all specific decay channel classes: allow 
+  nuclides with floating levels to decay
+
+- this tag works only with the RadioactiveDecay5.0 database or later 
+
+
+25 July 2016  Vladimir Ivanchenko  radioactive_decay-V10-02-08
+--------------------------------------------------------
+- G4NuclearDecayChannel, G4RadioactiveDecay, G4RadioactiveDecaymessenger
+    switch to use new gamma level data instead of old obsolete
+
 16 June 2016  Vladimir Ivanchenko  radioactive_decay-V10-02-07
 --------------------------------------------------------
 - G4RadioactiveDecay::BuildPhysicsTable: remove initialization of atomic 

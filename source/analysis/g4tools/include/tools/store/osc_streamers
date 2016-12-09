@@ -214,7 +214,7 @@ protected:
     int version = 1;
     if(!a_v.visit("fVersion",version)) return false;
 
-    unsigned int number = m_vec.size();
+    unsigned int number = (unsigned int)m_vec.size();
     if(!a_v.visit("fSize",number)) return false;
 
     std::string stmp;

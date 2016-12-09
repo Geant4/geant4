@@ -27,8 +27,8 @@
 //                 GEANT 4 - Brachytherapy example
 // --------------------------------------------------------------
 //
-// Code developed by:
-// S. Agostinelli, F. Foppiano, S. Garelli , M. Tropeano, S.Guatelli
+// Code developed currently by:
+//  S.Guatelli & D. Cutajar
 
 //
 //    *******************************
@@ -46,7 +46,7 @@
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
-#include "BrachyFactoryIr.hh"
+
 #include "BrachyActionInitialization.hh"
 
 #ifdef ANALYSIS_USE
@@ -79,17 +79,23 @@
 int main(int argc ,char ** argv)
 
 {
-
 #ifdef G4MULTITHREADED
   G4MTRunManager* pRunManager = new G4MTRunManager;
   pRunManager->SetNumberOfThreads(4); // Is equal to 2 by default
 #else
  G4RunManager* pRunManager = new G4RunManager;
 #endif
+ 
+  G4int seed = 0;
+  
+  G4Random::setTheSeed(seed);
 
+  G4cout << "***********************" << G4endl;
+  G4cout << "*** " << seed << " ***" << G4endl;
+  G4cout << "***********************" << G4endl;
  // Access to the Scoring Manager pointer
+  
   G4ScoringManager* scoringManager = G4ScoringManager::GetScoringManager();
-
 
   // Overwrite the default output file with user-defined one 
   scoringManager->SetScoreWriter(new BrachyUserScoreWriter());

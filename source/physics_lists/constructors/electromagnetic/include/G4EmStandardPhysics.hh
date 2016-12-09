@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics.hh 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4EmStandardPhysics.hh 98736 2016-08-09 10:55:12Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -52,10 +52,8 @@
 class G4EmStandardPhysics : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysics(G4int ver = 0);
 
-  // obsolete
-  G4EmStandardPhysics(G4int ver, const G4String& name);
+  explicit G4EmStandardPhysics(G4int ver=0, const G4String& name="");
 
   virtual ~G4EmStandardPhysics();
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChEventAction.cc
+/// \brief Implementation of the ExExChEventAction class
+//
 
 #include "ExExChEventAction.hh"
 

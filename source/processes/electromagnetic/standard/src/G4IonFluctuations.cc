@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4IonFluctuations.cc 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,7 +85,7 @@ G4IonFluctuations::G4IonFluctuations(const G4String& nam)
 {
   kineticEnergy = 0.0;
   beta2 = 0.0;
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -352,8 +352,8 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
 
     //    G4double ss = 1.0 + a[iz][0]*pow(energy,a[iz][1])+
     //  + a[iz][2]*pow(energy,a[iz][3]);
-    G4double ss = 1.0 + a[iz][0]*g4pow->powA(energy,a[iz][1])+
-      + a[iz][2]*g4pow->powA(energy,a[iz][3]);
+    G4double ss = 1.0 + a[iz][0]*g4calc->powA(energy,a[iz][1])+
+      + a[iz][2]*g4calc->powA(energy,a[iz][3]);
   
     // protection for the validity range for low beta
     static const G4double slim = 0.001;
@@ -384,7 +384,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   // ions
   } else {
 
-    factor = charge * g4pow->A13(charge/Z);
+    factor = charge * g4calc->A13(charge/Z);
 
     if( kStateGas == material->GetState() ) {
       energy /= (charge * sqrt(charge)) ;
@@ -404,7 +404,7 @@ G4double G4IonFluctuations::Factor(const G4Material* material, G4double Z)
   G4double x = b[i][2];
   G4double y = energy * b[i][3];
   if(y <= 0.2) x *= (y*(1.0 - 0.5*y));
-  else         x *= (1.0 - g4pow->expA(-y));
+  else         x *= (1.0 - g4calc->expA(-y));
   //  else         x *= (1.0 - exp(-y));
 
   y = energy - b[i][1];

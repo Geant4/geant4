@@ -33,11 +33,17 @@
 #include "RE06PrimaryGeneratorAction.hh"
 #include "RE06RunAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE06ActionInitialization::RE06ActionInitialization()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE06ActionInitialization::~RE06ActionInitialization()
 {;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE06ActionInitialization::Build() const
 {
@@ -48,6 +54,8 @@ void RE06ActionInitialization::Build() const
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE06ActionInitialization::BuildForMaster() const
 {
   //
@@ -55,3 +63,4 @@ void RE06ActionInitialization::BuildForMaster() const
   SetUserAction(run_action);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

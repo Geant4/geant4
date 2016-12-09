@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 97907 2016-06-22 13:37:05Z gcosmo $
+# $Id: sources.cmake 100331 2016-10-18 07:33:28Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -87,11 +87,13 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_decay
     HEADERS
         G4DecayPhysics.hh
+	G4MuonicAtomDecayPhysics.hh
         G4SpinDecayPhysics.hh
         G4RadioactiveDecayPhysics.hh
         G4UnknownDecayPhysics.hh
     SOURCES
         G4DecayPhysics.cc
+	G4MuonicAtomDecayPhysics.cc
         G4SpinDecayPhysics.cc
         G4RadioactiveDecayPhysics.cc
         G4UnknownDecayPhysics.cc

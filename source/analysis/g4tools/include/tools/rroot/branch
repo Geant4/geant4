@@ -259,7 +259,7 @@ public:
     //TObjArray
     //::printf("debug : branch::stream : leaves : begin\n");
    {ifac::args args;
-    args[ifac::arg_branch()] = this;
+    //args[ifac::arg_branch()] = this;
     if(!m_leaves.stream(a_buffer,args)) {
       m_out << "tools::rroot::branch::stream :"
             << " can't read leaves."
@@ -516,9 +516,9 @@ public:
 
   virtual bool read_leaves(buffer& a_buffer){
     tools_vforcit(base_leaf*,m_leaves,it) {
-      if(!(*it)->read_basket(a_buffer)) {
+      if(!(*it)->read_buffer(a_buffer)) {
         m_out << "tools::rroot::branch::read_leaves :" 
-              << " read_basket failed."
+              << " read_buffer failed."
               << std::endl;
         return false;
       }
@@ -526,7 +526,7 @@ public:
     return true;
   }
 
-  virtual bool find_entry(uint32 a_entry,uint32& a_nbytes){
+  virtual bool find_entry(ifile& a_file,uint32 a_entry,uint32& a_nbytes){
     // Read all leaves of entry and return total number of bytes :
     // The input argument entry is the entry serial number in the current tree.
     a_nbytes = 0;
@@ -635,7 +635,7 @@ public:
           return false;
         }
 
-        bsk = get_basket(fBasketSeek[m_read_basket],fBasketBytes[m_read_basket]);
+        bsk = get_basket(a_file,fBasketSeek[m_read_basket],fBasketBytes[m_read_basket]);
         if(!bsk) {
           m_out << "tools::rroot::branch::find_entry :"
                 << " can't read basket " << m_read_basket
@@ -706,7 +706,7 @@ public:
     }
 */
 
-    rroot::buffer buffer(m_out,m_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
+    rroot::buffer buffer(m_out,a_file.byte_swap(),m__read_basket->buf_size(),m__read_basket->buf(),0,false); 
     buffer.set_offset(bufbegin);
 
     if(!read_leaves(buffer)) {
@@ -727,10 +727,37 @@ public:
     return true;
   }
 
+  virtual bool show(std::ostream& a_out,ifile& a_file,uint32 a_entry) {
+    // Print values of all active leaves for entry :
+    // if entry==-1, print current entry (default)
+    uint32 n;
+    if(!find_entry(a_file,a_entry,n)) return false;
+
+    tools_vforcit(base_leaf*,m_leaves,it) {
+      base_leaf* bl = *it;
+
+      uint32 num = bl->num_elem();
+      num = mn<uint32>(num,10);
+      if(!num) continue;
+
+     {std::string s;
+      uint32 len = uint32(bl->name().size())+128;
+      sprintf(s,len," %-15s = ",bl->name().c_str());
+      a_out << s;}
+
+      for(uint32 i=0;i<num;i++) {
+        if(i) a_out << ", ";
+        bl->print_value(a_out,i);
+      }
+
+      a_out << std::endl;
+    }
+
+    return true;
+  }
 public:
-  branch(ifile& a_file,ifac& a_fac)
-  :m_file(a_file)
-  ,m_out(a_file.out())
+  branch(std::ostream& a_out,ifac& a_fac)
+  :m_out(a_out)
   ,m_fac(a_fac)
 
   ,m_streamed_baskets(m_fac,true)
@@ -765,7 +792,7 @@ public:
 protected:
   branch(const branch& a_from)
   :iro(a_from)
-  ,m_file(a_from.m_file),m_out(a_from.m_out),m_fac(a_from.m_fac)
+  ,m_out(a_from.m_out),m_fac(a_from.m_fac)
   ,m_streamed_baskets(m_fac,false),m__read_basket(0)
   ,fAutoDelete(false)
   ,m_branches(m_fac,false),m_leaves(m_fac,false)
@@ -779,57 +806,25 @@ protected:
   {}
   branch& operator=(const branch&){return *this;}
 public:
-  ifile& file() {return m_file;}
   uint32 entry_number() const {return m_entry_number;}
   const std::string& name() const {return m_name;}
   const std::string& title() const {return m_title;}
   const std::vector<base_leaf*>& leaves() const {return m_leaves;}
   const std::vector<branch*>& branches() const {return m_branches;}
-
-  bool show(std::ostream& a_out,uint32 a_entry){
-    // Print values of all active leaves for entry :
-    // if entry==-1, print current entry (default)
-    uint32 n;
-    if(!find_entry(a_entry,n)) return false;
-
-    tools_vforcit(base_leaf*,m_leaves,it) {
-      base_leaf* bl = *it;
-
-      uint32 num = bl->num_elem();
-      num = mn<uint32>(num,10);
-      if(!num) continue;
-
-     {std::string s;
-      uint32 len = bl->name().size()+128;
-      sprintf(s,len," %-15s = ",bl->name().c_str());
-      a_out << s;}
-
-      for(uint32 i=0;i<num;i++) {
-        if(i) a_out << ", ";
-        bl->print_value(a_out,i);
-      }
-
-      a_out << std::endl;
-    }
-
-    return true;
-  }
 protected:
-  basket* get_basket(seek a_pos,uint32 a_len) {
+  basket* get_basket(ifile& a_file,seek a_pos,uint32 a_len) {
     //if(fBranch.tree().memoryFull(fBufferSize)) fBranch.dropBaskets();
     if(!a_len) return 0;  
 
-    rroot::basket* basket = 
-      new rroot::basket(m_file,a_pos,a_len); //basket is a key.
-    if(!basket->read_file()) {
+    rroot::basket* basket = new rroot::basket(m_out,a_pos,a_len); //basket is a key.
+    if(!basket->read_file(a_file)) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " read_file() failed."
             << std::endl;
       delete basket;
       return 0;
     }
-   {rroot::buffer buffer(m_out,m_file.byte_swap(),
-                         a_len,basket->buf(),0,false); 
+   {rroot::buffer buffer(m_out,a_file.byte_swap(),a_len,basket->buf(),0,false); 
     if(!basket->stream(buffer)) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " basket stream failed."
@@ -838,7 +833,7 @@ protected:
       return 0;
     }}
     unsigned int sz;    
-    char* buf = basket->get_object_buffer(sz); //basket owns buf.
+    char* buf = basket->get_object_buffer(a_file,sz); //basket owns buf.
     if(!buf) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " get_object_buffer() failed."
@@ -865,7 +860,7 @@ protected:
     //}
 
     if(fEntryOffsetLen) {
-    if(!basket->read_offset_tables()) {
+    if(!basket->read_offset_tables(a_file.byte_swap())) {
       m_out << "tools::rroot::branch::get_basket :" 
             << " read_offset_tables failed."
             << std::endl;
@@ -916,8 +911,6 @@ protected:
 
 
 protected:
-  //Tree& fTree;
-  ifile& m_file;
   std::ostream& m_out;
   ifac& m_fac;
   std::vector< std::pair<uint32,uint32> > m_first_last;

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XLogicalAtomicLatticeSingleAtom.hh
+/// \brief Definition of the XLogicalAtomicLatticeSingleAtom class
+//
 
 #ifndef XLogicalAtomicLatticeSingleAtom_h
 #define XLogicalAtomicLatticeSingleAtom_h

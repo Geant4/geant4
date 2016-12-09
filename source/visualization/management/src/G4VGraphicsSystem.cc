@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsSystem.cc 93025 2015-09-30 16:02:12Z gcosmo $
+// $Id: G4VGraphicsSystem.cc 99418 2016-09-21 09:18:42Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -74,7 +74,7 @@ G4bool G4VGraphicsSystem::IsUISessionCompatible () const
 std::ostream& operator << (std::ostream& os, const G4VGraphicsSystem& gs)
 {
   os << "Graphics System: " << gs.GetName ();
-  os << ", nicknames:"; for (auto&& nickname: gs.GetNicknames())
+  os << ", nicknames:"; for (const auto& nickname: gs.GetNicknames())
   {os << ' ' << nickname;}
   os << "\n  Description: " << gs.GetDescription ();
   os << "\n  Functionality: ";

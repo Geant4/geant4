@@ -26,7 +26,7 @@
 /// \file persistency/P01/src/RootIO.cc
 /// \brief Implementation of the RootIO class
 //
-// $Id: RootIO.cc 93305 2015-10-16 07:34:53Z gcosmo $
+// $Id: RootIO.cc 98770 2016-08-09 14:22:25Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,7 +86,6 @@ void RootIO::Write(std::vector<ExP01TrackerHit*>* hcont)
   const char* chevt = stevt.c_str();
 
   G4cout << "writing " << stevt << G4endl;
-
 
   fFile->WriteObject(hcont, chevt);
 

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChDetectorConstructionMessenger.cc
+/// \brief Implementation of the ExExChDetectorConstructionMessenger class
+//
 
 #include "ExExChDetectorConstructionMessenger.hh"
 #include "ExExChDetectorConstruction.hh"

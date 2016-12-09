@@ -26,7 +26,7 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// $Id: DicomNestedPhantomParameterisation.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomNestedPhantomParameterisation.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
@@ -82,7 +82,7 @@ void DicomNestedPhantomParameterisation::ReadColourData()
         G4Colour colour( cred, cgreen, cblue, copacity );
         G4VisAttributes* visAtt = (copacity > 0.) ?
         (new G4VisAttributes( colour )) : 
-        (new G4VisAttributes(G4VisAttributes::Invisible));
+        (new G4VisAttributes(G4VisAttributes::GetInvisible()));
         //visAtt->SetForceSolid(true);
         fColours[mateName] = visAtt;
     }*/

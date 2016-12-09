@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc 96606 2016-04-25 13:33:42Z gcosmo $
+// $Id: G4DNASancheExcitationModel.cc 98733 2016-08-09 10:51:58Z gcosmo $
 //
 
 // Created by Z. Francis
@@ -72,6 +72,10 @@ G4DNASancheExcitationModel::G4DNASancheExcitationModel(const G4ParticleDefinitio
   
   fParticleChangeForGamma = 0;
   fpWaterDensity = 0;
+
+  // Selection of stationary mode
+
+  statCode = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -271,9 +275,21 @@ void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
 
   if (electronEnergy0 < HighEnergyLimit() && newEnergy>0.)
   {
-    fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
-    fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
-    fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+
+    if (!statCode)     
+    {     
+      fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
+      fParticleChangeForGamma->SetProposedKineticEnergy(newEnergy);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+    }
+
+    else 
+    {
+      fParticleChangeForGamma->ProposeMomentumDirection(aDynamicElectron->GetMomentumDirection());
+      fParticleChangeForGamma->SetProposedKineticEnergy(electronEnergy0);
+      fParticleChangeForGamma->ProposeLocalEnergyDeposit(excitationEnergy);
+    }
+
   }
 
   //

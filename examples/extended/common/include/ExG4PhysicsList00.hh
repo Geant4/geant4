@@ -49,9 +49,3 @@ class ExG4PhysicsList00: public G4VUserPhysicsList
 
 #endif
 
-
-
-
-
-
-

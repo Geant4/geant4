@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 96733 2016-05-02 11:52:48Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 98766 2016-08-09 14:17:17Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -269,8 +269,8 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand -> SetGuidance
   ("Draws axes at (x0, y0, z0) of given length and colour.");
   fpCommand -> SetGuidance
-  ("If \"unitcolour\" is \"auto\", x, y and z will be red, green and blue"
-   "\n  respectively.  Otherwise choose from the pre-defined text-specified"
+  ("If \"colour-string\" is \"auto\", x, y and z will be red, green and blue"
+   "\n  respectively.  Otherwise it can be one of the pre-defined text-specified"
    "\n  colours - see information printed by the vis manager at start-up or"
    "\n  use \"/vis/list\".");
   fpCommand -> SetGuidance
@@ -293,7 +293,7 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   parameter =  new G4UIparameter ("unit", 's', omitable = true);
   parameter->SetDefaultValue ("m");
   fpCommand->SetParameter (parameter);
-  parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
+  parameter =  new G4UIparameter ("colour-string", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("showtext", 'b', omitable = true);
@@ -1090,9 +1090,10 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
   fpCommand -> SetGuidance ("Adds a logical volume to the current scene,");
   fpCommand -> SetGuidance
-    ("Shows boolean components (if any), voxels (if any) and readout geometry"
-     "\n(if any).  Note: voxels are not constructed until start of run -"
-     "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
+  ("Shows boolean components (if any), voxels (if any), readout geometry"
+   "\n  (if any) and local axes, under control of the appropriate flag."
+   "\n  Note: voxels are not constructed until start of run -"
+   "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("logical-volume-name", 's', omitable = false);
   fpCommand -> SetParameter (parameter);
@@ -1556,7 +1557,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
 G4VisCommandSceneAddLogo::G4Logo::G4Logo
 (G4double height, const G4VisAttributes& visAtts):
   fVisAtts(visAtts)
- {
+{
   const G4double& h =  height;
   const G4double h2  = 0.5 * h;   // Half height.
   const G4double ri  = 0.25 * h;  // Inner radius.
@@ -1583,6 +1584,17 @@ G4VisCommandSceneAddLogo::G4Logo::G4Logo
   // But to get inner, we make a triangle translated by...
   const G4double xtr = ss - f1, ytr = -ss - f2 -w;
   x9 += xtr; y9 += ytr;
+
+  // The idea here is to create a polyhedron for the G and the 4.  To do
+  // this we use Geant4 geometry solids and make boolean operations.
+  // Note that we do not need to keep the solids. We use local objects,
+  // which, of course, are deleted on leaving this function. This
+  // is contrary to the usual requirement for solids that are part of the
+  // detector for which solids MUST be created on the heap (with "new").
+  // Finally we invoke CreatePolyhedron, which creates a polyhedron on the heap
+  // and returns a pointer.  It is the user's responsibility to delete,
+  // which is done in the destructor of this class. Thus the polyhedra,
+  // created here, remain on the heap for the lifetime of the job.
 
   // G...
   G4Tubs tG("tG",ri,ro,d2,0.15*pi,1.85*pi);

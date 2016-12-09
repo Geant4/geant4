@@ -6,6 +6,8 @@
 
 #include "base_leaf"
 
+#include "../cids"
+
 namespace tools {
 namespace wroot {
 
@@ -41,10 +43,14 @@ inline const std::string& leaf_element_store_class() {
 template <class T>
 class leaf : public base_leaf {
   typedef base_leaf parent;
-public: //ibo
-  virtual const std::string& store_cls() const {
-    return leaf_store_class(T());
+public:
+  static cid id_class() {return base_leaf_cid()+_cid(T());}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
   }
+public: //ibo
+  virtual const std::string& store_cls() const {return leaf_store_class(T());}
   virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
     if(!a_buffer.write_version(1,c)) return false;
@@ -55,15 +61,10 @@ public: //ibo
     return true;
   }
 public: //base_leaf
-  virtual bool fill_basket(buffer& a_buffer) const {
-    return a_buffer.write<T>(m_value);
-  }
+  virtual bool fill_buffer(buffer& a_buffer) const {return a_buffer.write<T>(m_value);}
 public:
-  leaf(std::ostream& a_out,
-       wroot::branch& a_branch,
-       const std::string& a_name,
-       const std::string& a_title)
-  :parent(a_out,a_branch,a_name,a_title)
+  leaf(std::ostream& a_out,const std::string& a_name,const std::string& a_title)
+  :parent(a_out,a_name,a_title)
   ,m_min(T()),m_max(T())
   ,m_value(T())
   {
@@ -84,10 +85,14 @@ protected:
 
 class leaf_string : public base_leaf {
   typedef base_leaf parent;
-public: //ibo
-  virtual const std::string& store_cls() const {
-    return leaf_string_store_class();
+public:
+  static cid id_class() {return leaf_string_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_string>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
   }
+public: //ibo
+  virtual const std::string& store_cls() const {return leaf_string_store_class();}
   virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
     if(!a_buffer.write_version(1,c)) return false;
@@ -98,26 +103,23 @@ public: //ibo
     return true;
   }
 public: //base_leaf
-  virtual bool fill_basket(buffer& a_buffer) const {
+  virtual bool fill_buffer(buffer& a_buffer) const {
     size_t len = ::strlen(m_value.c_str());
     leaf_string& self = const_cast<leaf_string&>(*this);
-    if(len >= (size_t)m_max) self.m_max = len+1;
-    if(len >= m_length) self.m_length = len+1;
+    if(len >= (size_t)m_max) self.m_max = int(len)+1;
+    if(len >= m_length) self.m_length = uint32(len)+1;
     if(len < 255) {
       if(!a_buffer.write<unsigned char>((unsigned char)len)) return false;
     } else {
       if(!a_buffer.write<unsigned char>(255)) return false;
-      if(!a_buffer.write<uint32>(len)) return false;
+      if(!a_buffer.write<uint32>(uint32(len))) return false;
     }
-    if(len) if(!a_buffer.write_fast_array(m_value.c_str(),len)) return false;
+    if(len) if(!a_buffer.write_fast_array(m_value.c_str(),uint32(len))) return false;
     return true;
   }
 public:
-  leaf_string(std::ostream& a_out,
-              wroot::branch& a_branch,
-              const std::string& a_name,
-              const std::string& a_title)
-  :parent(a_out,a_branch,a_name,a_title)
+  leaf_string(std::ostream& a_out,const std::string& a_name,const std::string& a_title)
+  :parent(a_out,a_name,a_title)
   ,m_min(0),m_max(0)
   {
     m_length_type = 1;
@@ -128,6 +130,8 @@ protected:
   leaf_string& operator=(const leaf_string&){return *this;}
 public:
   void fill(const std::string& a_value) {m_value = a_value;}
+  int get_max() const {return m_max;}
+  void set_max(int a_value) {m_max = a_value;}
 protected:
   int m_min; //Minimum value if leaf range is specified
   int m_max; //Maximum value if leaf range is specified
@@ -137,9 +141,13 @@ protected:
 class leaf_element : public base_leaf {
   typedef base_leaf parent;
 public:
-  virtual const std::string& store_cls() const {
-    return leaf_element_store_class();
+  static cid id_class() {return leaf_element_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<leaf_element>(this,a_class)) {return p;}
+    return base_leaf::cast(a_class);
   }
+public:
+  virtual const std::string& store_cls() const {return leaf_element_store_class();}
   virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
     if(!a_buffer.write_version(1,c)) return false;
@@ -152,17 +160,13 @@ public:
     return true;
   }
 public: //base_leaf
-  virtual bool fill_basket(buffer&) const {
-    m_out << "tools::wroot::leaf_element::fill_basket : dummy." << std::endl;
+  virtual bool fill_buffer(buffer&) const {
+    m_out << "tools::wroot::leaf_element::fill_buffer : dummy." << std::endl;
     return false;
   }
 public:
-  leaf_element(std::ostream& a_out,
-               wroot::branch& a_branch,
-               const std::string& a_name,
-               const std::string& a_title,
-               int a_id,int a_type)
-  :parent(a_out,a_branch,a_name,a_title)
+  leaf_element(std::ostream& a_out,const std::string& a_name,const std::string& a_title,int a_id,int a_type)
+  :parent(a_out,a_name,a_title)
   ,fID(a_id)
   ,fType(a_type)
   {}

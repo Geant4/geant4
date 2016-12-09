@@ -1,4 +1,4 @@
-$Id: History 94807 2015-12-10 08:20:59Z gcosmo $
+$Id: History 100922 2016-11-03 10:47:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-11-16 L.Garnier (testem16-V10-02-04)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+14-10-16 G.Folger (testem16-V10-02-03)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+26-07-16 V.Ivant  (testem16-V10-02-02)
+- H.Burkhardt added gui buttons, icons.mac, gui.mac
+
+04-07-16 I. Hrivnacova  (testem16-V10-02-01)
+- Fixes for Doxygen documentation
 
 09-12-15 V.Ivant (testem16-V10-02-00)
 01-12-15 V.Ivant (testem16-V10-01-02)

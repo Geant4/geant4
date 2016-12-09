@@ -53,7 +53,8 @@
 class G4EmStandardPhysicsWVI : public G4VPhysicsConstructor
 {
 public:
-  G4EmStandardPhysicsWVI(G4int ver = 1);
+
+  explicit G4EmStandardPhysicsWVI(G4int ver = 1);
 
   virtual ~G4EmStandardPhysicsWVI();
 

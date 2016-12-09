@@ -86,5 +86,3 @@ class B03PhysicsList: public G4VUserPhysicsList
 
 #endif
 
-
-

@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19/11/16 A. Dotti      (exampleB4-V10-02-04)
+- explicit set of SDs to manager
+
+03/11/16 I. Hrivnacova (exampleB4-V10-02-03)
+- Added C++11 features
+- Removed analysisManager->SetFirstHistoId(1); setting
+  and added meaningful names to histograms
+
+02/11/16 L.Garnier (exampleB4-V10-02-02)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+10/10/16 I. Hrivnacova (exampleB4-V10-02-01)
+- Activate merging of ntuples
+
 09/12/15 I. Hrivnacova (exampleB4-V10-02-00)
 - Restored the third parameter in G4UIsession construction, which was
   lost when moving G4UIExecutive at the beginning of main().

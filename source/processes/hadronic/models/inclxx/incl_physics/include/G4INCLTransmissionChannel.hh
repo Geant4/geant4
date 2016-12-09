@@ -85,7 +85,7 @@ namespace G4INCL {
     /// \brief Cosine of the refraction angle
     const G4double cosRefractionAngle;
 
-    INCL_DECLARE_ALLOCATION_POOL(TransmissionChannel);
+    INCL_DECLARE_ALLOCATION_POOL(TransmissionChannel)
   };
 }
 #endif // TransmissionChannel_hh

@@ -92,7 +92,7 @@ class G4UExtrudedSolid : public G4USolid
     G4int GetNofZSections() const;
     ZSection GetZSection(G4int index) const;
     std::vector<ZSection> GetZSections() const;
-  
+
     inline G4GeometryType GetEntityType() const;
 
   public:  // without description
@@ -105,6 +105,13 @@ class G4UExtrudedSolid : public G4USolid
     G4UExtrudedSolid( const G4UExtrudedSolid& source );
     G4UExtrudedSolid &operator=(const G4UExtrudedSolid& source);
       // Copy constructor and assignment operator.
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;  
+
     G4Polyhedron* CreatePolyhedron() const;
 };
 

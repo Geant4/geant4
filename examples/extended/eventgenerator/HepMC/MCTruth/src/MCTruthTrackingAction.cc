@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthTrackingAction class
 //
 //
-// $Id: MCTruthTrackingAction.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthTrackingAction.cc 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +37,8 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 #include <iostream>
 
@@ -46,11 +48,17 @@
 #include "MCTruthTrackingAction.hh"
 #include "MCTruthTrackInformation.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 MCTruthTrackingAction::MCTruthTrackingAction() 
 {}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 MCTruthTrackingAction::~MCTruthTrackingAction() 
 {} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void MCTruthTrackingAction::PreUserTrackingAction(const G4Track* track)
 {
@@ -63,6 +71,8 @@ void MCTruthTrackingAction::PreUserTrackingAction(const G4Track* track)
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 void MCTruthTrackingAction::PostUserTrackingAction(const G4Track* track)
 {
 
@@ -72,7 +82,7 @@ void MCTruthTrackingAction::PostUserTrackingAction(const G4Track* track)
 
   // here (?) make all different checks to decide whether to store the particle
   //
-  if (trackToBeStored(track))
+  if (TrackToBeStored(track))
   {
     MCTruthTrackInformation* mcinf =
       (MCTruthTrackInformation*) track->GetUserInformation();
@@ -107,7 +117,9 @@ void MCTruthTrackingAction::PostUserTrackingAction(const G4Track* track)
   }
 }
 
-G4bool MCTruthTrackingAction::trackToBeStored(const G4Track* track)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4bool MCTruthTrackingAction::TrackToBeStored(const G4Track* track)
 {
   MCTruthConfig* config = MCTruthManager::GetInstance()->GetConfig();
   
@@ -127,3 +139,5 @@ G4bool MCTruthTrackingAction::trackToBeStored(const G4Track* track)
   
   return false;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

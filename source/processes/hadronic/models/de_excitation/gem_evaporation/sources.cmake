@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 97097 2016-05-25 07:50:31Z gcosmo $
+# $Id: sources.cmake 98739 2016-08-09 12:56:55Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -56,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_gem_evaporation
         G4F21GEMChannel.hh
         G4B10GEMProbability.hh
         G4GEMChannel.hh
+        G4GEMChannelVI.hh
         G4B11GEMChannel.hh
         G4GEMProbability.hh
         G4He3GEMChannel.hh
@@ -130,8 +131,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_gem_evaporation
         G4C15GEMProbability.hh
         G4C16GEMProbability.hh
         G4DeuteronGEMChannel.hh
+        G4DeuteronGEMChannel.hh
         G4DeuteronGEMProbability.hh
         G4EvaporationGEMFactory.hh
+        G4EvaporationGEMFactoryVI.hh
         G4F17GEMProbability.hh
         G4F18GEMProbability.hh
         G4F19GEMProbability.hh
@@ -204,14 +207,17 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_gem_evaporation
         G4C15GEMProbability.cc
         G4C16GEMProbability.cc
         G4DeuteronGEMChannel.cc
+        G4DeuteronGEMChannel.cc
         G4DeuteronGEMProbability.cc
         G4EvaporationGEMFactory.cc
+        G4EvaporationGEMFactoryVI.cc
         G4F17GEMProbability.cc
         G4F18GEMProbability.cc
         G4F19GEMProbability.cc
         G4F20GEMProbability.cc
         G4F21GEMProbability.cc
         G4GEMChannel.cc
+        G4GEMChannelVI.cc
         G4GEMCoulombBarrier.cc
         G4GEMProbability.cc
         G4He3GEMChannel.cc

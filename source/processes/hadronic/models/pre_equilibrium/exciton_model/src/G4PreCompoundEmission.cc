@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 96527 2016-04-20 08:51:00Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -60,7 +60,7 @@ G4PreCompoundEmission::G4PreCompoundEmission()
   theFragmentsFactory = new G4PreCompoundEmissionFactory();
   theFragmentsVector = 
     new G4PreCompoundFragmentVector(theFragmentsFactory->GetFragmentVector());
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters() ;
   fLevelDensity = param->GetLevelDensity();
@@ -121,8 +121,8 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
   //  G4cout << "Chosen fragment: " << G4endl;
   //  G4cout << *thePreFragment << G4endl;
   //  G4cout << "Ekin= " << kinEnergy << G4endl;
-    // }
-  if(kinEnergy < 0.0) { kinEnergy = 0.0; }
+  // }
+  kinEnergy = std::max(kinEnergy, 0.0);
   
   // Calculate the fragment momentum (three vector)
   AngularDistribution(thePreFragment,aFragment,kinEnergy);
@@ -267,8 +267,8 @@ G4double G4PreCompoundEmission::rho(G4int p, G4int h, G4double gg,
   if ( E - Aph < 0.0) { return 0.0; }
   
   G4double logConst =  (p+h)*G4Log(gg) 
-    - g4pow->logfactorial(p+h-1) - g4pow->logfactorial(p) 
-    - g4pow->logfactorial(h);
+    - g4calc->logfactorial(p+h-1) - g4calc->logfactorial(p) 
+    - g4calc->logfactorial(h);
 
   // initialise values using j=0
 

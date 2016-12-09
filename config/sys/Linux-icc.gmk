@@ -4,27 +4,26 @@
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi -fp-model precise -w1
-  ifdef G4USE_STD11
-    CPPFLAGS  += -std=c++11 
-    CXXFLAGS  += -std=c++11
-  endif
+  G4USE_STD11 := 1
   ifdef G4USE_STD14
-    G4USE_STD11 := 1
     CPPFLAGS  += -std=c++14
     CXXFLAGS  += -std=c++14
-  endif
-  ifdef G4USE_STD17
-    G4USE_STD11 := 1
-    CPPFLAGS  += -std=c++17
-    CXXFLAGS  += -std=c++17
+  else
+    ifdef G4USE_STD17
+      CPPFLAGS  += -std=c++17
+      CXXFLAGS  += -std=c++17
+    else
+      CXXFLAGS  += -std=c++11
+      CPPFLAGS  += -std=c++11
+    endif
   endif
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
   ifdef G4OPTIMISE
-    CXXFLAGS  += -O2
-    FCFLAGS   := -O2
-    CCFLAGS   := -O2
+    CXXFLAGS  += -O3
+    FCFLAGS   := -O3
+    CCFLAGS   := -O3
   else
     ifdef G4DEBUG
       CXXFLAGS  += -g

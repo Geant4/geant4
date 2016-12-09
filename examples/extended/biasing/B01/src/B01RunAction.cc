@@ -27,7 +27,7 @@
 /// \brief Implementation of the B01RunAction class
 //
 //
-// $Id: B01RunAction.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: B01RunAction.cc 98774 2016-08-09 14:28:06Z gcosmo $
 // 
 #include "B01RunAction.hh"
 #include "B01Run.hh"
@@ -128,7 +128,6 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
     G4THitsMap<G4double>* SLWE = b01Run->GetHitsMap(fSDName[i]+"/SLWE");
     G4THitsMap<G4double>* SLW_V = b01Run->GetHitsMap(fSDName[i]+"/SLW_V");
     G4THitsMap<G4double>* SLWE_V = b01Run->GetHitsMap(fSDName[i]+"/SLWE_V");
-
 
     if (IsMaster())
       {

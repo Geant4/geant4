@@ -27,7 +27,7 @@
 /// \brief Implementation of the SteppingAction class
 //
 //
-// $Id: SteppingAction.cc 67268 2013-02-13 11:38:40Z ihrivnac $
+// $Id: SteppingAction.cc 98767 2016-08-09 14:18:40Z gcosmo $
 //
 // 
 
@@ -55,12 +55,11 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  G4double EdepStep = aStep->GetTotalEnergyDeposit();
- if (EdepStep > 0.) fEventAction->addEdep(EdepStep);
+ if (EdepStep > 0.) fEventAction->AddEdep(EdepStep);
   
  //example of saving random number seed of this event, under condition
  //// if (condition) G4RunManager::GetRunManager()->rndmSaveThisEvent();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

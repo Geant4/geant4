@@ -38,15 +38,17 @@
 #include "Randomize.hh"
 #include "G4Pow.hh"
 
-G4FermiBreakUp::G4FermiBreakUp() : thePool(nullptr), thePhaseSpace(nullptr)
+G4FermiBreakUp::G4FermiBreakUp() : thePhaseSpace(nullptr)
 {
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
   Coef = ConstCoeff = 0.0;
 
   nmax = 16;
   NormalizedWeights.resize(nmax,0.0);
   massRes.reserve(4);
   frag.resize(4, 0);
+  thePool = G4FermiFragmentsPool::Instance(); 
+  Initialise();
 }
 
 G4FermiBreakUp::~G4FermiBreakUp()
@@ -54,22 +56,21 @@ G4FermiBreakUp::~G4FermiBreakUp()
 
 void G4FermiBreakUp::Initialise()
 {
-  if(thePool != nullptr) { return; }
-  thePool = G4FermiFragmentsPool::Instance(); 
+  if(thePhaseSpace != nullptr) { return; }
   // Kappa = V/V_0 it is used in calculation of Coulomb energy
   // Nuclear radius r0 (is a model parameter)
   G4double Kappa = 6.0;
   G4double r0 = 1.3*CLHEP::fermi;
 
-  Coef = 0.6*(CLHEP::elm_coupling/r0)/g4pow->Z13(1+G4int(Kappa));
-  ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa/(6.0*pi*pi);
+  Coef = 0.6*(CLHEP::elm_coupling/r0)/g4calc->Z13(1+G4int(Kappa));
+  ConstCoeff = g4calc->powN(r0/hbarc,3)*Kappa/(6.0*pi*pi);
 
   thePhaseSpace = thePool->GetFermiPhaseSpaceDecay();
 }
 
 G4bool G4FermiBreakUp::IsApplicable(G4int Z, G4int A, G4double mass) const
 {
-  return thePool != nullptr ? thePool->IsApplicable(Z, A, mass) : false;
+  return thePool->IsApplicable(Z, A, mass);
 }
 
 G4double G4FermiBreakUp::CoulombBarrier(
@@ -83,20 +84,12 @@ G4double G4FermiBreakUp::CoulombBarrier(
   for (size_t i=0; i<nn; ++i) {
     G4int z = (*conf)[i]->GetZ();
     G4int a = (*conf)[i]->GetA();
-    CoulombEnergy += G4double(z*z)/g4pow->Z13(a);
+    CoulombEnergy += G4double(z*z)/g4calc->Z13(a);
     SumA += a;
     SumZ += z;
   }
-  CoulombEnergy -= SumZ*SumZ/g4pow->Z13(SumA);
+  CoulombEnergy -= SumZ*SumZ/g4calc->Z13(SumA);
   return -Coef * CoulombEnergy;
-}
-
-G4FragmentVector* G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
-{
-  G4FragmentVector* result = new G4FragmentVector();
-  G4Fragment* nucleus = new G4Fragment(theNucleus);
-  BreakFragment(result, nucleus);
-  return result;
 }
 
 void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult, 
@@ -231,7 +224,7 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
   G4double MassFactor = ProdMass/SumMass;
   MassFactor *= std::sqrt(MassFactor);  
   
-  G4double Coeff = g4pow->powN(ConstCoeff*A, K-1);
+  G4double Coeff = g4calc->powN(ConstCoeff*A, K-1);
 
   //JMQ 111009 Bug fixed: gamma function for odd K was wrong  by a factor 2
   //VI  251014 Use G4Pow
@@ -241,8 +234,8 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
   // integer argument of Gamma function
   if ((K-1)%2 != 1) {
     G4int N = 3*(K-1)/2;
-    Gamma = g4pow->factorial(N - 1);
-    Energ = g4pow->powN(Energ, N);
+    Gamma = g4calc->factorial(N - 1);
+    Energ = g4calc->powN(Energ, N);
     
     // n + 1/2 argument of Gamma function
     // http://en.wikipedia.org/wiki/Gamma_function
@@ -251,9 +244,9 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
     G4int n1 = n2/2;
 
     static const G4double sqrtpi = std::sqrt(CLHEP::pi);
-    Gamma = sqrtpi*g4pow->factorial(n2)/
-      (g4pow->powN(4.0,n1)*g4pow->factorial(n1));
-    Energ = g4pow->powN(Energ, n1)*std::sqrt(Energ);
+    Gamma = sqrtpi*g4calc->factorial(n2)/
+      (g4calc->powN(4.0,n1)*g4calc->factorial(n1));
+    Energ = g4calc->powN(Energ, n1)*std::sqrt(Energ);
   }
   
   // Permutation Factor G_n
@@ -268,7 +261,7 @@ G4double G4FermiBreakUp::DecayProbability(G4int A, G4double TotalE,
           frag[j] = 0;
 	}
       }
-      if(1 < nf) { G_n *= g4pow->factorial(nf); }
+      if(1 < nf) { G_n *= g4calc->factorial(nf); }
     }
   }
 

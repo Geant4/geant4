@@ -61,6 +61,8 @@ class G4ScaledSolid : public G4VSolid
 
     EInside Inside( const G4ThreeVector& p ) const;
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,

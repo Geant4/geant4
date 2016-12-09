@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoriesModel.cc 87360 2014-12-01 16:07:16Z gcosmo $
+// $Id: G4TrajectoriesModel.cc 98852 2016-08-15 07:03:35Z gcosmo $
 //
 // 
 // John Allison  26th August 1998.
@@ -73,6 +73,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     fRunID = currentRun->GetRunID();
   } else {
     fRunID = -1;
+    return;
   }
 
   const G4Event* event = fpMP->GetEvent();
@@ -80,6 +81,7 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
     fEventID = event->GetEventID();
   } else {
     fEventID = -1;
+    return;
   }
 
   G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();

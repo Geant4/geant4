@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
-// $Id: SteppingAction.cc 90848 2015-06-10 13:44:30Z gcosmo $
+// $Id: SteppingAction.cc 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,5 +155,4 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

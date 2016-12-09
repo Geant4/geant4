@@ -65,15 +65,15 @@ int main(int argc,char** argv)
   // Construct the default run manager
   //
 #ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  auto runManager = new G4MTRunManager;
 #else
-  G4RunManager* runManager = new G4RunManager;
+  auto runManager = new G4RunManager;
 #endif
 
   // Mandatory user initialization classes
   runManager->SetUserInitialization(new B5DetectorConstruction);
 
-  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  auto physicsList = new FTFP_BERT;
   physicsList->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(physicsList);
 
@@ -82,14 +82,14 @@ int main(int argc,char** argv)
 
 #ifdef G4VIS_USE
   // Visualization manager construction
-  G4VisManager* visManager = new G4VisExecutive;
+  auto visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
     
   // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  auto UImanager = G4UImanager::GetUIpointer();
 
   if ( argc != 1 ) {
     // execute an argument macro file if exist

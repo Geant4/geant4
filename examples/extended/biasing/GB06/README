@@ -1,0 +1,100 @@
+              Example GB06: parallel geometries with generic biasing
+              ------------------------------------------------------
+
+
+    This example demonstrates the use of parallel geometries in generic biasing,
+on a classical shield problem, using geometry-based importance biasing.
+
+1) Geometry and activation of navigation in parallel world:
+   --------------------------------------------------------
+   
+    The geometry is made of two parts:
+    	- the mass (standard) geometry, which is made of a single block of
+	  concrete ; this is implemented in GB06DetectorConstuction ;
+	- a parallel geometry, in which a series of slices is defined, these
+	  slices being created using a replica volume ; this is implemeted in
+	  GB06ParallelGeometryForSlices, which derives from the base class
+	  G4VUserParallelWorld .
+
+    The navigation in the parallel geometry is activated for neutrons. This is
+done in the main program exampleGB06.cc. The activation is made using the
+facilities of the G4GenericBiasingPhysics class, as:
+
+    biasingPhysics->AddParallelGeometry("neutron",
+                                        "parallelWorldForSlices");
+
+where the first name is for the particle type to be aware of the parallel word,
+the second argument is the name of the parallel world.
+
+    When checking the process list of neutrons (/particle/select neutron and
+then /particle/process dump ) a new process, `biasingLimiter', is visible. This
+process handles the step limitation in the parallel geometry. This process can
+handle several parallel geometries, these being passed to the process as
+biasingPhysics->AddParallelGeometry("neutron", "parallelWorld1") ,
+biasingPhysics->AddParallelGeometry("neutron", "parallelWorld2") , etc.
+
+    The geometry-based importance technique utilizes only splitting and killing,
+hence techniques which are "non-physics biasing" techniques, in the sense they
+don't modify the behavior of physics processes. For this reason, only a process
+making the interface between the tracking and the biaising is inserted in the
+physics list, the physics processes themselves being untouched, this is made as:
+
+             biasingPhysics->NonPhysicsBias("neutron");
+
+    Finally, the volume (ie the slice) importances are defined in a simple
+"importance map" that is created in the GB06ParallelGeometryForSlices class, this
+map associating a replica number to a volume importance. The map is hold by the
+biasing operator.
+	      
+
+2) Biasing classes:
+   ----------------
+
+    As usual, with the generic biasing scheme, a biasing operator and a biasing
+operation are defined, these are, respectively the
+
+                GB06BOptrSplitAndKillByImportance and
+                GB06BOptnSplitAndKillByImportance
+		
+classes. The operator here only handles one particle type. In the StartRun()
+method, it configures the biasing operation GB06BOptnSplitAndKillByImportance
+passing it the information related to the parallel geometry, and passing it the
+importance map.
+
+    The biasing operation GB06BOptnSplitAndKillByImportance applies a classical
+importance-based geometry technique, with spliting / killing at the slice
+bondaries. Splitting is made if the track goes from a smaller importance to a
+volume of larger importance, and killing (Russian roulette) is applied in the
+other case.
+    The particularity of this biasing operation is its handling of the parallel
+geometry information. It has to get by itself geometry information that, in the
+case of information of the mass geometry, are provided in the G4StepPoint objects
+(pre step point, post step point) of the G4Step. Here, in the
+DistanceToApplyOperation(...), which is called at the beginning of the step, it
+gets a "snapshot" of the geometry state keeping a G4TouchableHistoryHandle. Then
+in the GenerateBiasingFinalState, which is called at the end of the step, it gets
+the new geometry state, with an other G4TouchableHistoryHandle. For a step that
+ends on the boundary, this last touchable history will logically point to the
+next volume. In this case, the biasing is applied, and the importances are
+obtained from the replica numbers taken from the two touchable histories, and
+then from the importance map.
+
+3) Output:
+   -------
+
+    A simple sensitive detector is defined (GB06SD) and is attached to a thin
+volume ("meas.logical") placed after the concrete shield. This sensitive
+detector simply prints the information (particle type, kinetic energy, etc,
+and weight) leaving the shield.
+
+
+4) Known problems:
+   ---------------
+
+    In exampleGB06.in the neutron killer process, nKiller, is de-activated
+(process that kills neutrons after some time), for two reasons. First, killing
+neutrons in a shield problem is not desirable because neutrons may fly for some
+time before leaving the shield, and hence must be accounted for. Second, if
+nKiller is left active, an exception message about a spurious displacement by
+1e-7mm will appear sometimes : this happens when a neutron is killed on a volume
+boundary, and the navigation "sees" a (tiny) displacement, that should not exist.

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 85517 2014-10-30 15:53:26Z gcosmo $
+# $Id: sources.cmake 99936 2016-10-12 07:59:09Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -75,6 +75,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4PiMinusAbsorptionBertini.hh
         G4KaonMinusAbsorptionBertini.hh
         G4SigmaMinusAbsorptionBertini.hh
+        G4MuonMinusAtomicCapture.hh
     SOURCES
         G4AntiNeutronAnnihilationAtRest.cc
         G4ElementSelector.cc
@@ -85,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_stop
         G4MuonMinusBoundDecay.cc
         G4MuonMinusCapture.cc
         G4HadronicAbsorptionBertini.cc
+        G4MuonMinusAtomicCapture.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

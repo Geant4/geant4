@@ -47,8 +47,9 @@
 G4ECDecay::G4ECDecay(const G4ParticleDefinition* theParentNucleus,
                      const G4double& branch, const G4double& Qvalue,
                      const G4double& excitationE,
+                     const G4Ions::G4FloatLevelBase& flb,
                      const G4RadioactiveDecayMode& mode)
- : G4NuclearDecay("electron capture", mode, excitationE), transitionQ(Qvalue),
+ : G4NuclearDecay("electron capture", mode, excitationE, flb), transitionQ(Qvalue),
    applyARM(true)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
@@ -59,7 +60,7 @@ G4ECDecay::G4ECDecay(const G4ParticleDefinition* theParentNucleus,
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   G4int daughterZ = theParentNucleus->GetAtomicNumber() - 1;
   G4int daughterA = theParentNucleus->GetAtomicMass(); 
-  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE) );
+  SetDaughter(0, theIonTable->GetIon(daughterZ, daughterA, excitationE, flb) );
   SetDaughter(1, "nu_e");
 }
 

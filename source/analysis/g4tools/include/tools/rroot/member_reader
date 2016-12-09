@@ -46,9 +46,9 @@ public:
   virtual bool visit(std::vector<bool>& a_v){
     std::vector<unsigned char> data;
     if(!m_buf.read_array(data)) {a_v.clear();return false;}
-    unsigned int number = data.size();
+    size_t number = data.size();
     a_v.resize(number);
-    for(unsigned int index=0;index<number;index++) {
+    for(size_t index=0;index<number;index++) {
       a_v[index] = (data[index]==1?true:false);  
     }
     return true;

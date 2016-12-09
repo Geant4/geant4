@@ -23,8 +23,8 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/particleGun.cc
-/// \brief Main program of the eventgenerator/particleGun example
+/// \file eventgenerator/userPrimaryGenerator/userPrimaryGenerator.cc
+/// \brief Main program of the eventgenerator/userPrimaryGenerator example
 //
 //
 // $Id: particleGun.cc 84868 2014-10-21 21:18:58Z maire $

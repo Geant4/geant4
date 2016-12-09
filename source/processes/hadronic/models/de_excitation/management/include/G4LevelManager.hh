@@ -50,8 +50,6 @@
 #include "G4NucLevel.hh"
 #include <vector>
 
-static const G4float tolerance = 0.0001f;
-
 class G4LevelManager 
 {
 
@@ -61,10 +59,12 @@ public:
   // energies - list of excitation energies of nuclear levels starting
   //            from the ground state with energy zero 
   // spin - 2J, where J is the full angular momentum of the state 
-  G4LevelManager(const std::vector<G4float>& energies,
+  G4LevelManager(size_t ntrans,
+                 const std::vector<G4float>& energies,
 		 const std::vector<G4float>& lifetime,
 		 const std::vector<G4float>& lifetimegamma,
 		 const std::vector<G4int>& spin,
+		 const std::vector<G4int>& meta,
 		 const std::vector<const G4NucLevel*>& levels); 
 
   ~G4LevelManager();
@@ -95,7 +95,11 @@ public:
 
   inline G4float LifeTimeGamma(size_t i) const;
    
-  inline G4int Spin(size_t i) const;
+  inline G4int SpinParity(size_t i) const;
+
+  inline G4int IsFloatingLevel(size_t i) const;
+
+  const G4String& FloatingType(size_t i) const;
 
 private:
 
@@ -108,12 +112,15 @@ private:
   G4bool operator==(const G4LevelManager &right) const = delete;
   G4bool operator!=(const G4LevelManager &right) const = delete;
 
-  const std::vector<G4float>  fLevelEnergy;
-  const std::vector<G4float>  fLifeTime;
-  const std::vector<G4float>  fLifeTimeGamma;
-  const std::vector<G4int>    fSpin;
-  const std::vector<const G4NucLevel*> fLevels;
+  std::vector<G4float>  fLevelEnergy;
+  std::vector<G4float>  fLifeTime;
+  std::vector<G4float>  fLifeTimeGamma;
+  std::vector<G4int>    fSpin;
+  std::vector<G4int>    fFloating;
+  std::vector<const G4NucLevel*> fLevels;
   size_t nTransitions;
+  static const G4int nfloting = 13;
+  static G4String fFloatingLevels[nfloting];
 
 };
 
@@ -189,12 +196,20 @@ inline G4float G4LevelManager::LifeTimeGamma(size_t i) const
   return fLifeTimeGamma[i]; 
 }
    
-inline G4int G4LevelManager::Spin(size_t i) const
+inline G4int G4LevelManager::SpinParity(size_t i) const
 {
 #ifdef G4VERBOSE
-  if(i > nTransitions) { PrintError(i, "Spin"); }
+  if(i > nTransitions) { PrintError(i, "SpinParity"); }
 #endif
   return fSpin[i]; 
+}
+
+inline G4int G4LevelManager::IsFloatingLevel(size_t i) const
+{
+#ifdef G4VERBOSE
+  if(i > nTransitions) { PrintError(i, "Floating"); }
+#endif
+  return (0 != fFloating[i]); 
 }
 
 #endif

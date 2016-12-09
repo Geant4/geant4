@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc 96698 2016-05-02 07:19:24Z gcosmo $
+// $Id: G4EmCorrections.cc 100363 2016-10-19 09:24:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -129,7 +129,7 @@ G4EmCorrections::G4EmCorrections(G4int verb)
   eCorrMax   = 250.*CLHEP::MeV;
 
   ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 
   nIons = ncouples = numberOfElements = idx = currentZ = 0;
   mass = tau = gamma = bg2 = beta2 = beta = ba2 = tmax = charge = q2 = 0.0;
@@ -782,8 +782,8 @@ G4double G4EmCorrections::NuclearStoppingPower(G4double kineticEnergy,
   G4double nloss = 0.0;
   
   G4double rm;
-  if(z1 > 1.5) rm = (mass1 + mass2) * ( g4pow->Z23(G4lrint(z1)) + g4pow->Z23(G4lrint(z2)) ) ;
-  else         rm = (mass1 + mass2) * g4pow->Z13(G4lrint(z2));
+  if(z1 > 1.5) rm = (mass1 + mass2) * ( g4calc->Z23(G4lrint(z1)) + g4calc->Z23(G4lrint(z2)) ) ;
+  else         rm = (mass1 + mass2) * g4calc->Z13(G4lrint(z2));
 
   G4double er = 32.536 * mass2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
 

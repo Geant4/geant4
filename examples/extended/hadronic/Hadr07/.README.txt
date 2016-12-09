@@ -43,9 +43,14 @@
   
   PhysicsConstructors are either predefined G4 PhysicsConstructors or 'local'. 
   They include : HadronElastic (including neutronHP), HadronInelastic,
-  IonsInelastic, GammaNuclear physics, RadioactiveDecay and electomagnetic.
+  IonsInelastic, GammaNuclear physics, RadioactiveDecay and Electomagnetic physics.
   (see geant4/source/physics_lists/constructors)
-    
+  
+  ElectromagneticPhysics is a variante of EmStandard. No step constraint is imposed for 
+  energy loss mechanism (ionisation and brems). This is enough when spatial distribution
+  of deposited energy do not need to be accurate.
+  (see param->SetStepFunction(1., 1*mm))
+  
   Several hadronic physics options are controlled by environment variables.
   To trigger them, an envHadronic.csh has been added in this example.
   One must select the options wished, and do

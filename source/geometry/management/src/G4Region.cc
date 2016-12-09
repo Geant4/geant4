@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc 91803 2015-08-06 12:17:01Z gcosmo $
+// $Id: G4Region.cc 100428 2016-10-21 12:59:37Z gcosmo $
 //
 // 
 // class G4Region Implementation
@@ -40,11 +40,11 @@
 #include "G4VUserRegionInformation.hh"
 #include "G4Material.hh"
 
-// This static member is thread local. For each thread, it points to the
-// array of G4RegionData instances.
+// These macros changes the references to fields that are now encapsulated
+// in the class G4RegionData.
 //
-template <class G4RegionData> G4ThreadLocal
-G4RegionData* G4GeomSplitter<G4RegionData>::offset = 0;  
+#define G4MT_fsmanager ((subInstanceManager.offset[instanceID]).fFastSimulationManager)
+#define G4MT_rsaction ((subInstanceManager.offset[instanceID]).fRegionalSteppingAction)
 
 // This new field helps to use the class G4RegionManager
 //
@@ -119,6 +119,42 @@ G4Region::~G4Region()
 {
   G4RegionStore::GetInstance()->DeRegister(this);
   if(fUserInfo) delete fUserInfo;
+}
+
+// ********************************************************************
+// SetFastSimulationManager
+// ********************************************************************
+//
+void G4Region::SetFastSimulationManager(G4FastSimulationManager* fsm)
+{
+  G4MT_fsmanager = fsm;
+}
+
+// ********************************************************************
+// GetFastSimulationManager
+// ********************************************************************
+//
+G4FastSimulationManager* G4Region::GetFastSimulationManager() const
+{
+  return G4MT_fsmanager;
+}
+
+// ********************************************************************
+// SetRegionalSteppingAction
+// ********************************************************************
+//
+void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
+{
+  G4MT_rsaction = rusa;
+}
+
+// ********************************************************************
+// GetRegionalSteppingAction
+// ********************************************************************
+//
+G4UserSteppingAction* G4Region::GetRegionalSteppingAction() const
+{
+  return G4MT_rsaction;
 }
 
 // *******************************************************************

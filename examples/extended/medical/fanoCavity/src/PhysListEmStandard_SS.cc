@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_SS.cc
 /// \brief Implementation of the PhysListEmStandard_SS class
 //
-// $Id: PhysListEmStandard_SS.cc 91564 2015-07-27 12:17:17Z gcosmo $
+// $Id: PhysListEmStandard_SS.cc 100265 2016-10-17 08:11:18Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,9 +89,10 @@ void PhysListEmStandard_SS::ConstructProcess()
   // Add standard EM Processes
   //
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      

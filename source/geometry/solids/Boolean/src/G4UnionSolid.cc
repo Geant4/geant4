@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc 95390 2016-02-08 14:46:28Z gcosmo $
+// $Id: G4UnionSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -132,9 +132,41 @@ G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs)
   return *this;
 }  
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4UnionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4ThreeVector minA,maxA, minB,maxB;
+  fPtrSolidA->Extent(minA,maxA);
+  fPtrSolidB->Extent(minB,maxB);
+
+  pMin.set(std::min(minA.x(),minB.x()),
+           std::min(minA.y(),minB.y()),
+           std::min(minA.z(),minB.z()));
+
+  pMax.set(std::max(maxA.x(),maxB.x()),
+           std::max(maxA.y(),maxB.y()),
+           std::max(maxA.z(),maxB.z()));
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UnionSolid::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4UnionSolid::CalculateExtent( const EAxis pAxis,
@@ -149,15 +181,18 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
   touchesA = fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
                                           pTransform, minA, maxA);
-  touchesB= fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
-                                         pTransform, minB, maxB);
+  touchesB = fPtrSolidB->CalculateExtent( pAxis, pVoxelLimit, 
+                                          pTransform, minB, maxB);
   if( touchesA || touchesB )
   {
     pMin = std::min( minA, minB ); 
     pMax = std::max( maxA, maxB );
     out  = true ; 
   }
-  else out = false ;
+  else
+  {
+    out = false ;
+  }
 
   return out ;  // It exists in this slice if either one does.
 }

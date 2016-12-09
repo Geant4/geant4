@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4.cc 96209 2016-03-30 08:58:33Z gcosmo $
+// $Id: G4EmStandardPhysics_option4.cc 99938 2016-10-12 08:06:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -119,26 +119,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics_option4);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver)
-  : G4VPhysicsConstructor("G4EmStandard_opt4"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetLowestElectronEnergy(100*eV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->ActivateAngularGeneratorForIonisation(true);
-  param->SetMscRangeFactor(0.02);
-  param->SetMscStepLimitType(fUseDistanceToBoundary);
-  param->SetLatDisplacementBeyondSafety(true);
-  param->SetFluo(true);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver, 
 							 const G4String&)
   : G4VPhysicsConstructor("G4EmStandard_opt4"), verbose(ver)
@@ -154,7 +134,7 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMscRangeFactor(0.02);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
   param->SetMuHadLateralDisplacement(true);
-  //param->SetLatDisplacementBeyondSafety(true);
+  //  param->SetLatDisplacementBeyondSafety(true);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -193,10 +173,6 @@ void G4EmStandardPhysics_option4::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -247,9 +223,10 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add standard EM Processes
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ){
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {
@@ -480,8 +457,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

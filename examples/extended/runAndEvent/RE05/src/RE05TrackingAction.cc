@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackingAction.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05TrackingAction.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05TrackingAction.cc
 /// \brief Implementation of the RE05TrackingAction class
@@ -32,6 +32,8 @@
 #include "RE05TrackingAction.hh"
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
@@ -42,4 +44,4 @@ void RE05TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   { fpTrackingManager->SetStoreTrajectory(false); }
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

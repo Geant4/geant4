@@ -48,8 +48,6 @@ set(LXe_SCRIPTS
     photon.mac
     reviewEvent.mac
     gui.mac
-    icons.mac
-    run.png
     vis.mac
    )
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pythia6_decayer.cc 81443 2014-05-28 14:26:55Z gcosmo $
+// $Id: pythia6_decayer.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
 /// \brief Main program of the pythia6Decayer example
@@ -50,7 +50,6 @@
 #endif
 
 #include "Randomize.hh"
-
 
 int main(int argc,char** argv)
 {

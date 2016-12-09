@@ -1,4 +1,4 @@
-# $Id: TestEm1.in 85282 2014-10-27 09:22:11Z gcosmo $
+# $Id: TestEm1.in 99441 2016-09-22 08:35:13Z gcosmo $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -15,7 +15,9 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 ###/testem/phys/addPhysics  local
+#
 /run/setCut 1 mm
+/process/eLoss/CSDARange true
 #
 /run/initialize
 ##/globalField/setValue 0 0 5 tesla

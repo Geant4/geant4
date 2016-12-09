@@ -1,0 +1,46 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_get_lines
+#define tools_get_lines
+
+#include "cstr"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+
+inline void get_lines(const std::string& a_string,std::vector<std::string>& a_lines){
+  // a_string is a list separated by "\n" or "\\n".
+  // For "xxx\n\nxxx", {"xxx","","xxx"} will be created.
+  // WARNING : if a_string is a Windows file name, it may 
+  //  contains a \n which is not a delimiter ; like ..\data\ntuples.hbook.
+  a_lines.clear();
+  size_t length = a_string.length();
+  if(!length) return;
+  char* cstring = str_dup(a_string.c_str());
+  if(!cstring) return;
+  size_t pos = 0;
+  length++;
+  for(size_t count=0;count<length;count++) {
+    if( (cstring[count]=='\n') || 
+        (cstring[count]=='\0') || 
+        ( (cstring[count]=='\\') && (cstring[count+1]=='n') ) ) { 
+      char shift_one = (cstring[count]=='\n' ? 1 : 0);
+      cstring[count] = '\0';
+      a_lines.push_back(cstring+pos);
+      if(shift_one==1) {
+        pos = count+1;
+      } else {
+        pos = count+2;
+        count++;
+      }
+    }
+  }
+  str_del(cstring);
+}
+
+}
+
+#endif

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 93564 2015-10-26 14:47:17Z gcosmo $
+// $Id: RunAction.cc 99442 2016-09-22 08:36:14Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 
 #include "G4RunManager.hh"
 #include "G4EmCalculator.hh"
+#include "G4EmParameters.hh"
 
 #include "Randomize.hh"
 
@@ -53,7 +54,7 @@ RunAction::RunAction(DetectorConstruction* det, PhysicsList* phys,
 {
   // Book predefined histograms
   fHistoManager = new HistoManager();
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,8 +77,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {    
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  if (isMaster) G4Random::showEngineStatus();
-  
+  if (isMaster) { 
+    G4Random::showEngineStatus();
+    G4EmParameters::Instance()->Dump();
+  } 
   //histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -92,9 +95,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
       = fPrimary->GetParticleGun()->GetParticleDefinition();
   G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   fRun->SetPrimary(particle, energy);
-
-  
-      
+     
   //get CsdaRange from EmCalculator
   //
   G4EmCalculator emCalculator;

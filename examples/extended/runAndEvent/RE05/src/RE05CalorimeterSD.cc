@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05CalorimeterSD.cc 69920 2013-05-17 13:36:37Z gcosmo $
+// $Id: RE05CalorimeterSD.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05CalorimeterSD.cc
 /// \brief Implementation of the RE05CalorimeterSD class
@@ -45,7 +45,7 @@
 
 RE05CalorimeterSD::RE05CalorimeterSD(G4String name)
 :G4VSensitiveDetector(name),
- numberOfCellsInZ(20),numberOfCellsInPhi(48)
+ fNumberOfCellsInZ(20),fNumberOfCellsInPhi(48)
 {
   G4String HCname;
   collectionName.insert(HCname="calCollection");
@@ -54,16 +54,18 @@ RE05CalorimeterSD::RE05CalorimeterSD(G4String name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05CalorimeterSD::~RE05CalorimeterSD()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
-  CalCollection = new RE05CalorimeterHitsCollection
+  fCalCollection = new RE05CalorimeterHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
-  for(G4int j=0;j<numberOfCellsInZ;j++)
-  for(G4int k=0;k<numberOfCellsInPhi;k++)
+  for(G4int j=0;j<fNumberOfCellsInZ;j++)
+  for(G4int k=0;k<fNumberOfCellsInPhi;k++)
   {
-    CellID[j][k] = -1;
+    fCellID[j][k] = -1;
   }
   verboseLevel = 0;
 }
@@ -74,7 +76,7 @@ G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
 //***** RE05CalorimeterSD has been migrated to Geant4 version 10 that does not
 //***** support Readout Geometry in multi-threaded mode. Now RE05CalorimeterSD
-//***** is assigned to a dedicaed parallel world. The pointer "aStep" points to
+//***** is assigned to a dedicated parallel world. The pointer "aStep" points to
 //***** a G4Step object for the parallel world.
 
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -85,7 +87,7 @@ G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   G4int copyIDinZ = touchable->GetReplicaNumber(0);
   G4int copyIDinPhi = touchable->GetReplicaNumber(1);
 
-  if(CellID[copyIDinZ][copyIDinPhi]==-1)
+  if(fCellID[copyIDinZ][copyIDinPhi]==-1)
   {
     RE05CalorimeterHit* calHit
       = new RE05CalorimeterHit
@@ -95,17 +97,17 @@ G4bool RE05CalorimeterSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
     aTrans.Invert();
     calHit->SetPos(aTrans.NetTranslation());
     calHit->SetRot(aTrans.NetRotation());
-    G4int icell = CalCollection->insert( calHit );
-    CellID[copyIDinZ][copyIDinPhi] = icell - 1;
+    G4int icell = fCalCollection->insert( calHit );
+    fCellID[copyIDinZ][copyIDinPhi] = icell - 1;
     if(verboseLevel>0)
-    { G4cout << " New Calorimeter Hit on CellID " 
+    { G4cout << " New Calorimeter Hit on fCellID " 
            << copyIDinZ << " " << copyIDinPhi << G4endl; }
   }
   else
   { 
-    (*CalCollection)[CellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
+    (*fCalCollection)[fCellID[copyIDinZ][copyIDinPhi]]->AddEdep(edep);
     if(verboseLevel>0)
-    { G4cout << " Energy added to CellID " 
+    { G4cout << " Energy added to fCellID " 
            << copyIDinZ << " " << copyIDinPhi << G4endl; }
   }
 
@@ -119,18 +121,22 @@ void RE05CalorimeterSD::EndOfEvent(G4HCofThisEvent*HCE)
   static G4int HCID = -1;
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection( HCID, CalCollection );
+  HCE->AddHitsCollection( HCID, fCalCollection );
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05CalorimeterSD::clear()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterSD::DrawAll()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05CalorimeterSD::PrintAll()
-{
-} 
+{} 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

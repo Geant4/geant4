@@ -63,6 +63,4 @@ private:
   B03SetGeometryCell fSetGeometryCell;
 };
 
-
-
 #endif

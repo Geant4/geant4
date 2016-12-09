@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/src/PhysicsListMessenger.cc
+/// \file medical/dna/wvalue/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
 //
 // $Id: PhysicsListMessenger.cc 82461 2014-06-23 10:44:06Z gcosmo $

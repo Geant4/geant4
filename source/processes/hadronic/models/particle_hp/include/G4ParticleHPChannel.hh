@@ -68,6 +68,8 @@ public:
     theFinalStates = 0;
     active = 0;
     registerCount = -1;
+    niso = -1;
+    theElement = NULL;
   }
 
   G4ParticleHPChannel()
@@ -80,6 +82,8 @@ public:
     theFinalStates = 0;
     active = 0;
     registerCount = -1;
+    niso = -1;
+    theElement = NULL;
   }
 
   ~G4ParticleHPChannel()

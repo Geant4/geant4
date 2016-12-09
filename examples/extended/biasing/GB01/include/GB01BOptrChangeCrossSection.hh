@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/include/GB01BOptrChangeCrossSection.hh
+/// \brief Definition of the GB01BOptrChangeCrossSection class
+//
 // $Id: $
 //---------------------------------------------------------------
 //
@@ -48,7 +51,6 @@
 class G4BOptnChangeCrossSection;
 class G4ParticleDefinition;
 #include <map>
-
 
 class GB01BOptrChangeCrossSection : public G4VBiasingOperator {
 public:

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsFreeVector.hh 74256 2013-10-02 14:24:02Z gcosmo $
+// $Id: G4PhysicsFreeVector.hh 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -62,31 +62,35 @@
 
 class G4PhysicsFreeVector : public G4PhysicsVector  
 {
-  public: // with description
+public: // with description
 
-    G4PhysicsFreeVector();
-    explicit G4PhysicsFreeVector(size_t theNbin);
-    G4PhysicsFreeVector(const G4DataVector& binVector, 
-                        const G4DataVector& dataVector);
-         // Constructors:
-         // 'binVector' has the low edge value of each scale bin. 
-         // 'dataVector' has the cross-section/energy-loss/etc at 
-         // the energy/momenturm of the corresponding a bin of 
-         // 'binVector'. 'binVector' and 'dataVector' need to have 
-         // the same vector length.
+  G4PhysicsFreeVector();
+  // the vector will be filled from external file using Retrieve method
+
+  explicit G4PhysicsFreeVector(size_t length);
+  // the vector with 'length' elements will be filled using PutValue method 
+  // by default the vector is initialized with zeros
+
+  G4PhysicsFreeVector(const G4DataVector& eVector, 
+		      const G4DataVector& dataVector);
+  // the vector is filled in this constructor 
+  // 'eVector' and 'dataVector' need to have the same vector length
+  // 'eVector' assumed to be ordered
   
-    virtual ~G4PhysicsFreeVector();
-         // Destructor
+  virtual ~G4PhysicsFreeVector();
 
-    void PutValue( size_t binNumber, G4double binValue, 
-                                     G4double dataValue );   
-         // To use this method to fill a PhysicsFreeVector, you have
-         // to Construct a PhysicsFreeVector of the size you need
-         // using G4PhysicsFreeVector(size_t theNbin). Also take
-         // note that you have to fill all bin values and data 
-         // values before you the PhysicsFreeVector.
-
+  inline void PutValue(size_t index, G4double energy, G4double dataValue);   
+  // user code is responsible for correct filling of all elements
 };
 
+inline
+void G4PhysicsFreeVector::PutValue(size_t index, G4double e, G4double value)
+{
+  if(index >= numberOfNodes) { PrintPutValueError(index); }
+  binVector[index] = e;
+  dataVector[index] = value;
+  if(index == 0)                       { edgeMin = e; }
+  else if( numberOfNodes - 1 == index) { edgeMax = e; }
+}
 
 #endif

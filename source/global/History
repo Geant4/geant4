@@ -17,6 +17,60 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16, 2016 G.Cosmo (global-V10-02-33)
+- Fixed compilation warning on MacOS Sierra in MT mode in function
+  G4Threading::G4GetPidId().
+
+October 21, 2016 A.Dotti (global-V10-02-31, -32)
+- To avoid confusion rename method to:
+  G4Threading::GetNumberOfRunningWorkerThreads() 
+
+October 21, 2016 G.Cosmo (global-V10-02-30)
+- Made initialisation of G4TWorkspacePool thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+October 17, 2016 G.Cosmo (global-V10-02-29)
+- Moved inclusion of <atomic> within G4MULTITHREADED guard in G4Threading.cc
+
+October 11, 2016 A.Dotti (global-V10-02-28)
+- Added G4Threading::GetNumberOfActiveWorkerThreads() function.
+
+September 26, 2016 G.Cosmo (global-V10-02-27)
+- Added kilovolt/m and megavolt/m to G4UnitsTable for electric field.
+  Addressing enhancement request #1891.
+
+September 7, 2016 M.Asai (global-V10-02-26)
+- G4StatDouble: Additional constructor.
+
+September 6, 2016 M.Asai (global-V10-02-25)
+- G4StatDouble: Added = and += operators.
+
+August 31, 2016 V.Ivanchenko (global-V10-02-24)
+- G4StatDouble: fixed computation of RMS - was completely wrong.
+
+August 18, 2016 G.Cosmo (global-V10-02-23)
+- G4UnitsTable: added IsUnitDefined() method, checking existance of a unit
+  in the table. Addressing problem report #1880.
+
+August 15, 2016 V.Ivanchenko (global-V10-02-22)
+- G4PhysicsVector, G4PhysicsTable and derived classes: general cleanup.
+  Updated comments; removed duplicate methods; more correct names for some
+  variables; adoption of c++11 keywords.
+  Removed .icc files for G4LPhysicsFreeVector and G4PhysicsOrderedFreeVector.
+
+August 12, 2016 G.Cosmo (global-V10-02-21)
+- G4UnitsTable: use 'hep_pascal' instead of 'pascal' to avoid potential
+  symbol conflicts on Windows.
+
+July 29, 2016 M.Asai (global-V10-02-20)
+- Fix G4UnitDefinition to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
+July 21 and 22, 2016 M.Asai (global-V10-02-16, -17, -18 and -19)
+- Fix G4UnitsTable to be properly shared by all threads.
+  Addressed to Bug report #1869.
+
 June 3, 2016 G.Cosmo (global-V10-02-15)
 - Enabled new units 'us' and 'ps' in G4SystemOfUnits.hh.
   Now requiring CLHEP-2.3.3.0.

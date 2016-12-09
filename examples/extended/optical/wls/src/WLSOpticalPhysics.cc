@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSOpticalPhysics.cc 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSOpticalPhysics.cc 100260 2016-10-17 08:03:33Z gcosmo $
 //
 /// \file optical/wls/src/WLSOpticalPhysics.cc
 /// \brief Implementation of the WLSOpticalPhysics class
@@ -113,10 +113,11 @@ void WLSOpticalPhysics::ConstructProcess()
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   fScintProcess->AddSaturation(emSaturation);
 
-  aParticleIterator->reset();
-  while ( (*aParticleIterator)() ){
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ( (*particleIterator)() ){
 
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     pManager = particle->GetProcessManager();

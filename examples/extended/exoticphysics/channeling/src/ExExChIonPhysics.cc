@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChIonPhysics.cc
+/// \brief Implementation of the ExExChIonPhysics class
+//
 
 #include "ExExChIonPhysics.hh"
 #include "G4SystemOfUnits.hh"

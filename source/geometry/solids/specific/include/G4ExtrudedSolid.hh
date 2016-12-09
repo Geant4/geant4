@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh 95945 2016-03-03 09:54:38Z gcosmo $
+// $Id: G4ExtrudedSolid.hh 100819 2016-11-02 15:17:36Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -130,6 +130,11 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                            const G4bool calcNorm=false,
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut (const G4ThreeVector &p) const;
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
     G4GeometryType GetEntityType () const;
     G4VSolid* Clone() const;
 
@@ -148,7 +153,6 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
   private:
 
-    void CheckPolygon(G4String& removedVertices);     
     void ComputeProjectionParameters();
     
     G4ThreeVector GetVertex(G4int iz, G4int ind) const;
@@ -177,7 +181,6 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 
     G4bool AddGeneralPolygonFacets();
     G4bool MakeFacets();
-    G4bool IsConvex() const;
 
   private:
 

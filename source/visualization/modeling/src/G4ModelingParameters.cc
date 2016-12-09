@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 85020 2014-10-23 09:52:52Z gcosmo $
+// $Id: G4ModelingParameters.cc 101035 2016-11-04 08:48:17Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -50,7 +50,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
   fExplodeFactor         (1.),
-  fNoOfSides             (24),
+  fNoOfSides             (72),
   fpSectionSolid         (0),
   fpCutawaySolid         (0),
   fpEvent                (0)
@@ -211,13 +211,13 @@ std::ostream& operator << (std::ostream& os, const G4ModelingParameters& mp)
 
   os << "\n  Vis attributes modifiers: ";
   const std::vector<G4ModelingParameters::VisAttributesModifier>& vams =
-    mp.fVisAttributesModifiers;
+  mp.fVisAttributesModifiers;
   if (vams.empty()) {
     os << "None";
   } else {
     os << vams;
   }
-  
+
   return os;
 }
 
@@ -296,7 +296,9 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
       break;
     case G4ModelingParameters::VASForceAuxEdgeVisible:
       if (fVisAtts.IsForceAuxEdgeVisible() !=
-          rhs.fVisAtts.IsForceAuxEdgeVisible())
+          rhs.fVisAtts.IsForceAuxEdgeVisible() ||
+          fVisAtts.IsForcedAuxEdgeVisible() !=
+          rhs.fVisAtts.IsForcedAuxEdgeVisible())
         return true;
       break;
     case G4ModelingParameters::VASForceLineSegmentsPerCircle:
@@ -311,11 +313,11 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
 {
-//  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
+  os << "Touchable path: physical-volume-name:copy-number pairs:\n  ";
   G4ModelingParameters::PVNameCopyNoPathConstIterator i;
   for (i = path.begin(); i != path.end(); ++i) {
     if (i != path.begin()) {
-      os << ", ";
+      os << ',';
     }
     os << i->GetName() << ':' << i->GetCopyNo();
   }
@@ -327,12 +329,12 @@ std::ostream& operator <<
  const std::vector<G4ModelingParameters::VisAttributesModifier>& vams)
 {
   std::vector<G4ModelingParameters::VisAttributesModifier>::const_iterator
-    iModifier;
+  iModifier;
   for (iModifier = vams.begin();
        iModifier != vams.end();
        ++iModifier) {
     const G4ModelingParameters::PVNameCopyNoPath& vamPath =
-      iModifier->GetPVNameCopyNoPath();
+    iModifier->GetPVNameCopyNoPath();
     os << '\n' << vamPath;
     const G4VisAttributes& vamVisAtts = iModifier->GetVisAttributes();
     const G4Colour& c = vamVisAtts.GetColour();
@@ -394,11 +396,18 @@ std::ostream& operator <<
         }
         break;
       case G4ModelingParameters::VASForceAuxEdgeVisible:
-        os << " forceAuxEdgeVisible ";
+        os << " forceAuxEdgeVisible: ";
+        if (!vamVisAtts.IsForceDrawingStyle()) {
+          os << "not ";
+        }
+        os << " forced";
         if (vamVisAtts.IsForceAuxEdgeVisible()) {
-          os << "true";
-        } else {
-          os << "false";
+          os << ": ";
+          if (vamVisAtts.IsForcedAuxEdgeVisible()) {
+            os << "true";
+          } else {
+            os << "false";
+          }
         }
         break;
       case G4ModelingParameters::VASForceLineSegmentsPerCircle:

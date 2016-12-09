@@ -257,6 +257,43 @@ endif
 endfunction()
 
 #-----------------------------------------------------------------------
+# function _g4tc_append_path(<output> <shell> <name> <value>)
+#          Set output to a string whose value is the shell command to
+#          append supplied value to the path style environment variable
+#          name (e.g. 'PATH')
+#
+function(_g4tc_append_path TEMPLATE_NAME SHELL_FAMILY PATH_VARIABLE
+  APPEND_VARIABLE)
+  # -- bourne block
+  if(${SHELL_FAMILY} STREQUAL "bourne")
+    # We have to make this section verbatim
+    set(${TEMPLATE_NAME}
+    "
+if test \"x\$${PATH_VARIABLE}\" = \"x\" ; then
+  export ${PATH_VARIABLE}=${APPEND_VARIABLE}
+else
+  export ${PATH_VARIABLE}=\${${PATH_VARIABLE}}:${APPEND_VARIABLE}
+fi
+"
+    PARENT_SCOPE
+    )
+  # -- cshell block
+  elseif(${SHELL_FAMILY} STREQUAL "cshell")
+    # Again, this is verbatim so final output is formatted correctly
+    set(${TEMPLATE_NAME}
+      "
+if ( ! \${?${PATH_VARIABLE}} ) then
+  setenv ${PATH_VARIABLE} ${APPEND_VARIABLE}
+else
+  setenv ${PATH_VARIABLE} \${${PATH_VARIABLE}}:${APPEND_VARIABLE}
+endif
+      "
+      PARENT_SCOPE
+      )
+  endif()
+endfunction()
+
+#-----------------------------------------------------------------------
 # MACRO(_g4tc_configure_tc_variables)
 # Macro to perform the actual setting of the low level toolchain variables
 # which need to be set in the final shell files.
@@ -408,6 +445,28 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     set(GEANT4_TC_G4LIB_USE_G3TOG4 "# NOT BUILT WITH G3TOG4 SUPPORT")
   endif()
 
+  # - USolids/VecGeom
+  if(GEANT4_USE_USOLIDS)
+    # Derive base dir from include path, NB, not 100% robust as Geant4GNUmake makes
+    # significant assumptions about how USolids was installed
+    get_filename_component(_USOLIDS_INCLUDE_DIR "${USOLIDS_INCLUDE_DIRS}" REALPATH)
+    get_filename_component(_USOLIDS_BASE_DIR "${_USOLIDS_INCLUDE_DIR}" DIRECTORY)
+    _g4tc_setenv_command(GEANT4_TC_USOLIDS_BASE_DIR ${SHELL_FAMILY} USOLIDS_BASE_DIR "${_USOLIDS_BASE_DIR}")
+
+    if(GEANT4_USE_ALL_USOLIDS)
+      _g4tc_setenv_command(GEANT4_TC_G4GEOM_USE_USOLIDS ${SHELL_FAMILY} G4GEOM_USE_USOLIDS 1)
+      set(GEANT4_TC_G4GEOM_USE_PARTIAL_USOLIDS "# FULL USOLIDS REPLACEMENT")
+    else()
+      set(GEANT4_TC_G4GEOM_USE_USOLIDS "# PARTIAL USOLIDS REPLACEMENT")
+      _g4tc_setenv_command(GEANT4_TC_G4GEOM_USE_PARTIAL_USOLIDS ${SHELL_FAMILY} G4GEOM_USE_PARTIAL_USOLIDS 1)
+      foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
+        _g4tc_setenv_command(GEANT4_TC_G4GEOM_USE_U${__g4_usolid_shape} ${SHELL_FAMILY} G4GEOM_USE_U${__g4_usolid_shape} 1)
+      endforeach()
+    endif()
+  else()
+    set(GEANT4_TC_USOLIDS_BASE_DIR "# NOT BUILT WITH USOLIDS SUPPORT")
+  endif()
+
   # - USER INTERFACE AND VISUALIZATION MODULES...
   # - Terminals
   if(NOT WIN32)
@@ -433,7 +492,12 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     _g4tc_setenv_command(GEANT4_TC_G4UI_USE_QT ${SHELL_FAMILY} G4UI_USE_QT 1)
     _g4tc_setenv_command(GEANT4_TC_G4VIS_USE_OPENGLQT ${SHELL_FAMILY} G4VIS_USE_OPENGLQT 1)
 
-    # Might need library setup, but for now recommend system install....
+    # Dynamic loader path (NB Darwin section is obsolete on El Capitan and higher)
+    if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+      _g4tc_prepend_path(GEANT4_TC_QT_LIB_PATH_SETUP ${SHELL_FAMILY} DYLD_LIBRARY_PATH \${QTLIBPATH})
+    else()
+      _g4tc_prepend_path(GEANT4_TC_QT_LIB_PATH_SETUP ${SHELL_FAMILY} LD_LIBRARY_PATH \${QTLIBPATH})
+    endif()
   else()
     set(GEANT4_TC_G4UI_USE_QT "# NOT BUILT WITH QT INTERFACE")
   endif()
@@ -769,12 +833,25 @@ foreach(_shell bourne;cshell)
     get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" REALPATH)
     get_filename_component(_CLHEP_LIB_DIR "${_CLHEP_LIB_DIR}" DIRECTORY)
 
-    _g4tc_prepend_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP
+    _g4tc_append_path(GEANT4_TC_CLHEP_LIB_PATH_SETUP
       ${_shell}
       ${_libpathname}
       "${_CLHEP_LIB_DIR}"
       )
   endif()
+
+  # - XercesC
+  set(GEANT4_TC_XERCESC_LIB_PATH_SETUP "# GDML SUPPORT NOT AVAILABLE")
+  if(GEANT4_USE_GDML)
+    get_filename_component(_XERCESC_LIB_DIR "${XERCESC_LIBRARY}" REALPATH)
+    get_filename_component(_XERCESC_LIB_DIR "${XERCESC_LIBRARY}" DIRECTORY)
+    _g4tc_append_path(GEANT4_TC_XERCESC_LIB_PATH_SETUP
+      ${_shell}
+      ${_libpathname}
+      "${_XERCESC_LIB_DIR}"
+      )
+  endif()
+
 
   # - Set data paths
   set(GEANT4_ENV_DATASETS )
@@ -786,7 +863,7 @@ foreach(_shell bourne;cshell)
   # - Set Font Path
   set(GEANT4_ENV_TOOLS_FONT_PATH "# FREETYPE SUPPORT NOT AVAILABLE")
   if(GEANT4_USE_FREETYPE)
-    _g4tc_prepend_path(GEANT4_ENV_TOOLS_FONT_PATH
+    _g4tc_append_path(GEANT4_ENV_TOOLS_FONT_PATH
       ${_shell}
       TOOLS_FONT_PATH
       "${TOOLS_FONT_PATH}"

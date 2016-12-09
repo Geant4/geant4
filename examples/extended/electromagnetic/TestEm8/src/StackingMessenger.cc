@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/StackingMessenger.cc
+/// \file electromagnetic/TestEm8/src/StackingMessenger.cc
 /// \brief Implementation of the StackingMessenger class
 //
 // $Id: StackingMessenger.cc,v 1.5 2006-09-25 17:06:29 maire Exp $

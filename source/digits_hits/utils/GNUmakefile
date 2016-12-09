@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 99169 2016-09-07 09:29:14Z gcosmo $
 # --------------------------------------------------------------
 # GNUmakefile for digits+hits library.  Makoto Asai, 1/11/96.
 # --------------------------------------------------------------
@@ -16,6 +16,7 @@ CPPFLAGS += \
 	    -I$(G4BASE)/global/HEPRandom/include \
 	    -I$(G4BASE)/global/management/include \
 	    -I$(G4BASE)/global/HEPGeometry/include \
+	    -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/materials/include \

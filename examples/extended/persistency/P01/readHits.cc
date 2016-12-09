@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: readHits.cc 93305 2015-10-16 07:34:53Z gcosmo $
+// $Id: readHits.cc 98770 2016-08-09 14:22:25Z gcosmo $
 //
 /// \file persistency/P01/readHits.cc
 /// \brief Main program of the persistency/P01 example
@@ -35,7 +35,6 @@
 #include "TKey.h"
 //
 #include "include/ExP01TrackerHit.hh"
-
 
 int main(int argc,char** argv) 
 {
@@ -65,5 +64,4 @@ int main(int argc,char** argv)
     }         
   }
 }
-
 

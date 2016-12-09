@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc 97523 2016-06-03 14:25:30Z gcosmo $
+// $Id: G4EmDNAPhysics.cc 99938 2016-10-12 08:06:52Z gcosmo $
 // add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysics.hh"
@@ -70,6 +70,8 @@
 #include "G4LivermoreGammaConversionModel.hh"
 #include "G4RayleighScattering.hh" 
 #include "G4LivermoreRayleighModel.hh"
+
+#include "G4EmParameters.hh"
 // end of warning
 
 #include "G4LossTableManager.hh"
@@ -82,22 +84,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics);
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmDNAPhysics::G4EmDNAPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
-{
-  G4EmParameters::Instance();
-  SetPhysicsType(bElectromagnetic);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics::G4EmDNAPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics"), verbose(ver)
 {
-  G4EmParameters::Instance();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetFluo(true);  
+  param->SetAuger(true);  
+  param->SetAugerCascade(true);  
+  param->SetDeexcitationIgnoreCut(true);
+
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -144,10 +142,11 @@ void G4EmDNAPhysics::ConstructProcess()
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
@@ -295,7 +294,6 @@ void G4EmDNAPhysics::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

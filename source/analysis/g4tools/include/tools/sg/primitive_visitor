@@ -52,8 +52,8 @@ public:
     add_point(a_x,a_y,a_z,w);    
   }
 
-  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<3) return false;
 
     m_mode = gl::triangle_fan();
@@ -74,7 +74,7 @@ public:
     p2z = *(pos2+2);
     project(p2x,p2y,p2z,w2);
   
-    for(unsigned int index=2;index<num;index++) {
+    for(size_t index=2;index<num;index++) {
       const float* pos = a_xyzs+3*index;
       p3x = *(pos+0);
       p3y = *(pos+1);
@@ -95,8 +95,8 @@ public:
     return true;
   }
 
-  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<3) return false;
 
     m_mode = gl::triangle_strip();
@@ -118,7 +118,7 @@ public:
     project(p2x,p2y,p2z,w2);
   
     bool flip = false;
-    for(unsigned int index=2;index<num;index++) {
+    for(size_t index=2;index<num;index++) {
       const float* pos = a_xyzs+3*index;
       p3x = *(pos+0);
       p3y = *(pos+1);
@@ -154,8 +154,8 @@ public:
     return true;
   }
 
-  bool add_triangles(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_triangles(size_t a_floatn,const float* a_xyzs,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<3) return false;
 
     m_mode = gl::triangles();
@@ -164,23 +164,23 @@ public:
     float p2x,p2y,p2z,w2=1;
     float p3x,p3y,p3z,w3=1;
 
-    for(unsigned int index=0;index<num;index+=3) {
+    for(size_t index=0;index<num;index+=3) {
 
       const float* pos = a_xyzs+3*index;
 
-      p1x = *(pos++);
-      p1y = *(pos++);
-      p1z = *(pos++);
+      p1x = *pos;pos++;
+      p1y = *pos;pos++;
+      p1z = *pos;pos++;
       project(p1x,p1y,p1z,w1);
   
-      p2x = *(pos++);
-      p2y = *(pos++);
-      p2z = *(pos++);
+      p2x = *pos;pos++;
+      p2y = *pos;pos++;
+      p2z = *pos;pos++;
       project(p2x,p2y,p2z,w2);
   
-      p3x = *(pos++);
-      p3y = *(pos++);
-      p3z = *(pos++);
+      p3x = *pos;pos++;
+      p3y = *pos;pos++;
+      p3z = *pos;pos++;
       project(p3x,p3y,p3z,w3);
 
       if(!add_triangle(p1x,p1y,p1z,w1,
@@ -192,8 +192,8 @@ public:
     return true;
   }
 
-  bool add_triangles(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_triangles(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<3) return false;
 
     m_mode = gl::triangles();
@@ -206,41 +206,41 @@ public:
     float r2,g2,b2,a2;
     float r3,g3,b3,a3;
 
-    for(unsigned int index=0;index<num;index+=3) {
+    for(size_t index=0;index<num;index+=3) {
 
       const float* pos = a_xyzs+3*index;
 
-      p1x = *(pos++);
-      p1y = *(pos++);
-      p1z = *(pos++);
+      p1x = *pos;pos++;
+      p1y = *pos;pos++;
+      p1z = *pos;pos++;
       project(p1x,p1y,p1z,w1);
   
-      p2x = *(pos++);
-      p2y = *(pos++);
-      p2z = *(pos++);
+      p2x = *pos;pos++;
+      p2y = *pos;pos++;
+      p2z = *pos;pos++;
       project(p2x,p2y,p2z,w2);
   
-      p3x = *(pos++);
-      p3y = *(pos++);
-      p3z = *(pos++);
+      p3x = *pos;pos++;
+      p3y = *pos;pos++;
+      p3z = *pos;pos++;
       project(p3x,p3y,p3z,w3);
 
       const float* qos = a_rgbas+4*index;
 
-      r1 = *(qos++);
-      g1 = *(qos++);
-      b1 = *(qos++);
-      a1 = *(qos++);
+      r1 = *qos;qos++;
+      g1 = *qos;qos++;
+      b1 = *qos;qos++;
+      a1 = *qos;qos++;
 
-      r2 = *(qos++);
-      g2 = *(qos++);
-      b2 = *(qos++);
-      a2 = *(qos++);
+      r2 = *qos;qos++;
+      g2 = *qos;qos++;
+      b2 = *qos;qos++;
+      a2 = *qos;qos++;
 
-      r3 = *(qos++);
-      g3 = *(qos++);
-      b3 = *(qos++);
-      a3 = *(qos++);
+      r3 = *qos;qos++;
+      g3 = *qos;qos++;
+      b3 = *qos;qos++;
+      a3 = *qos;qos++;
 
       if(!add_triangle(p1x,p1y,p1z,w1,r1,g1,b1,a1,
                        p2x,p2y,p2z,w2,r2,g2,b2,a2,
@@ -251,16 +251,16 @@ public:
     return true;
   }
 
-  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_line_strip(size_t a_floatn,const float* a_xyzs,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_strip();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+3*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -277,10 +277,10 @@ public:
     return true;
   }
 
-  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_line_strip(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    size_t num = a_floatn/3;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_strip();
 
@@ -288,7 +288,7 @@ public:
     float rb,gb,bb,ab,re,ge,be,ae;
     float* pos;
     float* qos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+3*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -320,16 +320,16 @@ public:
     return true;
   }
 
-  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
-    unsigned int num = a_floatn/3;
+  bool add_line_loop(size_t a_floatn,const float* a_xyzs,bool a_stop = false) {
+    size_t num = a_floatn/3;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_loop();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+3*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -364,10 +364,10 @@ public:
     return true;
   }
   
-  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
-    unsigned int num = a_floatn/3;
+  bool add_line_loop(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
+    size_t num = a_floatn/3;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_loop();
 
@@ -375,7 +375,7 @@ public:
     float rb,gb,bb,ab,re,ge,be,ae;
     float* pos;
     float* qos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+3*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -437,11 +437,11 @@ public:
     return true;
   }
   
-  bool add_lines(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
+  bool add_lines(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false) {
     //lines = segments.
-    unsigned int num = a_floatn/3;
+    size_t num = a_floatn/3;
 
-    unsigned int nseg = num/2;
+    size_t nseg = num/2;
     if(!nseg) return false;
 
     m_mode = gl::lines();
@@ -450,7 +450,7 @@ public:
     float rb,gb,bb,ab,re,ge,be,ae;
     float* pos;
     float* qos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+6*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -479,18 +479,18 @@ public:
     return true;
   }
 
-  bool add_lines(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
+  bool add_lines(size_t a_floatn,const float* a_xyzs,bool a_stop = false) {
     //lines = segments.
-    unsigned int num = a_floatn/3;
+    size_t num = a_floatn/3;
 
-    unsigned int nseg = num/2;
+    size_t nseg = num/2;
     if(!nseg) return false;
 
     m_mode = gl::lines();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xyzs+6*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -508,14 +508,14 @@ public:
     return true;
   }
 
-  bool add_points(unsigned int a_floatn,const float* a_xyzs,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_points(size_t a_floatn,const float* a_xyzs,bool a_stop = false){
+    size_t num = a_floatn/3;
 
     m_mode = gl::points();
 
     float x,y,z,w;
     float* pos;
-    for(unsigned int ipt=0;ipt<num;ipt++) {
+    for(size_t ipt=0;ipt<num;ipt++) {
       pos = (float*)(a_xyzs+3*ipt);
       x = *pos;pos++;
       y = *pos;pos++;
@@ -528,8 +528,8 @@ public:
     return true;
   }
 
-  bool add_points(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
-    unsigned int num = a_floatn/3;
+  bool add_points(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,bool a_stop = false){
+    size_t num = a_floatn/3;
 
     m_mode = gl::points();
 
@@ -539,7 +539,7 @@ public:
     float* pos;
     float* qos;
 
-    for(unsigned int ipt=0;ipt<num;ipt++) {
+    for(size_t ipt=0;ipt<num;ipt++) {
       pos = (float*)(a_xyzs+3*ipt);
       x = *pos;pos++;
       y = *pos;pos++;
@@ -558,7 +558,7 @@ public:
     return true;
   }
 
-  bool add_primitive(gl::mode_t a_mode,unsigned int a_floatn,const float* a_xyzs,bool a_stop = false) {
+  bool add_primitive(gl::mode_t a_mode,size_t a_floatn,const float* a_xyzs,bool a_stop = false) {
 
     if(a_mode==gl::points()) {
       return add_points(a_floatn,a_xyzs,a_stop);
@@ -587,7 +587,7 @@ public:
   }
 
   bool add_primitive(gl::mode_t a_mode,
-                     unsigned int a_floatn,
+                     size_t a_floatn,
                      const float* a_xyzs,
                      const float* a_rgbas,
                      bool a_stop = false){
@@ -622,14 +622,14 @@ public:
   /// points with x,y only ///////////////////////////////
   ////////////////////////////////////////////////////////
 
-  bool add_points_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false) {
-    unsigned int num = a_floatn/2;
+  bool add_points_xy(size_t a_floatn,const float* a_xys,bool a_stop = false) {
+    size_t num = a_floatn/2;
 
     m_mode = gl::points();
 
     float x,y,z,w;
     float* pos;
-    for(unsigned int ipt=0;ipt<num;ipt++) {
+    for(size_t ipt=0;ipt<num;ipt++) {
       pos = (float*)(a_xys+2*ipt);
       x = *pos;pos++;
       y = *pos;pos++;
@@ -642,10 +642,10 @@ public:
     return true;
   }
 
-  bool add_triangle_fan_xy(unsigned int a_floatn,const float* a_xys,
+  bool add_triangle_fan_xy(size_t a_floatn,const float* a_xys,
                            bool a_stop = false,
                            bool a_triangle_revert = false){
-    unsigned int num = a_floatn/2;
+    size_t num = a_floatn/2;
     if(num<3) return false;
 
     m_mode = gl::triangle_fan();
@@ -666,7 +666,7 @@ public:
     p2z = 0;
     project(p2x,p2y,p2z,w2);
   
-    for(unsigned int index=2;index<num;index++) {
+    for(size_t index=2;index<num;index++) {
       const float* pos = a_xys+2*index;
       p3x = *(pos+0);
       p3y = *(pos+1);
@@ -696,10 +696,10 @@ public:
     return true;
   }
 
-  bool add_triangle_strip_xy(unsigned int a_floatn,const float* a_xys,
+  bool add_triangle_strip_xy(size_t a_floatn,const float* a_xys,
                              bool a_stop = false,
                              bool a_triangle_revert = false){
-    unsigned int num = a_floatn/2;
+    size_t num = a_floatn/2;
     if(num<3) return false;
 
     m_mode = gl::triangle_strip();
@@ -721,7 +721,7 @@ public:
     project(p2x,p2y,p2z,w2);
   
     bool flip = false;
-    for(unsigned int index=2;index<num;index++) {
+    for(size_t index=2;index<num;index++) {
       const float* pos = a_xys+2*index;
       p3x = *(pos+0);
       p3y = *(pos+1);
@@ -777,8 +777,8 @@ public:
     return true;
   }
 
-  bool add_triangles_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false,bool a_triangle_revert = false){
-    unsigned int num = a_floatn/2;
+  bool add_triangles_xy(size_t a_floatn,const float* a_xys,bool a_stop = false,bool a_triangle_revert = false){
+    size_t num = a_floatn/2;
     if(num<3) return false;
 
     m_mode = gl::triangles();
@@ -787,7 +787,7 @@ public:
     float p2x,p2y,p2z,w2=1;
     float p3x,p3y,p3z,w3=1;
 
-    for(unsigned int index=0;index<num;index+=3) {
+    for(size_t index=0;index<num;index+=3) {
 
       const float* pos1 = a_xys+2*index;
       p1x = *(pos1+0);
@@ -824,16 +824,16 @@ public:
     return true;
   }
 
-  bool add_line_loop_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
-    unsigned int num = a_floatn/2;
+  bool add_line_loop_xy(size_t a_floatn,const float* a_xys,bool a_stop = false){
+    size_t num = a_floatn/2;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_loop();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xys+2*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -868,16 +868,16 @@ public:
     return true;
   }
   
-  bool add_line_strip_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
-    unsigned int num = a_floatn/2;
+  bool add_line_strip_xy(size_t a_floatn,const float* a_xys,bool a_stop = false){
+    size_t num = a_floatn/2;
     if(num<=1) return false;
-    unsigned int nseg = num-1;
+    size_t nseg = num-1;
 
     m_mode = gl::line_strip();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xys+2*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -894,20 +894,20 @@ public:
     return true;
   }
 
-  bool add_lines_xy(unsigned int a_floatn,const float* a_xys,bool a_stop = false){
+  bool add_lines_xy(size_t a_floatn,const float* a_xys,bool a_stop = false){
     //lines = segments.  Each point having only (x,y) (no z).
     //used in exlib::sg::[text_freetype, text_hershey].
 
-    unsigned int num = a_floatn/2;
+    size_t num = a_floatn/2;
 
-    unsigned int nseg = num/2;
+    size_t nseg = num/2;
     if(!nseg) return false;
 
     m_mode = gl::lines();
 
     float xb,yb,zb,wb,xe,ye,ze,we;
     float* pos;
-    for(unsigned int iseg = 0;iseg<nseg;iseg++) {
+    for(size_t iseg = 0;iseg<nseg;iseg++) {
       pos = (float*)(a_xys+4*iseg);
       xb = *pos;pos++;
       yb = *pos;pos++;
@@ -926,7 +926,7 @@ public:
   }
 
   bool add_primitive_xy(gl::mode_t a_mode,
-                        unsigned int a_floatn,const float* a_xys,
+                        size_t a_floatn,const float* a_xys,
                         bool a_stop = false,
                         bool a_triangle_revert = false){
 
@@ -1003,34 +1003,34 @@ public:
 
 public:
   //for sg::[tex_]sphere::visit() template :
-  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
+  bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
     return add_triangle_fan(a_floatn,a_xyzs);
   }
-  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
+  bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
     return add_triangle_fan(a_floatn,a_xyzs);
   }
 /*
-  bool add_triangles_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+  bool add_triangles_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
     return add_triangles(a_floatn,a_xyzs);
   }
-  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
     return add_triangle_fan(a_floatn,a_xyzs);
   }
-  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int,const float*){
+  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,unsigned int,const float*){
     return add_triangle_strip(a_floatn,a_xyzs,false);
   }
 */
-  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
+  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
     return add_triangle_fan(a_floatn,a_xyzs);
   }
-  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
+  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,const float* /*a_nms*/,unsigned int,const float*){
     return add_triangle_strip(a_floatn,a_xyzs,false);
   }
 
-  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
+  bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* /*a_nms*/) {
     return add_triangle_strip(a_floatn,a_xyzs,false);
   }
-  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
+  bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* /*a_rgbas*/,const float* /*a_nms*/) {
     return add_triangle_strip(a_floatn,a_xyzs,false);
   }
 

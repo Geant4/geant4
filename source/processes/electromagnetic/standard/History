@@ -1,4 +1,4 @@
-$Id: History 97798 2016-06-13 12:10:14Z gcosmo $
+$Id: History 101837 2016-12-01 13:38:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+01 December 16: V.Ivanchenko (emstand-V10-02-33)
+- G4UniversalFluctuation - G.Folger switch to std::sqrt from sqrt
+- G4MottCoefficients, G4ScreeningMottCrossSection, 
+  G4eSingleCoulombScatteringModel - use Nuclear Formfactor options
+    via G4EmParameters
+
+09 November 16: V.Ivanchenko (emstand-V10-02-32)
+- G4eplusAnnihilation - fixed polarisation of final gamma at rest 
+
+08 November 16: V.Ivanchenko (emstand-V10-02-31)
+- G4eeToTwoGammaModel - fixed polarisation of final gamma
+
+19 October 16: V.Ivanchenko (emstand-V10-02-30)
+- G4UniversalFluctuation - restored 10.3beta version
+- G4BetheHeitlerModel, G4ICRU49NuclearStoppingModel, G4IonFluctuations,
+  G4GoudsmitSaundersonMscModel, G4IonFluctuations - for internal
+    variable use name g4calc instead of g4pow
+
+07 October 16: L.Urban (emstand-V10-02-29)
+- G4UniversalFluctuation - modified code for small energy losses
+
+22 August 16: V.Ivanchenko (emstand-V10-02-28)
+- G4UniversalFluctuation - restore 10.3beta version
+
+03 August 16: V.Ivanchenko (emstand-V10-02-27)
+- G4WentzelOKandVIxSection - added various formactor approximations
+
+20 July 16: V.Ivanchenko (emstand-V10-02-26)
+- G4eBremsstrahlungRelModel - removed unused variables
+
+19 July 16: V.Ivanchenko (emstand-V10-02-25)
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel, G4eBremParametrizedModel
+    added c++11 keywords explicit, override, delete; use nullptr and 
+    use G4Element::GetZasInt()
+
+18 July 16: L.Urban (emstand-V10-02-24)
+- G4UniversalFluctuation.cc correction in order to get better
+  step dependence (practically no step dependence)
+
+16 July 16: V.Ivanchenko (emstand-V10-02-23)
+- G4ScreeningMottCrossSection - fixed precision lost in relativistic
+    kinematics when E > 30 TeV
+- G4eBremsstrahlung - improved printout
 
 13 June 16: V.Ivanchenko (emstand-V10-02-22)
 - G4SeltzerBergerModel - fixed data handling for Z > 92
@@ -44,7 +88,7 @@ committal in the CVS repository !
 
 17 May 16: V.Ivanchenko (emstand-V10-02-16)
   Added c++11 keywords: explicit, final, override, delete;
-    use nullptr and use G4Element::GetZasInt();
+    use nullptr and use G4Element::GetZasInt()
 
 22 April 16: M.Novak (emstand-V10-02-15)
 - G4GoudsmitSaundersonMscModel - change some variable names

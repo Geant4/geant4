@@ -90,13 +90,8 @@ void B02ImportanceDetectorConstruction::Construct()
   G4LogicalVolume* worldLogical = fGhostWorld->GetLogicalVolume();
   fLogicalVolumeVector.push_back(worldLogical);
 
-
-
   //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
   fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
-
-
-
 
   // creating 18 slobs of 10 cm thicknes
 
@@ -286,13 +281,11 @@ void B02ImportanceDetectorConstruction::ConstructSD()
                          new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
-
   G4String fltName,particleName;
   G4SDParticleFilter* neutronFilter = 
       new G4SDParticleFilter(fltName="neutronFilter", particleName="neutron");
 
   MFDet->SetFilter(neutronFilter);
-
 
   for (std::vector<G4LogicalVolume *>::iterator it =  
                                                 fLogicalVolumeVector.begin();
@@ -305,11 +298,9 @@ void B02ImportanceDetectorConstruction::ConstructSD()
   G4PSNofCollision*   scorer0 = new G4PSNofCollision(psName="Collisions");  
   MFDet->RegisterPrimitive(scorer0);
 
-
   G4PSNofCollision*   scorer1 = new G4PSNofCollision(psName="CollWeight");  
   scorer1->Weighted(true);
   MFDet->RegisterPrimitive(scorer1);
-
 
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);
@@ -345,7 +336,6 @@ void B02ImportanceDetectorConstruction::ConstructSD()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VIStore* B02ImportanceDetectorConstruction::CreateImportanceStore()
 {
-
 
   G4cout << " B02ImportanceDetectorConstruction:: Creating Importance Store " 
          << G4endl;
@@ -417,7 +407,6 @@ CreateWeightWindowStore()
   
   G4WeightWindowStore *wwstore = G4WeightWindowStore::GetInstance(GetName());
 
-
   // create one energy region covering the energies of the problem
   //
   std::set<G4double, std::less<G4double> > enBounds;
@@ -456,7 +445,6 @@ CreateWeightWindowStore()
   // with the same importance as the last concrete cell 
   G4GeometryCell gCell = GetGeometryCell(19);
   wwstore->AddLowerWeights(gCell,  lowerWeights);
-
 
   return wwstore;
 

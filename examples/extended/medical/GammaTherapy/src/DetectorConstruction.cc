@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file medical/GammaTherapy/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
@@ -40,8 +40,8 @@
 //
 // -------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -73,7 +73,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
 {
@@ -126,12 +126,12 @@ DetectorConstruction::DetectorConstruction()
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::InitialiseGeometryParameters()
 {
@@ -165,7 +165,7 @@ void DetectorConstruction::InitialiseGeometryParameters()
   fGasVolumePosZ   =  fTargetVolumePosZ + 0.5*(fTargetVolumeZ + fGasVolumeZ);
   fCheckVolumePosZ =  fGasVolumePosZ + 0.5*(fGasVolumeZ + fCheckVolumeZ)
                                 +  fCheckShiftZ;
-  fMylarPosZ       =  fGasVolumePosZ + 0.5*(fGasVolumeZ + fMylarVolumeZ) + fDelta;
+  fMylarPosZ =  fGasVolumePosZ + 0.5*(fGasVolumeZ + fMylarVolumeZ) + fDelta;
 
   fPhantomPosZ     =  fGasVolumePosZ + 0.5*(fGasVolumeZ + fPhantomZ) + fAirZ;
   fAbsorberPosZ    =  fAbsorberShiftZ - 0.5*(fPhantomZ - fAbsorberZ);
@@ -205,16 +205,10 @@ void DetectorConstruction::InitialiseGeometryParameters()
   G4cout << "===================================================" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Cleanup old geometry
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-
-  //
   InitialiseGeometryParameters();
 
   //
@@ -348,7 +342,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
     solidRing = new G4Tubs("Ring",r1,r2,absWidth,0.,twopi);
     logicRing = new G4LogicalVolume(solidRing,fAbsorberMaterial,"Ring");
     logicRing->SetSensitiveDetector(fPhantomSD);
-    logicRing->SetVisAttributes(G4VisAttributes::Invisible);
+    logicRing->SetVisAttributes(G4VisAttributes::GetInvisible());
     pv = new G4PVPlacement(0,G4ThreeVector(0.,0.,0.),logicRing,"Ring",
                            logicAbsorber,false,k);
     r1 = r2;
@@ -430,10 +424,3 @@ void DetectorConstruction::SetTarget2Material(const G4String& mat)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

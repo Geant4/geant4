@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh 97316 2016-06-01 12:12:58Z gcosmo $
+// $Id: G4ViewParameters.hh 99418 2016-09-21 09:18:42Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -108,11 +108,11 @@ public: // With description
     freeRotation           // Free, Google-like rotation, using mouse-grab.
   };
 
-  friend std::ostream& operator << (std::ostream&,
-				      const DrawingStyle&);
+  friend std::ostream& operator <<
+  (std::ostream&, const DrawingStyle&);
 
-  friend std::ostream& operator << (std::ostream&,
-				      const G4ViewParameters&);
+  friend std::ostream& operator <<
+  (std::ostream&, const G4ViewParameters&);
 
   G4ViewParameters ();
   ~G4ViewParameters ();
@@ -249,8 +249,7 @@ public: // With description
   void SetPicking              (G4bool);
   void SetRotationStyle        (RotationStyle);
   void ClearVisAttributesModifiers ();
-  void AddVisAttributesModifier
-  (const G4ModelingParameters::VisAttributesModifier&);
+  void AddVisAttributesModifier(const G4ModelingParameters::VisAttributesModifier&);
 
   // Command dumping functions.
   // For camera commands we need to provide the standard target point from
@@ -329,8 +328,7 @@ private:
   G4Colour     fBackgroundColour;
   G4bool       fPicking;         // Request picking.
   RotationStyle fRotationStyle;  // Rotation style.
-  std::vector<G4ModelingParameters::VisAttributesModifier>
-  fVisAttributesModifiers;
+  std::vector<G4ModelingParameters::VisAttributesModifier> fVisAttributesModifiers;
 
   enum { // Constants for geometry mask in ParseGeometry and related functions.
     fNoValue     = 0,

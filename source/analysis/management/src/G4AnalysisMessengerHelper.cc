@@ -200,6 +200,7 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
   parValBinScheme->SetGuidance(binSchemeGuidance);
   parValBinScheme->SetDefaultValue("linear");
  
+  auto commandName = Update("/analysis/HNTYPE_/setUAXIS", axis);
   std::unique_ptr<G4UIcommand> command(
     new G4UIcommand(Update("/analysis/HNTYPE_/setUAXIS", axis), messenger));
   command->SetGuidance(Update("Set parameters for the NDIM_D LOBJECT of given id:"));
@@ -249,8 +250,13 @@ G4AnalysisMessengerHelper::CreateSetBinsCommand(const G4String& axis,
   command->SetGuidance(Update("Set parameters for the NDIM_D LOBJECT of #id:"));
   command->SetGuidance(
     Update("  AXISvalMin; AXISvalMax; AXISunit; AXISfunction", axis));
+  command->SetParameter(parId);
+  command->SetParameter(parValMin);
+  command->SetParameter(parValMax);
+  command->SetParameter(parValUnit);
+  command->SetParameter(parValFcn);
   command->AvailableForStates(G4State_PreInit, G4State_Idle);
-
+  
   return command;
 }  
 

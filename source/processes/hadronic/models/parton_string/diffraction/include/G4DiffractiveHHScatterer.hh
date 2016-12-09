@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4DiffractiveHHScatterer.hh 100828 2016-11-02 15:25:59Z gcosmo $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
@@ -50,7 +50,6 @@ class G4KineticTrack;
 
 
 class G4DiffractiveHHScatterer {
-
   public:
     G4DiffractiveHHScatterer();
     virtual ~G4DiffractiveHHScatterer();
@@ -59,7 +58,7 @@ class G4DiffractiveHHScatterer {
   private:
     const G4DiffractiveExcitation* theExcitation;
     G4LundStringFragmentation* theStringFragmentation;
-
 };
 
 #endif
+

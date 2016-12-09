@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungModel.cc 95950 2016-03-03 10:42:48Z gcosmo $
+// $Id: G4PenelopeBremsstrahlungModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -441,26 +441,19 @@ void G4PenelopeBremsstrahlungModel::ClearTables()
     G4Exception("G4PenelopeBremsstrahlungModel::ClearTables()",
 		"em0100",FatalException,"Worker thread in this method");
 
-  std::map< std::pair<const G4Material*,G4double>, G4PenelopeCrossSection*>::iterator i;
   if (XSTableElectron)
     {
-      for (i=XSTableElectron->begin(); i != XSTableElectron->end(); i++)
-        {
-          G4PenelopeCrossSection* tab = i->second;
-          delete tab;
-        }
+      for (auto& item : (*XSTableElectron))        
+	delete item.second;        
       delete XSTableElectron;
-      XSTableElectron = 0;
+      XSTableElectron = nullptr;
     }
   if (XSTablePositron)
     {
-      for (i=XSTablePositron->begin(); i != XSTablePositron->end(); i++)
-        {
-          G4PenelopeCrossSection* tab = i->second;
-          delete tab;
-        }
+      for (auto& item : (*XSTablePositron))                
+	delete item.second;    
       delete XSTablePositron;
-      XSTablePositron = 0;
+      XSTablePositron = nullptr;
     }
   /*
   if (energyGrid)
@@ -610,7 +603,7 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
       ed << "Invalid particle: " << part->GetParticleName() << G4endl;
       G4Exception("G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple()",
 		  "em0001",FatalException,ed);
-      return NULL;
+      return nullptr;
     }
 
   if (part == G4Electron::Electron())
@@ -706,7 +699,7 @@ G4PenelopeBremsstrahlungModel::GetCrossSectionTableForCouple(const G4ParticleDef
 	  return XSTablePositron->find(theKey)->second;
         }
     }
-  return NULL;
+  return nullptr;
 }
 
 

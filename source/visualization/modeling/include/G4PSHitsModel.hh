@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PSHitsModel.hh 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4PSHitsModel.hh 99152 2016-09-07 08:04:30Z gcosmo $
 //
 // 
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -36,8 +36,7 @@
 #define G4SCORINGHITSMODEL_HH
 
 #include "G4VModel.hh"
-
-template <typename T> class G4THitsMap;
+#include "G4StatDouble.hh"
 
 class G4PSHitsModel: public G4VModel {
 
@@ -50,13 +49,9 @@ public: // With description
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
   // The main task of a model is to describe itself to the graphics scene.
 
-  const G4THitsMap<G4double>* GetCurrentHits() const
-  {return fpCurrentHits;}
-
 private:
 
   G4String fRequestedMapName;
-  const G4THitsMap<G4double>* fpCurrentHits;
 };
 
 #endif

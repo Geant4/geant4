@@ -270,4 +270,54 @@ inline bool is_ps(const std::string& a_file,bool& a_is){
 
 }}
 
+#include "fsize"
+
+namespace tools {
+namespace file {
+
+inline bool is_aida(const std::string& a_file,bool& a_is){
+  long sz;
+  if(!size(a_file,sz)) {a_is = false;return false;}
+
+  //NOTE : it assumes that the file is not compressed.
+  unsigned char head[1024];
+ {unsigned int num = 1024;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=1024) {a_is = false;return true;}}
+  head[1023] = 0; //to have a C string.
+  a_is = ::strstr((const char*)head,"<aida")?true:false;
+  return true;
+}
+
+inline bool is_jive(const std::string& a_file,bool& a_is){
+  long sz;
+  if(!size(a_file,sz)) {a_is = false;return false;}
+
+  //NOTE : it assumes that the file is not compressed.
+  unsigned char head[1024];
+ {unsigned int num = 1024;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=1024) {a_is = false;return true;}}
+  head[1023] = 0; //to have a C string.
+  if(::strstr((const char*)head,"<?ATLAS")) {a_is = true;return true;}
+  a_is = ::strstr((const char*)head,"<!DOCTYPE Event")?true:false;
+  return true;
+}
+
+inline bool is_heprep(const std::string& a_file,bool& a_is){
+  long sz;
+  if(!size(a_file,sz)) {a_is = false;return false;}
+
+  //NOTE : it assumes that the file is not compressed.
+  unsigned char head[1024];
+ {unsigned int num = 1024;
+  if(!signature(a_file,head,num)) {a_is = false;return false;}
+  if(num!=1024) {a_is = false;return true;}}
+  head[1023] = 0; //to have a C string.
+  a_is = ::strstr((const char*)head,"<heprep")?true:false;
+  return true;
+}
+
+}}
+
 #endif

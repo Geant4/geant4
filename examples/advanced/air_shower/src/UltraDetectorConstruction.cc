@@ -68,6 +68,7 @@
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4Log.hh"
+#include "G4SDManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -114,7 +115,7 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
    UniverseVisAtt->SetVisibility(true);
    UniverseVisAtt->SetForceWireframe(true);
    World_log->SetVisAttributes(UniverseVisAtt);
-   World_log->SetVisAttributes (G4VisAttributes::Invisible);
+   World_log->SetVisAttributes (G4VisAttributes::GetInvisible());
 
 
 
@@ -139,15 +140,15 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
 
   G4cout << "Using mirror reflecting surface " << G4endl ;
 
-  G4VPhysicalVolume* Mirror ;
-  Mirror = ConstructMirror(World_phys);
+  // G4VPhysicalVolume* Mirror =
+  ConstructMirror(World_phys);
 
 #elif ULTRA_GROUND_USE
 
   G4cout << "Using ground reflecting surface " << G4endl ;
 
-  G4VPhysicalVolume* Ground ;
-  Ground = ConstructGround(World_phys);
+  // G4VPhysicalVolume* Ground =
+  ConstructGround(World_phys);
 
 #else
 
@@ -163,6 +164,7 @@ World_phys   = new G4PVPlacement(0,G4ThreeVector(),"World",World_log,0,false,0);
 void UltraDetectorConstruction::ConstructSDandField()
 { 
   UltraPMTSD* PMTSD = new UltraPMTSD("PMTSD");
+  G4SDManager::GetSDMpointer()->AddNewDetector(PMTSD);
   SetSensitiveDetector(logicalPMT,PMTSD);  
 }
 

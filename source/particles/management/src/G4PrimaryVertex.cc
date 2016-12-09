@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc 91885 2015-08-10 07:05:56Z gcosmo $
+// $Id: G4PrimaryVertex.cc 99159 2016-09-07 08:11:50Z gcosmo $
 //
 
 #include "G4PrimaryVertex.hh"
@@ -67,7 +67,14 @@ G4PrimaryVertex::G4PrimaryVertex(const G4PrimaryVertex & right)
 G4PrimaryVertex::~G4PrimaryVertex()
 {
   if(theParticle != 0) {
-    delete theParticle; 
+    G4PrimaryParticle* theNext = theParticle;
+    while(theNext)
+    {
+      G4PrimaryParticle* thisPrimary = theNext;
+      theNext = thisPrimary->GetNext();
+      thisPrimary->ClearNext();
+      delete thisPrimary;
+    }
     theParticle = 0;
   }
   if(nextVertex != 0) { 

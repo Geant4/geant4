@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm10/Test.cc
-/// \brief Main program of the electromagnetic/Test example
+/// \file electromagnetic/TestEm10/TestEm10.cc
+/// \brief Main program of the electromagnetic/TestEm10 example
 //
 //
-// $Id: TestEm10.cc 94932 2015-12-18 09:21:29Z gcosmo $
+// $Id: TestEm10.cc 98276 2016-07-04 18:00:15Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

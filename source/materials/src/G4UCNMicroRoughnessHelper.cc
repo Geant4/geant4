@@ -79,7 +79,7 @@ G4UCNMicroRoughnessHelper::S2(G4double costheta2, G4double klk2) const
   if (costheta2>=klk2)
      return 4*costheta2/(2*costheta2-klk2+2*std::sqrt(costheta2*(costheta2-klk2)));
   else
-     return 4*costheta2/klk2;
+     return std::norm(2*std::sqrt(costheta2)/(std::sqrt(costheta2) + std::sqrt(std::complex<G4double>(costheta2 - klk2))));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -300,7 +300,7 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
   *max = 0.;
   G4double wkeit=0.;
 
-  if (E*costheta_i_squared < fermipot) return wkeit;
+  if (E < fermipot) return wkeit;
 
   //k_l^4/4
   G4double kl4d4=neutron_mass_c2/hbarc_squared*neutron_mass_c2/

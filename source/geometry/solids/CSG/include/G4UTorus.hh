@@ -74,6 +74,10 @@ class G4UTorus : public G4USolid
     G4double GetRtor() const;
     G4double GetSPhi() const;
     G4double GetDPhi() const;
+    G4double GetSinStartPhi() const;
+    G4double GetCosStartPhi() const;
+    G4double GetSinEndPhi  () const;
+    G4double GetCosEndPhi  () const;
 
     void SetRmin(G4double arg);
     void SetRmax(G4double arg);
@@ -85,6 +89,13 @@ class G4UTorus : public G4USolid
                           G4double arg3, G4double arg4, G4double arg5);
 
     inline G4GeometryType GetEntityType() const;
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 

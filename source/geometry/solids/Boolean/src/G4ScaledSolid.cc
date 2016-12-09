@@ -123,9 +123,37 @@ G4VSolid* G4ScaledSolid::GetUnscaledSolid() const
   return fPtrSolid; 
 } 
 
-///////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
-// CalculateExtent
+// Get bounding box
+
+void G4ScaledSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4ThreeVector bmin,bmax;
+  G4ThreeVector scale = fScale->GetScale();
+ 
+  fPtrSolid->Extent(bmin,bmax);
+  pMin.set(bmin.x()*scale.x(),bmin.y()*scale.y(),bmin.z()*scale.z());
+  pMax.set(bmax.x()*scale.x(),bmax.y()*scale.y(),bmax.z()*scale.z());
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+           << "\npMax = " << pMax;
+    G4Exception("G4ScaledSolid::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
 //
 G4bool 
 G4ScaledSolid::CalculateExtent( const EAxis pAxis,
@@ -134,16 +162,9 @@ G4ScaledSolid::CalculateExtent( const EAxis pAxis,
                                       G4double& pMin,
                                       G4double& pMax ) const
 {
-  G4VoxelLimits unLimit;
-  G4AffineTransform unTransform;
-
   // Find bounding box of unscaled solid
-  G4double x1,x2,y1,y2,z1,z2;
-  fPtrSolid->CalculateExtent(kXAxis,unLimit,unTransform,x1,x2);
-  fPtrSolid->CalculateExtent(kYAxis,unLimit,unTransform,y1,y2);
-  fPtrSolid->CalculateExtent(kZAxis,unLimit,unTransform,z1,z2);
-  G4BoundingEnvelope bbox(G4Point3D(x1,y1,z1),
-                          G4Point3D(x2,y2,z2),kCarTolerance);
+  G4ThreeVector bmin,bmax;
+  fPtrSolid->Extent(bmin,bmax);
 
   // Set combined transformation
   G4Transform3D transform3D =
@@ -151,6 +172,7 @@ G4ScaledSolid::CalculateExtent( const EAxis pAxis,
                   pTransform.NetTranslation())*GetScaleTransform();
 
   // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
   return bbox.CalculateExtent(pAxis,pVoxelLimit,transform3D,pMin,pMax);
 }
  

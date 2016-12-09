@@ -1,0 +1,129 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_pntuple
+#define tools_wroot_pntuple
+
+// pntuple = for parallel ntupling.
+
+#include "base_pntuple"
+
+namespace tools {
+namespace wroot {
+
+class pntuple : public base_pntuple {
+  typedef base_pntuple parent;
+public:
+  pntuple(std::ostream& a_out,
+          bool a_byte_swap,uint32 a_compression,
+          const std::string& a_name,const std::string& a_title,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_name,a_title,a_verbose)
+  {}
+  pntuple(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+          const std::vector<uint32>& a_basket_sizes,const ntuple_booking& a_bkg,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_basket_sizes,a_bkg,a_verbose)
+  {}
+  virtual ~pntuple() {}
+protected:
+  pntuple(const pntuple& a_from):parent(a_from){}
+  pntuple& operator=(const pntuple& a_from){parent::operator=(a_from);return *this;}
+
+protected:
+  class basket_add : public virtual branch::iadd_basket {
+    typedef branch::iadd_basket parent;
+  public:
+    virtual bool add_basket(basket& a_basket) {
+      m_mutex.lock();
+      uint32 add_bytes,nout;
+      if(!m_main_branch->add_basket(m_main_file,a_basket,add_bytes,nout)) {
+        m_mutex.unlock();
+        return false;
+      }
+      m_main_branch->set_tot_bytes(m_main_branch->tot_bytes()+add_bytes);
+      m_main_branch->set_zip_bytes(m_main_branch->zip_bytes()+nout);
+      m_mutex.unlock();
+      return true;
+    }
+  public:
+    basket_add(imutex& a_mutex,ifile& a_main_file)
+    :m_mutex(a_mutex),m_main_file(a_main_file),m_main_branch(0)
+    {}
+  protected:
+    basket_add(const basket_add& a_from):parent()
+    ,m_mutex(a_from.m_mutex),m_main_file(a_from.m_main_file),m_main_branch(0)
+    {}
+    basket_add& operator=(const basket_add&){return *this;}
+  public:
+    void set_main_branch(branch* a_main_branch) {m_main_branch = a_main_branch;}
+  protected:
+    imutex& m_mutex;
+    ifile& m_main_file;
+    branch* m_main_branch;
+  };
+
+public:
+  bool add_row(imutex& a_mutex,ifile& a_main_file,const std::vector<branch*>& a_main_branches) {
+    if(m_cols.empty()) return false;
+
+    tools_vforit(icol*,m_cols,it) (*it)->add();
+
+    basket_add _badd(a_mutex,a_main_file);
+
+    std::vector<branch*>::const_iterator itb = a_main_branches.begin();
+    tools_vforit(icol*,m_cols,it) {
+      branch* main_branch = (*itb);itb++;
+      _badd.set_main_branch(main_branch);
+      if(!(*it)->get_branch()->pfill(_badd)) return false;
+    }
+
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return true;
+  }
+
+protected:
+  bool end_leaves(imutex& a_mutex,std::vector<branch*>& a_main_branches) const {
+    std::vector<icol*>::const_iterator pit = m_cols.begin();
+    tools_vforcit(branch*,a_main_branches,mit) {
+      base_leaf* _pleaf = (*pit)->get_leaf();
+      leaf_string* _pleafs = _pleaf?id_cast<base_leaf,leaf_string>(*_pleaf):0;
+
+      base_leaf* _mleaf = *((*mit)->leaves().begin());
+      leaf_string* _mleafs = _mleaf?tools::id_cast<base_leaf,leaf_string>(*_mleaf):0;
+
+      pit++; //WARNING.
+
+      if((_mleafs&&!_pleafs)||(!_mleafs&&_pleafs)) {
+        m_file.out() << "tools::wroot::pntuple::end_leaves : merge string leaves problem." << std::endl;
+        return false;
+      }
+
+      if(_mleafs && _pleafs) {
+        //m_file.out() << "tools::wroot::pntuple::end_leaves : merge string leaves ok." << std::endl;
+
+        tools::uint32 _length = _pleafs->length();
+        int _mx = _pleafs->get_max();
+
+        a_mutex.lock(); //do it here (and not outside loop) because of upper m_out.
+        _mleafs->set_length(tools::mx(_length,_mleafs->length())); 
+        _mleafs->set_max(tools::mx(_mx,_mleafs->get_max())); 
+        a_mutex.unlock();    
+      }      
+    }
+    return true;
+  }
+public:
+  bool end_fill(imutex& a_mutex,ifile& a_main_file,std::vector<branch*>& a_main_branches) {
+    std::vector<branch*>::const_iterator itb = a_main_branches.begin();
+    basket_add _badd(a_mutex,a_main_file);
+    tools_vforit(icol*,m_cols,it) {
+      branch* main_branch = (*itb);itb++;
+      _badd.set_main_branch(main_branch);
+      if(!(*it)->get_branch()->end_pfill(_badd)) return false;
+    }
+    return end_leaves(a_mutex,a_main_branches);
+  }
+};
+
+}}
+
+#endif

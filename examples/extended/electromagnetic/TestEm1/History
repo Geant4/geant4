@@ -1,4 +1,4 @@
-$Id: History 97813 2016-06-14 07:58:46Z gcosmo $
+$Id: History 100290 2016-10-17 08:47:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,23 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	
+
+14-10-16 G.Folger (testem1-V10-02-08)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+21-09-16 V.Ivant  (testem1-V10-02-07)
+- PhysicsList - enabling of CSDA range computation is moved to
+    UI command in macro file TestEm1.in
+- DetectorConstruction - do not re-initialise geometry when 
+    change box size
+
+26-07-16 mma  (testem1-V10-02-06)
+- PrimaryGeneratorMessenger : coding conventions
+
+04-07-16 I. Hrivnacova  (testem1-V10-02-05)
+- Fixes for Doxygen documentation
+
 13-06-16 mma  (testem1-V10-02-04)
 - add decayinfly.mac
 - adapt vis.mac (colors)

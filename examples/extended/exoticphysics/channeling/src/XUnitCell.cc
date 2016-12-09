@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XUnitCell.cc
+/// \brief Implementation of the XUnitCell class
+//
 
 #include "XUnitCell.hh"
 #include "G4PhysicalConstants.hh"

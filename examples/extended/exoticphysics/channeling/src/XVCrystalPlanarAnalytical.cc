@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XVCrystalPlanarAnalytical.cc
+/// \brief Implementation of the XVCrystalPlanarAnalytical class
+//
 
 #include "XVCrystalPlanarAnalytical.hh"
 #include "G4PhysicsLinearVector.hh"

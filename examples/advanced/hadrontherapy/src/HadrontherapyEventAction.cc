@@ -43,7 +43,7 @@
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::HadrontherapyEventAction() :
-  drawFlag("all" ),printModulo(1000), pointerEventMessenger(0)
+  drawFlag("all" ),printModulo(10), pointerEventMessenger(0)
 { 
   hitsCollectionID = -1;
   pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
@@ -53,13 +53,12 @@ HadrontherapyEventAction::HadrontherapyEventAction() :
 HadrontherapyEventAction::~HadrontherapyEventAction()
 {
  delete pointerEventMessenger;
-}
+}  
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
 { 
   G4int evtNb = evt->GetEventID();
-  
   //printing survey
   if (evtNb%printModulo == 0)
      G4cout << "\n---> Begin of Event: " << evtNb << G4endl;

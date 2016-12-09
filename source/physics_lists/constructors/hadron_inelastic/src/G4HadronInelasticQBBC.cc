@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronInelasticQBBC.cc 99977 2016-10-13 07:26:42Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -79,41 +79,30 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4HadronInelasticQBBC);
 
-G4ThreadLocal G4ComponentAntiNuclNuclearXS* G4HadronInelasticQBBC::theAntiNuclXS = 0;
-G4ThreadLocal G4ComponentGGHadronNucleusXsc* G4HadronInelasticQBBC::theKaonXS = 0;
-G4ThreadLocal G4bool G4HadronInelasticQBBC::wasActivated=false;
+G4ThreadLocal G4ComponentAntiNuclNuclearXS* G4HadronInelasticQBBC::theAntiNuclXS = nullptr;
+G4ThreadLocal G4ComponentGGHadronNucleusXsc* G4HadronInelasticQBBC::theKaonXS = nullptr;
 
 G4HadronInelasticQBBC::G4HadronInelasticQBBC(G4int ver) 
-  : G4VHadronPhysics("hInelastic"),verbose(ver)
+  : G4VHadronPhysics("hInelasticQBBC"),verbose(ver)
 {
-  htype = "QBBC";
-  theAntiNuclXS = 0;
-  theKaonXS = 0;
+  theAntiNuclXS = nullptr;
+  theKaonXS = nullptr;
 }
 
-G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver, 
-    G4bool, G4bool,G4bool, G4bool, G4bool)
-  : G4VHadronPhysics("hInelastic"),verbose(ver)
-{
-  htype = name;
-  theAntiNuclXS = 0;
-  theKaonXS = 0;
-}
+G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String&, G4int ver, 
+    G4bool, G4bool,G4bool, G4bool, G4bool) : G4HadronInelasticQBBC(ver)
+{}
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
-  delete theAntiNuclXS; theAntiNuclXS=0;
-  delete theKaonXS;     theKaonXS=0;
+  delete theAntiNuclXS; theAntiNuclXS=nullptr;
+  delete theKaonXS;     theKaonXS=nullptr;
 }
 
 void G4HadronInelasticQBBC::ConstructProcess()
 {
-  if(wasActivated) return;
-  wasActivated = true;
-
   if(verbose > 1) {
-    G4cout << "### HadronInelasticQBBC Construct Process with type <"
-	   << htype << ">" << G4endl;
+    G4cout << "### HadronInelasticQBBC Construct Process " << G4endl;
   }
 
   G4double emax = 100.*TeV;
@@ -121,7 +110,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
   //G4cout << "G4HadronInelasticQBBC::ConstructProcess new PRECO"<< G4endl;
 
   // PreCompound and Evaporation models are instantiated here
-  G4PreCompoundModel* thePreCompound = 0;
+  G4PreCompoundModel* thePreCompound = nullptr;
   G4HadronicInteraction* p =
     G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
   thePreCompound = static_cast<G4PreCompoundModel*>(p);
@@ -137,10 +126,13 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4HadronicInteraction* theFTFP2 = 
     BuildModel(new G4FTFBuilder("FTFP",thePreCompound),0.0,emax);
 
-  G4HadronicInteraction* theBERT = 
-    NewModel(new G4CascadeInterface(),1.0*GeV,4.0*GeV);
-  G4HadronicInteraction* theBERT1 = 
-    NewModel(new G4CascadeInterface(),0.0*GeV,4.0*GeV);
+  G4CascadeInterface* casc = new G4CascadeInterface();
+  casc->usePreCompoundDeexcitation();
+  G4HadronicInteraction* theBERT = NewModel(casc,1.0*GeV,5.0*GeV);
+
+  casc = new G4CascadeInterface();
+  casc->usePreCompoundDeexcitation();
+  G4HadronicInteraction* theBERT1 = NewModel(casc,0.0*GeV,5.0*GeV);
 
   //G4cout << "G4HadronInelasticQBBC::ConstructProcess new Binary"<< G4endl;
   G4BinaryCascade* bic = new G4BinaryCascade(thePreCompound);
@@ -154,11 +146,11 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4CrossSectionInelastic* kaonxs = new G4CrossSectionInelastic(theKaonXS);
 
   // loop over particles
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ) {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ) {
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String pname = particle->GetParticleName();
-    //G4ProcessManager* pmanager = particle->GetProcessManager();
     if(verbose > 1) { 
       G4cout << "### HadronInelasticQBBC:  " << pname << G4endl; 
     }

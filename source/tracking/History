@@ -1,4 +1,4 @@
-$Id: History 96231 2016-03-30 10:35:46Z gcosmo $
+$Id: History 101439 2016-11-17 14:54:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 17, 2016 L.Desorgher  (tracking-V10-02-05)
+- G4AdjointSteppingAction remove a test on weight with FPE issue.
+     
+Octb 27, 2016 L.Desorgher  (tracking-V10-02-04)
+- G4AdjointSteppingAction remove a print info on the weight, when stopping reverse tracking.
+for the implementation of the splitting of the reverse MC tracking.
+
+July 21, 2016 L.Desorgher  (tracking-V10-02-03)
+- Modification of G4AdjointTrackingAction and G4AdjointSteppingAction
+for the implementation of the splitting of the reverse MC tracking.
 
 30th Jan  2016 A. Dotti   (tracking-V10-02-02)
 - G4VTrajectory.cc: Added std::endl at end of ShowTrajectory.

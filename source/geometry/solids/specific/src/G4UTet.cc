@@ -38,6 +38,12 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
+#include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructor - create a tetrahedron
@@ -120,6 +126,77 @@ std::vector<G4ThreeVector> G4UTet::GetVertices() const
     vertices.push_back(v);
   }
   return vertices;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UTet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  UVector3 vmin, vmax;
+  GetShape()->Extent(vmin,vmax);
+  pMin.set(vmin.x(),vmin.y(),vmin.z());
+  pMax.set(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UTet::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UTet::CalculateExtent(const EAxis pAxis,
+                        const G4VoxelLimits& pVoxelLimit,
+                        const G4AffineTransform& pTransform,
+                              G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  std::vector<UVector3> vec = GetShape()->GetVertices();
+
+  G4ThreeVectorList anchor(1);
+  anchor[0].set(vec[0].x(),vec[0].y(),vec[0].z());
+
+  G4ThreeVectorList base(3);
+  base[0].set(vec[1].x(),vec[1].y(),vec[1].z());
+  base[1].set(vec[2].x(),vec[2].y(),vec[2].z());
+  base[2].set(vec[3].x(),vec[3].y(),vec[3].z());
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &anchor;
+  polygons[1] = &base;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 ////////////////////////////////////////////////////////////////////////

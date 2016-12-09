@@ -8,7 +8,9 @@
 #
 # Register physics constructor
 /w/phys/addPhysics dna	        
+#/w/phys/addPhysics  dna_opt2	
 #/w/phys/addPhysics  dna_opt4	
+#/w/phys/addPhysics  dna_opt5	
 
 #
 /run/initialize

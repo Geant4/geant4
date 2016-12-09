@@ -1,4 +1,4 @@
-$Id: History 93258 2015-10-14 08:34:50Z gcosmo $
+$Id: History 100265 2016-10-17 08:11:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-10-16 G.Folger (fano-V10-02-02)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+21-07-16 mma (fano-V10-02-01)
+- Fixe coding conventions in Run.hh
+
+04-07-16 I.Hrivnacova (fano-V10-02-00)
+- Fixes for Doxygen documentation
+
 12-10-15 J.Jacquemier (fano-V10-01-03)
 - Remove EventActionMessenger class
 - Replace printModulo by /run/printProgress

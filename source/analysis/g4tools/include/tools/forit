@@ -10,6 +10,12 @@
 #define tools_vforit(a__T,a__v,a__it) \
   for(std::vector< a__T >::iterator (a__it) = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
 
+#define tools_vforcrit(a__T,a__v,a__it) \
+  for(std::vector< a__T >::const_reverse_iterator (a__it) = (a__v).rbegin();(a__it)!=(a__v).rend();++(a__it))
+
+#define tools_vforrit(a__T,a__v,a__it) \
+  for(std::vector< a__T >::reverse_iterator (a__it) = (a__v).rbegin();(a__it)!=(a__v).rend();++(a__it))
+
 #define tools_vforit_npp(a__T,a__v,a__it) \
   for(std::vector< a__T >::iterator (a__it) = (a__v).begin();(a__it)!=(a__v).end();)
 

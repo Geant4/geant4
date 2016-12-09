@@ -1,4 +1,4 @@
-# $Id: TestEm0.in 93512 2015-10-23 13:45:07Z gcosmo $
+# $Id: TestEm0.in 98987 2016-08-29 07:03:05Z gcosmo $
 #
 # Macro file for "TestEm0.cc"
 #
@@ -6,10 +6,13 @@
 /run/verbose 0
 #
 #/testem/phys/addPhysics local
-###/testem/phys/addPhysics emstandard_opt3
+/testem/phys/addPhysics emstandard_opt3
+#
+/process/eLoss/verbose 0
+/process/eLoss/CSDARange true
+/process/em/printParameters 
 #
 /run/initialize
-/process/eLoss/verbose 0
 #
 /testem/det/setMat Germanium
 /gun/particle gamma

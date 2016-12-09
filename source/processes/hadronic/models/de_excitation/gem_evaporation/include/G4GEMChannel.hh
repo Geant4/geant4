@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh 97097 2016-05-25 07:50:31Z gcosmo $
+// $Id: G4GEMChannel.hh 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -57,8 +57,6 @@ public:
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
-
-  virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
   virtual void Dump() const;
 

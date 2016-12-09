@@ -14,6 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-09
+- G4VPreCompoundFragment, G4PreCompoundFragment - minor performance
+    improvement
+
+19-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-08
+- G4PreCompoundEmission, G4VPreCompoundFragment, G4HETCFragment,
+  G4PreCompoundIon, G4PreCompoundNucleon - changed identificator 
+    names in order to have more clean code
+
+11-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-07
+- G4VPreCompoundFragment, G4PreCompoundEmission, G4PreCompoundFragment,
+  G4PreCompoundNucleon - use Coulomb barrier from standard 
+    parametersation instead of hard-coded one in computation of 
+    probability of a fragment emission
+
 23-Apr-2016 V.Ivanchenko  hadr-pre-V10-02-06
 - G4PreCompoundFragment - fixed problem of the previous tag
 

@@ -571,7 +571,7 @@ void PassiveProtonBeamLine::ConstructPassiveProtonBeamLine()
     
     
     // The treatment room is invisible in the Visualisation
-    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
+    logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
     
     // Components of the Passive Proton Beam Line
     HadrontherapyBeamLineSupport();
@@ -1370,6 +1370,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
     
     logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
     
+    
     // ---------------------------------//
     //     BRASS TUBE 1 (phantom side)    //
     // ---------------------------------//
@@ -1404,6 +1405,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
                                        0);
     
     logicBrassTube -> SetVisAttributes(darkOrange3);
+     
     
     // ----------------------------------------------//
     //     BRASS TUBE 2 (inside the PMMA support)    //
@@ -1427,18 +1429,19 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
                                                            brassTube2Material,
                                                            "BrassTube2",
                                                            0, 0, 0);
-    
-    physiBrassTube2 = new G4PVPlacement(G4Transform3D(rm,
-                                                      G4ThreeVector(0,
-                                                                    0.,
-                                                                    0.)),
-                                        "BrassTube2",
-                                        logicBrassTube2,
-                                        physiNozzleSupport,
-                                        false,
-                                        0);
+    G4bool checkOverlaps = true;
+
+    new G4PVPlacement(0,
+                      G4ThreeVector(),
+                      logicBrassTube2,
+                      "BrassTube2",
+                      logicHoleNozzleSupport,
+                      false,
+                      0,
+                      checkOverlaps);
     
     logicBrassTube2 -> SetVisAttributes(darkOrange3);
+    
     
     
     // --------------------------------------//

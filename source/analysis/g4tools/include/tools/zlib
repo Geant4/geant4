@@ -182,7 +182,6 @@ inline bool gunzip_buffer(std::ostream& a_out,
 #if ZLIB_VERNUM <= 0x1140
   char* pos = (char*)a_src;
   if(gunzip_check_header(pos)!=Z_OK) return false;
-  uInt diff = pos-a_src;
   stream.next_in   = (Bytef*)pos;
   stream.avail_in  = (uInt)(a_srcsize-(pos-a_src));
 #else
@@ -225,5 +224,3 @@ inline bool gunzip_buffer(std::ostream& a_out,
 }
 
 #endif
-
-//exlib_build_use inlib zlib

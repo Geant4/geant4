@@ -1,4 +1,4 @@
-/score/create/boxMesh boxMesh_1
+/score/create/boxMesh boxMesh
 #
 /score/mesh/boxSize 100. 100. 100. cm
 /score/mesh/nBin 2 2 2

@@ -40,8 +40,6 @@
 
 #include "G4NuclearDecay.hh"
 
-class G4PhotonEvaporation;
-
 
 class G4ITDecay : public G4NuclearDecay
 {

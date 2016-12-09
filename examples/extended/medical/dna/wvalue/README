@@ -30,7 +30,8 @@ These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication:
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 This example is presented in the following paper, which shall also be cited:
@@ -79,6 +80,8 @@ The output results consist in a text file (wvalue.txt), containing :
 - the w value (in eV)
 - its rms (in eV)
 
+Note: rms values correspond to standard deviation.
+
 In addition, another macro (histo.in) is also provided including 
 a series of histograms :
 - histogram #1 : nb of ionisation interactions per event
@@ -93,3 +96,4 @@ a series of histograms :
 
 Should you have any enquiry, please do not hesitate to contact: 
 incerti@cenbg.in2p3.fr
+

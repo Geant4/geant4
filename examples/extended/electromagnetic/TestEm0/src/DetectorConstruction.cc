@@ -28,7 +28,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc 93512 2015-10-23 13:45:07Z gcosmo $
+// $Id: DetectorConstruction.cc 99373 2016-09-20 07:13:41Z gcosmo $
 //
 // 
 
@@ -56,7 +56,7 @@
 
 DetectorConstruction::DetectorConstruction()
 :G4VUserDetectorConstruction(),
- fBox(0),fBoxSize(0),fMaterial(0),fDetectorMessenger(0)
+ fBox(nullptr),fMaterial(nullptr)
 {
   fBoxSize = 1*mm;
   DefineMaterials();
@@ -68,13 +68,6 @@ DetectorConstruction::DetectorConstruction()
 
 DetectorConstruction::~DetectorConstruction()
 { delete fDetectorMessenger;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructVolumes();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -132,7 +125,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);  
   new G4Material("Iron"       , z=26., a= 55.85*g/mole, density= 7.870*g/cm3);
   new G4Material("Copper"     , z=29., a= 63.55*g/mole, density= 8.960*g/cm3);
-  new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);    
+  new G4Material("Germanium"  , z=32., a= 72.61*g/mole, density= 5.323*g/cm3);  
   new G4Material("Silver"     , z=47., a=107.87*g/mole, density= 10.50*g/cm3);
   new G4Material("Tungsten"   , z=74., a=183.85*g/mole, density= 19.30*g/cm3);
   new G4Material("Lead"       , z=82., a=207.19*g/mole, density= 11.35*g/cm3);
@@ -148,47 +141,44 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("ArgonGas", z=18, a=39.948*g/mole, density= 1.782*mg/cm3,
                  kStateGas, 273.15*kelvin, 1*atmosphere);
 
- G4Material* butane =
- new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
+  G4Material* butane =
+  new G4Material("Isobutane",density= 2.42*mg/cm3, ncomponents=2,
                  kStateGas,273.15*kelvin, 1*atmosphere);
- butane->AddElement(C, natoms=4);
- butane->AddElement(H, natoms=10);
+  butane->AddElement(C, natoms=4);
+  butane->AddElement(H, natoms=10);
  
- G4Material* ArButane =
- new G4Material("ArgonButane", density= 1.835*mg/cm3, ncomponents=2,
+  G4Material* ArButane =
+  new G4Material("ArgonButane", density= 1.835*mg/cm3, ncomponents=2,
                  kStateGas,273.15*kelvin,1.*atmosphere);
- ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
- ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
+  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
+  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
      
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 {
-  // Cleanup old geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
+  // the geometry is created once
+  if(fBox) { return fBox; }
 
   G4Box* 
     sBox = new G4Box("Container",                        //its name
-                     fBoxSize/2,fBoxSize/2,fBoxSize/2);        //its dimensions
+                     fBoxSize/2,fBoxSize/2,fBoxSize/2);  //its dimensions
                    
   G4LogicalVolume*
-    lBox = new G4LogicalVolume(sBox,                        //its shape
+    lBox = new G4LogicalVolume(sBox,                     //its shape
                                fMaterial,                //its material
-                               fMaterial->GetName());        //its name
+                               fMaterial->GetName());    //its name
 
-  fBox = new G4PVPlacement(0,                                //no rotation
-                             G4ThreeVector(),                //at (0,0,0)
-                           lBox,                        //its logical volume
-                           fMaterial->GetName(),        //its name
-                           0,                                //its mother  volume
+  fBox = new G4PVPlacement(0,                            //no rotation
+                           G4ThreeVector(0.,0.,0.),      //at (0,0,0)
+                           lBox,                         //its logical volume
+                           fMaterial->GetName(),         //its name
+                           0,                            //its mother  volume
                            false,                        //no boolean operation
-                           0);                                //copy number
+                           0);                           //copy number
                              
   //always return the root volume
   //
@@ -197,7 +187,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::PrintParameters()
+void DetectorConstruction::PrintParameters() const
 {
   G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
          << " of " << fMaterial->GetName() << G4endl;
@@ -207,7 +197,7 @@ void DetectorConstruction::PrintParameters()
 
 #include "G4RunManager.hh"
 
-void DetectorConstruction::SetMaterial(G4String materialChoice)
+void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
   // search the material by its name, or build it from nist data base
   G4Material* pttoMaterial = 
@@ -215,8 +205,8 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 
   if (pttoMaterial) {
     fMaterial = pttoMaterial;
-    if (fBox) G4RunManager::GetRunManager()
-                             ->DefineWorldVolume(ConstructVolumes());
+    if(fBox) { fBox->GetLogicalVolume()->SetMaterial(fMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  

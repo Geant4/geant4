@@ -53,7 +53,7 @@ gRunManager.SetUserInitialization(exN03geom)
 # setup for physics list
 # ------------------------------------------------------------------
 # normal way for constructing user physics list
-exN03PL= g4py.ExN03pl.PhysicsList()
+exN03PL= g4py.EMSTDpl.PhysicsListEMstd()
 gRunManager.SetUserInitialization(exN03PL)
 
 # 2nd way, short-cut way
@@ -97,7 +97,7 @@ gRunManager.Initialize()
 #gProcessTable.SetProcessActivation("annihil", 0)
 
 
-# visualization 
+# visualization
 # OGLSX, VRML and HEPREP sceneHandlers are all created with names
 gApplyUICommand("/vis/sceneHandler/create OGLSX OGLSX")
 gApplyUICommand("/vis/sceneHandler/create VRML2FILE VRML")
@@ -141,7 +141,7 @@ from tkinter import *
 class App(Frame):
 
   g4pipe = 0
-  
+
   def init(self):
 
 #title and header    row=0, 1
@@ -149,7 +149,7 @@ class App(Frame):
     title.grid(row=0, column=1, columnspan=3)
     header = Label(self, text="empowered by \n Geant4Py")
     header.grid(row=1, column=1, columnspan=3)
-# number of layers 
+# number of layers
     layerLabel = Label(self, bg="green",  text="No of layers")
     self.layerVar=IntVar()
     self.layerVar.set(10)
@@ -228,7 +228,7 @@ class App(Frame):
     energyLabel.grid(row=9, column=0, sticky=W)
     energy.grid(row=9, column=1, columnspan=5, sticky=W)
 
-#number of event row=10 
+#number of event row=10
     eventLabel = Label(self, bg="green",  text="Events")
     self.eventVar=IntVar()
     self.eventVar.set(3)
@@ -259,7 +259,7 @@ class App(Frame):
     processLabel=Label(self, text="Process on/off", bg="green")
     processLabel.grid(row=11, column=0, sticky=W)
     procTab = {}
-    
+
     self.processList = ["phot", "compt", "conv", "msc", "eIoni", "eBrem", "annihil","muIoni", "muBrems", "hIoni"]
     pos=1
     self.processVar = {}
@@ -319,11 +319,11 @@ class App(Frame):
     commandEntry.grid(row=17, column=1, columnspan=3, sticky=E+W)
     comBut.grid(row=17, column=5)
 
-#exit row = 0    
+#exit row = 0
     exitBut = Button(self, bg="red", text="End all", command=sys.exit)
     exitBut.grid(row=0, column=5, sticky=W)
 
-#on Run butto do...    
+#on Run butto do...
   def cmd_beamOn(self):
       exN03geom.SetNbOfLayers(self.layerVar.get())
       exN03geom.SetAbsorberMaterial(self.absorbermaterialVar.get())
@@ -353,7 +353,7 @@ class App(Frame):
         gRunManager.BeamOn(1)
         sleep(0.01)
       gApplyUICommand("/vis/viewer/update")
-      
+
   def cmd_setProcess(self):
     for i in self.processList:
       if self.processVar[i].get() == 0:
@@ -362,10 +362,10 @@ class App(Frame):
       else:
          gProcessTable.SetProcessActivation(i, 1)
          print("Process " + i + " activated")
-        
+
   def cmd_g4command(self):
     gApplyUICommand(self.g4commandVar.get())
-      
+
   def cmd_particle(self, particle):
     gApplyUICommand("/gun/particle " + particle)
 
@@ -402,7 +402,7 @@ class App(Frame):
       if self.g4pipe == 0:
         Popen(heprepViewer +  " -file " + heprepDir + "/" + heprepName +".heprep", shell=True)
         self.g4pipe = 1
-    
+
 
   def cmd_expand(self):
     gApplyUICommand("/vis/viewer/zoom 1.2")
@@ -415,12 +415,12 @@ class App(Frame):
     gApplyUICommand("/vis/viewer/zoom 0.8")
 
 
-    
+
   def __init__(self, master=None):
     Frame.__init__(self, master)
     self.init()
     self.grid()
 
-    
+
 app = App()
 app.mainloop()

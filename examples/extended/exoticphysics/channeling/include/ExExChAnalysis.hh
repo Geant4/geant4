@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChAnalysis.hh
+/// \brief Definition of the ExExChAnalysis class
+//
 
 #ifndef ExExChAnalysis_h
 #define ExExChAnalysis_h 1

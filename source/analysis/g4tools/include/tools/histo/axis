@@ -161,7 +161,7 @@ public:
 
 public:
   // Partition :
-  bool configure(const std::vector<TC>& aEdges) {
+  bool configure(const std::vector<TC>& a_edges) {
     // init :
     m_number_of_bins = 0;
     m_minimum_value = 0;
@@ -170,17 +170,17 @@ public:
     m_bin_width = 0;
     m_edges.clear();
     // setup :
-    if(aEdges.size()<=1) return false;
-    bn_t number = (bn_t)aEdges.size()-1;
+    if(a_edges.size()<=1) return false;
+    bn_t number = (bn_t)a_edges.size()-1;
     for(bn_t index=0;index<number;index++) {
-      if((aEdges[index]>=aEdges[index+1])) {
+      if((a_edges[index]>=a_edges[index+1])) {
         return false;
       }
     }
-    m_edges = aEdges;
+    m_edges = a_edges;
     m_number_of_bins = number;
-    m_minimum_value = aEdges[0];
-    m_maximum_value = aEdges[m_number_of_bins];
+    m_minimum_value = a_edges[0];
+    m_maximum_value = a_edges[m_number_of_bins];
     m_fixed = false;
     return true;
   }

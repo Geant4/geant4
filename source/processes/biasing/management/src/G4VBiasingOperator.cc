@@ -34,17 +34,17 @@ G4Cache< G4BiasingOperatorStateNotifier* >                G4VBiasingOperator::fS
 
 
 G4VBiasingOperator::G4VBiasingOperator(G4String name)
-  : fName                                      (name),
-    fOccurenceBiasingOperation                 (nullptr),
-    fFinalStateBiasingOperation                (nullptr),
-    fNonPhysicsBiasingOperation                (nullptr),
-    fPreviousProposedOccurenceBiasingOperation (nullptr),
-    fPreviousProposedFinalStateBiasingOperation(nullptr),
-    fPreviousProposedNonPhysicsBiasingOperation(nullptr),
-    fPreviousAppliedOccurenceBiasingOperation  (nullptr),
-    fPreviousAppliedFinalStateBiasingOperation (nullptr),
-    fPreviousAppliedNonPhysicsBiasingOperation (nullptr),
-    fPreviousBiasingAppliedCase                (BAC_None)
+  : fName                                      ( name     ),
+    fOccurenceBiasingOperation                 ( nullptr  ),
+    fFinalStateBiasingOperation                ( nullptr  ),
+    fNonPhysicsBiasingOperation                ( nullptr  ),
+    fPreviousProposedOccurenceBiasingOperation ( nullptr  ),
+    fPreviousProposedFinalStateBiasingOperation( nullptr  ),
+    fPreviousProposedNonPhysicsBiasingOperation( nullptr  ),
+    fPreviousAppliedOccurenceBiasingOperation  ( nullptr  ),
+    fPreviousAppliedFinalStateBiasingOperation ( nullptr  ),
+    fPreviousAppliedNonPhysicsBiasingOperation ( nullptr  ),
+    fPreviousBiasingAppliedCase                ( BAC_None )
 {
   fOperators.Push_back(this);
 
@@ -79,7 +79,7 @@ G4VBiasingOperator* G4VBiasingOperator::GetBiasingOperator(const G4LogicalVolume
 {
   G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
   it = fLogicalToSetupMap.Find(logical);
-  if ( it == fLogicalToSetupMap.End() ) return 0;
+  if ( it == fLogicalToSetupMap.End() ) return nullptr;
   else return (*it).second;
 }
 
@@ -107,18 +107,15 @@ void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface
 						 const G4VParticleChange*   particleChangeProduced )
 {
   fPreviousBiasingAppliedCase = biasingCase;
-  fPreviousAppliedOccurenceBiasingOperation  = 0;
-  fPreviousAppliedFinalStateBiasingOperation = 0;
-  fPreviousAppliedNonPhysicsBiasingOperation = 0;
+  fPreviousAppliedOccurenceBiasingOperation  = nullptr;
+  fPreviousAppliedFinalStateBiasingOperation = nullptr;
+  fPreviousAppliedNonPhysicsBiasingOperation = nullptr;
   switch ( biasingCase )
     {
     case BAC_None:
       break;
     case BAC_NonPhysics:
       fPreviousAppliedNonPhysicsBiasingOperation = operationApplied ;
-      break;
-    case BAC_DenyInteraction: // -- §§ will b deprecated
-      fPreviousAppliedOccurenceBiasingOperation  = operationApplied;
       break;
     case BAC_FinalState:
       fPreviousAppliedFinalStateBiasingOperation = operationApplied;
@@ -157,15 +154,15 @@ void G4VBiasingOperator::ExitingBiasing( const G4Track* track, const G4BiasingPr
   ExitBiasing( track, callingProcess );
   
   // -- reset all data members:
-  fOccurenceBiasingOperation                  = 0 ;
-  fFinalStateBiasingOperation                 = 0 ;
-  fNonPhysicsBiasingOperation                 = 0 ;
-  fPreviousProposedOccurenceBiasingOperation  = 0 ;
-  fPreviousProposedFinalStateBiasingOperation = 0 ;
-  fPreviousProposedNonPhysicsBiasingOperation = 0 ;
-  fPreviousAppliedOccurenceBiasingOperation   = 0 ;
-  fPreviousAppliedFinalStateBiasingOperation  = 0 ;
-  fPreviousAppliedNonPhysicsBiasingOperation  = 0 ;
+  fOccurenceBiasingOperation                  = nullptr ;
+  fFinalStateBiasingOperation                 = nullptr ;
+  fNonPhysicsBiasingOperation                 = nullptr ;
+  fPreviousProposedOccurenceBiasingOperation  = nullptr ;
+  fPreviousProposedFinalStateBiasingOperation = nullptr ;
+  fPreviousProposedNonPhysicsBiasingOperation = nullptr ;
+  fPreviousAppliedOccurenceBiasingOperation   = nullptr ;
+  fPreviousAppliedFinalStateBiasingOperation  = nullptr ;
+  fPreviousAppliedNonPhysicsBiasingOperation  = nullptr ;
   fPreviousBiasingAppliedCase                 = BAC_None ;
 }
 

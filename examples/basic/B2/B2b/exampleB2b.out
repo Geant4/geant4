@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -43,14 +43,14 @@ Registered model factories:
   drawByCharge
   drawByOriginVolume
   drawByParticleID
-  drawByTouchedVolume
+  drawByEncounteredVolume
 
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
-  touchedVolumeFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -133,368 +133,377 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.1
 Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1e+07
+Correlated gamma emission flag                      0
 =======================================================================
+
+ FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 12 GeV
+ for kaons :   3 to 12 GeV
+ for proton :  3 to 12 GeV
+ for neutron : 3 to 12 GeV
+
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
+       Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
 
 conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
-        WentzelVIUni :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
 
 eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  HighEnergyThreshold(GeV)= 10000
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from 100 MeV to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 hBrems:   for  proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of anti_proton
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV
 
 ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 hBrems:   for  anti_proton    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  anti_proton    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
 
 hBrems:   for  kaon+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
 
 hBrems:   for  kaon-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  kaon-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=       10 TeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
 
 muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 eV    Emax=       10 TeV
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
 
 muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 eV    Emax=       10 TeV
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
 
 hBrems:   for  pi+    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi+    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
-      Lambda table from threshold  to 10 TeV, 7 bins per decade, spline: 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
 hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
 
 hBrems:   for  pi-    SubType= 3
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               hBrem :  Emin=        0 eV    Emax=       10 TeV
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
 
 hPairProd:   for  pi-    SubType= 4
-      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-           hPairProd :  Emin=        0 eV    Emax=       10 TeV
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -508,8 +517,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -695,9 +704,10 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -708,9 +718,10 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hBertiniCaptureAtRest
@@ -754,8 +765,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -771,8 +782,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -789,8 +800,8 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -1432,7 +1443,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 -1.01e+03     -823 -2.54e+03   0.00145        0        0         0       World initStep
-    1 -1.01e+03     -822 -2.54e+03         0  0.00145   0.0989    0.0989       World eIoni
+    1 -1.01e+03     -823 -2.54e+03         0  0.00145   0.0989    0.0989       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 67
@@ -1866,7 +1877,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5    -15.6    -16.6 -2.4e+03      3.67   0.0378   0.0344      4.63      Target eBrem
     6    -15.3    -16.6 -2.4e+03      2.49    0.936    0.847      5.48      Target eBrem
     7    -15.3    -16.6 -2.4e+03      2.27    0.104   0.0996      5.58      Target eBrem
-    8    -15.3    -16.6 -2.4e+03      1.03   0.0362   0.0313      5.61      Target eBrem
+    8    -15.3    -16.6 -2.4e+03      1.03   0.0361   0.0313      5.61      Target eBrem
     9    -15.4    -16.6 -2.4e+03         0     1.03    0.768      6.38      Target eIoni
    10    -15.4    -16.6 -2.4e+03         0        0        0      6.38      Target annihil
 
@@ -4051,17 +4062,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3   0.0227  -0.0217     -700    0.0038 0.000128   0.0113    0.0334     Chamber msc
     4   0.0166  -0.0304     -700   0.00354 0.000261    0.011    0.0444     Chamber msc
     5   0.0168  -0.0266     -700   0.00349 4.43e-05   0.0109    0.0553     Chamber msc
-    6    0.025  -0.0216     -700   0.00324 0.000255   0.0133    0.0686     Chamber msc
+    6   0.0251  -0.0216     -700   0.00324 0.000256   0.0133    0.0687     Chamber msc
     7   0.0303  -0.0122     -700    0.0031 0.000138   0.0171    0.0857     Chamber msc
-    8   0.0255  0.00549     -700   0.00281  0.00029   0.0268     0.113     Chamber msc
-    9  0.00891    0.024     -700   0.00222 0.000589    0.027     0.139     Chamber msc
-   10    0.011   0.0243     -700   0.00204 0.000183     0.03     0.169     Chamber msc
-   11   0.0156   0.0181     -700   0.00182 0.000221   0.0145     0.184     Chamber msc
+    8   0.0254  0.00553     -700   0.00281  0.00029   0.0269     0.113     Chamber msc
+    9  0.00886    0.024     -700   0.00222 0.000589    0.027      0.14     Chamber msc
+   10   0.0109   0.0244     -700   0.00204 0.000183     0.03      0.17     Chamber msc
+   11   0.0155   0.0182     -700   0.00182 0.000221   0.0146     0.184     Chamber msc
    12   0.0193    0.012     -700    0.0017  0.00012   0.0113     0.195     Chamber msc
    13   0.0207   0.0187     -700   0.00163 6.73e-05   0.0113     0.207     Chamber msc
-   14    0.027   0.0191     -700   0.00145 0.000177   0.0109     0.217     Chamber msc
-   15   0.0279   0.0192     -700   0.00145        0  0.00133     0.219     Tracker Transportation
-   16   0.0522   0.0261     -700         0  0.00145   0.0499     0.269     Tracker msc
+   14   0.0269   0.0192     -700   0.00145 0.000177   0.0109     0.218     Chamber msc
+   15   0.0279   0.0192     -700   0.00145        0  0.00134     0.219     Tracker Transportation
+   16   0.0521   0.0261     -700         0  0.00145   0.0499     0.269     Tracker msc
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 1
@@ -4293,7 +4304,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3      -89      134 -2.8e+03     0.235   0.0171      105       174       World eIoni
     4     -184      237 -2.83e+03     0.201   0.0334      148       322       World eIoni
     5     -266      292 -2.88e+03     0.172   0.0296      116       438       World eIoni
-    6     -266      290 -2.89e+03     0.131  0.00142     8.41       447       World eIoni
+    6     -266      290 -2.89e+03     0.131  0.00142     8.42       447       World eIoni
     7     -276      287 -2.9e+03     0.126  0.00344     13.3       460       World eIoni
     8     -300      267 -2.91e+03     0.114  0.00691       34       494       World eIoni
     9     -301      258 -2.91e+03      0.11  0.00296     9.14       503       World eIoni
@@ -4499,21 +4510,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 1
     0 hits stored in this event
 >>> Event: 2
-    39 hits stored in this event
+    40 hits stored in this event
 >>> Event: 3
-    0 hits stored in this event
+    238 hits stored in this event
 >>> Event: 4
     0 hits stored in this event
 >>> Event: 5
     0 hits stored in this event
 >>> Event: 6
-    68 hits stored in this event
+    0 hits stored in this event
 >>> Event: 7
     0 hits stored in this event
 >>> Event: 8
     0 hits stored in this event
 >>> Event: 9
-    0 hits stored in this event
+    15 hits stored in this event
 >>> Event: 10
     0 hits stored in this event
 >>> Event: 11
@@ -4521,21 +4532,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 12
     0 hits stored in this event
 >>> Event: 13
-    0 hits stored in this event
+    89 hits stored in this event
 >>> Event: 14
     0 hits stored in this event
 >>> Event: 15
     0 hits stored in this event
 >>> Event: 16
-    0 hits stored in this event
+    116 hits stored in this event
 >>> Event: 17
     0 hits stored in this event
 >>> Event: 18
     0 hits stored in this event
 >>> Event: 19
-    94 hits stored in this event
->>> Event: 20
     0 hits stored in this event
+>>> Event: 20
+    12 hits stored in this event
 >>> Event: 21
     0 hits stored in this event
 >>> Event: 22
@@ -4551,11 +4562,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 27
     0 hits stored in this event
 >>> Event: 28
-    27 hits stored in this event
+    0 hits stored in this event
 >>> Event: 29
     0 hits stored in this event
 >>> Event: 30
-    0 hits stored in this event
+    70 hits stored in this event
 >>> Event: 31
     0 hits stored in this event
 >>> Event: 32
@@ -4563,19 +4574,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 33
     0 hits stored in this event
 >>> Event: 34
-    46 hits stored in this event
+    124 hits stored in this event
 >>> Event: 35
     0 hits stored in this event
 >>> Event: 36
-    0 hits stored in this event
+    18 hits stored in this event
 >>> Event: 37
-    0 hits stored in this event
+    56 hits stored in this event
 >>> Event: 38
     0 hits stored in this event
 >>> Event: 39
     0 hits stored in this event
 >>> Event: 40
-    55 hits stored in this event
+    0 hits stored in this event
 >>> Event: 41
     0 hits stored in this event
 >>> Event: 42
@@ -4599,7 +4610,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 51
     0 hits stored in this event
 >>> Event: 52
-    0 hits stored in this event
+    76 hits stored in this event
 >>> Event: 53
     0 hits stored in this event
 >>> Event: 54
@@ -4607,39 +4618,39 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 55
     0 hits stored in this event
 >>> Event: 56
-    3 hits stored in this event
->>> Event: 57
     0 hits stored in this event
+>>> Event: 57
+    55 hits stored in this event
 >>> Event: 58
     0 hits stored in this event
 >>> Event: 59
     0 hits stored in this event
 >>> Event: 60
-    0 hits stored in this event
+    27 hits stored in this event
 >>> Event: 61
     0 hits stored in this event
 >>> Event: 62
-    17 hits stored in this event
->>> Event: 63
     0 hits stored in this event
+>>> Event: 63
+    27 hits stored in this event
 >>> Event: 64
     0 hits stored in this event
 >>> Event: 65
-    150 hits stored in this event
+    93 hits stored in this event
 >>> Event: 66
     0 hits stored in this event
 >>> Event: 67
-    80 hits stored in this event
+    11 hits stored in this event
 >>> Event: 68
-    0 hits stored in this event
+    65 hits stored in this event
 >>> Event: 69
-    14 hits stored in this event
+    45 hits stored in this event
 >>> Event: 70
     0 hits stored in this event
 >>> Event: 71
-    247 hits stored in this event
+    0 hits stored in this event
 >>> Event: 72
-    162 hits stored in this event
+    0 hits stored in this event
 >>> Event: 73
     0 hits stored in this event
 >>> Event: 74
@@ -4651,13 +4662,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 77
     0 hits stored in this event
 >>> Event: 78
-    0 hits stored in this event
+    50 hits stored in this event
 >>> Event: 79
     0 hits stored in this event
 >>> Event: 80
-    0 hits stored in this event
+    42 hits stored in this event
 >>> Event: 81
-    29 hits stored in this event
+    0 hits stored in this event
 >>> Event: 82
     0 hits stored in this event
 >>> Event: 83
@@ -4673,17 +4684,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 88
     0 hits stored in this event
 >>> Event: 89
-    219 hits stored in this event
+    0 hits stored in this event
 >>> Event: 90
-    137 hits stored in this event
+    0 hits stored in this event
 >>> Event: 91
     0 hits stored in this event
 >>> Event: 92
     0 hits stored in this event
 >>> Event: 93
-    0 hits stored in this event
+    51 hits stored in this event
 >>> Event: 94
-    0 hits stored in this event
+    53 hits stored in this event
 >>> Event: 95
     0 hits stored in this event
 >>> Event: 96
@@ -4697,204 +4708,204 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 ### Run 3 starts.
 --> Event 0 starts.
 >>> Event: 0
-    77 hits stored in this event
+    241 hits stored in this event
 >>> Event: 1
-    76 hits stored in this event
+    52 hits stored in this event
 >>> Event: 2
-    49 hits stored in this event
+    66 hits stored in this event
 >>> Event: 3
-    130 hits stored in this event
+    78 hits stored in this event
 >>> Event: 4
-    134 hits stored in this event
+    57 hits stored in this event
 >>> Event: 5
-    54 hits stored in this event
+    652 hits stored in this event
 >>> Event: 6
-    76 hits stored in this event
+    130 hits stored in this event
 >>> Event: 7
-    87 hits stored in this event
->>> Event: 8
-    77 hits stored in this event
->>> Event: 9
-    64 hits stored in this event
->>> Event: 10
-    65 hits stored in this event
->>> Event: 11
-    2848 hits stored in this event
->>> Event: 12
-    141 hits stored in this event
->>> Event: 13
-    89 hits stored in this event
->>> Event: 14
-    52 hits stored in this event
->>> Event: 15
-    160 hits stored in this event
->>> Event: 16
-    684 hits stored in this event
->>> Event: 17
-    935 hits stored in this event
->>> Event: 18
-    78 hits stored in this event
->>> Event: 19
-    141 hits stored in this event
->>> Event: 20
-    94 hits stored in this event
->>> Event: 21
-    683 hits stored in this event
->>> Event: 22
-    1798 hits stored in this event
->>> Event: 23
-    729 hits stored in this event
->>> Event: 24
-    107 hits stored in this event
->>> Event: 25
-    376 hits stored in this event
->>> Event: 26
-    72 hits stored in this event
->>> Event: 27
-    263 hits stored in this event
->>> Event: 28
-    85 hits stored in this event
->>> Event: 29
-    225 hits stored in this event
->>> Event: 30
-    123 hits stored in this event
->>> Event: 31
-    82 hits stored in this event
->>> Event: 32
-    52 hits stored in this event
->>> Event: 33
-    91 hits stored in this event
->>> Event: 34
-    90 hits stored in this event
->>> Event: 35
-    49 hits stored in this event
->>> Event: 36
-    156 hits stored in this event
->>> Event: 37
-    226 hits stored in this event
->>> Event: 38
-    105 hits stored in this event
->>> Event: 39
-    42 hits stored in this event
->>> Event: 40
-    494 hits stored in this event
->>> Event: 41
-    126 hits stored in this event
->>> Event: 42
-    74 hits stored in this event
->>> Event: 43
-    89 hits stored in this event
->>> Event: 44
-    220 hits stored in this event
->>> Event: 45
-    602 hits stored in this event
->>> Event: 46
-    76 hits stored in this event
->>> Event: 47
-    61 hits stored in this event
->>> Event: 48
-    139 hits stored in this event
->>> Event: 49
-    105 hits stored in this event
->>> Event: 50
-    61 hits stored in this event
->>> Event: 51
-    88 hits stored in this event
->>> Event: 52
-    1389 hits stored in this event
->>> Event: 53
-    65 hits stored in this event
->>> Event: 54
-    55 hits stored in this event
->>> Event: 55
-    122 hits stored in this event
->>> Event: 56
-    1803 hits stored in this event
->>> Event: 57
-    72 hits stored in this event
->>> Event: 58
-    58 hits stored in this event
->>> Event: 59
-    64 hits stored in this event
->>> Event: 60
-    86 hits stored in this event
->>> Event: 61
-    55 hits stored in this event
->>> Event: 62
-    63 hits stored in this event
->>> Event: 63
-    359 hits stored in this event
->>> Event: 64
-    579 hits stored in this event
->>> Event: 65
-    58 hits stored in this event
->>> Event: 66
-    69 hits stored in this event
->>> Event: 67
-    219 hits stored in this event
->>> Event: 68
-    212 hits stored in this event
->>> Event: 69
-    78 hits stored in this event
->>> Event: 70
-    89 hits stored in this event
->>> Event: 71
-    341 hits stored in this event
->>> Event: 72
-    47 hits stored in this event
->>> Event: 73
-    98 hits stored in this event
->>> Event: 74
-    669 hits stored in this event
->>> Event: 75
-    97 hits stored in this event
->>> Event: 76
-    76 hits stored in this event
->>> Event: 77
-    237 hits stored in this event
->>> Event: 78
-    48 hits stored in this event
->>> Event: 79
-    381 hits stored in this event
->>> Event: 80
-    629 hits stored in this event
->>> Event: 81
-    183 hits stored in this event
->>> Event: 82
     129 hits stored in this event
->>> Event: 83
-    176 hits stored in this event
->>> Event: 84
-    212 hits stored in this event
->>> Event: 85
-    70 hits stored in this event
->>> Event: 86
-    141 hits stored in this event
->>> Event: 87
-    104 hits stored in this event
->>> Event: 88
-    79 hits stored in this event
->>> Event: 89
-    184 hits stored in this event
->>> Event: 90
-    69 hits stored in this event
->>> Event: 91
-    180 hits stored in this event
->>> Event: 92
-    162 hits stored in this event
->>> Event: 93
-    62 hits stored in this event
->>> Event: 94
-    126 hits stored in this event
->>> Event: 95
-    92 hits stored in this event
->>> Event: 96
-    532 hits stored in this event
->>> Event: 97
-    189 hits stored in this event
->>> Event: 98
+>>> Event: 8
+    112 hits stored in this event
+>>> Event: 9
+    115 hits stored in this event
+>>> Event: 10
+    123 hits stored in this event
+>>> Event: 11
+    94 hits stored in this event
+>>> Event: 12
+    77 hits stored in this event
+>>> Event: 13
+    57 hits stored in this event
+>>> Event: 14
+    61 hits stored in this event
+>>> Event: 15
+    546 hits stored in this event
+>>> Event: 16
+    47 hits stored in this event
+>>> Event: 17
     50 hits stored in this event
+>>> Event: 18
+    444 hits stored in this event
+>>> Event: 19
+    148 hits stored in this event
+>>> Event: 20
+    1812 hits stored in this event
+>>> Event: 21
+    99 hits stored in this event
+>>> Event: 22
+    128 hits stored in this event
+>>> Event: 23
+    1460 hits stored in this event
+>>> Event: 24
+    102 hits stored in this event
+>>> Event: 25
+    84 hits stored in this event
+>>> Event: 26
+    61 hits stored in this event
+>>> Event: 27
+    133 hits stored in this event
+>>> Event: 28
+    101 hits stored in this event
+>>> Event: 29
+    866 hits stored in this event
+>>> Event: 30
+    49 hits stored in this event
+>>> Event: 31
+    1111 hits stored in this event
+>>> Event: 32
+    257 hits stored in this event
+>>> Event: 33
+    48 hits stored in this event
+>>> Event: 34
+    80 hits stored in this event
+>>> Event: 35
+    294 hits stored in this event
+>>> Event: 36
+    174 hits stored in this event
+>>> Event: 37
+    93 hits stored in this event
+>>> Event: 38
+    189 hits stored in this event
+>>> Event: 39
+    68 hits stored in this event
+>>> Event: 40
+    111 hits stored in this event
+>>> Event: 41
+    171 hits stored in this event
+>>> Event: 42
+    244 hits stored in this event
+>>> Event: 43
+    74 hits stored in this event
+>>> Event: 44
+    124 hits stored in this event
+>>> Event: 45
+    57 hits stored in this event
+>>> Event: 46
+    108 hits stored in this event
+>>> Event: 47
+    57 hits stored in this event
+>>> Event: 48
+    138 hits stored in this event
+>>> Event: 49
+    67 hits stored in this event
+>>> Event: 50
+    122 hits stored in this event
+>>> Event: 51
+    105 hits stored in this event
+>>> Event: 52
+    68 hits stored in this event
+>>> Event: 53
+    636 hits stored in this event
+>>> Event: 54
+    222 hits stored in this event
+>>> Event: 55
+    49 hits stored in this event
+>>> Event: 56
+    125 hits stored in this event
+>>> Event: 57
+    71 hits stored in this event
+>>> Event: 58
+    151 hits stored in this event
+>>> Event: 59
+    92 hits stored in this event
+>>> Event: 60
+    71 hits stored in this event
+>>> Event: 61
+    79 hits stored in this event
+>>> Event: 62
+    92 hits stored in this event
+>>> Event: 63
+    61 hits stored in this event
+>>> Event: 64
+    77 hits stored in this event
+>>> Event: 65
+    59 hits stored in this event
+>>> Event: 66
+    150 hits stored in this event
+>>> Event: 67
+    414 hits stored in this event
+>>> Event: 68
+    137 hits stored in this event
+>>> Event: 69
+    482 hits stored in this event
+>>> Event: 70
+    54 hits stored in this event
+>>> Event: 71
+    82 hits stored in this event
+>>> Event: 72
+    107 hits stored in this event
+>>> Event: 73
+    93 hits stored in this event
+>>> Event: 74
+    139 hits stored in this event
+>>> Event: 75
+    129 hits stored in this event
+>>> Event: 76
+    61 hits stored in this event
+>>> Event: 77
+    55 hits stored in this event
+>>> Event: 78
+    172 hits stored in this event
+>>> Event: 79
+    88 hits stored in this event
+>>> Event: 80
+    104 hits stored in this event
+>>> Event: 81
+    234 hits stored in this event
+>>> Event: 82
+    456 hits stored in this event
+>>> Event: 83
+    127 hits stored in this event
+>>> Event: 84
+    59 hits stored in this event
+>>> Event: 85
+    204 hits stored in this event
+>>> Event: 86
+    53 hits stored in this event
+>>> Event: 87
+    235 hits stored in this event
+>>> Event: 88
+    97 hits stored in this event
+>>> Event: 89
+    280 hits stored in this event
+>>> Event: 90
+    130 hits stored in this event
+>>> Event: 91
+    81 hits stored in this event
+>>> Event: 92
+    173 hits stored in this event
+>>> Event: 93
+    83 hits stored in this event
+>>> Event: 94
+    192 hits stored in this event
+>>> Event: 95
+    145 hits stored in this event
+>>> Event: 96
+    71 hits stored in this event
+>>> Event: 97
+    84 hits stored in this event
+>>> Event: 98
+    90 hits stored in this event
 >>> Event: 99
-    1376 hits stored in this event
+    250 hits stored in this event
 Graphics systems deleted.
 Visualization Manager deleting...

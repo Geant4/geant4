@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.cc 97273 2016-05-31 14:16:47Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.cc 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -95,10 +95,9 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
     isElectron(true),
     fMigdalConstant(classic_electr_radius*electron_Compton_length*electron_Compton_length*4.0*pi),
     fLPMconstant(fine_structure_const*electron_mass_c2*electron_mass_c2/(4.*pi*hbarc)),
-    fXiLPM(0), fPhiLPM(0), fGLPM(0),
     use_completescreening(false)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   theGamma = G4Gamma::Gamma();
 
   lowestKinEnergy = 1.0*MeV;
@@ -110,10 +109,10 @@ G4eBremsstrahlungRelModel::G4eBremsstrahlungRelModel(
   //SetAngularDistribution(new G4ModifiedTsai());
   SetAngularDistribution(new G4DipBustGenerator());
 
-  particleMass = kinEnergy = totalEnergy = currentZ = z13 = z23 = lnZ = Fel 
+  particleMass = kinEnergy = totalEnergy = z13 = z23 = lnZ = Fel 
     = Finel = fCoulomb = fMax = densityFactor = densityCorr = lpmEnergy 
     = xiLPM = phiLPM = gLPM = klpm = kp = 0.0;
-
+  currentZ = 0;
   energyThresholdLPM = 1.e39;
 
   InitialiseConstants();
@@ -179,7 +178,7 @@ void G4eBremsstrahlungRelModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  currentZ = 0.;
+  currentZ = 0;
 
   if(IsMaster() && LowEnergyLimit() < HighEnergyLimit()) { 
     InitialiseElementSelectors(p, cuts); 
@@ -232,9 +231,9 @@ G4double G4eBremsstrahlungRelModel::ComputeDEDXPerVolume(
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
 
     G4VEmModel::SetCurrentElement((*theElementVector)[i]);
-    SetCurrentElement((*theElementVector)[i]->GetZ());
+    SetCurrentElement((*theElementVector)[i]->GetZasInt());
 
-    dedx += theAtomicNumDensityVector[i]*currentZ*currentZ*ComputeBremLoss(cut);
+    dedx += theAtomicNumDensityVector[i]*(currentZ*currentZ)*ComputeBremLoss(cut);
   }
   dedx *= bremFactor;
 
@@ -294,7 +293,7 @@ G4double G4eBremsstrahlungRelModel::ComputeCrossSectionPerAtom(
 
   if(cut >= tmax) { return 0.0; }
 
-  SetCurrentElement(Z);
+  SetCurrentElement(G4lrint(Z));
 
   G4double cross = ComputeXSectionPerAtom(cut);
 
@@ -440,8 +439,9 @@ G4double G4eBremsstrahlungRelModel::ComputeRelDXSectionPerAtom(G4double gammaEne
   //  G4double xiLPM, gLPM, phiLPM;  // to be made member variables !!!
   CalcLPMFunctions(gammaEnergy);
 
-  G4double mainLPM   = xiLPM*(y2 * gLPM + yone2*phiLPM) * ( (Fel-fCoulomb) + Finel/currentZ );
-  G4double secondTerm = (1.-y)/12.*(1.+1./currentZ);
+  G4double xz = 1.0/(G4double)currentZ;
+  G4double mainLPM   = xiLPM*(y2 * gLPM + yone2*phiLPM) * ( (Fel-fCoulomb) + Finel*xz );
+  G4double secondTerm = (1.-y)/12.*(1. + xz);
 
   G4double cross = mainLPM+secondTerm;
   return cross;
@@ -462,21 +462,23 @@ G4double G4eBremsstrahlungRelModel::ComputeDXSectionPerAtom(G4double gammaEnergy
 
   G4double main=0.,secondTerm=0.;
 
+  G4double currZ = (G4double)currentZ;
   if (use_completescreening|| currentZ<5) {
     // ** form factors complete screening case **      
-    main   = (3./4.*y*y - y + 1.) * ( (Fel-fCoulomb) + Finel/currentZ );
-    secondTerm = (1.-y)/12.*(1.+1./currentZ);
+    main   = (3./4.*y*y - y + 1.) * ( (Fel-fCoulomb) + Finel/currZ );
+    secondTerm = (1.-y)/12.*(1.+1./currZ);
   }
   else {
     // ** intermediate screening using Thomas-Fermi FF from Tsai only valid for Z>=5** 
     G4double dd=100.*electron_mass_c2*y/(totalEnergy-gammaEnergy);
     G4double gg=dd/z13;
     G4double eps=dd/z23;
-    G4double phi1=Phi1(gg,currentZ),  phi1m2=Phi1M2(gg,currentZ);
-    G4double psi1=Psi1(eps,currentZ),  psi1m2=Psi1M2(eps,currentZ);
+    G4double phi1=Phi1(gg,currZ),  phi1m2=Phi1M2(gg,currZ);
+    G4double psi1=Psi1(eps,currZ),  psi1m2=Psi1M2(eps,currZ);
     
-    main   = (3./4.*y*y - y + 1.) * ( (0.25*phi1-1./3.*lnZ-fCoulomb) + (0.25*psi1-2./3.*lnZ)/currentZ );
-    secondTerm = (1.-y)/8.*(phi1m2+psi1m2/currentZ);
+    main = (3./4.*y*y - y + 1.) * 
+      ( (0.25*phi1-1./3.*lnZ-fCoulomb) + (0.25*psi1-2./3.*lnZ)/currZ );
+    secondTerm = (1.-y)/8.*(phi1m2+psi1m2/currZ);
   }
   G4double cross = main+secondTerm;
   return cross;
@@ -501,7 +503,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   const G4Element* elm = 
     SelectRandomAtom(couple,particle,kineticEnergy,cut,emax);
-  SetCurrentElement(elm->GetZ());
+  SetCurrentElement(elm->GetZasInt());
 
   kinEnergy   = kineticEnergy;
   totalEnergy = kineticEnergy + particleMass;
@@ -543,7 +545,7 @@ void G4eBremsstrahlungRelModel::SampleSecondaries(
 
   G4ThreeVector gammaDirection = 
     GetAngularDistribution()->SampleDirection(dp, totalEnergy-gammaEnergy,
-					      G4lrint(currentZ), 
+					      currentZ, 
 					      couple->GetMaterial());
 
   // create G4DynamicParticle object for the Gamma

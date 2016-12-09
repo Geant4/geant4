@@ -24,13 +24,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Trd.cc 101121 2016-11-07 09:18:01Z gcosmo $
 //
 //
 // Implementation for G4Trd class
 //
 // History:
 //
+// 23.09.16 E.Tcherniaev: added Extent(pmin,pmax),
+//                      use G4BoundingEnvelope for CalculateExtent(),
+//                      removed CreateRotatedVertices()
 // 28.04.05 V.Grichine: new SurfaceNormal according to J. Apostolakis proposal 
 // 26.04.05, V.Grichine, new SurfaceNoramal is default
 // 07.12.04, V.Grichine, SurfaceNoramal with edges/vertices.
@@ -43,10 +46,12 @@
 
 #if !defined(G4GEOM_USE_UTRD)
 
-#include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "Randomize.hh"
+
+#include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
 
@@ -184,6 +189,36 @@ void G4Trd::ComputeDimensions(       G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4Trd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
+
+  G4double xmax = std::max(dx1,dx2);
+  G4double ymax = std::max(dy1,dy2);
+  pMin.set(-xmax,-ymax,-dz);
+  pMax.set( xmax, ymax, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Trd::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -194,173 +229,46 @@ G4bool G4Trd::CalculateExtent( const EAxis pAxis,
                                const G4AffineTransform& pTransform,
                                      G4double& pMin, G4double& pMax ) const
 {
-  if (!pTransform.IsRotated())
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
   {
-    // Special case handling for unrotated solids
-    // Compute x/y/z mins and maxs respecting limits, with early returns
-    // if outside limits. Then switch() on pAxis
-
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
-
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset-fDz;
-    zMax=zoffset+fDz;
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-        else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-    xoffset=pTransform.NetTranslation().x();
-    if (fDx2 >= fDx1)
-    { 
-      xMax =  xoffset+(fDx1+fDx2)/2+(zMax-zoffset)*(fDx2-fDx1)/(2*fDz) ;
-      xMin = 2*xoffset - xMax ;
-    }
-    else
-    {
-      xMax =  xoffset+(fDx1+fDx2)/2+(zMin-zoffset)*(fDx2-fDx1)/(2*fDz) ;
-      xMin =  2*xoffset - xMax ;
-    }   
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-    yoffset= pTransform.NetTranslation().y() ;
-    if(fDy2 >= fDy1)
-    {
-      yMax = yoffset+(fDy2+fDy1)/2+(zMax-zoffset)*(fDy2-fDy1)/(2*fDz) ;
-      yMin = 2*yoffset - yMax ;
-    }
-    else
-    {
-      yMax = yoffset+(fDy2+fDy1)/2+(zMin-zoffset)*(fDy2-fDy1)/(2*fDz) ;
-      yMin = 2*yoffset - yMax ;  
-    }  
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    switch (pAxis)
-    {
-      case kXAxis:
-        pMin=xMin;
-        pMax=xMax;
-        break;
-      case kYAxis:
-        pMin=yMin;
-        pMax=yMax;
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-
-    // Add 2*Tolerance to avoid precision troubles ?
-    //
-    pMin-=kCarTolerance;
-    pMax+=kCarTolerance;
-
-    return true;
+    return exist = (pMin < pMax) ? true : false;
   }
-  else
-  {
-    // General rotated case - create and clip mesh to boundaries
 
-    G4bool existsAfterClip=false;
-    G4ThreeVectorList *vertices;
+  // Set bounding envelope (benv) and calculate extent
+  //
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
 
-    pMin=+kInfinity;
-    pMax=-kInfinity;
+  G4ThreeVectorList baseA(4), baseB(4);
+  baseA[0].set(-dx1,-dy1,-dz);
+  baseA[1].set( dx1,-dy1,-dz);
+  baseA[2].set( dx1, dy1,-dz);
+  baseA[3].set(-dx1, dy1,-dz);
+  baseB[0].set(-dx2,-dy2, dz);
+  baseB[1].set( dx2,-dy2, dz);
+  baseB[2].set( dx2, dy2, dz);
+  baseB[3].set(-dx2, dy2, dz);
 
-    // Calculate rotated vertex coordinates
-    //
-    vertices=CreateRotatedVertices(pTransform);
-    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-      
-    if (pMin!=kInfinity||pMax!=-kInfinity)
-    {
-      existsAfterClip=true;
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
 
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=kCarTolerance;
-      pMax+=kCarTolerance;
-        
-    }
-    else
-    {
-      // Check for case where completely enveloping clipping volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipping volume. Hence set min/max extents according
-      // to clipping volume extents along the specified axis.
-
-      G4ThreeVector clipCentre(
-         (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-         (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-         (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-        
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -1303,51 +1211,6 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p ) const
 
   if (safe<0) safe=0;
   return safe;     
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-// Create a List containing the transformed vertices
-// Ordering [0-3] -fDz cross section
-//          [4-7] +fDz cross section such that [0] is below [4],
-//                                             [1] below [5] etc.
-// Note:
-//  Caller has deletion resposibility
-
-G4ThreeVectorList*
-G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
-{
-  G4ThreeVectorList *vertices;
-  vertices=new G4ThreeVectorList();
-  if (vertices)
-  {
-    vertices->reserve(8);
-    G4ThreeVector vertex0(-fDx1,-fDy1,-fDz);
-    G4ThreeVector vertex1(fDx1,-fDy1,-fDz);
-    G4ThreeVector vertex2(fDx1,fDy1,-fDz);
-    G4ThreeVector vertex3(-fDx1,fDy1,-fDz);
-    G4ThreeVector vertex4(-fDx2,-fDy2,fDz);
-    G4ThreeVector vertex5(fDx2,-fDy2,fDz);
-    G4ThreeVector vertex6(fDx2,fDy2,fDz);
-    G4ThreeVector vertex7(-fDx2,fDy2,fDz);
-
-    vertices->push_back(pTransform.TransformPoint(vertex0));
-    vertices->push_back(pTransform.TransformPoint(vertex1));
-    vertices->push_back(pTransform.TransformPoint(vertex2));
-    vertices->push_back(pTransform.TransformPoint(vertex3));
-    vertices->push_back(pTransform.TransformPoint(vertex4));
-    vertices->push_back(pTransform.TransformPoint(vertex5));
-    vertices->push_back(pTransform.TransformPoint(vertex6));
-    vertices->push_back(pTransform.TransformPoint(vertex7));
-  }
-  else
-  {
-    DumpInfo();
-    G4Exception("G4Trd::CreateRotatedVertices()",
-                "GeomSolids0003", FatalException,
-                "Error in allocation of vertices. Out of memory !");
-  }
-  return vertices;
 }
 
 //////////////////////////////////////////////////////////////////////////

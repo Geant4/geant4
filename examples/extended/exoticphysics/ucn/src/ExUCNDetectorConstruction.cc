@@ -194,7 +194,7 @@ G4VPhysicalVolume* ExUCNDetectorConstruction::Construct()
   endPlateColor->SetVisibility(true);
   endPlateColor->SetForceSolid(true);
 
-  logicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  logicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
   logicGuide->SetVisAttributes(guideColor);
   logicEndPlate->SetVisAttributes(endPlateColor);
 

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/rdecay01.cc
+/// \file rdecay01.cc
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
-// $Id: rdecay01.cc 94458 2015-11-18 14:36:25Z gcosmo $
+// $Id: rdecay01.cc 101866 2016-12-02 13:10:44Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+  runManager->SetNumberOfThreads(std::max(4,G4Threading::G4GetNumberOfCores()));
 #else
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);

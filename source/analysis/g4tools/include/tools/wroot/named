@@ -20,9 +20,7 @@ inline bool Object_stream(buffer& a_buffer) {
   return true;
 }
 
-inline bool Named_stream(buffer& a_buffer,
-                         const std::string& a_name,
-                         const std::string& a_title) {
+inline bool Named_stream(buffer& a_buffer,const std::string& a_name,const std::string& a_title) {
   unsigned int beg;
   if(!a_buffer.write_version(1,beg)) return false;
   if(!Object_stream(a_buffer)) return false;
@@ -45,7 +43,7 @@ public: //ibo
     if(!a_buffer.write_version(3,c)) return false;
     if(!Object_stream(a_buffer)) return false;
     if(!a_buffer.write(std::string(""))) return false;
-    int nobjects = std::vector<T*>::size();
+    int nobjects = int(std::vector<T*>::size());
     if(!a_buffer.write(nobjects)) return false;
     int lowerBound = 0;
     if(!a_buffer.write(lowerBound)) return false;
@@ -98,7 +96,7 @@ public: //ibo
     if(!a_buffer.write_version(4,c)) return false;
     if(!Object_stream(a_buffer)) return false;
     if(!a_buffer.write(std::string(""))) return false; //fName
-    int nobjects = std::vector<T*>::size();
+    int nobjects = int(std::vector<T*>::size());
     if(!a_buffer.write(nobjects)) return false;
     
     typedef typename std::vector<T*>::const_iterator it_t;
@@ -106,7 +104,7 @@ public: //ibo
     for(it=std::vector<T*>::begin();it!=std::vector<T*>::end();++it) {
       if(!a_buffer.write_object(*(*it))) return false;
       std::string opt;
-      unsigned char nch = opt.size();
+      unsigned char nch = (unsigned char)opt.size();
       if(!a_buffer.write(nch)) return false;
       if(!a_buffer.write_fast_array<char>(opt.c_str(),nch)) return false;
     }
@@ -117,7 +115,7 @@ public:
   List(){}
   virtual ~List(){tools::clear<T>(*this);}
 protected:
-  List(const List& a_from): ibo(a_from),std::vector<T*>(){}
+  List(const List& a_from):ibo(a_from),std::vector<T*>(){}
   List& operator=(const List&){return *this;}
 };
 

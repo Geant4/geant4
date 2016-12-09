@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 97388 2016-06-02 10:04:52Z gcosmo $
+// $Id: G4VisManager.cc 101792 2016-11-28 16:47:50Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -546,6 +546,15 @@ void G4VisManager::Enable() {
     if (fVerbosity >= confirmations) {
       G4cout << "G4VisManager::Enable: visualization enabled." << G4endl;
     }
+    if (fVerbosity >= warnings) {
+      auto nKeptEvents =
+      G4RunManager::GetRunManager()->GetCurrentRun()->GetEventVector()->size();
+      G4cout <<
+  "There are " << nKeptEvents << " kept events."
+  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
+  "\n  \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+      << G4endl;
+    }
   }
   else {
     if (fVerbosity >= warnings) {
@@ -562,10 +571,23 @@ void G4VisManager::Disable() {
   SetConcreteInstance(0);
   if (fVerbosity >= confirmations) {
     G4cout <<
-      "G4VisManager::Disable: visualization disabled."
-      "\n  The pointer returned by GetConcreteInstance will be zero."
-      "\n  Note that it will become enabled after some valid vis commands."
+    "G4VisManager::Disable: visualization disabled."
+    "\n  The pointer returned by GetConcreteInstance will be zero."
+    "\n  Note that it will become enabled after some valid vis commands."
 	   << G4endl;
+  }
+  if (fVerbosity >= warnings) {
+    G4int currentTrajectoryType =
+    G4RunManagerKernel::GetRunManagerKernel()->GetTrackingManager()->GetStoreTrajectory();
+    if (currentTrajectoryType > 0) {
+    G4cout <<
+      "You may wish to disable trajectory production too:"
+      "\n  \"/tracking/storeTrajectory 0\""
+      "\nbut don't forget to re-enable with"
+      "\n  \"/vis/enable\""
+      "\n  \"/tracking/storeTrajectory " << currentTrajectoryType << "\" (for your case)."
+      << G4endl;
+    }
   }
 }
 
@@ -1438,7 +1460,7 @@ void G4VisManager::PrintAvailableGraphicsSystems (Verbosity verbosity) const
 {
   G4cout << "Current available graphics systems are:\n";
   if (fAvailableGraphicsSystems.size ()) {
-    for (auto&& gs: fAvailableGraphicsSystems) {
+    for (const auto& gs: fAvailableGraphicsSystems) {
       const G4String& name = gs->GetName();
       const std::vector<G4String>& nicknames = gs->GetNicknames();
       if (verbosity <= warnings) {
@@ -1697,21 +1719,6 @@ G4ThreadFunReturnType G4VisManager::G4VisSubThread(G4ThreadFunArgType p)
 #else
     G4THREADSLEEP(1);
 #endif
-  }
-
-  // EndOfRun on master thread has signalled end of run
-  if (pScene->GetRefreshAtEndOfRun()) {
-    pSceneHandler->DrawEndOfRunModels();
-    // ShowView guarantees the view is flushed to the screen.  It also
-    // triggers other features such picking (if enabled) and allows
-    // file-writing viewers to close the file.
-    pViewer->ShowView();
-    //         An extra refresh for auto-refresh viewers.
-    //         ???? I DON'T THINK THIS IS NECESSARY ???? JA ????
-    //    if (pViewer->GetViewParameters().IsAutoRefresh()) {
-    //      pViewer->RefreshView();
-    //    }
-    pSceneHandler->SetMarkForClearingTransientStore(true);
   }
 
   // Inform viewer that we have finished all sub-thread drawing
@@ -2054,7 +2061,11 @@ void G4VisManager::EndOfRun ()
 #endif
 
 #ifdef G4MULTITHREADED
-  if (IsValidView()) {  // I.e., events should have been drawn.
+  // Print warning about discarded events, if any.
+  // Don't call IsValidView unless there is a scene handler.  This
+  // avoids WARNING message from IsValidView() when the user has
+  // not instantiated a scene handler, e.g., in batch mode.
+  if (fpSceneHandler && IsValidView()) {  // Events should have been drawn
     G4int noOfEventsRequested = runManager->GetNumberOfEventsToBeProcessed();
     if (fNoOfEventsDrawnThisRun != noOfEventsRequested) {
       if (!fWaitOnEventQueueFull && fVerbosity >= warnings) {
@@ -2089,7 +2100,10 @@ void G4VisManager::EndOfRun ()
         }
         G4cout << " made by the vis manager.)" << G4endl;
       }
-      G4cout << "  \"/vis/reviewKeptEvents\" to review them." << G4endl;
+      G4cout <<
+  "\n  \"/vis/reviewKeptEvents\" to review them one by one."
+  "\n  \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+      << G4endl;
     }
     //    static G4bool warned = false;
     //    if (!valid && fVerbosity >= warnings && !warned) {
@@ -2102,6 +2116,7 @@ void G4VisManager::EndOfRun ()
     //	"\n    \"/vis/scene/add/hits\" or \"/vis/scene/add/digitisations\""
     //	"\n    and, possibly, \"/vis/viewer/flush\"."
     //	"\n  To see all events: \"/vis/scene/endOfEventAction accumulate\"."
+    //  "\n  (You may need \"/vis/viewer/flush\" or even \"/vis/viewer/rebuild\".)"
     //	"\n  To see events individually: \"/vis/reviewKeptEvents\"."
     //	     << G4endl;
     //      warned = true;
@@ -2132,21 +2147,17 @@ void G4VisManager::EndOfRun ()
 //    // figured out why). ???? JA ????
 //    if (!fpSceneHandler->GetMarkForClearingTransientStore()) {
       if (fpScene->GetRefreshAtEndOfRun()) {
-        // Some instructions that should NOT be in multithreaded version.
-#ifndef G4MULTITHREADED
-        // These instructions are in G4VisSubThread for multithreading.
 	fpSceneHandler->DrawEndOfRunModels();
+        // An extra refresh for auto-refresh viewers.
+        // ???? I DON'T WHY THIS IS NECESSARY ???? JA ????
+        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+          fpViewer->RefreshView();
+        }
         // ShowView guarantees the view is flushed to the screen.  It also
         // triggers other features such picking (if enabled) and allows
         // file-writing viewers to close the file.
         fpViewer->ShowView();
-//        // An extra refresh for auto-refresh viewers.
-//        // ???? I DON'T THINK THIS IS NECESSARY ???? JA ????
-//        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
-//          fpViewer->RefreshView();
-//        }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
-#endif
       } else {
         if (fpGraphicsSystem->GetFunctionality() ==
             G4VGraphicsSystem::fileWriter) {

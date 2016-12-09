@@ -79,6 +79,7 @@ protected:
   }
   buffer& operator=(const buffer&){return *this;}
 public:
+  bool byte_swap() const {return m_byte_swap;}
   std::ostream& out() const {return m_out;}
 
   //void set_offset(unsigned int a_off) {m_pos = m_buffer+a_off;}
@@ -100,9 +101,7 @@ public:
     return m_wb.write(x);
   }
 
-  bool write(bool x){ 
-    return write<unsigned char>(x?1:0);
-  }
+  bool write(bool x) {return write<unsigned char>(x?1:0);}
 
   bool write(const std::string& x) {
     uint32 sz = (uint32)(x.size() + sizeof(int) + 1);
@@ -123,9 +122,7 @@ public:
     return true;
   }
 
-  bool write_cstring(const char* a_s) {
-    return write_fast_array(a_s,(::strlen(a_s)+1)*sizeof(char));
-  }
+  bool write_cstring(const char* a_s) {return write_fast_array(a_s,(uint32(::strlen(a_s))+1)*sizeof(char));}
 
   template <class T>
   bool write_fast_array(const T* a_a,uint32 a_n) {
@@ -140,7 +137,7 @@ public:
   template <class T>
   bool write_fast_array(const std::vector<T>& a_v) {
     if(a_v.empty()) return true;
-    uint32 l = a_v.size() * sizeof(T);
+    uint32 l = uint32(a_v.size() * sizeof(T));
     if((m_pos+l)>m_max) {
       if(!expand2(m_size+l)) return false;
     }
@@ -294,9 +291,7 @@ public:
     return true;
   }
 
-  unsigned int to_displace() const {
-    return m_cls_mapped.size()+m_obj_mapped.size();
-  }
+  size_t to_displace() const {return m_cls_mapped.size()+m_obj_mapped.size();}
 
   bool displace_mapped(unsigned int a_num){
     char* opos = m_pos;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLowEPPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmLowEPPhysics.cc 99938 2016-10-12 08:06:52Z gcosmo $
 
 #include "G4EmLowEPPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -123,23 +123,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLowEPPhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetLowestElectronEnergy(100*eV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->ActivateAngularGeneratorForIonisation(true);
-  param->SetFluo(true);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmLowEPPhysics"), verbose(ver)
 {
@@ -147,7 +130,7 @@ G4EmLowEPPhysics::G4EmLowEPPhysics(G4int ver, const G4String&)
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
+  param->SetMaxEnergy(1*TeV);
   param->SetLowestElectronEnergy(100*eV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
@@ -189,10 +172,6 @@ void G4EmLowEPPhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -228,11 +207,12 @@ void G4EmLowEPPhysics::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*myParticleIterator)() ){
   
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
     
     if(verbose > 1)
@@ -423,8 +403,7 @@ void G4EmLowEPPhysics::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

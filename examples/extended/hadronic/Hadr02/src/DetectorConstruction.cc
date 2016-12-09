@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -157,7 +157,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          <<  "  ###" << G4endl;
 
   // colors
-  G4VisAttributes zero = G4VisAttributes::Invisible;
+  G4VisAttributes zero = G4VisAttributes::GetInvisible();
   fLogicWorld->SetVisAttributes(&zero);
 
   G4VisAttributes regWcolor(G4Colour(0.3, 0.3, 0.3));

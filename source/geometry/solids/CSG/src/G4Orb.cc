@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 96318 2016-04-06 07:26:42Z gcosmo $
+// $Id: G4Orb.cc 101121 2016-11-07 09:18:01Z gcosmo $
 //
 // class G4Orb
 //
@@ -31,6 +31,7 @@
 //
 // History:
 //
+// 27.10.16 E.Tcherniaev - added Extent(), reimplemented CalculateExtent()
 // 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in cos(theta)
 // 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
@@ -41,9 +42,11 @@
 
 #if !defined(G4GEOM_USE_UORB)
 
+#include "G4TwoVector.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4VPVParameterisation.hh"
 
@@ -150,165 +153,111 @@ void G4Orb::ComputeDimensions(       G4VPVParameterisation* p,
   p->ComputeDimensions(*this,n,pRep);
 }
 
-////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4Orb::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double radius = GetRadius();
+  pMin.set(-radius,-radius,-radius);
+  pMax.set( radius, radius, radius);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Orb::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
 
-G4bool G4Orb::CalculateExtent( const EAxis pAxis,
-                               const G4VoxelLimits& pVoxelLimit,
-                               const G4AffineTransform& pTransform,
-                                        G4double& pMin, G4double& pMax ) const
+G4bool G4Orb::CalculateExtent(const EAxis pAxis,
+                              const G4VoxelLimits& pVoxelLimit,
+                              const G4AffineTransform& pTransform,
+                                        G4double& pMin, G4double& pMax) const
 {
-    // Compute x/y/z mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-      
-    G4double xoffset,xMin,xMax;
-    G4double yoffset,yMin,yMax;
-    G4double zoffset,zMin,zMax;
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
 
-    G4double diff1,diff2,delta,maxDiff,newMin,newMax;
-    G4double xoff1,xoff2,yoff1,yoff2;
+  // Get bounding box
+  Extent(bmin,bmax);
 
-    xoffset=pTransform.NetTranslation().x();
-    xMin=xoffset-fRmax;
-    xMax=xoffset+fRmax;
+  // Check bounding box
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
 
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
-        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-    yoffset=pTransform.NetTranslation().y();
-    yMin=yoffset-fRmax;
-    yMax=yoffset+fRmax;
+  // Find bounding envelope and calculate extent
+  //
+  static const G4int NTHETA = 8;  // number of steps along Theta
+  static const G4int NPHI   = 16; // number of steps along Phi
+  static const G4double sinHalfTheta = std::sin(halfpi/NTHETA);
+  static const G4double cosHalfTheta = std::cos(halfpi/NTHETA);
+  static const G4double sinHalfPhi   = std::sin(pi/NPHI);
+  static const G4double cosHalfPhi   = std::cos(pi/NPHI);
+  static const G4double sinStepTheta = 2.*sinHalfTheta*cosHalfTheta;
+  static const G4double cosStepTheta = 1. - 2.*sinHalfTheta*sinHalfTheta;
+  static const G4double sinStepPhi   = 2.*sinHalfPhi*cosHalfPhi;
+  static const G4double cosStepPhi   = 1. - 2.*sinHalfPhi*sinHalfPhi;
 
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
-        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-    zoffset=pTransform.NetTranslation().z();
-    zMin=zoffset-fRmax;
-    zMax=zoffset+fRmax;
+  G4double radius = GetRadius();
+  G4double rtheta = radius/cosHalfTheta;
+  G4double rphi   = rtheta/cosHalfPhi;
 
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
-        || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    // Known to cut sphere
-
-    switch (pAxis)
-    {
-      case kXAxis:
-        yoff1=yoffset-yMin;
-        yoff2=yMax-yoffset;
-
-        if ( yoff1 >= 0 && yoff2 >= 0 )
-        {
-          // Y limits cross max/min x => no change
-          //
-          pMin=xMin;
-          pMax=xMax;
-        }
-        else
-        {
-          // Y limits don't cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-yoff1*yoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-yoff2*yoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=xoffset-maxDiff;
-          newMax=xoffset+maxDiff;
-          pMin=(newMin<xMin) ? xMin : newMin;
-          pMax=(newMax>xMax) ? xMax : newMax;
-        }
-        break;
-      case kYAxis:
-        xoff1=xoffset-xMin;
-        xoff2=xMax-xoffset;
-        if (xoff1>=0&&xoff2>=0)
-        {
-          // X limits cross max/min y => no change
-          //
-          pMin=yMin;
-          pMax=yMax;
-        }
-        else
-        {
-          // X limits don't cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-xoff1*xoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-xoff2*xoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=yoffset-maxDiff;
-          newMax=yoffset+maxDiff;
-          pMin=(newMin<yMin) ? yMin : newMin;
-          pMax=(newMax>yMax) ? yMax : newMax;
-        }
-        break;
-      case kZAxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-    pMin -= fRmaxTolerance;
-    pMax += fRmaxTolerance;
-
-    return true;  
+  // set reference circle
+  G4TwoVector xy[NPHI];
+  G4double sinCurPhi = sinHalfPhi;
+  G4double cosCurPhi = cosHalfPhi;
+  for (G4int k=0; k<NPHI; ++k)
+  {
+    xy[k].set(cosCurPhi,sinCurPhi);
+    G4double sinTmpPhi = sinCurPhi;
+    sinCurPhi = sinCurPhi*cosStepPhi + cosCurPhi*sinStepPhi;
+    cosCurPhi = cosCurPhi*cosStepPhi - sinTmpPhi*sinStepPhi;
+  }
   
+  // set bounding circles
+  G4ThreeVectorList circles[NTHETA];
+  for (G4int i=0; i<NTHETA; ++i) circles[i].resize(NPHI);
+
+  G4double sinCurTheta = sinHalfTheta;
+  G4double cosCurTheta = cosHalfTheta;
+  for (G4int i=0; i<NTHETA; ++i)
+  {
+    G4double z = rtheta*cosCurTheta;
+    G4double rho = rphi*sinCurTheta;
+    for (G4int k=0; k<NPHI; ++k)
+    {
+      circles[i][k].set(rho*xy[k].x(),rho*xy[k].y(),z);
+    }
+    G4double sinTmpTheta = sinCurTheta;
+    sinCurTheta = sinCurTheta*cosStepTheta + cosCurTheta*sinStepTheta;
+    cosCurTheta = cosCurTheta*cosStepTheta - sinTmpTheta*sinStepTheta;
+  }
+
+  // set envelope and calculate extent
+  std::vector<const G4ThreeVectorList *> polygons;
+  polygons.resize(NTHETA);
+  for (G4int i=0; i<NTHETA; ++i) polygons[i] = &circles[i];
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -694,12 +643,12 @@ G4ThreeVector G4Orb::GetPointOnSurface() const
 {
   //  generate a random number from zero to 2pi...
   //
-  G4double phi      = RandFlat::shoot(0.,2.*pi);
+  G4double phi      = G4RandFlat::shoot(0.,2.*pi);
   G4double cosphi   = std::cos(phi);
   G4double sinphi   = std::sin(phi);
 
   // generate a random point uniform in area
-  G4double costheta = RandFlat::shoot(-1.,1.);
+  G4double costheta = G4RandFlat::shoot(-1.,1.);
   G4double sintheta = std::sqrt(1.-sqr(costheta));
   
   return G4ThreeVector (fRmax*sintheta*cosphi,

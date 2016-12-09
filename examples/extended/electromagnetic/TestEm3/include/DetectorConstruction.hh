@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: DetectorConstruction.hh 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,8 +46,7 @@ class DetectorMessenger;
 
 class G4GlobalMagFieldMessenger;
 
-
-     const G4int MaxAbsor = 10;                        // 0 + 9  
+     const G4int kMaxAbsor = 10;                        // 0 + 9  
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -94,8 +93,8 @@ public:
 private:
 
   G4int              fNbOfAbsor;
-  G4Material*        fAbsorMaterial [MaxAbsor];
-  G4double           fAbsorThickness[MaxAbsor];
+  G4Material*        fAbsorMaterial [kMaxAbsor];
+  G4double           fAbsorThickness[kMaxAbsor];
 
   G4int              fNbOfLayers;
   G4double           fLayerThickness;
@@ -119,9 +118,9 @@ private:
   G4LogicalVolume*   fLogicLayer;
   G4VPhysicalVolume* fPhysiLayer;
 
-  G4Box*             fSolidAbsor[MaxAbsor];
-  G4LogicalVolume*   fLogicAbsor[MaxAbsor];
-  G4VPhysicalVolume* fPhysiAbsor[MaxAbsor];
+  G4Box*             fSolidAbsor[kMaxAbsor];
+  G4LogicalVolume*   fLogicAbsor[kMaxAbsor];
+  G4VPhysicalVolume* fPhysiAbsor[kMaxAbsor];
 
   DetectorMessenger* fDetectorMessenger;
   G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;

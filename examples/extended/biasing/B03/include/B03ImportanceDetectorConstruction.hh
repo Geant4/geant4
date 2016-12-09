@@ -44,8 +44,6 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 
-
-
 class B03ImportanceDetectorConstruction : public G4VUserParallelWorld
 {
 public:

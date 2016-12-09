@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChProcessChanneling.hh
+/// \brief Definition of the ExExChProcessChanneling class
+//
 //
 
 #ifndef ExExChProcessChanneling_h
@@ -170,9 +173,9 @@ private:
     G4double fTimeStepMax;
     G4double fTimeStepTotal;
 
-    G4bool bHasToComputeTrajectory;
-    G4double bPointYPost;
-    G4double bPointYPre;
+    G4bool fHasToComputeTrajectory;
+    G4double fPointYPost;
+    G4double fPointYPre;
     
     G4double fTransverseVariationMax;
     G4double fIntegrationPeriod;

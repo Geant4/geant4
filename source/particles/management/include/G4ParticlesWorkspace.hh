@@ -54,6 +54,7 @@
 class G4ParticlesWorkspace
 {
   public:
+
     typedef G4TWorkspacePool<G4ParticlesWorkspace> pool_type;
       G4ParticlesWorkspace(G4bool verbose=false);
      ~G4ParticlesWorkspace();
@@ -69,18 +70,22 @@ class G4ParticlesWorkspace
      G4bool GetVerbose()  { return fVerbose;   } 
   
     static pool_type* GetPool();
+
  protected:  // Implementation methods
+
       void   InitialiseParticles();
 
- private:    // Helper pointers - can be per instance or shared
-      G4PDefManager *fpPDefSIM;
+ private:
+
+     // Helper pointer - can be per instance or shared
+     G4PDefManager *fpPDefSIM;
   
   // Per Instance variables
   //   NOTE: the ownership of the Data Arrays is IN this object
- private:
+
      // Store SubInstanceManager object pointers (SIM pointers)
      G4PDefData  *fpPDefOffset;
-     G4bool         fVerbose;
+     G4bool       fVerbose;
 };
 
 #endif //G4PARTICLESWORKSPACE_HH

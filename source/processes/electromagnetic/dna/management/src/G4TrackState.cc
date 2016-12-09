@@ -34,9 +34,7 @@
 
 int G4VTrackStateID::fgLastID = 0;
 
-/*
-G4TrackStateDependent::G4TrackStateDependent() : G4VTrackStateDependent()
-{
-	;
+// static function
+int G4VTrackStateID::Create() {
+  return fgLastID++; // keep it on the right
 }
-*/

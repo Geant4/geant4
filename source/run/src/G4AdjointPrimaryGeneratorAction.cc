@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.cc 97327 2016-06-01 14:24:40Z gcosmo $
+// $Id: G4AdjointPrimaryGeneratorAction.cc 98735 2016-08-09 10:54:06Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -62,6 +62,9 @@ G4AdjointPrimaryGeneratorAction::G4AdjointPrimaryGeneratorAction()
   ListOfPrimaryFwdParticles.clear();
   ListOfPrimaryAdjParticles.clear();
   nb_fwd_gammas_per_event = 1;
+  nb_adj_primary_gammas_per_event = 1;
+  nb_adj_primary_electrons_per_event = 1;
+
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -92,6 +95,7 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      E1=EminIon*A;
      E2=EmaxIon*A;
    }
+   //Generate first the forwrad primaries
    theAdjointPrimaryGenerator->GenerateFwdPrimaryVertex(anEvent,ListOfPrimaryFwdParticles[index_particle],E1,E2);
    G4PrimaryVertex* fwdPrimVertex = anEvent->GetPrimaryVertex();
 
@@ -135,7 +139,7 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
        }
    }
 
-
+   //Now generate the adjoint primaries
    G4PrimaryVertex* adjPrimVertex = new G4PrimaryVertex();
    adjPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
    adjPrimVertex->SetT0(0.);
@@ -149,13 +153,39 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    G4double adjoint_source_area = G4AdjointSimManager::GetInstance()->GetAdjointSourceArea();
    G4double adjoint_weight = weight_correction*ComputeEnergyDistWeight(ekin,E1,E2)*adjoint_source_area*pi;
    //if (ListOfPrimaryFwdParticles[index_particle]  ==G4Gamma::Gamma()) adjoint_weight = adjoint_weight/3.;
+   if (ListOfPrimaryAdjParticles[index_particle]->GetParticleName() == "adj_gamma") {
+	   //The weight will be corrected at the end of the track if splitted tracks are used
+	   adjoint_weight = adjoint_weight/nb_adj_primary_gammas_per_event;
+	   for (int i=0;i<nb_adj_primary_gammas_per_event-1;i++){
+          G4PrimaryVertex* newAdjPrimVertex = new G4PrimaryVertex();
+	      newAdjPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
+	      newAdjPrimVertex->SetT0(0.);
+	      aPrimParticle = new G4PrimaryParticle(ListOfPrimaryAdjParticles[index_particle],
+	                              -p.x(),-p.y(),-p.z());
+	      newAdjPrimVertex->SetPrimary(aPrimParticle);
+	      newAdjPrimVertex->SetWeight(adjoint_weight);
+	      anEvent->AddPrimaryVertex(newAdjPrimVertex);
+	   }
+   }
+   else if  (ListOfPrimaryAdjParticles[index_particle]->GetParticleName() == "adj_electron") {
+	   //The weight will be corrected at the end of the track if splitted tracks are used
+	   adjoint_weight = adjoint_weight/nb_adj_primary_electrons_per_event;
+	   for (int i=0;i<nb_adj_primary_electrons_per_event-1;i++){
+          G4PrimaryVertex* newAdjPrimVertex = new G4PrimaryVertex();
+	      newAdjPrimVertex->SetPosition(pos.x(),pos.y(),pos.z());
+	      newAdjPrimVertex->SetT0(0.);
+	      aPrimParticle = new G4PrimaryParticle(ListOfPrimaryAdjParticles[index_particle],
+	                              -p.x(),-p.y(),-p.z());
+	      newAdjPrimVertex->SetPrimary(aPrimParticle);
+	      newAdjPrimVertex->SetWeight(adjoint_weight);
+	      anEvent->AddPrimaryVertex(newAdjPrimVertex);
+	   }
+   }
    adjPrimVertex->SetWeight(adjoint_weight);
 
-
-
-
+   //Call some methods of G4AdjointSimManager
    G4AdjointSimManager::GetInstance()->SetAdjointTrackingMode(true);
-
+   G4AdjointSimManager::GetInstance()->ClearEndOfAdjointTrackInfoVectors();
 
   /* if ( !last_generated_part_was_adjoint ) {
 	 

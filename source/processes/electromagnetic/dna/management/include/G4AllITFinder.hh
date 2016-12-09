@@ -25,7 +25,7 @@
 //
 // $Id: G4AllITManager.hh 84670 2014-10-17 15:23:24Z matkara $
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+// Author: Mathieu Karamitros
 
 // The code is developed in the framework of the ESA AO7146
 //

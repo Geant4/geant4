@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4Element.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4Element.cc 101514 2016-11-18 15:30:57Z gcosmo $
 // ====================================================================
 //   pyG4Element.cc
 //
@@ -105,8 +105,5 @@ void export_G4Element()
 	 return_internal_reference<>())
     // ---
     .def("Print", Print)
-    .def(self == self)
-    .def(self != self)
     ;
-
 }

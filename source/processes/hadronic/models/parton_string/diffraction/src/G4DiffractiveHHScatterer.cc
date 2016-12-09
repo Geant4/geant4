@@ -45,11 +45,12 @@ G4DiffractiveHHScatterer::G4DiffractiveHHScatterer() :
 
 G4DiffractiveHHScatterer::~G4DiffractiveHHScatterer()
 {
-	delete theExcitation;
-	delete theStringFragmentation;
+  delete theExcitation;
+  delete theStringFragmentation;
 }
 
 
 //============================================================================
 
 void G4DiffractiveHHScatterer::CreateStrings() const {}
+

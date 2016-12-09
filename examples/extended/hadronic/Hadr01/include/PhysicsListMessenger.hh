@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.hh 68803 2013-04-05 13:59:55Z gcosmo $
+// $Id: PhysicsListMessenger.hh 99019 2016-08-31 08:27:06Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -68,11 +68,6 @@ private:
   
   PhysicsList* fPhysicsList;
     
-  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-  G4UIcmdWithADoubleAndUnit* fPosCutCmd;
-  G4UIcmdWithADoubleAndUnit* fCutCmd;
-  G4UIcmdWithADoubleAndUnit* fAllCutCmd;
   G4UIcmdWithAString*        fPListCmd;
   G4UIcmdWithoutParameter*   fListCmd;  
 };

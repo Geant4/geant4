@@ -172,9 +172,10 @@ void B03PhysicsList::ConstructProcess()
 
 void B03PhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -377,9 +378,10 @@ void B03PhysicsList::ConstructHad()
   G4HadronElastic* theElasticModel = new G4HadronElastic;
   theElasticProcess->RegisterMe(theElasticModel);
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()) {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()) {
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -611,9 +613,10 @@ void B03PhysicsList::ConstructLeptHad()
 void B03PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
@@ -649,9 +652,10 @@ void B03PhysicsList::AddScoringProcess(){
      = new G4ParallelWorldProcess(procName);
    theParallelWorldProcess->SetParallelWorld(fParaWorldName[i]);
 
-   theParticleIterator->reset();
-   while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+   auto particleIterator=GetParticleIterator();
+   particleIterator->reset();
+   while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     pmanager->AddProcess(theParallelWorldProcess);
     if(theParallelWorldProcess->IsAtRestRequired(particle))

@@ -1,4 +1,4 @@
-$Id: History 95714 2016-02-22 08:12:58Z gcosmo $
+$Id: History 101663 2016-11-21 09:07:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 November 2016 A.Dotti     (phononExample-V10-02-08)
+- explicit set of SD to manager
+ 
+14 October 2016 G.Folger    (phononExample-V10-02-07)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+29 July 2016: Gunter Folger (phononExample-V10-02-06)
+-  2nd attempt to fix typo
+
+29 July 2016: Gunter Folger (phononExample-V10-02-05)
+-  fix typo
+
+29 July 2016: Gunter Folger (phononExample-V10-02-04)
+-  correct selection of caustic reference on MAC in MT mode;
+   on MAC, compiler id is AppleClang.
+
+26 July 2016: Gunter Folger (phononExample-V10-02-03)
+- run.in: do not set random seed, this changes caustic.ssv and timing.ssv
+
+26 July 2016: Gunter Folger (phononExample-V10-02-02)
+- add clang/icc specific references, and switch depending on compiler 
+
+17 February 2016: E. Bagli (phononExample-V10-02-01)
+- run.in: set the random seed in the macro file
 
 19 August 2015: M. Kelsey   (phononExample-V10-01-01)
 - XAluminumElectrodeHit.hh:  Make simple container with public data members

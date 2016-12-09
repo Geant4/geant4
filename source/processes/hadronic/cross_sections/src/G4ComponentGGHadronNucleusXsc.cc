@@ -363,15 +363,19 @@ G4ComponentGGHadronNucleusXsc::GetIsoCrossSection(const G4DynamicParticle* aPart
 
     fTotalXsc = xsection;
 
-  
+    // inelastic xsc
 
-    fInelasticXsc = nucleusSquare*G4Log( 1. + cofInelastic*ratio )/cofInelastic;
+    fAxsc2piR2 = cofInelastic*ratio;
+
+    fModelInLog = G4Log( 1. + fAxsc2piR2 );
+
+    fInelasticXsc = nucleusSquare*fModelInLog/cofInelastic;
 
     fInelasticXsc *= GetParticleBarCorIn(theParticle, Z);
 
     fElasticXsc   = fTotalXsc - fInelasticXsc;
 
-    if(fElasticXsc < 0.) fElasticXsc = 0.;
+    if( fElasticXsc < 0. ) fElasticXsc = 0.;
     
     G4double difratio = ratio/(1.+ratio);
 
@@ -812,7 +816,7 @@ G4ComponentGGHadronNucleusXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aP
       //  Delta = 1.;  // DHW 19 May 2011: variable set but not used
       // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
-      if(proj_momentum >= 10.)
+      //AR-12Aug2016  if(proj_momentum >= 10.)
       {
         B0 = 7.5;
         A0 = 100. - B0*G4Log(3.0e7);
@@ -872,7 +876,7 @@ G4ComponentGGHadronNucleusXsc::GetHadronNucleonXscNS(const G4DynamicParticle* aP
       // Delta = 1.;  DHW 19 May 2011: variable set but not used
       // if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
-      if(proj_momentum >= 10.)
+      //AR-12Aug2016  if(proj_momentum >= 10.)
       {
         B0 = 7.5;
         A0 = 100. - B0*G4Log(3.0e7);

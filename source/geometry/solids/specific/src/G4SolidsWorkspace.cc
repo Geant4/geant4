@@ -53,7 +53,6 @@ G4SolidsWorkspace::G4SolidsWorkspace(G4bool verbose)
 
 G4SolidsWorkspace::~G4SolidsWorkspace()
 {
-  
 }
 
 //  Static methods 
@@ -70,7 +69,6 @@ G4SolidsWorkspace::UseWorkspace()
   //Geometry related, split classes mechanism: instantiate sub-instance for this thread
   fpPolyconeSideSIM->UseWorkArea(fPolyconeSideOffset);
   fpPolyhedraSideSIM->UseWorkArea(fPolyhedraSideOffset);
-
 }
 
 

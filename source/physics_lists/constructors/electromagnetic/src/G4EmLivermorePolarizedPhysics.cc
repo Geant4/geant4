@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmLivermorePolarizedPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmLivermorePolarizedPhysics.cc 99938 2016-10-12 08:06:52Z gcosmo $
 
 #include "G4EmLivermorePolarizedPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -121,36 +121,20 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmLivermorePolarizedPhysics);
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
+G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, 
+							     const G4String&)
+  : G4VPhysicsConstructor("G4EmLivermorePolarized"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
   param->SetVerbose(verbose);
   param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetLowestElectronEnergy(100*eV);
+  param->SetMaxEnergy(1*TeV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
-  param->SetFluo(true);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmLivermorePolarizedPhysics::G4EmLivermorePolarizedPhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmLivermorePolarizedPhysics"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->ActivateAngularGeneratorForIonisation(true);
+  param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
   SetPhysicsType(bElectromagnetic);
 }
@@ -189,10 +173,6 @@ void G4EmLivermorePolarizedPhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -232,11 +212,12 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Livermore EM Processes
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*myParticleIterator)() ){
   
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     //Applicability range for Livermore models
@@ -456,8 +437,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

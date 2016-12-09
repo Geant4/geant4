@@ -1,4 +1,4 @@
-$Id: History 82277 2014-06-13 14:40:54Z gcosmo $
+$Id: History 101245 2016-11-10 08:45:38Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-11-16  V.Ivant (gtherapy-V10-02-01)
+- PhysicsList - removed warnings, use G4EmParameters
+- DetectorConstruction, DetectorMessenger - do not change detector
+    between runs
+
+14-10-16 G.Folger (gtherapy-V10-02-00)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 12-06-14  V.Ivant (gtherapy-V10-00-00)
 - Applied code guidlines

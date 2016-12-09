@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/src/Run.cc
+/// \file electromagnetic/TestEm5/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
@@ -158,12 +158,12 @@ void Run::EndOfRun()
 
   fNbStepsCharged /= TotNbofEvents; fNbStepsCharged2 /= TotNbofEvents;
   G4double rmsStCh = fNbStepsCharged2 - fNbStepsCharged*fNbStepsCharged;
-  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStCh>0.) rmsStCh = std::sqrt(rmsStCh/TotNbofEvents);
   else            rmsStCh = 0.;
 
   fNbStepsNeutral /= TotNbofEvents; fNbStepsNeutral2 /= TotNbofEvents;
   G4double rmsStNe = fNbStepsNeutral2 - fNbStepsNeutral*fNbStepsNeutral;
-  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsTLCh/TotNbofEvents);
+  if (rmsStNe>0.) rmsStNe = std::sqrt(rmsStNe/TotNbofEvents);
   else            rmsStNe = 0.;
 
   G4double Gamma = (G4double)fNbGamma/TotNbofEvents;

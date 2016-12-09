@@ -35,6 +35,10 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4GeomTools.hh"
+#include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
+
 #include "G4PolyhedronArbitrary.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -165,6 +169,185 @@ std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
     vec.push_back(ZSection(sv[i]));
   }
   return vec;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  static G4bool checkBBox = true;
+
+  G4double xmin0 = kInfinity, xmax0 = -kInfinity;
+  G4double ymin0 = kInfinity, ymax0 = -kInfinity;
+
+  for (G4int i=0; i<GetNofVertices(); ++i)
+  {
+    G4TwoVector vertex = GetVertex(i);
+    G4double x = vertex.x();
+    if (x < xmin0) xmin0 = x;
+    if (x > xmax0) xmax0 = x;
+    G4double y = vertex.y();
+    if (y < ymin0) ymin0 = y;
+    if (y > ymax0) ymax0 = y;
+  }
+
+  G4double xmin = kInfinity, xmax = -kInfinity;
+  G4double ymin = kInfinity, ymax = -kInfinity;
+
+  G4int nsect = GetNofZSections();
+  for (G4int i=0; i<nsect; ++i)
+  {
+    ZSection zsect = GetZSection(i);
+    G4double dx    = zsect.fOffset.x();
+    G4double dy    = zsect.fOffset.y();
+    G4double scale = zsect.fScale;
+    xmin = std::min(xmin,xmin0*scale+dx);
+    xmax = std::max(xmax,xmax0*scale+dx);
+    ymin = std::min(ymin,ymin0*scale+dy);
+    ymax = std::max(ymax,ymax0*scale+dy);
+  }
+
+  G4double zmin = GetZSection(0).fZ;
+  G4double zmax = GetZSection(nsect-1).fZ;
+
+  pMin.set(xmin,ymin,zmin);
+  pMax.set(xmax,ymax,zmax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UExtrudedSolid::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  // Check consistency of bounding boxes
+  //
+  if (checkBBox)
+  {
+    UVector3 vmin, vmax;
+    GetShape()->Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
+        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
+        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
+        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
+        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
+        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Inconsistency in bounding boxes for solid: "
+              << GetName() << " !"
+              << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
+              << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
+      G4Exception("G4UExtrudedSolid::Extent()", "GeomMgt0001", JustWarning, message);
+      checkBBox = false;
+    }
+  }
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
+                                 const G4VoxelLimits& pVoxelLimit,
+                                 const G4AffineTransform& pTransform,
+                                       G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // To find the extent, the base polygon is subdivided in triangles.
+  // The extent is calculated as cumulative extent of the parts
+  // formed by extrusion of the triangles
+  //
+  G4TwoVectorList basePolygon = GetPolygon();
+  G4TwoVectorList triangles;
+  G4double eminlim = pVoxelLimit.GetMinExtent(pAxis);
+  G4double emaxlim = pVoxelLimit.GetMaxExtent(pAxis);
+
+  // triangulate the base polygon
+  if (!G4GeomTools::TriangulatePolygon(basePolygon,triangles))
+  {
+    std::ostringstream message;
+    message << "Triangulation of the base polygon has failed for solid: "
+            << GetName() << " !"
+            << "\nExtent has been calculated using boundary box";
+    G4Exception("G4UExtrudedSolid::CalculateExtent()",
+                "GeomMgt1002",JustWarning,message);
+    return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  }
+
+  // allocate vector lists
+  G4int nsect = GetNofZSections();
+  std::vector<const G4ThreeVectorList *> polygons;
+  polygons.resize(nsect);
+  for (G4int k=0; k<nsect; ++k) { polygons[k] = new G4ThreeVectorList(3); }
+
+  // main loop along triangles
+  pMin =  kInfinity;
+  pMax = -kInfinity;
+  G4int ntria = triangles.size()/3;
+  for (G4int i=0; i<ntria; ++i)
+  {
+    G4int i3 = i*3;
+    for (G4int k=0; k<nsect; ++k) // extrude triangle
+    {
+      ZSection zsect = GetZSection(k);
+      G4double z     = zsect.fZ;
+      G4double dx    = zsect.fOffset.x();
+      G4double dy    = zsect.fOffset.y();
+      G4double scale = zsect.fScale;
+
+      G4ThreeVectorList* ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
+      G4ThreeVectorList::iterator iter = ptr->begin();
+      G4double x0 = triangles[i3+0].x()*scale+dx;
+      G4double y0 = triangles[i3+0].y()*scale+dy;
+      iter->set(x0,y0,z);
+      iter++;
+      G4double x1 = triangles[i3+1].x()*scale+dx;
+      G4double y1 = triangles[i3+1].y()*scale+dy;
+      iter->set(x1,y1,z);
+      iter++;
+      G4double x2 = triangles[i3+2].x()*scale+dx;
+      G4double y2 = triangles[i3+2].y()*scale+dy;
+      iter->set(x2,y2,z);
+    }
+
+    // set sub-envelope and adjust extent
+    G4double emin,emax;
+    G4BoundingEnvelope benv(polygons);
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
+    if (emin < pMin) pMin = emin;
+    if (emax > pMax) pMax = emax;
+    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
+  }
+  // free memory
+  for (G4int k=0; k<nsect; ++k) { delete polygons[k]; polygons[k]=0;}
+  return (pMin < pMax);
 }
 
 

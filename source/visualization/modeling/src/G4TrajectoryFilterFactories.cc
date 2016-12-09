@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// $Id: G4TrajectoryFilterFactories.cc 95593 2016-02-16 10:48:50Z gcosmo $
+/// $Id: G4TrajectoryFilterFactories.cc 98766 2016-08-09 14:17:17Z gcosmo $
 //
 //
 // Trajectory filter model factories creating filters
@@ -37,7 +37,7 @@
 #include "G4TrajectoryChargeFilter.hh"
 #include "G4TrajectoryParticleFilter.hh"
 #include "G4TrajectoryOriginVolumeFilter.hh"
-#include "G4TrajectoryTouchedVolumeFilter.hh"
+#include "G4TrajectoryEncounteredVolumeFilter.hh"
 
 // Attribute filter
 G4TrajectoryAttributeFilterFactory::G4TrajectoryAttributeFilterFactory()
@@ -142,27 +142,27 @@ G4TrajectoryOriginVolumeFilterFactory::Create(const G4String& placement, const G
   return ModelAndMessengers(model, messengers);
 }
 
-// Touched volume filter
-G4TrajectoryTouchedVolumeFilterFactory::G4TrajectoryTouchedVolumeFilterFactory()
-:G4VModelFactory< G4VFilter<G4VTrajectory> >("touchedVolumeFilter")
+// Encountered volume filter
+G4TrajectoryEncounteredVolumeFilterFactory::G4TrajectoryEncounteredVolumeFilterFactory()
+:G4VModelFactory< G4VFilter<G4VTrajectory> >("encounteredVolumeFilter")
 {}
 
-G4TrajectoryTouchedVolumeFilterFactory::~G4TrajectoryTouchedVolumeFilterFactory() {}
+G4TrajectoryEncounteredVolumeFilterFactory::~G4TrajectoryEncounteredVolumeFilterFactory() {}
 
-G4TrajectoryTouchedVolumeFilterFactory::ModelAndMessengers
-G4TrajectoryTouchedVolumeFilterFactory::Create(const G4String& placement, const G4String& name)
+G4TrajectoryEncounteredVolumeFilterFactory::ModelAndMessengers
+G4TrajectoryEncounteredVolumeFilterFactory::Create(const G4String& placement, const G4String& name)
 {
   // Create model
-  G4TrajectoryTouchedVolumeFilter* model = new G4TrajectoryTouchedVolumeFilter(name);
+  G4TrajectoryEncounteredVolumeFilter* model = new G4TrajectoryEncounteredVolumeFilter(name);
 
   // Create associated messengers
   Messengers messengers;
 
-  messengers.push_back(new G4ModelCmdAddString<G4TrajectoryTouchedVolumeFilter>(model, placement));
-  messengers.push_back(new G4ModelCmdInvert<G4TrajectoryTouchedVolumeFilter>(model, placement));
-  messengers.push_back(new G4ModelCmdActive<G4TrajectoryTouchedVolumeFilter>(model, placement));
-  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryTouchedVolumeFilter>(model, placement));
-  messengers.push_back(new G4ModelCmdReset<G4TrajectoryTouchedVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdAddString<G4TrajectoryEncounteredVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdInvert<G4TrajectoryEncounteredVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdActive<G4TrajectoryEncounteredVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdVerbose<G4TrajectoryEncounteredVolumeFilter>(model, placement));
+  messengers.push_back(new G4ModelCmdReset<G4TrajectoryEncounteredVolumeFilter>(model, placement));
 
   return ModelAndMessengers(model, messengers);
 }

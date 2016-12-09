@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05PrimaryGeneratorMessenger.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05PrimaryGeneratorMessenger.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05PrimaryGeneratorMessenger.hh
 /// \brief Definition of the RE05PrimaryGeneratorMessenger class
@@ -50,14 +50,11 @@ class RE05PrimaryGeneratorMessenger: public G4UImessenger
     virtual G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    RE05PrimaryGeneratorAction * myAction;
+    RE05PrimaryGeneratorAction * fMyAction;
     
-  private: //commands
-    G4UIdirectory *             mydetDirectory;
-    G4UIcmdWithAString *        genCmd;
-    
+    //commands
+    G4UIdirectory *             fMydetDirectory;
+    G4UIcmdWithAString *        fGenCmd;
 };
 
 #endif
-
-

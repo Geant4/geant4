@@ -57,7 +57,7 @@ Run::Run(DetectorConstruction* detector)
 {
   for (G4int i=0; i<3; ++i) { fStatus[i] = 0; fTotEdep[i] = 0.; }
   fTotEdep[1] = joule;
-  for (G4int i=0; i<MaxAbsor; ++i) {
+  for (G4int i=0; i<kMaxAbsor; ++i) {
     fEdeposit[i] = 0.; fEmin[i] = joule; fEmax[i] = 0.;
     fCsdaRange[i] = 0.; fXfrontNorm[i] = 0.;
   }  

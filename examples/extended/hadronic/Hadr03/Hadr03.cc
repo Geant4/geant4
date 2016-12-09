@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/Hadr03.cc
+/// \file Hadr03.cc
 /// \brief Main program of the hadronic/Hadr03 example
 //
 //
@@ -76,10 +76,9 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction;
   runManager->SetUserInitialization(det);
-  
+
   PhysicsList* phys = new PhysicsList;  
   runManager->SetUserInitialization(phys);
-
   runManager->SetUserInitialization(new ActionInitialization(det));    
  
   // get the pointer to the User Interface manager

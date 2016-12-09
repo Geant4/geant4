@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/include/RMC01DoubleWithWeightHit.hh
 /// \brief Definition of the RMC01DoubleWithWeightHit class
 //
-// $Id: RMC01DoubleWithWeightHit.hh 71233 2013-06-12 13:16:05Z gcosmo $
+// $Id: RMC01DoubleWithWeightHit.hh 98774 2016-08-09 14:28:06Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:           RMC01DoubleWithWeightHit
@@ -105,5 +105,4 @@ inline void RMC01DoubleWithWeightHit::operator delete(void *aHit)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
 

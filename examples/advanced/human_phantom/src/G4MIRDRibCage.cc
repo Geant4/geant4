@@ -204,7 +204,7 @@ G4VPhysicalVolume* G4MIRDRibCage::Construct(const G4String& volumeName, G4VPhysi
 				0, true);
   
   // Visualization Attributes
-  logicRibCage -> SetVisAttributes(G4VisAttributes::Invisible);
+  logicRibCage -> SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //G4VisAttributes* RibCageVisAtt = new G4VisAttributes(G4Colour(0.46,0.53,0.6));
 

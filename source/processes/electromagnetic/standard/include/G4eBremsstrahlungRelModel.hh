@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh 93567 2015-10-26 14:51:41Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -64,39 +64,39 @@ class G4eBremsstrahlungRelModel : public G4VEmModel
 
 public:
 
-  G4eBremsstrahlungRelModel(const G4ParticleDefinition* p = 0, 
-			    const G4String& nam = "eBremLPM");
+  explicit G4eBremsstrahlungRelModel(const G4ParticleDefinition* p = 0, 
+				     const G4String& nam = "eBremLPM");
 
   virtual ~G4eBremsstrahlungRelModel();
 
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&) override;
 
   virtual void InitialiseLocal(const G4ParticleDefinition*,
-			       G4VEmModel* masterModel);
+			       G4VEmModel* masterModel) override;
 
   virtual G4double ComputeDEDXPerVolume(const G4Material*,
 					const G4ParticleDefinition*,
 					G4double kineticEnergy,
-					G4double cutEnergy);
+					G4double cutEnergy) override;
 					
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 					      G4double tkin, 
 					      G4double Z,   G4double,
 					      G4double cutEnergy,
-					      G4double maxEnergy = DBL_MAX);
+					      G4double maxEnergy = DBL_MAX) override;
   
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 const G4MaterialCutsCouple*,
 				 const G4DynamicParticle*,
 				 G4double cutEnergy,
-				 G4double maxEnergy);
+				 G4double maxEnergy) override;
 
   virtual void SetupForMaterial(const G4ParticleDefinition*,
-                                const G4Material*,G4double);
+                                const G4Material*,G4double) override;
 
   virtual G4double MinPrimaryEnergy(const G4Material*,
 				    const G4ParticleDefinition*,
-				    G4double cut);
+				    G4double cut) override;
 
   inline void SetLPMconstant(G4double val);
   inline G4double LPMconstant() const;
@@ -110,7 +110,7 @@ protected:
   virtual G4double ComputeDXSectionPerAtom(G4double gammaEnergy);
 
   // * fast inline functions *
-  inline void SetCurrentElement(const G4double);
+  inline void SetCurrentElement(G4int);
 
 private:
 
@@ -132,8 +132,8 @@ private:
   inline G4double Psi1M2(G4double,G4double);
 
   // hide assignment operator
-  G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right);
-  G4eBremsstrahlungRelModel(const  G4eBremsstrahlungRelModel&);
+  G4eBremsstrahlungRelModel & operator=(const  G4eBremsstrahlungRelModel &right) = delete;
+  G4eBremsstrahlungRelModel(const  G4eBremsstrahlungRelModel&) = delete;
 
 protected:
 
@@ -148,10 +148,10 @@ protected:
   G4double particleMass;
   G4double kinEnergy;
   G4double totalEnergy;
-  G4double currentZ;
   G4double densityFactor;
   G4double densityCorr;
 
+  G4int    currentZ;
   G4bool   isElectron;
 
 private:
@@ -174,7 +174,6 @@ private:
 
   // LPM effect
   G4double lpmEnergy;
-  G4PhysicsVector  *fXiLPM, *fPhiLPM, *fGLPM;
   G4double xiLPM, phiLPM, gLPM;
 
   // critical gamma energies
@@ -186,19 +185,18 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
+inline void G4eBremsstrahlungRelModel::SetCurrentElement(G4int Z)
 {
   if(Z != currentZ) {
     currentZ = Z;
 
-    G4int iz = G4lrint(Z);
-    z13 = nist->GetZ13(iz);
+    z13 = nist->GetZ13(Z);
     z23 = z13*z13;
-    lnZ = nist->GetLOGZ(iz);
+    lnZ = nist->GetLOGZ(Z);
 
-    if (iz <= 4) {
-      Fel = Fel_light[iz];  
-      Finel = Finel_light[iz] ; 
+    if (Z <= 4) {
+      Fel = Fel_light[Z];  
+      Finel = Finel_light[Z] ; 
     }
     else {
       G4double lnzt = lnZ/3.;
@@ -207,7 +205,8 @@ inline void G4eBremsstrahlungRelModel::SetCurrentElement(const G4double Z)
     }
 
     fCoulomb = GetCurrentElement()->GetfCoulomb();
-    fMax = Fel-fCoulomb + Finel/currentZ  +  (1.+1./currentZ)/12.;
+    G4double xz = 1.0/(G4double)Z;
+    fMax = Fel-fCoulomb + Finel*xz  + (1. + xz)/12.;
   }
 }
 

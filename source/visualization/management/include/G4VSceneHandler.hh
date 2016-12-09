@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.hh 73126 2013-08-19 08:01:37Z gcosmo $
+// $Id: G4VSceneHandler.hh 101714 2016-11-22 08:53:13Z gcosmo $
 //
 //
 // John Allison  19th July 1996.
@@ -104,17 +104,24 @@ public: // With description
   //   G4VSceneHandler::PostAddSolid ();
   // }
 
+  // From geometry/solids/CSG
   virtual void AddSolid (const G4Box&);
   virtual void AddSolid (const G4Cons&);
-  virtual void AddSolid (const G4Tubs&);
-  virtual void AddSolid (const G4Trd&);
-  virtual void AddSolid (const G4Trap&);
-  virtual void AddSolid (const G4Sphere&);
+  virtual void AddSolid (const G4Orb&);
   virtual void AddSolid (const G4Para&);
+  virtual void AddSolid (const G4Sphere&);
   virtual void AddSolid (const G4Torus&);
+  virtual void AddSolid (const G4Trap&);
+  virtual void AddSolid (const G4Trd&);
+  virtual void AddSolid (const G4Tubs&);
+
+  // From geometry/solids/specific
+  virtual void AddSolid (const G4Ellipsoid&);
   virtual void AddSolid (const G4Polycone&);
   virtual void AddSolid (const G4Polyhedra&);
-  virtual void AddSolid (const G4VSolid&);  // For solids not above.
+
+  // For solids not above.
+  virtual void AddSolid (const G4VSolid&);
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding "compound" GEANT4 objects to the scene
@@ -130,6 +137,7 @@ public: // With description
   virtual void AddCompound (const G4VHit&);
   virtual void AddCompound (const G4VDigi&);
   virtual void AddCompound (const G4THitsMap<G4double>&);
+  virtual void AddCompound (const G4THitsMap<G4StatDouble>&);
 
   //////////////////////////////////////////////////////////////
   // Functions for adding primitives.
@@ -226,9 +234,9 @@ public: // With description
   //////////////////////////////////////////////////////////////
   // Public utility functions.
 
-  const G4Colour& GetColour (const G4Visible&);
-  const G4Colour& GetColor  (const G4Visible&);
-  // Returns colour of G4Visible object, or default global colour.
+  const G4Colour& GetColour ();
+  const G4Colour& GetColor  ();
+  // Returns colour - checks fpVisAttribs and gets applicable colour.
 
   const G4Colour& GetTextColour (const G4Text&);
   const G4Colour& GetTextColor  (const G4Text&);
@@ -278,6 +286,9 @@ public: // With description
 
   //////////////////////////////////////////////////////////////
   // Administration functions.
+
+  template <class T> void AddSolidT (const T& solid);
+  template <class T> void AddSolidWithAuxiliaryEdges (const T& solid);
 
   G4int IncrementViewCount ();
 

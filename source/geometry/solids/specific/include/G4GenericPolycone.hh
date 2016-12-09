@@ -87,6 +87,12 @@ class G4GenericPolycone : public G4VCSGfaceted
   G4double DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
 
+  void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+  G4bool CalculateExtent(const EAxis pAxis,
+                         const G4VoxelLimits& pVoxelLimit,
+                         const G4AffineTransform& pTransform,
+                         G4double& pmin, G4double& pmax) const;
+
   G4ThreeVector GetPointOnSurface() const;
 
   G4GeometryType GetEntityType() const;
@@ -101,10 +107,14 @@ class G4GenericPolycone : public G4VCSGfaceted
 
   // Accessors
 
-  inline G4double GetStartPhi()  const;
-  inline G4double GetEndPhi()    const;
-  inline G4bool IsOpen()         const;
-  inline G4int  GetNumRZCorner() const;
+  inline G4double GetStartPhi()    const;
+  inline G4double GetEndPhi()      const;
+  inline G4double GetSinStartPhi() const;
+  inline G4double GetCosStartPhi() const;
+  inline G4double GetSinEndPhi()   const;
+  inline G4double GetCosEndPhi()   const;
+  inline G4bool IsOpen()           const;
+  inline G4int  GetNumRZCorner()   const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
   
  public:  // without description
@@ -139,7 +149,7 @@ class G4GenericPolycone : public G4VCSGfaceted
   G4double startPhi;    // Starting phi value (0 < phiStart < 2pi)
   G4double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
   G4bool   phiIsOpen;   // true if there is a phi segment
-  G4int   numCorner;    // number RZ points
+  G4int    numCorner;   // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
  
   // Our quick test

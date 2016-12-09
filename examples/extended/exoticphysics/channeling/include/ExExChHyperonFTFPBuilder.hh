@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChHyperonFTFPBuilder.hh
+/// \brief Definition of the ExExChHyperonFTFPBuilder class
+//
 
 #ifndef ExExChHyperonFTFPBuilder_h
 #define ExExChHyperonFTFPBuilder_h 1

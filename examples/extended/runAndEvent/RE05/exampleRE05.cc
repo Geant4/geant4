@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: exampleRE05.cc 69920 2013-05-17 13:36:37Z gcosmo $
+// $Id: exampleRE05.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/exampleRE05.cc
 /// \brief Main program of the RE05 example
@@ -43,7 +43,7 @@
 #include "G4UImanager.hh"
 
 #include "RE05DetectorConstruction.hh"
-#include "RE05CalorimeterROGeometry.hh"
+#include "RE05CalorimeterParallelWorld.hh"
 #include "QBBC.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "RE05ActionInitialization.hh"
@@ -74,7 +74,7 @@ int main(int argc,char** argv)
   //
   G4VUserDetectorConstruction* detector = new RE05DetectorConstruction();
   detector->RegisterParallelWorld
-       (new RE05CalorimeterROGeometry(parallelWorldName));
+       (new RE05CalorimeterParallelWorld(parallelWorldName));
   runManager->SetUserInitialization(detector);
   //
   G4VModularPhysicsList* physicsList = new QBBC;

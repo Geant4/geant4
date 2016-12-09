@@ -1,4 +1,4 @@
-$Id: History 97914 2016-06-22 15:22:24Z gcosmo $
+$Id: History 101863 2016-12-02 12:48:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,26 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-07)
+- G4RadioactiveDecayPhysics - fixed initialisation (also for the 
+    cases when radioactive decay is registered before EM physics or 
+    is the only physics constructor)
+
+01-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-06)
+- G4RadioactiveDecayPhysics - enable reading from new gamma evaporation
+    files, enable Auger cascade, do not apply cuts
+
+17-October-2016 Kevin Lynch (for Lynch and Genser) (phys-ctor-decay-V10-02-05)
+- Add G4MuonicAtomDecayPhysics constructor to enable decay of muonic atoms
+- depends on tag decay-V10-02-02
+
+16-October-2016 M.Maire   (phys-ctor-decay-V10-02-04)
+- add README
+
+12-October-2016 G.Folger  (phys-ctor-decay-V10-02-03)
+- replace direct use of aParticleIterator by GetParticleIterator().
+  fix required by clang39 on Windows and MAC
 
 22-Jun-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-02)
 22-Jun-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-01)

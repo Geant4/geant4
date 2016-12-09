@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc 88761 2015-03-09 12:23:46Z gcosmo $
+// $Id: G4ASCIITreeMessenger.cc 99076 2016-09-01 12:40:47Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -43,7 +43,7 @@ std::vector<G4String> G4ASCIITreeMessenger::fVerbosityGuidance;
 
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
-  fpASCIITree(ASCIITree) {
+fpASCIITree(ASCIITree) {
 
   G4bool omitable;
 
@@ -87,8 +87,11 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
     ("Note: by default, culling is switched off so all volumes are seen.");
   fVerbosityGuidance.push_back
     ("Note: the mass calculation takes into account daughters, which can be"
-     " time consuming.  If you want the mass of a particular subtree to a"
-     " particular depth:");
+     " time consuming.  If you want the mass of a particular subtree try:");
+  fVerbosityGuidance.push_back
+    ("  /vis/drawTree <subtree-physical-volume-name>");
+  fVerbosityGuidance.push_back
+    ("Or if you want more control, for example:");
   fVerbosityGuidance.push_back
     ("  /vis/open ATree");
   fVerbosityGuidance.push_back
@@ -96,7 +99,7 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
   fVerbosityGuidance.push_back
     ("  /vis/scene/create");
   fVerbosityGuidance.push_back
-    ("  /vis/scene/add/volume <subtree-physical-volume> ! <depth>");
+    ("  /vis/scene/add/volume <subtree-physical-volume-name> ! <depth>");
   fVerbosityGuidance.push_back
     ("  /vis/sceneHandler/attach");
   fVerbosityGuidance.push_back
@@ -108,7 +111,7 @@ G4ASCIITreeMessenger::G4ASCIITreeMessenger
     fpCommandVerbose -> SetGuidance(fVerbosityGuidance[i]);
   }
   fpCommandVerbose -> SetParameterName ("verbosity",omitable = true);
-  fpCommandVerbose -> SetDefaultValue(0);
+  fpCommandVerbose -> SetDefaultValue(1);
 
   fpCommandSetOutFile = new G4UIcmdWithAString ("/vis/ASCIITree/set/outFile", this
 );

@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'G4OpenGLQtMovieDialog.hh'
 **
-** Created: Fri Jun 3 09:32:38 2016
+** Created: Tue Nov 22 09:56:58 2016
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.4)
 **
 ** WARNING! All changes made in this file will be lost!

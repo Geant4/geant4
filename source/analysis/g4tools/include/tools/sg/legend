@@ -113,7 +113,7 @@ public:
   :parent()
   ,strings()
 
-  ,color(colorf::black())
+  ,color(colorf_black())
   //,transparency(0)
   ,font(font_hershey())
   ,encoding(encoding_PAW())
@@ -241,7 +241,7 @@ public:
     m_sep.add(_sep);
 
     rgba* mat = new rgba();
-    mat->color = colorf::black();
+    mat->color = colorf_black();
     _sep->add(mat);
 
     if(font==font_hershey()) {

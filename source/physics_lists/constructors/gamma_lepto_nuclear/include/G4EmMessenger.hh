@@ -61,6 +61,9 @@ private:
   G4UIcmdWithABool*   theSynchAll;
   G4UIcmdWithABool*   theGN;
   G4UIcmdWithABool*   theMUN;
+  G4UIcmdWithABool*   theGMM;
+  G4UIcmdWithABool*   thePMM;
+  G4UIcmdWithABool*   thePH;
   G4UIdirectory*      aDir1;
   G4UIdirectory*      aDir2;
 };

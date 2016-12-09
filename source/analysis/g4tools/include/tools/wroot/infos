@@ -10,17 +10,15 @@ namespace tools {
 namespace wroot {
 
 inline void scs(unsigned int& a_cs,const std::string& a_s) {
-  unsigned int l = a_s.size();
-  for(unsigned int i=0;i<l;i++) a_cs = a_cs*3+a_s[i];
+  size_t l = a_s.size();
+  for(size_t i=0;i<l;i++) a_cs = a_cs*3+a_s[i];
 }
 
 inline void acs(unsigned int& a_cs,int a_n,int* a_dims) {
   for(int i=0;i<a_n;i++) a_cs = a_cs*3+(unsigned int)a_dims[i];
 }
 
-inline void fill_vec(List<StreamerInfo>& a_infos,
-                     const std::string& a_type,
-                     streamer_info::Type a_si_type) {
+inline void fill_vec(List<StreamerInfo>& a_infos,const std::string& a_type,streamer_info::Type a_si_type) {
   unsigned int check = 196608;
   StreamerInfo* info = new StreamerInfo(std::string("vector<")+a_type+">",4,check);
   a_infos.push_back(info);

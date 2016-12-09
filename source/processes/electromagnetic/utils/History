@@ -1,4 +1,4 @@
-$Id: History 97742 2016-06-08 09:24:54Z gcosmo $
+$Id: History 101681 2016-11-21 09:33:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19 November 16: V.Ivant (emutils-V10-02-38)
+- G4EmParametersMessenger - fixed typo 
+
+09 November 16: V.Ivant (emutils-V10-02-37)
+- G4VAtomDeexcitation - fixed initialisation of de-excitation 
+    module per G4Region
+
+18 October 16: V.Ivant (emutils-V10-02-36)
+- G4EmCorrections, G4ionEffectiveCharge - use more safe name
+    for G4Pow pointer 
+
+18 October 16: V.Ivant (emutils-V10-02-35)
+- G4EmParameters - max energy back to 100 TeV
+- G4EmSaturation - cleanup; make it thread safe; default 
+    printout level set to 1 
+
+07 October 16: V.Ivant (emutils-V10-02-34)
+- G4EmParameters - reduce max energy back to 10 TeV
+
+20 September 16: V.Ivant (emutils-V10-02-33)
+- G4EmParameters - added private method Initialise() additionally 
+    to SetDefaults() to provide more safe initialisation of 
+    custom EM physics lists
+
+15 September 16: M.Asai (emutils-V10-02-32)
+- G4EmParameters - accept changes during the G4State_Init state.
+
+06 September 16: V.Ivant (emutils-V10-02-31)
+- fixed compillation warning and test crash 
+
+06 September 16: V.Ivant (emutils-V10-02-29)
+- G4EmSaturation - make it thread safe, added data for G4_PbWO4,
+   fixed data for G4_lAr using recent report from ATLAS, run time 
+   methods are now "const" 
+- G4EmParameters, G4EmParametersMessenger - added interface and UI 
+    command to enable thread safe built-in Birks saturation 
+    corrections, added access to G4EmSaturation, set by default 
+    Gaussian nuclear form-factor
+- G4LossTableManager - changed initialisation of G4EmSaturation
+
+27 August 16: V.Ivant (emutils-V10-02-28)
+- G4AtomicDeexcitation, G4EmParameters, G4EmParametersMessenger 
+    improved initialisation per region
+
+15 July 16: V.Ivant (emutils-V10-02-27)
+- G4EmBiasingManager - fixed PVS-Studio warning (A.Karpov)
+
+15 July 16: V.Ivant (emutils-V10-02-26)
+- G4EmParameters, G4EmParametersMessenger - added new methods and 
+    UI command to define optional EM physics per region
+
+16 July 16: V.Ivant (emutils-V10-02-25)
+13 July 16: V.Ivant (emutils-V10-02-24)
+- G4EmParameters, G4VEmProcess, G4VEnergyLossProcess - default upper
+    energy limits are extended from 10 TeV to 100 TeV of bins
+    per decade is unchanged
 
 07 June 16: V.Ivant (emutils-V10-02-23)
 - G4LossTableManager - removed debug printout

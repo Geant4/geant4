@@ -38,6 +38,7 @@
 #include "HistoManager.hh"
 
 #include "G4RunManager.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -107,7 +108,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
  
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {   
     //local cumulation is required before scoring once
     fTrackLength =  fTrackLength + tracklen;
@@ -123,7 +126,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //
 
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {  
    G4double pr = (track->GetPosition())*
                  (fPrimary->GetParticleGun()->GetParticleMomentumDirection());
@@ -138,7 +143,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  //extract penetration range of primary particle
  //
  if (track->GetDefinition()->GetPDGCharge() >= 0 
-     && track->GetDefinition()->GetPDGMass() > 0) 
+     && track->GetDefinition()->GetPDGMass() > 0
+     && track->GetDefinition() != G4Positron::PositronDefinition() 
+    ) 
  {    
    G4double pene = std::sqrt((track->GetPosition())*(track->GetPosition()));
    

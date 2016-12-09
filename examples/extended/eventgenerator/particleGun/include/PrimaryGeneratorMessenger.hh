@@ -26,7 +26,7 @@
 /// \file eventgenerator/particleGun/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
 //
-// $Id: PrimaryGeneratorMessenger.hh 68024 2013-03-13 13:42:01Z gcosmo $
+// $Id: PrimaryGeneratorMessenger.hh 98734 2016-08-09 10:53:12Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,7 +52,7 @@ class PrimaryGeneratorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    PrimaryGeneratorAction* Action;
+    PrimaryGeneratorAction* fAction;
     
     G4UIdirectory*        fDir;       
     G4UIcmdWithAnInteger* fSelectActionCmd;

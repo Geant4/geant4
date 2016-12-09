@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4MaterialPropertiesTable.cc 99765 2016-10-05 08:49:47Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -79,19 +79,20 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
 // Methods
 ////////////
 
-G4double G4MaterialPropertiesTable::GetConstProperty(const char *key)
+G4double G4MaterialPropertiesTable::GetConstProperty(const char *key) const
 {
   // Returns the constant material property corresponding to a key
 
   MPTCiterator j;
   j = MPTC.find(G4String(key));
   if ( j != MPTC.end() ) return j->second;
+  G4cout << "key: " << G4String(key) << G4endl;
   G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
               FatalException, "Constant Material Property not found.");
   return 0.;
 }
 
-G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key)
+G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key) const
 {
   // Returns true if a const property 'key' exists
 

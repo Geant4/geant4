@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.cc 82853 2014-07-14 09:07:11Z gcosmo $
+// $Id: LXeDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -271,7 +271,7 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
   fExperimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),
                               fExperimentalHall_log,"expHall",0,false,0);
 
-  fExperimentalHall_log->SetVisAttributes(G4VisAttributes::Invisible);
+  fExperimentalHall_log->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   //Place the main volume
   if(fMainVolumeOn){
@@ -332,7 +332,7 @@ void LXeDetectorConstruction::ConstructSDandField() {
     pmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
     pmt_SD->SetPmtPositions(fMainVolume->GetPmtPositions());
   }
-
+  G4SDManager::GetSDMpointer()->AddNewDetector(fPmt_SD.Get());
   //sensitive detector is not actually on the photocathode.
   //processHits gets done manually by the stepping action.
   //It is used to detect when photons hit and get absorbed&detected at the
@@ -350,6 +350,7 @@ void LXeDetectorConstruction::ConstructSDandField() {
     LXeScintSD* scint_SD = new LXeScintSD("/LXeDet/scintSD");
     fScint_SD.Put(scint_SD);
   }
+  G4SDManager::GetSDMpointer()->AddNewDetector(fScint_SD.Get());
   SetSensitiveDetector(fMainVolume->GetLogScint(), fScint_SD.Get());
 }
 

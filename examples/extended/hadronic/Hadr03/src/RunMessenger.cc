@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/RunMessenger.cc
+/// \file RunMessenger.cc
 /// \brief Implementation of the RunMessenger class
 //
 // $Id: RunMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $

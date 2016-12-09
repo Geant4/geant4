@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05DetectorConstruction.hh 69764 2013-05-14 09:59:36Z gcosmo $
+// $Id: RE05DetectorConstruction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05DetectorConstruction.hh
 /// \brief Definition of the RE05DetectorConstruction class
@@ -54,18 +54,11 @@ class RE05DetectorConstruction : public G4VUserDetectorConstruction
 
 #include "RE05DetectorParameterDef.hh"
 
-  G4Material* Air;
-  G4Material* Ar;
-  G4Material* Silicon;
-  G4Material* Scinti;
-  G4Material* Lead;
-
-  G4Element* H;
-  G4Element* C;
-  G4Element* N;
-  G4Element* O;
-
+  G4Material* fAir;
+  G4Material* fAr;
+  G4Material* fSilicon;
+  G4Material* fScinti;
+  G4Material* fLead;
 };
 
 #endif
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPartialDetectorConstruction.hh 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomPartialDetectorConstruction.hh 101109 2016-11-07 08:14:53Z gcosmo $
 //
 /// \file medical/DICOM/include/DicomPartialDetectorConstruction.hh
 /// \brief Definition of the DicomPartialDetectorConstruction class
@@ -40,13 +40,6 @@ class G4PartialPhantomParameterisation;
 class G4LogicalVolume;
 class G4Material;
 
-
-struct matInfo 
-{
-  G4double sumdens;
-  G4int nvoxels;
-  G4int id;
-};
 
 /// Construct a DICOM Geant4 geometry produced from the intersetion
 ///  of a DICOM file and a volume

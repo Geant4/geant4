@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05TrackingAction.hh 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05TrackingAction.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05TrackingAction.hh
 /// \brief Definition of the RE05TrackingAction class
@@ -34,15 +34,13 @@
 
 #include "G4UserTrackingAction.hh"
 
-
 class RE05TrackingAction : public G4UserTrackingAction {
 
   public:
-    RE05TrackingAction(){};
-    virtual ~RE05TrackingAction(){};
+    RE05TrackingAction() : G4UserTrackingAction() {}
+    virtual ~RE05TrackingAction() {}
    
     virtual void PreUserTrackingAction(const G4Track*);
-
 };
 
 #endif

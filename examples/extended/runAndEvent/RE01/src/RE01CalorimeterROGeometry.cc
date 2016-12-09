@@ -26,7 +26,7 @@
 /// \file runAndEvent/RE01/src/RE01CalorimeterROGeometry.cc
 /// \brief Implementation of the RE01CalorimeterROGeometry class
 //
-// $Id: RE01CalorimeterROGeometry.cc 97383 2016-06-02 09:56:35Z gcosmo $
+// $Id: RE01CalorimeterROGeometry.cc 101677 2016-11-21 09:26:55Z gcosmo $
 //
 
 #include "RE01CalorimeterROGeometry.hh"
@@ -110,6 +110,7 @@ void RE01CalorimeterROGeometry::ConstructSD()
   //------------------------------------------------------------------
   G4String calorimeterSDname = "/mydet/calorimeter";
   RE01CalorimeterSD * calorimeterSD = new RE01CalorimeterSD(calorimeterSDname);
+  G4SDManager::GetSDMpointer()->AddNewDetector(calorimeterSD);
   SetSensitiveDetector("caloROcellLogical", calorimeterSD);
 }
 

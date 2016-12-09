@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 68803 2013-04-05 13:59:55Z gcosmo $
+// $Id: PhysicsList.hh 101216 2016-11-09 13:54:13Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -62,13 +62,6 @@ public:
   virtual void ConstructParticle();
   virtual void ConstructProcess();    
 
-  virtual void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-  void SetCutForProton(G4double);
-        
   void AddPhysicsList(const G4String& name);
   void List();
   
@@ -77,11 +70,6 @@ private:
   void SetBuilderList0(G4bool flagHP = false);
   void SetBuilderList1(G4bool flagHP = false);
   void SetBuilderList2();
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
-  G4double fCutForProton;
 
   G4VPhysicsConstructor*  fEmPhysicsList;
   G4VPhysicsConstructor*  fParticleList;

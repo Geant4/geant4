@@ -217,9 +217,9 @@ public:
   }
 
   p2(const std::string& a_title,
-     const std::vector<TC>& aEdgesX,
-     const std::vector<TC>& aEdgesY)
-  :parent(a_title,aEdgesX,aEdgesY)
+     const std::vector<TC>& a_edges_x,
+     const std::vector<TC>& a_edges_y)
+  :parent(a_title,a_edges_x,a_edges_y)
   ,m_cut_v(false)
   ,m_min_v(0)
   ,m_max_v(0)
@@ -229,10 +229,10 @@ public:
   }
 
   p2(const std::string& a_title,
-     const std::vector<TC>& aEdgesX,
-     const std::vector<TC>& aEdgesY,
+     const std::vector<TC>& a_edges_x,
+     const std::vector<TC>& a_edges_y,
      TV aVmin,TV aVmax)
-  :parent(a_title,aEdgesX,aEdgesY)
+  :parent(a_title,a_edges_x,a_edges_y)
   ,m_cut_v(true)
   ,m_min_v(aVmin)
   ,m_max_v(aVmax)
@@ -272,8 +272,8 @@ public:
     m_max_v = 0;
     return true;
   }
-  bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY) {
-    if(!parent::configure(aEdgesX,aEdgesY)) return false;
+  bool configure(const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y) {
+    if(!parent::configure(a_edges_x,a_edges_y)) return false;
     m_bin_Svw.clear();
     m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);
@@ -294,8 +294,8 @@ public:
     m_max_v = aVmax;
     return true;
   }
-  bool configure(const std::vector<TC>& aEdgesX,const std::vector<TC>& aEdgesY,TV aVmin,TV aVmax) {
-    if(!parent::configure(aEdgesX,aEdgesY)) return false;
+  bool configure(const std::vector<TC>& a_edges_x,const std::vector<TC>& a_edges_y,TV aVmin,TV aVmax) {
+    if(!parent::configure(a_edges_x,a_edges_y)) return false;
     m_bin_Svw.clear();
     m_bin_Sv2w.clear();
     m_bin_Svw.resize(parent::m_bin_number,0);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundFragment.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4PreCompoundFragment.cc 100691 2016-10-31 11:26:25Z gcosmo $
 //
 // J. M. Quesada (August 2008).  
 // Based  on previous work by V. Lara
@@ -39,40 +39,14 @@
 #include "G4ChatterjeeCrossSection.hh"
 #include "Randomize.hh"
 
-// 10-Points Gauss-Legendre abcisas and weights
-const G4double G4PreCompoundFragment::ws[] = {
-    0.0666713443086881,
-    0.149451349150581,
-    0.219086362515982,
-    0.269266719309996,
-    0.295524224714753,
-    0.295524224714753,
-    0.269266719309996,
-    0.219086362515982,
-    0.149451349150581,
-    0.0666713443086881
-  };
-const G4double G4PreCompoundFragment::xs[] = {
-    -0.973906528517172,
-    -0.865063366688985,
-    -0.679409568299024,
-    -0.433395394129247,
-    -0.148874338981631,
-    0.148874338981631,
-    0.433395394129247,
-    0.679409568299024,
-    0.865063366688985,
-    0.973906528517172
-};
-
 G4PreCompoundFragment::G4PreCompoundFragment(const G4ParticleDefinition* p,
 					     G4VCoulombBarrier* aCoulBarrier)
   : G4VPreCompoundFragment(p, aCoulBarrier)
 {
   muu = probmax = 0.0;
-  index = 0;
-  if(1 == theZ) { index = theA; }
-  else { index = theA + 1; }
+  if(0 == theZ)      { index = 0; }
+  else if(1 == theZ) { index = theA; }
+  else               { index = theA + 1; }
 }
 
 G4PreCompoundFragment::~G4PreCompoundFragment()
@@ -85,23 +59,19 @@ CalcEmissionProbability(const G4Fragment & aFragment)
   // If  theCoulombBarrier effect is included in the emission probabilities
   // Coulomb barrier is the lower limit of integration over kinetic energy
 
-  G4double LowerLimit = theCoulombBarrier;
+  theEmissionProbability = 0.0;
 
-  if (theMaxKinEnergy <= LowerLimit) 
-    {
-      theEmissionProbability = 0.0;
-      return 0.0;
-    }    
+  if (theMaxKinEnergy <= theMinKinEnergy) { return 0.0; }    
 
   // compute power once
   if(OPTxs <= 2) { 
-    muu =  G4ChatterjeeCrossSection::ComputePowerParameter(theResA, index);
+    muu = G4ChatterjeeCrossSection::ComputePowerParameter(theResA, index);
   } else {
     muu = G4KalbachCrossSection::ComputePowerParameter(theResA, index);
   }
   
   theEmissionProbability = 
-    IntegrateEmissionProbability(LowerLimit,theMaxKinEnergy,aFragment);
+    IntegrateEmissionProbability(theMinKinEnergy,theMaxKinEnergy,aFragment);
   /*
   G4cout << "## G4PreCompoundFragment::CalcEmisProb "
          << "Z= " << aFragment.GetZ_asInt() 
@@ -118,20 +88,29 @@ G4double G4PreCompoundFragment::
 IntegrateEmissionProbability(G4double low, G4double up,
 			     const G4Fragment & aFragment)
 {  
-  G4double sum = 0.0;
-  G4double del = (up - low)*0.5;
-  G4double avr = (up + low)*0.5;
+  static const G4double den = 1.0/CLHEP::MeV;
+  G4double del = (up - low);
+  G4int nbins  = std::max(3,(G4int)(del*den));
+  del /= (G4double)nbins;
+  G4double e = low;
+  G4double y0 = ProbabilityDistributionFunction(e, aFragment);
+  probmax = y0;
+  //G4cout << "    0. e= " << low << "  y= " << y0 << G4endl;
 
-  G4double e, y;
-  probmax = 0.0;
-
-  for (G4int i=0; i<NPOINTSGL; ++i) {
-    e = del*xs[i] + avr;
-    y = ProbabilityDistributionFunction(e, aFragment);
+  G4double sum(0.0), ds(0.0), y;
+  for (G4int i=0; i<nbins; ++i) {
+    e += del;
+    y = ProbabilityDistributionFunction(e, aFragment); 
     probmax = std::max(probmax, y);
-    sum += ws[i]*y;
+    ds = y0 + y;
+    sum += ds;
+    if(ds < sum*0.01) { break; }
+    //G4cout << "   " << i << ". e= " << e << "  y= " << y << " sum= " << sum << G4endl;
+    y0 = y;
   }
-  return sum*del;
+  sum *= del*0.5;
+  //G4cout << "Evap prob: " << sum << " probmax= " << probmax << G4endl;
+  return sum;
 }
 
 G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
@@ -139,14 +118,16 @@ G4double G4PreCompoundFragment::CrossSection(G4double ekin) const
   G4double res;
   if(OPTxs == 0) { 
     res = GetOpt0(ekin);
+
   } else if(OPTxs <= 2) { 
-    res = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, theResA13, muu, 
-							index, theZ, 
-							theResZ, theResA); 
+    res = G4ChatterjeeCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
+							theResA13, muu, 
+							index, theZ, theResA); 
+
   } else { 
-    res = G4KalbachCrossSection::ComputeCrossSection(ekin, theResA13, muu,
-						     index, theZ, theA, 
-						     theResZ, theResA);
+    res = G4KalbachCrossSection::ComputeCrossSection(ekin, theCoulombBarrier, 
+						     theResA13, muu,
+						     index, theZ, theA, theResA);
   }
   return res;
 }  
@@ -162,19 +143,14 @@ G4double G4PreCompoundFragment::GetOpt0(G4double ekin) const
 
 G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment) 
 {
-  //let's keep this way for consistency with CalcEmissionProbability method
-  G4double limit = theCoulombBarrier; 
-
-  if(theMaxKinEnergy <= limit) { return 0.0; }
-
-  G4double delta = theMaxKinEnergy - limit;
+  G4double delta = theMaxKinEnergy - theMinKinEnergy;
   static const G4double toler = 1.25;
   probmax *= toler;
   G4double prob, T(0.0);
   CLHEP::HepRandomEngine* rndm = G4Random::getTheEngine();
   G4int i;
   for(i=0; i<100; ++i) {
-    T = limit + delta*rndm->flat();
+    T = theMinKinEnergy + delta*rndm->flat();
     prob = ProbabilityDistributionFunction(T, fragment);
     /*
     if(prob > probmax) { 
@@ -192,8 +168,11 @@ G4double G4PreCompoundFragment::SampleKineticEnergy(const G4Fragment& fragment)
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
     if(probmax*rndm->flat() <= prob) { break; }
   }
-  //G4cout << "G4PreCompoundFragment: i= " << i << "  T(MeV)= " << T 
-  //<< " Emin(MeV)= " << limit << " Emax= " << theMaxKinEnergy << G4endl;
+  /*
+  G4cout << "G4PreCompoundFragment: i= " << i << " Z= " << theZ << " A= " << theA 
+	 <<"  T(MeV)= " << T << " Emin(MeV)= " << theMinKinEnergy << " Emax= " 
+	 << theMaxKinEnergy << G4endl;
+  */
   return T;
 }
 

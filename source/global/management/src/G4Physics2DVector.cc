@@ -270,7 +270,7 @@ G4Physics2DVector::PutVectors(const std::vector<G4double>& vecX,
 
 // --------------------------------------------------------------
 
-void G4Physics2DVector::Store(std::ofstream& out)
+void G4Physics2DVector::Store(std::ofstream& out) const
 {
   // binning
   G4int prec = out.precision();

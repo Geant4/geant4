@@ -91,7 +91,7 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
   G4VPhysicalVolume * PhysicalMother =
     new G4PVPlacement(0, G4ThreeVector(),"Mother", LogicalMother, NULL, 0,0);
   
-  LogicalMother->SetVisAttributes(G4VisAttributes::Invisible);
+  LogicalMother->SetVisAttributes(G4VisAttributes::GetInvisible());
 
 
   //-------------------------------

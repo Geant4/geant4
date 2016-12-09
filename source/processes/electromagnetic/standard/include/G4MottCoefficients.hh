@@ -64,6 +64,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class G4Pow;
+
 class G4MottCoefficients
 {
 
@@ -80,12 +82,10 @@ private:
  	G4MottCoefficients & operator=(const  G4MottCoefficients &right) = delete;
   	G4MottCoefficients(const  G4MottCoefficients&) = delete;
 
-
+	G4Pow*          fG4pow;
 };
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-

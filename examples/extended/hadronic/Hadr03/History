@@ -1,4 +1,4 @@
-$Id: History 94619 2015-11-26 13:57:32Z gcosmo $
+$Id: History 99316 2016-09-13 09:53:31Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -14,13 +14,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+10-09-16 mma (exhadr03-V10-02-02)
+- change name : GammaPhysics --> GammaNuclearPhysics.
+
+15-08-16 mma (exhadr03-V10-02-01)
+- PhysicsList : rm G4HadronElasticPhysicsPHP  (not needed)
+
+28-07-16 mma (exhadr03-V10-02-00)
+- PhysicsList : add particleHP constructors
+
+04-07-16 I. Hrivnacova
+- Fixes for Doxygen documentation
+
 25-11-15 gum (exhadr03-V10-01-00)
 - fix G4HadronicProcess* hproc = dynamic_cast<G4HadronicProcess*>(process)
   in SteppingAction
 
 19-10-14 mma (exhadr03-V10-00-09)
 - cosmetic in envHadronic.csh
-	 
+
 14-10-14 mma (exhadr03-V10-00-08)
 - particleCount : corrections for MT
 	 

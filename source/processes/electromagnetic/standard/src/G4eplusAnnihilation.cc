@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc 68797 2013-04-05 13:27:11Z gcosmo $
+// $Id: G4eplusAnnihilation.cc 101249 2016-11-10 08:52:15Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -128,15 +128,18 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
 // Note : Effects due to binding of atomic electrons are negliged.
 {
   fParticleChange.InitializeForPostStep(aTrack);
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
-  G4double cosTeta = 2.*G4UniformRand()-1.; 
+  G4double cosTeta = 2.*rndmEngine->flat()-1.; 
   G4double sinTeta = sqrt((1.-cosTeta)*(1.0 + cosTeta));
-  G4double phi     = twopi * G4UniformRand();
+  G4double phi     = twopi * rndmEngine->flat();
   G4ThreeVector dir(sinTeta*cos(phi), sinTeta*sin(phi), cosTeta);
-  phi = twopi * G4UniformRand();
-  G4ThreeVector pol(cos(phi), sin(phi), 0.0);
+  phi = twopi * rndmEngine->flat();
+  G4double cosphi = cos(phi);
+  G4double sinphi = sin(phi);
+  G4ThreeVector pol(cosphi, sinphi, 0.0);
   pol.rotateUz(dir);
-  
+
   // e+ parameters
   G4double weight = aTrack.GetWeight();
   G4double time   = aTrack.GetGlobalTime();
@@ -152,7 +155,9 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
   pParticleChange->AddSecondary(track);
 
   dp = new G4DynamicParticle(theGamma,-dir, electron_mass_c2);
-  dp->SetPolarization(-pol.x(),-pol.y(),-pol.z()); 
+  pol.set(-sinphi, cosphi, 0.0);
+  pol.rotateUz(dir);
+  dp->SetPolarization(pol.x(),pol.y(),pol.z());
   track = new G4Track(dp, time, aTrack.GetPosition());
   track->SetTouchableHandle(aTrack.GetTouchableHandle());
   track->SetWeight(weight); 

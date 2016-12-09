@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -96,7 +96,7 @@ AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
 ee2hadr:   for  e+, integral: 1     SubType= 7  BuildTable= 0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         eeToHadrons :  Emin=        0 eV    Emax=       10 TeV
+         eeToHadrons :  Emin=        0 eV    Emax=      100 TeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -192,9 +192,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
  Number of process calls --->	GammaToMuPair : 5... write Root file : testem6_0.root - done
+... close Root file : testem6_0.root - done
 
 #
 /gun/particle e+
@@ -300,6 +301,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write Root file : testem6_1.root - done
+... close Root file : testem6_1.root - done
 
 #
 #/gun/particle anti_proton

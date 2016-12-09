@@ -107,7 +107,7 @@ namespace G4INCL {
     G4double refractionIndexRatio;
     G4bool internalReflection;
 
-    INCL_DECLARE_ALLOCATION_POOL(SurfaceAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(SurfaceAvatar)
   };
 
 }

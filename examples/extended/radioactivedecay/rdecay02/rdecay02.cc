@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/Hadr03.cc
-/// \brief Main program of the hadronic/Hadr03 example
+/// \file rdecay02.cc
+/// \brief Main program of the radioactivedecay/rdecay02 example
 //
 //
-// $Id: rdecay02.cc 88647 2015-03-03 11:06:49Z gcosmo $
+// $Id: rdecay02.cc 98257 2016-07-04 17:39:46Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

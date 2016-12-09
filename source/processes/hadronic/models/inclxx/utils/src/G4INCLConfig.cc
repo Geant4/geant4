@@ -107,13 +107,14 @@ namespace G4INCL {
     rngType = RanecuType;
     autosaveFrequency = 10000;
     maxNumberMultipions = -1;
-    crossSectionsString = "multipions";
-    crossSectionsType = MultiPionsCrossSections;
+    crossSectionsString = "multipions-resonances";
+    crossSectionsType = MultiPionsAndResonancesCrossSections;
     hadronizationTime = 0.;
 #ifdef INCL_ROOT_USE
     conciseROOTTree = false;
 #endif
     inverseKinematics = false;
+    decayTimeThreshold = 1.e-18;
   }
 
   std::string Config::summary() {

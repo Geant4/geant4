@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/HistoManager.hh
+/// \file medical/dna/wvalue/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
 //

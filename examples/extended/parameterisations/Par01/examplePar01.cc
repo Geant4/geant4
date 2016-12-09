@@ -23,12 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/examplePar01.cc
+/// \brief Main program of the Par01 example
 //
-// $Id: examplePar01.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: examplePar01.cc 101151 2016-11-08 08:06:16Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
-//      GEANT 4 - examplePar01
+//                     Geant4 - examplePar01
 // --------------------------------------------------------------
 // Comments
 //
@@ -36,27 +39,17 @@
 // i.e. "Fast Simulation"
 //-------------------------------------------------------------------
 
-//-------------------
-// Generator action:
-//-------------------
-#include "Par01PrimaryGeneratorAction.hh"
-
-//---------------------------
-// Parameterisation manager:
-//---------------------------
-#include "G4GlobalFastSimulationManager.hh"
-
-//------------
-// Geometries:
-//------------
+//---------------
+// -- Geometries:
+//---------------
 #include "Par01DetectorConstruction.hh"
 #include "Par01ParallelWorldForPion.hh"
 
-//-----------------------------------
-// Par01PhysicsList (makes use of the
-// G4ParameterisationManagerProcess):
-//-----------------------------------
-#include "Par01PhysicsList.hh"
+//---------------------------------------------------------------------
+// -- Physics list, and tool to modify it and activate fast simulation:
+//---------------------------------------------------------------------
+#include "FTFP_BERT.hh"
+#include "G4FastSimulationPhysics.hh"
 
 #include "G4UImanager.hh"
 #ifdef G4MULTITHREADED
@@ -64,6 +57,10 @@
 #else
 #include "G4RunManager.hh"
 #endif
+
+// ----------------------------------------------------------------
+// -- Action initialization (includes the primary generator action:
+// ----------------------------------------------------------------
 #include "Par01ActionInitialization.hh"
 
 #ifdef G4VIS_USE
@@ -73,6 +70,8 @@
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
@@ -92,16 +91,38 @@ int main(int argc, char** argv)
   G4cout<<"+-------------------------------------------------------+"<<G4endl;
 #endif
 
-  // Detector/mass geometry and parallel geometry(ies):
+  // -----------------------------------------------------
+  // -- Detector/mass geometry and parallel geometry(ies):
+  // -----------------------------------------------------
+  // -- Mass geometry (ie : standard geometry):
   G4VUserDetectorConstruction* detector = new Par01DetectorConstruction();
   // -- Parallel geometry for pion parameterisation
   detector->RegisterParallelWorld(new Par01ParallelWorldForPion("pionGhostWorld"));
-  // --  The name passed must be the same passed to the
-  // -- G4FastSimulationManagerProcess attached to the pions
+  // -- Passed to the run manager:
   runManager->SetUserInitialization(detector);
-  
-  // PhysicsList (including G4FastSimulationManagerProcess)
-  G4VUserPhysicsList* physicsList = new Par01PhysicsList;
+
+  // ----------------------------------------------
+  // -- PhysicsList and fast simulation activation:
+  // ----------------------------------------------
+  // -- Create a physics list (note : FTFP_BERT is a G4VModularPhysicsList
+  // -- which allows to use the subsequent G4FastSimulationPhysics tool to
+  // -- activate the fast simulation):
+  FTFP_BERT* physicsList = new FTFP_BERT;
+  // -- Create helper tool, used to activate the fast simulation:
+  G4FastSimulationPhysics* fastSimulationPhysics = new G4FastSimulationPhysics();
+  fastSimulationPhysics->BeVerbose();
+  // -- activation of fast simulation for particles having fast simulation models
+  // -- attached in the mass geometry:
+  fastSimulationPhysics->ActivateFastSimulation("e-");
+  fastSimulationPhysics->ActivateFastSimulation("e+");
+  fastSimulationPhysics->ActivateFastSimulation("gamma");
+  // -- activation of fast simulation for particles having fast simulation models
+  // -- attached in the parallel geometry:
+  fastSimulationPhysics->ActivateFastSimulation("pi+","pionGhostWorld");
+  fastSimulationPhysics->ActivateFastSimulation("pi-","pionGhostWorld");
+  // -- Attach the fast simulation physics constructor to the physics list:
+  physicsList->RegisterPhysics( fastSimulationPhysics );
+  // -- Finally passes the physics list to the run manager:
   runManager->SetUserInitialization(physicsList);
 
   //-------------------------------

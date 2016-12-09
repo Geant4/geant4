@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pythia6_common_address.c 72244 2013-07-12 08:49:56Z gcosmo $
+// $Id: pythia6_common_address.c 100687 2016-10-31 11:20:33Z gcosmo $
 //
 // According to pythia6_common_address.c provided in Root
 // Pythia6 distribution:
@@ -49,16 +49,14 @@
 # define type_of_call _stdcall
 #endif
 
-int pyjets[2+5*4000+2*2*5*4000];
-int pydat1[200+2*200+200+2*200];
-int pydat3[3*500+2*8000+2*8000+5*8000];  /* KNDCAY=8000 */
+extern int pyjets[2+5*4000+2*2*5*4000];
+extern int pydat1[200+2*200+200+2*200];
+extern int pydat3[3*500+2*8000+2*8000+5*8000];  /* KNDCAY=8000 */
 
-
-void *pythia6_common_address(const char* name)
+void* pythia6_common_address(const char* name)
 {
    if      (!strcmp(name,"PYJETS")) return pyjets;
    else if (!strcmp(name,"PYDAT1")) return pydat1;
    else if (!strcmp(name,"PYDAT3")) return pydat3;
    return 0;
 }
-

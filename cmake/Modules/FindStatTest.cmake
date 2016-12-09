@@ -1,3 +1,4 @@
+# Copied from Geant4 installation, need patch
 # - Find StatTest
 # This module tries to find the StatTest application
 # Once done this will define
@@ -13,7 +14,6 @@
 #
 #	STATTEST_ROOT_DIR	Root directory to StatTest package
 #
-
 #Search application
 #Note that the second suggested path is G4 specific... 
 find_path(STATTEST_APP_DIR
@@ -68,12 +68,13 @@ if(STATTEST_FOUND)
     #	   		                     G4TEST testname
     #                            CONFIG conffile
     #                            INPUT inputfile
-    #			                       [DEBUG]
+    #			         [DEBUG]
+    # 				 [TEXT]  #Input is text file instead of root
     #                            [REFERENCE reference]
     #                            [LABELS label1 label2 ...]
     #                            [IMG filename])
     function(STATTEST_ADD_TEST stattest)
-      CMAKE_PARSE_ARGUMENTS(ARG "DEBUG" 
+      CMAKE_PARSE_ARGUMENTS(ARG "DEBUG;TEXT" 
         "CONFIG;INPUT;REFERENCE;G4TEST;IMG"
         "LABELS" ${ARGN}
         )
@@ -99,7 +100,11 @@ if(STATTEST_FOUND)
         set(_command ${STATTEST_CMD} -g ${ARG_IMG})
       else()
         set(_command ${STATTEST_CMD})
-      endif() 
+      endif()
+ 
+     if(ARG_TEXT)
+	set(_command ${_command} "-T")
+     endif()	 
 
       #Mandatory parameters
       set(_command ${_command} ${ARG_CONFIG} ${ARG_INPUT})

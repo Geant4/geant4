@@ -15,6 +15,7 @@
 #include "normal"
 #include "separator"
 #include "tools"
+#include "nodekit"
 
 #include "../lina/vec3f"
 #include "../mnmx"
@@ -150,7 +151,8 @@ public:
       update_sg(a_action.out());
       reset_touched();
     }
-    m_group.pick(a_action);
+    //m_group.pick(a_action);
+    nodekit_pick(a_action,m_group,this);
   }
   virtual void search(search_action& a_action) {
     parent::search(a_action);
@@ -350,9 +352,9 @@ public:
   
       if(modeling==tick_modeling_hplot()) {
   
-        unsigned int num = m_sub_ticks.size()/4;
-        unsigned int pos = 0;
-        for(unsigned int index=0;index<num;index++) {
+        size_t num = m_sub_ticks.size()/4;
+        size_t pos = 0;
+        for(size_t index=0;index<num;index++) {
           float bx = m_sub_ticks[pos];pos++;
           float by = m_sub_ticks[pos];pos++;
           float ex = m_sub_ticks[pos];pos++;
@@ -433,8 +435,8 @@ public:
       vec3f Y = m_labels_style.y_orientation.value();
       X.normalize();
       Y.normalize();
-      vec3f Z = X.cross(Y);
-      Y = Z.cross (X);
+      vec3f Z;X.cross(Y,Z);
+      Z.cross(X,Y);
       mat4f scale_rot(X.v0(),Y.v0(),Z.v0(),0, //first row
                              X.v1(),Y.v1(),Z.v1(),0,
                              X.v2(),Y.v2(),Z.v2(),0,
@@ -631,18 +633,18 @@ public: //style
     m_mag_style = text_style();
     m_title_style = text_style();
 
-    m_line_style.color = colorf::black();
-    m_ticks_style.color = colorf::black();
+    m_line_style.color = colorf_black();
+    m_ticks_style.color = colorf_black();
 
-    m_labels_style.color = colorf::black();
+    m_labels_style.color = colorf_black();
     m_labels_style.font = font_hershey();
     m_labels_style.encoding = encoding_PAW();
 
-    m_mag_style.color = colorf::black();
+    m_mag_style.color = colorf_black();
     m_mag_style.font = font_hershey();
     m_mag_style.encoding = encoding_PAW();
 
-    m_title_style.color = colorf::black();
+    m_title_style.color = colorf_black();
     m_title_style.font = font_hershey();
     m_title_style.encoding = encoding_PAW();
   }
@@ -797,8 +799,7 @@ protected:
       else 
         pmag = startTick != 0.0 ? ffloor(flog10(ffabs(startTick))) : magxxx;
       
-      snpf(pstr,sizeof(pstr),
-           "%%1.%df",(int)tools::mx<float>((pmag-magxxx),0.0));
+      snpf(pstr,sizeof(pstr),"%%1.%df",(int)tools::mx<float>((pmag-magxxx),0.0));
       
       y = startTick;
       while (y <= mx*(1.0+NUM_FUZZ)) {
@@ -905,9 +906,9 @@ protected:
     }
   
     if(labels_enforced) {
-      unsigned int n = labels.size();
+      size_t n = labels.size();
       if(tick_num>n) {
-        for(unsigned int index=n;index<tick_num;index++) labels.add("");
+        for(size_t index=n;index<tick_num;index++) labels.add("");
       }
     } else {
       labels = tick_labels;
@@ -1013,7 +1014,7 @@ protected:
   
     float range = mx - mn;         
   
-    unsigned int tick_num = texts.size();
+    size_t tick_num = texts.size();
   
     // HPLOT stores the magnitude on the last label :
     magnitude.value(0);
@@ -1025,10 +1026,10 @@ protected:
       }
     }
   
-    tick_number.value(tick_num);
+    tick_number.value(uint32(tick_num));
     values.clear();
     coords.clear();
-    for(unsigned int index=0;index<tick_num;index++) {
+    for(size_t index=0;index<tick_num;index++) {
       float coord = (float)texts[index].fX;
       //NOTE : are we sure that val is in [mn,mx]
       float val = (coord/width.value()) * range + mn;
@@ -1037,25 +1038,25 @@ protected:
     }
   
     if(labels_enforced) {
-      unsigned int n = labels.size();
+      size_t n = labels.size();
       if(tick_num>n) {
-        for(unsigned int index=n;index<tick_num;index++) labels.add("");
+        for(size_t index=n;index<tick_num;index++) labels.add("");
       }
     } else {
       labels.clear();
-      for(unsigned int index=0;index<tick_num;index++) {
+      for(size_t index=0;index<tick_num;index++) {
         labels.add(texts[index].fString);
       }
     }
    
    {sub_coords.clear();
-    unsigned int num = m_sub_ticks.size()/4;
-    unsigned int pos = 0;
-    for(unsigned int index=0;index<num;index++) {
+    size_t num = m_sub_ticks.size()/4;
+    size_t pos = 0;
+    for(size_t index=0;index<num;index++) {
       float coord = m_sub_ticks[pos];
       pos += 4;
       bool found = false;
-      for(unsigned int i=0;i<tick_num;i++) {
+      for(size_t i=0;i<tick_num;i++) {
         if((float)texts[i].fX==coord) {
           found = true;
           break;

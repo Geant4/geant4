@@ -32,32 +32,14 @@
 // Class description:
 //
 // Helper class to facilitate calculation of the extent of a solid
-// within the limits defined by the G4VoxelLimits object.
+// within the limits defined by a G4VoxelLimits object.
 //
 // The function CalculateExtent() of a particular solid can create
 // a G4BoundingEnvelope object that bounds the solid and then call
 // CalculateExtent() of the G4BoundingEnvelope object.
 //
-// Calculation of the extent by G4BoundingEnvelope takes into account
-// special parameter "delta" - width of an imagery layer that envelops
-// the object. This value, multiplied by max scale factor, is added
-// to the voxel limits during calculation of the extent.
-//
-// Example of use. 
-// In case of G4Box, max possible distance of a point to the border
-// of the box, where the point is still considered as belonging to 
-// the surface of the box, is sqrt(0.5)*kCarTolerance (see corner).
-// So, it will be safe to set the extension = kCarTolerance.
-//
-// Alternative solution can be to define G4BoundingEnvelope wide
-// enough to include the surface of the solid and set delta = 0. 
-//
-// The class supports the following bouding envelopes:
-// - axis aligned bounding box (AABB);
-// - bounding prism given by two convex polygonal bases;
-// - bounding pyramid given by apex and convex polygonal base;
-// - set of bounding prisms, given by a sequence of convex
-//   polygonal bases;
+// Calculation of extent uses G4Transform3D, thus takes into account
+// scaling and reflection, if any.
 
 // History:
 //
@@ -84,98 +66,88 @@ class G4BoundingEnvelope
 {
   public:
 
-    G4BoundingEnvelope(const G4ThreeVector& pMin, 
-                       const G4ThreeVector& pMax, G4double delta);
+    G4BoundingEnvelope(const G4ThreeVector& pMin,
+                       const G4ThreeVector& pMax);
       // Constructor from an axis aligned bounding box (AABB)
 
-    G4BoundingEnvelope(const G4ThreeVectorList& baseA,
-                       const G4ThreeVectorList& baseB, G4double delta);
-      // Constructor from a prism given by two bases, the bases
-      // should have equal number of vertices
-
-    G4BoundingEnvelope(const G4ThreeVector& apex,
-                       const G4ThreeVectorList& base, G4double delta);
-      // Constructor from a pyramid given by apex and base
-
-    G4BoundingEnvelope(const std::vector<G4ThreeVectorList*>& polygons,
-                       G4double delta);
+    G4BoundingEnvelope(const std::vector<const G4ThreeVectorList*>& polygons);
       // Constructor from a sequence of convex polygons, the polygons
       // should have equal numbers of vertices except first and last
       // polygons which may consist of a single vertex
 
-    G4BoundingEnvelope(const G4BoundingEnvelope& rhs);
-      // Copy constructor
-
-    G4BoundingEnvelope& operator=(const G4BoundingEnvelope& rhs);
-      // Assignment operator
+    G4BoundingEnvelope(const G4ThreeVector& pMin, 
+                       const G4ThreeVector& pMax,
+                       const std::vector<const G4ThreeVectorList*>& polygons);
+      // Constructor from AABB and a sequence of polygons
 
     ~G4BoundingEnvelope();
       // Destructor
+
+    G4bool BoundingBoxVsVoxelLimits(const EAxis pAxis,
+                                    const G4VoxelLimits& pVoxelLimits,
+                                    const G4Transform3D& pTransform3D,
+                                    G4double& pMin, G4double& pMax) const;
+      // Analyse the position of the bounding box relative to the voxel.
+      // It returns "true" in the case where the value of the extent can be
+      // figured out directly from the dimensions of the bounding box, or
+      // it is clear that the bounding box and the voxel do not intersect.
+      // The reply "false" means that further calculations are needed.
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimits,
                            const G4Transform3D& pTransform3D,
                            G4double& pMin, G4double& pMax) const;
-      // Calculate extent of the envelope
+      // Calculate extent of the bounding envelope
 
   private:
 
-    void SetDelta(G4double delta);
-      // Set the extension
+    void CheckBoundingBox();
+      // Check correctness of the AABB (axis aligned bounding box)
 
-    void SetBoundingBox(const G4ThreeVector& pMin,
-                        const G4ThreeVector& pMax);
-      // Set AABB (axis aligned bounding box)
+    void CheckBoundingPolygons();
+      // Check correctness of the sequence of convex polygonal bases
 
-    void SetBoundingPrism(const G4ThreeVectorList& baseA,
-                          const G4ThreeVectorList& baseB);
-      // Set bounding prism
-
-    void SetBoundingPyramid(const G4ThreeVector& apex,
-                            const G4ThreeVectorList& base);
-      // Set bounding pyramid
-
-    void SetBoundingPolygons(const std::vector<G4ThreeVectorList*>& polygons);
-      // Set bounding sequence of convex polygons
-
-    void CleanPolygons();
-      // Free allocated memory
-
-    G4VoxelLimits GetAdjustedVoxelLimits(const G4VoxelLimits& pVoxelLimits,
-                                         G4double pDelta) const;
-      // Extend voxel limits by scaled surface tolerance 
+    G4double FindScaleFactor(const G4Transform3D& pTransform3D) const;
+      // Find max scale factor of the transformation
 
     void TransformVertices(const G4Transform3D& pTransform3D,
-                           const G4Polygon3D& polyA,
-                                 G4Polygon3D& polyB,
-                                 G4Segment3D& pAABB) const;
-      // Transform vertices of a polygon and update AABB (bounding box)
+                                 std::vector<G4Polygon3D*>& pBases) const;
+      // Create list of transformed polygons
+
+    void GetPrismAABB(const G4Polygon3D& pBaseA,
+                      const G4Polygon3D& pBaseB,
+                            G4Segment3D& pAABB) const;
+      // Find bounding box of a prism
 
     void CreateListOfEdges(const G4Polygon3D& baseA,
                            const G4Polygon3D& baseB,
-                           std::vector<G4Segment3D>& pEdges) const;
+                                 std::vector<G4Segment3D>& pEdges) const;
       // Create list of edges of a prism
   
     void CreateListOfPlanes(const G4Polygon3D& baseA,
                             const G4Polygon3D& baseB,
-                            std::vector<G4Plane3D>& pPlanes) const;
+                                  std::vector<G4Plane3D>& pPlanes) const;
       // Create list of planes bounding a prism
 
-    G4bool ClipEdgesByVoxelLimits(const std::vector<G4Segment3D>& pEdges,
-                                  const G4VoxelLimits& pLimits,
-                                        G4Segment3D& pExtent) const;
+    G4bool ClipEdgesByVoxel(const std::vector<G4Segment3D>& pEdges,
+                            const G4VoxelLimits& pLimits,
+                                  G4Segment3D& pExtent) const;
       // Clip set of edges by G4VoxelLimits
 
-    void ClipVoxelLimitsByPlanes(const G4VoxelLimits& pLimits,
-                                 const std::vector<G4Plane3D>& pPlanes,
-                                 const G4Segment3D& pAABB,
-                                       G4Segment3D& pExtent) const;
-      // Clip G4VoxelLimits by set of planes bounding a convex prism
+    void ClipVoxelByPlanes(G4int pBits,
+                           const G4VoxelLimits& pLimits,
+                           const std::vector<G4Plane3D>& pPlanes,
+                           const G4Segment3D& pAABB,
+                                 G4Segment3D& pExtent) const;
+      // Clip G4VoxelLimits by set of planes bounding a prism
 
   private:
 
-    G4double fDelta;                  // extention
-    std::vector<G4Polygon3D*> fBases; // sequence of polygonal bases
+    G4ThreeVector fMin, fMax; 
+      // original bounding box
+
+    const std::vector<const G4ThreeVectorList*>* fPolygons;
+      // ref to original sequence of polygonal bases
 };
 
 #endif // G4BOUNDINGENVELOPE_HH

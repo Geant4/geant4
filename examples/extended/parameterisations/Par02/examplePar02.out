@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -25,16 +25,6 @@ Geometry loaded from  file .......Par02FullDetector.gdml
 
 tracker !!!
 
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
 ecal !!!
 
 ecal !!!
@@ -44,12 +34,16 @@ ecal !!!
 ecal !!!
 
 ecal !!!
-Warning : Region <MuonEndCap_1> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
-Warning : Region <MuonEndCap_2> does not have specific production cuts,
-even though it appears in the current tracking world.
-Default cuts are used for this region.
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
 Warning : Region <MuonEndCap_3> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
@@ -78,6 +72,12 @@ Warning : Region <MuonForward_5> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Warning : Region <MuonForward_6> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonEndCap_1> does not have specific production cuts,
+even though it appears in the current tracking world.
+Default cuts are used for this region.
+Warning : Region <MuonEndCap_2> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.
 Instantiating Visualization Manager.......
@@ -112,14 +112,14 @@ Registered model factories:
   drawByCharge
   drawByOriginVolume
   drawByParticleID
-  drawByTouchedVolume
+  drawByEncounteredVolume
 
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
-  touchedVolumeFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -1133,5 +1133,6 @@ Magnetic field is active, fieldValue = (0 0 1 T ).
  ________Tracker model triggered _________
  ________Tracker model triggered _________
 ... write Root file : DefaultOutput.root - done
+... close Root file : DefaultOutput.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

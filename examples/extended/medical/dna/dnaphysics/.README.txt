@@ -22,7 +22,8 @@ These processes and models are further described at:
 http://geant4-dna.org
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication: \n
+cite the following Geant4-DNA collaboration publications: \n
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708 \n
 
 \section dnaphysics_s2 GEOMETRY SET-UP
@@ -58,7 +59,8 @@ To get visualization, make sure to uncomment the #/control/execute vis.mac
 \section dnaphysics_s5 PHYSICS
 
 This example shows:
-- how to use the Geant4-DNA processes, using the G4EmDNAPhysics constructor
+- how to use the Geant4-DNA processes, which are activated automatically at low energy,
+below the applicability range of G4EmStandardPhysics_option4 constructor
 (look at the PhysicsList.cc file)
 - how to count and save occurrences of processes
 (look at the SteppingAction.cc file)
@@ -72,6 +74,7 @@ The output results consists in a dna.root file, containing for each simulation s
 - the energy deposit along the current step (in eV)
 - the step length (in nm)
 - the total enery loss along the current step (in eV)
+- the event ID
 
 This file can be easily analyzed using for example the provided ROOT macro 
 file plot.C; to do so :
@@ -95,28 +98,29 @@ alpha+   : 5 \n
 helium   : 6 \n
 \n
 - processes: \n
-e-_G4DNAElastic			11 \n
-e-_G4DNAExcitation		12 \n
-e-_G4DNAIonisation		13 \n
-e-_G4DNAAttachment		14 \n
-e-_G4DNAVibExcitation		15 \n
-eCapture			16 \n \n
-proton_G4DNAExcitation		17 \n
-proton_G4DNAIonisation		18 \n
-proton_G4DNAChargeDecrease	19 \n \n
-hydrogen_G4DNAExcitation	20 \n
-hydrogen_G4DNAIonisation	21 \n
-hydrogen_G4DNAChargeIncrease	22 \n \n
-alpha_G4DNAExcitation		23 \n
-alpha_G4DNAIonisation		24 \n
-alpha_G4DNAChargeDecrease	25 \n \n
-alpha+_G4DNAExcitation		26 \n
-alpha+_G4DNAIonisation		27 \n
-alpha+_G4DNAChargeDecrease	28 \n
-alpha+_G4DNAChargeIncrease	29 \n \n
-helium_G4DNAExcitation		30 \n
-helium_G4DNAIonisation		31 \n
-helium_G4DNAChargeIncrease	32 \n \n
+Capture or e-_G4DNAElectronSolvation 	1 \n
+e-_G4DNAElastic				11 \n
+e-_G4DNAExcitation			12 \n
+e-_G4DNAIonisation			13 \n
+e-_G4DNAAttachment			14 \n
+e-_G4DNAVibExcitation			15 \n
+eCapture				16 \n \n
+proton_G4DNAExcitation			17 \n
+proton_G4DNAIonisation			18 \n
+proton_G4DNAChargeDecrease		19 \n \n
+hydrogen_G4DNAExcitation		20 \n
+hydrogen_G4DNAIonisation		21 \n
+hydrogen_G4DNAChargeIncrease		22 \n \n
+alpha_G4DNAExcitation			23 \n
+alpha_G4DNAIonisation			24 \n
+alpha_G4DNAChargeDecrease		25 \n \n
+alpha+_G4DNAExcitation			26 \n
+alpha+_G4DNAIonisation			27 \n
+alpha+_G4DNAChargeDecrease		28 \n
+alpha+_G4DNAChargeIncrease		29 \n \n
+helium_G4DNAExcitation			30 \n
+helium_G4DNAIonisation			31 \n
+helium_G4DNAChargeIncrease		32 \n \n
 \n
 ---------------------------------------------------------------------------
 

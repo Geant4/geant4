@@ -23,10 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/TestEm11.cc
-/// \brief Main program of the electromagnetic/TestEm11 example
+/// \file Hadr07.cc
+/// \brief Main program of the hadronic/Hadr07 example
 //
-// $Id: TestEm11.cc 94269 2015-11-10 07:55:24Z gcosmo $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

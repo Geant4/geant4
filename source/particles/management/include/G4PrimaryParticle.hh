@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.hh 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4PrimaryParticle.hh 99159 2016-09-07 08:11:50Z gcosmo $
 //
 //
 
@@ -136,6 +136,7 @@ class G4PrimaryParticle
   G4double GetPz() const;
   G4PrimaryParticle * GetNext() const;
   void SetNext(G4PrimaryParticle * np);
+  void ClearNext();
   G4PrimaryParticle * GetDaughter() const;
   void SetDaughter(G4PrimaryParticle * np);
   G4int GetTrackID() const;
@@ -299,6 +300,11 @@ inline void G4PrimaryParticle::SetNext(G4PrimaryParticle * np)
 { 
   if   (nextParticle == 0) { nextParticle = np; }
   else                     { nextParticle->SetNext(np); }
+}
+
+inline void G4PrimaryParticle::ClearNext()
+{
+  nextParticle = nullptr;
 }
 
 inline void G4PrimaryParticle::SetDaughter(G4PrimaryParticle * np)

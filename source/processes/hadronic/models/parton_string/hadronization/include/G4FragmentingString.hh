@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh 69569 2013-05-08 13:19:50Z gcosmo $
+// $Id: G4FragmentingString.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 
 #ifndef G4FragmentingString_h
@@ -48,7 +48,6 @@ class G4ExcitedString;
 
 class G4FragmentingString 
 {
-
   public:
      
       G4FragmentingString(const G4FragmentingString &right);
@@ -65,8 +64,7 @@ class G4FragmentingString
       int operator==(const G4FragmentingString &right) const;
 
       int operator!=(const G4FragmentingString &right) const;
-
-      
+     
       G4LorentzVector Get4Momentum() const;
 
       G4ThreeVector StablePt();
@@ -94,7 +92,6 @@ class G4FragmentingString
       G4bool    DecayIsQuark();
       G4bool    StableIsQuark();
       G4bool    FourQuarkString(void) const;
-
 
   private:
 
@@ -124,29 +121,26 @@ int G4FragmentingString::operator!=(const G4FragmentingString &right) const
 inline
 G4ParticleDefinition * G4FragmentingString::GetStableParton() const
 {
-     return  theStableParton;
+        return  theStableParton;
 }	
 
 inline
 G4ParticleDefinition * G4FragmentingString::GetDecayParton() const
 {
-     return  theDecayParton;
+        return  theDecayParton;
 }	
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetLeftParton(void) const
-    {
-    return LeftParton; 
-    }
+{
+        return LeftParton; 
+}
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetRightParton(void) const
-    {
-    return RightParton; 
-    }
-
-
+{
+        return RightParton; 
+}
 
 #endif
-
 

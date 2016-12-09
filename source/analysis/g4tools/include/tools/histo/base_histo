@@ -12,6 +12,7 @@
 
 #include <cmath>
 #include <map> //for annotations
+#include <ostream>
 
 namespace tools {
 namespace histo {
@@ -277,7 +278,7 @@ protected:
     return true;
   }
 
-  bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& aEdges) {
+  bool configure(dim_t a_dim,const std::vector< std::vector<TC> >& a_edges) {
     // Clear :
     parent::m_bin_entries.clear();
     parent::m_bin_Sw.clear();
@@ -304,7 +305,7 @@ protected:
     parent::m_axes.resize(a_dim);
     // Setup axes :
     for(dim_t iaxis=0;iaxis<a_dim;iaxis++) { 
-      if(!parent::m_axes[iaxis].configure(aEdges[iaxis])) {
+      if(!parent::m_axes[iaxis].configure(a_edges[iaxis])) {
         //m_axes.clear();
         return false;
       }
@@ -392,6 +393,17 @@ public: //annotations :
     return true;
   }
 
+  void set_annotations(const annotations_t& a_annotations) {parent::m_annotations = a_annotations;}
+
+  void hprint_annotations(std::ostream& a_out) {
+    a_out << " * ANNOTATIONS :" << std::endl;
+    annotations_t::const_iterator it;
+    for(it=parent::m_annotations.begin();it!=parent::m_annotations.end();++it) {
+    //out << " * (" << index << ") " 
+      a_out << " *  " << (*it).first << " = " << (*it).second << std::endl;
+    }
+  }
+
 protected:
   bool is_compatible(const base_histo& a_histo){
     if(parent::m_dimension!=a_histo.m_dimension) return false;
@@ -412,8 +424,9 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] += a_histo.m_bin_Sx2w[ibin][iaxis];
       }
     }
-   {dim_t nplane = parent::m_in_range_plane_Sxyw.size();
-    for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] += a_histo.m_in_range_plane_Sxyw[iplane];}
+   {size_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(size_t iplane=0;iplane<nplane;iplane++)
+      parent::m_in_range_plane_Sxyw[iplane] += a_histo.m_in_range_plane_Sxyw[iplane];}
     parent::update_fast_getters();
   }
 
@@ -527,8 +540,8 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] *= a_factor;
       }
     }
-   {dim_t nplane = parent::m_in_range_plane_Sxyw.size();
-    for(dim_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] *= a_factor;}
+   {size_t nplane = parent::m_in_range_plane_Sxyw.size();
+    for(size_t iplane=0;iplane<nplane;iplane++) parent::m_in_range_plane_Sxyw[iplane] *= a_factor;}
     parent::update_fast_getters();
     return true;
   }

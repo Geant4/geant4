@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05Field.hh 68698 2013-04-05 08:41:22Z gcosmo $
+// $Id: RE05Field.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05Field.hh
 /// \brief Definition of the RE05Field class
@@ -45,9 +45,9 @@ class RE05Field : public G4MagneticField
                                double *Bfield ) const;
 
   private:
-    G4double Bz;
-    G4double rmax_sq;
-    G4double zmax;
+    G4double fBz;
+    G4double fRmax_sq;
+    G4double fZmax;
 };
 
 #endif

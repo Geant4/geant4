@@ -22,6 +22,9 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
+//
+/// \file channeling/include/ExExChParticleUserInfo.hh
+/// \brief Definition of the ExExChParticleUserInfo class
 // --------------------------------------------------------------
 //
 
@@ -76,7 +79,7 @@ public:
 
 private:
     
-    G4int bHasBeenUnderCoherentEffect;
+    G4int fHasBeenUnderCoherentEffect;
     //Has been in channeling in the last step
 
     G4double fNucleiDensity;

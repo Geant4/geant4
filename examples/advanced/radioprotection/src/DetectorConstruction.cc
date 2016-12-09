@@ -144,7 +144,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
  G4LogicalVolume* logical_world = new G4LogicalVolume(world, vacuum, "world_log", 0,0,0);
 
  //set the logical world volume invisible
- logical_world -> SetVisAttributes(G4VisAttributes::Invisible);
+ logical_world -> SetVisAttributes(G4VisAttributes::GetInvisible());
 
  G4VPhysicalVolume* physical_world = new G4PVPlacement(0,
 						       G4ThreeVector(),
@@ -306,7 +306,7 @@ new G4PVPlacement(0, G4ThreeVector(-245*um,0,DiaVol_z - heightOfTheTube3 - Bdl_z
 	G4VisAttributes vis_SV(G4Colour(198, 226, 255));
 	vis_SV.SetForceSolid(true);
 	logical_SV -> SetVisAttributes(vis_SV);
-        logical_vacblock -> SetVisAttributes(G4VisAttributes::Invisible);		
+        logical_vacblock -> SetVisAttributes(G4VisAttributes::GetInvisible());		
 	logical_AlStrip -> SetVisAttributes(G4VisAttributes(G4Colour(0, 255, 255)));//cyan
 	
 	G4VisAttributes vis_GoldCylinder1(G4Colour(255, 255, 0));                    
@@ -328,5 +328,8 @@ return physical_world;
 void DetectorConstruction::ConstructSDandField()
 {
    SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", analysis);
+   G4SDManager::GetSDMpointer()->AddNewDetector(SD);
    SetSensitiveDetector("SV_log", SD);
+
+
 }

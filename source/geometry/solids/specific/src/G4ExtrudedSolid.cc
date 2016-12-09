@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 95956 2016-03-03 10:59:53Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 101118 2016-11-07 09:10:59Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -35,9 +35,13 @@
 // Author: Ivana Hrivnacova, IPN Orsay
 //
 // CHANGE HISTORY
-// --------------                                                                                                     
-// 02 March 2016,    E Tcherniaev, added CheckPolygon() to remove 
-//                   collinear and coincident points from polygon
+// --------------
+//
+// 21.10.2016 E.Tcherniaev: added Extent() and CalculateExtent(),
+//            used G4GeomTools::PolygonArea() to calculate area,
+//            replaced IsConvex() with G4GeomTools::IsConvex()
+// 02.03.2016 E.Tcherniaev: added CheckPolygon() to remove 
+//            collinear and coincident points from polygon
 // --------------------------------------------------------------------
 
 #include "G4ExtrudedSolid.hh"
@@ -48,6 +52,11 @@
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
+
+#include "G4GeomTools.hh"
+#include "G4VoxelLimits.hh"
+#include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4PhysicalConstants.hh"
@@ -101,7 +110,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
       G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
                   FatalErrorInArgument, message);
     }
-    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarToleranceHalf ) 
+    if ( std::fabs( zsections[i+1].fZ - zsections[i].fZ ) < kCarToleranceHalf )
     {
       std::ostringstream message;
       message << "Z-sections with the same z position are not supported - "
@@ -117,36 +126,35 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 
   // Remove collinear and coincident vertices, if any
   //
-  G4String removedVertices;
-  CheckPolygon(removedVertices);
-  if (fNv != G4int(polygon.size()))
+  std::vector<G4int> removedVertices;
+  G4GeomTools::RemoveRedundantVertices(fPolygon,removedVertices,
+                                       2*kCarTolerance);
+  if (removedVertices.size() != 0)
   {
+    G4int nremoved = removedVertices.size();
     std::ostringstream message;
-    message << "The following vertices have been removed from the polygon in "
-            << pName << G4endl
-            << "as collinear or coincident with other vertices: "
-            << removedVertices;
+    message << "The following "<< nremoved 
+            << " vertices have been removed from polygon in " << pName 
+            << "\nas collinear or coincident with other vertices: "
+            << removedVertices[0];
+    for (G4int i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
+
+  fNv = fPolygon.size();
   if (fNv < 3)
   {
     std::ostringstream message;
     message << "Number of vertices in polygon after removal < 3 - " << pName;
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
-		FatalErrorInArgument, message);
+                FatalErrorInArgument, message);
   }
 
   // Check if polygon vertices are defined clockwise
   // (the area is positive if polygon vertices are defined anti-clockwise)
   //
-  G4double area = 0.;
-  for (G4int i=fNv-1, k=0; k<fNv; i=k++)
-  {
-    area += fPolygon[i].x()*fPolygon[k].y() - fPolygon[k].x()*fPolygon[i].y();
-  }
-
-  if (area > 0.)
+  if (G4GeomTools::PolygonArea(fPolygon) > 0.)
   {   
     // Polygon vertices are defined anti-clockwise, we revert them
     // G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
@@ -167,7 +175,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0003",
                 FatalException, message);
   }
-  fIsConvex = IsConvex();
+  fIsConvex = G4GeomTools::IsConvex(fPolygon);
   
   ComputeProjectionParameters();
 }
@@ -175,7 +183,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
-                                  const std::vector<G4TwoVector>& polygon,       
+                                  const std::vector<G4TwoVector>& polygon,
                                         G4double dz,
                                   const G4TwoVector& off1, G4double scale1,
                                   const G4TwoVector& off2, G4double scale2 )
@@ -207,36 +215,35 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 
   // Remove collinear and coincident vertices, if any
   //
-  G4String removedVertices;
-  CheckPolygon(removedVertices);
-  if (fNv != G4int(polygon.size()))
+  std::vector<G4int> removedVertices;
+  G4GeomTools::RemoveRedundantVertices(fPolygon,removedVertices,
+                                       2*kCarTolerance);
+  if (removedVertices.size() != 0)
   {
+    G4int nremoved = removedVertices.size();
     std::ostringstream message;
-    message << "The following vertices have been removed from the polygon in "
-            << pName << G4endl
-            << "as collinear or coincident with other vertices: "
-            << removedVertices;
+    message << "The following "<< nremoved 
+            << " vertices have been removed from polygon in " << pName 
+            << "\nas collinear or coincident with other vertices: "
+            << removedVertices[0];
+    for (G4int i=1; i<nremoved; ++i) message << ", " << removedVertices[i];
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
                 JustWarning, message);
   }
+
+  fNv = fPolygon.size();
   if (fNv < 3)
   {
     std::ostringstream message;
     message << "Number of vertices in polygon after removal < 3 - " << pName;
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0002",
-		FatalErrorInArgument, message);
+                FatalErrorInArgument, message);
   }
 
   // Check if polygon vertices are defined clockwise
   // (the area is positive if polygon vertices are defined anti-clockwise)
   //  
-  G4double area = 0.;
-  for (G4int i=fNv-1, k=0; k<fNv; i=k++)
-  {
-    area += fPolygon[i].x()*fPolygon[k].y() - fPolygon[k].x()*fPolygon[i].y();
-  }
-
-  if (area > 0.)
+  if (G4GeomTools::PolygonArea(fPolygon) > 0.)
   {
     // Polygon vertices are defined anti-clockwise, we revert them
     // G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids1001",
@@ -258,7 +265,7 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
     G4Exception("G4ExtrudedSolid::G4ExtrudedSolid()", "GeomSolids0003",
                 FatalException, message);
   }
-  fIsConvex = IsConvex();
+  fIsConvex = G4GeomTools::IsConvex(fPolygon);
 
   ComputeProjectionParameters();
 }
@@ -314,93 +321,6 @@ G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs)
 G4ExtrudedSolid::~G4ExtrudedSolid()
 {
   // Destructor
-}
-
-//_____________________________________________________________________________
-
-void G4ExtrudedSolid::CheckPolygon(G4String & removedVertices)
-{ 
-  // Remove collinear and coincident vertices from 2D polygon
-
-  G4double delta = kCarTolerance; // dimension tolerance
-  G4double removeIt = kInfinity;  // special value to mark vertices for removal
-
-  // Main loop: check every three consecutive points, if the points 
-  // are collinear then mark middle point for removal
-  //
-  G4int icur, iprev=0, inext=0;
-  for (G4int i=0; i<fNv; ++i)
-  {
-    icur = i;
-
-    // Find index of previous point
-    for (G4int k=1; k<fNv+1; ++k)
-    {
-      iprev = icur - k;
-      if (iprev < 0) iprev += fNv;
-      if (fPolygon[iprev].x() != removeIt) break;
-    }
-
-    // Find index of next point
-    for (G4int k=1; k<fNv+1; ++k)
-    {
-      inext = icur + k;
-      if (inext >= fNv) inext -= fNv;
-      if (fPolygon[inext].x() != removeIt) break;
-    }
-
-    if (iprev == inext) break; // degenerate polygon, stop
-
-    // Calculate parameters of the triangle (iprev->icur->inext).
-    // If the triangle is too small or too narrow then
-    // mark current point for removal
-    G4TwoVector e1 = fPolygon[iprev] - fPolygon[icur];
-    G4TwoVector e2 = fPolygon[inext] - fPolygon[icur];
-
-    G4double leng1 = e1.mag();
-    G4double leng2 = e2.mag();
-    G4double leng3 = (e2-e1).mag();
-
-    G4double lmax = std::max(std::max(leng1,leng2),leng3);
-    G4double area = std::fabs(e1.x()*e2.y()-e1.y()*e2.x());
-
-    // Check length of edges, then check height of the triangle 
-    if (leng1 < delta || leng2 < delta || leng3 < delta)
-    {
-      fPolygon[icur].setX(removeIt);
-    }
-    else if (area/lmax < delta)
-    {
-      fPolygon[icur].setX(removeIt);
-    }
-  }
-
-  // Remove marked points
-  //
-  std::ostringstream message;
-  icur = 0;
-  for (G4int i=0; i<fNv; ++i)
-  {
-    if (fPolygon[i].x() != removeIt)
-    {
-      fPolygon[icur] = fPolygon[i];
-      icur++;
-    }
-    else
-    {
-      if (icur != i) message << ",";
-      message << i;
-    }
-  }
-
-  // Resize fPolygon, if required
-  //
-  if (icur != fNv)
-  {
-    fPolygon.resize(icur);
-    removedVertices = message.str();
-    fNv = icur;
-  }
 }
 
 //_____________________________________________________________________________
@@ -541,7 +461,7 @@ G4bool G4ExtrudedSolid::IsSameSide(const G4TwoVector& p1,
   // Return true if p1 and p2 are on the same side of the line through l1, l2 
 
   return   ( (p1.x() - l1.x()) * (l2.y() - l1.y())
-	 - (l2.x() - l1.x()) * (p1.y() - l1.y()) )
+         - (l2.x() - l1.x()) * (p1.y() - l1.y()) )
          * ( (p2.x() - l1.x()) * (l2.y() - l1.y())
          - (l2.x() - l1.x()) * (p2.y() - l1.y()) ) > 0;
 }       
@@ -615,7 +535,7 @@ G4ExtrudedSolid::MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const
   
   if ( cross.z() > 0.0 )
   {
-    // vertices ardered clock wise has to be reordered
+    // vertices ordered clock wise has to be reordered
 
     // G4cout << "G4ExtrudedSolid::MakeDownFacet: reordering vertices " 
     //        << ind1 << ", " << ind2 << ", " << ind3 << G4endl; 
@@ -803,8 +723,10 @@ G4bool G4ExtrudedSolid::MakeFacets()
                                             GetVertex(0, 2), ABSOLUTE) );
     if ( ! good ) { return false; }
 
-    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2), GetVertex(fNz-1, 1),
-                                            GetVertex(fNz-1, 0), ABSOLUTE) );
+    good = AddFacet( new G4TriangularFacet( GetVertex(fNz-1, 2),
+                                            GetVertex(fNz-1, 1),
+                                            GetVertex(fNz-1, 0),
+                                            ABSOLUTE) );
     if ( ! good ) { return false; }
     
     std::vector<G4int> triangle(3);
@@ -821,8 +743,10 @@ G4bool G4ExtrudedSolid::MakeFacets()
                                               ABSOLUTE) );
     if ( ! good ) { return false; }
 
-    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3), GetVertex(fNz-1, 2), 
-                                              GetVertex(fNz-1, 1), GetVertex(fNz-1, 0),
+    good = AddFacet( new G4QuadrangularFacet( GetVertex(fNz-1, 3),
+                                              GetVertex(fNz-1, 2), 
+                                              GetVertex(fNz-1, 1),
+                                              GetVertex(fNz-1, 0),
                                               ABSOLUTE) );
     if ( ! good ) { return false; }
 
@@ -862,27 +786,6 @@ G4bool G4ExtrudedSolid::MakeFacets()
 
   return good;
 }
-
-//_____________________________________________________________________________
-
-G4bool G4ExtrudedSolid::IsConvex() const
-{
-  // Get polygon convexity (polygon is convex if all vertex angles are < pi )
-
-  for ( G4int i=0; i< fNv; ++i )
-  {
-    G4int j = ( i + 1 ) % fNv;
-    G4int k = ( i + 2 ) % fNv;
-    G4TwoVector v1 = fPolygon[i]-fPolygon[j];
-    G4TwoVector v2 = fPolygon[k]-fPolygon[j];
-    G4double dphi = v2.phi() - v1.phi();
-    if ( dphi < 0. )  { dphi += 2.*pi; }
-    
-    if ( dphi >= pi ) { return false; }
-  }
-  
-  return true;
-}     
 
 //_____________________________________________________________________________
 
@@ -1001,6 +904,156 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p) const
   return G4TessellatedSolid::DistanceToOut(p);
 }
 
+///////////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4ExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double xmin0 = kInfinity, xmax0 = -kInfinity;
+  G4double ymin0 = kInfinity, ymax0 = -kInfinity;
+
+  for (G4int i=0; i<GetNofVertices(); ++i)
+  {
+    G4double x = fPolygon[i].x();
+    if (x < xmin0) xmin0 = x;
+    if (x > xmax0) xmax0 = x;
+    G4double y = fPolygon[i].y();
+    if (y < ymin0) ymin0 = y;
+    if (y > ymax0) ymax0 = y;
+  }
+
+  G4double xmin = kInfinity, xmax = -kInfinity;
+  G4double ymin = kInfinity, ymax = -kInfinity;
+
+  G4int nsect = GetNofZSections();
+  for (G4int i=0; i<nsect; ++i)
+  {
+    ZSection zsect = GetZSection(i);
+    G4double dx    = zsect.fOffset.x();
+    G4double dy    = zsect.fOffset.y();
+    G4double scale = zsect.fScale;
+    xmin = std::min(xmin,xmin0*scale+dx);
+    xmax = std::max(xmax,xmax0*scale+dx);
+    ymin = std::min(ymin,ymin0*scale+dy);
+    ymax = std::max(ymax,ymax0*scale+dy);
+  }
+
+  G4double zmin = GetZSection(0).fZ;
+  G4double zmax = GetZSection(nsect-1).fZ;
+
+  pMin.set(xmin,ymin,zmin);
+  pMax.set(xmax,ymax,zmax);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4ExtrudedSolid::Extent()",
+                "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
+                                 const G4VoxelLimits& pVoxelLimit,
+                                 const G4AffineTransform& pTransform,
+                                       G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // To find the extent, the base polygon is subdivided in triangles.
+  // The extent is calculated as cumulative extent of the parts
+  // formed by extrusion of the triangles
+  //
+  G4TwoVectorList triangles;
+  G4double eminlim = pVoxelLimit.GetMinExtent(pAxis);
+  G4double emaxlim = pVoxelLimit.GetMaxExtent(pAxis);
+
+  // triangulate the base polygon
+  if (!G4GeomTools::TriangulatePolygon(fPolygon,triangles))
+  {
+    std::ostringstream message;
+    message << "Triangulation of the base polygon has failed for solid: "
+            << GetName() << " !"
+            << "\nExtent has been calculated using boundary box";
+    G4Exception("G4ExtrudedSolid::CalculateExtent()",
+                "GeomMgt1002",JustWarning,message);
+    return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  }
+
+  // allocate vector lists
+  G4int nsect = GetNofZSections();
+  std::vector<const G4ThreeVectorList *> polygons;
+  polygons.resize(nsect);
+  for (G4int k=0; k<nsect; ++k) { polygons[k] = new G4ThreeVectorList(3); }
+
+  // main loop along triangles
+  pMin =  kInfinity;
+  pMax = -kInfinity;
+  G4int ntria = triangles.size()/3;
+  for (G4int i=0; i<ntria; ++i)
+  {
+    G4int i3 = i*3;
+    for (G4int k=0; k<nsect; ++k) // extrude triangle
+    {
+      ZSection zsect = GetZSection(k);
+      G4double z     = zsect.fZ;
+      G4double dx    = zsect.fOffset.x();
+      G4double dy    = zsect.fOffset.y();
+      G4double scale = zsect.fScale;
+
+      G4ThreeVectorList* ptr = const_cast<G4ThreeVectorList*>(polygons[k]);
+      G4ThreeVectorList::iterator iter = ptr->begin();
+      G4double x0 = triangles[i3+0].x()*scale+dx;
+      G4double y0 = triangles[i3+0].y()*scale+dy;
+      iter->set(x0,y0,z);
+      iter++;
+      G4double x1 = triangles[i3+1].x()*scale+dx;
+      G4double y1 = triangles[i3+1].y()*scale+dy;
+      iter->set(x1,y1,z);
+      iter++;
+      G4double x2 = triangles[i3+2].x()*scale+dx;
+      G4double y2 = triangles[i3+2].y()*scale+dy;
+      iter->set(x2,y2,z);
+    }
+
+    // set sub-envelope and adjust extent
+    G4double emin,emax;
+    G4BoundingEnvelope benv(polygons);
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
+    if (emin < pMin) pMin = emin;
+    if (emax > pMax) pMax = emax;
+    if (eminlim > pMin && emaxlim < pMax) break; // max possible extent
+  }
+  // free memory
+  for (G4int k=0; k<nsect; ++k) { delete polygons[k]; polygons[k]=0;}
+  return (pMin < pMax);
+}
+
 //_____________________________________________________________________________
 
 std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
@@ -1043,7 +1096,8 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
   for ( it = fTriangles.begin(); it != fTriangles.end(); it++ ) {
      std::vector<G4int> triangle = *it;
      os << std::setw(10) << counter++ 
-        << std::setw(10) << triangle[0] << std::setw(10)  << triangle[1]  << std::setw(10)  << triangle[2] 
+        << std::setw(10) << triangle[0] << std::setw(10)  << triangle[1]
+        << std::setw(10)  << triangle[2] 
         << G4endl;
   }          
 */

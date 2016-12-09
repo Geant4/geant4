@@ -1,4 +1,4 @@
-$Id: History 92318 2015-08-27 14:49:47Z gcosmo $
+$Id: History 98241 2016-07-04 16:56:59Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-07-16 I. Hrivnacova (analysisShared-V10-02-01)
+- Fixes for Doxygen documentation
+
+01-07-16 I. Hrivnacova (analysisShared-V10-02-00)
+- Coding guidelines (function names)
 
 27-08-15 I. Hrivnacova (analysisShared-V10-01-00)
 - Updated histogram ids in FillHiso (now starting from 0);

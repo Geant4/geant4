@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Para.hh 99509 2016-09-26 07:48:56Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -116,6 +116,8 @@ class G4Para : public G4CSGSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
@@ -157,11 +159,6 @@ class G4Para : public G4CSGSolid
     G4Para(const G4Para& rhs);
     G4Para& operator=(const G4Para& rhs); 
       // Copy constructor and assignment operator.
-
-  protected:  // without description
-
-    G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
 
   private:
 

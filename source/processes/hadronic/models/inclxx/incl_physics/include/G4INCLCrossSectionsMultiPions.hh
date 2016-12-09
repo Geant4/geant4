@@ -84,7 +84,45 @@ namespace G4INCL {
        * \return the slope of the angular distribution
        */
       virtual G4double calculateNNAngularSlope(G4double energyCM, G4int iso);
-
+	  
+      /// \brief Cross sections for mesonic resonance production - piN Channel
+      virtual G4double piNToEtaN(Particle const * const p1, Particle const * const p2);
+      virtual G4double piNToOmegaN(Particle const * const p1, Particle const * const p2);
+      virtual G4double piNToEtaPrimeN(Particle const * const p1, Particle const * const p2);
+			
+			   /// \brief Cross sections for mesonic resonance absorption on nucleon - pipiN Channel
+      virtual G4double etaNToPiPiN(Particle const * const p1, Particle const * const p2);			
+      virtual G4double omegaNToPiPiN(Particle const * const p1, Particle const * const p2);	  
+			
+      /// \brief Cross sections for mesonic resonance absorption on nucleon - piN Channel
+      virtual G4double etaNToPiN(Particle const * const p1, Particle const * const p2);
+      virtual G4double omegaNToPiN(Particle const * const p1, Particle const * const p2);
+      virtual G4double etaPrimeNToPiN(Particle const * const p1, Particle const * const p2);
+	  
+	     /// \brief Cross section for Eta production - NN entrance channel
+      virtual G4double NNToNNEta(Particle const * const particle1, Particle const * const particle2);
+			
+		   	/// \brief Cross section for Eta production  (exclusive) - NN entrance channel
+		   	virtual G4double NNToNNEtaExclu(Particle const * const particle1, Particle const * const particle2);
+	  
+		   	/// \brief Cross section for X pion production - NNEta Channel
+			   virtual G4double NNToNNEtaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+	  
+		   	/// \brief Cross section for N-Delta-Eta production - NNEta Channel
+		   	virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2);			
+	  
+      /// \brief Cross section for Eta production - NN entrance channel
+      virtual G4double NNToNNOmega(Particle const * const particle1, Particle const * const particle2);
+			
+      /// \brief Cross section for Eta production  (exclusive) - NN entrance channel
+      virtual G4double NNToNNOmegaExclu(Particle const * const particle1, Particle const * const particle2);
+	  
+      /// \brief Cross section for X pion production - NNEta Channel
+      virtual G4double NNToNNOmegaxPi(const G4int xpi, Particle const * const p1, Particle const * const p2);
+	  
+      /// \brief Cross section for N-Delta-Eta production - NNEta Channel
+      virtual G4double NNToNDeltaOmega(Particle const * const p1, Particle const * const p2);
+	  
     protected:
       /// \brief Maximum number of outgoing pions in NN collisions
       static const G4int nMaxPiNN;
@@ -174,13 +212,20 @@ namespace G4INCL {
       G4double piNIne(Particle const * const p1, Particle const * const p2);
       G4double piNTot(Particle const * const p1, Particle const * const p2);
       G4double piNTopiN(Particle const * const p1, Particle const * const p2);
-
+      G4double piPluspIne(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspIne(Particle const * const p1, Particle const * const p2);
+      G4double piPluspOnePi(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspOnePi(Particle const * const p1, Particle const * const p2);
+      G4double piPluspTwoPi(Particle const * const p1, Particle const * const p2);
+	  G4double piMinuspTwoPi(Particle const * const p1, Particle const * const p2);
+	  
       /// \brief Cross section for One (more) pion production - piN entrance channel
       virtual G4double piNOnePi(Particle const * const p1, Particle const * const p2);
-
+	  
       /// \brief Cross section for Two (more) pion production - piN entrance channel
       virtual G4double piNTwoPi(Particle const * const p1, Particle const * const p2);
-
+	  
+	  
   };
 }
 

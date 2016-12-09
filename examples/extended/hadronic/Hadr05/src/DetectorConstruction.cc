@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 // $Id: DetectorConstruction.cc 77210 2013-11-22 01:58:38Z adotti $
@@ -126,7 +126,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
          <<  "  ###" << G4endl;
 
   // colors
-  fLogicWorld->SetVisAttributes(G4VisAttributes::Invisible);
+  fLogicWorld->SetVisAttributes(G4VisAttributes::GetInvisible());
 
   G4VisAttributes* regCcolor = new G4VisAttributes(G4Colour(0., 0.3, 0.7));
   fLogicTarget->SetVisAttributes(regCcolor);

@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-November-2016 - G.Cosmo (externals-V10-02-11)
+- Updated to CLHEP-2.3.4.3.
+- CLHEP: fixed array initialisation in Evaluator static method function().
+
+08-July-2016 - G.Cosmo (externals-V10-02-10)
+- CLHEP: corrected value of SPECIALMUL in mixmax.h to correspond to exact
+  formula for N=17 (m=2^36+1).
+
 10-May-2016 - G.Cosmo (externals-V10-02-09)
 - Updated to CLHEP-2.3.3.0.
 - CLHEP: corrected check for counter range in MixMaxRng::getState().

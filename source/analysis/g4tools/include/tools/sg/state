@@ -147,7 +147,7 @@ public:
 public:
   void screen2ndc(int a_x,int a_y, //signed because of wall.
                   float& a_wcx,float& a_wcy,float& a_wcz,float& a_wcw) const {
-    // a proj point in near plan has (z,w) :
+    // a proj point in near plane has (z,w) :
     //   ortho -1,1   -> z/w = -1    and xy in [-1,1][-1,1]
     //   persp -n,n   -> z/w = -1    and xy in [-n,n][-n,n]
 

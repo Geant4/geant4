@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05MuonSD.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05MuonSD.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05MuonSD.cc
 /// \brief Implementation of the RE05MuonSD class
@@ -38,25 +38,35 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05MuonSD::RE05MuonSD(G4String name)
-:G4VSensitiveDetector(name)
+:G4VSensitiveDetector(name), 
+ fMuonCollection(0), fPositionResolution(0.)
 {
   G4String HCname;
   collectionName.insert(HCname="muonCollection");
-  positionResolution = 5*cm;
+  fPositionResolution = 5*cm;
 }
 
-RE05MuonSD::~RE05MuonSD(){;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RE05MuonSD::~RE05MuonSD()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05MuonSD::Initialize(G4HCofThisEvent*HCE)
 {
   static int HCID = -1;
-  muonCollection = new RE05MuonHitsCollection
+  fMuonCollection = new RE05MuonHitsCollection
                    (SensitiveDetectorName,collectionName[0]); 
   if(HCID<0)
   { HCID = GetCollectionID(0); }
-  HCE->AddHitsCollection(HCID,muonCollection);
+  HCE->AddHitsCollection(HCID,fMuonCollection);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool RE05MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
@@ -65,15 +75,15 @@ G4bool RE05MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   if(edep==0.) return true;
 
   RE05MuonHit* aHit;
-  int nHit = muonCollection->entries();
+  int nHit = fMuonCollection->entries();
   G4ThreeVector hitpos = aStep->GetPreStepPoint()->GetPosition();
   for(int i=0;i<nHit;i++)
   {
-    aHit = (*muonCollection)[i];
+    aHit = (*fMuonCollection)[i];
     G4ThreeVector pos = aHit->GetPos();
     G4double dist2 = sqr(pos.x()-hitpos.x())
                     +sqr(pos.y()-hitpos.y())+sqr(pos.z()-hitpos.z());
-    if(dist2<=sqr(positionResolution))
+    if(dist2<=sqr(fPositionResolution))
     aHit->AddEdep(edep);
     return true;
   }
@@ -81,23 +91,29 @@ G4bool RE05MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   aHit = new RE05MuonHit();
   aHit->SetEdep( edep );
   aHit->SetPos( aStep->GetPreStepPoint()->GetPosition() );
-  muonCollection->insert( aHit );
+  fMuonCollection->insert( aHit );
 
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE05MuonSD::EndOfEvent(G4HCofThisEvent*)
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05MuonSD::clear()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05MuonSD::DrawAll()
-{
-} 
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05MuonSD::PrintAll()
-{
-} 
+{} 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

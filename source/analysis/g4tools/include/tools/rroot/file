@@ -33,6 +33,7 @@ public:
     static const std::string s_v("tools::rroot::file");
     return s_v;
   }
+  virtual const std::string& s_cls() const {return s_class();}
 public: //ifile
   virtual const std::string& path() const {return m_path;}
 
@@ -115,7 +116,7 @@ public:
   ,m_file(not_open())
   ,m_bytes_read(0)
   ,m_root_directory(*this)
-  ,m_streamer_info_key(*this)
+  ,m_streamer_info_key(a_out)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
@@ -156,7 +157,7 @@ protected:
   :ifile(a_from)
   ,m_out(a_from.m_out)
   ,m_root_directory(*this)
-  ,m_streamer_info_key(*this)
+  ,m_streamer_info_key(a_from.m_out)
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -422,7 +423,7 @@ protected:
     char* buffer = new char[m_nbytes_info+1];
     if(!read_buffer(buffer,m_nbytes_info)) {delete [] buffer;return false;}
     char* buf = buffer;
-    if(!m_streamer_info_key.from_buffer(buffer+m_nbytes_info,buf)) {
+    if(!m_streamer_info_key.from_buffer(byte_swap(),buffer+m_nbytes_info,buf,m_verbose)) {
       delete [] buffer;
       return false;
     }

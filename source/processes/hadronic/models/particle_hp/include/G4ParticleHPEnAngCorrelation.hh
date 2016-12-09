@@ -60,6 +60,10 @@ class G4ParticleHPEnAngCorrelation
     fCache.Put( val );
     //theTotalMeanEnergy = -1.;
     fCache.Get().theTotalMeanEnergy = -1.;
+    targetMass = 0.0;
+    frameFlag = 0;
+    nProducts = 0;
+    bAdjustFinalState = true;
   }
   G4ParticleHPEnAngCorrelation(G4ParticleDefinition* proj)
     : theProjectile(proj)
@@ -70,6 +74,10 @@ class G4ParticleHPEnAngCorrelation
     fCache.Put( val );
     //theTotalMeanEnergy = -1.;
     fCache.Get().theTotalMeanEnergy = -1.;
+    targetMass = 0.0;
+    frameFlag = 0;
+    nProducts = 0;
+    bAdjustFinalState = true;
   }
 
   ~G4ParticleHPEnAngCorrelation()

@@ -1,4 +1,4 @@
-$Id: History 90338 2015-05-26 08:35:43Z gcosmo $
+$Id: History 101649 2016-11-21 08:44:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,19 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19,2016 A.Dotti  (LXe-V10-02-03)
+- explici set of SD to manager
+
+November 2, 2016 G.Folger (LXe-V10-02-02)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
+
+October 14, 2016 G.Folger (LXe-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+July 04, 2016 I. Hrivnacova (LXe-V10-02-00)
+- Fixes for Doxygen documentation
 
 May 22, 2015 P. Gumplinger (LXe-V10-01-00)
 - apply coding guideline 3.3

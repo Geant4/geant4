@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DecayPhysics.cc 71039 2013-06-10 09:23:55Z gcosmo $
+// $Id: G4DecayPhysics.cc 99983 2016-10-13 07:34:14Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -106,12 +106,13 @@ void G4DecayPhysics::ConstructProcess()
 
   // Add Decay Process
   fDecayProcess = new G4Decay();
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
   G4ParticleDefinition* particle=0;
 
-  while( (*aParticleIterator)() )
+  while( (*myParticleIterator)() )
   {
-    particle = aParticleIterator->value();
+    particle = myParticleIterator->value();
     if( fDecayProcess->IsApplicable(*particle) ) 
     { 
       if(verbose > 1) {

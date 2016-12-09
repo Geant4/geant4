@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66373 2012-12-18 09:41:34Z gcosmo $
+# $Id: GNUmakefile 99176 2016-09-07 09:46:36Z gcosmo $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -27,6 +27,7 @@ CPPFLAGS += -I$(G4BASE)/graphics_reps/include
 CPPFLAGS += -I$(G4BASE)/global/management/include
 CPPFLAGS += -I$(G4BASE)/global/HEPGeometry/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
+CPPFLAGS += -I$(G4BASE)/global/HEPNumerics/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/Boolean/include

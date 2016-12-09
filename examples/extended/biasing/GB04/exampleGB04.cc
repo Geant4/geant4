@@ -52,7 +52,6 @@
 #include "G4UIExecutive.hh"
 #endif
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 namespace {
@@ -66,7 +65,6 @@ namespace {
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 int main(int argc,char** argv)
 {
@@ -176,7 +174,6 @@ int main(int argc,char** argv)
       delete ui;
 #endif
     }
-
 
 #ifdef G4VIS_USE
   delete visManager;

@@ -5,6 +5,12 @@
                        Package History file
                        --------------------
 
+09 July 2016 - S. Incerti - tag wholeNuclearDNA-V10-02-01
+- Updated README
+
+04 July 2016 - I. Hrivnacova - tag wholeNuclearDNA-V10-02-00
+- Fixes for Doxygen documentation
+
 24 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-07
 - Add beamOn 2
 - Correct plot.C to handle mt mode

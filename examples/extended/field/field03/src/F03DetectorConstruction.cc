@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03DetectorConstruction class
 //
 //
-// $Id: F03DetectorConstruction.cc 77655 2013-11-27 08:51:59Z gcosmo $
+// $Id: F03DetectorConstruction.cc 101666 2016-11-21 09:12:08Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,6 +50,7 @@
 #include "G4PVPlacement.hh"
 #include "G4RunManager.hh"
 #include "G4AutoDelete.hh"
+#include "G4SDManager.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -435,6 +436,7 @@ void F03DetectorConstruction::ConstructSDandField()
     F03CalorimeterSD* calorimeterSD = new F03CalorimeterSD("CalorSD",this);
     fCalorimeterSD.Put(calorimeterSD);
   }  
+  G4SDManager::GetSDMpointer()->AddNewDetector(fCalorimeterSD.Get());
   SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
 
   // Construct the field creator - this will register the field it creates

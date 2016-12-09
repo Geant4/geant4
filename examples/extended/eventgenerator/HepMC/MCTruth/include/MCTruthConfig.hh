@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthConfig class
 //
 //
-// $Id: MCTruthConfig.hh 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: MCTruthConfig.hh 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -54,25 +54,25 @@ public:
 
   virtual ~MCTruthConfig();
 
-  void SetMinE(double e) {minE = e;}
-  G4double GetMinE() const {return minE;}
+  void SetMinE(double e) {fMinE = e;}
+  G4double GetMinE() const {return fMinE;}
 
-  void SetParticleTypes(std::vector<G4int>& types) {particleTypes = types;}
-  void AddParticleType(G4int type) {particleTypes.push_back(type);}
-  std::vector<G4int>& GetParticleTypes() {return particleTypes;}
+  void SetParticleTypes(std::vector<G4int>& types) {fParticleTypes = types;}
+  void AddParticleType(G4int type) {fParticleTypes.push_back(type);}
+  std::vector<G4int>& GetParticleTypes() {return fParticleTypes;}
 
   void SetCreatorProcesses(std::vector<G4String>& processes)
-       {creatorProcesses = processes;}
+       {fCreatorProcesses = processes;}
   void AddCreatorProcess(G4String& process)
-       {creatorProcesses.push_back(process);}
+       {fCreatorProcesses.push_back(process);}
   std::vector<G4String>& GetCreatorProcesses()
-       {return creatorProcesses;}
+       {return fCreatorProcesses;}
 
 private:
 
-  G4double minE;
-  std::vector<G4int> particleTypes;
-  std::vector<G4String> creatorProcesses;
+  G4double fMinE;
+  std::vector<G4int> fParticleTypes;
+  std::vector<G4String> fCreatorProcesses;
 
 };
 

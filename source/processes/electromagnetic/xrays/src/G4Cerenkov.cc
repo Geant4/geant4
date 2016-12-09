@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4Cerenkov.cc 98002 2016-06-30 13:03:36Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -97,7 +97,9 @@ G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VProcess(processName, type),
              fTrackSecondariesFirst(false),
              fMaxBetaChange(0.0),
-             fMaxPhotons(0)
+             fMaxPhotons(0),
+             fStackingFlag(true),
+             fNumPhotons(0)
 {
   SetProcessSubType(fCerenkov);
 
@@ -204,6 +206,8 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   // particle beta
   G4double beta = (pPreStepPoint->GetBeta() + pPostStepPoint->GetBeta())*0.5;
 
+  fNumPhotons = 0;
+
   G4double MeanNumberOfPhotons = 
                      GetAverageNumberOfPhotons(charge,beta,aMaterial,Rindex);
 
@@ -221,9 +225,9 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   MeanNumberOfPhotons = MeanNumberOfPhotons * step_length;
 
-  G4int NumPhotons = (G4int) G4Poisson(MeanNumberOfPhotons);
+  fNumPhotons = (G4int) G4Poisson(MeanNumberOfPhotons);
 
-  if (NumPhotons <= 0) {
+  if ( fNumPhotons <= 0 || !fStackingFlag ) {
 
      // return unchanged particle and no secondaries  
 
@@ -235,7 +239,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
   ////////////////////////////////////////////////////////////////
 
-  aParticleChange.SetNumberOfSecondaries(NumPhotons);
+  aParticleChange.SetNumberOfSecondaries(fNumPhotons);
 
   if (fTrackSecondariesFirst) {
      if (aTrack.GetTrackStatus() == fAlive )
@@ -263,7 +267,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   G4double MeanNumberOfPhotons2 =
                      GetAverageNumberOfPhotons(charge,beta2,aMaterial,Rindex);
 
-  for (G4int i = 0; i < NumPhotons; i++) {
+  for (G4int i = 0; i < fNumPhotons; i++) {
 
       // Determine photon energy
 

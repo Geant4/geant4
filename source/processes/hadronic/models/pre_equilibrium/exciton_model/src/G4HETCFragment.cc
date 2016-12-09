@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HETCFragment.cc 96527 2016-04-20 08:51:00Z gcosmo $
+// $Id: G4HETCFragment.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // by V. Lara
 //
@@ -96,8 +96,8 @@ IntegrateEmissionProbability(G4double & Low, G4double & Up,
   G4double Y = std::max(Up - Ab - Low, 0.0);
 
   G4double Probability = r2norm*GetSpinFactor()*theReducedMass*GetAlpha() 
-    *g4pow->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
-    *U*g4pow->powN(gb*Y,Nb)/g4pow->powN(ga*U,N);
+    *g4calc->Z23(theResA)*Pf*Hf*Nf*K(aFragment)*(X/Nb - Y/(Nb+1))
+    *U*g4calc->powN(gb*Y,Nb)/g4calc->powN(ga*U,N);
 
   return Probability;
 }

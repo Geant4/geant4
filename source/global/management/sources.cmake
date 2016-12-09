@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 95631 2016-02-17 08:02:06Z gcosmo $
+# $Id: sources.cmake 98864 2016-08-15 11:53:26Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -48,7 +48,6 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4GeometryTolerance.hh
         G4Log.hh
         G4LPhysicsFreeVector.hh
-        G4LPhysicsFreeVector.icc
         G4OrderedTable.hh
         G4PhysicalConstants.hh
         G4PhysicsFreeVector.hh
@@ -57,7 +56,6 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4PhysicsLogVector.hh
         G4PhysicsModelCatalog.hh
         G4PhysicsOrderedFreeVector.hh
-        G4PhysicsOrderedFreeVector.icc
         G4PhysicsTable.hh
         G4PhysicsTable.icc
         G4PhysicsVector.hh
@@ -114,7 +112,6 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4OrderedTable.cc
         G4PhysicsFreeVector.cc
         G4PhysicsLinearVector.cc
-        G4PhysicsLnVector.cc
         G4PhysicsLogVector.cc
         G4PhysicsModelCatalog.cc
         G4PhysicsOrderedFreeVector.cc

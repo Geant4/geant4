@@ -221,7 +221,7 @@ namespace G4INCL {
 
       ParticleList modified, created, modifiedAndCreated;
 
-      INCL_DECLARE_ALLOCATION_POOL(InteractionAvatar);
+      INCL_DECLARE_ALLOCATION_POOL(InteractionAvatar)
   };
 
 }

@@ -18,8 +18,14 @@ inline double pi()      {return 3.1415926535897931160E0;}
 inline double two_pi()  {return 6.2831853071795862320E0;}
 inline double half_pi() {return 1.5707963267948965580E0;}
 
-inline double deg2rad() {return pi()/180.0;}
-inline double rad2deg() {return 180.0/pi();}
+inline double deg2rad() {
+  static const double s_v = pi()/180.0;
+  return s_v;
+}
+inline double rad2deg() {
+  static const double s_v = 180.0/pi();
+  return s_v;
+}
 
 // for Lib/ExpFunc.
 inline bool in_domain_all(double){return true;}
@@ -34,8 +40,27 @@ inline bool in_domain_acos(double a_x){
   return true;
 }
 
+/*
+inline double angle_modulo(double a_angle) {
+  int64 div = a_angle/two_pi();
+  double rest = a_angle - div*two_pi();
+  if(rest<0) rest += two_pi();
+  return rest;
+}
+*/
+
 }
 
 //#include "power"
+
+#include <cmath>
+
+namespace tools {
+
+inline double dconj(const double& a_x) {return a_x;}
+inline double dfabs(const double& a_x) {return ::fabs(a_x);} //if passing a_fabs(const T&).
+inline double dsqrt(const double& a_x) {return ::sqrt(a_x);}
+
+}
 
 #endif

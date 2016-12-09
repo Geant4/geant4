@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalIntegratedDensityPlanar.cc
+/// \brief Implementation of the XCrystalIntegratedDensityPlanar class
+//
 
 #include "XCrystalIntegratedDensityPlanar.hh"
 

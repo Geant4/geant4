@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh 87695 2014-12-17 09:35:24Z gcosmo $
+// $Id: G4OpenGLViewer.hh 101714 2016-11-22 08:53:13Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -180,6 +180,8 @@ protected:
   void addExportImageFormat(std::string format);
   // add a image format to the available export format list
   G4bool isGl2psWriting();
+  G4bool isFramebufferReady();
+  
   void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                        GLint viewport[4]);
   // MESA implementation of gluPickMatrix

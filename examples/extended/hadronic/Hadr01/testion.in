@@ -12,8 +12,8 @@
 /testhadr/NumberDivZ       100
 /testhadr/PrintModulo      10
 #
-/testhadr/CutsAll          1 mm
-#/testhadr/Physics          QBBC
+/run/setCut                1 mm
+#/testhadr/Physics         QBBC
 #
 /run/initialize
 #

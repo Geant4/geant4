@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm11/include/Run.hh
+/// \file Run.hh
 /// \brief Definition of the Run class
 //
 // $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
@@ -82,11 +82,11 @@ private:
 
     G4int      fStatus[3];
     
-    G4double   fEdeposit[MaxAbsor], fEmin[MaxAbsor], fEmax[MaxAbsor];
+    G4double   fEdeposit[kMaxAbsor], fEmin[kMaxAbsor], fEmax[kMaxAbsor];
     G4double   fTotEdep[3];
 
     std::map<G4String,G4int>        fProcCounter;
-    std::map<G4String,ParticleData> fParticleDataMap[MaxAbsor];
+    std::map<G4String,ParticleData> fParticleDataMap[kMaxAbsor];
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

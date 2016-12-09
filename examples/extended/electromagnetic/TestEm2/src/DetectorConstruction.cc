@@ -27,7 +27,7 @@
 /// \brief Implementation of the DetectorConstruction class
 //
 // 
-// $Id: DetectorConstruction.cc 78550 2014-01-07 09:43:41Z gcosmo $
+// $Id: DetectorConstruction.cc 98761 2016-08-09 14:07:11Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -178,10 +178,10 @@ void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 void DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   fNLtot = (G4int)Value(0);
-  if (fNLtot > MaxBin) {
+  if (fNLtot > kMaxBin) {
     G4cout << "\n ---> warning from SetLBining: "
-           << fNLtot << " truncated to " << MaxBin << G4endl;
-    fNLtot = MaxBin;
+           << fNLtot << " truncated to " << kMaxBin << G4endl;
+    fNLtot = kMaxBin;
   }  
   fDLradl = Value(1);
   G4RunManager::GetRunManager()->ReinitializeGeometry();
@@ -192,10 +192,10 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
 void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   fNRtot = (G4int)Value(0);
-  if (fNRtot > MaxBin) {
+  if (fNRtot > kMaxBin) {
     G4cout << "\n ---> warning from SetRBining: "
-           << fNRtot << " truncated to " << MaxBin << G4endl;
-    fNRtot = MaxBin;
+           << fNRtot << " truncated to " << kMaxBin << G4endl;
+    fNRtot = kMaxBin;
   }    
   fDRradl = Value(1);
   G4RunManager::GetRunManager()->ReinitializeGeometry();

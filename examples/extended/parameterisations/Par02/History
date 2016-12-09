@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-10-16 G.Folger                                 (expar02-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
 04-Mar-2016 A. Ribon                        (expar02-V10-02-00)
 - Added magnetic field, and corrected the way to create a G4FieldTrack
   object in Par02FastSimModelTracker.

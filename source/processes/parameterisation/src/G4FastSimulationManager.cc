@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc 68056 2013-03-13 14:44:48Z gcosmo $
+// $Id: G4FastSimulationManager.cc 100945 2016-11-03 11:26:19Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -320,95 +320,96 @@ G4FastSimulationManager::ListModels() const
 	   << "(inactivated)\n";
 }
 
-void 
-G4FastSimulationManager::ListModels(const G4String& aName) const
+void G4FastSimulationManager::ListModels(const G4String& modelName) const
 {
   size_t iModel;
   G4int titled = 0;
-  G4ParticleTable* theParticleTable=
-    G4ParticleTable::GetParticleTable();
+  G4ParticleTable* theParticleTable = G4ParticleTable::GetParticleTable();
   
   // Active Models
-  for (iModel=0; iModel<ModelList.size(); iModel++)
-    if(ModelList[iModel]->GetName() == aName ||
-       aName == "all" ) {
-      if(!(titled++)){
-	G4cout << "In the envelope ";
-	ListTitle();
-	G4cout << ",\n";
+  for ( iModel=0; iModel<ModelList.size(); iModel++ )
+    if( ModelList[iModel]->GetName() == modelName || modelName == "all" )
+      {
+	if( !(titled++) )
+	  {
+	    G4cout << "In the envelope ";
+	    ListTitle();
+	    G4cout << ",\n";
+	  }
+	G4cout << "  the model " << ModelList[iModel]->GetName()
+	       << " is applicable for :\n     ";
+	
+	G4int list_started=0;
+	for ( G4int iParticle = 0; iParticle<theParticleTable->entries(); iParticle++)
+	  if( ModelList[iModel] -> IsApplicable( *(theParticleTable->GetParticle(iParticle))) )
+	    {
+	      if(list_started++) G4cout << ", ";
+	      G4cout << theParticleTable->
+		GetParticle(iParticle)->GetParticleName();
+	    }
+	G4cout <<G4endl;
       }
-      G4cout << "  the model " << ModelList[iModel]->GetName()
-	     << " is applicable for :\n     ";
-      
-      G4int list_started=0;
-      for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
-	   iParticle++)
-	if(ModelList[iModel]->
-	   IsApplicable(*(theParticleTable->
-			  GetParticle(iParticle)))) {
-	  if(list_started++) G4cout << ", ";
-	  G4cout << theParticleTable->
-	    GetParticle(iParticle)->GetParticleName();
-	}
-      G4cout <<G4endl;
-    }
   
   // Inactive Models
   for (iModel=0; iModel<fInactivatedModels.size(); iModel++)
-    if(fInactivatedModels[iModel]->GetName() == aName ||
-       aName == "all" ) {
-      if(!(titled++)){
-	G4cout << "In the envelope ";
-	ListTitle();
-	G4cout << ",\n";
+    if(fInactivatedModels[iModel]->GetName() == modelName || modelName == "all" )
+      {
+	if( !(titled++) )
+	  {
+	    G4cout << "In the envelope ";
+	    ListTitle();
+	    G4cout << ",\n";
+	  }
+	G4cout << "  the model " << fInactivatedModels[iModel]->GetName()
+	       << " (inactivated) is applicable for :\n     ";
+	
+	G4int list_started=0;
+	for ( G4int iParticle=0; iParticle<theParticleTable->entries(); iParticle++ )
+	  if( fInactivatedModels[iModel] -> IsApplicable( *(theParticleTable->GetParticle(iParticle))) )
+	    {
+	      if(list_started++) G4cout << ", ";
+	      G4cout << theParticleTable->
+		GetParticle(iParticle)->GetParticleName();
+	    }
+	G4cout <<G4endl;
       }
-      G4cout << "  the model " << fInactivatedModels[iModel]->GetName()
-	     << " (inactivated) is applicable for :\n     ";
-      
-      G4int list_started=0;
-      for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
-	   iParticle++)
-	if(fInactivatedModels[iModel]->
-	   IsApplicable(*(theParticleTable->
-			  GetParticle(iParticle)))) {
-	  if(list_started++) G4cout << ", ";
-	  G4cout << theParticleTable->
-	    GetParticle(iParticle)->GetParticleName();
-	}
-      G4cout <<G4endl;
-    }
 }
 
-void 
-G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const
+void G4FastSimulationManager::ListModels(const G4ParticleDefinition* particleDefinition) const
 {
   size_t iModel;
-  G4bool unique=true;
+  G4bool unique = true;
   
   // Active Models
-  for (iModel=0; iModel<ModelList.size(); iModel++)
-    if(ModelList[iModel]->IsApplicable(*aPD)) {
-      G4cout << "Envelope ";
-      ListTitle();
-      G4cout << ", Model " 
-	     << ModelList[iModel]->GetName() 
-	     << "." << G4endl;
-    }
-  // inactive Models
-  for (iModel=0; iModel<fInactivatedModels.size(); iModel++)
-    if(fInactivatedModels[iModel]->IsApplicable(*aPD)) {
-      G4cout << "Envelope ";
-      ListTitle();
-      G4cout << ", Model " 
-	     << fInactivatedModels[iModel]->GetName() 
-	     << " (inactivated)." << G4endl;
-    }
+  for ( iModel=0; iModel<ModelList.size(); iModel++ )
+    if ( ModelList[iModel]->IsApplicable(*particleDefinition) )
+      {
+	G4cout << "Envelope ";
+	ListTitle();
+	G4cout << ", Model " 
+	       << ModelList[iModel]->GetName() 
+	       << "." << G4endl;
+	// -- Verify unicity of model attached to particleDefinition:
+	for ( auto jModel = iModel + 1; jModel < ModelList.size(); jModel++ )
+	  if ( ModelList[jModel]->IsApplicable(*particleDefinition) ) unique = false;
+      }
+  
+  // Inactive Models
+  for ( iModel=0; iModel<fInactivatedModels.size(); iModel++ )
+    if( fInactivatedModels[iModel]->IsApplicable(*particleDefinition) )
+      {
+	G4cout << "Envelope ";
+	ListTitle();
+	G4cout << ", Model " 
+	       << fInactivatedModels[iModel]->GetName() 
+	       << " (inactivated)." << G4endl;
+      }
   
   if( !unique )
     {
       G4ExceptionDescription ed;
-      ed << "Two or more Models are available for the same particle type, in the same envelope/region." << G4endl;
-      G4Exception("G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const",
+      ed << "Two or more active Models are available for the same particle type, in the same envelope/region." << G4endl;
+      G4Exception("G4FastSimulationManager::ListModels(const G4ParticleDefinition* particleDefinition) const",
 		  "FastSim001",
 		  JustWarning, ed,
 		  "Models risk to exclude each other.");

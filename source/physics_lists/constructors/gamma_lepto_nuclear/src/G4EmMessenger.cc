@@ -78,6 +78,18 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theMUN = new G4UIcmdWithABool("/physics_lists/em/MuonNuclear",this);
   theMUN->SetGuidance("Switching on muon nuclear physics.");
   theMUN->AvailableForStates(G4State_PreInit);
+
+  theGMM = new G4UIcmdWithABool("/physics_lists/em/GammaToMuons",this);
+  theGMM->SetGuidance("Switching on gamma conversion to muon pair.");
+  theGMM->AvailableForStates(G4State_PreInit);
+
+  thePMM = new G4UIcmdWithABool("/physics_lists/em/PositronToMuons",this);
+  thePMM->SetGuidance("Switching on positron conversion to muon pair.");
+  thePMM->AvailableForStates(G4State_PreInit);
+
+  thePH = new G4UIcmdWithABool("/physics_lists/em/PositronToHadrons",this);
+  thePH->SetGuidance("Switching on positron conversion to hadrons.");
+  thePH->AvailableForStates(G4State_PreInit);
 }
 
 G4EmMessenger::~G4EmMessenger()
@@ -86,6 +98,9 @@ G4EmMessenger::~G4EmMessenger()
   delete theSynchAll;
   delete theGN;
   delete theMUN;
+  delete theGMM;
+  delete thePMM;
+  delete thePH;
   delete aDir1;
   delete aDir2;
 }
@@ -96,4 +111,7 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==theSynchAll) theB->SynchAll(theSynchAll->GetNewBoolValue(aS));
   if(aComm==theGN)       theB->GammaNuclear(theGN->GetNewBoolValue(aS));
   if(aComm==theMUN)      theB->MuonNuclear(theMUN->GetNewBoolValue(aS));
+  if(aComm==theGMM)      theB->GammaToMuMu(theGMM->GetNewBoolValue(aS));
+  if(aComm==thePMM)      theB->PositronToMuMu(thePMM->GetNewBoolValue(aS));
+  if(aComm==thePH)       theB->PositronToHadrons(thePH->GetNewBoolValue(aS));
 }

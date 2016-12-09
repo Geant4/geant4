@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 97316 2016-06-01 12:12:58Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 99440 2016-09-22 08:34:04Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -459,7 +459,7 @@ void G4VisCommandViewerClone::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Need to handle the possibility that the names contain embedded
   // blanks within quotation marks...
-  char c;
+  char c = ' ';
   while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {originalName += c;}
@@ -974,7 +974,7 @@ G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
    "order of filename. The files may be written by hand or produced by the "
    "\"/vis/viewer/save\" command.");
   fpCommand -> SetGuidance
-  ("The default is to search the working directory for files with a .view "
+  ("The default is to search the working directory for files with a .g4view "
    "extension. Another procedure is to assemble view files in a subdirectory, "
    "e.g., \"myviews\"; then they can be interpolated with\n"
    "\"/vis/viewer/interpolate myviews/*\".");
@@ -984,7 +984,7 @@ G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
   G4UIparameter* parameter;
   parameter = new G4UIparameter("pattern", 's', omitable = true);
   parameter -> SetGuidance("Pattern that defines the view files.");
-  parameter -> SetDefaultValue("*.view");
+  parameter -> SetDefaultValue("*.g4view");
   fpCommand -> SetParameter(parameter);
   parameter = new G4UIparameter("no-of-points", 'i', omitable = true);
   parameter -> SetGuidance ("Number of interpolation points per interval.");
@@ -1013,6 +1013,16 @@ G4String G4VisCommandViewerInterpolate::GetCurrentValue (G4UIcommand*) {
 void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
+  if (!currentViewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<
+      "ERROR: G4VisCommandViewerInterpolate::SetNewValue: no current viewer."
+	     << G4endl;
+    }
+    return;
+  }
 
   G4String pattern;
   G4int nInterpolationPoints;
@@ -1045,16 +1055,6 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     return;
   }
 
-  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
-  if (!currentViewer) {
-    if (verbosity >= G4VisManager::errors) {
-      G4cerr <<
-      "ERROR: G4VisCommandViewerInterpolate::SetNewValue: no current viewer."
-	     << G4endl;
-    }
-    return;
-  }
-
   // Save current view parameters
   G4ViewParameters saveVP = currentViewer->GetViewParameters();
 
@@ -1067,8 +1067,8 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   fpVisManager->SetVerboseLevel(G4VisManager::errors);
   ui->SetVerboseLevel(0);
 
-  // Switch off auto-refresh (it will be restored later)
-  // Note: the view files do not set autoRefresh.
+  // Switch off auto-refresh while we read in the view files (it will be
+  // restored later).  Note: the view files do not set auto-refresh.
   G4ViewParameters non_auto = saveVP;
   non_auto.SetAutoRefresh(false);
   currentViewer->SetViewParameters(non_auto);
@@ -1095,6 +1095,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
       "\n  the number of way points exceeds the maximum currently allowed: "
       << safety << G4endl;
     }
+    pclose(filelist);
     return;
   }
   
@@ -1103,7 +1104,9 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   do {
     G4ViewParameters* vp =
     G4ViewParameters::CatmullRomCubicSplineInterpolation(viewVector,nInterpolationPoints);
-    if (!vp) break;
+    if (!vp) break;  // Finished.
+    // Set original auto-refresh status.
+    vp->SetAutoRefresh(saveVP.IsAutoRefresh());
     currentViewer->SetViewParameters(*vp);
     currentViewer->RefreshView();
     if (exportString == "export" &&
@@ -1184,11 +1187,14 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand*, G4String newValue) {
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    G4cout << "Scene handler \"" << sceneHandler -> GetName ();
+    G4cout
+    << "Scene handler \"" << sceneHandler -> GetName () << "\" ("
+    << sceneHandler->GetGraphicsSystem()->GetNickname() << ')';
     const G4Scene* pScene = sceneHandler -> GetScene ();
     if (pScene) {
-      G4cout << "\", scene \"" << pScene -> GetName () << "\":";
+      G4cout << ", scene \"" << pScene -> GetName () << "\"";
     }
+    G4cout << ':';
     G4int nViewers = viewerList.size ();
     if (nViewers == 0) {
       G4cout << "\n            No viewers for this scene handler." << G4endl;
@@ -1544,12 +1550,12 @@ G4VisCommandViewerSave::G4VisCommandViewerSave () {
   ("Read them back into the same or any viewer with \"/control/execute\".");
   fpCommand -> SetGuidance
   ("If the filename is omitted the view is saved to a file "
-   "\"g4_nn.view\", where nn is a sequential two-digit number.");
+   "\"g4_nn.g4view\", where nn is a sequential two-digit number.");
   fpCommand -> SetGuidance
   ("If the filename is \"-\", the data are written to G4cout.");
   fpCommand -> SetGuidance
   ("If you are wanting to save views for future interpolation a recommended "
-   "procedure is: save views to \"g4_nn.view\", as above, then move the files "
+   "procedure is: save views to \"g4_nn.g4view\", as above, then move the files "
    "into a sub-directory, say, \"views\", then interpolate with"
    "\"/vis/viewer/interpolate views/\" (note the trailing \'/\').");
   fpCommand -> SetParameterName ("filename", omitable = true);
@@ -1634,7 +1640,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     }
     std::ostringstream oss;
     oss << std::setw(2) << std::setfill('0') << sequenceNumber++;
-    filename = "g4_" + oss.str() + ".view";
+    filename = "g4_" + oss.str() + ".g4view";
   }
 
   if (filename == "-") {

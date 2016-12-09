@@ -40,7 +40,7 @@ target_link_libraries(TestEm16 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm16_SCRIPTS
-    run01.mac run02.mac TestEm16.in TestEm16.out vis.mac
+    run01.mac run01_prot.mac run02.mac TestEm16.in TestEm16.out gui.mac vis.mac
   )
 
 foreach(_script ${TestEm16_SCRIPTS})

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChAntiBarionBuilder.hh
+/// \brief Definition of the ExExChAntiBarionBuilder class
+//
 
 
 #ifndef ExExChAntiBarionBuilder_h

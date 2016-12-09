@@ -1,4 +1,4 @@
-$Id: History 96797 2016-05-09 10:13:42Z gcosmo $
+$Id: History 101112 2016-11-07 08:19:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,88 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 4 November 2016 Gunter Folger ( particles-V10-02-34)
+-  remove G4PDefSplitter.
+-  reformat G4PDefManager.cc, and move G4PDefData::initialize() to .cc
+
+- 3 November 2016 Gunter Folger ( particles-V10-02-33)
+- Obsolete G4PDefSplitter, and replace 
+    "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
+    with implementation. This addresses initialistaion problems of 
+    static data previously in template.
+ 
+- 2 November 2016 Tatsumi Koi (particles-V10-02-32)
+- Improve error message for potentially using a wrong version of ENSDFSTATE data in use.
+
+- 26 October 2016 Gunter Folger  (particles-V10-02-31) - rejected
+- protect initialisation of G4PDefSplitter to be done only in particles
+   in attempt to correct windows compilation error.
+
+- 21 October 2016 Gabriele Cosmo (particles-V10-02-30)
+- Moved initialisation of G4PDefSplitter thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+- 17 October 2016 Kevin Lynch (particles-V10-02-29)
+- Added decay channel placeholders for G4MuonicAtom DIO and Nuclear
+  Capture physics
+
+- 29 September 2016 Tatsumi Koi (particles-V10-02-28)
+- Migration to ENSDFSTATE2.0
+- Fix bux the case of two or more levels have a same excitation energy
+
+- 28 September 2016 Tatsumi Koi (particles-V10-02-27)
+- Fix Circular dependency between management and leptons
+
+- 27 September 2016 Tatsumi Koi for Kevin Lynch (particles-V10-02-26)
+- 22 September 2016 Kevin Lynch 
+- Added G4MuonicAtom class, along with minimal changes to G4IonTable
+  to allow creation of muonic atoms.
+
+- 9 September 2016 Gabriele Cosmo (particles-V10-02-25)
+- Moved accessors/modifiers for splitter data to non-inline in
+  G4ParticleDefinition.
+  Explicitly initialise G4PDefSplitter data in G4ParticlesWorkspace
+  translation unit.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+- 2 September 2016 Makoto Asai (particles-V10-02-24)
+- Changed the way of deleting G4PrimaryVertex and G4PrimaryParticle
+  objects to avoid stack overflow for very large number of primary
+  vertices or primary particles.
+
+- 2 September 2016 Tatsumi Koi (particles-V10-02-23)
+- Fix problem in the previosu tag 
+
+- 29 August 2016 Tatsumi Koi (particles-V10-02-22)
+- AME12 is used by default in NucleiProperties
+
+- 19 August 2016 Tatsumi Koi (particles-V10-02-21)
+- Introducing G4NucleiPropertiesTableAME12
+
+- 8 August 2016 Makoto Asai (particles-V10-02-20)
+- Ground-level ion with floating level base now has a name with
+  its floating level base.
+
+- 27 July 2016 Makoto Asai (particles-V10-02-19)
+- Floating level base is updated for G4Ions, G4IonTable and related
+  classes.
+
+- 7 July 2016 Gabriele Cosmo (particles-V10-02-18)
+- Removed redundant check in G4PDefSplitter::UseWorkArea().
+  Addressing problem report #1876.
+
+- 7 July 2016 Hisaya Kurashige (particles-V10-02-17)
+- Skip check for one body decay in G4VDecayChannel::IsOKWithParentMass
+- Fix a bug (implemented in the previous tag) in G4DynamicParticle::Set4Momentum
+
+- 6 July 2016 Hisaya Kurashige (particles-V10-02-15)
+- Fix G4DynamicParticle in case that difference between the PDG mass and dynamical mass 
+  is very small (<10 eV)
+- Skip check daughter mass and parent mass in case of one body decay
+  in G4VDecayChannel::FillDaughters
+- Minor Fix for G4PhaseSpaceDecayChannel
 
 - 5 May 2016 Hisaya Kurashige (particles-V10-02-14)
 - Fix Coverity defects (43015,62787,62788)

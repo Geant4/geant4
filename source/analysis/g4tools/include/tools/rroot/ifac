@@ -29,7 +29,7 @@ public:
     if(it==a_args.end()) return 0;
     return (*it).second;
   }
-  static char arg_branch() {return 'B';}
+  //static char arg_branch() {return 'B';}
   static char arg_class() {return 'C';}
 
   static std::string* arg_class(const args& a_args) {

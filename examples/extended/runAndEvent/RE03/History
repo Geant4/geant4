@@ -1,4 +1,4 @@
-$Id: History 69567 2013-05-08 12:43:15Z gcosmo $
+$Id: History 99162 2016-09-07 08:14:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 02, 2016 M. Asai (exampleRE03-V10-02-00)
+- Migrate to G4THitsMap<G4StatDouble>.
 
 May 02, 2013 M. Asai (exampleRE03-V09-06-03)
 - Migrate to G4VUserActionInitalization so that it works

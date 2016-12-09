@@ -1,4 +1,4 @@
-$Id: History 96031 2016-03-09 08:23:10Z gcosmo $
+$Id: History 101363 2016-11-15 15:27:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 15th, 2016, M. Verderi
+- Fix one Coverity warning in G4ParallelGeometriesLimiterProcess.
+- proc-biasgen-V10-02-06
+
+November 3rd, 2016, M. Verderi
+- Remove reference to obsolete G4BiasingAppliedCase BAC_DenyInteraction enum value
+  and related logic. DenyProcessPostStepDoIt(..) method in G4BOptnForceFreeFlight
+  was concerned by this logic change. (The related case has been merged and
+  is handled by ApplyFinalStateBiasing(...) in a more general manner since
+  proc-biasgen-V10-00-00.)
+- proc-biasgen-V10-02-05
+
+October 26th, 2016, M. Verderi
+- Development tag for introducing parallel geometry capability in generic biasing:
+  - G4BiasingProcessInterface : checks for biasing operator in mass and parallel geometries
+  - G4ParallelGeometriesLimiterProcess : a new process that limits the step on the boundaries
+    of the parallel geometries (one instance handles all parallel geometries)
+  - G4BiasingProcessSharedData : data shared among biasing processes related to a same
+    G4ParticleDefinition ; extended to cary information related to parallel geometries.
+    G4BiasingProcessSharedData now also holds the static map of shared data and process
+    managers, this was held before by G4BiasingProcessInterface.
+  - G4BiasingHelper : extended to handle addition of G4ParallelGeometriesLimiterProcess
+    to process manager.
+- proc-biasgen-V10-02-04
 
 March 8th, 2016, M. Verderi
 - Clean up for unused variable fParticleChange in G4BiasingProcessInterface
@@ -53,7 +78,7 @@ November 6th, 2015, M. Verderi
 - proc-biasgen-V10-01-01
 
 November 6th, 2015, M. Verderi
-- adaptation to using G4VAuxuliaryTrackInformation:
+- adaptation to using G4VAuxiliaryTrackInformation:
     o creation of G4BOptrForceCollisionTrackData
     o quite rewriting of G4BOptrForceCollision biasing operator,
       removing many state variables used for bookeeping of tracks

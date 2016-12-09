@@ -11,17 +11,17 @@
   This module is going to be enhanced in future. Currently it provides 
   the following sets of classes:
 
-  - \ref extended_common_detectorConstruction :
+  - Detector construction classes
     - two simple detector construction classes with a messenger
   
-  - \ref extended_common_physicsList :
+  - Physics list classes
     - ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
   
-  - \ref extended_common_primaryGenerator :
+  - Primary generator classes
     - two simple primary generator classes (with G4ParticleGun and
       G4ParticleGeneralSource)
   
-  - \ref extended_common_userActions :
+  - User action classes:
     - event action and run action classes with messengers
 
 */

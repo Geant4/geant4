@@ -35,7 +35,6 @@
   #include <math.h>
 #endif
 #include <cmath>
-//#include <math.h>
 #include <array>
 
 #ifdef FPDEBUG

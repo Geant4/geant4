@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChProtonBuilder.hh
+/// \brief Definition of the ExExChProtonBuilder class
+//
 //
 
 #ifndef ExExChProtonBuilder_h

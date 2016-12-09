@@ -65,22 +65,24 @@ int main(int argc,char** argv) {
     
   //Construct the default run manager
 #ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
+  G4MTRunManager* runManager = new G4MTRunManager();
   G4int nThreads = G4Threading::G4GetNumberOfCores();
-  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  if (argc==3)
+  {
+    nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    G4cout << argv[0] << " launched with " << nThreads
+           << " (may be overwritten by script)"
+           << G4endl;
+  }
   runManager->SetNumberOfThreads(nThreads);
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
-  G4RunManager* runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager();
 #endif  
 
   //set mandatory initialization classes
-  DetectorConstruction* det = new DetectorConstruction;
-  runManager->SetUserInitialization(det);
-     
-  PhysicsList* phys = new PhysicsList;
-  runManager->SetUserInitialization(phys);
-
+  runManager->SetUserInitialization(new DetectorConstruction());
+  runManager->SetUserInitialization(new PhysicsList());
   runManager->SetUserInitialization(new ActionInitialization());
 
   //get the pointer to the User Interface manager 
@@ -96,7 +98,7 @@ int main(int argc,char** argv) {
   else           //define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
+   G4VisManager* visManager = new G4VisExecutive();
    visManager->Initialize();
 #endif    
      

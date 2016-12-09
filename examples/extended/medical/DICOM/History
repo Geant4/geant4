@@ -1,4 +1,4 @@
-$Id: History 92820 2015-09-17 15:22:14Z gcosmo $
+$Id: History 101667 2016-11-21 09:12:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,26 @@ $Id: History 92820 2015-09-17 15:22:14Z gcosmo $
                       Category History file
 
                       ---------------------
+
+19.11.2016 - Andrea Dotti     (DICOM-V10-02-04)
+           - explicit set of SD to manager
+
+11.11.2016 - Ivana Hrivnacova (DICOM-V10-02-03)
+           - Removed extra compiler flags in GNUmakefile, CMakeLists.txt
+             (not needed)
+           - Renamed G4_USE_DCMTK in DICOM_USE_DCMTK
+           - Updated README, .README.txt
+
+11.11.2016 - Pedro Arce (DICOM-V10-02-02)
+           - Complying with Geant4 guidelines in data variables
+
+04.11.2016 - Pedro Arce (DICOM-V10-02-01)
+           - New DICOM reader based on DCMTK
+
+20.07.2016 - Ivana Hrivnacova (DICOM-V10-02-00)
+           - Fixed coding guidelines 
+             (redundant empty lines, class data member names) 
+
 17.09.2015 - Pedro Arce (DICOM-V10-01-01)
            - Fixed coding guidelines (long lines) 
 

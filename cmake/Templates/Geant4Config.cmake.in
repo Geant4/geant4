@@ -6,6 +6,9 @@
 #  Geant4_INCLUDE_DIRS - include directories for Geant4
 #  Geant4_DEFINITIONS  - compile definitions needed to use Geant4
 #  Geant4_LIBRARIES    - libraries to link against
+#  Geant4_BUILD_TYPE   - Build type (e.g. "Release") used to build this
+#                        install. Only set if Geant4 was installed using
+#                        a single mode tool (e.g. make, ninja).
 #  Geant4_CXX_FLAGS    - Recommended CXX flags for the compiler used to
 #                        build the Geant4 libraries.
 #  Geant4_CXX_FLAGS_<CONFIG> - Recommended CXX flags for build mode CONFIG.
@@ -216,7 +219,7 @@ endif()
 # to find the actual package we were built against.
 # THIS IS NOT PERFECT, AS IT CANNOT GUARANTEE A BINARY COMPATIBLE
 # PACKAGE IS FOUND.
-@GEANT4_THIRD_PARTY_IMPORT_SETUP@
+#@GEANT4_THIRD_PARTY_IMPORT_SETUP@
 
 #-----------------------------------------------------------------------
 # Configure the path(s) to third party headers.
@@ -384,13 +387,12 @@ if(Geant4_qt_FOUND)
     find_package(Qt5Widgets REQUIRED PATHS "@Qt5Widgets_DIR@")
     find_package(Qt5OpenGL REQUIRED PATHS "@Qt5OpenGL_DIR@")
     find_package(Qt5PrintSupport REQUIRED PATHS "@Qt5PrintSupport_DIR@")
+  else()
+    # On Windows, must refind Qt4 because this always uses imported targets
+    @GEANT4_QT4_IMPORT_SETUP@
   endif()
 
   if(Geant4_FIND_REQUIRED_qt OR Geant4_FIND_REQUIRED_ui_all OR Geant4_FIND_REQUIRED_vis_all)
-    # If we have Qt5, we need to refind the components because they use
-    # imported targets, so linking will not work unless we recreate
-    # them
-
     list(APPEND
       Geant4_DEFINITIONS
       -DG4INTY_USE_QT
@@ -561,7 +563,14 @@ endif()
 # - Factory registration mechanism in physics_lists requires whole
 # archive to be linked when using static libs, so requires wrapping
 # with suitable compiler dependent flags
+# 2016-05-24: use an alternate means of forcing linking of references for
+# static builds.  --whole-archive never was implemented for _WIN32
+# (appears not to even be possible)
+# In order re-implement whole-archive, switch Geant4_FORCE_WHOLE_ARCHIVE ON
 set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
+
+set(Geant4_FORCE_WHOLE_ARCHIVE OFF)
+if( Geant4_FORCE_WHOLE_ARCHIVE )
 if(_geant4_lib_use_suffix STREQUAL "-static")
   # - Use CMAKE_CXX_COMPILER_ID, which should be reliable enough...
   # Though the GNU/Clang/Intel compilers/linkers *should* use identical
@@ -576,8 +585,11 @@ if(_geant4_lib_use_suffix STREQUAL "-static")
   else()
     # Needs determination of other compiler options.
     # NB: MSVC has /OPT:NOREF, but may apply globally...
+    # reading up on this ... doesn't seem that it applies for subtle reasons
+    # only real way is to actually reference the static variables
     set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
   endif()
+endif()
 endif()
 
 # - 'Kernel' libraries

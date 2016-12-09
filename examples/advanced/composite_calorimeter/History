@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 95947 2016-03-03 10:39:24Z gcosmo $
+$Id: History 101381 2016-11-16 10:58:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,12 @@ $Id: History 95947 2016-03-03 10:39:24Z gcosmo $
 
                       Example History file
                       ---------------------
+
+01.08.2016 - A. Dotti   (ccal-V10-02-02)
+- Fix issues with a char* length 
+
+02.11.2016 - L. Garnier (ccal-V10-02-01)
+- Remove icons.mac. Automatically include since interfaces-V10-02-07
 
 03.03.2016 - L. Pandola (ccal-V10-02-00)
 - Replace std::exp with G4Exp()

@@ -62,7 +62,6 @@
 #include "globals.hh"
 #include "G4VRestDiscreteProcess.hh"
 #include "G4ParticleChangeForRadDecay.hh"
-// #include "G4RadioactiveDecaymessenger.hh"  
 
 #include "G4NucleusLimits.hh"
 #include "G4RadioactiveDecayRate.hh"
@@ -234,10 +233,10 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     void BuildPhysicsTable(const G4ParticleDefinition &);
 
-  protected:
-
     G4VParticleChange* DecayIt(const G4Track& theTrack,
                                const G4Step&  theStep);
+
+  protected:
 
     G4DecayProducts* DoDecay(const G4ParticleDefinition& theParticleDef);
 

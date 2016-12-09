@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 // 
-// $Id: PhysicsList.cc 96419 2016-04-13 10:23:38Z gcosmo $
+// $Id: PhysicsList.cc 98987 2016-08-29 07:03:05Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -186,13 +186,7 @@ void PhysicsList::ConstructProcess()
 
   // Electromagnetic physics list
   //
-  fEmPhysicsList->ConstructProcess();
-  
-  // Em options
-  //
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetBuildCSDARange(true);
-
+  fEmPhysicsList->ConstructProcess();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.hh 66704 2013-01-10 18:20:17Z gunter $
+// $Id: G4EmPenelopePhysics.hh 98736 2016-08-09 10:55:12Z gcosmo $
 
 #ifndef G4EmPenelopePhysics_h
 #define G4EmPenelopePhysics_h 1
@@ -37,10 +37,7 @@ class G4EmPenelopePhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmPenelopePhysics(G4int ver = 1);
-
-  // obsolete
-  G4EmPenelopePhysics(G4int ver, const G4String& name);
+  explicit G4EmPenelopePhysics(G4int ver=1, const G4String& name="");
 
   virtual ~G4EmPenelopePhysics();
 

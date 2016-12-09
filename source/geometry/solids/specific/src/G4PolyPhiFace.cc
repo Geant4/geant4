@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4PolyPhiFace.cc 101041 2016-11-04 09:39:24Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -506,8 +506,8 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
   // Are we inside the face?
   //
   G4double distRZ2;
-  G4PolyPhiFaceVertex *base3Dnorm;
-  G4ThreeVector      *head3Dnorm;
+  G4PolyPhiFaceVertex *base3Dnorm=0;
+  G4ThreeVector       *head3Dnorm=0;
   
   if (InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm ))
   {
@@ -535,8 +535,8 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p,
     // Use edge normal to decide fate
     //
     G4ThreeVector cc( base3Dnorm->r*radial.x(),
-          base3Dnorm->r*radial.y(),
-          base3Dnorm->z );
+                      base3Dnorm->r*radial.y(),
+                      base3Dnorm->z );
     cc = p - cc;
     G4double normDist = head3Dnorm->dot(cc);
     if ( distRZ2 > tolerance*tolerance )
@@ -1126,7 +1126,7 @@ G4bool G4PolyPhiFace::Diagonal( G4PolyPhiFaceVertex *a, G4PolyPhiFaceVertex *b )
 //
 void G4PolyPhiFace::EarInit()
 {
-  G4PolyPhiFaceVertex   *corner = triangles;
+  G4PolyPhiFaceVertex *corner = triangles;
   G4PolyPhiFaceVertex *c_prev,*c_next;
   
   do    // Loop checking, 13.08.2015, G.Cosmo

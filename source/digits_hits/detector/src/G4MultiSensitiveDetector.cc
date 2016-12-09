@@ -133,10 +133,3 @@ G4VSensitiveDetector* G4MultiSensitiveDetector::Clone() const
 		newInst->AddSD( sd->Clone() );
 	return newInst;
 }
-
-void G4MultiSensitiveDetector::AddSD(G4VSensitiveDetector* sd) 
-{ 
-  // making sure this sensitive detector is registered to G4SDManager
-  G4SDManager::GetSDMpointer()->AddNewDetector(sd);
-  fSensitiveDetectors.push_back(sd);
-}

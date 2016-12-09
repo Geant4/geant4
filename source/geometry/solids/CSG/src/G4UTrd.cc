@@ -35,7 +35,11 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
+using namespace CLHEP;
 
 /////////////////////////////////////////////////////////////////////////
 //
@@ -169,6 +173,114 @@ void G4UTrd::ComputeDimensions(      G4VPVParameterisation* p,
 G4VSolid* G4UTrd::Clone() const
 {
   return new G4UTrd(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UTrd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  static G4bool checkBBox = true;
+
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
+
+  G4double xmax = std::max(dx1,dx2);
+  G4double ymax = std::max(dy1,dy2);
+  pMin.set(-xmax,-ymax,-dz);
+  pMax.set( xmax, ymax, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UTrd::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  // Check consistency of bounding boxes
+  //
+  if (checkBBox)
+  {
+    UVector3 vmin, vmax;
+    GetShape()->Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
+        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
+        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
+        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
+        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
+        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Inconsistency in bounding boxes for solid: "
+              << GetName() << " !"
+              << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
+              << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
+      G4Exception("G4UTrd::Extent()", "GeomMgt0001", JustWarning, message);
+      checkBBox = false;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UTrd::CalculateExtent(const EAxis pAxis,
+                        const G4VoxelLimits& pVoxelLimit,
+                        const G4AffineTransform& pTransform,
+                              G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  G4double dx1 = GetXHalfLength1();
+  G4double dx2 = GetXHalfLength2();
+  G4double dy1 = GetYHalfLength1();
+  G4double dy2 = GetYHalfLength2();
+  G4double dz  = GetZHalfLength();
+
+  G4ThreeVectorList baseA(4), baseB(4);
+  baseA[0].set(-dx1,-dy1,-dz);
+  baseA[1].set( dx1,-dy1,-dz);
+  baseA[2].set( dx1, dy1,-dz);
+  baseA[3].set(-dx1, dy1,-dz);
+  baseB[0].set(-dx2,-dy2, dz);
+  baseB[1].set( dx2,-dy2, dz);
+  baseB[2].set( dx2, dy2, dz);
+  baseB[3].set(-dx2, dy2, dz);
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 //////////////////////////////////////////////////////////////////////////

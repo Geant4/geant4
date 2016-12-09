@@ -36,7 +36,7 @@
 G4GEMCoulombBarrier::G4GEMCoulombBarrier(G4int anA, G4int aZ) :
   G4CoulombBarrier(anA,aZ) 
 {
-  AejectOneThird = g4pow->Z13(anA);
+  AejectOneThird = g4calc->Z13(anA);
 }
 
 G4GEMCoulombBarrier::~G4GEMCoulombBarrier() 
@@ -64,7 +64,7 @@ G4double G4GEMCoulombBarrier::GetCoulombBarrier(G4int ARes, G4int ZRes,
 
 G4double G4GEMCoulombBarrier::CalcCompoundRadius(G4int ARes) const
 {      
-  G4double AresOneThird = g4pow->Z13(ARes);
+  G4double AresOneThird = g4calc->Z13(ARes);
   G4int A = GetA();
 
   G4double Result = 0.0;

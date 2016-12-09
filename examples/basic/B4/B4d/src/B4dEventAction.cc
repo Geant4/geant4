@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4dEventAction.cc 75604 2013-11-04 13:17:26Z gcosmo $
+// $Id: B4dEventAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 //
 /// \file B4dEventAction.cc
 /// \brief Implementation of the B4dEventAction class
@@ -61,7 +61,7 @@ G4THitsMap<G4double>*
 B4dEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  G4THitsMap<G4double>* hitsCollection 
+  auto hitsCollection 
     = static_cast<G4THitsMap<G4double>*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
@@ -79,10 +79,10 @@ B4dEventAction::GetHitsCollection(G4int hcID,
 
 G4double B4dEventAction::GetSum(G4THitsMap<G4double>* hitsMap) const
 {
-  G4double sumValue = 0;
-  std::map<G4int, G4double*>::iterator it;
-  for ( it = hitsMap->GetMap()->begin(); it != hitsMap->GetMap()->end(); it++) {
-    sumValue += *(it->second);
+  G4double sumValue = 0.;
+  for ( auto it : *hitsMap->GetMap() ) {
+    // hitsMap->GetMap() returns the map of std::map<G4int, G4double*>
+    sumValue += *(it.second);
   }
   return sumValue;  
 }  
@@ -131,23 +131,23 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
   
   // Get sum values from hits collections
   //
-  G4double absoEdep = GetSum(GetHitsCollection(fAbsoEdepHCID, event));
-  G4double gapEdep = GetSum(GetHitsCollection(fGapEdepHCID, event));
+  auto absoEdep = GetSum(GetHitsCollection(fAbsoEdepHCID, event));
+  auto gapEdep = GetSum(GetHitsCollection(fGapEdepHCID, event));
 
-  G4double absoTrackLength 
+  auto absoTrackLength 
     = GetSum(GetHitsCollection(fAbsoTrackLengthHCID, event));
-  G4double gapTrackLength 
+  auto gapTrackLength 
     = GetSum(GetHitsCollection(fGapTrackLengthHCID, event));
 
   // get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
 
   // fill histograms
   //  
-  analysisManager->FillH1(1, absoEdep);
-  analysisManager->FillH1(2, gapEdep);
-  analysisManager->FillH1(3, absoTrackLength);
-  analysisManager->FillH1(4, gapTrackLength);
+  analysisManager->FillH1(0, absoEdep);
+  analysisManager->FillH1(1, gapEdep);
+  analysisManager->FillH1(2, absoTrackLength);
+  analysisManager->FillH1(3, gapTrackLength);
   
   // fill ntuple
   //
@@ -159,8 +159,8 @@ void B4dEventAction::EndOfEventAction(const G4Event* event)
   
   //print per event (modulo n)
   //
-  G4int eventID = event->GetEventID();
-  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  auto eventID = event->GetEventID();
+  auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
     PrintEventStatistics(absoEdep, absoTrackLength, gapEdep, gapTrackLength);

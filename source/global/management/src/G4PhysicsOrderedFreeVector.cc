@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsOrderedFreeVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsOrderedFreeVector.cc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // PhysicsOrderedFreeVector Class Implementation
@@ -51,42 +51,30 @@
 
 #include "G4PhysicsOrderedFreeVector.hh"
 
-/////////////////////////
-// Class Implementation
-/////////////////////////
-
-        /////////////////
-        // Constructors
-        /////////////////
+G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
+  : G4PhysicsVector()
+{
+        type = T_G4PhysicsOrderedFreeVector;
+}
 
 G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector(G4double *Energies,
                                                        G4double *Values,
                                                        size_t VectorLength)
   : G4PhysicsVector()
 {
-  type = T_G4PhysicsOrderedFreeVector;
+        type = T_G4PhysicsOrderedFreeVector;
 
-  for (size_t i = 0 ; i < VectorLength ; ++i)
-    {
-      InsertValues(Energies[i], Values[i]);
-    }
+        dataVector.reserve(VectorLength);
+        binVector.reserve(VectorLength);
+
+        for (size_t i = 0 ; i < VectorLength ; ++i)
+        { 
+          InsertValues(Energies[i], Values[i]);
+        }
 }
 
-G4PhysicsOrderedFreeVector::G4PhysicsOrderedFreeVector()
-  : G4PhysicsVector()
-{
-  type = T_G4PhysicsOrderedFreeVector;
-}
-
-        ////////////////
-        // Destructors
-        ////////////////
-
-G4PhysicsOrderedFreeVector::~G4PhysicsOrderedFreeVector() {}
-
-        ////////////
-        // Methods
-        ////////////
+G4PhysicsOrderedFreeVector::~G4PhysicsOrderedFreeVector()
+{}
   
 void G4PhysicsOrderedFreeVector::InsertValues(G4double energy, G4double value)
 {
@@ -136,12 +124,4 @@ G4double G4PhysicsOrderedFreeVector::LinearInterpolationOfEnergy(G4double aValue
           res += (aValue - dataVector[bin])*(binVector[bin+1] - res)/del;  
         }
         return res;
-}
-
-void G4PhysicsOrderedFreeVector::DumpValues()
-{
-        for (size_t i = 0; i < numberOfNodes; i++)
-        {
-          G4cout << binVector[i] << "\t" << dataVector[i] << G4endl;
-        }
 }

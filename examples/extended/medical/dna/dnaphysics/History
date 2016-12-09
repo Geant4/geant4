@@ -5,6 +5,15 @@
                        Package History file
                        --------------------
 
+30 Sep 2016 - tag dnaphysics-V10-02-05 - S. Incerti
+- PhysicsList - added explanations
+
+22 July 2016 - tag dnaphysics-V10-02-04 - V. Ivanchenko
+- PhysicsList - use G4EmDNAPhysicsActivator
+
+09 July 2016 - tag dnaphysics-V10-02-03 - S. Incerti
+- updated README
+
 03 June 2016 - tag dnaphysics-V10-02-02 - M. Karamitros
 - SteppingAction: add label for solvation
 - dnaphysics.cc: second arg is nb of threads

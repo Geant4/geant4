@@ -1,4 +1,4 @@
-$Id: History 96400 2016-04-12 07:26:33Z gcosmo $
+$Id: History 101684 2016-11-21 09:38:27Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+19-11-16 L.Urban (testem5-V10-02-07)
+- typos corrected in Run.cc  
+
+14-10-16 G.Folger (testem5-V10-02-06)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+28-07-16 mma  (testem5-V10-02-05)
+- coding convention : rm double blank lines
+
+04-07-16 I. Hrivnacova  (testem5-V10-02-04)
+- Fixes for Doxygen documentation
+
 11-04-16 mma  (testem5-V10-02-03)
 - PhysListEmStandard: use G4EmParameters
 - remove geant3 subdirectory

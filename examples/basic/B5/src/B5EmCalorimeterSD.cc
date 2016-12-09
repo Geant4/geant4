@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EmCalorimeterSD.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5EmCalorimeterSD.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5EmCalorimeterSD.cc
 /// \brief Implementation of the B5EmCalorimeterSD class
 
 #include "B5EmCalorimeterSD.hh"
 #include "B5EmCalorimeterHit.hh"
+#include "B5Constants.hh"
 
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -41,9 +42,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5EmCalorimeterSD::B5EmCalorimeterSD(G4String name)
-: G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
+: G4VSensitiveDetector(name), 
+  fHitsCollection(nullptr), fHCID(-1)
 {
-    collectionName.insert("EMcalorimeterColl");
+  collectionName.insert("EMcalorimeterColl");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,48 +57,44 @@ B5EmCalorimeterSD::~B5EmCalorimeterSD()
 
 void B5EmCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 {
-    fHitsCollection 
-      = new B5EmCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
-    if (fHCID<0)
-    { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
-    hce->AddHitsCollection(fHCID,fHitsCollection);
-    
-    // fill calorimeter hits with zero energy deposition
-    for (G4int i=0;i<80;i++)
-    {
-        B5EmCalorimeterHit* hit = new B5EmCalorimeterHit(i);
-        fHitsCollection->insert(hit);
-    }
+  fHitsCollection 
+    = new B5EmCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
+  if (fHCID<0) {
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  }
+  hce->AddHitsCollection(fHCID,fHitsCollection);
+  
+  // fill calorimeter hits with zero energy deposition
+  for (auto i=0;i<kNofEmCells;i++) {
+    fHitsCollection->insert(new B5EmCalorimeterHit(i));
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool B5EmCalorimeterSD::ProcessHits(G4Step*step, G4TouchableHistory*)
 {
-    G4double edep = step->GetTotalEnergyDeposit();
-    if (edep==0.) return true;
-    
-    G4TouchableHistory* touchable
-      = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
-    G4VPhysicalVolume* physical = touchable->GetVolume();
-    G4int copyNo = physical->GetCopyNo();
-    
-    B5EmCalorimeterHit* hit = (*fHitsCollection)[copyNo];
-    // check if it is first touch
-    if (!(hit->GetLogV()))
-    {
-        // fill volume information
-        hit->SetLogV(physical->GetLogicalVolume());
-        G4AffineTransform transform 
-          = touchable->GetHistory()->GetTopTransform();
-        transform.Invert();
-        hit->SetRot(transform.NetRotation());
-        hit->SetPos(transform.NetTranslation());
-    }
-    // add energy deposition
-    hit->AddEdep(edep);
-    
-    return true;
+  auto edep = step->GetTotalEnergyDeposit();
+  if (edep==0.) return true;
+  
+  auto touchable = step->GetPreStepPoint()->GetTouchable();
+  auto physical = touchable->GetVolume();
+  auto copyNo = physical->GetCopyNo();
+  
+  auto hit = (*fHitsCollection)[copyNo];
+  // check if it is first touch
+  if (!(hit->GetLogV())) {
+    // fill volume information
+    hit->SetLogV(physical->GetLogicalVolume());
+    G4AffineTransform transform = touchable->GetHistory()->GetTopTransform();
+    transform.Invert();
+    hit->SetRot(transform.NetRotation());
+    hit->SetPos(transform.NetTranslation());
+  }
+  // add energy deposition
+  hit->AddEdep(edep);
+  
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

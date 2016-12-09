@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G01 example
 //
 //
-// $Id: load_gdml.cc 89264 2015-03-30 08:18:11Z gcosmo $
+// $Id: load_gdml.cc 98062 2016-07-01 16:26:46Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -118,7 +118,7 @@ int main(int argc,char **argv)
    // Example how to retrieve Auxiliary Information
    //
 
-   std::cout << std::endl;
+   G4cout << std::endl;
    
    const G4LogicalVolumeStore* lvs = G4LogicalVolumeStore::GetInstance();
    std::vector<G4LogicalVolume*>::const_iterator lvciter;
@@ -134,13 +134,13 @@ int main(int argc,char **argv)
    }
 
    // now the 'global' auxiliary info
-   std::cout << std::endl;
-   std::cout << "Global auxiliary info:" << std::endl;
-   std::cout << std::endl;
+   G4cout << std::endl;
+   G4cout << "Global auxiliary info:" << std::endl;
+   G4cout << std::endl;
 
    print_aux(parser.GetAuxList());   
 
-   std::cout << std::endl;
+   G4cout << std::endl;
    
    //
    // End of Auxiliary Information block

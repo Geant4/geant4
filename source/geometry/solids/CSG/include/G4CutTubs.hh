@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.hh 76263 2013-11-08 11:41:52Z gcosmo $
+// $Id: G4CutTubs.hh 100820 2016-11-02 15:18:48Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -77,6 +77,8 @@ class G4CutTubs : public G4OTubs
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
@@ -119,12 +121,6 @@ class G4CutTubs : public G4OTubs
       // Copy constructor and assignment operator.
 
   protected:
-
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       //

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VPreCompoundFragment.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4VPreCompoundFragment.cc 100691 2016-10-31 11:26:25Z gcosmo $
 //
 // J. M. Quesada (August 2008).  Based  on previous work by V. Lara
 //
@@ -44,14 +44,14 @@ G4VPreCompoundFragment::G4VPreCompoundFragment(
     theA(particle->GetBaryonNumber()),
     theZ(G4lrint(particle->GetPDGCharge())),
     theResA(0),theResZ(0),theFragA(0),theFragZ(0),theBindingEnergy(0.0), 
-    theMaxKinEnergy(0.0),theResMass(0.0),
+    theMinKinEnergy(0.0),theMaxKinEnergy(0.0),theResMass(0.0),
     theReducedMass(0.0),
     theEmissionProbability(0.0),theCoulombBarrier(0.0),
     OPTxs(3),useSICB(true)
 {
   theMass = particle->GetPDGMass();
   theParameters = G4NuclearLevelData::GetInstance()->GetParameters();
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
   theResA13 = 0.0;
 }
 
@@ -83,19 +83,17 @@ G4VPreCompoundFragment::Initialize(const G4Fragment & aFragment)
   theResA = theFragA - theA;
   theResZ = theFragZ - theZ;
 
-  if ((theResA < theResZ) || (theResA < theA) || (theResZ < theZ)) 
-    {
-      // In order to be sure that emission probability will be 0.
-      theMaxKinEnergy = 0.0;
-      return;
-    }
+  theMinKinEnergy = theMaxKinEnergy = theCoulombBarrier = 0.0;
+  if ((theResA < theResZ) || (theResA < theA) || (theResZ < theZ)) {
+    return;
+  }
 
-  theResA13 = g4pow->Z13(theResA);
-    
-  // Calculate Coulomb barrier
+  theResA13 = g4calc->Z13(theResA);
   theCoulombBarrier = theCoulombBarrierPtr->
     GetCoulombBarrier(theResA,theResZ,aFragment.GetExcitationEnergy());
-
+    
+  theMinKinEnergy = (0 == OPTxs) ? theCoulombBarrier : theCoulombBarrier*0.7;
+  
   // Calculate masses
   theResMass = G4NucleiProperties::GetNuclearMass(theResA, theResZ);
   theReducedMass = theResMass*theMass/(theResMass + theMass);

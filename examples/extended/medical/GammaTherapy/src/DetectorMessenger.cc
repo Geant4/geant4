@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: DetectorMessenger.cc 101245 2016-11-10 08:45:38Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
@@ -39,8 +39,8 @@
 //
 // -------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
@@ -52,7 +52,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
   fDetector(h)
@@ -78,49 +78,43 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
   fAbsThickCmd->SetGuidance("Set mylarZ");
   fAbsThickCmd->SetParameterName("mylarZ",false);
   fAbsThickCmd->SetUnitCategory("Length");
-  fAbsThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsThickCmd->AvailableForStates(G4State_PreInit);
 
   fAbsGapCmd = new G4UIcmdWithADoubleAndUnit("/testem/delta",this);
   fAbsGapCmd->SetGuidance("Set gap between absorbers");
   fAbsGapCmd->SetParameterName("delta",false);
   fAbsGapCmd->SetUnitCategory("Length");
-  fAbsGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsGapCmd->AvailableForStates(G4State_PreInit);
 
   fAbsSizYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/target1Z",this);
   fAbsSizYZCmd->SetGuidance("Set targeet1Z");
   fAbsSizYZCmd->SetParameterName("target1Z",false);
   fAbsSizYZCmd->SetUnitCategory("Length");
-  fAbsSizYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsSizYZCmd->AvailableForStates(G4State_PreInit);
 
   fWorldXCmd = new G4UIcmdWithADoubleAndUnit("/testem/target2Z",this);
   fWorldXCmd->SetGuidance("Set target2Z");
   fWorldXCmd->SetParameterName("target2Z",false);
   fWorldXCmd->SetUnitCategory("Length");
-  fWorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fWorldXCmd->AvailableForStates(G4State_PreInit);
 
   fXMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/checkShiftZ",this);
   fXMagFieldCmd->SetGuidance("Define checkShftZ");
   fXMagFieldCmd->SetParameterName("CheckSZ",false);
   fXMagFieldCmd->SetUnitCategory("Length");
-  fXMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fXMagFieldCmd->AvailableForStates(G4State_PreInit);
 
   fYMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdZ",this);
   fYMagFieldCmd->SetGuidance("Define sensitive detector Z");
   fYMagFieldCmd->SetParameterName("sdZ",false);
   fYMagFieldCmd->SetUnitCategory("Length");
-  fYMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fYMagFieldCmd->AvailableForStates(G4State_PreInit);
 
   fZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/sdShiftZ",this);
   fZMagFieldCmd->SetGuidance("Define shift of sensitive detector");
   fZMagFieldCmd->SetParameterName("sdShiftZ",false);
   fZMagFieldCmd->SetUnitCategory("Length");
-  fZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fZMagFieldCmd->AvailableForStates(G4State_PreInit);
 
   fHistoCmd = new G4UIcmdWithAString("/testem/histoName",this);
   fHistoCmd->SetGuidance("Set the name of the histo file");
@@ -130,12 +124,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
   fNumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR",this);
   fNumOfAbsCmd->SetGuidance("Set number divisions R");
   fNumOfAbsCmd->SetParameterName("NR",false);
-  fNumOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNumOfAbsCmd->AvailableForStates(G4State_PreInit);
 
   fNumOfEvt = new G4UIcmdWithAnInteger("/testem/numberDivZ",this);
   fNumOfEvt->SetGuidance("Set number of divisions Z");
   fNumOfEvt->SetParameterName("NZ",false);
-  fNumOfEvt->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNumOfEvt->AvailableForStates(G4State_PreInit);
 
   fVerbCmd = new G4UIcmdWithAnInteger("/testem/verbose",this);
   fVerbCmd->SetGuidance("Set verbose for ");
@@ -155,7 +149,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
@@ -166,7 +160,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fAbsSizYZCmd;
   delete fWorldMaterCmd;
   delete fWorldXCmd;
-  delete fUpdateCmd;
   delete fXMagFieldCmd;
   delete fYMagFieldCmd;
   delete fZMagFieldCmd;
@@ -180,7 +173,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fDeltaECmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
@@ -202,9 +195,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fWorldXCmd )
    { fDetector->SetTarget2Z(fWorldXCmd->GetNewDoubleValue(newValue));}
 
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
-
   if( command == fXMagFieldCmd )
    { fDetector->SetCheckShiftZ(fXMagFieldCmd->GetNewDoubleValue(newValue));}
 
@@ -220,7 +210,8 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { (Histo::GetPointer())->SetHistoName(newValue);}
 
   if( command == fNumOfAbsCmd )
-   {(Histo::GetPointer())->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));}
+   {(Histo::GetPointer())
+     ->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));}
 
   if( command == fNumOfEvt )
    {(Histo::GetPointer())->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));}
@@ -234,8 +225,9 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    {(Histo::GetPointer())->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));}
 
   if( command == fDeltaECmd )
-   {(Histo::GetPointer()) ->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
+   {(Histo::GetPointer())
+     ->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

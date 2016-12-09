@@ -76,6 +76,7 @@
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "G4BigBanger.hh"
 #include "G4CascadeInterpolator.hh"
 #include "G4CollisionOutput.hh"
@@ -175,13 +176,24 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 
   if (verboseLevel>1) G4cout << " evaporating target: \n" << target << G4endl;
 
-  // simple implementation of the equilibium evaporation a la Dostrowski
+  // Implementation of the equilibium evaporation according to Dostrovsky
+  //   (Phys. Rev. 116 (1959) 683.
+  // Note that pairing energy which is of order 1 MeV for odd-even and even-odd
+  //   nuclei is not included
+
+  // Element in array:  0 : neutron
+  //                    1 : proton
+  //                    2 : deuteron
+  //                    3 : triton
+  //                    4 : 3He
+  //                    5 : alpha
+
   const G4double huge_num = 50.0;
   const G4double small = -50.0;
   const G4double prob_cut_off = 1.0e-15;
-  const G4double Q1[6] = { 0.0, 0.0, 2.23, 8.49, 7.72, 28.3 };
-  const G4int AN[6] = { 1, 1, 2, 3, 3, 4 };
-  const G4int Q[6] =  { 0, 1, 1, 1, 2, 2 };
+  const G4double Q1[6] = { 0.0, 0.0, 2.23, 8.49, 7.72, 28.3 };  // binding energy 
+  const G4int AN[6] = { 1, 1, 2, 3, 3, 4 };                     // mass number 
+  const G4int Q[6] =  { 0, 1, 1, 1, 2, 2 };                     // charge
   const G4double G[6] = { 2.0, 2.0, 6.0, 6.0, 6.0, 4.0 };
   const G4double BE = 0.0063;
   const G4double fisssion_cut = 1000.0;
@@ -193,8 +205,12 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
   const G4double small_ekin = 1.0e-6;
   const G4int itry_gam_max = 100;
 
-  G4double W[8], u[6], V[6], TM[6];
-  G4int A1[6], Z1[6];
+  G4double W[8];
+  G4double u[6];     // Level density for each particle type: (Atarg - Aemitted)*parlev  
+  G4double V[6];     // Coulomb energy 
+  G4double TM[6];    // Maximum possible kinetic energy of emitted particle          
+  G4int A1[6];       // A of remnant nucleus
+  G4int Z1[6];       // Z of remnant nucleus
 
   getTargetData(target);
   if (verboseLevel > 3) G4cout << " after noeq: eexs " << EEXS << G4endl;
@@ -244,12 +260,12 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
     if (verboseLevel > 2) {
       G4double nuc_mass = G4InuclNuclei::getNucleiMass(A, Z, EEXS);
       G4cout << " A " << A << " Z " << Z << " mass " << nuc_mass
-	     << " EEXS " << EEXS << G4endl;
+             << " EEXS " << EEXS << G4endl;
     }
       
     if (explosion(A, Z, EEXS)) { 			// big bang
       if (verboseLevel > 2) 
-	G4cout << " big bang in eql step " << itry_global << G4endl;
+        G4cout << " big bang in eql step " << itry_global << G4endl;
 
       theBigBanger.deExcite(makeFragment(PEX,A,Z,EEXS), output);
 
@@ -259,8 +275,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 
     if (EEXS < cut_off_energy) {	// Evaporation not possible
       if (verboseLevel > 2)
-	G4cout << " no energy for evaporation in eql step " << itry_global 
-	       << G4endl;
+        G4cout << " no energy for evaporation in eql step " << itry_global 
+               << G4endl;
 
       try_again = false;
       break;
@@ -286,14 +302,14 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       TM[i] = -0.1;
 
       if (goodRemnant(A1[i], Z1[i])) {
-	G4double QB = DM0 - bindingEnergy(A1[i],Z1[i]) - Q1[i];
-	V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
-	  (G4cbrt(A1[i]) + G4cbrt(AN[i]));
-	TM[i] = EEXS - QB - V[i] * A / A1[i];
-	if (verboseLevel > 3) {
-	  G4cout << " i=" << i << " : QB " << QB << " u " << u[i]
-		 << " V " << V[i] << " TM " << TM[i] << G4endl;
-	}
+        G4double QB = DM0 - bindingEnergy(A1[i],Z1[i]) - Q1[i];
+        V[i] = coul_coeff * Z * Q[i] * AK[i] / (1.0 + EEXS / E0) /
+               (G4cbrt(A1[i]) + G4cbrt(AN[i]));
+        TM[i] = EEXS - QB - V[i] * A / A1[i];
+        if (verboseLevel > 3) {
+          G4cout << " i=" << i << " : QB " << QB << " u " << u[i]
+                 << " V " << V[i] << " TM " << TM[i] << G4endl;
+        }
       }
     }
       
@@ -317,15 +333,15 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
     for (i = 1; i < 6; i++) {
       W[i] = 0.0;
       if (TM[i] > cut_off_energy) {
-	G4double A13 = G4cbrt(A1[i]);
-	W[i] = BE * A13*A13 * G[i] * (1.0 + CPA[i]);
-	G4double TM1 = 2.0 * std::sqrt(u[i] * TM[i]) - ue;
+        G4double A13 = G4cbrt(A1[i]);
+        W[i] = BE * A13*A13 * G[i] * (1.0 + CPA[i]);
+        G4double TM1 = 2.0 * std::sqrt(u[i] * TM[i]) - ue;
 
-	if (TM1 > huge_num) TM1 = huge_num;
-	else if (TM1 < small) TM1 = small;
+        if (TM1 > huge_num) TM1 = huge_num;
+        else if (TM1 < small) TM1 = small;
 
-	W[i] *= G4Exp(TM1);
-	prob_sum += W[i];
+        W[i] *= G4Exp(TM1);
+        prob_sum += W[i];
       }
     }
 
@@ -338,25 +354,25 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       G4double EF = EEXS - getQF(X, X2, A, Z, EEXS);
 	  
       if (EF > 0.0) {
-	G4double AF = u1 * getAF(X, A, Z, EEXS);
-	G4double TM1 = 2.0 * std::sqrt(AF * EF) - ue;
+        G4double AF = u1 * getAF(X, A, Z, EEXS);
+        G4double TM1 = 2.0 * std::sqrt(AF * EF) - ue;
 
-	if (TM1 > huge_num) TM1 = huge_num;
-	else if (TM1 < small) TM1 = small;
+        if (TM1 > huge_num) TM1 = huge_num;
+        else if (TM1 < small) TM1 = small;
 
-	W[6] = BF * G4Exp(TM1);
-	if (W[6] > fisssion_cut*W[0]) W[6] = fisssion_cut*W[0]; 	     
+        W[6] = BF * G4Exp(TM1);
+        if (W[6] > fisssion_cut*W[0]) W[6] = fisssion_cut*W[0]; 	     
 
-	prob_sum += W[6];
+        prob_sum += W[6];
       }
     } 
 
     // again time to decide what next
     if (verboseLevel > 2) {
       G4cout << " Evaporation probabilities: sum = " << prob_sum
-	     << "\n\t n " << W[0] << " p " << W[1] << " d " << W[2]
-	     << " He3 " << W[3] << "\n\t t " << W[4] << " alpha " << W[5]
-	     << " fission " << W[6] << G4endl;
+             << "\n\t n " << W[0] << " p " << W[1] << " d " << W[2]
+             << " He3 " << W[3] << "\n\t t " << W[4] << " alpha " << W[5]
+             << " fission " << W[6] << G4endl;
     }
 
     G4int icase = -1;
@@ -366,20 +382,20 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       G4double T00 = 1.0 / (std::sqrt(u1 / UCR0) - 1.25 / UCR0);
 
       if (verboseLevel > 3)
-	G4cout << " UCR0 " << UCR0 << " T00 " << T00 << G4endl;
+        G4cout << " UCR0 " << UCR0 << " T00 " << T00 << G4endl;
 
       G4int itry_gam = 0;
       while (EEXS > cut_off_energy && try_again) {
-	itry_gam++;
-	G4int itry = 0;
-	G4double T04 = 4.0 * T00;
-	G4double FMAX;
+        itry_gam++;
+        G4int itry = 0;
+        G4double T04 = 4.0 * T00;
+        G4double FMAX;
 
-	if (T04 < EEXS) {
-	  FMAX = (T04*T04*T04*T04) * G4Exp((EEXS - T04) / T00);
-	} else {
-	  FMAX = EEXS*EEXS*EEXS*EEXS;
-	}; 
+        if (T04 < EEXS) {
+          FMAX = (T04*T04*T04*T04) * G4Exp((EEXS - T04) / T00);
+        } else {
+          FMAX = EEXS*EEXS*EEXS*EEXS;
+        }; 
 
 	if (verboseLevel > 3)
 	  G4cout << " T04 " << T04 << " FMAX (EEXS^4) " << FMAX << G4endl;
@@ -393,31 +409,31 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	  if (X1 > FMAX * inuclRndm()) break;
 	};
 
-	if (itry == itry_max) {		// Maximum attempts exceeded
-	  try_again = false;
-	  break;
-	}
+        if (itry == itry_max) {	    // Maximum attempts exceeded
+          try_again = false;
+          break;
+        }
 
-	if (verboseLevel > 2) G4cout << " photon escape ?" << G4endl;
+        if (verboseLevel > 2) G4cout << " photon escape ?" << G4endl;
 
-	if (S < EEXS) {		// Valid evaporate
-	  S /= GeV;				// Convert to Bertini units
+        if (S < EEXS) {	        // Valid evaporate
+          S /= GeV;             // Convert to Bertini units
 
-	  G4double pmod = S;
-	  G4LorentzVector mom = generateWithRandomAngles(pmod, 0.);
+          G4double pmod = S;
+          G4LorentzVector mom = generateWithRandomAngles(pmod, 0.);
 
-	  // Push evaporated particle into current rest frame
-	  mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
+          // Push evaporated particle into current rest frame
+          mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 
-	  if (verboseLevel > 3) {
-	    G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
-		   << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
-		   << " evaporate px " << mom.px() << " py " << mom.py()
-		   << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-	  }
+          if (verboseLevel > 3) {
+            G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
+                   << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
+                   << " evaporate px " << mom.px() << " py " << mom.py()
+                   << " pz " << mom.pz() << " E " << mom.e() << G4endl;
+          }
 
-	  PEX -= mom;			// Remaining four-momentum
-	  EEXS -= S*GeV;		// New excitation energy (in MeV)
+          PEX -= mom;        // Remaining four-momentum
+          EEXS -= S*GeV;     // New excitation energy (in MeV)
 
 	  // NOTE:  In-situ construction will be optimized away (no copying)
 	  output.addOutgoingParticle(G4InuclElementaryParticle(mom, photon,
@@ -448,45 +464,44 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
       if (icase < 0) continue;	// Failed to choose scenario, try again
 
       if (icase < 6) { // particle or light nuclei escape
-	if (verboseLevel > 2) {
-	  G4cout << " particle/light-ion escape ("
-		 << (icase==0 ? "neutron" : icase==1 ? "proton" :
-		     icase==2 ? "deuteron" : icase==3 ? "He3" :
-		     icase==4 ? "triton" : icase==5 ? "alpha" : "ERROR!")
-		 << ")?" << G4endl;
-	}
+        if (verboseLevel > 2) {
+          G4cout << " particle/light-ion escape ("
+                 << (icase==0 ? "neutron" : icase==1 ? "proton" :
+                     icase==2 ? "deuteron" : icase==3 ? "He3" :
+                     icase==4 ? "triton" : icase==5 ? "alpha" : "ERROR!")
+                 << ")?" << G4endl;
+        }
 
-	G4double uc = 2.0 * std::sqrt(u[icase] * TM[icase]);
-	G4double ur = (uc > huge_num ? G4Exp(huge_num) : G4Exp(uc));
-	G4double d1 = 1.0 / ur;
-	G4double d2 = 1.0 / (ur - 1.0);	    
-	G4int itry1 = 0;
-	G4bool bad = true;
+        G4double Xmax = (std::sqrt(u[icase]*TM[icase] + 0.25) - 0.5)/u[icase];
+        G4int itry1 = 0;
+        G4bool bad = true;
 
-	while (itry1 < itry_max && bad) {
-	  itry1++; 
-	  G4int itry = 0;
-	  G4double EPR = -1.0;
-	  G4double S = 0.0;
+        while (itry1 < itry_max && bad) {
+          itry1++; 
+          G4int itry = 0;
+          G4double S = 0.0;
+          G4double X = 0.0;
+          G4double Ptest = 0.0;
 
-	  while (itry < itry_max && EPR < 0.0) {
-	    itry++;
-	    G4double uu = uc + G4Log((1.0 - d1) * inuclRndm() + d2);
-	    S = 0.5 * (uc * uc - uu * uu) / u[icase];
-	    EPR = TM[icase] - S * A / (A - 1.0) + V[icase];
-	  }; 
+          while (itry < itry_max) {
+            itry++;
 
-	  if (verboseLevel > 3) {
-	    G4cout << " EPR " << EPR << " V " << V[icase]
-		   << " S " << S << " EEXS " << EEXS << G4endl;
-	  }
+            // Sampling from eq. 17 of Dostrovsky
+            X = G4UniformRand()*TM[icase];
+            Ptest = (X/Xmax)*G4Exp(-2.*u[icase]*Xmax + 2.*std::sqrt(u[icase]*(TM[icase] - X)));
+            if (G4UniformRand() < Ptest) {
+              S = X + V[icase];
+              break;
+            }
+          }
 
-	  if (EPR > 0.0 && S > V[icase] && S < EEXS) {	// real escape
-	    if (verboseLevel > 2)
-	      G4cout << " escape itry1 " << itry1 << " icase "
-		     << icase << " S (MeV) " << S << G4endl;
+          if (S > V[icase] && S < EEXS) {  // real escape
 
-	    S /= GeV;				// Convert to Bertini units
+            if (verboseLevel > 2)
+              G4cout << " escape itry1 " << itry1 << " icase "
+                     << icase << " S (MeV) " << S << G4endl;
+
+            S /= GeV;            // Convert to Bertini units
 
 	    if (icase < 2) { 	// particle escape
 	      G4int ptype = 2 - icase;
@@ -495,13 +510,13 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	      
 	      // generate particle momentum
 	      G4double mass =
-		G4InuclElementaryParticle::getParticleMass(ptype);
+                G4InuclElementaryParticle::getParticleMass(ptype);
 	      
-	      G4double pmod = std::sqrt((2.0 * mass + S) * S);
-	      G4LorentzVector mom = generateWithRandomAngles(pmod, mass);
+              G4double pmod = std::sqrt((2.0 * mass + S) * S);
+              G4LorentzVector mom = generateWithRandomAngles(pmod, mass);
 	      
-	      // Push evaporated particle into current rest frame
-	      mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
+              // Push evaporated particle into current rest frame
+              mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 	      
 	      if (verboseLevel > 2) {
 		G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
@@ -524,36 +539,36 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	      Z = Z1[icase]; 	      
 	      
 	      // NOTE:  In-situ construction optimizes away (no copying)
-	      output.addOutgoingParticle(G4InuclElementaryParticle(mom,
-					 ptype, G4InuclParticle::Equilib));
+              output.addOutgoingParticle(G4InuclElementaryParticle(mom,
+                                         ptype, G4InuclParticle::Equilib));
 	      
-	      if (verboseLevel > 3)
-		G4cout << output.getOutgoingParticles().back() << G4endl;
+              if (verboseLevel > 3)
+                G4cout << output.getOutgoingParticles().back() << G4endl;
 	      
-	      ppout += mom;
-	      bad = false;
-	    } else {	// if (icase < 2)
-	      if (verboseLevel > 2) {
-		G4cout << " nucleus A " << AN[icase] << " Z " << Q[icase]
-		       << " escape icase " << icase << G4endl;
-	      }
+              ppout += mom;
+              bad = false;
+            } else {   // if (icase < 2)
+              if (verboseLevel > 2) {
+                G4cout << " nucleus A " << AN[icase] << " Z " << Q[icase]
+                       << " escape icase " << icase << G4endl;
+              }
 	      
-	      G4double mass =
-		G4InuclNuclei::getNucleiMass(AN[icase],Q[icase]);
+              G4double mass =
+                G4InuclNuclei::getNucleiMass(AN[icase],Q[icase]);
 	      
-	      // generate particle momentum
-	      G4double pmod = std::sqrt((2.0 * mass + S) * S);
-	      G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
+              // generate particle momentum
+              G4double pmod = std::sqrt((2.0 * mass + S) * S);
+              G4LorentzVector mom = generateWithRandomAngles(pmod,mass);
 	      
-	      // Push evaporated particle into current rest frame
-	      mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
+              // Push evaporated particle into current rest frame
+              mom = toTheNucleiSystemRestFrame.backToTheLab(mom);
 	      
-	      if (verboseLevel > 2) {
-		G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
-		       << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
-		       << " evaporate px " << mom.px() << " py " << mom.py()
-		       << " pz " << mom.pz() << " E " << mom.e() << G4endl;
-	      }
+              if (verboseLevel > 2) {
+                G4cout << " nucleus   px " << PEX.px() << " py " << PEX.py()
+                       << " pz " << PEX.pz() << " E " << PEX.e() << G4endl
+                       << " evaporate px " << mom.px() << " py " << mom.py()
+                       << " pz " << mom.pz() << " E " << mom.e() << G4endl;
+              }
 	      
 	      // New excitation energy depends on residual nuclear state
 	      G4double mass_new =
@@ -582,8 +597,8 @@ void G4EquilibriumEvaporator::deExcite(const G4Fragment& target,
 	  }		// if (EPR > 0.0 ...
 	}		// while (itry1 ...
 
-	if (itry1 == itry_max || bad) try_again = false;
-      } else { 	// if (icase < 6)
+        if (itry1 == itry_max || bad) try_again = false;
+      } else {  // if (icase < 6)
 	if (verboseLevel > 2) {
 	  G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS
 		 << " Wn " << W[0] << " Wf " << W[6] << G4endl;

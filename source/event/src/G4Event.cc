@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc 94950 2016-01-07 11:53:14Z gcosmo $
+// $Id: G4Event.cc 99158 2016-09-07 08:10:46Z gcosmo $
 //
 
 // G4Event
@@ -63,7 +63,15 @@ G4Event::G4Event(G4int evID)
 
 G4Event::~G4Event()
 {
-  delete thePrimaryVertex;
+  G4PrimaryVertex* nextVertex = thePrimaryVertex;
+  while(nextVertex)
+  {
+    G4PrimaryVertex* thisVertex = nextVertex;
+    nextVertex = thisVertex->GetNext();
+    thisVertex->ClearNext();
+    delete thisVertex;
+  }
+  thePrimaryVertex = nullptr;
   delete HC;
   delete DC;
   if(trajectoryContainer)

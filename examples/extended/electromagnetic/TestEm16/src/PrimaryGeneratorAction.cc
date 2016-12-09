@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 68208 2013-03-18 18:17:16Z maire $
+// $Id: PrimaryGeneratorAction.cc 98758 2016-08-09 13:59:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,6 +51,11 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
            = G4ParticleTable::GetParticleTable()->FindParticle("e+");
   fParticleGun->SetParticleDefinition(particle);
   fParticleGun->SetParticleEnergy(10*GeV);
+
+  //set the initial gun position and direction.
+  G4double x0 = -0.5*(fDetector->GetSize());
+  G4double y0 = 0.*cm, z0 = 0.*cm;
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
 }
 
@@ -65,12 +70,7 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  //this function is called at the begining of event
-  //
-  G4double x0 = -0.5*(fDetector->GetSize());
-  G4double y0 = 0.*cm, z0 = 0.*cm;
-
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  //this function is called at the beginning of event
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

@@ -35,5 +35,5 @@
 
 #include "globals.hh"
 
-#define G4INCL_VERSION_ID "v5.2.9.5-clean"
-#define G4INCL_GIT_HASH "6aca7e652750fce5391178ec9e26c7339ed4620b"
+#define G4INCL_VERSION_ID "v5.3-clean"
+#define G4INCL_GIT_HASH "4b60f13e3a0cddd63f948f27373aecdd41a081ad"

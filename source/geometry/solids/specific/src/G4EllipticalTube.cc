@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4EllipticalTube.cc 101118 2016-11-07 09:10:59Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -44,6 +44,7 @@
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
+#include "G4BoundingEnvelope.hh"
 #include "meshdefs.hh"
 
 #include "Randomize.hh"
@@ -134,123 +135,74 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
    return *this;
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
 
-//
-// CalculateExtent
-//
-G4bool
-G4EllipticalTube::CalculateExtent( const EAxis axis,
-                                   const G4VoxelLimits &voxelLimit,
-                                   const G4AffineTransform &transform,
-                                         G4double &min, G4double &max ) const
+void G4EllipticalTube::Extent( G4ThreeVector& pMin,
+                               G4ThreeVector& pMax ) const
 {
-  G4SolidExtentList  extentList( axis, voxelLimit );
-  
-  //
-  // We are going to divide up our elliptical face into small
-  // pieces
-  //
-  
-  //
-  // Choose phi size of our segment(s) based on constants as
-  // defined in meshdefs.hh
-  //
-  G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = twopi/numPhi;
-  
-  //
-  // We have to be careful to keep our segments completely outside
-  // of the elliptical surface. To do so we imagine we have
-  // a simple (unit radius) circular cross section (as in G4Tubs) 
-  // and then "stretch" the dimensions as necessary to fit the ellipse.
-  //
-  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
-  G4double dxFudge = dx*rFudge,
-           dyFudge = dy*rFudge;
-  
-  //
-  // As we work around the elliptical surface, we build
-  // a "phi" segment on the way, and keep track of two
-  // additional polygons for the two ends.
-  //
-  G4ClippablePolygon endPoly1, endPoly2, phiPoly;
-  
-  G4double phi = 0, 
-           cosPhi = std::cos(phi),
-           sinPhi = std::sin(phi);
-  G4ThreeVector v0( dxFudge*cosPhi, dyFudge*sinPhi, +dz ),
-                v1( dxFudge*cosPhi, dyFudge*sinPhi, -dz ),
-                w0, w1;
-  transform.ApplyPointTransform( v0 );
-  transform.ApplyPointTransform( v1 );
-  do    // Loop checking, 13.08.2015, G.Cosmo
-  {
-    phi += sigPhi;
-    if (numPhi == 1) phi = 0;  // Try to avoid roundoff
-    cosPhi = std::cos(phi), 
-    sinPhi = std::sin(phi);
-    
-    w0 = G4ThreeVector( dxFudge*cosPhi, dyFudge*sinPhi, +dz );
-    w1 = G4ThreeVector( dxFudge*cosPhi, dyFudge*sinPhi, -dz );
-    transform.ApplyPointTransform( w0 );
-    transform.ApplyPointTransform( w1 );
-    
-    //
-    // Add a point to our z ends
-    //
-    endPoly1.AddVertexInOrder( v0 );
-    endPoly2.AddVertexInOrder( v1 );
-    
-    //
-    // Build phi polygon
-    //
-    phiPoly.ClearAllVertices();
-    
-    phiPoly.AddVertexInOrder( v0 );
-    phiPoly.AddVertexInOrder( v1 );
-    phiPoly.AddVertexInOrder( w1 );
-    phiPoly.AddVertexInOrder( w0 );
-    
-    if (phiPoly.PartialClip( voxelLimit, axis ))
-    {
-      //
-      // Get unit normal
-      //
-      phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
-      
-      extentList.AddSurface( phiPoly );
-    }
-
-    //
-    // Next vertex
-    //    
-    v0 = w0;
-    v1 = w1;
-  } while( --numPhi > 0 );
-
-  //
-  // Process the end pieces
-  //
-  if (endPoly1.PartialClip( voxelLimit, axis ))
-  {
-    static const G4ThreeVector normal(0,0,+1);
-    endPoly1.SetNormal( transform.TransformAxis(normal) );
-    extentList.AddSurface( endPoly1 );
-  }
-  
-  if (endPoly2.PartialClip( voxelLimit, axis ))
-  {
-    static const G4ThreeVector normal(0,0,-1);
-    endPoly2.SetNormal( transform.TransformAxis(normal) );
-    extentList.AddSurface( endPoly2 );
-  }
-  
-  //
-  // Return min/max value
-  //
-  return extentList.GetExtent( min, max );
+  pMin.set(-dx,-dy,-dz);
+  pMax.set( dx, dy, dz);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4EllipticalTube::CalculateExtent( const EAxis pAxis,
+                                   const G4VoxelLimits& pVoxelLimit,
+                                   const G4AffineTransform& pTransform,
+                                         G4double& pMin, G4double& pMax ) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  const G4int NSTEPS = 48; // number of steps for whole circle
+  G4double ang = twopi/NSTEPS;
+
+  G4double sinHalf = std::sin(0.5*ang);
+  G4double cosHalf = std::cos(0.5*ang);
+  G4double sinStep = 2.*sinHalf*cosHalf;
+  G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+  G4double sx = dx/cosHalf;
+  G4double sy = dy/cosHalf;
+
+  G4double sinCur = sinHalf;
+  G4double cosCur = cosHalf;
+  G4ThreeVectorList baseA(NSTEPS),baseB(NSTEPS);
+  for (G4int k=0; k<NSTEPS; ++k)
+  {
+    baseA[k].set(sx*cosCur,sy*sinCur,-dz);
+    baseB[k].set(sx*cosCur,sy*sinCur, dz);
+
+    G4double sinTmp = sinCur;
+    sinCur = sinCur*cosStep + cosCur*sinStep;
+    cosCur = cosCur*cosStep - sinTmp*sinStep;
+  }
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
+}
 
 //
 // Inside
@@ -800,7 +752,7 @@ G4double G4EllipticalTube::DistanceToOut( const G4ThreeVector& p ) const
 //     trajectory just grazes the surface.
 //
 // Solution:
-//     One needs to solve: ( (p.x + q*v.x)/dx )**2  + ( (p.y + q*v.y)/dy )**2 = 1
+//     One needs to solve: ((p.x + q*v.x)/dx)**2  + ((p.y + q*v.y)/dy)**2 = 1
 //
 //     The solution is quadratic: a*q**2 + b*q + c = 0
 //
@@ -913,7 +865,7 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 {
   G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
 
-  phi    = RandFlat::shoot(0., 2.*pi);
+  phi    = G4RandFlat::shoot(0., 2.*pi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
   
@@ -931,9 +883,9 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 
   xRand = dx*cosphi;
   yRand = dy*sinphi;
-  zRand = RandFlat::shoot(dz, -1.*dz);
+  zRand = G4RandFlat::shoot(dz, -1.*dz);
     
-  chose = RandFlat::shoot(0.,2.*zArea+cArea);
+  chose = G4RandFlat::shoot(0.,2.*zArea+cArea);
   
   if( (chose>=0) && (chose < cArea) )
   {
@@ -941,16 +893,16 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
   }
   else if( (chose >= cArea) && (chose < cArea + zArea) )
   {
-    xRand = RandFlat::shoot(-1.*dx,dx);
+    xRand = G4RandFlat::shoot(-1.*dx,dx);
     yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
     return G4ThreeVector (xRand,yRand,dz); 
   }
   else
   { 
-    xRand = RandFlat::shoot(-1.*dx,dx);
+    xRand = G4RandFlat::shoot(-1.*dx,dx);
     yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
     return G4ThreeVector (xRand,yRand,-1.*dz);
   }
 }

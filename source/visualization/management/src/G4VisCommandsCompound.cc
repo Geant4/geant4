@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc 95006 2016-01-15 08:26:18Z gcosmo $
+// $Id: G4VisCommandsCompound.cc 98766 2016-08-09 14:17:17Z gcosmo $
 
 // Compound /vis/ commands - John Allison  15th May 2000
 
@@ -311,10 +311,12 @@ G4VisCommandSpecify::G4VisCommandSpecify() {
   fpCommand->SetGuidance
     ("Creates a scene consisting of this logical volume and asks the"
      "\n  current viewer to draw it to the specified depth of descent"
-     "\n  showing boolean components (if any), voxels (if any)"
-     "\n  and readout geometry (if any), under control of the appropriate flag.");
+     "\n  showing boolean components (if any), voxels (if any),"
+     "\n  readout geometry (if any) and local axes, under control of the"
+     "\n  appropriate flag.");
   fpCommand->SetGuidance
-    ("Note: voxels are not constructed until start of run - /run/beamOn.");
+  ("Note: voxels are not constructed until start of run - /run/beamOn."
+   "\n  (For voxels without a run, \"/run/beamOn 0\".)");
   fpCommand->SetGuidance("The scene becomes current.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter("logical-volume-name", 's', omitable = false);

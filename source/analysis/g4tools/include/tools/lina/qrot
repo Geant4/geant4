@@ -6,23 +6,21 @@
 
 // rotation done with quaternion.
 
-#include "vec4"
-#include "vec3"
-
-#include "mat4"
-
 namespace tools {
 
-template <class T>
+template <class VEC3,class VEC4>
 class qrot {
+protected:
+//typedef typename VEC3::elem_t T3;
+  typedef typename VEC4::elem_t T; //we assume = T3
 public:
   qrot()
   :m_quat(0,0,0,1)   //zero rotation around the positive Z axis.
   {}
-  qrot(const vec3<T>& a_axis,T a_radians){
-    if(!set_value(a_axis,a_radians)) {} //FIXME : throw
+  qrot(const VEC3& a_axis,T a_radians,T(*a_sin)(T),T(*a_cos)(T)){
+    if(!set_value(a_axis,a_radians,a_sin,a_cos)) {} //FIXME : throw
   }
-  qrot(const vec3<T>& a_from,const vec3<T>& a_to){set_value(a_from,a_to);}
+  qrot(const VEC3& a_from,const VEC3& a_to,T(*a_sqrt)(T),T(*a_fabs)(T)){set_value(a_from,a_to,a_sqrt,a_fabs);}
   virtual ~qrot(){}
 public:
   qrot(const qrot& a_from)
@@ -108,14 +106,14 @@ public:
   }
 
 
-  bool set_value(const vec3<T>& a_axis,T a_radians) {
+  bool set_value(const VEC3& a_axis,T a_radians,T(*a_sin)(T),T(*a_cos)(T)) {
     // Reset rotation with the given axis-of-rotation and rotation angle.
     // Make sure axis is not the null vector when calling this method.
     // From <http://www.automation.hut.fi/~jaro/thesis/hyper/node9.html>.
     if(a_axis.length()==T()) return false;
-    m_quat.v3(::cos(a_radians/2));
-    T sineval = ::sin(a_radians/2);
-    vec3<T> a = a_axis;
+    m_quat.v3(a_cos(a_radians/2));
+    T sineval = a_sin(a_radians/2);
+    VEC3 a = a_axis;
     a.normalize();
     m_quat.v0(a.v0() * sineval);
     m_quat.v1(a.v1() * sineval);
@@ -123,15 +121,15 @@ public:
     return true;
   }
 
-  bool set_value(const vec3<T>& a_from,const vec3<T>& a_to) {
+  bool set_value(const VEC3& a_from,const VEC3& a_to,T(*a_sqrt)(T),T(*a_fabs)(T)) {
     // code taken from coin3d/SbRotation.
-    vec3<T> from(a_from);
+    VEC3 from(a_from);
     if(from.normalize()==T()) return false;
-    vec3<T> to(a_to);
+    VEC3 to(a_to);
     if(to.normalize()==T()) return false;
 
     T dot = from.dot(to);
-    vec3<T> crossvec = from.cross(to);
+    VEC3 crossvec;from.cross(to,crossvec);
     T crosslen = crossvec.normalize();
 
     if(crosslen == T()) { // Parallel vectors
@@ -142,10 +140,10 @@ public:
         // Ok, so they are parallel and pointing in the opposite direction
         // of each other.
         // Try crossing with x axis.
-        vec3<T> t = from.cross(vec3<T>(1,0,0));
+        VEC3 t;from.cross(VEC3(1,0,0),t);
         // If not ok, cross with y axis.
         if(t.normalize() == T()) {
-          t = from.cross(vec3<T>(0,1,0));
+          from.cross(VEC3(0,1,0),t);
           t.normalize();
         }
         m_quat.set_value(t[0],t[1],t[2],0);
@@ -153,17 +151,17 @@ public:
     } else { // Vectors are not parallel
       // The fabs() wrapping is to avoid problems when `dot' "overflows"
       // a tiny wee bit, which can lead to sqrt() returning NaN.
-      crossvec *= (T)::sqrt(half() * ::fabs(one() - dot));
+      crossvec *= (T)a_sqrt(half() * a_fabs(one() - dot));
       // The fabs() wrapping is to avoid problems when `dot' "underflows"
       // a tiny wee bit, which can lead to sqrt() returning NaN.
-      m_quat.set_value(crossvec[0], crossvec[1], crossvec[2],(T)::sqrt(half()*::fabs(one()+dot)));
+      m_quat.set_value(crossvec[0], crossvec[1], crossvec[2],(T)a_sqrt(half()*a_fabs(one()+dot)));
     }
 
     return true;
   }
 
 
-  bool value(vec3<T>& a_axis,T& a_radians) const {
+  bool value(VEC3& a_axis,T& a_radians,T(*a_sin)(T),T(*a_acos)(T)) const { //WARNING a_acos and NOT a_cos
     //WARNING : can fail.
     if( (m_quat.v3()<minus_one()) || (m_quat.v3()> one()) ){ ////???
       a_axis.set_value(0,0,1);
@@ -171,8 +169,8 @@ public:
       return false;
     }
 
-    a_radians = ::acos(m_quat.v3()) * 2;
-    T sineval = ::sin(a_radians/2);
+    a_radians = a_acos(m_quat.v3()) * 2;
+    T sineval = a_sin(a_radians/2);
 
     if(sineval==T()) { //???
       a_axis.set_value(0,0,1);
@@ -185,14 +183,15 @@ public:
     return true;
   }
 
-  void set_value(const mat4<T>& a_m) {
+  template <class MAT4>
+  void set_value(const MAT4& a_m,T(*a_sqrt)(T)) {
     //WARNING : not tested.
 
     //Set the rotation from the components of the given matrix.
 
     T scalerow = a_m.v00() + a_m.v11() + a_m.v22();
     if (scalerow > T()) {
-      T _s = ::sqrt(scalerow + a_m.v33());
+      T _s = a_sqrt(scalerow + a_m.v33());
       m_quat.v3(_s * half());
       _s = half() / _s;
 
@@ -207,7 +206,7 @@ public:
       unsigned int j = (i+1)%3;
       unsigned int k = (j+1)%3;
 
-      T _s = ::sqrt((a_m.value(i,i) - (a_m.value(j,j) + a_m.value(k,k))) + a_m.v33());
+      T _s = a_sqrt((a_m.value(i,i) - (a_m.value(j,j) + a_m.value(k,k))) + a_m.v33());
   
       m_quat.set_value(i,_s * half());
       _s = half() / _s;
@@ -218,11 +217,12 @@ public:
     }
 
     if (a_m.v33()!=one()) {
-      m_quat.multiply(one()/::sqrt(a_m.v33()));
+      m_quat.multiply(one()/a_sqrt(a_m.v33()));
     }
   }
 
-  void value(mat4<T>& a_m) const {
+  template <class MAT4>
+  void value(MAT4& a_m) const {
     //Return this rotation in the form of a matrix.
     const T x = m_quat.v0();
     const T y = m_quat.v1();
@@ -255,7 +255,7 @@ public:
     a_m.v33(w*w + x*x + y*y + z*z);
   }
 
-  void mul_vec(const vec3<T>& a_in,vec3<T>& a_out) const {
+  void mul_vec(const VEC3& a_in,VEC3& a_out) const {
     const T x = m_quat.v0();
     const T y = m_quat.v1();
     const T z = m_quat.v2();
@@ -277,7 +277,7 @@ public:
     a_out.set_value(v0,v1,v2);
   }
 
-  void mul_vec(vec3<T>& a_v) const {
+  void mul_vec(VEC3& a_v) const {
     const T x = m_quat.v0();
     const T y = m_quat.v1();
     const T z = m_quat.v2();
@@ -324,8 +324,8 @@ public:
   }
 
 public: //for io::streamer
-  const vec4<T>& quat() const {return m_quat;}
-  vec4<T>& quat() {return m_quat;}
+  const VEC4& quat() const {return m_quat;}
+  VEC4& quat() {return m_quat;}
 
 protected:
   static T one() {return T(1);}
@@ -333,7 +333,7 @@ protected:
   static T half() {return T(0.5);}
 
 protected:
-  vec4<T> m_quat;
+  VEC4 m_quat;
 
 public:
   //NOTE : don't handle a static object because of mem balance.
@@ -342,7 +342,7 @@ public:
   //  return s_v;
   //}
 
-private:static void check_instantiation() {qrot<float> v;}
+//private:static void check_instantiation() {qrot<float> v;}
 };
 
 }

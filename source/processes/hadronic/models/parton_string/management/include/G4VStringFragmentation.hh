@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VStringFragmentation.hh 67999 2013-03-13 11:14:32Z gcosmo $
+// $Id: G4VStringFragmentation.hh 100828 2016-11-02 15:25:59Z gcosmo $
 //
 #ifndef G4VStringFragmentation_h
 #define G4VStringFragmentation_h 1
@@ -36,22 +36,21 @@ class G4KineticTrackVector;
 class G4VStringFragmentation 
 {
   public:
-      G4VStringFragmentation();
-      virtual ~G4VStringFragmentation();
+    G4VStringFragmentation();
+    virtual ~G4VStringFragmentation();
 
   private:
-      G4VStringFragmentation(const G4VStringFragmentation &right);
-      const G4VStringFragmentation & operator=(const G4VStringFragmentation &right);
-      int operator==(const G4VStringFragmentation &right) const;
-      int operator!=(const G4VStringFragmentation &right) const;
+    G4VStringFragmentation(const G4VStringFragmentation &right);
+    const G4VStringFragmentation & operator=(const G4VStringFragmentation &right);
+    int operator==(const G4VStringFragmentation &right) const;
+    int operator!=(const G4VStringFragmentation &right) const;
 
   public:
-      virtual G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)=0;
+    virtual G4KineticTrackVector * FragmentStrings(const G4ExcitedStringVector * theStrings)=0;
 
   private:
 
 };
 
 #endif
-
 

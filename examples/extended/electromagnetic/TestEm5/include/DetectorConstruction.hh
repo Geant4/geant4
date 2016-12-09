@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 91972 2015-08-12 13:48:40Z gcosmo $
+// $Id: DetectorConstruction.hh 98752 2016-08-09 13:44:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,7 +127,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

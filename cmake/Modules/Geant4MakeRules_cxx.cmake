@@ -24,9 +24,16 @@ endfunction()
 #-----------------------------------------------------------------------
 # GNU C++ or Clang/AppleClang Compiler on all(?) platforms
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow -pipe")
+  # Warnings
+  set(CMAKE_CXX_FLAGS_INIT "-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -Wno-variadic-macros -Wshadow")
+  # Use pipes rather than temp files
+  set(CMAKE_CXX_FLAGS_INIT "${CMAKE_CXX_FLAGS_INIT} -pipe")
+
+  # Additional per-mode flags
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g -DG4FPE_DEBUG")
-  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")
+  # Assist auto-vectorization
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "${CMAKE_CXX_FLAGS_RELEASE_INIT} -fno-trapping-math -ftree-vectorize -fno-math-errno")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 
@@ -60,7 +67,7 @@ if(MSVC)
   # best for native build.
   set(CMAKE_CXX_FLAGS_INIT "-GR -EHsc -Zm200 -nologo -D_CONSOLE -D_WIN32 -DWIN32 -DOS -DXPNET -D_CRT_SECURE_NO_DEPRECATE")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-MDd -Od -Zi")
-  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-MD -O2 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-MD -Ox -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-MD -Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-MD -O2 -Zi")
 
@@ -77,7 +84,7 @@ endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
   set(CMAKE_CXX_FLAGS_INIT "-w1 -Wno-non-virtual-dtor -Wpointer-arith -Wwrite-strings -fp-model precise")
   set(CMAKE_CXX_FLAGS_DEBUG_INIT "-g")
-  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O2 -DNDEBUG")
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "-O3 -DNDEBUG")
   set(CMAKE_CXX_FLAGS_MINSIZEREL_INIT "-Os -DNDEBUG")
   set(CMAKE_CXX_FLAGS_RELWITHDEBINFO_INIT "-O2 -g")
 

@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 96171 2016-03-22 09:18:21Z gcosmo $
+# $Id: sources.cmake 98736 2016-08-09 10:55:12Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -76,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_option4.hh
     G4EmDNAPhysics_option5.hh
     G4EmDNAPhysics_option7.hh
+    G4EmDNAPhysicsActivator.hh
     G4EmLEPTSPhysics.hh
     G4EmLivermorePhysics.hh
     G4EmLivermorePolarizedPhysics.hh
@@ -102,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_option4.cc
     G4EmDNAPhysics_option5.cc
     G4EmDNAPhysics_option7.cc
+    G4EmDNAPhysicsActivator.cc
     G4EmLEPTSPhysics.cc
     G4EmLivermorePhysics.cc
     G4EmLivermorePolarizedPhysics.cc

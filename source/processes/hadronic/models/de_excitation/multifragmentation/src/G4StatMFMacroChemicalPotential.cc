@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroChemicalPotential.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4StatMFMacroChemicalPotential.cc 100379 2016-10-19 15:05:35Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -57,12 +57,12 @@ G4bool G4StatMFMacroChemicalPotential::operator!=(const G4StatMFMacroChemicalPot
 G4double G4StatMFMacroChemicalPotential::CalcChemicalPotentialNu(void) 
 //	Calculate Chemical potential \nu
 {
-  G4Pow* g4pow = G4Pow::GetInstance();
+  G4Pow* g4calc = G4Pow::GetInstance();
   G4double CP = G4StatMFParameters::GetCoulomb();
 
   // Initial value for _ChemPotentialNu	
   _ChemPotentialNu = (theZ/theA)*(8.0*G4StatMFParameters::GetGamma0()
-				  +2.0*CP*g4pow->Z23(theA))
+				  +2.0*CP*g4calc->Z23(theA))
     - 4.0*G4StatMFParameters::GetGamma0();
 		
   G4double ChemPa = _ChemPotentialNu;

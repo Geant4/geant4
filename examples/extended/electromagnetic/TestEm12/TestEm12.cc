@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm12/TestEm12.cc
 /// \brief Main program of the electromagnetic/TestEm12 example
 //
-// $Id: TestEm12.cc 85260 2014-10-27 08:53:35Z gcosmo $
+// $Id: TestEm12.cc 99442 2016-09-22 08:36:14Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,9 +63,11 @@ int main(int argc,char** argv) {
   //Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  G4int nThreads = G4Threading::G4GetNumberOfCores();
+  G4int nThreads = std::min(4,G4Threading::G4GetNumberOfCores());
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
   runManager->SetNumberOfThreads(nThreads);
+  G4cout << "### TestEm12 run in MT mode with " 
+         << nThreads << " threads " << G4endl;
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);  
   G4RunManager* runManager = new G4RunManager;

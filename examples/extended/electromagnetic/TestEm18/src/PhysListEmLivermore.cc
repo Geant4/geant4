@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.cc 96374 2016-04-11 06:55:50Z gcosmo $
+// $Id: PhysListEmLivermore.cc 100275 2016-10-17 08:29:19Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -102,9 +102,10 @@ void PhysListEmLivermore::ConstructProcess()
 {
   // Add standard EM Processes
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 

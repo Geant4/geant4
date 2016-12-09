@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file parallel/ThreadsafeScorers/atomics/G4TAtomicHitsMap.hh
+/// \file parallel/ThreadsafeScorers/include/G4TAtomicHitsMap.hh
 /// \brief Definition of the G4TAtomicHitsMap class
 //
 //

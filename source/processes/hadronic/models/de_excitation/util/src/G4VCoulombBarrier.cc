@@ -23,19 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VCoulombBarrier.cc 97097 2016-05-25 07:50:31Z gcosmo $
+// $Id: G4VCoulombBarrier.cc 100690 2016-10-31 11:25:43Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Dec 1999)
 
 #include "G4VCoulombBarrier.hh"
+#include "G4PhysicalConstants.hh"
 
 G4VCoulombBarrier::G4VCoulombBarrier(G4int anA, G4int aZ)
 {
   theA = anA;
   theZ = aZ;
+  theRho = 0.0; 
+  theR0 = 1.5*CLHEP::fermi;
 }
 
 G4VCoulombBarrier::~G4VCoulombBarrier()
 {}
 
+void G4VCoulombBarrier::SetParameters(G4double rho, G4double r0)
+{
+  theRho = rho;
+  theR0 = r0;
+}

@@ -55,17 +55,16 @@ public:
   bool operator!=(const bmf& a_from) const { 
     return !operator==(a_from);
   }
-  const T& operator[](unsigned int a_index) const {
+  const T& operator[](size_t a_index) const {
     //WARNING : no check is done on a_index.
     return m_values[a_index];    
   }
-  T& operator[](unsigned int a_index) {
+  T& operator[](size_t a_index) {
     //WARNING : no check is done on a_index.
     return m_values[a_index];    
   }
 public:
-  //unsigned int number() const {return m_values.size();}
-  unsigned int size() const {return m_values.size();}
+  size_t size() const {return m_values.size();}
   bool empty() const {return m_values.empty();}
   const std::vector<T>& values() const {return m_values;}
   std::vector<T>& values() {return m_values;}
@@ -86,13 +85,13 @@ public:
     m_values.insert(a_it,a_value);
     m_touched = true;
   }
-  bool set_value(unsigned int a_index,const T& a_value) {
+  bool set_value(size_t a_index,const T& a_value) {
     if(a_index>=m_values.size()) return false;
     if(m_values[a_index]!=a_value) m_touched = true;
     m_values[a_index] = a_value;
     return true;
   }
-  bool get_value(unsigned int a_index,T& a_value) {
+  bool get_value(size_t a_index,T& a_value) {
     if(a_index>=m_values.size()) {a_value=T();return false;}
     a_value = m_values[a_index];
     return true;
@@ -114,25 +113,25 @@ public:
   }
 
 public: //for iv2sg
-  //bool setValues(unsigned int a_index,unsigned int a_num,const T* a_vs) {
-  //  for(unsigned int index=0;index<a_num;index++) {
+  //bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
+  //  for(size_t index=0;index<a_num;index++) {
   //    if(!set1Value(a_index+index,a_vs[index])) return false;
   //  }
   //  return true;
   //}
 
-  bool setValues(unsigned int a_index,unsigned int a_num,const T* a_vs) {
+  bool setValues(size_t a_index,size_t a_num,const T* a_vs) {
     //  012345678
     //    234
     if((a_index+a_num)>=m_values.size()) m_values.resize(a_index+a_num);
-    for(unsigned int index=0;index<a_num;index++) {
+    for(size_t index=0;index<a_num;index++) {
       if(a_vs[index]!=m_values[a_index+index]) m_touched = true;
       m_values[a_index+index] = a_vs[index];
     }
     return true;
   }
 
-  bool set1Value(unsigned int a_index,const T& a_value) {
+  bool set1Value(size_t a_index,const T& a_value) {
     if(a_index>=m_values.size()) m_values.resize(a_index+1);
     if(m_values[a_index]!=a_value) m_touched = true;
     m_values[a_index] = a_value;

@@ -27,7 +27,7 @@
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
 //
-// $Id: PrimaryGeneratorAction.cc 73446 2013-08-27 11:32:59Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 99841 2016-10-07 10:09:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -37,6 +37,9 @@
 // Author: Witold POKORSKI (Witold.Pokorski@cern.ch)
 //
 // --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 #include "PrimaryGeneratorAction.hh"
 
 #include "G4Event.hh"
@@ -45,6 +48,8 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
 {
@@ -61,10 +66,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   particleGun->SetParticleEnergy(3.0*GeV);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
   delete particleGun;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 { 
@@ -73,3 +82,5 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   particleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

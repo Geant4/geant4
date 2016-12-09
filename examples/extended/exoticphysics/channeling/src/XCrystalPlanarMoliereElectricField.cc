@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalPlanarMoliereElectricField.cc
+/// \brief Implementation of the XCrystalPlanarMoliereElectricField class
+//
 
 #include "XCrystalPlanarMoliereElectricField.hh"
 #include "G4PhysicalConstants.hh"

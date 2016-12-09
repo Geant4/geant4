@@ -25,11 +25,9 @@
 //
 #include "G4ParticlesWorkspace.hh"
 
-//Note: G4ParticlesWorkspacePool is typedef to G4TWorkspacePool<G4ParticlesWorkspace>
-template<> G4ThreadLocal G4ParticlesWorkspace* G4ParticlesWorkspace::pool_type::fMyWorkspace = 0;
-
-namespace {
-    G4ParticlesWorkspace::pool_type thePool;
+namespace
+{
+  G4ParticlesWorkspace::pool_type thePool;
 }
 
 G4ParticlesWorkspace::pool_type*
@@ -50,27 +48,23 @@ G4ParticlesWorkspace::G4ParticlesWorkspace(G4bool verbose)
 
 G4ParticlesWorkspace::~G4ParticlesWorkspace()
 {
-  
 }
-
-//  Static methods 
-//      For with current (original) G4WorkerThread -- which uses static methods
 
 void
 G4ParticlesWorkspace::UseWorkspace()
 {
   if( fVerbose ) 
-     G4cout << "G4ParticlesWorkspace::UseWorkspace: Copying particles-definition Split-Class - Start " << G4endl;
+     G4cout << "G4ParticlesWorkspace::UseWorkspace: "
+            << "Copying particles-definition Split-Class - Start " << G4endl;
 
-  // Implementation copied from  G4WorkerThread::BuildGeometryAndPhysicsVector()
+  // Implementation copied from G4WorkerThread::BuildGeometryAndPhysicsVector()
   
-  //Geometry related, split classes mechanism: instantiate sub-instance for this thread
+  // Geometry related, split classes mechanism: instantiate
+  // sub-instance for this thread
   fpPDefSIM->UseWorkArea(fpPDefOffset);
 }
 
-
 void G4ParticlesWorkspace::ReleaseWorkspace()
-//  The opposite of Use Workspace - let go of it.
 {
   fpPDefSIM->UseWorkArea(0);
 }
@@ -86,10 +80,10 @@ G4ParticlesWorkspace::InitialiseWorkspace()
      G4cout << "G4ParticlesWorkspace::InitialiseWorkspace: "
             << "Copying particles-definition Split-Class - Start " << G4endl;
     
-  //Particles related, split classes mechanism:
+  // Particles related, split classes mechanism:
   //   Do *NOT* instantiate sub-instance for this thread,
-  //     just copy the contents !!
-    fpPDefSIM->NewSubInstances();
+  //   just copy the contents !!
+  fpPDefSIM->NewSubInstances();
 
   // Additional initialization if needed - beyond copying memory
   InitialiseParticles();

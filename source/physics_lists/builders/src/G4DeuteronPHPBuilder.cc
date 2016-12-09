@@ -28,6 +28,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleHPInelasticData.hh"
+#include "G4SystemOfUnits.hh"
 
 G4DeuteronPHPBuilder::
 G4DeuteronPHPBuilder() 

@@ -38,6 +38,9 @@ G4ThreadLocal int G4ParticleHPGamma::instancecount = 0;
   {
     next = 0;
     instancecount ++;
+    levelEnergy = 0.0;
+    gammaEnergy = 0.0;
+    probability = 0.0;
   }
 
   G4ParticleHPGamma::~G4ParticleHPGamma() {instancecount--;}

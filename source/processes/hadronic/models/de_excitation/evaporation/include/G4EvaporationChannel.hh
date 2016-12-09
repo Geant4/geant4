@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.hh 96402 2016-04-12 07:30:48Z gcosmo $
+// $Id: G4EvaporationChannel.hh 98739 2016-08-09 12:56:55Z gcosmo $
 //
 //
 //J.M. Quesada (August2008). Based on:
@@ -61,12 +61,11 @@ public:
   
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  virtual G4FragmentVector* BreakUp(const G4Fragment & theNucleus);
-  
 private: 
   
   G4EvaporationChannel(const G4EvaporationChannel & right) = delete;
-  const G4EvaporationChannel & operator=(const G4EvaporationChannel & right) = delete;
+  const G4EvaporationChannel & operator=
+  (const G4EvaporationChannel & right) = delete;
   G4bool operator==(const G4EvaporationChannel & right) const = delete;
   G4bool operator!=(const G4EvaporationChannel & right) const = delete;
 

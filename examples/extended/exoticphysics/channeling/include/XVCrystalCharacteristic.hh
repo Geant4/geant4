@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XVCrystalCharacteristic.hh
+/// \brief Definition of the XVCrystalCharacteristic class
+//
 
 #ifndef XVCrystalCharacteristic_h
 #define XVCrystalCharacteristic_h

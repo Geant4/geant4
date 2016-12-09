@@ -102,7 +102,10 @@ public:
     //collect from UI managere the list of commands that threads
     //will execute.
     size_t GetNumberActiveThreads() const { return threads.size(); }
-    //Returns number of currently active threads
+    //Returns number of currently active threads.
+    //This number may be different from the number of threads currently
+    //in running state (e.g. the number returned by:
+    //G4Threading::GetNumberOfActiveWorkerThreads() method).
 private:
     // Number of worker threads. To be set by SetNumberOfThreads() method.
     G4int nworkers;

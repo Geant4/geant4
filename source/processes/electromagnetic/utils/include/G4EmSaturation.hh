@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmSaturation.hh 95657 2016-02-17 13:03:36Z gcosmo $
+// $Id: G4EmSaturation.hh 100346 2016-10-18 15:30:36Z gcosmo $
 //
 //
 #ifndef G4EmSaturation_h
@@ -64,7 +64,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4LossTableManager;
 class G4NistManager;
 class G4MaterialCutsCouple;
 class G4Material;
@@ -82,7 +81,10 @@ public:
 					   const G4MaterialCutsCouple*,
 					   G4double length, 
 					   G4double edepTotal,
-					   G4double edepNIEL = 0.0);
+					   G4double edepNIEL = 0.0) const;
+
+  // activate default model  
+  void InitialiseG4Saturation();
 
   // find and Birks coefficient 
   G4double FindG4BirksCoefficient(const G4Material*);
@@ -94,7 +96,7 @@ public:
   void DumpG4BirksCoefficients();
 
   // this method should not be overwitten
-  inline G4double VisibleEnergyDepositionAtAStep(const G4Step*); 
+  inline G4double VisibleEnergyDepositionAtAStep(const G4Step*) const; 
 
   inline void SetVerbose(G4int);
 
@@ -104,37 +106,27 @@ private:
   G4EmSaturation & operator=(const G4EmSaturation &right) = delete;
   G4EmSaturation(const G4EmSaturation&) = delete;
 
-  inline G4double FindBirksCoefficient(const G4Material*);
-
   void InitialiseBirksCoefficient(const G4Material*);
 
   void InitialiseG4materials();
 
   const G4ParticleDefinition* electron;
   const G4ParticleDefinition* proton;
-  G4LossTableManager*         manager;
   G4NistManager*              nist;
 
-  // cache
-  const G4Material*           curMaterial;
-  G4double                    curBirks;
-  G4double                    curRatio;
-  G4double                    curChargeSq;
-
   G4int    verbose;             
-  G4int    nMaterials;
   G4int    nG4Birks;
   G4int    nWarnings;
 
+  static G4int nMaterials;
+
   // list of materials used in run time
-  std::vector<const G4Material*>    matPointers;
-  std::vector<G4String>             matNames;
-  std::vector<G4double>             massFactors;
-  std::vector<G4double>             effCharges;
+  static std::vector<G4double> massFactors;
+  static std::vector<G4double> effCharges;
 
   // list of G4 materials 
-  std::vector<G4double>             g4MatData;
-  std::vector<G4String>             g4MatNames;
+  static std::vector<G4double>  g4MatData;
+  static std::vector<G4String>  g4MatNames;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -147,23 +139,13 @@ inline void G4EmSaturation::SetVerbose(G4int val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4EmSaturation::VisibleEnergyDepositionAtAStep(
-                const G4Step* step)
+                const G4Step* step) const
 {
-  G4Track* track = step->GetTrack();
-  return VisibleEnergyDeposition(track->GetParticleDefinition(),
-                                 track->GetMaterialCutsCouple(),
+  return VisibleEnergyDeposition(step->GetTrack()->GetParticleDefinition(),
+                                 step->GetTrack()->GetMaterialCutsCouple(),
 				 step->GetStepLength(),
                                  step->GetTotalEnergyDeposit(),
                                  step->GetNonIonizingEnergyDeposit());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline 
-G4double G4EmSaturation::FindBirksCoefficient(const G4Material* mat)
-{
-  if(mat != curMaterial) { InitialiseBirksCoefficient(mat); }
-  return curBirks;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

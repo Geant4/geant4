@@ -10,10 +10,8 @@
 
 #include "named"
 
-namespace tools {
-namespace wroot {
-class branch;
-}}
+#include "cids"
+#include "../scast"
 
 namespace tools {
 namespace wroot {
@@ -27,6 +25,12 @@ public:
     return s_v;
   }
 #endif
+public:
+  static cid id_class() {return base_leaf_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<base_leaf>(this,a_class)) {return p;}
+    else return 0;
+  }
 public: //ibo
   virtual bool stream(buffer& a_buffer) const {
     unsigned int c;
@@ -48,14 +52,10 @@ public: //ibo
     return true;
   }
 public:
-  virtual bool fill_basket(buffer&) const = 0;
+  virtual bool fill_buffer(buffer&) const = 0;
 public:
-  base_leaf(std::ostream& a_out,
-            wroot::branch& a_branch,
-            const std::string& a_name,
-            const std::string& a_title)
+  base_leaf(std::ostream& a_out,const std::string& a_name,const std::string& a_title)
   :m_out(a_out)
-  ,m_branch(a_branch)
   ,m_name(a_name)
   ,m_title(a_title)
 
@@ -75,16 +75,15 @@ protected:
   base_leaf(const base_leaf& a_from)
   :ibo(a_from)
   ,m_out(a_from.m_out)
-  ,m_branch(a_from.m_branch)
   {}
   base_leaf& operator=(const base_leaf&){return *this;}
 public:
-  wroot::branch& branch() {return m_branch;}
   const std::string& name() const {return m_name;}
   //const std::string& title() const {return m_title;}
+  uint32 length() const {return m_length;}
+  void set_length(uint32 a_value) {m_length = a_value;}
 protected:
   std::ostream& m_out;
-  wroot::branch& m_branch;
 protected: //Named
   std::string m_name;
   std::string m_title;

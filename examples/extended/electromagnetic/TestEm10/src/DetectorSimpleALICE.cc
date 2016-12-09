@@ -115,7 +115,8 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
 
   // Radiator description
   fRadiatorDescription = new RadiatorDescription;
-  fRadiatorDescription->fFoilMaterial  = mylar; // CH2; // Kapton; // Mylar ; // Li ; // CH2 ;
+  fRadiatorDescription->fFoilMaterial  = mylar; 
+  // CH2; // Kapton; // Mylar ; // Li ; // CH2 ;
   fRadiatorDescription->fGasMaterial   = air; // CO2; // He; //
   fRadiatorDescription->fFoilThickness = radThickness;
   fRadiatorDescription->fGasThickness  = gasGap;
@@ -142,7 +143,8 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
   G4double radZ = startZ + 0.5*radThick;
 
   G4VSolid* solidRadiator 
-    = new G4Box("Radiator", 1.1*absorberRadius, 1.1*absorberRadius, 0.5*radThick);
+    = new G4Box("Radiator", 1.1*absorberRadius, 1.1*absorberRadius, 
+                0.5*radThick);
 
   G4LogicalVolume* logicRadiator 
     = new G4LogicalVolume(solidRadiator, radiatorMat, "Radiator");
@@ -160,7 +162,8 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
   // Absorber
 
   G4VSolid* solidAbsorber 
-    = new G4Box("Absorber", absorberRadius, absorberRadius, absorberThickness/2.);
+    = new G4Box("Absorber", absorberRadius, absorberRadius, 
+                absorberThickness/2.);
 
   G4LogicalVolume* logicAbsorber 
     = new G4LogicalVolume(solidAbsorber, absorberMaterial, "Absorber");
@@ -168,7 +171,8 @@ G4VPhysicalVolume* DetectorSimpleALICE::Construct()
   G4double windowZ = startZ + radThick + windowThick/2. + 15.0*mm;
   G4double gapZ = windowZ + windowThick/2. + gapThick/2. + 0.01*mm;
   G4double electrodeZ = gapZ + gapThick/2. + electrodeThick/2. + 0.01*mm;
-  G4double absorberZ = electrodeZ + electrodeThick/2. + absorberThickness/2. + 0.01*mm;
+  G4double absorberZ = electrodeZ + electrodeThick/2. 
+    + absorberThickness/2. + 0.01*mm;
 
   new G4PVPlacement(0, G4ThreeVector(0., 0., absorberZ),
                     "Absorber", logicAbsorber, physicsWorld, false, 0);

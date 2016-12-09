@@ -31,6 +31,112 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+24th November 2016 - Gunter Folger  (cmake-V10-02-37)
+- Switch to PhotonEvaporation 4.3
+
+22nd November 2016 - Ben Morgan (cmake-V10-02-36)
+- Modules/Geant4MakeRules_cxx.cmake : Change optimization level for MSVC in
+  Release mode to -Ox for consistentcy with GNUmake system.
+
+18th November 2016 - Ben Morgan (cmake-V10-02-35)
+- Modules/Geant4BuildModes.cmake : Change default build type to Release
+  when using single mode tools like Make/Ninja.
+- Modules/Geant4InstallData.cmake : Always convert exported data paths to
+  native CMake paths. Prevents parse errors on Windows, where native
+  paths are exported (reported by Brian Smith)
+
+17th November 2016 - Ben Morgan (cmake-V10-02-34)
+- Fix bug in Qt4/5 handling on Windows
+- Templates/Geant4Config.cmake.in : Move re-find of Qt4 inside overall
+  Qt4/5 setup section.
+- Modules/Geant4BuildProjectConfig.cmake : Remove setting of GEANT4_THIRD_PARTY_IMPORT_SETUP
+  variable, and replace with dedicated GEANT4_QT4_IMPORT_SETUP variable for Qt
+- Export Qt library path to dynamic loader path in Geant4GNUmake environment setup
+- Modules/Geant4ToolchainBackwardCompatibility.cmake :
+  Prepend Qt library path to dynamic loader path, noting obselescense on
+  macOS.
+- Templates/geant4make-skeleton.in : Add expansion variable for Qt dynamic
+  loader setup.
+
+15th November 2016 - Ben Morgan (cmake-V10-02-33)
+- Export USolids/VecGeom compile defs to Geant4GNUmake environment setup scripts
+- Modules/Geant4ToolchainBackwardCompatibility.cmake :
+  Configure export variables based on choice of USolids full/partial
+  replacement
+- Templates/geant4make-skeleton.in : Add entries for required env vars
+
+9th November 2016 - Ivana Hrivnacova  (cmake-V10-02-32)
+- Added FindDCMTK.cmake needed for extended/medical/DICOM example
+
+8th November 2016 - Gunter Folger  (cmake-V10-02-31)
+- switch to RadioactiveDecay5.1, PhotonEvaporation4.2, G4ENSDFSTATE2.1
+ 
+3rd November 2016 - Gunter Folger  (cmake-V10-02-30)
+- switch to PhotonEvaporation 4.1
+
+31st October 2016 - Ben Morgan (cmake-V10-02-29)
+- Modules/Geant4MakeRules_cxx.cmake : fix bug - use correct
+  CMAKE_CXX_FLAGS_INIT variable to add -pipe argument to.
+
+31st October 2016 - Ben Morgan (cmake-V10-02-28)
+- Bugfix #1877
+- Templates/geant4-env-skeleton.in : Provide placeholder
+  variable for adding setting of XercesC libpath
+- Modules/Geant4ToolchainBackwardCompatibility.cmake
+  Extract and export XercesC library directory to geant4.(c)sh
+  scripts. Add new _g4tc_append_path function to allow appending
+  of entries to a path-like variable. This ensures paths to third
+  party libraries appear after the core Geant4 library path which
+  should prevent clashes.
+
+27th October 2016 - Gunter Folger (cmake-V10-02-27)
+- switch to G4EMLOW 6.50
+
+6th October 2016 - Ben Morgan (cmake-V10-02-26)
+- Modules/Geant4MakeRules_cxx.cmake : Move all -f optimization options
+to Release mode only. Add -fno-math-errno and -ftree-vectorize.
+
+
+6th October 2016 - Ben Morgan (cmake-V10-02-25)
+- Modules/Geant4MakeRules_cxx.cmake : Add -fno-trapping-math to default
+flags of GCC/Clang compielrs to assist in auto-vectorization (recommended 
+by CMS/GCC). Bump optimization level in Release mode to O3 on all supported 
+compilers.
+
+3rd October 2016- Gunter Folger (cmake-V10-02-24)
+- switch to use G4ENSDFSTATE 2.0 
+	(requires tag particles-V10-02-28)
+
+29th September 2016 - Robert Hatcher (cmake-V10-02-23)
+- Templates/Geant4Config.cmake.in : No longer use --whole-archive for 
+G4physicslists on static builds; this was never possible for _WIN32 and recent
+physics list factory work makes this untenable on some build platforms.
+
+28th September 2016 - Andrea Dotti  (cmake-V10-02-22)
+- add option for TEXT output file in FindStatTest.cmake script
+
+19th September 2016 - Gunter Folger (cmake-V10-02-21)
+- switch to PhotonEvaporation 4.0
+
+7th September 2016 - Gunter Folger (cmake-V10-02-20)
+- switch to G4RadioactiveDecay.5.0
+
+22nd August 2016 - Ben Morgan (cmake-V10-02-19)
+- Templates/UseGeant4.cmake : Force core and per-mode flags to those used to 
+  build Geant4. When Geant4 is built with a single mode generator, default 
+  CMAKE_BUILD_TYPE for the client to that used to build this install. This
+  guarantees matching of librayr/application optimization for most use cases.
+  NB: No default mode can be provided if Geant4 itself was built/installed using
+  multimode tool like Xcode/VS. This is because multiple modes may be installed
+  at once so a sensible default cannot be set (to be looked at further).
+- Templates/Geant4Config.cmake.in : Add new Geant4_BUILD_TYPE variable to hold
+  build type of install when Geant4 is installed using a single mode tool.
+- Modules/Geant4BuildProjectConfig.cmake : Set Geant4_BUILD_TYPE to CMAKE_BUILD_TYPE
+  when building with a single mode tool.
+
+15th August 2016 - Gunter Folger (cmake-V10-02-18)
+- switch to G4EMLOW.6.49
+
 17th June 2016 - Gabriele Cosmo (cmake-V10-02-17)
 - Modules/Geant4OptionalComponents.cmake: set CLHEP-2.3.3.0 as the required
   version for external CLHEP library.

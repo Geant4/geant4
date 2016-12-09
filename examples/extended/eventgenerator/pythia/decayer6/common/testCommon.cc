@@ -40,7 +40,6 @@
 #include "G4RunManager.hh"
 #include "FTFP_BERT.hh"
 
-
 // Test program which only instantiates classes defined in 
 // examples/common
 
@@ -82,5 +81,4 @@ int main()
 
   return 0;
 }
-
 

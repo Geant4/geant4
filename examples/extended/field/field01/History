@@ -1,4 +1,4 @@
-$Id: History 92496 2015-09-02 07:22:25Z gcosmo $
+$Id: History 101664 2016-11-21 09:10:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19,2016 A.Dotti   - fieldex01-V10-02-05
+- explicit set of SD to manager
+
+November 2, 2016 L.Garnier - fieldex01-V10-02-04
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+October 24, 2016 - I. Hrivnacova - fieldex01-V10-02-03
+- Inactivated use of the new Runge Kutta Stepper in field01.in,
+  not yet working.
+
+October 14, 2016 - I. Hrivnacova - fieldex01-V10-02-02
+July 1, 2016 - I. Hrivnacova - fieldex01-V10-02-01
+- Replaced F01PhysicsList with FTFP_BERT with G4StepLimiterPhyiscs
+- Propagated last update of README in .README.txt and fixed text format
+
+June 8, 2016 - J. Apostolakis - fieldex01-V10-02-00
+- Added option to use new Runge Kutta Steppers 
 
 September 01, 2015 - I. Hrivnacova - fieldex01-V10-01-02
 - Removed F01EventActionMessenger classes, now obsolete, and 

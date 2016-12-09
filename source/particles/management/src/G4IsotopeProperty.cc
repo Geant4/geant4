@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IsotopeProperty.cc 96314 2016-04-06 07:21:51Z gcosmo $
+// $Id: G4IsotopeProperty.cc 98732 2016-08-09 10:50:57Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ G4IsotopeProperty::G4IsotopeProperty():
 		   fLifeTime(-1.0),fDecayTable(0),
 		   fMagneticMoment(0.0),
 		   fIsomerLevel(-1),
-                   fFloatLevelBase(G4Ions::G4FloatLevelBase::noFloat)
+                   fFloatLevelBase(G4Ions::G4FloatLevelBase::no_Float)
 {
 }
 
@@ -131,7 +131,7 @@ void G4IsotopeProperty::DumpInfo() const
 	 << ", Excited Energy: " 
 	 << std::setprecision(1) 
 	 << fEnergy/keV;
-  if(fFloatLevelBase!=G4Ions::G4FloatLevelBase::noFloat)
+  if(fFloatLevelBase!=G4Ions::G4FloatLevelBase::no_Float)
   { G4cout << " +" << G4Ions::FloatLevelBaseChar(fFloatLevelBase); }
   G4cout << " [keV]" 
 	 << ",   "

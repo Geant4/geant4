@@ -77,6 +77,14 @@ class G4USphere : public G4USolid
     G4double GetDeltaPhiAngle  () const;
     G4double GetStartThetaAngle() const;
     G4double GetDeltaThetaAngle() const;
+    G4double GetSinStartPhi    () const;
+    G4double GetCosStartPhi    () const;
+    G4double GetSinEndPhi      () const;
+    G4double GetCosEndPhi      () const;
+    G4double GetSinStartTheta  () const;
+    G4double GetCosStartTheta  () const;
+    G4double GetSinEndTheta    () const;
+    G4double GetCosEndTheta    () const;
 
     void SetInnerRadius    (G4double newRMin);
     void SetOuterRadius    (G4double newRmax);
@@ -86,6 +94,13 @@ class G4USphere : public G4USolid
     void SetDeltaThetaAngle(G4double newDTheta);
 
     inline G4GeometryType GetEntityType() const;
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
 

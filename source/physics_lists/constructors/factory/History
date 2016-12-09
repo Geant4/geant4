@@ -14,6 +14,26 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Oct-2016, Michel Maire               (phys-ctor-fact-V10-02-04)
+- add README
+
+29-Sep-2016, Robert Hatcher             (phys-ctor-fact-V10-02-03)
+- Reviewed changes in current context, propose w/ minimal changes
+
+03-Jun-2016, Robert Hatcher             (phys-ctor-fact-V10-02-02)
+- Require use of declaring and referencing macros to have
+  a trailing semicolon; for case where macro expands to a
+  namespace block, deal with eating up the ";"
+
+26-May-2016, Robert Hatcher             (phys-ctor-fact-V10-02-01)
+- Implement G4_REFERENCE_PHYSCONSTR_FACTORY_NS in case physics
+   ctor lives in a namespace
+
+10-May-2016, Robert Hatcher             (phys-ctor-fact-V10-02-00)
+- Reinstate use of G4_REFERENCE_PHYSCONSTR_FACTORY so that registry works
+   in the case of static library builds, even without forcing linker
+   to load whole library (which is not possible for MS Visual Studio)
+
 05-Nov-2014, Alberto Ribon              (phys-ctor-fact-V10-01-00)
 - Replaced neutron_hp/ with particle_hp/
 

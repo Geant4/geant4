@@ -35,11 +35,16 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
+#include "G4VPVParameterisation.hh"
+#include "G4BoundingEnvelope.hh"
+
 #include "G4Polyhedron.hh"
 #include "G4PolyhedronArbitrary.hh"
 
 #include "G4AutoLock.hh"
 namespace { G4Mutex UGenericTrapMutex = G4MUTEX_INITIALIZER; }
+using namespace CLHEP;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -119,7 +124,7 @@ G4int G4UGenericTrap::GetNofVertices() const
 G4TwoVector G4UGenericTrap::GetVertex(G4int index) const
 {
   UVector2 v = GetShape()->GetVertex(index);
-  return G4TwoVector(v.x, v.y);
+  return G4TwoVector(v.x,v.y);
 }
 const std::vector<G4TwoVector>& G4UGenericTrap::GetVertices() const
 {
@@ -153,6 +158,93 @@ void G4UGenericTrap::SetVisSubdivisions(G4int subdiv)
 void G4UGenericTrap::SetZHalfLength(G4double halfZ)
 {
   GetShape()->SetZHalfLength(halfZ);
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UGenericTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  UVector3 vmin, vmax;
+  GetShape()->Extent(vmin,vmax);
+  pMin.set(vmin.x(),vmin.y(),vmin.z());
+  pMax.set(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UGenericTrap::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UGenericTrap::CalculateExtent(const EAxis pAxis,
+                                const G4VoxelLimits& pVoxelLimit,
+                                const G4AffineTransform& pTransform,
+                                      G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // Set bounding envelope (benv) and calculate extent
+  //
+  // To build the bounding envelope with plane faces each side face of
+  // the trapezoid is subdivided in triangles. Subdivision is done by
+  // duplication of vertices in the bases in a way that the envelope be
+  // a convex polyhedron (some faces of the envelope can be degenerate)
+  //
+  G4double dz = GetZHalfLength();
+  G4ThreeVectorList baseA(8), baseB(8);
+  for (G4int i=0; i<4; ++i)
+  {
+    G4TwoVector va = GetVertex(i);
+    G4TwoVector vb = GetVertex(i+4);
+    baseA[2*i].set(va.x(),va.y(),-dz);
+    baseB[2*i].set(vb.x(),vb.y(), dz);
+  }
+  for (G4int i=0; i<4; ++i)
+  {
+    G4int k1=2*i, k2=(2*i+2)%8;
+    G4double ax = (baseA[k2].x()-baseA[k1].x());
+    G4double ay = (baseA[k2].y()-baseA[k1].y());
+    G4double bx = (baseB[k2].x()-baseB[k1].x());
+    G4double by = (baseB[k2].y()-baseB[k1].y());
+    G4double znorm = ax*by - ay*bx;
+    baseA[k1+1] = (znorm < 0.0) ? baseA[k2] : baseA[k1];
+    baseB[k1+1] = (znorm < 0.0) ? baseB[k1] : baseB[k2];
+  }
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 //////////////////////////////////////////////////////////////////////////

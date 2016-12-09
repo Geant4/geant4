@@ -47,6 +47,30 @@ G4double G4GenericPolycone::GetEndPhi() const
 }
 
 inline
+G4double G4GenericPolycone::GetSinStartPhi() const
+{
+  return IsOpen() ? std::sin(startPhi) : 0;
+}
+
+inline
+G4double G4GenericPolycone::GetCosStartPhi() const
+{
+  return IsOpen() ? std::cos(startPhi) : 1;
+}
+
+inline
+G4double G4GenericPolycone::GetSinEndPhi() const
+{
+  return IsOpen() ? std::sin(endPhi) : 0;
+}
+
+inline
+G4double G4GenericPolycone::GetCosEndPhi() const
+{
+  return IsOpen() ? std::cos(endPhi) : 1;
+}
+
+inline
 G4bool G4GenericPolycone::IsOpen() const
 {
   return phiIsOpen;

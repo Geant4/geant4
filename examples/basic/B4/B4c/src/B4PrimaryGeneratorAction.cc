@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4PrimaryGeneratorAction.cc 75215 2013-10-29 16:07:06Z gcosmo $
+// $Id: B4PrimaryGeneratorAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4PrimaryGeneratorAction.cc
 /// \brief Implementation of the B4PrimaryGeneratorAction class
@@ -45,14 +45,14 @@
 
 B4PrimaryGeneratorAction::B4PrimaryGeneratorAction()
  : G4VUserPrimaryGeneratorAction(),
-   fParticleGun(0)
+   fParticleGun(nullptr)
 {
   G4int nofParticles = 1;
   fParticleGun = new G4ParticleGun(nofParticles);
 
   // default particle kinematic
   //
-  G4ParticleDefinition* particleDefinition 
+  auto particleDefinition 
     = G4ParticleTable::GetParticleTable()->FindParticle("e-");
   fParticleGun->SetParticleDefinition(particleDefinition);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
@@ -73,20 +73,24 @@ void B4PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // This function is called at the begining of event
 
   // In order to avoid dependence of PrimaryGeneratorAction
-  // on DetectorConstruction class we get world volume
+  // on DetectorConstruction class we get world volume 
   // from G4LogicalVolumeStore
   //
-  G4double worldZHalfLength = 0;
-  G4LogicalVolume* worlLV
-    = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
-  G4Box* worldBox = 0;
-  if ( worlLV) worldBox = dynamic_cast< G4Box*>(worlLV->GetSolid()); 
+  G4double worldZHalfLength = 0.;
+  auto worldLV = G4LogicalVolumeStore::GetInstance()->GetVolume("World");
+
+  // Check that the world volume has box shape
+  G4Box* worldBox = nullptr;
+  if (  worldLV ) {
+    worldBox = dynamic_cast<G4Box*>(worldLV->GetSolid());
+  }
+
   if ( worldBox ) {
     worldZHalfLength = worldBox->GetZHalfLength();  
   }
   else  {
     G4ExceptionDescription msg;
-    msg << "World volume of box not found." << G4endl;
+    msg << "World volume of box shape not found." << G4endl;
     msg << "Perhaps you have changed geometry." << G4endl;
     msg << "The gun will be place in the center.";
     G4Exception("B4PrimaryGeneratorAction::GeneratePrimaries()",

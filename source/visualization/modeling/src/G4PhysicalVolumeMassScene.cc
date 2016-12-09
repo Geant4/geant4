@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4PhysicalVolumeMassScene.cc 99076 2016-09-01 12:40:47Z gcosmo $
 //
 // 
 // John Allison  10th August 1998.
@@ -65,7 +65,7 @@ void G4PhysicalVolumeMassScene::Reset ()
   fDensityStack.clear();
 }
 
-void G4PhysicalVolumeMassScene::AccrueMass (const G4VSolid& solid)
+void G4PhysicalVolumeMassScene::ProcessVolume (const G4VSolid& solid)
 {
   G4int currentDepth = fpPVModel->GetCurrentDepth();
   G4VPhysicalVolume* pCurrentPV = fpPVModel->GetCurrentPV();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/SteppingVerbose.hh
+/// \file medical/dna/wvalue/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
 //
 //

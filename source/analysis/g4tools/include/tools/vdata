@@ -36,7 +36,7 @@ inline T* vec_data(std::vector<T>& a_vec) {
 #endif
 }
 
-inline void inlib_vdata_check_compile() {std::vector<double> v;vec_data(v);}
+inline void tools_vdata_check_compile() {std::vector<double> v;vec_data(v);}
 
 }
 

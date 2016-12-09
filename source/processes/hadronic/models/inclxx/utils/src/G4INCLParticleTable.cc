@@ -62,18 +62,44 @@ namespace G4INCL {
 
       const G4double theINCLNucleonMass = 938.2796;
       const G4double theINCLPionMass = 138.0;
+      const G4double theINCLEtaMass = 547.862;
+      const G4double theINCLOmegaMass = 782.65;
+      const G4double theINCLEtaPrimeMass = 957.78;
+      const G4double theINCLPhotonMass = 0.0;
       G4ThreadLocal G4double protonMass = 0.0;
       G4ThreadLocal G4double neutronMass = 0.0;
       G4ThreadLocal G4double piPlusMass = 0.0;
       G4ThreadLocal G4double piMinusMass = 0.0;
       G4ThreadLocal G4double piZeroMass = 0.0;
+      G4ThreadLocal G4double etaMass = 0.0;
+      G4ThreadLocal G4double omegaMass = 0.0;
+      G4ThreadLocal G4double etaPrimeMass = 0.0;
+      G4ThreadLocal G4double photonMass = 0.0;
 
       // Hard-coded values of the real particle masses (MeV/c^2)
       G4ThreadLocal G4double theRealProtonMass = 938.27203;
       G4ThreadLocal G4double theRealNeutronMass = 939.56536;
       G4ThreadLocal G4double theRealChargedPiMass = 139.57018;
       G4ThreadLocal G4double theRealPiZeroMass = 134.9766;
+      G4ThreadLocal G4double theRealEtaMass = 547.862;
+      G4ThreadLocal G4double theRealOmegaMass = 782.65;
+      G4ThreadLocal G4double theRealEtaPrimeMass = 957.78;
+      G4ThreadLocal G4double theRealPhotonMass = 0.0;
 
+	  // Width (second)
+	  const G4double theChargedPiWidth = 2.6033e-08;
+	  const G4double thePiZeroWidth = 8.52e-17;
+	  const G4double theEtaWidth = 5.025e-19; // 1.31 keV
+	  const G4double theOmegaWidth = 7.7528e-23; // 8.49 MeV
+	  const G4double theEtaPrimeWidth = 3.3243e-21; // 0.198 MeV
+	  G4ThreadLocal G4double piPlusWidth = 0.0;
+	  G4ThreadLocal G4double piMinusWidth = 0.0;
+	  G4ThreadLocal G4double piZeroWidth = 0.0;
+	  G4ThreadLocal G4double etaWidth = 0.0;
+	  G4ThreadLocal G4double omegaWidth = 0.0;
+	  G4ThreadLocal G4double etaPrimeWidth = 0.0;
+		
+		
       const G4int mediumNucleiTableSize = 30;
 
       const G4double mediumDiffuseness[mediumNucleiTableSize] =
@@ -277,6 +303,10 @@ namespace G4INCL {
       piPlusMass = theINCLPionMass;
       piMinusMass = theINCLPionMass;
       piZeroMass = theINCLPionMass;
+      etaMass = theINCLEtaMass;
+      omegaMass = theINCLOmegaMass;
+      etaPrimeMass = theINCLEtaPrimeMass;
+      photonMass = theINCLPhotonMass;
 
       if(theConfig && theConfig->getUseRealMasses()) {
         getTableMass = getRealMass;
@@ -300,12 +330,24 @@ namespace G4INCL {
       theRealNeutronMass = theG4ParticleTable->FindParticle("neutron")->GetPDGMass() / MeV;
       theRealChargedPiMass = theG4ParticleTable->FindParticle("pi+")->GetPDGMass() / MeV;
       theRealPiZeroMass = theG4ParticleTable->FindParticle("pi0")->GetPDGMass() / MeV;
+      theRealEtaMass = theG4ParticleTable->FindParticle("eta")->GetPDGMass() / MeV;
+      theRealOmegaMass = theG4ParticleTable->FindParticle("omega")->GetPDGMass() / MeV;
+      theRealEtaPrimeMass = theG4ParticleTable->FindParticle("eta_prime")->GetPDGMass() / MeV;
+      theRealPhotonMass = theG4ParticleTable->FindParticle("gamma")->GetPDGMass() / MeV;
 #endif
 
       minDeltaMass = theRealNeutronMass + theRealChargedPiMass + 0.5;
       minDeltaMass2 = minDeltaMass*minDeltaMass;
       minDeltaMassRndm = std::atan((minDeltaMass-effectiveDeltaMass)*2./effectiveDeltaWidth);
 
+	  piPlusWidth   = theChargedPiWidth;
+	  piMinusWidth  = theChargedPiWidth;
+	  piZeroWidth   = thePiZeroWidth;
+	  etaWidth      = theEtaWidth;
+	  omegaWidth    = theOmegaWidth;
+	  etaPrimeWidth = theEtaPrimeWidth;
+		
+		
       // Initialise the separation-energy function
       if(!theConfig || theConfig->getSeparationEnergyType()==INCLSeparationEnergy)
         getSeparationEnergy = getSeparationEnergyINCL;
@@ -373,7 +415,15 @@ namespace G4INCL {
       } else if(t == DeltaZero) {
         return -1;
       } else if(t == DeltaMinus) {
-        return -3;
+		return -3;
+      } else if(t == Eta) {
+		return 0;
+      } else if(t == Omega) {
+		return 0;
+      } else if(t == EtaPrime) {
+		return 0;
+      } else if(t == Photon) {
+		return 0;
       }
 
       INCL_ERROR("Requested isospin of an unknown particle!");
@@ -429,6 +479,14 @@ namespace G4INCL {
         return std::string("pi-");
       } else if(p == G4INCL::Composite) {
         return std::string("composite");
+      } else if(p == G4INCL::Eta) {
+        return std::string("eta");
+      } else if(p == G4INCL::Omega) {
+        return std::string("omega");
+      } else if(p == G4INCL::EtaPrime) {
+        return std::string("etaprime");
+      } else if(p == G4INCL::Photon) {
+        return std::string("photon");
       }
       return std::string("unknown");
     }
@@ -454,6 +512,14 @@ namespace G4INCL {
         return std::string("pi-");
       } else if(p == G4INCL::Composite) {
         return std::string("comp");
+      } else if(p == G4INCL::Eta) {
+        return std::string("eta");
+      } else if(p == G4INCL::Omega) {
+        return std::string("omega");
+      } else if(p == G4INCL::EtaPrime) {
+        return std::string("etap");
+      } else if(p == G4INCL::Photon) {
+        return std::string("photon");
       }
       return std::string("unknown");
     }
@@ -469,6 +535,14 @@ namespace G4INCL {
         return piMinusMass;
       } else if(pt == PiZero) {
         return piZeroMass;
+      } else if(pt == Eta) {
+        return etaMass;
+      } else if(pt == Omega) {
+        return omegaMass;
+      } else if(pt == EtaPrime) {
+        return etaPrimeMass;
+      } else if(pt == Photon) {
+        return photonMass;
       } else {
         INCL_ERROR("getMass : Unknown particle type." << '\n');
         return 0.0;
@@ -489,6 +563,18 @@ namespace G4INCL {
           break;
         case PiZero:
           return theRealPiZeroMass;
+          break;
+        case Eta:
+          return theRealEtaMass;
+          break;
+        case Omega:
+          return theRealOmegaMass;
+          break;
+        case EtaPrime:
+          return theRealEtaPrimeMass;
+          break;
+        case Photon:
+          return theRealPhotonMass;
           break;
         default:
           INCL_ERROR("Particle::getRealMass : Unknown particle type." << '\n');
@@ -563,6 +649,10 @@ namespace G4INCL {
         case PiPlus:
         case PiMinus:
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return 0;
           break;
         default:
@@ -584,6 +674,10 @@ namespace G4INCL {
         case Neutron:
         case DeltaZero:
         case PiZero:
+        case Eta:
+        case Omega:
+        case EtaPrime:
+        case Photon:
           return 0;
           break;
         case DeltaMinus:
@@ -867,6 +961,27 @@ namespace G4INCL {
         }
     }
 
+	G4double getWidth(const ParticleType pt) {
+// assert(pt == PiPlus || pt == PiMinus || pt == PiZero || pt == Eta || pt == Omega || pt == EtaPrime);
+		  if(pt == PiPlus) {
+			  return piPlusWidth;
+		  } else if(pt == PiMinus) {
+			  return piMinusWidth;
+		  } else if(pt == PiZero) {
+			  return piZeroWidth;
+		  } else if(pt == Eta) {
+			  return etaWidth;
+		  } else if(pt == Omega) {
+			  return omegaWidth;
+		  } else if(pt == EtaPrime) {
+			  return etaPrimeWidth;
+		  } else {
+			  INCL_ERROR("getWidth : Unknown particle type." << '\n');
+			  return 0.0;
+		  }
+	  }
+	  
+	  
   } // namespace ParticleTable
 } // namespace G4INCL
 

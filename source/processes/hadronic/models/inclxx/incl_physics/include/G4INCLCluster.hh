@@ -445,7 +445,7 @@ namespace G4INCL {
     ThreeVector theSpin;
     ParticleSampler *theParticleSampler;
 
-    INCL_DECLARE_ALLOCATION_POOL(Cluster);
+    INCL_DECLARE_ALLOCATION_POOL(Cluster)
   };
 
 }

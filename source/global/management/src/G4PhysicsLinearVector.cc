@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsLinearVector.cc 93409 2015-10-21 13:26:27Z gcosmo $
+// $Id: G4PhysicsLinearVector.cc 98864 2016-08-15 11:53:26Z gcosmo $
 //
 // 
 //--------------------------------------------------------------------
@@ -46,29 +46,13 @@ G4PhysicsLinearVector::G4PhysicsLinearVector()
   type = T_G4PhysicsLinearVector;
 }
 
-G4PhysicsLinearVector::G4PhysicsLinearVector(size_t theNbin)
-  : G4PhysicsVector()
-{
-  type = T_G4PhysicsLinearVector;
-
-  numberOfNodes = theNbin + 1;
-  dataVector.reserve(numberOfNodes);
-  binVector.reserve(numberOfNodes);      
-
-  for (size_t i=0; i<numberOfNodes; ++i)
-  {
-     binVector.push_back(0.0);
-     dataVector.push_back(0.0);
-  }
-}  
-
 G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin, 
                                              G4double theEmax, size_t theNbin)
   : G4PhysicsVector()
 {
   type = T_G4PhysicsLinearVector;
 
-  dBin    = (theEmax-theEmin)/theNbin;
+  dBin    = (theEmax-theEmin)/(G4double)theNbin;
   baseBin = theEmin/dBin;
 
   numberOfNodes = theNbin + 1;
@@ -91,16 +75,16 @@ G4PhysicsLinearVector::G4PhysicsLinearVector(G4double theEmin,
 
 }  
 
-G4PhysicsLinearVector::~G4PhysicsLinearVector(){}
+G4PhysicsLinearVector::~G4PhysicsLinearVector()
+{}
 
 G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 {
   G4bool success = G4PhysicsVector::Retrieve(fIn, ascii);
   if (success)
   {
-    G4double theEmin = binVector[0];
-    dBin = binVector[1]-theEmin;
-    baseBin = theEmin/dBin;
+    dBin = binVector[1]-edgeMin;
+    baseBin = edgeMin/dBin;
   }
   return success;
 }
@@ -108,8 +92,7 @@ G4bool G4PhysicsLinearVector::Retrieve(std::ifstream& fIn, G4bool ascii)
 void G4PhysicsLinearVector::ScaleVector(G4double factorE, G4double factorV)
 {
   G4PhysicsVector::ScaleVector(factorE, factorV);
-  G4double theEmin = binVector[0];
-  dBin = binVector[1]-theEmin;
-  baseBin = theEmin/dBin;
+  dBin = binVector[1]-edgeMin;
+  baseBin = edgeMin/dBin;
 }
 

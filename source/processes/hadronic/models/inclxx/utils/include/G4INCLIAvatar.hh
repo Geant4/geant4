@@ -101,7 +101,7 @@ namespace G4INCL {
   protected:
     G4double theTime;
 
-    INCL_DECLARE_ALLOCATION_POOL(IAvatar);
+    INCL_DECLARE_ALLOCATION_POOL(IAvatar)
   };
 
   typedef UnorderedVector<IAvatar*> IAvatarList;

@@ -116,8 +116,10 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
   bool bNPOK = true;
 //TKDB_PHP_150507
 #ifdef PHP_AS_HP
-  G4int iTry(0);
 #endif
+//TKDB_PHP_161107
+  G4int iTry(0);
+//TKDB_PHP_161107
 //TKDB_PHP_150507
   do {
     G4int sumZ = 0;
@@ -157,6 +159,8 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     }
 //TKDB_PHP_150507
 #ifdef PHP_AS_HP
+#endif
+//TKDB_PHP_161107
    iTry++;
    if ( iTry > 1024 ) {
       G4Exception("G4ParticleHPEnAngCorrelation::Sample",
@@ -165,7 +169,7 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
                   "Too many trials were done. Exiting current loop by force. You may have Probably, the result violating (baryon number) conservation law will be obtained.");
       bNPOK=true;
    }
-#endif
+//TKDB_PHP_161107
 //TKDB_PHP_150507
 
   }while(!bNPOK); // Loop checking, 11.05.2015, T. Koi

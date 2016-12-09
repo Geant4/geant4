@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 97548 2016-06-03 15:56:56Z gcosmo $
+// $Id: G4ViewParameters.cc 101035 2016-11-04 08:48:17Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -35,6 +35,7 @@
 #include "G4ViewParameters.hh"
 
 #include "G4VisManager.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
@@ -52,7 +53,7 @@ G4ViewParameters::G4ViewParameters ():
   fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
   fExplodeFactor (1.),
-  fNoOfSides (24),
+  fNoOfSides (72),
   fViewpointDirection (G4Vector3D (0., 0., 1.)),  // On z-axis.
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.
@@ -206,10 +207,14 @@ void G4ViewParameters::SetViewAndLights
   // If the requested viewpoint direction is parallel to the up
   // vector, the orientation of the view is undefined...
   if (fViewpointDirection.unit() * fUpVector.unit() > .9999) {
-    G4cout <<
+    static G4bool firstTime = true;
+    if (firstTime) {
+      firstTime = false;
+      G4cout <<
       "WARNING: Viewpoint direction is very close to the up vector direction."
       "\n  Consider setting the up vector to obtain definable behaviour."
-	   << G4endl;
+      << G4endl;
+    }
   }
 
   // Move the lights too if requested...
@@ -250,7 +255,7 @@ void G4ViewParameters::IncrementPan (G4double right, G4double up, G4double dista
 
 void G4ViewParameters::AddVisAttributesModifier
 (const G4ModelingParameters::VisAttributesModifier& vam) {
-  // If target exists, just change vis attributes.
+  // If target exists with same signifier just change vis attributes.
   G4bool duplicateTarget = false;
   auto i = fVisAttributesModifiers.begin();
   for (; i < fVisAttributesModifiers.end(); ++i) {
@@ -555,36 +560,44 @@ G4String G4ViewParameters::TouchableCommands() const
         << vamVisAtts.GetLineWidth();
         break;
       case G4ModelingParameters::VASForceWireframe:
-        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::wireframe) {
-          oss << "\n/vis/touchable/set/forceWireframe ";
-          if (vamVisAtts.IsForceDrawingStyle()) {
-            oss << "true";
-          } else {
-            oss << "false";
+        if (vamVisAtts.IsForceDrawingStyle()) {
+          if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::wireframe) {
+            oss << "\n/vis/touchable/set/forceWireframe ";
+            if (vamVisAtts.IsForceDrawingStyle()) {
+              oss << "true";
+            } else {
+              oss << "false";
+            }
           }
         }
         break;
       case G4ModelingParameters::VASForceSolid:
-        if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::solid) {
-          oss << "\n/vis/touchable/set/forceSolid ";
-          if (vamVisAtts.IsForceDrawingStyle()) {
+        if (vamVisAtts.IsForceDrawingStyle()) {
+          if (vamVisAtts.GetForcedDrawingStyle() == G4VisAttributes::solid) {
+            oss << "\n/vis/touchable/set/forceSolid ";
+            if (vamVisAtts.IsForceDrawingStyle()) {
+              oss << "true";
+            } else {
+              oss << "false";
+            }
+          }
+        }
+        break;
+      case G4ModelingParameters::VASForceAuxEdgeVisible:
+        if (vamVisAtts.IsForceAuxEdgeVisible()) {
+          oss << "\n/vis/touchable/set/forceAuxEdgeVisible ";
+          if (vamVisAtts.IsForcedAuxEdgeVisible()) {
             oss << "true";
           } else {
             oss << "false";
           }
         }
         break;
-      case G4ModelingParameters::VASForceAuxEdgeVisible:
-        oss << "\n/vis/touchable/set/forceAuxEdgeVisible ";
-        if (vamVisAtts.IsForceAuxEdgeVisible()) {
-          oss << "true";
-        } else {
-          oss << "false";
-        }
-        break;
       case G4ModelingParameters::VASForceLineSegmentsPerCircle:
-        oss << "\n/vis/touchable/set/lineSegmentsPerCircle "
-        << vamVisAtts.GetForcedLineSegmentsPerCircle();
+        if (vamVisAtts.GetForcedLineSegmentsPerCircle() > 0) {
+          oss << "\n/vis/touchable/set/lineSegmentsPerCircle "
+          << vamVisAtts.GetForcedLineSegmentsPerCircle();
+        }
         break;
     }
   }
@@ -658,6 +671,10 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
       G4cout << "Difference in explode factor." << G4endl;
     if (fExplodeCentre != v.fExplodeCentre)
       G4cout << "Difference in explode centre." << G4endl;
+  }
+
+  if (fVisAttributesModifiers != v.fVisAttributesModifiers) {
+    G4cout << "Difference in vis attributes modifiers." << G4endl;
   }
 }
 
@@ -898,11 +915,10 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
   return false;
 }
 
-
 void G4ViewParameters::SetXGeometryString (const G4String& geomStringArg)
 {
-  G4int x,y = 0;
-  unsigned int w,h = 0;
+  G4int x = 0, y = 0;
+  unsigned int w = 0, h = 0;
   G4String geomString = geomStringArg;
   // Parse windowSizeHintString for backwards compatibility...
   const G4String delimiters("xX+-");
@@ -1225,21 +1241,21 @@ G4ViewParameters* G4ViewParameters::CatmullRomCubicSplineInterpolation
   // Real parameters
   INTERPOLATE(fVisibleDensity);
   if (real < 0.) real = 0.;
-  holdingValues.fVisibleDensity       = real;
+  holdingValues.fVisibleDensity = real;
   INTERPOLATE(fExplodeFactor);
   if (real < 0.) real = 0.;
-  holdingValues.fExplodeFactor        = real;
+  holdingValues.fExplodeFactor = real;
   INTERPOLATE(fFieldHalfAngle);
   if (real < 0.) real = 0.;
-  holdingValues.fFieldHalfAngle       = real;
+  holdingValues.fFieldHalfAngle = real;
   INTERPOLATE(fZoomFactor);
   if (real < 0.) real = 0.;
-  holdingValues.fZoomFactor           = real;
+  holdingValues.fZoomFactor = real;
   INTERPOLATE(fDolly);
-  holdingValues.fDolly                = real;
+  holdingValues.fDolly = real;
   INTERPOLATE(fGlobalMarkerScale);
   if (real < 0.) real = 0.;
-  holdingValues.fGlobalMarkerScale    = real;
+  holdingValues.fGlobalMarkerScale = real;
   INTERPOLATE(fGlobalLineWidthScale);
   if (real < 0.) real = 0.;
   holdingValues.fGlobalLineWidthScale = real;
@@ -1337,8 +1353,9 @@ INTERPOLATE(plane.d()); d = real;
   }
 
   // Vis attributes modifiers
-  // Really, we are only intersted in colour - other attributes can follow
+  // Really, we are only interested in colour - other attributes can follow
   // the "crude" interpolation that is guaranteed above.
+  static G4VisAttributes workingVA;
   if  (v[i].fVisAttributesModifiers.size()) {
     CONTINUITY(fVisAttributesModifiers.size());
     if (continuous) { \
@@ -1350,7 +1367,7 @@ INTERPOLATE(plane.d()); d = real;
             if (v[i].fVisAttributesModifiers[j].GetVisAttributesSignifier() ==
                 G4ModelingParameters::VASColour) {
               INTERPOLATECOLOUR(fVisAttributesModifiers[j].GetVisAttributes().GetColour());
-              G4VisAttributes workingVA = v[i].fVisAttributesModifiers[j].GetVisAttributes();
+              workingVA = v[i].fVisAttributesModifiers[j].GetVisAttributes();
               workingVA.SetColour(G4Colour(red,green,blue,alpha));
               holdingValues.fVisAttributesModifiers[j].SetVisAttributes(workingVA);
             }

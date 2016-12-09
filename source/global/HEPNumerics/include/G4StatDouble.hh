@@ -47,7 +47,30 @@ class G4StatDouble
 
   public:
     G4StatDouble();
+    G4StatDouble(G4double);
     virtual ~G4StatDouble();
+
+  public:
+    G4StatDouble& operator=(const G4double &rhs) 
+    {
+      reset();
+      fill(rhs);
+      return *this;
+    }
+    G4StatDouble& operator=(const G4StatDouble &rhs) 
+    {
+      m_sum_wx = rhs.m_sum_wx;
+      m_sum_wx2 = rhs.m_sum_wx2;
+      m_n = rhs.m_n;
+      m_sum_w = rhs.m_sum_w;
+      m_sum_w2 = rhs.m_sum_w2;
+      m_scale = rhs.m_scale;
+      return *this;
+    }
+    G4StatDouble& operator+=(const G4double &rhs) 
+    { fill(rhs); return *this; }
+    G4StatDouble& operator+=(const G4StatDouble &rhs) 
+    { add(&rhs); return *this; }
 
   public:
 

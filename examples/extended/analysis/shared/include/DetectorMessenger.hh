@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/include/DetectorMessenger.hh
+/// \file DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
 //
-// $Id: DetectorMessenger.hh 77256 2013-11-22 10:10:23Z gcosmo $
+// $Id: DetectorMessenger.hh 98244 2016-07-04 17:21:15Z gcosmo $
 //
 // 
 

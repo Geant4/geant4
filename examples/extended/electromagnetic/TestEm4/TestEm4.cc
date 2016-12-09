@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm4 example
 //
 //
-// $Id: TestEm4.cc 85033 2014-10-23 10:05:41Z gcosmo $
+// $Id: TestEm4.cc 98767 2016-08-09 14:18:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,8 +37,6 @@
 #else
 #include "G4RunManager.hh"
 #endif
-
-
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"

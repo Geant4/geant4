@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh 79491 2014-03-05 15:24:29Z gcosmo $
+// $Id: G4Tubs.hh 100820 2016-11-02 15:18:48Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -106,6 +106,10 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetZHalfLength   () const;
     inline G4double GetStartPhiAngle () const;
     inline G4double GetDeltaPhiAngle () const;
+    inline G4double GetSinStartPhi   () const;
+    inline G4double GetCosStartPhi   () const;
+    inline G4double GetSinEndPhi     () const;
+    inline G4double GetCosEndPhi     () const;
 
     // Modifiers
 
@@ -123,6 +127,8 @@ class G4Tubs : public G4CSGSolid
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
+
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -174,12 +180,6 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetDPhi() const;
 
   protected:
-
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
     inline void Initialize();
       //

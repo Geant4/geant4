@@ -26,7 +26,7 @@
 /// \file exoticphysics/phonon/src/XDetectorConstruction.cc
 /// \brief Implementation of the XDetectorConstruction class
 //
-// $Id: XDetectorConstruction.cc 84197 2014-10-10 14:33:03Z gcosmo $
+// $Id: XDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
 //
 // 20141006  For MT compatibility, move SD handling to ConstructSDandField()
 
@@ -34,6 +34,7 @@
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
+#include "G4SDManager.hh"
 
 #include "G4Box.hh"
 #include "G4Tubs.hh"
@@ -151,7 +152,7 @@ void XDetectorConstruction::SetupGeometry()
   //                                        
   // Visualization attributes
   //
-  worldLogical->SetVisAttributes(G4VisAttributes::Invisible);
+  worldLogical->SetVisAttributes(G4VisAttributes::GetInvisible());
   G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   simpleBoxVisAtt->SetVisibility(true);
   fGermaniumLogical->SetVisAttributes(simpleBoxVisAtt);
@@ -166,7 +167,7 @@ void XDetectorConstruction::ConstructSDandField() {
   //
   XAluminumElectrodeSensitivity* electrodeSensitivity =
     new XAluminumElectrodeSensitivity("XAluminumElectrode");
-
+  G4SDManager::GetSDMpointer()->AddNewDetector(electrodeSensitivity);
   SetSensitiveDetector("fGermaniumLogical", electrodeSensitivity);
 }
 

@@ -52,9 +52,6 @@
 //           (appropriate for Mani et al potential)
 //
 
-static const G4double flow = 1.e-18;
-static const G4double spill= 1.e+18;
-
 // index: 0-neutron, 1-proton, 2-deuteron, 3-triton, 4-He3, 5-He4
 // parameters: p0, p1, p2, lambda0, lambda1, mu0, mu1, nu0, nu1, nu2, ra
 
@@ -83,21 +80,24 @@ static G4double ComputePowerParameter(G4int resA, G4int idx)
     return G4Pow::GetInstance()->powZ(resA, paramK[idx][6]);
   }
 
-static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1, 
-				    G4int idx, G4int Z, G4int A, 
-				    G4int resZ, G4int resA)
+  static G4double ComputeCrossSection(G4double K, G4double cb,  
+				      G4double resA13, G4double amu1, 
+				      G4int idx, G4int Z, G4int A, 
+				      G4int resA)
   {    
     G4double sig = 0.0;
     G4double signor = 1.0; 
     G4double lambda, mu, nu;
-    G4double ec  = 0.5;
-    if(0 < Z) {
+    G4double ec = 0.5;
+    if(0 < Z) { ec = cb; }
       //JMQ 13.02.2009 tuning for improving cluster emission ddxs 
       //               (spallation benchmark) 
+    /*
       G4double xx = 1.7;
       if(1 == A) { xx = 1.5; }
       ec = 1.44 * Z * resZ / (xx*resA13 + paramK[idx][10]);
     }
+    */
     G4double ecsq = ec*ec;
     G4double elab = K * (A + resA) / G4double(resA);    
     
@@ -123,9 +123,12 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       mu = paramK[idx][5]*amu1;
       nu = amu1* (paramK[idx][7] + paramK[idx][8]*ec + paramK[idx][9]*ecsq);
     }
-
+    /*
+    G4cout << "## idx= " << idx << " K= " << K << " elab= " << elab << "  ec= " << ec 
+	   << " lambda= " << lambda << " mu= " << mu << "  nu= " << nu << G4endl; 
+    */
     // threashold cross section
-    if(elab <= ec) {
+    if(elab < ec) {
       G4double p = paramK[idx][0];
       if(0 < Z) { p += paramK[idx][1]/ec + paramK[idx][2]/ecsq; }
       G4double a = -2*p*ec + lambda - nu/ecsq;
@@ -135,8 +138,12 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       if (det > 0.0) { ecut = (std::sqrt(det) - a)/(2*p); }
       else           { ecut = -a/(2*p); }
 
+      //G4cout << "  elab= " << elab << " ecut= " << ecut << " sig= " << sig
+      //	     << "  sig1= " << (p*elab*elab + a*elab + b)*signor << G4endl;
       // If ecut>0, sig=0 at elab=ecut
-      if(elab > ecut) { 
+      if(0 == idx) {
+      	sig = (lambda*ec + mu + nu/ec)*signor*std::sqrt(elab/ec);
+      } else if(elab >= ecut) { 
 	sig = (p*elab*elab + a*elab + b)*signor; 
 
 	// extra proton correction
@@ -148,6 +155,8 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
 	  sig /= (1. + G4Exp(signor2));
 	}
       }
+      //G4cout << "       ecut= " << ecut << " a= " << a << "  b= " << b 
+      //     <<  " signor= " << signor << " sig= " << sig << G4endl;  
 
       // high energy cross section
     } else {
@@ -157,7 +166,10 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       // neutron parameters
       G4double etest  = 32.;
       G4double xnulam = 1.0;
+
       // parameters for charged
+      static const G4double flow = 1.e-18;
+      static const G4double spill= 1.e+18;
       if(0 < Z) {
         etest = 0.0;
 	xnulam = nu / lambda;
@@ -177,6 +189,7 @@ static G4double ComputeCrossSection(G4double K,  G4double resA13, G4double amu1,
       }
     }
     sig = std::max(sig, 0.0);
+    //G4cout << "  ---- sig= " << sig << G4endl;
     return sig;
   }
 };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/src/PrimaryGenerator1.cc
+/// \file PrimaryGenerator.cc
 /// \brief Implementation of the PrimaryGenerator1 class
 //
 //

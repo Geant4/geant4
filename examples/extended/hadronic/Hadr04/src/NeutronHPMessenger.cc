@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/src/NeutronHPMessenger.cc
+/// \file NeutronHPMessenger.cc
 /// \brief Implementation of the NeutronHPMessenger class
 //
 // $Id: NeutronHPMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $

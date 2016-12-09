@@ -209,17 +209,18 @@
    The histograms and ntuple are saved in the output file in a format
    according to a technology selected in B5Analysis.hh.
 
-   When running in multi-threading mode, the histograms accumulated on threads are
-   automatically merged in a single output file, while the ntuple is written
-   in files per thread.
+   When running in multi-threading mode, the histograms and ntuple accumulated 
+   on threads are automatically merged in a single output file.
 
 \section B5_s8 BUILD OPTIONS
   
   This example can be built with excluding use of visualization and/or
-  Geant4 user interface using G4VIS_USE and G4UI_USE compiler options.
-  These options are defined with Geant4 configuration, they are not set
-  when Geant4 libraries were built with G4VIS_NONE or G4UI_NONE option
-  respectively.
+  Geant4 user interface using G4VIS_USE and G4UI_USE compiler options
+  (see exampleB5.cc).
+  These options are defined by default with Geant4 configuration;
+  they can be switched off at compilation time via the CMake options 
+  G4VIS_NONE or G4UI_NONE or via the environment variables of the 
+  same name if using GNUmake build.
 
 <hr>
 

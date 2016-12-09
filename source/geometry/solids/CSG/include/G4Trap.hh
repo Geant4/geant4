@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4Trap.hh 99509 2016-09-26 07:48:56Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -206,6 +206,8 @@ class G4Trap : public G4CSGSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
                             const G4AffineTransform& pTransform,
@@ -257,12 +259,6 @@ class G4Trap : public G4CSGSolid
                       const G4ThreeVector& p3, 
                       const G4ThreeVector& p4,
                             TrapSidePlane& plane ) ;
-
-    G4ThreeVectorList*
-    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
-      //
-      // Creates the List of transformed vertices in the format required
-      // for G4CSGSolid:: ClipCrossSection and ClipBetweenSections
 
   private:
 

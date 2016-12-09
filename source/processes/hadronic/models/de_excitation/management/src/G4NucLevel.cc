@@ -43,18 +43,34 @@
 #include "G4NucLevel.hh"
 #include "G4HadronicException.hh"
 
-G4NucLevel::G4NucLevel(const std::vector<size_t>&  idxTrans,
+G4NucLevel::G4NucLevel(size_t ntrans,
+		       const std::vector<size_t>&  idxTrans,
 		       const std::vector<G4int>&   vTrans,
 		       const std::vector<G4float>& wLevelGamma,
 		       const std::vector<G4float>& wLevelGammaE,
 		       const std::vector<G4float>& wGamma,
       	               const std::vector<G4float>& vRatio,
 		       const std::vector<const std::vector<G4float>*>& wShell)
-  :fFinalIndex(idxTrans),fTrans(vTrans),fGammaCumProbability(wLevelGamma),
-   fGammaECumProbability(wLevelGammaE),fGammaProbability(wGamma),
-   fMpRatio(vRatio),fShellProbability(wShell)
+  : length(ntrans)
 {
-  length = fFinalIndex.size();
+  if(0 < length) { 
+    fFinalIndex.reserve(length);
+    fTrans.reserve(length);
+    fGammaCumProbability.reserve(length);
+    fGammaECumProbability.reserve(length);
+    fGammaProbability.reserve(length);
+    fMpRatio.reserve(length);
+    fShellProbability.reserve(length);
+    for(size_t i=0; i<length; ++i) {
+      fFinalIndex.push_back(idxTrans[i]);
+      fTrans.push_back(vTrans[i]);
+      fGammaCumProbability.push_back(wLevelGamma[i]);
+      fGammaECumProbability.push_back(wLevelGammaE[i]);
+      fGammaProbability.push_back(wGamma[i]);
+      fMpRatio.push_back(vRatio[i]);
+      fShellProbability.push_back(wShell[i]);
+    }
+  }
 }
 
 G4NucLevel::~G4NucLevel()
@@ -67,6 +83,14 @@ G4NucLevel::~G4NucLevel()
 #ifdef G4VERBOSE
 void G4NucLevel::PrintError(size_t idx, const G4String& ss) const
 {
+  G4cout << "G4NucLevel::PrintError: length= " << length << G4endl;
+  for(size_t i=0; i<length; ++i) {
+    G4cout << i << ". " << fFinalIndex[i] << "  " << fTrans[i]
+	   << fGammaCumProbability[i] << " " 
+           << fGammaECumProbability[i] << " "
+	   << fGammaProbability[i] << " "
+	   << fMpRatio[i] << G4endl;
+  }
   G4String sss = "G4NucLevel::"+ss+"()";
   G4ExceptionDescription ed;
   ed << "Index of a level " << idx << " >= " 

@@ -27,7 +27,7 @@
 /// \brief Definition of the ExP01RunAction class
 //
 //
-// $Id: ExP01RunAction.hh 71111 2013-06-11 10:51:02Z gcosmo $
+// $Id: ExP01RunAction.hh 98770 2016-08-09 14:22:25Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,8 +58,4 @@ class ExP01RunAction : public G4UserRunAction
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
 

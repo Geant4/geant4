@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96296 2016-04-05 09:00:17Z gcosmo $
+# $Id: sources.cmake 99197 2016-09-08 09:45:49Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -53,26 +53,17 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
         G4AlphaDecay.hh
-        G4AlphaDecayChannel.hh
         G4BatemanParameters.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
         G4BetaMinusDecay.hh
-        G4BetaMinusDecayChannel.hh
         G4BetaPlusDecay.hh
-        G4BetaPlusDecayChannel.hh
         G4ECDecay.hh
         G4ITDecay.hh
-        G4ITDecayChannel.hh
-        G4KshellECDecayChannel.hh
-        G4LshellECDecayChannel.hh
-        G4MshellECDecayChannel.hh
         G4NeutronDecay.hh
-        G4NuclearDecayChannel.hh
         G4NuclearDecay.hh
         G4NucleusLimits.hh
         G4ProtonDecay.hh
-	G4ProtonDecayChannel.hh
         G4RadioactiveDecay.hh
         G4RadioactiveDecayMode.hh
         G4RadioactiveDecayRate.hh
@@ -91,7 +82,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4ECDecay.cc
         G4ITDecay.cc
         G4NeutronDecay.cc
-        G4NuclearDecayChannel.cc
         G4NuclearDecay.cc
         G4NucleusLimits.cc
         G4ProtonDecay.cc

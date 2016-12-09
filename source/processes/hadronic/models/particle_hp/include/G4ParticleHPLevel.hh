@@ -45,6 +45,7 @@ class G4ParticleHPLevel
   {
     nGammas = 0;
     theGammas = 0;
+    levelEnergy = 0.0;
   }
 
   ~G4ParticleHPLevel();

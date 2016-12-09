@@ -14,6 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09.07.2016 S.Incerti            tag chem2-V10-02-01                           
+-----------------------------------------------------
+-  Updated README
+
+04.07.2016 I.Hrivnacova         tag chem2-V10-02-00                           
+-----------------------------------------------------
+-  Fixes for Doxygen documentation
+
 22.03.2015 M.K                  tag chem2-V10-01-01
 -----------------------------------------------------
 - CommandLine option: -mt option restaured with 2 as default number of threads

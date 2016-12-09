@@ -1,4 +1,4 @@
-$Id: History 90240 2015-05-21 09:08:13Z gcosmo $
+$Id: History 101671 2016-11-21 09:18:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
  
      ----------------------------------------------------------
+
+Nov 19, 2016 A.Dotti   (WLS-V10-02-04,-05)
+- Explicit set of SD to manager
+
+Nov 08, 2016 G.Folger  (WLS-V10-02-03)
+- replace use of fPhysicsVector by RegisterPhysics in ctor of WLSPhysicsList.cc
+
+Nov 03, 2016 L.Garnier (WLS-V10-02-02)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+Oct 14, 2016 G.Folger (WLS-V10-02-01)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+Sep 28, 2016 P. Gumplinger (WLS-V10-02-00)
+- fully adhere to Coding Guide Lines for member functions
+
+Oct 09, 2015 P. Gumplinger (WLS-V10-01-04)
+- adhere to Coding Guide Lines for member functions
 
 May 14, 2015 P. Gumplinger (WLS-V10-01-03)
 - remove obsolete /event/drawTrack and /event/printModulo

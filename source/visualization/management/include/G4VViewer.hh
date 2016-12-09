@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VViewer.hh 95006 2016-01-15 08:26:18Z gcosmo $
+// $Id: G4VViewer.hh 99668 2016-09-30 08:02:13Z gcosmo $
 //
 // 
 // John Allison  27th March 1996
@@ -39,6 +39,7 @@
 #include "globals.hh"
 
 #include "G4ViewParameters.hh"
+#include "G4PhysicalVolumeModel.hh"
 
 class G4VSceneHandler;
 
@@ -154,6 +155,48 @@ public: // With description
 protected:
 
   //////////////////////////////////////////////////////////////
+  // Protected utility functions.
+
+  void SetTouchable
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath);
+  // Set the touchable for /vis/touchable/set/... commands.
+
+  void TouchableSetVisibility
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+   G4bool visibility);
+  // Set the touchable visibility attribute.
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  void TouchableSetColour
+  (const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>& fullPath,
+   const G4Colour&);
+  // Set the touchable colour attribute.
+  // Changes the Vis Attribute Modifiers WITHOUT triggering a rebuild.
+
+  class G4Spline
+  {
+  public:
+
+    // Constructors and destructor
+    G4Spline();
+    ~G4Spline();
+
+    // Operations
+    void AddSplinePoint(const G4Vector3D& v);
+    G4Vector3D GetInterpolatedSplinePoint(float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
+    int GetNumPoints();
+    G4Vector3D GetPoint(int);
+    // method for computing the Catmull-Rom parametric equation
+    // given a time (t) and a vector quadruple (p1,p2,p3,p4).
+    G4Vector3D CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2,
+                             const G4Vector3D& p3, const G4Vector3D& p4);
+
+  private:
+    std::vector<G4Vector3D> vp;
+    float delta_t;
+  };
+  
+  //////////////////////////////////////////////////////////////
   // Data members
   G4VSceneHandler&        fSceneHandler;     // Abstract scene for this view.
   G4int            fViewId;    // Id of this instance.
@@ -196,26 +239,4 @@ void G4VViewer::DrawView () {  // Default - concrete view usually overrides.
 
 *********************************************/
 
-class G4Spline
-{
-public:
-    
-    // Constructors and destructor
-    G4Spline();
-    ~G4Spline();
-    
-    // Operations
-    void AddSplinePoint(const G4Vector3D& v);
-    G4Vector3D GetInterpolatedSplinePoint(float t);   // t = 0...1; 0=vp[0] ... 1=vp[max]
-    int GetNumPoints();
-    G4Vector3D GetPoint(int);
-    // method for computing the Catmull-Rom parametric equation
-    // given a time (t) and a vector quadruple (p1,p2,p3,p4).
-    G4Vector3D CatmullRom_Eq(float t, const G4Vector3D& p1, const G4Vector3D& p2,
-                   const G4Vector3D& p3, const G4Vector3D& p4);
-    
-private:
-    std::vector<G4Vector3D> vp;
-    float delta_t;
-};
 #endif

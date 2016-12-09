@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmAdjointModel.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4VEmAdjointModel.hh 100341 2016-10-18 08:02:25Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Module:		G4VEMAdjointModel
@@ -215,7 +215,10 @@ public: // public methods
   
   inline G4String GetName(){ return name;}
   inline virtual void SetCSBiasingFactor(G4double aVal) {CS_biasing_factor = aVal;} 
-  				      
+
+  inline void SetCorrectWeightForPostStepInModel(G4bool aBool) {correct_weight_for_post_step_in_model = aBool;}
+  inline void SetAdditionalWeightCorrectionFactorForPostStepOutsideModel(G4double factor) {additional_weight_correction_factor_for_post_step_outside_model = factor;}
+
 protected: 
 
   //Some of them can be overriden by daughter classes
@@ -272,8 +275,7 @@ protected: //attributes
   G4double kinEnergyProdForIntegration;
   G4double kinEnergyScatProjForIntegration;
   G4double kinEnergyProjForIntegration;
-  
-  
+
   //for the adjoint simulation  we need for each element or material:
   //an adjoint CS Matrix 
   //-----------------------------
@@ -287,9 +289,6 @@ protected: //attributes
   G4double lastAdjointCSForScatProjToProjCase;
   G4double lastAdjointCSForProdToProjCase;
   
-  
-  
-  
   //particle definition
   //------------------
   
@@ -297,7 +296,6 @@ protected: //attributes
   G4ParticleDefinition*	theAdjEquivOfDirectSecondPartDef;
   G4ParticleDefinition*	theDirectPrimaryPartDef;
   G4bool second_part_of_same_type;
-  
   
   //Prestep energy
   //-------------
@@ -313,27 +311,20 @@ protected: //attributes
   G4double currentTcutForDirectSecond;
   G4bool ApplyCutInRange;
   
- 
- 
-  
   //For ions
   //---------
   G4double mass_ratio_product;
   G4double mass_ratio_projectile;
-  
-  
+
   //Energy limits
   //-------------
   
   G4double HighEnergyLimit;
   G4double LowEnergyLimit; 
 
-  
-  
   //Cross Section biasing factor
   //---------------------------
   G4double CS_biasing_factor;
-  
   
   //Type of Model with Matrix or not
   //--------------------------------
@@ -341,20 +332,18 @@ protected: //attributes
    G4bool UseMatrixPerElement; //other possibility is per Material
    G4bool UseOnlyOneMatrixForAllElements;
   
-  
    //Index of Cross section matrices to be used
    //------------
    size_t indexOfUsedCrossSectionMatrix;
    
    size_t model_index;
    
-   
-   
-   
-   
-   
+   //This is needed for the forced interaction where part of the weight correction
+   // is given outside the model while the secondary are created in the model
+   //The weight should be fixed before adding the secondary
+   G4bool correct_weight_for_post_step_in_model;
+   G4double additional_weight_correction_factor_for_post_step_outside_model;
 
-  
 };
 
 

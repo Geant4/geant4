@@ -41,8 +41,6 @@
 
 //---------------------------------------------------------------------------------
 
-//---------------------------------------------------------------------------------
-
 G4FragmentingString::G4FragmentingString(const G4FragmentingString &old)
 {
 	LeftParton=old.LeftParton;
@@ -58,19 +56,19 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old)
 
 G4FragmentingString & G4FragmentingString::operator =(const G4FragmentingString &old)
 {
-   if (this != &old)
-   {
-   LeftParton=old.LeftParton;
-   RightParton=old.RightParton;
-   Ptleft=old.Ptleft;
-   Ptright=old.Ptright;
-   Pplus=old.Pplus;
-   Pminus=old.Pminus;
-   theStableParton=old.theStableParton;
-   theDecayParton=old.theDecayParton;
-   decaying=old.decaying;
-   }
-   return *this;
+        if (this != &old)
+        {
+          LeftParton=old.LeftParton;
+          RightParton=old.RightParton;
+          Ptleft=old.Ptleft;
+          Ptright=old.Ptright;
+          Pplus=old.Pplus;
+          Pminus=old.Pminus;
+          theStableParton=old.theStableParton;
+          theDecayParton=old.theDecayParton;
+          decaying=old.decaying;
+        }
+        return *this;
 }
 
 //---------------------------------------------------------------------------------
@@ -88,9 +86,9 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
 	Pminus=P.e() - P.pz();
 	theStableParton=0;
 	theDecayParton=0;
-//	decaying=None;                                   // Uzhi 19.06.2014
-        if(excited.GetDirection() > 0) {decaying=Left; } // Uzhi 20.06.2014
-        else                           {decaying=Right;} // Uzhi 20.06.2014
+        //decaying=None;
+        if(excited.GetDirection() > 0) {decaying=Left; }
+        else                           {decaying=Right;}
 }
 
 //---------------------------------------------------------------------------------
@@ -109,7 +107,7 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptleft.setZ(0.);
 		theDecayParton=GetLeftParton();
 		theStableParton=GetRightParton();
-		decaying=Left;                      // Uzhi 19.06.2014
+		decaying=Left;
 	} else if ( old.decaying == Right )
 	{
 		RightParton = newdecay;
@@ -119,10 +117,11 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptleft      = old.Ptleft;
 		theDecayParton=GetRightParton();
 		theStableParton=GetLeftParton();
-		decaying=Right;                    // Uzhi 19.06.2014
+		decaying=Right;
 	} else
 	{
-		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
+		throw G4HadronicException(__FILE__, __LINE__, 
+                                          "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
 	Pplus  = old.Pplus  - (momentum->e() + momentum->pz());
 	Pminus = old.Pminus - (momentum->e() - momentum->pz());
@@ -130,7 +129,6 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 	//G4double Eold=0.5 * (old.Pplus + old.Pminus);
 	//G4double Enew=0.5 * (Pplus + Pminus);
 }
-
 
 //---------------------------------------------------------------------------------
 
@@ -148,24 +146,23 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 	{                                                                 
 		RightParton= old.RightParton;                             
 		LeftParton = newdecay;                                    
-                decaying=Left;                               // Uzhi 19.06.2014
+                decaying=Left;
 	} else if ( old.decaying == Right )                               
 	{                                                                 
 		RightParton = newdecay;                                   
 		LeftParton  = old.LeftParton;                             
-                decaying=Right;                             // Uzhi 19.06.2014
+                decaying=Right;
 	} else                                                            
 	{
-		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
+		throw G4HadronicException(__FILE__, __LINE__, 
+                                          "G4FragmentingString::G4FragmentingString: no decay Direction defined");
 	}
 }
-
 
 //---------------------------------------------------------------------------------
 
 G4FragmentingString::~G4FragmentingString()
 {}
-
 
 //---------------------------------------------------------------------------------
 
@@ -200,7 +197,7 @@ G4int G4FragmentingString::GetDecayDirection() const
 G4bool G4FragmentingString::FourQuarkString() const
 {
 	return   LeftParton->GetParticleSubType()== "di_quark" 
-	     && RightParton->GetParticleSubType()== "di_quark";
+	      && RightParton->GetParticleSubType()== "di_quark";
 }
 
 //---------------------------------------------------------------------------------
@@ -276,3 +273,4 @@ G4double G4FragmentingString::MassT2() const
 {
 	return Pplus*Pminus;
 }
+

@@ -68,7 +68,7 @@ namespace G4INCL {
     Nucleus *theNucleus;
     Particle *theParticle;
 
-    INCL_DECLARE_ALLOCATION_POOL(ReflectionChannel);
+    INCL_DECLARE_ALLOCATION_POOL(ReflectionChannel)
   };
 }
 #endif //REFLECTIONCHANNEL_HH_

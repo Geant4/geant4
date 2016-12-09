@@ -28,7 +28,7 @@
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
-//fanoCavity2
+//fanoCavity
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -59,7 +59,6 @@ void ActionInitialization::BuildForMaster() const
 
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
@@ -67,7 +66,6 @@ void ActionInitialization::Build() const
   PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
   SetUserAction(prim);
   SetUserAction(new RunAction(fDetector,prim));
-
 
   SetUserAction(new EventAction());
 
@@ -87,6 +85,5 @@ G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
 {
   return new SteppingVerbose();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

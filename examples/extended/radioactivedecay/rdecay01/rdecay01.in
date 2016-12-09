@@ -1,14 +1,17 @@
 /control/verbose 2
 /run/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
 /gun/particle ion
 /gun/ion 27 60
 #
 /rdecay01/fullChain false
 #
+/control/cout/ignoreThreadsExcept 1
 /tracking/verbose 2
 /run/beamOn 1
 #
+/control/cout/ignoreThreadsExcept 0
 /tracking/verbose 0
 /run/printProgress 10000
 #  

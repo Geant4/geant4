@@ -23,12 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5CellParameterisation.cc 76474 2013-11-11 10:36:34Z gcosmo $
+// $Id: B5CellParameterisation.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5CellParameterisation.cc
 /// \brief Implementation of the B5CellParameterisation class
 
 #include "B5CellParameterisation.hh"
+#include "B5Constants.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4ThreeVector.hh"
@@ -39,13 +40,12 @@
 B5CellParameterisation::B5CellParameterisation()
 : G4VPVParameterisation()
 {
-    for (G4int copyNo=0;copyNo<80;copyNo++)
-    {
-        G4int column = copyNo / 4;
-        G4int row = copyNo % 4;
-        fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
-        fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
-    }
+  for (auto copyNo=0; copyNo<kNofEmCells; copyNo++) {
+    auto column = copyNo / kNofEmRows ;
+    auto row = copyNo % kNofEmRows;
+    fXCell[copyNo] = (column-9)*15.*cm - 7.5*cm;
+    fYCell[copyNo] = (row-1)*15*cm - 7.5*cm;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,10 +55,10 @@ B5CellParameterisation::~B5CellParameterisation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B5CellParameterisation::ComputeTransformation
-(const G4int copyNo,G4VPhysicalVolume *physVol) const
+void B5CellParameterisation::ComputeTransformation(
+       const G4int copyNo,G4VPhysicalVolume *physVol) const
 {
-    physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
+  physVol->SetTranslation(G4ThreeVector(fXCell[copyNo],fYCell[copyNo],0.));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

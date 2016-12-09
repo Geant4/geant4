@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.cc 98737 2016-08-09 12:51:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,6 +82,8 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   coeff = twopi*p0*p0;
   particle = nullptr;
 
+  fNucFormfactor = fExponentialNF;
+
   // Thomas-Fermi screening radii
   // Formfactors from A.V. Butkevich et al., NIM A 488 (2002) 282
 
@@ -137,6 +139,8 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
     *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
   currentMaterial = nullptr;
+
+  fNucFormfactor = G4EmParameters::Instance()->NuclearFormfactorType();
   
   //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
   //         << "  " << p->GetParticleName() 
@@ -324,9 +328,22 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
     G4double w2 = 1. - cost2 + screenZ;
     G4double z1 = w1*w2/(w1 + rndmEngineMod->flat()*(w2 - w1)) - screenZ;
 
-    G4double fm = 1.0 + formf*z1;
-    G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))
-      /((1.0 + z1*factD)*fm*fm);
+    G4double fm = 1.0;
+    if(fNucFormfactor == fExponentialNF) {
+      fm += formf*z1;
+      fm = 1.0/(fm*fm);
+    } else if(fNucFormfactor == fGaussianNF) {
+      fm = G4Exp(-2*formf*z1);
+    } else if(fNucFormfactor == fFlatNF) {
+      static const G4double ccoef = 0.00508/MeV;
+      G4double x = std::sqrt(2.*mom2*z1)*ccoef*2.;
+      fm = FlatFormfactor(x);
+      fm *= FlatFormfactor(x*0.6
+	    *fG4pow->A13(fNistManager->GetAtomicMassAmu(targetZ) ) );     
+    }
+
+    G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2. - z1))
+      *fm*fm/(1.0 + z1*factD);
 
     if(rndmEngineMod->flat() <= grej) {
       // exclude "false" scattering due to formfactor and spin effect

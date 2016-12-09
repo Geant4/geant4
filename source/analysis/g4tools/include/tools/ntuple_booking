@@ -36,6 +36,7 @@ public:
   const std::string& name() const {return m_name;}
   cid cls_id() const {return m_cid;}
   void* user_obj() const {return m_user_obj;}
+  void set_user_obj(void* a_obj) {m_user_obj = a_obj;}
 protected:
   std::string m_name;
   cid m_cid;
@@ -74,6 +75,7 @@ public:
   const std::string& name() const {return m_name;}
   const std::string& title() const {return m_title;}
   const std::vector<column_booking>& columns() const {return m_columns;}
+  std::vector<column_booking>& columns() {return m_columns;}
 
   void set_name(const std::string& a_s) {m_name = a_s;}
   void set_title(const std::string& a_s) {m_title = a_s;}

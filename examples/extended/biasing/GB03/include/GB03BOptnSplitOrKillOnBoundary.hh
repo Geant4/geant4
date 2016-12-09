@@ -37,7 +37,6 @@
 #include "G4ParticleChangeForNothing.hh"
 class G4LogicalVolume;
 
-
 class GB03BOptnSplitOrKillOnBoundary : public G4VBiasingOperation {
 public:
   // -- Constructor :

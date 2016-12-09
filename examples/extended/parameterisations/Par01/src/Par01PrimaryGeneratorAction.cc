@@ -23,8 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file Par01/src/Par01PrimaryGeneratorAction.cc
+/// \brief Implementation of the Par01PrimaryGeneratorAction class
 //
-// $Id: Par01PrimaryGeneratorAction.cc 90093 2015-05-13 11:59:54Z gcosmo $
+//
+// $Id: Par01PrimaryGeneratorAction.cc 100936 2016-11-03 11:07:41Z gcosmo $
 //
 
 #include "Par01PrimaryGeneratorAction.hh"
@@ -35,6 +38,8 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Par01PrimaryGeneratorAction::Par01PrimaryGeneratorAction()
 {
@@ -52,15 +57,21 @@ Par01PrimaryGeneratorAction::Par01PrimaryGeneratorAction()
   fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,-300.*cm,0.*cm));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 Par01PrimaryGeneratorAction::~Par01PrimaryGeneratorAction()
 {
   delete fParticleGun;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Par01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4ParticleGun* Par01PrimaryGeneratorAction::GetParticleGun()
 {

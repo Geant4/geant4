@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm4/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 78396 2013-12-16 16:38:04Z gcosmo $
+// $Id: RunAction.cc 98767 2016-08-09 14:18:40Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,7 +62,6 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 void RunAction::BeginOfRunAction(const G4Run*)
 {
   // save Rndm status
@@ -91,6 +90,5 @@ void RunAction::EndOfRunAction(const G4Run*)
   analysisManager->Write();
   analysisManager->CloseFile();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

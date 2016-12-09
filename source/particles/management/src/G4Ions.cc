@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.cc 96314 2016-04-06 07:21:51Z gcosmo $
+// $Id: G4Ions.cc 98732 2016-08-09 10:50:57Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -66,7 +66,7 @@ G4Ions::G4Ions(
 			  shortlived, subType, anti_encoding),
     theExcitationEnergy(excitation),
     theIsomerLevel(isomer),
-    floatLevelBase(G4FloatLevelBase::noFloat)
+    floatLevelBase(G4FloatLevelBase::no_Float)
 {
    if ((aName == "proton") || (aName == "neutron")) { 
      isGeneralIon = false ;

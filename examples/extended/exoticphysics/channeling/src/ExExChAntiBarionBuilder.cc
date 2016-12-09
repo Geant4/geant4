@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChAntiBarionBuilder.cc
+/// \brief Implementation of the ExExChAntiBarionBuilder class
+//
 
 #include "ExExChAntiBarionBuilder.hh"
 #include "G4ParticleDefinition.hh"
@@ -43,6 +46,8 @@ ExExChAntiBarionBuilder(): wasActivated(false)
     theAntiAlphaInelastic=new G4AntiAlphaInelasticProcess;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExExChAntiBarionBuilder::
 ~ExExChAntiBarionBuilder(){
     delete theAntiProtonInelastic;
@@ -52,6 +57,8 @@ ExExChAntiBarionBuilder::
     delete theAntiHe3Inelastic;
     delete theAntiAlphaInelastic;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChAntiBarionBuilder::
 Build()

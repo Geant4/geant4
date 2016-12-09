@@ -60,7 +60,6 @@ private:
 
   G4VPhysicalVolume* fWorldVolume;
 
-
 };
 
 #endif

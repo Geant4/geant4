@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.hh 96126 2016-03-16 21:16:54Z gcosmo $
+// $Id: G4AffineTransform.hh 98309 2016-07-06 10:30:15Z gcosmo $
 //
 //
 // class G4AffineTransform
@@ -65,6 +65,7 @@
 #include "G4Types.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4Transform3D.hh"
 
 class G4AffineTransform
 {
@@ -151,6 +152,9 @@ public: // with description
   inline void SetNetRotation(const G4RotationMatrix& rot);
 
   inline void SetNetTranslation(const G4ThreeVector& tlate);
+
+  inline operator G4Transform3D () const;
+    // Conversion operator (cast) to G4Transform3D
 
 private:
 

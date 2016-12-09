@@ -89,22 +89,18 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAPhysics_option4);
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmDNAPhysics_option4::G4EmDNAPhysics_option4(G4int ver)
-  : G4VPhysicsConstructor("G4EmDNAPhysics_option4"), verbose(ver)
-{
-  G4EmParameters::Instance()->SetDefaults();
-  SetPhysicsType(bElectromagnetic);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmDNAPhysics_option4::G4EmDNAPhysics_option4(G4int ver, const G4String&)
   : G4VPhysicsConstructor("G4EmDNAPhysics_option4"), verbose(ver)
 {
-  G4EmParameters::Instance()->SetDefaults();
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetDefaults();
+  param->SetFluo(true);  
+  param->SetAuger(true);  
+  param->SetAugerCascade(true);  
+  param->SetDeexcitationIgnoreCut(true);
+
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -147,10 +143,11 @@ void G4EmDNAPhysics_option4::ConstructProcess()
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {
@@ -283,7 +280,6 @@ void G4EmDNAPhysics_option4::ConstructProcess()
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
-  de->SetFluo(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

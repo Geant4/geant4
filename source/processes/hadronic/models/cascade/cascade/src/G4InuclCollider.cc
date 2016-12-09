@@ -351,13 +351,20 @@ G4bool G4InuclCollider::photonuclearOkay(G4CollisionOutput& checkOutput) const {
   if (bullet->getKineticEnergy() > 0.050) return true;
 
   if (verboseLevel>2) {
-    G4cout << " comparing final nucleus with initial target:\n"
-	   << checkOutput.getOutgoingNuclei()[0] << G4endl
-	   << *(interCase.getTarget()) << G4endl;
+    if (checkOutput.numberOfOutgoingNuclei() > 0) {
+      G4cout << " comparing final nucleus with initial target:\n"
+             << checkOutput.getOutgoingNuclei()[0] << G4endl
+             << *(interCase.getTarget()) << G4endl;
+    } else {
+      G4cout << " no final nucleus remains when target was "
+             << *(interCase.getTarget()) << G4endl;
+    }
   }
 
   // Hadron production changes target nucleus
-  G4double mfinalNuc  = checkOutput.getOutgoingNuclei()[0].getMass();
+  G4double mfinalNuc = 0.0;
+  if (checkOutput.numberOfOutgoingNuclei() > 0)
+    mfinalNuc = checkOutput.getOutgoingNuclei()[0].getMass();
   G4double mtargetNuc = interCase.getTarget()->getMass();
   if (mfinalNuc != mtargetNuc) return true;	// Mass from G4Ions is fixed
   

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 90848 2015-06-10 13:44:30Z gcosmo $
+// $Id: RunAction.hh 98764 2016-08-09 14:12:17Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@
 #include "G4UserRunAction.hh"
 #include "ProcessesCount.hh"
 #include "globals.hh"
-
 
 class Run;
 class G4Material;
@@ -57,7 +56,6 @@ class RunAction : public G4UserRunAction
     virtual G4Run* GenerateRun();
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
 
     
   private:

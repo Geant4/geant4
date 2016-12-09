@@ -40,7 +40,7 @@ PhysicsList.cc defines only geantino and transportation process.
  5 concrete action classes. Each concrete generator action shoots geantinoes
  in a distribution decribed below.
  
-\subsection ParticleGun_sub_s31 0. Uniform particle direction in a given solid angle
+\subsection ParticleGun_sub_s30 0. Uniform particle direction in a given solid angle
 
  spherical angles (alpha,psi) respective to z axis
  Histograms 5,6 show momentum direction in master frame.

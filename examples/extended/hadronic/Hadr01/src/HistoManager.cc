@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 70761 2013-06-05 12:30:51Z gcosmo $
+// $Id: HistoManager.cc 100811 2016-11-02 15:05:20Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -118,7 +118,7 @@ HistoManager::~HistoManager()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HistoManager::bookHisto()
+void HistoManager::BookHisto()
 {
   fHistoBooked = true;
   fHisto->Add1D("1","Energy deposition (MeV/mm/event) in the target",
@@ -192,7 +192,7 @@ void HistoManager::BeginOfRun()
   fEdepSum     = 0.0;
   fEdepSum2    = 0.0;
 
-  if(!fHistoBooked) { bookHisto(); }
+  if(!fHistoBooked) { BookHisto(); }
   fHisto->Book();
 
   if(fVerbose > 0) {

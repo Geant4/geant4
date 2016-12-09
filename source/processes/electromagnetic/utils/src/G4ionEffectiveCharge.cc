@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4ionEffectiveCharge.cc 100363 2016-10-19 09:24:47Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -76,7 +76,7 @@ G4ionEffectiveCharge::G4ionEffectiveCharge()
   lastMat          = 0;
   lastKinEnergy    = 0.0;
   effCharge        = eplus;
-  g4pow = G4Pow::GetInstance();
+  g4calc = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,7 +149,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
   } else {
     
     G4double y;
-    G4double zi13 = g4pow->A13(Zi);
+    G4double zi13 = g4calc->A13(Zi);
     G4double zi23 = zi13*zi13;
 
     // v1 is ion velocity in vF unit
@@ -185,7 +185,7 @@ G4double G4ionEffectiveCharge::EffectiveCharge(const G4ParticleDefinition* p,
     // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
     // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
 
-    G4double lambda = 10.0 * vF *g4pow->A23(1.0 - q)/ (zi13 * (6.0 + q));
+    G4double lambda = 10.0 * vF *g4calc->A23(1.0 - q)/ (zi13 * (6.0 + q));
 
     G4double lambda2 = lambda*lambda;
 

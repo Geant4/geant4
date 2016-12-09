@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh 67975 2013-03-13 10:19:44Z gcosmo $
+// $Id: G4Region.hh 99379 2016-09-20 09:45:19Z gcosmo $
 //
 // class G4Region
 //
@@ -95,12 +95,6 @@ class G4RegionData
 // to achieve the partial effect for each instance in the array.
 //
 typedef G4GeomSplitter<G4RegionData> G4RegionManager;
-
-// These macros changes the references to fields that are now encapsulated
-// in the class G4RegionData.
-//
-#define G4MT_fsmanager ((subInstanceManager.offset[instanceID]).fFastSimulationManager)
-#define G4MT_rsaction ((subInstanceManager.offset[instanceID]).fRegionalSteppingAction)
 
 class G4Region
 {
@@ -177,8 +171,8 @@ class G4Region
       // Find a G4MaterialCutsCouple which corresponds to the material
       // in this region.
 
-    inline void SetFastSimulationManager(G4FastSimulationManager* fsm);
-    inline G4FastSimulationManager* GetFastSimulationManager() const;
+    void SetFastSimulationManager(G4FastSimulationManager* fsm);
+    G4FastSimulationManager* GetFastSimulationManager() const;
       // Set and Get methods for G4FastSimulationManager.
       // The root logical volume that has the region with G4FastSimulationManager
       // becomes an envelope of fast simulation.
@@ -215,8 +209,8 @@ class G4Region
       // Flag 'unique' is true if there is only one parent region containing
       // the current region.
 
-    inline void SetRegionalSteppingAction(G4UserSteppingAction* rusa);
-    inline G4UserSteppingAction* GetRegionalSteppingAction() const;
+    void SetRegionalSteppingAction(G4UserSteppingAction* rusa);
+    G4UserSteppingAction* GetRegionalSteppingAction() const;
       // Set/Get method of the regional user stepping action
 
   public:  // without description

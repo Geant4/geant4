@@ -370,8 +370,10 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 
   if(printModulo > 0 && anEvent->GetEventID()%printModulo == 0 )
   {
-    G4cout << "--> Event " << anEvent->GetEventID() << " starts with initial seeds ("
-           << s1 << "," << s2 << ")." << G4endl;
+    G4cout << "--> Event " << anEvent->GetEventID() << " starts";
+    if(eventHasToBeSeeded)
+    { G4cout << " with initial seeds (" << s1 << "," << s2 << ")"; }
+    G4cout << "." << G4endl;
   }
   userPrimaryGeneratorAction->GeneratePrimaries(anEvent);
   return anEvent;

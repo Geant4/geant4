@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/PrimaryGeneratorAction.hh
+/// \file medical/dna/wvalue/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
 //
 // $Id: PrimaryGeneratorAction.hh 73024 2013-08-15 09:11:40Z gcosmo $

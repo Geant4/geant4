@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PenelopeGammaConversionModel.cc 95950 2016-03-03 10:42:48Z gcosmo $
+// $Id: G4PenelopeGammaConversionModel.cc 99415 2016-09-21 09:05:43Z gcosmo $
 //
 // Author: Luciano Pandola
 //
@@ -91,9 +91,8 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
     {
       if (logAtomicCrossSection)
 	{
-	  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
-	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	    if (i->second) delete i->second;
+	  for (auto& item : (*logAtomicCrossSection))
+	    if (item.second) delete item.second;
 	  delete logAtomicCrossSection;
 	}
       if (fEffectiveCharge)
@@ -127,17 +126,17 @@ void G4PenelopeGammaConversionModel::Initialise(const G4ParticleDefinition* part
       if (fEffectiveCharge)
 	{
 	  delete fEffectiveCharge;
-	  fEffectiveCharge = 0;
+	  fEffectiveCharge = nullptr;
 	}
       if (fMaterialInvScreeningRadius)
 	{
 	  delete fMaterialInvScreeningRadius;
-	  fMaterialInvScreeningRadius = 0;
+	  fMaterialInvScreeningRadius = nullptr;
 	}
       if (fScreeningFunction)
 	{
 	  delete fScreeningFunction;
-	  fScreeningFunction = 0;
+	  fScreeningFunction = nullptr;
 	}
       //and create new ones
       fEffectiveCharge = new std::map<const G4Material*,G4double>;

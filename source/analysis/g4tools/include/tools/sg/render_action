@@ -19,54 +19,42 @@ namespace sg {
 namespace tools {
 namespace sg {
 
-typedef unsigned int bufpos;
+typedef size_t bufpos;
 
 class render_action : public matrix_action {
+public:
+  typedef unsigned int gstoid;
 public:
   virtual void load_proj_matrix(const mat4f&) = 0;
   virtual void load_model_matrix(const mat4f&) = 0;
 public:
-  virtual void draw_vertex_array(gl::mode_t,
-                                 unsigned int,
-                                 const float*) = 0;
-  virtual void draw_vertex_array_xy(gl::mode_t,
-                                    unsigned int,
-                                    const float*) = 0;
-  virtual void draw_vertex_color_array(gl::mode_t,
-                                       unsigned int,
-                                       const float*,
-                                       const float*) = 0;
-  virtual void draw_vertex_normal_array(gl::mode_t,
-                                        unsigned int,
-                                        const float*,
-                                        const float*) = 0;
-  virtual void draw_vertex_color_normal_array(gl::mode_t,
-                                        unsigned int,
-                                        const float*,
-                                        const float*,
-                                        const float*) = 0;
+  virtual void draw_vertex_array(gl::mode_t,size_t,const float*) = 0;
+  virtual void draw_vertex_array_xy(gl::mode_t,size_t,const float*) = 0;
+  virtual void draw_vertex_color_array(gl::mode_t,size_t,const float*,const float*) = 0;
+  virtual void draw_vertex_normal_array(gl::mode_t,size_t,const float*,const float*) = 0;
+  virtual void draw_vertex_color_normal_array(gl::mode_t,size_t,const float*,const float*,const float*) = 0;
 
   /////////////////////////////////////////////////////////////////
   /// texture /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
   virtual void draw_vertex_array_texture(tools::gl::mode_t,
-                                         unsigned int,const float*,
-                                         unsigned int,
+                                         size_t,const float*,
+                                         gstoid,
                                          const float*) = 0;
   virtual void draw_vertex_normal_array_texture(tools::gl::mode_t,
-                                         unsigned int,
+                                         size_t,
                                          const float*,const float*,
-                                         unsigned int,
+                                         gstoid,
                                          const float*) = 0;
 
   /////////////////////////////////////////////////////////////////
   /// VBO /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
-  virtual void begin_gsto(unsigned int) = 0;
-  virtual void draw_gsto_v(gl::mode_t,unsigned int,bufpos) = 0;
-  virtual void draw_gsto_vc(gl::mode_t,unsigned int,bufpos,bufpos) = 0;
-  virtual void draw_gsto_vn(gl::mode_t,unsigned int,bufpos,bufpos) = 0;
-  virtual void draw_gsto_vcn(gl::mode_t,unsigned int,bufpos,bufpos,bufpos) = 0;
+  virtual void begin_gsto(gstoid) = 0;
+  virtual void draw_gsto_v(gl::mode_t,size_t,bufpos) = 0;
+  virtual void draw_gsto_vc(gl::mode_t,size_t,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vn(gl::mode_t,size_t,bufpos,bufpos) = 0;
+  virtual void draw_gsto_vcn(gl::mode_t,size_t,bufpos,bufpos,bufpos) = 0;
   virtual void end_gsto() = 0;
   /////////////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
@@ -168,56 +156,56 @@ public:
 
 public:
   // for sphere::visit template.
-  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,const float* a_nms) {
+  bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
     draw_vertex_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_nms);
     return true;
   }
-  bool add_triangle_fan(unsigned int a_floatn,const float* a_xyzs,float* a_rgbas,const float* a_nms) {
+  bool add_triangle_fan(size_t a_floatn,const float* a_xyzs,float* a_rgbas,const float* a_nms) {
     draw_vertex_color_normal_array(gl::triangle_fan(),a_floatn,a_xyzs,a_rgbas,a_nms);
     return true;
   }
-  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_nms) {
+  bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* a_nms) {
     draw_vertex_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_nms);
     return true;
   }
-  bool add_triangle_strip(unsigned int a_floatn,const float* a_xyzs,const float* a_rgbas,const float* a_nms) {
+  bool add_triangle_strip(size_t a_floatn,const float* a_xyzs,const float* a_rgbas,const float* a_nms) {
     draw_vertex_color_normal_array(gl::triangle_strip(),a_floatn,a_xyzs,a_rgbas,a_nms);
     return true;
   }
-  bool add_line_loop(unsigned int a_floatn,const float* a_xyzs) {
+  bool add_line_loop(size_t a_floatn,const float* a_xyzs) {
     draw_vertex_array(gl::line_loop(),a_floatn,a_xyzs);
     return true;
   }
-  bool add_line_strip(unsigned int a_floatn,const float* a_xyzs) {
+  bool add_line_strip(size_t a_floatn,const float* a_xyzs) {
     draw_vertex_array(gl::line_strip(),a_floatn,a_xyzs);
     return true;
   }
-  bool add_points(unsigned int a_floatn,const float* a_xyzs) {
+  bool add_points(size_t a_floatn,const float* a_xyzs) {
     draw_vertex_array(gl::points(),a_floatn,a_xyzs);
     return true;
   }
 
 /*
-  bool add_triangles_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+  bool add_triangles_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
     draw_vertex_array_texture(gl::triangles(),a_floatn,a_xyzs,a_tex,a_texs);
     return true;
   }
-  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
     draw_vertex_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_tex,a_texs);
     return true;
   }
-  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,unsigned int a_tex,const float* a_texs){
+  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,gstoid a_tex,const float* a_texs){
     draw_vertex_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_tex,a_texs);
     return true;
   }
 */
-  bool add_triangle_fan_texture(unsigned int a_floatn,const float* a_xyzs,const float* a_nms,
-                                unsigned int a_tex,const float* a_texs){
+  bool add_triangle_fan_texture(size_t a_floatn,const float* a_xyzs,const float* a_nms,
+                                gstoid a_tex,const float* a_texs){
     draw_vertex_normal_array_texture(gl::triangle_fan(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
     return true;
   }
-  bool add_triangle_strip_texture(unsigned int a_floatn,const float* a_xyzs,const float* a_nms,
-                                  unsigned int a_tex,const float* a_texs){
+  bool add_triangle_strip_texture(size_t a_floatn,const float* a_xyzs,const float* a_nms,
+                                  gstoid a_tex,const float* a_texs){
     draw_vertex_normal_array_texture(gl::triangle_strip(),a_floatn,a_xyzs,a_nms,a_tex,a_texs);
     return true;
   }
@@ -228,11 +216,11 @@ public:
     return true;
   }
 
-  void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,unsigned int a_floatn,const float* a_xys) {
-    unsigned int num = a_floatn/2;
+  void dump_vertex_array_xy(std::ostream& a_out,gl::mode_t /*a_mode*/,size_t a_floatn,const float* a_xys) {
+    size_t num = a_floatn/2;
     if(!num) return;
     a_out << "dump_vertex_array_xy : begin : " << num << std::endl;
-    for(unsigned int index=0;index<num;index++) {
+    for(size_t index=0;index<num;index++) {
       a_out << "xy : " << index
             << " " << a_xys[2*index]
             << " " << a_xys[2*index+1]

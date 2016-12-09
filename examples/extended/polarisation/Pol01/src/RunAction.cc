@@ -26,7 +26,7 @@
 /// \file polarisation/Pol01/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 86443 2014-11-12 09:40:56Z gcosmo $
+// $Id: RunAction.cc 98772 2016-08-09 14:25:31Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,9 +53,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
-  : detector(det), primary(prim), ProcCounter(0), fAnalysisManager(0)
+: G4UserRunAction(),
+  fGamma(0), fElectron(0), fPositron(0),
+  fDetector(det), fPrimary(prim), fProcCounter(0), fAnalysisManager(0), 
+  fTotalEventCount(0),
+  fPhotonStats(), fElectronStats(), fPositronStats()
 {
-  totalEventCount=0;
   fGamma = G4Gamma::Gamma();
   fElectron = G4Electron::Electron();
   fPositron = G4Positron::Positron();
@@ -78,12 +81,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   //  CLHEP::HepRandom::showEngineStatus();
   
-  if (ProcCounter) delete ProcCounter;
-  ProcCounter = new ProcessesCount;
-  totalEventCount = 0;
-  photonStats.Clear();
-  electronStats.Clear();
-  positronStats.Clear();
+  if (fProcCounter) delete fProcCounter;
+  fProcCounter = new ProcessesCount;
+  fTotalEventCount = 0;
+  fPhotonStats.Clear();
+  fElectronStats.Clear();
+  fPositronStats.Clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -95,13 +98,13 @@ void RunAction::FillData(const G4ParticleDefinition* particle,
 {
   G4int id = -1;
   if (particle == fGamma) { 
-    photonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
+    fPhotonStats.FillData(kinEnergy, costheta, longitudinalPolarization);
     if(fAnalysisManager) { id = 1; } 
   } else if (particle == fElectron) { 
-    electronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
+    fElectronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
     if(fAnalysisManager) { id = 5; } 
   } else if (particle == fPositron) {
-    positronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
+    fPositronStats.FillData(kinEnergy, costheta, longitudinalPolarization);
     if(fAnalysisManager) { id = 9; } 
   }
   if(id > 0) {
@@ -177,12 +180,12 @@ void RunAction::CountProcesses(G4String procName)
 {
   // is the process already counted ?
   // *AS* change to std::map?!
-  size_t nbProc = ProcCounter->size();
+  size_t nbProc = fProcCounter->size();
   size_t i = 0;
-  while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-  if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
+  while ((i<nbProc)&&((*fProcCounter)[i]->GetName()!=procName)) i++;
+  if (i == nbProc) fProcCounter->push_back( new ProcessCount(procName));
   
-  (*ProcCounter)[i]->Count();
+  (*fProcCounter)[i]->Count();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,35 +197,35 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4int  prec = G4cout.precision(5);
     
-  G4Material* material = detector->GetMaterial();
+  G4Material* material = fDetector->GetMaterial();
   G4double density = material->GetDensity();
    
   G4ParticleDefinition* particle = 
-                            primary->GetParticleGun()->GetParticleDefinition();
+                            fPrimary->GetParticleGun()->GetParticleDefinition();
   G4String Particle = particle->GetParticleName();    
-  G4double energy = primary->GetParticleGun()->GetParticleEnergy();
+  G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
   G4cout << "\n The run consists of " << NbOfEvents << " "<< Particle << " of "
          << G4BestUnit(energy,"Energy") << " through " 
-         << G4BestUnit(detector->GetBoxSizeZ(),"Length") << " of "
+         << G4BestUnit(fDetector->GetBoxSizeZ(),"Length") << " of "
          << material->GetName() << " (density: " 
          << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
   
   //frequency of processes
   G4cout << "\n Process calls frequency --->\n";
-  for (size_t i=0; i< ProcCounter->size();i++) {
-     G4String procName = (*ProcCounter)[i]->GetName();
-     G4int    count    = (*ProcCounter)[i]->GetCounter(); 
+  for (size_t i=0; i< fProcCounter->size();i++) {
+     G4String procName = (*fProcCounter)[i]->GetName();
+     G4int    count    = (*fProcCounter)[i]->GetCounter(); 
      G4cout << "\t" << procName << " = " << count<<"\n";
   }
   
-  if (totalEventCount == 0) return;
+  if (fTotalEventCount == 0) return;
   
   G4cout<<" Gamma: \n";
-  photonStats.PrintResults(totalEventCount);
+  fPhotonStats.PrintResults(fTotalEventCount);
   G4cout<<" Electron: \n";
-  electronStats.PrintResults(totalEventCount);
+  fElectronStats.PrintResults(fTotalEventCount);
   G4cout<<" Positron: \n";
-  positronStats.PrintResults(totalEventCount);
+  fPositronStats.PrintResults(fTotalEventCount);
 
   //cross check from G4EmCalculator
   //  G4cout << "\n Verification from G4EmCalculator. \n";  
@@ -242,20 +245,20 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
 void RunAction::EventFinished()
 {
-  ++totalEventCount;
-  photonStats.EventFinished();
-  electronStats.EventFinished();
-  positronStats.EventFinished();
+  ++fTotalEventCount;
+  fPhotonStats.EventFinished();
+  fElectronStats.EventFinished();
+  fPositronStats.EventFinished();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::ParticleStatistics::ParticleStatistics()
-  : currentNumber(0),
-    totalNumber(0), totalNumber2(0),
-    sumEnergy(0), sumEnergy2(0),
-    sumPolarization(0), sumPolarization2(0),
-    sumCosTheta(0), sumCosTheta2(0)
+  : fCurrentNumber(0),
+    fTotalNumber(0), fTotalNumber2(0),
+    fSumEnergy(0), fSumEnergy2(0),
+    fSumPolarization(0), fSumPolarization2(0),
+    fSumCosTheta(0), fSumCosTheta2(0)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -267,9 +270,9 @@ RunAction::ParticleStatistics::~ParticleStatistics()
 
 void RunAction::ParticleStatistics::EventFinished()
 {
-  totalNumber+=currentNumber;
-  totalNumber2+=currentNumber*currentNumber;
-  currentNumber=0;
+  fTotalNumber+=fCurrentNumber;
+  fTotalNumber2+=fCurrentNumber*fCurrentNumber;
+  fCurrentNumber=0;
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -277,13 +280,13 @@ void RunAction::ParticleStatistics:: FillData(G4double kinEnergy,
                                               G4double costheta,
                                               G4double longitudinalPolarization)
 {
-  ++currentNumber;
-  sumEnergy+=kinEnergy;
-  sumEnergy2+=kinEnergy*kinEnergy;
-  sumPolarization+=longitudinalPolarization;
-  sumPolarization2+=longitudinalPolarization*longitudinalPolarization;
-  sumCosTheta+=costheta;
-  sumCosTheta2+=costheta*costheta;
+  ++fCurrentNumber;
+  fSumEnergy+=kinEnergy;
+  fSumEnergy2+=kinEnergy*kinEnergy;
+  fSumPolarization+=longitudinalPolarization;
+  fSumPolarization2+=longitudinalPolarization*longitudinalPolarization;
+  fSumCosTheta+=costheta;
+  fSumCosTheta2+=costheta*costheta;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -291,15 +294,15 @@ void RunAction::ParticleStatistics:: FillData(G4double kinEnergy,
 void RunAction::ParticleStatistics::PrintResults(G4int totalNumberOfEvents)
 {
   G4cout<<"Mean Number per Event :"
-        <<G4double(totalNumber)/G4double(totalNumberOfEvents)<<"\n";
-  if (totalNumber==0) totalNumber=1;
-  G4double energyMean=sumEnergy/totalNumber;
-  G4double energyRms=std::sqrt(sumEnergy2/totalNumber-energyMean*energyMean);
+        <<G4double(fTotalNumber)/G4double(totalNumberOfEvents)<<"\n";
+  if (fTotalNumber==0) fTotalNumber=1;
+  G4double energyMean=fSumEnergy/fTotalNumber;
+  G4double energyRms=std::sqrt(fSumEnergy2/fTotalNumber-energyMean*energyMean);
   G4cout<<"Mean Energy :"<< G4BestUnit(energyMean,"Energy")
         <<" +- "<<G4BestUnit(energyRms,"Energy")<<"\n";
-  G4double polarizationMean=sumPolarization/totalNumber;
+  G4double polarizationMean=fSumPolarization/fTotalNumber;
   G4double polarizationRms=
-    std::sqrt(sumPolarization2/totalNumber-polarizationMean*polarizationMean);
+    std::sqrt(fSumPolarization2/fTotalNumber-polarizationMean*polarizationMean);
   G4cout<<"Mean Polarization :"<< polarizationMean
         <<" +- "<<polarizationRms<<"\n";
 }
@@ -308,11 +311,11 @@ void RunAction::ParticleStatistics::PrintResults(G4int totalNumberOfEvents)
 
 void RunAction::ParticleStatistics::Clear()
 {
-  currentNumber=0;
-  totalNumber=totalNumber2=0;
-  sumEnergy=sumEnergy2=0;
-  sumPolarization=sumPolarization2=0;
-  sumCosTheta=sumCosTheta2=0;
+  fCurrentNumber=0;
+  fTotalNumber=fTotalNumber2=0;
+  fSumEnergy=fSumEnergy2=0;
+  fSumPolarization=fSumPolarization2=0;
+  fSumCosTheta=fSumCosTheta2=0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 91806 2015-08-06 12:20:45Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.cc 98826 2016-08-12 12:36:07Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -1872,7 +1872,7 @@ G4NuclNuclDiffuseElastic::GetHadronNucleonXscNS( G4ParticleDefinition* pParticle
 
     //if( proj_energy < 40. ) Delta = 0.916+0.0021*proj_energy;
 
-    if( proj_momentum >= 10.)
+    //AR-12Aug2016  if( proj_momentum >= 10.)
     {
         B0 = 7.5;
         A0 = 100. - B0*G4Log(3.0e7);

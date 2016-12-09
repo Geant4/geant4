@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc 82630 2014-07-01 09:43:00Z gcosmo $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc 100697 2016-10-31 11:32:35Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
 //      CERN Geneva Switzerland
@@ -224,7 +224,7 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       case 3:
 	break;
       }
-      
+      G4cout << particleGun->GetParticleDefinition()->GetParticleName() << G4endl;
       particleGun->GeneratePrimaryVertex(anEvent);
     }
    else

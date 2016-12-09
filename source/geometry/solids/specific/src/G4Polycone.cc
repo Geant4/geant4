@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 93559 2015-10-26 14:14:49Z gcosmo $
+// $Id: G4Polycone.cc 101819 2016-12-01 08:13:36Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -43,6 +43,11 @@
 
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
+
+#include "G4GeomTools.hh"
+#include "G4VoxelLimits.hh"
+#include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 
 #include "Randomize.hh"
 
@@ -191,9 +196,10 @@ void G4Polycone::Create( G4double phiStart,
     
   G4double rzArea = rz->Area();
   if (rzArea < -kCarTolerance)
+  {
     rz->ReverseOrder();
-
-  else if (rzArea < -kCarTolerance)
+  }
+  else if (rzArea < kCarTolerance)
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl
@@ -242,11 +248,11 @@ void G4Polycone::Create( G4double phiStart,
     //
     startPhi = phiStart;
     while( startPhi < 0 )    // Loop checking, 13.08.2015, G.Cosmo
-     startPhi += twopi;
+      startPhi += twopi;
     
     endPhi = phiStart+phiTotal;
     while( endPhi < startPhi )    // Loop checking, 13.08.2015, G.Cosmo
-     endPhi += twopi;
+      endPhi += twopi;
   }
   
   //
@@ -513,6 +519,184 @@ G4double G4Polycone::DistanceToIn( const G4ThreeVector &p ) const
   return G4VCSGfaceted::DistanceToIn(p);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4Polycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double rmin = kInfinity, rmax = -kInfinity;
+  G4double zmin = kInfinity, zmax = -kInfinity;
+
+  for (G4int i=0; i<GetNumRZCorner(); ++i)
+  {
+    G4PolyconeSideRZ corner = GetCorner(i);
+    if (corner.r < rmin) rmin = corner.r;
+    if (corner.r > rmax) rmax = corner.r;
+    if (corner.z < zmin) zmin = corner.z;
+    if (corner.z > zmax) zmax = corner.z;
+  }
+
+  if (IsOpen())
+  {
+    G4TwoVector vmin,vmax;
+    G4GeomTools::DiskExtent(rmin,rmax,
+                            GetSinStartPhi(),GetCosStartPhi(),
+                            GetSinEndPhi(),GetCosEndPhi(),
+                            vmin,vmax);
+    pMin.set(vmin.x(),vmin.y(),zmin);
+    pMax.set(vmax.x(),vmax.y(),zmax);
+  }
+  else
+  {
+    pMin.set(-rmax,-rmax, zmin);
+    pMax.set( rmax, rmax, zmax);
+  }
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4Polycone::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
+                                   const G4VoxelLimits& pVoxelLimit,
+                                   const G4AffineTransform& pTransform,
+                                         G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+  G4bool exist;
+
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
+
+  // To find the extent, RZ contour of the polycone is subdivided
+  // in triangles. The extent is calculated as cumulative extent of
+  // all sub-polycones formed by rotation of triangles around Z
+  //
+  G4TwoVectorList contourRZ;
+  G4TwoVectorList triangles;
+  std::vector<G4int> iout;
+  G4double eminlim = pVoxelLimit.GetMinExtent(pAxis);
+  G4double emaxlim = pVoxelLimit.GetMaxExtent(pAxis);
+
+  // get RZ contour, ensure anticlockwise order of corners
+  for (G4int i=0; i<GetNumRZCorner(); ++i)
+  {
+    G4PolyconeSideRZ corner = GetCorner(i);
+    contourRZ.push_back(G4TwoVector(corner.r,corner.z));
+  }
+  G4GeomTools::RemoveRedundantVertices(contourRZ,iout,2*kCarTolerance);
+  G4double area = G4GeomTools::PolygonArea(contourRZ);
+  if (area < 0.) std::reverse(contourRZ.begin(),contourRZ.end());
+
+  // triangulate RZ countour
+  if (!G4GeomTools::TriangulatePolygon(contourRZ,triangles))
+  {
+    std::ostringstream message;
+    message << "Triangulation of RZ contour has failed for solid: "
+            << GetName() << " !"
+            << "\nExtent has been calculated using boundary box";
+    G4Exception("G4Polycone::CalculateExtent()",
+                "GeomMgt1002", JustWarning, message);
+    return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  }
+
+  // set trigonometric values
+  const G4int NSTEPS = 24;            // number of steps for whole circle
+  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+
+  G4double sphi   = GetStartPhi();
+  G4double ephi   = GetEndPhi();
+  G4double dphi   = IsOpen() ? ephi-sphi : twopi;
+  G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
+  G4double ang    = dphi/ksteps;
+
+  G4double sinHalf = std::sin(0.5*ang);
+  G4double cosHalf = std::cos(0.5*ang);
+  G4double sinStep = 2.*sinHalf*cosHalf;
+  G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+
+  G4double sinStart = GetSinStartPhi();
+  G4double cosStart = GetCosStartPhi();
+  G4double sinEnd   = GetSinEndPhi();
+  G4double cosEnd   = GetCosEndPhi();
+
+  // define vectors and arrays
+  std::vector<const G4ThreeVectorList *> polygons;
+  polygons.resize(ksteps+2);
+  G4ThreeVectorList pols[NSTEPS+2];
+  for (G4int k=0; k<ksteps+2; ++k) pols[k].resize(6);
+  for (G4int k=0; k<ksteps+2; ++k) polygons[k] = &pols[k];
+  G4double r0[6],z0[6]; // contour with original edges of triangle
+  G4double r1[6];       // shifted radii of external edges of triangle
+
+  // main loop along triangles
+  pMin = kInfinity;
+  pMax =-kInfinity;
+  G4int ntria = triangles.size()/3;
+  for (G4int i=0; i<ntria; ++i)
+  {
+    G4int i3 = i*3;
+    for (G4int k=0; k<3; ++k)
+    {
+      G4int e0 = i3+k, e1 = (k<2) ? e0+1 : i3;
+      G4int k2 = k*2;
+      // set contour with original edges of triangle
+      r0[k2+0] = triangles[e0].x(); z0[k2+0] = triangles[e0].y();
+      r0[k2+1] = triangles[e1].x(); z0[k2+1] = triangles[e1].y();
+      // set shifted radii
+      r1[k2+0] = r0[k2+0];
+      r1[k2+1] = r0[k2+1];
+      if (z0[k2+1] - z0[k2+0] <= 0) continue;
+      r1[k2+0] /= cosHalf;
+      r1[k2+1] /= cosHalf;
+    }
+
+    // rotate countour, set sequence of 6-sided polygons
+    G4double sinCur = sinStart*cosHalf + cosStart*sinHalf;
+    G4double cosCur = cosStart*cosHalf - sinStart*sinHalf;
+    for (G4int j=0; j<6; ++j) pols[0][j].set(r0[j]*cosStart,r0[j]*sinStart,z0[j]);
+    for (G4int k=1; k<ksteps+1; ++k)
+    {
+      for (G4int j=0; j<6; ++j) pols[k][j].set(r1[j]*cosCur,r1[j]*sinCur,z0[j]);
+      G4double sinTmp = sinCur;
+      sinCur = sinCur*cosStep + cosCur*sinStep;
+      cosCur = cosCur*cosStep - sinTmp*sinStep;
+    }
+    for (G4int j=0; j<6; ++j) pols[ksteps+1][j].set(r0[j]*cosEnd,r0[j]*sinEnd,z0[j]);
+
+    // set sub-envelope and adjust extent
+    G4double emin,emax;
+    G4BoundingEnvelope benv(polygons);
+    if (!benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,emin,emax)) continue;
+    if (emin < pMin) pMin = emin;
+    if (emax > pMax) pMax = emax;
+    if (eminlim > pMin && emaxlim < pMax) return true; // max possible extent
+  }
+  return (pMin < pMax);
+}
 
 //
 // ComputeDimensions
@@ -610,37 +794,39 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   rone = (fRmax1-fRmax2)/(2.*fDz); 
   rtwo = (fRmin1-fRmin2)/(2.*fDz);
   if(fRmax1==fRmax2){qone=0.;}
-  else{
+  else
+  {
     qone = fDz*(fRmax1+fRmax2)/(fRmax1-fRmax2);
   }
   if(fRmin1==fRmin2){qtwo=0.;}
-  else{
+  else
+  {
     qtwo = fDz*(fRmin1+fRmin2)/(fRmin1-fRmin2);
-   }
+  }
   Aone   = 0.5*fDPhi*(fRmax2 + fRmax1)*(sqr(fRmin1-fRmin2)+sqr(zTwo-zOne));       
   Atwo   = 0.5*fDPhi*(fRmin2 + fRmin1)*(sqr(fRmax1-fRmax2)+sqr(zTwo-zOne));
   Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
   totArea = Aone+Atwo+2.*Afive;
   
-  phi  = RandFlat::shoot(startPhi,endPhi);
+  phi  = G4RandFlat::shoot(startPhi,endPhi);
   cosu = std::cos(phi);
   sinu = std::sin(phi);
 
 
   if( (startPhi == 0) && (endPhi == twopi) ) { Afive = 0; }
-  chose = RandFlat::shoot(0.,Aone+Atwo+2.*Afive);
+  chose = G4RandFlat::shoot(0.,Aone+Atwo+2.*Afive);
   if( (chose >= 0) && (chose < Aone) )
   {
     if(fRmax1 != fRmax2)
     {
-      zRand = RandFlat::shoot(-1.*afDz,afDz); 
+      zRand = G4RandFlat::shoot(-1.*afDz,afDz); 
       point = G4ThreeVector (rone*cosu*(qone-zRand),
                              rone*sinu*(qone-zRand), zRand);
     }
     else
     {
       point = G4ThreeVector(fRmax1*cosu, fRmax1*sinu,
-                            RandFlat::shoot(-1.*afDz,afDz));
+                            G4RandFlat::shoot(-1.*afDz,afDz));
      
     }
   }
@@ -648,7 +834,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   {
     if(fRmin1 != fRmin2)
     { 
-      zRand = RandFlat::shoot(-1.*afDz,afDz); 
+      zRand = G4RandFlat::shoot(-1.*afDz,afDz); 
       point = G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                              rtwo*sinu*(qtwo-zRand), zRand);
       
@@ -656,24 +842,24 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
     else
     {
       point = G4ThreeVector(fRmin1*cosu, fRmin1*sinu,
-                            RandFlat::shoot(-1.*afDz,afDz));
+                            G4RandFlat::shoot(-1.*afDz,afDz));
     }
   }
   else if( (chose >= Aone + Atwo + Afive) && (chose < Aone + Atwo + 2.*Afive) )
   {
-    zRand  = RandFlat::shoot(-1.*afDz,afDz);
+    zRand  = G4RandFlat::shoot(-1.*afDz,afDz);
     rmin   = fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2);
     rmax   = fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2);
-    rRand1 = std::sqrt(RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
+    rRand1 = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
     point  = G4ThreeVector (rRand1*std::cos(startPhi),
                             rRand1*std::sin(startPhi), zRand);
   }
   else
   { 
-    zRand  = RandFlat::shoot(-1.*afDz,afDz); 
+    zRand  = G4RandFlat::shoot(-1.*afDz,afDz); 
     rmin   = fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2);
     rmax   = fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2);
-    rRand1 = std::sqrt(RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
+    rRand1 = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
     point  = G4ThreeVector (rRand1*std::cos(endPhi),
                             rRand1*std::sin(endPhi), zRand);
    
@@ -702,34 +888,34 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
   aTwo = 2.*fDz*fDPhi*fRMin;
   aFou = 2.*fDz*(fRMax-fRMin);
   totArea = aOne+aTwo+2.*aFou;
-  phi    = RandFlat::shoot(startPhi,endPhi);
+  phi    = G4RandFlat::shoot(startPhi,endPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
-  rRand  = fRMin + (fRMax-fRMin)*std::sqrt(RandFlat::shoot());
+  rRand  = fRMin + (fRMax-fRMin)*std::sqrt(G4RandFlat::shoot());
  
   if(startPhi == 0 && endPhi == twopi) 
     aFou = 0;
   
-  chose  = RandFlat::shoot(0.,aOne+aTwo+2.*aFou);
+  chose  = G4RandFlat::shoot(0.,aOne+aTwo+2.*aFou);
   if( (chose >= 0) && (chose < aOne) )
   {
     xRand = fRMax*cosphi;
     yRand = fRMax*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
   else if( (chose >= aOne) && (chose < aOne + aTwo) )
   {
     xRand = fRMin*cosphi;
     yRand = fRMin*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
   else if( (chose >= aOne+aTwo) && (chose <aOne+aTwo+aFou) )
   {
     xRand = rRand*std::cos(fSPhi+fDPhi);
     yRand = rRand*std::sin(fSPhi+fDPhi);
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
 
@@ -737,7 +923,7 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
 
   xRand = rRand*std::cos(fSPhi+fDPhi);
   yRand = rRand*std::sin(fSPhi+fDPhi);
-  zRand = RandFlat::shoot(-1.*fDz,fDz);
+  zRand = G4RandFlat::shoot(-1.*fDz,fDz);
   return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
 }
 
@@ -752,7 +938,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
                                          G4double zOne) const
 {
   G4double xRand,yRand,phi,cosphi,sinphi,rRand1,rRand2,A1,Atot,rCh;
-  phi    = RandFlat::shoot(startPhi,endPhi);
+  phi    = G4RandFlat::shoot(startPhi,endPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
@@ -762,7 +948,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   }
   else
   {
-    rRand1 = RandFlat::shoot(fRMin1,fRMin2);
+    rRand1 = G4RandFlat::shoot(fRMin1,fRMin2);
     A1=std::fabs(fRMin2*fRMin2-fRMin1*fRMin1);
   }
   if(fRMax1==fRMax2)
@@ -771,10 +957,10 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   }
   else
   {
-    rRand2 = RandFlat::shoot(fRMax1,fRMax2);
+    rRand2 = G4RandFlat::shoot(fRMax1,fRMax2);
     Atot   = A1+std::fabs(fRMax2*fRMax2-fRMax1*fRMax1);
   }
-  rCh   = RandFlat::shoot(0.,Atot);
+  rCh   = G4RandFlat::shoot(0.,Atot);
  
   if(rCh>A1) { rRand1=rRand2; }
   
@@ -815,13 +1001,13 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
     G4int i=0;
     G4int numPlanes = original_parameters->Num_z_planes;
   
-    phi = RandFlat::shoot(startPhi,endPhi);
+    phi = G4RandFlat::shoot(startPhi,endPhi);
     cosphi = std::cos(phi);
     sinphi = std::sin(phi);
 
     rRand = original_parameters->Rmin[0] +
       ( (original_parameters->Rmax[0]-original_parameters->Rmin[0])
-        * std::sqrt(RandFlat::shoot()) );
+        * std::sqrt(G4RandFlat::shoot()) );
 
     std::vector<G4double> areas;       // (numPlanes+1);
     std::vector<G4ThreeVector> points; // (numPlanes-1);
@@ -862,7 +1048,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
                         sqr(original_parameters->Rmin[numPlanes-1])));
   
     totArea += (areas[0]+areas[numPlanes]);
-    G4double chose = RandFlat::shoot(0.,totArea);
+    G4double chose = G4RandFlat::shoot(0.,totArea);
 
     if( (chose>=0.) && (chose<areas[0]) )
     {
@@ -887,7 +1073,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
 
     rRand = original_parameters->Rmin[numPlanes-1] +
       ( (original_parameters->Rmax[numPlanes-1]-original_parameters->Rmin[numPlanes-1])
-        * std::sqrt(RandFlat::shoot()) );
+        * std::sqrt(G4RandFlat::shoot()) );
 
     return G4ThreeVector(rRand*cosphi,rRand*sinphi,
                          original_parameters->Z_values[numPlanes-1]);  

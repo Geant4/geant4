@@ -49,6 +49,8 @@
 
 #if defined(G4MULTITHREADED)
 
+#include <atomic>
+
 namespace
 {
    G4ThreadLocal G4int G4ThreadID = G4Threading::MASTER_ID;
@@ -58,7 +60,13 @@ namespace
 G4Pid_t G4Threading::G4GetPidId()
 { // In multithreaded mode return Thread ID
    #if defined(__MACH__)
+   #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+     uint64_t tid64;
+     pthread_threadid_np(NULL, &tid64);
+     return (pid_t)tid64;
+   #else
      return syscall(SYS_thread_selfid);
+   #endif
    #elif defined(WIN32)
      return GetCurrentThreadId();
    #else
@@ -111,6 +119,14 @@ G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&)
 void G4Threading::SetMultithreadedApplication(G4bool value ) { isMTAppType = value; }
 G4bool G4Threading::IsMultithreadedApplication() { return isMTAppType; }
 
+namespace
+{
+  std::atomic_int numActThreads(0);
+}
+int G4Threading::WorkerThreadLeavesPool() { return numActThreads--; }
+int G4Threading::WorkerThreadJoinsPool() { return numActThreads++;}
+G4int G4Threading::GetNumberOfRunningWorkerThreads() { return numActThreads.load(); }
+
 #else  // Sequential mode
 
 G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
@@ -134,4 +150,8 @@ G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
 
 void G4Threading::SetMultithreadedApplication(G4bool) {}
 G4bool G4Threading::IsMultithreadedApplication() { return false; }
+int G4Threading::WorkerThreadLeavesPool() { return 0; }
+int G4Threading::WorkerThreadJoinsPool() { return 0; }
+G4int G4Threading::GetNumberOfRunningWorkerThreads() { return 0; }
+
 #endif

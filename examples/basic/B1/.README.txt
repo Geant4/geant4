@@ -1,4 +1,4 @@
-//$Id: .README.txt 94957 2016-01-08 13:27:26Z gcosmo $
+//$Id: .README.txt 99560 2016-09-27 07:03:29Z gcosmo $
 
 ///\file "B1/.README.txt"
 ///\brief Example B1 README page
@@ -83,15 +83,15 @@
    
    Total dose deposited is computed at B1RunAction::EndOfRunAction(), 
    and printed together with informations about the primary particle.
-   In multi-threading mode the energy accumulated in G4Parameter objects per
+   In multi-threading mode the energy accumulated in G4Accumulable objects per
    workers is merged to the master in B1RunAction::EndOfRunAction() and the final
    result is printed on the screen.
    
-   G4Parameter<G4double> type instead of G4double type is used for the B1RunAction
+   G4Accumulable<G4double> type instead of G4double type is used for the B1RunAction
    data members in order to facilitate merging of the values accumulated on workers 
-   to the master.  Currently the parameters have to be registered to G4ParametersManager
-   and G4ParametersManager::Merge() has to be called from the users code. This is planned
-   to be further simplified with a closer integration of G4Parameter classes in
+   to the master.  Currently the accumulables have to be registered to G4AccumulablesManager
+   and G4AccumulablesManager::Merge() has to be called from the users code. This is planned
+   to be further simplified with a closer integration of G4Accumulable classes in
    the Geant4 kernel next year.
 
    An example of creating and computing new units (e.g., dose) is also shown 

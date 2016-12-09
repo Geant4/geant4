@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/XCrystalPlanarNucleiDensity.cc
+/// \brief Implementation of the XCrystalPlanarNucleiDensity class
+//
 
 #include "XCrystalPlanarNucleiDensity.hh"
 #include "G4SystemOfUnits.hh"

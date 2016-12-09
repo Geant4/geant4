@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundNucleon.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4PreCompoundNucleon.cc 100378 2016-10-19 15:03:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,18 +77,12 @@ ProbabilityDistributionFunction(G4double eKin,
   G4double rj = GetRj(P, aFragment.GetNumberOfCharged());
   G4double xs = CrossSection(eKin);
 
-  if (rj <0.0 || xs < 0.0) {  
-    std::ostringstream errOs;
-    errOs << "Rj=" << rj <<"  xsec("
-	  <<eKin/MeV<<" MeV)= "<< xs <<"  A= "<<GetA()<<"  Z= "<<GetZ()
-	  <<G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, errOs.str());
-  }
+  if (rj <0.0 || xs < 0.0) { return 0.0; }
 
   static const G4double fact = 2*CLHEP::millibarn
     /(CLHEP::pi2*CLHEP::hbarc*CLHEP::hbarc*CLHEP::hbarc);
   G4double Probability = fact * theReducedMass * rj * xs * eKin * P * (N-1) 
-    * g4pow->powN(g1*E1/(g0*E0),N-2) * g1 / (E0*g0*g0);
+    * g4calc->powN(g1*E1/(g0*E0),N-2) * g1 / (E0*g0*g0);
   
   return Probability;
 }

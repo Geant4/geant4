@@ -95,7 +95,7 @@ void DicomRegularDetectorConstruction::ConstructPhantom()
   // ComputeMaterial method of the parameterisation
 
     voxel_logic->SetVisAttributes(
-                     new G4VisAttributes(G4VisAttributes::Invisible));
+                     new G4VisAttributes(G4VisAttributes::GetInvisible()));
     
   //--- Assign the fContainer volume of the parameterisation
   param->BuildContainerSolid(fContainer_phys);

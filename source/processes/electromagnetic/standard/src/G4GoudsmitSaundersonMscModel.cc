@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonMscModel.cc 96561 2016-04-22 14:24:58Z gcosmo $
+// $Id: G4GoudsmitSaundersonMscModel.cc 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // ----------------------------------------------------------------------------
 //
@@ -748,8 +748,8 @@ G4double G4GoudsmitSaundersonMscModel::ComputeGeomPathLength(G4double)
       par1 = (fLambda1-lambda1)/(fLambda1*fTheTrueStepLenght);  // alpha
       par2 = 1./(par1*fLambda1);
       par3 = 1.+par2 ;
-      G4Pow *g4pow = G4Pow::GetInstance();
-      fTheZPathLenght = 1./(par1*par3) * (1.-g4pow->powA(1.-par1*fTheTrueStepLenght,par3));
+      G4Pow *g4calc = G4Pow::GetInstance();
+      fTheZPathLenght = 1./(par1*par3) * (1.-g4calc->powA(1.-par1*fTheTrueStepLenght,par3));
     }
   }
   fTheZPathLenght = std::min(fTheZPathLenght, fLambda1);
@@ -792,8 +792,8 @@ G4double G4GoudsmitSaundersonMscModel::ComputeTrueStepLength(G4double geomStepLe
         tlength = -fLambda1*G4Log(1.-geomStepLength/fLambda1) ;
       } else {
        if(par1*par3*geomStepLength < 1.) {
-           G4Pow *g4pow = G4Pow::GetInstance();
-           tlength = (1.-g4pow->powA( 1.-par1*par3*geomStepLength,1./par3))/par1;
+           G4Pow *g4calc = G4Pow::GetInstance();
+           tlength = (1.-g4calc->powA( 1.-par1*par3*geomStepLength,1./par3))/par1;
         } else {
           tlength = currentRange;
         }

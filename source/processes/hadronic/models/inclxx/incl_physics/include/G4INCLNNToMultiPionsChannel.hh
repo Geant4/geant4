@@ -117,7 +117,7 @@ namespace G4INCL {
       void pn_ppPipPi0PimPim();
       void isospinRepartition();
 
-      INCL_DECLARE_ALLOCATION_POOL(NNToMultiPionsChannel);
+      INCL_DECLARE_ALLOCATION_POOL(NNToMultiPionsChannel)
   };
 }
 

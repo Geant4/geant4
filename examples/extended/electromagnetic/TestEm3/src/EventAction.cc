@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm3/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 78655 2014-01-14 11:13:41Z gcosmo $
+// $Id: EventAction.cc 98762 2016-08-09 14:08:07Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,7 +56,7 @@ void EventAction::BeginOfEventAction(const G4Event*)
 {       
   //initialize EnergyDeposit per event
   //
-  for (G4int k=0; k<MaxAbsor; k++) {
+  for (G4int k=0; k<kMaxAbsor; k++) {
     fEnergyDeposit[k] = fTrackLengthCh[k] = 0.0;   
   }
 }
@@ -77,5 +77,4 @@ void EventAction::EndOfEventAction(const G4Event*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

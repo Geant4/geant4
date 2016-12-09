@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4IonFluctuations.hh 100399 2016-10-20 07:38:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -99,7 +99,7 @@ private:
   G4UniversalFluctuation      uniFluct;
   const G4ParticleDefinition* particle;
 
-  G4Pow*   g4pow; 
+  G4Pow*   g4calc; 
 
   G4double particleMass;
   G4double charge;

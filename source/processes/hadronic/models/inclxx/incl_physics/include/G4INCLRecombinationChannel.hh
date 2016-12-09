@@ -63,7 +63,7 @@ namespace G4INCL {
   private:
     Particle *theNucleon, *theDelta;
 
-    INCL_DECLARE_ALLOCATION_POOL(RecombinationChannel);
+    INCL_DECLARE_ALLOCATION_POOL(RecombinationChannel)
   };
 
 }

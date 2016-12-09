@@ -85,7 +85,7 @@ public:
   // implementation, instead we use the next function.
   //
   virtual G4IsotopeProperty* GetIsotope(G4int Z, G4int A, G4double E,
-            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::noFloat);
+            G4Ions::G4FloatLevelBase flb=G4Ions::G4FloatLevelBase::no_Float);
   virtual G4IsotopeProperty* GetIsotopeByIsoLvl(G4int Z, G4int A, G4int lvl=0);
   //
   //   again it will replace the pure virtual one in the abstract base class.

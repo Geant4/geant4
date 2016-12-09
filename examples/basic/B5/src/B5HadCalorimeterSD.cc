@@ -23,13 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5HadCalorimeterSD.cc 96048 2016-03-10 15:34:12Z gcosmo $
+// $Id: B5HadCalorimeterSD.cc 101036 2016-11-04 09:00:23Z gcosmo $
 //
 /// \file B5HadCalorimeterSD.cc
 /// \brief Implementation of the B5HadCalorimeterSD class
 
 #include "B5HadCalorimeterSD.hh"
 #include "B5HadCalorimeterHit.hh"
+#include "B5Constants.hh"
 
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
@@ -41,9 +42,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 B5HadCalorimeterSD::B5HadCalorimeterSD(G4String name)
-: G4VSensitiveDetector(name), fHitsCollection(0), fHCID(-1)
+: G4VSensitiveDetector(name), 
+  fHitsCollection(nullptr), fHCID(-1)
 {
-    collectionName.insert("HadCalorimeterColl");
+  collectionName.insert("HadCalorimeterColl");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,53 +57,48 @@ B5HadCalorimeterSD::~B5HadCalorimeterSD()
 
 void B5HadCalorimeterSD::Initialize(G4HCofThisEvent* hce)
 {
-    fHitsCollection 
-      = new B5HadCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
-    if (fHCID<0)
-    { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
-    hce->AddHitsCollection(fHCID,fHitsCollection);
-    
-    // fill calorimeter hits with zero energy deposition
-    for (G4int iColumn=0;iColumn<10;iColumn++)
-        for (G4int iRow=0;iRow<2;iRow++)
-        {
-            B5HadCalorimeterHit* hit = new B5HadCalorimeterHit();
-            fHitsCollection->insert(hit);
-        }
+  fHitsCollection 
+    = new B5HadCalorimeterHitsCollection(SensitiveDetectorName,collectionName[0]);
+  if (fHCID<0) { 
+    fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); 
+  }
+  hce->AddHitsCollection(fHCID,fHitsCollection);
+  
+  // fill calorimeter hits with zero energy deposition
+  for (auto column=0;column<kNofHadColumns;column++) {
+    for (auto row=0;row<kNofHadRows;row++) {
+      fHitsCollection->insert(new B5HadCalorimeterHit());
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool B5HadCalorimeterSD::ProcessHits(G4Step* step, G4TouchableHistory*)
 {
-    G4double edep = step->GetTotalEnergyDeposit();
-    if (edep==0.) return true;
-    
-    G4TouchableHistory* touchable
-      = (G4TouchableHistory*)(step->GetPreStepPoint()->GetTouchable());
-
-    G4int rowNo = touchable->GetCopyNumber(2);
-    G4int columnNo = touchable->GetCopyNumber(3);
-
-    G4int hitID = 2*columnNo+rowNo;
-    B5HadCalorimeterHit* hit = (*fHitsCollection)[hitID];
-    
-    // check if it is first touch
-    if (hit->GetColumnID()<0)
-    {
-        hit->SetColumnID(columnNo);
-        hit->SetRowID(rowNo);
-        G4int depth = touchable->GetHistory()->GetDepth();
-        G4AffineTransform transform 
-          = touchable->GetHistory()->GetTransform(depth-2);
-        transform.Invert();
-        hit->SetRot(transform.NetRotation());
-        hit->SetPos(transform.NetTranslation());
-    }
-    // add energy deposition
-    hit->AddEdep(edep);
-    
-    return true;
+  auto edep = step->GetTotalEnergyDeposit();
+  if (edep==0.) return true;
+  
+  auto touchable = step->GetPreStepPoint()->GetTouchable(); 
+  auto rowNo = touchable->GetCopyNumber(2);
+  auto columnNo = touchable->GetCopyNumber(3);
+  auto hitID = kNofHadRows*columnNo+rowNo;
+  auto hit = (*fHitsCollection)[hitID];
+  
+  // check if it is first touch
+  if (hit->GetColumnID()<0) {
+    hit->SetColumnID(columnNo);
+    hit->SetRowID(rowNo);
+    auto depth = touchable->GetHistory()->GetDepth();
+    auto transform = touchable->GetHistory()->GetTransform(depth-2);
+    transform.Invert();
+    hit->SetRot(transform.NetRotation());
+    hit->SetPos(transform.NetTranslation());
+  }
+  // add energy deposition
+  hit->AddEdep(edep);
+  
+  return true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

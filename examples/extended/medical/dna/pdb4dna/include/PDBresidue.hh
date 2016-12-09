@@ -61,7 +61,7 @@ public:
   //! Constructor
   Residue();
   //! Second constructor
-  Residue(string resName,int resSeq);
+  Residue(const std::string& resName,int resSeq);
   //!Destructor
   ~Residue() {};
 
@@ -78,7 +78,7 @@ public:
   //! Set the first Atom of the residue
   void SetFirst(Atom *);
 
-  string fResName;       //!< Residue name
+  std::string fResName;       //!< Residue name
   int fResSeq;           //!< Residue sequence number
   bool fVisible;         //!< Whether Residue is visible or not
   bool fSelected;     //!< Whether Residue is selected (Highlight) or not

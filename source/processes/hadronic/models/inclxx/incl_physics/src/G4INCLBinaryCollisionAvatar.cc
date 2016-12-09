@@ -47,6 +47,12 @@
 #include "G4INCLRecombinationChannel.hh"
 #include "G4INCLDeltaProductionChannel.hh"
 #include "G4INCLNNToMultiPionsChannel.hh"
+#include "G4INCLNNToNNEtaChannel.hh"
+#include "G4INCLNDeltaEtaProductionChannel.hh"
+#include "G4INCLNNEtaToMultiPionsChannel.hh"
+#include "G4INCLNNToNNOmegaChannel.hh"
+#include "G4INCLNDeltaOmegaProductionChannel.hh"
+#include "G4INCLNNOmegaToMultiPionsChannel.hh"
 #include "G4INCLCrossSections.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLRandom.hh"
@@ -55,6 +61,14 @@
 #include "G4INCLPiNElasticChannel.hh"
 #include "G4INCLPiNToDeltaChannel.hh"
 #include "G4INCLPiNToMultiPionsChannel.hh"
+#include "G4INCLPiNToEtaChannel.hh"
+#include "G4INCLPiNToOmegaChannel.hh"
+#include "G4INCLEtaNElasticChannel.hh"
+#include "G4INCLEtaNToPiNChannel.hh"
+#include "G4INCLEtaNToPiPiNChannel.hh"
+#include "G4INCLOmegaNElasticChannel.hh"
+#include "G4INCLOmegaNToPiNChannel.hh"
+#include "G4INCLOmegaNToPiPiNChannel.hh"
 #include "G4INCLStore.hh"
 #include "G4INCLBook.hh"
 #include "G4INCLLogger.hh"
@@ -137,50 +151,170 @@ namespace G4INCL {
       const G4double twoPiProductionCX = CrossSections::NNToxPiNN(2,particle1, particle2);
       const G4double threePiProductionCX = CrossSections::NNToxPiNN(3,particle1, particle2);
       const G4double fourPiProductionCX = CrossSections::NNToxPiNN(4,particle1, particle2);
+      const G4double etaProductionCX = CrossSections::NNToNNEtaExclu(particle1, particle2);
+      const G4double etadeltaProductionCX = CrossSections::NNToNDeltaEta(particle1, particle2);
+      const G4double etaonePiProductionCX = CrossSections::NNToNNEtaxPi(1,particle1, particle2);
+      const G4double etatwoPiProductionCX = CrossSections::NNToNNEtaxPi(2,particle1, particle2);
+      const G4double etathreePiProductionCX = CrossSections::NNToNNEtaxPi(3,particle1, particle2);
+      const G4double etafourPiProductionCX = CrossSections::NNToNNEtaxPi(4,particle1, particle2);
+      const G4double omegaProductionCX = CrossSections::NNToNNOmegaExclu(particle1, particle2);
+      const G4double omegadeltaProductionCX = CrossSections::NNToNDeltaOmega(particle1, particle2);
+      const G4double omegaonePiProductionCX = CrossSections::NNToNNOmegaxPi(1,particle1, particle2);
+      const G4double omegatwoPiProductionCX = CrossSections::NNToNNOmegaxPi(2,particle1, particle2);
+      const G4double omegathreePiProductionCX = CrossSections::NNToNNOmegaxPi(3,particle1, particle2);
+      const G4double omegafourPiProductionCX = CrossSections::NNToNNOmegaxPi(4,particle1, particle2);
       const G4double totCX=CrossSections::total(particle1, particle2);
 
       const G4double rChannel=Random::shoot() * totCX;
 
       if(elasticCX > rChannel) {
-        // Elastic NN channel
+// Elastic NN channel
         isElastic = true;
         INCL_DEBUG("NN interaction: elastic channel chosen" << '\n');
         return new ElasticChannel(particle1, particle2);
       } else if((elasticCX + deltaProductionCX) > rChannel) {
         isElastic = false;
-        // NN -> N Delta channel is chosen
+// NN -> N Delta channel is chosen
         INCL_DEBUG("NN interaction: Delta channel chosen" << '\n');
         return new DeltaProductionChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX > rChannel) {
         isElastic = false;
-        // NN -> PiNN channel is chosen
+// NN -> PiNN channel is chosen
         INCL_DEBUG("NN interaction: one Pion channel chosen" << '\n');
         return new NNToMultiPionsChannel(1,particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX > rChannel) {
         isElastic = false;
-        // NN -> 2PiNN channel is chosen
+// NN -> 2PiNN channel is chosen
         INCL_DEBUG("NN interaction: two Pions channel chosen" << '\n');
         return new NNToMultiPionsChannel(2,particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX > rChannel) {
         isElastic = false;
-        // NN -> 3PiNN channel is chosen
+// NN -> 3PiNN channel is chosen
         INCL_DEBUG("NN interaction: three Pions channel chosen" << '\n');
         return new NNToMultiPionsChannel(3,particle1, particle2);
       } else if (elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX > rChannel) {
-        isElastic = false;
-        // NN -> 4PiNN channel is chosen
-        INCL_DEBUG("NN interaction: four Pions channel chosen" << '\n');
-        return new NNToMultiPionsChannel(4,particle1, particle2);
+		      isElastic = false;
+// NN -> 4PiNN channel is chosen
+		      INCL_DEBUG("NN interaction: four Pions channel chosen" << '\n');
+		      return new NNToMultiPionsChannel(4,particle1, particle2);
+      } else if (elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX > rChannel) {
+       isElastic = false;
+// NN -> NNEta channel is chosen
+       INCL_DEBUG("NN interaction: Eta channel chosen" << '\n');
+       return new NNToNNEtaChannel(particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX > rChannel) {
+       isElastic = false;
+// NN -> N Delta Eta channel is chosen
+       INCL_DEBUG("NN interaction: Delta Eta channel chosen" << '\n');
+       return new NDeltaEtaProductionChannel(particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> EtaPiNN channel is chosen
+       INCL_DEBUG("NN interaction: Eta + one Pion channel chosen" << '\n');
+       return new NNEtaToMultiPionsChannel(1,particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Eta2PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Eta + two Pions channel chosen" << '\n');
+       return new NNEtaToMultiPionsChannel(2,particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Eta3PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Eta + three Pions channel chosen" << '\n');
+       return new NNEtaToMultiPionsChannel(3,particle1, particle2);
+      } else if (elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Eta4PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Eta + four Pions channel chosen" << '\n');
+       return new NNEtaToMultiPionsChannel(4,particle1, particle2);
+      } else if (elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX > rChannel) {
+       isElastic = false;
+// NN -> NNOmega channel is chosen
+       INCL_DEBUG("NN interaction: Omega channel chosen" << '\n');
+       return new NNToNNOmegaChannel(particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX + omegadeltaProductionCX > rChannel) {
+       isElastic = false;
+// NN -> N Delta Omega channel is chosen
+       INCL_DEBUG("NN interaction: Delta Omega channel chosen" << '\n');
+       return new NDeltaOmegaProductionChannel(particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> OmegaPiNN channel is chosen
+       INCL_DEBUG("NN interaction: Omega + one Pion channel chosen" << '\n');
+       return new NNOmegaToMultiPionsChannel(1,particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Omega2PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Omega + two Pions channel chosen" << '\n');
+       return new NNOmegaToMultiPionsChannel(2,particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Omega3PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Omega + three Pions channel chosen" << '\n');
+       return new NNOmegaToMultiPionsChannel(3,particle1, particle2);
+      } else if (elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + fourPiProductionCX + etaProductionCX + etadeltaProductionCX + etaonePiProductionCX + etatwoPiProductionCX + etathreePiProductionCX + etafourPiProductionCX + omegaProductionCX + omegadeltaProductionCX + omegaonePiProductionCX + omegatwoPiProductionCX + omegathreePiProductionCX + omegafourPiProductionCX > rChannel) {
+       isElastic = false;
+// NN -> Omega4PiNN channel is chosen
+       INCL_DEBUG("NN interaction: Omega + four Pions channel chosen" << '\n');
+       return new NNOmegaToMultiPionsChannel(4,particle1, particle2);
       } else {
         INCL_WARN("inconsistency within the NN Cross Sections (sum!=inelastic)" << '\n');
-        if(fourPiProductionCX>0.) {
-          INCL_WARN("Returning a 4pi channel" << '\n');
-          isElastic = false;
-          return new NNToMultiPionsChannel(4,particle1, particle2);
+        if(omegafourPiProductionCX>0.) {
+         INCL_WARN("Returning an Omega + four Pions channel" << '\n');
+         isElastic = false;
+         return new NNOmegaToMultiPionsChannel(4,particle1, particle2);
+        } else if(omegathreePiProductionCX>0.) {
+         INCL_WARN("Returning an Omega + three Pions channel" << '\n');
+         isElastic = false;
+         return new NNOmegaToMultiPionsChannel(3,particle1, particle2);
+        } else if(omegatwoPiProductionCX>0.) {
+         INCL_WARN("Returning an Omega + two Pions channel" << '\n');
+         isElastic = false;
+         return new NNOmegaToMultiPionsChannel(2,particle1, particle2);
+        } else if(omegaonePiProductionCX>0.) {
+         INCL_WARN("Returning an Omega + one Pion channel" << '\n');
+         isElastic = false;
+         return new NNOmegaToMultiPionsChannel(1,particle1, particle2);
+        } else if(omegadeltaProductionCX>0.) {
+         INCL_WARN("Returning an Omega + Delta channel" << '\n');
+         isElastic = false;
+         return new NDeltaOmegaProductionChannel(particle1, particle2);
+        } else if(omegaProductionCX>0.) {
+         INCL_WARN("Returning an Omega channel" << '\n');
+         isElastic = false;
+         return new NNToNNOmegaChannel(particle1, particle2);
+        } else if(etafourPiProductionCX>0.) {
+         INCL_WARN("Returning an Eta + four Pions channel" << '\n');
+         isElastic = false;
+         return new NNEtaToMultiPionsChannel(3,particle1, particle2);
+        } else if(etathreePiProductionCX>0.) {
+         INCL_WARN("Returning an Eta + threev channel" << '\n');
+         isElastic = false;
+         return new NNEtaToMultiPionsChannel(3,particle1, particle2);
+        } else if(etatwoPiProductionCX>0.) {
+         INCL_WARN("Returning an Eta + two Pions channel" << '\n');
+         isElastic = false;
+         return new NNEtaToMultiPionsChannel(2,particle1, particle2);
+        } else if(etaonePiProductionCX>0.) {
+         INCL_WARN("Returning an Eta + one Pion channel" << '\n');
+         isElastic = false;
+         return new NNEtaToMultiPionsChannel(1,particle1, particle2);
+        } else if(etadeltaProductionCX>0.) {
+         INCL_WARN("Returning an Eta + Delta channel" << '\n');
+         isElastic = false;
+         return new NDeltaEtaProductionChannel(particle1, particle2);
+        } else if(etaProductionCX>0.) {
+         INCL_WARN("Returning an Eta channel" << '\n');
+         isElastic = false;
+         return new NNToNNEtaChannel(particle1, particle2);
+        } else if(fourPiProductionCX>0.) {
+		        INCL_WARN("Returning a 4pi channel" << '\n');
+		        isElastic = false;
+		        return new NNToMultiPionsChannel(4,particle1, particle2);
         } else if(threePiProductionCX>0.) {
-          INCL_WARN("Returning a 3pi channel" << '\n');
-          isElastic = false;
-          return new NNToMultiPionsChannel(3,particle1, particle2);
+		        INCL_WARN("Returning a 3pi channel" << '\n');
+		        isElastic = false;
+		        return new NNToMultiPionsChannel(3,particle1, particle2);
         } else if(twoPiProductionCX>0.) {
           INCL_WARN("Returning a 2pi channel" << '\n');
           isElastic = false;
@@ -202,7 +336,7 @@ namespace G4INCL {
 
 //// NDelta
     } else if((particle1->isNucleon() && particle2->isDelta()) ||
-	      (particle1->isDelta() && particle2->isNucleon())) {
+	             (particle1->isDelta() && particle2->isNucleon())) {
           G4double elasticCX = CrossSections::elastic(particle1, particle2);
           G4double recombinationCX = CrossSections::NDeltaToNN(particle1, particle2);
 
@@ -213,11 +347,11 @@ namespace G4INCL {
 
           if(isElastic) {
 // Elastic N Delta channel
-              INCL_DEBUG("NDelta interaction: elastic channel chosen" << '\n');
-              return new ElasticChannel(particle1, particle2);
+												INCL_DEBUG("NDelta interaction: elastic channel chosen" << '\n');
+												return new ElasticChannel(particle1, particle2);
           } else { // Recombination
 // N Delta -> NN channel is chosen
-              INCL_DEBUG("NDelta interaction: recombination channel chosen" << '\n');
+												  INCL_DEBUG("NDelta interaction: recombination channel chosen" << '\n');
               return new RecombinationChannel(particle1, particle2);
             }
 
@@ -233,47 +367,69 @@ namespace G4INCL {
       const G4double deltaProductionCX = CrossSections::piNToDelta(particle1, particle2);
       const G4double onePiProductionCX = CrossSections::piNToxPiN(2,particle1, particle2);
       const G4double twoPiProductionCX = CrossSections::piNToxPiN(3,particle1, particle2);
-      const G4double threePiProductionCX = CrossSections::piNToxPiN(4,particle1, particle2);
+	     const G4double threePiProductionCX = CrossSections::piNToxPiN(4,particle1, particle2);
+	     const G4double etaProductionCX = CrossSections::piNToEtaN(particle1, particle2);
+	     const G4double omegaProductionCX = CrossSections::piNToOmegaN(particle1, particle2);
       const G4double totCX=CrossSections::total(particle1, particle2);
-// assert(std::fabs(totCX-elasticCX-deltaProductionCX-onePiProductionCX-twoPiProductionCX-threePiProductionCX)<1.);
+// assert(std::fabs(totCX-elasticCX-deltaProductionCX-onePiProductionCX-twoPiProductionCX-threePiProductionCX-etaProductionCX-omegaProductionCX)<1.);
 
       const G4double rChannel=Random::shoot() * totCX;
 
       if(elasticCX > rChannel) {
-        // Elastic PiN channel
+// Elastic PiN channel
         isElastic = true;
         INCL_DEBUG("PiN interaction: elastic channel chosen" << '\n');
         return new PiNElasticChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX > rChannel) {
         isElastic = false;
-        // PiN -> Delta channel is chosen
+// PiN -> Delta channel is chosen
         INCL_DEBUG("PiN interaction: Delta channel chosen" << '\n');
         return new PiNToDeltaChannel(particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX > rChannel) {
         isElastic = false;
-        // PiN -> PiNPi channel is chosen
+// PiN -> PiNPi channel is chosen
         INCL_DEBUG("PiN interaction: one Pion channel chosen" << '\n');
         return new PiNToMultiPionsChannel(2,particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX > rChannel) {
         isElastic = false;
-        // PiN -> PiN2Pi channel is chosen
+// PiN -> PiN2Pi channel is chosen
         INCL_DEBUG("PiN interaction: two Pions channel chosen" << '\n');
         return new PiNToMultiPionsChannel(3,particle1, particle2);
       } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX > rChannel) {
-        isElastic = false;
-        // PiN -> PiN3Pi channel is chosen
-        INCL_DEBUG("PiN interaction: three Pions channel chosen" << '\n');
-        return new PiNToMultiPionsChannel(4,particle1, particle2);
-      } else {
+		      isElastic = false;
+// PiN -> PiN3Pi channel is chosen
+		      INCL_DEBUG("PiN interaction: three Pions channel chosen" << '\n');
+		      return new PiNToMultiPionsChannel(4,particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX > rChannel) {
+		      isElastic = false;
+// PiN -> EtaN channel is chosen
+		      INCL_DEBUG("PiN interaction: Eta channel chosen" << '\n');
+		      return new PiNToEtaChannel(particle1, particle2);
+      } else if(elasticCX + deltaProductionCX + onePiProductionCX + twoPiProductionCX + threePiProductionCX + etaProductionCX+ omegaProductionCX > rChannel) {
+		      isElastic = false;
+// PiN -> OmegaN channel is chosen
+	      	INCL_DEBUG("PiN interaction: Omega channel chosen" << '\n');
+	      	return new PiNToOmegaChannel(particle1, particle2);
+      } 
+						
+						else {
         INCL_WARN("inconsistency within the PiN Cross Sections (sum!=inelastic)" << '\n');
-        if(threePiProductionCX>0.) {
-          INCL_WARN("Returning a 3pi channel" << '\n');
+        if(omegaProductionCX>0.) {
+          INCL_WARN("Returning a Omega channel" << '\n');
           isElastic = false;
-          return new PiNToMultiPionsChannel(4,particle1, particle2);
+          return new PiNToOmegaChannel(particle1, particle2);
+        } else if(etaProductionCX>0.) {
+		        INCL_WARN("Returning a Eta channel" << '\n');
+										isElastic = false;
+		        return new PiNToEtaChannel(particle1, particle2);
+        } else if(threePiProductionCX>0.) {
+		        INCL_WARN("Returning a 3pi channel" << '\n');
+		        isElastic = false;
+		        return new PiNToMultiPionsChannel(4,particle1, particle2);
         } else if(twoPiProductionCX>0.) {
-          INCL_WARN("Returning a 2pi channel" << '\n');
-          isElastic = false;
-          return new PiNToMultiPionsChannel(3,particle1, particle2);
+		        INCL_WARN("Returning a 2pi channel" << '\n');
+		        isElastic = false;
+		        return new PiNToMultiPionsChannel(3,particle1, particle2);
         } else if(onePiProductionCX>0.) {
           INCL_WARN("Returning a 1pi channel" << '\n');
           isElastic = false;
@@ -288,7 +444,97 @@ namespace G4INCL {
           return new PiNElasticChannel(particle1, particle2);
         }
       }
-    } else {
+    } else if ((particle1->isNucleon() && particle2->isEta()) || (particle2->isNucleon() && particle1->isEta())) {
+//// EtaN
+
+					const G4double elasticCX = CrossSections::elastic(particle1, particle2);
+					const G4double onePiProductionCX = CrossSections::etaNToPiN(particle1, particle2);
+					const G4double twoPiProductionCX = CrossSections::etaNToPiPiN(particle1, particle2);
+					const G4double totCX=CrossSections::total(particle1, particle2);
+// assert(std::fabs(totCX-elasticCX-onePiProductionCX-twoPiProductionCX)<1.);
+					
+					const G4double rChannel=Random::shoot() * totCX;
+										
+					if(elasticCX > rChannel) {
+// Elastic EtaN channel
+						isElastic = true;
+						INCL_DEBUG("EtaN interaction: elastic channel chosen" << '\n');
+						return new EtaNElasticChannel(particle1, particle2);
+					} else if(elasticCX + onePiProductionCX > rChannel) {
+						isElastic = false;
+// EtaN -> EtaPiN channel is chosen
+						INCL_DEBUG("EtaN interaction: PiN channel chosen" << '\n');
+						return new EtaNToPiNChannel(particle1, particle2);
+					} else if(elasticCX + onePiProductionCX + twoPiProductionCX > rChannel) {
+						isElastic = false;
+// EtaN -> EtaPiPiN channel is chosen
+						INCL_DEBUG("EtaN interaction: PiPiN channel chosen" << '\n');
+						return new EtaNToPiPiNChannel(particle1, particle2);
+					}
+
+					else {
+						INCL_WARN("inconsistency within the EtaN Cross Sections (sum!=inelastic)" << '\n');
+						if(twoPiProductionCX>0.) {
+							INCL_WARN("Returning a PiPiN channel" << '\n');
+							isElastic = false;
+							return new EtaNToPiPiNChannel(particle1, particle2);
+						} else if(onePiProductionCX>0.) {
+							INCL_WARN("Returning a PiN channel" << '\n');
+							isElastic = false;
+							return new EtaNToPiNChannel(particle1, particle2);
+						} else {
+							INCL_WARN("Returning an elastic channel" << '\n');
+							isElastic = true;
+							return new EtaNElasticChannel(particle1, particle2);
+						}
+					}
+									
+				} else if ((particle1->isNucleon() && particle2->isOmega()) || (particle2->isNucleon() && particle1->isOmega())) {
+//// OmegaN
+     
+					const G4double elasticCX = CrossSections::elastic(particle1, particle2);
+					const G4double onePiProductionCX = CrossSections::omegaNToPiN(particle1, particle2);
+					const G4double twoPiProductionCX = CrossSections::omegaNToPiPiN(particle1, particle2);
+					const G4double totCX=CrossSections::total(particle1, particle2);
+// assert(std::fabs(totCX-elasticCX-onePiProductionCX-twoPiProductionCX)<1.);
+					
+					const G4double rChannel=Random::shoot() * totCX;
+     
+					if(elasticCX > rChannel) {
+// Elastic OmegaN channel
+						isElastic = true;
+						INCL_DEBUG("OmegaN interaction: elastic channel chosen" << '\n');
+						return new OmegaNElasticChannel(particle1, particle2);
+					} else if(elasticCX + onePiProductionCX > rChannel) {
+						isElastic = false;
+// OmegaN -> OmegaPiN channel is chosen
+		    INCL_DEBUG("OmegaN interaction: PiN channel chosen" << '\n');
+		    return new OmegaNToPiNChannel(particle1, particle2);
+					} else if(elasticCX + onePiProductionCX + twoPiProductionCX > rChannel) {
+						isElastic = false;
+// OmegaN -> OmegaPiPiN channel is chosen
+						INCL_DEBUG("OmegaN interaction: PiPiN channel chosen" << '\n');
+						return new OmegaNToPiPiNChannel(particle1, particle2);
+					}
+     
+					else {
+						INCL_WARN("inconsistency within the OmegaN Cross Sections (sum!=inelastic)" << '\n');
+						if(twoPiProductionCX>0.) {
+							INCL_WARN("Returning a PiPiN channel" << '\n');
+							isElastic = false;
+							return new OmegaNToPiPiNChannel(particle1, particle2);
+						} else if(onePiProductionCX>0.) {
+							INCL_WARN("Returning a PiN channel" << '\n');
+							isElastic = false;
+							return new OmegaNToPiNChannel(particle1, particle2);
+						} else {
+							INCL_WARN("Returning an elastic channel" << '\n');
+							isElastic = true;
+							return new OmegaNElasticChannel(particle1, particle2);
+						}
+					}
+    }	
+	else {
       INCL_DEBUG("BinaryCollisionAvatar can only handle nucleons (for the moment)."
 	      << '\n'
 	      << particle1->print()

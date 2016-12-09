@@ -156,10 +156,10 @@ protected:
     maxs.push_back(aXmax);
     parent::configure(1,nbins,mins,maxs);
   }
-  b1(const std::string& a_title,const std::vector<TC>& aEdges) {
+  b1(const std::string& a_title,const std::vector<TC>& a_edges) {
     parent::m_title = a_title;
     std::vector< std::vector<TC> > edges(1);
-    edges[0] = aEdges;
+    edges[0] = a_edges;
     parent::configure(1,edges);
   }
 
@@ -177,9 +177,9 @@ public:
     maxs.push_back(aXmax);
     return parent::configure(1,nbins,mins,maxs);
   }
-  bool configure(const std::vector<TC>& aEdges) {
+  bool configure(const std::vector<TC>& a_edges) {
     std::vector< std::vector<TC> > edges(1);
-    edges[0] = aEdges;
+    edges[0] = a_edges;
     return parent::configure(1,edges);
   }
 protected:

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/Run.cc
+/// \file electromagnetic/TestEm8/src/Run.cc
 /// \brief Implementation of the Run class
 //
 // $Id: Run.cc 75577 2013-11-04 12:03:26Z vnivanch $
@@ -94,8 +94,7 @@ void Run::BeginOfRun()
 void Run::EndOfRun()
 {
   G4int nEvt = GetNumberOfEvent();
-  G4double norm = nEvt;
-  if(nEvt > 0) { norm = 1.0/norm; }
+  G4double norm = (nEvt > 0) ? 1.0/(G4double)nEvt : 0.0; 
 
   fTotStepGas  *= norm;
   fTotCluster  *= norm;
@@ -104,7 +103,6 @@ void Run::EndOfRun()
 
   G4double y1 = fEdep.mean();
   G4double y2 = fEdep.rms();
-  if(y2 > 0.0) { y2 = std::sqrt(y2); }
 
   G4double de = fMaxEnergy/G4double(fNbins);  
   G4double x1 = -de*0.5; 

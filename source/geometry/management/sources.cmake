@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 97686 2016-06-07 09:27:32Z gcosmo $
+# $Id: sources.cmake 100683 2016-10-31 10:56:21Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,8 +44,10 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4ErrorTanPlaneTarget.hh
         G4ErrorTarget.hh
         G4GeomSplitter.hh
+        G4GeomTools.hh
         G4GeometryManager.hh
         G4IdentityTrajectoryFilter.hh
+        G4LogicalCrystalVolume.hh
         G4LogicalSurface.hh
         G4LogicalSurface.icc
         G4LogicalVolume.hh
@@ -94,8 +96,10 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4ErrorSurfaceTarget.cc
         G4ErrorTanPlaneTarget.cc
         G4ErrorTarget.cc
+        G4GeomTools.cc
         G4GeometryManager.cc
         G4IdentityTrajectoryFilter.cc
+        G4LogicalCrystalVolume.cc
         G4LogicalSurface.cc
         G4LogicalVolume.cc
         G4LogicalVolumeStore.cc

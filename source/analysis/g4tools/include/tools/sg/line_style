@@ -45,7 +45,7 @@ public:
   line_style()
   :parent()
   ,visible(true)
-  ,color(colorf::black())
+  ,color(colorf_black())
   ,width(1)
   ,pattern(line_solid)
   {

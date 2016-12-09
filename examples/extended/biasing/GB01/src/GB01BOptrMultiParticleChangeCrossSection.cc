@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/src/GB01BOptrMultiParticleChangeCrossSection.cc
+/// \brief Implementation of the GB01BOptrMultiParticleChangeCrossSection class
+//
 #include "GB01BOptrMultiParticleChangeCrossSection.hh"
 #include "G4BiasingProcessInterface.hh"
 
@@ -32,9 +35,13 @@
 
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 GB01BOptrMultiParticleChangeCrossSection::GB01BOptrMultiParticleChangeCrossSection()
   : G4VBiasingOperator("TestManyExponentialTransform")
 {}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB01BOptrMultiParticleChangeCrossSection::AddParticle(G4String particleName)
 {
@@ -57,6 +64,8 @@ void GB01BOptrMultiParticleChangeCrossSection::AddParticle(G4String particleName
   fBOptrForParticle[ particle ] = optr;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4VBiasingOperation*
 GB01BOptrMultiParticleChangeCrossSection::
 ProposeOccurenceBiasingOperation(const G4Track* track,
@@ -75,6 +84,7 @@ ProposeOccurenceBiasingOperation(const G4Track* track,
   else                    return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB01BOptrMultiParticleChangeCrossSection::StartTracking( const G4Track* track )
 {
@@ -88,6 +98,8 @@ void GB01BOptrMultiParticleChangeCrossSection::StartTracking( const G4Track* tra
   // -- reset count for number of biased interactions:
   fnInteractions = 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void 
 GB01BOptrMultiParticleChangeCrossSection::
@@ -109,3 +121,5 @@ OperationApplied( const G4BiasingProcessInterface*               callingProcess,
                                                                     finalStateOperationApplied,
                                                                     particleChangeProduced );
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

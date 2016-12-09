@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmPenelopePhysics.cc 99938 2016-10-12 08:06:52Z gcosmo $
 
 #include "G4EmPenelopePhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -130,27 +130,8 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmPenelopePhysics);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
-{
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetDefaults();
-  param->SetVerbose(verbose);
-  param->SetMinEnergy(100*eV);
-  param->SetMaxEnergy(10*TeV);
-  param->SetLowestElectronEnergy(100*eV);
-  param->SetNumberOfBinsPerDecade(20);
-  param->SetMscRangeFactor(0.02);
-  param->SetMscStepLimitType(fUseDistanceToBoundary);
-  param->SetFluo(true);
-  param->SetPIXEElectronCrossSectionModel("Penelope");
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmPenelopePhysics"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmPenelope"), verbose(ver)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetDefaults();
@@ -161,6 +142,7 @@ G4EmPenelopePhysics::G4EmPenelopePhysics(G4int ver, const G4String&)
   param->SetNumberOfBinsPerDecade(20);
   param->SetMscRangeFactor(0.02);
   param->SetMscStepLimitType(fUseDistanceToBoundary);
+  param->SetMuHadLateralDisplacement(true);
   param->SetFluo(true);
   param->SetPIXEElectronCrossSectionModel("Penelope");
   SetPhysicsType(bElectromagnetic);
@@ -200,10 +182,6 @@ void G4EmPenelopePhysics::ConstructParticle()
   G4He3::He3();
   G4Alpha::Alpha();
   G4GenericIon::GenericIonDefinition();
-
-  // dna
-  G4EmModelActivator mact;
-  mact.ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -243,11 +221,12 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Penelope EM Processes
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*myParticleIterator)() ){
   
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
     
     //Applicability range for Penelope models
@@ -487,8 +466,7 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4VAtomDeexcitation* deexcitation = new G4UAtomicDeexcitation();
   G4LossTableManager::Instance()->SetAtomDeexcitation(deexcitation);
 
-  G4EmModelActivator mact;
-  mact.ConstructProcess();
+  G4EmModelActivator mact(GetPhysicsName());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

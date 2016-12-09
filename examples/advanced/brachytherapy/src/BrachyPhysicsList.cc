@@ -55,16 +55,13 @@ BrachyPhysicsList::BrachyPhysicsList():  G4VModularPhysicsList()
 SetVerboseLevel(1); 
  
 // EM physics: 3 alternatives
+emPhysicsList = new G4EmLivermorePhysics();
 
-emPhysicsList = new G4EmStandardPhysics_option4(1);
+// or
+//emPhysicsList = new G4EmStandardPhysics_option4(1);
 
-// Alternatively you can substitute this physics list
-// with the LowEnergy Livermore or LowEnergy Penelope: 
-// emPhysicsList = new G4EmLivermorePhysics();
-// Low Energy based on Livermore Evaluated Data Libraries
-//
-// Penelope physics
-//emPhysicsList = new G4EmPenelopePhysics();
+// or
+// emPhysicsList = new G4EmPenelopePhysics();
 
 // Add Decay
 decPhysicsList = new G4DecayPhysics();
@@ -99,7 +96,7 @@ void BrachyPhysicsList::SetCuts()
 // Definition of  threshold of production 
 // of secondary particles
 // This is defined in range.
-defaultCutValue = 0.1 * mm;
+defaultCutValue = 0.05 * mm;
 SetCutValue(defaultCutValue, "gamma");
 SetCutValue(defaultCutValue, "e-");
 SetCutValue(defaultCutValue, "e+");

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFAnnihilation.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4FTFAnnihilation.hh 100828 2016-11-02 15:25:59Z gcosmo $
 
 #ifndef G4FTFAnnihilation_h
 #define G4FTFAnnihilation_h 1
@@ -48,7 +48,6 @@ class G4ExcitedString;
 
 
 class G4FTFAnnihilation {
-
   public:
     G4FTFAnnihilation();
     virtual ~G4FTFAnnihilation();
@@ -67,7 +66,7 @@ class G4FTFAnnihilation {
     G4ThreeVector GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const;
     G4double ChooseX( G4double Alpha, G4double Beta ) const;
     void UnpackBaryon( G4int IdPDG, G4int& Q1, G4int& Q2, G4int& Q3 ) const;
-
 };
 
 #endif
+

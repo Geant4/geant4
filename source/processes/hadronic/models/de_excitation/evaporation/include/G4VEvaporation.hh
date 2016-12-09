@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 96744 2016-05-03 08:04:28Z gcosmo $
+// $Id: G4VEvaporation.hh 98739 2016-08-09 12:56:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -57,11 +57,7 @@ public:
   explicit G4VEvaporation();
   virtual ~G4VEvaporation(); 
 
-  // primary fragment is copied to the new instance, the copy is deleted 
-  // or is added to the list of products 
-  virtual G4FragmentVector * BreakItUp(const G4Fragment &theNucleus) = 0;
-
-  // new interface - vector of products is added to the provided vector
+  // vector of products is added to the provided vector
   // primary fragment is deleted or is modified and added to the list
   // of products 
   virtual void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);

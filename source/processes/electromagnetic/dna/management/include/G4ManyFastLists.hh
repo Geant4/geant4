@@ -275,7 +275,7 @@ template<class OBJECT>
       return fIterator.GetNode();
     }
 
-    G4ManyFastLists<OBJECT>* GetTrackList()
+    G4FastList<OBJECT>* GetTrackList()
     {
       return *fCurrentListIt;
     }

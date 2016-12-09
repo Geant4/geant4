@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc 88083 2015-01-28 08:31:34Z gcosmo $
+// $Id: G4VisAttributes.cc 98730 2016-08-09 10:47:54Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -33,27 +33,6 @@
 
 #include "G4AttValue.hh"
 #include "G4AttDef.hh"
-
-G4VisAttributes::G4VisAttributes (const G4VisAttributes& va):
-fVisible             (va.fVisible),
-fDaughtersInvisible  (va.fDaughtersInvisible),
-fColour              (va.fColour),
-fLineStyle           (va.fLineStyle),
-fLineWidth           (va.fLineWidth),
-fForceDrawingStyle   (va.fForceDrawingStyle),
-fForcedStyle         (va.fForcedStyle),
-fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
-fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
-fStartTime           (va.fStartTime),
-fEndTime             (va.fEndTime),
-// AttValues are created afresh for each object (using the
-// CreateAttValues message), but deletion is the responsibility of
-// the creator.  So just copy pointer.
-fAttValues           (va.fAttValues),
-// AttDefs, if any, belong to the object from which they were obtained
-// (with a GetAttDefs message), so just copy pointer.
-fAttDefs             (va.fAttDefs)
-{}
 
 G4VisAttributes::G4VisAttributes ():
 fVisible             (true),
@@ -64,6 +43,7 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
+fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
@@ -80,6 +60,7 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
+fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
@@ -96,6 +77,7 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
+fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
@@ -113,6 +95,7 @@ fLineWidth           (1.),
 fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
+fForcedAuxEdgeVisible(false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
@@ -120,21 +103,43 @@ fAttValues           (0),
 fAttDefs             (0)
 {}
 
+G4VisAttributes::G4VisAttributes (const G4VisAttributes& va):
+fVisible             (va.fVisible),
+fDaughtersInvisible  (va.fDaughtersInvisible),
+fColour              (va.fColour),
+fLineStyle           (va.fLineStyle),
+fLineWidth           (va.fLineWidth),
+fForceDrawingStyle   (va.fForceDrawingStyle),
+fForcedStyle         (va.fForcedStyle),
+fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
+fForcedAuxEdgeVisible(va.fForcedAuxEdgeVisible),
+fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
+fStartTime           (va.fStartTime),
+fEndTime             (va.fEndTime),
+// AttValues are created afresh for each object (using the
+// CreateAttValues message), but deletion is the responsibility of
+// the creator.  So just copy pointer.
+fAttValues           (va.fAttValues),
+// AttDefs, if any, belong to the object from which they were obtained
+// (with a GetAttDefs message), so just copy pointer.
+fAttDefs             (va.fAttDefs)
+{}
+
 G4VisAttributes::~G4VisAttributes()
-{
-}
+{}
 
 G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
 {
   if (&rhs == this) return *this;
-  fVisible             = rhs.fVisible;
-  fDaughtersInvisible  = rhs.fDaughtersInvisible;
-  fColour              = rhs.fColour;
-  fLineStyle           = rhs.fLineStyle;
-  fLineWidth           = rhs.fLineWidth;
-  fForceDrawingStyle   = rhs.fForceDrawingStyle;
-  fForcedStyle         = rhs.fForcedStyle;
-  fForceAuxEdgeVisible = rhs.fForceAuxEdgeVisible;
+  fVisible              = rhs.fVisible;
+  fDaughtersInvisible   = rhs.fDaughtersInvisible;
+  fColour               = rhs.fColour;
+  fLineStyle            = rhs.fLineStyle;
+  fLineWidth            = rhs.fLineWidth;
+  fForceDrawingStyle    = rhs.fForceDrawingStyle;
+  fForcedStyle          = rhs.fForcedStyle;
+  fForceAuxEdgeVisible  = rhs.fForceAuxEdgeVisible;
+  fForcedAuxEdgeVisible = rhs.fForcedAuxEdgeVisible;
   fForcedLineSegmentsPerCircle = rhs.fForcedLineSegmentsPerCircle;
   fStartTime           = rhs.fStartTime;
   fEndTime             = rhs.fEndTime;
@@ -148,7 +153,47 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   return *this;
 }
 
+// Deprecated 14 July 2016  JA
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
+
+const G4VisAttributes& G4VisAttributes::GetInvisible() {
+  static const G4VisAttributes invisible = G4VisAttributes(false);
+  return invisible;
+}
+
+void G4VisAttributes::SetForceWireframe (G4bool force) {
+  if (force) {
+    fForceDrawingStyle = true;
+    fForcedStyle = G4VisAttributes::wireframe;
+  } else {
+    fForceDrawingStyle = false;
+  }
+}
+
+void G4VisAttributes::SetForceSolid (G4bool force) {
+  if (force) {
+    fForceDrawingStyle = true;
+    fForcedStyle = G4VisAttributes::solid;
+  } else {
+    fForceDrawingStyle = false;
+  }
+}
+
+void G4VisAttributes::SetForceAuxEdgeVisible (G4bool visibility) {
+  fForceAuxEdgeVisible = true;
+  fForcedAuxEdgeVisible = visibility;
+}
+
+G4VisAttributes::ForcedDrawingStyle
+G4VisAttributes::GetForcedDrawingStyle () const {
+  if (fForceDrawingStyle) return fForcedStyle;
+  else return G4VisAttributes::wireframe;
+}
+
+G4bool G4VisAttributes::IsForcedAuxEdgeVisible () const {
+  if (fForceAuxEdgeVisible) return fForcedAuxEdgeVisible;
+  else return false;
+}
 
 const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
   // Create an expendable copy on the heap...
@@ -187,7 +232,7 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
   os << ", min line segments per circle: " << a.GetMinLineSegmentsPerCircle();
   os << "\n  drawing style: ";
   if (a.fForceDrawingStyle) {
-    os << "forced to: ";
+    os << "forced to ";
     switch (a.fForcedStyle) {
       case G4VisAttributes::wireframe:
         os << "wireframe"; break;
@@ -200,10 +245,15 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a)
     os << "not forced";
   }
   os << ", auxiliary edge visibility: ";
-  if (!a.fForceAuxEdgeVisible) {
-    os << "not ";
+  if (a.fForceAuxEdgeVisible) {
+    os << "forced to ";
+    if (!a.fForcedAuxEdgeVisible) {
+      os << "not ";
+    }
+    os << "visible";
+  } else {
+    os << "not forced";
   }
-  os << "forced";
   os << "\n  line segments per circle: ";
   if (a.fForcedLineSegmentsPerCircle > 0) {
     os << "forced to " << a.fForcedLineSegmentsPerCircle;
@@ -233,7 +283,7 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fLineStyle          != a.fLineStyle)          ||
       (fLineWidth          != a.fLineWidth)          ||
       (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
-      (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)||
+      (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)   ||
       (fForcedLineSegmentsPerCircle != a.fForcedLineSegmentsPerCircle) ||
       (fStartTime          != a.fStartTime)          ||
       (fEndTime            != a.fEndTime)            ||
@@ -244,6 +294,10 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
 
   if (fForceDrawingStyle) {
     if (fForcedStyle != a.fForcedStyle) return true;
+  }
+
+  if (fForceAuxEdgeVisible) {
+    if (fForcedAuxEdgeVisible != a.fForcedAuxEdgeVisible) return true;
   }
 
   return false;

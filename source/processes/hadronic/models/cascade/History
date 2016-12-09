@@ -15,6 +15,31 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 November 2016  Dennis Wright (hadr-casc-V10-02-05)
+ ----------------------------------------------------
+- G4InuclCollider::photonuclearOkay(): fix segfault reported by Daren Sawkey
+  in bug report #1883
+
+ 6 October 2016  Dennis Wright (hadr-casc-V10-02-04)
+ ---------------------------------------------------
+- G4EquilibriumEvaporator::deExcite: replace sampling of evaporation spectrum
+   with original Dostrovsky method 
+- paraMaker.cc: add comments
+
+ 3 October 2016  Dennis Wright (hadr-casc-V10-02-03)
+ ---------------------------------------------------
+  Mike Kelsey added the lines
+    process->PreparePhysicsTable(*part);
+    process->BuildPhysicsTable(*part);
+  in unit test cascade/test/cascade.cc to configure RunManager event loop 
+
+30 September 2016  Dennis Wright (hadr-casc-V10-02-02)
+------------------------------------------------------
+- add 8- and 9-body final states to K-, K0 and K0b induced reactions.
+  Classes affected: G4CascadeKminusNChannel, G4CascadeKminusPChannel,
+                    G4CascadeKzeroBarNChannel, G4CascadeKzeroBarPChannel,
+                    G4CascadeKzeroNChannel, G4CascadeKzeroPChannel
+
 14 March 2016  Dennis Wright (hadr-casc-V10-02-01)
 --------------------------------------------------
 - G4InuclCollider.cc: re-instate getenv for photonuclearOkay().  This

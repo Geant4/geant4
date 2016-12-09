@@ -1,4 +1,4 @@
-$Id: History 95713 2016-02-22 08:08:38Z gcosmo $
+$Id: History 101662 2016-11-21 09:05:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,20 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-11-16 A.Dotti  (testem8-V10-02-05)
+- explicit set of SD to manager
+
+14-10-16 G.Folger (testem8-V10-02-04)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+02-09-16 V.Ivant (testem8-V10-02-03)
+01-09-16 V.Ivant (testem8-V10-02-02)
+- Run - fixed RMS computation by G4StatDouble
+
+04-07-16 I. Hrivnacova  (testem8-V10-02-01)
+- Fixes for Doxygen documentation
 
 19-02-16 V.Ivant (testem8-V10-02-00)
 - TestParameters, Run, PrimaryGeneratorAction, 

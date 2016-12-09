@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/include/EmStandardPhysics.hh
+/// \file EmStandardPhysics.hh
 /// \brief Definition of the EmStandardPhysics class
 //
 // $Id: EmStandardPhysics.hh 66586 2012-12-21 10:48:39Z ihrivnac $

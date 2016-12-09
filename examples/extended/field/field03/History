@@ -1,4 +1,4 @@
-$Id: History 96980 2016-05-19 09:41:22Z gcosmo $
+$Id: History 101666 2016-11-21 09:12:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 19, 2016 A.Dotti   - fieldex03-V10-02-04
+- explicit set of SD to manager
+
+November 02, 2016 L.Garnier - fieldex03-V10-02-03
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+July 04, 2016 - I. Hrivnacova - fieldex03-V10-02-02
+- Fix for Doxygen documentation
+
+July 01, 2016 - I. Hrivnacova - fieldex03-V10-02-01
+- Replaced F03PhysicsList with FTFP_BERT with G4StepLimiterPhysics
 
 May 19, 2016 - G.Cosmo - fieldex03-V10-02-00
 - Fixed compilation warnings on gcc-6.1 in F03FieldMessenger.

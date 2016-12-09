@@ -37,8 +37,10 @@
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
+#include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4Polyhedron.hh"
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,6 +121,76 @@ G4double G4UParaboloid::GetRadiusPlusZ() const
 G4VSolid* G4UParaboloid::Clone() const
 {
   return new G4UParaboloid(*this);
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UParaboloid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  static G4bool checkBBox = true;
+
+  G4double r2 = GetRadiusPlusZ();
+  G4double dz = GetZHalfLength();
+  pMin.set(-r2,-r2,-dz);
+  pMax.set( r2, r2, dz);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UParaboloid::Extent()", "GeomMgt0001", JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  // Check consistency of bounding boxes
+  //
+  if (checkBBox)
+  {
+    UVector3 vmin, vmax;
+    GetShape()->Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
+        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
+        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
+        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
+        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
+        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    {
+      std::ostringstream message;
+      message << "Inconsistency in bounding boxes for solid: "
+              << GetName() << " !"
+              << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
+              << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
+      G4Exception("G4UParaboloid::Extent()", "GeomMgt0001", JustWarning, message);
+      checkBBox = false;
+    }
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UParaboloid::CalculateExtent(const EAxis pAxis,
+                               const G4VoxelLimits& pVoxelLimit,
+                               const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+
+  // Get bounding box
+  Extent(bmin,bmax);
+
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 ////////////////////////////////////////////////////////////////////////

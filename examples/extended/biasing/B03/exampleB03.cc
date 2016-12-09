@@ -81,8 +81,6 @@
 #include "G4GeometrySampler.hh"
 #include "G4IStore.hh"
 
-
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int , char **)
@@ -158,7 +156,6 @@ int main(int , char **)
 
   // creating the geometry cell and add both to the store
   //  G4GeometryCell gCell = pdet->GetGeometryCell(18);
-
 
   // create importance geometry cell pair for the "rest"cell
   // with the same importance as the last concrete cell 

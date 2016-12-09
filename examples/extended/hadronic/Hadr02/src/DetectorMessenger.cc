@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr02/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 81932 2014-06-06 15:39:45Z gcosmo $
+// $Id: DetectorMessenger.cc 100812 2016-11-02 15:06:25Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -57,9 +57,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
  : G4UImessenger(),
-   Detector(Det),
+   fDetector(det),
    fTestDir(0),
    fMatCmd(0),
    fMat1Cmd(0),
@@ -152,13 +152,13 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
   HistoManager* h = HistoManager::GetPointer();
   if( command == fMatCmd ) {
-    Detector->SetTargetMaterial(newValue);
+    fDetector->SetTargetMaterial(newValue);
   } else if( command == fMat1Cmd ) {
-    Detector->SetWorldMaterial(newValue);
+    fDetector->SetWorldMaterial(newValue);
   } else if( command == fIonCmd ) {
     h->SetIonPhysics(newValue);
   } else if( command == fRCmd ) {
-    Detector->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
+    fDetector->SetTargetRadius(fRCmd->GetNewDoubleValue(newValue));
   } else if( command == fLCmd ) {
     h->SetTargetLength(fLCmd->GetNewDoubleValue(newValue));
   } else if( command == fNOfAbsCmd ) {

@@ -113,8 +113,7 @@ inline bool List_empty_stream(buffer& a_buffer) {
 }
 
 template <class HIST>
-inline std::string axis_title(const HIST& a_h,
-                              const std::string& a_key) {
+inline std::string axis_title(const HIST& a_h,const std::string& a_key) {
   typedef std::map<std::string,std::string> annotations_t;
   annotations_t::const_iterator it = a_h.annotations().find(a_key);
   if(it==a_h.annotations().end()) return std::string();
@@ -266,54 +265,42 @@ inline bool TH_write_3D(buffer& a_buffer,
   return true;
 }
 
-inline bool TH1F_stream(buffer& a_buffer,
-                        const histo::h1df& a_h,
-                        const std::string& a_name) {
+inline bool TH1F_stream(buffer& a_buffer,const histo::h1df& a_h,const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
   if(!TH_write_1D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
 
-inline bool TH1F_stream(buffer& a_buffer,
-                        const histo::h1d& a_h,
-                        const std::string& a_name) {
+inline bool TH1F_stream(buffer& a_buffer,const histo::h1d& a_h,const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
   if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
   if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false;
   return true;
 }
 
-inline bool TH1D_stream(buffer& a_buffer,
-                        const histo::h1d& a_h,
-                        const std::string& a_name) {
+inline bool TH1D_stream(buffer& a_buffer,const histo::h1d& a_h,const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
   if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD
   return true;
 }
 
-inline bool TH2F_stream(buffer& a_buffer,
-                        const histo::h2d& a_h,
-                        const std::string& a_name){
+inline bool TH2F_stream(buffer& a_buffer,const histo::h2d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
   if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
   if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false; //fArray TArrayF
   return true;
 }
 
-inline bool TH2F_stream(buffer& a_buffer,
-                        const histo::h2df& a_h,
-                        const std::string& a_name){
+inline bool TH2F_stream(buffer& a_buffer,const histo::h2df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
   if(!TH_write_2D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
 
-inline bool TH2D_stream(buffer& a_buffer,
-                        const histo::h2d& a_h,
-                        const std::string& a_name){
+inline bool TH2D_stream(buffer& a_buffer,const histo::h2d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
   if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayD

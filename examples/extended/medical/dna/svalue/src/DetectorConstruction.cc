@@ -170,6 +170,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   // search the material by its name   
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);     
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
  

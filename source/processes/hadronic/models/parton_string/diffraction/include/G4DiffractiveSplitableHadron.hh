@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh 74627 2013-10-17 07:04:38Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.hh 100828 2016-11-02 15:25:59Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -45,7 +45,6 @@
 
 
 class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
-
   public:
     G4DiffractiveSplitableHadron();
     G4DiffractiveSplitableHadron( const G4ReactionProduct& aPrimary );
@@ -71,7 +70,7 @@ class G4DiffractiveSplitableHadron : public G4VSplitableHadron {
 
     G4Parton* Parton[2];
     G4int PartonIndex; 
-
 };
 
 #endif
+

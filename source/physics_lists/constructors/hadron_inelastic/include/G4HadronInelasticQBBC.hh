@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.hh 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronInelasticQBBC.hh 99005 2016-08-30 11:26:40Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -73,9 +73,7 @@ private:
   static G4ThreadLocal G4ComponentAntiNuclNuclearXS* theAntiNuclXS;
   static G4ThreadLocal G4ComponentGGHadronNucleusXsc* theKaonXS;
 
-  G4String htype;
   G4int    verbose;
-  static G4ThreadLocal G4bool   wasActivated;
 };
 
 #endif

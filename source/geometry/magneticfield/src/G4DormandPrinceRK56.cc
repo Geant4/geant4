@@ -1,3 +1,28 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
 //  FDormand-Prince RK 6(5) FSAL implementation by Somnath Banerjee
 //  Supervision / code review: John Apostolakis
 //
@@ -5,9 +30,6 @@
 // 
 // First version: 26 June 2015
 //
-// This code is made available subject to the Geant4 license, a copy of
-// which is available at
-//   http://geant4.org/license
 //  G4DormandPrince745.cc
 //  Geant4
 //
@@ -25,7 +47,9 @@
 G4DormandPrinceRK56::G4DormandPrinceRK56(G4EquationOfMotion *EqRhs,
                        G4int noIntegrationVariables,
                        G4bool primary)
-: G4MagIntegratorStepper(EqRhs, noIntegrationVariables){
+: G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
+  fAuxStepper(0)
+{
     
     const G4int numberOfVariables = noIntegrationVariables;
     

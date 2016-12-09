@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4VGraphicsScene.hh 99153 2016-09-07 08:05:30Z gcosmo $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -43,16 +43,19 @@ class G4VisAttributes;
 class G4VSolid;
 class G4Box;
 class G4Cons;
-class G4Tubs;
-class G4Trd;
-class G4Trap;
-class G4Sphere;
-class G4Ellipsoid;
+class G4Orb;
 class G4Para;
 class G4Torus;
-class G4PhysicalVolumeModel;
+class G4Trap;
+class G4Trd;
+class G4Tubs;
+class G4Sphere;
+
+class G4Ellipsoid;
 class G4Polycone;
 class G4Polyhedra;
+
+class G4PhysicalVolumeModel;
 class G4VTrajectory;
 class G4VHit;
 class G4VDigi;
@@ -65,6 +68,7 @@ class G4Square;
 class G4Polymarker;
 class G4Polyhedron;
 class G4VisExtent;
+class G4StatDouble;
 
 class G4VGraphicsScene {
 
@@ -90,17 +94,24 @@ public: // With description
 
   virtual void PostAddSolid () = 0;
 
+  // From geometry/solids/CSG
   virtual void AddSolid (const G4Box&)       = 0;
   virtual void AddSolid (const G4Cons&)      = 0;
-  virtual void AddSolid (const G4Tubs&)      = 0;
-  virtual void AddSolid (const G4Trd&)       = 0;
-  virtual void AddSolid (const G4Trap&)      = 0;
-  virtual void AddSolid (const G4Sphere&)    = 0;
+  virtual void AddSolid (const G4Orb&)       = 0;
   virtual void AddSolid (const G4Para&)      = 0;
+  virtual void AddSolid (const G4Sphere&)    = 0;
   virtual void AddSolid (const G4Torus&)     = 0;
+  virtual void AddSolid (const G4Trap&)      = 0;
+  virtual void AddSolid (const G4Trd&)       = 0;
+  virtual void AddSolid (const G4Tubs&)      = 0;
+
+  // From geometry/solids/specific
+  virtual void AddSolid (const G4Ellipsoid&) = 0;
   virtual void AddSolid (const G4Polycone&)  = 0;
   virtual void AddSolid (const G4Polyhedra&) = 0;
-  virtual void AddSolid (const G4VSolid&)    = 0;  // For solids not above.
+
+  // For solids not above.
+  virtual void AddSolid (const G4VSolid&)    = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding "compound" GEANT4 objects to the scene
@@ -117,6 +128,7 @@ public: // With description
   virtual void AddCompound (const G4VHit&)               = 0;
   virtual void AddCompound (const G4VDigi&)              = 0;
   virtual void AddCompound (const G4THitsMap<G4double>&) = 0;
+  virtual void AddCompound (const G4THitsMap<G4StatDouble>&) = 0;
 
   ///////////////////////////////////////////////////////////////////
   // Methods for adding graphics primitives to the scene handler.  A

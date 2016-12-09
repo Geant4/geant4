@@ -38,12 +38,15 @@
 #include "RE01TrackingAction.hh"
 #include "RE01SteppingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01ActionInitialization::RE01ActionInitialization()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 RE01ActionInitialization::~RE01ActionInitialization()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01ActionInitialization::Build() const
 {
   //
@@ -61,6 +64,7 @@ void RE01ActionInitialization::Build() const
   SetUserAction(new RE01SteppingAction);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void RE01ActionInitialization::BuildForMaster() const
 {
   //

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XCrystalPlanarMoliereElectronDensity.hh
+/// \brief Definition of the XCrystalPlanarMoliereElectronDensity class
+//
 //
 
 

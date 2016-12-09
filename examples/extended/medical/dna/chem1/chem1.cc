@@ -32,7 +32,7 @@
 //
 // $Id$
 //
-/// \file main.cc
+/// \file chem1.cc
 /// \brief Chem1 example
 
 #include "DetectorConstruction.hh"

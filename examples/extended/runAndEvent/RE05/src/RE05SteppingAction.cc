@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05SteppingAction.cc 66526 2012-12-19 13:41:33Z ihrivnac $
+// $Id: RE05SteppingAction.cc 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/src/RE05SteppingAction.cc
 /// \brief Implementation of the RE05SteppingAction class
@@ -39,11 +39,18 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 RE05SteppingAction::RE05SteppingAction()
-{;}
+: G4UserSteppingAction()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RE05SteppingAction::~RE05SteppingAction()
-{;}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RE05SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
@@ -75,4 +82,4 @@ void RE05SteppingAction::UserSteppingAction(const G4Step * theStep)
   theTrack->SetTrackStatus(fSuspend);
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

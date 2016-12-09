@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.hh 90331 2015-05-26 08:24:09Z gcosmo $
+// $Id: G4FTFModel.hh 100828 2016-11-02 15:25:59Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Class Description
@@ -61,7 +61,6 @@ class G4ExcitedString;
 
 
 class G4FTFModel : public G4VPartonStringModel {
-
   public:
     G4FTFModel( const G4String& modelName = "FTF" );
     ~G4FTFModel();
@@ -103,8 +102,8 @@ class G4FTFModel : public G4VPartonStringModel {
                                 G4Nucleon* involvedNucleons[], G4double& sumMasses );
     // Utility method used by PutOnMassShell.
 
-    G4bool SamplingNucleonKinematics(       G4double averagePt2, const G4double maxPt2,  // Uzhi
-                                            G4double dCor, G4V3DNucleus* nucleus,        // Uzhi
+    G4bool SamplingNucleonKinematics( G4double averagePt2, const G4double maxPt2,
+                                      G4double dCor, G4V3DNucleus* nucleus,
                                       const G4LorentzVector& pResidual, 
                                       const G4double residualMass, const G4int residualMassNumber,
                                       const G4int numberOfInvolvedNucleons,
@@ -155,7 +154,6 @@ class G4FTFModel : public G4VPartonStringModel {
     G4int           TargetResidualMassNumber;
     G4int           TargetResidualCharge;
     G4double        TargetResidualExcitationEnergy;
-
 };
 
 
@@ -174,3 +172,4 @@ inline G4V3DNucleus* G4FTFModel::GetProjectileNucleus() const {
 }
 
 #endif
+

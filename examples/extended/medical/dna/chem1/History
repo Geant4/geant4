@@ -14,6 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09.07.2016 S.Incerti         tag chem1-V10-02-01                           
+-----------------------------------------------------
+-  Updated README
+
+04.07.2016 I.Hrivnacova         tag chem1-V10-02-00                           
+-----------------------------------------------------
+-  Fixes for Doxygen documentation
+
 28.12.2014 M.K                  tag chem1-V10-00-06
 -----------------------------------------------------
 - Remove useless comments

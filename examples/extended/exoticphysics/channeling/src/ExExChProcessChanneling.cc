@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/src/ExExChProcessChanneling.cc
+/// \brief Implementation of the ExExChProcessChanneling class
+//
 
 #include "ExExChProcessChanneling.hh"
 
@@ -74,8 +77,8 @@ G4VDiscreteProcess(aName){
     fTimeStepMin = 2.E2 * CLHEP::angstrom;
     fTransverseVariationMax = 2.E-2 * CLHEP::angstrom;
 
-    bPointYPre = -1.;
-    bPointYPost = -1.;
+    fPointYPre = -1.;
+    fPointYPost = -1.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -213,20 +216,20 @@ void ExExChProcessChanneling::UpdateParameters(const G4Track& aTrack){
     G4ThreeVector vPositionPre =
     ComputePositionInTheCrystal(aTrack.GetStep()->GetPreStepPoint(),aTrack);
     
-    bHasToComputeTrajectory = true;
+    fHasToComputeTrajectory = true;
 
-    if(vPositionPost.y() == bPointYPost &&
-       vPositionPre.y() == bPointYPre){
-        bHasToComputeTrajectory = false;
+    if(vPositionPost.y() == fPointYPost &&
+       vPositionPre.y() == fPointYPre){
+        fHasToComputeTrajectory = false;
     }
     else{
         if(GetXPL(aTrack)->IsBent()){
-                bPointYPre = vPositionPre.y();
-                bPointYPost = vPositionPost.y();
+                fPointYPre = vPositionPre.y();
+                fPointYPost = vPositionPost.y();
         }
         else{
-                bPointYPre = vPositionPre.z();
-                bPointYPost = vPositionPost.z();
+                fPointYPre = vPositionPre.z();
+                fPointYPost = vPositionPost.z();
         }
         }
 
@@ -249,7 +252,7 @@ void ExExChProcessChanneling::UpdateParameters(const G4Track& aTrack){
     G4double vNucleiDensity=0.;
     G4double vElectronDensity=0.;
 
-    if(fIntegrationPeriod>0. && bHasToComputeTrajectory==true){
+    if(fIntegrationPeriod>0. && fHasToComputeTrajectory==true){
             G4double kBeta = 0.;
             G4double kPos = 0.;
             G4double kMom = 0.;

@@ -46,7 +46,7 @@ class G4ProtonDecay : public G4NuclearDecay
   public:
     G4ProtonDecay(const G4ParticleDefinition* theParentNucleus,
                   const G4double& theBR, const G4double& Qvalue,
-                  const G4double& excitation);
+                  const G4double& excitation, const G4Ions::G4FloatLevelBase& flb);
 
     virtual ~G4ProtonDecay();
 

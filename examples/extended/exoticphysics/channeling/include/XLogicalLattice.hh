@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/XLogicalLattice.hh
+/// \brief Definition of the XLogicalLattice class
+//
 
 #ifndef XLogicalLattice_h
 #define XLogicalLattice_h

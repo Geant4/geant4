@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94571 2015-11-24 13:12:42Z gcosmo $
+# $Id: sources.cmake 100678 2016-10-31 10:48:06Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -47,129 +47,161 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
     HEADERS
-        G4INCLReflectionChannel.hh
-        G4INCLCDPP.hh
-        G4INCLCoulombNone.hh
-        G4INCLClustering.hh
-        G4INCLBinaryCollisionAvatar.hh
-        G4INCLSurfaceAvatar.hh
-        G4INCLNDFModifiedHarmonicOscillator.hh
-        G4INCLConstantRandom.hh
-        G4INCLKinematicsUtils.hh
-        G4INCLElasticChannel.hh
-        G4INCLTransmissionChannel.hh
-        G4INCLNuclearDensity.hh
-        G4INCLPauliStandard.hh
-        G4INCLStandardPropagationModel.hh
-        G4INCLDeltaProductionChannel.hh
-        G4INCLPiNElasticChannel.hh
-        G4INCLCascade.hh
-        G4INCLPauliStrictStandard.hh
-        G4INCLDeuteronDensity.hh
-        G4INCLNDFWoodsSaxon.hh
-        G4INCLICrossSections.hh
-        G4INCLNNToMultiPionsChannel.hh
-        G4INCLIPropagationModel.hh
-        G4INCLNuclearPotentialEnergyIsospin.hh
         G4INCLAvatarDumpAction.hh
-        G4INCLNuclearDensityFactory.hh
-        G4INCLNDFParis.hh
-        G4INCLCrossSectionsTruncatedMultiPions.hh
-        G4INCLINuclearPotential.hh
-        G4INCLNuclearPotentialIsospin.hh
-        G4INCLStore.hh
-        G4INCLDeltaDecayChannel.hh
-        G4INCLIPauli.hh
-        G4INCLCoulombDistortion.hh
-        G4INCLPiNToDeltaChannel.hh
-        G4INCLCrossSectionsINCL46.hh
-        G4INCLIPhaseSpaceGenerator.hh
-        G4INCLParticleSampler.hh
-        G4INCLProjectileRemnant.hh
-        G4INCLCluster.hh
-        G4INCLCrossSections.hh
-        G4INCLPiNToMultiPionsChannel.hh
-        G4INCLInteractionAvatar.hh
-        G4INCLNDFHardSphere.hh
-        G4INCLCoulombNonRelativistic.hh
-        G4INCLParticleEntryAvatar.hh
-        G4INCLPauliGlobal.hh
-        G4INCLCrossSectionsMultiPions.hh
-        G4INCLICoulomb.hh
-        G4INCLIClusteringModel.hh
-        G4INCLClusterDecay.hh
-        G4INCLNuclearPotentialEnergyIsospinSmooth.hh
-        G4INCLPhaseSpaceKopylov.hh
-        G4INCLParticleEntryChannel.hh
-        G4INCLDecayAvatar.hh
-        G4INCLPhaseSpaceRauboldLynch.hh
-        G4INCLNucleus.hh
-        G4INCLPhaseSpaceGenerator.hh
+        G4INCLBinaryCollisionAvatar.hh
+        G4INCLCascade.hh
         G4INCLCascadeAction.hh
-        G4INCLPauliStrict.hh
-        G4INCLClusteringModelNone.hh
-        G4INCLNuclearPotentialConstant.hh
-        G4INCLDeJongSpin.hh
+        G4INCLCDPP.hh
+        G4INCLCluster.hh
+        G4INCLClusterDecay.hh
+        G4INCLClustering.hh
         G4INCLClusteringModelIntercomparison.hh
+        G4INCLClusteringModelNone.hh
+        G4INCLConstantRandom.hh
+        G4INCLCoulombDistortion.hh
+        G4INCLCoulombNone.hh
+        G4INCLCoulombNonRelativistic.hh
+        G4INCLCrossSections.hh
+        G4INCLCrossSectionsINCL46.hh
+        G4INCLCrossSectionsMultiPions.hh
+        G4INCLCrossSectionsMultiPionsAndResonances.hh
+        G4INCLCrossSectionsTruncatedMultiPions.hh
+        G4INCLDecayAvatar.hh
+        G4INCLDeJongSpin.hh
+        G4INCLDeltaDecayChannel.hh
+        G4INCLDeltaProductionChannel.hh
+        G4INCLDeuteronDensity.hh
+        G4INCLElasticChannel.hh
+        G4INCLEtaNElasticChannel.hh
+        G4INCLEtaNToPiNChannel.hh
+        G4INCLEtaNToPiPiNChannel.hh
+        G4INCLIClusteringModel.hh
+        G4INCLICoulomb.hh
+        G4INCLICrossSections.hh
+        G4INCLInteractionAvatar.hh
+        G4INCLINuclearPotential.hh
+        G4INCLIPauli.hh
+        G4INCLIPhaseSpaceGenerator.hh
+        G4INCLIPropagationModel.hh
+        G4INCLKinematicsUtils.hh
+        G4INCLNDeltaEtaProductionChannel.hh
+        G4INCLNDeltaOmegaProductionChannel.hh
         G4INCLNDFGaussian.hh
+        G4INCLNDFHardSphere.hh
+        G4INCLNDFModifiedHarmonicOscillator.hh
+        G4INCLNDFParis.hh
+        G4INCLNDFWoodsSaxon.hh
+        G4INCLNNEtaToMultiPionsChannel.hh
+        G4INCLNNOmegaToMultiPionsChannel.hh
+        G4INCLNNToMultiPionsChannel.hh
+        G4INCLNNToNNEtaChannel.hh
+        G4INCLNNToNNOmegaChannel.hh
+        G4INCLNuclearDensity.hh
+        G4INCLNuclearDensityFactory.hh
+        G4INCLNuclearPotentialConstant.hh
+        G4INCLNuclearPotentialEnergyIsospin.hh
+        G4INCLNuclearPotentialEnergyIsospinSmooth.hh
+        G4INCLNuclearPotentialIsospin.hh
+        G4INCLNucleus.hh
+        G4INCLOmegaNElasticChannel.hh
+        G4INCLOmegaNToPiNChannel.hh
+        G4INCLOmegaNToPiPiNChannel.hh
+        G4INCLParticleEntryAvatar.hh
+        G4INCLParticleEntryChannel.hh
+        G4INCLParticleSampler.hh
         G4INCLPauliBlocking.hh
+        G4INCLPauliGlobal.hh
+        G4INCLPauliStandard.hh
+        G4INCLPauliStrict.hh
+        G4INCLPauliStrictStandard.hh
+        G4INCLPhaseSpaceGenerator.hh
+        G4INCLPhaseSpaceKopylov.hh
+        G4INCLPhaseSpaceRauboldLynch.hh
+        G4INCLPiNElasticChannel.hh
+        G4INCLPiNToDeltaChannel.hh
+        G4INCLPiNToEtaChannel.hh
+        G4INCLPiNToMultiPionsChannel.hh
+        G4INCLPiNToOmegaChannel.hh
+        G4INCLPionResonanceDecayChannel.hh
+        G4INCLProjectileRemnant.hh
         G4INCLRecombinationChannel.hh
+        G4INCLReflectionChannel.hh
+        G4INCLStandardPropagationModel.hh
+        G4INCLStore.hh
+        G4INCLSurfaceAvatar.hh
+        G4INCLTransmissionChannel.hh
 
     SOURCES
-        G4INCLPiNToDeltaChannel.cc
-        G4INCLPauliStrict.cc
-        G4INCLPauliStrictStandard.cc
-        G4INCLPauliStandard.cc
-        G4INCLCluster.cc
-        G4INCLPauliBlocking.cc
-        G4INCLKinematicsUtils.cc
-        G4INCLParticleEntryChannel.cc
-        G4INCLCoulombDistortion.cc
-        G4INCLNuclearPotentialIsospin.cc
-        G4INCLStandardPropagationModel.cc
-        G4INCLCrossSectionsINCL46.cc
-        G4INCLDecayAvatar.cc
-        G4INCLDeuteronDensity.cc
-        G4INCLCDPP.cc
-        G4INCLCrossSectionsMultiPions.cc
-        G4INCLCascade.cc
-        G4INCLNuclearPotentialEnergyIsospinSmooth.cc
-        G4INCLRecombinationChannel.cc
-        G4INCLReflectionChannel.cc
-        G4INCLPhaseSpaceGenerator.cc
         G4INCLAvatarDumpAction.cc
-        G4INCLElasticChannel.cc
-        G4INCLPiNElasticChannel.cc
-        G4INCLSurfaceAvatar.cc
-        G4INCLPiNToMultiPionsChannel.cc
-        G4INCLNuclearPotentialEnergyIsospin.cc
-        G4INCLPhaseSpaceRauboldLynch.cc
-        G4INCLPauliGlobal.cc
-        G4INCLINuclearPotential.cc
-        G4INCLNuclearDensityFactory.cc
-        G4INCLCoulombNonRelativistic.cc
-        G4INCLPhaseSpaceKopylov.cc
-        G4INCLCrossSections.cc
-        G4INCLParticleSampler.cc
-        G4INCLNucleus.cc
-        G4INCLStore.cc
-        G4INCLParticleEntryAvatar.cc
-        G4INCLNuclearPotentialConstant.cc
+        G4INCLBinaryCollisionAvatar.cc
+        G4INCLCascade.cc
+        G4INCLCascadeAction.cc
+        G4INCLCDPP.cc
+        G4INCLCluster.cc
+        G4INCLClusterDecay.cc
+        G4INCLClustering.cc
+        G4INCLClusteringModelIntercomparison.cc
+        G4INCLCoulombDistortion.cc
         G4INCLCoulombNone.cc
-        G4INCLNNToMultiPionsChannel.cc
+        G4INCLCoulombNonRelativistic.cc
+        G4INCLCrossSections.cc
+        G4INCLCrossSectionsINCL46.cc
+        G4INCLCrossSectionsMultiPions.cc
+        G4INCLCrossSectionsMultiPionsAndResonances.cc
+        G4INCLCrossSectionsTruncatedMultiPions.cc
+        G4INCLDecayAvatar.cc
         G4INCLDeJongSpin.cc
-        G4INCLNuclearDensity.cc
-        G4INCLProjectileRemnant.cc
         G4INCLDeltaDecayChannel.cc
         G4INCLDeltaProductionChannel.cc
-        G4INCLClustering.cc
-        G4INCLTransmissionChannel.cc
-        G4INCLClusterDecay.cc
-        G4INCLBinaryCollisionAvatar.cc
-        G4INCLClusteringModelIntercomparison.cc
-        G4INCLCascadeAction.cc
+        G4INCLDeuteronDensity.cc
+        G4INCLElasticChannel.cc
+        G4INCLEtaNElasticChannel.cc
+        G4INCLEtaNToPiNChannel.cc
+        G4INCLEtaNToPiPiNChannel.cc
         G4INCLInteractionAvatar.cc
-        G4INCLCrossSectionsTruncatedMultiPions.cc
+        G4INCLINuclearPotential.cc
+        G4INCLKinematicsUtils.cc
+        G4INCLNDeltaEtaProductionChannel.cc
+        G4INCLNDeltaOmegaProductionChannel.cc
+        G4INCLNNEtaToMultiPionsChannel.cc
+        G4INCLNNOmegaToMultiPionsChannel.cc
+        G4INCLNNToMultiPionsChannel.cc
+        G4INCLNNToNNEtaChannel.cc
+        G4INCLNNToNNOmegaChannel.cc
+        G4INCLNuclearDensity.cc
+        G4INCLNuclearDensityFactory.cc
+        G4INCLNuclearPotentialConstant.cc
+        G4INCLNuclearPotentialEnergyIsospin.cc
+        G4INCLNuclearPotentialEnergyIsospinSmooth.cc
+        G4INCLNuclearPotentialIsospin.cc
+        G4INCLNucleus.cc
+        G4INCLOmegaNElasticChannel.cc
+        G4INCLOmegaNToPiNChannel.cc
+        G4INCLOmegaNToPiPiNChannel.cc
+        G4INCLParticleEntryAvatar.cc
+        G4INCLParticleEntryChannel.cc
+        G4INCLParticleSampler.cc
+        G4INCLPauliBlocking.cc
+        G4INCLPauliGlobal.cc
+        G4INCLPauliStandard.cc
+        G4INCLPauliStrict.cc
+        G4INCLPauliStrictStandard.cc
+        G4INCLPhaseSpaceGenerator.cc
+        G4INCLPhaseSpaceKopylov.cc
+        G4INCLPhaseSpaceRauboldLynch.cc
+        G4INCLPiNElasticChannel.cc
+        G4INCLPiNToDeltaChannel.cc
+        G4INCLPiNToEtaChannel.cc
+        G4INCLPiNToMultiPionsChannel.cc
+        G4INCLPiNToOmegaChannel.cc
+        G4INCLPionResonanceDecayChannel.cc
+        G4INCLProjectileRemnant.cc
+        G4INCLRecombinationChannel.cc
+        G4INCLReflectionChannel.cc
+        G4INCLStandardPropagationModel.cc
+        G4INCLStore.cc
+        G4INCLSurfaceAvatar.cc
+        G4INCLTransmissionChannel.cc
 
     GRANULAR_DEPENDENCIES
         G4baryons

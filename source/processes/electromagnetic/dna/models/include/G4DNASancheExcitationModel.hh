@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh 96606 2016-04-25 13:33:42Z gcosmo $
+// $Id: G4DNASancheExcitationModel.hh 98733 2016-08-09 10:51:58Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -77,11 +77,16 @@ public:
     verboseLevel = verbose;
   }
 
+  inline void SelectStationary(G4bool input); 
+
 protected:
 
   G4ParticleChangeForGamma* fParticleChangeForGamma;
 
 private:
+
+  G4bool statCode;
+
   // Water density table
   const std::vector<G4double>* fpWaterDensity;
 
@@ -124,6 +129,13 @@ inline void G4DNASancheExcitationModel::ExtendLowEnergyLimit(G4double threshold)
   
   SetLowEnergyLimit(threshold);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4DNASancheExcitationModel::SelectStationary (G4bool input)
+{ 
+    statCode = input; 
+}		 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

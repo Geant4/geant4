@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 2, 2016 L.Garnier (ExUCN-V10-02-02)
+- remove icons.mac. Automatically include since interfaces-V10-02-07
+
+October 14, 2016 G.Folger   (ExUCN-V10-02-01)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+July 08, 2016 P. Gumplinger (ExUCN-V10-02-00)
+- update output with additional verbose and after
+  bug fix #1750 in G4Navigator::GetGlobalExitNormal
+
 June 26, 2015 P. Gumplinger (ExUCN-V10-01-03)
 - add NumberOfVariables in G4RepleteEofM constructor
 

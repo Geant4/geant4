@@ -1,4 +1,4 @@
-$Id: History 96374 2016-04-11 06:55:50Z gcosmo $
+$Id: History 100275 2016-10-17 08:29:19Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-10-16 G.Folger (testem18-V10-02-03)
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 	 
+04-07-16 I. Hrivnacova  (testem18-V10-02-02)
+- Fixes for Doxygen documentation
+
 10-04-16 mma  (testem18-V10-02-01)
 - PhysListEmStandard: use G4EmParameters
 

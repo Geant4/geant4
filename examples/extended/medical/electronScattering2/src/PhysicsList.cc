@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 93734 2015-10-30 10:59:21Z gcosmo $
+// $Id: PhysicsList.cc 100254 2016-10-17 07:53:29Z gcosmo $
 //
 /// \file medical/electronScattering2/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
@@ -162,9 +162,10 @@ void PhysicsList::AddDecay()
     
     G4Decay* fDecayProcess = new G4Decay();
     
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while( (*particleIterator)() ){
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         
         if (fDecayProcess->IsApplicable(*particle) && 
@@ -189,9 +190,10 @@ void PhysicsList::AddStepMax()
     // Step limitation seen as a process
     StepMax* stepMaxProcess = new StepMax();
     
-    theParticleIterator->reset();
-    while ((*theParticleIterator)()){
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while ((*particleIterator)()){
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         
         if (stepMaxProcess->IsApplicable(*particle))

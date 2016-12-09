@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/SteppingAction.hh
+/// \file medical/dna/wvalue/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
 // $Id: SteppingAction.hh 78723 2014-01-20 10:32:17Z gcosmo $

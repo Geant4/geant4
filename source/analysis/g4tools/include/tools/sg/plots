@@ -71,7 +71,7 @@ private:
 public:
   class updater { 
   public:
-    virtual void update(plots&,unsigned int) = 0;
+    virtual void update(plots&,size_t) = 0;
     virtual updater* copy() const = 0;
   public:
     virtual ~updater(){}
@@ -140,7 +140,7 @@ public:
   ,border_visible(false)
   ,border_width(0)
   ,border_height(0)
-  ,border_color(colorf::grey())
+  ,border_color(colorf_grey())
 
   ,m_ttf(a_ttf)
   ,m_current(0)
@@ -228,8 +228,8 @@ public:
 
   void clear() {
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       _plotter->clear();
@@ -238,8 +238,8 @@ public:
 
   bool has_data() {
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       if(_plotter->plottables().size()) return true;
@@ -249,8 +249,8 @@ public:
 
   void touch_plotters() { //used in exlib/geant4/session.
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       _plotter->touch();
@@ -259,8 +259,8 @@ public:
 
   void next() {
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    if(m_current>=(_number-1)) {
+    size_t _number = m_sep.size();    
+    if(m_current>=(uint32(_number)-1)) {
       m_current = 0;
     } else {
       m_current++;
@@ -278,12 +278,12 @@ public:
 
   bool set_current(plotter* a_plotter) { //for popup.
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       if(_plotter==a_plotter) {
-        m_current = index;
+        m_current = uint32(index);
         update_current_border();
         return true;
       }
@@ -441,8 +441,8 @@ public:
   void plotters(std::vector<plotter*>& a_vec) { //a_vec do NOT get ownership of sg::plotter objects.
     a_vec.clear();
     if(m_sep.empty()) update_sg();
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       plotter* _plotter = (plotter*)(*sep)[PLOTTER()];
       a_vec.push_back(_plotter);
@@ -509,10 +509,10 @@ protected:
       float rw_wc = ww_wc/cols;
       float rh_wc = wh_wc/rows;
   
-      unsigned int _number = m_sep.size();    
-      for(unsigned int index=0;index<_number;index++) {
-        unsigned int row = index/cols;
-        unsigned int col = index-cols*row;
+      size_t _number = m_sep.size();    
+      for(size_t index=0;index<_number;index++) {
+        size_t row = index/cols.value();
+        size_t col = index-cols.value()*row;
   
         reg_t* sep = (reg_t*)m_sep[index];
   
@@ -558,7 +558,7 @@ protected:
     a_parent.add(new group()); //empty
 
     rgba* mat = new rgba();
-    mat->color = colorf::red();
+    mat->color = colorf_red();
     sep->add(mat);
 
     draw_style* ds = new draw_style;
@@ -580,8 +580,8 @@ protected:
   }
 
   void update_current_border() {
-    unsigned int _number = m_sep.size();    
-    for(unsigned int index=0;index<_number;index++) {
+    size_t _number = m_sep.size();    
+    for(size_t index=0;index<_number;index++) {
       reg_t* sep = (reg_t*)m_sep[index];
       _switch* _border = (_switch*)(*sep)[BORDER()];
       if(index==m_current) {  
@@ -700,7 +700,6 @@ protected:
   separator m_border_sep;
   unsigned int m_current;
   updater* m_updater;
-  
   unsigned int m_old_cols;
   unsigned int m_old_rows;
 };

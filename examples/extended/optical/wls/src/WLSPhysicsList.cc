@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPhysicsList.cc 78066 2013-12-03 11:08:36Z gcosmo $
+// $Id: WLSPhysicsList.cc 101181 2016-11-08 15:08:33Z gcosmo $
 //
 /// \file optical/wls/src/WLSPhysicsList.cc
 /// \brief Implementation of the WLSPhysicsList class
@@ -99,19 +99,10 @@ WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
 
     fAbsorptionOn = true;
     
-    //This looks complex, but it is not:
-    //Get from base-class the pointer of the phsyicsVector
-    //to be used. Remember: G4VModularPhysicsList is now a split class.
-    //Why G4VModularPhysicsList::RegisterPhysics method is not used instead?
-    //If possible we can remove this...
-    fPhysicsVector =
-                GetSubInstanceManager().offset[GetInstanceID()].physicsVector;
-    
-    fPhysicsVector->push_back(new WLSExtraPhysics());
-    fPhysicsVector->push_back(fOpticalPhysics =
-                                        new WLSOpticalPhysics(fAbsorptionOn));
+    RegisterPhysics(new WLSExtraPhysics());
+    RegisterPhysics(fOpticalPhysics = new WLSOpticalPhysics(fAbsorptionOn));
 
-    fPhysicsVector->push_back(new G4RadioactiveDecayPhysics());
+    RegisterPhysics(new G4RadioactiveDecayPhysics());
 
     fStepMaxProcess = new WLSStepMax();
 }
@@ -322,9 +313,10 @@ void WLSPhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())

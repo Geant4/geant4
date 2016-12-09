@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PhysListEmStandardWVI.cc
 /// \brief Implementation of the PhysListEmStandardWVI class
 //
-// $Id: PhysListEmStandardWVI.cc 96459 2016-04-15 12:28:01Z gcosmo $
+// $Id: PhysListEmStandardWVI.cc 100262 2016-10-17 08:08:04Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,9 +86,10 @@ void PhysListEmStandardWVI::ConstructProcess()
   // Add standard EM Processes
   //
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      

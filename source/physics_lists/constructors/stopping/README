@@ -1,0 +1,14 @@
+$Id: $
+-------------------------------------------------------------------
+
+
+ G4StoppingPhysics
+ -----------------
+ It uses Bertini/Precompound (i.e. Bertini followed by the official
+ Precompound/deexcitation of Geant4, not the internal one of Bertini)
+ for nuclear capture of: pi-, K-, Sigma-, Xi- and Omega-.
+ It uses Fritiof/Precompound model for nuclear capture of: anti_proton,
+ anti_Sigma+, anti_deuteron, anti_triton, anti_He3 and anti_alpha.
+ For mu-, Bertini model is used for nuclear capture, together with
+ default element selector, EM cascade sampling and bound decay sampling.
+

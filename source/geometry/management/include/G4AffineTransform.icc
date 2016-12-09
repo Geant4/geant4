@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AffineTransform.icc 93152 2015-10-08 11:53:57Z gcosmo $
+// $Id: G4AffineTransform.icc 98309 2016-07-06 10:30:15Z gcosmo $
 //
 //
 // G4AffineTransformation Inline implementation
@@ -363,10 +363,9 @@ G4bool G4AffineTransform::IsTranslated() const
 
 inline G4RotationMatrix G4AffineTransform::NetRotation() const
 {
-  G4RotationMatrix mat;
-  return mat.rotateAxes(G4ThreeVector(rxx,ryx,rzx),
-                        G4ThreeVector(rxy,ryy,rzy),
-                        G4ThreeVector(rxz,ryz,rzz));
+        return G4Rep3x3(rxx,rxy,rxz,
+                        ryx,ryy,ryz,
+                        rzx,rzy,rzz);
 }
 
 inline
@@ -395,6 +394,12 @@ void G4AffineTransform::SetNetTranslation(const G4ThreeVector& tlate)
         tx=tlate.x();
         ty=tlate.y();
         tz=tlate.z();
+}
+
+inline
+G4AffineTransform::operator G4Transform3D () const
+{
+        return G4Transform3D(NetRotation().inverse(),NetTranslation());
 }
 
 inline

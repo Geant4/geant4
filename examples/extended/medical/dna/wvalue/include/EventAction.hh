@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/EventAction.hh
+/// \file medical/dna/wvalue/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
 // $Id: EventAction.hh 78723 2014-01-20 10:32:17Z gcosmo $

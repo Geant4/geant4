@@ -6,17 +6,15 @@
 
 /*! \page ExampleMicrodosimetry Example microdosimetry
 
-\section microdosimetry_s0 CORRESPONDING AUTHOR 
-
-S. Incerti (a, *), V. Ivanchenko (b), M. Karamitros (a) \n
-a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan  \n
+\author S. Incerti (a, *), V. Ivanchenko (b), M. Karamitros (a) \n
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan
 (CENBG), IN2P3 / CNRS / Bordeaux 1 University, 33175 Gradignan, France \n
 b. G4AI Ltd, UK \n
 * e-mail:incerti@cenbg.in2p3.fr  \n
 
 \section microdosimetry_s1  INTRODUCTION                                                   
                                                                        
-The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
+The microdosimetry example simulates the track of two 5 MeV protons in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
 are used in a Target volume, declared as a Region.
 
@@ -24,10 +22,10 @@ This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:
 http://geant4-dna.org
-B
 
 Any report or published results obtained using the Geant4-DNA software shall 
-cite the following Geant4-DNA collaboration publication: \n
+cite the following Geant4-DNA collaboration publications: \n
+Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
 
 We also suggest these other references related to this example: \n
@@ -51,8 +49,14 @@ It works in MT mode.
 In interactive mode, run:
 
 \verbatim
-./microdosimetry -mt 4 -root myRootFile.mac
+./microdosimetry -mt 2 -root myRootFile.mac
 \endverbatim
+
+(or more generally
+\verbatim
+./microdosimetry -mt 2 -out myRootFile
+\endverbatim
+)
 
 The macro microdosimetry.in is executed by default.
 
@@ -102,7 +106,7 @@ file plot.C; to do so :
 The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
 
 - particles: \n
-e-       : 1    \n 
+e-       : 1 \n 
 proton   : 2 \n
 hydrogen : 3 \n
 alpha    : 4 \n
@@ -110,6 +114,7 @@ alpha+   : 5 \n
 helium   : 6 \n
 \n
 - processes: \n
+msc				10 \n
 e-_G4DNAElastic			11 \n
 e-_G4DNAExcitation		12 \n
 e-_G4DNAIonisation		13 \n

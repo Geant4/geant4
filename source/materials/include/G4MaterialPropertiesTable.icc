@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4MaterialPropertiesTable.icc 99765 2016-10-05 08:49:47Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -87,4 +87,3 @@ void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
   MPT.erase(G4String(key));
 }
-

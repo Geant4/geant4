@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: PhysicsList.hh 98772 2016-08-09 14:25:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -62,13 +62,12 @@ public:
       
 private:
     
-  G4VPhysicsConstructor*  emPhysicsList;
-  G4String emName;
+  G4VPhysicsConstructor*  fEmPhysicsList;
+  G4String fEmName;
     
-  PhysicsListMessenger* pMessenger;         
+  PhysicsListMessenger* fMessenger;         
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

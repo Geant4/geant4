@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-beta-01    (30-June-2016)
+ Geant4 version Name: geant4-10-03    (9-December-2016)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -12,8 +12,8 @@
 
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-### ===  Auger cascade flag: 0
-### ===  Ignore cuts flag:   0
+### ===  Auger cascade flag: 1
+### ===  Ignore cuts flag:   1
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -45,14 +45,14 @@ Registered model factories:
   drawByCharge
   drawByOriginVolume
   drawByParticleID
-  drawByTouchedVolume
+  drawByEncounteredVolume
 
 Registered filter factories:
   attributeFilter
   chargeFilter
   originVolumeFilter
   particleFilter
-  touchedVolumeFilter
+  encounteredVolumeFilter
 
 You have successfully registered the following user vis actions.
 Run Duration User Vis Actions: none
@@ -64,12 +64,14 @@ Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
 /run/verbose 1
+/control/cout/ignoreThreadsExcept 0
 #
 /gun/particle ion
 /gun/ion 27 60
 #
 /rdecay01/fullChain false
 #
+/control/cout/ignoreThreadsExcept 1
 /tracking/verbose 2
 /run/beamOn 1
 
@@ -129,7 +131,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.34s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -143,7 +145,7 @@ Run Summary
 
    Ekin Total (Q single decay): mean =  317.1 keV	( 317.1 keV --> 317.1 keV)
 
-   Momentum balance (excluding gamma desexcitation): mean = 0.5648 eV 	( 0.5648 eV  --> 0.5648 eV )
+   Momentum balance (excluding gamma desexcitation): mean =  0.342 eV 	( 0.342 eV  --> 0.342 eV )
 
    Total time of life (full chain): mean =  9.982 y    half-life =  6.919 y     ( 9.982 y   --> 9.982 y  )
 
@@ -153,6 +155,7 @@ Run Summary
 
 
 #
+/control/cout/ignoreThreadsExcept 0
 /tracking/verbose 0
 /run/printProgress 10000
 #
@@ -203,7 +206,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.96s Real=1.97s Sys=0s
+  User=1.77s Real=1.77s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -212,13 +215,13 @@ Run Summary
  Nb of generated particles: 
 
    Ni60[1332.514]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )
-   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008367 eV  --> 3.757 eV )
+   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008295 eV  --> 3.757 eV )
         anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)
                e-:  100000  Emean =  95.49 keV	( 2.058 eV  --> 1.358 MeV)
 
    Ekin Total (Q single decay): mean =  318.4 keV	( 317.1 keV --> 1.49 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean = 0.3661 eV 	( 6.902e-06 eV  --> 15.57 eV )
+   Momentum balance (excluding gamma desexcitation): mean = 0.3753 eV 	( 1.339e-06 eV  --> 26.53 eV )
 
    Total time of life (full chain): mean =  7.607 y    half-life =  5.273 y     ( 15.92 min --> 94.63 y  )
 
@@ -277,7 +280,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.86s Real=7.92s Sys=0s
+  User=4.86s Real=4.87s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -285,17 +288,17 @@ Run Summary
 
  Nb of generated particles: 
 
-             Ni60:  100000  Emean =  29.74 eV 	( 0.001615 eV  --> 92.29 eV )
-   Ni60[1332.514]:   99999  Emean =  13.82 eV 	( 0.108 eV  --> 40.25 eV )
-   Ni60[2158.632]:       8  Emean =  2.528 eV 	( 0.6632 eV  --> 5.752 eV )
-   Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001892 eV  --> 3.791 eV )
+             Ni60:  100000  Emean =  29.77 eV 	( 0.01064 eV  --> 84.79 eV )
+   Ni60[1332.514]:   99999  Emean =  13.83 eV 	( 0.45 eV  --> 33.14 eV )
+   Ni60[2158.632]:       8  Emean =  3.024 eV 	( 0.3664 eV  --> 5.569 eV )
+   Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )
         anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)
                e-:  100035  Emean =  96.27 keV	( 5.686 eV  --> 1.436 MeV)
             gamma:  199840  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)
 
    Ekin Total (Q single decay): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  834.9 keV	( 2.478e-06 eV  --> 2.159 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =  834.9 keV	( 2.505e-06 eV  --> 2.159 MeV)
 
    Total time of life (full chain): mean =  7.602 y    half-life =  5.269 y     ( 1.164 h   --> 101.5 y  )
 

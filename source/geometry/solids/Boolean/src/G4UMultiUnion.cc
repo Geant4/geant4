@@ -34,6 +34,8 @@
 
 #if defined(G4GEOM_USE_USOLIDS)
 
+#include "G4VoxelLimits.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4Polyhedron.hh"
 #include "G4DisplacedSolid.hh"
 #include "G4RotationMatrix.hh"
@@ -143,6 +145,50 @@ void G4UMultiUnion::Voxelize()
   GetShape()->Voxelize();
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Get bounding box
+
+void G4UMultiUnion::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  UVector3 vmin, vmax;
+  GetShape()->Extent(vmin,vmax);
+  pMin.set(vmin.x(),vmin.y(),vmin.z());
+  pMax.set(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4UMultiUnion::Extent()", "GeomMgt0001", JustWarning, message);
+    DumpInfo();
+  }
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Calculate extent under transform and specified limit
+
+G4bool
+G4UMultiUnion::CalculateExtent(const EAxis pAxis,
+                               const G4VoxelLimits& pVoxelLimit,
+                               const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax) const
+{
+  G4ThreeVector bmin, bmax;
+
+  // Get bounding box
+  Extent(bmin,bmax);
+
+  // Find extent
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+}
 
 //////////////////////////////////////////////////////////////////////////
 //

@@ -1,5 +1,5 @@
 
-$Id: History 97695 2016-06-07 09:54:49Z gcosmo $
+$Id: History 101046 2016-11-04 10:44:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ November 4, 2016 E. Tcherniaev          geom-bool-V10-02-11
+ - Implemented Extent() method for all shapes/constructs and use it
+   in CalculateExtent().
+
+ August 17, 2016 G. Cosmo                geom-bool-V10-02-10
+ - G4SubtractionSolid: directly return previously computed distance in
+   DistanceToIn(p,v) if no progress is made (zero step).
+
+ June 28, 2016 E. Tcherniaev             geom-bool-V10-02-09
+ - Removed tolerance argument to call to G4BoundingEnvelope in
+   G4ScaledSolid::CalculateExtent().
+   Coworks with tag "geommng-V10-02-14".
 
  June 6, 2016 E. Tcherniaev              geom-bool-V10-02-08
  - Reimplemented CalculateExtent() in G4ScaledSolid to use new class

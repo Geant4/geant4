@@ -1,4 +1,4 @@
-$Id: History 90260 2015-05-22 08:59:31Z gcosmo $
+$Id: History 101420 2016-11-17 10:37:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,35 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov 16, 2016 L. Desorgher  (ReverseMC01-V10-02-03)
+- New attempt to solve the FPE issue  RMC01AnalysisManager::ComputeMeanEdepAndError() 
+  remove of floating point exception issue.
+
+Nov 11, 2016 L. Desorgher  (ReverseMC01-V10-02-02)
+- Modification in of RMC01AnalysisManager::ComputeMeanEdepAndError() 
+  remove of floating point exception issue.
+
+Nov 1, 2016 L. Desorgher  (ReverseMC01-V10-02-01)
+- Modification in RMC01AnalysisManager:::EndOfEventForAdjointSimulation() to
+  loop over the list of tracks reaching the external surface. 
+  New features introduced in GEANT4.10.3. 
+  
+- Modification of RMC01AnalysisManager::ComputeMeanEdepAndError() 
+  Remove the use of fNentry  introduced in tag ReverseMC01-V10-01-00 
+  in the computation of the mean and error of energy deposition.
+  The use of nb_event is restored. This is crucial for a correct normalisation!
+  
+-Modification in the physics list in order to use the processes 
+ G4AdjointForcedInteractionForGamma and G4eAdjointMultipleScattering. 
+
+- Adaptation of the README file.
+
+Oct 14th, 2016 G.Folger             (ReverseMC01-V10-02-00)
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+Jul 20th, 2016 I. Hrivnacova
+- Coding guidelines (redundant empty lines, class member function names)
 
 21-May, 2015  V.Ivanchenko         (ReverseMC01-V10-01-00)
 - RMC01AnalysisManager - a variable fNentry is added in order correctly

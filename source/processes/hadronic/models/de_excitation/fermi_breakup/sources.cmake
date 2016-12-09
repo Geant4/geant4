@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96634 2016-04-27 09:31:49Z gcosmo $
+# $Id: sources.cmake 98739 2016-08-09 12:56:55Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -32,6 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/particles/leptons/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
@@ -45,8 +46,14 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4B9FermiFragment.hh
         G4Be8FermiFragment.hh
         G4FermiBreakUp.hh
+        G4FermiBreakUpVI.hh
+        G4FermiChannels.hh
         G4FermiConfiguration.hh
+        G4FermiDecayProbability.hh
+        G4FermiFragment.hh
         G4FermiFragmentsPool.hh
+        G4FermiFragmentsPoolVI.hh
+        G4FermiPair.hh
         G4FermiPhaseSpaceDecay.hh
         G4He5FermiFragment.hh
         G4Li5FermiFragment.hh
@@ -58,8 +65,13 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_fermi_breakup
         G4B9FermiFragment.cc
         G4Be8FermiFragment.cc
         G4FermiBreakUp.cc
+        G4FermiBreakUpVI.cc
         G4FermiConfiguration.cc
+        G4FermiDecayProbability.cc
+        G4FermiFragment.cc
         G4FermiFragmentsPool.cc
+        G4FermiFragmentsPoolVI.cc
+        G4FermiPair.cc
         G4FermiPhaseSpaceDecay.cc
         G4He5FermiFragment.cc
         G4Li5FermiFragment.cc

@@ -46,7 +46,7 @@
 
 Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* kin)
  :G4Run(),fDet(det),fKin(kin),
-  f_nLbin(MaxBin),f_nRbin(MaxBin)
+  f_nLbin(kMaxBin),f_nRbin(kMaxBin)
 {
   Reset();
 }

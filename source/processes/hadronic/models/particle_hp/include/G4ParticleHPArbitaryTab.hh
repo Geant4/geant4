@@ -48,6 +48,7 @@ class G4ParticleHPArbitaryTab : public G4VParticleHPEDis
   G4ParticleHPArbitaryTab()
   {
    theDistFunc = 0;
+   nDistFunc = 0;
   }
   ~G4ParticleHPArbitaryTab()
   {

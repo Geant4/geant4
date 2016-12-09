@@ -33,8 +33,8 @@
 // Rad. Prot. Dos. 133 (2009) 2-11
 
 #include "EMField.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4Exp.hh"
+#include "G4SystemOfUnits.hh"
 
 EMField::EMField() 
 {    

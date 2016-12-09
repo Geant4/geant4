@@ -31,39 +31,33 @@ class wbuf {
   //        directly.
 
   static void write_swap_2(char* a_pos,char* a_x) {
-    *a_pos++ = *(a_x+1);
-    *a_pos++ = *a_x;
+    *a_pos = *(a_x+1);a_pos++;
+    *a_pos = *a_x;a_pos++;
   }
   static void write_swap_4(char* a_pos,char* a_x) {
     a_x += 3;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;
   }
   static void write_swap_8(char* a_pos,char* a_x) {
     a_x += 7;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x--;
-    *a_pos++ = *a_x;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;a_x--;
+    *a_pos = *a_x;a_pos++;
   }
   /////////////////////////////////////////////////////////
   /// nswp ////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
-  static void write_nswp_2(char* a_pos,char* a_x) {
-    ::memcpy(a_pos,a_x,2);
-  }
-  static void write_nswp_4(char* a_pos,char* a_x) {
-    ::memcpy(a_pos,a_x,4);
-  }
-  static void write_nswp_8(char* a_pos,char* a_x) {
-    ::memcpy(a_pos,a_x,8);
-  }
+  static void write_nswp_2(char* a_pos,char* a_x) {::memcpy(a_pos,a_x,2);}
+  static void write_nswp_4(char* a_pos,char* a_x) {::memcpy(a_pos,a_x,4);}
+  static void write_nswp_8(char* a_pos,char* a_x) {::memcpy(a_pos,a_x,8);}
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////
@@ -77,8 +71,7 @@ class wbuf {
   typedef void (*w_4_func)(char*,char*);
   typedef void (*w_8_func)(char*,char*);
 public:
-  wbuf(std::ostream& a_out,bool a_byte_swap,
-       const char* a_eob,char*& a_pos)
+  wbuf(std::ostream& a_out,bool a_byte_swap,const char* a_eob,char*& a_pos)
   :m_out(a_out)
   ,m_byte_swap(a_byte_swap)
   ,m_eob(a_eob)
@@ -186,7 +179,7 @@ public:
 
   bool write(const std::string& a_x) {
     unsigned char nwh;
-    unsigned int nchars = a_x.size();
+    unsigned int nchars = (unsigned int)a_x.size();
     if(nchars>254) {
       if(!check_eob(1+4,"std::string")) return false;
       nwh = 255;
@@ -223,7 +216,7 @@ public:
   template <class T>
   bool write(const std::vector<T>& a_v) {
     if(a_v.empty()) return true;
-    uint32 n = a_v.size();
+    uint32 n = uint32(a_v.size());
     uint32 l = n * sizeof(T);
     if(!check_eob(l,"array")) return false;
     for(uint32 i=0;i<n;i++) {
@@ -237,7 +230,8 @@ protected:
   bool check_eob(){
     if((m_pos+sizeof(T))>m_eob) {
       m_out << s_class() << " : " << stype(T()) << " : "
-           << " try to access out of buffer " << long_out(sizeof(T)) << " bytes"
+//           << " try to access out of buffer " << long_out(sizeof(T)) << " bytes"
+           << " try to access out of buffer " << sizeof(T) << " bytes"
            << " (pos=" << charp_out(m_pos)
            << ", eob=" << charp_out(m_eob) << ")." << std::endl;
       return false;
@@ -247,7 +241,8 @@ protected:
   bool check_eob(size_t a_n,const char* a_cmt){
     if((m_pos+a_n)>m_eob) {
       m_out << s_class() << " : " << a_cmt << " : "
-           << " try to access out of buffer " << long_out(a_n) << " bytes"
+//           << " try to access out of buffer " << long_out(a_n) << " bytes"
+           << " try to access out of buffer " << a_n << " bytes"
            << " (pos=" << charp_out(m_pos)
            << ", eob=" << charp_out(m_eob) << ")." << std::endl;
       return false;

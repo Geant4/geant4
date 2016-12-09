@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: DetectorConstruction.hh 101245 2016-11-10 08:45:38Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -42,14 +42,14 @@
 //
 // -------------------------------------------------------------
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Material.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class CheckVolumeSD;
 class PhantomSD;
@@ -68,24 +68,16 @@ public:
 
   void SetTarget1Material(const G4String& m);
   void SetTarget2Material(const G4String& m);
-  void UpdateGeometry();
 
   inline G4double GetGeneratorPosZ() const    { return fGeneratorPosZ; };
 
-  inline void SetGap(G4double val)            { fDelta = val; 
-                                                UpdateGeometry(); };
-  inline void SetTarget1Z(G4double val)       { fTarget1Z = val; 
-                                                UpdateGeometry(); };
-  inline void SetTarget2Z(G4double val)       { fTarget2Z = val; 
-                                                UpdateGeometry(); };
-  inline void SetMylarZ(G4double val)         { fMylarVolumeZ = val; 
-                                                UpdateGeometry(); };
-  inline void SetCheckShiftZ(G4double val)    { fCheckShiftZ = val; 
-                                                UpdateGeometry(); };
-  inline void SetAbsorberZ(G4double val)      { fAbsorberZ = val; 
-                                                UpdateGeometry(); };
-  inline void SetAbsorberShiftZ(G4double val) { fAbsorberShiftZ = val; 
-                                                UpdateGeometry(); };
+  inline void SetGap(G4double val)            { fDelta = val; };
+  inline void SetTarget1Z(G4double val)       { fTarget1Z = val; };
+  inline void SetTarget2Z(G4double val)       { fTarget2Z = val; };
+  inline void SetMylarZ(G4double val)         { fMylarVolumeZ = val; }
+  inline void SetCheckShiftZ(G4double val)    { fCheckShiftZ = val; }
+  inline void SetAbsorberZ(G4double val)      { fAbsorberZ = val; }
+  inline void SetAbsorberShiftZ(G4double val) { fAbsorberShiftZ = val; }
 
 private:  
 
@@ -130,6 +122,6 @@ private:
   DetectorMessenger* fMessenger;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

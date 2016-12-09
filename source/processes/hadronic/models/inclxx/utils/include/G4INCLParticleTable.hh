@@ -69,6 +69,10 @@ namespace G4INCL {
     const G4double effectiveDeltaMass = 1232.0;
     const G4double effectiveDeltaWidth = 130.0;
     const G4double effectivePionMass = 138.0;
+    const G4double effectiveEtaMass = 547.862;
+    const G4double effectiveOmegaMass = 782.65;
+    const G4double effectiveEtaPrimeMass = 957.78;
+    const G4double effectivePhotonMass = 0.0;
     extern G4ThreadLocal G4double minDeltaMass;
     extern G4ThreadLocal G4double minDeltaMass2;
     extern G4ThreadLocal G4double minDeltaMassRndm;
@@ -266,6 +270,8 @@ namespace G4INCL {
     /// \brief Get the type of delta
     ParticleType getDeltaType(const G4int isosp);
 
+	/// \brief Get particle width (in s)
+	G4double getWidth(const ParticleType t);
   }
 }
 

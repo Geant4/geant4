@@ -534,7 +534,7 @@ G4double G4H3ToolsManager::GetH3Xmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Xmin");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMin(*h3d, kX);
 }  
@@ -543,7 +543,7 @@ G4double G4H3ToolsManager::GetH3Xmin(G4int id) const
 G4double G4H3ToolsManager::GetH3Xmax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Xmax");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMax(*h3d, kX);
 }  
@@ -552,7 +552,7 @@ G4double G4H3ToolsManager::GetH3Xmax(G4int id) const
 G4double G4H3ToolsManager::GetH3XWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3XWidth", true, false);
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetWidth(*h3d, kX, fHnManager->GetHnType());
 }  
@@ -572,7 +572,7 @@ G4double G4H3ToolsManager::GetH3Ymin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Ymin");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMin(*h3d, kY);
 }  
@@ -581,7 +581,7 @@ G4double G4H3ToolsManager::GetH3Ymin(G4int id) const
 G4double G4H3ToolsManager::GetH3Ymax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Ymax");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMax(*h3d, kY);
 }  
@@ -590,7 +590,7 @@ G4double G4H3ToolsManager::GetH3Ymax(G4int id) const
 G4double G4H3ToolsManager::GetH3YWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3YWidth", true, false);
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetWidth(*h3d, kY, fHnManager->GetHnType());
 }  
@@ -610,7 +610,7 @@ G4double G4H3ToolsManager::GetH3Zmin(G4int id) const
 // Returns xmin value with applied unit and histogram function
 
   auto h3d = GetTInFunction(id, "GetH3Zmin");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMin(*h3d, kZ);
 }  
@@ -619,7 +619,7 @@ G4double G4H3ToolsManager::GetH3Zmin(G4int id) const
 G4double G4H3ToolsManager::GetH3Zmax(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3Zmax");
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetMax(*h3d, kZ);
 }  
@@ -628,7 +628,7 @@ G4double G4H3ToolsManager::GetH3Zmax(G4int id) const
 G4double G4H3ToolsManager::GetH3ZWidth(G4int id) const
 {
   auto h3d = GetTInFunction(id, "GetH3ZWidth", true, false);
-  if ( ! h3d ) return 0;
+  if ( ! h3d ) return 0.;
   
   return GetWidth(*h3d, kZ, fHnManager->GetHnType());
 }  

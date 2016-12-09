@@ -1,4 +1,4 @@
-$Id: History 97069 2016-05-24 08:47:21Z gcosmo $
+$Id: History 101819 2016-12-01 08:13:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,71 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30-November-2016  E.Tcherniaev    (geom-specific-V10-02-25)
+- Call RemoveRedundantVertices() from G4GeomTools in CalculateExtent()
+  for G4Polycone, G4Polyhedra and related USolids wrappers.
+- Fix in G4Parabolid and G4UParaboloid for correct computation of extent.
+
+18-November-2016  E.Tcherniaev    (geom-specific-V10-02-24)
+- Added consistency checks for extent computation in USolids wrappers.
+- Fix in cached parameters in G4UPolyhedra.
+
+10-November-2016  G.Cosmo         (geom-specific-V10-02-23)
+- G4UPolyhedra re-introduced new implementation of CalculateExtent() using
+  G4BoundingEnvelope and extended wrapper to cache corners and start/end
+  Phi parameters, to overcome issues in VecGeom on treatment of angles.
+
+10-November-2016  E.Tcherniaev    (geom-specific-V10-02-22)
+- Added caching of corners and implementation of GetCorner() in G4UPolycone
+  in order to assure correct translation.
+- Withdrawn changes in G4UPolyhedra introduced in tag geom-specific-V10-02-16
+  until understood proper conversion from VecGeom.
+
+7-November-2016  E.Tcherniaev    (geom-specific-V10-02-21)
+- Correction in G4EllipticalCone::DistanceToOut(p) to make it more accurate.
+- Added optional debug flag G4BBOX_EXTENT in GNUMake build to compare
+  extent calculation by simply using bounding-box.
+
+3-November-2016  G.Cosmo         (geom-specific-V10-02-20, 19)
+- Fix in G4PolyPhiFace for potential unitialised data in Inside().
+
+31-October-2016  E.Tcherniaev    (geom-specific-V10-02-18)
+- Re-implemented CalculateExtent() to make use of G4BoundingEnvelope and
+  removed no-longer used method CreateRotatedVertices() in G4Polyhedra,
+  G4EllipticalCone, G4Polycone, G4Paraboloid, G4ExtrudedSolid, G4Hype,
+  G4GenericPolycone, G4TessellatedSolid, G4TwistedTubs and related USolids
+  wrappers.
+- Use G4RandFlat instead of RandFlat.
+
+21-October-2016  G.Cosmo         (geom-specific-V10-02-17)
+- Moved initialisation of G4GeomSplitter thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+19-October-2016  E.Tcherniaev      (geom-specific-V10-02-16)
+- Reimplemented CalculateExtent() in G4Polycone, G4Polyhedra, G4GenericPolycone
+  and associated USolids wrappers, to make use of G4BoundingEnvelope.
+
+5-October-2016  E.Tcherniaev       (geom-specific-V10-02-15, 14)
+- Reimplemented CalculateExtent() in G4Tet, G4UTet, G4GenericTrap,
+  G4UGenericTrap, G4EllipticalTube and G4VTwistedFaceted, to make use
+  of G4BoundingEnvelope; removed no-longer used method CreateRotatedVertices().
+
+20-September-2016  G.Cosmo         (geom-specific-V10-02-13)
+- Moved accessors/modifiers for splitter data to non-inline in
+  G4PolyhedraSide and G4PolyconeSide.
+  Explicitly initialise G4GeomSplitter data in G4SolidsWorkspace
+  translation unit.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+06-July-2016  E.Tcherniaev         (geom-specific-V10-02-12)
+- Fixed monir typo in function Create() for G4Polycone, G4Polyhedra and
+  G4GenericPolycone.
+  Fixed minor typos in G4GenericTrap::SurfaceNormal() and
+  G4VTwistSurface::CurrentStatus::ResetfDone().
+  Issues detected by PVS-Studio static code analyzer.
+  Addressing problem report #1876.
 
 24-May-2016  G.Cosmo               (geom-specific-V10-02-11)
 - Correction in G4UExtrudedSolid for definition of CreatePolyhedron().

@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/shared/include/EventAction.hh
+/// \file EventAction.hh
 /// \brief Definition of the EventAction class
 //
 //
-// $Id: EventAction.hh 67226 2013-02-08 12:07:18Z ihrivnac $
+// $Id: EventAction.hh 98243 2016-07-04 16:58:38Z gcosmo $
 //
 // 
 

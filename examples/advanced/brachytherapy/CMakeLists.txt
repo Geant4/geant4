@@ -59,9 +59,10 @@ target_link_libraries(Brachy ${Geant4_LIBRARIES})
 #
 
 set(brachy_SCRIPTS
-   IridiumSourceMacro.mac IodiumSourceMacro.mac  LeipzigSourceMacro.mac VisualisationMacro.mac
+   IodineSourceMacro.mac  LeipzigSourceMacro.mac VisualisationMacro.mac
    macro.C iridium_source_primary.mac iodine_source_primary.mac iridium_source_leipzig_primary.mac
-   plot_primary.C  iridium_decay.mac iodine_decay.mac 
+   plot_primary.C  iodine_decay.mac FlexiSourceMacro.mac 
+   TG43_relative_dose.C TG186SourceMacro.mac TG186_iridium_decay.mac
   )
 
 foreach(_script ${brachy_SCRIPTS})

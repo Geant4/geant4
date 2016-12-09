@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/dna/w/include/Run.hh
+/// \file medical/dna/wvalue/include/Run.hh
 /// \brief Definition of the Run class
 //
 // $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $

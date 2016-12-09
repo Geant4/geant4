@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B1RunAction.hh 93886 2015-11-03 08:28:26Z gcosmo $
+// $Id: B1RunAction.hh 99560 2016-09-27 07:03:29Z gcosmo $
 //
 /// \file B1RunAction.hh
 /// \brief Definition of the B1RunAction class
@@ -32,7 +32,7 @@
 #define B1RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "G4Parameter.hh"
+#include "G4Accumulable.hh"
 #include "globals.hh"
 
 class G4Run;
@@ -56,8 +56,8 @@ class B1RunAction : public G4UserRunAction
     void AddEdep (G4double edep); 
 
   private:
-    G4Parameter<G4double> fEdep;
-    G4Parameter<G4double> fEdep2;
+    G4Accumulable<G4double> fEdep;
+    G4Accumulable<G4double> fEdep2;
 };
 
 #endif

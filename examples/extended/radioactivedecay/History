@@ -1,4 +1,4 @@
-$Id: History 68030 2013-03-13 13:51:27Z gcosmo $
+$Id: History 98257 2016-07-04 17:39:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 04, 2016      I. Hrivnacova - exRadioactivedecay-V10-02-00
+- Fixes for Doxygen documentation
 
 February 19, 2012  I. Hrivnacova - exRadioactivedecay-V09-06-00
 - Applied coding guidelines (data members names and initialization)

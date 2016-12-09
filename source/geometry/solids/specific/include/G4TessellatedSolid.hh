@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 95801 2016-02-25 10:59:41Z gcosmo $
+// $Id: G4TessellatedSolid.hh 100819 2016-11-02 15:17:36Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -187,16 +187,14 @@ class G4TessellatedSolid : public G4VSolid
                                    const G4AffineTransform& pTransform,
                                          G4double& pMin, G4double& pMax) const;
 
+    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+
     G4double      GetMinXExtent () const;
     G4double      GetMaxXExtent () const;
     G4double      GetMinYExtent () const;
     G4double      GetMaxYExtent () const;
     G4double      GetMinZExtent () const;
     G4double      GetMaxZExtent () const;
-
-    G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT) const;
-      // Create the List of transformed vertices in the format required
-      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
     virtual G4Polyhedron* CreatePolyhedron () const;
     virtual G4Polyhedron* GetPolyhedron    () const;

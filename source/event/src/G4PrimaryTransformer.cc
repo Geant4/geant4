@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc 94950 2016-01-07 11:53:14Z gcosmo $
+// $Id: G4PrimaryTransformer.cc 101916 2016-12-08 08:04:03Z gcosmo $
 //
 
 #include "G4PrimaryTransformer.hh"
@@ -280,6 +280,7 @@ void G4PrimaryTransformer::SetDecayProducts
       G4double pmas = daughter->GetMass();
       if(pmas>=0.)
       { DP->SetMass(pmas); }
+      DP->SetPolarization(daughter->GetPolX(),daughter->GetPolY(),daughter->GetPolZ());
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
       // Check the particle is properly constructed

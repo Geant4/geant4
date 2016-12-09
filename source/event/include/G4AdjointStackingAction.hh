@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointStackingAction.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AdjointStackingAction.hh 98744 2016-08-09 13:21:26Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointStackingAction
@@ -61,11 +61,12 @@
 
 class G4Track;
 class G4ParticleDefinition;
+class G4AdjointTrackingAction;
 
 class G4AdjointStackingAction : public G4UserStackingAction
 {
   public:
-    G4AdjointStackingAction();
+    G4AdjointStackingAction(G4AdjointTrackingAction* anAction);
     virtual ~G4AdjointStackingAction();
 
   public:
@@ -74,14 +75,16 @@ class G4AdjointStackingAction : public G4UserStackingAction
     virtual void PrepareNewEvent();
     inline void SetUserFwdStackingAction(G4UserStackingAction* anAction){theFwdStackingAction = anAction;}
     inline void SetUserAdjointStackingAction(G4UserStackingAction* anAction){theUserAdjointStackingAction = anAction;}
-    
     inline void SetKillTracks(G4bool aBool){kill_tracks =aBool;}
     inline void SetAdjointMode(G4bool aBool){adjoint_mode=aBool;}
+
+
   
   private:
     G4UserStackingAction* theFwdStackingAction;
     G4UserStackingAction* theUserAdjointStackingAction;
-    G4bool kill_tracks, adjoint_mode;
+    G4bool reclassification_stage,first_reclassification_stage,kill_tracks,adjoint_mode;
+    G4AdjointTrackingAction* theAdjointTrackingAction;
 };
 
 #endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05SteppingVerbose.hh 66521 2012-12-19 12:22:01Z ihrivnac $
+// $Id: RE05SteppingVerbose.hh 98775 2016-08-09 14:30:39Z gcosmo $
 //
 /// \file RE05/include/RE05SteppingVerbose.hh
 /// \brief Definition of the RE05SteppingVerbose class
@@ -54,7 +54,6 @@ class RE05SteppingVerbose : public G4SteppingVerbose
 
   void StepInfo();
   void TrackingStarted();
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

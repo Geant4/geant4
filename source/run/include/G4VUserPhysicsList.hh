@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh 73123 2013-08-19 07:52:00Z gcosmo $
+// $Id: G4VUserPhysicsList.hh 101155 2016-11-08 08:21:41Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -150,11 +150,7 @@ typedef G4VUPLManager G4VUserPhysicsListSubInstanceManager;
 //        we need to change its use in all classes that inherits from
 //        this base class (all examples). However one should note comment
 //        on JIRA task: http://jira-geant4.kek.jp/browse/DEV-27
-#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
-#define G4MT_theMessenger ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theMessenger)
-#define G4MT_thePLHelper ((this->subInstanceManager.offset[this->g4vuplInstanceID])._thePLHelper)
-#define fIsPhysicsTableBuilt ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fIsPhysicsTableBuilt)
-#define fDisplayThreshold ((this->subInstanceManager.offset[this->g4vuplInstanceID])._fDisplayThreshold)
+//#define theParticleIterator ((this->subInstanceManager.offset[this->g4vuplInstanceID])._theParticleIterator)
 
 class G4VUserPhysicsList
 {
@@ -190,6 +186,7 @@ class G4VUserPhysicsList
    //  'true' is returned if the process is registerd successfully
    G4bool RegisterProcess(G4VProcess*            process,
 			  G4ParticleDefinition*  particle);
+
 
   public:
    void UseCoupledTransportation(G4bool vl=true);
@@ -394,6 +391,7 @@ class G4VUserPhysicsList
   protected:
     G4int g4vuplInstanceID;
     G4RUN_DLL static G4VUPLManager subInstanceManager;
+    G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
   public:
     inline G4int GetInstanceID() const;
     static const G4VUPLManager& GetSubInstanceManager();

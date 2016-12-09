@@ -26,15 +26,24 @@
 ##########################
 # Visualisation
 #
+/vis/open OGL 600x600-0+0
 
-/vis/scene/create
-/vis/open OGLI
-/vis/viewer/flush
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+/vis/verbose errors
+
+/vis/drawVolume
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/viewer/zoom 1
 /vis/viewer/pan -10  0 cm
-/vis/scene/add/trajectories
+/vis/scene/add/trajectories smooth
+
 /vis/scene/endOfEventAction accumulate
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
+
 
 ####################################################
 # Set here the CUT and the STEP MAX for the tracking. 
@@ -54,7 +63,6 @@
 # Set the primary particle type,
 # energy and position along the X direction
 #
-
 
 #---------------------------gps-----------------
 /gps/pos/shape Circle
@@ -80,7 +88,7 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 62 MeV
+/gps/ene/mono 63.5 MeV
 /gps/ene/sigma 0.3 MeV
 
 
@@ -101,7 +109,7 @@
 ###################################################
 #
 /changeDetector/size 4 4 4 cm
-/changeDetector/voxelSize .4 40 40 mm
+/changeDetector/voxelSize .1 40 40 mm
 
 # Put the detector in the lower left corner of the phantom
 #
@@ -124,7 +132,9 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 10
+/run/printProgress 10
+
+/run/beamOn 1
 
 /control/shell mkdir -p SimulationOutputs/proton/BraggPeak
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root

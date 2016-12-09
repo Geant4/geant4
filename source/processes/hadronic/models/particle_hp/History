@@ -14,6 +14,95 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 November 2016 Tatsumi Koi (hadr-hpp-V10-02-33)
+---------------------------------------------------
+-Fix run-time memory errors reported by valgrind on top of hadr-hpp-V10-02-31
+
+
+9 November 2016 Tatsumi Koi (hadr-hpp-V10-02-32)
+---------------------------------------------------
+-Change default behavior to DO_NOT_SET_PHP_AS_HP
+-You can specify old behavior by setting environment variable of PHP_AS_HP
+
+
+9 November 2016 Tatsumi Koi (hadr-hpp-V10-02-31)
+---------------------------------------------------
+-Fix entering infinite loop in "DO_NOT_SET_PHP_AS_HP" environment
+-Fix problem on divide by zero error in G4ParticleHPVector::ThinOut, which happens in "Release + G4FPE_DEBUG"
+
+
+4 November 2016 Tatsumi Koi (hadr-hpp-V10-02-30)
+---------------------------------------------------
+-Fix problem of uninitilaization of cache in "G4ParticleHPContAngularPar",  which happens in "DO_NOT_SET_PHP_AS_HP" enviroment 
+-Fix problem of divide by zero error in "G4ParticleHPContAngularPar::BuildByInterpolation", which happens in "DO_NOT_SET_PHP_AS_HP" enviroment 
+-Fix wrong residual in case of He3 projectile Bugzilla #1906
+
+
+4 November 2016 Pedro Arce (hadr-hpp-V10-02-29)
+---------------------------------------------------
+Add protection with G4PHP_DO_NOT_ADJUST_FINAL_STATE to G4ParticleHPInelasticBaseFS.cc
+
+
+31 October 2016 Tatsumi Koi (hadr-hpp-V10-02-28)
+---------------------------------------------------
+-Re-introduce cache of cross section in GetIsoCrossSection
+ Since current CrossSectionDataStore does not call elementwise cross sections
+and GetIsoCrossSection is called multiple time in calculation of element which is made from more than one isotope
+
+
+21 October 2016 Tatsumi Koi (hadr-hpp-V10-02-27)
+---------------------------------------------------
+- Introduce an environment variable of G4PARTICLEHPDATA as default base name of data directories of ParticleHP
+
+
+30 September 2016 Tatsumi Koi (hadr-hpp-V10-02-26)
+---------------------------------------------------
+- Fix coverity issues 58738 58739 58743 and 62507
+
+
+29 September 2016 Tatsumi Koi (hadr-hpp-V10-02-25)
+---------------------------------------------------
+- Fix coverity issues 58734 58735 and 58745
+
+
+28 September 2016 Tatsumi Koi (hadr-hpp-V10-02-24)
+---------------------------------------------------
+- Fix warning messages from clang 3.8
+
+
+12 August 2016 Alberto Ribon (hadr-hpp-V10-02-23)
+---------------------------------------------------
+- G4ParticleHPPhotonDist : added missing protection against null pointer;
+- G4ParticleHPLabAngularEnergy : removed redundant if-statement;
+- G4ParticleHPThermalScattering : added missing  throw  statements;
+(fixes suggested by the PVS-Studio static code analyzer: see bug #1876)
+
+
+29 July 2016 Tatsumi Koi (hadr-hpp-V10-02-22)
+---------------------------------------------------
+- Fix coverity issues 58719, 58724, 58725, 58726, 58729, 58730, 58731 and 58733
+
+
+20 July 2016 Tatsumi Koi (hadr-hpp-V10-02-21)
+---------------------------------------------------
+- Fix coverity issues 58715, 58717, 58718 and 58728
+
+
+19 July 2016 Tatsumi Koi (hadr-hpp-V10-02-20)
+---------------------------------------------------
+- Fix coverity issues 58708, 58712, 58713, 58714 and 58716
+
+
+13 July 2016 Tatsumi Koi (hadr-hpp-V10-02-19)
+---------------------------------------------------
+- Fix coverity issues 58706 and 58707
+
+
+12 July 2016 Tatsumi Koi (hadr-hpp-V10-02-18)
+---------------------------------------------------
+- Fix coverity issues 58698 and 58705
+
+
 8 June 2016 Tatsumi Koi (hadr-hpp-V10-02-17)
 ---------------------------------------------------
 - Change default option of GNUmake system "G4PHPDEBUG" was unintentionally activated.

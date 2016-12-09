@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 91972 2015-08-12 13:48:40Z gcosmo $
+// $Id: DetectorConstruction.cc 98752 2016-08-09 13:44:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,6 @@
 
 #include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 96744 2016-05-03 08:04:28Z gcosmo $
+// $Id: G4PhotonEvaporation.hh 101756 2016-11-24 14:27:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,14 +77,8 @@ public:
   virtual G4bool 
   BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus) final;
 
-  // emitted gamma and e- are added to the results
-  virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus) final;
-
   // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus) final;
-
-  // emitted gamma, e-, and residual fragment are added to the results
-  virtual G4FragmentVector* BreakItUp(const G4Fragment& theNucleus) final;
+  G4FragmentVector* BreakItUp(const G4Fragment& theNucleus);
 
   // compute emission probability for both continum and discrete cases
   // must be called before any method above
@@ -161,10 +155,7 @@ G4PhotonEvaporation::InitialiseLevelManager(G4int Z, G4int A)
     theA = A;
     fIndex = 0;
     fLevelManager = fNuclearLevelData->GetLevelManager(theZ, theA);
-    fLevelEnergyMax = 0.0;
-    if(fLevelManager) { 
-      fLevelEnergyMax = (G4double)fLevelManager->MaxLevelEnergy();
-    }
+    fLevelEnergyMax = fLevelManager ? fLevelManager->MaxLevelEnergy() : 0.0f;
   }
 }
 

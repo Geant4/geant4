@@ -41,6 +41,12 @@ G4StatDouble::G4StatDouble()
   reset();
 }
 
+G4StatDouble::G4StatDouble(G4double x)
+{
+  reset();
+  fill(x);
+}
+
 void G4StatDouble::reset()
 {
   m_sum_wx  = 0.;
@@ -118,10 +124,10 @@ G4double G4StatDouble::rms(G4double ssum_wx, G4double ssum_wx2,
       // and dividing it by sqrt[n] to go from rms of distribution to the
       // rms of the mean value
 
-      (1. / (xn - 1))
+      (xn / (xn - 1))
       * ((ssum_wx2 / ssum_w) - (vmean * vmean));
 
-    if (tmp < 0.) tmp=0.; // this avoids observed computation problem
+    tmp = std::max(tmp, 0.0); // this avoids observed computation problem
     vrms = std::sqrt( tmp );
 //  G4cout << "[G4StatDoubleElement::rms] m_sum_wx: " << m_sum_wx
 //         << "  m_sum_wx2: " << m_sum_wx2 << "  m_sum_w: " << m_sum_w

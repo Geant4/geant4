@@ -1,4 +1,4 @@
-$Id: History 94396 2015-11-13 13:37:16Z gcosmo $
+$Id: History 100268 2016-10-17 08:18:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Oct-2016 G.Folger (exgflash-V10-02-01)
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
+
+04-Jul-2016, Ivana Hrivnacova (exgflash-V10-02-00)
+- Fixes for Doxygen documentation
 
 13-Nov-2015, Ivana Hrivnacova (exgflash-V10-01-01)
 - ExGflashPhysicsList replaced with ExGflashPhysics builder

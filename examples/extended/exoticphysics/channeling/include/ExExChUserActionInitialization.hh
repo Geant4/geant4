@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file channeling/include/ExExChUserActionInitialization.hh
+/// \brief Definition of the ExExChUserActionInitialization class
+//
 //
 
 #ifdef G4MULTITHREADED

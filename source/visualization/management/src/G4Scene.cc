@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc 86360 2014-11-10 08:34:16Z gcosmo $
+// $Id: G4Scene.cc 99418 2016-09-21 09:18:42Z gcosmo $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -170,7 +170,7 @@ G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {
 	    "\n  For a better view of the contents, mark the world as"
 	    " invisible, e.g.,"
 	    "\n  myWorldLogicalVol ->"
-	    " SetVisAttributes (G4VisAttributes::Invisible);"
+		" SetVisAttributes (G4VisAttributes::GetInvisible());"
 		 << G4endl;
 	}
       }

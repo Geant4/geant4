@@ -158,7 +158,13 @@ namespace G4INCL {
      * \return true if any delta was forced to decay.
      */
     G4bool decayInsideDeltas();
-
+	  
+	  /** \brief Force the decay of outgoing PionResonances (eta/omega).
+	   *
+	   * \return true if any eta was forced to decay.
+	   */
+	G4bool decayOutgoingPionResonances(G4double timeThreshold);
+	  	  
     /** \brief Force the decay of unstable outgoing clusters.
      *
      * \return true if any cluster was forced to decay.
@@ -234,7 +240,23 @@ namespace G4INCL {
         if((*i)->isDelta()) return true;
       return false;
     }
-
+	  
+	  ///\brief Returns true if the nucleus contains any etas.
+	  inline G4bool containsEtas() {
+		  ParticleList const &inside = theStore->getParticles();
+		  for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+			  if((*i)->isEta()) return true;
+		  return false;
+	  }
+	  
+	  ///\brief Returns true if the nucleus contains any omegas.
+	  inline G4bool containsOmegas() {
+		  ParticleList const &inside = theStore->getParticles();
+		  for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+			  if((*i)->isOmega()) return true;
+		  return false;
+	  }
+	  
     /**
      * Print the nucleus info
      */
@@ -296,7 +318,8 @@ namespace G4INCL {
      * \return surface radius
      */
     G4double getSurfaceRadius(Particle const * const particle) const {
-      if(particle->isPion())
+//      if(particle->isPion())
+      if(particle->isPion() || particle->isEta() || particle->isOmega() || particle->isEtaPrime())
         // Temporarily set RPION = RMAX
         return getUniverseRadius();
         //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
@@ -416,7 +439,7 @@ namespace G4INCL {
     /// \brief Pointer to the NuclearPotential object
     NuclearPotential::INuclearPotential const *thePotential;
 
-    INCL_DECLARE_ALLOCATION_POOL(Nucleus);
+    INCL_DECLARE_ALLOCATION_POOL(Nucleus)
   };
 
 }

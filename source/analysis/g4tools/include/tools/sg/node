@@ -154,7 +154,8 @@ protected:
                        << " : field not found."
                        << "."
                        << std::endl;
-/*
+//#define TOOLS_NODE_DEBUG_READ_FIELD
+#ifdef TOOLS_NODE_DEBUG_READ_FIELD
         check_fields(a_action.out()); //costly.
         dump_field_descs(a_action.out());
        {a_action.out() << "read field descs of node class " << s_cls() << " :" << std::endl;
@@ -171,7 +172,7 @@ protected:
                 << std::endl;
         }}
         ::exit(0);
-*/
+#endif
         fd = a_action.field_factory().create(fdesc.cls());
         if(!fd) {
           a_action.out() << "tools::node::read_fields :"

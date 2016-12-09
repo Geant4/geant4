@@ -10,6 +10,16 @@ Authors: Y. Perrot (a), H. Payno (b)
 
 Laboratoire de Physique Corpusculaire de Clermont-Ferrand, CNRS/IN2P3 - Clermont University, France
 
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
 ---> 1. Introduction
 
 The clustering example simulates protons tracks in liquid water using Geant4-DNA processes and models.

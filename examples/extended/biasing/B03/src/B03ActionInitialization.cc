@@ -36,7 +36,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 B03ActionInitialization::B03ActionInitialization()
 {;} 
 

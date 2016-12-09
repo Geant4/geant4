@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file GB01/src/GB01BOptrChangeCrossSection.cc
+/// \brief Implementation of the GB01BOptrChangeCrossSection class
+//
 #include "GB01BOptrChangeCrossSection.hh"
 #include "G4BiasingProcessInterface.hh"
 #include "G4BOptnChangeCrossSection.hh"
@@ -34,6 +37,8 @@
 #include "Randomize.hh"
 
 #include "G4InteractionLawPhysical.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
                                                          G4String         name)
@@ -53,6 +58,8 @@ GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 GB01BOptrChangeCrossSection::~GB01BOptrChangeCrossSection()
 {
   for ( std::map< const G4BiasingProcessInterface*, G4BOptnChangeCrossSection* >::iterator 
@@ -61,6 +68,7 @@ GB01BOptrChangeCrossSection::~GB01BOptrChangeCrossSection()
         it++ ) delete (*it).second;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB01BOptrChangeCrossSection::StartRun()
 {
@@ -91,6 +99,7 @@ void GB01BOptrChangeCrossSection::StartRun()
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VBiasingOperation* 
 GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*            track, 
@@ -178,6 +187,7 @@ GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*    
   
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB01BOptrChangeCrossSection::
 OperationApplied(const G4BiasingProcessInterface*           callingProcess, 
@@ -191,3 +201,4 @@ OperationApplied(const G4BiasingProcessInterface*           callingProcess,
   if ( operation ==  occurenceOperationApplied ) operation->SetInteractionOccured();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

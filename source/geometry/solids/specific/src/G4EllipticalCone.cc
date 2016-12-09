@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4EllipticalCone.cc 101118 2016-11-07 09:10:59Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -42,9 +42,9 @@
 #include "G4EllipticalCone.hh"
 
 #include "G4ClippablePolygon.hh"
-#include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
+#include "G4BoundingEnvelope.hh"
 #include "G4GeometryTolerance.hh"
 
 #include "meshdefs.hh"
@@ -168,120 +168,91 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
 
 ///////////////////////////////////////////////////////////////////////////////
 //
+// Get bounding box
+
+void G4EllipticalCone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+{
+  G4double zcut   = GetZTopCut();
+  G4double height = GetZMax(); 
+  G4double xmax   = GetSemiAxisX()*(height+zcut);
+  G4double ymax   = GetSemiAxisY()*(height+zcut);
+  pMin.set(-xmax,-ymax,-zcut);
+  pMax.set( xmax, ymax, zcut);
+
+  // Check correctness of the bounding box
+  //
+  if (pMin.x() >= pMax.x() || pMin.y() >= pMax.y() || pMin.z() >= pMax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " !"
+            << "\npMin = " << pMin
+            << "\npMax = " << pMax;
+    G4Exception("G4EllipticalCone::Extent()", "GeomMgt0001",
+                JustWarning, message);
+    DumpInfo();
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // Calculate extent under transform and specified limit
 //
 G4bool
-G4EllipticalCone::CalculateExtent( const EAxis axis,
-                                   const G4VoxelLimits &voxelLimit,
-                                   const G4AffineTransform &transform,
-                                         G4double &min, G4double &max ) const
+G4EllipticalCone::CalculateExtent(const EAxis pAxis,
+                                  const G4VoxelLimits& pVoxelLimit,
+                                  const G4AffineTransform& pTransform,
+                                        G4double& pMin, G4double& pMax) const
 {
-  G4SolidExtentList  extentList( axis, voxelLimit );
-  
-  //
-  // We are going to divide up our elliptical face into small pieces
-  //
-  
-  //
-  // Choose phi size of our segment(s) based on constants as
-  // defined in meshdefs.hh
-  //
-  G4int numPhi = kMaxMeshSections;
-  G4double sigPhi = twopi/numPhi;
-  
-  //
-  // We have to be careful to keep our segments completely outside
-  // of the elliptical surface. To do so we imagine we have
-  // a simple (unit radius) circular cross section (as in G4Tubs) 
-  // and then "stretch" the dimensions as necessary to fit the ellipse.
-  //
-  G4double rFudge = 1.0/std::cos(0.5*sigPhi);
-  G4double dxFudgeBot = xSemiAxis*2.*zheight*rFudge,
-           dyFudgeBot = ySemiAxis*2.*zheight*rFudge;
-  G4double dxFudgeTop = xSemiAxis*(zheight-zTopCut)*rFudge,
-           dyFudgeTop = ySemiAxis*(zheight-zTopCut)*rFudge;
-  
-  //
-  // As we work around the elliptical surface, we build
-  // a "phi" segment on the way, and keep track of two
-  // additional polygons for the two ends.
-  //
-  G4ClippablePolygon endPoly1, endPoly2, phiPoly;
-  
-  G4double phi = 0, 
-           cosPhi = std::cos(phi),
-           sinPhi = std::sin(phi);
-  G4ThreeVector v0( dxFudgeTop*cosPhi, dyFudgeTop*sinPhi, +zTopCut ),
-                v1( dxFudgeBot*cosPhi, dyFudgeBot*sinPhi, -zTopCut ),
-                w0, w1;
-  transform.ApplyPointTransform( v0 );
-  transform.ApplyPointTransform( v1 );
-  do    // Loop checking, 13.08.2015, G.Cosmo
-  {
-    phi += sigPhi;
-    if (numPhi == 1) phi = 0;  // Try to avoid roundoff
-    cosPhi = std::cos(phi), 
-    sinPhi = std::sin(phi);
-    
-    w0 = G4ThreeVector( dxFudgeTop*cosPhi, dyFudgeTop*sinPhi, +zTopCut );
-    w1 = G4ThreeVector( dxFudgeBot*cosPhi, dyFudgeBot*sinPhi, -zTopCut );
-    transform.ApplyPointTransform( w0 );
-    transform.ApplyPointTransform( w1 );
-    
-    //
-    // Add a point to our z ends
-    //
-    endPoly1.AddVertexInOrder( v0 );
-    endPoly2.AddVertexInOrder( v1 );
-    
-    //
-    // Build phi polygon
-    //
-    phiPoly.ClearAllVertices();
-    
-    phiPoly.AddVertexInOrder( v0 );
-    phiPoly.AddVertexInOrder( v1 );
-    phiPoly.AddVertexInOrder( w1 );
-    phiPoly.AddVertexInOrder( w0 );
-    
-    if (phiPoly.PartialClip( voxelLimit, axis ))
-    {
-      //
-      // Get unit normal
-      //
-      phiPoly.SetNormal( (v1-v0).cross(w0-v0).unit() );
-      
-      extentList.AddSurface( phiPoly );
-    }
+  G4ThreeVector bmin,bmax;
+  G4bool exist;
 
-    //
-    // Next vertex
-    //    
-    v0 = w0;
-    v1 = w1;
-  } while( --numPhi > 0 );
+  // Check bounding box (bbox)
+  //
+  Extent(bmin,bmax);
+  G4BoundingEnvelope bbox(bmin,bmax);
+#ifdef G4BBOX_EXTENT
+  if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+#endif
+  if (bbox.BoundingBoxVsVoxelLimits(pAxis,pVoxelLimit,pTransform,pMin,pMax))
+  {
+    return exist = (pMin < pMax) ? true : false;
+  }
 
+  // Set bounding envelope (benv) and calculate extent
   //
-  // Process the end pieces
-  //
-  if (endPoly1.PartialClip( voxelLimit, axis ))
+  static const G4int NSTEPS = 48; // number of steps for whole circle
+  static const G4double ang = twopi/NSTEPS;
+  static const G4double sinHalf = std::sin(0.5*ang);
+  static const G4double cosHalf = std::cos(0.5*ang);
+  static const G4double sinStep = 2.*sinHalf*cosHalf;
+  static const G4double cosStep = 1. - 2.*sinHalf*sinHalf;
+  G4double zcut   = bmax.z();
+  G4double height = GetZMax(); 
+  G4double sxmin  = GetSemiAxisX()*(height-zcut)/cosHalf;
+  G4double symin  = GetSemiAxisY()*(height-zcut)/cosHalf;
+  G4double sxmax  = bmax.x()/cosHalf;
+  G4double symax  = bmax.y()/cosHalf;
+
+  G4double sinCur = sinHalf;
+  G4double cosCur = cosHalf;
+  G4ThreeVectorList baseA(NSTEPS),baseB(NSTEPS);
+  for (G4int k=0; k<NSTEPS; ++k)
   {
-    static const G4ThreeVector normal(0,0,+1);
-    endPoly1.SetNormal( transform.TransformAxis(normal) );
-    extentList.AddSurface( endPoly1 );
+    baseA[k].set(sxmax*cosCur,symax*sinCur,-zcut);
+    baseB[k].set(sxmin*cosCur,symin*sinCur, zcut);
+    
+    G4double sinTmp = sinCur;
+    sinCur = sinCur*cosStep + cosCur*sinStep;
+    cosCur = cosCur*cosStep - sinTmp*sinStep;
   }
-  
-  if (endPoly2.PartialClip( voxelLimit, axis ))
-  {
-    static const G4ThreeVector normal(0,0,-1);
-    endPoly2.SetNormal( transform.TransformAxis(normal) );
-    extentList.AddSurface( endPoly2 );
-  }
-  
-  //
-  // Return min/max value
-  //
-  return extentList.GetExtent( min, max );
+
+  std::vector<const G4ThreeVectorList *> polygons(2);
+  polygons[0] = &baseA;
+  polygons[1] = &baseB;
+  G4BoundingEnvelope benv(bmin,bmax,polygons);
+  exist = benv.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
+  return exist;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -907,9 +878,6 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p,
 //
 G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
 {
-  G4double rds,roo,roo1, distR, distZ, distMin=0.;
-  G4double minAxis = xSemiAxis < ySemiAxis ? xSemiAxis : ySemiAxis;
-
 #ifdef G4SPECSDEBUG
   if( Inside(p) == kOutside )
   {
@@ -926,29 +894,31 @@ G4double G4EllipticalCone::DistanceToOut(const G4ThreeVector& p) const
                  JustWarning, message);
   }
 #endif
-    
-  // since we have made the above warning, below we are working assuming p
-  // is inside check how close it is to the circular cone with radius equal
-  // to the smaller of the axes
+  // The safety is calculated in the scaled space where elliptical cone
+  // becomes a circular cone with radius equal to the smaller of the axes 
   //
-  if( sqr(p.x()/minAxis)+sqr(p.y()/minAxis) < sqr(zheight - p.z()) )
+  G4double px = p.x(), py = p.y(), pz = p.z();
+  G4double axis;
+  if (xSemiAxis < ySemiAxis)
   {
-    rds     = std::sqrt(sqr(p.x()) + sqr(p.y()));
-    roo     = minAxis*(zheight-p.z()); // radius of cone at z= p.z()
-    roo1    = minAxis*(zheight-zTopCut); // radius of cone at z=+zTopCut
-
-    distZ=zTopCut - std::fabs(p.z()) ;
-    distR=(roo-rds)/(std::sqrt(1+sqr(minAxis)));
-
-    if(rds>roo1)
-    {
-      distMin=(zTopCut-p.z())*(roo-rds)/(roo-roo1);
-      distMin=std::min(distMin,distR);
-    }      
-    distMin=std::min(distR,distZ);
+    axis = xSemiAxis;
+    py  *= xSemiAxis/ySemiAxis; // scale y
+  }
+  else
+  {
+    axis = ySemiAxis;
+    px  *= ySemiAxis/xSemiAxis; // scale x
   }
 
-  return distMin;
+  G4double distZ = zTopCut - std::abs(pz) ;
+  if (distZ <= 0) return 0; // point is outside 
+
+  G4double rho = axis*(zheight-pz); // radius at z = p.z()
+  G4double pr  = std::sqrt(px*px+py*py);
+  if (pr >= rho)  return 0; // point is outside
+
+  G4double distR = (rho-pr)/std::sqrt(1+axis*axis);
+  return std::min(distR,distZ);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -1015,16 +985,16 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   aTwo   = pi*xSemiAxis*ySemiAxis*sqr(zheight+zTopCut);
   aThree = pi*xSemiAxis*ySemiAxis*sqr(zheight-zTopCut);  
 
-  phi = RandFlat::shoot(0.,twopi);
+  phi = G4RandFlat::shoot(0.,twopi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
   
   if(zTopCut >= zheight) aThree = 0.;
 
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree);
   if((chose>=0.) && (chose<aOne))
   {
-    zRand = RandFlat::shoot(-zTopCut,zTopCut);
+    zRand = G4RandFlat::shoot(-zTopCut,zTopCut);
     return G4ThreeVector(xSemiAxis*(zheight-zRand)*cosphi,
                          ySemiAxis*(zheight-zRand)*sinphi,zRand);    
   }
@@ -1032,11 +1002,10 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   {
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      rRand1 = RandFlat::shoot(0.,1.) ;
-      rRand2 = RandFlat::shoot(0.,1.) ;
+      rRand1 = G4RandFlat::shoot(0.,1.) ;
+      rRand2 = G4RandFlat::shoot(0.,1.) ;
     } while (( rRand2 >= rRand1  ) && (++it1 < 1000)) ;
 
-    //    rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
     return G4ThreeVector(rRand1*xSemiAxis*(zheight+zTopCut)*cosphi,
                          rRand1*ySemiAxis*(zheight+zTopCut)*sinphi, -zTopCut);
 
@@ -1046,8 +1015,8 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
 
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    rRand1 = RandFlat::shoot(0.,1.) ;
-    rRand2 = RandFlat::shoot(0.,1.) ;
+    rRand1 = G4RandFlat::shoot(0.,1.) ;
+    rRand2 = G4RandFlat::shoot(0.,1.) ;
   } while (( rRand2 >= rRand1  ) && (++it2 < 1000));
 
   return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut)*cosphi,
@@ -1067,13 +1036,11 @@ G4VisExtent G4EllipticalCone::GetExtent() const
 {
   // Define the sides of the box into which the solid instance would fit.
   //
-  G4double maxDim;
-  maxDim = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
-  maxDim = maxDim > zTopCut ? maxDim : zTopCut;
-  
-  return G4VisExtent (-maxDim, maxDim,
-                      -maxDim, maxDim,
-                      -maxDim, maxDim);
+  G4ThreeVector pmin,pmax;
+  Extent(pmin,pmax);
+  return G4VisExtent(pmin.x(),pmax.x(),
+                     pmin.y(),pmax.y(),
+                     pmin.z(),pmax.z());
 }
 
 G4Polyhedron* G4EllipticalCone::CreatePolyhedron () const

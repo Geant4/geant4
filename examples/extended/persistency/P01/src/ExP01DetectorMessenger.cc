@@ -27,7 +27,7 @@
 /// \brief Implementation of the ExP01DetectorMessenger class
 //
 //
-// $Id: ExP01DetectorMessenger.cc 71791 2013-06-24 14:08:28Z gcosmo $
+// $Id: ExP01DetectorMessenger.cc 98770 2016-08-09 14:22:25Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,10 +91,10 @@ ExP01DetectorMessenger::~ExP01DetectorMessenger()
 void ExP01DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
   if( command == fTargMatCmd )
-   { fDetector->setTargetMaterial(newValue);}
+   { fDetector->SetTargetMaterial(newValue);}
    
   if( command == fChamMatCmd )
-   { fDetector->setChamberMaterial(newValue);}  
+   { fDetector->SetChamberMaterial(newValue);}  
   
   if( command == fFieldCmd )
    { fDetector->SetMagField(fFieldCmd->GetNewDoubleValue(newValue));}

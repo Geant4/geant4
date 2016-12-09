@@ -44,18 +44,20 @@
 #include "SteppingAction.hh"
 #include "HistoManager.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {     
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Construct the default run manager
   //
   G4RunManager * runManager = new G4RunManager;
@@ -91,38 +93,30 @@ int main(int argc,char** argv)
   //
   runManager->Initialize();
   
+  // Initialize visualization
+  //
+  G4VisManager* visManager = new G4VisExecutive;
+  visManager->Initialize();
+
   // Get the pointer to the User Interface manager
   //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
-  else
-    {  // interactive mode : define visualization and UI terminal
-#ifdef G4VIS_USE
-      G4VisManager* visManager = new G4VisExecutive;
-      visManager->Initialize();
-#ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#endif
-      UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
-
-#ifdef G4UI_USE
-      ui->SessionStart();
-      delete ui;
-#endif
-
-#ifdef G4VIS_USE
-      delete visManager;
-#endif
-    }
+  if ( ! ui ) {
+    // batch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);    
+  }
+  else {  
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");     
+    ui->SessionStart();
+    delete ui;
+  }
   
   // Job termination
+  delete visManager;
   delete histo;                
   delete runManager;
 

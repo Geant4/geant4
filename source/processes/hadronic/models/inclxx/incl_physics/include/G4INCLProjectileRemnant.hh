@@ -280,7 +280,7 @@ namespace G4INCL {
     /// \brief Ground-state energies for any number of nucleons
     EnergyLevels theGroundStateEnergies;
 
-    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant);
+    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant)
   };
 }
 

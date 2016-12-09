@@ -36,10 +36,7 @@ class G4EmLowEPPhysics : public G4VPhysicsConstructor
 {
 public:
 
-  G4EmLowEPPhysics(G4int ver = 1);
-
-  // obsolete
-  G4EmLowEPPhysics(G4int ver, const G4String& name);
+  explicit G4EmLowEPPhysics(G4int ver=1, const G4String& name= "");
 
   virtual ~G4EmLowEPPhysics();
 

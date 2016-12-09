@@ -571,14 +571,14 @@ G4ComponentGGNuclNuclXsc::GetHadronNucleonXscNS(const G4ParticleDefinition* pPar
     //  Delta = 1.;    // DHW 19 May 2011: variable set but not used
     //  if (proj_energy < 40.) Delta = 0.916+0.0021*proj_energy;
 
-    if (proj_momentum >= 10.) {
+    //AR-12Aug2016  if (proj_momentum >= 10.) {
       B0 = 7.5;
       A0 = 100. - B0*G4Log(3.0e7);
 
       xsection = A0 + B0*G4Log(proj_energy) - 11
                 + 103*G4Pow::GetInstance()->powA(2*0.93827*proj_energy + proj_mass*proj_mass+
                   0.93827*0.93827,-0.165);        //  mb
-    }
+    //AR-12Aug2016  }
   }
   else // low energy pp = nn != np
   {

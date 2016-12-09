@@ -176,11 +176,11 @@ void G4P1Messenger::SetP1Cmd()
   auto p1xValMax = new G4UIparameter("xvalMax", 'd', false);
   p1xValMax->SetGuidance("Maximum x-value, expressed in unit");
   
-  auto p1xValUnit = new G4UIparameter("xvalUnit", 's', false);
+  auto p1xValUnit = new G4UIparameter("xvalUnit", 's', true);
   p1xValUnit->SetGuidance("The unit applied to filled x-values and xvalMin0, xvalMax0");
   p1xValUnit->SetDefaultValue("none");
  
-  auto p1xValFcn = new G4UIparameter("xvalFcn", 's', false);
+  auto p1xValFcn = new G4UIparameter("xvalFcn", 's', true);
   p1xValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnxGuidance = "The function applied to filled x-values (log, log10, exp, none).\n";
   fcnxGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
@@ -197,17 +197,17 @@ void G4P1Messenger::SetP1Cmd()
   p1xValBinScheme->SetGuidance(binSchemeGuidance);
   p1xValBinScheme->SetDefaultValue("linear");
   
-  auto p1yValMin = new G4UIparameter("yvalMin", 'd', false);
+  auto p1yValMin = new G4UIparameter("yvalMin", 'd', true);
   p1yValMin->SetGuidance("Minimum y-value, expressed in unit");
   
-  auto p1yValMax = new G4UIparameter("yvalMax", 'd', false);
+  auto p1yValMax = new G4UIparameter("yvalMax", 'd', true);
   p1yValMax->SetGuidance("Maximum y-value, expressed in unit");
   
   auto p1yValUnit = new G4UIparameter("yvalUnit", 's', true);
   p1yValUnit->SetGuidance("The unit applied to filled y-values and yvalMin0, yvalMax0");
   p1yValUnit->SetDefaultValue("none");
  
-  auto p1yValFcn = new G4UIparameter("yvalFcn", 's', false);
+  auto p1yValFcn = new G4UIparameter("yvalFcn", 's', true);
   p1yValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnyGuidance = "The function applied to filled y-values (log, log10, exp, none).\n";
   fcnyGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
@@ -284,17 +284,26 @@ void G4P1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
                     xdata.fSbinScheme);     
   }
   else if ( command == fSetP1XCmd.get() ) { 
-    // Only save values
+    // Save values
     auto counter = 0;
     fXId = G4UIcommand::ConvertToInt(parameters[counter++]);
     fHelper->GetBinData(fXData, parameters, counter);
+    // Set values
+    // (another set may follow if setY is also called)
+    auto xunit = GetUnitValue(fXData.fSunit);
+    fManager->SetP1(fXId, 
+                    fXData.fNbins, fXData.fVmin*xunit, fXData.fVmax*xunit, 
+                    0., 0., 
+                    fXData.fSunit, "none", 
+                    fXData.fSfcn, "none", 
+                    fXData.fSbinScheme);     
   }
   else if ( command == fSetP1YCmd.get() ) { 
     // Check if setX command was called
     auto counter = 0;
     auto id = G4UIcommand::ConvertToInt(parameters[counter++]);
     if ( fXId == -1 || fXId != id ) {
-      // add exception
+      fHelper->WarnAboutSetCommands();
       return;
     }
     auto xunit = GetUnitValue(fXData.fSunit);

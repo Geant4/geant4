@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B4cEventAction.cc 88427 2015-02-19 08:19:38Z gcosmo $
+// $Id: B4cEventAction.cc 100946 2016-11-03 11:28:08Z gcosmo $
 // 
 /// \file B4cEventAction.cc
 /// \brief Implementation of the B4cEventAction class
@@ -61,7 +61,7 @@ B4cCalorHitsCollection*
 B4cEventAction::GetHitsCollection(G4int hcID,
                                   const G4Event* event) const
 {
-  B4cCalorHitsCollection* hitsCollection 
+  auto hitsCollection 
     = static_cast<B4cCalorHitsCollection*>(
         event->GetHCofThisEvent()->GetHC(hcID));
   
@@ -113,17 +113,17 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
   }
 
   // Get hits collections
-  B4cCalorHitsCollection* absoHC = GetHitsCollection(fAbsHCID, event);
-  B4cCalorHitsCollection* gapHC = GetHitsCollection(fGapHCID, event);
+  auto absoHC = GetHitsCollection(fAbsHCID, event);
+  auto gapHC = GetHitsCollection(fGapHCID, event);
 
   // Get hit with total values
-  B4cCalorHit* absoHit = (*absoHC)[absoHC->entries()-1];
-  B4cCalorHit* gapHit = (*gapHC)[gapHC->entries()-1];
+  auto absoHit = (*absoHC)[absoHC->entries()-1];
+  auto gapHit = (*gapHC)[gapHC->entries()-1];
  
   // Print per event (modulo n)
   //
-  G4int eventID = event->GetEventID();
-  G4int printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
+  auto eventID = event->GetEventID();
+  auto printModulo = G4RunManager::GetRunManager()->GetPrintProgress();
   if ( ( printModulo > 0 ) && ( eventID % printModulo == 0 ) ) {
     G4cout << "---> End of event: " << eventID << G4endl;     
 
@@ -136,13 +136,13 @@ void B4cEventAction::EndOfEventAction(const G4Event* event)
   //
 
   // get analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  auto analysisManager = G4AnalysisManager::Instance();
  
   // fill histograms
-  analysisManager->FillH1(1, absoHit->GetEdep());
-  analysisManager->FillH1(2, gapHit->GetEdep());
-  analysisManager->FillH1(3, absoHit->GetTrackLength());
-  analysisManager->FillH1(4, gapHit->GetTrackLength());
+  analysisManager->FillH1(0, absoHit->GetEdep());
+  analysisManager->FillH1(1, gapHit->GetEdep());
+  analysisManager->FillH1(2, absoHit->GetTrackLength());
+  analysisManager->FillH1(3, gapHit->GetTrackLength());
   
   // fill ntuple
   analysisManager->FillNtupleDColumn(0, absoHit->GetEdep());

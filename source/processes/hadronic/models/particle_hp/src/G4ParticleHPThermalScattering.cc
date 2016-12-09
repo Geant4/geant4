@@ -516,7 +516,7 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
 
          } else {
             //TL.second.n != TH.second.n
-            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
+            throw G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
          }
      
          //set 
@@ -575,7 +575,7 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
          else 
          {
             //tempLH.first == 0.0 && tempLH.second
-            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Unexpected temperature values in data");
+            throw G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Unexpected temperature values in data");
          }
 
          std::vector< G4double > vE_T;
@@ -586,7 +586,7 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
 
          for ( G4int i=1 ; i < n1 ; i++ ) 
          {
-            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data!");
+            if ( (*pvE_p_TL)[i]->first != (*pvE_p_TH)[i]->first ) throw G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data!");
             vE_T.push_back ( (*pvE_p_TL)[i]->first );
             vp_T.push_back ( get_linear_interpolated ( aTemp , std::pair< G4double , G4double > ( tempLH.first , (*pvE_p_TL)[i]->second ) , std::pair< G4double , G4double > ( tempLH.second , (*pvE_p_TL)[i]->second ) ) );  
          }
@@ -688,7 +688,7 @@ G4HadFinalState* G4ParticleHPThermalScattering::ApplyYourself(const G4HadProject
 
          } else {
             // anEPM_TL_E.n != anEPM_TH_E.n
-            G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
+            throw G4HadronicException(__FILE__, __LINE__, "A problem is found in Thermal Scattering Data! Do not yet supported");
          }
 
          // Set Final State
@@ -825,12 +825,13 @@ E_isoAng G4ParticleHPThermalScattering::create_E_isoAng_from_energy ( G4double e
    {
       for ( iv = vEPM->begin() ; iv != vEPM->end() ;  iv++ )
       {
-         if ( energyLH.first == (*iv)->energy ) 
+         if ( energyLH.first == (*iv)->energy ) {
+            panEPM_T_EL = *iv;
+            iv++;
+            panEPM_T_EH = *iv;
             break;
+         }
       }  
-      panEPM_T_EL = *iv;
-      iv++;
-      panEPM_T_EH = *iv;
    }
    else if ( energyLH.first == 0.0 )
    {

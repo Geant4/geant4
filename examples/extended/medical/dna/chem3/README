@@ -8,7 +8,17 @@ $Id:$
                              Chem3
                             -------
 
-  How to implement user actions in the chemistry module.
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software shall 
+cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+How to implement user actions in the chemistry module.
 
  1 - GEOMETRY DEFINITION
 

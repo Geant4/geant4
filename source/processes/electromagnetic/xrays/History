@@ -1,4 +1,4 @@
-$Id: History 97385 2016-06-02 09:59:53Z gcosmo $
+$Id: History 98002 2016-06-30 13:03:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Jun 16: P. Gumplinger (xrays-V10-02-05)
+- Add a stacking flag to G4Scintillation and G4Cerenkov and add
+  GetNumPhotons() method
 
 1 Jun 16: D.Sawkey (xrays-V10-02-04)
 - Most files: use C++11 keywords override, delete, explicit, nullptr

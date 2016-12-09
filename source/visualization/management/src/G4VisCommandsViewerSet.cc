@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc 86988 2014-11-21 13:06:15Z gcosmo $
+// $Id: G4VisCommandsViewerSet.cc 101035 2016-11-04 08:48:17Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -292,7 +292,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandLineSegments->SetGuidance
  ("Refers to graphical representation of objects with curved lines/surfaces.");
   fpCommandLineSegments->SetParameterName("line-segments",omitable = true);
-  fpCommandLineSegments->SetDefaultValue(24);
+  fpCommandLineSegments->SetDefaultValue(72);
 
   fpCommandPicking = new G4UIcmdWithABool
     ("/vis/viewer/set/picking",this);
