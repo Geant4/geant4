@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4EllipticalTube.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -913,7 +913,7 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 {
   G4double xRand, yRand, zRand, phi, cosphi, sinphi, zArea, cArea,p, chose;
 
-  phi    = RandFlat::shoot(0., 2.*pi);
+  phi    = G4RandFlat::shoot(0., 2.*pi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
   
@@ -931,9 +931,9 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
 
   xRand = dx*cosphi;
   yRand = dy*sinphi;
-  zRand = RandFlat::shoot(dz, -1.*dz);
+  zRand = G4RandFlat::shoot(dz, -1.*dz);
     
-  chose = RandFlat::shoot(0.,2.*zArea+cArea);
+  chose = G4RandFlat::shoot(0.,2.*zArea+cArea);
   
   if( (chose>=0) && (chose < cArea) )
   {
@@ -941,16 +941,16 @@ G4ThreeVector G4EllipticalTube::GetPointOnSurface() const
   }
   else if( (chose >= cArea) && (chose < cArea + zArea) )
   {
-    xRand = RandFlat::shoot(-1.*dx,dx);
+    xRand = G4RandFlat::shoot(-1.*dx,dx);
     yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
     return G4ThreeVector (xRand,yRand,dz); 
   }
   else
   { 
-    xRand = RandFlat::shoot(-1.*dx,dx);
+    xRand = G4RandFlat::shoot(-1.*dx,dx);
     yRand = std::sqrt(1.-sqr(xRand/dx));
-    yRand = RandFlat::shoot(-1.*yRand, yRand);
+    yRand = G4RandFlat::shoot(-1.*yRand, yRand);
     return G4ThreeVector (xRand,yRand,-1.*dz);
   }
 }

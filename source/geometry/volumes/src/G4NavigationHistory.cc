@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc 86527 2014-11-13 15:06:24Z gcosmo $
+// $Id: G4NavigationHistory.cc 102270 2017-01-19 14:42:29Z gcosmo $
 //
 // 
 // G4NavigationHistory Implementation
@@ -41,7 +41,7 @@ G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
 G4NavigationHistory::G4NavigationHistory()
   : fStackDepth(0)
 {
-  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetNewLevels();
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
   Clear();
 }
 
@@ -68,7 +68,7 @@ G4NavigationHistory::~G4NavigationHistory()
 std::ostream&
 operator << (std::ostream& os, const G4NavigationHistory& nav)
 {
-  G4cout << "History depth=" << nav.GetDepth() << G4endl;
+  os << "History depth=" << nav.GetDepth() << G4endl;
   for ( G4int i=0; i<=nav.GetDepth(); i++ )
   {
     os << "Level=["<<i<<"]: ";

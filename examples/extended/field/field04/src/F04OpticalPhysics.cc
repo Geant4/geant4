@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04OpticalPhysics.cc 85428 2014-10-29 08:28:14Z gcosmo $
+// $Id: F04OpticalPhysics.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 /// \file field/field04/src/F04OpticalPhysics.cc
 /// \brief Implementation of the F04OpticalPhysics class
@@ -105,11 +105,12 @@ void F04OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(theWLSProcess);
 
-  aParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*particleIterator)() ){
 
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     pManager = particle->GetProcessManager();

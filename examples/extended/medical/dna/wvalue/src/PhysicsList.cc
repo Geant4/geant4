@@ -121,10 +121,11 @@ void PhysicsList::AddTrackingCut()
 {
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)())
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-")

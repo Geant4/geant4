@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc 93287 2015-10-15 09:50:22Z gcosmo $
+// $Id: G4VPhysicalVolume.cc 102288 2017-01-20 10:57:03Z gcosmo $
 //
 // 
 // class G4VPhysicalVolume Implementation
@@ -36,48 +36,16 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolume.hh"
 
-// This static member is thread local. For each thread, it points to the
-// array of G4PVData instances.
-//
-template <class G4PVData> G4ThreadLocal
-G4PVData* G4GeomSplitter<G4PVData>::offset = 0;
-
 // This new field helps to use the class G4PVManager
 //
 G4PVManager G4VPhysicalVolume::subInstanceManager;
 
-// This method is similar to the constructor. It is used by each worker
-// thread to achieve the same effect as that of the master thread exept
-// to register the new created instance. This method is invoked explicitly.
-// It does not create a new G4VPhysicalVolume instance.
-// It only assign the value for the fields encapsulated by the class G4PVData.
+// These macros change the references to fields that are now encapsulated
+// in the class G4PVData.
 //
-void G4VPhysicalVolume::
-InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
-                  G4RotationMatrix *pRot,
-                  const G4ThreeVector &tlate)
-{
-  subInstanceManager.SlaveCopySubInstanceArray();
-
-  this->SetRotation( pRot );      // G4MT_rot   = pRot;
-  this->SetTranslation( tlate );  // G4MT_trans = tlate;
-  //  G4PhysicalVolumeStore::Register(this);
-}
-
-// This method is similar to the destructor. It is used by each worker
-// thread to achieve the partial effect as that of the master thread.
-// For G4VPhysicalVolume instances, nothing more to do here.
-//
-void G4VPhysicalVolume::TerminateWorker( G4VPhysicalVolume* /*pMasterObject*/)
-{
-}
-
-// Returns the private data instance manager.
-//
-const G4PVManager& G4VPhysicalVolume::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
+#define G4MT_rot ((subInstanceManager.offset[instanceID]).frot)
+#define G4MT_trans ((subInstanceManager.offset[instanceID]).ftrans)
+#define G4MT_pvdata (subInstanceManager.offset[instanceID])
 
 // Constructor: init parameters and register in Store
 //
@@ -123,9 +91,67 @@ G4VPhysicalVolume::~G4VPhysicalVolume()
   G4PhysicalVolumeStore::DeRegister(this);
 }
 
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4VPhysicalVolume instance.
+// It only assign the value for the fields encapsulated by the class G4PVData.
+//
+void G4VPhysicalVolume::
+InitialiseWorker( G4VPhysicalVolume* /*pMasterObject*/,
+                  G4RotationMatrix *pRot,
+                  const G4ThreeVector &tlate)
+{
+  subInstanceManager.SlaveCopySubInstanceArray();
+
+  this->SetRotation( pRot );      // G4MT_rot   = pRot;
+  this->SetTranslation( tlate );  // G4MT_trans = tlate;
+  //  G4PhysicalVolumeStore::Register(this);
+}
+
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4VPhysicalVolume instances, nothing more to do here.
+//
+void G4VPhysicalVolume::TerminateWorker( G4VPhysicalVolume* /*pMasterObject*/)
+{
+}
+
+// Returns the private data instance manager.
+//
+const G4PVManager& G4VPhysicalVolume::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
 G4int G4VPhysicalVolume::GetMultiplicity() const
 {
   return 1;
+}
+
+const G4ThreeVector& G4VPhysicalVolume::GetTranslation() const
+{
+  return G4MT_trans;
+}
+
+void G4VPhysicalVolume::SetTranslation(const G4ThreeVector &vec)
+{
+  G4MT_trans=vec;
+}
+
+const G4RotationMatrix* G4VPhysicalVolume::GetRotation() const
+{
+  return G4MT_rot;
+}
+
+G4RotationMatrix* G4VPhysicalVolume::GetRotation()
+{
+  return G4MT_rot;
+}
+
+void G4VPhysicalVolume::SetRotation(G4RotationMatrix *pRot)
+{
+  G4MT_rot=pRot;
 }
 
 G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
@@ -142,6 +168,33 @@ G4RotationMatrix* G4VPhysicalVolume::GetObjectRotation() const
      retval= &aRotM;
   }
   return retval;
+}
+
+G4RotationMatrix G4VPhysicalVolume::GetObjectRotationValue() const
+{
+  G4RotationMatrix  aRotM;   // Initialised to identity
+
+  // Insure against G4MT_rot being a null pointer
+  if(G4MT_rot)
+  {
+     aRotM= G4MT_rot->inverse();
+  }
+  return aRotM;
+}
+
+G4ThreeVector  G4VPhysicalVolume::GetObjectTranslation() const
+{
+  return G4MT_trans;
+}
+
+const G4RotationMatrix* G4VPhysicalVolume::GetFrameRotation() const
+{
+  return G4MT_rot;
+}
+
+G4ThreeVector  G4VPhysicalVolume::GetFrameTranslation() const
+{
+  return -G4MT_trans;
 }
 
 // Only implemented for placed and parameterised volumes.

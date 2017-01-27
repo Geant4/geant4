@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc 92918 2015-09-21 15:04:01Z gcosmo $
+// $Id: G4ParticleDefinition.icc 102308 2017-01-20 14:54:21Z gcosmo $
 //
 
 inline 
@@ -90,13 +90,6 @@ inline
  G4int G4ParticleDefinition::GetVerboseLevel() const
 {
    return verboseLevel;
-}
-
-inline
- G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
-{
-    if(g4particleDefinitionInstanceID<0) return 0;
-    return G4MT_pmanager;
 }
 
 inline

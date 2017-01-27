@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+31 October 2016 Tatsumi Koi (hadr-hpp-V10-01-37)
+---------------------------------------------------
+- Re-introduce cache of cross section in GetIsoCrossSection
+  Since current CrossSectionDataStore does not call elementwise cross sections
+  and GetIsoCrossSection is called multiple time in calculation of element which is made from more than one isotope
+
+28 September 2016 Tatsumi Koi
+---------------------------------------------------
+- Fix warning messages from clang 3.8
+
 2 June 2016 Tatsumi Koi (hadr-hpp-V10-01-35)
 ---------------------------------------------------
 - Bug fix usage of G4Nucleus::GetBiassedThermalNucleus 

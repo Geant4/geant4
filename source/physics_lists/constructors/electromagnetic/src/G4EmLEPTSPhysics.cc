@@ -99,11 +99,11 @@ void G4EmLEPTSPhysics::ConstructParticle()
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void G4EmLEPTSPhysics::ConstructProcess()
 {
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  aParticleIterator->reset();
-
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition * particle = aParticleIterator->value();
+  while( (*myParticleIterator)() ){
+    G4ParticleDefinition * particle = myParticleIterator->value();
     G4String               particleName = particle->GetParticleName();
     G4ProcessManager     * manager = particle->GetProcessManager();
     G4cout << " particle " << particle->GetParticleName() << " manager " << manager << G4endl; //GDEB    

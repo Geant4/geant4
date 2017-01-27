@@ -14,6 +14,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21-December 2016 Gunter Folger            had-im_r-V10-01-06
+- G4VScatteringCollision: Fix memory leak in MT, bug report 1905
+
 13-November 2015 Gunter Folger            had-im_r-V10-01-05
 - Revert back to G4float, add 'f' for initialisation.
 

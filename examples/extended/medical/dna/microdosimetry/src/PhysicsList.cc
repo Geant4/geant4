@@ -160,12 +160,13 @@ void PhysicsList::ConstructProcess()
 void PhysicsList::ConstructEM()
 {
 
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*particleIterator)() )
   {
 
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 

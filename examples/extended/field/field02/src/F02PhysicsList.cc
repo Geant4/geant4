@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02PhysicsList class
 //
 //
-// $Id: F02PhysicsList.cc 77794 2013-11-28 09:54:17Z gcosmo $
+// $Id: F02PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -176,11 +176,12 @@ void F02PhysicsList::ConstructProcess()
 
 void F02PhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*particleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -267,11 +268,12 @@ void F02PhysicsList::ConstructGeneral()
   // Add Decay Process
 
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*particleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (theDecayProcess->IsApplicable(*particle))

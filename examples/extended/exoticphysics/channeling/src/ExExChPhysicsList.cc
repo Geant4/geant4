@@ -195,9 +195,10 @@ void ExExChPhysicsList::AddChanneling(){
         channeling->SetFileCharacteristicsName(fFilePotentialName);
     }
     
-    theParticleIterator->reset();
-    while( (*theParticleIterator)() ){
-        G4ParticleDefinition* particle = theParticleIterator->value();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while( (*particleIterator)() ){
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pManager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
         

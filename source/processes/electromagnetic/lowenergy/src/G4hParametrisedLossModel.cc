@@ -322,7 +322,7 @@ G4bool G4hParametrisedLossModel::MolecIsInZiegler1988(
     "C_2H_2F_2", "C_4H_8O_2",  "C_2H_6",   "C_2F_6",             "C_2H_6O",
     "C_3H_6O",   "C_4H_10O",   "C_2H_4",   "C_2H_4O",            "C_2H_4S",
     "SH_2",      "CH_4",       "CCLF_3",   "CCl_2F_2",           "CHCl_2F",
-    "(CH_3)_2S", "N_2O",       "C_5H_10O" "C_8H_6",          "(CH_2)_N",
+    "(CH_3)_2S", "N_2O",       "C_5H_10O", "C_8H_6",          "(CH_2)_N",
     "(C_3H_6)_N","(C_8H_8)_N", "C_3H_8",   "C_3H_6-Propylene",   "C_3H_6O",
     "C_3H_6S",   "C_4H_4S",    "C_7H_8"
   };

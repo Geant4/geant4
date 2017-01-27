@@ -52,8 +52,10 @@ class G4GeomSplitter
 {
   public:
 
-    G4GeomSplitter() : totalobj(0), totalspace(0), sharedOffset(0) {
-    	G4MUTEXINIT(mutex);
+    G4GeomSplitter()
+      : totalobj(0), totalspace(0), sharedOffset(0)
+    {
+      G4MUTEXINIT(mutex);
     }
 
     G4int CreateSubInstance()
@@ -125,7 +127,8 @@ class G4GeomSplitter
     // To cope with user's changes in Geometry - e.g. change of material in a volume
     {
       G4AutoLock l(&mutex);
-      if (!offset)  {
+      if (!offset)
+      {
         SlaveInitializeSubInstance();
         G4Exception("G4GeomSPlitter::SlaveReCopySubInstance()",
                     "MissingInitialisation", JustWarning,
@@ -153,18 +156,9 @@ class G4GeomSplitter
       // Use recycled work area - which was created previously
       if( offset && offset!=newOffset )
       {
-         if( newOffset != offset ) 
-         {
-              G4Exception("G4GeomSplitter::UseWorkspace()", 
-                    "TwoWorkspaces", FatalException,
-                    "Thread already has workspace - cannot use another.");
-         }
-         else
-         {
-              G4Exception("G4GeomSplitter::UseWorkspace()", 
-                    "TwoWorkspaces", JustWarning,
-                    "Thread already has a workspace - trying to set the same again.");
-         }
+         G4Exception("G4GeomSplitter::UseWorkspace()", 
+                     "TwoWorkspaces", FatalException,
+                     "Thread already has workspace - cannot use another.");
       }
       offset= newOffset;
       // totalobj= numObjects;
@@ -199,5 +193,7 @@ class G4GeomSplitter
     T* sharedOffset;
     G4Mutex mutex;
 };
+
+template <typename T> G4ThreadLocal T* G4GeomSplitter<T>::offset = 0;
 
 #endif

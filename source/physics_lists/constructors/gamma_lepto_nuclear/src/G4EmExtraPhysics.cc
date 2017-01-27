@@ -156,11 +156,12 @@ void G4EmExtraPhysics::ConstructProcess()
     ph->RegisterProcess( theSynchRad, positron);
     //G4AutoDelete::Register(theSynchRad);
     if(synActivatedForAll) {
-      aParticleIterator->reset();
+      auto myParticleIterator=GetParticleIterator();
+      myParticleIterator->reset();
       G4ParticleDefinition* particle=0;
 
-      while( (*aParticleIterator)() ) {
-	particle = aParticleIterator->value();
+      while( (*myParticleIterator)() ) {
+	particle = myParticleIterator->value();
 	if( particle->GetPDGStable() && particle->GetPDGCharge() != 0.0) { 
 	  if(verbose > 1) {
 	    G4cout << "### G4SynchrotronRadiation for " 

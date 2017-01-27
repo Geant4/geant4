@@ -24,14 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc 85261 2014-10-27 08:54:57Z gcosmo $
+// $Id: G4VisAttributes.icc 102310 2017-01-20 15:27:13Z gcosmo $
 //
 // 
 // John Allison  18th November 1996
-
-inline const G4VisAttributes& G4VisAttributes::GetInvisible() {
-  return Invisible;
-}
 
 inline void G4VisAttributes::SetVisibility (G4bool v) {fVisible = v;}
 

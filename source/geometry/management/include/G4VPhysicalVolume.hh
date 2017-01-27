@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh 93287 2015-10-15 09:50:22Z gcosmo $
+// $Id: G4VPhysicalVolume.hh 102288 2017-01-20 10:57:03Z gcosmo $
 //
 //
 // class G4VPhysicalVolume
@@ -115,26 +115,26 @@ class G4VPhysicalVolume
     // (They are the inverse of each other).
 
     G4RotationMatrix* GetObjectRotation() const;              //  Obsolete 
-    inline G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
-    inline G4ThreeVector  GetObjectTranslation() const;
+    G4RotationMatrix  GetObjectRotationValue() const;  //  Replacement
+    G4ThreeVector  GetObjectTranslation() const;
       // Return the rotation/translation of the Object relative to the mother.
-    inline const G4RotationMatrix* GetFrameRotation() const;
-    inline G4ThreeVector  GetFrameTranslation() const;
+    const G4RotationMatrix* GetFrameRotation() const;
+    G4ThreeVector  GetFrameTranslation() const;
       // Return the rotation/translation of the Frame used to position 
       // this volume in its mother volume (opposite of object rot/trans).
 
     // Older access functions, that do not distinguish between frame/object!
 
-    inline const G4ThreeVector& GetTranslation() const;
-    inline const G4RotationMatrix* GetRotation() const;
+    const G4ThreeVector& GetTranslation() const;
+    const G4RotationMatrix* GetRotation() const;
       // Old access functions, that do not distinguish between frame/object!
       // They return the translation/rotation of the volume.
 
     // Set functions
 
-    inline void SetTranslation(const G4ThreeVector &v);
-    inline G4RotationMatrix* GetRotation();
-    inline void SetRotation(G4RotationMatrix*);
+    void SetTranslation(const G4ThreeVector &v);
+    G4RotationMatrix* GetRotation();
+    void SetRotation(G4RotationMatrix*);
       // NOT INTENDED FOR GENERAL USE.
       // Non constant versions of above. Used to change transformation
       // for replication/parameterisation mechanism.

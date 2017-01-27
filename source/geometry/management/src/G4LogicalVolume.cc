@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc 93287 2015-10-15 09:50:22Z gcosmo $
+// $Id: G4LogicalVolume.cc 102288 2017-01-20 10:57:03Z gcosmo $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -40,12 +40,6 @@
 // --------------------------------------------------------------------
 
 #include "G4LogicalVolume.hh"
-#ifdef   NO_INLINE
-#define  inline
-#include "G4LogicalVolume.icc"
-#undef   inline
-#endif
-
 #include "G4LogicalVolumeStore.hh"
 #include "G4VSolid.hh"
 #include "G4Material.hh"
@@ -53,12 +47,6 @@
 #include "G4VisAttributes.hh"
 
 #include "G4UnitsTable.hh"
-
-// This static member is thread local. For each thread, it points to the
-// array of G4LVData instances.
-//
-template <class G4LVData> G4ThreadLocal
-G4LVData* G4GeomSplitter<G4LVData>::offset = 0;      
 
 G4LVData::G4LVData()
 : fSolid(0),fSensitiveDetector(0),fFieldManager(0),
@@ -69,65 +57,16 @@ G4LVData::G4LVData()
 //
 G4LVManager G4LogicalVolume::subInstanceManager;
 
-// ********************************************************************
-// InitialiseWorker
+// These macros change the references to fields that are now encapsulated
+// in the class G4LVData.
 //
-// This method is similar to the constructor. It is used by each worker
-// thread to achieve the same effect as that of the master thread exept
-// to register the new created instance. This method is invoked explicitly.
-// It does not create a new G4LogicalVolume instance. It only assign the value
-// for the fields encapsulated by the class G4LVData.
-// ********************************************************************
-//
-void G4LogicalVolume::
-InitialiseWorker( G4LogicalVolume* /*pMasterObject*/,
-                  G4VSolid* pSolid,
-                  G4VSensitiveDetector* pSDetector)
-{
-  subInstanceManager.SlaveCopySubInstanceArray();
-
-  SetSolid(pSolid);
-  SetSensitiveDetector(pSDetector); //  How this object is available now ?
-  AssignFieldManager(fFieldManager); // Should be set - but a per-thread copy is not available yet
-  // G4MT_fmanager= fFieldManager;
-  //  Must not call SetFieldManager(fFieldManager, false); which propagates FieldMgr
-
-#ifdef CLONE_FIELD_MGR
-  // Create a field FieldManager by cloning
-  G4FieldManager workerFldMgr= fFieldManager->GetWorkerClone(G4bool* created);
-  if( created || (GetFieldManager()!=workerFldMgr) )
-  {
-    SetFieldManager(fFieldManager, false); // which propagates FieldMgr
-  }else{
-    // Field manager existed and is equal to current one
-    AssignFieldManager(workerFldMgr);
-  }
-#endif
-}
-
-// ********************************************************************
-// TerminateWorker
-//
-// This method is similar to the destructor. It is used by each worker
-// thread to achieve the partial effect as that of the master thread.
-// For G4LogicalVolume instances, nothing more to do here.
-// ********************************************************************
-//
-void G4LogicalVolume::
-TerminateWorker( G4LogicalVolume* /*pMasterObject*/)
-{
-}
-
-// ********************************************************************
-// GetSubInstanceManager
-//
-// Returns the private data instance manager.    
-// ********************************************************************
-//
-const G4LVManager& G4LogicalVolume::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
+#define G4MT_solid     ((subInstanceManager.offset[instanceID]).fSolid)
+#define G4MT_sdetector ((subInstanceManager.offset[instanceID]).fSensitiveDetector)
+#define G4MT_fmanager  ((subInstanceManager.offset[instanceID]).fFieldManager)
+#define G4MT_material  ((subInstanceManager.offset[instanceID]).fMaterial)
+#define G4MT_mass      ((subInstanceManager.offset[instanceID]).fMass)
+#define G4MT_ccouple   ((subInstanceManager.offset[instanceID]).fCutsCouple)
+#define G4MT_instance  (subInstanceManager.offset[instanceID])
 
 // ********************************************************************
 // Constructor - sets member data and adds to logical Store,
@@ -216,6 +155,85 @@ G4LogicalVolume::~G4LogicalVolume()
 }
 
 // ********************************************************************
+// InitialiseWorker
+//
+// This method is similar to the constructor. It is used by each worker
+// thread to achieve the same effect as that of the master thread exept
+// to register the new created instance. This method is invoked explicitly.
+// It does not create a new G4LogicalVolume instance. It only assign the value
+// for the fields encapsulated by the class G4LVData.
+// ********************************************************************
+//
+void G4LogicalVolume::
+InitialiseWorker( G4LogicalVolume* /*pMasterObject*/,
+                  G4VSolid* pSolid,
+                  G4VSensitiveDetector* pSDetector)
+{
+  subInstanceManager.SlaveCopySubInstanceArray();
+
+  SetSolid(pSolid);
+  SetSensitiveDetector(pSDetector); //  How this object is available now ?
+  AssignFieldManager(fFieldManager); // Should be set - but a per-thread copy is not available yet
+  // G4MT_fmanager= fFieldManager;
+  //  Must not call SetFieldManager(fFieldManager, false); which propagates FieldMgr
+
+#ifdef CLONE_FIELD_MGR
+  // Create a field FieldManager by cloning
+  G4FieldManager workerFldMgr= fFieldManager->GetWorkerClone(G4bool* created);
+  if( created || (GetFieldManager()!=workerFldMgr) )
+  {
+    SetFieldManager(fFieldManager, false); // which propagates FieldMgr
+  }else{
+    // Field manager existed and is equal to current one
+    AssignFieldManager(workerFldMgr);
+  }
+#endif
+}
+
+// ********************************************************************
+// TerminateWorker
+//
+// This method is similar to the destructor. It is used by each worker
+// thread to achieve the partial effect as that of the master thread.
+// For G4LogicalVolume instances, nothing more to do here.
+// ********************************************************************
+//
+void G4LogicalVolume::
+TerminateWorker( G4LogicalVolume* /*pMasterObject*/)
+{
+}
+
+// ********************************************************************
+// GetSubInstanceManager
+//
+// Returns the private data instance manager.    
+// ********************************************************************
+//
+const G4LVManager& G4LogicalVolume::GetSubInstanceManager()
+{
+  return subInstanceManager;
+}
+
+// ********************************************************************
+// GetFieldManager
+// ********************************************************************
+//
+G4FieldManager* G4LogicalVolume::GetFieldManager() const
+{
+  return G4MT_fmanager;
+}
+
+// ********************************************************************
+// AssignFieldManager
+// ********************************************************************
+//
+void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
+{
+  G4MT_fmanager= fldMgr;
+  if(G4Threading::IsMasterThread())  fFieldManager = fldMgr;
+}
+
+// ********************************************************************
 // SetFieldManager
 // ********************************************************************
 //
@@ -238,6 +256,196 @@ G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
   }
 }
 
+// ********************************************************************
+// AddDaughter
+// ********************************************************************
+//
+void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
+{
+  if( !fDaughters.empty() && fDaughters[0]->IsReplicated() )
+  {
+    std::ostringstream message;
+    message << "ERROR - Attempt to place a volume in a mother volume" << G4endl
+            << "        already containing a replicated volume." << G4endl
+            << "        A volume can either contain several placements" << G4endl
+            << "        or a unique replica or parameterised volume !" << G4endl
+            << "           Mother logical volume: " << GetName() << G4endl
+            << "           Placing volume: " << pNewDaughter->GetName() << G4endl;
+    G4Exception("G4LogicalVolume::AddDaughter()", "GeomMgt0002",
+                FatalException, message,
+                "Replica or parameterised volume must be the only daughter !");
+  }
+
+  // Invalidate previous calculation of mass - if any - for all threads
+  G4MT_mass = 0.;
+  // SignalVolumeChange();  // fVolumeChanged= true;
+  fDaughters.push_back(pNewDaughter);
+
+  G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
+
+  // Propagate the Field Manager, if the daughter has no field Manager.
+  //
+  G4FieldManager* pDaughterFieldManager = pDaughterLogical->GetFieldManager();
+
+  if( pDaughterFieldManager == 0 )
+  {
+    pDaughterLogical->SetFieldManager(G4MT_fmanager, false);
+  }
+  if (fRegion)
+  {
+    PropagateRegion();
+    fRegion->RegionModified(true);
+  }
+}
+
+// ********************************************************************
+// RemoveDaughter
+// ********************************************************************
+//
+void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
+{
+  G4PhysicalVolumeList::iterator i;
+  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
+  {
+    if (**i==*p)
+    {
+      fDaughters.erase(i);
+      break;
+    }
+  }
+  if (fRegion)
+  {
+    fRegion->RegionModified(true);
+  }
+  G4MT_mass = 0.;
+}
+
+// ********************************************************************
+// ClearDaughters
+// ********************************************************************
+//
+void G4LogicalVolume::ClearDaughters()
+{
+  fDaughters.erase(fDaughters.begin(), fDaughters.end());
+  if (fRegion)
+  {
+    fRegion->RegionModified(true);
+  }
+  G4MT_mass = 0.;
+}
+
+// ********************************************************************
+// ResetMass
+// ********************************************************************
+//
+void G4LogicalVolume::ResetMass()
+{
+  G4MT_mass= 0.0;
+}
+
+// ********************************************************************
+// GetSolid
+// ********************************************************************
+//
+G4VSolid* G4LogicalVolume::GetSolid(G4LVData &instLVdata) // const
+{
+  return instLVdata.fSolid;
+}
+
+G4VSolid* G4LogicalVolume::GetSolid() const
+{
+  // return G4MT_solid;
+  // return ((subInstanceManager.offset[instanceID]).fSolid);
+  return this->GetSolid( subInstanceManager.offset[instanceID] ); 
+}
+
+// ********************************************************************
+// SetSolid
+// ********************************************************************
+//
+void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
+{
+
+  // ((subInstanceManager.offset[instanceID]).fSolid) = pSolid;
+  G4MT_solid=pSolid;
+  // G4MT_mass = 0.;
+  this->ResetMass(); 
+}
+
+void G4LogicalVolume::SetSolid(G4LVData &instLVdata, G4VSolid *pSolid)
+{  
+  instLVdata.fSolid = pSolid;
+  // G4MT_solid=pSolid;
+  instLVdata.fMass= 0;
+  // A fast way to reset the mass ... ie G4MT_mass = 0.;
+}
+
+// ********************************************************************
+// GetMaterial
+// ********************************************************************
+//
+G4Material* G4LogicalVolume::GetMaterial() const
+{
+  return G4MT_material;
+}
+
+// ********************************************************************
+// SetMaterial
+// ********************************************************************
+//
+void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
+{
+  G4MT_material=pMaterial;
+  G4MT_mass = 0.;
+}
+
+// ********************************************************************
+// UpdateMaterial
+// ********************************************************************
+//
+void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
+{
+  G4MT_material=pMaterial;
+  if(fRegion) { G4MT_ccouple = fRegion->FindCouple(pMaterial); }
+  G4MT_mass = 0.;
+}
+
+// ********************************************************************
+// GetSensitiveDetector
+// ********************************************************************
+//
+G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
+{
+  return G4MT_sdetector;
+}
+
+// ********************************************************************
+// SetSensitiveDetector
+// ********************************************************************
+//
+void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
+{
+  G4MT_sdetector = pSDetector;
+  if(G4Threading::IsMasterThread()) fSensitiveDetector = pSDetector;
+}
+
+// ********************************************************************
+// GetMaterialCutsCouple
+// ********************************************************************
+//
+const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
+{
+  return G4MT_ccouple;
+}
+
+// ********************************************************************
+// SetMaterialCutsCouple
+// ********************************************************************
+//
+void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
+{
+  G4MT_ccouple = cuts;
+}
 
 // ********************************************************************
 // IsAncestor
@@ -392,3 +600,4 @@ void G4LogicalVolume::SetVisAttributes (const G4VisAttributes& VA)
 {
   fVisAttributes = new G4VisAttributes(VA);
 }
+

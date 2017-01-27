@@ -17,6 +17,28 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 16, 2016 G.Cosmo (global-V10-01-29)
+- Fixed compilation warning on MacOS Sierra in MT mode in function
+  G4Threading::G4GetPidId().
+
+October 21, 2016 G.Cosmo (global-V10-01-28)
+- Made initialisation of G4TWorkspacePool thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+September 7, 2016 M.Asai
+- G4StatDouble: Additional constructor.
+
+September 6, 2016 M.Asai
+- G4StatDouble: Added = and += operators.
+
+August 31, 2016 V.Ivanchenko
+- G4StatDouble: fixed computation of RMS - was completely wrong.
+
+August 12, 2016 G.Cosmo
+- G4UnitsTable: use 'hep_pascal' instead of 'pascal' to avoid potential
+  symbol conflicts on Windows.
+
 April 25, 2016 G.Cosmo (global-V10-01-27)
 - Added check for support of atomics for clang compiler in HEPRandom wrappers.
 

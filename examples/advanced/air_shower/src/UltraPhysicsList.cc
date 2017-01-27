@@ -147,9 +147,10 @@ void UltraPhysicsList::ConstructProcess()
 void UltraPhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) {
       pmanager->AddDiscreteProcess(theDecayProcess);
@@ -181,9 +182,10 @@ void UltraPhysicsList::ConstructGeneral()
 
 void UltraPhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -260,9 +262,10 @@ void UltraPhysicsList::ConstructOp()
 //   theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
   theCerenkovProcess->SetTrackSecondariesFirst(true);
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 

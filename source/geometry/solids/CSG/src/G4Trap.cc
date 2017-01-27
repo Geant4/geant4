@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc 83851 2014-09-19 10:12:12Z gcosmo $
+// $Id: G4Trap.cc 102294 2017-01-20 11:41:52Z gcosmo $
 //
 // class G4Trap
 //
@@ -1881,19 +1881,19 @@ G4ThreeVector G4Trap::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
   
   area = aOne + aTwo;
   
-  chose = RandFlat::shoot(0.,aOne+aTwo);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo);
 
   if( (chose>=0.) && (chose < aOne) )
   {
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
+    lambda1 = G4RandFlat::shoot(0.,1.);
+    lambda2 = G4RandFlat::shoot(0.,lambda1);
     return (p2+lambda1*v+lambda2*w);    
   }
   
   // else
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
 
   return (p0+lambda1*t+lambda2*u);    
 }
@@ -1934,7 +1934,7 @@ G4ThreeVector G4Trap::GetPointOnSurface() const
   Five  = GetPointOnPlane(pt[0],pt[2],pt[6],pt[4], aFive);
   Six   = GetPointOnPlane(pt[1],pt[3],pt[7],pt[5], aSix);
  
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree+aFour+aFive+aSix);
   if( (chose>=0.) && (chose<aOne) )                    
     { return One; }
   else if( (chose>=aOne) && (chose<aOne+aTwo) )  

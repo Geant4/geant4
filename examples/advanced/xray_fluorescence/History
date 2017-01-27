@@ -1,4 +1,4 @@
-# $Id: History 92689 2015-09-14 07:03:16Z gcosmo $
+# $Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.10.2016 Gunter Folger
+- Removed direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+  Fix required by clang39 on Linux and MAC
 
 11.09.2015 S. Incerti Tag: XrayFluo-V10-01-00
 - Updated macro livermore.mac

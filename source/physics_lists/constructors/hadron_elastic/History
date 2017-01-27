@@ -1,4 +1,4 @@
-$Id: History 97609 2016-06-06 09:49:23Z gcosmo $
+$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-October-2016 G.Folger
+- replace direct use of aParticleIterator by GetParticleIterator().
+  fix required by clang39 on Windows and MAC
 
 26-May-2016, A. Ribon         (phys-ctor-helastic-V10-01-07)
 - G4HadronElasticPhysicsPHP : made it thread-safe.

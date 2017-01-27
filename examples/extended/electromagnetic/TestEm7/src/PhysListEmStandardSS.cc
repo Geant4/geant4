@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysListEmStandardSS.cc
 /// \brief Implementation of the PhysListEmStandardSS class
 //
-// $Id: PhysListEmStandardSS.cc 68585 2013-04-01 23:35:07Z adotti $
+// $Id: PhysListEmStandardSS.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -99,9 +99,10 @@ void PhysListEmStandardSS::ConstructProcess()
   G4MuBremsstrahlung* mub = new G4MuBremsstrahlung();
   G4MuPairProduction* mup = new G4MuPairProduction();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {

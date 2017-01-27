@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 93421 2015-10-22 09:26:27Z gcosmo $
+// $Id: G4Sphere.cc 102294 2017-01-20 11:41:52Z gcosmo $
 //
 // class G4Sphere
 //
@@ -3101,10 +3101,10 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   aFou = fDPhi*((fRmax + fRmin)*sinETheta)*slant2;
   aFiv = 0.5*fDTheta*(fRmax*fRmax-fRmin*fRmin);
   
-  phi = RandFlat::shoot(fSPhi, ePhi); 
+  phi = G4RandFlat::shoot(fSPhi, ePhi); 
   cosphi = std::cos(phi); 
   sinphi = std::sin(phi);
-  costheta = RandFlat::shoot(cosETheta,cosSTheta);
+  costheta = G4RandFlat::shoot(cosETheta,cosSTheta);
   sintheta = std::sqrt(1.-sqr(costheta));
 
   if(fFullPhiSphere) { aFiv = 0; }
@@ -3113,7 +3113,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   if(fSTheta == halfpi) { aThr = pi*(fRmax*fRmax-fRmin*fRmin); }
   if(eTheta == halfpi)  { aFou = pi*(fRmax*fRmax-fRmin*fRmin); }
 
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThr+aFou+2.*aFiv);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThr+aFou+2.*aFiv);
   if( (chose>=0.) && (chose<aOne) )
   {
     return G4ThreeVector(fRmax*sintheta*cosphi,
@@ -3128,7 +3128,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   {
     if (fSTheta != halfpi)
     {
-      zRand = RandFlat::shoot(fRmin*cosSTheta,fRmax*cosSTheta);
+      zRand = G4RandFlat::shoot(fRmin*cosSTheta,fRmax*cosSTheta);
       return G4ThreeVector(tanSTheta*zRand*cosphi,
                            tanSTheta*zRand*sinphi,zRand);
     }
@@ -3141,7 +3141,7 @@ G4ThreeVector G4Sphere::GetPointOnSurface() const
   {
     if(eTheta != halfpi)
     {
-      zRand = RandFlat::shoot(fRmin*cosETheta, fRmax*cosETheta);
+      zRand = G4RandFlat::shoot(fRmin*cosETheta, fRmax*cosETheta);
       return G4ThreeVector  (tanETheta*zRand*cosphi,
                              tanETheta*zRand*sinphi,zRand);
     }

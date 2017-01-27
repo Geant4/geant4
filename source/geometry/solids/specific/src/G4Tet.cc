@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Tet.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // class G4Tet
 //
@@ -58,7 +58,7 @@
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 83572 2014-09-01 15:23:27Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 102297 2017-01-20 13:33:54Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -754,8 +754,8 @@ G4ThreeVector G4Tet::GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2,
   v = p3 - p1;
   w = p1 - p2;
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
 
   area = 0.5*(v.cross(w)).mag();
 
@@ -776,7 +776,7 @@ G4ThreeVector G4Tet::GetPointOnSurface() const
   p3 = GetPointOnFace(fAnchor,fP4,fP2,aThree);
   p4 = GetPointOnFace(fP4,fP3,fP2,aFour);
   
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree+aFour);
   if( (chose>=0.) && (chose <aOne) ) {return p1;}
   else if( (chose>=aOne) && (chose < aOne+aTwo) ) {return p2;}
   else if( (chose>=aOne+aTwo) && (chose<aOne+aTwo+aThree) ) {return p3;}

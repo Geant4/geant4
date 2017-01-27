@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BrentLocator.cc 97507 2016-06-03 12:48:42Z gcosmo $
+// $Id: G4BrentLocator.cc 102290 2017-01-20 11:19:44Z gcosmo $
 //
 // Class G4BrentLocator implementation
 //
@@ -218,14 +218,15 @@ G4bool G4BrentLocator::EstimateIntersectionPoint(
   //
   G4FieldTrack SubStart_PointVelocity = CurveStartPointVelocity;
    
-  do
+  do   // Loop checking, 07.10.2016, J.Apostolakis
   {
     G4int substep_no_p = 0;
     G4bool sub_final_section = false; // the same as final_section,
                                       // but for 'sub_section'
     SubStart_PointVelocity = CurrentA_PointVelocity;
-    do // REPEAT param
-    {
+
+    do   // Loop checking, 07.10.2016, J.Apostolakis
+    { // REPEAT param 
       G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
       G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();
        

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm16/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 84365 2014-10-14 12:43:52Z gcosmo $
+// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -155,11 +155,12 @@ void PhysicsList::ConstructProcess()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void PhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
   G4SynchrotronRadiation* fSync = new G4SynchrotronRadiation();
     G4AutoDelete::Register(fSync);
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -229,9 +230,10 @@ void PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       if (theDecayProcess->IsApplicable(*particle)) {
         pmanager ->AddProcess(theDecayProcess);

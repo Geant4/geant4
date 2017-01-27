@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: Par01PhysicsList.cc 90093 2015-05-13 11:59:54Z gcosmo $
+// $Id: Par01PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 // 
 
@@ -145,9 +145,10 @@ void Par01PhysicsList::AddTransportation()
 #include "G4hIonisation.hh"
 void Par01PhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -246,9 +247,10 @@ void Par01PhysicsList::ConstructGeneral()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);
@@ -268,10 +270,11 @@ void Par01PhysicsList::AddParameterisation()
   G4FastSimulationManagerProcess*
     fastSimProcess_parallelGeom = new G4FastSimulationManagerProcess("G4FSMP_parallelGeom",
                                                                      "pionGhostWorld");
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       // -- For the mass geometry, G4FSMP is a PostStep process, ordering does not matter:
       if (particle->GetParticleName() == "e+"  || 

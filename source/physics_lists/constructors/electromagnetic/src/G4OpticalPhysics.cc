@@ -324,11 +324,12 @@ void G4OpticalPhysics::ConstructProcess()
   UIhelpers::buildCommands(CerenkovProcess);
   OpProcesses[kCerenkov] = CerenkovProcess;
 
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*myParticleIterator)() ){
 
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     pManager = particle->GetProcessManager();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeomTestVolume.cc 73253 2013-08-22 13:24:02Z gcosmo $
+// $Id: G4GeomTestVolume.cc 102290 2017-01-20 11:19:44Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class source file
@@ -156,15 +156,14 @@ void G4GeomTestVolume::TestRecursiveOverlap( G4int slevel, G4int depth )
   for( iDaughter=0; iDaughter<nDaughter; ++iDaughter )
   {
     G4VPhysicalVolume *daughter = logical->GetDaughter(iDaughter);
-    const G4LogicalVolume *daughterLogical =
-          daughter->GetLogicalVolume();
     
-    //
     // Tested already?
     //
-    std::pair<std::set<const G4LogicalVolume *>::iterator, G4bool>
-           there = tested.insert(daughterLogical);
-    if (!there.second) continue;
+    // const G4LogicalVolume *daughterLogical =
+    //      daughter->GetLogicalVolume();
+    // std::pair<std::set<const G4LogicalVolume *>::iterator, G4bool>
+    //       there = tested.insert(daughterLogical);
+    // if (!there.second) continue;
 
     //
     // Recurse

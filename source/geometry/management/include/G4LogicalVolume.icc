@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc 91010 2015-06-15 09:55:26Z gcosmo $
+// $Id: G4LogicalVolume.icc 102288 2017-01-20 10:57:03Z gcosmo $
 //
 // 
 // class G4LogicalVolume Inline Implementation file
@@ -38,19 +38,6 @@
 // 17.05.02 - G.Cosmo: Added IsToOptimise() method
 // --------------------------------------------------------------------
 
-
-// These macros change the references to fields that are now encapsulated
-// in the class G4LVData.
-//
-#define G4MT_solid     ((subInstanceManager.offset[instanceID]).fSolid)
-#define G4MT_sdetector ((subInstanceManager.offset[instanceID]).fSensitiveDetector)
-#define G4MT_fmanager  ((subInstanceManager.offset[instanceID]).fFieldManager)
-#define G4MT_material  ((subInstanceManager.offset[instanceID]).fMaterial)
-#define G4MT_mass      ((subInstanceManager.offset[instanceID]).fMass)
-#define G4MT_ccouple   ((subInstanceManager.offset[instanceID]).fCutsCouple)
-#define G4MT_instance  (subInstanceManager.offset[instanceID])
-
-#include "G4Threading.hh"
 // ********************************************************************
 // GetName
 // ********************************************************************
@@ -80,23 +67,6 @@ G4int G4LogicalVolume::GetInstanceID() const
 {
   return instanceID;
 }
-
-// ********************************************************************
-// GetFieldManager
-// ********************************************************************
-//
-inline
-G4FieldManager* G4LogicalVolume::GetFieldManager() const
-{
-  return G4MT_fmanager;
-}
-
-inline void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
-{
-  G4MT_fmanager= fldMgr;
-  if(G4Threading::IsMasterThread())  fFieldManager = fldMgr;
-}
-
 
 // ********************************************************************
 // GetMasterFieldManager
@@ -141,49 +111,6 @@ G4FastSimulationManager* G4LogicalVolume::GetFastSimulationManager () const
 }
 
 // ********************************************************************
-// AddDaughter
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::AddDaughter(G4VPhysicalVolume* pNewDaughter)
-{
-  if( !fDaughters.empty() && fDaughters[0]->IsReplicated() )
-  {
-    std::ostringstream message;
-    message << "ERROR - Attempt to place a volume in a mother volume" << G4endl
-            << "        already containing a replicated volume." << G4endl
-            << "        A volume can either contain several placements" << G4endl
-            << "        or a unique replica or parameterised volume !" << G4endl
-            << "           Mother logical volume: " << GetName() << G4endl
-            << "           Placing volume: " << pNewDaughter->GetName() << G4endl;
-    G4Exception("G4LogicalVolume::AddDaughter()", "GeomMgt0002",
-                FatalException, message,
-                "Replica or parameterised volume must be the only daughter !");
-  }
-
-  // Invalidate previous calculation of mass - if any - for all threads
-  G4MT_mass = 0.;
-  // SignalVolumeChange();  // fVolumeChanged= true;
-  fDaughters.push_back(pNewDaughter);
-
-  G4LogicalVolume* pDaughterLogical = pNewDaughter->GetLogicalVolume();
-
-  // Propagate the Field Manager, if the daughter has no field Manager.
-  //
-  G4FieldManager* pDaughterFieldManager = pDaughterLogical->GetFieldManager();
-
-  if( pDaughterFieldManager == 0 )
-  {
-    pDaughterLogical->SetFieldManager(G4MT_fmanager, false);
-  }
-  if (fRegion)
-  {
-    PropagateRegion();
-    fRegion->RegionModified(true);
-  }
-}
-
-// ********************************************************************
 // IsDaughter
 // ********************************************************************
 //
@@ -196,48 +123,6 @@ G4bool G4LogicalVolume::IsDaughter(const G4VPhysicalVolume* p) const
     if (**i==*p) return true;
   }
   return false;
-}
-
-// ********************************************************************
-// RemoveDaughter
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::RemoveDaughter(const G4VPhysicalVolume* p)
-{
-  G4PhysicalVolumeList::iterator i;
-  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
-  {
-    if (**i==*p)
-    {
-      fDaughters.erase(i);
-      break;
-    }
-  }
-  if (fRegion)
-  {
-    fRegion->RegionModified(true);
-  }
-  G4MT_mass = 0.;
-}
-
-// ********************************************************************
-// ClearDaughters
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::ClearDaughters()
-{
-  G4PhysicalVolumeList::iterator i;
-  for ( i=fDaughters.begin(); i!=fDaughters.end(); ++i )
-  {
-    fDaughters.erase(i);
-  }
-  if (fRegion)
-  {
-    fRegion->RegionModified(true);
-  }
-  G4MT_mass = 0.;
 }
 
 // ********************************************************************
@@ -262,30 +147,6 @@ EVolume G4LogicalVolume::CharacteriseDaughters() const
   return type;
 }
 
-inline
-void G4LogicalVolume::ResetMass()
-{
-  G4MT_mass= 0.0;
-}
-
-// ********************************************************************
-// GetSolid
-// ********************************************************************
-//
-inline
-G4VSolid* G4LogicalVolume::GetSolid(G4LVData &instLVdata) // const
-{
-  return instLVdata.fSolid;
-}
-
-inline
-G4VSolid* G4LogicalVolume::GetSolid() const
-{
-  // return G4MT_solid;
-  // return ((subInstanceManager.offset[instanceID]).fSolid);
-  return this->GetSolid( subInstanceManager.offset[instanceID] ); 
-}
-
 // ********************************************************************
 // GetMasterSolid
 // ********************************************************************
@@ -297,72 +158,6 @@ G4VSolid* G4LogicalVolume::GetMasterSolid() const
 }
 
 // ********************************************************************
-// SetSolid
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetSolid(G4VSolid *pSolid)
-{
-
-  // ((subInstanceManager.offset[instanceID]).fSolid) = pSolid;
-  G4MT_solid=pSolid;
-  // G4MT_mass = 0.;
-  this->ResetMass(); 
-}
-
-inline
-void G4LogicalVolume::SetSolid(G4LVData &instLVdata, G4VSolid *pSolid)
-{  
-  instLVdata.fSolid = pSolid;
-  // G4MT_solid=pSolid;
-  instLVdata.fMass= 0;
-  // A fast way to reset the mass ... ie G4MT_mass = 0.;
-}
-
-// ********************************************************************
-// GetMaterial
-// ********************************************************************
-//
-inline
-G4Material* G4LogicalVolume::GetMaterial() const
-{
-  return G4MT_material;
-}
-
-// ********************************************************************
-// SetMaterial
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetMaterial(G4Material *pMaterial)
-{
-  G4MT_material=pMaterial;
-  G4MT_mass = 0.;
-}
-
-// ********************************************************************
-// UpdateMaterial
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
-{
-  G4MT_material=pMaterial;
-  if(fRegion) { G4MT_ccouple = fRegion->FindCouple(pMaterial); }
-  G4MT_mass = 0.;
-}
-
-// ********************************************************************
-// GetSensitiveDetector
-// ********************************************************************
-//
-inline
-G4VSensitiveDetector* G4LogicalVolume::GetSensitiveDetector() const
-{
-  return G4MT_sdetector;
-}
-
-// ********************************************************************
 // GetMasterSensitiveDetector
 // ********************************************************************
 //
@@ -370,17 +165,6 @@ inline
 G4VSensitiveDetector* G4LogicalVolume::GetMasterSensitiveDetector() const
 {
   return fSensitiveDetector;
-}
-
-// ********************************************************************
-// SetSensitiveDetector
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
-{
-  G4MT_sdetector = pSDetector;
-  if(G4Threading::IsMasterThread()) fSensitiveDetector = pSDetector;
 }
 
 // ********************************************************************
@@ -528,26 +312,6 @@ void G4LogicalVolume::PropagateRegion()
 }
 
 // ********************************************************************
-// GetMaterialCutsCouple
-// ********************************************************************
-//
-inline
-const G4MaterialCutsCouple* G4LogicalVolume::GetMaterialCutsCouple() const
-{
-  return G4MT_ccouple;
-}
-
-// ********************************************************************
-// SetMaterialCutsCouple
-// ********************************************************************
-//
-inline
-void G4LogicalVolume::SetMaterialCutsCouple(G4MaterialCutsCouple* cuts)
-{
-  G4MT_ccouple = cuts;
-}
-
-// ********************************************************************
 // Lock
 // ********************************************************************
 //
@@ -606,10 +370,3 @@ G4double G4LogicalVolume::GetBiasWeight() const
 {
   return fBiasWeight;
 }
-#undef G4MT_solid
-#undef G4MT_sdetector
-#undef G4MT_fmanager
-#undef G4MT_material
-// #undef G4MT_mass
-// #undef G4MT_ccouple
-#undef G4MT_instance

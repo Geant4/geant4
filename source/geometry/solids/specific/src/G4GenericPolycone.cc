@@ -100,9 +100,10 @@ void G4GenericPolycone::Create( G4double phiStart,
     
   G4double rzArea = rz->Area();
   if (rzArea < -kCarTolerance)
+  {
     rz->ReverseOrder();
-
-  else if (rzArea < -kCarTolerance)
+  }
+  else if (rzArea < kCarTolerance)
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl

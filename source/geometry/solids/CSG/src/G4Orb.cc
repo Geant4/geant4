@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 97511 2016-06-03 13:36:29Z gcosmo $
+// $Id: G4Orb.cc 102294 2017-01-20 11:41:52Z gcosmo $
 //
 // class G4Orb
 //
@@ -694,12 +694,12 @@ G4ThreeVector G4Orb::GetPointOnSurface() const
 {
   //  generate a random number from zero to 2pi...
   //
-  G4double phi      = RandFlat::shoot(0.,2.*pi);
+  G4double phi      = G4RandFlat::shoot(0.,2.*pi);
   G4double cosphi   = std::cos(phi);
   G4double sinphi   = std::sin(phi);
 
   // generate a random point uniform in area
-  G4double costheta = RandFlat::shoot(-1.,1.);
+  G4double costheta = G4RandFlat::shoot(-1.,1.);
   G4double sintheta = std::sqrt(1.-sqr(costheta));
   
   return G4ThreeVector (fRmax*sintheta*cosphi,

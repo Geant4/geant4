@@ -96,9 +96,10 @@ void PhysListEmStandardMP::ConstructProcess()
   
   // Add standard EM Processes
   //
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {

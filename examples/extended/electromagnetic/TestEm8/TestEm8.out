@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -869,13 +869,13 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.24s Real=0.23s Sys=0s
+  User=0.13s Real=0.14s Sys=0s
 RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0164919
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.492 +- 0.63672 keV    RMS/Emean = 1.2209
+   Mean energy deposit in absorber = 16.492 +- 3.5805 keV    RMS/Emean = 6.8656
    Mean number of steps in absorber= 1.267  mean number of ion-clusters = 824.92 MeanCluster= 824.59
 
  ====== Energy deposit distribution   Noverflows= 0.013 ====== 

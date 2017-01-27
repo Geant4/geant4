@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F06ExtraPhysics.cc 91270 2015-06-29 07:07:49Z gcosmo $
+// $Id: F06ExtraPhysics.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 /// \file field/field06/src/F06ExtraPhysics.cc
 /// \brief Implementation of the F06ExtraPhysics class
@@ -61,10 +61,11 @@ void F06ExtraPhysics::ConstructParticle() {;}
 
 void F06ExtraPhysics::ConstructProcess()
 {
-    aParticleIterator->reset();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
 
-    while ((*aParticleIterator)()) {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+    while ((*particleIterator)()) {
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
 

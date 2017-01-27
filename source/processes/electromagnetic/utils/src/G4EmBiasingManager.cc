@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmBiasingManager.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4EmBiasingManager.cc 102325 2017-01-23 10:25:31Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -296,7 +296,7 @@ G4EmBiasingManager::ApplySecondaryBiasing(
         if(safety > fSafetyMin) { ApplyRangeCut(vd, track, eloss, safety); }
 
         // Russian Roulette
-      } if(1 == nsplit) { 
+      } else if(1 == nsplit) { 
         weight = ApplyRussianRoulette(vd, index);
 
         // Splitting

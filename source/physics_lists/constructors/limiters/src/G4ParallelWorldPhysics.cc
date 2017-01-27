@@ -82,9 +82,10 @@ void G4ParallelWorldPhysics::ConstructProcess()
   theParallelWorldProcess->SetParallelWorld(namePhysics);
   theParallelWorldProcess->SetLayeredMaterialFlag(fLayeredMass);
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ){
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     pmanager->AddProcess(theParallelWorldProcess);
     if(theParallelWorldProcess->IsAtRestRequired(particle))

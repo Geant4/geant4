@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyhedraSide.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4PolyhedraSide.cc 102371 2017-01-24 08:47:28Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -47,17 +47,15 @@
 
 #include "Randomize.hh"
 
-// This static member is thread local. For each thread, it points to the
-// array of G4PhSideData instances.
-//
-template <class G4PhSideData> G4ThreadLocal
-         G4PhSideData* G4GeomSplitter<G4PhSideData>::offset = 0;
-
 // This new field helps to use the class G4PhSideManager.
 //
 G4PhSideManager G4PolyhedraSide::subInstanceManager;
 
+// This macro changes the references to fields that are now encapsulated
+// in the class G4PhSideData.
 //
+#define G4MT_phphi ((subInstanceManager.offset[instanceID]).fPhi)
+
 // Returns the private data instance manager.
 //
 const G4PhSideManager& G4PolyhedraSide::GetSubInstanceManager()

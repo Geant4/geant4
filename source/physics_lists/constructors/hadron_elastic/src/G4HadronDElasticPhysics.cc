@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronDElasticPhysics.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4HadronDElasticPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -137,10 +137,11 @@ void G4HadronDElasticPhysics::ConstructProcess()
 
   G4DiffuseElastic* model = 0;
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||

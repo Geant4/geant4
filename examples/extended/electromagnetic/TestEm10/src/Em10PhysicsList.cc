@@ -27,7 +27,7 @@
 /// \brief Implementation of the Em10PhysicsList class
 //
 //
-// $Id: Em10PhysicsList.cc 90463 2015-06-01 09:33:38Z gcosmo $
+// $Id: Em10PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 
 #include "Em10PhysicsList.hh"
@@ -299,11 +299,12 @@ void Em10PhysicsList::ConstructEM()
   //  processXTR->SetCompton(true);
   processXTR->SetVerboseLevel(1);
 
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*particleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
@@ -405,11 +406,12 @@ void Em10PhysicsList::ConstructGeneral()
   // Add Decay Process
 
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while( (*theParticleIterator)() )
+  while( (*particleIterator)() )
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (theDecayProcess->IsApplicable(*particle)) 

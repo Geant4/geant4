@@ -3,7 +3,7 @@
 #
 # 21st September 2010 Ben Morgan
 #
-# $Id: CMakeLists.txt 97459 2016-06-03 09:28:04Z gcosmo $
+# $Id: CMakeLists.txt 102302 2017-01-20 14:05:34Z gcosmo $
 #
 
 #-----------------------------------------------------------------------
@@ -35,10 +35,10 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
 project(Geant4)
 
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.2.2")
+set(${PROJECT_NAME}_VERSION "10.2.3")
 set(${PROJECT_NAME}_VERSION_MAJOR "10")
 set(${PROJECT_NAME}_VERSION_MINOR "2")
-set(${PROJECT_NAME}_VERSION_PATCH "2")
+set(${PROJECT_NAME}_VERSION_PATCH "3")
 
 
 # - Prepend our own CMake Modules to the search path

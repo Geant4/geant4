@@ -111,14 +111,13 @@ G4ReactionProduct * G4ParticleHPDiscreteTwoBody::Sample(G4double anEnergy, G4dou
        G4InterpolationManager aManager;
        aManager.Init(LINLIN, theCoeff[it].GetNumberOfPoly()/2);
        theStore.SetInterpolationManager(aManager);
-       for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
+       for(i=0;i<theCoeff[it].GetNumberOfPoly(); i+=2)
        {
          //101110
          //theStore.SetX(i, theCoeff[it].GetCoeff(i));
          //theStore.SetY(i, theCoeff[it].GetCoeff(i));
          theStore.SetX(i/2, theCoeff[it].GetCoeff(i));
          theStore.SetY(i/2, theCoeff[it].GetCoeff(i+1));
-	 i++;
        }
        cosTh = theStore.Sample();
      }
@@ -128,14 +127,13 @@ G4ReactionProduct * G4ParticleHPDiscreteTwoBody::Sample(G4double anEnergy, G4dou
        G4InterpolationManager aManager;
        aManager.Init(LOGLIN, theCoeff[it].GetNumberOfPoly()/2);
        theStore.SetInterpolationManager(aManager);
-       for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
+       for(i=0;i<theCoeff[it].GetNumberOfPoly(); i+=2)
        {
          //101110
          //theStore.SetX(i, theCoeff[it].GetCoeff(i));
          //theStore.SetY(i, theCoeff[it].GetCoeff(i));
          theStore.SetX(i/2, theCoeff[it].GetCoeff(i));
          theStore.SetY(i/2, theCoeff[it].GetCoeff(i+1));
-	 i++;
        }
        cosTh = theStore.Sample(); 
      }
@@ -167,26 +165,24 @@ G4ReactionProduct * G4ParticleHPDiscreteTwoBody::Sample(G4double anEnergy, G4dou
          G4InterpolationManager aManager1;
          aManager1.Init(LINLIN, theCoeff[it-1].GetNumberOfPoly()/2);
          theBuff1.SetInterpolationManager(aManager1);
-	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i++)
+	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i+=2)
 	 {
            //101110
            //theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
            //theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
            theBuff1.SetX(i/2, theCoeff[it-1].GetCoeff(i));
            theBuff1.SetY(i/2, theCoeff[it-1].GetCoeff(i+1));
-	   i++;
 	 }
 	 G4ParticleHPVector theBuff2;
          G4InterpolationManager aManager2;
          aManager2.Init(LINLIN, theCoeff[it].GetNumberOfPoly()/2);
          theBuff2.SetInterpolationManager(aManager2);
-	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
+	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i+=2)
 	 {
            //theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
            //theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
            theBuff2.SetX(i/2, theCoeff[it].GetCoeff(i));
            theBuff2.SetY(i/2, theCoeff[it].GetCoeff(i+1));
-	   i++;
 	 }
 
 	 G4double x1 = theCoeff[it-1].GetEnergy();
@@ -226,28 +222,26 @@ G4ReactionProduct * G4ParticleHPDiscreteTwoBody::Sample(G4double anEnergy, G4dou
          G4InterpolationManager aManager1;
          aManager1.Init(LOGLIN, theCoeff[it-1].GetNumberOfPoly()/2);
          theBuff1.SetInterpolationManager(aManager1);
-	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i++)
+	 for(i=0;i<theCoeff[it-1].GetNumberOfPoly(); i+=2)
 	 {
            //101110
            //theBuff1.SetX(i, theCoeff[it-1].GetCoeff(i));
            //theBuff1.SetY(i, theCoeff[it-1].GetCoeff(i));
            theBuff1.SetX(i/2, theCoeff[it-1].GetCoeff(i));
            theBuff1.SetY(i/2, theCoeff[it-1].GetCoeff(i+1));
-	   i++;
 	 }
 	 
 	 G4ParticleHPVector theBuff2;
          G4InterpolationManager aManager2;
          aManager2.Init(LOGLIN, theCoeff[it].GetNumberOfPoly()/2);
          theBuff2.SetInterpolationManager(aManager2);
-	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i++)
+	 for(i=0;i<theCoeff[it].GetNumberOfPoly(); i+=2)
 	 {
            //101110
            //theBuff2.SetX(i, theCoeff[it].GetCoeff(i));
            //theBuff2.SetY(i, theCoeff[it].GetCoeff(i));
            theBuff2.SetX(i/2, theCoeff[it].GetCoeff(i));
            theBuff2.SetY(i/2, theCoeff[it].GetCoeff(i+1));
-	   i++;
 	 }
 
 	 G4double x1 = theCoeff[it-1].GetEnergy();

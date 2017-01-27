@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.cc 93494 2015-10-23 10:05:09Z gcosmo $
+// $Id: G4CutTubs.cc 102294 2017-01-20 11:41:52Z gcosmo $
 //
 // 
 // class G4CutTubs
@@ -119,18 +119,21 @@ G4CutTubs::G4CutTubs( const G4String &pName,
   fLowNorm  = pLowNorm;
   fHighNorm = pHighNorm;
 
-  // Check Intersection of Cutted planes. They MUST NOT Intersect
+  // Check Intersection of cut planes. They MUST NOT Intersect
   //
-  if(IsCrossingCutPlanes())
-  {
-    std::ostringstream message;
-    message << "Invalid Low or High Normal to Z plane; "
-            << "Crossing Cutted Planes." << G4endl
-            << "Invalid Norm to Z plane (" << pLowNorm << " and "
-            << pHighNorm << ") in solid: " << GetName();
-    G4Exception("G4CutTubs::G4CutTubs()", "GeomSolids0002",
-                FatalException, message);
-  }
+  // This check has been disabled as too strict.
+  // See problem report #1887
+  //
+  // if(IsCrossingCutPlanes())
+  // {
+  //   std::ostringstream message;
+  //   message << "Invalid Low or High Normal to Z plane; "
+  //           << "Crossing Cutted Planes." << G4endl
+  //           << "Invalid Norm to Z plane (" << pLowNorm << " and "
+  //           << pHighNorm << ") in solid: " << GetName();
+  //   G4Exception("G4CutTubs::G4CutTubs()", "GeomSolids0002",
+  //               FatalException, message);
+  // }
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -191,7 +194,7 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
    return *this;
 }
 
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Calculate extent under transform and specified limit
 
@@ -1897,7 +1900,7 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   aThr = 0.5*fDPhi*(fRMax*fRMax-fRMin*fRMin);
   aFou = 2.*fDz*(fRMax-fRMin);
 
-  phi    = RandFlat::shoot(fSPhi, fSPhi+fDPhi);
+  phi    = G4RandFlat::shoot(fSPhi, fSPhi+fDPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
@@ -1905,22 +1908,22 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   
   if( (fSPhi == 0) && (fDPhi == twopi) ) { aFou = 0; }
   
-  chose  = RandFlat::shoot(0.,aOne+aTwo+2.*aThr+2.*aFou);
+  chose  = G4RandFlat::shoot(0.,aOne+aTwo+2.*aThr+2.*aFou);
 
   if( (chose >=0) && (chose < aOne) )
   {
     xRand = fRMax*cosphi;
     yRand = fRMax*sinphi;
-    zRand = RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
-                            GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
+    zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
+                              GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else if( (chose >= aOne) && (chose < aOne + aTwo) )
   {
     xRand = fRMin*cosphi;
     yRand = fRMin*sinphi;
-    zRand = RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
-                            GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
+    zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
+                              GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else if( (chose >= aOne + aTwo) && (chose < aOne + aTwo + aThr) )
@@ -1942,16 +1945,16 @@ G4ThreeVector G4CutTubs::GetPointOnSurface() const
   {
     xRand = rRand*std::cos(fSPhi);
     yRand = rRand*std::sin(fSPhi);
-    zRand = RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
-                            GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
+    zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
+                              GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else
   {
     xRand = rRand*std::cos(fSPhi+fDPhi);
     yRand = rRand*std::sin(fSPhi+fDPhi);
-    zRand = RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
-                            GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
+    zRand = G4RandFlat::shoot(GetCutZ(G4ThreeVector(xRand,yRand,-fDz)),
+                              GetCutZ(G4ThreeVector(xRand,yRand,fDz)));
     return G4ThreeVector  (xRand, yRand, zRand);
   }
 }

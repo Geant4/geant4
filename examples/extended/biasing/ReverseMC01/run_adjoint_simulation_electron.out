@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -395,7 +395,7 @@ nb event 475000
  Run terminated.
 Run Summary
   Run Aborted after 476575 events processed.
-  User=474.41s Real=475.36s Sys=0.01s
+  User=279.61s Real=280.27s Sys=0.01s
 Results of reverse/adjoint simulation!
 normalised edep [MeV] = 0.000897042
 error[MeV] = 8.97014e-06

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc 67975 2013-03-13 10:19:44Z gcosmo $
+// $Id: G4Region.icc 102288 2017-01-20 10:57:03Z gcosmo $
 //
 // 
 // class G4Region Inline Implementation file
@@ -238,26 +238,6 @@ G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
 }
 
 // ********************************************************************
-// SetFastSimulationManager
-// ********************************************************************
-//
-inline
-void G4Region::SetFastSimulationManager(G4FastSimulationManager* fsm)
-{
-  G4MT_fsmanager = fsm;
-}
-
-// ********************************************************************
-// GetFastSimulationManager
-// ********************************************************************
-//
-inline 
-G4FastSimulationManager* G4Region::GetFastSimulationManager() const
-{
-  return G4MT_fsmanager;
-}
-
-// ********************************************************************
 // GetFieldManager
 // ********************************************************************
 //
@@ -301,26 +281,6 @@ void G4Region::AddMaterial(G4Material* aMaterial)
     fMaterials.push_back(aMaterial);
     fRegionMod = true;
   }
-}
-
-// ********************************************************************
-// SetRegionalSteppingAction
-// ********************************************************************
-//
-inline
-void G4Region::SetRegionalSteppingAction(G4UserSteppingAction* rusa)
-{
-  G4MT_rsaction = rusa;
-}
-
-// ********************************************************************
-// GetRegionalSteppingAction
-// ********************************************************************
-//
-inline
-G4UserSteppingAction* G4Region::GetRegionalSteppingAction() const
-{
-  return G4MT_rsaction;
 }
 
 // ********************************************************************

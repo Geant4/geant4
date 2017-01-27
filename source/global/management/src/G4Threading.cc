@@ -58,7 +58,13 @@ namespace
 G4Pid_t G4Threading::G4GetPidId()
 { // In multithreaded mode return Thread ID
    #if defined(__MACH__)
+   #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12
+     uint64_t tid64;
+     pthread_threadid_np(NULL, &tid64);
+     return (pid_t)tid64;
+   #else
      return syscall(SYS_thread_selfid);
+   #endif
    #elif defined(WIN32)
      return GetCurrentThreadId();
    #else

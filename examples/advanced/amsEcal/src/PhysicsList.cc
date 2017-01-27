@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc 83010 2014-07-24 14:53:07Z gcosmo $
+// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -113,9 +113,10 @@ void PhysicsList::ConstructProcess()
   G4Decay* fDecayProcess = new G4Decay();
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     if (fDecayProcess->IsApplicable(*particle)) 
       ph ->RegisterProcess(fDecayProcess, particle);
   }

@@ -75,12 +75,13 @@ void G4StepLimiterPhysics::ConstructParticle()
 
 void G4StepLimiterPhysics::ConstructProcess()
 {
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
   fStepLimiter = new G4StepLimiter();
   fUserSpecialCuts = new G4UserSpecialCuts();
-  while ((*aParticleIterator)()) {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  while ((*myParticleIterator)()) {
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4double charge = particle->GetPDGCharge();
 

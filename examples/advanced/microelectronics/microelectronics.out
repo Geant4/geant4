@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -186,13 +186,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0xa2a890
+##### Create analysis manager   0xbb7890
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.19s Real=0.19s Sys=0s
+  User=0.13s Real=0.12s Sys=0s
 ... write Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :
 _______________________
@@ -238,7 +238,7 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-##### Create analysis manager   0xa2a890
+##### Create analysis manager   0xbb7890
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
  Run terminated.

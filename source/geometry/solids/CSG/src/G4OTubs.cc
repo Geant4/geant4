@@ -1813,7 +1813,7 @@ G4ThreeVector G4OTubs::GetPointOnSurface() const
   aThr = 0.5*fDPhi*(fRMax*fRMax-fRMin*fRMin);
   aFou = 2.*fDz*(fRMax-fRMin);
 
-  phi    = RandFlat::shoot(fSPhi, fSPhi+fDPhi);
+  phi    = G4RandFlat::shoot(fSPhi, fSPhi+fDPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
@@ -1821,20 +1821,20 @@ G4ThreeVector G4OTubs::GetPointOnSurface() const
   
   if( (fSPhi == 0) && (fDPhi == twopi) ) { aFou = 0; }
   
-  chose  = RandFlat::shoot(0.,aOne+aTwo+2.*aThr+2.*aFou);
+  chose  = G4RandFlat::shoot(0.,aOne+aTwo+2.*aThr+2.*aFou);
 
   if( (chose >=0) && (chose < aOne) )
   {
     xRand = fRMax*cosphi;
     yRand = fRMax*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else if( (chose >= aOne) && (chose < aOne + aTwo) )
   {
     xRand = fRMin*cosphi;
     yRand = fRMin*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else if( (chose >= aOne + aTwo) && (chose < aOne + aTwo + aThr) )
@@ -1856,14 +1856,14 @@ G4ThreeVector G4OTubs::GetPointOnSurface() const
   {
     xRand = rRand*std::cos(fSPhi);
     yRand = rRand*std::sin(fSPhi);
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector  (xRand, yRand, zRand);
   }
   else
   {
     xRand = rRand*std::cos(fSPhi+fDPhi);
     yRand = rRand*std::sin(fSPhi+fDPhi);
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector  (xRand, yRand, zRand);
   }
 }

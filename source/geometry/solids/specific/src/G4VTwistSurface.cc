@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistSurface.cc 72937 2013-08-14 13:20:38Z gcosmo $
+// $Id: G4VTwistSurface.cc 102296 2017-01-20 13:21:03Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -1195,7 +1195,7 @@ G4VTwistSurface::CurrentStatus::ResetfDone(EValidate     validate,
 {
   if (validate == fLastValidate && p && *p == fLastp)
   {
-     if (!v || (v && *v == fLastv)) return;
+     if (!v || (*v == fLastv)) return;
   }         
   G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
   for (size_t i=0; i<G4VSURFACENXX; i++)

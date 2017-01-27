@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc 87702 2014-12-17 09:55:28Z gcosmo $
+// $Id: G4EmDNAPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 // add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysics.hh"
@@ -141,10 +141,11 @@ void G4EmDNAPhysics::ConstructProcess()
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-") {

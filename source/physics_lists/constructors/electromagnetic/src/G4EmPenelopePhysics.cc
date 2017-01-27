@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmPenelopePhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmPenelopePhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 
 #include "G4EmPenelopePhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -243,11 +243,12 @@ void G4EmPenelopePhysics::ConstructProcess()
   G4NuclearStopping* pnuc = new G4NuclearStopping();
 
   // Add Penelope EM Processes
-  aParticleIterator->reset();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
 
-  while( (*aParticleIterator)() ){
+  while( (*myParticleIterator)() ){
   
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
     
     //Applicability range for Penelope models

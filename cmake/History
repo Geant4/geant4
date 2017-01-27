@@ -31,6 +31,24 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+15th November 2016 - Ben Morgan (cmake-V10-01-47)
+- Export USolids/VecGeom compile defs to Geant4GNUmake environment setup scripts
+- Modules/Geant4ToolchainBackwardCompatibility.cmake :
+  Configure export variables based on choice of USolids full/partial
+  replacement
+- Templates/geant4make-skeleton.in : Add entries for required env vars
+
+31st October 2016 - Ben Morgan
+- Bugfix #1877
+- Templates/geant4-env-skeleton.in : Provide placeholder
+  variable for adding setting of XercesC libpath
+- Modules/Geant4ToolchainBackwardCompatibility.cmake
+  Extract and export XercesC library directory to geant4.(c)sh
+  scripts. Add new _g4tc_append_path function to allow appending
+  of entries to a path-like variable. This ensures paths to third
+  party libraries appear after the core Geant4 library path which
+  should prevent clashes.
+
 3rd June 2016 - Gunter Folger (cmake-V10-01-46)
 - Switch to corrected datasets to correct bad packing in patch01:
    - G4ENSDFSTATE.1.2.3

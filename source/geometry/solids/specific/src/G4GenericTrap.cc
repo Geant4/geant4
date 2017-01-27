@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc 95652 2016-02-17 11:40:43Z gcosmo $
+// $Id: G4GenericTrap.cc 102296 2017-01-20 13:21:03Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -512,7 +512,7 @@ G4ThreeVector G4GenericTrap::SurfaceNormal( const G4ThreeVector& p ) const
     sumnorm=apprnorm;
     // Add Approximative Surface Normal Calculation?
   }
-  else if ( noSurfaces == 1 )  { sumnorm = sumnorm; }
+  else if ( noSurfaces == 1 )  { ; }
   else                         { sumnorm = sumnorm.unit(); }
 
   return sumnorm ; 

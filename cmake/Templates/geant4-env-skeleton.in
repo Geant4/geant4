@@ -29,6 +29,9 @@
 # - CLHEP
 @GEANT4_TC_CLHEP_LIB_PATH_SETUP@
 
+# - XercesC
+@GEANT4_TC_XERCESC_LIB_PATH_SETUP@
+
 #-----------------------------------------------------------------------
 # Resource file paths
 # - Datasets

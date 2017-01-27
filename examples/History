@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4th December 2015  Gabriele Cosmo (examples-V10-02-00)
+27th January 2017  Gabriele Cosmo (examples-V10-01-11)
+- Updated reference outputs according to patch release tag geant4-10-02-patch-03.
+- Replaced direct use of 'a/theParticleIterator' with GetParticleIterator().
+
+4th December 2015  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-10-02-ref-00.
 - Includes tags: doxygen-V10-01-03, ccal-V10-01-00, hadrontherapy-V10-01-03,
                  DMX-V10-01-01, exampleB1-V10-01-03, exampleB3-V10-01-01,

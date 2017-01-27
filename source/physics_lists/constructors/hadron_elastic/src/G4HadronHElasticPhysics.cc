@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc 90757 2015-06-09 07:45:14Z gcosmo $
+// $Id: G4HadronHElasticPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -159,10 +159,11 @@ void G4HadronHElasticPhysics::ConstructProcess() {
     G4AutoDelete::Register(diffRatio);    
   }
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ) {
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ) {
 
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
 

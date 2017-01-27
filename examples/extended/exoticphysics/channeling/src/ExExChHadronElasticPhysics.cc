@@ -125,10 +125,11 @@ void ExExChHadronElasticPhysics::ConstructProcess()
     G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE();
     he->SetMinEnergy(elimitPi);
 
-    aParticleIterator->reset();
-    while( (*aParticleIterator)() )
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
+    while( (*particleIterator)() )
     {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String pname = particle->GetParticleName();
         if(pname == "anti_lambda"  ||

@@ -31,6 +31,16 @@ typedef unsigned long long diff_pointer_t;
 typedef unsigned long diff_pointer_t;
 #endif
 
+#ifdef _WIN64
+typedef unsigned long long upointer;
+inline const char* upointer_format() {static const char s[] = "%llu";return s;}
+inline const char* upointer_format_x() {static const char s[] = "0x%llx";return s;}
+#else
+typedef unsigned long upointer;
+inline const char* upointer_format() {static const char s[] = "%lu";return s;}
+inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
+#endif
+
 #elif defined(_LP64) 
 
 // 64 Bit Platforms
@@ -46,6 +56,10 @@ inline const char* uint64_format() {static const char s[] = "%lu";return s;}
 
 typedef unsigned long diff_pointer_t;
 
+typedef unsigned long upointer;
+inline const char* upointer_format() {static const char s[] = "%lu";return s;}
+inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
+
 #else 
 
 // 32-Bit Platforms
@@ -60,6 +74,10 @@ inline const char* uint32_format() {static const char s[] = "%u";return s;}
 inline const char* uint64_format() {static const char s[] = "%llu";return s;}
 
 typedef unsigned long diff_pointer_t;
+
+typedef unsigned long upointer;
+inline const char* upointer_format() {static const char s[] = "%lu";return s;}
+inline const char* upointer_format_x() {static const char s[] = "0x%lx";return s;}
 
 #endif
 
@@ -87,7 +105,7 @@ typedef char* cstr_t;
 typedef const char* const_cstr_t;
 
 class fits_bit {public:char m_c;}; //for exlib/cfitsio
-class csv_time {public:long m_l;}; //for inlib/rcsv_ntuple
+class csv_time {public:long m_l;}; //for tools/rcsv_ntuple
 
 inline unsigned int size_char()   {return 1;}
 inline unsigned int size_short()  {return 2;}

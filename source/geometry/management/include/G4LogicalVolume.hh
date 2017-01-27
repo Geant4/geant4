@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh 93287 2015-10-15 09:50:22Z gcosmo $
+// $Id: G4LogicalVolume.hh 102288 2017-01-20 10:57:03Z gcosmo $
 //
 // 
 // class G4LogicalVolume
@@ -119,6 +119,7 @@
 #include "G4Region.hh"           // Required by inline methods
 #include "G4VPhysicalVolume.hh"  // Need operator == for vector fdaughters
 #include "G4GeomSplitter.hh"     // Needed for MT RW data splitting
+#include "G4Threading.hh"
 
 // Forward declarations
 //
@@ -139,13 +140,14 @@ class G4LVData
 
   public:
     G4LVData();
-    void initialize() {
-     fSolid = 0;
-     fSensitiveDetector = 0;
-     fFieldManager = 0;
-     fMaterial = 0;
-     fMass = 0.0;
-     fCutsCouple = 0;
+    void initialize()
+    {
+      fSolid = 0;
+      fSensitiveDetector = 0;
+      fFieldManager = 0;
+      fMaterial = 0;
+      fMass = 0.0;
+      fCutsCouple = 0;
     }
 
   public:
@@ -206,7 +208,7 @@ class G4LogicalVolume
 
     ~G4LogicalVolume();
       // Destructor. Removes the logical volume from the logical volume Store.
-      // NOT virtual, since not meant to act as base class.
+      // This class is NOT meant to act as base class.
 
     inline const G4String& GetName() const;
     inline void SetName(const G4String& pName);
@@ -217,7 +219,7 @@ class G4LogicalVolume
     inline G4VPhysicalVolume* GetDaughter(const G4int i) const;
       // Returns the ith daughter. Note numbering starts from 0,
       // and no bounds checking is performed.
-    inline void AddDaughter(G4VPhysicalVolume* p);
+    void AddDaughter(G4VPhysicalVolume* p);
       // Adds the volume p as a daughter of the current logical volume.
     inline G4bool IsDaughter(const G4VPhysicalVolume* p) const;
       // Returns true if the volume p is a daughter of the current
@@ -226,10 +228,10 @@ class G4LogicalVolume
       // Returns true if the volume p is part of the hierarchy of
       // volumes established by the current logical volume. Scans
       // recursively the volume tree.
-    inline void RemoveDaughter(const G4VPhysicalVolume* p);
+    void RemoveDaughter(const G4VPhysicalVolume* p);
       // Removes the volume p from the List of daughter of the current
       // logical volume.
-    inline void ClearDaughters();
+    void ClearDaughters();
       // Clears the list of daughters. Used by the phys-volume store when
       // the geometry tree is cleared, since modified at run-time.
     G4int TotalVolumeEntities() const;
@@ -238,14 +240,14 @@ class G4LogicalVolume
     inline EVolume CharacteriseDaughters() const;
       // Characterise the daughters of this logical volume.
 
-    inline G4VSolid* GetSolid() const;
-    inline void SetSolid(G4VSolid *pSolid);
+    G4VSolid* GetSolid() const;
+    void SetSolid(G4VSolid *pSolid);
       // Gets and sets the current solid.
 
-    inline G4Material* GetMaterial() const;
-    inline void SetMaterial(G4Material *pMaterial);
+    G4Material* GetMaterial() const;
+    void SetMaterial(G4Material *pMaterial);
       // Gets and sets the current material.
-    inline void UpdateMaterial(G4Material *pMaterial);
+    void UpdateMaterial(G4Material *pMaterial);
       // Sets material and corresponding MaterialCutsCouple.
       // This method is invoked by G4Navigator while it is navigating through 
       // material parameterization.
@@ -264,12 +266,12 @@ class G4LogicalVolume
       //       method returns the mass of the present logical volume only 
       //       (subtracted for the volume occupied by the daughter volumes).
       //       An optional argument to specify a material is also provided.
-    void   ResetMass(); 
+    void ResetMass(); 
       // Ensure that cached value of Mass is invalidated - due to change in 
       //  state, e.g. change of size of Solid, change of type of solid,
       //              or the addition/deletion of a daughter volume. 
  
-    inline G4FieldManager* GetFieldManager() const;
+    G4FieldManager* GetFieldManager() const;
       // Gets current FieldManager.
     void SetFieldManager(G4FieldManager *pFieldMgr, G4bool forceToAllDaughters); 
       // Sets FieldManager and propagates it:
@@ -278,9 +280,9 @@ class G4LogicalVolume
       // ii) to all daughters
       //     if forceToAllDaughters=true
 
-    inline G4VSensitiveDetector* GetSensitiveDetector() const;
+    G4VSensitiveDetector* GetSensitiveDetector() const;
       // Gets current SensitiveDetector.
-    inline void SetSensitiveDetector(G4VSensitiveDetector *pSDetector);
+    void SetSensitiveDetector(G4VSensitiveDetector *pSDetector);
       // Sets SensitiveDetector (can be 0).
 
     inline G4UserLimits* GetUserLimits() const;
@@ -316,8 +318,8 @@ class G4LogicalVolume
     inline void PropagateRegion();
       // Propagates region pointer to daughters.
 
-    inline const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
-    inline void SetMaterialCutsCouple(G4MaterialCutsCouple* cuts);
+    const G4MaterialCutsCouple* GetMaterialCutsCouple() const;
+    void SetMaterialCutsCouple(G4MaterialCutsCouple* cuts);
       // Accessors for production cuts.
 
     G4bool operator == (const G4LogicalVolume& lv) const;
@@ -374,12 +376,12 @@ class G4LogicalVolume
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-    inline void AssignFieldManager( G4FieldManager *fldMgr);
+    void AssignFieldManager( G4FieldManager *fldMgr);
       // Set the FieldManager - only at this level (do not push down hierarchy)
   
-    // Optimised Methods - passing thread instance of worker data
-    inline static G4VSolid* GetSolid(G4LVData &instLVdata) ; // const;
-    inline static void SetSolid(G4LVData &instLVdata, G4VSolid *pSolid);
+    static G4VSolid* GetSolid(G4LVData &instLVdata) ; // const;
+    static void SetSolid(G4LVData &instLVdata, G4VSolid *pSolid);
+      // Optimised Methods - passing thread instance of worker data
 
   private:
 

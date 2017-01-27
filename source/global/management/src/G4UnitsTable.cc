@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc 97527 2016-06-03 14:59:04Z gcosmo $
+// $Id: G4UnitsTable.cc 102299 2017-01-20 14:03:34Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -296,7 +296,7 @@ void G4UnitDefinition::BuildUnitsTable()
  new G4UnitDefinition("newton","N","Force",newton);
  
  //Pressure
- new G4UnitDefinition(    "pascal","Pa" ,"Pressure",pascal);
+ new G4UnitDefinition(    "pascal","Pa" ,"Pressure",hep_pascal);
  new G4UnitDefinition(       "bar","bar","Pressure",bar); 
  new G4UnitDefinition("atmosphere","atm","Pressure",atmosphere);
  

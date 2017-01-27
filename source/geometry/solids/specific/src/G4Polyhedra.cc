@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 93559 2015-10-26 14:14:49Z gcosmo $
+// $Id: G4Polyhedra.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -217,9 +217,10 @@ void G4Polyhedra::Create( G4double phiStart,
 
   G4double rzArea = rz->Area();
   if (rzArea < -kCarTolerance)
+  {
     rz->ReverseOrder();
-
-  else if (rzArea < -kCarTolerance)
+  }
+  else if (rzArea < kCarTolerance)
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl
@@ -663,16 +664,16 @@ G4ThreeVector G4Polyhedra::GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1,
   v = p3 - p2;
   w = p0 - p3;
 
-  chose = RandFlat::shoot(0.,aOne+aTwo);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo);
   if( (chose>=0.) && (chose < aOne) )
   {
-    lambda1 = RandFlat::shoot(0.,1.);
-    lambda2 = RandFlat::shoot(0.,lambda1);
+    lambda1 = G4RandFlat::shoot(0.,1.);
+    lambda2 = G4RandFlat::shoot(0.,lambda1);
     return (p2+lambda1*v+lambda2*w);    
   }
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
   return (p0+lambda1*t+lambda2*u);
 }
 
@@ -689,8 +690,8 @@ G4ThreeVector G4Polyhedra::GetPointOnTriangle(G4ThreeVector p1,
   G4double lambda1,lambda2;
   G4ThreeVector v=p3-p1, w=p1-p2;
 
-  lambda1 = RandFlat::shoot(0.,1.);
-  lambda2 = RandFlat::shoot(0.,lambda1);
+  lambda1 = G4RandFlat::shoot(0.,1.);
+  lambda2 = G4RandFlat::shoot(0.,lambda1);
 
   return (p2 + lambda1*w + lambda2*v);
 }
@@ -780,10 +781,10 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     Achose1 = 0.;
     Achose2 = numSide*(aVector1[0]+aVector2[0])+2.*aVector3[0];
 
-    chose = RandFlat::shoot(0.,totArea+aTop+aBottom);
+    chose = G4RandFlat::shoot(0.,totArea+aTop+aBottom);
     if( (chose >= 0.) && (chose < aTop + aBottom) )
     {
-      chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
+      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
       rang = std::floor((chose-startPhi)/ksi-0.01);
       if(rang<0) { rang=0; }
       rang = std::fabs(rang);  
@@ -791,7 +792,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
       sinphi2 = std::sin(startPhi+(rang+1)*ksi);
       cosphi1 = std::cos(startPhi+rang*ksi);
       cosphi2 = std::cos(startPhi+(rang+1)*ksi);
-      chose = RandFlat::shoot(0., aTop + aBottom);
+      chose = G4RandFlat::shoot(0., aTop + aBottom);
       if(chose>=0. && chose<aTop)
       {
         rad1 = original_parameters->Rmin[numPlanes-1];
@@ -830,11 +831,11 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     j = Flag; 
     
     totArea = numSide*(aVector1[j]+aVector2[j])+2.*aVector3[j];
-    chose = RandFlat::shoot(0.,totArea);
+    chose = G4RandFlat::shoot(0.,totArea);
   
     if( (chose>=0.) && (chose<numSide*aVector1[j]) )
     {
-      chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
+      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
       rang = std::floor((chose-startPhi)/ksi-0.01);
       if(rang<0) { rang=0; }
       rang = std::fabs(rang);
@@ -858,7 +859,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
     else if ( (chose >= numSide*aVector1[j])
            && (chose <= numSide*(aVector1[j]+aVector2[j])) )
     {
-      chose = RandFlat::shoot(startPhi,startPhi+totalPhi);
+      chose = G4RandFlat::shoot(startPhi,startPhi+totalPhi);
       rang = std::floor((chose-startPhi)/ksi-0.01);
       if(rang<0) { rang=0; }
       rang = std::fabs(rang);
@@ -880,7 +881,7 @@ G4ThreeVector G4Polyhedra::GetPointOnSurface() const
       return GetPointOnPlane(p0,p1,p2,p3);
     }
 
-    chose = RandFlat::shoot(0.,2.2);
+    chose = G4RandFlat::shoot(0.,2.2);
     if( (chose>=0.) && (chose < 1.) )
     {
       rang = startPhi;

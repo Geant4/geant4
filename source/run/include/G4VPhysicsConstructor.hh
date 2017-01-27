@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicsConstructor.hh 68802 2013-04-05 13:54:41Z gcosmo $
+// $Id: G4VPhysicsConstructor.hh 102337 2017-01-23 13:20:50Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -165,6 +165,7 @@ class G4VPhysicsConstructor
     G4ParticleTable* theParticleTable;
     G4int g4vpcInstanceID;
     G4RUN_DLL static G4VPCManager subInstanceManager;
+    G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
 public:
     inline G4int GetInstanceID() const;
     static const G4VPCManager& GetSubInstanceManager();

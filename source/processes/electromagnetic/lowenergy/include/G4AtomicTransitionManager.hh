@@ -111,6 +111,10 @@ public:
   G4double 
   TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const; 
 
+  // Verbosity control
+  void SetVerboseLevel(G4int vl) {verboseLevel = vl;};
+  G4int GetVerboseLevel(){return verboseLevel;};
+
 private:
 
   G4AtomicTransitionManager();
@@ -146,6 +150,8 @@ private:
   G4int supTableLimit;
  
   G4bool   isInitialized;
+
+  G4int verboseLevel;
 };
 
 #endif

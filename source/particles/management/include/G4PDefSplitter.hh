@@ -54,7 +54,8 @@ class G4PDefSplitter
 {
   public:
 
-    G4PDefSplitter() : totalobj(0) {
+    G4PDefSplitter() : totalobj(0)
+    {
     	G4MUTEXINIT(mutex);
     }
 
@@ -65,7 +66,8 @@ class G4PDefSplitter
     {
       G4AutoLock l(&mutex);
       totalobj++;
-      if (totalobj > slavetotalspace)  {
+      if (totalobj > slavetotalspace)
+      {
     	  l.unlock();
     	  NewSubInstances();
     	  l.lock();
@@ -112,18 +114,9 @@ class G4PDefSplitter
         // Use recycled work area - which was created previously
         if( offset && offset!=newOffset )
         {
-            if( newOffset != offset )
-            {
-                G4Exception("G4PDefSplitter::UseWorkspace()",
-                            "TwoWorkspaces", FatalException,
-                            "Thread already has workspace - cannot use another.");
-            }
-            else
-            {
-                G4Exception("G4PDefSplitter::UseWorkspace()",
-                            "TwoWorkspaces", JustWarning,
-                            "Thread already has a workspace - trying to set the same again.");
-            }
+          G4Exception("G4PDefSplitter::UseWorkspace()",
+                      "TwoWorkspaces", FatalException,
+                      "Thread already has workspace - cannot use another.");
         }
         offset= newOffset;
         // totalobj= numObjects;
@@ -152,5 +145,8 @@ class G4PDefSplitter
     G4int totalobj;
     G4Mutex mutex;
 };
-
+#if defined G4PARTICLES_ALLOC_EXPORT
+  template<typename T> G4ThreadLocal G4int G4PDefSplitter<T>::slavetotalspace=0;
+  template<typename T> G4ThreadLocal T* G4PDefSplitter<T>::offset=0;
+#endif
 #endif

@@ -33,7 +33,7 @@
 //    ********************************
 //
 //
-// $Id: PurgMagPhysicsList.cc 69086 2013-04-18 07:29:59Z gcosmo $
+// $Id: PurgMagPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -136,10 +136,11 @@ void PurgMagPhysicsList::ConstructProcess()
 
 void PurgMagPhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
       

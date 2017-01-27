@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 92392 2015-08-31 14:07:02Z gcosmo $
+// $Id: G4Paraboloid.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -1012,25 +1012,25 @@ std::ostream& G4Paraboloid::StreamInfo( std::ostream& os ) const
 G4ThreeVector G4Paraboloid::GetPointOnSurface() const
 {
   G4double A = (fSurfaceArea == 0)? CalculateSurfaceArea(): fSurfaceArea;
-  G4double z = RandFlat::shoot(0.,1.);
-  G4double phi = RandFlat::shoot(0., twopi);
+  G4double z = G4RandFlat::shoot(0.,1.);
+  G4double phi = G4RandFlat::shoot(0., twopi);
   if(pi*(sqr(r1) + sqr(r2))/A >= z)
   {
     G4double rho;
     if(pi * sqr(r1) / A > z)
     {
-      rho = r1 * std::sqrt(RandFlat::shoot(0., 1.));
+      rho = r1 * std::sqrt(G4RandFlat::shoot(0., 1.));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), -dz);
     }
     else
     {
-      rho = r2 * std::sqrt(RandFlat::shoot(0., 1));
+      rho = r2 * std::sqrt(G4RandFlat::shoot(0., 1));
       return G4ThreeVector(rho * std::cos(phi), rho * std::sin(phi), dz);
     }
   }
   else
   {
-    z = RandFlat::shoot(0., 1.)*2*dz - dz;
+    z = G4RandFlat::shoot(0., 1.)*2*dz - dz;
     return G4ThreeVector(std::sqrt(z*k1 + k2)*std::cos(phi),
                          std::sqrt(z*k1 + k2)*std::sin(phi), z);
   }

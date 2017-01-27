@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MultiLevelLocator.cc 97507 2016-06-03 12:48:42Z gcosmo $
+// $Id: G4MultiLevelLocator.cc 102290 2017-01-20 11:19:44Z gcosmo $
 //
 // Class G4MultiLevelLocator implementation
 //
@@ -220,14 +220,15 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
   //
   G4FieldTrack SubStart_PointVelocity = CurveStartPointVelocity;
    
-  do
+  do  // Loop checking, 07.10.2016, J.Apostolakis
   {
     unsigned int substep_no_p = 0;
     G4bool sub_final_section = false; // the same as final_section,
                                       // but for 'sub_section'
-    SubStart_PointVelocity = CurrentA_PointVelocity; 
-    do // REPEAT param
-    {
+    SubStart_PointVelocity = CurrentA_PointVelocity;
+ 
+    do // Loop checking, 07.10.2016, J.Apostolakis
+    { // REPEAT param
       G4ThreeVector Point_A = CurrentA_PointVelocity.GetPosition();  
       G4ThreeVector Point_B = CurrentB_PointVelocity.GetPosition();
        
@@ -653,7 +654,7 @@ G4bool G4MultiLevelLocator::EstimateIntersectionPoint(
       unsigned int levelPops=0;
       
       G4bool unfinished = Second_half;
-      while ( unfinished && (depth>0) )
+      while ( unfinished && (depth>0) )  // Loop checking, 07.10.2016, J. Apostolakis
       {
         // Second part of curve (InterMed[depth],Intermed[depth-1])) 
         // On the depth-1 level normally we are on the 'second_half'

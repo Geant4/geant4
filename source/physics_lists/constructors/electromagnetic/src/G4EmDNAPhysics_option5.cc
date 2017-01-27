@@ -147,10 +147,11 @@ void G4EmDNAPhysics_option5::ConstructProcess()
   }
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "e-")

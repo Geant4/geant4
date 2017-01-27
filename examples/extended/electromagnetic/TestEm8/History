@@ -1,4 +1,4 @@
-$Id: History 93674 2015-10-28 09:58:36Z gcosmo $
+$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-10-16 G.Folger
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+  fix required by clang39 on Linux and MAC
 
 27-10-15 D.Sawkey (testem8-V10-01-06)
 - spellcheck, synch README, .README

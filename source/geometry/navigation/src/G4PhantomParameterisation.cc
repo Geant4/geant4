@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhantomParameterisation.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4PhantomParameterisation.cc 102290 2017-01-20 11:19:44Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4PhantomParameterisation implementation
@@ -53,7 +53,7 @@ G4PhantomParameterisation::G4PhantomParameterisation()
   kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 }
 
-
+ 
 //------------------------------------------------------------------
 G4PhantomParameterisation::~G4PhantomParameterisation()
 {
@@ -156,7 +156,8 @@ GetMaterialIndex( size_t nx, size_t ny, size_t nz ) const
 
 
 //------------------------------------------------------------------
-G4Material* G4PhantomParameterisation::GetMaterial( size_t nx, size_t ny, size_t nz) const
+G4Material*
+G4PhantomParameterisation::GetMaterial( size_t nx, size_t ny, size_t nz) const
 {
   return fMaterials[GetMaterialIndex(nx,ny,nz)];
 }
@@ -241,7 +242,11 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
             << " - is outside container solid: "
             << fContainerSolid->GetName() << G4endl;
     G4Exception("G4PhantomParameterisation::GetReplicaNo()", "GeomNav0003",
-                FatalErrorInArgument, message);
+                JustWarning, message);
+    G4cerr << " DIFFERENCE WITH PHANTOM WALLS X: "
+           << fabs(localPoint.x()) - fContainerWallX
+           << " Y: " << fabs(localPoint.y()) - fContainerWallY
+           << " Z: " << fabs(localPoint.z()) - fContainerWallZ << G4endl;
   }
   
   // Check the voxel numbers corresponding to localPoint
@@ -256,23 +261,23 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   // Add +kCarTolerance so that they are first placed on voxel N, and then
   // if the direction is negative substract 1
 
-  G4double fx = (localPoint.x()+fContainerWallX+kCarTolerance)/(fVoxelHalfX*2.);
+  G4double fx = (localPoint.x()+fContainerWallX)/(fVoxelHalfX*2.);
   G4int nx = G4int(fx);
 
-  G4double fy = (localPoint.y()+fContainerWallY+kCarTolerance)/(fVoxelHalfY*2.);
+  G4double fy = (localPoint.y()+fContainerWallY)/(fVoxelHalfY*2.); 
   G4int ny = G4int(fy);
 
-  G4double fz = (localPoint.z()+fContainerWallZ+kCarTolerance)/(fVoxelHalfZ*2.);
+  G4double fz = (localPoint.z()+fContainerWallZ)/(fVoxelHalfZ*2.);
   G4int nz = G4int(fz);
 
   // If it is on the surface side, check the direction: if direction is
-  // negative place it on the previous voxel (if direction is positive it is
-  // already in the next voxel...). 
+  // negative place it in the previous voxel (if direction is positive it is
+  // already in the next voxel).
   // Correct also cases where n = -1 or n = fNoVoxel. It is always traced to be
   // due to multiple scattering: track is entering a voxel but multiple
   // scattering changes the angle towards outside
   //
-  if( fx - nx < kCarTolerance/fVoxelHalfX )
+  if( fx - nx < kCarTolerance*fContainerWallX )
   {
     if( localDir.x() < 0 )
     {
@@ -289,7 +294,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       }
     }
   }
-  if( fy - ny < kCarTolerance/fVoxelHalfY )
+  if( fy - ny < kCarTolerance*fContainerWallY )
   {
     if( localDir.y() < 0 )
     {
@@ -306,7 +311,7 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
       }
     }
   }
-  if( fz - nz < kCarTolerance/fVoxelHalfZ )
+  if( fz - nz < kCarTolerance*fContainerWallZ )
   {
     if( localDir.z() < 0 )
     {
@@ -377,7 +382,9 @@ GetReplicaNo( const G4ThreeVector& localPoint, const G4ThreeVector& localDir )
   }
 
   // CheckCopyNo( copyNo ); // not needed, just for debugging code
-
+  // G4cout << " COPYNO " << copyNo << " " << nx << " " << ny << " " << nz
+  //        << G4endl; //GDEB
+  
   return copyNo;
 }
 

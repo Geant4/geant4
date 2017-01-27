@@ -177,9 +177,10 @@ void XrayFluoPhysicsList::AddDecay()
 
   G4Decay* fDecayProcess = new G4Decay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
@@ -201,9 +202,10 @@ void XrayFluoPhysicsList::AddStepMax()
   // Step limitation seen as a process
   XrayFluoStepMax* stepMaxProcess = new XrayFluoStepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())

@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 14, 2016 G.Folger
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+  fix required by clang39 on Linux and MAC
+
 June 16, 2015 E. Bagli (channelingExample-V10-01-05)
 - bug fix passing arguments
 

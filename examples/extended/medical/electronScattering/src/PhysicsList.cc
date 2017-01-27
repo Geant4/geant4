@@ -26,7 +26,7 @@
 /// \file medical/electronScattering/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 86064 2014-11-07 08:49:32Z gcosmo $
+// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -154,9 +154,10 @@ void PhysicsList::AddDecay()
 
   G4Decay* fDecayProcess = new G4Decay();
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
@@ -180,9 +181,10 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (stepMaxProcess->IsApplicable(*particle))

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -405,8 +405,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1467025659
- float_seed_table[] = 0.051339 0.287153 0.266665 0.451768 0.218104 0.364492 0.879297 0.225476 0.232141 0.00818038 0.527705 0.719851 0.259945 0.534538 0.150509 0.612227 0.719533 0.526322 0.317769 0.234285 0.760191 0.424932 0.239266 0.157135 
+ Initial seed = 1485359289
+ float_seed_table[] = 0.131983 0.316989 0.1055 0.656285 0.723241 0.888098 0.37069 0.967939 0.185518 0.387449 0.38827 0.373476 0.330573 0.752242 0.20178 0.208947 0.984691 0.497871 0.940918 0.094232 0.708002 0.177318 0.372896 0.161464 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -417,7 +417,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.52s Real=3.52s Sys=0s
+  User=2.45s Real=2.45s Sys=0s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -431,22 +431,22 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 9
+Total navigation history collections cleaned: 11
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.253 MB
-Pool ID '7G4Track', size : 0.506 MB
+Pool ID '17G4DynamicParticle', size : 0.221 MB
+Pool ID '7G4Track', size : 0.441 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00385 MB
+Pool ID '15UltraOpticalHit', size : 0.00481 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.78 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.69 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

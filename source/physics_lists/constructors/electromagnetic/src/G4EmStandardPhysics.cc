@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 92821 2015-09-17 15:23:49Z gcosmo $
+// $Id: G4EmStandardPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -210,9 +210,10 @@ void G4EmStandardPhysics::ConstructProcess()
   G4double highEnergyLimit = 100*MeV;
 
   // Add standard EM Processes
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ){
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
     if (particleName == "gamma") {

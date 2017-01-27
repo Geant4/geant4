@@ -465,7 +465,7 @@ void G4WorkerRunManager::ConstructScoringWorlds()
       if(!pWorld)
       {
         G4ExceptionDescription ed;
-        ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the masther thread.";
+        ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the master thread.";
         G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",
                       FatalException,ed);
       }

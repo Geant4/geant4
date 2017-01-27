@@ -286,7 +286,9 @@ public:
     }
   }
 
-  virtual ~ntuple() {}
+  virtual ~ntuple() {
+    tools::clear<icol>(m_cols);
+  }
 protected:
   ntuple(const ntuple& a_from)
   :iobject(a_from),itree(a_from),tree(a_from)

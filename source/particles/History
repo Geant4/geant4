@@ -1,4 +1,4 @@
-$Id: History 97537 2016-06-03 15:26:56Z gcosmo $
+$Id: History 102405 2017-01-25 08:40:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 9 January 2017 Hisaya Kurashige (particles-V10-01-24)
+- Fix a bug in G4MuonRadiativeDecayWithSpin (#1928)
+
+- 4 November 2016 Gunter Folger (particles-V10-01-23)
+- Reformat G4PDefManager.cc, and move G4PDefData::initialize() to .cc
+
+- 3 November 2016 Gunter Folger
+- Obsolete G4PDefSplitter, and replace 
+    "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
+    with implementation. This addresses initialistaion problems of 
+    static data previously in template.
+ 
+- 26 October 2016 Gunter Folger
+- Protect initialisation of G4PDefSplitter to be done only in particles
+   in attempt to correct windows compilation error.
+
+- 21 October 2016 Gabriele Cosmo
+- Moved initialisation of G4PDefSplitter thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+- 9 September 2016 Gabriele Cosmo
+- Moved accessors/modifiers for splitter data to non-inline in
+  G4ParticleDefinition.
+  Explicitly initialise G4PDefSplitter data in G4ParticlesWorkspace
+  translation unit.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+- 2 September 2016 Makoto Asai (particles-V10-01-22)
+- Changed the way of deleting G4PrimaryVertex and G4PrimaryParticle
+  objects to avoid stack overflow for very large number of primary
+  vertices or primary particles.
+
+- 7 July 2016 Gabriele Cosmo
+- Removed redundant check in G4PDefSplitter::UseWorkArea().
+  Addressing problem report #1876.
 
 - 1 Match 2016 Andrea Dotti (particles-V10-01-21)
 - Fix for WIN: removing constexpr

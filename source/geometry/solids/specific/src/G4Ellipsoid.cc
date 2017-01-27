@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Ellipsoid.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // class G4Ellipsoid
 //
@@ -1013,10 +1013,10 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   else if (max1 == ySemiAxis) { max2 = xSemiAxis; max3 = zSemiAxis; }
   else                        { max2 = xSemiAxis; max3 = ySemiAxis; }
 
-  phi   = RandFlat::shoot(0.,twopi);
+  phi   = G4RandFlat::shoot(0.,twopi);
   
   cosphi = std::cos(phi);   sinphi = std::sin(phi);
-  costheta = RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
+  costheta = G4RandFlat::shoot(zBottomCut,zTopCut)/zSemiAxis;
   sintheta = std::sqrt(1.-sqr(costheta));
   
   alpha = 1.-sqr(max2/max1); beta  = 1.-sqr(max3/max1);
@@ -1037,7 +1037,7 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
     aTop = 0; aBottom = 0;
   }
   
-  chose = RandFlat::shoot(0.,aTop + aBottom + aCurved); 
+  chose = G4RandFlat::shoot(0.,aTop + aBottom + aCurved); 
   
   if(chose < aCurved)
   { 
@@ -1048,18 +1048,18 @@ G4ThreeVector G4Ellipsoid::GetPointOnSurface() const
   }
   else if(chose >= aCurved && chose < aCurved + aTop)
   {
-    xRand = RandFlat::shoot(-1.,1.)*xSemiAxis
+    xRand = G4RandFlat::shoot(-1.,1.)*xSemiAxis
           * std::sqrt(1-sqr(zTopCut/zSemiAxis));
-    yRand = RandFlat::shoot(-1.,1.)*ySemiAxis
+    yRand = G4RandFlat::shoot(-1.,1.)*ySemiAxis
           * std::sqrt(1.-sqr(zTopCut/zSemiAxis)-sqr(xRand/xSemiAxis));
     zRand = zTopCut;
     return G4ThreeVector (xRand,yRand,zRand);
   }
   else
   {
-    xRand = RandFlat::shoot(-1.,1.)*xSemiAxis
+    xRand = G4RandFlat::shoot(-1.,1.)*xSemiAxis
           * std::sqrt(1-sqr(zBottomCut/zSemiAxis));
-    yRand = RandFlat::shoot(-1.,1.)*ySemiAxis
+    yRand = G4RandFlat::shoot(-1.,1.)*ySemiAxis
           * std::sqrt(1.-sqr(zBottomCut/zSemiAxis)-sqr(xRand/xSemiAxis)); 
     zRand = zBottomCut;
     return G4ThreeVector (xRand,yRand,zRand);

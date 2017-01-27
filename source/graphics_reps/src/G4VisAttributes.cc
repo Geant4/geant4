@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.cc 88083 2015-01-28 08:31:34Z gcosmo $
+// $Id: G4VisAttributes.cc 102310 2017-01-20 15:27:13Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -148,7 +148,13 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   return *this;
 }
 
+// Deprecated 14 July 2016  JA
 const G4VisAttributes  G4VisAttributes::Invisible = G4VisAttributes (false);
+
+const G4VisAttributes& G4VisAttributes::GetInvisible() {
+  static const G4VisAttributes invisible = G4VisAttributes(false);
+  return invisible;
+}
 
 const std::vector<G4AttValue>* G4VisAttributes::CreateAttValues () const {
   // Create an expendable copy on the heap...

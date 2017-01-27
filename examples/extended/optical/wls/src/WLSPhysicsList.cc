@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSPhysicsList.cc 78066 2013-12-03 11:08:36Z gcosmo $
+// $Id: WLSPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 /// \file optical/wls/src/WLSPhysicsList.cc
 /// \brief Implementation of the WLSPhysicsList class
@@ -322,9 +322,10 @@ void WLSPhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())

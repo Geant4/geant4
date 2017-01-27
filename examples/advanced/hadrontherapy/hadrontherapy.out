@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -591,7 +591,7 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=5.48s Real=6.46s Sys=0.03s
+  User=4.78s Real=4.84s Sys=0.03s
 Dose is being written to Dose.out
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc 95780 2016-02-24 08:34:54Z gcosmo $
+// $Id: G4HadronElasticPhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -142,10 +142,11 @@ void G4HadronElasticPhysics::ConstructProcess()
   G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
   he->SetMinEnergy(elimitPi);
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String pname = particle->GetParticleName();
     if(pname == "anti_lambda"  ||

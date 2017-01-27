@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94332 2015-11-12 09:56:46Z gcosmo $
+# $Id: sources.cmake 102308 2017-01-20 14:54:21Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -55,6 +55,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
 	G4NuclideTable.hh
 	G4NuclideTableMessenger.hh
         G4PDGCodeChecker.hh
+        G4PDefManager.hh
         G4PDefSplitter.hh
         G4ParticleDefinition.hh
         G4ParticleDefinition.icc
@@ -101,6 +102,7 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4NucleiPropertiesTheoreticalTableB.cc
 	G4NuclideTable.cc
 	G4NuclideTableMessenger.cc
+        G4PDefManager.cc
         G4PDGCodeChecker.cc
         G4ParticleDefinition.cc
         G4ParticleMessenger.cc

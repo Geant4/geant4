@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: F04PhysicsList.cc 85915 2014-11-06 09:05:23Z gcosmo $
+// $Id: F04PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 /// \file field/field04/src/F04PhysicsList.cc
 /// \brief Implementation of the F04PhysicsList class
@@ -309,9 +309,10 @@ void F04PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
 
       if (fStepMaxProcess->IsApplicable(*particle) && !particle->IsShortLived())

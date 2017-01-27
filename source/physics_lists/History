@@ -1,4 +1,4 @@
-$Id: History 83699 2014-09-10 07:18:25Z gcosmo $
+$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-2016, Gunter Folger (physics_lists-V10-01-00)
+- replaced direct use of aParticleIterator by GetParticleIterator().
 
 09-09-2014, Witek Pokorski (physics_lists-V10-00-01)
 - replacing explicite instantiation of cross sections by calls

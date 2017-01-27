@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 93559 2015-10-26 14:14:49Z gcosmo $
+// $Id: G4Polycone.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -191,9 +191,10 @@ void G4Polycone::Create( G4double phiStart,
     
   G4double rzArea = rz->Area();
   if (rzArea < -kCarTolerance)
+  {
     rz->ReverseOrder();
-
-  else if (rzArea < -kCarTolerance)
+  }
+  else if (rzArea < kCarTolerance)
   {
     std::ostringstream message;
     message << "Illegal input parameters - " << GetName() << G4endl
@@ -622,25 +623,25 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   Afive  = fDz*(fRmax1-fRmin1+fRmax2-fRmin2);
   totArea = Aone+Atwo+2.*Afive;
   
-  phi  = RandFlat::shoot(startPhi,endPhi);
+  phi  = G4RandFlat::shoot(startPhi,endPhi);
   cosu = std::cos(phi);
   sinu = std::sin(phi);
 
 
   if( (startPhi == 0) && (endPhi == twopi) ) { Afive = 0; }
-  chose = RandFlat::shoot(0.,Aone+Atwo+2.*Afive);
+  chose = G4RandFlat::shoot(0.,Aone+Atwo+2.*Afive);
   if( (chose >= 0) && (chose < Aone) )
   {
     if(fRmax1 != fRmax2)
     {
-      zRand = RandFlat::shoot(-1.*afDz,afDz); 
+      zRand = G4RandFlat::shoot(-1.*afDz,afDz); 
       point = G4ThreeVector (rone*cosu*(qone-zRand),
                              rone*sinu*(qone-zRand), zRand);
     }
     else
     {
       point = G4ThreeVector(fRmax1*cosu, fRmax1*sinu,
-                            RandFlat::shoot(-1.*afDz,afDz));
+                            G4RandFlat::shoot(-1.*afDz,afDz));
      
     }
   }
@@ -648,7 +649,7 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
   {
     if(fRmin1 != fRmin2)
     { 
-      zRand = RandFlat::shoot(-1.*afDz,afDz); 
+      zRand = G4RandFlat::shoot(-1.*afDz,afDz); 
       point = G4ThreeVector (rtwo*cosu*(qtwo-zRand),
                              rtwo*sinu*(qtwo-zRand), zRand);
       
@@ -656,24 +657,24 @@ G4ThreeVector G4Polycone::GetPointOnCone(G4double fRmin1, G4double fRmax1,
     else
     {
       point = G4ThreeVector(fRmin1*cosu, fRmin1*sinu,
-                            RandFlat::shoot(-1.*afDz,afDz));
+                            G4RandFlat::shoot(-1.*afDz,afDz));
     }
   }
   else if( (chose >= Aone + Atwo + Afive) && (chose < Aone + Atwo + 2.*Afive) )
   {
-    zRand  = RandFlat::shoot(-1.*afDz,afDz);
+    zRand  = G4RandFlat::shoot(-1.*afDz,afDz);
     rmin   = fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2);
     rmax   = fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2);
-    rRand1 = std::sqrt(RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
+    rRand1 = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
     point  = G4ThreeVector (rRand1*std::cos(startPhi),
                             rRand1*std::sin(startPhi), zRand);
   }
   else
   { 
-    zRand  = RandFlat::shoot(-1.*afDz,afDz); 
+    zRand  = G4RandFlat::shoot(-1.*afDz,afDz); 
     rmin   = fRmin2-((zRand-fDz)/(2.*fDz))*(fRmin1-fRmin2);
     rmax   = fRmax2-((zRand-fDz)/(2.*fDz))*(fRmax1-fRmax2);
-    rRand1 = std::sqrt(RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
+    rRand1 = std::sqrt(G4RandFlat::shoot()*(sqr(rmax)-sqr(rmin))+sqr(rmin));
     point  = G4ThreeVector (rRand1*std::cos(endPhi),
                             rRand1*std::sin(endPhi), zRand);
    
@@ -702,34 +703,34 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
   aTwo = 2.*fDz*fDPhi*fRMin;
   aFou = 2.*fDz*(fRMax-fRMin);
   totArea = aOne+aTwo+2.*aFou;
-  phi    = RandFlat::shoot(startPhi,endPhi);
+  phi    = G4RandFlat::shoot(startPhi,endPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
-  rRand  = fRMin + (fRMax-fRMin)*std::sqrt(RandFlat::shoot());
+  rRand  = fRMin + (fRMax-fRMin)*std::sqrt(G4RandFlat::shoot());
  
   if(startPhi == 0 && endPhi == twopi) 
     aFou = 0;
   
-  chose  = RandFlat::shoot(0.,aOne+aTwo+2.*aFou);
+  chose  = G4RandFlat::shoot(0.,aOne+aTwo+2.*aFou);
   if( (chose >= 0) && (chose < aOne) )
   {
     xRand = fRMax*cosphi;
     yRand = fRMax*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
   else if( (chose >= aOne) && (chose < aOne + aTwo) )
   {
     xRand = fRMin*cosphi;
     yRand = fRMin*sinphi;
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
   else if( (chose >= aOne+aTwo) && (chose <aOne+aTwo+aFou) )
   {
     xRand = rRand*std::cos(fSPhi+fDPhi);
     yRand = rRand*std::sin(fSPhi+fDPhi);
-    zRand = RandFlat::shoot(-1.*fDz,fDz);
+    zRand = G4RandFlat::shoot(-1.*fDz,fDz);
     return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
   }
 
@@ -737,7 +738,7 @@ G4ThreeVector G4Polycone::GetPointOnTubs(G4double fRMin, G4double fRMax,
 
   xRand = rRand*std::cos(fSPhi+fDPhi);
   yRand = rRand*std::sin(fSPhi+fDPhi);
-  zRand = RandFlat::shoot(-1.*fDz,fDz);
+  zRand = G4RandFlat::shoot(-1.*fDz,fDz);
   return G4ThreeVector(xRand, yRand, zRand+0.5*(zTwo+zOne));
 }
 
@@ -752,7 +753,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
                                          G4double zOne) const
 {
   G4double xRand,yRand,phi,cosphi,sinphi,rRand1,rRand2,A1,Atot,rCh;
-  phi    = RandFlat::shoot(startPhi,endPhi);
+  phi    = G4RandFlat::shoot(startPhi,endPhi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
 
@@ -762,7 +763,7 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   }
   else
   {
-    rRand1 = RandFlat::shoot(fRMin1,fRMin2);
+    rRand1 = G4RandFlat::shoot(fRMin1,fRMin2);
     A1=std::fabs(fRMin2*fRMin2-fRMin1*fRMin1);
   }
   if(fRMax1==fRMax2)
@@ -771,10 +772,10 @@ G4ThreeVector G4Polycone::GetPointOnRing(G4double fRMin1, G4double fRMax1,
   }
   else
   {
-    rRand2 = RandFlat::shoot(fRMax1,fRMax2);
+    rRand2 = G4RandFlat::shoot(fRMax1,fRMax2);
     Atot   = A1+std::fabs(fRMax2*fRMax2-fRMax1*fRMax1);
   }
-  rCh   = RandFlat::shoot(0.,Atot);
+  rCh   = G4RandFlat::shoot(0.,Atot);
  
   if(rCh>A1) { rRand1=rRand2; }
   
@@ -815,13 +816,13 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
     G4int i=0;
     G4int numPlanes = original_parameters->Num_z_planes;
   
-    phi = RandFlat::shoot(startPhi,endPhi);
+    phi = G4RandFlat::shoot(startPhi,endPhi);
     cosphi = std::cos(phi);
     sinphi = std::sin(phi);
 
     rRand = original_parameters->Rmin[0] +
       ( (original_parameters->Rmax[0]-original_parameters->Rmin[0])
-        * std::sqrt(RandFlat::shoot()) );
+        * std::sqrt(G4RandFlat::shoot()) );
 
     std::vector<G4double> areas;       // (numPlanes+1);
     std::vector<G4ThreeVector> points; // (numPlanes-1);
@@ -862,7 +863,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
                         sqr(original_parameters->Rmin[numPlanes-1])));
   
     totArea += (areas[0]+areas[numPlanes]);
-    G4double chose = RandFlat::shoot(0.,totArea);
+    G4double chose = G4RandFlat::shoot(0.,totArea);
 
     if( (chose>=0.) && (chose<areas[0]) )
     {
@@ -887,7 +888,7 @@ G4ThreeVector G4Polycone::GetPointOnSurface() const
 
     rRand = original_parameters->Rmin[numPlanes-1] +
       ( (original_parameters->Rmax[numPlanes-1]-original_parameters->Rmin[numPlanes-1])
-        * std::sqrt(RandFlat::shoot()) );
+        * std::sqrt(G4RandFlat::shoot()) );
 
     return G4ThreeVector(rRand*cosphi,rRand*sinphi,
                          original_parameters->Z_values[numPlanes-1]);  

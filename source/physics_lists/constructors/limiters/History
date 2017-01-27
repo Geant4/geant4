@@ -1,5 +1,5 @@
 
-$Id: History 95451 2016-02-11 09:41:23Z gcosmo $
+$Id: History 102321 2017-01-23 09:51:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-October-2016 G.Folger
+- replace remaining direct use of aParticleIterator by GetParticleIterator().
 
 27-Jan-2016, M. Asai (phys-ctor-limiters-V10-01-05)
 - G4ParallelWorldPhysics: change process order index of

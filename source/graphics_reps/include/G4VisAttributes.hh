@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh 85261 2014-10-27 08:54:57Z gcosmo $
+// $Id: G4VisAttributes.hh 102310 2017-01-20 15:27:13Z gcosmo $
 //
 // 
 // John Allison  23rd October 1996
@@ -80,6 +80,11 @@ public: // With description
   ~G4VisAttributes ();
   G4VisAttributes& operator= (const G4VisAttributes&);
 
+  // Deprecated 14 July 2016  JA
+  // Use GetInvisible() instead.  E.g.:
+  //   logical_volume->SetVisAttributes(G4VisAttributes::GetInvisible());
+  // or use one of the above constructors or SetVisibility and
+  //   logical_volume->SetVisAttributes(my_vis_attributes);
   static const G4VisAttributes Invisible;
 
   static const G4VisAttributes& GetInvisible();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 92393 2015-08-31 14:07:30Z gcosmo $
+// $Id: G4Torus.cc 102294 2017-01-20 11:41:52Z gcosmo $
 //
 // 
 // class G4Torus
@@ -1735,8 +1735,8 @@ G4ThreeVector G4Torus::GetPointOnSurface() const
 {
   G4double cosu, sinu,cosv, sinv, aOut, aIn, aSide, chose, phi, theta, rRand;
    
-  phi   = RandFlat::shoot(fSPhi,fSPhi+fDPhi);
-  theta = RandFlat::shoot(0.,twopi);
+  phi   = G4RandFlat::shoot(fSPhi,fSPhi+fDPhi);
+  theta = G4RandFlat::shoot(0.,twopi);
   
   cosu   = std::cos(phi);    sinu = std::sin(phi);
   cosv   = std::cos(theta);  sinv = std::sin(theta); 
@@ -1748,7 +1748,7 @@ G4ThreeVector G4Torus::GetPointOnSurface() const
   aSide  = pi*(fRmax*fRmax-fRmin*fRmin);
   
   if ((fSPhi == 0) && (fDPhi == twopi)){ aSide = 0; }
-  chose = RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
+  chose = G4RandFlat::shoot(0.,aOut + aIn + 2.*aSide);
 
   if(chose < aOut)
   {

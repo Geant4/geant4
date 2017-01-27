@@ -212,7 +212,7 @@ public:
     mem::increment(s_class().c_str());\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
-    is[0] = a_v.size();\
+    is[0] = (unsigned int)a_v.size();\
     u.a_m_what = new tools::array<a_what>(is);\
     u.a_m_what->fill(a_v);\
   }
@@ -221,7 +221,7 @@ public:
   value(const std::vector<a_what>& a_v){\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
-    is[0] = a_v.size();\
+    is[0] = (unsigned int)a_v.size();\
     u.a_m_what = new tools::array<a_what>(is);\
     u.a_m_what->fill(a_v);\
   }
@@ -596,7 +596,7 @@ public:
     reset();\
     m_type = a_type;\
     std::vector<unsigned int> is(1);\
-    is[0] = a_v.size();\
+    is[0] = (unsigned int)a_v.size();\
     u.a_m_what = new tools::array<a_what>(is);\
     u.a_m_what->fill(a_v);\
   }
@@ -684,49 +684,49 @@ public:
       tools::sprintf(a_s,5,"(nil)");
       return true;
     case INT:
-      tools::sprintf(a_s,16,"%d",a_v.u.m_int);
+      tools::sprintf(a_s,32,"%d",a_v.u.m_int);
       return true;
     case DOUBLE:
-      tools::sprintf(a_s,16,"%g",a_v.u.m_double);
+      tools::sprintf(a_s,32,"%g",a_v.u.m_double);
       return true;
     case VOID_STAR:
-      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_void_star);
+      tools::sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_void_star);
       return true;
     case UNSIGNED_SHORT:
-      tools::sprintf(a_s,16,"%u",a_v.u.m_unsigned_short);
+      tools::sprintf(a_s,32,"%u",a_v.u.m_unsigned_short);
       return true;
     case UNSIGNED_INT:
-      tools::sprintf(a_s,16,"%u",a_v.u.m_unsigned_int);
+      tools::sprintf(a_s,32,"%u",a_v.u.m_unsigned_int);
       return true;
     case BOOL:
       tools::sprintf(a_s,5,"%s",a_v.u.m_bool?"true":"false");
       return true;
     case SHORT:
-      tools::sprintf(a_s,16,"%d",a_v.u.m_short);
+      tools::sprintf(a_s,32,"%d",a_v.u.m_short);
       return true;
     case INT64:
-      tools::sprintf(a_s,16,tools::int64_format(),a_v.u.m_int64);
+      tools::sprintf(a_s,32,tools::int64_format(),a_v.u.m_int64);
       return true;
     case UNSIGNED_INT64:
-      tools::sprintf(a_s,16,tools::int64_format(),a_v.u.m_unsigned_int64);
+      tools::sprintf(a_s,32,tools::int64_format(),a_v.u.m_unsigned_int64);
       return true;
     case FLOAT:
-      tools::sprintf(a_s,16,"%g",a_v.u.m_float);
+      tools::sprintf(a_s,32,"%g",a_v.u.m_float);
       return true;
     //case UNSIGNED_CHAR:
-    //  tools::sprintf(a_s,16,"%c",a_v.u.m_unsigned_char);
+    //  tools::sprintf(a_s,32,"%c",a_v.u.m_unsigned_char);
     //  return true;
     //case CHAR:
-    //  tools::sprintf(a_s,16,"%c",a_v.u.m_char);
+    //  tools::sprintf(a_s,32,"%c",a_v.u.m_char);
     //  return true;
     case DOUBLE_STAR:
-      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_double_star);
+      tools::sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_double_star);
       return true;
     case FLOAT_STAR:
-      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_float_star);
+      tools::sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_float_star);
       return true;
     case INT_STAR:
-      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_int_star);
+      tools::sprintf(a_s,32,upointer_format_x(),(upointer)a_v.u.m_int_star);
       return true;
     case STRING:
       a_s = *a_v.u.m_string;
@@ -866,7 +866,7 @@ public:
     return false;
   }
 
-  unsigned int array_size() const {
+  size_t array_size() const {
     switch(m_type) {
     case INT:
     case DOUBLE:

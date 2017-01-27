@@ -1,4 +1,4 @@
-$Id: History 97917 2016-06-23 07:12:01Z gcosmo $
+$Id: History 102339 2017-01-23 13:22:48Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,30 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 21, 2016 G.Cosmo (run-V10-01-19)
+- Moved initialisation of G4VUPLSplitter thread-local data to be inline
+  along with generic template type. Removed explicit initialisation of
+  thread-local data from workspaces, as now happening inline in
+  G4TWorkspacePool.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+October 14, 2016, G.Cosmo
+- Again trying fixing G4RNGHelper inlining issue.
+
+October 13, 2016, G.Cosmo
+- Explicitly initialise G4VUPLSplitter data in G4PhysicsListWorkspace.
+- Moved static GetInstance() method in G4RNGHelper to be not inline.
+- Grouped #include statements in G4WorkerThread.cc.
+
+October 12, 2016, G.Folger
+- Add method GetParticleIterator in G4VUserPhysicsList
+   and make these methods const and protected in both classes 
+   ... fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+October 11, 2016, G.Folger
+- Add method GetParticleIterator in G4VPhysicsConstructor
+  Start to fix for compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
 Jan 27th, 2016 M.Asai (run-V10-01-17)
 - G4PhysicsListHelper: add entry for G4ParallelWorldProcess

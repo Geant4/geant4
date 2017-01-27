@@ -56,7 +56,8 @@ G4AtomicTransitionManager::G4AtomicTransitionManager()
    zMax(100),
    infTableLimit(6),
    supTableLimit(100),
-   isInitialized(false)
+   isInitialized(false),
+   verboseLevel(0)
 {}
 
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
@@ -109,8 +110,9 @@ G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
 	  ed << "No de-excitation for Z= " << Z 
 	     << "  shellIndex= " << shellIndex
 	     << ">=  numberOfShells= " << lastShell;
-	  G4Exception("G4AtomicTransitionManager::Shell()","de0001",
-		      JustWarning,ed," AtomicShell not found");
+	  if (verboseLevel > 0) 
+              G4Exception("G4AtomicTransitionManager::Shell()","de0001",
+		JustWarning,ed," AtomicShell not found");
 	  if (lastShell > 0) { return v[lastShell - 1]; }
 	}
     }

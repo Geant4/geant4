@@ -1,4 +1,4 @@
-$Id: History 97486 2016-06-03 10:45:04Z gcosmo $
+$Id: History 102286 2017-01-20 10:31:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 7, 2016 D.Sorokin                 - field-V10-01-18
+---------------------  Commit: J. Apostolakis
+- Protection for multiple inclusion of G4ClassicalRK4 
+   (thanks to Dmitrii Sorokin, GSoC 2016 student. )
 
 May 4, 2016 G.Cosmo                   - field-V10-01-17
 -------------------

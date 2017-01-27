@@ -50,7 +50,7 @@
 
 #include <fstream>
 
-G4ThreadLocal G4LENDManager* G4LENDManager::lend_manager = NULL;
+G4LENDManager* G4LENDManager::lend_manager = NULL;
 
 
 G4LENDManager::G4LENDManager()

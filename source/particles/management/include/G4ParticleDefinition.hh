@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh 79342 2014-02-24 11:42:42Z gcosmo $
+// $Id: G4ParticleDefinition.hh 102308 2017-01-20 14:54:21Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -59,54 +59,15 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "G4PDefSplitter.hh"
+#include "G4PDefManager.hh"
 
 class G4ProcessManager;
 class G4DecayTable;
 class G4ParticleTable;
 class G4ParticlePropertyTable;
 
-class G4PDefData
-{
-  // Encapsulates the fields of the class G4ParticleDefinition
-  // that may not be read-only.
-
-  public:
-
-    void initialize()
-    {
-      theProcessManager = 0;    
-    }
-
-    G4ProcessManager *theProcessManager;
-};
-
-// The type G4PDefManager is introduced to encapsulate the methods used by
-// both the master thread and worker threads to allocate memory space for
-// the fields encapsulated by the class G4PDefData. When each thread
-// changes the value for these fields, it refers to them using a macro
-// definition defined below. For every G4ParticleDefinition instance,
-// there is a corresponding G4PDefData instance. All G4PDefData instances
-// are organized by the class G4PDefManager as an array.
-// The field "int g4particleDefinitionInstanceID" is added to the class G4ParticleDefinition.
-// The value of this field in each G4ParticleDefinition instance is the
-// subscript of the corresponding G4PDefData instance.
-// In order to use the class G4PDefManager, we add a static member in the class
-// G4ParticleDefinition as follows: "static G4PDefManager subInstanceManager".
-// Both the master thread and worker threads change the length of the array
-// for G4PDefData instances mutually along with G4ParticleDefinition
-// instances are created. For each worker thread, it dynamically creates ions.
-// Consider any thread A, if there is any other thread which creates an ion.
-// This ion is shared by the thread A. So the thread A leaves an empty space
-// in the array of G4PDefData instances for the ion.
-//
-typedef G4PDefSplitter<G4PDefData>  G4PDefManager;
+//typedef G4PDefSplitter<G4PDefData>  G4PDefManager;
 typedef G4PDefManager G4ParticleDefinitionSubInstanceManager;
-
-// This macro changes the references to fields that are now encapsulated
-// in the class G4PDefData.
-//
-#define G4MT_pmanager ((subInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
 
 class G4ParticleDefinition 
 {

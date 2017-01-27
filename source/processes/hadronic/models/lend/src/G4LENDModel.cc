@@ -42,7 +42,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
-double MyRNG(void*) { return  CLHEP::HepRandom::getTheEngine()->flat(); }
+double MyRNG(void*) { return  G4Random::getTheEngine()->flat(); }
 
 G4LENDModel::G4LENDModel( G4String name )
 :G4HadronicInteraction( name )

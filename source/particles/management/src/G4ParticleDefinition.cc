@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 92918 2015-09-21 15:04:01Z gcosmo $
+// $Id: G4ParticleDefinition.cc 102308 2017-01-20 14:54:21Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -61,21 +61,14 @@
 #include "G4StateManager.hh"
 #include "G4UnitsTable.hh"
 
-// This static member is thread local. For each thread, it holds the array
-// size of G4PDefData instances.
-//
-template <class G4PDefData> G4ThreadLocal
-G4int G4PDefSplitter<G4PDefData>::slavetotalspace = 0;
-
-// This static member is thread local. For each thread, it points to the
-// array of G4PDefData instances.
-//
-template <class G4PDefData> G4ThreadLocal
-G4PDefData* G4PDefSplitter<G4PDefData>::offset = 0;
-
 // This new field helps to use the class G4PDefManager.
 //
 G4PDefManager G4ParticleDefinition::subInstanceManager;
+
+// This macro changes the references to fields that are now encapsulated
+// in the class G4PDefData.
+//
+#define G4MT_pmanager ((subInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
 
 // Returns the private data instance manager.
 //
@@ -251,7 +244,11 @@ G4int G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
   return (this->theParticleName != right.theParticleName);
 }
 
-
+G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
+{
+    if(g4particleDefinitionInstanceID<0) return 0;
+    return G4MT_pmanager;
+}
 
 G4int G4ParticleDefinition::FillQuarkContents()
       //  calculate quark and anti-quark contents

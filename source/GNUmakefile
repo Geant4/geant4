@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 97460 2016-06-03 09:28:56Z gcosmo $
+# $Id: GNUmakefile 102301 2017-01-20 14:05:04Z gcosmo $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -168,8 +168,8 @@ endif
 
 banner:
 	@$(ECHO) "*************************************************************"
-	@$(ECHO) " Installation Geant4 version geant4-10-02-patch-02           "
-	@$(ECHO) " Copyright (C) 1994-2016 Geant4 Collaboration                "
+	@$(ECHO) " Installation Geant4 version geant4-10-02-patch-03           "
+	@$(ECHO) " Copyright (C) 1994-2017 Geant4 Collaboration                "
 	@$(ECHO) "*************************************************************"
 
 clean_libs::

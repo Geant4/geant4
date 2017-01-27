@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc 97507 2016-06-03 12:48:42Z gcosmo $
+// $Id: G4VoxelNavigation.cc 102290 2017-01-20 11:19:44Z gcosmo $
 //
 //
 // class G4VoxelNavigation Implementation
@@ -450,7 +450,8 @@ G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector& localPoint) const
 
   // Compute isotropic safety to boundaries of previous levels
   // [NOT to collected boundaries]
-  //
+
+  // Loop checking, 07.10.2016, J.Apostolakis
   while ( (localVoxelDepth>0) && (voxelSafety>0) )
   {
     localVoxelDepth--;

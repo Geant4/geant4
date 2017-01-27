@@ -180,5 +180,6 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
 void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision()
 {
   establish_G4MT_TLS_G4VCollision();
+  if ( theAngularDistribution ) delete theAngularDistribution;
   theAngularDistribution = new G4AngularDistribution(true);
 }

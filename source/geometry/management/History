@@ -1,4 +1,4 @@
-$Id: History 97491 2016-06-03 10:57:01Z gcosmo $
+$Id: History 102288 2017-01-20 10:57:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 21, 2016 G.Cosmo                   geommng-V10-01-09
+- Moved initialisation of G4GeomSplitter thread-local data to be inline
+  along with generic template type.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+September 20, 2016 G.Cosmo
+- Moved accessors/modifiers for splitter data to non-inline in G4Region,
+  G4LogicalVolume, G4VPhysicalVolume.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+July 7, 2016 G.Cosmo
+- Removed redundant check in G4GeomSplitter::UseWorkArea().
+  Addressing problem report #1876.
 
 April 14, 2016 G.Cosmo                     geommng-V10-01-08
 - Added flag for partial use of USolids/VecGeom types.

@@ -1,4 +1,4 @@
-$Id: History 97616 2016-06-06 12:37:57Z gcosmo $
+$Id: History 102325 2017-01-23 10:25:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 July 16: V.Ivant (emutils-V10-01-43)
+- G4EmBiasingManager - fixed PVS-Studio warning (A.Karpov)
 
 15 March 16: V.Ivant (emutils-V10-01-42)
 - G4EmCalculator - added protection against zero cut value - use 

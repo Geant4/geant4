@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14/10/16 Gunter Folger
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+
 17/11/15 J. Madsen
 - Removed preprocessor checks for C++11
 - Removed _HAS_ATOMICS_ preprocessor definition/conditions

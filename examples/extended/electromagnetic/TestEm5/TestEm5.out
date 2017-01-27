@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -418,7 +418,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.32s Real=3.33s Sys=0s
+  User=2.5s Real=2.5s Sys=0s
 
  ======================== run summary ======================
 
@@ -827,7 +827,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=3.63s Real=3.66s Sys=0s
+  User=2.22s Real=2.23s Sys=0s
 
  ======================== run summary ======================
 
@@ -1241,7 +1241,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=5.48s Real=5.5s Sys=0s
+  User=3.9s Real=3.96s Sys=0s
 
  ======================== run summary ======================
 
@@ -1661,7 +1661,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.71s Real=1.72s Sys=0s
+  User=0.97s Real=0.98s Sys=0s
 
  ======================== run summary ======================
 
@@ -2082,7 +2082,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=19.64s Real=19.67s Sys=0s
+  User=11.35s Real=11.41s Sys=0s
 
  ======================== run summary ======================
 

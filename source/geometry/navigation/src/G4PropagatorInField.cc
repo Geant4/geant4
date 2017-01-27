@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc 94380 2015-11-13 10:14:39Z gcosmo $
+// $Id: G4PropagatorInField.cc 102290 2017-01-20 11:19:44Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PropagatorInField Implementation
@@ -200,10 +200,6 @@ G4PropagatorInField::ComputeStep(
   // For the next call, the field manager must again be set
   fSetFieldMgr= false;
 
- // Values for Intersection Locator has to be updated on each call for the
- // case that CurrentFieldManager has changed from the one of previous step
-  RefreshIntersectionLocator();
-
   G4FieldTrack  CurrentState(pFieldTrack);
   G4FieldTrack  OriginalState = CurrentState;
 
@@ -225,10 +221,15 @@ G4PropagatorInField::ComputeStep(
   epsilon = fCurrentFieldMgr->GetDeltaOneStep() / CurrentProposedStepLength;
   // G4double raw_epsilon= epsilon;
   G4double epsilonMin= fCurrentFieldMgr->GetMinimumEpsilonStep();
-  G4double epsilonMax= fCurrentFieldMgr->GetMaximumEpsilonStep();; 
+  G4double epsilonMax= fCurrentFieldMgr->GetMaximumEpsilonStep();
   if( epsilon < epsilonMin ) epsilon = epsilonMin;
   if( epsilon > epsilonMax ) epsilon = epsilonMax;
   SetEpsilonStep( epsilon );
+
+
+  // Values for Intersection Locator has to be updated on each call for the
+  // case that CurrentFieldManager has changed from the one of previous step
+  RefreshIntersectionLocator();
 
   // G4cout << "G4PiF: Epsilon of current step - raw= " << raw_epsilon
   //        << " final= " << epsilon << G4endl;
@@ -297,7 +298,7 @@ G4PropagatorInField::ComputeStep(
   fLast_ProposedStepLength = CurrentProposedStepLength;
 
   G4int do_loop_count = 0; 
-  do
+  do  // Loop checking, 07.10.2016, J.Apostolakis
   { 
     G4FieldTrack SubStepStartState = CurrentState;
     G4ThreeVector SubStartPoint = CurrentState.GetPosition(); 

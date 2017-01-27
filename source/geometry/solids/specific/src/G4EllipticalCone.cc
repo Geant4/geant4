@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4EllipticalCone.cc 102297 2017-01-20 13:33:54Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -1015,16 +1015,16 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   aTwo   = pi*xSemiAxis*ySemiAxis*sqr(zheight+zTopCut);
   aThree = pi*xSemiAxis*ySemiAxis*sqr(zheight-zTopCut);  
 
-  phi = RandFlat::shoot(0.,twopi);
+  phi = G4RandFlat::shoot(0.,twopi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
   
   if(zTopCut >= zheight) aThree = 0.;
 
-  chose = RandFlat::shoot(0.,aOne+aTwo+aThree);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+aThree);
   if((chose>=0.) && (chose<aOne))
   {
-    zRand = RandFlat::shoot(-zTopCut,zTopCut);
+    zRand = G4RandFlat::shoot(-zTopCut,zTopCut);
     return G4ThreeVector(xSemiAxis*(zheight-zRand)*cosphi,
                          ySemiAxis*(zheight-zRand)*sinphi,zRand);    
   }
@@ -1032,11 +1032,11 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
   {
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      rRand1 = RandFlat::shoot(0.,1.) ;
-      rRand2 = RandFlat::shoot(0.,1.) ;
+      rRand1 = G4RandFlat::shoot(0.,1.) ;
+      rRand2 = G4RandFlat::shoot(0.,1.) ;
     } while (( rRand2 >= rRand1  ) && (++it1 < 1000)) ;
 
-    //    rRand2 = RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
+    //    rRand2 = G4RandFlat::shoot(0.,std::sqrt(1.-sqr(rRand1)));
     return G4ThreeVector(rRand1*xSemiAxis*(zheight+zTopCut)*cosphi,
                          rRand1*ySemiAxis*(zheight+zTopCut)*sinphi, -zTopCut);
 
@@ -1046,8 +1046,8 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
 
   do    // Loop checking, 13.08.2015, G.Cosmo
   {
-    rRand1 = RandFlat::shoot(0.,1.) ;
-    rRand2 = RandFlat::shoot(0.,1.) ;
+    rRand1 = G4RandFlat::shoot(0.,1.) ;
+    rRand2 = G4RandFlat::shoot(0.,1.) ;
   } while (( rRand2 >= rRand1  ) && (++it2 < 1000));
 
   return G4ThreeVector(rRand1*xSemiAxis*(zheight-zTopCut)*cosphi,

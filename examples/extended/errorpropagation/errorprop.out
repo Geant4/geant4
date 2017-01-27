@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x226ad30
+ creating G4RunManagerKernel 0x1944d30
 
 The materials defined are : 
 
@@ -79,15 +79,15 @@ List of instantiated particles ============================================
 e+ e- gamma geantino mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x24b2730G4ErrorPhysicsList:: particle process manager e+ = 0x24b4f30
-0x24b25a0G4ErrorPhysicsList:: particle process manager e- = 0x24b6520
-0x24b22e0G4ErrorPhysicsList:: particle process manager gamma = 0x24b6790
-0x24b3de0G4ErrorPhysicsList:: particle process manager geantino = 0x24b69e0
-0x24b2940G4ErrorPhysicsList:: particle process manager mu+ = 0x24b6c30
-0x24b2de0G4ErrorPhysicsList:: particle process manager mu- = 0x24b6e80
-0x24b3280G4ErrorPhysicsList:: particle process manager pi+ = 0x24b70d0
-0x24b3700G4ErrorPhysicsList:: particle process manager pi- = 0x24b7320
-0x24b3b80G4ErrorPhysicsList:: particle process manager proton = 0x24b7570
+0x1b8c680G4ErrorPhysicsList:: particle process manager e+ = 0x1b8ee80
+0x1b8c4f0G4ErrorPhysicsList:: particle process manager e- = 0x1b90470
+0x1b8c230G4ErrorPhysicsList:: particle process manager gamma = 0x1b906e0
+0x1b8dd30G4ErrorPhysicsList:: particle process manager geantino = 0x1b90930
+0x1b8c890G4ErrorPhysicsList:: particle process manager mu+ = 0x1b90b80
+0x1b8cd30G4ErrorPhysicsList:: particle process manager mu- = 0x1b90dd0
+0x1b8d1d0G4ErrorPhysicsList:: particle process manager pi+ = 0x1b91020
+0x1b8d650G4ErrorPhysicsList:: particle process manager pi- = 0x1b91270
+0x1b8dad0G4ErrorPhysicsList:: particle process manager proton = 0x1b914c0
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

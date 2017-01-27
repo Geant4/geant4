@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-10-16 G.Folger
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+  fix required by clang39 on Linux and MAC
+
 27-10-15 D.Sawkey (testem9-V10-01-01)
 - Add physics lists G4EmStandardPhysicsGS, SS, WVI
 

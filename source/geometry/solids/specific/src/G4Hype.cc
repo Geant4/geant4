@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4Hype.cc 102297 2017-01-20 13:33:54Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -1451,13 +1451,13 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
   if(outerStereo == 0.) {aOne = std::fabs(2.*pi*outerRadius*2.*halfLenZ);}
   if(innerStereo == 0.) {aTwo = std::fabs(2.*pi*innerRadius*2.*halfLenZ);}
   
-  phi = RandFlat::shoot(0.,2.*pi);
+  phi = G4RandFlat::shoot(0.,2.*pi);
   cosphi = std::cos(phi);
   sinphi = std::sin(phi);
-  sinhu = RandFlat::shoot(-1.*halfLenZ*tanOuterStereo/outerRadius,
+  sinhu = G4RandFlat::shoot(-1.*halfLenZ*tanOuterStereo/outerRadius,
                           halfLenZ*tanOuterStereo/outerRadius);
 
-  chose = RandFlat::shoot(0.,aOne+aTwo+2.*aThree);
+  chose = G4RandFlat::shoot(0.,aOne+aTwo+2.*aThree);
   if(chose>=0. && chose < aOne)
   {
     if(outerStereo != 0.)
@@ -1470,14 +1470,14 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     else
     {
       return G4ThreeVector(outerRadius*cosphi,outerRadius*sinphi,
-                           RandFlat::shoot(-halfLenZ,halfLenZ));
+                           G4RandFlat::shoot(-halfLenZ,halfLenZ));
     }
   }
   else if(chose>=aOne && chose<aOne+aTwo)
   {
     if(innerStereo != 0.)
     {
-      sinhu = RandFlat::shoot(-1.*halfLenZ*tanInnerStereo/innerRadius,
+      sinhu = G4RandFlat::shoot(-1.*halfLenZ*tanInnerStereo/innerRadius,
                               halfLenZ*tanInnerStereo/innerRadius);
       zRand = innerRadius*sinhu/tanInnerStereo;
       xRand = std::sqrt(sqr(sinhu)+1)*innerRadius*cosphi;
@@ -1487,7 +1487,7 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
     else 
     {
       return G4ThreeVector(innerRadius*cosphi,innerRadius*sinphi,
-                           RandFlat::shoot(-1.*halfLenZ,halfLenZ));
+                           G4RandFlat::shoot(-1.*halfLenZ,halfLenZ));
     }
   }
   else if(chose>=aOne+aTwo && chose<aOne+aTwo+aThree)
@@ -1498,8 +1498,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
  
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      xRand = RandFlat::shoot(-rOut,rOut) ;
-      yRand = RandFlat::shoot(-rOut,rOut) ;
+      xRand = G4RandFlat::shoot(-rOut,rOut) ;
+      yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
     } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
 
@@ -1514,8 +1514,8 @@ G4ThreeVector G4Hype::GetPointOnSurface() const
  
     do    // Loop checking, 13.08.2015, G.Cosmo
     {
-      xRand = RandFlat::shoot(-rOut,rOut) ;
-      yRand = RandFlat::shoot(-rOut,rOut) ;
+      xRand = G4RandFlat::shoot(-rOut,rOut) ;
+      yRand = G4RandFlat::shoot(-rOut,rOut) ;
       r2 = xRand*xRand + yRand*yRand ;
     } while ( ! ( r2 >= rIn2 && r2 <= rOut2 ) ) ;
 

@@ -9,6 +9,9 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+21 Oct 2016 - S.Incerti
+- correct use of particleIterator as required by clang39
+
 28 Aug 2015 - S.Incerti - tag microbeam-V10-01-03
 - added stronger constraints on SetMinimumEpsilonStep
 and SetMaximumEpsilonStep

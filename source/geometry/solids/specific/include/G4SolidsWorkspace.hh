@@ -73,13 +73,14 @@ class G4SolidsWorkspace
  protected:  // Implementation methods
       void   InitialiseSolids();
 
- private:    // Helper pointers - can be per instance or shared
+ private:
+      // Helper pointers - can be per instance or shared
       G4PlSideManager *fpPolyconeSideSIM;
       G4PhSideManager *fpPolyhedraSideSIM;
   
-  // Per Instance variables
-  //   NOTE: the ownership of the Data Arrays is IN this object
- private:
+      // Per Instance variables
+      //   NOTE: the ownership of the Data Arrays is IN this object
+ 
      // Store SubInstanceManager object pointers (SIM pointers)
      G4PlSideData  *fPolyconeSideOffset;
      G4PhSideData  *fPolyhedraSideOffset;

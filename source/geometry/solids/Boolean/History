@@ -1,5 +1,5 @@
 
-$Id: History 97509 2016-06-03 13:32:08Z gcosmo $
+$Id: History 102292 2017-01-20 11:27:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ August 17, 2016 G. Cosmo                geom-bool-V10-01-05
+ - G4SubtractionSolid: directly return previously computed distance in
+   DistanceToIn(p,v) if no progress is made (zero step).
 
  May 20, 2016 G. Cosmo                   geom-bool-V10-01-04
  - Moved accessors and modifiers in UMultiUnion wrapper to be not inlined.

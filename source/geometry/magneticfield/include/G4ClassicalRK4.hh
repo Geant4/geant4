@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ClassicalRK4.hh 102286 2017-01-20 10:31:02Z gcosmo $
 //
 //
 // class G4ClassicalRK4
@@ -37,7 +37,11 @@
 // History:
 // - Created: J.Apostolakis, V.Grichine - 30.1.97
 // - Moved into G4MagErrorStepper: W.Wander <wwc@mit.edu> - 12/09/97
+// - Fix:  D.Sorokin add header guard
 // -------------------------------------------------------------------
+
+#ifndef G4ClassicalRK4_HH
+#define G4ClassicalRK4_HH
 
 #include "G4MagErrorStepper.hh"
 
@@ -90,3 +94,5 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 
     G4double *dydxm, *dydxt, *yt; // scratch space - not state 
 };
+
+#endif

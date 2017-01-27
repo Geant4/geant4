@@ -197,9 +197,10 @@ void DMXPhysicsList::AddTransportation() {
   
   G4VUserPhysicsList::AddTransportation();
   
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     // time cuts for ONLY neutrons:
@@ -275,9 +276,10 @@ void DMXPhysicsList::ConstructEM() {
   opt.SetDEDXBinning(200);
   opt.SetLambdaBinning(200);
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
     G4String particleType = particle->GetParticleType();
@@ -466,10 +468,11 @@ void DMXPhysicsList::ConstructOp()
   // theRayleighScatteringProcess->SetVerboseLevel(OpVerbLevel);
   theBoundaryProcess->SetVerboseLevel(OpVerbLevel);
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
       if (theScintProcessDef->IsApplicable(*particle)) {
@@ -618,10 +621,11 @@ void DMXPhysicsList::ConstructHad()
   G4ComponentGGNuclNuclXsc * ggNuclNuclXsec = new G4ComponentGGNuclNuclXsc();
   G4VCrossSectionDataSet * theGGNuclNuclData = new G4CrossSectionInelastic(ggNuclNuclXsec);
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()) 
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()) 
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
 
@@ -874,10 +878,11 @@ void DMXPhysicsList::ConstructGeneral() {
 
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() )
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* pmanager = particle->GetProcessManager();
       
       if (theDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) 

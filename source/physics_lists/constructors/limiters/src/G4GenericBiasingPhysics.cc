@@ -195,11 +195,12 @@ void G4GenericBiasingPhysics::ConstructProcess()
 {
   
   // -- bias setup per individual particle name:
-  aParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
   
-  while( (*aParticleIterator)() )
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition*     particle = aParticleIterator->value();
+      G4ParticleDefinition*     particle = particleIterator->value();
       G4String              particleName = particle->GetParticleName();
       G4ProcessManager*         pmanager = particle->GetProcessManager();
       
@@ -246,11 +247,11 @@ void G4GenericBiasingPhysics::ConstructProcess()
 
   
   // -- bias setup per group:
-  aParticleIterator->reset();
+  particleIterator->reset();
 
-  while( (*aParticleIterator)() )
+  while( (*particleIterator)() )
     {
-      G4ParticleDefinition*     particle = aParticleIterator->value();
+      G4ParticleDefinition*     particle = particleIterator->value();
       G4String              particleName = particle->GetParticleName();
       G4ProcessManager*         pmanager = particle->GetProcessManager();
       
@@ -329,11 +330,11 @@ void G4GenericBiasingPhysics::ConstructProcess()
   if ( fVerbose )
     {
       // -- print:
-      aParticleIterator->reset();
+      particleIterator->reset();
       
-      while( (*aParticleIterator)() )
+      while( (*particleIterator)() )
 	{
-	  G4ParticleDefinition*     particle = aParticleIterator->value();
+	  G4ParticleDefinition*     particle = particleIterator->value();
 	  G4String              particleName = particle->GetParticleName();
 	  G4ProcessManager*         pmanager = particle->GetProcessManager();
 	  

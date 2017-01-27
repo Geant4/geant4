@@ -1,4 +1,4 @@
-$Id: History 95532 2016-02-12 14:22:43Z gcosmo $
+$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-10-16 G.Folger
+- fix typo, i.e. add missing declaration of particleIterator in Decay.
+
+14-10-16 G.Folger
+- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+  fix required by clang39 on Linux and MAC
 
 08-01-16 SI (testem12-V10-01-03)
 - updated dna.mac

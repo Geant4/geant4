@@ -26,7 +26,7 @@
 /// \file biasing/ReverseMC01/src/G4AdjointPhysicsList.cc
 /// \brief Implementation of the G4AdjointPhysicsList class
 //
-// $Id: G4AdjointPhysicsList.cc 70966 2013-06-07 15:22:09Z gcosmo $
+// $Id: G4AdjointPhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //////////////////////////////////////////////////////////////
 //  Class Name:        G4AdjointPhysicsList
@@ -361,9 +361,10 @@ void G4AdjointPhysicsList::ConstructEM()
 
   //Declare the processes active for the different particles
   //--------------------------------------------------------
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (!pmanager) {
      pmanager = new G4ProcessManager(particle);
@@ -641,9 +642,10 @@ void G4AdjointPhysicsList::ConstructGeneral()
 {
   // Add Decay Process
    G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       pmanager ->AddProcess(theDecayProcess);

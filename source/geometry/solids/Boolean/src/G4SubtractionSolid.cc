@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 95422 2016-02-10 14:35:47Z gcosmo $
+// $Id: G4SubtractionSolid.cc 102292 2017-01-20 11:27:42Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -136,7 +136,7 @@ G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs)
 
 ///////////////////////////////////////////////////////////////
 //
-// CalculateExtent
+// Calculate extent under transform and specified limit
      
 G4bool 
 G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
@@ -146,7 +146,7 @@ G4SubtractionSolid::CalculateExtent( const EAxis pAxis,
                                            G4double& pMax ) const 
 {
   // Since we cannot be sure how much the second solid subtracts 
-  // from the first,    we must use the first solid's extent!
+  // from the first, we must use the first solid's extent!
 
   return fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
                                       pTransform, pMin, pMax );
@@ -259,7 +259,7 @@ G4double
 G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
                                    const G4ThreeVector& v  ) const 
 {
-  G4double dist = 0.0,disTmp = 0.0 ;
+  G4double dist = 0.0, dist2 = 0.0, disTmp = 0.0;
     
 #ifdef G4BOOLDEBUG
   if( Inside(p) == kInside )
@@ -297,8 +297,10 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
 
           if( Inside(p+dist*v) == kOutside )
           {
-            disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ; 
-            dist += disTmp ;
+            disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v) ;
+            dist2 = dist+disTmp;
+            if (dist == dist2)  { return dist; }   // no progress
+            dist = dist2 ;
             count1++;
             if( count1 > 1000 )  // Infinite loop detected
             {
@@ -352,7 +354,9 @@ G4SubtractionSolid::DistanceToIn(  const G4ThreeVector& p,
             {  
               return kInfinity ;
             }                 
-            dist += disTmp ;
+            dist2 = dist+disTmp;
+            if (dist == dist2)  { return dist; }   // no progress
+            dist = dist2 ;
             count2++;
             if( count2 > 1000 )  // Infinite loop detected
             {

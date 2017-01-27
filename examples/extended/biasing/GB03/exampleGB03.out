@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -789,7 +789,7 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
@@ -805,7 +805,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.14s Real=0.14s Sys=0.01s
+  User=0.07s Real=0.07s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -865,7 +865,7 @@ GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and prob
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.94s Real=0.94s Sys=0s
+  User=0.63s Real=0.62s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -14,7 +14,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
-19-05-2016, MK, tag emdna-V10-01-57
+19-05-2016, MK, tag emdna-V10-01-58
 - G4ITNavigator: remove warnings on gcc6.1
 
 30-04-2016, MK
@@ -22,6 +22,9 @@ committal in the CVS repository !
 
 30-04-2016, MK
 - G4VUserChemistryList: remove a if statement
+
+17-02-2016, MK
+* G4MoleculeCounter: remove check of c++ version for unique_ptr/auto_ptr selection
 
 16-12-2015, SI, tag emdna-V10-01-56
 * Ionisation models : in SampleSecondaries: 

@@ -175,9 +175,10 @@ void PhysicsList::AddStepMax()
 
   fStepMaxProcess = new G4StepLimiter();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fStepMaxProcess->IsApplicable(*particle) && pmanager)

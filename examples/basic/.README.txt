@@ -1,4 +1,4 @@
-// $Id: .README.txt 94710 2015-12-03 16:15:05Z gunter $
+// $Id: .README.txt 95508 2016-02-12 13:52:06Z gcosmo $
 
 ///\file "basic/.README.txt"
 ///\brief Geant4 Basic Examples README page

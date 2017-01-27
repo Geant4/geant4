@@ -53,10 +53,10 @@
 G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
                              : G4MaterialPropertiesTable() 
 {
-  theMicroRoughnessTable = NULL;
-  maxMicroRoughnessTable = NULL;
-  theMicroRoughnessTransTable = NULL;
-  maxMicroRoughnessTransTable = NULL;
+  theMicroRoughnessTable = nullptr;
+  maxMicroRoughnessTable = nullptr;
+  theMicroRoughnessTransTable = nullptr;
+  maxMicroRoughnessTransTable = nullptr;
 
   theta_i_min =  0.*degree;
   theta_i_max = 90.*degree;
@@ -272,9 +272,9 @@ G4double G4UCNMaterialPropertiesTable::
   // theta_i in columns
 
   //G4cout << "E_pos: " << E_pos << " theta_i_pos: " << theta_i_pos << G4endl;
-  //G4cout << "Probability: " << *(theMicroRoughnessTable+E_pos+theta_i_pos*noE) << G4endl;
+  //G4cout << "Probability: " << *(theMicroRoughnessTable+E_pos+theta_i_pos*(noE-1)) << G4endl;
 
-  return *(theMicroRoughnessTable+E_pos+theta_i_pos*noE);
+  return *(theMicroRoughnessTable+E_pos+theta_i_pos*(noE - 1));
 }
 
 G4double G4UCNMaterialPropertiesTable::
@@ -297,7 +297,7 @@ G4double G4UCNMaterialPropertiesTable::
   // lookup table is onedimensional (1 row), energy is in rows,
   // theta_i in columns
 
-  return *(theMicroRoughnessTransTable+E_pos+theta_i_pos*noE);
+  return *(theMicroRoughnessTransTable+E_pos+theta_i_pos*(noE - 1));
 }
 
 G4double G4UCNMaterialPropertiesTable::

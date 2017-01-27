@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 93477 2015-10-23 07:40:20Z gcosmo $
+$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 93477 2015-10-23 07:40:20Z gcosmo $
 
                        Package History file
                        --------------------
+
+28 Oct 2016 - G.Folger
+- Remove direct use of theParticleIterator, use GetParticleTableIterator().
+   fix required by clang39 on Linux and MAC
 
 22 Oct 2015 - tag nanobeam-V10-01-00 - S. Incerti
 - upgraded plot.C to ROOT 6

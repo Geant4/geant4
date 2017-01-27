@@ -177,9 +177,10 @@ void eRositaPhysicsList::ConstructProcess()
 
 void eRositaPhysicsList::ConstructEM()
 {
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* processManager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
      
@@ -272,9 +273,10 @@ void eRositaPhysicsList::ConstructGeneral()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* processManager = particle->GetProcessManager();
     if (theDecayProcess->IsApplicable(*particle)) { 
       processManager ->AddProcess(theDecayProcess);
@@ -296,9 +298,10 @@ void eRositaPhysicsList::AddStepMax()
   G4StepLimiter* stepLimiter = new G4StepLimiter();
   ////G4UserSpecialCuts* userCuts = new G4UserSpecialCuts();
   
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-      G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+      G4ParticleDefinition* particle = particleIterator->value();
       G4ProcessManager* processManager = particle->GetProcessManager();
 
       if (particle->GetPDGCharge() != 0.0)

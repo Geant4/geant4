@@ -1,4 +1,4 @@
-$Id: History 91025 2015-06-16 09:40:08Z gcosmo $
+$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 14, 2016 G.Folger
+- remove direct use of theParticleIterator, use GetParticleTableIterator().
+  fix required by clang39 on Linux and MAC
 
 Jun 15, 2015 - P. Gumplinger (OpNovice-V10-01-04)
 - introduce G4ThreadLocal in OpNovicePhysicsList class

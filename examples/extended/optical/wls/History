@@ -1,4 +1,4 @@
-$Id: History 90240 2015-05-21 09:08:13Z gcosmo $
+$Id: History 102356 2017-01-23 16:22:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
  
      ----------------------------------------------------------
+
+Oct 14, 2016 G.Folger
+- remove direct use of aParticleIterator, use GetParticleTableIterator().
+    fix required by clang39 on Linux and MAC
 
 May 14, 2015 P. Gumplinger (WLS-V10-01-03)
 - remove obsolete /event/drawTrack and /event/printModulo

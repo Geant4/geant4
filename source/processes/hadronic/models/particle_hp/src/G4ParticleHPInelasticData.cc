@@ -119,9 +119,14 @@ G4double G4ParticleHPInelasticData::GetIsoCrossSection( const G4DynamicParticle*
                                    const G4Element* element ,
                                    const G4Material* material )
 {
+   if ( dp->GetKineticEnergy() == ke_cache && element == element_cache &&  material == material_cache ) return xs_cache;
+
+   ke_cache = dp->GetKineticEnergy();
+   element_cache = element;
+   material_cache = material;
    G4double xs = GetCrossSection( dp , element , material->GetTemperature() );
+   xs_cache = xs;
    return xs;
-   //return GetCrossSection( dp , element , material->GetTemperature() );
 }
 
 /*

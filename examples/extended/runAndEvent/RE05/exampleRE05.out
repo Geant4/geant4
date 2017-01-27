@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-02-patch-02    (17-June-2016)
+ Geant4 version Name: geant4-10-02-patch-03    (27-January-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -816,9 +816,9 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ### Run 0 start.
 G4HEPEvtInterface - reading 484 HEPEvt particles from pythia_event.data.
 >>> Event 0
-     81 hits are stored in RE05TrackerHitsCollection.
-     52 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.3658271738185 (GeV)
+     40 hits are stored in RE05TrackerHitsCollection.
+     46 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.8818967805309 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
 >>> Event 1
@@ -836,19 +836,19 @@ G4HEPEvtInterface - reading 448 HEPEvt particles from pythia_event.data.
 >>> Event 3
      0 hits are stored in RE05TrackerHitsCollection.
      3 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.53262162066675 (GeV)
+     Total energy deposition in calorimeter : 0.52834940032603 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 945 HEPEvt particles from pythia_event.data.
 >>> Event 4
-     76 hits are stored in RE05TrackerHitsCollection.
-     66 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.738199008442 (GeV)
+     108 hits are stored in RE05TrackerHitsCollection.
+     73 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 11.065377909137 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 837 HEPEvt particles from pythia_event.data.
 >>> Event 5
-     41 hits are stored in RE05TrackerHitsCollection.
-     7 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.9089073819101 (GeV)
+     98 hits are stored in RE05TrackerHitsCollection.
+     64 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.5684143744256 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
 >>> Event 6
@@ -858,33 +858,33 @@ G4HEPEvtInterface - reading 603 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 627 HEPEvt particles from pythia_event.data.
 >>> Event 7
-     36 hits are stored in RE05TrackerHitsCollection.
-     31 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.1177723342551 (GeV)
+     28 hits are stored in RE05TrackerHitsCollection.
+     29 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.3965984866989 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 682 HEPEvt particles from pythia_event.data.
 >>> Event 8
-     132 hits are stored in RE05TrackerHitsCollection.
-     53 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.6239083931975 (GeV)
+     67 hits are stored in RE05TrackerHitsCollection.
+     48 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.7842582561287 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 330 HEPEvt particles from pythia_event.data.
 >>> Event 9
-     24 hits are stored in RE05TrackerHitsCollection.
-     26 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.7340468174743 (GeV)
+     33 hits are stored in RE05TrackerHitsCollection.
+     24 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.752787911814 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1060 HEPEvt particles from pythia_event.data.
 >>> Event 10
-     97 hits are stored in RE05TrackerHitsCollection.
-     61 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.273942178146 (GeV)
+     95 hits are stored in RE05TrackerHitsCollection.
+     68 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.5965473930943 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1010 HEPEvt particles from pythia_event.data.
 >>> Event 11
      0 hits are stored in RE05TrackerHitsCollection.
      17 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.8615789529237 (GeV)
+     Total energy deposition in calorimeter : 2.8578582174315 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 517 HEPEvt particles from pythia_event.data.
 >>> Event 12
@@ -894,15 +894,15 @@ G4HEPEvtInterface - reading 517 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 815 HEPEvt particles from pythia_event.data.
 >>> Event 13
-     103 hits are stored in RE05TrackerHitsCollection.
-     89 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.9682854130686 (GeV)
+     70 hits are stored in RE05TrackerHitsCollection.
+     54 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.9214584372184 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 702 HEPEvt particles from pythia_event.data.
 >>> Event 14
-     59 hits are stored in RE05TrackerHitsCollection.
-     47 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.7304155578208 (GeV)
+     51 hits are stored in RE05TrackerHitsCollection.
+     42 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.2003174356278 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 568 HEPEvt particles from pythia_event.data.
 >>> Event 15
@@ -912,15 +912,15 @@ G4HEPEvtInterface - reading 568 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 405 HEPEvt particles from pythia_event.data.
 >>> Event 16
-     22 hits are stored in RE05TrackerHitsCollection.
-     33 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.7075100283991 (GeV)
+     15 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.7049036104161 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 533 HEPEvt particles from pythia_event.data.
 >>> Event 17
      0 hits are stored in RE05TrackerHitsCollection.
      5 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.96548949444257 (GeV)
+     Total energy deposition in calorimeter : 0.97881718882949 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 342 HEPEvt particles from pythia_event.data.
 >>> Event 18
@@ -930,15 +930,15 @@ G4HEPEvtInterface - reading 342 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 621 HEPEvt particles from pythia_event.data.
 >>> Event 19
-     70 hits are stored in RE05TrackerHitsCollection.
-     34 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.5108806824587 (GeV)
+     39 hits are stored in RE05TrackerHitsCollection.
+     33 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.5292042242222 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 906 HEPEvt particles from pythia_event.data.
 >>> Event 20
-     49 hits are stored in RE05TrackerHitsCollection.
-     49 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.6815936079191 (GeV)
+     68 hits are stored in RE05TrackerHitsCollection.
+     50 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.2488314940168 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 427 HEPEvt particles from pythia_event.data.
 >>> Event 21
@@ -948,9 +948,9 @@ G4HEPEvtInterface - reading 427 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 387 HEPEvt particles from pythia_event.data.
 >>> Event 22
-     45 hits are stored in RE05TrackerHitsCollection.
-     33 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.0894492968011 (GeV)
+     27 hits are stored in RE05TrackerHitsCollection.
+     21 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.3672984996503 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 359 HEPEvt particles from pythia_event.data.
 >>> Event 23
@@ -968,7 +968,7 @@ G4HEPEvtInterface - reading 786 HEPEvt particles from pythia_event.data.
 >>> Event 25
      0 hits are stored in RE05TrackerHitsCollection.
      7 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 1.200809770459 (GeV)
+     Total energy deposition in calorimeter : 1.2160683310877 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 661 HEPEvt particles from pythia_event.data.
 >>> Event 26
@@ -980,13 +980,13 @@ G4HEPEvtInterface - reading 673 HEPEvt particles from pythia_event.data.
 >>> Event 27
      0 hits are stored in RE05TrackerHitsCollection.
      49 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.7557014890208 (GeV)
+     Total energy deposition in calorimeter : 6.2131212525023 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 694 HEPEvt particles from pythia_event.data.
 >>> Event 28
      0 hits are stored in RE05TrackerHitsCollection.
      8 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 1.4106523717331 (GeV)
+     Total energy deposition in calorimeter : 1.4256952871767 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 913 HEPEvt particles from pythia_event.data.
 >>> Event 29
@@ -996,15 +996,15 @@ G4HEPEvtInterface - reading 913 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 425 HEPEvt particles from pythia_event.data.
 >>> Event 30
-     36 hits are stored in RE05TrackerHitsCollection.
-     35 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.4109784726066 (GeV)
+     44 hits are stored in RE05TrackerHitsCollection.
+     30 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.7499127709767 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 466 HEPEvt particles from pythia_event.data.
 >>> Event 31
-     27 hits are stored in RE05TrackerHitsCollection.
-     30 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.9700094740844 (GeV)
+     35 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.3223695143807 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 954 HEPEvt particles from pythia_event.data.
 >>> Event 32
@@ -1016,13 +1016,13 @@ G4HEPEvtInterface - reading 575 HEPEvt particles from pythia_event.data.
 >>> Event 33
      76 hits are stored in RE05TrackerHitsCollection.
      15 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.9632310822464 (GeV)
+     Total energy deposition in calorimeter : 3.9562509623288 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1002 HEPEvt particles from pythia_event.data.
 >>> Event 34
-     144 hits are stored in RE05TrackerHitsCollection.
-     68 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.747173819477 (GeV)
+     77 hits are stored in RE05TrackerHitsCollection.
+     61 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.1617756440101 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 440 HEPEvt particles from pythia_event.data.
 >>> Event 35
@@ -1038,51 +1038,51 @@ G4HEPEvtInterface - reading 389 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 318 HEPEvt particles from pythia_event.data.
 >>> Event 37
-     40 hits are stored in RE05TrackerHitsCollection.
-     36 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.5267318192229 (GeV)
+     88 hits are stored in RE05TrackerHitsCollection.
+     32 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.7236980359129 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 367 HEPEvt particles from pythia_event.data.
 >>> Event 38
-     83 hits are stored in RE05TrackerHitsCollection.
-     45 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.0650094916588 (GeV)
+     63 hits are stored in RE05TrackerHitsCollection.
+     37 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.316976657207 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1000 HEPEvt particles from pythia_event.data.
 >>> Event 39
      0 hits are stored in RE05TrackerHitsCollection.
      4 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.72960293909762 (GeV)
+     Total energy deposition in calorimeter : 0.72721493895177 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 253 HEPEvt particles from pythia_event.data.
 >>> Event 40
      22 hits are stored in RE05TrackerHitsCollection.
-     32 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.6585094501135 (GeV)
+     29 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.0835175706561 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 474 HEPEvt particles from pythia_event.data.
 >>> Event 41
      21 hits are stored in RE05TrackerHitsCollection.
      24 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.9566179526217 (GeV)
+     Total energy deposition in calorimeter : 7.3937539198477 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 695 HEPEvt particles from pythia_event.data.
 >>> Event 42
-     84 hits are stored in RE05TrackerHitsCollection.
-     50 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.3290838140607 (GeV)
+     105 hits are stored in RE05TrackerHitsCollection.
+     54 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.2280136454046 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 760 HEPEvt particles from pythia_event.data.
 >>> Event 43
      0 hits are stored in RE05TrackerHitsCollection.
      13 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.2357397168898 (GeV)
+     Total energy deposition in calorimeter : 2.2374018489665 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 328 HEPEvt particles from pythia_event.data.
 >>> Event 44
      0 hits are stored in RE05TrackerHitsCollection.
      10 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 1.7679915045494 (GeV)
+     Total energy deposition in calorimeter : 1.7855200707058 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 574 HEPEvt particles from pythia_event.data.
 >>> Event 45
@@ -1092,21 +1092,21 @@ G4HEPEvtInterface - reading 574 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 420 HEPEvt particles from pythia_event.data.
 >>> Event 46
-     43 hits are stored in RE05TrackerHitsCollection.
-     51 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 12.237382781764 (GeV)
+     45 hits are stored in RE05TrackerHitsCollection.
+     45 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 19.08150091765 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1092 HEPEvt particles from pythia_event.data.
 >>> Event 47
-     53 hits are stored in RE05TrackerHitsCollection.
-     47 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.1168714764422 (GeV)
+     59 hits are stored in RE05TrackerHitsCollection.
+     53 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.2569293462233 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 708 HEPEvt particles from pythia_event.data.
 >>> Event 48
-     51 hits are stored in RE05TrackerHitsCollection.
+     49 hits are stored in RE05TrackerHitsCollection.
      19 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.01685067451 (GeV)
+     Total energy deposition in calorimeter : 4.0065067668815 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 942 HEPEvt particles from pythia_event.data.
 >>> Event 49
@@ -1116,15 +1116,15 @@ G4HEPEvtInterface - reading 942 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 422 HEPEvt particles from pythia_event.data.
 >>> Event 50
-     19 hits are stored in RE05TrackerHitsCollection.
-     37 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.296172337307 (GeV)
+     25 hits are stored in RE05TrackerHitsCollection.
+     36 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.8571681897039 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 621 HEPEvt particles from pythia_event.data.
 >>> Event 51
-     52 hits are stored in RE05TrackerHitsCollection.
-     43 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.8484274854163 (GeV)
+     39 hits are stored in RE05TrackerHitsCollection.
+     44 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.7874444744203 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 380 HEPEvt particles from pythia_event.data.
 >>> Event 52
@@ -1140,39 +1140,39 @@ G4HEPEvtInterface - reading 780 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 218 HEPEvt particles from pythia_event.data.
 >>> Event 54
-     21 hits are stored in RE05TrackerHitsCollection.
-     34 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.9327003610966 (GeV)
+     22 hits are stored in RE05TrackerHitsCollection.
+     32 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.6859008151669 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 349 HEPEvt particles from pythia_event.data.
 >>> Event 55
-     59 hits are stored in RE05TrackerHitsCollection.
-     30 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.9723940995315 (GeV)
+     61 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.8320391137588 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 566 HEPEvt particles from pythia_event.data.
 >>> Event 56
      59 hits are stored in RE05TrackerHitsCollection.
-     34 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.186035934871 (GeV)
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.6349857339505 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 467 HEPEvt particles from pythia_event.data.
 >>> Event 57
-     79 hits are stored in RE05TrackerHitsCollection.
-     32 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.1957304048955 (GeV)
+     50 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.4470821959591 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 745 HEPEvt particles from pythia_event.data.
 >>> Event 58
-     56 hits are stored in RE05TrackerHitsCollection.
-     40 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.4585316503151 (GeV)
+     48 hits are stored in RE05TrackerHitsCollection.
+     38 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.3745344843119 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 742 HEPEvt particles from pythia_event.data.
 >>> Event 59
      0 hits are stored in RE05TrackerHitsCollection.
      12 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.0891878246851 (GeV)
+     Total energy deposition in calorimeter : 2.1107303216339 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 822 HEPEvt particles from pythia_event.data.
 >>> Event 60
@@ -1184,13 +1184,13 @@ G4HEPEvtInterface - reading 324 HEPEvt particles from pythia_event.data.
 >>> Event 61
      0 hits are stored in RE05TrackerHitsCollection.
      1 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.11054535015606 (GeV)
+     Total energy deposition in calorimeter : 0.11273659997616 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 389 HEPEvt particles from pythia_event.data.
 >>> Event 62
-     21 hits are stored in RE05TrackerHitsCollection.
+     22 hits are stored in RE05TrackerHitsCollection.
      10 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.1757565983088 (GeV)
+     Total energy deposition in calorimeter : 3.1945238676245 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 624 HEPEvt particles from pythia_event.data.
 >>> Event 63
@@ -1200,21 +1200,21 @@ G4HEPEvtInterface - reading 624 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 340 HEPEvt particles from pythia_event.data.
 >>> Event 64
-     46 hits are stored in RE05TrackerHitsCollection.
-     19 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.4920361443457 (GeV)
+     37 hits are stored in RE05TrackerHitsCollection.
+     25 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.7186531665961 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 520 HEPEvt particles from pythia_event.data.
 >>> Event 65
-     91 hits are stored in RE05TrackerHitsCollection.
-     48 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.090493848065 (GeV)
+     54 hits are stored in RE05TrackerHitsCollection.
+     39 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.6247487201613 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 235 HEPEvt particles from pythia_event.data.
 >>> Event 66
-     8 hits are stored in RE05TrackerHitsCollection.
-     20 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.3630373206409 (GeV)
+     9 hits are stored in RE05TrackerHitsCollection.
+     13 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.9616186667245 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 759 HEPEvt particles from pythia_event.data.
 >>> Event 67
@@ -1225,14 +1225,14 @@ G4HEPEvtInterface - reading 759 HEPEvt particles from pythia_event.data.
 G4HEPEvtInterface - reading 865 HEPEvt particles from pythia_event.data.
 >>> Event 68
      0 hits are stored in RE05TrackerHitsCollection.
-     8 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.91808115319552 (GeV)
+     7 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.90869684954 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 264 HEPEvt particles from pythia_event.data.
 >>> Event 69
-     52 hits are stored in RE05TrackerHitsCollection.
-     29 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.8188231266619 (GeV)
+     51 hits are stored in RE05TrackerHitsCollection.
+     25 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.3356213299752 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 785 HEPEvt particles from pythia_event.data.
 >>> Event 70
@@ -1244,49 +1244,49 @@ G4HEPEvtInterface - reading 618 HEPEvt particles from pythia_event.data.
 >>> Event 71
      0 hits are stored in RE05TrackerHitsCollection.
      4 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.60560963272757 (GeV)
+     Total energy deposition in calorimeter : 0.59452409606426 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 219 HEPEvt particles from pythia_event.data.
 >>> Event 72
-     71 hits are stored in RE05TrackerHitsCollection.
-     42 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.9353639365317 (GeV)
+     43 hits are stored in RE05TrackerHitsCollection.
+     37 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.2416793111214 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 480 HEPEvt particles from pythia_event.data.
 >>> Event 73
-     33 hits are stored in RE05TrackerHitsCollection.
-     65 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.2161174810016 (GeV)
+     26 hits are stored in RE05TrackerHitsCollection.
+     47 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 8.9383160447666 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 614 HEPEvt particles from pythia_event.data.
 >>> Event 74
      0 hits are stored in RE05TrackerHitsCollection.
      4 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.58230273492733 (GeV)
+     Total energy deposition in calorimeter : 0.57797850352351 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 436 HEPEvt particles from pythia_event.data.
 >>> Event 75
-     8 hits are stored in RE05TrackerHitsCollection.
-     51 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.1585353861645 (GeV)
+     13 hits are stored in RE05TrackerHitsCollection.
+     49 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.2664252794757 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 355 HEPEvt particles from pythia_event.data.
 >>> Event 76
-     12 hits are stored in RE05TrackerHitsCollection.
-     28 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 3.4500735484943 (GeV)
+     13 hits are stored in RE05TrackerHitsCollection.
+     35 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.3811516069695 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 865 HEPEvt particles from pythia_event.data.
 >>> Event 77
-     24 hits are stored in RE05TrackerHitsCollection.
-     88 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 9.1474580870659 (GeV)
+     28 hits are stored in RE05TrackerHitsCollection.
+     111 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.763704960187 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 752 HEPEvt particles from pythia_event.data.
 >>> Event 78
      0 hits are stored in RE05TrackerHitsCollection.
      4 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.66220991191519 (GeV)
+     Total energy deposition in calorimeter : 0.69234101523989 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 766 HEPEvt particles from pythia_event.data.
 >>> Event 79
@@ -1296,15 +1296,15 @@ G4HEPEvtInterface - reading 766 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 564 HEPEvt particles from pythia_event.data.
 >>> Event 80
-     57 hits are stored in RE05TrackerHitsCollection.
-     53 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.8050398381948 (GeV)
+     33 hits are stored in RE05TrackerHitsCollection.
+     59 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.1448707559349 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 220 HEPEvt particles from pythia_event.data.
 >>> Event 81
-     25 hits are stored in RE05TrackerHitsCollection.
-     43 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.0347274509936 (GeV)
+     40 hits are stored in RE05TrackerHitsCollection.
+     30 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.7999505175952 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 823 HEPEvt particles from pythia_event.data.
 >>> Event 82
@@ -1314,45 +1314,45 @@ G4HEPEvtInterface - reading 823 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 914 HEPEvt particles from pythia_event.data.
 >>> Event 83
-     67 hits are stored in RE05TrackerHitsCollection.
-     37 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 5.7180224636181 (GeV)
+     73 hits are stored in RE05TrackerHitsCollection.
+     40 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.8558095526091 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 232 HEPEvt particles from pythia_event.data.
 >>> Event 84
-     29 hits are stored in RE05TrackerHitsCollection.
-     33 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 10.33649040775 (GeV)
+     27 hits are stored in RE05TrackerHitsCollection.
+     34 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 10.215459896966 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1034 HEPEvt particles from pythia_event.data.
 >>> Event 85
-     149 hits are stored in RE05TrackerHitsCollection.
-     87 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 13.601585506418 (GeV)
+     136 hits are stored in RE05TrackerHitsCollection.
+     85 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 11.468323419452 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 673 HEPEvt particles from pythia_event.data.
 >>> Event 86
-     43 hits are stored in RE05TrackerHitsCollection.
-     37 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.2288417968746 (GeV)
+     61 hits are stored in RE05TrackerHitsCollection.
+     31 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.8527964002976 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 246 HEPEvt particles from pythia_event.data.
 >>> Event 87
-     33 hits are stored in RE05TrackerHitsCollection.
-     37 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.2856284563058 (GeV)
+     26 hits are stored in RE05TrackerHitsCollection.
+     32 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.8418171892475 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 1139 HEPEvt particles from pythia_event.data.
 >>> Event 88
      0 hits are stored in RE05TrackerHitsCollection.
      7 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 1.3326037819701 (GeV)
+     Total energy deposition in calorimeter : 1.3228623078305 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 991 HEPEvt particles from pythia_event.data.
 >>> Event 89
-     126 hits are stored in RE05TrackerHitsCollection.
-     56 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.8846364350178 (GeV)
+     96 hits are stored in RE05TrackerHitsCollection.
+     46 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 7.8013070113082 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 430 HEPEvt particles from pythia_event.data.
 >>> Event 90
@@ -1362,21 +1362,21 @@ G4HEPEvtInterface - reading 430 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 232 HEPEvt particles from pythia_event.data.
 >>> Event 91
-     37 hits are stored in RE05TrackerHitsCollection.
-     37 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.4563089060283 (GeV)
+     32 hits are stored in RE05TrackerHitsCollection.
+     32 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.7055951558864 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 410 HEPEvt particles from pythia_event.data.
 >>> Event 92
      0 hits are stored in RE05TrackerHitsCollection.
      5 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.97317103423813 (GeV)
+     Total energy deposition in calorimeter : 0.9765752473565 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 680 HEPEvt particles from pythia_event.data.
 >>> Event 93
-     80 hits are stored in RE05TrackerHitsCollection.
-     58 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 7.4456265853802 (GeV)
+     47 hits are stored in RE05TrackerHitsCollection.
+     42 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 6.3326628210453 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 259 HEPEvt particles from pythia_event.data.
 >>> Event 94
@@ -1386,15 +1386,15 @@ G4HEPEvtInterface - reading 259 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 358 HEPEvt particles from pythia_event.data.
 >>> Event 95
-     15 hits are stored in RE05TrackerHitsCollection.
-     33 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.1151975842145 (GeV)
+     14 hits are stored in RE05TrackerHitsCollection.
+     27 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 4.8624470330147 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 546 HEPEvt particles from pythia_event.data.
 >>> Event 96
      0 hits are stored in RE05TrackerHitsCollection.
      3 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.52230516923491 (GeV)
+     Total energy deposition in calorimeter : 0.51304308100811 (GeV)
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 611 HEPEvt particles from pythia_event.data.
 >>> Event 97
@@ -1404,20 +1404,20 @@ G4HEPEvtInterface - reading 611 HEPEvt particles from pythia_event.data.
      0 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 298 HEPEvt particles from pythia_event.data.
 >>> Event 98
-     42 hits are stored in RE05TrackerHitsCollection.
-     24 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 4.4470984057564 (GeV)
+     36 hits are stored in RE05TrackerHitsCollection.
+     27 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 5.5069200481599 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
 G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
 >>> Event 99
-     52 hits are stored in RE05TrackerHitsCollection.
-     57 hits are stored in RE05CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 8.9077048985891 (GeV)
+     86 hits are stored in RE05TrackerHitsCollection.
+     56 hits are stored in RE05CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.2327818175829 (GeV)
      1 hits are stored in RE05MuonHitsCollection.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=19.89s Real=20.03s Sys=0.04s
+  User=13.19s Real=13.28s Sys=0.06s
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1429,30 +1429,30 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 495
+Total navigation history collections cleaned: 494
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.791 MB
+Pool ID '20G4NavigationLevelRep', size : 0.79 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.847 MB
+Pool ID '17G4DynamicParticle', size : 0.814 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.157 MB
 Pool ID '16G4HEPEvtParticle', size : 0.0269 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '7G4Track', size : 1.46 MB
+Pool ID '7G4Track', size : 1.39 MB
 Pool ID '18G4TouchableHistory', size : 0.0596 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00769 MB
 Pool ID '12G4Trajectory', size : 0.0231 MB
-Pool ID '17G4TrajectoryPoint', size : 0.189 MB
+Pool ID '17G4TrajectoryPoint', size : 0.185 MB
 Pool ID '14RE05TrackerHit', size : 0.00577 MB
-Pool ID '18RE05CalorimeterHit', size : 0.0125 MB
+Pool ID '18RE05CalorimeterHit', size : 0.0154 MB
 Pool ID '11RE05MuonHit', size : 0.000961 MB
 Pool ID '21G4TrajectoryContainer', size : 0.000961 MB
-Pool ID '17G4ReactionProduct', size : 0.0115 MB
-Pool ID '10G4Fragment', size : 0.00481 MB
+Pool ID '17G4ReactionProduct', size : 0.0135 MB
+Pool ID '10G4Fragment', size : 0.00577 MB
 Number of memory pools allocated: 20 of which, static: 0
-Dynamic pools deleted: 20 / Total memory freed: 3.6 MB
+Dynamic pools deleted: 20 / Total memory freed: 3.5 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

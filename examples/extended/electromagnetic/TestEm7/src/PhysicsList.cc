@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 93675 2015-10-28 09:59:23Z gcosmo $
+// $Id: PhysicsList.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -282,9 +282,10 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   fStepMaxProcess = new StepMax();
 
-  theParticleIterator->reset();
-  while ((*theParticleIterator)()){
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)()){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
     if (fStepMaxProcess->IsApplicable(*particle) && pmanager)
@@ -300,10 +301,11 @@ void PhysicsList::AddIonGasModels()
 {
   G4EmConfigurator* em_config = 
     G4LossTableManager::Instance()->EmConfigurator();
-  theParticleIterator->reset();
-  while ((*theParticleIterator)())
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while ((*particleIterator)())
   {
-    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ParticleDefinition* particle = particleIterator->value();
     G4String partname = particle->GetParticleName();
     if(partname == "alpha" || partname == "He3" || partname == "GenericIon") {
       G4BraggIonGasModel* mod1 = new G4BraggIonGasModel();

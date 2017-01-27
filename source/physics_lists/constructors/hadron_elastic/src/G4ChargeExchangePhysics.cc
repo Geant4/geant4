@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChargeExchangePhysics.cc 71037 2013-06-10 09:20:54Z gcosmo $
+// $Id: G4ChargeExchangePhysics.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -87,10 +87,11 @@ void G4ChargeExchangePhysics::ConstructProcess()
 	   << model->GetModelName() << ">" << G4endl;
   }
 
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() )
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() )
   {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String pname = particle->GetParticleName();
     if(pname == "neutron"   || 
        pname == "pi-"       || 

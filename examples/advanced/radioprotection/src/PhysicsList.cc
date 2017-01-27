@@ -211,11 +211,12 @@ void PhysicsList::AddStepMax()
 {
   // Step limitation seen as a process
 
-  theParticleIterator->reset();
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
 
-  while ((*theParticleIterator)())
-{
-    G4ParticleDefinition* particle = theParticleIterator->value();
+  while ((*particleIterator)())
+  {
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
         pmanager -> AddProcess(new G4StepLimiter(),  -1,-1,3);
   }

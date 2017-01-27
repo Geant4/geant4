@@ -1,4 +1,4 @@
-$Id: History 91809 2015-08-06 13:00:09Z gcosmo $
+$Id: History 102284 2017-01-20 09:43:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-Oct-2016, Gunter Folger (error-propagation-V10-01-01)
+- replace direct use of aParticleIterator by GetParticleIterator().
+    fix required by clang39 on Windows and MAC
+	 
+21 September 2016 - G.Cosmo
+- Roll back to tag "error-propagation-V10-01-00". Cleaner solution to the
+  problem is required to be applied in conjunction with "run" category for
+  the treatment of splitters symbols by physics-lists.
+
+20 September 2016 - G.Cosmo
+- Explicitly initialise templated data in G4ErrorPhysicsList source.
+  Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
 
 6 August 2015 - G.Cosmo (error-propagation-V10-01-00)
 - Checked for potential never-ending loops. No issues found.

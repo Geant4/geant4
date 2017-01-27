@@ -28,8 +28,37 @@
 #include "Randomize.hh"
 
 template<>
-G4TemplateRNGHelper<long>* G4TemplateRNGHelper<long>::instance = 0;
+G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::instance = 0;
 
 template<>
 G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::instance = 0;
 
+template<class T>
+G4TemplateRNGHelper<T>* G4TemplateRNGHelper<T>::GetInstance()
+{
+  if (!instance)
+  {
+    instance = new G4TemplateRNGHelper<T>();
+  }
+  return instance;
+}
+
+template<>
+G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstance()
+{
+  if (!instance)
+  {
+    instance = new G4TemplateRNGHelper<G4long>();
+  }
+  return instance;
+}
+
+template<>
+G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::GetInstance()
+{
+  if (!instance)
+  {
+    instance = new G4TemplateRNGHelper<G4String>();
+  }
+  return instance;
+}

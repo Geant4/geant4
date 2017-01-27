@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronInelasticQBBC.cc 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronInelasticQBBC.cc 102321 2017-01-23 09:51:59Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -154,9 +154,10 @@ void G4HadronInelasticQBBC::ConstructProcess()
   G4CrossSectionInelastic* kaonxs = new G4CrossSectionInelastic(theKaonXS);
 
   // loop over particles
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ) {
-    G4ParticleDefinition* particle = aParticleIterator->value();
+  auto myParticleIterator=GetParticleIterator();
+  myParticleIterator->reset();
+  while( (*myParticleIterator)() ) {
+    G4ParticleDefinition* particle = myParticleIterator->value();
     G4String pname = particle->GetParticleName();
     //G4ProcessManager* pmanager = particle->GetProcessManager();
     if(verbose > 1) { 

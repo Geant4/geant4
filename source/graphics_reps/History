@@ -1,4 +1,4 @@
-$Id: History 95882 2016-03-01 08:48:39Z gcosmo $
+$Id: History 102310 2017-01-20 15:27:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+14th July 2016  John Allison  (greps-V10-01-05)
+- G4VisAttributes::GetInvisible():
+  o Changed to use a static instance instead of G4VisAttributes::Invisible.
+  o Moved implementation to .cc file.  Now it is non-inline.
+- G4VisAttributes::Invisible:
+  o Deprecated. It is a static instance and does not always instantiate
+    properly on Windows.
 
 1st March 2016  Gabriele Cosmo  (greps-V10-01-04)
 - Use "" instead of <> for internal header inclusion in

@@ -1,4 +1,4 @@
-$Id: History 95701 2016-02-19 10:04:13Z gcosmo $
+$Id: History 102303 2017-01-20 14:14:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-10-16 P.Gumplinger (materials-V10-01-17)
+- Fix incorrectly calculated index for MicroRoughness lookup table
+  in G4UCNMaterialPropertiesTable.cc
+  (thanks to W. Schreyer/Technische Universität München)
+- Fix incorrectly calculated MicroRoughness amplitude
+  in G4UCNMicroRoughnessHelper.cc
+  (thanks to W. Schreyer/Technische Universität München)
 
 18-02-16 A. Dotti   (materials-V10-01-16)
 - Fix rare data-race in G4MaterialPropertiesTable for optical physics

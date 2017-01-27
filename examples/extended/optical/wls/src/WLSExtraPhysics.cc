@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSExtraPhysics.cc 69561 2013-05-08 12:25:56Z gcosmo $
+// $Id: WLSExtraPhysics.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 /// \file optical/wls/src/WLSExtraPhysics.cc
 /// \brief Implementation of the WLSExtraPhysics class
@@ -59,10 +59,11 @@ void WLSExtraPhysics::ConstructProcess()
     G4cout << "WLSExtraPhysics:: Add Extra Physics Processes"
               << G4endl;
 
-    aParticleIterator->reset();
+    auto particleIterator=GetParticleIterator();
+    particleIterator->reset();
 
-    while ((*aParticleIterator)()) {
-        G4ParticleDefinition* particle = aParticleIterator->value();
+    while ((*particleIterator)()) {
+        G4ParticleDefinition* particle = particleIterator->value();
         G4ProcessManager* pmanager = particle->GetProcessManager();
         G4String particleName = particle->GetParticleName();
         G4double charge = particle->GetPDGCharge();

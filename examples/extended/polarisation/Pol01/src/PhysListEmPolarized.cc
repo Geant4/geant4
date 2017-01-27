@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmPolarized class
 //
 //
-// $Id: PhysListEmPolarized.cc 86418 2014-11-11 10:39:38Z gcosmo $
+// $Id: PhysListEmPolarized.cc 102356 2017-01-23 16:22:42Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,10 +69,11 @@ PhysListEmPolarized::~PhysListEmPolarized()
 void PhysListEmPolarized::ConstructProcess()
 {
   // Add standard EM Processes
-  
-  aParticleIterator->reset();
-  while( (*aParticleIterator)() ){
-    G4ParticleDefinition* particle = aParticleIterator->value();
+
+  auto particleIterator=GetParticleIterator();
+  particleIterator->reset();
+  while( (*particleIterator)() ){
+    G4ParticleDefinition* particle = particleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
