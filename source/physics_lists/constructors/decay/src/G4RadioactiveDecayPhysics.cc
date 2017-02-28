@@ -51,13 +51,11 @@ G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
 :  G4VPhysicsConstructor("G4RadioactiveDecay")//, theRadioactiveDecay(0)
 {
   G4EmParameters* param = G4EmParameters::Instance();
-  param->SetFluo(true);
-  param->SetAuger(true);
   param->SetAugerCascade(true);
-  param->SetDeexcitationIgnoreCut(true);
   param->AddMsc("world","G4RadioactiveDecay");
 
   G4NuclearLevelData::GetInstance()->GetParameters()->SetUseFilesNEW(true);
+  G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true);
 }
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)

@@ -1,4 +1,4 @@
-$Id: History 97317 2016-06-01 12:14:31Z gcosmo $
+$Id: History 102573 2017-02-09 08:50:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+10 January 2017  Fred Jones (openinventor-V10-02-04)
+- G4OpenInventorXtExtendedViewer:
+  Added viewer button for Wireframe/Solid switching.
+  Added workaround to prevent empty second page in
+  PS and PDF output (due to superimposed scene).
 
 01 June 2016  John Allison (openinventor-V10-02-03)
 - G4OpenInventorXtExtendedViewer.hh:

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03    (9-December-2016)
+ Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -583,7 +583,7 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start.
 Number of Scintillation photons produced in this event : 71
 Number of Cerenkov photons produced in this event : 25
-number of event = 1 User=0.01s Real=0s Sys=0s
+number of event = 1 User=0.01s Real=0.01s Sys=0s
 #
 Graphics systems deleted.
 Visualization Manager deleting...

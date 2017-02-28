@@ -1,4 +1,4 @@
-$Id: History 101519 2016-11-18 15:43:54Z gcosmo $
+$Id: History 102769 2017-02-22 09:05:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 22, 2017 E.Tcherniaev geom-csg-V10-02-21
+- Fix in GetCubicVolume() and GetSurfaceArea() for G4CutTubs, to make
+  use of the cached values. Addressing problem report #1943.
+
+February 2, 2017 G.Cosmo geom-csg-V10-02-20
+- Removed redundant code/checks in G4Orb::SurfaceNormal().
+
+December 20, 2016 H.Burkhardt, E.Tcherniaev
+- Use radius differences and hypot to improve precision in G4Torus.
+  Addressing problem report #1931.
 
 November 18, 2016 E.Tcherniaev geom-csg-V10-02-19
 - Added consistency checks for extent computation in USolids wrappers.

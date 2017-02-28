@@ -1,0 +1,231 @@
+
+                 Geant4 10.2 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                                 27 January 2017
+
+List of fixes included in this public patch since the public release 10.2.p02:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Correctly export USolids/VecGeom settings to GNUmake configuration
+        scripts.
+      o Provided placeholder variable for adding setting of XercesC library
+        path. Addressing problem report #1877.
+
+  o Analysis
+    --------
+    + Fixed incompatibility with ROOT 5.x and 6.x formats.
+    + Fixed compilation warnings and MacOSX and Win64.
+
+  o Error-Propagation
+    -----------------
+    + G4ErrorPhysicsList: replaced direct use of 'aParticleIterator' with
+      GetParticleIterator(), to allow for porting on clang-3.9 and XCode-8
+      on MacOS.
+
+  o Event:
+    -----
+    + Fixed way of deleting G4PrimaryVertex objects to avoid stack overflow
+      for very large number of primary vertices.
+    + Set polarization to pre-assigned decay products in G4PrimaryTransformer.
+      Addressing problem report #1914.
+
+  o Geometry:
+    --------
+    + magnetic-field:
+      o Fixed G4ClassicalRK4 header with protection against multiple inclusions.
+    + management:
+      o Moved initialisation of G4GeomSplitter thread-local data to be inline
+        along with generic template type; moved accessors/modifiers for splitter
+        data to non-inline in G4Region, G4LogicalVolume and G4VPhysicalVolume.
+        Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+      o Removed redundant check in G4GeomSplitter::UseWorkArea().
+        Addressing problem report #1876.
+    + navigation:
+      o Fixed recursion test for overlaps in G4GeomTestVolume to iterate on
+        all daughters.
+      o G4ReplicaNavigation: use Cartesian tolerance in distance evaluation
+        in DistanceToOutPhi(). Addressing problem report #1902.
+      o G4Navigator: in ComputeStep() force abortion of event if track gets
+        really stuck, but avoid check for overlaps if push-verbosity is set to
+        false. Extended printout for stuck tracks, to show also local
+        coordinates.
+      o Fix in G4Navigator::GetGlobalExitNormal() to synchronise caching of
+       'fExitNormalGlobalFrame' before returning.
+        Addressing problem report #1750.
+        Added more diagnostics in G4VERBOSE mode.
+      o G4PhantomParameterisation: revisited precision checks.
+      o G4PropagatorInField: fix to pass accuracy values to Intersection Locator
+        after re-evaluating epsilon.
+      o Added annotations for while-do loops.
+    + solids/Boolean:
+      o G4SubtractionSolid: directly return previously computed distance in
+        DistanceToIn(p,v) if no progress is made (zero step).
+    + solids/CSG:
+      o Disabled check for intersection of cut planes in G4CutTubs constructor,
+        as too strict and not necessary. Addressing problem report #1887.
+      o Use G4RandFlat instead of RandFlat.
+    + solids/specific:
+      o Moved accessors/modifiers for splitter data to non-inline in
+        G4PolyhedraSide and G4PolyconeSide. Moved initialisation of
+        G4GeomSplitter thread-local data to be inline along with generic
+        template type.
+        Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+      o Fixed minor typo in function Create() for G4Polycone, G4Polyhedra and
+        G4GenericPolycone. Fixed minor typos in G4GenericTrap::SurfaceNormal()
+        and G4VTwistSurface::CurrentStatus::ResetfDone().
+        Addressing problem report #1876.
+      o Use G4RandFlat instead of RandFlat.
+    + volumes:
+      o Correction in G4NavigationHistory default constructor to use
+        GetLevels() instead of GetNewLevels() from G4NavigationHistoryPool,
+        to favor re-use of already allocated space.
+        Corrected printout in streaming operator.
+      o Moved initialisation of G4GeomSplitter thread-local data to be inline
+        along with generic template type.
+        Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+  o Global:
+    ------
+    + G4StatDouble: fixed computation of RMS and added new constructor.
+    + G4UnitsTable: use 'hep_pascal' instead of 'pascal' to avoid potential
+      symbol conflicts on Windows.
+    + Made initialisation of G4TWorkspacePool thread-local data to be inline
+      along with generic template type. Fixing compilation/linking errors on
+      clang-3.9 and XCode-8 on MacOS.
+    + Fixed compilation warning on MacOS Sierra in MT mode in function
+      G4Threading::G4GetPidId().
+    + Updated date and version for 10.2.p03.
+
+  o Graphics Representations:
+    ------------------------
+    + G4VisAttributes::GetInvisible(): changed to use a static instance instead
+      of G4VisAttributes::Invisible; moved implementation to be not inline.
+      Deprecated G4VisAttributes::Invisible.
+
+  o Materials:
+    ---------
+    + Fixed incorrectly calculated index for MicroRoughness lookup table
+      in G4UCNMaterialPropertiesTable. Fixed incorrectly calculated
+      MicroRoughness amplitude in G4UCNMicroRoughnessHelper.
+
+  o Parameterisations:
+    -----------------
+    + gflash:
+      o Fixed memory leak in GVFlashShowerParameterisation.
+      o Removed redundant condition in GFlashHitMaker::make().
+        Addressing problem report #1876.
+
+  o Particles:
+    ---------
+    + Fixed way of deleting G4PrimaryVertex and G4PrimaryParticle objects
+      to avoid stack overflow for very large number of primary vertices or
+      primary particles.
+    + Fixed calculation of neutrino mass in G4MuonRadiativeDecayWithSpin.
+      Addressing problem report #1928.
+    + Replaced use of obsolete G4PDefSplitter class by G4PDefManager, concrete
+      class with implementation. This addresses initialisation problems of
+      static data previously in template.
+      Moved accessors/modifiers for splitter data to non-inline in
+      G4ParticleDefinition and moved initialisation of Splitter thread-local
+      data to be inline along with generic template type.
+      Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+  o Persistency:
+    -----------
+    + GDML:
+      o Fixed check for correctness of the units for divisions and replicas
+        along angular axis. Addressing problem report #1912.
+    + mctruth:
+      o Fixed typo in G4PersistencyCenterMessenger::GetCurrentValue() in
+        selection of verbose mode. Addressing problem report #1876.
+
+  o Physics Lists
+    -------------
+    + Replaced direct use of aParticleIterator by GetParticleIterator().
+      Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o Removed check of c++ version for unique_ptr/auto_ptr selection in
+        G4MoleculeCounter.
+    + lowenergy:
+      o Removed verbosity in G4AtomicTransitionManager.
+        Addressing problem report #1874.
+      o Fixed typo in G4hParameterisedLossModel.
+        Addressing problem report #1876.
+    + utils:
+      o G4EmBiasingManager: fixed typo in condition.
+        Addressing problem report #1876.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/im_r_matrix:
+      o G4VScatteringCollision: fixed memory leak in MT-mode.
+        Addressing problem report #1905.
+    + models/lend:
+      o Fixed to use G4Random.
+      o Improved memory consumption in multi-threaded runs.
+      o Fixed compilation warning in GCC with -O3 optimisation option.
+    + models/particle_hp:
+      o Reintroduced cache of cross-section in GetIsoCrossSection().
+        Fixing CPU performance penalty introduced in release 10.2 on HP
+        processes.
+      o Fixed warning messages on clang-3.8,
+    + processes:
+      o UCN processes: fixed incorrectly calculated MicroRoughness correction
+        to absorption probability. Corrected calculation of refracted velocity
+        after transmission.
+    + util:
+      o Fix in G4Nucleus::GetThermalNucleus() in branch on total energy 
+        calculation using relativistic energy at higher energies.
+        Addressing problem report #1911.
+
+  o Processes - Optical:
+    -------------------
+    + Fixed potential problem of photon stuck when traveling almost
+      perpendicular to the surface normal. Addressing problem report #1888.
+
+  o Run:
+    ---
+    + Added method GetParticleIterator() in G4VPhysicsConstructor and in
+      G4VUserPhysicsList. Mved static GetInstance() method in G4RNGHelper to be
+      not inline. Moved initialisation of G4VUPLSplitter thread-local data to
+      be inline along with generic template type.
+      Removed explicit initialisation of thread-local data from workspaces,
+      as now happening inline in G4TWorkspacePool.
+      Fixing compilation/linking errors on clang-3.9 and XCode-8 on MacOS.
+    + Removed redundant check in G4VUPLSplitter::UseWorkArea().
+      Addressing problem report #1876.
+    + G4WorkerRunManager: minor printout improvement.
+
+  o Visualization:
+    -------------
+    + management:
+      o G4Scene: replaced warning reference to obsolete
+        G4VisAttributes::Invisible to G4VisAttributes::GetInvisible().
+    + OpenGL:
+      o Fixed compilation warning on Win64.
+
+  o Examples:
+    --------
+    + Updated reference outputs.
+    + Replaced direct use of 'a/theParticleIterator' with GetParticleIterator().
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.2.
+  o  Technical notes distributed for release 10.2 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.2.p03 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

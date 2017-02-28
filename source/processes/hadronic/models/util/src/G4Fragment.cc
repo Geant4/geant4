@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 97799 2016-06-13 12:13:11Z gcosmo $
+// $Id: G4Fragment.cc 102724 2017-02-20 13:00:39Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -43,9 +43,8 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-//#define debug_G4Fragment 
-
 G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = nullptr;
+const G4double G4Fragment::minFragExcitation = 10.*CLHEP::eV;
 
 // Default constructor
 G4Fragment::G4Fragment() :
@@ -61,6 +60,7 @@ G4Fragment::G4Fragment() :
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(nullptr),
   spin(0.0),
   theCreationTime(0.0)
@@ -80,6 +80,7 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
    numberOfHoles(right.numberOfHoles),
    numberOfChargedHoles(right.numberOfChargedHoles),
    numberOfShellElectrons(right.numberOfShellElectrons),
+   xLevel(right.xLevel),
    theParticleDefinition(right.theParticleDefinition),
    spin(right.spin),
    theCreationTime(right.theCreationTime)
@@ -92,6 +93,7 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
 G4Fragment::~G4Fragment()
 {
   delete thePolarization;
+  thePolarization = nullptr;
 }
 
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
@@ -107,6 +109,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(nullptr),
   spin(0.0),
   theCreationTime(0.0)
@@ -131,6 +134,7 @@ G4Fragment::G4Fragment(const G4LorentzVector& aMomentum,
   numberOfHoles(0),
   numberOfChargedHoles(0),
   numberOfShellElectrons(0),
+  xLevel(0),
   theParticleDefinition(aParticleDefinition),
   spin(0.0),
   theCreationTime(0.0)
@@ -163,6 +167,7 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     numberOfHoles = right.numberOfHoles;
     numberOfChargedHoles = right.numberOfChargedHoles;
     numberOfShellElectrons = right.numberOfShellElectrons;
+    xLevel = right.xLevel;
     theParticleDefinition = right.theParticleDefinition;
     spin = right.spin;
     theCreationTime = right.theCreationTime;
@@ -214,6 +219,9 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
       << ") MeV   E = " 
       << theFragment->GetMomentum().t()/CLHEP::MeV << " MeV"
       << G4endl;
+
+  out << "    #spin= " << theFragment->GetSpin()
+      << "    #floatLevelNo= " << theFragment->GetFloatingLevelNumber();
        
   if(theFragment->GetNuclearPolarization()) { 
     out << theFragment->GetNuclearPolarization(); 
@@ -224,10 +232,9 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
 	<< "#Particles= " << theFragment->GetNumberOfParticles() 
 	<< ", #Charged= " << theFragment->GetNumberOfCharged()
 	<< ", #Holes= "   << theFragment->GetNumberOfHoles()
-	<< ", #ChargedHoles= " << theFragment->GetNumberOfChargedHoles()
-	<< ", #spin= " << theFragment->GetSpin()
-	<< G4endl;
+	<< ", #ChargedHoles= " << theFragment->GetNumberOfChargedHoles();
   }
+  out << G4endl;
   out.setf(old_floatfield,std::ios::floatfield);
   out.precision(floatPrec);
 
@@ -242,22 +249,10 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 
 void G4Fragment::ExcitationEnergyWarning()
 {
-  const G4double exclimit = -10*CLHEP::eV;
-  if (theExcitationEnergy < exclimit) {
-
 #ifdef G4VERBOSE
-    G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
-    G4cout << *this << G4endl;
+  G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
+  G4cout << *this << G4endl;
 #endif
-
-#ifdef debug_G4Fragment
-    G4ExceptionDescription ed;
-    ed << *this << G4endl;
-    G4Exception("G4Fragment::ExcitationEnergyWarning()", "had777", 
-		FatalException,ed);
-#endif
-  }
-  theExcitationEnergy = 0.0;
 }
 
 void G4Fragment::NumberOfExitationWarning(const G4String& value)
@@ -269,7 +264,7 @@ void G4Fragment::NumberOfExitationWarning(const G4String& value)
   throw G4HadronicException(__FILE__, __LINE__, text);
 }
 
-void G4Fragment::SetAngularMomentum(G4ThreeVector& v)
+void G4Fragment::SetAngularMomentum(const G4ThreeVector& v)
 {
   spin = v.mag();
 }

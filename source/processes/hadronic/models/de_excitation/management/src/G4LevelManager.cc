@@ -48,31 +48,22 @@ G4String G4LevelManager::fFloatingLevels[] = {
 
 G4LevelManager::G4LevelManager(size_t ntrans,
                                const std::vector<G4float>& energies,
-			       const std::vector<G4float>& lifetime,
-			       const std::vector<G4float>& lifetimegamma,
 			       const std::vector<G4int>& spin,
-			       const std::vector<G4int>& fll,
 			       const std::vector<const G4NucLevel*>& levels)
   : nTransitions(0)
 { 
   if(0 < ntrans) {
     nTransitions = ntrans - 1;
     fLevelEnergy.reserve(ntrans);
-    fLifeTime.reserve(ntrans);
-    fLifeTimeGamma.reserve(ntrans);
     fSpin.reserve(ntrans);
-    fFloating.reserve(ntrans);
     fLevels.reserve(ntrans);
     for(size_t i=0; i<ntrans; ++i) {
       fLevelEnergy.push_back(energies[i]);
-      fLifeTime.push_back(lifetime[i]);
-      fLifeTimeGamma.push_back(lifetimegamma[i]);
       fSpin.push_back(spin[i]);
       fLevels.push_back(levels[i]);
-      fFloating.push_back(fll[i]); 
     }
-    //G4cout << "New G4LevelManager N= " << nTransitions << " " << fLevelEnergy.size() 
-    //	   << " <" << this << ">" << G4endl;
+    //G4cout << "New G4LevelManager N= " << nTransitions << " " 
+    //<< fLevelEnergy.size() << " <" << this << ">" << G4endl;
   }
 }
 
@@ -115,7 +106,8 @@ const G4String& G4LevelManager::FloatingType(size_t i) const
 #ifdef G4VERBOSE
   if(i > nTransitions) { PrintError(i, "Meta"); }
 #endif
-  return fFloatingLevels[fFloating[i]]; 
+  return fFloatingLevels[fSpin[i]/100000]; 
+  //  return fFloatingLevels[fFloating[i]]; 
 }
 
 #ifdef G4VERBOSE

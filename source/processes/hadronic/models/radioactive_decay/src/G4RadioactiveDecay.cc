@@ -117,12 +117,14 @@
 #include "G4VDecayChannel.hh"
 #include "G4NuclearDecay.hh"
 #include "G4RadioactiveDecayMode.hh"
+#include "G4Fragment.hh"
 #include "G4Ions.hh"
 #include "G4IonTable.hh"
 #include "G4BetaDecayType.hh"
 #include "Randomize.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4NuclearLevelData.hh"
+#include "G4DeexPrecoParameters.hh"
 #include "G4LevelManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4Electron.hh"
@@ -146,8 +148,10 @@
 
 using namespace CLHEP;
 
-const G4double G4RadioactiveDecay::levelTolerance = 0.1*keV;
+// const G4double G4RadioactiveDecay::levelTolerance = 0.1*keV;
+const G4double G4RadioactiveDecay::levelTolerance = 10.0*eV;
 const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
+//G4ThreadLocal G4Fragment G4RadioactiveDecay::polarizedNucleus=nullptr;
 
 #ifdef G4MULTITHREADED
 #include "G4AutoLock.hh"
@@ -413,7 +417,7 @@ G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double t
   }
   long double lt = t ;
   long double ltau = tau;
-
+  // G4cout << " Convolve: tau = " << tau << G4endl;
   if (nbin > 0) {
     for (G4int i = 0; i < nbin; i++) {
       convolvedTime += (long double)SProfile[i] *
@@ -734,6 +738,10 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
       theManager->SetAtomDeexcitation(p);
       */
     }
+
+    G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
+    param->SetUseFilesNEW(true);
+    //param->SetCorrelatedGamma(true);  //AR-20Feb2017: Temporary, to fix non-reproducibility problems
   }
 }
 
@@ -1235,6 +1243,9 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
                << ") are being calculated,  generation = " << nGeneration
                << G4endl;
       }
+//      G4cout << " Taus = " << G4endl;
+//      for (G4int ii = 0; ii < TP.size(); ii++) G4cout << TP[ii] << ", " ;
+//      G4cout << G4endl;
 
       aParentNucleus = theIonTable->GetIon(ZP,AP,EP);
       parentDecayTable = GetDecayTable(aParentNucleus);
@@ -1785,9 +1796,10 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
           // it will be used to calculate the statistical weight of the 
           // decay products of this isotope
 
-          //  G4cout <<"PA= "<< PA << " PZ= " << PZ << " PE= "<< PE  <<G4endl;
+//          G4cout <<"PA= "<< PA << " PZ= " << PZ << " PE= "<< PE  <<G4endl;
           decayRate = 0.L;
           for (j = 0; j < PT.size(); j++) {
+//            G4cout <<  " RDM::DecayIt: tau input to Convolve: " <<  PT[j] << G4endl; 
             taotime = ConvolveSourceTimeProfile(theDecayTime,PT[j]);
 //            taotime = GetTaoTime(theDecayTime,PT[j]);
             decayRate -= PR[j] * (long double)taotime;

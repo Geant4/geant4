@@ -1,4 +1,4 @@
-$Id: History 101863 2016-12-02 12:48:47Z gcosmo $
+$Id: History 102586 2017-02-09 09:51:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,14 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-Dec-2016, Laurent Desorgher (phys-ctor-decay-V10-02-09)
+-G4RadioactiveDecayPhysics switch on  the storing of all internal conversion data vector
+  (G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true)) for 
+ correct gamma deexcitation modeling in radioactive decay. 
+
+16-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-08)
+- G4RadioactiveDecayPhysics - simplified list of EM parameters.
 
 02-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-07)
 - G4RadioactiveDecayPhysics - fixed initialisation (also for the 

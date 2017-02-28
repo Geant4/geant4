@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.hh 98735 2016-08-09 10:54:06Z gcosmo $
+// $Id: G4AdjointSimManager.hh 102566 2017-02-09 08:35:24Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSimManager.hh
@@ -168,6 +168,7 @@ class G4AdjointSimManager: public G4UserRunAction
     G4bool GetDidAdjParticleReachTheExtSource();
     void RegisterAtEndOfAdjointTrack();
     void RegisterAdjointPrimaryWeight(G4double aWeight);
+    void ResetDidOneAdjPartReachExtSourceDuringEvent();
     //to continue here
     inline G4int GetIDOfLastAdjParticleReachingExtSource(){return ID_of_last_particle_that_reach_the_ext_source;};
     G4ThreeVector GetPositionAtEndOfLastAdjointTrack(size_t i=0);
@@ -261,6 +262,7 @@ class G4AdjointSimManager: public G4UserRunAction
   public:
     void SwitchToAdjointSimulationMode();
     void BackToFwdSimulationMode();
+
 
   private: //constructor and destructor
   

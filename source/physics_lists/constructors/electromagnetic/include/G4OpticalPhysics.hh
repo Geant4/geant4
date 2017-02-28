@@ -96,6 +96,9 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
     void SetFiniteRiseTime(G4bool );
 
+    void SetCerenkovStackPhotons(G4bool );
+    void SetScintillationStackPhotons(G4bool );
+
     void SetInvokeSD(G4bool );
 
   private:
@@ -145,6 +148,11 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     /// option to allow for G4OpBoundaryProcess
     /// to call/not call InvokeSD method
     G4bool                      fInvokeSD;
+
+    /// option to allow stacking of secondary Cerenkov photons
+    G4bool                      fCerenkovStackPhotons;
+    /// option to allow stacking of secondary Scintillation photons
+    G4bool                      fScintillationStackPhotons;
 
 };
 

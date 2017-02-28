@@ -190,6 +190,11 @@ public:
   {
     return fMaxTimeStep;
   }
+  
+  inline G4ITTrackingManager* GetTrackingManager() const
+  {
+    return fpTrackingManager;
+  }
 
 protected:
 

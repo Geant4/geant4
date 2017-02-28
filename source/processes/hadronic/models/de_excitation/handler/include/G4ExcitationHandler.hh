@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 98808 2016-08-11 08:35:24Z gcosmo $
+// $Id: G4ExcitationHandler.hh 102590 2017-02-09 10:13:30Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -127,6 +127,7 @@ private:
   G4IonTable* theTableOfIons;
   G4NistManager* nist;
 
+  G4int  fVerbose;
   G4bool isInitialised;
   G4bool isEvapLocal;
 

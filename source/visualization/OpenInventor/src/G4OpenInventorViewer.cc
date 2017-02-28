@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc 88190 2015-02-02 17:24:54Z gcosmo $
+// $Id: G4OpenInventorViewer.cc 102573 2017-02-09 08:50:23Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
@@ -184,6 +184,9 @@ G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {
       // needs a kernel visit.  (In this respect, it differs from the
       // OpenGL drivers, where it's done in SetView.)
       (vp.GetScaleFactor ()     != fVP.GetScaleFactor ())     ||
+      // If G4OpenInventor ever introduces VAMs, the following might need
+      // changing to a complete comparison, i.e., remove ".size()".  See
+      // G4OpenGLStoredViewer::CompareForKernelVisit.
       (vp.GetVisAttributesModifiers().size() !=
        fVP.GetVisAttributesModifiers().size())
       )

@@ -349,7 +349,7 @@ void PassiveCarbonBeamLine::ConstructPassiveCarbonBeamLine()
 	
 	
 	// The treatment room is invisible in the Visualisation
-	logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::GetInvisible());
+	logicTreatmentRoom -> SetVisAttributes (G4VisAttributes::Invisible);
 	
 	// Components of the Passive Carbon Beam Line
 	HadrontherapyBeamLineSupport();

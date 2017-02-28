@@ -65,9 +65,11 @@ class G4UIcommand;
 // - /process/optical/setTrackSecondariesFirst proc_name flag
 // - /process/optical/defaults/cerenkov/setMaxPhotons val
 // - /process/optical/defaults/cerenkov/setMaxBetaChange val
+// - /process/optical/defaults/cerenkov/setStackPhotons flag
 // - /process/optical/defaults/scintillation/setYieldFactor val
 // - /process/optical/defaults/scintillation/setByParticleType val
 // - /process/optical/defaults/scintillation/setFiniteRiseTime val
+// - /process/optical/defaults/scintillation/setStackPhotons flag
 // - /process/optical/defaults/wls/setTimeProfile val
 // - /process/optical/defaults/boundary/setInvokeSD flag
 
@@ -115,6 +117,9 @@ private:
   /// setCerenkovMaxBetaChange command
   G4UIcmdWithADouble*    fSetCerenkovMaxBetaChangeCmd;
 
+  /// setStackPhotons command
+  G4UIcmdWithABool*      fSetCerenkovStackPhotonsCmd;
+
   /// setScintillationYieldFactor command
   G4UIcmdWithADouble*    fSetScintillationYieldFactorCmd;
 
@@ -123,6 +128,9 @@ private:
 
   /// setScintillationTrackInfo command
   G4UIcmdWithABool*      fSetScintillationTrackInfoCmd;
+
+  /// setStackPhotons command
+  G4UIcmdWithABool*      fSetScintillationStackPhotonsCmd;
 
 //  /// setOpticalSurfaceModel command
 //  G4UIcmdWithAString*    fSetOpticalSurfaceModelCmd;

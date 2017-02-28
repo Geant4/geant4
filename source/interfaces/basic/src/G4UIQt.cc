@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 101789 2016-11-28 15:31:24Z gcosmo $
+// $Id: G4UIQt.cc 102539 2017-02-08 14:06:50Z gcosmo $
 //
 // L. Garnier
 
@@ -208,6 +208,7 @@ G4UIQt::G4UIQt (
   CreateIcons();
   
   fMainWindow = new QMainWindow();
+  fMainWindow->setAttribute(Qt::WA_DeleteOnClose);
 
   fMainWindow->setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
   fMainWindow->setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
@@ -269,10 +270,6 @@ G4UIQt::~G4UIQt(
 #ifdef G4MULTITHREADED 
     masterG4coutDestination = 0; // set to cout when UI is deleted
 #endif
-  }
-  
-  if (fMainWindow!=NULL) {
-    delete fMainWindow;
   }
 }
 
@@ -4241,7 +4238,9 @@ void G4UIQt::ChangeCursorAction(const QString& action) {
       fPickSelected = false;
       list.at(i)->setChecked(FALSE);
       G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/picking false");
-      fPickInfosDialog->hide();
+      if (fPickInfosDialog) {
+        fPickInfosDialog->hide();
+      }
     } else if (list.at(i)->data().toString () == "rotate") {
       fRotateSelected = false;
       list.at(i)->setChecked(FALSE);

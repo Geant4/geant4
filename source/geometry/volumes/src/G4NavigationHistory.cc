@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc 96346 2016-04-08 14:10:33Z gcosmo $
+// $Id: G4NavigationHistory.cc 102534 2017-02-08 13:47:58Z gcosmo $
 //
 // 
 // G4NavigationHistory Implementation
@@ -41,7 +41,7 @@ G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
 G4NavigationHistory::G4NavigationHistory()
   : fStackDepth(0)
 {
-  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetNewLevels();
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
   Clear();
 }
 

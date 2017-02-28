@@ -172,7 +172,7 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::AlongStepDoIt(const G4Tra
 
   if (is_free_flight_gamma) { //for free_flight survival probability stays 1
       //Accumulate the number of interaction lengths during free flight of gamma
-     total_acc_nb_fwd_interaction_length+=nb_fwd_interaction_length_over_step;
+	 total_acc_nb_fwd_interaction_length+=nb_fwd_interaction_length_over_step;
      total_acc_nb_adj_interaction_length+=nb_adj_interaction_length_over_step;
      acc_track_length+=stepLength;
   }
@@ -182,8 +182,14 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::AlongStepDoIt(const G4Tra
 	  acc_nb_adj_interaction_length+=nb_adj_interaction_length_over_step;
 	  theNumberOfInteractionLengthLeft-=nb_adj_interaction_length_over_step;
 
-	  mc_induced_survival_probability= std::exp(-acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length);
-	  mc_induced_survival_probability=mc_induced_survival_probability/(std::exp(-previous_acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length));
+	  //Following condition to remove very rare FPE issue
+      if (total_acc_nb_adj_interaction_length <=  1.e-50 &&  theNumberOfInteractionLengthLeft<=1.e-50) { //condition added to avoid FPE issue
+         mc_induced_survival_probability =  1.e50;
+       }
+      else {
+       mc_induced_survival_probability= std::exp(-acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length);
+       mc_induced_survival_probability=mc_induced_survival_probability/(std::exp(-previous_acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length));
+      }
   }
  G4double weight_correction = fwd_survival_probability/mc_induced_survival_probability;
  //weight_correction = 1.;

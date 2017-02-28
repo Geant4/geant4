@@ -259,7 +259,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   fr1Cmd = new G4UIcmdWithADouble("/process/msc/RangeFactorMuHad",this);
   fr1Cmd->SetGuidance("Set RangeFactor for msc processes of muons/hadrons");
   fr1Cmd->SetParameterName("Fr1",true);
-  fr1Cmd->SetRange("Fr>0");
+  fr1Cmd->SetRange("Fr1>0");
   fr1Cmd->SetDefaultValue(0.2);
   fr1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 

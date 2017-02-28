@@ -57,15 +57,15 @@
 
 void InactiveNode(G4KDNode_Base* node)
 {
-	if(!node) return ;
-	node->InactiveNode() ;
+  if(node == nullptr) return;
+//	if(node->IsValid())
+  node->InactiveNode();
 }
 
 void Free(G4KDNode_Base*& node)
 {
-	if(node)
-		delete node ;
-	node = 0;
+  if(node) delete node;
+  node = nullptr;
 }
 
 //______________________________________________________________________
@@ -74,8 +74,8 @@ G4KDNode_Base::G4KDNode_Base(G4KDTree* tree,
     						fTree(tree),
     						fLeft(0), fRight(0), fParent(parent)
 {
-	fSide = 0;
-	fAxis = fParent == 0? 0 : fParent->fAxis +1 < fTree->fDim? fParent->fAxis+1:0;
+  fSide = 0;
+  fAxis = fParent == 0? 0 : fParent->fAxis +1 < fTree->fDim? fParent->fAxis+1:0;
 }
 
 // Copy constructor should not be used
@@ -83,8 +83,8 @@ G4KDNode_Base::G4KDNode_Base(const G4KDNode_Base& ):
     						fTree(0),
     						fLeft(0), fRight(0), fParent(0)
 {
-	fSide = 0;
-	fAxis = 0;
+  fSide = 0;
+  fAxis = 0;
 }
 
 // Assignement should not be used

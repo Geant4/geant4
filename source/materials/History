@@ -1,4 +1,4 @@
-$Id: History 101178 2016-11-08 12:50:41Z gcosmo $
+$Id: History 102806 2017-02-22 16:36:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-02-17 G.Cosmo (materials-V10-02-21)
+- Removed debug printout from G4MaterialPropertiesTable destructor.
+  Addressing problem report #1944.
 
 08-11-16 E.Bagli (materials-V10-02-20)
 - Fixed Coverity warnings

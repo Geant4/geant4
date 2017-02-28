@@ -64,15 +64,16 @@ public:
                                        G4int  JP1,
                                        G4int  JP2,
                                        G4int  MP,
-                                       size_t shell,
+                                       G4int  shell,
                                        G4bool isDiscrete,
-                                       G4bool isGamma,
-				       G4bool isLongLived);
+                                       G4bool isGamma);
 
   virtual void SampleDirection(G4Fragment* nuc, G4double ratio, 
 			       G4int twoJ1, G4int twoJ2, G4int mp);
 
   inline void SetPolarizationFlag(G4bool val) { polarFlag = val; };
+
+  inline void SetVerbose(G4int val) { fVerbose = val; fPolTrans.SetVerbose(val); };
 
 private:  
 
@@ -87,12 +88,8 @@ protected:
 
   G4ThreeVector fDirection;
   G4PolarizationTransition fPolTrans;
+  G4int fVerbose;
 };
 
 
 #endif
-
-
-
-
-

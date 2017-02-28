@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 100648 2016-10-31 10:06:45Z gcosmo $
+// $Id: G4RootAnalysisManager.cc 102848 2017-02-27 13:09:25Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -622,6 +622,32 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   if ( fNtupleMergeMode != G4NtupleMergeMode::kSlave )  {
     // close file
     fFileManager->CloseFile(); 
+  }
+
+  // No files clean-up in sequential mode
+  if ( ! G4Threading::IsMultithreadedApplication() )  return finalResult;
+  
+  // Delete files if empty in MT mode
+  if ( ( fState.GetIsMaster() && 
+         fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && fNtupleManager->IsEmpty() ) || 
+       ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() &&
+             fNtupleMergeMode == G4NtupleMergeMode::kNone ) ) {
+    result = ! std::remove(fFileManager->GetFullFileName());
+    //  std::remove returns 0 when success
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "Removing file " 
+                  << fFileManager->GetFullFileName() << " failed";
+      G4Exception("G4XmlAnalysisManager::CloseFile()",
+                "Analysis_W021", JustWarning, description);
+    }            
+    finalResult = finalResult && result;
+#ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()
+        ->Message("delete", "empty file", fFileManager->GetFullFileName());
+#endif
   }
 
   return finalResult;

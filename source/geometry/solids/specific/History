@@ -1,4 +1,4 @@
-$Id: History 101819 2016-12-01 08:13:36Z gcosmo $
+$Id: History 102532 2017-02-08 13:44:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-December-2016  G.Cosmo         (geom-specific-V10-02-26)
+- Correction in G4UExtrudedSolid to signature for CalculateExtent().
+  Fixes issue of undefined symbol if extruded-solid not included in the
+  list of VecGeom wrappers to activate.
 
 30-November-2016  E.Tcherniaev    (geom-specific-V10-02-25)
 - Call RemoveRedundantVertices() from G4GeomTools in CalculateExtent()

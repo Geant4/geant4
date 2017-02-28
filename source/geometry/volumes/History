@@ -1,4 +1,4 @@
-$Id: History 100429 2016-10-21 13:00:52Z gcosmo $
+$Id: History 102534 2017-02-08 13:47:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 10th, 2017 G.Cosmo                - geomvol-V10-02-04
+- Correction in G4NavigationHistory default constructor to use
+  GetLevels() instead of GetNewLevels() from G4NavigationHistoryPool,
+  to favor re-use of already allocated space.
+  Thanks to M.Karamitros for spotting this.
 
 October 21st, 2016 G.Cosmo                - geomvol-V10-02-03
 - Moved initialisation of G4GeomSplitter thread-local data to be inline

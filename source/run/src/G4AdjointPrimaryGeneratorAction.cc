@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointPrimaryGeneratorAction.cc 98735 2016-08-09 10:54:06Z gcosmo $
+// $Id: G4AdjointPrimaryGeneratorAction.cc 102566 2017-02-09 08:35:24Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointPrimaryGeneratorAction
@@ -186,6 +186,7 @@ void G4AdjointPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    //Call some methods of G4AdjointSimManager
    G4AdjointSimManager::GetInstance()->SetAdjointTrackingMode(true);
    G4AdjointSimManager::GetInstance()->ClearEndOfAdjointTrackInfoVectors();
+   G4AdjointSimManager::GetInstance()->ResetDidOneAdjPartReachExtSourceDuringEvent();
 
   /* if ( !last_generated_part_was_adjoint ) {
 	 

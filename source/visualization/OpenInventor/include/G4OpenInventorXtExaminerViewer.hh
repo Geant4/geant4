@@ -65,6 +65,8 @@ class SoPointSet;
 class G4OpenInventorXtExaminerViewer : public SoXtExaminerViewer {
 
   friend class G4OpenInventorXtExaminerViewerMessenger;
+  // FWJ
+  friend class G4OpenInventorXtExtendedViewer;
 
 private:
   Widget prevViewPtButton, nextViewPtButton;
@@ -108,6 +110,8 @@ public:
   bool abbrOutputFlag;
   bool pickRefPathFlag;
   bool viewingBeforePickRef;
+   // FWJ
+   //  SoNode * superimposition;
 		     
 protected:
   // Same constructor as the ExaminerViewer 
@@ -204,6 +208,7 @@ private:
   static void saveViewPtCB(Widget, XtPointer, XtPointer);
   static void abbrOutputCB(Widget, XtPointer, XtPointer);
   static void pickRefPathCB(Widget, XtPointer, XtPointer);
+  static void switchWireFrameCB(Widget, XtPointer, XtPointer);
   static void constructListsDialog(Widget, XtPointer, XtPointer);
   void saveViewPt(char *name);
   

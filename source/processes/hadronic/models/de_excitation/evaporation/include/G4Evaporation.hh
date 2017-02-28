@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Evaporation.hh 98808 2016-08-11 08:35:24Z gcosmo $
+// $Id: G4Evaporation.hh 102590 2017-02-09 10:13:30Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -86,6 +86,7 @@ private:
   G4bool operator==(const G4Evaporation &right) const = delete;
   G4bool operator!=(const G4Evaporation &right) const = delete;
 
+  G4int    fVerbose;
   size_t   nChannels;
   G4double minExcitation;
   G4NistManager* nist;

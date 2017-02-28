@@ -375,10 +375,11 @@ G4DecayProducts *G4MuonRadiativeDecayChannelWithSpin::DecayIt(G4double)
 
   G4double energy2 = parentmass*(1.0 - (x+y)/2.0);
 
-  G4double vmass   = std::sqrt((energy2-
-                                (daughtermomentum[0]+daughtermomentum[1]))*
-                               (energy2+
-                                (daughtermomentum[0]+daughtermomentum[1])));
+  G4double vmass2 = energy2*energy2 -
+                    (daughtermomentum[0]*direction0+daughtermomentum[1]*direction1)*
+                    (daughtermomentum[0]*direction0+daughtermomentum[1]*direction1);
+  G4double vmass = std::sqrt(vmass2);
+
   G4double beta = (daughtermomentum[0]+daughtermomentum[1])/energy2;
   beta = -1.0 * std::min(beta,0.99);
 

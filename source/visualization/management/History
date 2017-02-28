@@ -1,4 +1,4 @@
-$Id: History 101792 2016-11-28 16:47:50Z gcosmo $
+$Id: History 102575 2017-02-09 09:07:12Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -25,6 +25,9 @@ committal in the CVS repository !
 
 History file for visualization management sub-category
 ------------------------------------------------------
+
+12th December 2016  Brian Smith, Laurent Garnier  (visman-V10-02-38)
+- /vis/viewer/interpolate: Now works for WIN32.
 
 27th November 2016  John Allison (visman-V10-02-37)
 - G4VisManager.cc: Fix for OpenGLXm.  An extra refresh should come

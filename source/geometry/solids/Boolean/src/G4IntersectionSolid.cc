@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
+// $Id: G4IntersectionSolid.cc 102530 2017-02-08 13:41:59Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -258,28 +258,22 @@ G4IntersectionSolid::SurfaceNormal( const G4ThreeVector& p ) const
   }
 #endif
 
-  // OLD: if(fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToOut(p) ) 
-
   // On the surface of both is difficult ... treat it like on A now!
   //
-  // if( (insideA == kSurface) && (insideB == kSurface) )
-  //    normal= fPtrSolidA->SurfaceNormal(p) ;
-  // else 
   if( insideA == kSurface )
-    {
-      normal= fPtrSolidA->SurfaceNormal(p) ;
-    }
+  {
+    normal= fPtrSolidA->SurfaceNormal(p) ;
+  }
   else if( insideB == kSurface )
-    {
-      normal= fPtrSolidB->SurfaceNormal(p) ;
-    } 
-    // We are on neither surface, so we should generate an exception
-  else
-    {
-      if(fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToOut(p) ) 
-   normal= fPtrSolidA->SurfaceNormal(p) ;   
-      else
-   normal= fPtrSolidB->SurfaceNormal(p) ;   
+  {
+    normal= fPtrSolidB->SurfaceNormal(p) ;
+  } 
+  else  // We are on neither surface, so we should generate an exception
+  {
+    if(fPtrSolidA->DistanceToOut(p) <= fPtrSolidB->DistanceToOut(p) ) 
+      normal= fPtrSolidA->SurfaceNormal(p) ;   
+    else
+      normal= fPtrSolidB->SurfaceNormal(p) ;   
 #ifdef G4BOOLDEBUG
       G4cout << "WARNING - Invalid call in "
              << "G4IntersectionSolid::SurfaceNormal(p)" << G4endl

@@ -76,6 +76,10 @@
 #include "G4MoleculeDefinition.hh"
 
 class G4Molecule;
+template<>
+G4KDNode<G4Molecule>::~G4KDNode();
+
+class G4Molecule;
 class G4MolecularConfiguration;
 class G4MoleculeDefinition;
 class G4MolecularDissociationChannel;

@@ -1,4 +1,4 @@
-$Id: History 101901 2016-12-07 08:38:58Z gcosmo $
+$Id: History 102624 2017-02-10 08:22:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+09-Feb-2017, Makoto Asai                (phys-ctor-hinelastic-V10-02-11)
+- Print-out of the transition energy region between FTFP and BERT 
+  in the physics lists FTFP_BERT_HP and G4HadronPhysicsFTFP_BERT_HP
+  is made only for the master thread.
 
 07-Dec-2016, Alberto Ribon              (phys-ctor-hinelastic-V10-02-10)
 - G4HadronPhysicsFTFP_BERT_HP : changed the transition energy region

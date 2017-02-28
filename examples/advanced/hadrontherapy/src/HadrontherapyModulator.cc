@@ -469,12 +469,12 @@ for (G4int i=1;i<StepNumbers;i++)
   G4VisAttributes * red = new G4VisAttributes( G4Colour(1. ,0. ,0.));
   red-> SetVisibility(true);
   red-> SetForceSolid(true);
-  logicMotherMod -> SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicMotherMod -> SetVisAttributes(G4VisAttributes::Invisible);
  
-  logicMod1 ->SetVisAttributes(G4VisAttributes::GetInvisible());
-  logicMod2 ->SetVisAttributes(G4VisAttributes::GetInvisible());
-  logicMod3 ->SetVisAttributes(G4VisAttributes::GetInvisible());
-  logicMod4 ->SetVisAttributes(G4VisAttributes::GetInvisible());
+  logicMod1 ->SetVisAttributes(G4VisAttributes::Invisible);
+  logicMod2 ->SetVisAttributes(G4VisAttributes::Invisible);
+  logicMod3 ->SetVisAttributes(G4VisAttributes::Invisible);
+  logicMod4 ->SetVisAttributes(G4VisAttributes::Invisible);
   
   for (G4int i=1;i<StepNumbers;i++)
   {

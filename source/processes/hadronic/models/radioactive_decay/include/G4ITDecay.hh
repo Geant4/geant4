@@ -39,7 +39,9 @@
 #define G4ITDecay_h 1
 
 #include "G4NuclearDecay.hh"
+#include "G4Fragment.hh"
 
+class G4PhotonEvaporation;
 
 class G4ITDecay : public G4NuclearDecay
 {
@@ -61,6 +63,9 @@ class G4ITDecay : public G4NuclearDecay
     G4int parentZ;
     G4int parentA;
     G4bool applyARM;
+
+    G4Fragment* daughterNucleus;
+    G4PhotonEvaporation* photoEvap;
 };
 
 #endif

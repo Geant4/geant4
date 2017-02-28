@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT.cc 101872 2016-12-02 14:02:40Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT.cc 102624 2017-02-10 08:22:14Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -60,6 +60,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4Threading.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -124,14 +125,16 @@ void G4HadronPhysicsFTFP_BERT::CreateModels()
   G4double maxBERT_proton = 12.0 * GeV;
   G4double minFTFP_neutron = 3.0 * GeV;
   G4double maxBERT_neutron = 12.0 * GeV;
-
-  G4cout << G4endl
+ 
+  if(G4Threading::IsMasterThread()) {
+    G4cout << G4endl
          << " FTFP_BERT : new threshold between BERT and FTFP is over the interval " << G4endl
          << " for pions :   " << minFTFP_pion/GeV << " to " << maxBERT_pion/GeV  << " GeV" << G4endl
          << " for kaons :   " << minFTFP_kaon/GeV << " to " << maxBERT_kaon/GeV  << " GeV" << G4endl
          << " for proton :  " << minFTFP_proton/GeV << " to " << maxBERT_proton/GeV  << " GeV" << G4endl
          << " for neutron : " << minFTFP_neutron/GeV << " to " << maxBERT_neutron/GeV  << " GeV" << G4endl
          << G4endl;
+  }
 
   tpdata->theNeutrons=new G4NeutronBuilder;
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(QuasiElastic);

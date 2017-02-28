@@ -38,6 +38,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
 #include "G4PhotonEvaporation.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4AtomicShells.hh"
 #include "G4Electron.hh"
@@ -51,7 +52,7 @@ G4ITDecay::G4ITDecay(const G4ParticleDefinition* theParentNucleus,
                      const G4double& branch, const G4double& Qvalue,
                      const G4double& excitationE)
  : G4NuclearDecay("IT decay", IT, excitationE, noFloat), transitionQ(Qvalue), 
-   applyARM(true)
+   applyARM(true), daughterNucleus(nullptr), photoEvap(0)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
@@ -63,11 +64,18 @@ G4ITDecay::G4ITDecay(const G4ParticleDefinition* theParentNucleus,
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable());
   SetDaughter(0, theIonTable->GetIon(parentZ, parentA, excitationE, noFloat) );
+
+  // Let G4PhotonEvaporation do the decay
+  photoEvap = new G4PhotonEvaporation; 
+  photoEvap->RDMForced(true);
+  photoEvap->SetICM(true);
 }
 
 
 G4ITDecay::~G4ITDecay()
-{}
+{
+  delete photoEvap;
+}
 
 
 G4DecayProducts* G4ITDecay::DecayIt(G4double)
@@ -83,25 +91,59 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
   G4DynamicParticle parentParticle(G4MT_parent, atRest);
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
-  // Let G4PhotonEvaporation do the decay 
-  G4PhotonEvaporation* photoEvap = new G4PhotonEvaporation;
-  photoEvap->RDMForced(true);
-  photoEvap->SetICM(true);
+  // Let G4PhotonEvaporation do the decay
+  G4Fragment parentNucleus(parentA, parentZ, atRest);
+  // G4cout << " START of G4ITDecay::DecayIt: " << G4endl;
 
-  G4Fragment* nucleus = new G4Fragment(parentA, parentZ, atRest);
-  G4Fragment* eOrGamma = photoEvap->EmittedFragment(nucleus);
+  // Check if the old nuclear polarization can be used
+  G4NuclearPolarization* nucPol(nullptr);
+  G4int oldZ(0), oldA(0);
+  G4double oldMass(0.0);
+  if(daughterNucleus) {
+    nucPol = daughterNucleus->GetNuclearPolarization();
+    if(nucPol) {
+      oldZ = daughterNucleus->GetZ_asInt();
+      oldA = daughterNucleus->GetA_asInt();
+      oldMass = daughterNucleus->GetGroundStateMass() +
+	daughterNucleus->GetExcitationEnergy();
+    }
+  }
+  static const G4double mlimit = 10*CLHEP::eV;
+  if (nucPol && oldZ == parentZ && oldA == parentA 
+      && std::abs(atRest.e() - oldMass) < mlimit) {
+    // Continue with existing chain
+    parentNucleus = *daughterNucleus;
+    parentNucleus.SetMomentum(atRest);
+  }
 
-  // Daughter nuclide is returned in nucleus pointer
-  G4double finalDaughterExcitation = nucleus->GetExcitationEnergy();
-  if (finalDaughterExcitation < 1*keV) finalDaughterExcitation = 0.0;
-  G4LorentzVector daughterMomentum = nucleus->GetMomentum();
+  // G4cout << " BEFORE TRANSITION fragment = " << G4endl;
+  // G4cout << parentNucleus << G4endl;
+ 
+  G4Fragment* eOrGamma = photoEvap->EmittedFragment(&parentNucleus);
+
+  // G4cout << " AFTER TRANSITION " << G4endl;
+  // G4cout << parentNucleus << G4endl;
+
+  // Check if IT chain has ended with excited isomere
+  // Take care for deletion of cached G4Fragment
+  if (parentNucleus.GetExcitationEnergy() > mlimit) {
+    // G4cout << " IT chain is continue " << G4endl;
+    delete daughterNucleus;
+    daughterNucleus = new G4Fragment(parentNucleus);
+  } else if(daughterNucleus) {
+    // G4cout << " End of IT chain " << G4endl;
+    delete daughterNucleus;
+    daughterNucleus = nullptr;
+  }
+
+  // Modified nuclide is returned as dynDaughter
   G4IonTable* theIonTable =
     (G4IonTable*)(G4ParticleTable::GetParticleTable()->GetIonTable() );
   G4ParticleDefinition* daughterIon =
-    theIonTable->GetIon(parentZ, parentA, finalDaughterExcitation);
+    theIonTable->GetIon(parentZ, parentA, parentNucleus.GetExcitationEnergy(), 
+                        G4Ions::FloatLevelBase(parentNucleus.GetFloatingLevelNumber()));
   G4DynamicParticle* dynDaughter = new G4DynamicParticle(daughterIon,
-                                                         daughterMomentum); 
-  delete nucleus;
+                                                         parentNucleus.GetMomentum());
 
   if (eOrGamma) {
     G4DynamicParticle* eOrGammaDyn =
@@ -111,7 +153,7 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
     products->PushProducts(eOrGammaDyn);
     delete eOrGamma;
 
-    // Now do atomic relaxation
+    // Now do atomic relaxation if e- is emitted
     if (applyARM) {
       G4int shellIndex = photoEvap->GetVacantShellNumber();
       if (shellIndex > -1) {
@@ -126,7 +168,6 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
 
           // VI, SI
           // Allows fixing of Bugzilla 1727
-          //const G4double deexLimit = 0.1*keV;
           G4double deexLimit = 0.1*keV;
           if (G4EmParameters::Instance()->DeexcitationIgnoreCut())  deexLimit =0.;
           //
@@ -181,8 +222,8 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
   G4double eCons = G4MT_parent->GetPDGMass() - dynDaughter->GetMass() - KEsum;
   G4cout << " IT check: Ediff (keV) = " << eCons/keV << G4endl; 
   */
-  delete photoEvap;
-
+//  delete photoEvap;
+  // G4cout << " END G4ITDecay::DecayIt " << G4endl;
   return products;
 }
 

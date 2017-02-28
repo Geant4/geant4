@@ -80,6 +80,8 @@ private:
 
   G4bool ReadDataItem(std::istream& dataFile, G4double& x);
 
+  G4bool ReadDataItem(std::istream& dataFile, G4float& x);
+
   G4bool ReadDataItem(std::istream& dataFile, G4int& x);
 
   G4bool ReadDataItem(std::istream& dataFile, G4String& x);
@@ -97,18 +99,18 @@ private:
   G4NuclearLevelData* fData;
   G4DeexPrecoParameters* fParam;
 
-  G4double fMinProbability;
-  G4double fTimeFactor;
-
   G4double fEnergy;
   G4double fCurrEnergy;
   G4double fTrEnergy;
-  G4double fProb;
-  G4double fTime;
-  G4double fSpin;
-  G4double fAlpha;
-  G4double fRatio;
-  G4double fICC[10];
+
+  G4float  fTimeFactor;
+  G4float  fTime;
+  G4float  fProb;
+  G4float  fSpin;
+  G4float  fAlpha;
+  G4float  fAlphaMax;
+  G4float  fRatio;
+  G4float  fICC[10];
 
   static const G4int nfloting = 13;
   static G4String fFloatingLevels[nfloting];
@@ -118,32 +120,27 @@ private:
   G4String fPol;
 
   static const G4int nbufmax = 20;
+  static const G4int nbuf1   = 14;
   static const G4int nbuf2   = 8;
 
   char buffer[nbufmax];
+  char buff1[nbuf1];
   char buff2[nbuf2];
-  char bufp[2];
+  char bufp[3];
 
   G4int fVerbose;
   G4int fLevelMax;
   G4int fTransMax;
 
   G4float fNorm1;
-  G4float fNorm2;
 
   std::vector<G4float> vEnergy;
-  std::vector<G4float> vTime;
-  std::vector<G4float> vTimeg;
   std::vector<G4int>   vSpin;
-  std::vector<G4int>   vMeta;
-  std::vector<G4int>   vIndexDB;
   std::vector<const G4NucLevel*> vLevel;
 
-  std::vector<size_t>   vIndex;
   std::vector<G4int>    vTrans;
   std::vector<G4float>  vRatio;
   std::vector<G4float>  vGammaCumProbability;
-  std::vector<G4float>  vGammaECumProbability;
   std::vector<G4float>  vGammaProbability;
   std::vector<G4float>  vMpRatio;
   std::vector<const std::vector<G4float>*> vShellProbability;

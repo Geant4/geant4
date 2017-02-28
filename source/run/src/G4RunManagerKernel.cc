@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 99767 2016-10-05 08:54:01Z gcosmo $
+// $Id: G4RunManagerKernel.cc 102620 2017-02-10 08:11:22Z gcosmo $
 //
 //
 
@@ -225,13 +225,15 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
        << G4endl;
        break;
      default:
-      versionString = " Local thread RunManagerKernel version ";
-      versionString += vs;
-      G4cout << G4endl
+      if(verboseLevel) {
+       versionString = " Local thread RunManagerKernel version ";
+       versionString += vs;
+       G4cout << G4endl
        << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
        << versionString << G4endl
        << "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^" << G4endl
        << G4endl;
+      }
     }
 
 #ifdef G4MULTITHREADED

@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 19, 2016 G.Cosmo (global-V10-02-34)
+- Removed obsolete utility class G4SubString used internally in G4String,
+  as no longer necessary and also including unnecessary and buggy operators.
+  Addressing problem report #1864.
+- Updated date and version for 10.3.p01.
+
 November 16, 2016 G.Cosmo (global-V10-02-33)
 - Fixed compilation warning on MacOS Sierra in MT mode in function
   G4Threading::G4GetPidId().

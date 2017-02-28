@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 101792 2016-11-28 16:47:50Z gcosmo $
+// $Id: G4VisManager.cc 102575 2017-02-09 09:07:12Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -490,9 +490,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandViewerCreate);
   RegisterMessenger(new G4VisCommandViewerDolly);
   RegisterMessenger(new G4VisCommandViewerFlush);
-#ifndef WIN32
   RegisterMessenger(new G4VisCommandViewerInterpolate);
-#endif
   RegisterMessenger(new G4VisCommandViewerList);
   RegisterMessenger(new G4VisCommandViewerPan);
   RegisterMessenger(new G4VisCommandViewerRebuild);

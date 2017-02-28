@@ -324,12 +324,28 @@ void G4OpenInventorXtExtendedViewer::EscapeFromKeyboardCbk(void* o) {
 void G4OpenInventorXtExtendedViewer::PostScriptCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtExtendedViewer* This = (G4OpenInventorXtExtendedViewer*)aData;
+  // FWJ Workaround: avoids empty 2nd page in file
+  SbBool superimpState =
+     This->fViewer->getSuperimpositionEnabled(This->fViewer->superimposition);
+  This->fViewer->setSuperimpositionEnabled(This->fViewer->superimposition,
+                                           FALSE);
   This->WritePostScript();
+  if (superimpState)
+     This->fViewer->setSuperimpositionEnabled(This->fViewer->superimposition,
+                                              TRUE);
 }
 void G4OpenInventorXtExtendedViewer::PDFCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtExtendedViewer* This = (G4OpenInventorXtExtendedViewer*)aData;
+  // FWJ Workaround: avoids empty 2nd page in file
+  SbBool superimpState =
+     This->fViewer->getSuperimpositionEnabled(This->fViewer->superimposition);
+  This->fViewer->setSuperimpositionEnabled(This->fViewer->superimposition,
+                                           FALSE);
   This->WritePDF();
+  if (superimpState)
+     This->fViewer->setSuperimpositionEnabled(This->fViewer->superimposition,
+                                              TRUE);
 }
 
 void G4OpenInventorXtExtendedViewer::PixmapPostScriptCbk(

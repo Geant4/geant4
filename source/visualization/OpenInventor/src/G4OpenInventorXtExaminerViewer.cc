@@ -83,6 +83,7 @@
 #include "saveViewPt.h"
 #include "pickext.h"
 #include "pickref.h"
+#include "wireframe.h"
 //#include "console.h"
 //#include "favorites.h"
 
@@ -689,6 +690,7 @@ void G4OpenInventorXtExaminerViewer::createViewerButtons(Widget parent,
    int n;
    Arg args[6];
    Widget saveViewPtButton, abbrOutputButton, pickRefPathButton;
+   Widget switchWireFrameButton;
 
    // Create original buttons
    SoXtExaminerViewer::createViewerButtons(parent, buttonlist);
@@ -779,16 +781,23 @@ void G4OpenInventorXtExaminerViewer::createViewerButtons(Widget parent,
    XtVaSetValues(pickRefPathButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
        pickrefxpm, XmNselectPixmap, pickrefxpm, XmNlabelInsensitivePixmap,
        pickrefxpm_ins, XmNselectInsensitivePixmap, pickrefxpm_ins, NULL);
-   //   Pixmap favoritesxpm, favoritesxpm_ins;
-   //   favoritesxpm = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
-   //                                                    favorites_xpm);
-   //   favoritesxpm_ins = SoXtInternal::createPixmapFromXpm(pickRefPathButton,
-   //                                                        favorites_xpm, TRUE);
-   //   XtVaSetValues(pickRefPathButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
-   //       favoritesxpm, XmNselectPixmap, favoritesxpm, XmNlabelInsensitivePixmap,
-   //       favoritesxpm_ins, XmNselectInsensitivePixmap, favoritesxpm_ins, NULL);
+
    buttonlist->append(pickRefPathButton);
 
+   // Toggle button for switching in and out of wireframe mode
+   switchWireFrameButton = XtVaCreateManagedWidget("Wireframe",
+         xmToggleButtonWidgetClass, parent,  XmNindicatorOn, False, NULL);
+   XtAddCallback(switchWireFrameButton, XmNvalueChangedCallback,
+                 G4OpenInventorXtExaminerViewer::switchWireFrameCB, this);
+   Pixmap wireframe, wireframe_ins;
+   wireframe = SoXtInternal::createPixmapFromXpm(switchWireFrameButton,
+                                                 wireframe_xpm);
+   wireframe_ins = SoXtInternal::createPixmapFromXpm(switchWireFrameButton,
+                                                     wireframe_xpm, TRUE);
+   XtVaSetValues(switchWireFrameButton, XmNlabelType, XmPIXMAP, XmNlabelPixmap,
+              wireframe, XmNselectPixmap, wireframe, XmNlabelInsensitivePixmap,
+              wireframe_ins, XmNselectInsensitivePixmap, wireframe_ins, NULL);
+   buttonlist->append(switchWireFrameButton);
 }
 
 
@@ -3036,11 +3045,11 @@ void G4OpenInventorXtExaminerViewer::saveViewPtCB(Widget w,
    XmString label = XmStringCreateLocalized((char *) "Name the viewpoint:");
 
    XtSetArg(args[n], XmNselectionLabelString, label);	n++;
-   XtSetArg(args[n], XmNautoUnmanage, False);	n++; 	//prevent the dialog from closing
-   //automatically, in case the name
-   //is wrong
-
-   nameViewPtDialog = XmCreatePromptDialog(parent, (char *) "Save Viewpoint",
+// Prevent the dialog from closing automatically, in case the name is wrong
+   XtSetArg(args[n], XmNautoUnmanage, False);	n++;
+// FWJ
+   XtSetArg(args[n], XmNtitle, "Save Bookmark"); n++;
+   nameViewPtDialog = XmCreatePromptDialog(parent, String("Save Bookmark"),
                                            args, n);
 
    XmStringFree(label);
@@ -3109,8 +3118,9 @@ void G4OpenInventorXtExaminerViewer::abbrOutputCB(Widget,
                                    XtPointer client_data,
                                    XtPointer)
 {
-   G4OpenInventorXtExaminerViewer * This = 
+   G4OpenInventorXtExaminerViewer * This =
       (G4OpenInventorXtExaminerViewer *) client_data;
+// G4cout << "DISARMCALLBACK abbrOutputFlag=" << This->abbrOutputFlag << G4endl;
    This->abbrOutputFlag = !(This->abbrOutputFlag);
 }
 
@@ -3127,6 +3137,24 @@ void G4OpenInventorXtExaminerViewer::pickRefPathCB(Widget,
       This->setViewing(false);
    This->setComponentCursor(SoXtCursor(SoXtCursor::CROSSHAIR));
    This->pickRefPathFlag = true;
+}
+
+
+void G4OpenInventorXtExaminerViewer::switchWireFrameCB(Widget w,
+                                    XtPointer client_data,
+                                    XtPointer)
+{
+   G4OpenInventorXtExaminerViewer* This = 
+      (G4OpenInventorXtExaminerViewer*)client_data;
+   //   xmToggleButton theToggleButton = (xmToggleButton)w;
+   if (XmToggleButtonGetState(w)) {
+         This->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_LINE);
+         This->setDrawStyle(SoXtViewer::INTERACTIVE, SoXtViewer::VIEW_LINE);
+      } else {
+         This->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+         This->setDrawStyle(SoXtViewer::INTERACTIVE,
+                            SoXtViewer::VIEW_SAME_AS_STILL);
+      }
 }
 
 

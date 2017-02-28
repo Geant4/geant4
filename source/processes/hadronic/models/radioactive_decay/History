@@ -14,6 +14,53 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 February 2017  V.Ivanchenko  radioactive_decay-V10-02-18
+------------------------------------------------------------
+- G4ITDecay: make daughterNucleus a pointer and store previous 
+    state of the G4Fragment there
+- G4RadioactiveDecay - removed G4ThreadLocal G4Fragment
+
+20 February 2017  A. Ribon       radioactive_decay-V10-02-17
+------------------------------------------------------------
+- G4RadioactiveDecay: switch off temporarily the correlated gamma emission,
+                      to limit the non-reproducibility violations.
+
+16 February 2017  V.Ivanchenko
+------------------------------------------------------------
+- G4ITDecay: fixed old mass variable
+
+14 February 2017  Dennis Wright
+------------------------------------------------------------
+- G4ITDecay: Vladimir's changes from trunk which fix warnings:
+    added check on Z, A, excitation energy in order to be
+    sure that correlated gamma may be sampled; reset 4-momentum at rest
+    when previous nucleaus is reused; use floating level index
+    when a new ion is created
+
+- G4RadioactiveDecay: use Laurent's level tolerence level of 10 eV 
+ 
+10 February 2017  Dennis Wright
+------------------------------------------------------------
+- G4RadioactiveDecay: add static G4ThreadLocal G4Fragment polarizedNucleus
+  to serve as cache for polarized nucleus
+
+- G4RadioactiveDecay::BuildPhysicsTable: added lines
+    G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
+    param->SetUseFilesNEW(true);
+    param->SetCorrelatedGamma(true);
+
+  in order to enable correlated gamma emission
+
+- G4ITDecay: use G4RadioactiveDecay::polarizedNucleus as a cache to enable
+  chain decay with polarization
+
+20 December 2016  Dennis Wright  radioactive_decay-V10-02-16
+------------------------------------------------------------
+- G4ITDecay::G4ITDecay(): make G4PhotonEvaporation a class member 
+  and intialize only once to avoid memory churn
+
+- G4ITDecay::DecayIt(): make G4Fragment a data member to avoid its
+    deletion at end of this method and keep polarization information 
 
 7 November 2016  Dennis Wright  radioactive_decay-V10-02-15
 -----------------------------------------------------------

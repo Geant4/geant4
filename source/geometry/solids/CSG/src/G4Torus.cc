@@ -24,13 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 101121 2016-11-07 09:18:01Z gcosmo $
+// $Id: G4Torus.cc 102528 2017-02-08 13:37:51Z gcosmo $
 //
 // 
 // class G4Torus
 //
 // Implementation
 //
+// 16.12.16 H.Burkhardt: use radius differences and hypot to improve precision
 // 28.10.16 E.Tcherniaev: reimplemented CalculateExtent(),
 //                      added Extent(), removed CreateRotatedVertices()
 // 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
@@ -272,13 +273,13 @@ void G4Torus::TorusRootsJT( const G4ThreeVector& p,
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
   G4double pRad2 = p.x()*p.x() + p.y()*p.y() + p.z()*p.z() ;
 
+  G4double d=pRad2 - Rtor2;
   c[0] = 1.0 ;
   c[1] = 4*pDotV ;
-  c[2] = 2*(pRad2 + 2*pDotV*pDotV - Rtor2 - r2 + 2*Rtor2*v.z()*v.z()) ;
-  c[3] = 4*(pDotV*(pRad2 - Rtor2 - r2) + 2*Rtor2*p.z()*v.z()) ;
-  c[4] = pRad2*pRad2 - 2*pRad2*(Rtor2+r2) 
-       + 4*Rtor2*p.z()*p.z() + (Rtor2-r2)*(Rtor2-r2) ;
-  
+  c[2] = 2*( (d + 2*pDotV*pDotV  - r2) + 2*Rtor2*v.z()*v.z());
+  c[3] = 4*(pDotV*(d - r2) + 2*Rtor2*p.z()*v.z()) ;
+  c[4] = (d-r2)*(d-r2) +4*Rtor2*(p.z()*p.z()-r2);
+
   G4JTPolynomialSolver  torusEq;
 
   num = torusEq.FindRoots( c, 4, srd, si );
@@ -365,10 +366,8 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
           // compute scalar product at position p : v.n
           // ( n taken from SurfaceNormal, not normalized )
 
-          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
-                                   p.y()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
+          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::hypot(p.x(),p.y())),
+                                   p.y()*(1-fRtor/std::hypot(p.x(),p.y())),
                                    p.z() );
 
           // change sign in case of inner radius
@@ -387,10 +386,8 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
         {
           // compute scalar product at position p : v.n   
           //
-          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
-                                   p.y()*(1-fRtor/std::sqrt(p.x()*p.x()
-                                          + p.y()*p.y())),
+          scal = v* G4ThreeVector( p.x()*(1-fRtor/std::hypot(p.x(),p.y())),
+                                   p.y()*(1-fRtor/std::hypot(p.x(),p.y())),
                                    p.z() );
 
           // change sign in case of inner radius
@@ -601,14 +598,14 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
 
 EInside G4Torus::Inside( const G4ThreeVector& p ) const
 {
-  G4double r2, pt2, pPhi, tolRMin, tolRMax ;
+  G4double r, pt2, pPhi, tolRMin, tolRMax ;
 
   EInside in = kOutside ;
 
   // General precals
   //
-  r2  = p.x()*p.x() + p.y()*p.y() ;
-  pt2 = r2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*std::sqrt(r2) ;
+  r   = std::hypot(p.x(),p.y());
+  pt2 = p.z()*p.z() + (r-fRtor)*(r-fRtor);
 
   if (fRmin) tolRMin = fRmin + fRminTolerance ;
   else       tolRMin = 0 ;
@@ -713,7 +710,7 @@ EInside G4Torus::Inside( const G4ThreeVector& p ) const
 G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
 {
   G4int noSurfaces = 0;  
-  G4double rho2, rho, pt2, pt, pPhi;
+  G4double rho, pt, pPhi;
   G4double distRMin = kInfinity;
   G4double distSPhi = kInfinity, distEPhi = kInfinity;
 
@@ -726,11 +723,8 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
   G4ThreeVector nR, nPs, nPe;
   G4ThreeVector norm, sumnorm(0.,0.,0.);
 
-  rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2);
-  pt2 = rho2+p.z()*p.z() +fRtor * (fRtor-2*rho);
-  pt2 = std::max(pt2, 0.0); // std::fabs(pt2);
-  pt = std::sqrt(pt2) ;
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
 
   G4double  distRMax = std::fabs(pt - fRmax);
   if(fRmin) distRMin = std::fabs(pt - fRmin);
@@ -847,13 +841,11 @@ G4ThreeVector G4Torus::ApproxSurfaceNormal( const G4ThreeVector& p ) const
 {
   ENorm side ;
   G4ThreeVector norm;
-  G4double rho2,rho,pt2,pt,phi;
+  G4double rho,pt,phi;
   G4double distRMin,distRMax,distSPhi,distEPhi,distMin;
 
-  rho2 = p.x()*p.x() + p.y()*p.y();
-  rho = std::sqrt(rho2) ;
-  pt2 = std::fabs(rho2+p.z()*p.z() +fRtor*fRtor - 2*fRtor*rho) ;
-  pt = std::sqrt(pt2) ;
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
 
 #ifdef G4CSGDEBUG
   G4cout << " G4Torus::ApproximateSurfaceNormal called for point " << p
@@ -970,7 +962,7 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   G4double tolORMin2;  // `generous' radii squared
   G4double tolORMax2;
 
-  G4double Dist,xi,yi,zi,rhoi2,it2; // Intersection point variables
+  G4double Dist,xi,yi,zi,rhoi,it2; // Intersection point variables
 
   G4double Comp;
   G4double cosSPhi,sinSPhi;       // Trig for phi start intersect
@@ -1002,8 +994,6 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
   tolORMax2 = (fRmax + fRmaxTolerance)*(fRmax + fRmaxTolerance) ;
 
   // Intersection with Rmax (possible return) and Rmin (must also check phi)
-
-  G4double Rtor2 = fRtor*fRtor ;
 
   snxt = SolveNumericJT(p,v,fRmax,true);
 
@@ -1043,8 +1033,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           xi    = p.x() + sphi*v.x() ;
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
-          rhoi2 = xi*xi + yi*yi ;
-          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
+          rhoi = std::hypot(xi,yi);
+          it2 = zi*zi + (rhoi-fRtor)*(rhoi-fRtor);
 
           if ( it2 >= tolORMin2 && it2 <= tolORMax2 )
           {
@@ -1076,8 +1066,8 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p,
           xi    = p.x() + sphi*v.x() ;
           yi    = p.y() + sphi*v.y() ;
           zi    = p.z() + sphi*v.z() ;
-          rhoi2 = xi*xi + yi*yi ;
-          it2   = std::fabs(rhoi2 + zi*zi + Rtor2 - 2*fRtor*std::sqrt(rhoi2)) ;
+          rhoi = std::hypot(xi,yi);
+          it2 = zi*zi + (rhoi-fRtor)*(rhoi-fRtor);
 
           if (it2 >= tolORMin2 && it2 <= tolORMax2)
           {
@@ -1106,13 +1096,10 @@ G4double G4Torus::DistanceToIn( const G4ThreeVector& p ) const
 {
   G4double safe=0.0, safe1, safe2 ;
   G4double phiC, cosPhiC, sinPhiC, safePhi, ePhi, cosPsi ;
-  G4double rho2, rho, pt2, pt ;
-    
-  rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = std::sqrt(rho2) ;
-  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = std::sqrt(pt2) ;
-
+  G4double rho, pt ;
+  
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
   safe1 = fRmin - pt ;
   safe2 = pt - fRmax ;
 
@@ -1175,18 +1162,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   // To be done: Check the precision of this calculation.
   // If you want return always validNorm = false, then take the version below
   
-  G4double rho2  = p.x()*p.x()+p.y()*p.y();
-  G4double rho   = std::sqrt(rho2) ;
-
-  G4double pt2   = rho2 + p.z()*p.z() + fRtor * (fRtor - 2.0*rho);
-    // Regroup for slightly better FP accuracy
-
-  if( pt2 < 0.0)
-  {
-     pt2= std::fabs( pt2 );
-  }
-     
-  G4double pt    = std::sqrt(pt2) ;
+  
+  G4double rho = std::hypot(p.x(),p.y());
+  G4double pt = hypot(p.z(),rho-fRtor);
 
   G4double pDotV = p.x()*v.x() + p.y()*v.y() + p.z()*v.z() ;
 
@@ -1195,7 +1173,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   G4double vDotNmax   = pDotV - fRtor*(v.x()*p.x() + v.y()*p.y())/rho ;
   G4double pDotxyNmax = (1 - fRtor/rho) ;
 
-  if( (pt2 > tolRMax*tolRMax) && (vDotNmax >= 0) )
+  if( (pt*pt > tolRMax*tolRMax) && (vDotNmax >= 0) )
   {
     // On tolerant boundary & heading outwards (or perpendicular to) outer
     // radial surface -> leaving immediately with *n for really convex part
@@ -1221,7 +1199,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
   {
     G4double tolRMin = fRmin + fRminTolerance ;
 
-    if ( (pt2 < tolRMin*tolRMin) && (vDotNmax < 0) )
+    if ( (pt*pt < tolRMin*tolRMin) && (vDotNmax < 0) )
     {
       if (calcNorm)  { *validNorm = false ; } // Concave surface of the torus
       return  snxt = 0 ;                      // Leaving by Rmin immediately
@@ -1409,7 +1387,7 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     }     
   }
 
-  G4double rhoi2,rhoi,it2,it,iDotxyNmax ;
+  G4double rhoi,it,iDotxyNmax ;
   // Note: by numerical computation we know where the ray hits the torus
   // So I propose to return the side where the ray hits
 
@@ -1419,12 +1397,11 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
     {
       case kRMax:                     // n is unit vector 
         xi    = p.x() + snxt*v.x() ;
-        yi    =p.y() + snxt*v.y() ;
+        yi    = p.y() + snxt*v.y() ;
         zi    = p.z() + snxt*v.z() ;
-        rhoi2 = xi*xi + yi*yi ;
-        rhoi  = std::sqrt(rhoi2) ;
-        it2   = std::fabs(rhoi2 + zi*zi + fRtor*fRtor - 2*fRtor*rhoi) ;
-        it    = std::sqrt(it2) ;
+        rhoi = std::hypot(xi,yi);
+        it = hypot(zi,rhoi-fRtor);
+
         iDotxyNmax = (1-fRtor/rhoi) ;
         if(iDotxyNmax >= -2.*fRmaxTolerance) // really convex part of Rmax
         {                       
@@ -1505,13 +1482,12 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
 G4double G4Torus::DistanceToOut( const G4ThreeVector& p ) const
 {
   G4double safe=0.0,safeR1,safeR2;
-  G4double rho2,rho,pt2,pt ;
+  G4double rho,pt ;
   G4double safePhi,phiC,cosPhiC,sinPhiC,ePhi;
-  rho2 = p.x()*p.x() + p.y()*p.y() ;
-  rho  = std::sqrt(rho2) ;
-  pt2  = std::fabs(rho2 + p.z()*p.z() + fRtor*fRtor - 2*fRtor*rho) ;
-  pt   = std::sqrt(pt2) ;
-
+  
+  rho = std::hypot(p.x(),p.y());
+  pt  = std::hypot(p.z(),rho-fRtor);
+  
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {

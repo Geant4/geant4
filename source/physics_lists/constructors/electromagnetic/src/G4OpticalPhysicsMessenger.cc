@@ -66,9 +66,11 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetOpProcessVerboseCmd(0),
     fSetCerenkovMaxPhotonsCmd(0),
     fSetCerenkovMaxBetaChangeCmd(0),
+    fSetCerenkovStackPhotonsCmd(0),
     fSetScintillationYieldFactorCmd(0),
     fSetScintillationByParticleTypeCmd(0),
     fSetScintillationTrackInfoCmd(0),
+    fSetScintillationStackPhotonsCmd(0),
     fSetWLSTimeProfileCmd(0),
     fSetTrackSecondariesFirstCmd(0),
     fSetFiniteRiseTimeCmd(0),
@@ -134,6 +136,13 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetCerenkovMaxBetaChangeCmd->SetRange("CerenkovMaxBetaChange>=0");
     fSetCerenkovMaxBetaChangeCmd->AvailableForStates(G4State_PreInit);
 
+    fSetCerenkovStackPhotonsCmd = new G4UIcmdWithABool("/process/optical/defaults/cerenkov/setStackPhotons", this);
+    fSetCerenkovStackPhotonsCmd->SetGuidance("Set default whether or not to stack secondary Cerenkov photons");
+    fSetCerenkovStackPhotonsCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetCerenkovStackPhotonsCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetCerenkovStackPhotonsCmd->SetParameterName("CerenkovStackPhotons", true);
+    fSetCerenkovStackPhotonsCmd->AvailableForStates(G4State_PreInit);
+
     fSetScintillationYieldFactorCmd = new G4UIcmdWithADouble("/process/optical/defaults/scintillation/setYieldFactor", this);
     fSetScintillationYieldFactorCmd->SetGuidance("Set scintillation yield factor");
     fSetScintillationYieldFactorCmd->SetGuidance("Note this command is used to set the default value,");
@@ -162,6 +171,13 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetFiniteRiseTimeCmd->SetParameterName("FiniteRiseTime", false);
     fSetFiniteRiseTimeCmd->AvailableForStates(G4State_PreInit);
 
+    fSetScintillationStackPhotonsCmd = new G4UIcmdWithABool("/process/optical/defaults/scintillation/setStackPhotons", this);
+    fSetScintillationStackPhotonsCmd->SetGuidance("Set default whether or not to stack secondary Scintillation photons");
+    fSetScintillationStackPhotonsCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetScintillationStackPhotonsCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetScintillationStackPhotonsCmd->SetParameterName("ScintillationStackPhotons", true);
+    fSetScintillationStackPhotonsCmd->AvailableForStates(G4State_PreInit);
+
     fSetWLSTimeProfileCmd = new G4UIcmdWithAString("/process/optical/defaults/wls/setTimeProfile", this);
     fSetWLSTimeProfileCmd->SetGuidance("Set the WLS time profile (delta or exponential)");
     fSetWLSTimeProfileCmd->SetParameterName("WLSTimeProfile", false);
@@ -184,9 +200,11 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
   delete fSetOpProcessVerboseCmd;
   delete fSetCerenkovMaxPhotonsCmd;
   delete fSetCerenkovMaxBetaChangeCmd;
+  delete fSetCerenkovStackPhotonsCmd;
   delete fSetScintillationYieldFactorCmd;
   delete fSetScintillationByParticleTypeCmd;
   delete fSetScintillationTrackInfoCmd;
+  delete fSetScintillationStackPhotonsCmd;
   delete fSetWLSTimeProfileCmd;
   delete fSetTrackSecondariesFirstCmd;
   delete fSetFiniteRiseTimeCmd;
@@ -266,6 +284,11 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
       ->SetMaxBetaChangePerStep(
           fSetCerenkovMaxBetaChangeCmd->GetNewDoubleValue(newValue));
   }
+  else if (command == fSetCerenkovStackPhotonsCmd) {
+    fOpticalPhysics
+     ->SetCerenkovStackPhotons(
+          fSetCerenkovStackPhotonsCmd->GetNewBoolValue(newValue));
+  }
   else if (command == fSetScintillationYieldFactorCmd) {
     fOpticalPhysics
       ->SetScintillationYieldFactor(
@@ -285,6 +308,11 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
     fOpticalPhysics
       ->SetFiniteRiseTime(
          fSetFiniteRiseTimeCmd->GetNewBoolValue(newValue));
+  }
+  else if (command == fSetScintillationStackPhotonsCmd) {
+    fOpticalPhysics
+     ->SetScintillationStackPhotons(
+          fSetScintillationStackPhotonsCmd->GetNewBoolValue(newValue));
   }
   else if (command == fSetWLSTimeProfileCmd) {
     fOpticalPhysics->SetWLSTimeProfile(newValue);

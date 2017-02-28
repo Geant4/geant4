@@ -1,4 +1,4 @@
-$Id: History 101681 2016-11-21 09:33:05Z gcosmo $
+$Id: History 102548 2017-02-08 14:33:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 December 16: V.Ivant (emutils-V10-02-39)
+- G4EmParametersMessenger - fixed typo (#1929)
 
 19 November 16: V.Ivant (emutils-V10-02-38)
 - G4EmParametersMessenger - fixed typo 

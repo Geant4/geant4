@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 85249 2014-10-27 08:28:57Z gcosmo $
+// $Id: G4UImanager.hh 102562 2017-02-09 08:27:31Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -293,6 +293,13 @@ class G4UImanager : public G4VStateDependent
       void SetThreadIgnoreInit(G4bool flg = true);
       inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
  
+  private:
+      static G4bool doublePrecisionStr;
+
+  public:
+      inline static void UseDoublePrecisionStr(G4bool val) { doublePrecisionStr = val; }
+      inline static G4bool DoublePrecisionStr() { return doublePrecisionStr; }
+
 };
 
 #endif
