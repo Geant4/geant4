@@ -1,4 +1,4 @@
-$Id: History 101864 2016-12-02 12:50:38Z gcosmo $
+$Id: History 102543 2017-02-08 14:16:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-January-2017 P. Gumplinger (phys-ctor-em-V10-02-39)
+- add setCerenkov/ScintillationStackPhotons commands to
+  G4OpticalPhysicsMessenger and use them in G4OpticalPhysics
 
 02-December-2016 V.Ivanchenko (phys-ctor-em-V10-02-38)
 - G4EmModelActivator - added initialisation of atomic deexcitation

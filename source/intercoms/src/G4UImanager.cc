@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 94366 2015-11-13 08:15:49Z gcosmo $
+// $Id: G4UImanager.cc 102562 2017-02-09 08:27:31Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -52,6 +52,7 @@
 G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
 G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
 G4UImanager * G4UImanager::fMasterUImanager = 0;
+G4bool G4UImanager::doublePrecisionStr = false;
 
 G4int G4UImanager::igThreadID = -1;
 

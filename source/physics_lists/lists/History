@@ -1,4 +1,4 @@
-$Id: History 99975 2016-10-13 07:23:55Z gcosmo $
+$Id: History 102588 2017-02-09 10:00:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-February-2017 V.Ivanchenko  (phys-lists-V10-02-11)
+- G4PhysListFactory - add single scattering EM option (required by
+    several user groups), one need to add "__SS" to the reference
+    physics list name
 
 12-October-2016 G.Folger  (phys-lists-V10-02-10)
 - remove direct use of theParticleIterator, get this from G4ParticleTable.

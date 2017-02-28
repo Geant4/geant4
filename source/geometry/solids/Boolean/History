@@ -1,5 +1,5 @@
 
-$Id: History 101046 2016-11-04 10:44:26Z gcosmo $
+$Id: History 102530 2017-02-08 13:41:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ February 2, 2017 G. Cosmo               geom-bool-V10-02-12
+ - Return normal from solid being subtracted, in case point is located
+   outside in G4SubtractionSolid::SurfaceNormal().
+ - Code formatting and minor cleanup in G4IntersectionSolid.
 
  November 4, 2016 E. Tcherniaev          geom-bool-V10-02-11
  - Implemented Extent() method for all shapes/constructs and use it

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEvaporation.hh 98739 2016-08-09 12:56:55Z gcosmo $
+// $Id: G4VEvaporation.hh 102590 2017-02-09 10:13:30Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations interface
 //
@@ -74,9 +74,11 @@ public:
   inline G4VEvaporationChannel* GetFissionChannel();
 
   // for inverse cross section choice
-  inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
+  inline void SetOPTxs(G4int opt); 
   // for superimposed Coulomb Barrier for inverse cross sections 	
-  inline void UseSICB(G4bool use) { useSICB = use; }	
+  inline void UseSICB(G4bool use);
+
+  inline size_t GetNumberOfChannels() const;
 
 protected:
 
@@ -116,9 +118,22 @@ inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 
 inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
 {
-  G4VEvaporationChannel* p = 0;
-  if(theChannels->size() > 1) { p = (*theChannels)[1]; }
-  return p;
+  return (theChannels && theChannels->size() > 1) ? (*theChannels)[1] : nullptr;
 }
+
+inline void G4VEvaporation::SetOPTxs(G4int opt) 
+{ 
+  OPTxs = opt;
+} 
+
+inline void G4VEvaporation::UseSICB(G4bool use) 
+{ 
+  useSICB = use; 
+}	
+
+inline size_t G4VEvaporation::GetNumberOfChannels() const 
+{ 
+  return theChannels ? theChannels->size() : 0; 
+}	
 
 #endif

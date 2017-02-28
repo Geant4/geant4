@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSimManager.cc 98735 2016-08-09 10:54:06Z gcosmo $
+// $Id: G4AdjointSimManager.cc 102566 2017-02-09 08:35:24Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointCrossSurfChecker
@@ -692,6 +692,11 @@ void G4AdjointSimManager::EndOfRunAction(const G4Run* aRun)
 //
 G4ParticleDefinition* G4AdjointSimManager::GetLastGeneratedFwdPrimaryParticle(){
    	return theAdjointPrimaryGeneratorAction->GetLastGeneratedFwdPrimaryParticle();
+}
+///////////////////////////////////////////////////////////////////////////////
+//
+void G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent()
+{theAdjointSteppingAction->ResetDidOneAdjPartReachExtSourceDuringEvent();
 }
 
 

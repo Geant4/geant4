@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.hh 97316 2016-06-01 12:12:58Z gcosmo $
+// $Id: G4VisCommandsViewer.hh 102575 2017-02-09 09:07:12Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -194,7 +194,6 @@ private:
   G4UIcmdWithAString* fpCommand;
 };
 
-#ifndef WIN32
 class G4VisCommandViewerInterpolate: public G4VVisCommandViewer {
 public:
   G4VisCommandViewerInterpolate ();
@@ -206,7 +205,6 @@ private:
   G4VisCommandViewerInterpolate& operator = (const G4VisCommandViewerInterpolate&);
   G4UIcommand* fpCommand;
 };
-#endif
 
 class G4VisCommandViewerList: public G4VVisCommandViewer {
 public:

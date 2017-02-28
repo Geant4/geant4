@@ -53,11 +53,9 @@ class G4NucLevel
 {
 public:
 
-  explicit G4NucLevel(size_t ntrans,
-                      const std::vector<size_t>&  idxTrans,
+  explicit G4NucLevel(size_t ntrans, G4float  tgamma,
 	              const std::vector<G4int>&   vTrans,
 	              const std::vector<G4float>& wLevelGamma,
-	              const std::vector<G4float>& wLevelGammaE,
 	              const std::vector<G4float>& wGamma,
 	              const std::vector<G4float>& vRatio,
                       const std::vector<const std::vector<G4float>*>& wShell);
@@ -66,23 +64,25 @@ public:
 
   inline size_t NumberOfTransitions() const;
 
-  inline G4bool IsXLevel() const;
-
   inline size_t FinalExcitationIndex(size_t idx) const;
 
   inline G4int TransitionType(size_t idx) const;
+
+  inline G4float GetTimeGamma() const;
 
   inline G4float MixingRatio(size_t idx) const;
 
   inline G4float GammaProbability(size_t idx) const;
 
+  inline G4float GammaCumProbability(size_t idx) const;
+
   inline G4float MultipolarityRatio(size_t idx) const;
 
   inline size_t SampleGammaTransition(G4double rndm) const;
 
-  inline size_t SampleGammaETransition(G4double rndm) const;
+  inline G4int SampleShell(size_t idx, G4double rndm) const;
 
-  inline size_t SampleShell(size_t idx, G4double rndm) const;
+  inline const std::vector<G4float>* ShellProbabilty(size_t idx) const;
 
 private:  
 
@@ -94,15 +94,15 @@ private:
   G4bool operator!=(const G4NucLevel &right) const = delete;
   G4bool operator<(const G4NucLevel &right) const = delete;
   const G4NucLevel& operator=(const G4NucLevel &right) = delete;
+
+  size_t  length;
+  G4float fTimeGamma;
   
-  std::vector<size_t>   fFinalIndex;
   std::vector<G4int>    fTrans;
   std::vector<G4float>  fGammaCumProbability;
-  std::vector<G4float>  fGammaECumProbability;
   std::vector<G4float>  fGammaProbability;
   std::vector<G4float>  fMpRatio;
   std::vector<const std::vector<G4float>*> fShellProbability;
-  size_t length;
 };
 
 inline size_t G4NucLevel::NumberOfTransitions() const
@@ -110,17 +110,12 @@ inline size_t G4NucLevel::NumberOfTransitions() const
   return length;
 }
 
-inline G4bool G4NucLevel::IsXLevel() const
-{
-  return (1 == fTrans[0]);
-}
-
 inline size_t G4NucLevel::FinalExcitationIndex(size_t idx) const
 {
 #ifdef G4VERBOSE
   if(idx >= length) { PrintError(idx, "FinalExcitationEnergy"); }
 #endif
-  return fFinalIndex[idx];
+  return (size_t)(fTrans[idx]/10000);
 }
 
 inline G4int G4NucLevel::TransitionType(size_t idx) const
@@ -128,7 +123,12 @@ inline G4int G4NucLevel::TransitionType(size_t idx) const
 #ifdef G4VERBOSE
   if(idx >= length) { PrintError(idx, "TransitionType"); }
 #endif
-  return fTrans[idx];
+  return fTrans[idx]%10000;
+}
+
+inline G4float G4NucLevel::GetTimeGamma() const
+{
+  return fTimeGamma;
 }
 
 inline G4float G4NucLevel::MixingRatio(size_t idx) const
@@ -145,6 +145,14 @@ inline G4float G4NucLevel::GammaProbability(size_t idx) const
   if(idx >= length) { PrintError(idx, "GammaProbability"); }
 #endif
   return fGammaProbability[idx];
+}
+
+inline G4float G4NucLevel::GammaCumProbability(size_t idx) const
+{
+#ifdef G4VERBOSE
+  if(idx >= length) { PrintError(idx, "GammaCumProbability"); }
+#endif
+  return fGammaCumProbability[idx];
 }
 
 inline G4float G4NucLevel::MultipolarityRatio(size_t idx) const
@@ -165,29 +173,28 @@ inline size_t G4NucLevel::SampleGammaTransition(G4double rndm) const
   return idx;
 }
 
-inline size_t G4NucLevel::SampleGammaETransition(G4double rndm) const
-{
-  G4float x = (G4float)rndm;
-  size_t idx = 0;
-  for(; idx<length; ++idx) { 
-    if(x <= fGammaECumProbability[idx]) { break; } 
-  }
-  return idx;
-}
-
-inline size_t G4NucLevel::SampleShell(size_t idx, G4double rndm) const
+inline G4int G4NucLevel::SampleShell(size_t idx, G4double rndm) const
 {
 #ifdef G4VERBOSE
   if(idx >= length) { PrintError(idx, "SampleShell"); }
 #endif
   const std::vector<G4float>* prob = fShellProbability[idx];
-  size_t i = 0;
+  G4int i(-1);
   if(prob) {
-    size_t nn = prob->size();
+    G4int nn = prob->size();
     G4float x = (G4float)rndm;
-    for(; i<nn; ++i) { if(x <= (*prob)[i]) { break; } }
+    for(i=0; i<nn; ++i) { if(x <= (*prob)[i]) { break; } }
   } 
   return i;
+}
+
+inline const std::vector<G4float>* 
+G4NucLevel::ShellProbabilty(size_t idx) const
+{
+#ifdef G4VERBOSE
+  if(idx >= length) { PrintError(idx, "ShellProbability"); }
+#endif
+  return fShellProbability[idx];
 }
 
 #endif

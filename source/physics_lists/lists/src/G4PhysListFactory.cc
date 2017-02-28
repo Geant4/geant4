@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc 96327 2016-04-06 15:50:53Z gcosmo $
+// $Id: G4PhysListFactory.cc 102588 2017-02-09 10:00:46Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -67,6 +67,7 @@
 #include "G4EmStandardPhysics_option3.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmStandardPhysicsGS.hh"
+#include "G4EmStandardPhysicsSS.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
 
@@ -84,8 +85,8 @@ G4PhysListFactory::G4PhysListFactory()
     listnames_hadr.push_back(ss[i]);
   }
 
-  nlists_em = 8;
-  G4String s1[8] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN","__GS"};
+  nlists_em = 9;
+  G4String s1[9] = {"","_EMV","_EMX","_EMY","_EMZ","_LIV","_PEN","__GS","__SS"};
   for(size_t i=0; i<nlists_em; ++i) {
     listnames_em.push_back(s1[i]);
   }

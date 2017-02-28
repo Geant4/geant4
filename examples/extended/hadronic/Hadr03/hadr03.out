@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03    (9-December-2016)
+ Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,25 +29,15 @@ Command is ignored.
          --->  Isotope:  Mo98   Z = 42   N =  98   A =  97.91 g/mole   abundance: 100.000 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Type of de-excitation inverse x-section             3
-Min excitation energy (keV)                         0.1
-Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1e+07
-Correlated gamma emission flag                      0
-=======================================================================
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
 #
 /process/list
      Transportation,         hadElastic,   neutronInelastic,           nCapture
@@ -67,17 +57,17 @@ anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic,anti_tritonIne
 /run/printProgress 1000
 #
 /run/beamOn 10000
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-00_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -375,6 +365,19 @@ NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Type of de-excitation inverse x-section             3
+Min excitation energy (keV)                         0.01
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1000
+Use new data files                                  1
+Use complete data files                             0
+Correlated gamma emission flag                      0
+=======================================================================
+Number of de-excitation channels                    8
 
 ========= Table of registered couples ==============================
 
@@ -406,17 +409,17 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.43s Real=0.43s Sys=0s
+  User=0.19s Real=0.2s Sys=0s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
  Process calls frequency:
-	hadElastic= 7789	protonInelastic= 2211
+	hadElastic= 7729	protonInelastic= 2271
 
 
- MeanFreePath:	4.852 cm  +- 4.8232 cm 	massic: 49.879 g/cm2 
- CrossSection:	0.2061 cm^-1 		massic: 2.0049 mm2/g 
- crossSection per atom:	3.2594 barn  
+ MeanFreePath:	4.8448 cm  +- 4.8149 cm 	massic: 49.804 g/cm2 
+ CrossSection:	0.20641 cm^-1 		massic: 2.0079 mm2/g 
+ crossSection per atom:	3.2643 barn  
 
  Verification: crossSections from G4HadronicProcessStore:
           hadElastic= 1.5534 mm2/g 	2.5254 barn  
@@ -425,28 +428,38 @@ Run Summary
 
  List of nuclear reactions: 
 
-            proton + Mo98 --> N gamma + alpha + Nb95:       1   Q =  3.5405 MeV
-          proton + Mo98 --> N gamma + neutron + Tc98:    2203   Q = -2.4725 MeV
-           proton + Mo98 --> N gamma + proton + Mo98:       7   Q = -2.0522e-07 eV 
-                     proton + Mo98 --> proton + Mo98:    7789   Q = 2.0641e-06 eV 
+   proton + Mo98 --> N gamma + 2 e- + neutron + Tc98:      22   Q = -2.4725 MeV
+   proton + Mo98 --> N gamma + 3 e- + neutron + Tc98:       3   Q = -2.4725 MeV
+   proton + Mo98 --> N gamma + 4 e- + neutron + Tc98:       1   Q = -2.4725 MeV
+                    proton + Mo98 --> N gamma + Tc99:       1   Q =  6.4945 MeV
+           proton + Mo98 --> N gamma + Tc99[142.683]:       3   Q =  6.3518 MeV
+            proton + Mo98 --> N gamma + alpha + Nb95:       2   Q =  3.5405 MeV
+               proton + Mo98 --> N gamma + e- + Tc99:       1   Q =  6.4945 MeV
+     proton + Mo98 --> N gamma + e- + neutron + Tc98:     603   Q = -2.4725 MeV
+          proton + Mo98 --> N gamma + neutron + Tc98:    1630   Q = -2.4725 MeV
+           proton + Mo98 --> N gamma + proton + Mo98:       5   Q = -4.6925e-06 eV 
+                     proton + Mo98 --> proton + Mo98:    7729   Q = 2.1698e-06 eV 
 
-                                     Number of gamma: N = 2 --> 11
+                                     Number of gamma: N = 1 --> 11
 
  List of generated particles:
-           Mo98:    7796  Emean =  32.512 keV	( 0.53171 eV  --> 404.47 keV)
-           Nb95:       1  Emean =  281.32 keV	( 281.32 keV --> 281.32 keV)
-           Tc98:    2203  Emean =  115.81 keV	( 15.303 keV --> 292.92 keV)
-          alpha:       1  Emean =  9.0654 MeV	( 9.0654 MeV --> 9.0654 MeV)
-          gamma:   12909  Emean =  1.0216 MeV	( 21.762 keV --> 6.3379 MeV)
-        neutron:    2203  Emean =  1.4355 MeV	( 31.863 keV --> 6.2376 MeV)
-         proton:       7  Emean =  7.2196 MeV	( 6.2599 MeV --> 8.5901 MeV)
+           Mo98:    7734  Emean =  31.785 keV	( 0.70945 eV  --> 403.15 keV)
+           Nb95:       2  Emean =   423.8 keV	( 280.25 keV --> 567.35 keV)
+           Tc98:    2259  Emean =   115.5 keV	( 7.0797 keV --> 301.34 keV)
+           Tc99:       2  Emean =  89.668 keV	( 87.766 keV --> 91.571 keV)
+  Tc99[142.683]:       3  Emean =  102.28 keV	( 92.434 keV --> 113.06 keV)
+          alpha:       2  Emean =  8.9207 MeV	( 8.776 MeV --> 9.0654 MeV)
+             e-:     661  Emean =  138.93 keV	( 21.552 keV --> 3.9586 MeV)
+          gamma:   14853  Emean =  907.97 keV	( 7.8448 keV --> 9.8141 MeV)
+        neutron:    2259  Emean =  1.4436 MeV	( 31.735 keV --> 7.155 MeV)
+         proton:       5  Emean =  8.8341 MeV	( 6.8497 MeV --> 9.8175 MeV)
 
-   Momentum balance: Pmean = 0.0096208 eV 	( 4.0755e-07 eV  --> 2.1298 eV ) 
+   Momentum balance: Pmean =  52.336 eV 	( 3.8404e-07 eV  --> 3.5559 keV) 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1964074411, 807412498
+ Current couple of seeds = 1078086851, 1295236255
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

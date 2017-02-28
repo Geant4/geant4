@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 99503 2016-09-26 07:17:29Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 102570 2017-02-09 08:40:47Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -120,17 +120,54 @@ void G4OpenGLSceneHandler::ScaledFlush()
 
     // Drawing transients, e.g., trajectories.
 
+    if (!fpScene) {
+      // No scene, so probably not in event loop.
+      glFlush();
+      return;
+    }
+    // Get event from modeling parameters
+    if (!fpModel) {
+      // No model, so probably not in event loop
+      glFlush();
+      return;
+    }
+    const G4ModelingParameters* modelingParameters =
+    fpModel->GetModelingParameters();
+    if (!modelingParameters) {
+      // No modeling parameters, so probably not in event loop.
+      glFlush();
+      return;
+    }
+    const G4Event* thisEvent = modelingParameters->GetEvent();
+    if (!thisEvent) {
+      // No event, so probably not in event loop.
+      glFlush();
+      return;
+    }
+    G4RunManager* runMan = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+    if (G4Threading::IsMultithreadedApplication()) {
+      runMan = G4MTRunManager::GetMasterRunManager();
+    }
+#endif
+    if (!runMan) {
+      glFlush();
+      return;
+    }
+    const G4Run* thisRun = runMan->GetCurrentRun();
+    if (!thisRun) {
+      glFlush();
+      return;
+    }
+
     switch (fFlushAction) {
       case endOfEvent:
         // If "/vis/scene/endOfEventAction refresh", primitives are flushed at
-        // end of event anyway.
-        // But if "/vis/scene/endOfEventAction accumulate", ShowView is not
-        // called until end of run, so we have to watch for a new event.
-        if (fpScene->GetRefreshAtEndOfEvent()) return;
-        else {
+        // end of run anyway, so only scale if false.
+        if (!fpScene->GetRefreshAtEndOfEvent()) {
+          // But if "/vis/scene/endOfEventAction accumulate", ShowView is not
+          // called until end of run, so we have to watch for a new event.
           // Get event from modeling parameters
-          const G4Event* thisEvent = fpModel->GetModelingParameters()->GetEvent();
-          if (!thisEvent) {glFlush(); return;}
           G4int thisEventID = thisEvent->GetEventID();
           static G4int lastEventID = 0;
           if (thisEventID != lastEventID) {
@@ -141,20 +178,10 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case endOfRun:
         // If "/vis/scene/endOfRunAction refresh", primitives are flushed at
-        // end of run anyway.
-        // If "/vis/scene/endOfRunAction accumulate", ShowView is never called
-        // so we have to watch for a new run.
-        if (fpScene->GetRefreshAtEndOfRun()) return;
-        else {
-          G4RunManager* runMan = G4RunManager::GetRunManager();
-#ifdef G4MULTITHREADED
-          if (G4Threading::IsMultithreadedApplication()) {
-            runMan = G4MTRunManager::GetMasterRunManager();
-          }
-#endif
-          if (!runMan) {glFlush(); return;}
-          const G4Run* thisRun = runMan->GetCurrentRun();
-          if (!thisRun) {glFlush(); return;}
+        // end of run anyway, so only scale if false.
+        if (!fpScene->GetRefreshAtEndOfRun()) {
+          // If "/vis/scene/endOfRunAction accumulate", ShowView is never called
+          // so we have to watch for a new run.
           G4int thisRunID = thisRun->GetRunID();
           static G4int lastRunID = 0;
           if (thisRunID != lastRunID) {
@@ -178,11 +205,8 @@ void G4OpenGLSceneHandler::ScaledFlush()
       }
       case NthEvent:
         // If "/vis/scene/endOfEventAction refresh", primitives are flushed at
-        // end of event anyway.
-        if (fpScene->GetRefreshAtEndOfEvent()) return;
-        else {
-          // Get event from modeling parameters
-          const G4Event* thisEvent = fpModel->GetModelingParameters()->GetEvent();
+        // end of event anyway, so only scale if false.
+        if (!fpScene->GetRefreshAtEndOfEvent()) {
           G4int thisEventID = thisEvent->GetEventID();
           static G4int lastEventID = 0;
           if (thisEventID != lastEventID) {

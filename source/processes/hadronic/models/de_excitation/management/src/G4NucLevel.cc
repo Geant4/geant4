@@ -43,29 +43,23 @@
 #include "G4NucLevel.hh"
 #include "G4HadronicException.hh"
 
-G4NucLevel::G4NucLevel(size_t ntrans,
-		       const std::vector<size_t>&  idxTrans,
+G4NucLevel::G4NucLevel(size_t ntrans, G4float tgamma,
 		       const std::vector<G4int>&   vTrans,
 		       const std::vector<G4float>& wLevelGamma,
-		       const std::vector<G4float>& wLevelGammaE,
 		       const std::vector<G4float>& wGamma,
       	               const std::vector<G4float>& vRatio,
 		       const std::vector<const std::vector<G4float>*>& wShell)
-  : length(ntrans)
+  : length(ntrans), fTimeGamma(tgamma)
 {
   if(0 < length) { 
-    fFinalIndex.reserve(length);
     fTrans.reserve(length);
     fGammaCumProbability.reserve(length);
-    fGammaECumProbability.reserve(length);
     fGammaProbability.reserve(length);
     fMpRatio.reserve(length);
     fShellProbability.reserve(length);
     for(size_t i=0; i<length; ++i) {
-      fFinalIndex.push_back(idxTrans[i]);
       fTrans.push_back(vTrans[i]);
       fGammaCumProbability.push_back(wLevelGamma[i]);
-      fGammaECumProbability.push_back(wLevelGammaE[i]);
       fGammaProbability.push_back(wGamma[i]);
       fMpRatio.push_back(vRatio[i]);
       fShellProbability.push_back(wShell[i]);
@@ -85,10 +79,9 @@ void G4NucLevel::PrintError(size_t idx, const G4String& ss) const
 {
   G4cout << "G4NucLevel::PrintError: length= " << length << G4endl;
   for(size_t i=0; i<length; ++i) {
-    G4cout << i << ". " << fFinalIndex[i] << "  " << fTrans[i]
-	   << fGammaCumProbability[i] << " " 
-           << fGammaECumProbability[i] << " "
-	   << fGammaProbability[i] << " "
+    G4cout << i << ". " /*<< fFinalIndex[i] << "  "*/ << fTrans[i]
+	   << fGammaCumProbability[i] << " " << fTimeGamma << " "
+           << fGammaProbability[i] << " "
 	   << fMpRatio[i] << G4endl;
   }
   G4String sss = "G4NucLevel::"+ss+"()";

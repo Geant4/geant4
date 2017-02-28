@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03    (9-December-2016)
+ Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,16 +63,6 @@ Available colours:
 Checking overlaps for volume Envelope ... OK! 
 Checking overlaps for volume Shape1 ... OK! 
 Checking overlaps for volume Shape2 ... OK! 
-=======================================================================
-======       Pre-compound/De-excitation Physics Parameters     ========
-=======================================================================
-Type of pre-compound inverse x-section              3
-Type of de-excitation inverse x-section             3
-Min excitation energy (keV)                         0.1
-Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1e+07
-Correlated gamma emission flag                      0
-=======================================================================
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
@@ -746,6 +736,19 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Type of de-excitation inverse x-section             3
+Min excitation energy (keV)                         0.01
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1000
+Use new data files                                  1
+Use complete data files                             0
+Correlated gamma emission flag                      0
+=======================================================================
+Number of de-excitation channels                    8
 ### Run 0 starts.
 --> Event 0 starts.
 --> Event 100 starts.
@@ -777,7 +780,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Cumulated dose per run, in scoring volume : 5.1075 nanoGy  rms = 147.637 picoGy 
+ Cumulated dose per run, in scoring volume : 5.03046 nanoGy  rms = 144.653 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

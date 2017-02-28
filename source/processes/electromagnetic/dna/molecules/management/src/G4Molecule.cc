@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Molecule.cc 100802 2016-11-02 14:55:27Z gcosmo $
+// $Id: G4Molecule.cc 102637 2017-02-10 11:08:17Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -63,6 +63,13 @@ using namespace std;
 ITImp(G4Molecule)
 
 G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator = 0;
+
+//______________________________________________________________________________
+
+template<>
+G4KDNode<G4Molecule>::~G4KDNode(){
+  fPoint->SetNode(nullptr);
+}
 
 //______________________________________________________________________________
 
@@ -152,7 +159,7 @@ G4Molecule::G4Molecule() :
 
 G4Molecule::~G4Molecule()
 {
-  if (fpTrack != NULL)
+  if (fpTrack != nullptr)
   {
     if (G4VMoleculeCounter::Instance()->InUse())
     {
@@ -161,9 +168,9 @@ G4Molecule::~G4Molecule()
                               fpTrack->GetGlobalTime(),
                               &(fpTrack->GetPosition()));
     }
-    fpTrack = 0;
+    fpTrack = nullptr;
   }
-  fpMolecularConfiguration = 0;
+  fpMolecularConfiguration = nullptr;
 }
 
 //______________________________________________________________________________

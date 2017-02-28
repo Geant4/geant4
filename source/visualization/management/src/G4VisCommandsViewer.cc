@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 99440 2016-09-22 08:34:04Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 102575 2017-02-09 09:07:12Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -52,6 +52,10 @@
 #include <fstream>
 #include <sstream>
 #include <iomanip>
+#ifdef WIN32
+#include <regex>
+#include <filesystem>
+#endif //WIN32
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
@@ -958,10 +962,6 @@ void G4VisCommandViewerFlush::SetNewValue (G4UIcommand*, G4String newValue) {
 
 ////////////// /vis/viewer/interpolate ///////////////////////////////////////
 
-#ifndef WIN32
-// popen is not available in Windows.  _popen is said to be available in
-// Windows but this has not been tried.
-
 G4VisCommandViewerInterpolate::G4VisCommandViewerInterpolate () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/viewer/interpolate", this);
@@ -1037,10 +1037,39 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   >> waitTimePerPointString
   >> timeUnit
   >> exportString;
+  G4String waitTimePerPointDimString(waitTimePerPointString + ' ' + timeUnit);
   const G4double waitTimePerPoint =
-  G4UIcommand::ConvertToDimensionedDouble((waitTimePerPointString + ' ' + timeUnit).c_str());
+  G4UIcommand::ConvertToDimensionedDouble(waitTimePerPointDimString.c_str());
   G4int waitTimePerPointmilliseconds = waitTimePerPoint/millisecond;
   if (waitTimePerPointmilliseconds < 0) waitTimePerPointmilliseconds = 0;
+
+  G4UImanager* uiManager = G4UImanager::GetUIpointer();
+
+  // Save current view parameters
+  G4ViewParameters saveVP = currentViewer->GetViewParameters();
+
+  // Save current verbosities
+  G4VisManager::Verbosity keepVisVerbosity = fpVisManager->GetVerbosity();
+  G4int keepUIVerbosity = uiManager->GetVerboseLevel();
+
+  // Set verbosities for this operation
+  fpVisManager->SetVerboseLevel(G4VisManager::errors);
+  uiManager->SetVerboseLevel(0);
+
+  // Switch off auto-refresh while we read in the view files (it will be
+  // restored later).  Note: the view files do not set auto-refresh.
+  G4ViewParameters non_auto = saveVP;
+  non_auto.SetAutoRefresh(false);
+  currentViewer->SetViewParameters(non_auto);
+
+  // View vector of way points
+  std::vector<G4ViewParameters> viewVector;
+
+  const G4int safety = 9999;
+  G4int safetyCount = 0;
+  G4String pathname;
+
+#ifndef WIN32
 
   // Execute pattern and get resulting list of filles
   G4String shellCommand = "echo " + pattern;
@@ -1055,38 +1084,74 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     return;
   }
 
-  // Save current view parameters
-  G4ViewParameters saveVP = currentViewer->GetViewParameters();
-
-  // Save current verbosities
-  G4VisManager::Verbosity keepVisVerbosity = fpVisManager->GetVerbosity();
-  G4UImanager* ui = G4UImanager::GetUIpointer();
-  G4int keepUIVerbosity = ui->GetVerboseLevel();
-
-  // Set verbosities for this operation
-  fpVisManager->SetVerboseLevel(G4VisManager::errors);
-  ui->SetVerboseLevel(0);
-
-  // Switch off auto-refresh while we read in the view files (it will be
-  // restored later).  Note: the view files do not set auto-refresh.
-  G4ViewParameters non_auto = saveVP;
-  non_auto.SetAutoRefresh(false);
-  currentViewer->SetViewParameters(non_auto);
-
   // Build view vector of way points
-  std::vector<G4ViewParameters> viewVector;
   const size_t BUFLENGTH = 999999;
   char buf[BUFLENGTH];
   fgets(buf, BUFLENGTH, filelist);
   std::istringstream fileliststream(buf);
-  const G4int safety = 9999;
-  G4int safetyCount = 0;
-  G4String pathname;
   while (fileliststream >> pathname
          && safetyCount++ < safety) {  // Loop checking, 16.02.2016, J.Allison
-    ui->ApplyCommand("/control/execute " + pathname);
+    uiManager->ApplyCommand("/control/execute " + pathname);
     viewVector.push_back(currentViewer->GetViewParameters());
   }
+  pclose(filelist);
+
+#else // WIN32 (popen is not available in Windows)
+
+  std::experimental::filesystem::v1::path filePattern(pattern);
+
+  // Default pattern : *.g4view
+  // Translated to a regexp : ^.*\\.g4view
+  // Convert pattern into a regexp
+  std::string regexp_pattern("^" + filePattern.filename().string());
+  std::string result_pattern = "";
+  // Replace '.' by "\\."
+  size_t currentPos = 0;
+  size_t nextPos = 0;
+  std::string currentReplacement = "";
+  size_t pos1 = regexp_pattern.find('.', nextPos);
+  size_t pos2 = regexp_pattern.find('*', nextPos);
+  size_t pos3 = regexp_pattern.find('?', nextPos);
+  while ((pos1 != std::string::npos) || (pos2 != std::string::npos) || (pos3 != std::string::npos)) {
+    nextPos = pos1;
+    currentReplacement = "\\.";
+    if (pos2 < nextPos) {
+      nextPos = pos2;
+      currentReplacement = ".*";
+    }
+    if (pos3 < nextPos) {
+      nextPos = pos3;
+      currentReplacement = "(.{1,1})";
+    }
+    result_pattern += regexp_pattern.substr(currentPos, nextPos - currentPos) + currentReplacement;
+    nextPos++;
+    currentPos = nextPos;
+    pos1 = regexp_pattern.find('.', currentPos);
+    pos2 = regexp_pattern.find('*', currentPos);
+    pos3 = regexp_pattern.find('?', currentPos);
+  }
+  result_pattern += regexp_pattern.substr(currentPos);
+
+  // Build view vector of way points
+  // Add "./" for empty paths
+  G4String parentPath(filePattern.parent_path().string().length() ? filePattern.parent_path().string() : std::string("./"));
+  // Iterate through files in directory and apply regex match to filter appropriate files
+  std::regex result_pattern_regex (result_pattern, std::regex_constants::basic | std::regex_constants::icase);
+  for (auto iter = std::experimental::filesystem::v1::directory_iterator(parentPath);
+       iter != std::experimental::filesystem::v1::directory_iterator() && safetyCount++ < safety;
+       ++iter)
+  {
+    const auto& file = iter->path();
+
+    G4String filename(file.filename().string());
+    if (std::regex_match(filename, result_pattern_regex))
+    {
+      uiManager->ApplyCommand("/control/execute " + filename);
+      viewVector.push_back(currentViewer->GetViewParameters());
+    }
+  }
+
+#endif // WIN32
 
   if (safetyCount >= safety) {
     if (verbosity >= G4VisManager::errors) {
@@ -1095,10 +1160,9 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
       "\n  the number of way points exceeds the maximum currently allowed: "
       << safety << G4endl;
     }
-    pclose(filelist);
     return;
   }
-  
+
   // Interpolate views
   safetyCount = 0;
   do {
@@ -1111,7 +1175,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     currentViewer->RefreshView();
     if (exportString == "export" &&
         currentViewer->GetName().contains("OpenGL"))
-      ui->ApplyCommand("/vis/ogl/export");
+      uiManager->ApplyCommand("/vis/ogl/export");
 #ifdef G4VIS_USE_STD11
     if (waitTimePerPointmilliseconds > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
@@ -1119,7 +1183,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
   } while (safetyCount++ < safety);  // Loop checking, 16.02.2016, J.Allison
 
   // Restore original verbosities
-  ui->SetVerboseLevel(keepUIVerbosity);
+  uiManager->SetVerboseLevel(keepUIVerbosity);
   fpVisManager->SetVerboseLevel(keepVisVerbosity);
 
   // Restore original view parameters
@@ -1129,11 +1193,7 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     G4cout << "Viewer \"" << currentViewer -> GetName () << "\""
     << " restored." << G4endl;
   }
-
-  pclose(filelist);
 }
-
-#endif // WIN32 - popen is not available in Windows.  _popen is there but not tried.
 
 ////////////// /vis/viewer/list ///////////////////////////////////////
 

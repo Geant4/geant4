@@ -46,12 +46,14 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4VisExecutive.hh"
+#ifdef G4UI_USE_QT
+#include "G4UIQt.hh"
+#endif
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "CommandLineParser.hh"
-#include "G4UIQt.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

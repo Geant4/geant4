@@ -57,8 +57,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fFermiEnergy = 35.0*CLHEP::MeV; 
   fPrecoLowEnergy = 0.1*CLHEP::MeV; 
   fPhenoFactor = 1.0; 
-  fMinExcitation = 0.1*CLHEP::keV;
-  fMaxLifeTime = 0.01*CLHEP::second;
+  fMinExcitation = 10*CLHEP::eV;
+  fMaxLifeTime = 1.0*CLHEP::microsecond;
   fMinExPerNucleounForMF = 100*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
@@ -69,8 +69,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fUseCEM = true;
   fUseGNASH = false;
   fUseHETC = false;
-  fUseAngularGen = true;
-  fUseLongFiles = false;
+  fUseAngularGen = false;
+  fUseLongFiles = true;
   fCorrelatedGamma = false;
   fStoreAllLevels = false;
   fDeexChannelType = fEvaporation;
@@ -231,6 +231,8 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
      << fLevelDensity*CLHEP::MeV << "\n";
   os << "Time limit for long lived isomeres (ns)             " 
      << fMaxLifeTime/CLHEP::ns << "\n";
+  os << "Use new data files                                  " << fUseLongFiles << "\n";
+  os << "Use complete data files                             " << fStoreAllLevels << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);

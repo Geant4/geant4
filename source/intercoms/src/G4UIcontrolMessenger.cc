@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc 98731 2016-08-09 10:49:49Z gcosmo $
+// $Id: G4UIcontrolMessenger.cc 102562 2017-02-09 08:27:31Z gcosmo $
 //
 
 #include <stdlib.h>
@@ -34,6 +34,7 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIaliasList.hh"
@@ -107,6 +108,11 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
   verboseCommand->SetRange("switch >= 0 && switch <=2");
   verboseCommand->SetDefaultValue(2);
   
+  doublePrecCommand = new G4UIcmdWithABool("/control/useDoublePrecision",this);
+  doublePrecCommand->SetGuidance("Use double precision for printing out the current parameter value(s).");
+  doublePrecCommand->SetParameterName("useDoublePrecision",true);
+  doublePrecCommand->SetDefaultValue(true);
+
   historyCommand = new G4UIcmdWithAString("/control/saveHistory",this);
   historyCommand->SetGuidance("Store command history to a file.");
   historyCommand->SetGuidance("Defaul file name is G4history.macro.");
@@ -327,6 +333,7 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete ExecuteCommand;
   delete suppressAbortionCommand;
   delete verboseCommand;
+  delete doublePrecCommand;
   delete historyCommand;
   delete stopStoreHistoryCommand;
   delete ManualCommand;
@@ -377,6 +384,10 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command==verboseCommand)
   {
     UI->SetVerboseLevel(verboseCommand->GetNewIntValue(newValue));
+  }
+  if(command==doublePrecCommand)
+  {
+    G4UImanager::UseDoublePrecisionStr(doublePrecCommand->GetNewBoolValue(newValue));
   }
   if(command==historyCommand)
   {
@@ -638,6 +649,10 @@ G4String G4UIcontrolMessenger::GetCurrentValue(G4UIcommand * command)
   if(command==verboseCommand)
   {
     currentValue = verboseCommand->ConvertToString(UI->GetVerboseLevel());
+  }
+  if(command==doublePrecCommand)
+  {
+    currentValue = doublePrecCommand->ConvertToString(G4UImanager::DoublePrecisionStr());
   }
   if(command==suppressAbortionCommand)
   {

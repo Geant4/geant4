@@ -260,10 +260,10 @@ void G4UExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 // Calculate extent under transform and specified limit
 
 G4bool
-G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
-                                 const G4VoxelLimits& pVoxelLimit,
-                                 const G4AffineTransform& pTransform,
-                                       G4double& pMin, G4double& pMax) const
+G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
+                                  const G4VoxelLimits& pVoxelLimit,
+                                  const G4AffineTransform& pTransform,
+                                        G4double& pMin, G4double& pMax) const
 {
   G4ThreeVector bmin, bmax;
   G4bool exist;

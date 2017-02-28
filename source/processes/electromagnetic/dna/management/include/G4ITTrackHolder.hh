@@ -163,7 +163,12 @@ public:
 
   inline void PushToKill(G4Track* track)
   {
+    G4TrackList::Pop(track);
     fToBeKilledList.push_back(track);
+    
+    if(track->GetTrackStatus() != fKillTrackAndSecondaries){
+      track->SetTrackStatus(fStopAndKill);
+    }
   }
 
   bool MergeNextTimeToMainList(double& time);

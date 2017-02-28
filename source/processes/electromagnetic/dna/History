@@ -14,6 +14,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+09-02-2017, MK, tag emdna-V10-02-38
+- G4KDNode.hh: remove unused G4ThreeVector header
+- G4KDMap.hh: int->size_t + indentation
+- G4KDMap.cc: int->size_t
+- G4IT & G4Molecule: template specialization
+  template<> G4KDNode<G4IT / G4Molecule>::~G4KDNode()
+
+14-01-2017, MK, tag emdna-V10-02-37
+- Prevent a crash when calling G4ITTrackingManager::EndTracking from 
+  the UserTimeStepAction::PostTimeStepAction
+- Add missing: G4ITTrackingManager* G4Scheduler::GetTrackingManager()
+
 27-11-2016, MK, tag emdna-V10-02-36
 - G4Electron_aq: correct charge
 - G4DNADamages -> G4DNADamage

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 101865 2016-12-02 13:06:50Z gcosmo $
+// $Id: G4Evaporation.cc 102590 2017-02-09 10:13:30Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -64,7 +64,8 @@
 #include "Randomize.hh"
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : G4VEvaporation(),nChannels(0),minExcitation(0.1*keV),isInitialised(false)
+  : G4VEvaporation(),fVerbose(0),nChannels(0),minExcitation(0.1*keV),
+    isInitialised(false)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }
@@ -100,11 +101,14 @@ void G4Evaporation::InitialiseChannels()
 
 void G4Evaporation::InitialiseChannelFactory()
 {
-  //G4cout << "### G4Evaporation::InitialiseChannelFactory  " << this << G4endl;
   theChannels = theChannelFactory->GetChannel(); 
   nChannels = theChannels->size();   
   probabilities.resize(nChannels, 0.0);
 
+  if(fVerbose > 0) {
+    G4cout << "### G4Evaporation::InitialiseChannelFactory  for " 
+	   << nChannels << " channels " << this << G4endl;
+  }
   for(size_t i=0; i<nChannels; ++i) {
     (*theChannels)[i]->SetOPTxs(OPTxs);
     (*theChannels)[i]->Initialise();
@@ -168,26 +172,27 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*
-    G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
-    	   << " A= " << A << " Eex(MeV)= " 
-    	   << theResidualNucleus->GetExcitationEnergy()
-    	   << " aban= " << abun << G4endl;
-    */
+    if(fVerbose > 0) {
+      G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
+	     << " A= " << A << " Eex(MeV)= " 
+	     << theResidualNucleus->GetExcitationEnergy()
+	     << " aban= " << abun << G4endl;
+    }
     // stop deecitation loop in the case of a cold stable fragment 
     if(Eex <= minExcitation && abun > 0.0) { break; }
  
     totprob = 0.0;
     maxchannel = nChannels;
-    /*
-    G4cout << "### Evaporation loop #" << ia 
-    	   << "  Fragment: " << theResidualNucleus << G4endl;
-    */
+    if(fVerbose > 1) {
+      G4cout << "### Evaporation loop #" << ia 
+	     << "  Fragment: " << theResidualNucleus << G4endl;
+    }
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      //G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
-
+      if(fVerbose > 0 && prob > 0.0) {
+	G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
+      }
       totprob += prob;
       probabilities[i] = totprob;
 
@@ -204,7 +209,9 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // photon evaporation in the case of no other channels available
     // do evaporation chain and reset total probability
     if(0.0 < totprob && probabilities[0] == totprob) {
-      //G4cout << "Start chain of gamma evaporation" << G4endl;
+      if(fVerbose > 1) {
+	G4cout << "Start chain of gamma evaporation" << G4endl;
+      }
       (*theChannels)[0]->BreakUpChain(theResult, theResidualNucleus);
       totprob = 0.0;
     }
@@ -214,9 +221,9 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
 
       // if fragment is exotic, then force its decay 
       if(0.0 == abun) {
-	//G4cout << "$$$ Decay exotic fragment" << G4endl;
 	if(!unstableBreakUp->BreakUpChain(theResult, theResidualNucleus))
 	  { break; }
+	if(fVerbose > 1) { G4cout << "$$$ Decay exotic fragment" << G4endl; }
       } else {
 	break;
       }
@@ -227,9 +234,9 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<maxchannel; ++i) { if(probabilities[i] >= totprob) { break; } }
 
-    //G4cout << "Channel # " << i << G4endl;
+    if(fVerbose > 1) { G4cout << "Channel # " << i << G4endl; }
     G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
-    //if(frag) G4cout << "   " << *frag << G4endl;
+    if(fVerbose > 1 && frag) { G4cout << "   " << *frag << G4endl; }
 
     // normaly a fragment should be created
     if(frag) { theResult->push_back(frag); }

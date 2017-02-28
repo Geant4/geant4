@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 101121 2016-11-07 09:18:01Z gcosmo $
+// $Id: G4Orb.cc 102528 2017-02-08 13:37:51Z gcosmo $
 //
 // class G4Orb
 //
@@ -295,28 +295,11 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 /////////////////////////////////////////////////////////////////////
 //
 // Return unit normal of surface closest to p
-// - note if point on z axis, ignore phi divided sides
-// - unsafe if point close to z axis a rmin=0 - no explicit checks
 
 G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENorm side = kNRMax;
-  G4ThreeVector norm;
   G4double radius = std::sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
-
-  switch (side)
-  {
-    case kNRMax: 
-      norm = G4ThreeVector(p.x()/radius,p.y()/radius,p.z()/radius);
-      break;
-   default:        // Should never reach this case ...
-      DumpInfo();
-      G4Exception("G4Orb::SurfaceNormal()", "GeomSolids1002", JustWarning,
-                  "Undefined side for valid surface normal to solid.");
-      break;    
-  } 
-
-  return norm;
+  return G4ThreeVector(p.x()/radius,p.y()/radius,p.z()/radius);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

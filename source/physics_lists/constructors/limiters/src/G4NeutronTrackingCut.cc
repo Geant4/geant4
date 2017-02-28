@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc 83417 2014-08-21 15:29:32Z gcosmo $
+// $Id: G4NeutronTrackingCut.cc 102622 2017-02-10 08:17:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,6 +44,8 @@
 #include "G4Neutron.hh"
 #include "G4NeutronKiller.hh"
 #include "G4HadronicProcessStore.hh"
+
+#include "G4Threading.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -80,7 +82,7 @@ void G4NeutronTrackingCut::ConstructProcess()
   G4ParticleDefinition * particle = G4Neutron::Neutron();
   G4ProcessManager * pmanager = particle->GetProcessManager();
 
-  if(verbose > 0) {
+  if(verbose > 0 && G4Threading::IsMasterThread()) {
     G4String pn = particle->GetParticleName();//Avoid data-race when passing
                                               //this string to G4MTcout
     G4cout << "### Adding tracking cuts for " << pn 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.icc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4CutTubs.icc 102769 2017-02-22 09:05:45Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -36,12 +36,14 @@
 
 inline G4double G4CutTubs::GetCubicVolume()
 {
-  return G4VSolid::GetCubicVolume();
+  if (fCubicVolume == 0.) { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  return fCubicVolume;
 }
 
 inline G4double G4CutTubs::GetSurfaceArea()
 {
-  return G4VSolid::GetSurfaceArea();
+  if (fSurfaceArea == 0.) { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  return fSurfaceArea;
 }
 
 inline

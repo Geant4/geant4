@@ -1,4 +1,4 @@
-$Id: History 101419 2016-11-17 10:36:30Z gcosmo $
+$Id: History 102848 2017-02-27 13:09:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 24, 2017 I. Hrivnacova (analysis-V10-02-26)
+- Restored clean-up of Root empty files in MT mode
+  (which was lost with previous updates)
 
 November 17, 2016 I. Hrivnacova (analysis-V10-02-25)
 - Fixed compiler warning issued when G4VERBOSE is not set.

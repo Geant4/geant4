@@ -8,10 +8,13 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================	    
 
-19.11.2016 A.Dotti		    Tag: hadrontherapy-V10-02-05
-       - explicit set of SD to manager
-
-07.11.2016 G.Folger                 Tag: hadrontherapy-V10-02-04
+07.02.2017 G.A.P.Cirrone, G.Petringa;  Tag: hadrontherapy-V10-02-06
+	   - Physics list corrected
+31.01.2017 G.A.P.Cirrone, L.Pandola, J.Pipek
+	   - Fixed Bugzilla #1879 (remaining edge cases)
+19.11.2016 A.Dotti; Tag: hadrontherapy-V10-02-05
+       	   - explicit set of SD to manager
+07.11.2016 G.Folger; Tag: hadrontherapy-V10-02-04
        - Remove direct use of theParticleIterator, and use GetParticleIterator() method.
 03.11.2016 L. Pandola and J. Pipek. Tag: hadrontherapy-V10-02-03
 	   - Fixed Bugzilla #1879

@@ -63,7 +63,7 @@ User Documentation</A> for further information about using Geant4.
 
 Platforms:
 <UL>
-<LI>Linux, gcc-4.8.4.<BR>
+<LI>Linux, gcc-4.8.5.<BR>
     Tested on 64 bit architectures (Intel or AMD) with
     CERN CentOS Linux 7 (CC7) (based on CentOS Linux 7).</LI>
 <LI>MacOSX 10.12 Sierra with clang-3.8 (Apple LLVM/Clang-8.0.0)</LI>
@@ -142,6 +142,16 @@ re-compilation) and a re-compilation of user applications is required.
     supporting export of scaled volumes.
     The new schema is fully compatible with old schema versions
     and schema validation thorugh network is already activated against it.</LI>
+</UL>
+
+<P> </P>
+<B>Senditive Detectors</B>
+<P> </P>
+<UL>
+<LI>An explicit call to G4SDManager::AddNewDetector() <U>must now be added</U>
+    in order to register a sensitive-detector. The use of
+    G4VUserDetectorConstruction::SetSensitiveDetector() no longer does
+    this implicitly.</LI>
 </UL>
 
 <P> </P>

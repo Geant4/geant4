@@ -72,7 +72,9 @@ G4OpticalPhysics::G4OpticalPhysics(G4int verbose, const G4String& name)
     fFiniteRiseTime(false),
     fScintillationByParticleType(false),
     fScintillationTrackInfo(false),
-    fInvokeSD(true)
+    fInvokeSD(true),
+    fCerenkovStackPhotons(true),
+    fScintillationStackPhotons(true)
 {
   verboseLevel = verbose;
   fMessenger = new G4OpticalPhysicsMessenger(this);
@@ -323,6 +325,7 @@ void G4OpticalPhysics::ConstructProcess()
   ScintillationProcess->SetScintillationByParticleType(fScintillationByParticleType);
   ScintillationProcess->SetScintillationTrackInfo(fScintillationTrackInfo);
   ScintillationProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kScintillation]);
+  ScintillationProcess->SetStackPhotons(fScintillationStackPhotons);
   G4EmSaturation* emSaturation = G4LossTableManager::Instance()->EmSaturation();
   ScintillationProcess->AddSaturation(emSaturation);
   UIhelpers::buildCommands(ScintillationProcess);
@@ -332,6 +335,7 @@ void G4OpticalPhysics::ConstructProcess()
   CerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
   CerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
   CerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
+  CerenkovProcess->SetStackPhotons(fCerenkovStackPhotons);
   UIhelpers::buildCommands(CerenkovProcess);
   OpProcesses[kCerenkov] = CerenkovProcess;
 
@@ -456,6 +460,16 @@ void G4OpticalPhysics::SetFiniteRiseTime(G4bool finiteRiseTime)
 void G4OpticalPhysics::SetInvokeSD(G4bool invokeSD)
 {
   fInvokeSD = invokeSD;
+}
+
+void G4OpticalPhysics::SetCerenkovStackPhotons(G4bool stackingFlag)
+{
+  fCerenkovStackPhotons = stackingFlag;
+}
+
+void G4OpticalPhysics::SetScintillationStackPhotons(G4bool stackingFlag)
+{
+  fScintillationStackPhotons = stackingFlag;
 }
 
 void G4OpticalPhysics::Configure(G4OpticalProcessIndex index, G4bool isUse)

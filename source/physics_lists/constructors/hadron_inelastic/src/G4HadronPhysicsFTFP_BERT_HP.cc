@@ -53,6 +53,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4PhysListUtil.hh"
+#include "G4Threading.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -120,13 +121,15 @@ void G4HadronPhysicsFTFP_BERT_HP::CreateModels()
   G4double minFTFP_neutron = 3.0 * GeV;
   G4double maxBERT_neutron = 12.0 * GeV;
 
-  G4cout << G4endl
+  if(G4Threading::IsMasterThread()) {
+    G4cout << G4endl
          << " FTFP_BERT_HP : new threshold between BERT and FTFP is over the interval " << G4endl
          << " for pions :   " << minFTFP_pion/GeV << " to " << maxBERT_pion/GeV  << " GeV" << G4endl
          << " for kaons :   " << minFTFP_kaon/GeV << " to " << maxBERT_kaon/GeV  << " GeV" << G4endl
          << " for proton :  " << minFTFP_proton/GeV << " to " << maxBERT_proton/GeV  << " GeV" << G4endl
          << " for neutron : " << minFTFP_neutron/GeV << " to " << maxBERT_neutron/GeV  << " GeV" << G4endl
          << G4endl;
+  }
 
   tpdata->theNeutrons=new G4NeutronBuilder( true ); // Fission on
   tpdata->theFTFPNeutron=new G4FTFPNeutronBuilder(QuasiElastic);

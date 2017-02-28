@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc 99765 2016-10-05 08:49:47Z gcosmo $
+// $Id: G4MaterialPropertiesTable.cc 102806 2017-02-22 16:36:36Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,6 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
   MPTiterator i;
   for (i = MPT.begin(); i != MPT.end(); ++i)
   {
-    G4cout << (*i).second << G4endl;
     delete (*i).second;
   }
   MPT.clear();

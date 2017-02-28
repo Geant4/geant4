@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03    (9-December-2016)
+ Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -131,7 +131,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.34s Sys=0s
+  User=0s Real=0s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -206,7 +206,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.77s Real=1.77s Sys=0s
+  User=0.86s Real=0.86s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -280,7 +280,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.86s Real=4.87s Sys=0s
+  User=1.99s Real=1.99s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -293,7 +293,7 @@ Run Summary
    Ni60[2158.632]:       8  Emean =  3.024 eV 	( 0.3664 eV  --> 5.569 eV )
    Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )
         anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)
-               e-:  100035  Emean =  96.27 keV	( 5.686 eV  --> 1.436 MeV)
+               e-:  100035  Emean =  96.28 keV	( 5.686 eV  --> 1.436 MeV)
             gamma:  199840  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)
 
    Ekin Total (Q single decay): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)

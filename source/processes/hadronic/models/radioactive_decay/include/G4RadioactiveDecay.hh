@@ -70,6 +70,7 @@
 #include "G4ThreeVector.hh"
 #include "G4Threading.hh"
 
+class G4Fragment;
 class G4RadioactiveDecaymessenger;
 
 typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
@@ -235,6 +236,8 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4VParticleChange* DecayIt(const G4Track& theTrack,
                                const G4Step&  theStep);
+
+  //    static G4ThreadLocal G4Fragment* polarizedNucleus;
 
   protected:
 

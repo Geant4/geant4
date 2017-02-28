@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 96383 2016-04-11 09:06:57Z gcosmo $
+// $Id: G4Fragment.hh 102724 2017-02-20 13:00:39Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -105,6 +105,7 @@ public:
   inline void SetZandA_asInt(G4int Znew, G4int Anew);
   
   inline G4double GetExcitationEnergy() const;
+  inline void SetExcEnergyAndMomentum(G4double eexc, const G4LorentzVector&);
 
   inline G4double GetGroundStateMass() const;
    
@@ -151,6 +152,9 @@ public:
   inline G4int GetNumberOfElectrons() const;
   inline void SetNumberOfElectrons(G4int value);
 
+  inline G4int GetFloatingLevelNumber() const;
+  inline void SetFloatingLevelNumber(G4int value);
+
   inline const G4ParticleDefinition * GetParticleDefinition() const;
   inline void SetParticleDefinition(const G4ParticleDefinition * p);
 
@@ -160,7 +164,7 @@ public:
   inline G4NuclearPolarization* GetNuclearPolarization() const;
   inline void SetNuclearPolarization(G4NuclearPolarization*);
 
-  void SetAngularMomentum(G4ThreeVector&);
+  void SetAngularMomentum(const G4ThreeVector&);
   G4ThreeVector GetAngularMomentum() const;
 
   // ============= PRIVATE METHODS ==============================
@@ -201,11 +205,14 @@ private:
 
   // Gamma evaporation data members
   G4int numberOfShellElectrons;
+  G4int xLevel;
 
   const G4ParticleDefinition* theParticleDefinition;
   
   G4double spin;
   G4double theCreationTime;
+
+  static const G4double minFragExcitation;
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
@@ -239,7 +246,10 @@ inline void G4Fragment::operator delete(void * aFragment)
 inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
-  if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
+  if(theExcitationEnergy < minFragExcitation) { 
+    if(theExcitationEnergy < -minFragExcitation) {  ExcitationEnergyWarning(); }
+    theExcitationEnergy = 0.0;
+  }
 }
 
 inline G4double 
@@ -278,6 +288,14 @@ inline G4double G4Fragment::GetExcitationEnergy()  const
 inline G4double G4Fragment::GetGroundStateMass() const
 {
   return theGroundStateMass; 
+}
+
+inline void G4Fragment::SetExcEnergyAndMomentum(G4double eexc, 
+						const G4LorentzVector& v)
+{
+  theExcitationEnergy = eexc;
+  theMomentum.set(0.0, 0.0, 0.0, theGroundStateMass + eexc);
+  theMomentum.boost(v.boostVector());
 }
 
 inline G4double G4Fragment::GetBindingEnergy() const
@@ -404,6 +422,16 @@ inline G4double G4Fragment::GetSpin() const
 inline void G4Fragment::SetSpin(G4double value)
 {
   spin = value;
+}
+
+inline G4int G4Fragment::GetFloatingLevelNumber() const
+{
+  return xLevel;
+}
+
+inline void G4Fragment::SetFloatingLevelNumber(G4int value)
+{
+  xLevel = value;
 }
 
 inline 

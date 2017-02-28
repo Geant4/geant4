@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTXScanner.cc 66373 2012-12-18 09:41:34Z gcosmo $
+// $Id: G4RTXScanner.cc 102778 2017-02-22 10:50:10Z gcosmo $
 //
 //
 
@@ -177,16 +177,16 @@ G4bool G4RTXScanner::GetXWindow(const G4String& name, G4ViewParameters& vp)
   int nMaps;
   Status status = XGetRGBColormaps
     (display, RootWindow(display, screen_num),
-     &scmap, &nMaps, XA_RGB_BEST_MAP);
+     &scmap, &nMaps, XA_RGB_DEFAULT_MAP);
   if (!status) {
     system("xstdcmap -best");  // ...and try again...
     status = XGetRGBColormaps
       (display, RootWindow(display, screen_num),
-       &scmap, &nMaps, XA_RGB_BEST_MAP);
+       &scmap, &nMaps, XA_RGB_DEFAULT_MAP);
     if (!status) {
       G4cerr <<
 	"G4RTXScanner::Initialize(): cannot get color map."
-	"\n  Perhaps your system does not support RGB_BEST_MAP."
+	"\n  Perhaps your system does not support XA_RGB_DEFAULT_MAP."
 	     << G4endl;
       return false;
     }

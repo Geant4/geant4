@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96179 2016-03-22 15:43:57Z gcosmo $
+# $Id: sources.cmake 102573 2017-02-09 08:50:23Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -109,6 +109,7 @@ if(UNIX)
     saveViewPt.h
     pickext.h
     pickref.h
+    wireframe.h
     )
 
   list(APPEND G4VIS_MODULE_OPENINVENTOR_SOURCES

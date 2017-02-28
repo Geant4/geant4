@@ -84,6 +84,8 @@ class G4PolarizationTransition
 
     void DumpTransitionData(const POLAR& pol) const;
 
+    inline void SetVerbose(G4int val) { fVerbose = val; };
+
   private:
 
     G4PolarizationTransition(const G4PolarizationTransition &right) = delete;
@@ -91,6 +93,7 @@ class G4PolarizationTransition
 
     inline G4double LnFactorial(int k) const { return G4Pow::GetInstance()->logfactorial(k); }
 
+    G4int fVerbose;
     G4int fTwoJ1, fTwoJ2;
     G4int fLbar, fL;
     G4double fDelta;

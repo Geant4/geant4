@@ -1,4 +1,4 @@
-$Id: History 99076 2016-09-01 12:40:47Z gcosmo $
+$Id: History 102778 2017-02-22 10:50:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for Ray Tracer category
 ---------------------------------------
+
+22nd February 2017  John Allison (raytracer-V10-02-02)
+- G4RTXScanner.cc: Changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
+  (It seems XA_RGB_BEST_MAP no longer available on Mac XQuartz 2.7.11.)
 
 31st August 2016  John Allison (raytracer-V10-02-01)
 - Fix G4Orb and G4Ellipsoid hiding warnings.

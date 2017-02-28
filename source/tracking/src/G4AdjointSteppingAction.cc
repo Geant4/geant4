@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc 101439 2016-11-17 14:54:08Z gcosmo $
+// $Id: G4AdjointSteppingAction.cc 102568 2017-02-09 08:37:41Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction
@@ -62,8 +62,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   //G4cout<<"Ste weight "<<<<std:.endl;
   //forward tracking mode
    if(!is_adjoint_tracking_mode){
-     //check if last adjoint did reach the external source
-     if (!did_adj_part_reach_ext_source) {
+     if (!did_one_adj_part_reach_ext_source_during_event) {
         aTrack->SetTrackStatus(fStopAndKill);
         return;
      }
@@ -116,6 +115,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 	if (surface_name == "ExternalSource") {
 		//Registering still needed
 		did_adj_part_reach_ext_source=true;
+		did_one_adj_part_reach_ext_source_during_event=true;
 		aTrack->SetTrackStatus(fStopAndKill);
 		//now register the adjoint particles reaching the external surface
 		last_momentum =aTrack->GetMomentum();
@@ -135,14 +135,13 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   //G4cout<<aStep->GetPostStepPoint()->GetStepStatus()<<std::endl;
   if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
 	  did_adj_part_reach_ext_source=true;
+	  did_one_adj_part_reach_ext_source_during_event=true;
 	  last_momentum =aTrack->GetMomentum();
 	  last_ekin=aTrack->GetKineticEnergy();
 	  last_weight = aTrack->GetWeight();
 	  last_part_def = aTrack->GetDefinition();
 	  last_pos = crossing_pos;
   		return;
-
   }
-
 }
 

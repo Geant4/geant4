@@ -53,10 +53,10 @@ int __1DSortOut::GetDimension()
   return fSortOutNDim.fDimension;
 }
 
-G4KDNode_Base* __1DSortOut::GetMidle(int& main_middle)
+G4KDNode_Base* __1DSortOut::GetMidle(size_t& main_middle)
 {
-  int contSize = fContainer.size();
-  main_middle = (int) ceil(contSize / 2.); // ceil = round up
+  size_t contSize = fContainer.size();
+  main_middle = (size_t) ceil(contSize / 2.); // ceil = round up
   return fContainer[main_middle];
 }
 
@@ -67,7 +67,7 @@ _deq_iterator __1DSortOut::Insert(G4KDNode_Base* pos)
 
 G4KDNode_Base* __1DSortOut::PopOutMiddle()
 {
-  int middle;
+  size_t middle;
   G4KDNode_Base* pos = GetMidle(middle);
   _deq_iterator deq_pos = fContainer.begin() + middle;
 

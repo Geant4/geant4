@@ -4,7 +4,7 @@
 /run/verbose 1
 /control/verbose 2
 /event/verbose 1
-/tracking/verbose 1
+#/tracking/verbose 1
 /ucnboundary/verbose 1
 #
 /run/beamOn 1

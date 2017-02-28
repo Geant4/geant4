@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.hh 98731 2016-08-09 10:49:49Z gcosmo $
+// $Id: G4UIcontrolMessenger.hh 102562 2017-02-09 08:27:31Z gcosmo $
 //
 
 #ifndef G4UIcontrolMessenger_h
@@ -34,6 +34,7 @@
 
 class G4UIdirectory;
 class G4UIcmdWithAString;
+class G4UIcmdWithABool;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithoutParameter;
 class G4UIcommand;
@@ -49,6 +50,7 @@ class G4UIcommand;
 //   /control/foreach
 //   /control/suppressAbortion
 //   /control/verbose
+//   /control/useDoublePrecision
 //   /control/saveHistory
 //   /control/stopSavingHistory
 //   /control/alias
@@ -88,6 +90,7 @@ class G4UIcontrolMessenger : public G4UImessenger
       G4UIcmdWithAString * ExecuteCommand;
       G4UIcmdWithAnInteger * suppressAbortionCommand;
       G4UIcmdWithAnInteger * verboseCommand;
+      G4UIcmdWithABool * doublePrecCommand;
       G4UIcmdWithAString * historyCommand;
       G4UIcmdWithoutParameter * stopStoreHistoryCommand;
       G4UIcommand * aliasCommand;

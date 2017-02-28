@@ -14,6 +14,103 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-72)
+- G4LevelReader - in the case of broken file structure or absence of
+    a file G4Exception will be issued
+
+16 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-71)
+- G4GammaTransition - added control on printout for all G4cout; removed
+    thread unsafe check
+
+15 February 2017 Vladimir Ivanchenko
+- G4GammaTransition - added control on printout
+- G4LevelManager - fixed unpacking of spin
+
+14 February 2017 Vladimir Ivanchenko
+  Fix no-reproducibility due to precision lost in Lorentz transformations
+- G4ExcitationHandler, G4PhotonEvaporation - use floating level number
+- G4GammaTransition - use a new method of G4Fragment::SetExcitationEnergy()
+    which allows to keep excitation energy exact as in the database to
+    avoid rare non-reproducibility; added SetVerbose method
+- G4PolarizationTransition - added SetVerbose method; protect from
+    extra verbosity
+
+13 February 2017 Vladimir Ivanchenko
+  Fixed U235[0.076] problem:
+- G4DeexPrecoParameters - min excitation energy is set to 10 eV (was 100 eV)
+- G4LevelReader - if value of alpha (relative probability of the internal 
+    conversion) is 10^10, then assume that internal conversion will go via 
+    outer levels and gamma emission has zero probability, internal 
+    conversion is forced intdependently on other flags
+
+08 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-70)
+- G4GammaTransition::SampleDirection - D.Wright fixed multipolarity
+    after changing multipolarity Nx by 1 in the new dataset
+
+27 January 2017 Vladimir Ivanchenko
+- G4GammaTransition, G4PhotonEvaporation, G4NuclLevel - minor cleanup
+- G4DeexPrecoParameters - by default used uniform angular distribution
+    in CM sytem of precompound decay
+
+18 January 2017 Vladimir Ivanchenko
+- G4GammaTransition::SampleDirection - return back sampling in the case, when 
+    initial state has angular moment but its polarisation is random
+- G4PhotonEvaporation - added internal conversion even if the data are not
+    stored
+
+11 January 2017  Dennis Wright
+- G4PolarizationTransition::SetGammaTransitionData: replace fTwoJ1 and fTwoJ2
+  with their absolute values to avoid crash
+- G4GammaTransition::SampleDirection: remove return; from (!np) block,
+  otherwise only zero polarization is returned.
+  Also remove line 
+    fPolTrans.UpdatePolarizationToFinalState(fDirection.z(), fDirection.phi(), nuc);
+  in order to comply with instructions in G4PolarizationTransition.hh (call order) 
+  and to properly initialize the nuclear polarization.
+ 
+ 9 January 2017  Dennis Wright
+- G4NucLevel::TransitionType: use % operator to correctly strip off
+  leading digit
+- G4LevelReader::LevelManager: added comments to describe some variables
+- G4PolarizationTransition::UpdatePolarizationToFinalState: add comment
+  showing where zero-value entries are trimmed off
+
+19 December 2016 Vladimir Ivanchenko
+- G4LevelReader - fixed Ra228 problem - read all levels from 
+    a data file
+
+16 December 2016 Vladimir Ivanchenko
+- G4PolarizationTransition - J.Detwiler has fixed computation 
+    of multipolarity
+
+16 December 2016 Vladimir Ivanchenko
+- G4DeexPrecoParameters - change default time limit from 0.01 s to
+    1 microsecond
+- G4PhotonEvaporation, G4GammaTransition - improved sampling
+    and kinematics for internal conversion
+- G4PolarizationTransition - J.Detwiler has fixed computation 
+    of polarisation
+
+14 December 2016 Vladimir Ivanchenko
+- G4LevelManager, G4NuclLevel, G4LevelReader - reduce memory for
+    description of a level: each two integer parameters are packed 
+    into one integer values; use only one set of probabilities of 
+    transition independently on use-case (HEP or radioactive decay); 
+    fill internal conversion coefficients into the data structure only 
+    if a flag SetStoreAllLevels() is set to true. In the last case,
+    more memory required per isotope (~8 times)
+- G4DeexPrecoParameters - extended Dump() printout; make new 
+    data structure default
+- G4ExcitationHandler - moved Dump() printout in Initialise()
+    method, print info if evaporation channels are changed; added
+    local data member to control verbosity level
+- G4VEvaporation - added extra const access method
+- G4Evaporation - added data member to control verbosity level 
+- G4GammaTransition - in the case, when internal conversion data
+    are not filled but in sampling e- emission is selected, sample e-
+    with kinetic energy corresponding to transition between nuclear
+    levels ignoring atomic effects
+
 01 December 2016 Vladimir Ivanchenko (hadr-deex-V10-02-69)
 - G4KalbachCrossSection, G4NuclearLevelData, G4GammaTransition
     Gunter Folger fixed use of std::sqrt

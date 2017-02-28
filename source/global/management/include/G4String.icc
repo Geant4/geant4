@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc 94844 2015-12-10 16:23:09Z gcosmo $
+// $Id: G4String.icc 102536 2017-02-08 13:53:34Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -32,98 +32,6 @@
 //
 //  G4String
 //---------------------------------------------------------------
-
-// **************************************************************
-// G4SubString
-// **************************************************************
-
-inline G4SubString::G4SubString(const G4SubString& str)
-  : mystring(str.mystring), mystart(str.mystart), extent(str.extent)
-{
-}
-
-inline G4SubString::G4SubString(G4String& str, str_size siz, str_size e)
-  : mystring(&str),mystart(siz),extent(e)
-{
-} 
-
-inline G4SubString& G4SubString::operator=(const G4SubString& str)
-{
-  mystring->replace(mystart,extent,str.mystring->data(),str.length());
-  extent=str.length();
-  return *this;
-}
-
-inline G4SubString& G4SubString::operator=(const char* str)
-{
-  mystring->replace(mystart,extent,str,strlen(str));
-  extent=strlen(str);
-  return *this;
-}
-
-inline char& G4SubString::operator()(str_size i)
-{
-  return mystring->operator[](mystart+i);
-}
-
-inline char  G4SubString::operator()(str_size i) const
-{
-  return mystring->operator[](mystart+i);
-}
-
-inline char&  G4SubString::operator[](str_size i)
-{
-  return mystring->operator[](mystart+i);
-}
-
-inline char  G4SubString::operator[](str_size i) const
-{
-  return mystring->operator[](mystart+i);
-}
-
-inline G4int G4SubString::operator!() const
-{
-  return (extent==0) ? 1 : 0;
-}
-
-inline G4bool G4SubString::operator==(const G4String& str) const
-{
-  return (mystring->find(str,mystart,extent) != std::string::npos);
-}
-
-inline G4bool G4SubString::operator==(const char* str) const
-{
-  return (mystring->find(str,mystart,extent) != std::string::npos);
-}
-
-inline G4bool G4SubString::operator!=(const G4String& str) const
-{
-  return (mystring->find(str,mystart,extent) == std::string::npos);
-}
-
-inline G4bool G4SubString::operator!=(const char* str) const
-{
-  return (mystring->find(str,mystart,extent) == std::string::npos);
-}
-
-inline str_size G4SubString::length() const
-{
-  return extent;
-}
-
-inline str_size G4SubString::start() const
-{
-  return mystart;
-}
-
-inline G4bool G4SubString::isNull() const
-{
-  return (extent==0);
-}
-
-// **************************************************************
-// G4String
-// **************************************************************
 
 inline G4String::G4String () {}
 
@@ -143,9 +51,6 @@ inline G4String::G4String ( char ch )
 
 inline G4String::G4String ( const G4String& str )
  : std_string(str) {}
-
-inline G4String::G4String ( const G4SubString& str )
- : std_string(*(str.mystring),str.mystart,str.extent) {}
 
 inline G4String::G4String ( const std::string& str )
  : std_string(str) {}
@@ -184,11 +89,9 @@ inline char& G4String::operator () (str_size i)
   return std_string::operator[](i);
 }
 
-inline G4String& G4String::operator+=(const G4SubString& str)
+inline G4String G4String::operator()(str_size start, str_size extent)
 {
-  G4String tmp(str);
-  std_string::operator+=(tmp);
-  return *this;
+  return G4String(substr(start,extent));
 }
 
 inline G4String& G4String::operator+=(const char* str)
@@ -416,11 +319,6 @@ inline str_size G4String::index (const char* str, G4int pos) const
 inline str_size G4String::index (char ch, G4int pos) const
 {
   return std_string::find(ch,pos);
-}
-
-inline G4SubString G4String::operator()(str_size start, str_size extent)
-{
-  return G4SubString(*this,start,extent);
 }
 
 inline const char* G4String::data() const
