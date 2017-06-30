@@ -47,6 +47,9 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p1d*>& htVec
     auto fileName = fFileManager->GetHnFileName(hnType, name);
     std::ofstream hnFile(fileName);
 
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
+
     auto result
       = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
 
@@ -85,6 +88,9 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<tools::histo::p2d*>& htVec
     auto fileName = fFileManager->GetHnFileName(hnType, name);
     std::ofstream hnFile(fileName);
 
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
+
     auto result
       = tools::wcsv::pto(hnFile, ht->s_cls(), *ht);
 
@@ -122,6 +128,9 @@ G4bool G4CsvAnalysisManager::WriteT(const std::vector<T*>& htVector,
     auto ht = htVector[i];
     auto fileName = fFileManager->GetHnFileName(hnType, name);
     std::ofstream hnFile(fileName);
+
+    // Do nothing if there is no file
+    if ( ! hnFile.is_open() ) return false;
 
     auto result
       = tools::wcsv::hto(hnFile, ht->s_cls(), *ht);

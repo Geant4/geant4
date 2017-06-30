@@ -35,6 +35,8 @@
 //
 // Modified:
 //
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4FTFPPionBuilder_h
@@ -60,13 +62,14 @@ class G4FTFPPionBuilder : public G4VPionBuilder
     G4FTFPPionBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFPPionBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VPionBuilder::Build; //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;

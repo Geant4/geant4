@@ -117,6 +117,7 @@ private:
   G4UIcmdWithADouble*        fr1Cmd;
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        skinCmd;
+  G4UIcmdWithADouble*        screCmd;
 
   G4UIcmdWithAnInteger*      dedxCmd;
   G4UIcmdWithAnInteger*      lamCmd;

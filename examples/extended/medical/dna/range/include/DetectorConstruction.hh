@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
-//
-// $Id: DetectorConstruction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
@@ -47,30 +42,35 @@ class DetectorMessenger;
 class DetectorConstruction: public G4VUserDetectorConstruction
 {
 public:
+
   DetectorConstruction();
   ~DetectorConstruction();
 
-public:
   void SetRadius(G4double);
   void SetMaterial(G4String);
   void SetTrackingCut(G4double);
+  
   virtual G4VPhysicalVolume* Construct();
 
   inline G4double GetAbsorRadius() const
   {
     return fAbsorRadius;
   }
+  
   inline G4Material* GetAbsorMaterial() const
   {
     return fAbsorMaterial;
   }
+  
   inline G4double GetAbsorMass() const
   {
     return fLogicalAbsor->GetMass();
   }
+  
   void PrintParameters() const;
 
 private:
+
   void DefineMaterials();
   G4VPhysicalVolume* ConstructVolumes();
 
@@ -79,10 +79,9 @@ private:
   G4Material* fAbsorMaterial;
   G4VPhysicalVolume* fAbsor;
   G4LogicalVolume* fLogicalAbsor;
+  
   DetectorMessenger* fDetectorMessenger;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

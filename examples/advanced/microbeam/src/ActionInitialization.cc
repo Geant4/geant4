@@ -54,9 +54,7 @@ ActionInitialization::~ActionInitialization()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
-{
-  // No specific action for Master
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,6 +68,4 @@ void ActionInitialization::Build() const
   SetUserAction(new EventAction(runAction));
   
   SetUserAction(new SteppingAction(runAction,fDetectorConstruction));
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}

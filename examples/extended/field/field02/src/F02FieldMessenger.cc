@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02FieldMessenger class
 //
 //
-// $Id: F02FieldMessenger.cc 76247 2013-11-08 11:18:52Z gcosmo $
+// $Id: F02FieldMessenger.cc 104216 2017-05-18 13:45:22Z gcosmo $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,7 +99,7 @@ void F02FieldMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if( command == fStepperCmd )
     fElFieldSetup->SetStepperType(fStepperCmd->GetNewIntValue(newValue));
   if( command == fUpdateCmd )
-    fElFieldSetup->UpdateField();
+    fElFieldSetup->UpdateIntegrator();
   if( command == fElFieldCmd )
     fElFieldSetup->SetFieldValue(fElFieldCmd->GetNewDoubleValue(newValue));
   if( command == fMinStepCmd )

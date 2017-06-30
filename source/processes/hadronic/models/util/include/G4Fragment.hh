@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 102724 2017-02-20 13:00:39Z gcosmo $
+// $Id: G4Fragment.hh 104779 2017-06-16 09:20:56Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -91,7 +91,6 @@ public:
   G4bool operator==(const G4Fragment &right) const;
   G4bool operator!=(const G4Fragment &right) const;
 
-  friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
 
   //  new/delete operators are overloded to use G4Allocator
@@ -161,8 +160,9 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
+  inline G4NuclearPolarization* NuclearPolarization();
   inline G4NuclearPolarization* GetNuclearPolarization() const;
-  inline void SetNuclearPolarization(G4NuclearPolarization*);
+  void SetNuclearPolarization(G4NuclearPolarization*);
 
   void SetAngularMomentum(const G4ThreeVector&);
   G4ThreeVector GetAngularMomentum() const;
@@ -216,7 +216,7 @@ private:
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
-
+/*
 inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
 {
   if(p !=  thePolarization) {
@@ -224,7 +224,7 @@ inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
     thePolarization = p;
   }
 }
-
+*/
 #if defined G4HADRONIC_ALLOC_EXPORT
   extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
 #else
@@ -453,6 +453,11 @@ inline G4double G4Fragment::GetCreationTime() const
 inline void G4Fragment::SetCreationTime(G4double time)
 {
   theCreationTime = time;
+}
+
+inline G4NuclearPolarization* G4Fragment::NuclearPolarization()
+{
+  return thePolarization;
 }
 
 inline G4NuclearPolarization* G4Fragment::GetNuclearPolarization() const

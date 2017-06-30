@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BcMesonMinus.cc 95951 2016-03-03 10:44:16Z gcosmo $
+// $Id: G4BcMesonMinus.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -64,7 +64,7 @@ G4BcMesonMinus* G4BcMesonMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      6.2751*GeV,  1.302e-9*MeV,   -1.*eplus,
+                 name,      6.2751*GeV,  1.298e-9*MeV,   -1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,        -541,

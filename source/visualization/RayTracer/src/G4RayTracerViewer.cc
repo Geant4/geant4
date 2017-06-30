@@ -24,12 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerViewer.cc 74050 2013-09-20 09:38:19Z gcosmo $
+// $Id: G4RayTracerViewer.cc 104015 2017-05-08 07:28:08Z gcosmo $
 
 #include "G4RayTracerViewer.hh"
 
 #include "G4ios.hh"
 #include <sstream>
+#include <iomanip>
+
 #include "G4SystemOfUnits.hh"
 
 #include "G4VSceneHandler.hh"
@@ -37,29 +39,28 @@
 #include "G4TheRayTracer.hh"
 #include "G4UImanager.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4TheMTRayTracer.hh"
-#endif
-
 G4RayTracerViewer::G4RayTracerViewer
 (G4VSceneHandler& sceneHandler,
  const G4String& name,
- G4TheRayTracer* aTracer):
-  G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name),
-  fFileCount(0)
+ G4TheRayTracer* aTracer)
+: G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name)
+, fFileCount(0)
+, theTracer(aTracer)
 {
-  theTracer = aTracer;
-#ifdef G4MULTITHREADED
-  if (!aTracer) theTracer = G4TheMTRayTracer::theInstance;
-  if (!theTracer) theTracer = new G4TheMTRayTracer;
-#else
-  if (!aTracer) theTracer = new G4TheRayTracer;
-#endif
-  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
-  theTracer->SetNRow(fVP.GetWindowSizeHintY());
+  if (!theTracer) {
+    G4cerr << "G4RayTracerViewer::Initialise: No tracer" << G4endl;
+    fViewId = -1;  // This flags an error.
+    return;
+  }
 }
 
 G4RayTracerViewer::~G4RayTracerViewer() {}
+
+void G4RayTracerViewer::Initialise()
+{
+  theTracer->SetNColumn(fVP.GetWindowSizeHintX());
+  theTracer->SetNRow(fVP.GetWindowSizeHintY());
+}
 
 void G4RayTracerViewer::SetView()
 {
@@ -110,14 +111,16 @@ void G4RayTracerViewer::DrawView()
 	   << fieldHalfAngle <<
       " radians."
 	   << G4endl;
-    SetView();  // Special graphics system - bypass ProcessView().
+    SetView();  // With this fieldHalfAngle
+    ProcessView();
     fVP.SetFieldHalfAngle(0.);
   }
   else {
-    SetView();  // Special graphics system - bypass ProcessView().
+    ProcessView();
   }
   std::ostringstream filename;
-  filename << "g4RayTracer." << fShortName << '_' << fFileCount++ << ".jpeg";
+  filename << "g4RayTracer." << fShortName << '_'
+  << std::setw(4) << std::setfill('0') << fFileCount++ << ".jpeg";
   theTracer->Trace(filename.str());
 
   // Reset call flag

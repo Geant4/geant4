@@ -38,7 +38,6 @@
 
 #include "G4CascadeInterface.hh"
 #include "G4ElectroVDNuclearModel.hh"
-//#include "G4ElectroNuclearReaction.hh"
 #include "G4PhotoNuclearProcess.hh"
 #include "G4ElectronNuclearProcess.hh"
 #include "G4PositronNuclearProcess.hh"
@@ -49,7 +48,7 @@
 class G4BertiniElectroNuclearBuilder 
 {
   public: 
-    G4BertiniElectroNuclearBuilder();
+    G4BertiniElectroNuclearBuilder(G4bool eNucl);
     virtual ~G4BertiniElectroNuclearBuilder();
 
   public: 
@@ -68,6 +67,7 @@ class G4BertiniElectroNuclearBuilder
     G4QGSMFragmentation * theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
     G4bool wasActivated;
+    G4bool eActivated;
 };
 
 // 2002 by J.P. Wellisch

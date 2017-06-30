@@ -26,7 +26,7 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 98257 2016-07-04 17:39:46Z gcosmo $
+// $Id: RunAction.cc 103467 2017-04-11 07:26:58Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -82,11 +81,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
-  }     
-  
-  //inform the runManager to save random number seed
-  //
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

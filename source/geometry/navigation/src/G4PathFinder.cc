@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 90009 2015-05-08 07:42:39Z gcosmo $
+// $Id: G4PathFinder.cc 103219 2017-03-22 11:30:15Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -52,7 +52,7 @@ G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
 // ----------------------------------------------------------------------------
 // GetInstance()
 //
-// Retrieve the static instance of the singleton
+// Retrieve the static instance of the singleton and create it if not existing
 //
 G4PathFinder* G4PathFinder::GetInstance()
 {
@@ -60,6 +60,16 @@ G4PathFinder* G4PathFinder::GetInstance()
    {
      fpPathFinder = new G4PathFinder; 
    }
+   return fpPathFinder;
+}
+
+// ----------------------------------------------------------------------------
+// GetInstanceIfExist()
+//
+// Retrieve the static instance pointer of the singleton
+//
+G4PathFinder* G4PathFinder::GetInstanceIfExist()
+{
    return fpPathFinder;
 }
 
@@ -115,7 +125,7 @@ G4PathFinder::G4PathFinder()
 G4PathFinder::~G4PathFinder() 
 {
    delete fpMultiNavigator;
-   if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
+   fpPathFinder = 0;
 }
 
 // ----------------------------------------------------------------------------

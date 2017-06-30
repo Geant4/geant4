@@ -433,7 +433,7 @@ void G4MTRunManager::SetUserInitialization(G4VUserDetectorConstruction *userDC)
 void G4MTRunManager::SetUserAction(G4UserRunAction* userAction)
 {
     G4RunManager::SetUserAction(userAction); 
-    userAction->SetMaster();
+    if(userAction) userAction->SetMaster();
 }
 
 void G4MTRunManager::SetUserAction(G4VUserPrimaryGeneratorAction* /*userAction*/)

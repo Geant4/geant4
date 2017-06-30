@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,6 +23,18 @@ G4GDML: Reading 'Par02FullDetector.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 Geometry loaded from  file .......Par02FullDetector.gdml 
 
+ecal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
+hcal !!!
+
 tracker !!!
 
 ecal !!!
@@ -32,18 +44,6 @@ ecal !!!
 ecal !!!
 
 ecal !!!
-
-ecal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
-
-hcal !!!
 Warning : Region <MuonEndCap_1> does not have specific production cuts,
 even though it appears in the current tracking world.
 Default cuts are used for this region.

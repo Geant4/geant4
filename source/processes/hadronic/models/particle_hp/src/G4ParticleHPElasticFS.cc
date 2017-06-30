@@ -126,9 +126,9 @@ void G4ParticleHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & di
     {
        G4int nEnergy_Legendre;
        theData >> nEnergy_Legendre; 
-       if ( nEnergy_Legendre == 0 ) {
+       if ( nEnergy_Legendre <= 0 ) {
           std::stringstream iss;
-          iss << "G4ParticleHPElasticFS::Init Data Error repFlag is 3 but nEnergy_Legendre is 0.";
+          iss << "G4ParticleHPElasticFS::Init Data Error repFlag is 3 but nEnergy_Legendre <= 0";
           iss << "Z, A and M of problematic file is " << theNDLDataZ << ", " << theNDLDataA << " and " << theNDLDataM << " respectively.";
           throw G4HadronicException(__FILE__, __LINE__, iss.str() );
        }

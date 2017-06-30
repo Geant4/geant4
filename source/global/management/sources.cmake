@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 98864 2016-08-15 11:53:26Z gcosmo $
+# $Id: sources.cmake 103592 2017-04-19 08:09:03Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4String.hh
         G4String.icc
         G4SystemOfUnits.hh
-	G4Threading.hh
+        G4Threading.hh
         G4ThreeVector.hh
         G4Timer.hh
         G4Timer.icc
@@ -92,14 +92,19 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4coutDestination.hh
         G4ios.hh
         G4strstreambuf.hh
-        G4ofstreamDestination.hh
         G4MTcoutDestination.hh
-	G4CacheDetails.hh
-	G4Cache.hh
-	G4ThreadLocalSingleton.hh
-	G4AutoDelete.hh
+        G4CacheDetails.hh
+        G4Cache.hh
+        G4ThreadLocalSingleton.hh
+        G4AutoDelete.hh
         G4TWorkspacePool.hh
-	G4MTBarrier.hh
+        G4MTBarrier.hh
+        G4coutFormatters.hh
+        G4MulticoutDestination.hh
+        G4LockcoutDestination.hh
+        G4MasterForwardcoutDestination.hh
+        G4FilecoutDestination.hh
+        G4BuffercoutDestination.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
@@ -122,7 +127,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4ReferenceCountedHandle.cc
         G4SliceTimer.cc
         G4StateManager.cc
-	G4Threading.cc
+        G4Threading.cc
         G4Timer.cc
         G4UnitsTable.cc
         G4VExceptionHandler.cc
@@ -130,10 +135,14 @@ GEANT4_DEFINE_MODULE(NAME G4globman
         G4VStateDependent.cc
         G4coutDestination.cc
         G4ios.cc
-        G4ofstreamDestination.cc
         G4MTcoutDestination.cc
-	G4CacheDetails.cc
-	G4MTBarrier.cc
+        G4CacheDetails.cc
+        G4MTBarrier.cc
+        G4coutFormatters.cc
+        G4LockcoutDestination.cc
+        G4MasterForwardcoutDestination.cc
+        G4FilecoutDestination.cc
+        G4BuffercoutDestination.cc
     GRANULAR_DEPENDENCIES
     GLOBAL_DEPENDENCIES
     LINK_LIBRARIES

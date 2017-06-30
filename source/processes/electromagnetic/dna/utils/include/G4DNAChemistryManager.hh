@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.hh 100802 2016-11-02 14:55:27Z gcosmo $
+// $Id: G4DNAChemistryManager.hh 103042 2017-03-10 11:50:07Z gcosmo $
 //
 
 // Author: Mathieu Karamitros
@@ -64,6 +64,7 @@ class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4ITGun;
+class G4VPhysChemIO;
 
 enum ElectronicModification
 {
@@ -85,7 +86,8 @@ enum ElectronicModification
  * creation of water molecules and solvated electrons.
  */
 
-class G4DNAChemistryManager : public G4UImessenger, public G4VStateDependent
+class G4DNAChemistryManager: public G4UImessenger,
+                             public G4VStateDependent
 {
 protected:
   virtual ~G4DNAChemistryManager();
@@ -119,7 +121,7 @@ public:
   void Initialize();
   inline void SetChemistryList(G4VUserChemistryList*);
   inline void Deregister(G4VUserChemistryList*);
-  void SetGlobalTemperature(double temp_K);
+  void SetGlobalTemperature(G4double temp_K);
 
   inline void ForceMasterReinitialization();
   inline void TagThreadForReinitialization();
@@ -152,10 +154,10 @@ public:
   //============================================================================
   /**
    * Method used by DNA physics model to create a water molecule.
-   * The ElectronicModification is a flag telling wheter the molecule
+   * The ElectronicModification is a flag telling whether the molecule
    * is ionized or excited, the electronic level is calculated by the
    * model and the IncomingTrack is the track responsible for the creation
-   * of this molecule, for instance an electron.
+   * of this molecule (electron, proton...).
    */
   void CreateWaterMolecule(ElectronicModification,
                            G4int /*electronicLevel*/,
@@ -179,9 +181,9 @@ public:
    */
 
   void PushMolecule(G4Molecule*& molecule,
-                    double time,
+                    G4double time,
                     const G4ThreeVector& position,
-                    int parentID);
+                    G4int parentID);
 
   /**
    * WARNING : In case chemistry is not activated, PushMoleculeAtParentTimeAndPlace
@@ -200,7 +202,7 @@ public:
     fVerbose = verbose;
   }
 
-  inline void SetBuildPhysicsTable(bool flag)
+  inline void SetBuildPhysicsTable(G4bool flag)
   {fBuildPhysicsTable = flag;}
 
   G4bool IsCounterResetWhenRunEnds() const
@@ -213,6 +215,8 @@ public:
     fResetCounterWhenRunEnds = resetCounterWhenRunEnds;
   }
 
+  void SetPhysChemIO(G4VPhysChemIO* physChemIO);
+  
 protected:
   G4DNAWaterExcitationStructure* GetExcitationLevel();
   G4DNAWaterIonisationStructure* GetIonisationLevel();
@@ -227,17 +231,22 @@ private:
   G4UIcmdWithABool* fpActivateChem;
   G4UIcmdWithoutParameter* fpRunChem;
   G4UIcmdWithoutParameter* fpSkipReactionsFromChemList;
-  //G4UIcmdWithADoubleAndUnit* fpGridSize;
+  //G4UIcmdWithADoubleAndUnit* fpGridSize; // not used in release
   G4UIcmdWithADoubleAndUnit* fpScaleForNewTemperature;
   G4UIcmdWithoutParameter* fpInitChem;
-
+  
   static G4DNAChemistryManager* fgInstance;
-//  static bool fActiveChemistry;
-  bool fActiveChemistry;
-  G4bool fFileInitialized;
-  G4bool fWriteFile;
-  static G4ThreadLocal std::ofstream* fpgOutput_tl;
-  static G4ThreadLocal G4bool* fpgThreadInitialized_tl;
+  G4bool fActiveChemistry;
+  
+  struct ThreadLocalData{
+    ThreadLocalData();
+    ~ThreadLocalData();
+    G4VPhysChemIO* fpPhysChemIO;
+    G4bool fThreadInitialized_tl;
+  };
+  
+  static G4ThreadLocal ThreadLocalData* fpThreadData;
+  
   G4bool fMasterInitialized;
   G4bool fForceThreadReinitialization;
 
@@ -254,6 +263,8 @@ private:
   G4int fVerbose;
   G4bool fResetCounterWhenRunEnds;
 };
+
+//------------------------------------------------------------------------------
 
 inline void G4DNAChemistryManager::ForceRebuildingPhysicsTable()
 {
@@ -279,13 +290,12 @@ inline void G4DNAChemistryManager::ForceMasterReinitialization()
 
 inline void G4DNAChemistryManager::ForceThreadReinitialization()
 {
-  // TODO
   fForceThreadReinitialization = true;
 }
 
 inline void G4DNAChemistryManager::TagThreadForReinitialization()
 {
-  if (fpgThreadInitialized_tl) delete fpgThreadInitialized_tl;
+  fpThreadData->fThreadInitialized_tl = false;
 }
 
 #endif // G4DNACHEMISTRYMANAGER_HH

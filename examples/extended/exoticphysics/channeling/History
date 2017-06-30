@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 05,2017 E. Bagli (channelingExample-V10-03-00)
+- Added the support to the G4Crystal package implemented in V10-03
+- Added the support to G4Channeling process implemented in V10-03-01
+
 November 02, 2016 I. Hrivnacova (channelingExample-V10-02-04)
 - Added file descriptions for Doxygen documentation
 

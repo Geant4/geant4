@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPionBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4QGSPPionBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //  devired from G4QGSPPiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -62,11 +63,13 @@ class G4QGSPPionBuilder : public G4VPionBuilder
     virtual ~G4QGSPPionBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+
+    using G4VPionBuilder::Build; //Prevent compiler warning
 
   private:
     G4VCrossSectionDataSet* thePiData;

@@ -41,22 +41,9 @@ class G4FermiFragment
 public:
 
   explicit G4FermiFragment(G4int anA, G4int aZ, G4int sp, 
-                           G4double exc, G4bool stable = true);
+                           G4double exc, G4bool stable, G4bool phys = true);
 
   ~G4FermiFragment();
-  
-  inline void 
-  FillFragment(G4FragmentVector* fv, const G4LorentzVector & aMomentum) const
-  {
-    fv->push_back(new G4Fragment(A, Z, aMomentum));
-  }
-
-  inline G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const
-  {
-    G4FragmentVector* vec = new G4FragmentVector();
-    FillFragment(vec, aMomentum);
-    return vec;
-  }
 
   inline G4int GetA(void) const 
   {
@@ -93,9 +80,14 @@ public:
     return isStable;
   }
 
+  inline G4bool IsPhysical() const
+  {
+    return isPhysical;
+  }
+
   inline G4double GetCoulombBarrier(G4int Ares, G4int Zres, G4double Eex) const
   {
-    return isStable ? cBarrier->GetCoulombBarrier(Ares, Zres, Eex)
+    return cBarrier ? cBarrier->GetCoulombBarrier(Ares, Zres, Eex)
       *cBarrier->BarrierPenetrationFactor(Eex) : 0.0;
   }
 
@@ -107,10 +99,12 @@ public:
 
 private:
 
-  G4bool isStable;
   G4int A;
   G4int Z;
   G4int spin;
+
+  G4bool isStable;
+  G4bool isPhysical;
 
   G4double excitEnergy;
   G4double fragmentMass;

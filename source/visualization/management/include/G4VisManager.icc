@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.icc 93026 2015-09-30 16:07:07Z gcosmo $
+// $Id: G4VisManager.icc 102233 2017-01-13 15:59:06Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -110,12 +110,6 @@ inline G4bool G4VisManager::GetWaitOnEventQueueFull () const {
 }
 
 #endif
-
-inline void G4VisManager::SetUserAction
-(G4VUserVisAction* pVisAction,
- const G4VisExtent& extent) {
-  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
-}
 
 inline G4SceneList& G4VisManager::SetSceneList () {
   return fSceneList;

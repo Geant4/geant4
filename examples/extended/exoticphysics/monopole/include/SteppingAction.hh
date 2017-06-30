@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/SteppingAction.hh
 /// \brief Definition of the SteppingAction class
 //
-// $Id: SteppingAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: SteppingAction.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,22 +36,18 @@
 
 #include "G4UserSteppingAction.hh"
 
-class RunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  SteppingAction(RunAction*);
+  SteppingAction();
   ~SteppingAction();
 
   virtual void UserSteppingAction(const G4Step*);
     
 private:
-
-  RunAction*  fRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

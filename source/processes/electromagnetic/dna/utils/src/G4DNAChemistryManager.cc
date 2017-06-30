@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChemistryManager.cc 100802 2016-11-02 14:55:27Z gcosmo $
+// $Id: G4DNAChemistryManager.cc 103042 2017-03-10 11:50:07Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
@@ -58,38 +58,57 @@
 #include "G4StateManager.hh"
 #include "G4MoleculeFinder.hh"
 #include "G4MoleculeTable.hh"
+#include "G4PhysChemIO.hh"
 
 using namespace std;
 
 G4DNAChemistryManager* G4DNAChemistryManager::fgInstance;
-G4ThreadLocal std::ofstream* G4DNAChemistryManager::fpgOutput_tl = 0;
-G4ThreadLocal G4bool* G4DNAChemistryManager::fpgThreadInitialized_tl = 0;
+
+G4ThreadLocal G4DNAChemistryManager::ThreadLocalData*
+  G4DNAChemistryManager::fpThreadData = 0;
+
 G4Mutex chemManExistence;
-//bool G4DNAChemistryManager::fActiveChemistry = false;
+
+//------------------------------------------------------------------------------
+
+G4DNAChemistryManager::ThreadLocalData::ThreadLocalData()
+{
+  fpPhysChemIO = nullptr;
+  fThreadInitialized_tl = false;
+}
+
+//------------------------------------------------------------------------------
+
+G4DNAChemistryManager::ThreadLocalData::~ThreadLocalData()
+{
+  if(fpPhysChemIO) delete fpPhysChemIO;
+  fThreadInitialized_tl = false;
+}
+
+//------------------------------------------------------------------------------
+
+void G4DNAChemistryManager::SetPhysChemIO(G4VPhysChemIO* physChemIO)
+{
+  if(fpThreadData->fpPhysChemIO)
+    delete fpThreadData->fpPhysChemIO;
+  fpThreadData->fpPhysChemIO = physChemIO;
+}
+
+//------------------------------------------------------------------------------
 
 G4DNAChemistryManager::G4DNAChemistryManager() :
     G4UImessenger(), G4VStateDependent()
 {
-//==============================================================================
-/* M.K: 24/11/2014
- * To work properly, the chemistry manager should be created and initialized on
- * the master thread only. If the static flag fActiveChemistry is on but the
- * chemistry manager singleton
+
+//------------------------------------------------------------------------------
+/* 
+ * The chemistry manager is shared between threads
+ * It is initialized both on the master thread and on the worker threads
  */
-//==============================================================================
-
-//  if (/*fActiveChemistry &&*/ G4Threading::IsWorkerThread()
-//      && G4Threading::IsMultithreadedApplication())
-//  {
-//    G4Exception("G4DNAChemistryManager::G4DNAChemistryManager",
-//                "G4DNAChemistryManager_MASTER_CREATION", FatalException,
-//                "The chemistry manager should be created and initialized on the "
-//                "master thread only");
-//  }
-
+//------------------------------------------------------------------------------
+  
   fpExcitationLevel = 0;
   fpIonisationLevel = 0;
-  fWriteFile = false;
   fpUserChemistryList = 0;
   fMasterInitialized = false;
   fpChemDNADirectory = new G4UIdirectory("/chem/");
@@ -106,17 +125,18 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
   fGeometryClosed = false;
   fPhysicsTableBuilt = false;
   fForceThreadReinitialization = false;
-  fFileInitialized = false;
   fVerbose = 0;
   fActiveChemistry = false;
   fSkipReactions = false;
   fResetCounterWhenRunEnds = true;
 }
 
+//------------------------------------------------------------------------------
+
 G4DNAChemistryManager*
 G4DNAChemistryManager::Instance()
 {
-  if (fgInstance == 0)
+  if(fgInstance == 0)
   {
     G4AutoLock lock(&chemManExistence);
     if (fgInstance == 0) // MT : double check at initialisation
@@ -125,14 +145,22 @@ G4DNAChemistryManager::Instance()
     }
     lock.unlock();
   }
+  
+  if(fpThreadData==0) fpThreadData = new ThreadLocalData();
+   // make sure thread local data is initialized for all threads
+  
   return fgInstance;
 }
+
+//------------------------------------------------------------------------------
 
 G4DNAChemistryManager*
 G4DNAChemistryManager::GetInstanceIfExists()
 {
   return fgInstance;
 }
+
+//------------------------------------------------------------------------------
 
 G4DNAChemistryManager::~G4DNAChemistryManager()
 {
@@ -145,6 +173,8 @@ G4DNAChemistryManager::~G4DNAChemistryManager()
    *  DeregisterDependent(this) == true);
    */
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::Clear()
 {
@@ -206,6 +236,8 @@ void G4DNAChemistryManager::Clear()
   G4VMoleculeCounter::DeleteInstance();
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::DeleteInstance()
 {
   //G4cout << "G4DNAChemistryManager::DeleteInstance" << G4endl;
@@ -226,6 +258,8 @@ void G4DNAChemistryManager::DeleteInstance()
   lock.unlock();
 }
 
+//------------------------------------------------------------------------------
+
 G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
 {
   if (requestedState == G4State_Quit)
@@ -236,7 +270,15 @@ G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
     //DeleteInstance();
     Clear();
   }
-
+//  else if(requestedState == G4State_EventProc)
+//    Note: From here we can know that a new event is started
+//          But the run and event IDs remain unknown
+//  {
+//    if(fpThreadData->fpPhysChemIO)
+//    {
+//      
+//    }
+//  }
   else if(requestedState == G4State_GeomClosed)
   {
     fGeometryClosed = true;
@@ -249,6 +291,8 @@ G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
 
   return true;
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
 {
@@ -271,7 +315,8 @@ void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
   }
   else if(command == fpScaleForNewTemperature)
   {
-    SetGlobalTemperature(fpScaleForNewTemperature->ConvertToDimensionedDouble(value));
+    SetGlobalTemperature(fpScaleForNewTemperature->
+                         ConvertToDimensionedDouble(value));
   }
   else if(command == fpInitChem)
   {
@@ -279,6 +324,8 @@ void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
     InitializeThread();
   }
 }
+
+//------------------------------------------------------------------------------
 
 G4String G4DNAChemistryManager::GetCurrentValue(G4UIcommand* command)
 {
@@ -289,6 +336,8 @@ G4String G4DNAChemistryManager::GetCurrentValue(G4UIcommand* command)
 
   return "";
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::Run()
 {
@@ -304,7 +353,7 @@ void G4DNAChemistryManager::Run()
                   description);
     }
 
-    if (fpgThreadInitialized_tl == 0)
+    if (fpThreadData->fThreadInitialized_tl == 0)
     {
       G4ExceptionDescription description;
       description << "Thread local components were not initialized.";
@@ -322,11 +371,15 @@ void G4DNAChemistryManager::Run()
   }
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
 {
   fBuildPhysicsTable = physicsTableToBuild;
   G4Scheduler::Instance()->SetGun(gun);
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::Initialize()
 {
@@ -340,7 +393,7 @@ void G4DNAChemistryManager::Initialize()
     //==========================================================================
     if(G4Threading::IsWorkerThread())
     {
-      InitializeThread(); // Will create and initialize G4ITScheduler
+      InitializeThread(); // Will create and initialize G4Scheduler
       return;
     }
     //==========================================================================
@@ -364,6 +417,8 @@ void G4DNAChemistryManager::Initialize()
 
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::InitializeMaster()
 {
   if (fMasterInitialized == false)
@@ -375,7 +430,6 @@ void G4DNAChemistryManager::InitializeMaster()
 
     G4Scheduler::Instance(); 
     // creates a concrete object of the scheduler 
-    // and track container
 
     if (fpUserChemistryList)
     {
@@ -404,9 +458,12 @@ void G4DNAChemistryManager::InitializeMaster()
   }
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::InitializeThread()
 {
-  if (fpgThreadInitialized_tl == 0 || fForceThreadReinitialization == true)
+  if (fpThreadData->fThreadInitialized_tl == false
+      || fForceThreadReinitialization == true)
   {
     if (fpUserChemistryList)
     {
@@ -447,7 +504,7 @@ void G4DNAChemistryManager::InitializeThread()
           G4DNAMolecularReactionTable::GetReactionTable());
       G4Scheduler::Instance()->Initialize();
 
-      fpgThreadInitialized_tl = new G4bool(true);
+      fpThreadData->fThreadInitialized_tl = true;
     }
     else
     {
@@ -463,54 +520,50 @@ void G4DNAChemistryManager::InitializeThread()
   InitializeFile();
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::InitializeFile()
 {
-  if (fpgOutput_tl == 0 || fWriteFile == false || fFileInitialized)
-  {
-    return;
-  }
-
   if(fVerbose)
   {
     G4cout << "G4DNAChemistryManager::InitializeFile() is called"
            << G4endl;
   }
-
-  *fpgOutput_tl << std::setprecision(6) << std::scientific;
-  *fpgOutput_tl << setw(11) << left << "#Parent ID" << setw(10) << "Molecule"
-                << setw(14) << "Elec Modif" << setw(13) << "Energy (eV)"
-                << setw(22) << "X pos of parent [nm]" << setw(22)
-                << "Y pos of parent [nm]" << setw(22) << "Z pos of parent [nm]"
-                << setw(14) << "X pos [nm]" << setw(14) << "Y pos [nm]"
-                << setw(14) << "Z pos [nm]" << G4endl<< setw(21) << "#"
-                << setw(13) << "1)io/ex=0/1"
-                << G4endl
-                << setw(21) << "#"
-                << setw(13) << "2)level=0...5"
-                << G4endl;
-
-  fFileInitialized = true;
+  
+  if(fpThreadData->fpPhysChemIO){
+    fpThreadData->fpPhysChemIO->InitializeFile();
+  }
 }
+
+//------------------------------------------------------------------------------
 
 G4bool G4DNAChemistryManager::IsActivated()
 {
   return Instance()->fActiveChemistry;
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::Activated(G4bool flag)
 {
   Instance()->fActiveChemistry = flag;
 }
+
+//------------------------------------------------------------------------------
 
 G4bool G4DNAChemistryManager::IsChemistryActivated()
 {
   return fActiveChemistry;
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::SetChemistryActivation(G4bool flag)
 {
   fActiveChemistry = flag;
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::WriteInto(const G4String& output,
                                       ios_base::openmode mode)
@@ -521,33 +574,34 @@ void G4DNAChemistryManager::WriteInto(const G4String& output,
            << output.data() << G4endl;
   }
 
-  fpgOutput_tl = new std::ofstream();
-  fpgOutput_tl->open(output.data(), mode);
-  fWriteFile = true;
-  fFileInitialized = false;
+  if(fpThreadData->fpPhysChemIO){
+    fpThreadData->fpPhysChemIO->WriteInto(output, mode);
+  }
+  else{
+    fpThreadData->fpPhysChemIO = new G4PhysChemIO::FormattedText();
+    fpThreadData->fpPhysChemIO->WriteInto(output, mode);
+  }
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::AddEmptyLineInOuputFile()
 {
-  if (fWriteFile)
-  {
-    *fpgOutput_tl << G4endl;
+  if(fpThreadData->fpPhysChemIO){
+    fpThreadData->fpPhysChemIO->AddEmptyLineInOuputFile();
   }
 }
+
+//------------------------------------------------------------------------------
 
 void G4DNAChemistryManager::CloseFile()
 {
-  if (fpgOutput_tl == 0) return;
-
-  if (fpgOutput_tl->is_open())
-  {
-    if (fVerbose)
-    {
-      G4cout << "G4DNAChemistryManager: Close File" << G4endl;
-    }
-    fpgOutput_tl->close();
+  if(fpThreadData->fpPhysChemIO){
+    fpThreadData->fpPhysChemIO->CloseFile();
   }
 }
+
+//------------------------------------------------------------------------------
 
 G4DNAWaterExcitationStructure*
 G4DNAChemistryManager::GetExcitationLevel()
@@ -559,6 +613,8 @@ G4DNAChemistryManager::GetExcitationLevel()
   return fpExcitationLevel;
 }
 
+//------------------------------------------------------------------------------
+
 G4DNAWaterIonisationStructure*
 G4DNAChemistryManager::GetIonisationLevel()
 {
@@ -569,14 +625,14 @@ G4DNAChemistryManager::GetIonisationLevel()
   return fpIonisationLevel;
 }
 
-void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modification,
-                                                G4int electronicLevel,
-                                                const G4Track* theIncomingTrack)
-{
-  if (fWriteFile)
-  {
-    if(!fFileInitialized) InitializeFile();
+//------------------------------------------------------------------------------
 
+void
+G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modification,
+                                           G4int electronicLevel,
+                                           const G4Track* theIncomingTrack)
+{
+  if(fpThreadData->fpPhysChemIO){
     G4double energy = -1.;
 
     switch (modification)
@@ -591,19 +647,11 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
         energy = GetIonisationLevel()->IonisationEnergy(electronicLevel);
         break;
     }
-
-    *fpgOutput_tl << setw(11) << left << theIncomingTrack->GetTrackID()
-                  << setw(10) << "H2O" << left << modification << internal
-                  << ":" << right << electronicLevel << left << setw(11) << ""
-                  << std::setprecision(2) << std::fixed << setw(13)
-                  << energy / eV << std::setprecision(6) << std::scientific
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().x()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().y()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().z()) / nanometer
-                  << G4endl;
+  
+    fpThreadData->fpPhysChemIO->CreateWaterMolecule(modification,
+                                      4-electronicLevel,
+                                      energy,
+                                      theIncomingTrack);
   }
 
   if(fActiveChemistry)
@@ -631,37 +679,18 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
     H2OTrack -> SetKineticEnergy(0.);
     G4VITTrackHolder::Instance()->Push(H2OTrack);
   }
-//  else
-//	abort();
 }
 
-void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTrack,
-                                                   G4ThreeVector* finalPosition)
+//------------------------------------------------------------------------------
+
+void
+G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTrack,
+                                              G4ThreeVector* finalPosition)
 // finalPosition is a pointer because this argument is optional
 {
-  if (fWriteFile)
-  {
-    if(!fFileInitialized) InitializeFile();
-
-    *fpgOutput_tl << setw(11) << theIncomingTrack->GetTrackID() << setw(10)
-                  << "e_aq" << setw(14) << -1 << std::setprecision(2)
-                  << std::fixed << setw(13)
-                  << theIncomingTrack->GetKineticEnergy() / eV
-                  << std::setprecision(6) << std::scientific << setw(22)
-                  << (theIncomingTrack->GetPosition().x()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().y()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().z()) / nanometer;
-
-    if (finalPosition != 0)
-    {
-      *fpgOutput_tl << setw(14) << (finalPosition->x()) / nanometer << setw(14)
-                    << (finalPosition->y()) / nanometer << setw(14)
-                    << (finalPosition->z()) / nanometer;
-    }
-
-    *fpgOutput_tl << G4endl;
+  if(fpThreadData->fpPhysChemIO){
+    fpThreadData->fpPhysChemIO->CreateSolvatedElectron(theIncomingTrack,
+                                         finalPosition);
   }
 
   if(fActiveChemistry)
@@ -682,24 +711,15 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
   }
 }
 
+//------------------------------------------------------------------------------
+
 void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule,
                                          double time,
                                          const G4ThreeVector& position,
                                          int parentID)
 {
-  if (fWriteFile)
-  {
-    if(!fFileInitialized) InitializeFile();
-
-    *fpgOutput_tl << setw(11) << parentID << setw(10) << molecule->GetName()
-                  << setw(14) << -1 << std::setprecision(2) << std::fixed
-                  << setw(13) << -1 << std::setprecision(6) << std::scientific
-                  << setw(22) << (position.x()) / nanometer << setw(22)
-                  << (position.y()) / nanometer << setw(22)
-                  << (position.z()) / nanometer;
-    *fpgOutput_tl << G4endl;
-  }
-
+  // TODO: PhysChemIO - method unused in the released code
+  
   if(fActiveChemistry)
   {
     G4Track* track = molecule->BuildTrack(time,position);
@@ -714,25 +734,14 @@ void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule,
   }
 }
 
-void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
-                                                             const G4Track* theIncomingTrack)
-{
-  if (fWriteFile)
-  {
-    if(!fFileInitialized) InitializeFile();
+//------------------------------------------------------------------------------
 
-    *fpgOutput_tl << setw(11) << theIncomingTrack->GetTrackID() << setw(10)
-                  << molecule->GetName() << setw(14) << -1
-                  << std::setprecision(2) << std::fixed << setw(13)
-                  << theIncomingTrack->GetKineticEnergy() / eV
-                  << std::setprecision(6) << std::scientific << setw(22)
-                  << (theIncomingTrack->GetPosition().x()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().y()) / nanometer
-                  << setw(22)
-                  << (theIncomingTrack->GetPosition().z()) / nanometer;
-    *fpgOutput_tl << G4endl;
-  }
+
+void G4DNAChemistryManager::
+PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
+                                 const G4Track* theIncomingTrack)
+{
+  // TODO: PhysChemIO - method unused in the released code
 
   if(fActiveChemistry)
   {
@@ -749,9 +758,12 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
   }
 }
 
-void G4DNAChemistryManager::SetGlobalTemperature(double temp_K)
+//------------------------------------------------------------------------------
+
+void G4DNAChemistryManager::SetGlobalTemperature(G4double temp_K)
 {
   G4MolecularConfiguration::SetGlobalTemperature(temp_K);
-  G4DNAMolecularReactionTable::Instance()->ScaleReactionRateForNewTemperature(temp_K);
+  G4DNAMolecularReactionTable::Instance()->
+    ScaleReactionRateForNewTemperature(temp_K);
 }
 

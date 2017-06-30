@@ -60,6 +60,7 @@ public:
   void SetMaterial(G4String);
 
 private:
+
   G4Material* fpWaterMaterial;
 
   void DefineMaterials();

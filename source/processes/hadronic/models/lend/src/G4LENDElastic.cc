@@ -67,12 +67,16 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
    theNeutron.SetMomentum( aTrack.Get4Momentum().vect() );
    theNeutron.SetKineticEnergy( ke );
 
-//G4cout << "iZ " << iZ << " iA " << iA  << G4endl;
+   //G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
+   //TK 170509 Fix for the case of excited isomer target 
+   G4double EE = 0.0;
+   if ( iM != 0 ) {
+      G4LENDManager::GetInstance()->GetExcitationEnergyOfExcitedIsomer( iZ , iA , iM );
+   }
+   G4ParticleDefinition* target_pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , EE );
+   G4ReactionProduct theTarget( target_pd );
 
-   G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
-   G4ReactionProduct theTarget( pd );
-
-   G4double mass = pd->GetPDGMass();
+   G4double mass = target_pd->GetPDGMass();
 
 // add Thermal motion 
    G4double kT = k_Boltzmann*temp;
@@ -138,8 +142,7 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
      theResult->SetMomentumChange(theNeutron.GetMomentum().unit());
      G4DynamicParticle* theRecoil = new G4DynamicParticle;
 
-//     theRecoil->SetDefinition( ionTable->GetIon( iZ , iA ) ); 
-       theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ, iA , iM ));
+     theRecoil->SetDefinition( target_pd );
      theRecoil->SetMomentum( theTarget.GetMomentum() );
 
      theResult->AddSecondary( theRecoil );

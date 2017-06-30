@@ -1,4 +1,4 @@
-$Id: History 100676 2016-10-31 10:45:48Z gcosmo $
+$Id: History 104832 2017-06-21 08:37:35Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,35 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20-06-17  Dennis Wright (rdecay01-V10-03-08)
+- /UserData/UserRadData_z98.a238 : fix format of file so that it is read 
+  properly by G4RadioactiveDecay
+
+10-04-17 mma  (rdecay01-V10-03-07)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+06-03-17 mma (rdecay01-V10-03-06)
+- TrackingAction.cc : simplify get meanLife
+
+27-02-17 V.Ivanchenko (rdecay01-V10-03-05)
+- PhysicsList - use time limit from G4IonTable for de-excitation module
+
+25-02-17 mma (rdecay01-V10-03-04)
+- Run.cc : print mean time life
+
+05-01-17 mma (rdecay01-V10-03-03)
+- update UserData/PhotonEvaporation-readme
+
+05-01-17 mma (rdecay01-V10-03-02)
+- update UserData, Cf238.mac, No252.mac
+
+30-12-16 mma (rdecay01-V10-03-01)
+- PhysicsList : SetStoreAllLevels(true)
+				
+14-12-16 vi, mma (rdecay01-V10-03-00)
+- PhysicsList : read new PhotonEvaporation data set
+                set AugerCascade via G4EmParameters
 
 26-10-16 mma (rdecay01-V10-02-08)
 - add neutron.mac proton.mac

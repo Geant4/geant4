@@ -1,4 +1,4 @@
-$Id: README 101036 2016-11-04 09:00:23Z gcosmo $
+$Id: README 103553 2017-04-18 09:00:54Z gcosmo $
 
     =========================================================
     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -191,7 +191,6 @@ $Id: README 101036 2016-11-04 09:00:23Z gcosmo $
    2D histograms:
    - Drift Chamber 1 X vs Y positions
    - Drift Chamber 2 X vs Y positions
-   - Total energy deposit vs time of flight  
    
    Ntuple:
    - Number of hits in Chamber 1

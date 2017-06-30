@@ -67,6 +67,8 @@ private:
   G4NeutronRadCapture & operator=(const G4NeutronRadCapture &right) = delete;
   G4NeutronRadCapture(const G4NeutronRadCapture&) = delete;
 
+  G4int icID;
+  const G4ParticleDefinition* electron;
   G4double lowestEnergyLimit;
   G4double minExcitation;
   G4VEvaporationChannel* photonEvaporation;

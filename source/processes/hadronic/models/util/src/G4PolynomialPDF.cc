@@ -51,12 +51,13 @@ G4PolynomialPDF::G4PolynomialPDF(size_t n, const G4double* coeffs,
 G4PolynomialPDF::~G4PolynomialPDF() 
 {}
 
-void G4PolynomialPDF::SetCoefficient(size_t i, G4double value)
+void G4PolynomialPDF::SetCoefficient(size_t i, G4double value, bool doSimplify)
 {
   while(i >= fCoefficients.size()) fCoefficients.push_back(0);  
   /* Loop checking, 30-Oct-2015, G.Folger */
   fCoefficients[i] = value;
   fChanged = true;
+  if(doSimplify) Simplify();
 }
 
 void G4PolynomialPDF::SetCoefficients(size_t nCoeffs, 
@@ -64,9 +65,22 @@ void G4PolynomialPDF::SetCoefficients(size_t nCoeffs,
 {
   SetNCoefficients(nCoeffs);
   for(size_t i=0; i<GetNCoefficients(); ++i) {
-    SetCoefficient(i, coefficients[i]);
+    SetCoefficient(i, coefficients[i], false);
   }
   fChanged = true;
+  Simplify();
+}
+
+void G4PolynomialPDF::Simplify()
+{
+  while(fCoefficients.size() && fCoefficients[fCoefficients.size()-1] == 0) {
+    if(fVerbose > 0) {
+      G4cout << "G4PolynomialPDF::Simplify() WARNING: had to pop coefficient "
+             << fCoefficients.size()-1 << G4endl;
+    }
+    fCoefficients.pop_back();
+    fChanged = true;
+  }
 }
 
 void G4PolynomialPDF::SetDomain(G4double x1, G4double x2) 
@@ -109,8 +123,9 @@ void G4PolynomialPDF::Normalize()
   }
 
   for(size_t i=0; i<GetNCoefficients(); ++i) {
-    SetCoefficient(i, GetCoefficient(i)/sum);
+    SetCoefficient(i, GetCoefficient(i)/sum, false);
   }
+  Simplify();
 }
 
 G4double G4PolynomialPDF::Evaluate(G4double x, G4int ddxPower)
@@ -167,7 +182,7 @@ G4bool G4PolynomialPDF::HasNegativeMinimum(G4double x1, G4double x2)
   // If linear, or if quadratic with negative second derivative, 
   // just check the endpoints
   if(GetNCoefficients() == 2 || 
-     (GetNCoefficients() == 3 && GetCoefficient(2) < 0)) {
+     (GetNCoefficients() == 3 && GetCoefficient(2) <= 0)) {
     return (Evaluate(x1) < -fTolerance) || (Evaluate(x2) < -fTolerance);
   }
 
@@ -254,7 +269,14 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
      (ddxPower ==  0 && GetNCoefficients() == 2) ||
      (ddxPower ==  1 && GetNCoefficients() == 3)) {
     G4double b = (ddxPower > -1) ? GetCoefficient(ddxPower) : -GetCoefficient(0)*fX1;
-    G4double slope = GetCoefficient(ddxPower+1);
+    G4double slope = GetCoefficient(ddxPower+1); // the highest-order coefficient
+    if(slope == 0) { // the highest-order coefficient should never be zero if simplified
+      if(fVerbose > 0) {
+        G4cout << "G4PolynomialPDF::GetX() WARNING: Got slope = 0. "
+               << "Did you forget to Simplify()?" << G4endl;
+      }
+      return x2;
+    }
     if(ddxPower == 1) slope *= 2.;
     G4double value = (p-b)/slope;
     if(value < x1) {
@@ -276,7 +298,14 @@ G4double G4PolynomialPDF::GetX(G4double p, G4double x1, G4double x2,
     if(ddxPower == -1) c -= (GetCoefficient(0) + GetCoefficient(1)/2.*fX1)*fX1;
     G4double b = GetCoefficient(ddxPower+1);
     if(ddxPower == 1) b *= 2.;
-    G4double a = GetCoefficient(ddxPower+2);
+    G4double a = GetCoefficient(ddxPower+2); // the highest-order coefficient
+    if(a == 0) { // the highest-order coefficient should never be 0 if simplified
+      if(fVerbose > 0) {
+        G4cout << "G4PolynomialPDF::GetX() WARNING: Got a = 0. "
+               << "Did you forget to Simplify()?" << G4endl;
+      }
+      return x2;
+    }
     if(ddxPower == 1) a *= 3;
     else if(ddxPower == -1) a *= 0.5;
     double sqrtFactor = b*b - 4.*a*c;

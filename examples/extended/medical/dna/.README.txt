@@ -5,7 +5,7 @@
 
 /*! \page Examples_dna  Category "dna"
 
-This directory contains a set of dna examples.
+This directory contains a set of Geant4-DNA examples.
 
 \section dna_s0 Physics
    - \link ExampleDnaphysics dnaphysics \endlink  
@@ -23,6 +23,9 @@ are used in a Target volume, declared as a Region.
    - \link Examplerange  range \endlink  
    Simulation of ranges.
 
+   - \link Examplespower  spower \endlink  
+   Simulation of stopping power.
+
    - \link Examplesvalue svalue \endlink
    This example shows how to simulate S-values in spheres of liquid water
    using the Geant4-DNA physics processes and models.
@@ -31,6 +34,9 @@ are used in a Target volume, declared as a Region.
    This example shows how to simulate W-values in liquid water
    using the Geant4-DNA physics processes and models.
 
+   - \link Exampleslowing  slowing \endlink  
+   Simulation of slowing down spectra.
+
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
@@ -38,8 +44,9 @@ are used in a Target volume, declared as a Region.
    - \link ExampleChem4  chem4 \endlink   Simulation of radiochemical yields with the chemistry module.
 
 \section dna_s2 Geometry and other   
-   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink   Geometrical description of a full simplified cell nucleus.
    - \link ExamplePdb4dna  pdb4dna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries.
+   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink   Geometrical description of a full simplified cell nucleus.
+   - \link ExampleNeuron  neuron \endlink   Irradiation of a realistic neuron cell.
    - \link Exampleclustering  clustering \endlink   Clustering application for direct damage extraction  
 
 

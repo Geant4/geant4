@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
 //
-// $Id: PrimaryGeneratorAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,7 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* det)
-  :G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det)
+  :G4VUserPrimaryGeneratorAction(),fParticleGun(0),fDetector(det),
+   bPrimPositionDefined(false)
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleEnergy(100 * GeV);
@@ -60,10 +61,12 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-  if(0 == anEvent->GetEventID()) {
+  if(0 == anEvent->GetEventID() || !bPrimPositionDefined) {
     G4double x0 = -0.5*(fDetector->GetWorldSizeX()) + 1*um;
     fParticleGun->SetParticlePosition(G4ThreeVector(x0,0.0,0.0));
+    bPrimPositionDefined = true;
   }  
+
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

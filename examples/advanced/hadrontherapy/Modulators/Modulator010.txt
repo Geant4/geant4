@@ -1,0 +1,14 @@
+NumberOfStep   12
+#    Thickness Relative_Weight
+Step1	0	.28215
+Step2	0.84	.06864
+Step3	1.68	.09704
+Step4	2.52	.05974
+Step5	3.36	.07385
+Step6	4.2	.05965
+Step7	5.04	.06518
+Step8	5.88	.05708
+Step9	6.72	.06055
+Step10	7.56	.05762
+Step11	8.4	.05942
+Step12	9.24	.05908

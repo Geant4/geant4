@@ -4,26 +4,24 @@
 /control/verbose 2
 /run/verbose 2
 #
-#/testem/det/setAbsMat Gold     
 /testem/det/setAbsMat G4_Au
 /testem/det/setAbsThick 50 um
 /testem/det/setAbsYZ    50 um
 #
-#/testem/phys/addPhysics local
-#/testem/phys/addPhysics emstandard_opt0
 /testem/phys/addPhysics emlivermore
 #/testem/phys/addPhysics empenelope
-###/testem/phys/addPhysics emstandard_opt3
+#
 /run/setCut 0.01 mm
 /run/setCutForAGivenParticle gamma 0.5 um
-#
-/run/initialize
 #
 /process/em/deexcitationIgnoreCut true
 #/process/em/deexcitation world true false true
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
+/process/em/augerCascade true
+#
+/run/initialize
 #
 /testem/gun/setDefault
 /gun/particle e-

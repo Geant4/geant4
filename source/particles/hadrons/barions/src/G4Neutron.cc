@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Neutron.cc 83749 2014-09-12 12:14:59Z gcosmo $
+// $Id: G4Neutron.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -73,11 +73,11 @@ G4Neutron* G4Neutron::Definition()
   // static const double  neutron_mass_c2 = 939.56563 * MeV;
 
     anInstance = new G4Ions(
-                 name, neutron_mass_c2, 7.477e-28*GeV,         0.0, 
+                 name, neutron_mass_c2, 7.478e-28*GeV,         0.0, 
 		    1,              +1,             0,          
 		    1,              -1,             0,             
 	     "baryon",               0,            +1,        2112,
-		false,    880.3*second,          NULL,
+		false,    880.2*second,          NULL,
 		false,       "nucleon",         -2112,
 		 0.0,                0 
               );

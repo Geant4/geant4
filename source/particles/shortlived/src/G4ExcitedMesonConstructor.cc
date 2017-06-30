@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc 95951 2016-03-03 10:44:16Z gcosmo $
+// $Id: G4ExcitedMesonConstructor.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -1431,7 +1431,7 @@ const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMulti
 {
   {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.272*GeV },
   {   1.474*GeV, 1.350*GeV,       0.0, 1.430*GeV,  1.430*GeV },
-  {   1.230*GeV,1.2819*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
+  {   1.230*GeV, 1.282*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
   {  1.3183*GeV,1.2755*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
   {  1.6722*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
   {   1.720*GeV, 1.670*GeV,       0.0, 1.717*GeV,  1.717*GeV },
@@ -1455,7 +1455,7 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
 {
   {  142.0*MeV, 360.0*MeV,  91.0*MeV,  90.0*MeV,  90.0*MeV },
   {  265.0*MeV, 350.0*MeV,       0.0, 270.0*MeV, 270.0*MeV },
-  {  420.0*MeV,  24.2*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
+  {  420.0*MeV,  24.1*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
   {  107.0*MeV, 186.7*MeV,  73.0*MeV,  98.5*MeV,  98.5*MeV },
   {  260.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
   {  250.0*MeV, 315.0*MeV,       0.0, 320.0*MeV, 320.0*MeV },

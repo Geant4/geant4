@@ -91,8 +91,9 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
 #include "G4MTRunManager.hh"
 
 G4WorkerRunManager::~G4WorkerRunManager() {
-    // Delete thread-local process manager objects
-    physicsList->RemoveProcessManager();
+    // Delete thread-local data process manager objects
+    physicsList->TerminateWorker();
+//    physicsList->RemoveProcessManager();
 
     //Put these pointers to zero: owned by master thread
     //If not to zero, the base class destructor will attempt to
@@ -539,7 +540,7 @@ void G4WorkerRunManager::SetUserInitialization(G4VUserPhysicsList* pl)
 void G4WorkerRunManager::SetUserAction(G4UserRunAction* userAction)
 {
     G4RunManager::SetUserAction(userAction);
-    userAction->SetMaster(false);
+    if(userAction) userAction->SetMaster(false);
 }
 
 void G4WorkerRunManager::SetupDefaultRNGEngine()

@@ -24,17 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.hh 82279 2014-06-13 14:44:00Z gcosmo $
+// $Id: G4coutDestination.hh 103661 2017-04-20 14:57:11Z gcosmo $
 //
 // 
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 // GEANT 4 class header file
 //
 // G4coutDestination.hh
 //
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 #ifndef G4COUTDESTINATION_HH
 #define G4COUTDESTINATION_HH
+
+#include <functional>
+#include <vector>
+#include <algorithm>
+#include <iostream>
 
 #include "globals.hh"
 
@@ -42,17 +47,55 @@ class G4coutDestination
 {
   public:
 
-    G4coutDestination();
+    G4coutDestination() = default;
     virtual ~G4coutDestination();
+    // Note: limitation on ICC for MIC cannot use 'default';
 
-    virtual G4int ReceiveG4cout(const G4String&);
-    virtual G4int ReceiveG4cerr(const G4String&);
-protected:
-    //For MT: if master G4coutDestination derived
-    //class wants to intercept the thread outputs
-    //derived class should set this pointer.
-    //Needed for some G4UIsession like GUIs
+    // The type of the functions defining a transformation of the message.
+    // The function manipulates the input message, for example, to add a prefix:
+    //    G4coutDestination::AddCoutTransformer(
+    //       [](G4String& msg) -> G4bool { msg="PREFIX "+msg; return true; }
+    //    );
+    // Function should return false if message should not be processed
+    // anymore and discarded
+    //
+    using Transformer=std::function<G4bool(G4String&)>;
+    void AddCoutTransformer(const Transformer& t)
+      { transformersCout.push_back(t); }
+    void AddCoutTransformer( Transformer&& t)
+      { transformersCout.push_back(t); }
+    void AddCerrTransformer(const Transformer& t)
+      { transformersCerr.push_back(t); }
+    void AddCerrTransformer( Transformer&& t)
+      { transformersCerr.push_back(t); }
+    virtual void ResetTransformers();
+
+    // Derived class implements here handling of message.
+    // For example, streaming on std::cout or file.
+    // Return 0 for success, -1 otherwise
+    //
+    virtual G4int ReceiveG4cout(const G4String& msg);
+    virtual G4int ReceiveG4cerr(const G4String& msg);
+
+    // Methods called by G4strbuf when need to handle a message
+    //
+    G4int ReceiveG4cout_(const G4String& msg);
+
+    // Transformers cannot remove an error message from stream
+    //
+    G4int ReceiveG4cerr_(const G4String& msg);
+
+  protected:
+
+    // For MT: if master G4coutDestination derived
+    // class wants to intercept the thread outputs
+    // derived class should set this pointer.
+    // Needed for some G4UIsession like GUIs
+    //
     static G4coutDestination* masterG4coutDestination;
+
+    std::vector<Transformer> transformersCout;
+    std::vector<Transformer> transformersCerr;
 };
 
 #endif

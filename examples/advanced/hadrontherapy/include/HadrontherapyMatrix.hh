@@ -32,12 +32,54 @@
 #include "globals.hh"
 #include <vector>
 #include <fstream>
+#include "g4csv.hh"
+
+
+#ifndef HADRONTHERAPYANALYSISMANAGER_HH
+#define HADRONTHERAPYANALYSISMANAGER_HH 1
+
+class HadrontherapyAnalysisFileMessenger;
+
+/**
+ * A class for connecting the simulation to an analysis package.
+ */
+class HadrontherapyAnalysisManager
+{
+private:
+    /**
+     * Analysis manager is a singleton object (there is only one instance).
+     * The pointer to this object is available through the use of the method GetInstance();
+     *
+     * @see GetInstance
+     */
+    HadrontherapyAnalysisManager();
+    
+    
+    
+public:
+    ~HadrontherapyAnalysisManager();
+    
+    /**
+     * Get the pointer to the analysis manager.
+     */
+    static HadrontherapyAnalysisManager* GetInstance();
+    
+    
+    
+    static HadrontherapyAnalysisManager* instance;
+    HadrontherapyAnalysisFileMessenger* fMess;
+    
+};
+
+#endif
 
 // The information: energy deposit and position in the phantom
 // is stored in a matrix
 
 // type struct useful to store nucludes data
-struct ion 
+
+
+struct ion
 { 
   G4bool isPrimary;   // true if particle is primary
   G4int PDGencoding;  // Particle data group id for the particle
@@ -71,6 +113,9 @@ public:
 
   static G4bool secondary;
   // Full list of generated nuclides
+    
+    
+    
   void PrintNuclides(); 
   // Hit array marker (useful to avoid multiple counts of fluence)
   void ClearHitTrack();
@@ -92,7 +137,7 @@ public:
   
   // Store the information of the matrix in a ntuple and in 
   // a 1D Histogram
-  void TotalEnergyDeposit();
+  //void TotalEnergyDeposit();
    
   // Store single matrix data to filename 
   void StoreMatrix(G4String file, void* data,size_t psize);
@@ -103,11 +148,9 @@ public:
 
   // Store all data (except the total dose) to ONE filename
   void StoreDoseFluenceAscii(G4String filename = "");
+  
 
-#ifdef G4ANALYSIS_USE_ROOT
-  void StoreDoseFluenceRoot();
-#endif
-
+    
   inline G4int Index(G4int i, G4int j, G4int k) { return (i * numberOfVoxelAlongY + j) * numberOfVoxelAlongZ + k; } 
   // Get a unique index from  a three dimensional one 
 

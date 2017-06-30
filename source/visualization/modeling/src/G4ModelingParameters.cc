@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 101035 2016-11-04 08:48:17Z gcosmo $
+// $Id: G4ModelingParameters.cc 103627 2017-04-19 13:30:26Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -249,14 +249,6 @@ G4bool G4ModelingParameters::operator !=
   return false;
 }
 
-G4bool G4ModelingParameters::PVNameCopyNo::operator!=
-(const G4ModelingParameters::PVNameCopyNo& rhs) const
-{
-  if (fName != rhs.fName) return true;
-  if (fCopyNo != rhs.fCopyNo) return true;
-  return false;
-}
-
 G4bool G4ModelingParameters::VisAttributesModifier::operator!=
 (const G4ModelingParameters::VisAttributesModifier& rhs) const
 {
@@ -310,6 +302,14 @@ G4bool G4ModelingParameters::VisAttributesModifier::operator!=
   return false;
 }
 
+G4bool G4ModelingParameters::PVNameCopyNo::operator!=
+(const G4ModelingParameters::PVNameCopyNo& rhs) const
+{
+  if (fName != rhs.fName) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath& path)
 {
@@ -320,6 +320,33 @@ std::ostream& operator <<
       os << ',';
     }
     os << i->GetName() << ':' << i->GetCopyNo();
+  }
+  return os;
+}
+
+const G4String& G4ModelingParameters::PVPointerCopyNo::GetName() const
+{
+  return fpPV->GetName();
+}
+
+G4bool G4ModelingParameters::PVPointerCopyNo::operator!=
+(const G4ModelingParameters::PVPointerCopyNo& rhs) const
+{
+  if (fpPV != rhs.fpPV) return true;
+  if (fCopyNo != rhs.fCopyNo) return true;
+  return false;
+}
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVPointerCopyNoPath& path)
+{
+  os << "Touchable path: physical-volume-pointer:copy-number pairs:\n  ";
+  G4ModelingParameters::PVPointerCopyNoPathConstIterator i;
+  for (i = path.begin(); i != path.end(); ++i) {
+    if (i != path.begin()) {
+      os << ',';
+    }
+    os << '(' << (void*)(i->GetPVPointer()) << ')' << i->GetName() << ':' << i->GetCopyNo();
   }
   return os;
 }

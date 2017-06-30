@@ -27,7 +27,7 @@
 /// \brief Implementation of the F02ElectricFieldSetup class
 //
 //
-// $Id: F02ElectricFieldSetup.cc 77123 2013-11-21 16:13:28Z gcosmo $
+// $Id: F02ElectricFieldSetup.cc 104352 2017-05-26 07:23:36Z gcosmo $
 //
 //   User Field class implementation.
 //
@@ -69,7 +69,8 @@
 //  Constructors:
 
 F02ElectricFieldSetup::F02ElectricFieldSetup()
- : fFieldManager(0),
+ : fMinStep(0.010*mm),  // minimal step of 10 microns
+   fFieldManager(0),
    fChordFinder(0),
    fEquation(0),
    fEMfield(0),
@@ -77,21 +78,23 @@ F02ElectricFieldSetup::F02ElectricFieldSetup()
    fStepper(0),
    fIntgrDriver(0),
    fStepperType(4),    // ClassicalRK4 -- the default stepper
-   fMinStep(0.010*mm)  // minimal step of 10 microns
+   fFieldMessenger(nullptr)   
 {
   fEMfield = new G4UniformElectricField(
                    G4ThreeVector(0.0,100000.0*kilovolt/cm,0.0));
   fEquation = new G4EqMagElectricField(fEMfield);
 
   fFieldManager = GetGlobalFieldManager();
+
+  UpdateIntegrator();
   fFieldMessenger = new F02FieldMessenger(this);
-  UpdateField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02ElectricFieldSetup::F02ElectricFieldSetup(G4ThreeVector fieldVector)
-  : fFieldManager(0),
+  : fMinStep(0.010*mm),  // minimal step of 10 microns
+    fFieldManager(0),
     fChordFinder(0),
     fEquation(0),
     fEMfield(0),
@@ -99,43 +102,66 @@ F02ElectricFieldSetup::F02ElectricFieldSetup(G4ThreeVector fieldVector)
     fStepper(0),
     fIntgrDriver(0),
     fStepperType(4),    // ClassicalRK4 -- the default stepper
-    fMinStep(0.010*mm)  // minimal step of 10 microns
+    fFieldMessenger(nullptr)
 {
   fEMfield = new G4UniformElectricField(fieldVector);
   fEquation = new G4EqMagElectricField(fEMfield);
 
   fFieldManager = GetGlobalFieldManager();
+  UpdateIntegrator();
+  
   fFieldMessenger = new F02FieldMessenger(this);
-
-  UpdateField();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02ElectricFieldSetup::~F02ElectricFieldSetup()
 {
-  delete fChordFinder;
-  delete fStepper;
-  delete fEquation;
-  delete fEMfield;
-  delete fFieldMessenger;
+  G4cout << " F02ElectricFieldSetup - dtor called. " << G4endl;
+
+  delete fFieldMessenger; fFieldMessenger= nullptr;
+   // Delete the messenger first, to avoid messages to deleted classes!
+  
+  delete fChordFinder;  fChordFinder= nullptr;
+  delete fStepper;      fStepper = nullptr;
+  delete fEquation;     fEquation = nullptr;
+  delete fEMfield;      fEMfield = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02ElectricFieldSetup::UpdateField()
+void F02ElectricFieldSetup::UpdateIntegrator()
 {
-// Register this field to 'global' Field Manager and
-// Create Stepper and Chord Finder with predefined type, minstep (resp.)
+  // Register this field to 'global' Field Manager and
+  // Create Stepper and Chord Finder with predefined type, minstep (resp.)
 
-  SetStepper();
+  // It must be possible to call 'again' after an alternative stepper
+  //   has been chosen, or other changes have been made
+  assert(fEquation!=nullptr);
 
-  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
+  G4cout<< " F02ElectricFieldSetup: The minimal step is equal to "
+        << fMinStep/mm << " mm" << G4endl;
 
-  fFieldManager->SetDetectorField(fEMfield);
+  if (fChordFinder) {
+     delete fChordFinder;
+     fChordFinder= nullptr;
+     // The chord-finder's destructor deletes the driver
+     fIntgrDriver= nullptr;
+  }
+  
+  // Currently driver does not 'own' stepper      ( 17.05.2017 J.A. )
+  //   -- so this stepper is still a valid object after this
 
-  if (fChordFinder) delete fChordFinder;
-
+  if( fStepper ) {
+     delete fStepper;
+     fStepper = nullptr;
+  }
+  
+  // Create the new objects, in turn for all relevant classes
+  //  -- Careful to call this after all old objects are destroyed, and
+  //      pointers nullified.
+  CreateStepper();  // Note that this method deleted the existing Stepper!
+  
   fIntgrDriver = new G4MagInt_Driver(fMinStep,
                                      fStepper,
                                      fStepper->GetNumberOfVariables());
@@ -143,17 +169,19 @@ void F02ElectricFieldSetup::UpdateField()
   fChordFinder = new G4ChordFinder(fIntgrDriver);
 
   fFieldManager->SetChordFinder(fChordFinder);
+  fFieldManager->SetDetectorField(fEMfield);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F02ElectricFieldSetup::SetStepper()
+void F02ElectricFieldSetup::CreateStepper()
 {
-// Set stepper according to the stepper type
+  // Deletes the existing stepper
+  //   and creates a new stepper object of the chosen stepper type
 
-  G4int nvar = 8;
+  const G4int nvar = 8;
 
-  if (fStepper) delete fStepper;
+  auto oldStepper= fStepper;
 
   switch ( fStepperType )
   {
@@ -200,6 +228,15 @@ void F02ElectricFieldSetup::SetStepper()
       break;
     default: fStepper = 0;
   }
+
+  delete oldStepper;
+  // Now must make sure it is 'stripped' from the dependent object(s)
+  //  ... but the next line does this anyway - by informing
+  //      the driver (if it exists) about the new stepper.
+
+  // Always inform the (existing) driver about the new stepper
+  if( fIntgrDriver )
+      fIntgrDriver->RenewStepperAndAdjust( fStepper );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

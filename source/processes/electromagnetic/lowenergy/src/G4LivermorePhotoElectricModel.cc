@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 94854 2015-12-11 13:54:09Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 104801 2017-06-19 07:10:39Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -63,7 +63,7 @@ using namespace std;
 
 G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
     const G4String& nam)
-  : G4VEmModel(nam),fParticleChange(nullptr),maxZ(99),
+  : G4VEmModel(nam),fParticleChange(nullptr),maxZ(98),
     nShellLimit(100),fDeexcitationActive(false),isInitialised(false),
     fAtomDeexcitation(nullptr)
 { 
@@ -98,13 +98,14 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {  
   if(IsMaster()) {
     delete fShellCrossSection;
-    for(G4int i=0; i<maxZ; ++i) { 
+    fShellCrossSection = nullptr;
+    for(G4int i=0; i<=maxZ; ++i) { 
       delete fParam[i];
-      fParam[i] = 0;
+      fParam[i] = nullptr;
       delete fCrossSection[i];
-      fCrossSection[i] = 0;
+      fCrossSection[i] = nullptr;
       delete fCrossSectionLE[i];
-      fCrossSectionLE[i] = 0;
+      fCrossSectionLE[i] = nullptr;
     }
   }
 }
@@ -142,9 +143,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
       G4int nelm = material->GetNumberOfElements();
     
       for (G4int j=0; j<nelm; ++j) {        
-	G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-	if(Z < 1)          { Z = 1; }
-	else if(Z > maxZ)  { Z = maxZ; }
+	G4int Z = std::min((*theElementVector)[j]->GetZasInt(), maxZ);
 	if(!fCrossSection[Z]) { ReadData(Z, path); }
       }
     }
@@ -213,8 +212,8 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
 	   << " Z= " << ZZ << "  R(keV)= " << energy/keV << G4endl;
   }
   G4double cs = 0.0;
-  G4int Z = G4lrint(ZZ);
-  if(Z < 1 || Z >= maxZ) { return cs; }
+  G4int Z = std::min(G4lrint(ZZ), maxZ);
+  if(Z < 1) { return cs; }
 
   // if element was not initialised
   // do initialisation safely for MT mode
@@ -224,7 +223,7 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
   }
 
   G4int idx = fNShells[Z]*6 - 4;
-  if (energy < (*(fParam[Z]))[idx-1]) { energy = (*(fParam[Z]))[idx-1]; }
+  energy = std::max(energy, (*(fParam[Z]))[idx-1]);
   
   G4double x1 = 1.0/energy;
   G4double x2 = x1*x1;
@@ -287,13 +286,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   // Select randomly one element in the current material
   //G4cout << "Select random atom Egamma(keV)= " << gammaEnergy/keV << G4endl;
   const G4Element* elm = SelectRandomAtom(material, theGamma, gammaEnergy);
-  G4int Z = G4lrint(elm->GetZ());
-
-  // Select the ionised shell in the current atom according to shell 
-  //   cross sections
-  // G4cout << "Select random shell Z= " << Z << G4endl;
-
-  if(Z >= maxZ) { Z = maxZ-1; }
+  G4int Z = std::min(elm->GetZasInt(), maxZ);
 
   // element was not initialised gamma should be absorbed
   if(!fCrossSection[Z]) {
@@ -358,7 +351,7 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   //       << " Ebind(keV)= " << bindingEnergy/keV 
   //       << " Egamma(keV)= " << gammaEnergy/keV << G4endl;
 
-  const G4AtomicShell* shell = 0;
+  const G4AtomicShell* shell = nullptr;
 
   // no de-excitation from the last shell
   if(fDeexcitationActive && shellIdx + 1 < nn) {

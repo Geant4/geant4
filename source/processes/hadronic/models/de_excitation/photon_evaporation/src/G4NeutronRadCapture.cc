@@ -45,6 +45,7 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
+#include "G4Electron.hh"
 #include "G4Deuteron.hh"
 #include "G4Triton.hh"
 #include "G4He3.hh"
@@ -58,6 +59,9 @@ G4NeutronRadCapture::G4NeutronRadCapture()
   minExcitation = 0.1*CLHEP::keV;
   SetMinEnergy( 0.0*CLHEP::GeV );
   SetMaxEnergy( 100.*CLHEP::TeV );
+
+  electron = G4Electron::Electron();
+  icID = -1;
 
   theTableOfIons = G4ParticleTable::GetParticleTable()->GetIonTable();
 }
@@ -73,6 +77,7 @@ void G4NeutronRadCapture::InitialiseModel()
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters();
   minExcitation = param->GetMinExcitation();
+  icID = param->GetInternalConversionID();
 
   photonEvaporation = new G4PhotonEvaporation();
   photonEvaporation->Initialise();
@@ -180,7 +185,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
     size_t n = fv->size();
 
     if (verboseLevel > 1) {
-      G4cout << "G4NeutronRadCapture: " << n << " final particle" << G4endl;
+      G4cout << "G4NeutronRadCapture: " << n << " final particle icID= " << icID << G4endl;
     }
     for(size_t i=0; i<n; ++i) {
 
@@ -220,6 +225,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       G4double timeF = f->GetCreationTime();
       if(timeF < 0.0) { timeF = 0.0; }
       news->SetTime(time + timeF);
+      if(theDef == electron) { news->SetCreatorModelType(icID); }
       theParticleChange.AddSecondary(*news);
       delete news;
       delete f;

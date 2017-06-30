@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownParticle.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4UnknownParticle.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4UnknownParticle*  G4UnknownParticle::Definition()
 		    0,               0,             0,          
 		    0,               0,             0,             
 	   "geantino",               0,             0,           0,
-		 true,             0.0,          NULL,
+		 true,            -1.0,          NULL,
 		false,      "geantino",            0
 		);
   }

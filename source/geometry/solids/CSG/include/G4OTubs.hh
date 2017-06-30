@@ -88,7 +88,7 @@ class G4OTubs : public G4CSGSolid
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

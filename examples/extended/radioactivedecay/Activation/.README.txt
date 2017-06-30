@@ -1,0 +1,181 @@
+
+//$Id$
+
+///\file "radioactivedecay/Activation/.README.txt"
+///\brief Example Activation README page
+
+/*! \page ExampleActivation Example Activation
+
+   Survey energy deposition and particle's flux from a hadronic cascade.
+   Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
+   Plot evolution of each species as a function of time.
+   Plot activity of emerging particles.
+
+\section Activation_s1 MATERIALS AND GEOMETRY DEFINITION
+
+ The "absorber" is a box made of a given material.                
+
+ Three parameters define the absorber :
+ - the material of the absorber
+ - the thickness of an absorber
+ - the transverse size of the absorber (the input face is a square)
+
+ The volume "World" contains the "absorber". 
+
+ A function, and its associated UI command, allows to build a material
+ directly from a single isotope.
+
+ To be identified by the ThermalScattering module, the elements composing a
+ material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
+ Examples of such materials are build in DetectorConstruction::DefineMaterials().
+
+\section Activation_s2 PHYSICS LIST
+
+  The physics list contains a "full" set of physics processes. It is defined in 
+  the PhysicsList class as a Geant4 modular physics list with registered physics 
+  constructors (builders).
+
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic , HadronInelastic, IonsInelastic, GammaNuclear,
+  RadioactiveDecay and Electomagnetic.
+  (see geant4/source/physics_lists/constructors)
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+  
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
+  This is enough when spatial distribution of deposited energy do not need
+  to be accurate (see param->SetStepFunction(1., 1*mm)).
+
+  Several hadronic physics options are controlled by environment variables.
+  To trigger them, the envHadronic.csh script has been added in this example.
+  One must select the options wished, and do
+\verbatim   
+source envHadronic.csh  (or sh)
+\endverbatim	 
+ 	 
+\section Activation_s3 AN EVENT : THE PRIMARY GENERATOR
+ 
+  The primary kinematic is a single particle which hits the absorber 
+  perpendicular to the input face. The type of particle and its energy are 
+  set in the PrimaryGeneratorAction class, and can be changed via the G4 
+  build-in commands of G4ParticleGun class 
+  (see the macros provided with this example).
+
+  One can control the transverse size of the beam.
+  The command
+\verbatim
+/testhadr/gun/beamSize
+\endverbatim
+ is built in PrimaryGeneratorMessenger class.
+
+  The time of exposure in the beam may be finite. It is controled by the command
+\verbatim
+/testhadr/gun/beamTime.
+\endverbatim
+  Then the time zero of each event is randomly chosen within this interval.
+
+\section Activation_s4 PHYSICS
+
+   The program computes and plots energy deposited in the interaction volume
+   (absorber), energy spectrum and activity of particles leaving the absorber,
+   and evolution of population of species within the absorber (see below : histograms).
+   Processes invoked and particles generated during interactions are listed.
+
+\section Activation_s5 HISTOGRAMS
+
+   The test contains 43 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+\verbatim
+/analysis/h1/set id nbBins  valMin valMax unit
+\endverbatim
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+   
+            1     "total energy deposit"
+            2     "Edep (MeV/mm) profile along beam direction"		  
+            3     "total kinetic energy emerging"
+            4     "energy spectrum of emerging gamma"
+            5     "energy spectrum of emerging e+-"
+            6     "energy spectrum of emerging neutrons"
+            7     "energy spectrum of emerging protons"
+            8     "energy spectrum of emerging deuterons"
+            9     "energy spectrum of emerging alphas"
+            10    "energy spectrum of all others emerging ions"
+            11    "energy spectrum of all others emerging baryons"
+            12    "energy spectrum of all others emerging mesons"
+            13    "energy spectrum of all others emerging leptons (neutrinos)" 
+            14    "dN/dt (becquerel) of emerging gamma"
+            15    "dN/dt (becquerel) of emerging e+-"
+            16    "dN/dt (becquerel) of emerging neutrons"
+            17    "dN/dt (becquerel) of emerging protons"
+            18    "dN/dt (becquerel) of emerging deuterons"
+            19    "dN/dt (becquerel) of emerging alphas"
+            20    "dN/dt (becquerel) of all others emerging ions"
+            21    "dN/dt (becquerel) of all others emerging baryons"
+            22    "dN/dt (becquerel) of all others emerging mesons"
+            23    "dN/dt (becquerel) of all others emerging leptons (neutrinos)"
+
+   Histograms 24 to 43 are assigned to population of species.
+   A species is an ion of a given excitation energy, with mean life > 0.
+   In other words, 2 different excited states are 2 different species.
+   
+   The type and number of species created in a run cannot be predicted in advance.
+   Therefore the assignation : species <--> histo_Id is done dynamically 
+   and printed at end of run.
+   Activation and binning control of histograms is done with the usual command
+\verbatim
+/analysis/h1/set 
+\endverbatim
+
+   One can control the name of the histograms file with the command:
+\verbatim
+/analysis/setFileName  name  (default Activation)
+\endverbatim
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+\verbatim
+/analysis/h1/setAscii id
+\endverbatim
+   All selected histos will be written on a file name.ascii (default Activation)
+ 	 				
+\section Activation_s6 VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+\verbatim
+> /control/execute vis.mac
+\endverbatim
+ 	
+   The tracks are drawn at the end of event, and erased at the end of run.   
+   gamma green   
+   neutron yellow
+   negative particles (e-, ...) red
+   positive particles (e+, ions, ...) blue
+ 	
+\section Activation_s7 HOW TO START ?
+ 
+   Execute Activation in 'batch' mode from macro files :
+\verbatim
+% Activation   run1.mac
+\endverbatim
+ 		
+   Execute Activation in 'interactive mode' with visualization :
+\verbatim
+% Activation
+Idle> control/execute vis.mac
+....
+Idle> type your commands
+....
+Idle> exit
+\endverbatim
+
+*/

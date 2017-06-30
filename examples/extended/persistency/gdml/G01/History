@@ -1,4 +1,4 @@
-$Id: History 98062 2016-07-01 16:26:46Z gcosmo $
+$Id: History 103272 2017-03-23 13:47:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 23rd, 2017 Gabriele Cosmo G01-V10-03-01
+- Updated setup for visualization in main program.
+
+March 23rd, 2017 Witek Pokorski G01-V10-03-00
+- Added missing gdml files to CMake installation script.
 
 July 1st, 2016 Ivana Hrivnacova G01-V10-02-02
 - Replaced std::cout with G4cout

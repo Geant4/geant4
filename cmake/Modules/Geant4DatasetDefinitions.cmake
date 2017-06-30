@@ -18,21 +18,21 @@ geant4_add_dataset(
 # - Low energy electromagnetics
 geant4_add_dataset(
   NAME      G4EMLOW
-  VERSION   6.50
+  VERSION   6.54
   FILENAME  G4EMLOW
   EXTENSION tar.gz
   ENVVAR    G4LEDATA
-  MD5SUM    2a0dbeb2dd57158919c149f33675cce5
+  MD5SUM    9d9b5207861fbed0aebddb7f89384151
   )
 
 # - Photon evaporation
 geant4_add_dataset(
   NAME      PhotonEvaporation
-  VERSION   4.3.2
+  VERSION   5.0
   FILENAME  G4PhotonEvaporation
   EXTENSION tar.gz
   ENVVAR    G4LEVELGAMMADATA
-  MD5SUM    027a07cc3259388fd5499aae930a7832
+  MD5SUM    d796cc6d8c65d010f8f0e1641408b89d
   )
 
 # - Radioisotopes
@@ -68,11 +68,11 @@ geant4_add_dataset(
 # - Optical Surfaces
 geant4_add_dataset(
   NAME      RealSurface
-  VERSION   1.0
-  FILENAME  RealSurface
+  VERSION   2.1
+  FILENAME  G4RealSurface
   EXTENSION tar.gz
   ENVVAR    G4REALSURFACEDATA
-  MD5SUM    0dde95e00fcd3bcd745804f870bb6884
+  MD5SUM    f1c72b31d45905f011e2ec4ea96612f4
   )
 
 # - SAID

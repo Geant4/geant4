@@ -34,6 +34,7 @@
 // Description: Modified version of G4QGSBinaryKaonBuilder to use PreCompound
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -61,14 +62,15 @@ class G4QGSPKaonBuilder : public G4VKaonBuilder
     virtual ~G4QGSPKaonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4KaonPlusInelasticProcess * aP);
-    virtual void Build(G4KaonMinusInelasticProcess * aP);
-    virtual void Build(G4KaonZeroLInelasticProcess * aP);
-    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * aP) final override;
+    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
+    using G4VKaonBuilder::Build; //Prevent compiler warning
   private:
     G4TheoFSGenerator * theModel;
     G4GeneratorPrecompoundInterface * theCascade;

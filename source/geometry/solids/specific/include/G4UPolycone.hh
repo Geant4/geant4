@@ -43,18 +43,21 @@
 #ifndef G4UPOLYCONE_HH
 #define G4UPOLYCONE_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UPolycone.hh"
+#include <volumes/UnplacedPolycone.h>
+
 #include "G4TwoVector.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
 #include "G4Polyhedron.hh"
 
-class G4UPolycone : public G4USolid 
+class G4UPolycone : public G4UAdapter<vecgeom::UnplacedPolycone>
 {
+  using Shape_t = vecgeom::UnplacedPolycone;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedPolycone>;
 
   public:  // with description
 
@@ -81,9 +84,8 @@ class G4UPolycone : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UPolycone* GetShape() const;
-
     G4double GetStartPhi()    const;
+    G4double GetDeltaPhi()    const;
     G4double GetEndPhi()      const;
     G4double GetSinStartPhi() const;
     G4double GetCosStartPhi() const;
@@ -110,7 +112,7 @@ class G4UPolycone : public G4USolid
     G4UPolycone &operator=( const G4UPolycone &source );
       // Copy constructor and assignment operator.
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -118,6 +120,13 @@ class G4UPolycone : public G4USolid
                            G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
+
+  protected:
+
+    void SetOriginalParameters();
+
+    G4bool fGenericPcon; // true if created through the 2nd generic constructor
+    G4PolyconeHistorical fOriginalParameters; // original input parameters
 
   private:
 
@@ -129,11 +138,6 @@ class G4UPolycone : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UPolycone* G4UPolycone::GetShape() const
-{
-  return (UPolycone*) fShape;
-}
 
 inline G4GeometryType G4UPolycone::GetEntityType() const
 {

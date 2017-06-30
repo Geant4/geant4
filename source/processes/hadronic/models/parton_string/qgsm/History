@@ -1,4 +1,4 @@
-$Id: History 100828 2016-11-02 15:25:59Z gcosmo $
+$Id: History 102316 2017-01-20 16:12:52Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,71 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+19-Jan-2017 A. Ribon                     (hadr-qgsm-V10-03-03)
+-  Small fix in G4QGSParticipants to avoid a strange crash seen only
+   in optimized mode (a 4-vector with negative square mass).
+
+14-Dec-2016 A. Ribon                     (hadr-qgsm-V10-03-02)
+-  After the release G4 10.3, with "stable" version, this tag brings back
+   the "development" version, similar (although not identical because
+   of some code clean-up and a bug fix included in the (internal) tag
+   hadr-qgsm-V10-03-01, see below) to G4 10.2.ref10.
+
+11-Nov-2016 V. Uzhinsky                  (hadr-qgsm-V10-03-01)
+-  Bug is fixed in G4QGSParticipants with nucleon state counter (SetStatus(?)).
+
+02-Nov-2016 A. Ribon                     (hadr-qgsm-V10-03-00)
+-  Fixed warning message in G4QuarkExchange .
+
+28-Oct-2016 A. Ribon                     (hadr-qgsm-V10-02-07)
+-  Fixed warning message .
+
+27-Oct-2016 A. Ribon                     (hadr-qgsm-V10-02-06)
+-  Fixed trivial error in source.cmake .
+
+27-Oct-2016 A. Ribon                     (hadr-qgsm-V10-02-05)
+-  Fixed trivial error (forgotten deleted class) in source.cmake and
+   G4QGSModel.
+
+27 Oct. 2016 V. Uzhinsky                 (hadr-qgsm-V10-02-04)
+-  Essential improvement of QGSM. ======
+   First of all, Pomeron parameters were set up according to A. Kaidalov and M. Poghosyan (2009-2010).
+   Non-vacuum reggeons - f and omega, were included in the calculations using parameters
+   by A. Kaidalov and M. Poghosyan (2009-2010).
+   New class G4Reggeons was created for calculations of X-sections.
+
+   Cutted non-vacuum regeons are interpreted as a creation of a single string, or as
+   a single string creation and one "stable" hadron. Such processes are described by
+   RRR diagram of Reggeon phenomenology. For implementation of the processes, a new class -
+   G4QuarkExchange, was created.
+
+   Main changes are in G4QGSParticipants.cc. 
+
+   10-20 Implementation of Quark exchange simulation.
+   7-9 Oct. Creation and testing G4Reggeons.
+   6 Oct. Cleaned and improved G4SingleDiffractiveExcitation.cc and G4QGSDiffractiveExcitation.
+   4 Oct. G4SingleDiffractiveExcitation.cc was corrected to treat h+N and Gamma + N diffraction.
+   3 Oct. G4MesonSplitter prob. UUbar DDbar (0.5, 0.5) were changed to (0.8, 0.2) for gamma projectile.
+
+19 Sept 2016 V. Uzhinsky                 (hadr-qgsm-V10-02-03)
+-  Saving of the initial state of QGSM
+
+18 May 2016 Alberto Ribon                (hadr-qgsm-V10-02-02)
+-  G4PomeronCrossSection : added class originally in the management/
+   directory.
+
+14 April 2016 Alberto Ribon              (hadr-qgsm-V10-02-01)
+   G4QGSMSplitableHadron : fixed bug in the case of gamma projectile
+   with P_minus = 0.
+
+04 December 2015 Alberto Ribon           (hadr-qgsm-V10-02-00)
+   Resumed the tag hadr-qgsm-V10-01-14, i.e. the new QGS model.
+   The files that are changed are: G4QGSDiffractiveExcitation.hh,
+   G4QGSMSplitableHadron.hh, G4QGSModel.icc, G4QGSParticipants.hh,
+   G4QGSMSplitableHadron.cc, G4GammaParticipants.cc, G4QGSParticipants.cc,
+   G4SingleDiffractiveExcitation.cc, G4QGSDiffractiveExcitation.cc and
+   G4SPBaryon.cc .
 
 26 October 2015 Alberto Ribon            (hadr-qgsm-V10-01-16)
    After bringing the QGS string formation as it was in G4 10.1 (and before)

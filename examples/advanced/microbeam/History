@@ -9,6 +9,16 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+09 March 2017 - V.Ivanchenko - tag microbeam-V10-03-01
+- PhysicsList, PhysicsListMessenger - removed obsolete way of
+    cut definition
+- DetectorConstruction - thread safe definition of magnetic field
+- SteppingAction - simplified implementation, added check on
+    alpha leaving the world volume
+
+30 Dec 2016 - S.Incerti - tag microbeam-V10-03-00
+- cleanup and relaxed step size constraints
+
 07 Nov 2016 - S.Incerti - tag microbeam-V10-02-04
 - correct warnings from clang compilers
 

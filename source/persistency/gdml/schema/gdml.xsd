@@ -198,7 +198,7 @@
 	  </xs:complexType>
 	</xs:element>
       </xs:sequence>
-      <xs:attribute fixed="3.1.4" name="version" type="xs:string">
+      <xs:attribute fixed="3.1.5" name="version" type="xs:string">
 	<xs:annotation>
 	  <xs:documentation>The GDML Schema version consists of 3 digits X.Y.Z
             where these mean:

@@ -18,8 +18,9 @@
 ##########################
 # Set of the physic models
 #
-/Physics/addPhysics HADRONTHERAPY_1
+/Physics/addPhysics QGSP_BIC_EMY
 
+/run/numberOfThreads 4
 
 ##########################
 # INFN-LNS transport beam line,
@@ -38,30 +39,34 @@
 ##########################
 # Visualisation 
 #
-/vis/scene/create
-/vis/open OGLI
-#/vis/viewer/set/background white
-/vis/viewer/flush
-/vis/viewer/set/viewpointThetaPhi 30 140 deg
-/vis/viewer/zoomTo 1
-/vis/viewer/panTo 100 50 cm
-/tracking/storeTrajectory 1
-/vis/scene/add/trajectories
-#/vis/scene/endOfEventAction accumulate
-/vis/scene/endOfEventAction accumulate -1
+#/vis/open OGLI 600x600-0+0
 
-#/vis/viewer/update
+# Disable auto refresh and quieten vis messages whilst scene and
+# trajectories are established:
+/vis/viewer/set/autoRefresh false
+#/vis/verbose errors
+
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
+/vis/scene/add/trajectories smooth
+
+/vis/scene/endOfEventAction accumulate
+
+/vis/viewer/set/autoRefresh true
+/vis/verbose warnings
 
 ##########################
 # Set here the cut and the step max for the tracking. 
 # Suggested values of cut and step:
 # Set cuts OUTSIDE the detector
-/run/setCut 1 mm
+/run/setCut 10 mm
 # Set cuts ONLY inside the detector
 #
-/run/setCutForRegion DetectorLog 0.05 mm
+/run/setCutForRegion DetectorLog 0.1 mm
 
-/Step/waterPhantomStepMax 1 mm 
+/Step/waterPhantomStepMax 0.1 mm 
 
 ##########################################################################################################
 #						PRIMARY PARTICLES
@@ -72,7 +77,7 @@
 
 #---------------------------gps-----------------
 /gps/pos/shape Circle
-/gps/pos/centre -10. 0. 0. cm
+/gps/pos/centre -1710. 0. 0. mm
 /gps/pos/radius 0. mm
 /gps/pos/sigma_r 2. mm
 /gps/particle ion
@@ -97,28 +102,26 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 3240 MeV
-/gps/ene/sigma 0.744 MeV
-
+/gps/ene/mono 744 MeV
+/gps/ene/sigma 0.740 MeV
 
 
 # Voxelised detector
 /changePhantom/size 40 40 40  cm
 /changePhantom/position 20 0 0 cm
 
-/changeDetector/size 20 20 20 cm
-/changeDetector/voxelSize .2 20 20 cm
-
+/changeDetector/size 4 4 4 cm
+/changeDetector/voxelSize .1 40 40 mm
 
 # Put the detector in the lower left corner of the phantom
-/changeDetector/displacement 0 8 8 cm
+/changeDetector/displacement 0 18 18 cm
 /changePhantom/update
 
 #########################
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 2
+/run/printProgress 1000
 
 # Compute Dose and Fluence for secondary 
 #/analysis/secondary true
@@ -129,6 +132,6 @@
 #
 #########################
 
-/run/beamOn 2000
+/run/beamOn 1000
 
 

@@ -1,4 +1,4 @@
-$Id: History 100265 2016-10-17 08:11:18Z gcosmo $
+$Id: History 103257 2017-03-23 08:54:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-03-17 S.Elles (fano-V10-03-01)
+- switch to NIST material description (keeping material densities defined in previous version)
+- default thread number is not set to the maximum available cores but 
+	( set to 2 by default // fanoCavity blabla.mac -1 set the thred number to the core number ) 
+
+21-03-17 V.Ivant (fano-V10-03-00)
+- PhysListEmStandard_GS, PhysListEmStandard_SS, PhysListEmStandard_WVI,
+  PhysListEmStandard_option3 - use the same step function as in 
+  physics_list factory for corresponding constructors, ensure that
+  step function parameters may be redefined by UI commands
 
 14-10-16 G.Folger (fano-V10-02-02)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().

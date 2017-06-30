@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc 101121 2016-11-07 09:18:01Z gcosmo $
+// $Id: G4Tubs.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // class G4Tubs
@@ -209,7 +209,7 @@ void G4Tubs::ComputeDimensions(       G4VPVParameterisation* p,
 //
 // Get bounding box
 
-void G4Tubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Tubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double rmin = GetInnerRadius();
   G4double rmax = GetOuterRadius();
@@ -242,7 +242,8 @@ void G4Tubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Tubs::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Tubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -261,7 +262,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
@@ -282,7 +283,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
   // Find bounding envelope and calculate extent
   //
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
   G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
   G4double ang    = dphi/ksteps;
 

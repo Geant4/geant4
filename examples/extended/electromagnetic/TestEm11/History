@@ -1,4 +1,4 @@
-$Id: History 100682 2016-10-31 10:54:39Z gcosmo $
+$Id: History 103624 2017-04-19 13:27:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+19-04-17 mma  (testem11-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
 
 24-10-16 mma  (testem11-V10-02-09)
 - add alpha.mac ionC12.mac

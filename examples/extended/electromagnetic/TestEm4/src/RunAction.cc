@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm4/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 98767 2016-08-09 14:18:40Z gcosmo $
+// $Id: RunAction.cc 103468 2017-04-11 07:28:24Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,8 +64,7 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  // save Rndm status
-  //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  // show Rndm status
   if (isMaster) G4Random::showEngineStatus();
 
   

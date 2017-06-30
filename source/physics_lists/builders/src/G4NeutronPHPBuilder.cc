@@ -51,10 +51,6 @@ G4NeutronPHPBuilder()
 
 }
 
-G4NeutronPHPBuilder::
-~G4NeutronPHPBuilder() 
-{}
-
 void G4NeutronPHPBuilder::
 Build(G4HadronElasticProcess * aP)
 {

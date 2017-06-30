@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5DetectorConstruction.cc 101036 2016-11-04 09:00:23Z gcosmo $
+// $Id: B5DetectorConstruction.cc 103284 2017-03-24 08:27:19Z gcosmo $
 //
 /// \file B5DetectorConstruction.cc
 /// \brief Implementation of the B5DetectorConstruction class
@@ -39,7 +39,6 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4Mag_UsualEqRhs.hh"
-#include "G4AutoDelete.hh"
 
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -401,10 +400,6 @@ void B5DetectorConstruction::ConstructSDandField()
   fFieldMgr->CreateChordFinder(fMagneticField);
   G4bool forceToAllDaughters = true;
   fMagneticLogical->SetFieldManager(fFieldMgr, forceToAllDaughters);
-
-  // Register the field and its manager for deleting
-  G4AutoDelete::Register(fMagneticField);
-  G4AutoDelete::Register(fFieldMgr);
 }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

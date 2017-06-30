@@ -1,4 +1,4 @@
-$Id: History 101714 2016-11-22 08:53:13Z gcosmo $
+$Id: History 104015 2017-05-08 07:28:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
+
+7th May 2017  John Allison (DAWN-V10-03-00)
+- G4DAWNFILESceneHandler.cc:
+  o In g4_<N>.prim, expand to 4 digits, e.g., g4_0000.prim, g4_0001.prim,...
+    so that many files can be generated in filename sequence for ease of
+    making a movie, for example.
+  o To take advantage of this one has to set the following environment variable
+      export G4DAWNFILE_MAX_FILE_NUM=9999
+    or
+      setenv G4DAWNFILE_MAX_FILE_NUM 9999
 
 19th November 2016  John Allison (DAWN-V10-02-02)
 - Fixed the GetColour() problem.

@@ -109,7 +109,6 @@ class G4WilsonAbrasionModel : public G4HadronicInteraction
     G4bool useAblation;
     G4WilsonAblationModel* theAblation;
     G4ExcitationHandler* theExcitationHandler;
-    G4ExcitationHandler* theExcitationHandlerx;
     G4bool conserveEnergy;
     G4bool conserveMomentum;
     G4double B;

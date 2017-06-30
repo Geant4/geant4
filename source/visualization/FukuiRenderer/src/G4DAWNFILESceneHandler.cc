@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4DAWNFILESceneHandler.cc 104015 2017-05-08 07:28:08Z gcosmo $
 //
 // Satoshi TANAKA
 // DAWNFILE scene.
@@ -38,6 +38,8 @@
 #include <fstream>
 #include <stdlib.h>
 #include <string.h>
+#include <sstream>
+#include <iomanip>
 #include "globals.hh"
 #include "G4VisManager.hh"
 #include "G4FRConst.hh"
@@ -66,7 +68,7 @@
 //----- constants
 const char  FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
 const char  G4PRIM_FILE_HEADER      [] = "g4_";
-const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_00.prim";
+const char  DEFAULT_G4PRIM_FILE_NAME[] = "g4_0000.prim";
 
 // const int   FR_MAX_FILE_NUM = 1 ;
 // const int   FR_MAX_FILE_NUM = 5 ;
@@ -142,7 +144,7 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 //-----
 void	G4DAWNFILESceneHandler::SetG4PrimFileName() 
 {
-	// g4_00.prim, g4_01.prim, ..., g4_MAX_FILE_INDEX.prim
+	// g4_0000.prim, g4_0001.prim, ..., g4_MAX_FILE_INDEX.prim
 	const int MAX_FILE_INDEX = fMaxFileNum - 1 ;
 
 	// dest directory (null if no environmental variables is set)
@@ -163,17 +165,16 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 		    G4cout << "  This file name is the final one in the   "   << G4endl;
 		    G4cout << "  automatic updation of the output file name." << G4endl; 
 		    G4cout << "  You may overwrite existing files, i.e.   "   << G4endl; 
-		    G4cout << "  g4_XX.prim and g4_XX.eps                 "   << G4endl;
+		    G4cout << "  g4_XXXX.prim and g4_XXXX.eps             "   << G4endl;
 		    G4cout << "==========================================="   << G4endl; 
 		  }
 		}
 
-		// re-determine file name as G4DAWNFILE_DEST_DIR/g4_XX.prim 
-		if( i >=  0 && i <= 9 ) { 
-			sprintf( fG4PrimFileName, "%s%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, "0", i );
-		} else {
-			sprintf( fG4PrimFileName, "%s%s%d.prim" , fG4PrimDestDir,  G4PRIM_FILE_HEADER, i );
-		}
+		// re-determine file name as G4DAWNFILE_DEST_DIR/g4_XXXX.prim
+		std::ostringstream filename; filename
+		<< fG4PrimDestDir << G4PRIM_FILE_HEADER
+		<< std::setw(4) << std::setfill('0') << i << ".prim";
+		strncpy(fG4PrimFileName,filename.str().c_str(),sizeof(fG4PrimFileName));
 
 		// check validity of the file name
 		std::ifstream  fin ; 

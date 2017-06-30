@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UBox to make use of UBox from USolids module.
+//   Wrapper class for G4Box to make use of VecGeom Box.
 
 // History:
 // 13.09.13 G.Cosmo, CERN/PH
@@ -42,16 +42,19 @@
 #ifndef G4UBOX_HH
 #define G4UBOX_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UBox.hh"
+#include <volumes/UnplacedBox.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UBox : public G4USolid 
+class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
 {
+  using Shape_t = vecgeom::UnplacedBox;
+  using Base_t = G4UAdapter<vecgeom::UnplacedBox>;
+
   public:  // with description
 
     G4UBox(const G4String& pName, G4double pX, G4double pY, G4double pZ);
@@ -65,8 +68,6 @@ class G4UBox : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UBox* GetShape() const;
-
     G4double GetXHalfLength() const;
     G4double GetYHalfLength() const;
     G4double GetZHalfLength() const;
@@ -77,7 +78,9 @@ class G4UBox : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    std::ostream& StreamInfo(std::ostream& os) const;
+
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -101,11 +104,6 @@ class G4UBox : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UBox* G4UBox::GetShape() const
-{
-  return (UBox*) fShape;
-}
 
 inline G4GeometryType G4UBox::GetEntityType() const
 {

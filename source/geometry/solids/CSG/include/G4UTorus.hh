@@ -90,7 +90,7 @@ class G4UTorus : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

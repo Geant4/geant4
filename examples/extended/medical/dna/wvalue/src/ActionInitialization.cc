@@ -23,8 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
-//
 /// \file ActionInitialization.cc
 /// \brief Implementation of the ActionInitialization class
 
@@ -35,8 +33,9 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "G4RunManager.hh"
 #include "DetectorConstruction.hh"
+
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -78,6 +77,4 @@ void ActionInitialization::Build() const
 G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
 {
   return new SteppingVerbose();
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+}

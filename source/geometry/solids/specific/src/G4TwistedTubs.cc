@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4TwistedTubs.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -328,7 +328,8 @@ void G4TwistedTubs::ComputeDimensions(G4VPVParameterisation* /* p */ ,
 //
 // Get bounding box
 
-void G4TwistedTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4TwistedTubs::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
   G4double maxEndOuterRad = (fEndOuterRadius[0] > fEndOuterRadius[1] ?
                              fEndOuterRadius[0] : fEndOuterRadius[1]);
@@ -344,7 +345,8 @@ void G4TwistedTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4TwistedTubs::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4TwistedTubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -362,7 +364,7 @@ G4TwistedTubs::CalculateExtent(const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

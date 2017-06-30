@@ -43,11 +43,12 @@
 #ifndef G4UPOLYHEDRA_HH
 #define G4UPOLYHEDRA_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UPolyhedra.hh"
+#include <volumes/UnplacedPolyhedron.h>
+
 #include "G4TwoVector.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
@@ -56,8 +57,11 @@
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 
-class G4UPolyhedra : public G4USolid
+class G4UPolyhedra : public G4UAdapter<vecgeom::UnplacedPolyhedron>
 {
+  using Shape_t = vecgeom::UnplacedPolyhedron;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedPolyhedron>;
+
   public:  // with description
 
     G4UPolyhedra( const G4String& name, 
@@ -84,8 +88,6 @@ class G4UPolyhedra : public G4USolid
                            const G4VPhysicalVolume* pRep);
 
     G4VSolid* Clone() const;
-
-    inline UPolyhedra* GetShape() const;
 
     G4int GetNumSide()        const;
     G4double GetStartPhi()    const;
@@ -116,7 +118,7 @@ class G4UPolyhedra : public G4USolid
     G4UPolyhedra &operator=( const G4UPolyhedra &source );
       // Copy constructor and assignment operator.
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -124,6 +126,13 @@ class G4UPolyhedra : public G4USolid
                            G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
+
+  protected:
+
+    void SetOriginalParameters();
+
+    G4bool fGenericPgon; // true if created through the 2nd generic constructor
+    G4PolyhedraHistorical fOriginalParameters; // original input parameters
 
   private:
 
@@ -136,11 +145,6 @@ class G4UPolyhedra : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UPolyhedra* G4UPolyhedra::GetShape() const
-{
-  return (UPolyhedra*) fShape;
-}
 
 inline G4GeometryType G4UPolyhedra::GetEntityType() const
 {

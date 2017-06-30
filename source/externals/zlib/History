@@ -19,6 +19,16 @@ committal in the CVS repository !
 
 History file for G4 zlib package
 --------------------------------
+18 May 2017 Gunter Folger   (zlib-V10-03-01)
+- disable warning on fall-through on many case statements issued by gcc7
+   add directive -Wno-implicit-fallthrough in CMakeLists.txt, and fix copy-paste typo.
+
+03 February 2017 Ben Morgan (zlib-V10-03-00)
+- Set interface include directories on G4zlib{-static} targets
+  in CMakeLists.txt. This provides the needed interface to allow transparent
+  usage of internal/external zlib via targets and without needing to use
+  include_directories explicitly. Only set include paths in BUILD
+  interface for consistency with other targets.
 
 19 April 2015 Gunter Folger   (zlib-V10-02-01)
 -  fix in gzguts.h for Windows; as of Studio 2015 in 64 bit compilation,

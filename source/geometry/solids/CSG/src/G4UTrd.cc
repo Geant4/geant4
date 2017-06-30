@@ -49,7 +49,7 @@ G4UTrd::G4UTrd(const G4String& pName,
                      G4double pdx1,  G4double pdx2,
                      G4double pdy1,  G4double pdy2,
                      G4double pdz)
-  : G4USolid(pName, new UTrd(pName, pdx1, pdx2, pdy1, pdy2, pdz))
+  : Base_t(pName, pdx1, pdx2, pdy1, pdy2, pdz)
 {
 }
 
@@ -59,7 +59,7 @@ G4UTrd::G4UTrd(const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4UTrd::G4UTrd( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -76,7 +76,7 @@ G4UTrd::~G4UTrd()
 // Copy constructor
 //
 G4UTrd::G4UTrd(const G4UTrd& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -92,7 +92,7 @@ G4UTrd& G4UTrd::operator = (const G4UTrd& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -103,54 +103,54 @@ G4UTrd& G4UTrd::operator = (const G4UTrd& rhs)
 
 G4double G4UTrd::GetXHalfLength1() const
 {
-  return GetShape()->GetXHalfLength1();
+  return dx1();
 }
 G4double G4UTrd::GetXHalfLength2() const
 {
-  return GetShape()->GetXHalfLength2();
+  return dx2();
 }
 G4double G4UTrd::GetYHalfLength1() const
 {
-  return GetShape()->GetYHalfLength1();
+  return dy1();
 }
 G4double G4UTrd::GetYHalfLength2() const
 {
-  return GetShape()->GetYHalfLength2();
+  return dy2();
 }
 G4double G4UTrd::GetZHalfLength()  const
 {
-  return GetShape()->GetZHalfLength();
+  return dz();
 }
 
 void G4UTrd::SetXHalfLength1(G4double val)
 {
-  GetShape()->SetXHalfLength1(val);
+  Base_t::SetXHalfLength1(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetXHalfLength2(G4double val)
 {
-  GetShape()->SetXHalfLength2(val);
+  Base_t::SetXHalfLength2(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetYHalfLength1(G4double val)
 {
-  GetShape()->SetYHalfLength1(val);
+  Base_t::SetYHalfLength1(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetYHalfLength2(G4double val)
 {
-  GetShape()->SetYHalfLength2(val);
+  Base_t::SetYHalfLength2(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetZHalfLength(G4double val)
 {
-  GetShape()->SetZHalfLength(val);
+  Base_t::SetZHalfLength(val);
   fRebuildPolyhedron = true;
 }
 void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
                               G4double pdy1, G4double pdy2, G4double pdz)
 {
-  GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
+  Base_t::SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
   fRebuildPolyhedron = true;
 }
 
@@ -179,7 +179,7 @@ G4VSolid* G4UTrd::Clone() const
 //
 // Get bounding box
 
-void G4UTrd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UTrd::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
 
@@ -203,7 +203,8 @@ void G4UTrd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UTrd::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UTrd::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -211,8 +212,8 @@ void G4UTrd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
@@ -225,7 +226,8 @@ void G4UTrd::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UTrd::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UTrd::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -246,7 +248,7 @@ G4UTrd::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh 96023 2016-03-08 08:25:42Z gcosmo $
+// $Id: G4OpBoundaryProcess.hh 104458 2017-05-31 15:54:11Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -54,6 +54,8 @@
 //                           William Moses (Lawrence Berkeley National Lab.)
 //              2013-06-01 - add the capability of simulating the transmission
 //                           of a dichronic filter
+//              2017-02-24 - add capability of simulating surface reflections
+//                           with Look-Up-Tables (LUT) developed in DAVIS
 //
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
@@ -139,7 +141,7 @@ public:
 
         G4OpBoundaryProcess(const G4String& processName = "OpBoundary",
                                      G4ProcessType type = fOptical);
-	~G4OpBoundaryProcess();
+        ~G4OpBoundaryProcess();
 
 private:
 
@@ -154,22 +156,22 @@ private:
 public:
 
 	////////////
-	// Methods
+        // Methods
         ////////////
 
         G4bool IsApplicable(const G4ParticleDefinition& aParticleType);
         // Returns true -> 'is applicable' only for an optical photon.
 
-	G4double GetMeanFreePath(const G4Track& ,
-				 G4double ,
-				 G4ForceCondition* condition);
+        G4double GetMeanFreePath(const G4Track& ,
+                                 G4double ,
+                                 G4ForceCondition* condition);
         // Returns infinity; i. e. the process does not limit the step,
         // but sets the 'Forced' condition for the DoIt to be invoked at
         // every step. However, only at a boundary will any action be
         // taken.
 
-	G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
-				       const G4Step&  aStep);
+        G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
+                                        const G4Step&  aStep);
         // This is the method implementing boundary processes.
 
         G4OpBoundaryProcessStatus GetStatus() const;
@@ -180,14 +182,17 @@ public:
 
 private:
 
-	G4bool G4BooleanRand(const G4double prob) const;
+        G4bool G4BooleanRand(const G4double prob) const;
 
-	G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
-				     const G4ThreeVector&  Normal) const;
+        G4ThreeVector GetFacetNormal(const G4ThreeVector& Momentum,
+                                     const G4ThreeVector&  Normal) const;
 
         void DielectricMetal();
         void DielectricDielectric();
+
         void DielectricLUT();
+        void DielectricLUTDAVIS();
+
         void DielectricDichroic();
 
         void ChooseReflection();
@@ -213,44 +218,44 @@ private:
 
 private:
 
-	G4double thePhotonMomentum;
+        G4double thePhotonMomentum;
 
-	G4ThreeVector OldMomentum;
-	G4ThreeVector OldPolarization;
+        G4ThreeVector OldMomentum;
+        G4ThreeVector OldPolarization;
 
-	G4ThreeVector NewMomentum;
-	G4ThreeVector NewPolarization;
+        G4ThreeVector NewMomentum;
+        G4ThreeVector NewPolarization;
 
-	G4ThreeVector theGlobalNormal;
-	G4ThreeVector theFacetNormal;
+        G4ThreeVector theGlobalNormal;
+        G4ThreeVector theFacetNormal;
 
-	G4Material* Material1;
-	G4Material* Material2;
+        G4Material* Material1;
+        G4Material* Material2;
 
-	G4OpticalSurface* OpticalSurface;
+        G4OpticalSurface* OpticalSurface;
 
         G4MaterialPropertyVector* PropertyPointer;
         G4MaterialPropertyVector* PropertyPointer1;
         G4MaterialPropertyVector* PropertyPointer2;
 
-	G4double Rindex1;
-	G4double Rindex2;
+        G4double Rindex1;
+        G4double Rindex2;
 
-	G4double cost1, cost2, sint1, sint2;
+        G4double cost1, cost2, sint1, sint2;
 
-	G4OpBoundaryProcessStatus theStatus;
+        G4OpBoundaryProcessStatus theStatus;
 
-	G4OpticalSurfaceModel theModel;
+        G4OpticalSurfaceModel theModel;
 
-	G4OpticalSurfaceFinish theFinish;
+        G4OpticalSurfaceFinish theFinish;
 
-	G4double theReflectivity;
-	G4double theEfficiency;
+        G4double theReflectivity;
+        G4double theEfficiency;
         G4double theTransmittance;
 
         G4double theSurfaceRoughness;
 
-	G4double prob_sl, prob_ss, prob_bs;
+        G4double prob_sl, prob_ss, prob_bs;
 
         G4int iTE, iTM;
 
@@ -276,7 +281,7 @@ G4bool G4OpBoundaryProcess::G4BooleanRand(const G4double prob) const
 
 inline
 G4bool G4OpBoundaryProcess::IsApplicable(const G4ParticleDefinition& 
-					               aParticleType)
+                                                       aParticleType)
 {
    return ( &aParticleType == G4OpticalPhoton::OpticalPhoton() );
 }
@@ -320,7 +325,7 @@ void G4OpBoundaryProcess::DoAbsorption()
               theStatus = Absorption;
 
               if ( G4BooleanRand(theEfficiency) ) {
-		
+
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
                  aParticleChange.ProposeLocalEnergyDeposit(thePhotonMomentum);
@@ -347,7 +352,7 @@ void G4OpBoundaryProcess::DoReflection()
         }
         else if ( theFinish == ground ) {
 
-	  theStatus = LobeReflection;
+          theStatus = LobeReflection;
           if ( PropertyPointer1 && PropertyPointer2 ){
           } else {
              theFacetNormal =

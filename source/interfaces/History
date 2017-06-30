@@ -1,4 +1,4 @@
-$Id: History 102539 2017-02-08 14:06:50Z gcosmo $
+$Id: History 102246 2017-01-16 13:10:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13th January Laurent Garnier (interfaces-V10-02-15)
+13th January Laurent Garnier (interfaces-V10-03-00)
 - G4UIQt:
   o Fix bugzilla 1933. I check was missing to avoid a NULL pointer
   o Avoid problem on close when deleting objects

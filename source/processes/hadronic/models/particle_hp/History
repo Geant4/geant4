@@ -14,6 +14,39 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+1 May 2017 Tatsumi Koi (hadr-hpp-V10-03-03)
+---------------------------------------------------
+- Bug fix and improve stability: G4ParticleHPFinalState
+- Suppress unnecessary warning messages: G4ParticleHPEnAngCorrelation
+
+
+27 April 2017 Andrea Dotti (hadr-hpp-V10-03-02)
+--------------------------------------------------
+- Fix in destructor of processes to protect agains concurrent 
+  deletion 
+
+
+24 April 2017 Tatsumi Koi (hadr-hpp-V10-03-01)
+---------------------------------------------------
+- Adding check for He3 projectile; Bugzilla #1907
+
+
+6 March 2017 Tatsumi Koi (hadr-hpp-V10-03-00)
+---------------------------------------------------
+- Fix minor inconsistency between documentation and code
+
+
+15 November 2016 Tatsumi Koi (hadr-hpp-V10-02-35)
+---------------------------------------------------
+-Fix Coverity 82426 
+-Fix Coverity 58745
+
+
+14 November 2016 Tatsumi Koi (hadr-hpp-V10-02-34)
+---------------------------------------------------
+-Fix run-time memory errors reported by valgrind on top of hadr-hpp-V10-02-32
+
+
 14 November 2016 Tatsumi Koi (hadr-hpp-V10-02-33)
 ---------------------------------------------------
 -Fix run-time memory errors reported by valgrind on top of hadr-hpp-V10-02-31

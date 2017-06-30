@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTSteppingAction.cc 74050 2013-09-20 09:38:19Z gcosmo $
+// $Id: G4RTSteppingAction.cc 104015 2017-05-08 07:28:08Z gcosmo $
 //
 //
 //
@@ -32,6 +32,7 @@
 
 #include "G4RTSteppingAction.hh"
 
+#include "G4RayTracerSceneHandler.hh"
 #include "G4SteppingManager.hh"
 #include "G4VisManager.hh"
 #include "G4VisAttributes.hh"
@@ -50,27 +51,42 @@ void G4RTSteppingAction::UserSteppingAction(const G4Step* aStep)
   // Stop the ray particle if it reaches to the coloured volume with its alpha = 1
   // or coloured volume and the user request to ignore transparency
 
-  G4StepPoint* fpStepPoint = aStep -> GetPostStepPoint();
-  G4VPhysicalVolume* postVolume_phys=fpStepPoint->GetPhysicalVolume();
+  G4StepPoint* postStepPoint = aStep -> GetPostStepPoint();
 
+  G4VPhysicalVolume* postVolume_phys=postStepPoint->GetPhysicalVolume();
   if(!postVolume_phys) return;   // Reach to out of the world
 
-  const G4LogicalVolume* postVolume_log = postVolume_phys->GetLogicalVolume();
-  const G4VisAttributes* postVisAtt = postVolume_log -> GetVisAttributes();
   G4VisManager* visManager = G4VisManager::GetInstance();
-  if(visManager) {
-    G4VViewer* viewer = visManager->GetCurrentViewer();
-    if (viewer) {
-      postVisAtt = viewer->GetApplicableVisAttributes(postVisAtt);
-    }
-  }
-  if((!postVisAtt) || (!(postVisAtt->IsVisible()))) return; // Invisible volume, continue tracking
+  G4RayTracerSceneHandler* sceneHandler =
+  static_cast<G4RayTracerSceneHandler*>(visManager->GetCurrentSceneHandler());
 
-  if((postVisAtt->IsForceDrawingStyle())
-    &&(postVisAtt->GetForcedDrawingStyle()==G4VisAttributes::wireframe)) return;
+  // Make a path from the touchable
+  const G4VTouchable* postTouchable = postStepPoint->GetTouchable();
+  G4int postDepth = postTouchable->GetHistoryDepth();
+  G4ModelingParameters::PVPointerCopyNoPath localPostPVPointerCopyNoPath;
+  for (G4int i = postDepth; i >= 0; --i) {
+    localPostPVPointerCopyNoPath.push_back
+    (G4ModelingParameters::PVPointerCopyNo
+     (postTouchable->GetVolume(i),postTouchable->GetCopyNumber(i)));
+  }
+
+  // Pick up the vis atts, if any, from the scene handler
+  const auto& sceneVisAttsMap = sceneHandler->GetSceneVisAttsMap();
+  auto postIterator = sceneVisAttsMap.find(localPostPVPointerCopyNoPath);
+  const G4VisAttributes* postVisAtts;
+  if (postIterator != sceneVisAttsMap.end()) {
+    postVisAtts = &postIterator->second;
+  } else {
+    postVisAtts = 0;
+  }
+
+  if((!postVisAtts) || (!(postVisAtts->IsVisible()))) return; // Invisible volume, continue tracking
+
+  if((postVisAtts->IsForceDrawingStyle())
+    &&(postVisAtts->GetForcedDrawingStyle()==G4VisAttributes::wireframe)) return;
                                           // Wire frame volume, continue tracking
 
-  G4double postAlpha=(postVisAtt->GetColour()).GetAlpha();
+  G4double postAlpha=(postVisAtts->GetColour()).GetAlpha();
 
   if(postAlpha==1.0 || ignoreTransparency) // Stop stepping
   { 

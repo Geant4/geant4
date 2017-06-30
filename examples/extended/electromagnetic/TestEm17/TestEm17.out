@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,7 +38,7 @@
 
 
  Material:    CaCO3    density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.749 cm 
-                       Imean: 123.236 eV 
+                       Imean: 123.236 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Calcium (Ca)   Z = 20.0   N =    40   A = 40.080 g/mole
          --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance: 96.941 %
@@ -62,7 +62,7 @@
 
 
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
-                       Imean:  81.000 eV 
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.010 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -71,7 +71,7 @@
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -82,7 +82,7 @@
 
 
  Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm 
-                       Imean: 488.000 eV 
+                       Imean: 488.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Sn (Sn)   Z = 50.0   N =   119   A = 118.700 g/mole
          --->  Isotope: Sn112   Z = 50   N = 112   A = 111.90 g/mole   abundance:  0.970 %
@@ -99,7 +99,7 @@
 
 
  Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.880 cm 
-                       Imean: 462.393 eV 
+                       Imean: 462.393 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -185,7 +185,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.71s Real=1.71s Sys=0s
+  User=2.32s Real=2.31s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -246,7 +246,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.58s Real=1.59s Sys=0s
+  User=1.8s Real=1.81s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -306,7 +306,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.51s Real=1.51s Sys=0s
+  User=2.22s Real=2.22s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -327,6 +327,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB

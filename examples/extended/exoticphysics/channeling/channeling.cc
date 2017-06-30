@@ -23,9 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file channeling/channeling.cc
-/// \brief Main program of the channeling example
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -34,25 +31,20 @@
 #else
 #include "G4RunManager.hh"
 #endif
+
 #include "G4ScoringManager.hh"
 #include "G4UImanager.hh"
 
-#include "Randomize.hh"
-
-#include "ExExChDetectorConstruction.hh"
-
 #ifdef G4MULTITHREADED
-#include "ExExChUserActionInitialization.hh"
+#include "UserActionInitialization.hh"
 #else
-#include "ExExChPrimaryGeneratorAction.hh"
-#include "ExExChTrackingAction.hh"
-#include "ExExChStackingAction.hh"
-#include "ExExChEventAction.hh"
-#include "ExExChRunAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "StackingAction.hh"
+#include "EventAction.hh"
+#include "RunAction.hh"
 #endif
 
-#include "ExExChPhysicsList.hh"
-#include "QGSP_BERT.hh"
+#include "DetectorConstruction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -62,6 +54,12 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "FTFP_BERT.hh"
+
+#include "G4EmStandardPhysics_option4_channeling.hh"
+#include "G4ChannelingPhysics.hh"
+#include "G4GenericBiasingPhysics.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
@@ -69,43 +67,36 @@ int main(int argc,char** argv)
     // Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    if(argv[2]){
-        if(atoi(argv[2])>0){
-            runManager->SetNumberOfThreads(atoi(argv[2]));
-        }
-    }
-    G4cout << "MT MODE ON " << runManager->GetNumberOfThreads() << G4endl;
+    runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores() - 2);
 #else
     G4RunManager* runManager = new G4RunManager;
-    G4cout << "MT MODE OFF" << G4endl;
 #endif
     
     // Activate UI-command base scorer
     G4ScoringManager * scManager = G4ScoringManager::GetScoringManager();
     scManager->SetVerboseLevel(0);
-    
-    // Choose the Random engine
-#ifndef G4MULTITHREADED
-    CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-#endif
-    
-    // Set mandatory initialization classes
-    G4VUserDetectorConstruction* detector =
-        new ExExChDetectorConstruction;
-    runManager->SetUserInitialization(detector);
-    runManager->SetUserInitialization(new ExExChPhysicsList());
 
+    // Set mandatory initialization classes
+    G4VModularPhysicsList* physlist= new FTFP_BERT();
+    G4GenericBiasingPhysics* biasingPhysics = new G4GenericBiasingPhysics();
+    physlist->RegisterPhysics(new G4ChannelingPhysics());
+    physlist->ReplacePhysics(new G4EmStandardPhysics_option4_channeling());
+    //physlist->ReplacePhysics(new G4EmStandardPhysicsSS_channeling());
+    biasingPhysics->PhysicsBiasAllCharged();
+    physlist->RegisterPhysics(biasingPhysics);
+    runManager->SetUserInitialization(physlist);
+    
 #ifndef G4MULTITHREADED
     // Set user action classes
-    runManager->SetUserAction(new ExExChPrimaryGeneratorAction());
-    runManager->SetUserAction(new ExExChEventAction());
-    runManager->SetUserAction(new ExExChStackingAction());
-    runManager->SetUserAction(new ExExChTrackingAction());
-    runManager->SetUserAction(new ExExChRunAction());
+    runManager->SetUserAction(new PrimaryGeneratorAction());
+    runManager->SetUserAction(new EventAction());
+    runManager->SetUserAction(new StackingAction());
+    runManager->SetUserAction(new RunAction());
 #else
-    runManager->SetUserInitialization(
-                new ExExChUserActionInitialization());
+    runManager->SetUserInitialization(new UserActionInitialization());
 #endif
+
+    runManager->SetUserInitialization(new DetectorConstruction());
     
     // Get the pointer to the User Interface manager
     G4UImanager* UI = G4UImanager::GetUIpointer();  

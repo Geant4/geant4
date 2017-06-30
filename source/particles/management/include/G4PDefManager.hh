@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PDefManager.hh 101112 2016-11-07 08:19:33Z gcosmo $
+// $Id: G4PDefManager.hh 103108 2017-03-16 13:00:35Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -102,7 +102,6 @@ class G4PDefManager
 
     void FreeSlave();
       // Invoked by all threads to free the subinstance array.
-
 
     G4PDefData*   GetOffset();
 

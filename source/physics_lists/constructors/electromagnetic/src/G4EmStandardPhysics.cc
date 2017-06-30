@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 99938 2016-10-12 08:06:52Z gcosmo $
+// $Id: G4EmStandardPhysics.cc 104043 2017-05-09 07:47:10Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,6 +51,8 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
+#include "G4RayleighScattering.hh"
+#include "G4LivermorePhotoElectricModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4MuMultipleScattering.hh"
@@ -203,9 +205,13 @@ void G4EmStandardPhysics::ConstructProcess()
 
     if (particleName == "gamma") {
 
-      ph->RegisterProcess(new G4PhotoElectricEffect(), particle);
+      G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
+      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      ph->RegisterProcess(pee, particle);
+
       ph->RegisterProcess(new G4ComptonScattering(), particle);
       ph->RegisterProcess(new G4GammaConversion(), particle);
+      ph->RegisterProcess(new G4RayleighScattering(), particle);
 
     } else if (particleName == "e-") {
 

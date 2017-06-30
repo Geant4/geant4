@@ -1,4 +1,4 @@
-$Id: History 101022 2016-11-04 08:25:50Z gcosmo $
+$Id: History 104093 2017-05-11 07:29:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,20 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+10th May 2017  John Allison  (greps-V10-03-04)
+- G4Colour: Added Set functions for components.
+
+25th April 2017  John Allison  (greps-V10-03-03)
+- G4Colour& operator += (const G4Colour& rhs) {*this = rhs; return *this;}
+  // Note: This is required by RayTracer in its use of G4THitsMap.
+  // Adding colours, without also taking brightness into account, does not make
+  // sense, so let us make it synonymous with operator=, which is, I guess,
+  // equivalent to covering the old colour with the new, like a coat of paint.
+
+22nd February 2017  John Allison  (greps-V10-03-01)
+- Requires visman-V10-03-03.
+- Removed G4VisExtent::NullExtent.
 
 3rd November 2016  John Allison  (greps-V10-02-10)
 - Fix typo in previous tag.

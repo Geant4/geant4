@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 83921 2014-09-23 09:14:40Z gcosmo $
+// $Id: HistoManager.cc 104417 2017-05-30 08:30:48Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,17 +63,19 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);    // enable inactivation of histograms
 
   // Define histograms start values
-  const G4int kMaxHisto = 50;
+  const G4int kMaxHisto = 62;
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
                          "10","11","12","13","14","15","16","17","18","19",
                          "20","21","22","23","24","25","26","27","28","29",
                          "30","31","32","33","34","35","36","37","38","39",
-                         "40","41","42","43","44","45","46","47","48","49" 
+                         "40","41","42","43","44","45","46","47","48","49",
+                         "50","51","52","53","54","55","56","57","58","59",
+                         "60","61"
                         };
                         
   const G4String title[] =
                 { "dummy",                                                //0
-                  "energy deposit in absorber",                           //1
+                  "energy deposit in absorber: dN/dE",                    //1
                   "energy of charged secondaries at creation",            //2
                   "energy of neutral secondaries at creation",            //3
                   "energy of charged at creation (log scale)",            //4
@@ -81,16 +83,16 @@ void HistoManager::Book()
                   "x_vertex of charged secondaries (all)",                //6
                   "x_vertex of charged secondaries (not absorbed)",       //7
                   "dummy","dummy",                                        //8-9
-                  "(transmit, charged) : kinetic energy at exit",         //10
+                  "(transmit, charged) : kinetic energy at exit: dN/dE",  //10
                   "(transmit, charged) : ener fluence: dE(MeV)/dOmega",   //11
                   "(transmit, charged) : space angle: dN/dOmega",         //12
                   "(transmit, charged) : projected angle at exit",        //13
                   "(transmit, charged) : projected position at exit",     //14
                   "(transmit, charged) : radius at exit",                 //15
-                  "energy of Auger e- at creation",                       //16
-                  "energy of fluorescence gamma at creation",             //17
-                  "energy of Auger e- at creation (log scale)",           //18
-                  "energy of fluorescence gamma at creation (log scale)", //19
+                  "dummy",                                                //16
+                  "dummy",                                                //17
+                  "dummy",                                                //18
+                  "dummy",                                                //19
                   "(transmit, neutral) : kinetic energy at exit",         //20
                   "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",   //21
                   "(transmit, neutral) : space angle: dN/dOmega",         //22
@@ -105,11 +107,24 @@ void HistoManager::Book()
                   "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",   //41
                   "(reflect , neutral) : space angle: dN/dOmega",         //42
                   "(reflect , neutral) : projected angle at exit",        //43
-                  "energy of PIXE Auger e- at creation",                  //44
-                  "energy of PIXE gamma at creation",                     //45
-                  "energy of PIXE Auger e- at creation (log scale)",      //46
-                  "energy of PIXE gamma at creation (log scale)",         //47
-                  "dummy","dummy"                                        //48-49
+                  "dummy",                                                //44
+                  "dummy",                                                //45
+                  "dummy",                                                //46
+                  "dummy",                                                //47
+                  "dummy",                                                //48
+                  "dummy",                                                //49
+                  "energy of Auger e- at creation",                       //50
+                  "energy of fluorescence gamma at creation",             //51
+                  "energy of Auger e- at creation (log scale)",           //52
+                  "energy of fluorescence gamma at creation (log scale)", //53
+                  "energy of PIXE Auger e- at creation",                  //54
+                  "energy of PIXE gamma at creation",                     //55
+                  "energy of PIXE Auger e- at creation (log scale)",      //56
+                  "energy of PIXE gamma at creation (log scale)",         //57
+                  "energy of DNA Auger e- at creation",                   //58
+                  "energy of DNA gamma at creation",                      //59
+                  "energy of DNA Auger e- at creation (log scale)",       //60
+                  "energy of DNA gamma at creation (log scale)"           //61
                  };
 
   // Default values (to be reset via /analysis/h1/set command)               

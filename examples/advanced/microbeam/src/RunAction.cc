@@ -40,7 +40,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det) 
+RunAction::RunAction(const DetectorConstruction* det) 
 :fDetector(det)
 {   
   fSaveRndm = 0;  
@@ -59,7 +59,7 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
   // Read phantom - Singleton
-  fMyCellParameterisation = CellParameterisation::Instance(); 
+  CellParameterisation* fMyCellParameterisation = CellParameterisation::Instance(); 
   
   // Histograms
   // Get/create analysis manager
@@ -126,10 +126,10 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   // save Rndm status
   if (fSaveRndm > 0)
-    { 
-      CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }
+  { 
+    CLHEP::HepRandom::showEngineStatus();
+    CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
+  }
  
   fNumEvent = 0;
   fNbOfHitsGas = 0;
@@ -147,8 +147,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   for (G4int i=0; i<fNbOfPixels; i++)
   {
-	fMapVoxels [i]=fMyCellParameterisation->GetVoxelThreeVector(i);
-  	fDose3DDose[i]=0;
+    fMapVoxels [i]=fMyCellParameterisation->GetVoxelThreeVector(i);
+    fDose3DDose[i]=0;
   }
   
 }
@@ -172,12 +172,12 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
     v = fMapVoxels[i];
     if ( (GetNumEvent()+1) !=0) 
       {
-	//Fill ntuple #5
-	man->FillNtupleDColumn(5,0,v.x());
-	man->FillNtupleDColumn(5,1,v.y());
-	man->FillNtupleDColumn(5,2,v.z());
-	man->FillNtupleDColumn(5,3,fDose3DDose[i]/(GetNumEvent()+1));
-	man->AddNtupleRow(5);
+        //Fill ntuple #5
+        man->FillNtupleDColumn(5,0,v.x());
+        man->FillNtupleDColumn(5,1,v.y());
+        man->FillNtupleDColumn(5,2,v.z());
+        man->FillNtupleDColumn(5,3,fDose3DDose[i]/(GetNumEvent()+1));
+        man->AddNtupleRow(5);
       }
   }
    

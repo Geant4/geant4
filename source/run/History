@@ -1,4 +1,4 @@
-$Id: History 102620 2017-02-10 08:11:22Z gcosmo $
+$Id: History 104521 2017-06-02 07:17:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,50 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 9, 2017, M. Asai (run-V10-02-41)
+June 1, 2017, A.Dotti (run-V10-03-11)
+- Prevent adding multiple times the same SD to the same LV via
+  G4VUserDetectorConsturction::SetSensitiveDetector.
+  In case skip and issue a warning.
+
+May 3, 2017, A. Dotti (run-V10-03-10)
+- Transfor G4VPhysicsConstructor split-class to be all pointers
+  (assessing valgrind report)
+
+April 26, 2017, A. Dotti (run-V10-03-08, -09)
+- New design of physics lists for cleanup of memory in MT
+- Introduced new class G4PhysicsBuilderInterface from which 
+  all physics_lists/builders inherit
+  Worker threads now call G4VUserPhysicsList::TerminateWorker
+  to clean up physics list thread-specific objects
+- G4VPhysicsConstructor holds list of TLS builders
+- Coworking tag phys-builders-V10-03-03
+ 
+April 21, 2017, M. Asai (run-V10-03-07)
+- G4MTRunManager.cc, G4WorkerRunManager.cc : protect against null 
+  pointer for SetUserAction() method.
+
+March 24, 2017, M. Asai (run-V10-03-06)
+- G4RunManagerKernel : remove unnecessary warning message.
+- G4RunManager : notify Vis manager when world volune is re-initialized.
+
+March 23, 2017, G. Cosmo (run-V10-03-05)
+- Added deletion of field-manager store and geometry manager thread-local
+  singletons in G4RunManagerKernel destructor.
+
+March 17, 2017, G. Cosmo (run-V10-03-04, 03)
+- Delete G4TransportationManager and G4PathFinder singletons in
+  G4RunManagerKernel, clearing static leaks at exit.
+
+March 13, 2017, G. Cosmo (run-V10-03-02)
+- G4WorkerThread: use CleanUpAndDestroyAllWorkspaces() from workspace pools
+  in DestroyGeometryAndPhysicsVector(). Minor code cleanup.
+
+February 9, 2017, M. Asai (run-V10-03-01)
 - Banner on worker RunManager will no longer be printed.
 
-December 22, 2016, L. Desorgher (run-V10-02-40)
--Modifications to solve bug with reverse track splitting. Works with tag tracking-V10-03-00.
+December 22, 2016, L. Desorgher (run-V10-03-00)
+- Modifications to solve bug with reverse track splitting.
+  Works with tag tracking-V10-03-00.
   - Add G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent()
   - Use G4AdjointSimManager::ResetDidOneAdjPartReachExtSourceDuringEvent() in 
                 G4AdjointPrimaryGeneratorAction. 

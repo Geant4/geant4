@@ -1,4 +1,4 @@
-$Id: History 100657 2016-10-31 10:16:49Z gcosmo $
+$Id: History 104102 2017-05-11 07:48:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ and keep track of all category-tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.09.2017    G.Cosmo tag medical_linac-V10-03-00
+              Fixed compilation warnings on gcc-7.1 in CML2Acc1::MLC().
 
 28.11.2016    G.Folger tag medical_linac-V10-02-00
               Remove direct use of theParticleIterator, use GetParticleTableIterator().

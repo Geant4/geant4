@@ -122,11 +122,11 @@ class G4GeomSplitter
     }
 
     void SlaveReCopySubInstanceArray()
-    // Invoked by each worker thread at start of a run (2nd or later)
-    //  to copy again all the subinstance array from the master thread.
-    // To cope with user's changes in Geometry - e.g. change of material in a volume
+      // Invoked by each worker thread at start of a run (2nd or later)
+      // to copy again all the subinstance array from the master thread.
+      // To cope with user's changes in Geometry - e.g. change of material
+      // in a volume
     {
-      G4AutoLock l(&mutex);
       if (!offset)
       {
         SlaveInitializeSubInstance();
@@ -134,7 +134,6 @@ class G4GeomSplitter
                     "MissingInitialisation", JustWarning,
                     "Must be called after Initialisation or first Copy.");
       }
-      l.unlock();
       CopyMasterContents();
     }
   
@@ -146,14 +145,13 @@ class G4GeomSplitter
       offset = 0;
     }
 
-   // 
-   // Extension - to allow sharing of workspaces  - John Apostolakis 28 May 2013
+    // Extension - to allow sharing of workspaces
   
-    T*   GetOffset() { return offset; }
+    T* GetOffset() { return offset; }
   
-    void UseWorkArea( T* newOffset ) // ,  G4int numObjects, G4int numSpace)
-    {
+    void UseWorkArea( T* newOffset )
       // Use recycled work area - which was created previously
+    {
       if( offset && offset!=newOffset )
       {
          G4Exception("G4GeomSplitter::UseWorkspace()", 
@@ -161,25 +159,15 @@ class G4GeomSplitter
                      "Thread already has workspace - cannot use another.");
       }
       offset= newOffset;
-      // totalobj= numObjects;
-      // totalspace= numSpace;
     }
 
-    T* FreeWorkArea() // G4int* numObjects, G4int* numSpace)
-    {
-      // Detach this thread from this Location
+    T* FreeWorkArea()
+      // Detach this thread from this Location.
       // The object which calls this method is responsible for it.
-      //
-      T* offsetRet= offset;
-
-       offset= 0; 
-
-       return offsetRet;
-    }
-  
-    void Destroy()
     {
- 
+      T* offsetRet= offset;
+      offset= 0;
+      return offsetRet;
     }
 
   public:

@@ -1,4 +1,4 @@
-$Id: History 95193 2016-01-29 08:23:25Z gcosmo $
+$Id: History 103731 2017-04-25 08:01:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 24, 2017, M. Asai (procscore-V10-03-00)
+- G4ParallelWorldProcess: G4Step of a parallel world now has a valid
+  pointer to secondaries.
 
 January 27, 2016, M. Asai (procscore-V10-02-00)
 - G4ParallelWorldProcess: change processType from fParameterized

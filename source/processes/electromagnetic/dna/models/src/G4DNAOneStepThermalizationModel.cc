@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.cc 102637 2017-02-10 11:08:17Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.cc 101807 2016-11-30 13:42:28Z gunter $
 //
 // Author: Mathieu Karamitros
 //
@@ -141,7 +141,7 @@ namespace DNA{ namespace Penetration{
     size_t lowBin, upBin;
     
     if(k_eV >= 1.){
-      lowBin=floor(k_eV)+1;
+      lowBin=std::floor(k_eV)+1;
       upBin=std::min(lowBin+1, size_t(10));
     }
     else{
@@ -183,7 +183,7 @@ namespace DNA{ namespace Penetration{
     static constexpr double factor = 2.20496999539;
     // 1./(3. - 8./CLHEP::pi);
     
-    double sigma1D = sqrt(pow(sigma3D, 2.)*factor);
+    double sigma1D = std::sqrt(std::pow(sigma3D, 2.)*factor);
     
     // G4cout << "sigma1D = " << sigma1D/CLHEP::nanometer << G4endl;
 

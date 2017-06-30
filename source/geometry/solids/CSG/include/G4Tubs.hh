@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh 100820 2016-11-02 15:18:48Z gcosmo $
+// $Id: G4Tubs.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -128,7 +128,7 @@ class G4Tubs : public G4CSGSolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

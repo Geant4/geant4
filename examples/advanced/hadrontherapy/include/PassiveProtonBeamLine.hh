@@ -38,7 +38,6 @@
 
 class G4VPhysicalVolume;
 class HadrontherapyDetectorConstruction;
-//class FaradayCup;
 class HadrontherapyModulator;
 class PassiveProtonBeamLineMessenger;
 class HadrontherapyDetectorROGeometry;
@@ -46,8 +45,7 @@ class HadrontherapyDetectorROGeometry;
 class PassiveProtonBeamLine : public G4VUserDetectorConstruction
 {
 public:
-    
-    //PassiveProtonBeamLine(G4VPhysicalVolume*);
+
     PassiveProtonBeamLine();
     ~PassiveProtonBeamLine();
   // static G4bool doCalculation;
@@ -134,8 +132,6 @@ private:
     G4VPhysicalVolume* physicalTreatmentRoom;
     HadrontherapyDetectorConstruction* hadrontherapyDetectorConstruction;
     
-    // Pointer to the Faraday Cup class file
-  // FaradayCup *pFaradayCup;
     
     G4Material* kapton;
 	

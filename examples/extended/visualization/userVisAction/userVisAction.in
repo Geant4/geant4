@@ -1,21 +1,16 @@
-/tracking/verbose 1
+# Macro file for example B1 test
 
-/gun/energy    200 MeV
-/gun/particle e+
-/run/beamOn 1
+/run/initialize
 
-/gun/energy    1 TeV
-/gun/particle mu+
-/run/beamOn 1
-
-/tracking/verbose 0
-
-/gun/energy    200 MeV
-/gun/particle e+
-/run/beamOn 100
-
-/gun/energy    1 TeV
-/gun/particle mu+
-/run/beamOn 100
-
-exit
+# gamma 6 MeV 
+/gun/particle gamma
+/gun/energy 6 MeV
+#
+/run/printProgress 100
+/run/beamOn 1000
+#
+# proton 210 MeV 
+/gun/particle proton
+/gun/energy 210 MeV
+#
+/run/beamOn 1000

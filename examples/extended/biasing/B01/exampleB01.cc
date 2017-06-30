@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/B01 example
 //
 //
-// $Id: exampleB01.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: exampleB01.cc 103006 2017-03-08 08:12:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
     delete wwAlg;
   }
 
-  mgs.ClearSampling();
+  // mgs.ClearSampling();
 
   delete runManager;
 

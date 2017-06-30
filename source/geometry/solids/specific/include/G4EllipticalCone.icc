@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4EllipticalCone.icc 102864 2017-02-27 14:22:02Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -88,32 +88,4 @@ void G4EllipticalCone::SetZCut (G4double newzTopCut)
   else
     { zTopCut = newzTopCut; }
   fRebuildPolyhedron = true;
-}
-
-inline
-G4double G4EllipticalCone::GetCubicVolume()
-{
-  if(fCubicVolume != 0 ) {;}
-  else
-  {
-    if (zTopCut > +zheight )
-    {
-      fCubicVolume = (8./3.)*CLHEP::pi*xSemiAxis*
-                     ySemiAxis*zheight*zheight*zheight;
-    }
-    else 
-    {   
-      fCubicVolume = CLHEP::pi*xSemiAxis*ySemiAxis*
-                    (2./3.*std::pow(zTopCut,3.)+2.*sqr(zheight)*zTopCut);
-    }
-  }
-  return fCubicVolume;
-}
-
-inline
-G4double G4EllipticalCone::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
-  return fSurfaceArea;
 }

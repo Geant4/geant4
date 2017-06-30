@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/StackingAction.cc
 /// \brief Implementation of the StackingAction class
 //
-// $Id: StackingAction.cc 88674 2015-03-05 08:29:46Z gcosmo $
+// $Id: StackingAction.cc 104417 2017-05-30 08:30:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,11 @@ StackingAction::StackingAction(EventAction* EA)
  : G4UserStackingAction(), fEventAction(EA),
    fKillSecondary(0),fStackMessenger(0),fPhotoGamma(-1),fComptGamma(-1),
    fPhotoAuger(-1),fComptAuger(-1),fPixeGamma(-1),fPixeAuger(-1),
-   fIDdefined(false)
+   fElectronDNAGamma(-1),fElectronDNAAuger(-1),fProtonDNAGamma(-1),
+   fProtonDNAAuger(-1),fHydrogenDNAGamma(-1),fHydrogenDNAAuger(-1),
+   fAlphaDNAGamma(-1),fAlphaDNAAuger(-1),fAlphaPlusDNAGamma(-1),
+   fAlphaPlusDNAAuger(-1),fHeliumDNAGamma(-1),fHeliumDNAAuger(-1),
+   fGenericIonDNAGamma(-1),fGenericIonDNAAuger(-1),fIDdefined(false)
 {
   fStackMessenger = new StackingMessenger(this);
 }
@@ -77,6 +81,34 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
     fComptAuger = G4PhysicsModelCatalog::GetIndex("compt_auger");
     fPixeGamma = G4PhysicsModelCatalog::GetIndex("gammaPIXE");
     fPixeAuger = G4PhysicsModelCatalog::GetIndex("e-PIXE");
+    fElectronDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("e-_G4DNAIonisation_fluo");
+    fElectronDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("e-_G4DNAIonisation_auger");
+    fProtonDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("proton_G4DNAIonisation_fluo");
+    fProtonDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("proton_G4DNAIonisation_auger");
+    fHydrogenDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("hydrogen_G4DNAIonisation_fluo");
+    fHydrogenDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("hydrogen_G4DNAIonisation_auger");
+    fAlphaDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("alpha_G4DNAIonisation_fluo");
+    fAlphaDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("alpha_G4DNAIonisation_auger");
+    fAlphaPlusDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("alpha+_G4DNAIonisation_fluo");
+    fAlphaPlusDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("alpha+_G4DNAIonisation_auger");
+    fHeliumDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("helium_G4DNAIonisation_fluo");
+    fHeliumDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("helium_G4DNAIonisation_auger");
+    fGenericIonDNAGamma = 
+     G4PhysicsModelCatalog::GetIndex("GenericIon_G4DNAIonisation_fluo");
+    fGenericIonDNAAuger = 
+     G4PhysicsModelCatalog::GetIndex("GenericIon_G4DNAIonisation_auger");
   }
   G4int idx = aTrack->GetCreatorModelID();
 
@@ -101,11 +133,20 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
     analysisManager->FillH1(2,energy);
     analysisManager->FillH1(4,energy);
     if(idx == fPhotoAuger || idx == fComptAuger) {
-      analysisManager->FillH1(16,energy);
-      analysisManager->FillH1(18,energy);
+      analysisManager->FillH1(50,energy);
+      analysisManager->FillH1(52,energy);
     } else if(idx == fPixeAuger) {
-      analysisManager->FillH1(44,energy);
-      analysisManager->FillH1(46,energy);
+      analysisManager->FillH1(54,energy);
+      analysisManager->FillH1(56,energy);
+    } else if(idx == fElectronDNAAuger || 
+              idx == fProtonDNAAuger || 
+              idx == fHydrogenDNAAuger || 
+              idx == fAlphaDNAAuger || 
+              idx == fAlphaPlusDNAAuger || 
+              idx == fHeliumDNAAuger || 
+              idx == fGenericIonDNAAuger) {
+      analysisManager->FillH1(58,energy);
+      analysisManager->FillH1(60,energy);
     }
   }
 
@@ -113,11 +154,20 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
     analysisManager->FillH1(3,energy);
     analysisManager->FillH1(5,energy);
     if(idx == fPhotoGamma || idx == fComptGamma) {
-      analysisManager->FillH1(17,energy);
-      analysisManager->FillH1(19,energy);
+      analysisManager->FillH1(51,energy);
+      analysisManager->FillH1(53,energy);
     } else if(idx == fPixeGamma) {
-      analysisManager->FillH1(45,energy);
-      analysisManager->FillH1(47,energy);
+      analysisManager->FillH1(55,energy);
+      analysisManager->FillH1(57,energy);
+    } else if(idx == fElectronDNAGamma || 
+              idx == fProtonDNAGamma || 
+              idx == fHydrogenDNAGamma || 
+              idx == fAlphaDNAGamma || 
+              idx == fAlphaPlusDNAGamma || 
+              idx == fHeliumDNAGamma || 
+              idx == fGenericIonDNAGamma) {
+      analysisManager->FillH1(59,energy);
+      analysisManager->FillH1(61,energy);
     }
   }  
 

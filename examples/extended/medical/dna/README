@@ -4,7 +4,7 @@
                         README file
                    ----------------------
 
-This directory contains a set of dna examples.
+This directory contains a set of Geant4-DNA examples.
 
    - dnaphysics 
        The dnaphysics example shows how to simulate track structures in liquid 
@@ -22,6 +22,9 @@ This directory contains a set of dna examples.
    - range 
        Simulation of ranges.
 
+   - spower 
+       Simulation of stopping power.
+
    - svalue
        This example shows how to simulate S-values in spheres of liquid water
        using the Geant4-DNA physics processes and models.
@@ -29,6 +32,9 @@ This directory contains a set of dna examples.
    - wvalue
        This example shows how to simulate W-values in liquid water
        using the Geant4-DNA physics processes and models.
+
+   - slowing 
+       Simulation of slowing down spectra.
 
    - chem1   Simple activation of the chemistry module.
    - chem2   Usage of TimeStepAction in the chemistry module.
@@ -38,8 +44,11 @@ This directory contains a set of dna examples.
    - pdb4dna         
        Usage of the Protein Data Bank (PDB) file format to build geometries.
 
-   - wholenucleardna 
+   - wholeNuclearDNA 
        Geometrical description of a full simplified cell nucleus.
+   
+   - neuron 
+       Irradiation of a realistic neuron cell.
    
    - clustering 
        Clustering application for direct damage extraction.

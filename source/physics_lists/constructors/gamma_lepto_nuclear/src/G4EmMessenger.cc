@@ -74,6 +74,10 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetGuidance("Switching on gamma nuclear physics.");
   theGN->AvailableForStates(G4State_PreInit);
 
+  theEN = new G4UIcmdWithABool("/physics_lists/em/ElectroNuclear",this);
+  theEN->SetGuidance("Switching on e+- nuclear physics.");
+  theEN->AvailableForStates(G4State_PreInit);
+
   // command for muon nuclear physics.
   theMUN = new G4UIcmdWithABool("/physics_lists/em/MuonNuclear",this);
   theMUN->SetGuidance("Switching on muon nuclear physics.");
@@ -90,6 +94,18 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   thePH = new G4UIcmdWithABool("/physics_lists/em/PositronToHadrons",this);
   thePH->SetGuidance("Switching on positron conversion to hadrons.");
   thePH->AvailableForStates(G4State_PreInit);
+
+  theGMM1 = new G4UIcmdWithADouble("/physics_lists/em/GammaToMuonsFactor",this);
+  theGMM1->SetGuidance("Factor for gamma conversion to muon pair.");
+  theGMM1->AvailableForStates(G4State_PreInit);
+
+  thePMM1 = new G4UIcmdWithADouble("/physics_lists/em/PositronToMuonsFactor",this);
+  thePMM1->SetGuidance("Factor for positron conversion to muon pair.");
+  thePMM1->AvailableForStates(G4State_PreInit);
+
+  thePH1 = new G4UIcmdWithADouble("/physics_lists/em/PositronToHadronsFactor",this);
+  thePH1->SetGuidance("Factor for positron conversion to hadrons.");
+  thePH1->AvailableForStates(G4State_PreInit);
 }
 
 G4EmMessenger::~G4EmMessenger()
@@ -97,10 +113,14 @@ G4EmMessenger::~G4EmMessenger()
   delete theSynch;
   delete theSynchAll;
   delete theGN;
+  delete theEN;
   delete theMUN;
   delete theGMM;
   delete thePMM;
   delete thePH;
+  delete theGMM1;
+  delete thePMM1;
+  delete thePH1;
   delete aDir1;
   delete aDir2;
 }
@@ -110,8 +130,12 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==theSynch)    theB->Synch(theSynch->GetNewBoolValue(aS));
   if(aComm==theSynchAll) theB->SynchAll(theSynchAll->GetNewBoolValue(aS));
   if(aComm==theGN)       theB->GammaNuclear(theGN->GetNewBoolValue(aS));
+  if(aComm==theEN)       theB->ElectroNuclear(theEN->GetNewBoolValue(aS));
   if(aComm==theMUN)      theB->MuonNuclear(theMUN->GetNewBoolValue(aS));
   if(aComm==theGMM)      theB->GammaToMuMu(theGMM->GetNewBoolValue(aS));
   if(aComm==thePMM)      theB->PositronToMuMu(thePMM->GetNewBoolValue(aS));
   if(aComm==thePH)       theB->PositronToHadrons(thePH->GetNewBoolValue(aS));
+  if(aComm==theGMM1)     theB->GammaToMuMuFactor(theGMM1->GetNewDoubleValue(aS));
+  if(aComm==thePMM1)     theB->PositronToMuMuFactor(thePMM1->GetNewDoubleValue(aS));
+  if(aComm==thePH1)      theB->PositronToHadronsFactor(thePH1->GetNewDoubleValue(aS));
 }

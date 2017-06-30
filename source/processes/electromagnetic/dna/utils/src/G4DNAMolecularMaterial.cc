@@ -23,10 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 101354 2016-11-15 08:27:51Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 103042 2017-03-10 11:50:07Z gcosmo $
 //
 // Author: Mathieu Karamitros
 //
+
 #include "G4DNAMolecularMaterial.hh"
 #include "G4Material.hh"
 #include <utility>
@@ -323,6 +324,7 @@ G4DNAMolecularMaterial::RecordMolecularMaterial(G4Material* parentMaterial,
   }
   else{
     matComponent[molecularMaterial] = it->second + fraction;
+    // handle "base material"
   }
 }
 
@@ -332,30 +334,27 @@ void G4DNAMolecularMaterial::SearchMolecularMaterial(G4Material* parentMaterial,
                                                      G4Material* material,
                                                      double currentFraction)
 {
-  if (material->GetMassOfMolecule() != 0.0){
+  if (material->GetMassOfMolecule() != 0.0){ // is a molecular material
     RecordMolecularMaterial(parentMaterial, material, currentFraction);
     return;
   }
 
-  G4Material* compMat(0);
-  G4double fraction = -1;
+  G4Material* compMat(nullptr);
+  G4double fraction = -1.;
   std::map<G4Material*, G4double> matComponent = material->GetMatComponents();
   std::map<G4Material*, G4double>::iterator it = matComponent.begin();
 
   for (; it != matComponent.end(); it++){
     compMat = it->first;
     fraction = it->second;
-    if (compMat->GetMassOfMolecule() == 0.0){
+    if (compMat->GetMassOfMolecule() == 0.0){ // is not a molecular material
       SearchMolecularMaterial(parentMaterial, compMat,
                               currentFraction * fraction);
     }
-    else{
+    else{ // is a molecular material
       RecordMolecularMaterial(parentMaterial, compMat,
                               currentFraction * fraction);
     }
-
-    //compMat = 0;
-    //fraction = -1;
   }
 }
 
@@ -438,7 +437,7 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(
     const G4Material* lookForMaterial) const
 {
   if(lookForMaterial==0) return nullptr;
-  
+
   if (!fpCompNumMolPerVolTable){
     if (fIsInitialized){
       G4ExceptionDescription exceptionDescription;
@@ -581,7 +580,7 @@ G4DNAMolecularMaterial::SetMolecularConfiguration(const G4String& materialName,
                                                   const G4String& molUserID)
 {
   G4Material* material = G4Material::GetMaterial(materialName);
-  
+
   if(material == 0){
     G4cout<< "Material " << materialName
           << " was not found and therefore won't be linked to "
@@ -589,4 +588,34 @@ G4DNAMolecularMaterial::SetMolecularConfiguration(const G4String& materialName,
     return;
   }
   SetMolecularConfiguration(material, molUserID);
+}
+
+//------------------------------------------------------------------------------
+
+G4double
+G4DNAMolecularMaterial::
+GetNumMoleculePerVolumeUnitForMaterial(const G4Material*)
+{
+  G4Exception("G4DNAMolecularMaterial::GetNumMolPerVolForComponentInComposite",
+              "DEPRECATED",
+              FatalException,"Use standard method: GetNumMolPerVolTableFor"
+              " at the run initialization to retrieve a read-only table used"
+              " during stepping. The method is thread-safe.");
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+
+G4double
+G4DNAMolecularMaterial::
+GetNumMolPerVolForComponentInComposite(const G4Material*,
+                                       const G4Material*,
+                                       G4double)
+{
+  G4Exception("G4DNAMolecularMaterial::GetNumMolPerVolForComponentInComposite",
+               "DEPRECATED",
+               FatalException,"Use standard method: GetNumMolPerVolTableFor"
+              " at the run initialization to retrieve a read-only table used"
+              " during stepping. The method is thread-safe.");
+  return 0;
 }

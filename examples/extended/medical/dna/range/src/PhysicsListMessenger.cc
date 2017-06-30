@@ -25,15 +25,10 @@
 //
 /// \file medical/dna/range/src/PhysicsListMessenger.cc
 /// \brief Implementation of the PhysicsListMessenger class
-//
-// $Id: PhysicsListMessenger.cc 82461 2014-06-23 10:44:06Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsListMessenger.hh"
-
 #include "PhysicsList.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
@@ -70,4 +65,3 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    { fPhysicsList->AddPhysicsList(newValue);}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

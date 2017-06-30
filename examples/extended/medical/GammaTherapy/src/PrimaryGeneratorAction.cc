@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PrimaryGeneratorAction.cc 103662 2017-04-20 14:58:33Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/PrimaryGeneratorAction.cc
 /// \brief Implementation of the PrimaryGeneratorAction class
@@ -51,7 +51,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,10 +65,10 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* pDet):
 
 void PrimaryGeneratorAction::InitializeMe()
 {
+  fVerbose = fDetector->GetVerbose();
   fMessenger = new PrimaryGeneratorMessenger(this);
   fParticleGun = new G4ParticleGun();
   fCounter = 0;
-  fVerbose = 0;
   fX0 = 0.0;
   fY0 = 0.0;
   fZ0 = 0.0;
@@ -85,9 +84,6 @@ void PrimaryGeneratorAction::InitializeMe()
   fPosition  = G4ThreeVector(fX0,fY0,fZ0);
   fDirection = G4ThreeVector(0.0,0.0,1.0);
   fGauss = true;
-  if(fEnergy < (Histo::GetPointer())->GetMaxEnergy()) {
-    (Histo::GetPointer())->SetMaxEnergy(fEnergy);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -103,7 +99,6 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   fCounter++ ;
-  fVerbose = (Histo::GetPointer())->GetVerbose();
 
   // Simulation of beam position
   G4double x = fX0;
@@ -183,9 +178,7 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 void PrimaryGeneratorAction::SetBeamEnergy(G4double val)
 {
   fEnergy = val;
-  if(fEnergy < (Histo::GetPointer())->GetMaxEnergy()) {
-    (Histo::GetPointer())->SetMaxEnergy(fEnergy);
-  }
+  if(fEnergy<fDetector->GetMaxEnergy()) fDetector->SetMaxEnergy(fEnergy);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

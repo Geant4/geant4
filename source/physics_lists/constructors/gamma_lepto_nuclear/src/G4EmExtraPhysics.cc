@@ -72,12 +72,16 @@
 G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
 
 G4bool G4EmExtraPhysics::gnActivated  = true;
+G4bool G4EmExtraPhysics::eActivated   = true;
 G4bool G4EmExtraPhysics::munActivated = true;
 G4bool G4EmExtraPhysics::synActivated = false;
 G4bool G4EmExtraPhysics::synActivatedForAll = false;
 G4bool G4EmExtraPhysics::gmumuActivated = false;
 G4bool G4EmExtraPhysics::pmumuActivated = false;
-G4bool G4EmExtraPhysics::phadActivated = false;
+G4bool G4EmExtraPhysics::phadActivated  = false;
+G4double G4EmExtraPhysics::gmumuFactor  = 1.0;
+G4double G4EmExtraPhysics::pmumuFactor  = 1.0;
+G4double G4EmExtraPhysics::phadFactor   = 1.0;
 
 G4ThreadLocal G4BertiniElectroNuclearBuilder* G4EmExtraPhysics::theGNPhysics = nullptr;
 G4ThreadLocal G4SynchrotronRadiation* G4EmExtraPhysics::theSynchRad = nullptr;
@@ -120,6 +124,11 @@ void G4EmExtraPhysics::GammaNuclear(G4bool val)
   gnActivated = val;
 }
 
+void G4EmExtraPhysics::ElectroNuclear(G4bool val)
+{
+  eActivated = val;
+}
+
 void G4EmExtraPhysics::MuonNuclear(G4bool val)
 {
   munActivated = val;
@@ -138,6 +147,21 @@ void G4EmExtraPhysics::PositronToMuMu(G4bool val)
 void G4EmExtraPhysics::PositronToHadrons(G4bool val)
 {
   phadActivated = val;
+}
+
+void G4EmExtraPhysics::GammaToMuMuFactor(G4double val)
+{
+  if(val > 0.0) gmumuFactor = val;
+}
+
+void G4EmExtraPhysics::PositronToMuMuFactor(G4double val)
+{
+  if(val > 0.0) pmumuFactor = val;
+}
+
+void G4EmExtraPhysics::PositronToHadronsFactor(G4double val)
+{
+  if(val > 0.0) phadFactor = val;
 }
 
 void G4EmExtraPhysics::ConstructParticle()
@@ -159,9 +183,8 @@ void G4EmExtraPhysics::ConstructProcess()
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   if(gnActivated) {
-    theGNPhysics = new G4BertiniElectroNuclearBuilder();
+    theGNPhysics = new G4BertiniElectroNuclearBuilder(eActivated);
     theGNPhysics->Build();
-    //G4AutoDelete::Register(theGNPhysics);
   }
   if(munActivated) {
     G4MuonNuclearProcess* muNucProcess = new G4MuonNuclearProcess();
@@ -172,21 +195,23 @@ void G4EmExtraPhysics::ConstructProcess()
   }
   if(gmumuActivated) {
     theGammaToMuMu = new G4GammaConversionToMuons();
+    theGammaToMuMu->SetCrossSecFactor(gmumuFactor);
     ph->RegisterProcess(theGammaToMuMu, gamma);
   }  
   if(pmumuActivated) {
     thePosiToMuMu = new G4AnnihiToMuPair();
+    thePosiToMuMu->SetCrossSecFactor(pmumuFactor);
     ph->RegisterProcess(thePosiToMuMu, positron);
   }  
   if(phadActivated) {
     thePosiToHadrons = new G4eeToHadrons();
+    thePosiToHadrons->SetCrossSecFactor(phadFactor);
     ph->RegisterProcess(thePosiToHadrons, positron);
   }  
   if(synActivated) {
     theSynchRad = new G4SynchrotronRadiation();
     ph->RegisterProcess( theSynchRad, electron);
     ph->RegisterProcess( theSynchRad, positron);
-    //G4AutoDelete::Register(theSynchRad);
     if(synActivatedForAll) {
       auto myParticleIterator=GetParticleIterator();
       myParticleIterator->reset();

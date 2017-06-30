@@ -38,6 +38,7 @@
 #include "G4LossTableManager.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4NuclideTable.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -52,10 +53,13 @@ G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
 {
   G4EmParameters* param = G4EmParameters::Instance();
   param->SetAugerCascade(true);
-  param->AddMsc("world","G4RadioactiveDecay");
+  param->AddPhysics("world","G4RadioactiveDecay");
 
-  G4NuclearLevelData::GetInstance()->GetParameters()->SetUseFilesNEW(true);
-  G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true);
+  G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
+  deex->SetUseFilesNEW(true);
+  deex->SetStoreAllLevels(true);
+  deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
+                       /std::log(2.));
 }
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)

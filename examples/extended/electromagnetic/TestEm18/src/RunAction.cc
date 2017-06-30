@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 82401 2014-06-18 14:43:54Z gcosmo $
+// $Id: RunAction.cc 103621 2017-04-19 13:21:45Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,6 @@
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
 
@@ -82,8 +81,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
     analysisManager->OpenFile();
   }       
 
-  // do not save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.hh 96677 2016-04-29 12:20:20Z gcosmo $
+// $Id: G4GDMLWriteStructure.hh 104688 2017-06-12 12:16:28Z gcosmo $
 //
 //
 // class G4GDMLWriteStructure
@@ -67,6 +67,9 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    void SetEnergyCutsExport(G4bool);
    void SetSDExport(G4bool);
 
+   G4int GetMaxExportLevel() const;
+   void SetMaxExportLevel(G4int);
+
  protected:
 
    void DivisionvolWrite(xercesc::DOMElement*, const G4PVDivision* const);
@@ -96,7 +99,9 @@ class G4GDMLWriteStructure : public G4GDMLWriteParamvol
    std::vector<const G4OpticalSurface*> opt_vec;
    G4ReflectionFactory* reflFactory;
    G4bool cexport;  // Flag for optional export of energy cuts per volume
-   G4bool sdexport;  // Flag for optional export of SD per volume
+   G4bool sdexport; // Flag for optional export of SD per volume
+   G4int maxLevel;  // Maximum number of levels to export
+   static G4int levelNo;  // Counter for level being exported
 };
 
 #endif

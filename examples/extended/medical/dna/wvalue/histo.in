@@ -2,13 +2,12 @@
 /run/numberOfThreads 2
 #
 /w/det/setMat G4_WATER
+#
 /w/det/setRadius 1 m
 #
 /w/det/setTrackingCut 7.4 eV
 #
-# Register physics constructor
 /w/phys/addPhysics dna	        
-#/w/phys/addPhysics  dna_opt4	
 #
 /run/initialize
 #

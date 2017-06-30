@@ -7,6 +7,9 @@
                            History file
                            ------------
 
+09.03.2017 - G. Cosmo (air_shower-V10-03-00)
+	     Updated setup for visualization in main() and Visualisation.mac.
+
 21.11.2016 - G. Cosmo (air_shower-V10-02-03)
 	     Fixed compilation warning for unused variable in
              UltraDetectorConstruction.

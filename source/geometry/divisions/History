@@ -1,4 +1,4 @@
-$Id: History 96863 2016-05-13 13:45:58Z gcosmo $
+$Id: History 103225 2017-03-22 14:31:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 22nd, 2017        G.Cosmo (geomdiv-V10-03-00)
+- Updated ExDivision unit test.
 
 May 13th, 2016          G.Cosmo (geomdiv-V10-02-00)
 - Updated unit tests.

@@ -35,8 +35,8 @@
 /// \brief Implementation of the DetectorMessenger class
 
 #include "DetectorMessenger.hh"
-
 #include "DetectorConstruction.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"

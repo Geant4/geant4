@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -29,7 +29,7 @@
 
 
  Material: H2liquid    density: 70.800 mg/cm3  RadL:   8.923 m    Nucl.Int.Length:   4.944 m  
-                       Imean:  19.200 eV 
+                       Imean:  19.200 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -38,7 +38,7 @@
 
 
  Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
-                       Imean:  78.000 eV 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -76,7 +76,7 @@
 
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
-                       Imean: 188.000 eV 
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -86,7 +86,7 @@
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
-                       Imean: 166.000 eV 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
@@ -94,7 +94,7 @@
 
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
-                       Imean: 173.000 eV 
+                       Imean: 173.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -104,7 +104,7 @@
 
 
  Material: Chromium    density:  7.140 g/cm3   RadL:   2.093 cm   Nucl.Int.Length:  18.295 cm 
-                       Imean: 257.000 eV 
+                       Imean: 257.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Cr (Cr)   Z = 24.0   N =    52   A = 51.990 g/mole
          --->  Isotope:  Cr50   Z = 24   N =  50   A =  49.95 g/mole   abundance:  4.345 %
@@ -115,7 +115,7 @@
 
 
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
-                       Imean: 350.000 eV 
+                       Imean: 350.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
@@ -127,7 +127,7 @@
 
 
  Material:      BGO    density:  7.100 g/cm3   RadL:   1.123 cm   Nucl.Int.Length:  22.806 cm 
-                       Imean: 473.785 eV 
+                       Imean: 473.785 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
@@ -149,7 +149,7 @@
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
+                       Imean: 286.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.850 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -160,7 +160,7 @@
 
 
  Material: Tungsten    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
-                       Imean: 727.000 eV 
+                       Imean: 727.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: W (W)   Z = 74.0   N =   184   A = 183.850 g/mole
          --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
@@ -172,7 +172,7 @@
 
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
-                       Imean: 790.000 eV 
+                       Imean: 790.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Au (Au)   Z = 79.0   N =   197   A = 196.970 g/mole
          --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.000 %
@@ -180,7 +180,7 @@
 
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
-                       Imean: 823.000 eV 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -191,7 +191,7 @@
 
 
  Material:  Uranium    density: 18.950 g/cm3   RadL:   3.166 mm   Nucl.Int.Length:  11.446 cm 
-                       Imean: 890.000 eV 
+                       Imean: 890.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: U (U)   Z = 92.0   N =   238   A = 238.030 g/mole
          --->  Isotope:  U234   Z = 92   N = 234   A = 234.04 g/mole   abundance:  0.005 %
@@ -254,7 +254,7 @@
 
 
  Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.920 cm 
-                       Imean: 418.807 eV 
+                       Imean: 418.807 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Lu (Lu)   Z = 71.0   N =   175   A = 174.967 g/mole
          --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance: 97.410 %
@@ -334,40 +334,41 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.48s Real=1.48s Sys=0s
+  User=2.38s Real=2.37s Sys=0s
 
  ======================== run summary ======================
 
  The run is: 2000 e- of 100 MeV through 10 m   of Aluminium (density: 2.7 g/cm3 )
 
- total energy deposit: 99.817 MeV
+ total energy deposit: 99.823 MeV
 
- nb tracks/event   neutral:  25.441   charged:  138.46
- nb  steps/event   neutral:  131.89   charged:  204.44
+ nb tracks/event   neutral:  25.302   charged:  137.55
+ nb  steps/event   neutral:  139.77   charged:  203.24
 
  Process calls frequency :
-       Transportation=   1839               annihil=   2876                 compt= 212896
-                 conv=   2866                 eBrem=  46209                 eIoni= 359472
-                  msc=    320                  phot=  46180 
+          CoulombScat=      1                  Rayl=  17645        Transportation=   1820
+              annihil=   2826                 compt= 211290                  conv=   2813
+                eBrem=  45992                 eIoni= 357217                   msc=    426
+                 phot=  45979 
 
 ---------------------------------------------------------
  Primary particle : 
- true Range = 11.001 cm    rms = 3.8709 cm 
- proj Range = 9.5787 cm    rms = 3.5769 cm 
- proj/true  = 0.87071
- transverse dispersion at end = 1.5791 cm 
-      mass true Range from simulation = 29.703 g/cm2 
+ true Range = 11.083 cm    rms = 3.9372 cm 
+ proj Range = 9.6308 cm    rms = 3.6326 cm 
+ proj/true  = 0.86894
+ transverse dispersion at end = 1.619 cm 
+      mass true Range from simulation = 29.925 g/cm2 
        from PhysicsTable (csda range) = 32.1 g/cm2 
 ---------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 708485330, 665665664
+ Current couple of seeds = 1900758666, 1991093562
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.067 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.07 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

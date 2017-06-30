@@ -1,4 +1,4 @@
-$Id: History 102534 2017-02-08 13:47:58Z gcosmo $
+$Id: History 103041 2017-03-10 11:47:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-January 10th, 2017 G.Cosmo                - geomvol-V10-02-04
+March 10th, 2017 G.Cosmo                  - geomvol-V10-03-01
+- G4GeometryWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  to be called by worker threads. Removed declaration (i.e. not implemented)
+  of protected method ReleaseAndDestroyWorkspace().
+
+January 10th, 2017 G.Cosmo                - geomvol-V10-03-00
 - Correction in G4NavigationHistory default constructor to use
   GetLevels() instead of GetNewLevels() from G4NavigationHistoryPool,
   to favor re-use of already allocated space.

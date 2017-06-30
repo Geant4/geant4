@@ -15,26 +15,12 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
-
-#----------------------------------------------------------------------------
-# Find ROOT variables if the variable G4ANALYSIS_USE_ROOT is set
-#
-find_package(ROOT QUIET)
-
-
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
-if(ROOT_FOUND)
-add_definitions(-DG4ANALYSIS_USE_ROOT)
-include(${Geant4_USE_FILE})
-include_directories(${ROOT_INCLUDE_DIR} ${Geant4_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
-else()
 include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
-endif()
-
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -47,12 +33,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(hadrontherapy hadrontherapy.cc ${sources} ${headers})
-
-if(ROOT_FOUND)
-target_link_libraries(hadrontherapy ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
-else()
 target_link_libraries(hadrontherapy ${Geant4_LIBRARIES})
-endif()
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -62,8 +43,11 @@ endif()
 set(EXAMPLEhadrontherapy_SCRIPTS
   clean.sh
  batch.mac
- ModoulWeight.txt
- macro/GUIPersonalisation.mac
+Modulators/Modulator009_02.txt
+Modulators/Modulator010.txt
+Modulators/Modulator011.txt
+Modulators/ModulatorAM16FR.txt
+  macro/GUIPersonalisation.mac
   macro/carbon_beamline.mac
   macro/detectorGeometry.mac
   macro/hadron_therapy.mac
@@ -79,6 +63,7 @@ set(EXAMPLEhadrontherapy_SCRIPTS
   macro/defaultMacro.mac
   macro/Taranis.mac
   macro/inputFC.mac
+  macro/Trento_parameters.mac
 
  field/ESSMagneticField.TABLE
 

@@ -14,6 +14,41 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 Jun 2017 - Dennis Wright        (hadr-cohe-V10-03-05)
+--------------------------------------------------------
+- G4NuclNuclDiffuseElastic ctor: variables fCofAlphaMax and fCofAlphaCoulomb
+  were first set to non-zero values (1.5 and 0.5, respectively), then zeroed 
+  a few lines later.   This caused a zero scattering angle and no elastically
+  scattered target particle.  Fixed in response to bug report #1979.
+
+13 Jun 2017 - A.Ribon              (hadr-cohe-V10-03-04)
+-----------------------------------------------------------------
+- G4NeutronElectronElModel : Coverity fix.
+
+29 May 2017 - A.Ribon              (hadr-cohe-V10-03-03)
+-----------------------------------------------------------------
+- G4NeutronElectronElModel : added (by Grichine) model for neutron-electron
+  elastic scattering. It produces recoil electrons resulting in visible
+  energy deposition. The model is based on ultra-relativistic approximation
+  of the Rosenbluth formula, since recoil electrons will have enough energy
+  to be detected in the case of high energy neutrons, roughly > 1 GeV.
+
+23 May 2017 - A.Ribon              (hadr-cohe-V10-03-02)
+-----------------------------------------------------------------
+- G4NeutrinoElectronNcModel : fixed (by Grichine) bug on the Plab
+  calculation in the G4NeutrinoElectronNcModel::ApplyYourself method.
+
+11 April 2017 - A.Ribon            (hadr-cohe-V10-03-01)
+-----------------------------------------------------------------
+- Forgot to add the (new) class G4NeutrinoElectronNcModel in the
+  sources.cmake.
+
+11 April 2017 - A.Ribon            (hadr-cohe-V10-03-00)
+-----------------------------------------------------------------
+- G4NeutrinoElectronNcModel : added new class by Vladimir Grichine
+  for the final-state model of elastic neutrino-electron scattering.
+  This class is useful for dark matter and neutrino experiments.
+
 12 August 2016 - A.Ribon           (hadr-cohe-V10-02-01)
 -----------------------------------------------------------------
 - G4hhElastic : fixed wrong pointer initialization;

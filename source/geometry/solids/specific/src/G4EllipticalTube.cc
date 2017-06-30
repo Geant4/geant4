@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4EllipticalTube.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -40,6 +40,7 @@
 
 #include "G4EllipticalTube.hh"
 
+#include "G4GeomTools.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4AffineTransform.hh"
 #include "G4SolidExtentList.hh"
@@ -139,8 +140,8 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
 //
 // Get bounding box
 
-void G4EllipticalTube::Extent( G4ThreeVector& pMin,
-                               G4ThreeVector& pMax ) const
+void G4EllipticalTube::BoundingLimits( G4ThreeVector& pMin,
+                                       G4ThreeVector& pMax ) const
 {
   pMin.set(-dx,-dy,-dz);
   pMax.set( dx, dy, dz);
@@ -161,7 +162,7 @@ G4EllipticalTube::CalculateExtent( const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -813,14 +814,13 @@ G4VSolid* G4EllipticalTube::Clone() const
   return new G4EllipticalTube(*this);
 }
 
-
 //
 // GetCubicVolume
 //
 G4double G4EllipticalTube::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) {;}
-    else { fCubicVolume = G4VSolid::GetCubicVolume(); }
+  if (fCubicVolume == 0.)
+    fCubicVolume = twopi*dx*dy*dz;
   return fCubicVolume;
 }
 
@@ -829,8 +829,8 @@ G4double G4EllipticalTube::GetCubicVolume()
 //
 G4double G4EllipticalTube::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
+  if(fSurfaceArea == 0.)
+    fSurfaceArea = 2.*(pi*dx*dy + G4GeomTools::EllipsePerimeter(dx,dy)*dz);
   return fSurfaceArea;
 }
 

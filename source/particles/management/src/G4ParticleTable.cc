@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc 94421 2015-11-16 08:22:56Z gcosmo $
+// $Id: G4ParticleTable.cc 103108 2017-03-16 13:00:35Z gcosmo $
 //
 // class G4ParticleTable
 //
@@ -227,6 +227,7 @@ G4ParticleTable::~G4ParticleTable()
 
   fgParticleTable =0;
 
+  G4ParticleDefinition::Clean();  // Delete sub-instance static data
 }
 
 ////////////////////

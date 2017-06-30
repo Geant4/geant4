@@ -56,10 +56,7 @@ HadrontherapyInteractionParameters::HadrontherapyInteractionParameters(G4bool wa
     data(G4cout.rdbuf()), 
     pMessenger(0),
     beamFlag(false)
-#ifdef G4ANALYSIS_USE_ROOT 
-    ,theRootCanvas(0),
-    theRootGraph(0)
-#endif
+
 {
     if (wantMessenger) pMessenger = new HadrontherapyParameterMessenger(this); 
 }
@@ -117,10 +114,7 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
 		data << std::setw(16) << energy[i] << massDedx[i] << G4endl;
 	}
     outfile.close();
-    // This will plot 
-#ifdef G4ANALYSIS_USE_ROOT 
-    PlotStopping("pdf");
-#endif
+    // This will plot
 
 // Info to user
     G4String ofName = (filename == "") ? "User terminal": filename;
@@ -132,53 +126,6 @@ bool HadrontherapyInteractionParameters::GetStoppingTable(const G4String& vararg
 		 ofName << "\"" << G4endl;
     return true;
 }
-///////////////////////////////////////////////////////////////////////////////////
-// Save Plot  
-#ifdef G4ANALYSIS_USE_ROOT 
-void HadrontherapyInteractionParameters::PlotStopping(const G4String& filetype)
-{
-    if (!theRootCanvas)
-    {
-	gROOT->Reset(); 
-	gROOT->SetStyle("Plain");
-	theRootCanvas = new TCanvas("theRootCanvas","Interaction Parameters",200, 10, 600,400);
-	theRootCanvas -> SetFillColor(20);
-	theRootCanvas -> SetBorderMode(1);
-	theRootCanvas -> SetBorderSize(1);
-	theRootCanvas -> SetFrameBorderMode(0);
-	theRootCanvas -> SetGrid();
-	// Use global pad: root manual pgg 109,...
-    }
-
-    if (theRootGraph) delete theRootGraph;
-    theRootGraph = new TGraph(energy.size(), &energy[0], &massDedx[0]);
-    //theRootGraph = new TGraph();
-    axisX = theRootGraph -> GetXaxis(),
-    axisY = theRootGraph -> GetYaxis();
-    axisX -> SetTitle("MeV");
-    axisY -> SetTitle("Stopping Power (MeV cm2/g)");
-    //axisX -> SetNdivisions(500,kTRUE);
-    //axisX -> SetTickLength(0.03);
-    //axisX -> SetLabelOffset(2.005);
-    axisX -> SetAxisColor(2);
-    axisY -> SetAxisColor(2);
-    gPad -> SetLogx(1);
-    gPad -> SetLogy(1);
-    theRootGraph -> SetMarkerColor(4);
-    theRootGraph -> SetMarkerStyle(20);// circle
-    theRootGraph -> SetMarkerSize(.5);
-
-    G4String gName = particle.substr(0, particle.find("[") ); // cut excitation energy   
-    gName = gName + "_" + material;
-    G4String fName = "./referenceData/interaction/" + gName + "." + filetype;
-    theRootGraph -> SetTitle(gName);
-    theRootGraph -> Draw("AP");
-    //theRootCanvas -> Update();
-    //theRootCanvas -> Draw();
-    theRootCanvas -> SaveAs(fName);
-}
-#endif
-
 // Search for user material choice inside G4NistManager database
 G4Material* HadrontherapyInteractionParameters::GetNistMaterial(G4String mat)
 {

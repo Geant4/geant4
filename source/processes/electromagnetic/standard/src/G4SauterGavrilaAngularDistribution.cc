@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SauterGavrilaAngularDistribution.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4SauterGavrilaAngularDistribution.cc 104021 2017-05-08 07:35:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -37,7 +37,8 @@
 // 
 // Creation date: 23 July 2012
 //
-//
+// Modified: 
+//   04.05.2017 Marilena Bandieramonte implemented Penelope 2014 algorithm
 // -------------------------------------------------------------------
 //
 
@@ -52,41 +53,56 @@ G4SauterGavrilaAngularDistribution::G4SauterGavrilaAngularDistribution()
 G4SauterGavrilaAngularDistribution::~G4SauterGavrilaAngularDistribution() 
 {}
 
-G4ThreeVector& 
-G4SauterGavrilaAngularDistribution::SampleDirection(
+G4ThreeVector&  G4SauterGavrilaAngularDistribution::SampleDirection( 
        const G4DynamicParticle* dp, G4double, G4int, const G4Material*)
 {
-  G4double tau = dp->GetKineticEnergy()/electron_mass_c2;
-  static const G4double taulimit = 50.0;
+  static const G4double emin = 1*CLHEP::eV;
+  static const G4double emax = 100*CLHEP::MeV;
 
-  if (tau > taulimit) {
-    fLocalDirection = dp->GetMomentumDirection(); 
-    // Bugzilla 1120
-    // SI on 05/09/2010 as suggested by JG 04/09/10 
+  G4double energy = std::max(dp->GetKineticEnergy(), emin);
+  if (energy > emax) {
+    fLocalDirection = dp->GetMomentumDirection();
   } else {
-    // algorithm according Penelope 2008 manual and 
-    // F.Sauter Ann. Physik 9, 217(1931); 11, 454(1931). 
+    // Initial algorithm according Penelope 2008 manual and 
+    // F.Sauter Ann. Physik 9, 217(1931); 11, 454(1931).
+    // Modified according Penelope 2014 manual 
+    G4double costheta = 0.0;
 
-    G4double gamma = tau + 1;
-    G4double beta  = std::sqrt(tau*(tau + 2))/gamma;
-    G4double A     = (1 - beta)/beta;
-    G4double Ap2   = A + 2;
-    G4double B     = 0.5*beta*gamma*(gamma - 1)*(gamma - 2);
-    G4double grej  = 2*(1 + A*B)/A;
-    G4double z, g;
-    do { 
-      G4double q = G4UniformRand();
-      z = 2*A*(2*q + Ap2*std::sqrt(q))/(Ap2*Ap2 - 4*q); 
-      g = (2 - z)*(1.0/(A + z) + B);
-
+    // 1) initialize energy-dependent variables
+    // Variable naming according to Eq. (2.24) of Penelope Manual
+    // (pag. 44)
+    G4double tau = energy/electron_mass_c2;
+    G4double gamma = 1.0 + tau;
+    G4double beta = std::sqrt(tau*(tau + 2.0))/gamma;
+    
+    // ac corresponds to "A" of Eq. (2.31)
+    //
+    G4double ac = (1.0 - beta)/beta;
+    G4double a1 = 0.5*beta*gamma*tau*(gamma-2.0);
+    G4double a2 = ac + 2.0;
+    // gtmax = maximum of the rejection function according to Eq. (2.28), 
+    // obtained for tsam=0
+    G4double gtmax = 2.0*(a1 + 1.0/ac);
+    
+    G4double tsam = 0.0;
+    G4double gtr  = 0.0;
+    
+    //2) sampling. Eq. (2.31) of Penelope Manual
+    // tsam = 1-std::cos(theta)
+    // gtr = rejection function according to Eq. (2.28)
+    do{
+      G4double rand = G4UniformRand();
+      tsam = 2.0*ac * (2.0*rand + a2*std::sqrt(rand)) / (a2*a2 - 4.0*rand);
+      gtr = (2.0 - tsam) * (a1 + 1.0/(ac+tsam));
       // Loop checking, 03-Aug-2015, Vladimir Ivanchenko
-    } while(g < G4UniformRand()*grej);
- 
-    G4double cost = 1 - z;
-    G4double sint = std::sqrt(z*(2 - z));
-    G4double phi  = CLHEP::twopi*G4UniformRand(); 
+    } while(G4UniformRand()*gtmax > gtr);
 
-    fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi), cost);
+    costheta = 1.0 - tsam;
+        
+    G4double sint = std::sqrt(tsam*(2.0 - tsam));
+    G4double phi  = CLHEP::twopi*G4UniformRand();
+        
+    fLocalDirection.set(sint*std::cos(phi), sint*std::sin(phi), costheta);
     fLocalDirection.rotateUz(dp->GetMomentumDirection());
   }
   return fLocalDirection;
@@ -100,3 +116,4 @@ void G4SauterGavrilaAngularDistribution::PrintGeneratorInformation() const
   G4cout << "Originally developed by M.Maire for Geant3" 
          << G4endl;
 } 
+

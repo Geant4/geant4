@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ImportanceAlgorithm.cc 102994 2017-03-07 16:31:28Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
@@ -36,8 +36,13 @@
 #include "G4Types.hh"
 #include <sstream>
 #include "Randomize.hh"
+#include "G4Threading.hh"
 
 #include "G4ImportanceAlgorithm.hh"
+
+#ifdef G4MULTITHREADED
+G4Mutex G4ImportanceAlgorithm::ImportanceMutex = G4MUTEX_INITIALIZER;
+#endif
 
 G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false)
 {
@@ -52,6 +57,11 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
 				 G4double ipost,
                                  G4double init_w) const
 {
+
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
+#endif
+
   G4Nsplit_Weight nw = {0,0};
   if (ipost>0.){
     if (!(ipre>0.)){
@@ -109,6 +119,9 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
       }
     }
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4ImportanceAlgorithm::ImportanceMutex);
+#endif
   return nw;
 }
 

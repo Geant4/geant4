@@ -842,16 +842,14 @@ void G4OpenInventorXtExaminerViewer::afterRealizeHook()
          fileOut.open(fileName.c_str(), std::ios::in);
          fileOut.seekp(0, std::ios::end); // For appending new data to the end
          constructListsDialog(getParentWidget(), this, NULL); // Pop up listsDialog
-
          if (viewPtList.size()) {
             // FWJ disabled auto-selection of first viewpoint.
             // Initial view should be user-controllable & not forced
-            //            setViewPt();
+            //    setViewPt();
             XtSetSensitive(nextViewPtButton, True);
             XtSetSensitive(prevViewPtButton, True);
          }
       }
-
       fileIn.close();
    } else {
       // Creates a new default bookmark file
@@ -999,12 +997,13 @@ void G4OpenInventorXtExaminerViewer::moveCamera(float dist, bool lookdown)
             distance = dist;
       }
 
-      if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-         if (!dist)
-            distance = (prevPt - cam->position.getValue()).length();
-         else
-            distance = dist;
-      }
+      // FWJ distance not relevant -- use focalDistance
+      // if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
+      //    if (!dist)
+      //       distance = (prevPt - cam->position.getValue()).length();
+      //    else
+      //       distance = dist;
+      // }
 
 
       float x,y,z;
@@ -1015,14 +1014,14 @@ void G4OpenInventorXtExaminerViewer::moveCamera(float dist, bool lookdown)
          camPosNew = p2 - (camDir*distance);
       }
       if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
-         camPosNew = p2 - (camDir);
+         // FWJ maintain focal distance
+         camPosNew = p2 - (camDir*cam->focalDistance.getValue());
+         //         camPosNew = p2 - (camDir);
       }
 
       cam->position = camPosNew;
       cam->pointAt(p2, camUpVec);
-      // FWJ Disabled: zooms out the Persp camera much too far
-      // and can't recover by zooming in!
-      //      cam->focalDistance = (p2 - camPosNew).length();
+      cam->focalDistance = (p2 - camPosNew).length();
 
       p2.getValue(x,y,z);
       camPosNew.getValue(x,y,z);
@@ -2834,18 +2833,24 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
             SbVec3f p1, pN;
             This->currentState = BEAMLINE;
             This->prevParticleDir = SbVec3f(0,0,0); //so that moveCamera() knows sets default parameters
-
+            
             p1 = This->prevPt = This->refParticleTrajectory[0];
             pN = This->refParticleTrajectory[This->refParticleTrajectory.size() - 1];
             This->distance = (pN - p1).length() / 10;
 
-            // FWJ Restore the default height instead of hard-wired value
-            if (cam->isOfType(SoOrthographicCamera::getClassTypeId()))
-               ((SoOrthographicCamera *) cam)->height.setValue(This->defaultHeight);
-            // ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
-            else if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
-               ((SoPerspectiveCamera *) cam)->heightAngle.setValue(
-                                                                   This->defaultHeightAngle);
+            // FWJ Rather than switching to a default height, it is more flexible
+            // to keep the same height(magnification) while moving the camera.
+            // if (cam->isOfType(SoOrthographicCamera::getClassTypeId())) {
+            //    ((SoOrthographicCamera *) cam)->height.setValue(This->defaultHeight);
+            // // FWJ Restore the default height instead of hard-wired value
+            // // ((SoOrthographicCamera *) cam)->height.setValue(10000.0f);
+            // }
+            // else if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
+
+            // FWJ required to avoid extreme perspective after camera move:
+            if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
+               ((SoPerspectiveCamera*)cam)->heightAngle.setValue(This->defaultHeightAngle);
+
          } else {
             if (cam->isOfType(SoPerspectiveCamera::getClassTypeId()))
                This->distance = (This->prevPt - cam->position.getValue()).length();
@@ -2864,11 +2869,11 @@ void G4OpenInventorXtExaminerViewer::lookAtSceneElementCB(Widget,
          XtFree(value);
 
       }
+      
       else{
          This->offsetFromCenter.setValue(0, 0, 1);
          This->distance = 50;// small number since using viewAll() for default zoom
          This->upVector.setValue(0, 1, 0);
-
          This->moveCamera(This->distance);
          cam->viewAll(path, This->getViewportRegion());
       }

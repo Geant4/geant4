@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.hh 93069 2015-10-02 09:54:27Z gcosmo $
+// $Id: G4MagneticFieldModel.hh 101958 2016-12-12 08:04:35Z gcosmo $
 //
 // 
 // John Allison  17th August 2013
@@ -49,7 +49,8 @@ public: // With description
 
   G4MagneticFieldModel
   (G4int nDataPointsPerHalfScene = 10,
-   Representation representation = Representation::fullArrow);
+   Representation representation = Representation::fullArrow,
+   G4int arrow3DLineSegmentsPerCircle = 6);
   virtual ~G4MagneticFieldModel ();
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&);
@@ -68,6 +69,7 @@ private:
 
   Representation fRepresentation;
 
+  G4int fArrow3DLineSegmentsPerCircle;
 };
 
 #endif

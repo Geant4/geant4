@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.cc 102534 2017-02-08 13:47:58Z gcosmo $
+// $Id: G4NavigationHistory.cc 102197 2017-01-10 14:25:23Z gcosmo $
 //
 // 
 // G4NavigationHistory Implementation

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.cc 96133 2016-03-16 22:21:17Z gcosmo $
+// $Id: G4GDMLWriteSolids.cc 103463 2017-04-11 07:22:55Z gcosmo $
 //
 // class G4GDMLWriteSolids Implementation
 //
@@ -69,6 +69,7 @@
 #include "G4UnionSolid.hh"
 #include "G4OpticalSurface.hh"
 #include "G4SurfaceProperty.hh"
+#include "G4MaterialPropertiesTable.hh"
 
 G4GDMLWriteSolids::G4GDMLWriteSolids()
   : G4GDMLWriteMaterials(), solidsElement(0)
@@ -79,17 +80,6 @@ G4GDMLWriteSolids::~G4GDMLWriteSolids()
 {
 }
 
-#if !defined(G4GEOM_USE_USOLIDS)
-void G4GDMLWriteSolids::
-MultiUnionWrite(xercesc::DOMElement*,
-                const G4MultiUnion* const)
-{
-   G4Exception("G4GDMLWriteSolids::MultiUnionWrite()",
-               "InvalidSetup", FatalException,
-               "Installation with USolids primitives required!");
-   return;
-}
-#else
 void G4GDMLWriteSolids::
 MultiUnionWrite(xercesc::DOMElement* solElement,
                 const G4MultiUnion* const munionSolid)
@@ -98,7 +88,7 @@ MultiUnionWrite(xercesc::DOMElement* solElement,
    G4String tag("multiUnion");
    
    G4VSolid* solid;
-   G4Transform3D* transform;
+   G4Transform3D transform;
 
    const G4String& name = GenerateName(munionSolid->GetName(),munionSolid);
    xercesc::DOMElement* multiUnionElement = NewElement(tag);
@@ -112,7 +102,7 @@ MultiUnionWrite(xercesc::DOMElement* solElement,
       HepGeom::Rotate3D rot3d;
       HepGeom::Translate3D transl ;
       HepGeom::Scale3D scale;
-      transform->getDecomposition(scale,rot3d,transl); 
+      transform.getDecomposition(scale,rot3d,transl); 
 
       G4ThreeVector pos = transl.getTranslation();
       G4RotationMatrix 
@@ -148,7 +138,6 @@ MultiUnionWrite(xercesc::DOMElement* solElement,
    solElement->appendChild(multiUnionElement);
      // Add the multiUnion solid AFTER the constituent nodes!
 }
-#endif
 
 void G4GDMLWriteSolids::
 BooleanWrite(xercesc::DOMElement* solElement,
@@ -1050,7 +1039,60 @@ OpticalSurfaceWrite(xercesc::DOMElement* solElement,
    optElement->setAttributeNode(NewAttribute("type", surf->GetType()));
    optElement->setAttributeNode(NewAttribute("value", sval));
 
+   // Write any property attached to the optical surface...
+   //
+   if (surf->GetMaterialPropertiesTable())
+   {
+     PropertyWrite(optElement, surf);
+   }
+
    solElement->appendChild(optElement);
+}
+
+void G4GDMLWriteSolids::PropertyWrite(xercesc::DOMElement* optElement,
+                                         const G4OpticalSurface* const surf)
+{
+   xercesc::DOMElement* propElement;
+   G4MaterialPropertiesTable* ptable = surf->GetMaterialPropertiesTable();
+   const std::map< G4String, G4PhysicsOrderedFreeVector*,
+                 std::less<G4String> >* pmap = ptable->GetPropertiesMap();
+   const std::map< G4String, G4double,
+                 std::less<G4String> >* cmap = ptable->GetPropertiesCMap();
+   std::map< G4String, G4PhysicsOrderedFreeVector*,
+                 std::less<G4String> >::const_iterator mpos;
+   std::map< G4String, G4double,
+                 std::less<G4String> >::const_iterator cpos;
+   for (mpos=pmap->begin(); mpos!=pmap->end(); mpos++)
+   {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute("name", mpos->first));
+      propElement->setAttributeNode(NewAttribute("ref",
+                                    GenerateName(mpos->first, mpos->second)));
+      if (mpos->second)
+      {
+         PropertyVectorWrite(mpos->first, mpos->second);
+         optElement->appendChild(propElement);
+      }
+      else
+      {
+         G4String warn_message = "Null pointer for material property -"
+                  + mpos->first + "- of optical surface -" + surf->GetName() + "- !";
+         G4Exception("G4GDMLWriteSolids::PropertyWrite()", "NullPointer",
+                     JustWarning, warn_message);
+         continue;
+      }
+   }
+   for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
+   {
+      propElement = NewElement("property");
+      propElement->setAttributeNode(NewAttribute("name", cpos->first));
+      propElement->setAttributeNode(NewAttribute("ref", cpos->first));
+      xercesc::DOMElement* constElement = NewElement("constant");
+      constElement->setAttributeNode(NewAttribute("name", cpos->first));
+      constElement->setAttributeNode(NewAttribute("value", cpos->second));
+      defineElement->appendChild(constElement);
+      optElement->appendChild(propElement);
+   }
 }
 
 void G4GDMLWriteSolids::SolidsWrite(xercesc::DOMElement* gdmlElement)

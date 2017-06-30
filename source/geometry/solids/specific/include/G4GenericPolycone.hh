@@ -87,7 +87,7 @@ class G4GenericPolycone : public G4VCSGfaceted
   G4double DistanceToIn( const G4ThreeVector &p, const G4ThreeVector &v ) const;
   G4double DistanceToIn( const G4ThreeVector &p ) const;
 
-  void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+  void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
   G4bool CalculateExtent(const EAxis pAxis,
                          const G4VoxelLimits& pVoxelLimit,
                          const G4AffineTransform& pTransform,

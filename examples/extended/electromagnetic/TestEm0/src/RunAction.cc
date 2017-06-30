@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 99373 2016-09-20 07:13:41Z gcosmo $
+// $Id: RunAction.cc 104822 2017-06-20 12:24:22Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -286,15 +286,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
          << "\t" << std::setw(8) << G4BestUnit(range1,"Length")
          << " (" << std::setw(8) << G4BestUnit(range2,"Mass/Surface") << ")";
   
-   //get range from full dedx
-  if(energy < GeV) {
+  //get range from full dedx
+  G4double EmaxTable = G4EmParameters::Instance()->MaxEnergyForCSDARange();
+  if(energy < EmaxTable) {
     G4double Range1 = emCal.GetCSDARange(energy,particle,material);
     G4double Range2 = Range1*density;
      
     G4cout << "\n  range from full dE/dx    : " 
            << "\t" << std::setw(8) << G4BestUnit(Range1,"Length")
            << " (" << std::setw(8) << G4BestUnit(Range2,"Mass/Surface") << ")";
-  }         
+  }
 
   //get transport mean free path (for multiple scattering)
   G4double MSmfp1 = emCal.GetMeanFreePath(energy,particle,"msc",material);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.cc 101121 2016-11-07 09:18:01Z gcosmo $
+// $Id: G4CutTubs.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // class G4CutTubs
@@ -32,7 +32,7 @@
 // History:
 //
 // 30.10.16 E.Tcherniaev - reimplemented CalculateExtent(),
-//                       added Extent, removed CreateRotatedVetices()
+//                       removed CreateRotatedVetices()
 // 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in sqrt(r)
 // 01.06.11 T.Nikitina - Derived from G4Tubs
 //
@@ -202,7 +202,7 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
 //
 // Get bounding box
 
-void G4CutTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4CutTubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double rmin = GetInnerRadius();
   G4double rmax = GetOuterRadius();
@@ -250,7 +250,8 @@ void G4CutTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4CutTubs::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4CutTubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -269,7 +270,7 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
@@ -291,7 +292,7 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
   // Find bounding envelope and calculate extent
   //
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
   G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
   G4double ang    = dphi/ksteps;
 
@@ -372,98 +373,73 @@ G4bool G4CutTubs::CalculateExtent( const EAxis              pAxis,
 
 EInside G4CutTubs::Inside( const G4ThreeVector& p ) const
 {
-  G4double zinLow,zinHigh,r2,pPhi=0.;
-  G4double tolRMin,tolRMax;
-  G4ThreeVector vZ=G4ThreeVector(0,0,fDz);
+  G4ThreeVector vZ = G4ThreeVector(0,0,fDz);
   EInside in = kInside;
-
-  // Check if point is contained in the cut plane in -/+ Z
 
   // Check the lower cut plane
   //
-  zinLow =(p+vZ).dot(fLowNorm);
-  if (zinLow>halfCarTolerance)  { return kOutside; }
+  G4double zinLow =(p+vZ).dot(fLowNorm);
+  if (zinLow > halfCarTolerance)  { return kOutside; }
 
   // Check the higher cut plane
   //
-  zinHigh = (p-vZ).dot(fHighNorm);
-  if (zinHigh>halfCarTolerance)  { return kOutside; }
+  G4double zinHigh = (p-vZ).dot(fHighNorm);
+  if (zinHigh > halfCarTolerance)  { return kOutside; }
 
   // Check radius
   //
-  r2 = p.x()*p.x() + p.y()*p.y() ;
+  G4double r2 = p.x()*p.x() + p.y()*p.y() ;
 
-  // First check 'generous' boundaries R+tolerance
-  //
-  tolRMin = fRMin - halfRadTolerance ;
-  tolRMax = fRMax + halfRadTolerance ;
+  G4double tolRMin = fRMin - halfRadTolerance;
+  G4double tolRMax = fRMax + halfRadTolerance;
   if ( tolRMin < 0 )  { tolRMin = 0; }
-    
-  if ( ((r2 < tolRMin*tolRMin) || (r2 > tolRMax*tolRMax))
-     && (r2 >=halfRadTolerance*halfRadTolerance) )  { return kOutside; }
-   
-  // Check Phi
+
+  if (r2 < tolRMin*tolRMin || r2 > tolRMax*tolRMax) { return kOutside; }
+
+  // Check Phi cut
   //
   if(!fPhiFullCutTube)
   {
-    // Try outer tolerant phi boundaries only
-
-    if ( (tolRMin==0) && (std::fabs(p.x())<=halfCarTolerance)
-                      && (std::fabs(p.y())<=halfCarTolerance) )
+    if ((tolRMin == 0) && (std::fabs(p.x()) <= halfCarTolerance)
+                       && (std::fabs(p.y()) <= halfCarTolerance))
     {
       return kSurface;
     }
- 
-    pPhi = std::atan2(p.y(),p.x()) ;
 
-    if ( pPhi < -halfAngTolerance)  { pPhi += twopi; } // 0<=pPhi<2pi
-    if ( fSPhi >= 0 )
-    {
-      if ( (std::fabs(pPhi) < halfAngTolerance)
-        && (std::fabs(fSPhi + fDPhi - twopi) < halfAngTolerance) )
-      { 
-        pPhi += twopi ; // 0 <= pPhi < 2pi
-      }
-      if ( (pPhi <= fSPhi - halfAngTolerance)
-        || (pPhi >= fSPhi + fDPhi + halfAngTolerance) )
-      {
-        in = kOutside ;
-      }
-      else if ( (pPhi <= fSPhi + halfAngTolerance)
-             || (pPhi >= fSPhi + fDPhi - halfAngTolerance) )
-      {
-        in=kSurface;
-      }
-    }
-    else  // fSPhi < 0
-    {
-      if ( (pPhi <= fSPhi + twopi - halfAngTolerance)
-        && (pPhi >= fSPhi + fDPhi + halfAngTolerance) )
-      {
-        in = kOutside;
-      }
-      else
-      {
-        in = kSurface ;
-      }
-    }
+    G4double phi0 = std::atan2(p.y(),p.x());
+    G4double phi1 = phi0 - twopi;
+    G4double phi2 = phi0 + twopi;
+
+    in = kOutside;
+    G4double sphi = fSPhi - halfAngTolerance;
+    G4double ephi = sphi + fDPhi + kAngTolerance;
+    if ((phi0  >= sphi && phi0  <= ephi) ||
+        (phi1  >= sphi && phi1  <= ephi) ||
+        (phi2  >= sphi && phi2  <= ephi)) in = kSurface;
+    if (in == kOutside)  { return kOutside; }
+
+    sphi += kAngTolerance;
+    ephi -= kAngTolerance;
+    if ((phi0  >= sphi && phi0  <= ephi) ||
+        (phi1  >= sphi && phi1  <= ephi) ||
+        (phi2  >= sphi && phi2  <= ephi)) in = kInside;
+    if (in == kSurface)  { return kSurface; }
   }
 
   // Check on the Surface for Z
   //
-  if ((zinLow>=-halfCarTolerance)
-   || (zinHigh>=-halfCarTolerance))
+  if ((zinLow >= -halfCarTolerance) || (zinHigh >= -halfCarTolerance))
   {
-    in=kSurface;
+    return kSurface;
   }
 
   // Check on the Surface for R
   //
-  if (fRMin) { tolRMin = fRMin + halfRadTolerance ; }
-  else       { tolRMin = 0 ; }
-  tolRMax = fRMax - halfRadTolerance ;  
-  if ( ((r2 <= tolRMin*tolRMin) || (r2 >= tolRMax*tolRMax))&&
-        (r2 >=halfRadTolerance*halfRadTolerance) )
+  if (fRMin) { tolRMin = fRMin + halfRadTolerance; }
+  else       { tolRMin = 0; }
+  tolRMax = fRMax - halfRadTolerance;
+  if (((r2 <= tolRMin*tolRMin) || (r2 >= tolRMax*tolRMax)) &&
+       (r2 >= halfRadTolerance*halfRadTolerance))
   {
     return kSurface;
   }

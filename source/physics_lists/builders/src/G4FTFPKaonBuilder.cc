@@ -28,6 +28,7 @@
 //---------------------------------------------------------------------------
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -72,9 +73,6 @@ G4FTFPKaonBuilder::~G4FTFPKaonBuilder()
   //delete theHandler;
   delete theLund;
 }
-
-void G4FTFPKaonBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4FTFPKaonBuilder::
 Build(G4KaonPlusInelasticProcess * aP)

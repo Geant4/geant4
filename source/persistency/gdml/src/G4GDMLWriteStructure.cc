@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 96677 2016-04-29 12:20:20Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 104688 2017-06-12 12:16:28Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -57,8 +57,10 @@
 
 #include "G4VSensitiveDetector.hh"
 
+G4int G4GDMLWriteStructure::levelNo = 0;  // Counter for level being exported
+
 G4GDMLWriteStructure::G4GDMLWriteStructure()
-  : G4GDMLWriteParamvol(), cexport(false)
+  : G4GDMLWriteParamvol(), cexport(false), maxLevel(INT_MAX)
 {
   reflFactory = G4ReflectionFactory::Instance();
 }
@@ -395,6 +397,8 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    std::map<const G4LogicalVolume*, G4GDMLAuxListType>::iterator auxiter; 
 
+   levelNo++;
+
    while (true) // Solve possible displacement/reflection
    {            // of the referenced solid!
       if (trans>maxTransforms)
@@ -459,8 +463,13 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
    solidrefElement->setAttributeNode(NewAttribute("ref",solidref));
    volumeElement->appendChild(solidrefElement);
 
-   const G4int daughterCount = volumePtr->GetNoDaughters();
-       
+   G4int daughterCount = volumePtr->GetNoDaughters();
+
+   if (levelNo == maxLevel)  // Stop exporting if reached levels limit
+   {
+     daughterCount = 0;
+   }
+
    for (G4int i=0;i<daughterCount;i++)   // Traverse all the children!
      {
        const G4VPhysicalVolume* const physvol = volumePtr->GetDaughter(i);
@@ -542,9 +551,9 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
      }
 
    structureElement->appendChild(volumeElement);
-   // Append the volume AFTER traversing the children so that
-   // the order of volumes will be correct!
-       
+     // Append the volume AFTER traversing the children so that
+     // the order of volumes will be correct!
+
    VolumeMap()[tmplv] = R;
        
    AddExtension(volumeElement, volumePtr);
@@ -632,4 +641,24 @@ G4GDMLWriteStructure::ExportSD(const G4LogicalVolume* const lvol)
       G4GDMLAuxStructType SDinfo = {"SensDet", SDname, "", 0};
       AddVolumeAuxiliary(SDinfo, lvol);
     }
+}
+
+G4int
+G4GDMLWriteStructure::GetMaxExportLevel() const
+{
+  return maxLevel;
+}
+
+void
+G4GDMLWriteStructure::SetMaxExportLevel(G4int level)
+{
+  if (level <= 0)
+  {
+    G4Exception("G4GDMLWriteStructure::TraverseVolumeTree()",
+                "InvalidSetup", FatalException,
+                "Levels to export must be greater than zero!");
+    return;
+  }
+  maxLevel = level;
+  levelNo = 0;
 }

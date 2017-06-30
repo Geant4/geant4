@@ -72,152 +72,6 @@ G4bool G4USolid::operator==(const G4USolid& s) const
   return (this == &s) ? true : false;
 }
 
-EInside G4USolid::Inside(const G4ThreeVector& p) const
-{
-  UVector3 pt;
-  VUSolid::EnumInside in_temp;
-  EInside in = kOutside;
-  pt.x() = p.x();
-  pt.y() = p.y();
-  pt.z() = p.z(); // better assign at construction
-
-  in_temp = fShape->Inside(pt);
-
-  if (in_temp == VUSolid::EnumInside::eSurface) return kSurface;
-  if (in_temp == VUSolid::EnumInside::eInside) return kInside;
-
-  return in;
-}
-
-G4ThreeVector G4USolid::SurfaceNormal(const G4ThreeVector& pt) const
-{
-  UVector3 p;
-  p.x() = pt.x();
-  p.y() = pt.y();
-  p.z() = pt.z();
-  UVector3 n;
-  fShape->Normal(p, n);
-  return G4ThreeVector(n.x(), n.y(), n.z());
-}
-
-G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
-                                const G4ThreeVector& d) const
-{
-  UVector3 p;
-  p.x() = pt.x();
-  p.y() = pt.y();
-  p.z() = pt.z(); // better assign at construction
-  UVector3 v;
-  v.x() = d.x();
-  v.y() = d.y();
-  v.z() = d.z(); // better assign at construction
-  G4double dist = fShape->DistanceToIn(p, v);
-  if (dist > kInfinity) return kInfinity;
-//  return  (dist > halfTolerance) ? dist : 0.0;
-  return dist;
-}
-
-G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
-{
-  UVector3 p;
-  p.x() = pt.x();
-  p.y() = pt.y();
-  p.z() = pt.z(); // better assign at construction
-  G4double dist = fShape->SafetyFromOutside(p); // true?
-  if (dist > kInfinity) return kInfinity;
-//  return (dist > halfTolerance) ? dist : 0.0;
-  return dist;
-}
-
-G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
-                                 const G4ThreeVector& d,
-                                 const G4bool calcNorm,
-                                 G4bool* validNorm,
-                                 G4ThreeVector* norm) const
-{
-  UVector3 p;
-  p.x() = pt.x();
-  p.y() = pt.y();
-  p.z() = pt.z(); // better assign at construction
-  UVector3 v;
-  v.x() = d.x();
-  v.y() = d.y();
-  v.z() = d.z(); // better assign at construction
-  UVector3 n;
-  G4bool valid;
-  G4double dist = fShape->DistanceToOut(p, v, n, valid); // should use local variable
-  if(calcNorm)
-  {
-    if(valid){ *validNorm = true; }
-    else { *validNorm = false; }
-    if(*validNorm)  // *norm = n, but only after calcNorm check
-    {
-      norm->setX(n.x());
-      norm->setY(n.y());
-      norm->setZ(n.z());
-    }
-  }
-  if (dist > kInfinity) return kInfinity;
-//  return (dist > halfTolerance) ? dist : 0.0;
-  return dist;
-}
-
-G4double G4USolid::DistanceToOut(const G4ThreeVector& pt) const
-{
-  UVector3 p;
-  p.x() = pt.x();
-  p.y() = pt.y();
-  p.z() = pt.z(); // better assign at construction
-  G4double dist = fShape->SafetyFromInside(p); // true?
-//  return (dist > halfTolerance) ? dist : 0.0;
-  return dist;
-}
-
-G4double G4USolid::GetCubicVolume()
-{
-  return fShape->Capacity();
-}
-
-G4double G4USolid::GetSurfaceArea()
-{
-  return fShape->SurfaceArea();
-}
-
-G4ThreeVector G4USolid::GetPointOnSurface() const
-{
-  UVector3 p;
-  p = fShape->GetPointOnSurface();
-  return G4ThreeVector(p.x(), p.y(), p.z());
-}
-
-G4bool G4USolid::CalculateExtent(const EAxis pAxis,
-                                 const G4VoxelLimits& pVoxelLimit,
-                                 const G4AffineTransform& pTransform,
-                                 G4double& pMin, G4double& pMax) const
-{
-  UVector3 vmin, vmax;
-  fShape->Extent(vmin,vmax);
-  G4ThreeVector bmin(vmin.x(),vmin.y(),vmin.z());
-  G4ThreeVector bmax(vmax.x(),vmax.y(),vmax.z());
-
-  // Check correctness of the bounding box
-  //
-  if (bmin.x() >= bmax.x() || bmin.y() >= bmax.y() || bmin.z() >= bmax.z())
-  {
-    std::ostringstream message;
-    message << "Bad bounding box (min >= max) for solid: "
-            << GetName() << " - " << GetEntityType() << " !"
-            << "\nmin = " << bmin
-            << "\nmax = " << bmax;
-    G4Exception("G4USolid::CalculateExtent()", "GeomMgt0001",
-                JustWarning, message);
-    StreamInfo(G4cout);
-  }
-
-  G4BoundingEnvelope bbox(bmin,bmax);
-  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
-}
-
 void G4USolid::ComputeDimensions(G4VPVParameterisation*,
                                  const G4int,
                                  const G4VPhysicalVolume*)
@@ -282,6 +136,34 @@ G4VSolid* G4USolid::Clone() const
           << "Returning NULL pointer!";
   G4Exception("G4USolid::Clone()", "GeomSolids1001", JustWarning, message);
   return 0;
+}
+
+G4bool G4USolid::CalculateExtent(const EAxis pAxis,
+                                 const G4VoxelLimits& pVoxelLimit,
+                                 const G4AffineTransform& pTransform,
+                                 G4double& pMin, G4double& pMax) const
+{
+  UVector3 vmin, vmax;
+  fShape->Extent(vmin,vmax);
+  G4ThreeVector bmin(vmin.x(),vmin.y(),vmin.z());
+  G4ThreeVector bmax(vmax.x(),vmax.y(),vmax.z());
+
+  // Check correctness of the bounding box
+  //
+  if (bmin.x() >= bmax.x() || bmin.y() >= bmax.y() || bmin.z() >= bmax.z())
+  {
+    std::ostringstream message;
+    message << "Bad bounding box (min >= max) for solid: "
+            << GetName() << " - " << GetEntityType() << " !"
+            << "\nmin = " << bmin
+            << "\nmax = " << bmax;
+    G4Exception("G4USolid::CalculateExtent()", "GeomMgt0001",
+                JustWarning, message);
+    StreamInfo(G4cout);
+  }
+
+  G4BoundingEnvelope bbox(bmin,bmax);
+  return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
 }
 
 G4Polyhedron* G4USolid::CreatePolyhedron() const

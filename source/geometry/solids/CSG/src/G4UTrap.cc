@@ -52,14 +52,14 @@ G4UTrap::G4UTrap( const G4String& pName,
                         G4double pAlp1,
                         G4double pdy2, G4double pdx3, G4double pdx4,
                         G4double pAlp2 )
-  : G4USolid(pName, new UTrap(pName, pdz, pTheta, pPhi,
-                              pdy1, pdx1, pdx2, pAlp1, pdy2, pdx3, pdx4, pAlp2))
+  : Base_t(pName, pdz, pTheta, pPhi, pdy1, pdx1, pdx2,
+           pAlp1, pdy2, pdx3, pdx4, pAlp2)
 {
 }
 
 G4UTrap::G4UTrap( const G4String& pName,
                   const G4ThreeVector pt[8] )
-  : G4USolid(pName, new UTrap(pName))
+  : Base_t(pName)
 {
   SetPlanes(pt);
 }
@@ -68,7 +68,7 @@ G4UTrap::G4UTrap( const G4String& pName,
                         G4double pZ,
                         G4double pY,
                         G4double pX, G4double pLTX )
-  : G4USolid(pName, new UTrap(pName, pZ, pY, pX, pLTX))
+  : Base_t(pName, pZ, pY, pX, pLTX)
 {
 }
 
@@ -76,19 +76,19 @@ G4UTrap::G4UTrap( const G4String& pName,
                         G4double pdx1,  G4double pdx2,
                         G4double pdy1,  G4double pdy2,
                         G4double pdz )
-  : G4USolid(pName, new UTrap(pName, pdx1, pdx2, pdy1, pdy2, pdz))
+  : Base_t(pName, pdx1, pdx2, pdy1, pdy2, pdz)
 {
 }
 
 G4UTrap::G4UTrap(const G4String& pName,
                        G4double pdx, G4double pdy, G4double pdz,
                        G4double pAlpha, G4double pTheta, G4double pPhi )
-  : G4USolid(pName, new UTrap(pName, pdx, pdy, pdz, pAlpha, pTheta, pPhi))
+  : Base_t(pName, pdx, pdy, pdz, pAlpha, pTheta, pPhi)
 {
 }
 
 G4UTrap::G4UTrap( const G4String& pName )
-  : G4USolid(pName, new UTrap(pName))
+  : Base_t(pName)
 {
 }
 
@@ -98,7 +98,7 @@ G4UTrap::G4UTrap( const G4String& pName )
 //                            for usage restricted to object persistency.
 //
 G4UTrap::G4UTrap( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -115,7 +115,7 @@ G4UTrap::~G4UTrap()
 // Copy constructor
 //
 G4UTrap::G4UTrap(const G4UTrap& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -131,7 +131,7 @@ G4UTrap& G4UTrap::operator = (const G4UTrap& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -142,50 +142,56 @@ G4UTrap& G4UTrap::operator = (const G4UTrap& rhs)
 
 G4double G4UTrap::GetZHalfLength() const
 {
-  return GetShape()->GetZHalfLength();
+  return GetDz();
 }
 G4double G4UTrap::GetYHalfLength1() const
 {
-  return GetShape()->GetYHalfLength1();
+  return GetDy1();
 }
 G4double G4UTrap::GetXHalfLength1() const
 {
-  return GetShape()->GetXHalfLength1();
+  return GetDx1();
 }
 G4double G4UTrap::GetXHalfLength2() const
 {
-  return GetShape()->GetXHalfLength2();
-}
-G4double G4UTrap::GetTanAlpha1() const
-{
-  return GetShape()->GetTanAlpha1();
+  return GetDx2();
 }
 G4double G4UTrap::GetYHalfLength2() const
 {
-  return GetShape()->GetYHalfLength2();
+  return GetDy2();
 }
 G4double G4UTrap::GetXHalfLength3() const
 {
-  return GetShape()->GetXHalfLength3();
+  return GetDx3();
 }
 G4double G4UTrap::GetXHalfLength4() const
 {
-  return GetShape()->GetXHalfLength4();
+  return GetDx4();
 }
-G4double G4UTrap::GetTanAlpha2() const
+G4double G4UTrap::GetThetaCphi() const
 {
-  return GetShape()->GetTanAlpha2();
+  return GetTanThetaCosPhi();
+}
+G4double G4UTrap::GetThetaSphi() const
+{
+  return GetTanThetaSinPhi();
 }
 TrapSidePlane G4UTrap::GetSidePlane(G4int n) const
 {
-  UTrapSidePlane iplane = GetShape()->GetSidePlane(n);
-  TrapSidePlane oplane = {iplane.a, iplane.b, iplane.c, iplane.d };
-  return oplane;
+  TrapSidePlane plane;
+  plane.a = GetStruct().GetPlane(n).fA;
+  plane.b = GetStruct().GetPlane(n).fB;
+  plane.c = GetStruct().GetPlane(n).fC;
+  plane.d = GetStruct().GetPlane(n).fD;
+  return plane;
 }
 G4ThreeVector G4UTrap::GetSymAxis() const
 {
-  UVector3 axis = GetShape()->GetSymAxis();
-  return G4ThreeVector(axis.x(), axis.y(), axis.z());
+  G4double tanThetaSphi = GetTanThetaSinPhi();
+  G4double tanThetaCphi = GetTanThetaCosPhi();
+  G4double tan2Theta = tanThetaSphi*tanThetaSphi + tanThetaCphi*tanThetaCphi;
+  G4double cosTheta = 1.0 / std::sqrt(1 + tan2Theta);
+  return G4ThreeVector(tanThetaCphi*cosTheta, tanThetaSphi*cosTheta, cosTheta);
 }
 
 void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
@@ -194,20 +200,29 @@ void G4UTrap::SetAllParameters(G4double pDz, G4double pTheta, G4double pPhi,
                                G4double pDy2, G4double pDx3, G4double pDx4,
                                G4double pAlp2)
 {
-  GetShape()->SetAllParameters(pDz, pTheta, pPhi,
-                               pDy1, pDx1, pDx2, pAlp1,
-                               pDy2, pDx3, pDx4, pAlp2);
+  SetDz(pDz);
+  SetDy1(pDy1);
+  SetDy2(pDy2);
+  SetDx1(pDx1);
+  SetDx2(pDx2);
+  SetDx3(pDx3);
+  SetDx4(pDx4);
+  SetTanAlpha1(std::tan(pAlp1));
+  SetTanAlpha1(std::tan(pAlp2));
+  // last two will also reset cached variables
+  SetTheta(pTheta);
+  SetPhi(pPhi);
   fRebuildPolyhedron = true;
 }
 
 void G4UTrap::SetPlanes(const G4ThreeVector pt[8])
 {
-  UVector3 upt[8];
+  U3Vector upt[8];
   for (unsigned int i=0; i<8; ++i)
   {
-    upt[i] = UVector3(pt[i].x(), pt[i].y(), pt[i].z());
+    upt[i] = U3Vector(pt[i].x(), pt[i].y(), pt[i].z());
   }
-  GetShape()->SetPlanes(upt);
+  fromCornersToParameters(upt);
   fRebuildPolyhedron = true;
 }
 
@@ -236,35 +251,28 @@ G4VSolid* G4UTrap::Clone() const
 //
 // Get bounding box
 
-void G4UTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UTrap::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
 
-  G4double dz  = GetZHalfLength();
-  G4double dx1 = GetXHalfLength1();
-  G4double dx2 = GetXHalfLength2();
-  G4double dx3 = GetXHalfLength3();
-  G4double dx4 = GetXHalfLength4();
-  G4double dy1 = GetYHalfLength1();
-  G4double dy2 = GetYHalfLength2();
-  G4double fTthetaSphi = GetShape()->GetThetaSphi();
-  G4double fTthetaCphi = GetShape()->GetThetaCphi();
+  TrapSidePlane planes[4];
+  for (G4int i=0; i<4; ++i) { planes[i] = GetSidePlane(i); }
 
-  G4double x0 = dz*fTthetaCphi;
-  G4double x1 = dy1*GetTanAlpha1();
-  G4double x2 = dy2*GetTanAlpha2();
-  G4double xmin =
-    std::min(
-    std::min(
-    std::min(-x0-x1-dx1,-x0+x1-dx2),x0-x2-dx3),x0+x2-dx4);
-  G4double xmax =
-    std::max(
-    std::max(
-    std::max(-x0-x1+dx1,-x0+x1+dx2),x0-x2+dx3),x0+x2+dx4);
-
-  G4double y0 = dz*fTthetaSphi;
-  G4double ymin = std::min(-y0-dy1,y0-dy2);
-  G4double ymax = std::max(-y0+dy1,y0+dy2);
+  G4double xmin = kInfinity, xmax = -kInfinity;
+  G4double ymin = kInfinity, ymax = -kInfinity;
+  G4double dz   = GetZHalfLength();
+  for (G4int i=0; i<8; ++i)
+  {
+    G4int iy = (i==0 || i==1 || i==4 || i==5) ? 0 : 1;
+    G4int ix = (i==0 || i==2 || i==4 || i==6) ? 2 : 3;
+    G4double z = (i < 4) ? -dz : dz;
+    G4double y = -(planes[iy].c*z + planes[iy].d)/planes[iy].b;
+    G4double x = -(planes[ix].b*y + planes[ix].c*z + planes[ix].d)/planes[ix].a;
+    if (x < xmin) xmin = x;
+    if (x > xmax) xmax = x;
+    if (y < ymin) ymin = y;
+    if (y > ymax) ymax = y;
+  }
 
   pMin.set(xmin,ymin,-dz);
   pMax.set(xmax,ymax, dz);
@@ -278,7 +286,8 @@ void G4UTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UTrap::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UTrap::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -286,21 +295,23 @@ void G4UTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
-    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
-        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
-        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
-        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
-        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
-        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    G4double tolerance = kCarTolerance;
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
+    if (std::abs(pMin.x()-vmin.x()) > tolerance ||
+        std::abs(pMin.y()-vmin.y()) > tolerance ||
+        std::abs(pMin.z()-vmin.z()) > tolerance ||
+        std::abs(pMax.x()-vmax.x()) > tolerance ||
+        std::abs(pMax.y()-vmax.y()) > tolerance ||
+        std::abs(pMax.z()-vmax.z()) > tolerance)
     {
       std::ostringstream message;
       message << "Inconsistency in bounding boxes for solid: "
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UTrap::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UTrap::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -321,7 +332,7 @@ G4UTrap::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -333,31 +344,31 @@ G4UTrap::CalculateExtent(const EAxis pAxis,
 
   // Set bounding envelope (benv) and calculate extent
   //
-  G4double dz  = GetZHalfLength();
-  G4double dx1 = GetXHalfLength1();
-  G4double dx2 = GetXHalfLength2();
-  G4double dx3 = GetXHalfLength3();
-  G4double dx4 = GetXHalfLength4();
-  G4double dy1 = GetYHalfLength1();
-  G4double dy2 = GetYHalfLength2();
-  G4double fTthetaSphi = GetShape()->GetThetaSphi();
-  G4double fTthetaCphi = GetShape()->GetThetaCphi();
+  TrapSidePlane planes[4];
+  for (G4int i=0; i<4; ++i) { planes[i] = GetSidePlane(i); }
 
-  G4double x0 = dz*fTthetaCphi;
-  G4double x1 = dy1*GetTanAlpha1();
-  G4double x2 = dy2*GetTanAlpha2();
-  G4double y0 = dz*fTthetaSphi;
+  G4ThreeVector pt[8];
+  G4double dz = GetZHalfLength();
+  for (G4int i=0; i<8; ++i)
+  {
+    G4int iy = (i==0 || i==1 || i==4 || i==5) ? 0 : 1;
+    G4int ix = (i==0 || i==2 || i==4 || i==6) ? 2 : 3;
+    G4double z = (i < 4) ? -dz : dz;
+    G4double y = -(planes[iy].c*z + planes[iy].d)/planes[iy].b;
+    G4double x = -(planes[ix].b*y + planes[ix].c*z + planes[ix].d)/planes[ix].a;
+    pt[i].set(x,y,z);
+  }
 
   G4ThreeVectorList baseA(4), baseB(4);
-  baseA[0].set(-x0-x1-dx1,-y0-dy1,-dz);
-  baseA[1].set(-x0-x1+dx1,-y0-dy1,-dz);
-  baseA[2].set(-x0+x1+dx2,-y0+dy1,-dz);
-  baseA[3].set(-x0+x1-dx2,-y0+dy1,-dz);
+  baseA[0] = pt[0];
+  baseA[1] = pt[1];
+  baseA[2] = pt[3];
+  baseA[3] = pt[2];
 
-  baseB[0].set( x0-x2-dx3, y0-dy2, dz);
-  baseB[1].set( x0-x2+dx3, y0-dy2, dz);
-  baseB[2].set( x0+x2+dx4, y0+dy2, dz);
-  baseB[3].set( x0+x2-dx4, y0+dy2, dz);
+  baseB[0] = pt[4];
+  baseB[1] = pt[5];
+  baseB[2] = pt[7];
+  baseB[3] = pt[6];
 
   std::vector<const G4ThreeVectorList *> polygons(2);
   polygons[0] = &baseA;
@@ -374,8 +385,8 @@ G4UTrap::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UTrap::CreatePolyhedron() const
 {
-  G4double fTthetaSphi = GetShape()->GetThetaSphi();
-  G4double fTthetaCphi = GetShape()->GetThetaCphi();
+  G4double fTthetaSphi = GetThetaSphi();
+  G4double fTthetaCphi = GetThetaCphi();
   G4double phi = std::atan2(fTthetaSphi, fTthetaCphi);
   G4double alpha1 = std::atan(GetTanAlpha1());
   G4double alpha2 = std::atan(GetTanAlpha2());

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4WentzelVIModel.cc 104802 2017-06-19 07:11:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,19 +71,19 @@
 
 using namespace std;
 
-G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
-  G4VMscModel(nam),
-  ssFactor(1.05),
-  invssFactor(1.0),
-  currentCouple(nullptr),
-  singleScatteringMode(false),
-  cosThetaMin(1.0),
-  cosThetaMax(-1.0),
-  fSecondMoments(nullptr),
-  idx2(0),
-  numlimit(0.1),
-  isCombined(combined),
-  useSecondMoment(false)
+G4WentzelVIModel::G4WentzelVIModel(G4bool comb, const G4String& nam) 
+  : G4VMscModel(nam),
+    ssFactor(1.05),
+    invssFactor(1.0),
+    currentCouple(nullptr),
+    cosThetaMin(1.0),
+    cosThetaMax(-1.0),
+    fSecondMoments(nullptr),
+    idx2(0),
+    numlimit(0.1),
+    singleScatteringMode(false),
+    isCombined(comb),
+    useSecondMoment(false)
 {
   SetSingleScatteringFactor(1.25);
   invsqrt12 = 1./sqrt(12.);
@@ -93,7 +93,7 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   nelments = 5;
   xsecn.resize(nelments);
   prob.resize(nelments);
-  wokvi = new G4WentzelOKandVIxSection(combined);
+  wokvi = nullptr;
   fixedCut = -1.0;
 
   minNCollisions = 10;
@@ -114,7 +114,7 @@ G4WentzelVIModel::~G4WentzelVIModel()
   delete wokvi;
   if(fSecondMoments && IsMaster()) {
     delete fSecondMoments;
-    fSecondMoments = 0;
+    fSecondMoments = nullptr;
   }
 }
 
@@ -123,6 +123,8 @@ G4WentzelVIModel::~G4WentzelVIModel()
 void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
                                   const G4DataVector& cuts)
 {
+  if(!wokvi) { wokvi = new G4WentzelOKandVIxSection(isCombined); }
+
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
@@ -132,8 +134,9 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
     if(tet <= 0.0)           { cosThetaMax = 1.0; }
     else if(tet < CLHEP::pi) { cosThetaMax = cos(tet); }
   }
+  //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() 
+  //	 << " " << this << " " << wokvi << G4endl;
 
-  //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
   /*  
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
@@ -205,6 +208,18 @@ void G4WentzelVIModel::InitialiseLocal(const G4ParticleDefinition*,
     ->GetSecondMomentTable(); 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4WentzelVIModel::DefineMaterial(const G4MaterialCutsCouple* cup) 
+{ 
+  if(cup != currentCouple) {
+    currentCouple = cup;
+    SetCurrentCouple(cup); 
+    currentMaterial = cup->GetMaterial();
+    currentMaterialIndex = currentCouple->GetIndex(); 
+  }
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4WentzelVIModel::ComputeCrossSectionPerAtom( 
@@ -224,8 +239,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   DefineMaterial(CurrentCouple());
   cosTetMaxNuc = wokvi->SetupKinematic(kinEnergy, currentMaterial);
   if(cosTetMaxNuc < 1.0) {
-    G4double cut = cutEnergy;
-    if(fixedCut > 0.0) { cut = fixedCut; }
+    G4double cut  = (0.0 < fixedCut) ? fixedCut : cutEnergy;
     G4double cost = wokvi->SetupTarget(G4lrint(Z), cut);
     cross = wokvi->ComputeTransportCrossSectionPerAtom(cost);
     /*

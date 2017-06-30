@@ -39,8 +39,6 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
-#include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"

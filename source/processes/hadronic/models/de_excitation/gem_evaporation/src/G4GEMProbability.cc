@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GEMProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4GEMProbability.cc 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -56,8 +56,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 
-G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
-  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0)
+G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) 
+  : G4VEmissionProbability(aZ, anA), Spin(aSpin), 
+    theCoulombBarrierPtr(nullptr)
 {
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 

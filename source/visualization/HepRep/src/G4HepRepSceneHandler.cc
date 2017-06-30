@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc 101714 2016-11-22 08:53:13Z gcosmo $
+// $Id: G4HepRepSceneHandler.cc 104290 2017-05-23 13:24:52Z gcosmo $
 //
 
 /**
@@ -823,7 +823,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
         setAttribute(instance, "Fill", true);
         setColor(instance, GetColor(), G4String("FillColor"));
     } else if (mtype == line.circles) {
-    } else if (line.squares) {
+    } else if (mtype == line.squares) {
         setAttribute(instance, "MarkName", G4String("Box"));
     } else {
         // line.line + default

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VKinkyStringDecay.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4VKinkyStringDecay.cc 102717 2017-02-20 10:37:13Z gcosmo $
 //  Maxim Komogorov
 //
 // -----------------------------------------------------------------------------
@@ -41,14 +41,14 @@
 //*****************************************************************************************************
 
 G4VKinkyStringDecay::G4VKinkyStringDecay(G4VLongitudinalStringDecay* theModal)
-{
-    this->SetLongitudinalStringDecay(theModal);
-}
+   {
+   this->SetLongitudinalStringDecay(theModal);
+   }
 
 //*****************************************************************************************************
 
 G4double G4VKinkyStringDecay::GetLightConeGluonZ(G4double zmin, G4double zmax)
-{
+    {
     G4double z, yf;
     do {
        z = zmin + G4UniformRand()*(zmax-zmin);
@@ -56,12 +56,12 @@ G4double G4VKinkyStringDecay::GetLightConeGluonZ(G4double zmin, G4double zmax)
        } 
     while (G4UniformRand() > yf);  /* Loop checking, 07.08.2015, A.Ribon */ 
     return z;
-}
+    }
 
 //*****************************************************************************************************
 
 G4KineticTrackVector* G4VKinkyStringDecay::FragmentString(const G4ExcitedString& String) 
-{
+    {
     G4LorentzVector Mom = String.GetGluon()->Get4Momentum();
     G4ThreeVector Pos = String.GetGluon()->GetPosition();
     G4int QuarkEncoding = theLongitudinalStringDecay->SampleQuarkFlavor();
@@ -97,7 +97,20 @@ G4KineticTrackVector* G4VKinkyStringDecay::FragmentString(const G4ExcitedString&
 	     KTV1->erase(KTV1->end()-1);
 	 }
     return KTV1;            
-} 
+    } 
  
 //*****************************************************************************************************
-
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 

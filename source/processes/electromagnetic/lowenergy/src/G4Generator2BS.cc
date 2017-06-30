@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BS.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4Generator2BS.cc 104410 2017-05-30 07:17:09Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -92,9 +92,6 @@ G4ThreeVector& G4Generator2BS::SampleDirection(const G4DynamicParticle* dp,
 
   G4double gamma = energy/electron_mass_c2;
   G4double beta  = std::sqrt((gamma - 1)*(gamma + 1))/gamma;
-
-  //G4double Zeff = std::sqrt(static_cast<G4double>(Z) * (static_cast<G4double>(Z) + 1.0));
-  //z = (0.00008116224*(std::pow(Zeff,0.3333333)));
 
   // VI speadup
   fz = 0.00008116224*g4pow->Z13(Z)*g4pow->Z13(Z+1);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: templates.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: templates.hh 103661 2017-04-20 14:57:11Z gcosmo $
 //
 // 
 // -*- C++ -*-
@@ -145,18 +145,6 @@ template <class T>
 inline T sqr(const T& x)
 {
   return x*x;
-}
-#endif
-
-#ifdef G4_ABS_DEFINED
-  #ifdef abs
-    #undef abs
-  #endif
-
-template <class T>
-inline T std::abs(const T& a)
-{
-  return a < 0 ? -a : a;
 }
 #endif
 

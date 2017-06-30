@@ -38,7 +38,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4ThreadLocal EMField* DetectorConstruction::fField = 0;
+G4ThreadLocal EMField* DetectorConstruction::fField = nullptr;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -652,11 +652,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   fLogicBoite->SetUserLimits(new G4UserLimits(10*mm));
 */
 
-  // relaxed 
-  fLogicWorld->SetUserLimits(new G4UserLimits(1*mm));
-  fLogicVol->SetUserLimits(new G4UserLimits(1*mm));
-  fLogicBoite->SetUserLimits(new G4UserLimits(1*mm));
-
 /*
   logicPhantom->SetUserLimits (new G4UserLimits(0.5*micrometer));
   logic1Gap->SetUserLimits (new G4UserLimits(5*micrometer));
@@ -673,6 +668,11 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   logicKgm->SetUserLimits (new G4UserLimits(1*micrometer));
   logicVerre2->SetUserLimits (new G4UserLimits(10*micrometer));
 */
+
+  // Relaxed 
+  fLogicWorld->SetUserLimits(new G4UserLimits(10*mm));
+  fLogicVol->SetUserLimits(new G4UserLimits(10*mm));
+  fLogicBoite->SetUserLimits(new G4UserLimits(1*mm));
 
   // VISUALISATION ATTRIBUTES (for phantom, see in Parameterisation class)
   
@@ -736,13 +736,16 @@ void DetectorConstruction::ConstructSDandField()
 {
   if(!fField) fField = new EMField(); 
   
-  fEquation = new G4EqMagElectricField(fField);
-  fStepper = new G4ClassicalRK4 (fEquation,8);
-  fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-  // relaxed
-  // fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
-  fIntgrDriver = new G4MagInt_Driver(1*mm,fStepper,fStepper->GetNumberOfVariables() );
-  fChordFinder = new G4ChordFinder(fIntgrDriver);
+  G4EqMagElectricField* fEquation = new G4EqMagElectricField(fField);
+  G4MagIntegratorStepper* fStepper = new G4ClassicalRK4 (fEquation,8);
+  G4FieldManager* fFieldMgr = 
+    G4TransportationManager::GetTransportationManager()->GetFieldManager();
+
+  // Relaxed
+  G4MagInt_Driver* fIntgrDriver = 
+    new G4MagInt_Driver(1*mm,fStepper,fStepper->GetNumberOfVariables() );
+
+  G4ChordFinder* fChordFinder = new G4ChordFinder(fIntgrDriver);
   fFieldMgr->SetChordFinder(fChordFinder);
   fFieldMgr->SetDetectorField(fField);
 

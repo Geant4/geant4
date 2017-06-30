@@ -1,4 +1,4 @@
-$Id: History 102806 2017-02-22 16:36:36Z gcosmo $
+$Id: History 104459 2017-05-31 15:54:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22-02-17 G.Cosmo (materials-V10-02-21)
+29-05-17 P.Gumplinger (materials-V10-03-04)
+- This version of Mariele Stockhoff's DAVIS model includes not only
+  reflection but also the capability of transmitting photons based on LUTs
+
+22-03-17 P.Gumplinger (materials-V10-03-03)
+- fix compilation waring in previous tag
+
+21-03-17 P.Gumplinger (materials-V10-03-02)
+- Mariele Stockhoff's DAVIS model
+
+24-02-17 V.Ivanchenko (materials-V10-03-01)
+- G4Material - improved printout - always print temperature and presure 
+    independently on the state of the material (CMS requirement)
+
+22-02-17 G.Cosmo (materials-V10-03-00)
 - Removed debug printout from G4MaterialPropertiesTable destructor.
   Addressing problem report #1944.
 

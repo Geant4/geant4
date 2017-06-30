@@ -1,4 +1,4 @@
-$Id: History 92125 2015-08-18 14:35:23Z gcosmo $
+$Id: History 103766 2017-04-26 14:19:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Apr. 26, 2017  H.Kurashige (procman-V10-03-01)
+- Use G4Log in G4VProcess
+
 - Aug. 18, 2015  H.Kurashige (procman-V10-01-03)
 - Clean up source codes for messsengers
 

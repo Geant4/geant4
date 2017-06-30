@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Trd.icc 104358 2017-05-26 09:43:34Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -67,69 +67,29 @@ G4double G4Trd::GetZHalfLength() const
 inline
 void G4Trd::SetXHalfLength1(G4double val)
 {
-  fDx1= val;
-  fCubicVolume= 0.;
-  fSurfaceArea=0;
-  fRebuildPolyhedron = true;
+  SetAllParameters(val,fDx2,fDy1,fDy2,fDz);
 }
 
 inline
 void G4Trd::SetXHalfLength2(G4double val)
 {
-  fDx2= val;
-  fCubicVolume= 0.;
-  fSurfaceArea=0;
-  fRebuildPolyhedron = true;
+  SetAllParameters(fDx1,val,fDy1,fDy2,fDz);
 }
 
 inline
 void G4Trd::SetYHalfLength1(G4double val)
 {
-  fDy1= val;
-  fCubicVolume= 0.;
-  fSurfaceArea=0;
-  fRebuildPolyhedron = true;
+  SetAllParameters(fDx1,fDx2,val,fDy2,fDz);
 }
 
 inline
 void G4Trd::SetYHalfLength2(G4double val)
 {
-  fDy2= val;
-  fCubicVolume= 0.;
-  fSurfaceArea=0;
-  fRebuildPolyhedron = true;
+  SetAllParameters(fDx1,fDx2,fDy1,val,fDz);
 }
 
 inline
 void G4Trd::SetZHalfLength(G4double val)
 {
-  fDz= val;
-  fCubicVolume= 0.;
-  fSurfaceArea=0;
-  fRebuildPolyhedron = true;
-}
-
-inline
-G4double G4Trd::GetCubicVolume()
-{
-  if(fCubicVolume != 0.) {;}
-  else
-  {
-    fCubicVolume = 2*fDz*( (fDx1+fDx2)*(fDy1+fDy2)
-                         + (fDx2-fDx1)*(fDy2-fDy1)/3 );
-  }
-  return fCubicVolume;
-}
-
-inline
-G4double G4Trd::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  { 
-    fSurfaceArea = 4*(fDx1*fDy1+fDx2*fDy2)
-                 + 2*((fDy1+fDy2)*std::sqrt(4*fDz*fDz+(fDx2-fDx1)*(fDx2-fDx1))
-                 + (fDx1+fDx2) *std::sqrt(4*fDz*fDz+(fDy2-fDy1)*(fDy2-fDy1)) );
-  }
-  return fSurfaceArea;
+  SetAllParameters(fDx1,fDx2,fDy1,fDy2,val);
 }

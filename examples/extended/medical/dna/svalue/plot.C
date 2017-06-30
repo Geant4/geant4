@@ -6,6 +6,7 @@
 // To execute this macro under ROOT after your simulation ended, 
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
+//   3 - OR type directly 'root plot.C'
 // *********************************************************************
 
 {
@@ -15,7 +16,7 @@ gStyle->SetPalette(1);
 gROOT->SetStyle("Plain");
 gStyle->SetOptStat(000000);
 	
-c1 = new TCanvas ("c1","",60,60,500,500);
+c1 = new TCanvas ("c1","",60,60,800,800);
 c1->Divide(1,1);
 
 FILE * fp = fopen("s.txt","r");

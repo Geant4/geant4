@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -37,7 +37,7 @@
 // CHANGE HISTORY
 // --------------
 //
-// 21.10.2016 E.Tcherniaev: added Extent() and CalculateExtent(),
+// 21.10.2016 E.Tcherniaev: reimplemented CalculateExtent(),
 //            used G4GeomTools::PolygonArea() to calculate area,
 //            replaced IsConvex() with G4GeomTools::IsConvex()
 // 02.03.2016 E.Tcherniaev: added CheckPolygon() to remove 
@@ -908,7 +908,8 @@ G4double G4ExtrudedSolid::DistanceToOut (const G4ThreeVector &p) const
 //
 // Get bounding box
 
-void G4ExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4ExtrudedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                     G4ThreeVector& pMax) const
 {
   G4double xmin0 = kInfinity, xmax0 = -kInfinity;
   G4double ymin0 = kInfinity, ymax0 = -kInfinity;
@@ -954,7 +955,7 @@ void G4ExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4ExtrudedSolid::Extent()",
+    G4Exception("G4ExtrudedSolid::BoundingLimits()",
                 "GeomMgt0001", JustWarning, message);
     DumpInfo();
   }
@@ -975,7 +976,7 @@ G4ExtrudedSolid::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

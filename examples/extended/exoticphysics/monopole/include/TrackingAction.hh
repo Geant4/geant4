@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/TrackingAction.hh
 /// \brief Definition of the TrackingAction class
 //
-// $Id: TrackingAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: TrackingAction.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,23 +37,19 @@
 #include "G4UserTrackingAction.hh"
 #include "globals.hh"
 
-class RunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
 public:  
 
-  TrackingAction(RunAction*);
+  TrackingAction();
   ~TrackingAction();
    
   virtual void PostUserTrackingAction(const G4Track*);
     
 private:
 
-
-  RunAction* fRunAction;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

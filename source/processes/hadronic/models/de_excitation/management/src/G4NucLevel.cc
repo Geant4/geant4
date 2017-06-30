@@ -43,7 +43,7 @@
 #include "G4NucLevel.hh"
 #include "G4HadronicException.hh"
 
-G4NucLevel::G4NucLevel(size_t ntrans, G4float tgamma,
+G4NucLevel::G4NucLevel(size_t ntrans, G4double tgamma,
 		       const std::vector<G4int>&   vTrans,
 		       const std::vector<G4float>& wLevelGamma,
 		       const std::vector<G4float>& wGamma,

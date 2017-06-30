@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.hh 98739 2016-08-09 12:56:55Z gcosmo $
+// $Id: G4CompetitiveFission.hh 103162 2017-03-20 09:40:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -48,7 +48,7 @@ class G4CompetitiveFission : public G4VEvaporationChannel
 {
 public:
   
-  G4CompetitiveFission();
+  explicit G4CompetitiveFission();
   virtual ~G4CompetitiveFission();
 
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
@@ -91,10 +91,10 @@ private:
 
   inline G4ThreeVector IsotropicVector(G4double Magnitude);
 
-  G4CompetitiveFission(const G4CompetitiveFission &right);
-  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right);
-  G4bool operator==(const G4CompetitiveFission &right) const;
-  G4bool operator!=(const G4CompetitiveFission &right) const;
+  G4CompetitiveFission(const G4CompetitiveFission &right) = delete;
+  const G4CompetitiveFission & operator=(const G4CompetitiveFission &right) = delete;
+  G4bool operator==(const G4CompetitiveFission &right) const = delete;
+  G4bool operator!=(const G4CompetitiveFission &right) const = delete;
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;

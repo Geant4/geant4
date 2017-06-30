@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.cc 66870 2013-01-14 23:38:59Z adotti $
+// $Id: G4VRML2FileSceneHandler.cc 104289 2017-05-23 13:24:09Z gcosmo $
 //
 // G4VRML2FileSceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
@@ -37,6 +37,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <cmath>
+#include <sstream>
+#include <iomanip>
 
 #include "globals.hh"
 #include "G4VPhysicalVolume.hh"
@@ -161,11 +163,11 @@ void G4VRML2FileSceneHandler::connectPort()
 		}
 
 		// re-determine file name as G4VRMLFILE_DEST_DIR/g4_XX.wrl 
-		if( i >=  0 && i <= 9 ) { 
-			sprintf( fVRMLFileName, "%s%s%s%d.wrl" , fVRMLFileDestDir,  WRL_FILE_HEADER, "0", i );
-		} else {
-			sprintf( fVRMLFileName, "%s%s%d.wrl"   , fVRMLFileDestDir,  WRL_FILE_HEADER, i );
-		}
+		std::ostringstream filename;
+		filename
+		<< fVRMLFileDestDir << WRL_FILE_HEADER
+		<< std::setw(2) << std::setfill('0') << i << ".wrl";
+		strncpy(fVRMLFileName,filename.str().c_str(),sizeof(fVRMLFileName));
 
 		// check validity of the file name
 		std::ifstream  fin ; 
@@ -220,7 +222,9 @@ void G4VRML2FileSceneHandler::closePort()
 		G4cout << "    setenv  " << ENV_VRML_VIEWER << "  vrwave " << G4endl;
 	  }
 	} else {
-		sprintf( command, "%s %s", viewer, fVRMLFileName  );   
+		std::ostringstream ossCommand;
+		ossCommand << viewer << ' ' << fVRMLFileName;
+		strncpy(command,ossCommand.str().c_str(),sizeof(command));
 		(void) system( command );
 	}
 }

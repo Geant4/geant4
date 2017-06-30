@@ -42,42 +42,65 @@
 #include "globals.hh"
 #include "G4Fragment.hh"
 #include "G4PairingCorrection.hh"
-//#include "G4EvaporationLevelDensityParameter.hh"
 #include "G4Pow.hh"
+#include <vector>
 
 class G4VEmissionProbability 
 {
 public:
-  G4VEmissionProbability();
+
+  explicit G4VEmissionProbability(G4int Z, G4int A);
   virtual ~G4VEmissionProbability();
-
-private:  
-  G4VEmissionProbability(const G4VEmissionProbability &right) = delete;
-
-  const G4VEmissionProbability & operator=(const G4VEmissionProbability &right) = delete;
-  G4bool operator==(const G4VEmissionProbability &right) const = delete;
-  G4bool operator!=(const G4VEmissionProbability &right) const = delete;
-  
-public:
-  virtual G4double EmissionProbability(const G4Fragment & fragment, const G4double anEnergy) = 0;
 
   void Initialise();
 
-  // for cross section selection
-  inline void SetOPTxs(G4int opt) { OPTxs = opt; }
-  // for superimposed Coulomb Barrier for inverse cross sections 	
-  inline void UseSICB(G4bool use) { useSICB = use; }	
+  virtual G4double EmissionProbability(const G4Fragment & fragment, 
+  				       G4double anEnergy) = 0;
+
+  virtual G4double ComputeProbability(G4double anEnergy, G4double CB);
+
+  inline G4int GetZ(void) const { return theZ; }
+	
+  inline G4int GetA(void) const { return theA; }
 
 protected:
+
+  void ResetIntegrator(size_t nbin, G4double de, G4double eps);
+
+  G4double IntegrateProbability(G4double elow, G4double ehigh, G4double CB);
+
+  G4double SampleEnergy();
+
   G4int OPTxs;
-  G4bool useSICB;
+  G4int fVerbose;
+  G4int theZ;
+  G4int theA;
   G4double LevelDensity;
 
   G4Pow*   fG4pow;
   G4PairingCorrection* fPairCorr;
-  //G4EvaporationLevelDensityParameter * theEvapLDPptr;
 
+private:  
+
+  G4VEmissionProbability(const G4VEmissionProbability &right) = delete;
+  const G4VEmissionProbability & operator=(const G4VEmissionProbability &right) = delete;
+  G4bool operator==(const G4VEmissionProbability &right) const = delete;
+  G4bool operator!=(const G4VEmissionProbability &right) const = delete;
+
+  size_t length;
+  size_t nfilled;
+
+  G4double emin;
+  G4double emax;
+  G4double elimit;
+  G4double eCoulomb;
+  G4double accuracy;
+  G4double probmax;
+  G4double eprobmax;
+  G4double totProbability;
+
+  std::vector<G4double> fEner;
+  std::vector<G4double> fProb;
 };
-
 
 #endif

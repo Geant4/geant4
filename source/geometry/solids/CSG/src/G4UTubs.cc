@@ -51,7 +51,7 @@ G4UTubs::G4UTubs( const G4String& pName,
                         G4double pRMin, G4double pRMax,
                         G4double pDz,
                         G4double pSPhi, G4double pDPhi )
-  : G4USolid(pName, new UTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi))
+  : Base_t(pName, pRMin, pRMax, pDz, pSPhi, pDPhi)
 {
 }
 
@@ -61,7 +61,7 @@ G4UTubs::G4UTubs( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4UTubs::G4UTubs( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -78,7 +78,7 @@ G4UTubs::~G4UTubs()
 // Copy constructor
 
 G4UTubs::G4UTubs(const G4UTubs& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -94,7 +94,7 @@ G4UTubs& G4UTubs::operator = (const G4UTubs& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -105,70 +105,64 @@ G4UTubs& G4UTubs::operator = (const G4UTubs& rhs)
 
 G4double G4UTubs::GetInnerRadius() const
 {
-  return GetShape()->GetInnerRadius();
+  return rmin();
 }
 G4double G4UTubs::GetOuterRadius() const
 {
-  return GetShape()->GetOuterRadius();
+  return rmax();
 }
 G4double G4UTubs::GetZHalfLength() const
 {
-  return GetShape()->GetZHalfLength();
+  return z();
 }
 G4double G4UTubs::GetStartPhiAngle() const
 {
-  return GetShape()->GetStartPhiAngle();
+  return sphi();
 }
 G4double G4UTubs::GetDeltaPhiAngle() const
 {
-  return GetShape()->GetDeltaPhiAngle();
+  return dphi();
 }
 G4double G4UTubs::GetSinStartPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle();
-  return std::sin(phi);
+  return std::sin(GetStartPhiAngle());
 }
 G4double G4UTubs::GetCosStartPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle();
-  return std::cos(phi);
+  return std::cos(GetStartPhiAngle());
 }
 G4double G4UTubs::GetSinEndPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle() +
-                 GetShape()->GetDeltaPhiAngle();
-  return std::sin(phi);
+  return std::sin(GetStartPhiAngle()+GetDeltaPhiAngle());
 }
 G4double G4UTubs::GetCosEndPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle() +
-                 GetShape()->GetDeltaPhiAngle();
-  return std::cos(phi);
+  return std::cos(GetStartPhiAngle()+GetDeltaPhiAngle());
 }
 
 void G4UTubs::SetInnerRadius(G4double newRMin)
 {
-  GetShape()->SetInnerRadius(newRMin);
+  SetRMin(newRMin);
   fRebuildPolyhedron = true;
 }
 void G4UTubs::SetOuterRadius(G4double newRMax)
 {
-  GetShape()->SetOuterRadius(newRMax);
+  SetRMax(newRMax);
   fRebuildPolyhedron = true;
 }
 void G4UTubs::SetZHalfLength(G4double newDz)
 {
-  GetShape()->SetZHalfLength(newDz);
+  SetDz(newDz);
   fRebuildPolyhedron = true;
 }
-void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
+void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool)
 {
-  GetShape()->SetStartPhiAngle(newSPhi, trig);
+  SetSPhi(newSPhi);
   fRebuildPolyhedron = true;
 }
 void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
 {
-  GetShape()->SetDeltaPhiAngle(newDPhi);
+  SetDPhi(newDPhi);
   fRebuildPolyhedron = true;
 }
 
@@ -197,7 +191,7 @@ G4VSolid* G4UTubs::Clone() const
 //
 // Get bounding box
 
-void G4UTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UTubs::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
 
@@ -232,7 +226,8 @@ void G4UTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UTubs::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UTubs::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -240,8 +235,8 @@ void G4UTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
@@ -254,7 +249,8 @@ void G4UTubs::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UTubs::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UTubs::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -274,7 +270,7 @@ G4UTubs::CalculateExtent(const EAxis pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);
@@ -295,7 +291,7 @@ G4UTubs::CalculateExtent(const EAxis pAxis,
   // Find bounding envelope and calculate extent
   //
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
   G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
   G4double ang    = dphi/ksteps;
 

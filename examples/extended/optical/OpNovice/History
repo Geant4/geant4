@@ -1,4 +1,4 @@
-$Id: History 100934 2016-11-03 11:04:36Z gcosmo $
+$Id: History 104597 2017-06-07 08:57:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 22, 2017 P.Gumplinger (OpNovice-V10-03-00/OpNovice-V10-03-01)
+- exercise the new DAVIS LUT surface model
 
 Nov 02, 2016 L.Garnier (OpNovice-V10-02-01)
 - Remove icons.mac. Automatically include since interfaces-V10-02-07

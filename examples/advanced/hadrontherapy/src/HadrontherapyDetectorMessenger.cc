@@ -33,7 +33,7 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4SystemOfUnits.hh"
-
+#include "G4UIcmdWithABool.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
@@ -110,6 +110,10 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
     changeTheDetectorVoxelCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
 
+
+    
+    
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -124,6 +128,7 @@ HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
     delete changeTheDetectorSizeCmd; 
     delete changeTheDetectorToPhantomPositionCmd; 
     delete changeTheDetectorVoxelCmd;
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -163,4 +168,5 @@ void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String n
   {
       hadrontherapyDetector -> UpdateGeometry();
   }
+ 
 }

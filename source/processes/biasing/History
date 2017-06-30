@@ -1,4 +1,4 @@
-$Id: History 88804 2015-03-10 17:12:21Z gcosmo $
+$Id: History 103005 2017-03-08 08:08:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 7th, 2017  Alexander Howard (procbiasing-V10-03-01)
+- G4GeometrySampler: removed unnecessary ClearSampling from the destructor
+
+Mar 7th, 2015 Alexander Howard (procbiasing-V10-03-00)
+- G4ImportanceConfigurator: adjusted the ProcessPlacer in the destructor
+  of the G4ImportanceConfigurator so that it didn't cause an error in MT-mode
 
 Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-01-00)
 - G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made

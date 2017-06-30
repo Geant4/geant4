@@ -1,5 +1,5 @@
 
-$Id: History 100258 2016-10-17 08:01:05Z gcosmo $
+$Id: History 104770 2017-06-16 07:03:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-06-17 Dennis Wright (rdecay02-V10-03-00)
+- README: add note stating that all histograms but one are turned off by
+    default, and describing how to turn them back on.  Solves user 
+    complaint in bug report #1936 
 
 14-10-16 G.Folger (rdecay02-V10-02-01)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

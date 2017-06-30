@@ -13,6 +13,18 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+27-04-17 mma  (NeutronSource-V10-03-03)
+- Update Readme
+
+12-04-17 mma  (NeutronSource-V10-03-02)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
+19-02-17 mma  (NeutronSource-V10-03-01)
+- HistoManager.cc : add a comment
+
+17-02-17 mma  (NeutronSource-V10-03-00)
+- Run.cc : remove normalisation of all histos
 
 14-10-16 G.Folger (NeutronSource-V10-02-01)
 - remove direct use of aParticleIterator, use GetParticleTableIterator().

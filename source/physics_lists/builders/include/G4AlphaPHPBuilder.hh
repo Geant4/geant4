@@ -28,7 +28,7 @@
 // ClassName:   G4AlphaPHPBuilder
 //
 // Author: 2013 P. Arce
-//
+// 12.04.2017 A.Dotti move to new design with base class//
 //----------------------------------------------------------------------------
 //
 
@@ -47,21 +47,22 @@ class G4AlphaPHPBuilder : public G4VAlphaBuilder
 {
 public: 
   G4AlphaPHPBuilder();
-  virtual ~G4AlphaPHPBuilder();
+  virtual ~G4AlphaPHPBuilder() {}
   
-public: 
-  virtual void Build(G4AlphaInelasticProcess * aP);
-  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4AlphaInelasticProcess * aP) final override ;
+  virtual void Build(G4HadronElasticProcess * aP) final override;
   
-  void SetMinEnergy(G4double aM) 
+  virtual void SetMinEnergy(G4double aM) final override
   {
     theMin=aM;
   }
-  void SetMaxEnergy(G4double aM) 
+  virtual void SetMaxEnergy(G4double aM) final override
   {
     theMax=aM;
   }
   
+  using G4VAlphaBuilder::Build; //Prevent compiler warning
+
 private:
   G4double theMin;
   G4double theMax;

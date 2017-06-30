@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AdjointSteppingAction.cc 102568 2017-02-09 08:37:41Z gcosmo $
+// $Id: G4AdjointSteppingAction.cc 102436 2017-01-27 08:28:53Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////////
 //      Class Name:	G4AdjointSteppingAction

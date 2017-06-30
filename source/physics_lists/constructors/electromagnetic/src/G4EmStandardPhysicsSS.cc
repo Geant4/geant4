@@ -60,6 +60,7 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4UrbanMscModel.hh"
 
@@ -181,14 +182,15 @@ void G4EmStandardPhysicsSS::ConstructProcess()
   G4hBremsstrahlung* pb = new G4hBremsstrahlung();
   G4hPairProduction* pp = new G4hPairProduction();
 
-  // muon & hadron multiple scattering
+  // muon & hadron scattering
   G4CoulombScattering* muss = new G4CoulombScattering();
+  muss->SetEmModel(new G4hCoulombScatteringModel(), 1);
   G4CoulombScattering* piss = new G4CoulombScattering();
+  piss->SetEmModel(new G4hCoulombScatteringModel(), 1);
   G4CoulombScattering* kss = new G4CoulombScattering();
+  kss->SetEmModel(new G4hCoulombScatteringModel(), 1);
   G4CoulombScattering* pss = new G4CoulombScattering();
-
-  G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
-
+  pss->SetEmModel(new G4hCoulombScatteringModel(), 1);
 
   // Add standard EM Processes
   auto myParticleIterator=GetParticleIterator();
@@ -304,8 +306,8 @@ void G4EmStandardPhysicsSS::ConstructProcess()
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
 
-      ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
     }
   }
 

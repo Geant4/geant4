@@ -1,0 +1,21 @@
+# $Id$
+#
+# Macro file for "Activation.cc"
+#
+/control/verbose 2
+/run/verbose 1
+#
+###/testhadr/det/setIsotopeMat Li7 3 7 1.85 g/cm3
+###/run//testhadr/det/setMat G4_Co
+###/testhadr/det/setThickness 1 cm
+###/testhadr/det/setSizeYZ 1 cm
+#
+/run/initialize
+/process/list
+#
+/gun/particle neutron
+/gun/energy 25 meV
+#
+/run/printProgress 100
+#
+/run/beamOn 1000

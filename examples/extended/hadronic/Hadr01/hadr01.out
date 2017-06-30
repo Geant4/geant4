@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -32,7 +32,7 @@ userDetector->Construct() start.
 ***** Table : Nb of materials = 2 *****
 
  Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.894 cm 
-                       Imean: 166.000 eV 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
@@ -62,7 +62,7 @@ physicsList->setCut() start.
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -75,6 +75,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -737,10 +743,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     2
 =======================================================================
 Number of de-excitation channels                    8
 
@@ -792,7 +799,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-RunAction::BeginOfRunAction:  User=1.04s Real=1.08s Sys=0.02s
+RunAction::BeginOfRunAction:  User=1.24s Real=1.29s Sys=0.01s
 NuclearData:  User=0s Real=0s Sys=0s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
@@ -807,33 +814,33 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.11s Real=0.1s Sys=0s
+  User=0.15s Real=0.17s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         67.12   RMS(MeV) 62.35
-Average number of steps              206.6
-Average number of gamma              1.57
-Average number of e-                 3.69
-Average number of e+                 0.04
-Average number of neutrons           1.15
-Average number of protons            1.18
+Average energy deposit (MeV)         70.39   RMS(MeV) 78.21
+Average number of steps              208.2
+Average number of gamma              1.63
+Average number of e-                 3.84
+Average number of e+                 0.05
+Average number of neutrons           0.83
+Average number of protons            0.9
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.21
-Average number of pi0                0.12
-Average number of kaons              0
+Average number of pi+ & pi-          0.24
+Average number of pi0                0.15
+Average number of kaons              0.01
 Average number of muons              0.01
-Average number of deuterons+tritons  0.24
-Average number of He3+alpha          0.23
-Average number of ions               0.48
-Average number of forward neutrons   0.1
-Average number of reflected neutrons 0.96
-Average number of leaked neutrons    0.02
-Average number of proton leak        0.52
-Average number of pion leak          0.18
+Average number of deuterons+tritons  0.29
+Average number of He3+alpha          0.19
+Average number of ions               0.39
+Average number of forward neutrons   0.05
+Average number of reflected neutrons 0.74
+Average number of leaked neutrons    0.01
+Average number of proton leak        0.38
+Average number of pion leak          0.22
 ========================================================
 
 #
@@ -846,9 +853,10 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 15
+TransportationManager deleted.
+Total navigation history collections cleaned: 20
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0211 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0288 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00577 MB
 Pool ID '7G4Event', size : 0.000961 MB
@@ -856,12 +864,12 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '7G4Track', size : 0.0115 MB
-Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '18G4TouchableHistory', size : 0.00288 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.05 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.059 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

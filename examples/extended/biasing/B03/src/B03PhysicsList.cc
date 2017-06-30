@@ -269,10 +269,7 @@ void B03PhysicsList::ConstructEM()
 // -- generator models
 #include "G4TheoFSGenerator.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4Evaporation.hh"
 #include "G4CompetitiveFission.hh"
-#include "G4FermiBreakUp.hh"
-#include "G4StatMF.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4Fancy3DNucleus.hh"
 #include "G4CascadeInterface.hh"
@@ -304,17 +301,8 @@ void B03PhysicsList::ConstructHad()
   G4TheoFSGenerator* theTheoModel = new G4TheoFSGenerator;
   G4TheoFSGenerator* antiBHighEnergyModel = new G4TheoFSGenerator;
        
-  // all models for treatment of thermal nucleus 
-  G4Evaporation* theEvaporation = new G4Evaporation;
-  G4FermiBreakUp* theFermiBreakUp = new G4FermiBreakUp;
-  G4StatMF* theMF = new G4StatMF;
-
   // Evaporation logic
   G4ExcitationHandler* theHandler = new G4ExcitationHandler;
-  theHandler->SetEvaporation(theEvaporation);
-  theHandler->SetFermiModel(theFermiBreakUp);
-  theHandler->SetMultiFragmentation(theMF);
-  theHandler->SetMaxAandZForFermiBreakUp(12, 6);
   theHandler->SetMinEForMultiFrag(3*MeV);
         
   // Pre equilibrium stage 

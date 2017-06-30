@@ -1,4 +1,4 @@
-$Id: History 101390 2016-11-16 14:13:20Z gcosmo $
+$Id: History 104041 2017-05-09 07:44:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08-05-17 V.Ivant (testem7-V10-03-00)
+- c2_functions - fixed compillation for gcc 7.1
 
 16-11-16 V.Ivant (testem7-V10-02-07)
 - DetectorConstruction - fixed valgrind reported problem

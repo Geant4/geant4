@@ -43,12 +43,13 @@ using namespace std;
 G4int G4BoldyshevTripletModel::maxZ = 99;
 G4LPhysicsFreeVector* G4BoldyshevTripletModel::data[] = {0};
 
-G4BoldyshevTripletModel::G4BoldyshevTripletModel (const G4ParticleDefinition*, const G4String& nam)
-  :G4VEmModel(nam),isInitialised(false),smallEnergy(4.*MeV)
+G4BoldyshevTripletModel::G4BoldyshevTripletModel(const G4ParticleDefinition*, const G4String& nam)
+  :G4VEmModel(nam),smallEnergy(4.*MeV)
 {
-  fParticleChange = 0;
+  fParticleChange = nullptr;
   
   lowEnergyLimit = 4.0*electron_mass_c2;
+  momentumThreshold_c = energyThreshold = xb = xn = lowEnergyLimit; 
   
   verboseLevel= 0;
   // Verbosity scale for debugging purposes:
@@ -70,7 +71,7 @@ G4BoldyshevTripletModel::~G4BoldyshevTripletModel()
     for(G4int i=0; i<maxZ; ++i) {
       if(data[i]) { 
 	delete data[i];
-	data[i] = 0;
+	data[i] = nullptr;
       }
     }
   }
@@ -78,9 +79,8 @@ G4BoldyshevTripletModel::~G4BoldyshevTripletModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BoldyshevTripletModel::Initialise(
-                                const G4ParticleDefinition* particle,
-				const G4DataVector& cuts)
+void G4BoldyshevTripletModel::Initialise(const G4ParticleDefinition*,
+				         const G4DataVector&)
 {
   if (verboseLevel > 1) 
   {
@@ -88,19 +88,30 @@ void G4BoldyshevTripletModel::Initialise(
 	   << G4endl
 	   << "Energy range: "
 	   << LowEnergyLimit() / MeV << " MeV - "
-	   << HighEnergyLimit() / GeV << " GeV"
+	   << HighEnergyLimit() / GeV << " GeV isMaster: " << IsMaster()
 	   << G4endl;
   }
+  // compute values only once
+  energyThreshold = 1.1*electron_mass_c2; 
+  momentumThreshold_c = std::sqrt(energyThreshold * energyThreshold 
+                                - electron_mass_c2*electron_mass_c2); 
+  G4double momentumThreshold_N = momentumThreshold_c/electron_mass_c2; 
+  G4double t = 0.5*G4Log(momentumThreshold_N + 
+			 std::sqrt(momentumThreshold_N*momentumThreshold_N + 1.0));
+  //G4cout << 0.5*asinh(momentumThreshold_N) << "  " << t << G4endl;
+  G4double sinht = std::sinh(t);                         
+  G4double cosht = std::cosh(t);  
+  G4double logsinht = G4Log(2.*sinht);                     
+  G4double J1 = 0.5*(t*cosht/sinht - logsinht);
+  G4double J2 = (-2./3.)*logsinht + t*cosht/sinht 
+    + (sinht - t*cosht*cosht*cosht)/(3.*sinht*sinht*sinht);
+
+  xb = 2.*(J1-J2)/J1; 
+  xn = 1. - xb/6.;
 
   if(IsMaster()) 
   {
-
-    // Initialise element selector
-
-    InitialiseElementSelectors(particle, cuts);
-
-    // Access to elements
-  
+    // Access to elements  
     char* path = getenv("G4LEDATA");
 
     G4ProductionCutsTable* theCoupleTable =
@@ -117,32 +128,22 @@ void G4BoldyshevTripletModel::Initialise(
     
       for (G4int j=0; j<nelm; ++j) 
       {
-        G4int Z = (G4int)(*theElementVector)[j]->GetZ();
-        if(Z < 1)          { Z = 1; }
-        else if(Z > maxZ)  { Z = maxZ; }
+        G4int Z = std::min((*theElementVector)[j]->GetZasInt(), maxZ);
         if(!data[Z]) { ReadData(Z, path); }
       }
     }
   }
-  if(isInitialised) { return; }
-  fParticleChange = GetParticleChangeForGamma();
-  isInitialised = true;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4BoldyshevTripletModel::InitialiseLocal(
-     const G4ParticleDefinition*, G4VEmModel* masterModel)
-{
-  SetElementSelectors(masterModel->GetElementSelectors());
+  if(!fParticleChange) {
+    fParticleChange = GetParticleChangeForGamma();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double 
 G4BoldyshevTripletModel::MinPrimaryEnergy(const G4Material*,
-						  const G4ParticleDefinition*,
-						  G4double)
+					  const G4ParticleDefinition*,
+					  G4double)
 {
   return lowEnergyLimit;
 }
@@ -172,15 +173,10 @@ void G4BoldyshevTripletModel::ReadData(size_t Z, const char* path)
       return;
     }
   }
-
-  //
   
   data[Z] = new G4LPhysicsFreeVector();
-  
-  //
-  
   std::ostringstream ost;
-  ost << datadir << "livermore/tripdata/pp-trip-cs-" << Z <<".dat";
+  ost << datadir << "/livermore/tripdata/pp-trip-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
   
   if( !fin.is_open()) 
@@ -204,17 +200,14 @@ void G4BoldyshevTripletModel::ReadData(size_t Z, const char* path)
   } 
 
   // Activation of spline interpolation
-  data[Z] ->SetSpline(true);  
-  
+  data[Z]->SetSpline(true);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double 
-G4BoldyshevTripletModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
-							    G4double GammaEnergy,
-							    G4double Z, G4double,
-							    G4double, G4double)
+G4double G4BoldyshevTripletModel::ComputeCrossSectionPerAtom(
+         const G4ParticleDefinition* part,
+	 G4double GammaEnergy, G4double Z, G4double, G4double, G4double)
 {
   if (verboseLevel > 1) 
   {
@@ -224,38 +217,27 @@ G4BoldyshevTripletModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 
   if (GammaEnergy < lowEnergyLimit) { return 0.0; } 
 
-  G4double xs = 0.0;
-  
-  G4int intZ=G4int(Z);
-
-  if(intZ < 1 || intZ > maxZ) { return xs; }
-
+  G4double xs = 0.0;  
+  G4int intZ = std::max(1, std::min(G4lrint(Z), maxZ));
   G4LPhysicsFreeVector* pv = data[intZ];
 
   // if element was not initialised
   // do initialisation safely for MT mode
   if(!pv) 
   {
-    InitialiseForElement(0, intZ);
+    InitialiseForElement(part, intZ);
     pv = data[intZ];
     if(!pv) { return xs; }
   }
   // x-section is taken from the table
   xs = pv->Value(GammaEnergy); 
 
-  if(verboseLevel > 0)
+  if(verboseLevel > 1)
   {
-    G4int n = pv->GetVectorLength() - 1;
-    G4cout  <<  "****** DEBUG: tcs value for Z=" << Z << " at energy (MeV)=" 
-	    << GammaEnergy/MeV << G4endl;
-    G4cout  <<  "  cs (Geant4 internal unit)=" << xs << G4endl;
-    G4cout  <<  "    -> first cs value in EADL data file (iu) =" << (*pv)[0] << G4endl;
-    G4cout  <<  "    -> last  cs value in EADL data file (iu) =" << (*pv)[n] << G4endl;
-    G4cout  <<  "*********************************************************" << G4endl;
+    G4cout  <<  "*** Triplet conversion xs for Z=" << Z << " at energy E(MeV)=" 
+	    << GammaEnergy/MeV <<  "  cs=" << xs/millibarn << " mb" << G4endl;
   }
-
   return xs;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -267,8 +249,8 @@ void G4BoldyshevTripletModel::SampleSecondaries(
 				 G4double, G4double)
 {
 
-  // The energies of the secondary particles are sampled using                                                                                                                 // a modified Wheeler-Lamb model (see PhysRevD 7 (1973), 26)
-
+  // The energies of the secondary particles are sampled using
+  // a modified Wheeler-Lamb model (see PhysRevD 7 (1973), 26)
   if (verboseLevel > 1) {
     G4cout << "Calling SampleSecondaries() of G4BoldyshevTripletModel" 
 	   << G4endl;
@@ -277,183 +259,124 @@ void G4BoldyshevTripletModel::SampleSecondaries(
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
 
-  G4double epsilon ;
-  //  G4double epsilon0Local = electron_mass_c2 / photonEnergy ;
+  G4double epsilon;
 
-  
-  G4double p0 = electron_mass_c2;
-  G4double positronTotEnergy, electronTotEnergy, thetaEle, thetaPos;
-  G4double ener_re=0., theta_re, phi_re, phi;
-  
-  // Calculo de theta - elecron de recoil                                                                                                                                   
-             
-  G4double energyThreshold = sqrt(2.)*electron_mass_c2; // -> momentumThreshold_N = 1                                                                                       
-             
-  energyThreshold = 1.1*electron_mass_c2;
-  // G4cout << energyThreshold << G4endl;                                                                                                                                   
-             
-  
-  G4double momentumThreshold_c = sqrt(energyThreshold * energyThreshold - electron_mass_c2*electron_mass_c2); // momentun in MeV/c unit                                 
-  G4double momentumThreshold_N = momentumThreshold_c/electron_mass_c2; // momentun in mc unit                                                                                            
+  CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
-  // Calculation of recoil electron production  
+  // recoil electron thould be 3d particle
+  G4DynamicParticle* particle3 = nullptr;
+  static const G4double costlim = std::cos(4.47*CLHEP::pi/180.);
   
-  
-  G4double SigmaTot = (28./9.) * std::log ( 2.* photonEnergy / electron_mass_c2 ) - 218. / 27. ;
-  G4double X_0 = 2. * ( sqrt(momentumThreshold_N*momentumThreshold_N + 1) -1 );
-  G4double SigmaQ = (82./27. - (14./9.) * log (X_0) + 4./15.*X_0 - 0.0348 * X_0 * X_0);
-  G4double recoilProb = G4UniformRand();
-  //G4cout << "SIGMA TOT " << SigmaTot <<  " " << "SigmaQ " << SigmaQ << " " << SigmaQ/SigmaTot << " " << recoilProb << G4endl;                                            
-  
-  
-  if (recoilProb >= SigmaQ/SigmaTot) // create electron recoil                                                                                                                           
+  G4double loga, f1_re, greject, cost;
+  G4double cosThetaMax = (energyThreshold - electron_mass_c2 
+     + electron_mass_c2*(energyThreshold + electron_mass_c2)/photonEnergy )
+	/momentumThreshold_c;
+  if (cosThetaMax > 1.) {
+    //G4cout << "G4BoldyshevTripletModel::SampleSecondaries: ERROR cosThetaMax= " 
+    //	   << cosThetaMax << G4endl;
+    cosThetaMax = 1.0;
+  }
+
+  G4double logcostm = G4Log(cosThetaMax);
+  G4int nn = 0;
+  do {
+    cost = G4Exp(logcostm*rndmEngine->flat());
+    G4double are = 1./(14.*cost*cost);
+    G4double bre = (1.-5.*cost*cost)/(2.*cost);
+    loga = G4Log((1.+ cost)/(1.- cost));
+    f1_re = 1. - bre*loga;
+    greject = (cost < costlim) ? are*f1_re : 1.0;
+    // G4cout << nn << ". step of the 1st loop greject= " << greject << G4endl;
+    ++nn;
+  } while(greject < rndmEngine->flat());
+      
+  // Calculo de phi - elecron de recoil
+  G4double sint2 = (1. - cost)*(1. + cost);
+  G4double fp = 1. - sint2*loga/(2.*cost) ;
+  G4double rt, phi_re;
+  nn = 0;
+  do {
+    phi_re = twopi*rndmEngine->flat();
+    rt = (1. - std::cos(2.*phi_re)*fp/f1_re)/twopi;
+    //G4cout << nn << ". step of the 2nd loop greject= " << rt << G4endl;
+    ++nn;
+  } while(rt < rndmEngine->flat());
+
+  // Calculo de la energia - elecron de recoil - relacion momento maximo <-> angulo
+  G4double S  = electron_mass_c2*(2.* photonEnergy + electron_mass_c2);
+  G4double P2 = S - electron_mass_c2*electron_mass_c2;
+
+  G4double D2 = 4.*S * electron_mass_c2*electron_mass_c2 + P2*P2*sint2;
+  G4double ener_re = electron_mass_c2 * (S + electron_mass_c2*electron_mass_c2)/sqrt(D2);
+      
+  if(ener_re >= energyThreshold) 
     {
-      
-      G4double cosThetaMax = (  ( energyThreshold - electron_mass_c2 ) / (momentumThreshold_c) + electron_mass_c2*
-				( energyThreshold + electron_mass_c2 ) / (photonEnergy*momentumThreshold_c) );
-      
-      
-      if (cosThetaMax > 1) G4cout << "ERRORE " << G4endl;
-
-      G4double r1;
-      G4double r2;
-      G4double are, bre, loga, f1_re, greject, cost;
-
-      do {
-        r1 = G4UniformRand();
-        r2 = G4UniformRand();
-        //      cost = (pow(4./enern,0.5*r1)) ;                                                                                                                             
-	
-        cost = pow(cosThetaMax,r1);
-        theta_re = acos(cost);
-	are = 1./(14.*cost*cost);
-        bre = (1.-5.*cost*cost)/(2.*cost);
-        loga = log((1.+ cost)/(1.- cost));
-        f1_re = 1. - bre*loga;
-	
-        if ( theta_re >= 4.47*CLHEP::pi/180.)
-          {
-            greject = are*f1_re;
-          } else {
-	  greject = 1. ;
-        }
-      } while(greject < r2);
-      
-      // Calculo de phi - elecron de recoil                                                                                                                                              
-
-      G4double r3, r4, rt;
-
-      do {
-        r3 = G4UniformRand();
-	r4 = G4UniformRand();
-        phi_re = twopi*r3 ;
-        G4double sint2 = 1. - cost*cost ;
-        G4double fp = 1. - sint2*loga/(2.*cost) ;
-	rt = (1.-cos(2.*phi_re)*fp/f1_re)/(2.*pi) ;
-
-      } while(rt < r4);
-
-      // Calculo de la energia - elecron de recoil - relacion momento maximo <-> angulo                                                                                                  
-
-      G4double S = electron_mass_c2*(2.* photonEnergy + electron_mass_c2);
-
-      G4double D2 = 4.*S * electron_mass_c2*electron_mass_c2
-	+ (S - electron_mass_c2*electron_mass_c2)
-	*(S - electron_mass_c2*electron_mass_c2)*sin(theta_re)*sin(theta_re);
-      ener_re = electron_mass_c2 * (S + electron_mass_c2*electron_mass_c2)/sqrt(D2);
-      
-      // New Recoil energy calculation                                                                                                                                                   
-      
-      G4double momentum_recoil = 2* (electron_mass_c2) * (std::cos(theta_re)/(std::sin(phi_re)*std::sin(phi_re)));
-      G4double ener_recoil = sqrt( momentum_recoil*momentum_recoil + electron_mass_c2*electron_mass_c2);
-      ener_re = ener_recoil;	
-      
-      //      G4cout << "electron de retroceso " << ener_re << " " << theta_re << " " << phi_re << G4endl;                                                                               
-
-      // Recoil electron creation                                                                                                                                                        
-      G4double dxEle_re=sin(theta_re)*std::cos(phi_re),dyEle_re=sin(theta_re)*std::sin(phi_re), dzEle_re=cos(theta_re);
-
-      G4double electronRKineEnergy = std::max(0.,ener_re - electron_mass_c2) ;
-
-      G4ThreeVector electronRDirection (dxEle_re, dyEle_re, dzEle_re);
+      G4double electronRKineEnergy = ener_re - electron_mass_c2;
+      G4double sint = std::sqrt(sint2);
+      G4ThreeVector electronRDirection (sint*std::cos(phi_re), sint*std::sin(phi_re), cost);
       electronRDirection.rotateUz(photonDirection);
-
-      G4DynamicParticle* particle3 = new G4DynamicParticle (G4Electron::Electron(),
-							    electronRDirection,
-                                                            electronRKineEnergy);
-      fvect->push_back(particle3);
-
+      particle3 = new G4DynamicParticle (G4Electron::Electron(),
+					 electronRDirection,
+					 electronRKineEnergy);
     }
   else
     {
-      // deposito la energia  ener_re - electron_mass_c2                                                                                                                    
-      // G4cout << "electron de retroceso " << ener_re << G4endl;                                                                                                          
-      
-      fParticleChange->ProposeLocalEnergyDeposit(ener_re - electron_mass_c2);
+      // deposito la energia  ener_re - electron_mass_c2
+      // G4cout << "electron de retroceso " << ener_re << G4endl;
+      fParticleChange->ProposeLocalEnergyDeposit(std::max(0.0, ener_re - electron_mass_c2));
+      ener_re = 0.0;
     }
   
+  // Depaola (2004) suggested distribution for e+e- energy
+  // VI: very suspect that 1 random number is not enough
+  //     and sampling below is not correct - should be fixed
+  G4double re = rndmEngine->flat();
   
-  // Depaola (2004) suggested distribution for e+e- energy                                  
+  G4double a  = std::sqrt(16./xb - 3. - 36.*re*xn + 36.*re*re*xn*xn + 6.*xb*re*xn);
+  G4double c1 = G4Exp(G4Log((-6. + 12.*re*xn + xb + 2*a)*xb*xb)/3.);
+  epsilon = c1/(2.*xb) + (xb - 4.)/(2.*c1) + 0.5;
+  
+  G4double photonEnergy1 = photonEnergy - ener_re ; 
+  // resto al foton la energia del electron de retro.
+  G4double positronTotEnergy = std::max(epsilon*photonEnergy1, electron_mass_c2);
+  G4double electronTotEnergy = std::max(photonEnergy1 - positronTotEnergy, electron_mass_c2);
+  
+  static const G4double a1 = 1.6;
+  static const G4double a2 = 0.5333333333;
+  G4double uu = -G4Log(rndmEngine->flat()*rndmEngine->flat());
+  G4double u = (0.25 > rndmEngine->flat()) ? uu*a1 : uu*a2;
 
-  // G4double t = 0.5*asinh(momentumThreshold_N);
-  G4double t = 0.5*log(momentumThreshold_N + sqrt(momentumThreshold_N*momentumThreshold_N+1));
-  //G4cout << 0.5*asinh(momentumThreshold_N) << "  " << t << G4endl;                          
-  G4double J1 = 0.5*(t*cosh(t)/sinh(t) - log(2.*sinh(t)));
-  G4double J2 = (-2./3.)*log(2.*sinh(t)) + t*cosh(t)/sinh(t) + (sinh(t)-t*pow(cosh(t),3))/(3.*pow(sinh(t),3));
-    G4double b = 2.*(J1-J2)/J1; 
-  
-  G4double n = 1 - b/6.;
-  G4double re=0.;                                                                          
-  re = G4UniformRand();                                                                     
-  G4double a = 0.;   
-  
-  G4double b1 =  16. - 3.*b - 36.*b*re*n + 36.*b*pow(re,2.)*pow(n,2.) +
-    6.*pow(b,2.)*re*n;
-  a = pow((b1/b),0.5);
-  G4double c1 = (-6. + 12.*re*n + b + 2*a)*pow(b,2.);
-  epsilon = (pow(c1,1./3.))/(2.*b) + (b-4.)/(2.*pow(c1,1./3.))+0.5;
-  
-  G4double photonEnergy1 = photonEnergy - ener_re ; // resto al foton la energia del electron de retro.                                                                                  
-  positronTotEnergy = epsilon*photonEnergy1;
-  electronTotEnergy = photonEnergy1 - positronTotEnergy; // temporarly                                                                                                                   
-  
-  G4double momento_e = sqrt(electronTotEnergy*electronTotEnergy -
-                            electron_mass_c2*electron_mass_c2) ;
-  G4double momento_p = sqrt(positronTotEnergy*positronTotEnergy -
-                            electron_mass_c2*electron_mass_c2) ;
+  G4double thetaEle = u*electron_mass_c2/electronTotEnergy;
+  G4double sinte = std::sin(thetaEle);
+  G4double coste = std::cos(thetaEle);
 
-  thetaEle = acos((sqrt(p0*p0/(momento_e*momento_e) +1.)- p0/momento_e)) ;
-  thetaPos = acos((sqrt(p0*p0/(momento_p*momento_p) +1.)- p0/momento_p)) ;
-  phi  = twopi * G4UniformRand();
-  
-  G4double dxEle= std::sin(thetaEle)*std::cos(phi),dyEle= std::sin(thetaEle)*std::sin(phi),dzEle=std::cos(thetaEle);
-  G4double dxPos=-std::sin(thetaPos)*std::cos(phi),dyPos=-std::sin(thetaPos)*std::sin(phi),dzPos=std::cos(thetaPos);
-  
-  // Kinematics of the created pair:                                                                                                                                       
-              
-  // the electron and positron are assumed to have a symetric angular                                                                                                 
-  // distribution with respect to the Z axis along the parent photon                                                                                                       
-              
+  G4double thetaPos = u*electron_mass_c2/positronTotEnergy;
+  G4double sintp = std::sin(thetaPos);
+  G4double costp = std::cos(thetaPos);
 
-  G4double electronKineEnergy = std::max(0.,electronTotEnergy - electron_mass_c2) ;
+  G4double phi  = twopi * rndmEngine->flat();
+  G4double sinp = std::sin(phi);
+  G4double cosp = std::cos(phi);
 
+  // Kinematics of the created pair:
+  // the electron and positron are assumed to have a symetric angular
+  // distribution with respect to the Z axis along the parent photon
 
-  G4ThreeVector electronDirection (dxEle, dyEle, dzEle);
+  G4double electronKineEnergy = electronTotEnergy - electron_mass_c2;
+
+  G4ThreeVector electronDirection (sinte*cosp, sinte*sinp, coste);
   electronDirection.rotateUz(photonDirection);
 
   G4DynamicParticle* particle1 = new G4DynamicParticle (G4Electron::Electron(),
                                                         electronDirection,
 							electronKineEnergy);
 
-  // The e+ is always created (even with kinetic energy = 0) for further annihilation                                                                                      
-  
-  G4double positronKineEnergy = std::max(0.,positronTotEnergy - electron_mass_c2) ;
+  G4double positronKineEnergy = positronTotEnergy - electron_mass_c2;
 
-  G4ThreeVector positronDirection (dxPos, dyPos, dzPos);
+  G4ThreeVector positronDirection (-sintp*cosp, -sintp*sinp, costp);
   positronDirection.rotateUz(photonDirection);
 
   // Create G4DynamicParticle object for the particle2      
-
   G4DynamicParticle* particle2 = new G4DynamicParticle(G4Positron::Positron(),
                                                        positronDirection, positronKineEnergy);
   // Fill output vector       
@@ -461,13 +384,11 @@ void G4BoldyshevTripletModel::SampleSecondaries(
   fvect->push_back(particle1);
   fvect->push_back(particle2);
 
+  if(particle3) { fvect->push_back(particle3); }
   
-  // kill incident photon                                                                                                                                                                
+  // kill incident photon
   fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);
-
-
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -476,12 +397,11 @@ void G4BoldyshevTripletModel::SampleSecondaries(
 namespace { G4Mutex BoldyshevTripletModelMutex = G4MUTEX_INITIALIZER; }
 
 void G4BoldyshevTripletModel::InitialiseForElement(
-				      const G4ParticleDefinition*, 
-				      G4int Z)
+     const G4ParticleDefinition*, G4int Z)
 {
   G4AutoLock l(&BoldyshevTripletModelMutex);
-  //  G4cout << "G4BoldyshevTripletModel::InitialiseForElement Z= " 
-  //   << Z << G4endl;
+  // G4cout << "G4BoldyshevTripletModel::InitialiseForElement Z= " 
+  //	  << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
   l.unlock();
 }

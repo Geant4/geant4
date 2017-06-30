@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh 80747 2014-05-09 12:53:43Z gcosmo $
+// $Id: G4OpticalSurface.hh 104459 2017-05-31 15:54:52Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -37,6 +37,7 @@
 // Created:     1997-06-26
 // Author:      Peter Gumplinger
 // Updated:     1999-10-29 add method and class descriptors
+//              2017-02-24 Mariele Stockhoff add DAVIS model 
 // mail:        gum@triumf.ca
 //
 ////////////////////////////////////////////////////////////////////////
@@ -93,7 +94,20 @@ enum G4OpticalSurfaceFinish
    groundtioair,                // rough-cut surface, with tio paint
    groundtyvekair,              // rough-cut surface, with tyvek
    groundvm2000air,             // rough-cut surface, with esr film
-   groundvm2000glue             // rough-cut surface, with esr film & meltmount
+   groundvm2000glue,            // rough-cut surface, with esr film & meltmount
+   
+   // for DAVIS model
+   Rough_LUT,                   //rough surface 
+   RoughTeflon_LUT,             //rough surface wrapped in Teflon tape
+   RoughESR_LUT,                //rough surface wrapped with ESR
+   RoughESRGrease_LUT,          //rough surface wrapped with ESR
+                                //and coupled with opical grease
+   Polished_LUT,                //polished surface 
+   PolishedTeflon_LUT,          //polished surface wrapped in Teflon tape
+   PolishedESR_LUT,             //polished surface wrapped with ESR
+   PolishedESRGrease_LUT,       //polished surface wrapped with ESR
+                                //and coupled with opical grease
+   Detector_LUT                 //polished surface with optical grease 
 };
 
 enum G4OpticalSurfaceModel
@@ -101,6 +115,7 @@ enum G4OpticalSurfaceModel
    glisur,                      // original GEANT3 model
    unified,                     // UNIFIED model
    LUT,                         // Look-Up-Table model
+   DAVIS,                       // DAVIS model
    dichroic                     // dichroic filter
 };
 
@@ -132,10 +147,10 @@ public: // With description
         ////////////////////////////////
 
 	G4OpticalSurface(const G4String& name,
-			 G4OpticalSurfaceModel model = glisur,
-			 G4OpticalSurfaceFinish finish = polished,
-			 G4SurfaceType type = dielectric_dielectric,
-			 G4double value = 1.0);
+                         G4OpticalSurfaceModel model = glisur,
+                         G4OpticalSurfaceFinish finish = polished,
+                         G4SurfaceType type = dielectric_dielectric,
+                         G4double value = 1.0);
         // Constructor of an optical surface object.
 
 public: // Without description
@@ -174,12 +189,12 @@ public: // With description
         // Sets the optical surface polish type.
 
 	inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
-				       { return theMaterialPropertiesTable; }
+                                       { return theMaterialPropertiesTable; }
         // Retrieves the pointer of the G4MaterialPropertiesTable 
         // attached to optical surface.
 
 	inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable *anMPT)
-				       { theMaterialPropertiesTable = anMPT; }
+                                       { theMaterialPropertiesTable = anMPT; }
         // Attaches a G4MaterialPropertiesTable to the optical surface.
 
 	void DumpInfo() const;
@@ -189,7 +204,30 @@ public: // With description
         // Method to read the Look-Up-Table into array AngularDistribution
 
         inline G4double GetAngularDistributionValue(G4int, G4int, G4int);
+        
+        // for DAVIS model
 
+        inline G4double GetAngularDistributionValueLUT(G4int);
+        // Returns the AngularDistributionValue
+
+        void ReadLUTDAVISFile(void);
+        // Method to read the Davis Look-Up-Table into array AngularDistribution
+ 
+        void ReadReflectivityLUTFile(void);
+        // Method to read the Look-Up-Table for reflectivity
+        
+        inline G4double GetReflectivityLUTValue(G4int);
+        // Returns the reflectivity value from the Davis Look-Up-Table
+        
+        inline G4int GetInmax(void) const { return indexmax; }
+        // Returns the number of lines in the Davis Look-Up-Table
+
+        inline G4int GetLUTbins(void) const { return LUTbins; }
+        // Returns the number of probability values per incidentangle
+
+        inline G4int GetRefMax(void) const { return RefMax; }
+        // Returns the number of reflectivity values per angle
+    
         inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
         inline G4int GetPhiIndexMax(void) const { return phiIndexMax; }
 
@@ -217,9 +255,14 @@ private:
         static const G4int phiIndexMax = 37;
 
         G4float* AngularDistribution;
-
         G4Physics2DVector* DichroicVector;
 
+        // for DAVIS model
+        static const G4int indexmax = 7280001; // 3640001; 
+        static const G4int RefMax = 90; 
+        static const G4int LUTbins =20000;
+        G4float* AngularDistributionLUT;
+        G4float* Reflectivity;
 };
 
 ////////////////////
@@ -234,6 +277,18 @@ inline
   return AngularDistribution[angleIncident+
                              thetaIndex*incidentIndexMax+
                              phiIndex*thetaIndexMax*incidentIndexMax];
+}
+
+inline
+ G4double G4OpticalSurface::GetAngularDistributionValueLUT(G4int i)
+{
+  return AngularDistributionLUT[i];
+}
+
+inline
+ G4double G4OpticalSurface::GetReflectivityLUTValue(G4int i)
+{
+  return Reflectivity[i];
 }
 
 inline

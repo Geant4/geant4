@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 98352 2016-07-08 08:21:00Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 102916 2017-03-02 12:58:58Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -635,6 +635,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
       delete [] sm;
       delete [] daughtermass;
       delete [] daughtermomentum;
+      delete products;
       return 0;  // Error detection
     }
     if ( weight < G4UniformRand()) break; 

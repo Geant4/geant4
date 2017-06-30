@@ -3,6 +3,7 @@
 // To execute this macro under ROOT after your simulation ended, 
 //   1 - launch ROOT (usually type 'root' at your machine's prompt)
 //   2 - type '.X plot.C' at the ROOT session prompt
+//   3 - OR directly type 'root plot.C'
 // *********************************************************************
 
 {

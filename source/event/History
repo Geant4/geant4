@@ -1,4 +1,4 @@
-$Id: History 101916 2016-12-08 08:04:03Z gcosmo $
+$Id: History 104522 2017-06-02 07:19:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1, 2017 A.Dotti (event-V10-03-02)
+- Fixing gcc-7.1 warnings for fallthroughs in case statements
+  G4EventManager and G4StackingManager
+
+May 3, 2017 J.Allison (event-V10-03-01)
+- Added more access functions for use by G4GPSModel for visualisation.
+
+April 30, 2017 J.Allison (event-V10-03-00)
+- G4SPSPosDistribution.hh: Added GetRotx,y,z access functions.
 
 December 7, 2016 M.Asai (event-V10-02-09)
 - Set polarization to pre-assigned decay products. Addressing to

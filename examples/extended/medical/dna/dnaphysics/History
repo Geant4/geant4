@@ -5,6 +5,21 @@
                        Package History file
                        --------------------
 
+15 Jun 2017 - tag dnaphysics-V10-03-04 - S. Incerti
+- added visu. to dnaphysics.in
+
+08 Jun 2017 - tag dnaphysics-V10-03-03 - S. Incerti
+- added flag for Capture
+
+08 Apr 2017 - tag dnaphysics-V10-03-02 - S. Incerti
+- added third plot in plot.C
+
+31 Dec 2016 - tag dnaphysics-V10-03-01 - S. Incerti
+- fixed compilation
+
+30 Dec 2016 - tag dnaphysics-V10-03-00 - S. Incerti
+- updated numbering schemme in SteppingAction & README files
+
 30 Sep 2016 - tag dnaphysics-V10-02-05 - S. Incerti
 - PhysicsList - added explanations
 

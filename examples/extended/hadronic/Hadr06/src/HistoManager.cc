@@ -66,21 +66,21 @@ void HistoManager::Book()
   const G4String id[] = {"0","1","2","3","4","5","6","7","8","9",
                          "10","11","12","13"};
   const G4String title[] = 
-                { "dummy",                                        //0
-                  "total energy deposit",                         //1
-                  "Edep (MeV/mm) along absorber",                 //2
-                  "total kinetic energy flow",                    //3
-                  "gamma flux (dN/dE) at exit",                   //4
-                  "e+- flux (dN/dE) at exit",                     //5
-                  "neutrons flux (dN/dE) at exit",                //6
-                  "protons flux (dN/dE) at exit",                 //7
-                  "deuterons flux (dN/dE) at exit",               //8
-                  "alphas flux (dN/dE) at exit",                  //9
-                  "all others ions flux (dN/dE) at exit",         //10
-                  "all others baryons flux (dN/dE) at exit",      //11
-                  "all others mesons flux (dN/dE) at exit",       //12
-                  "all others leptons flux (dN/dE) at exit"       //13  
-                 };  
+       { "dummy",                                                        //0
+         "total energy deposit",                                         //1
+         "Edep (MeV/mm) along absorber",                                 //2
+         "total kinetic energy flow",                                    //3
+         "energy spectrum of emerging gamma",                            //4
+         "energy spectrum of emerging e+-",                              //5
+         "energy spectrum of emerging neutrons",                         //6
+         "energy spectrum of emerging protons",                          //7
+         "energy spectrum of emerging deuterons",                        //8
+         "energy spectrum of emerging alphas",                           //9
+         "energy spectrum of all others emerging ions",                  //10
+         "energy spectrum of all others emerging baryons",               //11
+         "energy spectrum of all others emerging mesons",                //12
+         "energy spectrum of all others emerging leptons (neutrinos)"    //13
+       };
 
   // Default values (to be reset via /analysis/h1/set command) 
   G4int nbins = 100;

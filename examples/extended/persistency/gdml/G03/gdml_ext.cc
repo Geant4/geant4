@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G03 example
 //
 //
-// $Id: gdml_ext.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: gdml_ext.cc 103280 2017-03-23 14:18:19Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -51,13 +51,10 @@
 #include "G03PrimaryGeneratorAction.hh"
 #include "G03RunAction.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+
+// --------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
@@ -78,44 +75,35 @@ int main(int argc, char** argv)
   // Initialisation of runManager via macro for the interactive mode
   // This gives possibility to give different names for GDML file to READ
  
-#ifdef G4VIS_USE
   // Initialize visualization
   //
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
-  // run initialisation macro
+  // Run initialisation macro
+  //
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
   if ( argc==1 )   // Define UI session for interactive mode. 
   {
-#ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
     UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
     ui->SessionStart();
     delete ui;
-#endif
   }
   else             // Batch mode
   { 
-#ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     G4String command = "/control/execute "; 
     G4String fileName = argv[1]; 
     UImanager->ApplyCommand(command+fileName); 
     ui->SessionStart();
     delete ui;
-#endif
   }
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
-  
   // Job termination
   //
+  delete visManager;
   delete runManager;
 
   return 0;

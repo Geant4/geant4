@@ -1,4 +1,4 @@
-$Id: History 102570 2017-02-09 08:40:47Z gcosmo $
+$Id: History 104288 2017-05-23 13:23:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-6th January 2017  John Allison (opengl-V10-02-27)
+23rd May 2017  John Allison (opengl-V10-03-02)
+- Hopefully fix gcc-7.1 warnings.
+
+16th May 2017  Laurent Garnier
+- Fix DEV-262 bug. Picking was not working for retina display due to a screen factor *2
+
+23rd April 2017  John Allison
+- G4OpenGLXViewer.cc: Reverted to XA_RGB_BEST_MAP.
+- G4OpenGLViewer.cc:
+  o Minor improvement to picking (suppressing "no hits" message).
+  o Minor code clean-uo.
+
+18th January 2017  Laurent Garnier
+- Merge John's picking branch
+ o G4OpenGLViewer, G4OpenGLQtViewer, G4OpenGLSceneHandler, G4OpenGLStoredQtViewer, G4OpenGLViewer
+
+G4OpenGLQtViewer.cc: Change labels of picking points in pick info box
+
+17th January 2017  Laurent Garnier
+- G4OpenGLQtViewer.cc: Change labels of picking points in pick info box
+
+12th January 2017  John Allison (opengl-V10-03-01)
+- G4OpenGLImmediate/StoredQtViewer::ShowView: Tidied.
+- G4OpenGLSceneHandler::ScaledFlush: Tidied.
+
+6th January 2017  John Allison (opengl-V10-03-00)
 - G4OpenGLSceneHandler.cc: Fixed bug in ScaledFlush.
 
 21th November 2016  Laurent Garnier (opengl-V10-02-26)

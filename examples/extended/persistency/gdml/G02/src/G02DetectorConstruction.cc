@@ -27,7 +27,7 @@
 /// \brief Implementation of the G02DetectorConstruction class
 //
 //
-// $Id: G02DetectorConstruction.cc 97979 2016-06-30 09:36:20Z gcosmo $
+// $Id: G02DetectorConstruction.cc 104689 2017-06-12 12:17:25Z gcosmo $
 //
 // Class G02DetectorConstruction implementation
 //
@@ -159,7 +159,7 @@ G4VPhysicalVolume* G02DetectorConstruction::Construct()
     // Can be a integer or a pointer to the top Physical Volume:
     //
     // G4int depth=1;
-    // parser.AddModule(depth);
+    // fParser.AddModule(depth);
      
     // OPTION: SETTING ADDITION OF POINTER TO NAME TO FALSE
     //
@@ -170,12 +170,19 @@ G4VPhysicalVolume* G02DetectorConstruction::Construct()
     // NOTE: you have to be sure not to have duplication of names in your
     //       Geometry Setup.
     // 
-    // parser.SetAddPointerToName(false);
+    // fParser.SetAddPointerToName(false);
     //
     // or
     //
     // fParser.Write(fWriteFile, fWorldPhysVol, false);
     
+    // OPTION: SET MAXIMUM LEVEL TO EXPORT (REDUCED TREE)...
+    //
+    // Can be a integer greater than zero:
+    //
+    // G4int maxlevel=3;
+    // fParser.SetMaxExportLevel(maxlevel);
+
     // Writing Geometry to GDML File
     //
     fParser.Write(fWriteFile, fWorldPhysVol);

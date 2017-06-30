@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc 95006 2016-01-15 08:26:18Z gcosmo $
+// $Id: G4VVisCommand.cc 104163 2017-05-15 06:52:42Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -35,14 +35,16 @@
 #include "G4UImanager.hh"
 #include "G4UnitsTable.hh"
 #include <sstream>
+#include <cctype>
 
 G4int G4VVisCommand::fErrorCode = 0;
 
-G4Colour                   G4VVisCommand::fCurrentColour = G4Colour::White();
-G4Colour                   G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
-G4Text::Layout             G4VVisCommand::fCurrentTextLayout = G4Text::left;
-G4double                   G4VVisCommand::fCurrentTextSize = 12.;  // pixels
-G4double                   G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
+G4int           G4VVisCommand::fCurrentArrow3DLineSegmentsPerCircle = 6;
+G4Colour        G4VVisCommand::fCurrentColour = G4Colour::White();
+G4Colour        G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
+G4Text::Layout  G4VVisCommand::fCurrentTextLayout = G4Text::left;
+G4double        G4VVisCommand::fCurrentTextSize = 12.;  // pixels
+G4double        G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;
@@ -64,21 +66,95 @@ G4String G4VVisCommand::ConvertToString
   return oss.str();
 }
 
-void G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
+G4bool G4VVisCommand::ConvertToDoublePair(const G4String& paramString,
 					G4double& xval,
 					G4double& yval)
 {
   G4double x, y;
-  char unts[30];
+  G4String unit;
   
   std::istringstream is(paramString);
-  is >> x >> y >> unts;
-  G4String unt = unts;
+  is >> x >> y >> unit;
 
-  xval = x*G4UIcommand::ValueOf(unt);
-  yval = y*G4UIcommand::ValueOf(unt);
+  if (G4UnitDefinition::IsUnitDefined(unit)) {
+    xval = x*G4UIcommand::ValueOf(unit);
+    yval = y*G4UIcommand::ValueOf(unit);
+  } else {
+    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Unrecognised unit" << G4endl;
+    }
+    return false;
+  }
 
-  return;
+  return true;
+}
+
+const G4String& G4VVisCommand::ConvertToColourGuidance()
+{
+  static G4String guidance
+  ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
+   "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
+   "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+   "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
+   "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+  return guidance;
+}
+
+void G4VVisCommand::ConvertToColour
+(G4Colour& colour,
+ const G4String& redOrString, G4double green, G4double blue, G4double opacity)
+{
+  // Note: colour is supplied by the caller and becomes the default if the
+  // remaining parameters cannot be parsed.
+
+  // Note: redOrString is either a number or string.  If a string it must be
+  // one of the recognised colours.
+
+  // Thus the arguments can be, for example:
+  // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
+  // third and fourth arguments are ignored), or
+  // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  const size_t iPos0 = 0;
+  if (std::isalpha(redOrString[iPos0])) {
+
+    // redOrString is probably alphabetic characters defining the colour
+    if (!G4Colour::GetColour(redOrString, colour)) {
+      // Not a recognised string
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "WARNING: Colour \"" << redOrString
+        << "\" not found.  Defaulting to " << colour
+        << G4endl;
+      }
+      return;
+    } else {
+      // It was a recognised string.  Now add opacity.
+      colour.SetAlpha(opacity);
+      return;
+    }
+
+  } else {
+
+    // redOrString is probably numeric defining the red component
+    std::istringstream iss(redOrString);
+    G4double red;
+    iss >> red;
+    if (iss.fail()) {
+      if (verbosity >= G4VisManager::warnings) {
+        G4cout << "WARNING: String \"" << redOrString
+        << "\" cannot be parsed.  Defaulting to " << colour
+        << G4endl;
+      }
+      return;
+    } else {
+      colour = G4Colour(red,green,blue,opacity);
+      return;
+    }
+    
+  }
 }
 
 void G4VVisCommand::UpdateVisManagerScene

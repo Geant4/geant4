@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc 101046 2016-11-04 10:44:26Z gcosmo $
+// $Id: G4DisplacedSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -265,13 +265,14 @@ void G4DisplacedSolid::SetObjectTranslation(const G4ThreeVector& vector)
 //
 // Get bounding box
 
-void G4DisplacedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4DisplacedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                      G4ThreeVector& pMax) const
 {
   if (!fDirectTransform->IsRotated())
   {
     // Special case of pure translation
     //
-    fPtrSolid->Extent(pMin,pMax);
+    fPtrSolid->BoundingLimits(pMin,pMax);
     G4ThreeVector offset = fDirectTransform->NetTranslation();
     pMin += offset;
     pMax += offset;
@@ -298,7 +299,7 @@ void G4DisplacedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4DisplacedSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4DisplacedSolid::BoundingLimits()", "GeomMgt0001",
                JustWarning, message);
     DumpInfo();
   }

@@ -1,4 +1,4 @@
-//$Id: .README.txt 94957 2016-01-08 13:27:26Z gcosmo $
+//$Id: .README.txt 104901 2017-06-26 14:40:57Z gcosmo $
 
 ///\file "B4/.README.txt"
 ///\brief Example B4 README page
@@ -190,15 +190,22 @@
    - Track length in absorber
    - Track length in gap
 
-   The same values are also saved in an ntuple. The histograms and ntuple are saved 
-   in the output file in a format according to a technology selected in B4Analysis.hh.
+   The same values are also saved in an ntuple. 
+
+   The histograms and the ntuple are saved in the output file in a format
+   according to a technology selected in B4Analysis.hh, the default in this example
+   is ROOT.
 
    The accumulated statistic and computed dispersion is printed at the end of 
    run, in B4RunAction::EndOfRunAction() ((see also
    \link B4bRunAction::EndOfRunAction() B4b \endlink variant).
-   When running in multi-threading mode, the histograms accumulated on threads are
-   automatically merged in a single output file, while the ntuple is written
-   in files per thread.
+   When running in multi-threading mode, the histograms and the ntuple accumulated 
+   on threads are merged in a single output file. While merging of histograms is
+   performed by default, merging of ntuples is explicitly activated in the B4RunAction 
+   constructor.
+
+   The ROOT histograms and ntuple can be plotted with ROOT using the plotHisto.C
+   and plotNtuple.C macros.
  
 \section B4_s8 VISUALIZATION TUTORIAL
 

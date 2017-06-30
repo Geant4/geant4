@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -23,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RunAction.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: RunAction.cc 103888 2017-05-03 08:07:13Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/RunAction.cc
 /// \brief Implementation of the RunAction class
@@ -38,33 +39,77 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "RunAction.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
+#include "Run.hh"
+
+#include "Randomize.hh"
 #include "globals.hh"
-#include "Histo.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction()
-{}
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
+  :G4UserRunAction(),fDetector(det), fPrimary(kin), fRun(0), fHistoManager(0)
+{
+  // Book predefined histograms
+  fHistoManager = new HistoManager();
+  fHistoManager->Update(det);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start" << G4endl;
-  (Histo::GetPointer())->BeginOfHisto();
+#ifdef G4MULTITHREADED
+  if (isMaster) delete fPrimary;      
+#endif
+  delete fHistoManager;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4Run* RunAction::GenerateRun()
+{ 
+  fRun = new Run(fDetector,fPrimary,fHistoManager);
+  return fRun;
+}
+
+
+void RunAction::BeginOfRunAction(const G4Run*)
+{
+  // save Rndm status
+  ////  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  //  if (isMaster) G4Random::showEngineStatus();
+
+  CLHEP::HepRandom::showEngineStatus();
+     
+  //histograms
+  //        
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::EndOfRunAction(const G4Run*)
-{
-  G4cout << "RunAction: End of run actions are started" << G4endl;
-  (Histo::GetPointer())->EndOfHisto();
+{  
+  // print Run summary
+  //
+  if (isMaster) fRun->EndOfRun();    
+      
+  // save histograms
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {    
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }  
+
+  // show Rndm status
+  if (isMaster) G4Random::showEngineStatus();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

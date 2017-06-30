@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericTrap.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4GenericTrap.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -42,7 +42,7 @@
 // 03.02.2016 E.Tcherniaev - Revised GetSurfaceArea() and GetCubicVolume(),
 //            rewritten GetFaceSurfaceArea(), added GetFaceCubicVolume()      
 // 25.09.2016 E.Tcherniaev - Use G4BoundingEnvelope for CalculateExtent(),
-//            added Extent(), removed CreateRotatedVertices()
+//            removed CreateRotatedVertices()
 // --------------------------------------------------------------------
 
 #include "G4GenericTrap.hh"
@@ -1212,7 +1212,8 @@ G4double G4GenericTrap::DistanceToOut(const G4ThreeVector& p) const
 
 // --------------------------------------------------------------------
 
-void G4GenericTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4GenericTrap::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
   pMin = GetMinimumBBox();
   pMax = GetMaximumBBox();
@@ -1226,7 +1227,8 @@ void G4GenericTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4GenericTrap::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4GenericTrap::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -1244,7 +1246,7 @@ G4GenericTrap::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

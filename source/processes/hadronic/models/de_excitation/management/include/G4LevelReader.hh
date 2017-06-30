@@ -62,15 +62,9 @@ public:
   // create run manager using G4LEVELGAMMADATA data for Z and A
   const G4LevelManager* CreateLevelManager(G4int Z, G4int A);
 
-  // create run manager using G4LEVELGAMMADATA data for Z and A
-  const G4LevelManager* CreateLevelManagerNEW(G4int Z, G4int A);
-
   // create run manager using whatever data
   const G4LevelManager* MakeLevelManager(G4int Z, G4int A,
 					 const G4String& filename);
-
-  const G4LevelManager* MakeLevelManagerNEW(G4int Z, G4int A,
-					    const G4String& filename);
 
   inline void SetVerbose(G4int val);
   
@@ -103,8 +97,9 @@ private:
   G4double fCurrEnergy;
   G4double fTrEnergy;
 
-  G4float  fTimeFactor;
-  G4float  fTime;
+  G4double fTimeFactor;
+  G4double fTime;
+
   G4float  fProb;
   G4float  fSpin;
   G4float  fAlpha;
@@ -134,15 +129,14 @@ private:
 
   G4float fNorm1;
 
-  std::vector<G4float> vEnergy;
-  std::vector<G4int>   vSpin;
+  std::vector<G4double> vEnergy;
+  std::vector<G4int>    vSpin;
   std::vector<const G4NucLevel*> vLevel;
 
   std::vector<G4int>    vTrans;
   std::vector<G4float>  vRatio;
   std::vector<G4float>  vGammaCumProbability;
   std::vector<G4float>  vGammaProbability;
-  std::vector<G4float>  vMpRatio;
   std::vector<const std::vector<G4float>*> vShellProbability;
 };
 

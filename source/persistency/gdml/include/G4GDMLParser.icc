@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.icc 96673 2016-04-29 12:08:20Z gcosmo $
+// $Id: G4GDMLParser.icc 104688 2017-06-12 12:16:28Z gcosmo $
 //
 //
 // class G4GDMLParser inline methods
@@ -211,6 +211,16 @@ inline void G4GDMLParser::SetEnergyCutsExport(G4bool flag)
 inline void G4GDMLParser::SetSDExport(G4bool flag)
 {
   writer->SetSDExport(flag);
+}
+
+inline G4int G4GDMLParser::GetMaxExportLevel() const
+{
+  return writer->GetMaxExportLevel();
+}
+
+inline void G4GDMLParser::SetMaxExportLevel(G4int level)
+{
+  writer->SetMaxExportLevel(level);
 }
 
 inline void G4GDMLParser::Clear()

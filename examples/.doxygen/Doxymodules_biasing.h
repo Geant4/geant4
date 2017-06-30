@@ -1,4 +1,4 @@
-// $Id: Doxymodules_biasing.h 101330 2016-11-14 15:38:27Z gcosmo $
+// $Id: Doxymodules_biasing.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_biasing.h
@@ -16,12 +16,11 @@
  *  @{
  */
 
+  class B01ActionInitialization {};
   class B01DetectorConstruction {};
-  class B01PhysicsList {};
   class B01PrimaryGeneratorAction {};
   class B01RunAction {};
   class B01Run {};
-  class B01ScoreTable {};
 
 
 /** @} */
@@ -32,18 +31,13 @@
  *  @{
  */
 
-  class B02CellScorer {};
-  class B02CellScorerStore {};
+  class B02ActionInitialization {};
   class B02DetectorConstruction {};
   class B02ImportanceDetectorConstruction {};
-  class B02PhysicsList {};
   class B02PrimaryGeneratorAction {};
-  class B02PSScoringDetectorConstruction {};
   class B02PVolumeStore {};
   class B02RunAction {};
   class B02Run {};
-  class B02ScoreTable {};
-  class B02ScoringDetectorConstruction {};
 
 /** @} */
 
@@ -159,9 +153,6 @@
 
   class G4AdjointPhysicsList {};
   class G4AdjointPhysicsMessenger {};
-  class Histo1DVar {};
-  class Histo2DVar {};
-  class Histograms {};
   class RMC01AdjointEventAction {};
   class RMC01AnalysisManager {};
   class RMC01AnalysisManagerMessenger {};
@@ -172,8 +163,6 @@
   class RMC01PrimaryGeneratorAction {};
   class RMC01RunAction {};
   class RMC01SD {};
-  enum  side {};
-  class VariableLengthPartition {};
 
 /** @} */
 

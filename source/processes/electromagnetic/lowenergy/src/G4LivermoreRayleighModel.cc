@@ -258,6 +258,7 @@ void G4LivermoreRayleighModel::SampleSecondaries(
   G4double photonEnergy0 = aDynamicGamma->GetKineticEnergy();
 
   // absorption of low-energy gamma  
+  /*
   if (photonEnergy0 <= lowEnergyLimit)
     {
       fParticleChange->ProposeTrackStatus(fStopAndKill);
@@ -265,7 +266,7 @@ void G4LivermoreRayleighModel::SampleSecondaries(
       fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
       return ;
     }
-
+  */
   // Select randomly one element in the current material
   const G4ParticleDefinition* particle =  aDynamicGamma->GetDefinition();
   const G4Element* elm = SelectRandomAtom(couple,particle,photonEnergy0);

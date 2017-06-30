@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 102724 2017-02-20 13:00:39Z gcosmo $
+// $Id: G4Fragment.cc 104779 2017-06-16 09:20:56Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -92,8 +92,15 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
 
 G4Fragment::~G4Fragment()
 {
-  delete thePolarization;
-  thePolarization = nullptr;
+  SetNuclearPolarization(nullptr);
+}
+
+void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
+{
+  if(p !=  thePolarization) {
+    delete thePolarization;
+    thePolarization = p;
+  }
 }
 
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
@@ -185,66 +192,55 @@ G4bool G4Fragment::operator!=(const G4Fragment &right) const
   return (this != (G4Fragment *) &right);
 }
 
-std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
+std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
 {
-  if (!theFragment) {
-    out << "Fragment: null pointer ";
-    return out;
-  }
-
   std::ios::fmtflags old_floatfield = out.flags();
   out.setf(std::ios::floatfield);
 
-  out << "Fragment: A = " << std::setw(3) << theFragment->theA 
-      << ", Z = " << std::setw(3) << theFragment->theZ ;
+  out << "Fragment: A = " << std::setw(3) << theFragment.theA 
+      << ", Z = " << std::setw(3) << theFragment.theZ ;
   out.setf(std::ios::scientific,std::ios::floatfield);
 
   // Store user's precision setting and reset to (3) here: back-compatibility
   std::streamsize floatPrec = out.precision();
 
   out << std::setprecision(3)
-      << ", U = " << theFragment->GetExcitationEnergy()/CLHEP::MeV 
+      << ", U = " << theFragment.GetExcitationEnergy()/CLHEP::MeV 
       << " MeV  ";
-  if(theFragment->GetCreatorModelType() >= 0) { 
-    out << " creatorModelType= " << theFragment->GetCreatorModelType(); 
+  if(theFragment.GetCreatorModelType() >= 0) { 
+    out << " creatorModelType= " << theFragment.GetCreatorModelType(); 
   }
-  if(theFragment->GetCreationTime() > 0.0) { 
-    out << "  Time= " << theFragment->GetCreationTime()/CLHEP::ns << " ns"; 
+  if(theFragment.GetCreationTime() > 0.0) { 
+    out << "  Time= " << theFragment.GetCreationTime()/CLHEP::ns << " ns"; 
   }
   out << G4endl
       << "          P = (" 
-      << theFragment->GetMomentum().x()/CLHEP::MeV << ","
-      << theFragment->GetMomentum().y()/CLHEP::MeV << ","
-      << theFragment->GetMomentum().z()/CLHEP::MeV 
+      << theFragment.GetMomentum().x()/CLHEP::MeV << ","
+      << theFragment.GetMomentum().y()/CLHEP::MeV << ","
+      << theFragment.GetMomentum().z()/CLHEP::MeV 
       << ") MeV   E = " 
-      << theFragment->GetMomentum().t()/CLHEP::MeV << " MeV"
+      << theFragment.GetMomentum().t()/CLHEP::MeV << " MeV"
       << G4endl;
 
-  out << "    #spin= " << theFragment->GetSpin()
-      << "    #floatLevelNo= " << theFragment->GetFloatingLevelNumber();
-       
-  if(theFragment->GetNuclearPolarization()) { 
-    out << theFragment->GetNuclearPolarization(); 
-  }
- 
-  if (theFragment->GetNumberOfExcitons() != 0) {
-    out << "          " 
-	<< "#Particles= " << theFragment->GetNumberOfParticles() 
-	<< ", #Charged= " << theFragment->GetNumberOfCharged()
-	<< ", #Holes= "   << theFragment->GetNumberOfHoles()
-	<< ", #ChargedHoles= " << theFragment->GetNumberOfChargedHoles();
+  out << "    #spin= " << theFragment.GetSpin()
+      << "    #floatLevelNo= " << theFragment.GetFloatingLevelNumber() << "  ";
+        
+  if (theFragment.GetNumberOfExcitons() != 0) {
+    out << "   " 
+	<< "#Particles= " << theFragment.GetNumberOfParticles() 
+	<< ", #Charged= " << theFragment.GetNumberOfCharged()
+	<< ", #Holes= "   << theFragment.GetNumberOfHoles()
+	<< ", #ChargedHoles= " << theFragment.GetNumberOfChargedHoles();
+  } 
+  out << G4endl;
+  if(theFragment.GetNuclearPolarization()) { 
+    out << *(theFragment.GetNuclearPolarization()); 
   }
   out << G4endl;
   out.setf(old_floatfield,std::ios::floatfield);
   out.precision(floatPrec);
 
   return out;
-}
-
-std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
-{
-  out << &theFragment;
-  return out; 
 }
 
 void G4Fragment::ExcitationEnergyWarning()

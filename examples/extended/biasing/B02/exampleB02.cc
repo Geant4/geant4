@@ -27,7 +27,7 @@
 /// \brief Main program of the biasing/B02 example
 //
 //
-// $Id: exampleB02.cc 77475 2013-11-25 09:38:51Z gcosmo $
+// $Id: exampleB02.cc 103007 2017-03-08 08:14:00Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -145,7 +145,7 @@ int main(int argc, char **argv)
   //
   G4GeometryManager::GetInstance()->OpenGeometry();
 
-  pgs.ClearSampling();
+  // pgs.ClearSampling();
 
   delete runManager;
 

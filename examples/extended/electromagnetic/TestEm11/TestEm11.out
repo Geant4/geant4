@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -456,27 +456,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=1.93s Real=1.93s Sys=0s
+  User=2.42s Real=2.45s Sys=0.01s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 449.264 keV	(18.074 keV-->500.000 keV)
+ Edep in absorber 1 = 447.462 keV	(14.832 keV-->500.000 keV)
 
- Track length of primary track = 880.829 um  +- 191.683 um 
+ Track length of primary track = 880.393 um  +- 195.304 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 318.504 um  +- 198.342 um 
+ Projected range               = 318.277 um  +- 199.633 um 
 
- Nb of steps of primary track  = 20.97 +- 4.87	 Step size= 42.491 um  +- 6.737 um 
+ Nb of steps of primary track  = 21.05 +- 4.94	 Step size= 42.290 um  +- 6.660 um 
 
- absorbed = 78.31 %   transmit = 5.19 %   reflected = 16.50 %
+ absorbed = 77.72 %   transmit = 5.41 %   reflected = 16.88 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 436669118, 486485246
+ Current couple of seeds = 384160406, 814367431
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -487,6 +487,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB

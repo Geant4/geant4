@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc 74050 2013-09-20 09:38:19Z gcosmo $
+// $Id: G4RayTracer.cc 103626 2017-04-19 13:29:18Z gcosmo $
 
 #include "G4RayTracer.hh"
 #include "G4RayTracerFeatures.hh"
@@ -61,7 +61,8 @@ G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
 
 G4VViewer* G4RayTracer::CreateViewer (G4VSceneHandler& sceneHandler,
 				      const G4String& name) {
-  G4VViewer* pViewer = new G4RayTracerViewer (sceneHandler, name);
+  G4VViewer* pViewer = new G4RayTracerViewer
+  (sceneHandler, name, theRayTracer);
   if (pViewer) {
     if (pViewer->GetViewId() < 0) {
       G4cout <<

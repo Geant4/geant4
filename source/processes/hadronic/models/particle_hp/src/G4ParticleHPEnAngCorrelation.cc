@@ -142,15 +142,30 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     double targetA = fCache.Get().theTarget->GetDefinition()->GetAtomicMass();
     targetZ += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicNumber();
     targetA += fCache.Get().theProjectileRP->GetDefinition()->GetAtomicMass();
-    if( bAdjustFinalState ) {
-      if ( (sumZ != targetZ || sumA != targetA ) && 
-	   (sumZ > targetZ || sumA > targetA  
-	    || ! G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
-	bNPOK = false;
-	//nParticles.clear();
+    if ( bAdjustFinalState ) {
+/*
+G4cout << "TKDB G4ParticleHPEnAngCorrelation::Sample 1" << G4endl;
+G4cout << "TKDB "
+<< "targetZ = " << targetZ
+<< ", targetA = " << targetA
+<< ", sumZ = " << sumZ
+<< ", sumA = " << sumA
+<< ", int( targetZ-sumZ ) = " << int( targetZ-sumZ )
+<< ", int( targetA-sumA ) = " << int( targetA-sumA )
+//<< ", G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) = " << G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 )
+<< G4endl;
+*/
+      //if ( (sumZ != targetZ || sumA != targetA ) && 
+      //   (sumZ > targetZ || sumA > targetA  
+      //    || ! G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
+      if ( ( sumZ != targetZ || sumA != targetA ) 
+        && ( sumZ  > targetZ || sumA  > targetA || (targetZ-sumZ) >= (targetA-sumA) ) ) {  
+                                                        // e.g. Z=3, A=2
+	 bNPOK = false;
+	 //nParticles.clear();
 #ifdef G4PHPDEBUG
-	if( getenv("G4ParticleHPDebug") ) 
-	  G4cerr << " WRONG MULTIPLICITY Z= " << sumZ 
+	  if ( getenv("G4ParticleHPDebug") ) 
+	     G4cerr << " WRONG MULTIPLICITY Z= " << sumZ 
 		 << " > " << targetZ
 		 << " A= " <<  sumA 
 		 << " > " << targetA << G4endl;

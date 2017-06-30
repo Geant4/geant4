@@ -14,17 +14,83 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
-09-02-2017, MK, tag emdna-V10-02-38
+31-05-2017, SM, tag emdna-V10-03-20
+- Correct windows issues with path of diff. CS data file.
+
+31-05-2017, SI, tag emdna-V10-03-19
+- roll-back (Windows issues with previous tag)
+
+24-05-2017, SI, tag emdna-V10-03-18
+- added tagging of atom. deexc. products in ionisation models.
+
+11-05-2017, VI tag emdna-V10-03-17
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+
+10-05-2017, NL, MK, SI, tag emdna-V10-03-16
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+
+03-05-2017, SM, tag emdna-V10-03-15
+- add the new G4DNADummyModel and allow the combination of G4VEmModel and G4VDNAModel in G4DNAModelInterface.      
+
+27-04-2017, SM, tag emdna-V10-03-14
+- correct small typo mistakes.
+
+27-04-2017, SM, tag emdna-V10-03-13
+- update Models/G4DNAModelInterface to correctly use G4DNAMolecularMaterial
+
+10-03-2017, MK, tag emdna-V10-03-12
+- update utils/GNUmakefile
+
+13-02-2017, MK, tag emdna-V10-03-11
+- G4DNAMolecularMaterial: update doxygen doc
+
+13-02-2017, MK, tag emdna-V10-03-10
+- G4DNAMolecularMaterial: 
+  remove newly introduced methods, add fatal exception if used
+  add doxygen documentation
+
+10-02-2017, MK, tag emdna-V10-03-09
+- Introducing G4PhysChemIO
+- Move call to G4TrackList::Pop(track) from G4ITTrackingManager
+  to G4ITTrackHolder. And make sure track status is set to fStopAndKill
+  when G4ITTrackHolder::PushToKill is called.
+
+09-02-2017, MK, tag emdna-V10-03-08
 - G4KDNode.hh: remove unused G4ThreeVector header
 - G4KDMap.hh: int->size_t + indentation
 - G4KDMap.cc: int->size_t
 - G4IT & G4Molecule: template specialization
   template<> G4KDNode<G4IT / G4Molecule>::~G4KDNode()
 
+24-01-2017, SM, tag emdna-V10-03-07
+- add a ifdef to remove a warning (windows only) related to the use of several levels of map.
+
+23-01-2017, SM, tag emdna-V10-03-06
+- add missing G4DNAModelInterface files (.hh and .cc) to the source.cmake
+
+23-01-2017, SM CV, tag emdna-V10-03-05
+- add new G4DNAPTB* classes and the structure of the new material management system
+
 14-01-2017, MK, tag emdna-V10-02-37
-- Prevent a crash when calling G4ITTrackingManager::EndTracking from 
+- Prevent a crash when calling G4ITTrackingManager::EndTracking from
   the UserTimeStepAction::PostTimeStepAction
-- Add missing: G4ITTrackingManager* G4Scheduler::GetTrackingManager()
+- Add missing: G4ITTrackingManager* G4Scheduler::GetTrackingManager() 
+
+28-12-2016, SI, tag emdna-V10-03-04
+- extended upper energy limit of protons for 
+G4DNARuddIonisationExtendedModel
+
+27-12-2016, SI, tag emdna-V10-03-03
+- updated references of CPA100 classes
+
+23-12-2016, SI, tag emdna-V10-03-02
+- updated sources.cmake
+
+23-12-2016, SI, tag emdna-V10-03-01
+- commit of first CPA100 classes, part 2
+
+21-12-2016, SI, tag emdna-V10-03-00
+- commit of first CPA100 classes
 
 27-11-2016, MK, tag emdna-V10-02-36
 - G4Electron_aq: correct charge

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.hh 93069 2015-10-02 09:54:27Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.hh 104163 2017-05-15 06:52:42Z gcosmo $
 
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -187,6 +187,18 @@ private:
     G4double fWidth;
     G4Colour fColour;
   };
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddGPS: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddGPS ();
+  virtual ~G4VisCommandSceneAddGPS ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddGPS (const G4VisCommandSceneAddGPS&);
+  G4VisCommandSceneAddGPS& operator = (const G4VisCommandSceneAddGPS&);
   G4UIcommand* fpCommand;
 };
 

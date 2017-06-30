@@ -183,7 +183,7 @@ void G4LivermoreNuclearGammaConversionModel::ReadData(size_t Z, const char* path
   //
   
   std::ostringstream ost;
-  ost << datadir << "livermore/pairdata/pp-pair-cs-" << Z <<".dat";
+  ost << datadir << "/livermore/pairdata/pp-pair-cs-" << Z <<".dat";
   std::ifstream fin(ost.str().c_str());
   
   if( !fin.is_open()) 

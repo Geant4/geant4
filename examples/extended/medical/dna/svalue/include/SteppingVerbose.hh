@@ -25,12 +25,6 @@
 //
 /// \file medical/dna/svalue/include/SteppingVerbose.hh
 /// \brief Definition of the SteppingVerbose class
-//
-//
-// $Id: SteppingVerbose.hh 70932 2013-06-07 13:24:47Z gcosmo $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef SteppingVerbose_h
 #define SteppingVerbose_h 1
@@ -49,7 +43,5 @@ public:
   virtual void TrackingStarted();
   virtual void StepInfo();
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

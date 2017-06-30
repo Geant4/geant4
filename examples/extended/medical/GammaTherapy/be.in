@@ -21,11 +21,11 @@
 /testem/target1Z              3 mm
 /testem/target2Z              0.1 mm
 #
-#/testem/histoName            be_st_n
-#
 /run/initialize
 #
 /run/setCut         0.1 mm
+#
+/analysis/setFileName            be_st_n
 #
 /gun/particle e-
 /gun/energy 50.0 MeV

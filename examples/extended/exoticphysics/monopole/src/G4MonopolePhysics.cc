@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopolePhysics.cc
 /// \brief Implementation of the G4MonopolePhysics class
 //
-// $Id: G4MonopolePhysics.cc 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: G4MonopolePhysics.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -76,7 +76,6 @@ G4MonopolePhysics::G4MonopolePhysics(const G4String& nam)
   //  fElCharge  = -50.0;
   fElCharge  = 0.0;
   fMonopoleMass = 100.*GeV;
-  fMessenger = new G4MonopolePhysicsMessenger(this);
   SetPhysicsType(bUnknown);
 }
 
@@ -101,6 +100,8 @@ void G4MonopolePhysics::ConstructProcess()
   if(verboseLevel > 0) {
     G4cout << "G4MonopolePhysics::ConstructProcess" << G4endl;
   }
+
+  fMessenger = new G4MonopolePhysicsMessenger(this);
   
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   G4ProcessManager* pmanager = fMpl->GetProcessManager();

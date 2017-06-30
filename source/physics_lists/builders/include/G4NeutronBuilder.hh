@@ -33,30 +33,31 @@
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
 // 13.06.2006 G.Folger: (re)move elastic scatterring 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4NeutronBuilder_h
 #define G4NeutronBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4HadronFissionProcess.hh"
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronInelasticProcess.hh"
 #include "G4VNeutronBuilder.hh"
-
 #include <vector>
 
-class G4NeutronBuilder
+class G4NeutronBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4NeutronBuilder(G4bool fissionFlag = false);
-    virtual ~G4NeutronBuilder();
+    virtual ~G4NeutronBuilder() {}
 
   public: 
-    void Build();
-    void RegisterMe(G4VNeutronBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4NeutronInelasticProcess * theNeutronInelastic;

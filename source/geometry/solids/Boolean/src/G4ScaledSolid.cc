@@ -127,12 +127,13 @@ G4VSolid* G4ScaledSolid::GetUnscaledSolid() const
 //
 // Get bounding box
 
-void G4ScaledSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4ScaledSolid::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
   G4ThreeVector bmin,bmax;
   G4ThreeVector scale = fScale->GetScale();
  
-  fPtrSolid->Extent(bmin,bmax);
+  fPtrSolid->BoundingLimits(bmin,bmax);
   pMin.set(bmin.x()*scale.x(),bmin.y()*scale.y(),bmin.z()*scale.z());
   pMax.set(bmax.x()*scale.x(),bmax.y()*scale.y(),bmax.z()*scale.z());
 
@@ -145,7 +146,7 @@ void G4ScaledSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
            << "\npMax = " << pMax;
-    G4Exception("G4ScaledSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4ScaledSolid::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }
@@ -164,7 +165,7 @@ G4ScaledSolid::CalculateExtent( const EAxis pAxis,
 {
   // Find bounding box of unscaled solid
   G4ThreeVector bmin,bmax;
-  fPtrSolid->Extent(bmin,bmax);
+  fPtrSolid->BoundingLimits(bmin,bmax);
 
   // Set combined transformation
   G4Transform3D transform3D =

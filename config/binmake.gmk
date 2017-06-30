@@ -1,4 +1,4 @@
-# $Id: binmake.gmk 101512 2016-11-18 15:28:47Z gcosmo $
+# $Id: binmake.gmk 103646 2017-04-20 09:30:24Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -88,7 +88,8 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
-              -I$(G4BASE)/processes/phonon/include \
+              -I$(G4BASE)/processes/solidstate/channeling/include \
+              -I$(G4BASE)/processes/solidstate/phonon/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
               -I$(G4BASE)/processes/electromagnetic/adjoint/include \
@@ -233,8 +234,7 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4analysis \
-             -lG4error_propagation \
+  LDLIBS2 += -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
              -lG4run \
@@ -248,6 +248,7 @@ ifdef GLOBALLIBS
              -lG4geometry \
              -lG4materials \
              -lG4graphics_reps \
+             -lG4analysis \
              -lG4intercoms \
              -lG4global
 

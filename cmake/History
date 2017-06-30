@@ -31,13 +31,178 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-21st February 2017 - Gunter Folger  (cmake-V10-02-39)
-- Switch to PhotonEvaporation 4.3.2
+12th June 2017 - Ben Morgan (cmake-V10-03-23)
+- Remove support for modulefile generation, as not used and
+  generated files not compatible with relocatability. It's
+  expected that software stack managers will generate a
+  modulefile file according to their requirements.
 
-3rd February 2017 - Gunter Folger  (cmake-V10-02-38)
-- Switch to 
+9th June 2017 - Gabriele Cosmo  (cmake-V10-03-22)
+- Corrected exporting of external packages paths from VecGeom.
+
+8th June 2017 - Gunter Folger   (cmake-V10-03-21)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW6.54 
+
+31st May 2017 - Gunter Folger   (cmake-V10-03-20)
+- Modules/Geant4DatasetDefinitions.cmake: switch to RealSurface 2.1 
+
+30th May 2017 - Gabriele Cosmo  (cmake-V10-03-19)
+- Modules/Geant4OptionalComponents.cmake: added VECGEOM_EXTERNAL_INCLUDES
+  to include directories for USolids/VecGeom enabled build, in order to
+  allow for detection of external packages paths from VecGeom (e.g. Vc if
+  Vetor backend is chosen at installation of VecGeom).
+
+24th May 2017 - Gabriele Cosmo  (cmake-V10-03-18)
+- Modules/Geant4OptionalComponents.cmake: appended VECGEOM_DEFINITIONS
+  to GEANT4_USOLIDS_COMPILE_DEFINITIONS. Preparing for introducing direct
+  dependency on VecGeom in G4U* wrappers, and deprecate USolids. 
+
+16th May 2017 - Ben Morgan      (cmake-V10-03-17)
+- BUGFIX #1960: Do not set or modify DYLD_LIBRARY_PATH in basic and
+  geant4make setup scripts on macOS.
+
+2nd May 2017 - Gunter Folger    (cmake-V10-03-16)
+- Update G4EMLOW data to 6.53
+
+4th April 2017 - Gunter Folger  (cmake-V10-03-15)
+- Update PhotonEvaporation data to 5.0
+
+27th March 2017 - Gunter Folger (cmake-V10-03-14)
+- fix previous tag: the download file for RealSurface re-named
+   from RealSurface to G4RealSurface, making this name is  consistent 
+   with other datafiles. 
+
+23rd March 2017 - Gunter Folger (cmake-V10-03-13)
+- Update RealSurface data to 2.0
+
+9th March 2017 - Gunter Folger  (cmake-V10-03-12)
+- Modules/G4CMakeMain.cmake: add directory verification to testing
+
+23rd February 2017 - Ben Morgan (cmake-V10-03-11)
+- Bugfix-1934
+- Templates/Geant4Config.cmake.in: Re-include CLHEP
+  include directories when using external CLHEP. Needed
+  to allow examples using ROOT to generate dictionaries
+  as ROOT's CMake functions do not support usage requirements
+  or generator expressions yet.
+
+21st February 2017 - Gunter Folger  (cmake-V10-03-10)
+ base on tag cmake-V10-03-06, and only update History 
+ and Modules/Geant4DatasetDefinitions.cmake to trunk.
+ Changes to above two files committed first in trunk. 
+ Then create branch cmake-V10-03-06_branch for tagging.
+- switch to PhotonEvaporation 4.3.2
+
+
+21st February 2017 - Gunter Folger  (cmake-V10-03-09) 
+ rejected: as based on previous rejected tags 
+- switch to PhotonEvaporation 4.3.2
+
+10th February 2017 - Ben Morgan (cmake-V10-03-08)
+- Bugfix: Continuous identified issue on Windows and internal CLHEP.
+  Way that DLLs are built means that target_include_directories are
+  not propagated to intermediate archive library, causing builds
+  to fail due to missing CLHEP headers.
+- Geant4OptionalComponents.cmake : Set CLHEP_INCLUDE_DIRS to internal
+  path for CLHEP headers with using builtin CLHEP.
+- TODO: look at resolution via better DLL build process.
+
+9th February 2017 - Ben Morgan (cmake-V10-03-07)
+- BUGFIX-1934
+- Incorporates all changes from branch cmake-bugfix-1934
+
+8th February 2017 - Ben Morgan (branch cmake-bugfix-1934)
+- BUGFIX 1934
+- Note that this patch should not be applied to Geant4 < 10.3 without additional
+  changes to support CLHEP's imported targets in versions =< 2.3.3.0. 
+- See the comments in Geant4OptionalComponents.cmake for details.
+- Remove obsolete FindCLHEP.cmake module
+- Geant4OptionalComponents.cmake: Update Internal/System CLHEP selection
+  - Prepend CLHEP_ROOT_DIR to CMAKE_PREFIX_PATH so that find_package's
+    Config mode finds CLHEP as FindCLHEP did. Retain auto-activation
+    of GEANT4_USE_SYSTEM_CLHEP if CLHEP_ROOT_DIR supplied.
+  - Simplify System/Granular CLHEP selection using dependent options
+  - Simplify location/setup of system CLHEP as CLHEP >= 2.3.3.0 provides
+    CLHEP_LIBRARIES set with appropriate single/granular targets with
+    full usage requirements.
+  - Remove setting of GEANT4_USE_BUILTIN_CLHEP variable.
+- G4ConfigureCMakeHelpers.cmake: Remove install of deleted FindCLHEP module
+- Geant4Config.cmake.in: Update re-find of CLHEP to use find_package Config mode
+  - Set CLHEP_DIR rather than CLHEP_ROOT_DIR.
+  - Add new variable Geant4_system_clhep_FOUND set from expansion of
+    buildtime GEANT4_USE_SYSTEM_CLHEP option.
+  - Set value of Geant4_builtin_clhep_FOUND as boolean inverse of Geant4_system_clhep_FOUND
+
+7th February 2017 - Ben Morgan (cmake-V10-03-06)
+- Restructure developer API scripts for clarity ready for new system
+- Merge Geant4MacroDefineModule.cmake and Geant4MacroLibraryTargets.cmake
+  into single G4DeveloperAPI_OLD.cmake module
+- Create new G4DeveloperAPI.cmake module. This will be the eventual home
+  for the new developer API, but for now it simply forwards to
+  G4DeveloperAPI_OLD.cmake.
+- Leave Geant4MacroDefineModule and Geant4MacroLibraryTargets modules
+  as stubs which simply forward to G4DeveloperAPI. At present these modules
+  are included in several places, so maintaining their presence is required.
+- Include G4DeveloperAPI in top levl G4CMakeMain module.
+
+3rd February 2017 - Gunter Folger  (cmake-V10-03-05)
+- switch to 
   - PhotonEvaporation 4.3.1
   - RadioactiveDecay 5.1.1
+
+27th January 2017 - Ben Morgan (cmake-V10-03-04)
+- Refactor core Configure/Build and Client Script modules for
+  clarity and cohesion.
+- Module renames and changes:
+  - Modules/G4CMakeSettings.cmake (NEW)
+    - Handles all core CMake behaviour and extensions
+  - Modules/Geant4MacroUtilities.cmake -> Modules/G4CMakeUtilities.cmake
+    - Rename to better reflect purpose
+  - Modules/Geant4LibraryBuildOptions.cmake -> Modules/G4BuildSettings.cmake
+    - Handles all core build/link options not dependent on externals
+    - All functionality in Modules/Geant4BuildModes.cmake moved to this module
+  - Modules/Geant4ToolchainBackwardCompatibility.cmake -> Modules/G4ConfigureGNUMakeHelpers.cmake
+    - Rename to clearly identify task
+    - Move all GMake related setup to this module
+  - Modules/Geant4ConfigureConfigScript.cmake -> Modules/G4ConfigurePkgConfigHelpers.cmake
+    - Rename to clearly identify task
+  - Modules/Geant4BuildProjectConfig.cmake -> Modules/G4ConfigureCMakeHelpers.cmake
+    - Rename to clearly identify task
+- Modules/Geant4CTest.cmake
+  - All test-related options moved into file.
+
+16th January 2017 - Ben Morgan (cmake-V10-03-03)
+- Remove/refactor obsolete CMake modules
+- Modules/CMakeMacroParseArguments.cmake: Remove as interface
+  provided by CMake builtin CMakeParseArguments. Use builtin
+  interface in modules:
+  - FindROOT.cmake
+  - Geant4MacroDefineModule.cmake
+  - Geant4MacroLibraryTargets.cmake
+  - Geant4MacroUtilities.cmake
+  - UseGeant4_internal.cmake
+- Modules/Geant4InstallDirs.cmake: Remove as interface
+  provided by CMake builtin GNUInstallDirs, included in
+  G4CMakeMain.cmake
+- Modules/MacroEnsureVersion.cmake: Remove as unused, version
+  comparison now supplied in CMake if()
+- Modules/ResolveCompilerPaths.cmake: Remove as unused.
+- Modules/Geant4BuildProjectConfig.cmake: Remove install
+  of obsolete modules.
+
+5th January 2017 - Gunter Folger    (cmake-V10-03-02)
+- switch to EMLOW6.52
+
+19th December 2016 - Gunter Folger (cmake-V10-03-01)
+- switch to EMLOW6.51
+
+12th December 2016 - Ben Morgan (cmake-V10-03-00)
+- Modules/G4CMakeMain.cmake : New Module
+  Refactor core implementation from top level CMake script into a module
+  under the CMake category. This assists with tagging and upcoming
+  modularization work, as changes will be tagged in category and
+  can be made without requiring changes and co-working tag for
+  top level script.
 
 24th November 2016 - Gunter Folger  (cmake-V10-02-37)
 - Switch to PhotonEvaporation 4.3

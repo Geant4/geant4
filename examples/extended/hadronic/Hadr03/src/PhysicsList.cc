@@ -26,7 +26,7 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 99316 2016-09-13 09:53:31Z gcosmo $
+// $Id: PhysicsList.cc 103488 2017-04-11 10:16:44Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,8 +45,10 @@
 
 #include "G4IonElasticPhysics.hh"
 #include "G4IonPhysics.hh"
+#include "G4IonQMDPhysics.hh"
 #include "G4IonPhysicsPHP.hh"
 #include "G4IonINCLXXPhysics.hh"
+
 #include "GammaNuclearPhysics.hh"
 
 // particles
@@ -78,8 +80,8 @@ PhysicsList::PhysicsList()
 
   // Hadron Inelastic physics
   //
-  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
@@ -92,8 +94,9 @@ PhysicsList::PhysicsList()
   //
   RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonPhysicsPHP(verb));
+  ////RegisterPhysics( new G4IonQMDPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
-    
+
   // Gamma physics
   //
   RegisterPhysics( new GammaNuclearPhysics("gamma"));

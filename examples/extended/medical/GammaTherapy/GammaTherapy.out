@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 6 *****
 
  Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.413 cm 
-                       Imean:  63.700 eV 
+                       Imean:  63.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Be (Be)   Z =  4.0   N =     9   A =  9.012 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.000 %
@@ -22,7 +22,7 @@
 
 
  Material:     G4_W    density: 19.300 g/cm3   RadL:   3.504 mm   Nucl.Int.Length:  10.312 cm 
-                       Imean: 727.000 eV 
+                       Imean: 727.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: W (W)   Z = 74.0   N =   184   A = 183.842 g/mole
          --->  Isotope:  W180   Z = 74   N = 180   A = 179.95 g/mole   abundance:  0.120 %
@@ -43,7 +43,7 @@
 
 
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
-                       Imean:  78.000 eV 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -84,7 +84,7 @@
 
 
  Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
-                       Imean:  78.700 eV 
+                       Imean:  78.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -160,7 +160,7 @@ Absorber R= 200 dz= 2.5 posZ= -77.5
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 GeV in 47 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=       10 GeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=       10 GeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 10 eV  to 1 MeV, 10 bins per decade, spline: 1
@@ -172,6 +172,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 10 GeV, 25 bins per decade, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       10 GeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 10 eV  to 100 keV, 10 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 GeV in 50 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=       10 GeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -562,38 +568,45 @@ Index : 5     used in the geometry : Yes
 
 ====================================================================
 
-### Run 0 starts.
-### Run 0 start
-### Histo start initialisation nHisto= 10
    80 bins R   stepR= 2.5 mm 
    60 bins Z   stepZ= 5 mm 
    200 bins E   stepE= 0.25 MeV 
    14-th bin in Z is used for R distribution
+### Run 0 starts.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.8s Real=3.81s Sys=0.01s
-RunAction: End of run actions are started
+  User=5.71s Real=5.72s Sys=0s
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
 Average number of e-                         33.21
-Average number of gamma                      19.56
-Average number of e+                         0.7602
-Average number of steps in the phantom       11.68
-Average number of e- steps in the target     18.07
-Average number of g  produced in the target  18.73
-Average number of e- produced in the target  20.94
-Average number of g produced in the phantom  0.4883
-Average number of e- produced in the phantom 5.98
-Total fGamma fluence in front of the phantom 8.093 MeV 
+Average number of gamma                      19.5
+Average number of e+                         0.7605
+Average number of steps in the phantom       12.01
+Average number of e- steps in the target     17.98
+Average number of g  produced in the target  18.61
+Average number of e- produced in the target  20.77
+Average number of g produced in the phantom  0.5271
+Average number of e- produced in the phantom 6.144
+Total fGamma fluence in front of the phantom 8.159 MeV 
 ========================================================
 
 
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 958452512, 880129512
+----------------------------------------
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.076 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.071 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

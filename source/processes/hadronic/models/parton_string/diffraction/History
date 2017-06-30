@@ -1,4 +1,4 @@
-$Id: History 100828 2016-11-02 15:25:59Z gcosmo $
+$Id: History 102029 2016-12-16 14:53:08Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,27 +15,43 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-05-July-2016 V.Ivanchenko  (cms_hadr-string-diff-V10-01-17)
-- G4FTFModel - merged modification from cms_hadr-string-diff-V10-01-16
-  on top of hadr-string-diff-V10-01-15 
+14-Dec-2016 A. Ribon       (hadr-string-diff-V10-03-00)
+-  After the release G4 10.3, with "stable" version, this tag brings back
+   the "development" version, similar (although not identical because
+   of some code clean-up) to G4 10.2.ref10.
 
-30-May-2016 A. Ribon    (cms_hadr-string-diff-V10-01-16)
-- G4FTFParameters, G4FTFModel : brought back the computation of the
-  residual nucleus excitation energy as it was in G4 10.1.
-  This should reduce the energy response of hadronic showers in all 
-  materials.
-  This is a special, internal tag for CMS which should further reduce 
-  (with respect to the previous tag) the jet energy scale problem of G4 10.2.
+29-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-07)
+       Pt of nucleon involved in the reggeon cascade
+       was returned to original values. Attempts to improve
+       proton spectra in p+C at 158 GeV/c were not successful.
 
-18-May-2016 A. Ribon    (cms_hadr-string-diff-V10-01-15)
-- G4FTFParameters : removed the A-dependence in Reggeon Cascade introduced
-  in the release G4 10.2 to describe ITEP thin-target data on Carbon.
-  This should reduce the energy response of hadronic showers in Iron and
-  Copper calorimeters.
-  This is a special, internal tag for CMS which should reduce the
-  jet energy scale problem of G4 10.2.
+27-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-06)
+       Fine tuning of G4FTFParameters.cc.
+ 
+13-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-05)
+       Cleaned version of G4DiffractiveExcitation.cc
 
-5-May-2016 V. Uzhinsky    (hadr-string-diff-V10-01-15)
+ 1-June-2016 V. Uzhinsky   (hadr-string-diff-V10-02-04)
+       Fine tuning of G4DiffractiveExcitation.cc of FTFmodel has been done
+       to describe NA49 exp. data, especially, <Pt> on Xf.
+
+28-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-03)
+-      Various <Pt^2> for diffr. and non-diffr. interactions were introduced
+       in G4FTFModel.cc for NA49 and NA61/SHINE exp. data.
+
+23-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-02)
+-      Tunning of FTF model parameters has been done.
+ 
+17-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-01)
+-  FTF model was essential improved: 
+       Smearing of Delta-isobar mass was introduced;
+       Delta-isobars are now treated as a kinetic track;
+       Parameterisation the quark exchange process with excitation is improved also.
+   Na61/SHINE exp. data on Pi+, Pi-, K+, K- and protons in PP interactions at
+   20, 31, 40, 80 and 158 GeV/c are described. The ratio of <Strane Q>/<Normal Q>
+   in PP interactions is reproduced. The kink in AA interactions does not described.
+
+5-May-2016 V. Uzhinsky    (hadr-string-diff-V10-02-00)
 - A bug was fixed in G4FTFModel for nucleus-nucleus interactions
     if ( G4UniformRand() < 
        ( 1.0 - target->GetSoftCollisionCount()     / MaxNumOfInelCollisions )  *  // Uzhi March 2015

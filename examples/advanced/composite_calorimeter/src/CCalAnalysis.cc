@@ -114,7 +114,7 @@ CCalAnalysis::CCalAnalysis() :
   // Time slices	  
   for (int i=0; i<numberOfTimeSlices; i++){
     sprintf(id, "h%d",i+300);
-    sprintf(ntupletag, "Time slice %d nsec energy profile   in GeV",i);
+    sprintf(ntupletag, "Time slice %d nsec energy profile in GeV",i);
     G4int histoID = analysisManager->CreateH1(id,ntupletag,100, 0., 100.0);
     if (!i)
       timeHist = histoID;

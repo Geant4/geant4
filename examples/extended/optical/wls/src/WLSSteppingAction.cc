@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSSteppingAction.cc 99622 2016-09-29 10:16:04Z gcosmo $
+// $Id: WLSSteppingAction.cc 104079 2017-05-10 14:51:06Z gcosmo $
 //
 /// \file optical/wls/src/WLSSteppingAction.cc
 /// \brief Implementation of the WLSSteppingAction class
@@ -281,6 +281,7 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
           G4cout << "\n Bounce Limit Exceeded" << G4endl;
           return;
        }
+       break;
  
      case FresnelReflection:
 
@@ -347,7 +348,6 @@ void WLSSteppingAction::UserSteppingAction(const G4Step* theStep)
 
           return;
        }
-
        break;
 
      default: break;

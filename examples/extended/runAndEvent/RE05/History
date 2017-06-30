@@ -1,4 +1,4 @@
-$Id: History 101676 2016-11-21 09:25:51Z gcosmo $
+$Id: History 104017 2017-05-08 07:31:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05-05-17 M. Asai       (exampleRE05-V10-03-00)
+- RE05PrimaryGeneratorAction.cc : fix potential rare race condition
+  issue.
 
 19-11-16 A. Dotti      (exampleRE05-V10-02-01)
 - Explicit setting of SD to manager

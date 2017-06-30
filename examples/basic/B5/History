@@ -1,4 +1,4 @@
-$Id: History 101159 2016-11-08 08:29:10Z gcosmo $
+$Id: History 103553 2017-04-18 09:00:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 April 2017  Ivana Hrivnacova Cosmo (exampleB5-V10-03-01)
+- Use std::array for related data members in B5EventAction to reduce the code
+- Added data members for histogram Ids and the code to retrieve them by histogram
+  names via G4AnalysisManager
+- Corrected the list of 2D histograms in README  
+
+24 March 2017  Gabriele Cosmo (exampleB5-V10-03-00)
+- Do not use G4AutoDelete utility for thread-local magnetic-field and
+  its manager, since not necessary as not automatically deleted by the kernel.
 
 07 November 2016  Laurent Garnier (exampleB5-V10-02-04)
 - Fix a missing /gui/defaultIcons false

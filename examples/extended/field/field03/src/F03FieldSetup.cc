@@ -27,7 +27,7 @@
 /// \brief Implementation of the F03FieldSetup class
 //
 //
-// $Id: F03FieldSetup.cc 77294 2013-11-22 11:01:00Z gcosmo $
+// $Id: F03FieldSetup.cc 104351 2017-05-26 07:23:04Z gcosmo $
 //
 //
 //   Field Setup class implementation.
@@ -111,28 +111,45 @@ F03FieldSetup::~F03FieldSetup()
 
 void F03FieldSetup::UpdateField()
 {
+  // It must be possible to call 'again' - e.g. to choose an alternative stepper
+  //   has been chosen, or in case other changes have been made.
+
+  // 1. First clean up previous state.
+  delete fChordFinder;
+  fChordFinder= nullptr;
+  delete fLocalChordFinder;
+  fLocalChordFinder= nullptr;
+
+  G4cout<<"F03FieldSetup::UpdateField> The minimal step is equal to "
+        << fMinStep/mm <<" mm"<<G4endl;
+  G4cout<<"                            Stepper Type chosen = " << fStepperType
+        << G4endl;
+
+  // 2. Create the steppers ( Note: this also deletes the previous ones. )
   SetStepper();
-  G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
-  fFieldManager->SetDetectorField(fMagneticField);
-  fLocalFieldManager->SetDetectorField(fLocalMagneticField);
-
-  if (fChordFinder) delete fChordFinder;
-  if (fLocalChordFinder) delete fLocalChordFinder;
-
+  // 3. Create the chord finder(s)
   fChordFinder = new G4ChordFinder(fMagneticField, fMinStep, fStepper);
   fLocalChordFinder = new G4ChordFinder(fLocalMagneticField,
                                         fMinStep,fLocalStepper);
 
   fFieldManager->SetChordFinder(fChordFinder);
   fLocalFieldManager->SetChordFinder(fLocalChordFinder);
+
+  // 4. Ensure that the field is updated (in Field manager & equation)
+  fFieldManager->SetDetectorField(fMagneticField);
+  fLocalFieldManager->SetDetectorField(fLocalMagneticField);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void F03FieldSetup::SetStepper()
 {
-  if (fStepper) delete fStepper;
+  delete fStepper;
+  fStepper= nullptr;
+
+  delete fLocalStepper; 
+  fLocalStepper= nullptr;
 
   switch ( fStepperType )
   {

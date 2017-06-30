@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc 102726 2017-02-20 13:15:29Z gcosmo $
+// $Id: G4PhotonEvaporation.cc 104747 2017-06-15 08:42:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -116,6 +116,8 @@ G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
     G4cout << "G4PhotonEvaporation::EmittedFragment: RDM= " << fRDM << G4endl; 
     if(gamma) { G4cout << *gamma << G4endl; }
     G4cout << "   Residual: " << *nucleus << G4endl;
+    G4cout << "   ExcEnergy(MeV)= " << nucleus->GetExcitationEnergy()
+	   << "  idxf= " << nucleus->GetFloatingLevelNumber() << G4endl;
   }
   return gamma; 
 }
@@ -248,7 +250,7 @@ G4PhotonEvaporation::GetFinalLevelEnergy(G4int Z, G4int A, G4double energy)
   G4double E = energy;
   InitialiseLevelManager(Z, A);
   if(fLevelManager) { 
-    E = (G4double)fLevelManager->NearestLevelEnergy(energy, fIndex); 
+    E = fLevelManager->NearestLevelEnergy(energy, fIndex); 
     if(E > fLevelEnergyMax + Tolerance) { E = energy; }
   }
   return E;
@@ -284,6 +286,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
   const G4NucLevel* level = nullptr;
   size_t ntrans = 0;
 
+  // initial discrete state
   if(fLevelManager && eexc <= fLevelEnergyMax + Tolerance) {
     fIndex = fLevelManager->NearestLevelIndex(eexc, fIndex);
     if(0 < fIndex) {
@@ -335,16 +338,24 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       }
     }
     // final discrete level
-    if(fLevelManager && efinal <=  fLevelEnergyMax + Tolerance) {
-      //G4cout << "Efinal= " << efinal << "  idx= " << fIndex << G4endl;
-      fIndex = fLevelManager->NearestLevelIndex(efinal, fIndex);
-      efinal = (G4double)fLevelManager->LevelEnergy(fIndex);
-      // protection
-      if(efinal >= eexc && 0 < fIndex) {
-	--fIndex;
-	efinal = (G4double)fLevelManager->LevelEnergy(fIndex);
-      } 
-      nucleus->SetFloatingLevelNumber(fLevelManager->FloatingLevel(fIndex));
+    if(fLevelManager) {
+      if(efinal < fLevelEnergyMax) {
+	//G4cout << "Efinal= " << efinal << "  idx= " << fIndex << G4endl;
+	fIndex = fLevelManager->NearestLevelIndex(efinal, fIndex);
+	efinal = fLevelManager->LevelEnergy(fIndex);
+	// protection - take level below
+	if(efinal >= eexc && 0 < fIndex) {
+	  --fIndex;
+	  efinal = fLevelManager->LevelEnergy(fIndex);
+	} 
+	nucleus->SetFloatingLevelNumber(fLevelManager->FloatingLevel(fIndex));
+
+	// not allowed to have final energy above max energy
+	// if G4LevelManager exist
+      } else {
+	efinal = fLevelEnergyMax;
+	fIndex = fLevelManager->NearestLevelIndex(efinal, fIndex);
+      }
     }
     if(fVerbose > 1) {
       G4cout << "Continues emission efinal(MeV)= " << efinal << G4endl; 
@@ -358,11 +369,10 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     if(0 == fIndex || !level) { return result; }
 
-    G4double ltime = 0.0;
-    if(fSampleTime) {
-      ltime = (G4double)fLevelManager->LifeTime(fIndex);
-      if(!fRDM && ltime >= fMaxLifeTime) { return result; }
-    }
+    // stable fragment has life time -1
+    // if called from radioactive decay the life time is not checked
+    G4double ltime = fLevelManager->LifeTime(fIndex);
+    if(ltime < 0.0 || (!fRDM && ltime > fMaxLifeTime)) { return result; }
 
     size_t idx = 0;
     if(1 < ntrans) {
@@ -370,11 +380,10 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     if(fVerbose > 1) {
       G4cout << "Ntrans= " << ntrans << " idx= " << idx
-	     << " ICM= " << fICM << G4endl;
+	     << " ICM= " << fICM << "  JP1= " << JP1 << G4endl;
     }
     G4double prob = (G4double)level->GammaProbability(idx);
     // prob = 0 means that there is only internal conversion
-    // if((fICM && prob < 1.0) || prob == 0.0) {
     if(prob < 1.0) {
       G4double rndm = G4UniformRand();
       if(rndm > prob) {
@@ -391,7 +400,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     JP2    = fLevelManager->SpinTwo(fIndex); 
 
     // final energy and time
-    efinal = (G4double)fLevelManager->LevelEnergy(fIndex);
+    efinal = fLevelManager->LevelEnergy(fIndex);
     if(fSampleTime && ltime > 0.0) { 
       time -= ltime*G4Log(G4UniformRand()); 
     }
@@ -405,12 +414,20 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 					 isDiscrete, isGamma);
   if(result) { result->SetCreationTime(time); }
   nucleus->SetCreationTime(time);
-  
+  nucleus->SetSpin(0.5*JP2);
+
+  // ignore the floating levels with zero energy and create ground state
+  if(efinal == 0.0 && fIndex > 0) {
+    fIndex = 0;
+    nucleus->SetFloatingLevelNumber(fLevelManager->FloatingLevel(fIndex));
+  }
+      
   if(fVerbose > 1) { 
     G4cout << "Final level E= " << efinal << " time= " << time 
 	   << " idxFinal= " << fIndex << " isDiscrete: " << isDiscrete
 	   << " isGamma: " << isGamma << " multiP= " << multiP 
-	   << " shell= " << vShellNumber << G4endl;
+	   << " shell= " << vShellNumber 
+	   << " JP1= " << JP1 << " JP2= " << JP2 << G4endl;
   }
   return result;
 }

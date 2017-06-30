@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -476,10 +476,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     0
 =======================================================================
 Number of de-excitation channels                    8
 =======================================================================
@@ -489,10 +490,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     0
 =======================================================================
 Number of de-excitation channels                    8
 ++ ConcreteSD/Collisions id 0
@@ -510,7 +512,7 @@ Number of de-excitation channels                    8
 *** G4Exception : GeomBias1001
       issued by : G4ImportanceAlgorithm::Warning()
 Calculate() - ipre_over_ipost ! in [0.25, 4].
-ipre_over_ipost = 8192.
+ipre_over_ipost = 1024.
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
@@ -530,79 +532,24 @@ ipre_over_ipost = 8192.
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            38 |           131 |             0 |             0 |      0.615797 |       3.54717 |             1 |       7764.55 |       7764.55 |       1446.41 |       27542.2 |       890.696 |
-       cell_01 |           141 |           172 |           559 |           559 |      0.452871 |       4.11041 |             1 |       23144.2 |       23144.2 |       5872.88 |         95132 |       2659.66 |
-       cell_02 |           149 |           263 |          1037 |         518.5 |      0.301368 |       3.06565 |           0.5 |       38748.3 |       19374.1 |       6035.26 |       59394.3 |       1818.83 |
-       cell_03 |           215 |           354 |          1670 |         417.5 |      0.243482 |       2.43315 |          0.25 |       58023.4 |       14505.9 |       4816.75 |       35294.9 |       1172.79 |
-       cell_04 |           227 |           381 |          1932 |         241.5 |      0.185452 |       2.07363 |         0.125 |         66787 |       8348.37 |       3257.61 |       17311.4 |       604.131 |
-       cell_05 |           244 |           411 |          2126 |       132.875 |      0.168608 |       1.81913 |        0.0625 |       69047.8 |       4315.49 |        1710.4 |       7850.42 |       288.386 |
-       cell_06 |           256 |           406 |          2148 |        67.125 |       0.16032 |        1.8576 |       0.03125 |       69619.5 |       2175.61 |       923.281 |       4041.42 |        148.02 |
-       cell_07 |           292 |           423 |          2391 |       37.3594 |      0.148577 |       1.57139 |      0.015625 |       75858.8 |       1185.29 |       484.816 |       1862.55 |       72.0325 |
-       cell_08 |           277 |           436 |          2431 |       18.9922 |      0.125756 |       1.42518 |     0.0078125 |       75164.9 |       587.226 |       267.904 |       836.902 |       33.6905 |
-       cell_09 |           261 |           413 |          2178 |       8.50781 |      0.137057 |       1.52669 |    0.00390625 |       69034.3 |       269.665 |       119.175 |       411.696 |       16.3338 |
-       cell_10 |           297 |           435 |          2365 |       4.61914 |      0.124018 |       1.36421 |    0.00195312 |       75338.1 |       147.145 |        67.432 |       200.736 |       8.36276 |
-       cell_11 |           316 |           478 |          2821 |       2.75488 |      0.114359 |       1.19705 |   0.000976562 |         87062 |       85.0215 |       39.8396 |       101.775 |         4.556 |
-       cell_12 |           278 |           431 |          2576 |       1.25781 |      0.112178 |       1.22026 |   0.000488281 |       75947.9 |       37.0839 |       17.4092 |       45.2521 |       1.95292 |
-       cell_13 |           252 |           371 |          2192 |      0.535156 |     0.0996486 |       1.11984 |   0.000244141 |         66109 |       16.1399 |       8.03034 |        18.074 |      0.800212 |
-       cell_14 |           221 |           336 |          2076 |      0.253418 |     0.0946568 |       1.13656 |    0.00012207 |       60910.8 |        7.4354 |       3.98966 |       8.45078 |      0.377648 |
-       cell_15 |           186 |           290 |          1861 |      0.113586 |      0.110914 |        1.0462 |   6.10352e-05 |       55839.9 |       3.40819 |       1.57606 |       3.56566 |      0.174807 |
-       cell_16 |           148 |           232 |          1494 |     0.0455933 |     0.0632583 |      0.797689 |   3.05176e-05 |       42309.8 |       1.29119 |      0.817666 |       1.02997 |     0.0517241 |
-       cell_17 |           115 |           181 |          1131 |     0.0172577 |       0.10909 |       1.04002 |   1.52588e-05 |       34875.2 |      0.532153 |      0.247801 |      0.553449 |     0.0270326 |
-       cell_18 |            69 |           132 |           780 |    0.00595093 |      0.102372 |      0.894151 |   7.62939e-06 |       23056.4 |      0.175906 |     0.0806366 |      0.157287 |    0.00825496 |
-       cell_19 |            42 |            42 |             0 |             0 |       0.19215 |       1.46111 |   7.62939e-06 |       6806.72 |     0.0519311 |     0.0177029 |     0.0758772 |     0.0034016 |
+       cell_00 |            39 |           134 |             0 |             0 |      0.557525 |       1.90683 |             1 |       6675.43 |       6675.43 |       1003.63 |       12728.9 |       559.548 |
+       cell_01 |           146 |           180 |           658 |           658 |      0.559485 |       4.06338 |             1 |       26095.6 |       26095.6 |       5444.36 |        106036 |       3046.04 |
+       cell_02 |           161 |           263 |          1095 |         547.5 |      0.276005 |       2.93392 |           0.5 |       41121.9 |         20561 |       6760.95 |       60324.1 |       1866.05 |
+       cell_03 |           229 |           380 |          1721 |        430.25 |      0.219276 |       2.55702 |          0.25 |       59950.7 |       14987.7 |       5662.23 |       38323.7 |       1241.59 |
+       cell_04 |           266 |           434 |          2198 |        274.75 |      0.184252 |       2.08522 |         0.125 |       70692.6 |       8836.58 |        3449.8 |       18426.2 |       635.632 |
+       cell_05 |           313 |           507 |          2522 |       157.625 |       0.20019 |       1.91021 |        0.0625 |       86204.5 |       5387.78 |       1897.28 |       10291.8 |       379.816 |
+       cell_06 |           412 |           589 |          3632 |         113.5 |      0.144251 |       1.57436 |       0.03125 |        113936 |        3560.5 |       1501.05 |       5605.53 |       216.528 |
+       cell_07 |           418 |           645 |          3758 |       58.7188 |      0.114837 |         1.407 |      0.015625 |        113562 |       1774.41 |       864.322 |        2496.6 |       99.2561 |
+       cell_08 |           347 |           535 |          2799 |       21.8672 |      0.131633 |        1.6203 |     0.0078125 |       89192.8 |       696.819 |       324.336 |       1129.06 |       42.6932 |
+       cell_09 |           359 |           539 |          2815 |       10.9961 |      0.116227 |       1.48077 |    0.00390625 |       86697.5 |       338.662 |       166.879 |       501.482 |       19.3959 |
+       cell_10 |           337 |           510 |          2973 |       5.80664 |      0.102141 |       1.25111 |    0.00195312 |       89143.7 |       174.109 |       86.9403 |       217.829 |       8.88015 |
+       cell_11 |           293 |           483 |          2754 |       2.68945 |      0.118775 |       1.34748 |   0.000976562 |       85645.5 |       83.6382 |       38.6769 |       112.701 |       4.59384 |
+       cell_12 |           285 |           445 |          2551 |       1.24561 |      0.121854 |       1.26132 |   0.000488281 |       80679.3 |       39.3942 |       17.2385 |       49.6887 |       2.10058 |
+       cell_13 |           250 |           387 |          2233 |      0.545166 |     0.0975149 |       1.19817 |   0.000244141 |       68442.7 |       16.7096 |       8.53965 |        20.021 |      0.832744 |
+       cell_14 |           238 |           358 |          2063 |      0.251831 |     0.0938981 |         1.243 |    0.00012207 |       64133.2 |       7.82876 |       4.24947 |       9.73117 |      0.399017 |
+       cell_15 |           235 |           346 |          2055 |      0.125427 |     0.0952804 |       1.20836 |   6.10352e-05 |       61746.4 |        3.7687 |       2.01809 |       4.55395 |      0.192284 |
+       cell_16 |           209 |           319 |          1840 |     0.0561523 |     0.0910099 |       1.10356 |   3.05176e-05 |       54478.7 |       1.66256 |      0.890931 |       1.83473 |     0.0810835 |
+       cell_17 |           167 |           261 |          1587 |     0.0242157 |      0.119453 |       1.18756 |   1.52588e-05 |       47281.2 |      0.721454 |      0.315696 |      0.856768 |      0.037711 |
+       cell_18 |           104 |           211 |          1070 |    0.00816345 |      0.115318 |       1.36904 |   7.62939e-06 |       33738.8 |      0.257407 |      0.122904 |        0.3524 |     0.0141731 |
+       cell_19 |            74 |            74 |             0 |             0 |      0.267249 |       2.21452 |   7.62939e-06 |       11803.2 |     0.0900511 |     0.0272309 |       0.19942 |    0.00727742 |
 =============================================
-=== G4ProcessPlacer::RemoveProcess: for: neutron
-  ProcessName: ImportanceProcess, will be removed!
-  The initial AlongStep Vectors: 
-GPIL Vector: 
-   ImportanceProcess
-   ParaWorldProc_ParallelBiasingWorld
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ParaWorldProc_ParallelBiasingWorld
-   ImportanceProcess
-  The initial PostStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   Decay
-   nCapture
-   nFission
-   inelastic
-   hadElastic
-   ImportanceProcess
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ImportanceProcess
-   hadElastic
-   inelastic
-   nFission
-   nCapture
-   Decay
-   ParaWorldProc_ParallelBiasingWorld
-  The final AlongStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ParaWorldProc_ParallelBiasingWorld
-  The final PostStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   Decay
-   nCapture
-   nFission
-   inelastic
-   hadElastic
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   hadElastic
-   inelastic
-   nFission
-   nCapture
-   Decay
-   ParaWorldProc_ParallelBiasingWorld
-================================================

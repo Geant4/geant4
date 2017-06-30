@@ -189,27 +189,32 @@ void G4EmDNAPhysics_option4::ConstructProcess()
       //ph->RegisterProcess(new G4DNAAttachment("e-_G4DNAAttachment"), particle); 
     
     } else if ( particleName == "proton" ) {
+      ph->RegisterProcess(new G4DNAElastic("proton_G4DNAElastic"), particle);
       ph->RegisterProcess(new G4DNAExcitation("proton_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("proton_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"), particle);
 
     } else if ( particleName == "hydrogen" ) {
+      ph->RegisterProcess(new G4DNAElastic("hydrogen_G4DNAElastic"), particle);
       ph->RegisterProcess(new G4DNAExcitation("hydrogen_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("hydrogen_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"), particle);
 
     } else if ( particleName == "alpha" ) {
+      ph->RegisterProcess(new G4DNAElastic("alpha_G4DNAElastic"), particle);
       ph->RegisterProcess(new G4DNAExcitation("alpha_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("alpha_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"), particle);
 
     } else if ( particleName == "alpha+" ) {
+      ph->RegisterProcess(new G4DNAElastic("alpha+_G4DNAElastic"), particle);
       ph->RegisterProcess(new G4DNAExcitation("alpha+_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("alpha+_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"), particle);
       ph->RegisterProcess(new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"), particle);
 
     } else if ( particleName == "helium" ) {
+      ph->RegisterProcess(new G4DNAElastic("helium_G4DNAElastic"), particle);
       ph->RegisterProcess(new G4DNAExcitation("helium_G4DNAExcitation"), particle);
       ph->RegisterProcess(new G4DNAIonisation("helium_G4DNAIonisation"), particle);
       ph->RegisterProcess(new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"), particle);

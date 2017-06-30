@@ -14,19 +14,144 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-21 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-72)
+19 June 2017 Vladimir Ivanchenko (hadr-deex-V10-03-40)
+- G4WilsonAblationModel - C. Mancini Terracciano fixed crash at 
+    initialisation
+
+16 June 2017 Vladimir Ivanchenko (hadr-deex-V10-03-39)
+- G4DeexPrecoParameters - disable parameter change in G4_Idle state,
+    only G4_PreInit is allowed
+- G4ExcitationHandler - improved debug cout
+
+15 June 2017 Vladimir Ivanchenko (hadr-deex-V10-03-38)
+- G4DeexPrecoParameters - removed compilation warning of previous tag
+- G4ExcitationHandler - added protection from incomplete 
+    initialisation when external evaporation instance is defined;
+    removed debug cout
+
+14 June 2017 Vladimir Ivanchenko (hadr-deex-V10-03-37)
+- G4GammaTransition - more accurate protection for 2J > 6
+- G4PhotonEvaporation, G4ExcitationHandler - extended local debug printout
+- G4PolarizationTransition - use G4double, and std::sqrt
+- G4DeexPrecoParameters - disable correlated gamma
+
+13 June 2017 Alberto Ribon (hadr-deex-V10-03-36)
+- G4PolarizationTransition : applied Jason Detwiler's fix to avoid integer
+    overflow in the argument of sqrt(), and caching to speed up the
+    calculations.
+- G4GammaTransition : temporary workaround to avoid very long computations,
+    by skipping polarization if initial state has angular momentum 2J > 6 .
+
+13 June 2017 Vladimir Ivanchenko (hadr-deex-V10-03-35)
+- G4GammaTransition - added a protection - do not sample nuclear 
+    polarization if initial state has momentum 2J > 12
+
+1 June 2017 Dennis Wright (hadr-deex-V10-03-34)
+- G4PolarizationTransition::GenerateGammaCosTheta: add Jason Detwiler's 
+    warning of zero coefficient
+
+23 May 2017 Dennis Wright (hadr-deex-V10-03-33)
+- G4PolarizationTransition::GenerateGammaCosTheta and 
+  G4PolarizationTransition::GenerateGammaPhi:  add warning when polarization
+    entries are empty and return isotropic random in that case.  Fixes
+    somewhat rare crash. 
+
+13 May 2017 Vladimir Ivanchenko (hadr-deex-V10-03-32)
+- G4ExcitationHandler, G4NeutronRadCapture - propagate index of
+    e- internal conversion to base class G4HadronicProcess
+
+10 May 2017 Vladimir Ivanchenko (hadr-deex-V10-03-31)
+- G4ExcitationHandler, G4DeexPrecoParameters - define index of
+    e- internal conversion and propagate it to reaction products
+
+28 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-30)
+- G4LevelReader - by default issue G4Exception only for Z<6,
+- G4LevelReader, G4LevelManager, G4NucLevel,  G4PhotonEvaporation
+    use G4double for energy and life time (fix problem #1964)  
+- G4FermiFragmentsPoolVI - fixed selection of decay chains for
+    unphysical fragments, which happens when used by INCL++
+
+27 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-29)
+- G4LevelReader - by default issue G4Exception only for Z<9
+- G4FermiFragmentsPoolVI - fixed selection of decay chains for
+    unphysical fragments, which happens when used by INCL++
+
+08 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-28)
+- G4PhotonEvaporation - fixed second part of the bug #1950
+    always have gamma transition to the discrete level (if there is
+    no levels - to the ground state)
+- G4DeexPrecoParameters - set default MaxLifeTime = 1000 second 
+    (was 0.1 second)
+
+05 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-27)
+- G4LevelReader,  G4NuclearLevelData - removed code for reading of old 
+    data structure
+- G4LevelReader - fixed fill of mpRatio parameter of a transition (was
+    always zero before)
+
+04 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-26)
+- G4DeexPrecoParameters - disable possibility to read old data; make
+    FatalException soon if the first file in the dataset cannot be red
+
+04 April 2017 Vladimir Ivanchenko (hadr-deex-V10-03-24)
+- G4LevelReader - read update data structure where "correlated_gamma"
+    directory is 
+- G4LevelManager - removed obsolete method
+
+20 March 2017 Vladimir Ivanchenko (hadr-deex-V10-03-23)
+- G4LevelReader - fixed bug #1942 (FatalException if data file is 
+    not opened)
+- G4PhotonEvaporation - fixed bug #1950 (perform transition to
+    the ground state of an isotope if the floating level has zero 
+    excitation energy) 
+
+17 March 2017 Vladimir Ivanchenko (hadr-deex-V10-03-22)
+- G4VEmissionProbability - added private method for general treatment 
+    of PDF functions
+- G4EvaporationProbability, G4CompetitiveFission, G4CompetitiveFission,
+  G4GEMProbability - changes are implemented according to base class
+    modifications
+- G4EvaporationChannel - make choice of minimal evaporation energy
+    Z-dependent
+
+07 March 2017 Vladimir Ivanchenko (hadr-deex-V10-03-21)
+07 March 2017 Vladimir Ivanchenko (hadr-deex-V10-03-19)
+- G4NuclearLevelData - synkronise the list of isotopes with the 
+    current set of data files - extra rare isotopes are alloed; 
+    Z max is extended from 102 to 117
+- G4LevelReader - always create G4LevelManager for stable isotopes
+    including light stable p, d, t, He3, He4
+- G4LevelManager - removed obsolete method
+- G4FermiFragmentsPoolVI - improved handling of internal data structure,
+- G4ExcitationHandler, fermi_breakup, photon_evaporation sub-directories 
+    removed obsolete FermiBreakUp model and corresponding classes
+
+02 March 2017 Vladimir Ivanchenko (hadr-deex-V10-03-18)
+- G4LevelReader, G4FermiFragmentsPoolVI - fixed Coverity static 
+    analysis warnings
+
+27 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-17)
+- G4LevelReader, G4LevelManager, G4PhotonEvaporation - for stable states 
+    (ground state isotopes) life time is set to "-1", change all checks 
+    accordingly
+- G4DeexPrecoParameters - default time limit 0.1s (if radioactive
+    decay is enabled this time is set to the limit of the
+    G4NuclideTable), this allows do not create extra isomeres
+    if radioactive decay is not included in the physics list
+
+21 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-15)
 - G4LevelReader - in the case of broken file structure or absence of
     a file G4Exception will be issued
 
-16 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-71)
+16 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-14)
 - G4GammaTransition - added control on printout for all G4cout; removed
     thread unsafe check
 
-15 February 2017 Vladimir Ivanchenko
+15 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-13)
 - G4GammaTransition - added control on printout
 - G4LevelManager - fixed unpacking of spin
 
-14 February 2017 Vladimir Ivanchenko
+14 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-12)
   Fix no-reproducibility due to precision lost in Lorentz transformations
 - G4ExcitationHandler, G4PhotonEvaporation - use floating level number
 - G4GammaTransition - use a new method of G4Fragment::SetExcitationEnergy()
@@ -35,7 +160,7 @@ code and to keep track of all tags.
 - G4PolarizationTransition - added SetVerbose method; protect from
     extra verbosity
 
-13 February 2017 Vladimir Ivanchenko
+13 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-11)
   Fixed U235[0.076] problem:
 - G4DeexPrecoParameters - min excitation energy is set to 10 eV (was 100 eV)
 - G4LevelReader - if value of alpha (relative probability of the internal 
@@ -43,22 +168,23 @@ code and to keep track of all tags.
     outer levels and gamma emission has zero probability, internal 
     conversion is forced intdependently on other flags
 
-08 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-70)
+08 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-10)
+08 February 2017 Vladimir Ivanchenko (hadr-deex-V10-03-08)
 - G4GammaTransition::SampleDirection - D.Wright fixed multipolarity
     after changing multipolarity Nx by 1 in the new dataset
 
-27 January 2017 Vladimir Ivanchenko
+27 January 2017 Vladimir Ivanchenko (hadr-deex-V10-03-07)
 - G4GammaTransition, G4PhotonEvaporation, G4NuclLevel - minor cleanup
 - G4DeexPrecoParameters - by default used uniform angular distribution
     in CM sytem of precompound decay
 
-18 January 2017 Vladimir Ivanchenko
+18 January 2017 Vladimir Ivanchenko (hadr-deex-V10-03-06)
 - G4GammaTransition::SampleDirection - return back sampling in the case, when 
     initial state has angular moment but its polarisation is random
 - G4PhotonEvaporation - added internal conversion even if the data are not
     stored
 
-11 January 2017  Dennis Wright
+11 January 2017  Dennis Wright (hadr-deex-V10-03-05)
 - G4PolarizationTransition::SetGammaTransitionData: replace fTwoJ1 and fTwoJ2
   with their absolute values to avoid crash
 - G4GammaTransition::SampleDirection: remove return; from (!np) block,
@@ -68,22 +194,22 @@ code and to keep track of all tags.
   in order to comply with instructions in G4PolarizationTransition.hh (call order) 
   and to properly initialize the nuclear polarization.
  
- 9 January 2017  Dennis Wright
+ 9 January 2017  Dennis Wright (hadr-deex-V10-03-04)
 - G4NucLevel::TransitionType: use % operator to correctly strip off
   leading digit
 - G4LevelReader::LevelManager: added comments to describe some variables
 - G4PolarizationTransition::UpdatePolarizationToFinalState: add comment
   showing where zero-value entries are trimmed off
 
-19 December 2016 Vladimir Ivanchenko
+19 December 2016 Vladimir Ivanchenko (hadr-deex-V10-03-03)
 - G4LevelReader - fixed Ra228 problem - read all levels from 
     a data file
 
-16 December 2016 Vladimir Ivanchenko
+16 December 2016 Vladimir Ivanchenko (hadr-deex-V10-03-02)
 - G4PolarizationTransition - J.Detwiler has fixed computation 
     of multipolarity
 
-16 December 2016 Vladimir Ivanchenko
+16 December 2016 Vladimir Ivanchenko (hadr-deex-V10-03-01)
 - G4DeexPrecoParameters - change default time limit from 0.01 s to
     1 microsecond
 - G4PhotonEvaporation, G4GammaTransition - improved sampling
@@ -91,7 +217,7 @@ code and to keep track of all tags.
 - G4PolarizationTransition - J.Detwiler has fixed computation 
     of polarisation
 
-14 December 2016 Vladimir Ivanchenko
+14 December 2016 Vladimir Ivanchenko (hadr-deex-V10-03-00)
 - G4LevelManager, G4NuclLevel, G4LevelReader - reduce memory for
     description of a level: each two integer parameters are packed 
     into one integer values; use only one set of probabilities of 

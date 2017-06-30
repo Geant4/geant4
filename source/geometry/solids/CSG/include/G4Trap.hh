@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.hh 99509 2016-09-26 07:48:56Z gcosmo $
+// $Id: G4Trap.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -199,14 +199,14 @@ class G4Trap : public G4CSGSolid
                                 
   // Methods for solid
     
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -253,7 +253,8 @@ class G4Trap : public G4CSGSolid
 
   protected:  // with description
 
-    G4bool MakePlanes();
+    void MakePlanes();
+    void MakePlanes(const G4ThreeVector pt[8]);
     G4bool MakePlane( const G4ThreeVector& p1,
                       const G4ThreeVector& p2,
                       const G4ThreeVector& p3, 
@@ -262,31 +263,24 @@ class G4Trap : public G4CSGSolid
 
   private:
 
+    void CheckParameters();
+      // Check parameters
+
+    void GetVertices(G4ThreeVector pt[8]) const;
+      // Compute coordinates of the trap vertices from planes 
+
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
       // specification for points not on the surface
 
-    inline G4double GetFaceArea(const G4ThreeVector& p1,
-                                const G4ThreeVector& p2, 
-                                const G4ThreeVector& p3,
-                                const G4ThreeVector& p4);
-      //
-      // Provided four corners of plane in clockwise fashion,
-      // it returns the area of finite face
-
-    G4ThreeVector GetPointOnPlane(G4ThreeVector p0, G4ThreeVector p1, 
-                                  G4ThreeVector p2, G4ThreeVector p3, 
-                                  G4double& area) const;
-      //
-      // Returns a random point on the surface of one of the faces
-
   private:
 
+    G4double halfCarTolerance;
     G4double fDz,fTthetaCphi,fTthetaSphi;
     G4double fDy1,fDx1,fDx2,fTalpha1;
     G4double fDy2,fDx3,fDx4,fTalpha2;
     TrapSidePlane fPlanes[4];
-
+    G4int fTrapType;
 };
 
 #include "G4Trap.icc"

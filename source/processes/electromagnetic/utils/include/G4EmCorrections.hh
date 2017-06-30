@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh 100363 2016-10-19 09:24:47Z gcosmo $
+// $Id: G4EmCorrections.hh 103954 2017-05-04 11:29:22Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -134,11 +134,6 @@ public:
                           const G4Material*,
                           G4double kineticEnergy);
 
-  G4double NuclearDEDX(const G4ParticleDefinition*,
-                       const G4Material*,
-                       G4double kineticEnergy,
-                       G4bool fluct = true);
-
   void AddStoppingData(G4int Z, G4int A, const G4String& materialName,
                        G4PhysicsVector* dVector);
 
@@ -190,9 +185,6 @@ private:
                   G4double y1, G4double y2, G4double z11, G4double z21, 
 		  G4double z12, G4double z22) const;
 
-  G4double NuclearStoppingPower(G4double e, G4double z1, G4double z2,
-                                            G4double m1, G4double m2);
-
   // hide assignment operator
   G4EmCorrections & operator=(const G4EmCorrections &right) = delete;
   G4EmCorrections(const G4EmCorrections&) = delete;
@@ -214,9 +206,7 @@ private:
   static G4LPhysicsFreeVector* ThetaK;
   static G4LPhysicsFreeVector* ThetaL;
 
-  G4double     theZieglerFactor;
   G4double     alpha2;
-  G4bool       lossFlucFlag;
 
   std::vector<const G4Material*> currmat;
   std::map< G4int, std::vector<G4double> > thcorr;

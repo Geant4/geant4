@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94076 2015-11-05 14:59:19Z gcosmo $
+# $Id: sources.cmake 104408 2017-05-30 07:14:50Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -59,6 +59,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4LEpp.hh
         G4LEppData.hh
         G4LMsdGenerator.hh
+        G4NeutrinoElectronNcModel.hh
+        G4NeutronElectronElModel.hh
         G4NuclNuclDiffuseElastic.hh
     SOURCES
         G4AntiNuclElastic.cc
@@ -73,6 +75,8 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4LEnp.cc
         G4LEpp.cc
         G4LMsdGenerator.cc
+        G4NeutrinoElectronNcModel.cc
+        G4NeutronElectronElModel.cc
         G4NuclNuclDiffuseElastic.cc
     GRANULAR_DEPENDENCIES
         G4baryons

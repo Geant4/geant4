@@ -53,7 +53,7 @@ class G4NucLevel
 {
 public:
 
-  explicit G4NucLevel(size_t ntrans, G4float  tgamma,
+  explicit G4NucLevel(size_t ntrans, G4double  tgamma,
 	              const std::vector<G4int>&   vTrans,
 	              const std::vector<G4float>& wLevelGamma,
 	              const std::vector<G4float>& wGamma,
@@ -68,7 +68,7 @@ public:
 
   inline G4int TransitionType(size_t idx) const;
 
-  inline G4float GetTimeGamma() const;
+  inline G4double GetTimeGamma() const;
 
   inline G4float MixingRatio(size_t idx) const;
 
@@ -95,8 +95,8 @@ private:
   G4bool operator<(const G4NucLevel &right) const = delete;
   const G4NucLevel& operator=(const G4NucLevel &right) = delete;
 
-  size_t  length;
-  G4float fTimeGamma;
+  size_t   length;
+  G4double fTimeGamma;
   
   std::vector<G4int>    fTrans;
   std::vector<G4float>  fGammaCumProbability;
@@ -126,7 +126,7 @@ inline G4int G4NucLevel::TransitionType(size_t idx) const
   return fTrans[idx]%10000;
 }
 
-inline G4float G4NucLevel::GetTimeGamma() const
+inline G4double G4NucLevel::GetTimeGamma() const
 {
   return fTimeGamma;
 }

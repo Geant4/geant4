@@ -80,6 +80,7 @@ public:
 
   // check max energy of a level without upload of the data
   G4double GetMaxLevelEnergy(G4int Z, G4int A) const;
+  G4float MaxLevelEnergy(G4int Z, G4int A) const;
 
   // check closest level if the energy is below the max level energy
   G4double GetLevelEnergy(G4int Z, G4int A, G4double energy);
@@ -105,7 +106,7 @@ private:
   G4DeexPrecoParameters* fDeexPrecoParameters;
   G4LevelReader*    fLevelReader;
 
-  static const G4int ZMAX = 103;
+  static const G4int ZMAX = 118;
   static const G4int AMIN[ZMAX];
   static const G4int AMAX[ZMAX];
   static const G4int LEVELIDX[ZMAX];

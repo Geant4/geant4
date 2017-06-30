@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 100425 2016-10-21 12:57:06Z gcosmo $
+// $Id: G4ParticleDefinition.cc 103108 2017-03-16 13:00:35Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -69,13 +69,6 @@ G4PDefManager G4ParticleDefinition::subInstanceManager;
 // in the class G4PDefData.
 //
 #define G4MT_pmanager ((subInstanceManager.offset[g4particleDefinitionInstanceID]).theProcessManager)
-
-// Returns the private data instance manager.
-//
-const G4PDefManager& G4ParticleDefinition::GetSubInstanceManager()
-{
-  return subInstanceManager;
-}
 
 G4ParticleDefinition::G4ParticleDefinition(
 		     const G4String&     aName,  
@@ -243,6 +236,21 @@ G4int G4ParticleDefinition::operator!=(const G4ParticleDefinition &right) const
 {
   return (this->theParticleName != right.theParticleName);
 }
+
+
+const G4PDefManager& G4ParticleDefinition::GetSubInstanceManager()
+  // Returns the private data instance manager.
+{
+  return subInstanceManager;
+}
+
+
+void G4ParticleDefinition::Clean()
+  // Clears memory allocated by sub-instance manager
+{
+  subInstanceManager.FreeSlave();
+}
+
 
 G4ProcessManager* G4ParticleDefinition::GetProcessManager() const
 {

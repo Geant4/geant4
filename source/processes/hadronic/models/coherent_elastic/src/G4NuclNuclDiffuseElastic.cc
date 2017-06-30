@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclNuclDiffuseElastic.cc 98826 2016-08-12 12:36:07Z gcosmo $
+// $Id: G4NuclNuclDiffuseElastic.cc 104887 2017-06-26 07:12:43Z gcosmo $
 //
 //
 // Physics model class G4NuclNuclDiffuseElastic 
@@ -115,8 +115,8 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
 
   fNuclearRadius1 = fNuclearRadius2 = fNuclearRadiusSquare 
     = fRutherfordRatio = fCoulombPhase0 = fHalfRutThetaTg = fHalfRutThetaTg2 
-    = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar = fCofAlphaMax 
-    = fCofAlphaCoulomb = fSumSigma = fEtaRatio = fReZ = 0.0;
+    = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar
+    = fSumSigma = fEtaRatio = fReZ = 0.0;
   fMaxL = 0;
 
   fNuclearRadiusCof = 1.0;

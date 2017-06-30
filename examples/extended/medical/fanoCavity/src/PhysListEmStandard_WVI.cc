@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_WVI.cc
 /// \brief Implementation of the PhysListEmStandard_WVI class
 //
-// $Id: PhysListEmStandard_WVI.cc 100265 2016-10-17 08:11:18Z gcosmo $
+// $Id: PhysListEmStandard_WVI.cc 103180 2017-03-21 10:33:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +123,6 @@ void PhysListEmStandard_WVI::ConstructProcess()
 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel(), 1);
-      eIoni->SetStepFunction(0.2, 10*um);
 
       G4CoulombScattering* cs = new G4CoulombScattering();
       G4eCoulombScatteringModel* single = new G4eCoulombScatteringModel();

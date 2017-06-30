@@ -95,7 +95,6 @@ void G4KDMap::Insert(G4KDNode_Base* pos)
 
   G4cout << "G4KDMap::Insert : " << maxSize << G4endl;
 
-
   vit.reserve(maxSize);
 
   for (size_t i = 0; i < fSortOut.size(); ++i)

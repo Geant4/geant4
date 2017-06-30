@@ -116,6 +116,9 @@ static nfu_status ptwXY_createFromFunctionBisect( ptwXYPoints *ptwXY, double x1,
 static nfu_status ptwXY_createFromFunctionZeroCrossing( ptwXYPoints *ptwXY, double x1, double y1, double x2, double y2, 
         ptwXY_createFromFunction_callback func, void *argList, double eps ) {
 
+    //For coverity #63077
+    if ( y2 == y1 ) return ( nfu_badInput );
+
     int i;
     double x, y;
     nfu_status status;
@@ -202,6 +205,9 @@ static nfu_status ptwXY_applyFunctionZeroCrossing( ptwXYPoints *ptwXY1, double y
     double y, x1 = p1->x, x2 = p2->x, nY1 = p1->y, nY2 = p2->y, refY = 0.5 * ( std::fabs( p1->y ) + std::fabs( p2->y ) );
     ptwXYPoint p;
     nfu_status status;
+
+    //For coverity #63074
+    if ( nY2 == nY1 ) return ( nfu_badInput );
 
     for( i = 0; i < 6; i++ ) {
         if( nY2 == nY1 ) break;

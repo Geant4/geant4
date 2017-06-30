@@ -1,4 +1,4 @@
-$Id: History 101649 2016-11-21 08:44:52Z gcosmo $
+$Id: History 104474 2017-06-01 07:35:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 19,2016 A.Dotti  (LXe-V10-02-03)
+May 31, 2017 P. Gumplinger (LXe-V10-03-00)
+- address problem report:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/opticalphotons/651/1/1/1.html
+
+November 19, 2016 A.Dotti  (LXe-V10-02-03)
 - explici set of SD to manager
 
 November 2, 2016 G.Folger (LXe-V10-02-02)

@@ -15,8 +15,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 May 2017  Dennis Wright (hadr-casc-V10-03-02)
+------------------------------------------------
+- G4ElementaryParticleCollider::generateSCMmuonAbsorption: fix rare seg fault
+  spotted and diagnosed by Ralf Ehrlich (mu2e/Virgina).  Added line
+      particles.clear();  
+  if GetThreeBodyMomenta() returns no momenta.
+
+1 May 2017  Tatsumi Koi (hadr-casc-V10-03-01)
+---------------------------------------------------
+- G4CascadeParameters.cc: Use G4HadronicDeveloperParameters as a tool 
+for sharing parameters between developers and experienced users.
+Need to set environment variable of "TEST_HDP" for testing the tool. 
+
+13 April 2017  Michael Kelsey (hadr-casc-V10-03-00)
+---------------------------------------------------
+- G4CascadeCoalescence:  Remove clusterHash() function and triedClusters
+  registry.  Drop redundant calls of tryCluster() with subcombinatorics; all
+  combinations are handled, uniquely, in main loop over indices.  Eliminates
+  significant memory usage seen with high-energy applications of BERT.
+
+- test/clusterComb.cc, test/GNUmakefile:  New standalone test to exercise
+  combinatoric behaviour of G4CascadeCoalescence (used in testing above
+  changes).
+
 29 November 2016  Dennis Wright (hadr-casc-V10-02-05)
- ----------------------------------------------------
+-----------------------------------------------------
 - G4InuclCollider::photonuclearOkay(): fix segfault reported by Daren Sawkey
   in bug report #1883
 

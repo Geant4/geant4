@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/wvalue/include/PhysicsListMessenger.hh
 /// \brief Definition of the PhysicsListMessenger class
-//
-// $Id: PhysicsListMessenger.hh 82461 2014-06-23 10:44:06Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsListMessenger_h
 #define PhysicsListMessenger_h 1
@@ -38,6 +33,7 @@
 #include "G4UImessenger.hh"
 
 class PhysicsList;
+
 class G4UIdirectory;
 class G4UIcmdWithAString;
 
@@ -60,8 +56,6 @@ class PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithAString*        fListCmd;
     
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

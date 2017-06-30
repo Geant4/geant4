@@ -1,4 +1,4 @@
-# $Id: History 101651 2016-11-21 08:47:15Z gcosmo $
+# $Id: History 102209 2017-01-12 08:21:05Z gcosmo $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: geant4-09-04-ref-00 $
 # -------------------------------------------------------------------
@@ -19,12 +19,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12.01.2017 Gabriele Cosmo  Tag: XrayFluo-V10-03-00
+- Use units for angles explicitly in XrayFluoDetectorConstruction
+
 19.11.2016 Andrea Dotti    Tag: XrayFluo-V10-02-02
-- explicit set of SD to manager
+- Explicit set of SD to manager
 
 28.10.2016 Gunter Folger   Tag: XrayFluo-V10-02-01
-- remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
-    fix required by clang39 on Linux and MAC
+- Removed direct use of {a,the}ParticleIterator, use GetParticleTableIterator().
+  Fix required by clang39 on Linux and MAC
 
 11.09.2015 S. Incerti Tag: XrayFluo-V10-01-00
 - Updated macro livermore.mac

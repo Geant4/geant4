@@ -1,4 +1,4 @@
-# $Id: History 101153 2016-11-08 08:19:11Z gcosmo $
+# $Id: History 104803 2017-06-19 07:13:32Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,33 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 June 2017 Tatsumi Koi (hadr-lend-V10-03-05)
+-----------------------------------------------
+-Fix Coverity 63066
+
+12 June 2017 Tatsumi Koi (hadr-lend-V10-03-04)
+-----------------------------------------------
+-Fix Coverity 63074 and 63077
+
+23 May 2017 Tatsumi Koi (hadr-lend-V10-03-03)
+-----------------------------------------------
+-Fix bug related to "fallthrough" and add comment 
+
+12 May 2017 Gabriele Cosmo (hadr-lend-V10-03-02)
+-----------------------------------------------
+-Added 'fallthrough' comment to nf_angularMomentumCoupling.cc:145,
+ to quit compilation warning message on gcc-7.1.
+
+09 May 2017 Tatsumi Koi (hadr-lend-V10-03-01)
+-----------------------------------------------
+-Fix inconsistency of name of excited isomer between data and code
+-Fix Fix problem in handling excited isomer target
+-Add table of excitation energy of excited isomer target
+
+08 May 2017 Tatsumi Koi (hadr-lend-V10-03-00)
+-----------------------------------------------
+-Fix warning messages from compiler(gcc7.1)
 
 07 November 2016 Tatsumi Koi (hadr-lend-V10-02-06)
 -----------------------------------------------

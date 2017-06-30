@@ -1,4 +1,4 @@
-# $Id: CMakeLists.txt 100923 2016-11-03 10:50:34Z gcosmo $
+# $Id: CMakeLists.txt 104871 2017-06-23 14:17:13Z gcosmo $
 
 #----------------------------------------------------------------------------
 # Setup the project
@@ -48,6 +48,7 @@ set(EXAMPLEB4C_SCRIPTS
   exampleB4.in
   gui.mac
   init_vis.mac
+  plotHisto.C
   run1.mac
   run2.mac
   vis.mac

@@ -63,6 +63,38 @@ private:
   HadrontherapyEventActionMessenger* pointerEventMessenger;
 };
 
+class B4aEventAction : public G4UserEventAction
+{
+public:
+    B4aEventAction();
+    virtual ~B4aEventAction();
+    
+    virtual void  BeginOfEventAction(const G4Event* event);
+    virtual void    EndOfEventAction(const G4Event* event);
+    
+    void AddAbs(G4double de, G4double dl);
+    void AddGap(G4double de, G4double dl);
+    
+private:
+    G4double  fEnergyAbs;
+    G4double  fEnergyGap;
+    G4double  fTrackLAbs;
+    G4double  fTrackLGap;
+};
+
+// inline functions
+
+inline void B4aEventAction::AddAbs(G4double de, G4double dl) {
+    fEnergyAbs += de;
+    fTrackLAbs += dl;
+}
+
+inline void B4aEventAction::AddGap(G4double de, G4double dl) {
+    fEnergyGap += de;
+    fTrackLGap += dl;
+}
+
+
 #endif
 
 

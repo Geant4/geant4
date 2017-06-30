@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AntiSigmacPlusPlus.cc 95951 2016-03-03 10:44:16Z gcosmo $
+// $Id: G4AntiSigmacPlusPlus.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -69,7 +69,7 @@ G4AntiSigmacPlusPlus* G4AntiSigmacPlusPlus::Definition()
   //             shortlived      subType    anti_encoding
   
    anInstance = new G4ParticleDefinition(
-                 name,      2.45397*GeV,      2.26*MeV,  -2.0*eplus,
+                 name,      2.45397*GeV,     1.89*MeV,  -2.0*eplus,
                     1,              +1,             0,
                     2,              -2,             0,
              "baryon",               0,            -1,       -4222,

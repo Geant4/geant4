@@ -108,7 +108,7 @@ class G4GeomTools
                                          G4TwoVectorList& result);
 
   static G4bool TriangulatePolygon(const G4TwoVectorList& polygon,
-				         std::vector<G4int>& result);
+                                         std::vector<G4int>& result);
     // Simple implementation of "ear clipping" algorithm for
     // triangulation of a simple contour/polygon, it places results
     // in a std::vector as triplets of vertices. If triangulation
@@ -123,7 +123,7 @@ class G4GeomTools
   static G4bool DiskExtent(G4double rmin, G4double rmax,
                            G4double startPhi, G4double delPhi,
                            G4TwoVector& pmin, G4TwoVector& pmax); 
-    // Calculate bounding square of a disk sector,
+    // Calculate bounding rectangle of a disk sector,
     // it returns false if input parameters do not meet the following:
     //   rmin   >= 0
     //   rmax   >  rmin + kCarTolerance
@@ -133,45 +133,66 @@ class G4GeomTools
                          G4double sinPhiStart, G4double cosPhiStart,
                          G4double sinPhiEnd, G4double cosPhiEnd,
                          G4TwoVector& pmin, G4TwoVector& pmax); 
-    // Calculate bounding square of a disk sector,
+    // Calculate bounding rectangle of a disk sector,
     // faster version without check of parameters
+
+  static G4double EllipsePerimeter(G4double a,
+                                   G4double b);
+    // Compute the circumference (perimeter) of an ellipse
+
+  static G4double EllipticConeLateralArea(G4double a,
+                                          G4double b,
+                                          G4double h);
+    // Compute the lateral surface area of an elliptic cone
 
   // ==================================================================
   //   3D Utilities 
   // ------------------------------------------------------------------
 
-  /*
   static G4ThreeVector TriangleAreaNormal(const G4ThreeVector& A,
                                           const G4ThreeVector& B,
                                           const G4ThreeVector& C);
-    // Calcuate normal to the plane of of 3D triangle ABC with
-    // length equal to its area
+    // Find the normal to the plane of 3D triangle ABC,
+    // length of the normal is equal to the area of the triangle
 
   static G4ThreeVector QuadAreaNormal(const G4ThreeVector& A,
                                       const G4ThreeVector& B,
                                       const G4ThreeVector& C,
                                       const G4ThreeVector& D);
-    // Calcuate normal to the plane of 3D quadrilateral ABCD with
-    // length equal to its area
+    // Find normal to the plane of 3D quadrilateral ABCD,
+    // length of the normal is equal to the area of the quadrilateral
 
   static G4ThreeVector PolygonAreaNormal(const G4ThreeVectorList& polygon);
-    // Calcuate normal to the plane of 3D polygon with
-    // length equal to its area
+    // Find normal to the plane of 3D polygon
+    // length of the normal is equal to the area of the polygon
 
+  /*
   static G4bool IsPlanar(const G4ThreeVector& A,
                          const G4ThreeVector& B,
                          const G4ThreeVector& C,
                          const G4ThreeVector& D);
     // Decide if 3D quadrilateral ABCD is planar
 
-  static G4bool IsPlanar(const G4ThreeVectorList& polygon);
+  static G4bool IsPlanar(const G4ThreeVectorList& polygon
+                         const G4ThreeVector& normal);
     // Decide if 3D polygon is planar
  */
 
-  static G4double DistancePointSegment(G4ThreeVector P,
-                                       G4ThreeVector A,
-                                       G4ThreeVector B);
+  static G4double DistancePointSegment(const G4ThreeVector& P,
+                                       const G4ThreeVector& A,
+                                       const G4ThreeVector& B);
     // Calculate distance between point P and line segment AB in 3D
+
+  static G4ThreeVector ClosestPointOnSegment(const G4ThreeVector& P,
+                                             const G4ThreeVector& A,
+                                             const G4ThreeVector& B);
+    // Find point on 3D line segment AB closest to point P
+
+  static G4ThreeVector ClosestPointOnTriangle(const G4ThreeVector& P,
+                                              const G4ThreeVector& A,
+                                              const G4ThreeVector& B,
+                                              const G4ThreeVector& C);
+    // Find point on 3D triangle ABC closest to point P
 
   static G4bool SphereExtent(G4double rmin, G4double rmax,
                              G4double startTheta, G4double delTheta,
@@ -191,6 +212,9 @@ class G4GeomTools
                           G4int a, G4int b, G4int c,
                           G4int n, const G4int* V);
     // Helper function for TriangulatePolygon()
+
+  static G4double comp_ellint_2(G4double e);
+    // Complete Elliptic Integral of the Second Kind
 };
 
 #endif // G4GEOMTOOLS_HH

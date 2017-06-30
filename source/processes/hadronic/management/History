@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 May 2017 V. Ivanchenko (hadr-man-V10-03-03)
+10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
+---------------------------------------------------
+- G4HadronicProcess - correctly check charge and energy balance
+    in the case of e- internal convertion; improved initialisation
+    for constructors 
+
 01 July 2016 V. Ivanchenko (hadr-man-V10-02-03)
 ---------------------------------------------------
 - G4EnergyRangeManager - fixed Coverity warning

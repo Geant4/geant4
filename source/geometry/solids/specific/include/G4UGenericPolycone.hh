@@ -88,7 +88,7 @@ class G4UGenericPolycone : public G4USolid
     G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

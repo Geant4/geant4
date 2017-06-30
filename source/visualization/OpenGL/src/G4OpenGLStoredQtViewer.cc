@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredQtViewer.cc 101714 2016-11-22 08:53:13Z gcosmo $
+// $Id: G4OpenGLStoredQtViewer.cc 103926 2017-05-03 13:43:27Z gcosmo $
 //
 //
 // Class G4OpenGLStoredQtViewer : a class derived from G4OpenGLQtViewer and
@@ -407,6 +407,7 @@ void G4OpenGLStoredQtViewer::updateQWidget() {
   // will be called if it hasn't already been called.
   // Copies the back buffer of a double-buffered context to the front buffer.
   repaint(); // will read scene tree state
+  // updateGL() // From J.Allison picking branch
   updateViewerPropertiesTableWidget();
   updateSceneTreeWidget();
   fUpdateGLLock = false;
@@ -418,12 +419,12 @@ void G4OpenGLStoredQtViewer::ShowView (
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   //  glFlush ();  // Tentativley offered by JA 29/04/16.
-
+  
   // Some X servers fail to draw all trajectories, particularly Mac
   // XQuartz.  Revisit this at a future date.  Meanwhile, issue an
   // extra...
-  ClearView();  // Necessary?  JA 29/04/16
-  DrawView();   // Necessary?  JA 29/04/16
+  //  ClearView();  // Necessary?  JA 29/04/16 
+  //  DrawView();   // Necessary?  JA 29/04/16
   activateWindow();
   //  glFlush(); // NO NEED and as drawView will already cause a flush
   // that could do a double flush

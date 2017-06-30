@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4Tet.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Tet
 //
@@ -51,8 +51,7 @@
 //  20040803 - Dionysios Anninos, added GetPointOnSurface() method
 //  20061112 - MHM added code for G4VSolid GetSurfaceArea()
 //  20100920 - Gabriele Cosmo added copy-ctor and operator=()
-//  20160924 - Evgueni Tcherniaev, added Extent(pmin,pmax),
-//             use G4BoundingEnvelope for CalculateExtent()
+//  20160924 - Evgueni Tcherniaev, use G4BoundingEnvelope for CalculateExtent()
 //
 // --------------------------------------------------------------------
 
@@ -60,7 +59,7 @@
 
 #if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 101118 2016-11-07 09:10:59Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 104316 2017-05-24 13:04:23Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -301,7 +300,7 @@ void G4Tet::ComputeDimensions(G4VPVParameterisation* ,
 //
 // Get bounding box
 
-void G4Tet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Tet::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   pMin.set(fXMin,fYMin,fZMin);
   pMax.set(fXMax,fYMax,fZMax);
@@ -315,7 +314,7 @@ void G4Tet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Tet::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Tet::BoundingLimits()", "GeomMgt0001", JustWarning, message);
     DumpInfo();
   }
 }
@@ -334,7 +333,7 @@ G4bool G4Tet::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

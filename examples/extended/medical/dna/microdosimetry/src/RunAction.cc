@@ -231,7 +231,6 @@ void RunAction::CreateHistogram()
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-//  if(!analysisManager->IsActive()) {return; }
 
   G4cout << "Using " << analysisManager->GetType() <<
       " analysis manager" << G4endl;
@@ -319,5 +318,3 @@ void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container)
         << it->second << G4endl;
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

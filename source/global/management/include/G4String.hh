@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh 102537 2017-02-08 14:02:58Z gcosmo $
+// $Id: G4String.hh 102049 2016-12-19 09:04:20Z gcosmo $
 //
 // 
 //---------------------------------------------------------------
@@ -55,7 +55,6 @@
 #endif
 
 typedef std::string::size_type str_size;
-typedef std::string G4SubString;
 
 class G4String : public std::string
 {

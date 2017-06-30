@@ -36,6 +36,7 @@
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4UserLimits.hh"
 #include "G4NistManager.hh"
@@ -153,5 +154,3 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
     G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

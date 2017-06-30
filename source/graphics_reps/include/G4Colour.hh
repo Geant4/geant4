@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4Colour.hh 104093 2017-05-11 07:29:45Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -98,11 +98,22 @@ public: // With description
 
   G4bool operator != (const G4Colour& c) const;
   G4bool operator == (const G4Colour& c) const {return !(operator != (c));}
-  G4Colour& operator += (const G4Colour&) {return *this;}  // Dummy
+
+  G4Colour& operator += (const G4Colour& rhs) {*this = rhs; return *this;}
+  // Note: This is required by RayTracer in its use of G4THitsMap.
+  // Adding colours, without also taking brightness into account, does not make
+  // sense, so let us make it synonymous with operator=, which is, I guess,
+  // equivalent to covering the old colour with the new, like a coat of paint.
+
   G4double GetRed   () const;
   G4double GetGreen () const;
   G4double GetBlue  () const;
   G4double GetAlpha () const;  // alpha = opacity = 1. - transparency.
+
+  void SetRed   (G4double);
+  void SetGreen (G4double);
+  void SetBlue  (G4double);
+  void SetAlpha (G4double);  // alpha = opacity = 1. - transparency.
 
   static G4Colour White();
   static G4Colour Gray();

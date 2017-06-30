@@ -176,7 +176,8 @@ std::vector<G4UExtrudedSolid::ZSection> G4UExtrudedSolid::GetZSections() const
 //
 // Get bounding box
 
-void G4UExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UExtrudedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                      G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
 
@@ -225,7 +226,7 @@ void G4UExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UExtrudedSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4UExtrudedSolid::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     StreamInfo(G4cout);
   }
@@ -248,7 +249,8 @@ void G4UExtrudedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UExtrudedSolid::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UExtrudedSolid::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -270,7 +272,7 @@ G4UExtrudedSolid::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

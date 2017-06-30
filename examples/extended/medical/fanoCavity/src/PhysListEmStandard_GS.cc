@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/PhysListEmStandard_GS.cc
 /// \brief Implementation of the PhysListEmStandard_GS class
 //
-// $Id: PhysListEmStandard_GS.cc 100265 2016-10-17 08:11:18Z gcosmo $
+// $Id: PhysListEmStandard_GS.cc 103180 2017-03-21 10:33:40Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -118,7 +118,6 @@ void PhysListEmStandard_GS::ConstructProcess()
             
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetEmModel(new MyMollerBhabhaModel);
-      eIoni->SetStepFunction(0.2, 10*um);
                          
       pmanager->AddProcess(eMsc,                      -1, 1, 1);
       pmanager->AddProcess(eIoni,                     -1, 2, 2);

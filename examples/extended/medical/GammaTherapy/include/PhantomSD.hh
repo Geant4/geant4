@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PhantomSD.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PhantomSD.hh 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PhantomSD.hh
 /// \brief Definition of the PhantomSD class
@@ -50,7 +50,6 @@
 class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
-class Histo;
 
 class PhantomSD : public G4VSensitiveDetector
 {
@@ -73,7 +72,6 @@ private:
   PhantomSD & operator=(const PhantomSD &right);
   PhantomSD(const PhantomSD&);
 
-  Histo*   fHisto;
   G4double fShiftZ;
   G4int    fCounter;
 };

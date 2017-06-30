@@ -29,6 +29,7 @@
 // ClassName:   G4QGSPLundStrFragmProtonBuilder
 //
 // Author: Julia Yarba, FNAL/CD (2014)
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -60,11 +61,12 @@ class G4QGSPLundStrFragmProtonBuilder : public G4VProtonBuilder
     virtual ~G4QGSPLundStrFragmProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
+    using G4VProtonBuilder::Build; //Prevent compiler warning
   private:
 
     G4TheoFSGenerator*               theModel;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 102590 2017-02-09 10:13:30Z gcosmo $
+// $Id: G4ExcitationHandler.hh 104078 2017-05-10 14:50:23Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -118,6 +118,9 @@ private:
   G4VMultiFragmentation* theMultiFragmentation;
   G4VFermiBreakUp* theFermiModel;
   G4VEvaporationChannel* thePhotonEvaporation;
+
+  const G4ParticleDefinition* electron;
+  G4int icID;
 
   G4int maxZForFermiBreakUp;
   G4int maxAForFermiBreakUp;

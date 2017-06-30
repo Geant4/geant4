@@ -1,4 +1,4 @@
-$Id: History 101714 2016-11-22 08:53:13Z gcosmo $
+$Id: History 104015 2017-05-08 07:28:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,83 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th May 2017  John Allison (vis-V10-03-05)
+- visman-V10-03-08: Fix /vis/viewer/interpolate for file wring viewers.
+- DAWN-V10-03-00:
+  o Expand filename numbering to 4 digits, e.g., g4_0000.prim, g4_0001.prim,...
+  o You may need
+    export G4DAWNFILE_MAX_FILE_NUM=9999
+    or setenv G4DAWNFILE_MAX_FILE_NUM 9999
+  o Useful if producing many files for a movie.
+- raytracer-V10-03-04:
+  o Expand filename numbering to 4 digits, zero filled, e.g.,
+      g4RayTracer.viewer-1_0000.jpeg
+      g4RayTracer.viewer-1_0001.jpeg
+    etc.
+  o Useful for producing many files for a movie.
+
+3rd May 2017  John Allison
+- modeling-V10-03-06 (needs event-V10-03-01):
+  o Completed G4GPSModel for visualisation of General Particle Source. Can
+    be used with command /vis/scene/add/gps.
+
+3rd May 2017  John Allison (vis-V10-03-04)
+- modeling-V10-03-05:
+  o Add prototype/skeleton G4GPSModel.
+  o Improve checking of G4PhysicalVolumeModel.
+
+1st May 2017  John Allison
+- visman-V10-03-07: Added /vis/scene/add/gps.
+
+23rd April 2017  John Allison
+- visman-V10-03-05: Improved command guidance.
+
+19th April 2017  John Allison
+- modeling-V10-03-01: Added G4ModelingParameters::PVPointerCopyNo.
+- raytracer-V10-03-02:
+  o Changed back to XA_RGB_BEST_MAP (seems OK now).
+  o Simplified passing of ray tracer pointer.
+  o Fixed a bug whereby the jpeg for RayTracer was always 600x600.
+
+18th April 2017  John Allison
+- visman-V10-03-04: Improved error trapping.
+
+22nd February 2017  John Allison
+- raytracer-V10-03-00:
+  G4RTXScanner.cc: Changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
+  (It seems XA_RGB_BEST_MAP no longer available on Mac XQuartz 2.7.11.)
+- visman-V10-03-03: Replaced G4VisExtent::NullExtent by G4VisExtent().
+
+12th January 2017  John Allison
+- opengl-V10-03-01: Tidied.
+- visman-V10-03-02: Brian Smith, Laurent Garnier:
+  o /vis/viewer/interpolate: Now works for WIN32.
+
+12th January 2017  John Allison  (vis-V10-03-01)
+- Tagged.
+
+10th January 2017  Fred Jones
+- openinventor-V10-03-00:
+  o G4OpenInventorXtExtendedViewer: fixes and improvements.
+
+7th December 2016  John Allison
+- visman-V10-03-01:
+  o Deprecated SetUserAction. Use RegisterRunDurationUserVisAction."
+
+6th January 2017  John Allison
+- opengl-V10-03-00: Fixed bug in ScaledFlush.
+
+9th December 2016  John Allison  (vis-V10-03-00)
+- modeling-V10-03-00 and visman-V10-03-00:
+  o Improved arrow drawing.  Reduced default lineSegmentsPerCircle
+    to 6 for rapid yet adequate drawing.
+  o Similar improvement to magnetic field drawing.
+  o Default can be changed with new command:
+    /vis/set/arrow3DLineSegmentsPerCircle.
+
+27th November 2016  John Allison
+- visman-V10-02-37: Fix for OpenGLXm.
 
 21th November 2016  Laurent Garnier (vis-V10-02-30)
 - opengl-V10-02-26: Go back on the glCheckFramebufferStatus(): comment out this command

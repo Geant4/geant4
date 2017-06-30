@@ -1,4 +1,4 @@
-$Id: History 100828 2016-11-02 15:25:59Z gcosmo $
+$Id: History 102317 2017-01-20 16:14:06Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,39 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+19-Jan-2017 A. Ribon      hadr-partonstring-mgt-V10-03-02
+-  Removed G4PomeronCrossSection class.
+
+16-Dec-2016 A. Ribon      hadr-partonstring-mgt-V10-03-01
+-  Temporary work-around to bring back only qgsm: in practice, re-introduce
+   temporarily G4PomeronCrossSection class.
+
+14-Dec-2016 A. Ribon      hadr-partonstring-mgt-V10-03-00
+-  After the release G4 10.3, with "stable" version, this tag brings back
+   the "development" version, similar (although not identical because
+   of some code clean-up) to G4 10.2.ref10.
+
+12-Oct-2016 V. Uzhinsky  : hadr-partonstring-mgt-V10-02-04
+   G4Exception was introduced in G4VPartonStringModel which gives a warning
+   message when parton model cannot produce or fragment strings. In the case
+   projectile hadron and target nucleus will return unchanged to a caller.
+
+28-Sept-2016 V. Uzhinsky : hadr-partonstring-mgt-V10-02-03
+-  G4VPartonStringModel: Repetition is implemented of an event simulation
+   if strings were not generated, or the hadronization could not manage
+   with string's fragmentation. An exception is generated after 100 attempts.
+
+19-Sept-2016 V. Uzhinsky : hadr-partonstring-mgt-V10-02-02
+-  G4VPartonStringModel: G4HadronicException was implemented for the case
+   when the string fragmentation does not produce hadrons!
+
+29-June-2016 V. Uzhinsky : hadr-partonstring-mgt-V10-02-01
+-  G4VPartonStringModel::Scatter was improved in order to protect
+   a case when string's fragmentation does not give a result.
+
+18-May-2016 A. Ribon      hadr-partonstring-mgt-V10-02-00
+-  G4PomeronCrossSection : moved into the qgsm/ directory.
 
 07-Aug-2015 A. Ribon      hadr-partonstring-mgt-V10-01-02
 -  G4VPartonStringModel : checking of 'while' loops.

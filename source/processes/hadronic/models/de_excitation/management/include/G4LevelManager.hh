@@ -59,10 +59,10 @@ public:
   // energies - list of excitation energies of nuclear levels starting
   //            from the ground state with energy zero 
   // spin - 2J, where J is the full angular momentum of the state 
-  G4LevelManager(size_t ntrans,
-                 const std::vector<G4float>& energies,
-		 const std::vector<G4int>& spin,
-		 const std::vector<const G4NucLevel*>& levels); 
+  explicit G4LevelManager(size_t ntrans,
+			  const std::vector<G4double>& energies,
+			  const std::vector<G4int>& spin,
+			  const std::vector<const G4NucLevel*>& levels); 
 
   ~G4LevelManager();
 
@@ -74,9 +74,9 @@ public:
 
   inline const G4NucLevel* GetLevel(size_t i) const;
 
-  inline G4float LevelEnergy(size_t i) const;
+  inline G4double LevelEnergy(size_t i) const;
 
-  inline G4float MaxLevelEnergy() const;
+  inline G4double MaxLevelEnergy() const;
 
   size_t NearestLevelIndex(G4double energy, size_t index=0) const;
 
@@ -84,14 +84,13 @@ public:
 
   inline const G4NucLevel* NearestLevel(G4double energy, size_t index=0) const;
 
-  inline G4float NearestLevelEnergy(G4double energy, size_t index=0) const;
+  inline G4double NearestLevelEnergy(G4double energy, size_t index=0) const;
 
-  inline G4float NearestLowEdgeLevelEnergy(G4double energy) const;
+  inline G4double NearestLowEdgeLevelEnergy(G4double energy) const;
 
-  inline G4float LifeTime(size_t i) const;
+  // for stable isotopes life time is -1
+  inline G4double LifeTime(size_t i) const;
 
-  inline G4float LifeTimeGamma(size_t i) const;
-   
   inline G4int SpinTwo(size_t i) const;
 
   inline G4int SpinParity(size_t i) const;
@@ -113,7 +112,7 @@ private:
   G4bool operator==(const G4LevelManager &right) const = delete;
   G4bool operator!=(const G4LevelManager &right) const = delete;
 
-  std::vector<G4float>  fLevelEnergy;
+  std::vector<G4double>  fLevelEnergy;
   std::vector<G4int>    fSpin;
   std::vector<const G4NucLevel*> fLevels;
 
@@ -137,7 +136,7 @@ inline const G4NucLevel* G4LevelManager::GetLevel(size_t i) const
   return fLevels[i]; 
 }
 
-inline G4float G4LevelManager::LevelEnergy(size_t i) const
+inline G4double G4LevelManager::LevelEnergy(size_t i) const
 {
 #ifdef G4VERBOSE
   if(i > nTransitions) { PrintError(i, "LevelEnergy"); }
@@ -145,17 +144,14 @@ inline G4float G4LevelManager::LevelEnergy(size_t i) const
   return fLevelEnergy[i]; 
 }
 
-inline G4float G4LevelManager::MaxLevelEnergy() const
+inline G4double G4LevelManager::MaxLevelEnergy() const
 {
   return fLevelEnergy[nTransitions]; 
 }
 
-inline size_t G4LevelManager::NearestLowEdgeLevelIndex(G4double ener) const
+inline size_t G4LevelManager::NearestLowEdgeLevelIndex(G4double energy) const
 {
-  //G4cout<< "index= " << index << " max= " << nTransitions << " exc= " << ener 
-  //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
   size_t idx = nTransitions;
-  G4float energy = (G4float)ener; 
   if(energy < fLevelEnergy[nTransitions]) {
     idx = std::lower_bound(fLevelEnergy.begin(), fLevelEnergy.end(), energy)
       - fLevelEnergy.begin() - 1;
@@ -169,31 +165,23 @@ G4LevelManager::NearestLevel(G4double energy, size_t index) const
   return GetLevel(NearestLevelIndex(energy, index));
 }
 
-inline G4float
+inline G4double
 G4LevelManager::NearestLevelEnergy(G4double energy, size_t index) const
 {   
   return LevelEnergy(NearestLevelIndex(energy, index));
 }
 
-inline G4float G4LevelManager::NearestLowEdgeLevelEnergy(G4double energy) const
+inline G4double G4LevelManager::NearestLowEdgeLevelEnergy(G4double energy) const
 {   
   return LevelEnergy(NearestLowEdgeLevelIndex(energy));
 }
 
-inline G4float G4LevelManager::LifeTime(size_t i) const
+inline G4double G4LevelManager::LifeTime(size_t i) const
 {
 #ifdef G4VERBOSE
   if(i > nTransitions) { PrintError(i, "LifeTime"); }
 #endif
-  return (fLevels[i]) ? fLevels[i]->GetTimeGamma() : 0.0f;
-}
-
-inline G4float G4LevelManager::LifeTimeGamma(size_t i) const
-{
-#ifdef G4VERBOSE
-  if(i > nTransitions) { PrintError(i, "LifeTimeGamma"); }
-#endif
-  return (fLevels[i]) ? fLevels[i]->GetTimeGamma() : 0.0f; 
+  return (fLevels[i]) ? fLevels[i]->GetTimeGamma() : 0.0;
 }
    
 inline G4int G4LevelManager::SpinTwo(size_t i) const
@@ -210,14 +198,6 @@ inline G4int G4LevelManager::SpinParity(size_t i) const
   if(i > nTransitions) { PrintError(i, "SpinTwo"); }
 #endif
   return fSpin[i]%100000 - 100; 
-}
-
-inline G4int G4LevelManager::Parity(size_t i) const
-{
-#ifdef G4VERBOSE
-  if(i > nTransitions) { PrintError(i, "Parity"); }
-#endif
-  return (fSpin[i]%100000 - 100)/2; 
 }
 
 inline G4int G4LevelManager::FloatingLevel(size_t i) const

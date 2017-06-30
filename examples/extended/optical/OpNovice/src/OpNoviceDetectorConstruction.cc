@@ -281,12 +281,21 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 // Water Tank
 //
   G4OpticalSurface* opWaterSurface = new G4OpticalSurface("WaterSurface");
-  opWaterSurface->SetType(dielectric_dielectric);
-  opWaterSurface->SetFinish(ground);
-  opWaterSurface->SetModel(unified);
+//  opWaterSurface->SetType(dielectric_dielectric);
+//  opWaterSurface->SetFinish(ground);
+//  opWaterSurface->SetModel(unified);
+  opWaterSurface->SetType(dielectric_LUTDAVIS);
+  opWaterSurface->SetFinish(Rough_LUT);
+  opWaterSurface->SetModel(DAVIS);
 
-  new G4LogicalBorderSurface("WaterSurface",
+  G4LogicalBorderSurface* waterSurface =
+          new G4LogicalBorderSurface("WaterSurface",
                                  waterTank_phys,expHall_phys,opWaterSurface);
+
+  G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
+        (waterSurface->GetSurface(waterTank_phys,expHall_phys)->
+                                                       GetSurfaceProperty());
+  if (opticalSurface) opticalSurface->DumpInfo();
 
 // Air Bubble
 //
@@ -298,9 +307,8 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4LogicalSkinSurface* airSurface =
           new G4LogicalSkinSurface("AirSurface", bubbleAir_log, opAirSurface);
 
-  G4OpticalSurface* opticalSurface = dynamic_cast <G4OpticalSurface*>
+  opticalSurface = dynamic_cast <G4OpticalSurface*>
         (airSurface->GetSurface(bubbleAir_log)->GetSurfaceProperty());
-
   if (opticalSurface) opticalSurface->DumpInfo();
 
 //
@@ -325,7 +333,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
   myST1->DumpTable();
 
-  opWaterSurface->SetMaterialPropertiesTable(myST1);
+//  opWaterSurface->SetMaterialPropertiesTable(myST1);
 
   //OpticalAirSurface
   G4double reflectivity[num] = {0.3, 0.5};

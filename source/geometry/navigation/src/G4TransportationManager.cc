@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc 83466 2014-08-25 10:31:39Z gcosmo $
+// $Id: G4TransportationManager.cc 103236 2017-03-22 15:54:40Z gcosmo $
 //
 //
 // G4TransportationManager 
@@ -71,7 +71,7 @@ G4TransportationManager::G4TransportationManager()
   fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
 
   fGeomMessenger    = new G4GeometryMessenger(this);
-  fFieldManager     = new G4FieldManager();
+  fFieldManager     = new G4FieldManager(); // deleted by G4FieldManagerStore
   fPropagatorInField= new G4PropagatorInField(trackingNavigator,fFieldManager);
   fSafetyHelper     = new G4SafetyHelper();
 } 
@@ -81,21 +81,17 @@ G4TransportationManager::G4TransportationManager()
 //
 G4TransportationManager::~G4TransportationManager()
 {
-  delete fFieldManager; 
-  delete fPropagatorInField;
-  ClearNavigators(); 
-  delete fGeomMessenger;
   delete fSafetyHelper;
-  if (fTransportationManager)
-  {
-    delete fTransportationManager; fTransportationManager=0;
-  }
+  delete fPropagatorInField;
+  delete fGeomMessenger;
+  ClearNavigators();
+  fTransportationManager = 0; 
 }
 
 // ----------------------------------------------------------------------------
 // GetTransportationManager()
 //
-// Retrieve the static instance of the singleton
+// Retrieve the static instance of the singleton and create it if not existing
 //
 G4TransportationManager* G4TransportationManager::GetTransportationManager()
 {
@@ -103,6 +99,16 @@ G4TransportationManager* G4TransportationManager::GetTransportationManager()
    {
      fTransportationManager = new G4TransportationManager;
    }   
+   return fTransportationManager;
+}
+
+// ----------------------------------------------------------------------------
+// GetInstanceIfExist()
+//
+// Retrieve the static instance pointer of the singleton
+//
+G4TransportationManager* G4TransportationManager::GetInstanceIfExist()
+{
    return fTransportationManager;
 }
 

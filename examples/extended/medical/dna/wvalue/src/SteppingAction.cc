@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/wvalue/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
-//
-// $Id: SteppingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "Run.hh"
@@ -91,5 +86,3 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
  else if (track->GetDefinition()->GetPDGCharge() != 0.)
                                     analysisManager->FillH1(7, steplen); 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

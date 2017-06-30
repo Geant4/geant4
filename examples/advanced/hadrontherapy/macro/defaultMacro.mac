@@ -1,12 +1,12 @@
-# G.A.P.Cirrone, 
+# G.A.P.Cirrone,
 # pablo.cirrone@lns.infn.it
 #
 # Default macro file. It is called if no argument is provided at run
 # and when the PHYSLIST enviroment variable is OFF
-# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!> 
+# i.e. simply typing $G4WORKDIR/bin/Linux-++/Hadrontherapy <no argument here!>
 
 #########################
-# Set of the verboses 
+# Set of the verboses
 #
 /control/verbose 1
 /tracking/verbose 0
@@ -17,6 +17,7 @@
 # Set of the physic models
 #
 /Physics/addPhysics HADRONTHERAPY_1
+/run/numberOfThreads 4
 
 ##########################
 # Initialisation procedure
@@ -26,38 +27,36 @@
 ##########################
 # Visualisation
 #
-/vis/open OGL 600x600-0+0
+/vis/open OGLI 600x600-0+0
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
 /vis/viewer/set/autoRefresh false
-/vis/verbose errors
+#/vis/verbose errors
 
 /vis/drawVolume
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
-/vis/viewer/zoom 1
-/vis/viewer/pan -10  0 cm
+#/vis/viewer/zoom 1
+#/vis/viewer/pan -10  0 cm
 /vis/scene/add/trajectories smooth
-
 /vis/scene/endOfEventAction accumulate
 
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
 
-
 ####################################################
-# Set here the CUT and the STEP MAX for the tracking. 
+# Set here the CUT and the STEP MAX for the tracking.
 # Suggested values of cut and step
 #
 # Set cuts OUTSIDE the detector
-# 
+#
 /run/setCut 1 mm
 
 # Set cuts ONLY inside the detector
 #
 /run/setCutForRegion DetectorLog 0.1 mm
 
-/Step/waterPhantomStepMax 1 mm 
+/Step/waterPhantomStepMax 0.1 mm
 
 #########################
 # Set the primary particle type,
@@ -81,16 +80,15 @@
 #
 
 /gps/ang/rot1 0 0 1
-/gps/ang/rot2 0 1 0 
-/gps/ang/type beam1d 
-/gps/ang/sigma_r 0. deg
+/gps/ang/rot2 0 1 0
+/gps/ang/type beam1d
+/gps/ang/sigma_r 0.028 deg
 
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 63.5 MeV
-/gps/ene/sigma 0.3 MeV
-
+/gps/ene/mono 62.4 MeV
+/gps/ene/sigma 0.25 MeV
 
 ###################################################
 #		DETECTOR DESCRIPTION
@@ -116,26 +114,21 @@
 /changeDetector/displacement 0 18 18 cm
 /changePhantom/update
 
-
 #########################
 # Display the event number
 # during the run
-# 
+#
 /event/printEventNumber 100
 
 #########################
 # Start of the run
 #
 # If secondary particles dose & fluence are needed
-#/analysis/secondary true 
+#/analysis/secondary true
+#/analysis/computeLet
 
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/printProgress 10
-
-/run/beamOn 1
-
-/control/shell mkdir -p SimulationOutputs/proton/BraggPeak
-/control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root
-
+/run/printProgress 1000
+/run/beamOn 100000

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.hh 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuPairProductionModel.hh 103220 2017-03-22 11:35:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -154,8 +154,6 @@ protected:
   G4int    currentZ;
 
   static const G4double xgi[8],wgi[8];
-
-private:
 
   G4ParticleDefinition*       theElectron;
   G4ParticleDefinition*       thePositron;

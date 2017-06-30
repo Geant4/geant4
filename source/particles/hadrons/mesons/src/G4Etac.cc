@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Etac.cc 95951 2016-03-03 10:44:16Z gcosmo $
+// $Id: G4Etac.cc 102905 2017-03-02 09:50:56Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4Etac* G4Etac::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      2.9836*GeV,      31.8*MeV,         0.0,
+                 name,      2.9834*GeV,      31.8*MeV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         441,

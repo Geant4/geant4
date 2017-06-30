@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20/4/17 Jonathan Madsen               (ThreadsafeScorers-V10-03-00)
+- Fixes to deletion/clearing of static maps between runs
+- Removed some unnecessary typedefs
+- Set the number of threads to the number of cores
+
 19/11/16 Andrea Dotti		      (ThreadsafeScorers-V10-02-05)
 - Explicit set of SD to manager
 

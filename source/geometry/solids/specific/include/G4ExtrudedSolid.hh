@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4ExtrudedSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -130,7 +130,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                            const G4bool calcNorm=false,
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut (const G4ThreeVector &p) const;
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,

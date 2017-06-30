@@ -1,4 +1,4 @@
-$Id: History 100287 2016-10-17 08:44:33Z gcosmo $
+$Id: History 103468 2017-04-11 07:28:24Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+10-04-17 mma  (testem4-V10-03-00)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
 
 14-10-16 G.Folger (testem4-V10-02-05)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

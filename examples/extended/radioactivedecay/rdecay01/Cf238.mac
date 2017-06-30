@@ -1,7 +1,7 @@
 # to read user's data file
 /control/cout/ignoreThreadsExcept 0
 #
-/grdm/setRadioactiveDecayFile 98 238 UserData/UserRadData_z98.a238
+/grdm/setRadioactiveDecayFile 98 238 ../UserData/UserRadData_z98.a238
 #
 /gun/particle ion
 /gun/ion 98 238 

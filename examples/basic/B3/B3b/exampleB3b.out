@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -106,7 +106,7 @@ Checking overlaps for volume Patient ... OK!
 ***** Table : Nb of materials = 3 *****
 
  Material:  Lu2SiO5    density:  7.400 g/cm3   RadL:   1.143 cm   Nucl.Int.Length:  20.920 cm 
-                       Imean: 418.807 eV 
+                       Imean: 418.807 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Lu (Lu)   Z = 71.0   N =   175   A = 174.967 g/mole
          --->  Isotope: Lu175   Z = 71   N = 175   A = 174.94 g/mole   abundance: 97.410 %
@@ -153,7 +153,7 @@ Checking overlaps for volume Patient ... OK!
 
 
  Material: G4_BRAIN_ICRP    density:  1.040 g/cm3   RadL:  35.403 cm   Nucl.Int.Length:  72.156 cm 
-                       Imean:  73.300 eV 
+                       Imean:  73.300 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -213,8 +213,8 @@ G4SDManager::AddNewCollection : the collection <patient/dose> is registered at 2
 ---> end of event: 0
 
 --------------------End of Global Run-----------------------
-  The run was 10000 events  Nb of 'good' e+ annihilations: 1242
- Total dose in patient : 289.201 picoGy 
+  The run was 10000 events  Nb of 'good' e+ annihilations: 1290
+ Total dose in patient : 291.745 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

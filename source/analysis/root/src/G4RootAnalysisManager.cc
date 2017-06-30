@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.cc 102848 2017-02-27 13:09:25Z gcosmo $
+// $Id: G4RootAnalysisManager.cc 103532 2017-04-13 14:00:35Z gcosmo $
 
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
@@ -513,7 +513,7 @@ G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("open", "analysis file", name);
+      fState.GetVerboseL1()->Message("open", "analysis file", name, finalResult);
 #endif
   
   }
@@ -534,7 +534,7 @@ G4bool G4RootAnalysisManager::OpenFileImpl(const G4String& fileName)
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()->Message("open", "main analysis file", name);
+      fState.GetVerboseL1()->Message("open", "main analysis file", name, finalResult);
 #endif  
   }
 
@@ -609,6 +609,10 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 {
   auto finalResult = true;
 
+  G4bool isNtupleManagerEmpty = fNtupleManager->IsEmpty();
+    // the ntuple decription vector is cleared on Reset()
+    // in kNoMergeAfterOpen ntuple manager mode 
+
   // reset data
   auto result = Reset();
   if ( ! result ) {
@@ -626,12 +630,12 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 
   // No files clean-up in sequential mode
   if ( ! G4Threading::IsMultithreadedApplication() )  return finalResult;
-  
+
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
          fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
-         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && fNtupleManager->IsEmpty() ) || 
-       ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() &&
+         fP1Manager->IsEmpty() && fP2Manager->IsEmpty() && isNtupleManagerEmpty ) ||
+       ( ( ! fState.GetIsMaster() ) && isNtupleManagerEmpty &&
              fNtupleMergeMode == G4NtupleMergeMode::kNone ) ) {
     result = ! std::remove(fFileManager->GetFullFileName());
     //  std::remove returns 0 when success

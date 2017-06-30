@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-04-17 mma  (exhadr04-V10-03-01)
+- BeginOfRunAction() : remove SetRandomNumberStore()
 
 12-07-16 mma (exhadr04-V10-02-00)
 - DetectorConstruction : add HeavyWater

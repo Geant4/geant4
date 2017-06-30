@@ -1,4 +1,4 @@
-$Id: History 101664 2016-11-21 09:10:32Z gcosmo $
+$Id: History 104350 2017-05-26 07:20:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 24, 2017 J.Apostolakis   - fieldex01-V10-03-00
+- Fixed valgrind error in F01FieldSetup CreateStepperAndChordFinder() method.
+    first delete all dependent objects, then create new ones.
 
 November 19,2016 A.Dotti   - fieldex01-V10-02-05
 - explicit set of SD to manager

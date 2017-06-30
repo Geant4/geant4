@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -321,10 +321,10 @@ nb event 175000
 1%  Precision reached!
  Run terminated.
 Run Summary
-  Run Aborted after 177760 events processed.
-  User=93.7s Real=94.2s Sys=0.19s
+  Run Aborted after 177858 events processed.
+  User=115.24s Real=115.85s Sys=0.15s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00167089
+normalised edep [MeV] = 0.00167091
 error[MeV] = 1.67088e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root

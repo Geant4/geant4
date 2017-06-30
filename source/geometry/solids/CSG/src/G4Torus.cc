@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc 102528 2017-02-08 13:37:51Z gcosmo $
+// $Id: G4Torus.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // class G4Torus
@@ -33,7 +33,7 @@
 //
 // 16.12.16 H.Burkhardt: use radius differences and hypot to improve precision
 // 28.10.16 E.Tcherniaev: reimplemented CalculateExtent(),
-//                      added Extent(), removed CreateRotatedVertices()
+//                      removed CreateRotatedVertices()
 // 05.04.12 M.Kelsey:   Use sqrt(r) in GetPointOnSurface() for uniform points
 // 02.10.07 T.Nikitina: Bug fixed in SolveNumericJT(), b.969:segmentation fault.
 //                      rootsrefined is used only if the number of refined roots
@@ -414,7 +414,7 @@ G4double G4Torus::SolveNumericJT( const G4ThreeVector& p,
 //
 // Get bounding box
 
-void G4Torus::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Torus::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double rmax = GetRmax();
   G4double rtor = GetRtor();
@@ -449,7 +449,8 @@ void G4Torus::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Torus::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Torus::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -467,7 +468,7 @@ G4bool G4Torus::CalculateExtent( const EAxis pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);

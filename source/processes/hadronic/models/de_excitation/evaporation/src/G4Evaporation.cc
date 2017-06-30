@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Evaporation.cc 102590 2017-02-09 10:13:30Z gcosmo $
+// $Id: G4Evaporation.cc 103162 2017-03-20 09:40:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -190,7 +190,7 @@ void G4Evaporation::BreakFragment(G4FragmentVector* theResult,
     // loop over evaporation channels
     for(i=0; i<nChannels; ++i) {
       prob = (*theChannels)[i]->GetEmissionProbability(theResidualNucleus);
-      if(fVerbose > 0 && prob > 0.0) {
+      if(fVerbose > 1 && prob > 0.0) {
 	G4cout << "  Channel# " << i << "  prob= " << prob << G4endl; 
       }
       totprob += prob;

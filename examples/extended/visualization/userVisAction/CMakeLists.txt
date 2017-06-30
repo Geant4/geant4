@@ -46,7 +46,6 @@ target_link_libraries(userVisAction ${Geant4_LIBRARIES})
 set(USERVISACTION_SCRIPTS
   userVisAction.in
   userVisAction.out
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac

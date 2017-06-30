@@ -56,6 +56,7 @@ class DetectorMessenger: public G4UImessenger
     virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
+  
     DetectorConstruction*      fpDetector;
     G4UIcmdWithAString*        fpMaterCmd;
 };

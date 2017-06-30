@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc 102575 2017-02-09 09:07:12Z gcosmo $
+// $Id: G4VisCommandsViewer.cc 104163 2017-05-15 06:52:42Z gcosmo $
 
 // /vis/viewer commands - John Allison  25th October 1998
 
@@ -567,8 +567,8 @@ G4VisCommandViewerCopyViewFrom::G4VisCommandViewerCopyViewFrom () {
   fpCommand -> SetGuidance
   ("Copy the camera-specific parameters from the specified viewer.");
   fpCommand -> SetGuidance
-  ("Note: To copy scene modifications - style, etc. - please use"
-   "\n\"/vis/viewer/set/all\"");
+  ("Note: To copy ALL view parameters, including scene modifications,"
+   "\nuse \"/vis/viewer/set/all\"");
   fpCommand -> SetParameterName ("from-viewer-name", omitable = false);
 }
 
@@ -1174,8 +1174,11 @@ void G4VisCommandViewerInterpolate::SetNewValue (G4UIcommand*, G4String newValue
     currentViewer->SetViewParameters(*vp);
     currentViewer->RefreshView();
     if (exportString == "export" &&
-        currentViewer->GetName().contains("OpenGL"))
+        currentViewer->GetName().contains("OpenGL")) {
       uiManager->ApplyCommand("/vis/ogl/export");
+    }
+    // File-writing viewers need to close the file
+    currentViewer->ShowView();
 #ifdef G4VIS_USE_STD11
     if (waitTimePerPointmilliseconds > 0)
       std::this_thread::sleep_for(std::chrono::milliseconds(waitTimePerPointmilliseconds));
@@ -1684,6 +1687,7 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
   const G4Point3D& stp = currentScene->GetStandardTargetPoint();
 
   G4String filename = newValue;
+
   if (newValue.length() == 0) {
     // Null filename - generate a filename
     const G4int maxNoOfFiles = 100;
@@ -1707,7 +1711,11 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
     // Write to standard output
     WriteCommands(G4cout,vp,stp);
   } else {
-    // Write to file
+    // Write to file - but add extension if not prescribed
+    if (!filename.contains('.')) {
+      // No extension supplied - add .g4view
+      filename += ".g4view";
+    }
     std::ofstream ofs(filename);
     if (!ofs) {
       if (verbosity >= G4VisManager::errors) {

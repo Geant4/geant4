@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.cc 91834 2015-08-07 07:24:22Z gcosmo $
+// $Id: G4FissionProbability.cc 103162 2017-03-20 09:40:58Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -41,6 +41,7 @@
 #include "G4Exp.hh"
 
 G4FissionProbability::G4FissionProbability() :
+  G4VEmissionProbability(0, 0),
   theEvapLDP(new G4EvaporationLevelDensityParameter),
   theFissLDP(new G4FissionLevelDensityParameter),
   ownEvapLDP(true),
@@ -53,13 +54,12 @@ G4FissionProbability::~G4FissionProbability()
   if (ownFissLDP) delete theFissLDP;
 }
 
-
 G4double 
 G4FissionProbability::EmissionProbability(const G4Fragment & fragment, 
 					  G4double MaximalKineticEnergy)
   // Compute integrated probability of fission channel
 {
-  if (MaximalKineticEnergy <= 0.0) return 0.0;
+  if (MaximalKineticEnergy <= 0.0) { return 0.0; }
   G4int A = fragment.GetA_asInt();
   G4int Z = fragment.GetZ_asInt();
   G4double U = fragment.GetExcitationEnergy();

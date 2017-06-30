@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: P6DExtDecayerPhysics.cc 100121 2016-10-14 13:21:59Z gunter $
+// $Id: P6DExtDecayerPhysics.cc 100687 2016-10-31 11:20:33Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/src/P6DExtDecayerPhysics.cc
 /// \brief Implementation of the P6DExtDecayerPhysics class

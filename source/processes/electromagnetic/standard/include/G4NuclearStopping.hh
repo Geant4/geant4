@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4NuclearStopping.hh 103955 2017-05-04 11:29:54Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -60,8 +60,6 @@
 #include "G4ParticleChangeForLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class G4ICRU49NuclearStoppingModel;
 
 class G4NuclearStopping : public G4VEmProcess
 {
@@ -101,9 +99,6 @@ private:
   G4NuclearStopping & operator=(const G4NuclearStopping &right) = delete;
 
   G4ParticleChangeForLoss nParticleChange;
-
-  G4ICRU49NuclearStoppingModel* modelICRU49;
-
   G4bool   isInitialized;
 
 };

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ImportanceAlgorithm.hh 102994 2017-03-07 16:31:28Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceAlgorithm
@@ -66,6 +66,11 @@ private:
 private:
 
   mutable G4bool fWorned;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex ImportanceMutex;
+#endif
+
 };
 
 #endif

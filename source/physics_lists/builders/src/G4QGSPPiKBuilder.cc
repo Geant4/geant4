@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPiKBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4QGSPPiKBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -85,9 +85,6 @@ G4QGSPPiKBuilder::
   delete theStringModel;
   delete theQGSM;
 }
-
-void G4QGSPPiKBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4QGSPPiKBuilder::
 Build(G4PionPlusInelasticProcess * aP)

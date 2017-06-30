@@ -38,10 +38,6 @@ G4DeuteronPHPBuilder()
   theParticlePHPModel = 0;
 }
 
-G4DeuteronPHPBuilder::
-~G4DeuteronPHPBuilder() 
-{}
-
 void G4DeuteronPHPBuilder::
 Build(G4HadronElasticProcess *)
 {

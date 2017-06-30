@@ -5,13 +5,13 @@
 #
 # IT SHOULD NOT BE INSTALLED!
 
-include(CMakeMacroParseArguments)
+include(CMakeParseArguments)
 
 #-----------------------------------------------------------------------
 # Special internal functions for building tests.
 #-----------------------------------------------------------------------
 # function geant4_link_library(<name> source1 source2 ...
-#                              [TYPE STATIC|SHARED] 
+#                              [TYPE STATIC|SHARED]
 #                              LIBRARIES library1 library2 ...)
 #
 function(geant4_link_library library)
@@ -19,13 +19,13 @@ function(geant4_link_library library)
   set(sources)
 
   # - Fill sources
-  foreach(fp ${ARG_UNPARSED_ARGUMENTS})  
-    if(IS_ABSOLUTE ${fp}) 
-      file(GLOB files ${fp})     
+  foreach(fp ${ARG_UNPARSED_ARGUMENTS})
+    if(IS_ABSOLUTE ${fp})
+      file(GLOB files ${fp})
     else()
       file(GLOB files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${fp})
     endif()
-    if(files) 
+    if(files)
       set(sources ${sources} ${files})
     else()
       set(sources ${sources} ${fp})
@@ -88,13 +88,13 @@ function(geant4_executable executable)
 endfunction()
 
 #-----------------------------------------------------------------------
-# function geant4_add_test(<name> COMMAND cmd [arg1... ] 
+# function geant4_add_test(<name> COMMAND cmd [arg1... ]
 #                          [PRECMD cmd [arg1...]] [POSTCMD cmd [arg1...]]
 #                           [OUTPUT outfile] [ERROR errfile]
 #                           [WORKING_DIRECTORY directory]
 #                           [ENVIRONMENT var1=val1 var2=val2 ...
 #                           [DEPENDS test1 ...]
-#                           [TIMEOUT seconds] 
+#                           [TIMEOUT seconds]
 #                           [DEBUG]
 #                           [SOURCE_DIR dir] [BINARY_DIR dir]
 #                           [BUILD target] [PROJECT project]
@@ -107,16 +107,16 @@ function(geant4_add_test test)
     return()
   endif()
 
-  cmake_parse_arguments(ARG 
-    "DEBUG" 
-    "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT;PASSREGEX;FAILREGEX;WORKING_DIRECTORY" 
-    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS" 
+  cmake_parse_arguments(ARG
+    "DEBUG"
+    "TIMEOUT;BUILD;OUTPUT;ERROR;SOURCE_DIR;BINARY_DIR;PROJECT;PASSREGEX;FAILREGEX;WORKING_DIRECTORY"
+    "COMMAND;PRECMD;POSTCMD;ENVIRONMENT;DEPENDS;LABELS"
     ${ARGN})
 
   if(NOT CMAKE_GENERATOR MATCHES Makefiles)
     set(_cfg $<CONFIGURATION>/)
   endif()
-  
+
   #- Handle COMMAND argument
   list(LENGTH ARG_COMMAND _len)
   if(_len LESS 1)
@@ -165,11 +165,11 @@ function(geant4_add_test test)
   if(ARG_DEBUG)
     set(_command ${_command} -DDBG=ON)
   endif()
-  
+
   if(ARG_WORKING_DIRECTORY)
     set(_command ${_command} -DCWD=${ARG_WORKING_DIRECTORY})
   endif()
-  
+
   if(ARG_TIMEOUT)
     set(_command ${_command} -DTIM=${ARG_TIMEOUT})
   endif()
@@ -202,7 +202,7 @@ function(geant4_add_test test)
        else()
          set(ARG_PROJECT ${ARG_BUILD})
        endif()
-    endif() 
+    endif()
     add_test(NAME ${test} COMMAND ${CMAKE_CTEST_COMMAND}
       --build-and-test  ${ARG_SOURCE_DIR} ${ARG_BINARY_DIR}
       --build-generator ${CMAKE_GENERATOR}
@@ -216,7 +216,7 @@ function(geant4_add_test test)
     if(ARG_FAILREGEX)
       set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:|(${ARG_FAILREGEX})")
     else()
-      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:")      
+      set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION "warning:")
     endif()
   else()
     add_test(NAME ${test} COMMAND ${_command})
@@ -237,11 +237,11 @@ function(geant4_add_test test)
   if(ARG_PASSREGEX)
     set_property(TEST ${test} PROPERTY PASS_REGULAR_EXPRESSION ${ARG_PASSREGEX})
   endif()
-  
+
   if(ARG_LABELS)
     set_property(TEST ${test} PROPERTY LABELS ${ARG_LABELS})
   else()
-    set_property(TEST ${test} PROPERTY LABELS Nightly)  
+    set_property(TEST ${test} PROPERTY LABELS Nightly)
   endif()
 endfunction()
 

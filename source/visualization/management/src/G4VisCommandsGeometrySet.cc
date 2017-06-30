@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsGeometrySet.cc 98797 2016-08-09 15:12:22Z gcosmo $
+// $Id: G4VisCommandsGeometrySet.cc 104123 2017-05-11 13:51:32Z gcosmo $
 
 // /vis/geometry commands - John Allison  31st January 2006
 
@@ -36,7 +36,6 @@
 #include "G4UImanager.hh"
 
 #include <sstream>
-#include <cctype>
 
 void G4VVisCommandGeometrySet::Set
 (G4String requestedName,
@@ -155,21 +154,7 @@ void G4VisCommandGeometrySetColour::SetNewValue
   std::istringstream iss(newValue);
   iss >> name >> requestedDepth >> redOrString >> green >> blue >> opacity;
   G4Colour colour(1,1,1,1);  // Default white and opaque.
-  const size_t iPos0 = 0;
-  if (std::isalpha(redOrString[iPos0])) {
-    if (!G4Colour::GetColour(redOrString, colour)) {
-      if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-        G4cout << "WARNING: Colour \"" << redOrString
-               << "\" not found.  Defaulting to white and opaque."
-               << G4endl;
-      }
-    }
-  } else {
-    colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
-  }
-  colour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
-
+  ConvertToColour(colour, redOrString, green, blue, opacity);
   G4VisCommandGeometrySetColourFunction setColour(colour);
   Set(name, setColour, requestedDepth);
 }

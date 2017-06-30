@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorAction.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PrimaryGeneratorAction.hh 103662 2017-04-20 14:58:33Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
@@ -89,6 +89,8 @@ public:
   inline void SetVerbose(G4int val) { fVerbose = val;};
   inline void SetRandom(const G4String& type) { fGauss = type;};
 
+  G4bool GetVerbose() const { return fVerbose; }
+
 private:
 
   void InitializeMe();
@@ -96,12 +98,12 @@ private:
   PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
   PrimaryGeneratorAction(const PrimaryGeneratorAction&);
 
-  G4ParticleGun* fParticleGun;
+  G4int fVerbose;
   PrimaryGeneratorMessenger* fMessenger;
+  G4ParticleGun* fParticleGun;
   DetectorConstruction* fDetector;
 
   G4int fCounter;
-  G4int fVerbose;
   G4double fX0, fY0, fZ0;
   G4double fSigmaX, fSigmaY, fSigmaZ;
   G4double fRMax2;

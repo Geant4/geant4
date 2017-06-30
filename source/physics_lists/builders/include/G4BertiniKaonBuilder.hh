@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniKaonBuilder.hh 67969 2013-03-13 09:44:42Z gcosmo $
+// $Id: G4BertiniKaonBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //  devired from G4BertiniPionBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -53,18 +54,19 @@ class G4BertiniKaonBuilder : public G4VKaonBuilder
 {
   public: 
     G4BertiniKaonBuilder();
-    virtual ~G4BertiniKaonBuilder();
+    virtual ~G4BertiniKaonBuilder() {}
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4KaonPlusInelasticProcess * aP);
-    virtual void Build(G4KaonMinusInelasticProcess * aP);
-    virtual void Build(G4KaonZeroLInelasticProcess * aP);
-    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
 
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
+    using G4VKaonBuilder::Build; //Prevent compier warning
   private:
     G4VCrossSectionDataSet * ChipsKaonMinus;
     G4VCrossSectionDataSet * ChipsKaonPlus;

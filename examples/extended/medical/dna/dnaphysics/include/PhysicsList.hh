@@ -51,7 +51,5 @@ class PhysicsList: public G4VModularPhysicsList
     virtual ~PhysicsList();
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

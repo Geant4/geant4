@@ -315,16 +315,7 @@ void Run::EndOfRun()
            << " --> " << G4BestUnit(eMax, "Energy") 
            << ") \tEflow/event = " << G4BestUnit(Eflow, "Energy") << G4endl;
  }
- 
-  //normalize histograms
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();        
-  for (G4int ih=1; ih<14; ih++) {
-    G4double binWidth = analysisManager->GetH1Width(ih);
-    G4double unit     = analysisManager->GetH1Unit(ih);  
-    G4double fac = unit/binWidth;
-    analysisManager->ScaleH1(ih,fac);
-  }  
-           
+
   //remove all contents in fProcCounter, fCount 
   fProcCounter.clear();
   fParticleDataMap2.clear();

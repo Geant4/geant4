@@ -113,7 +113,7 @@ void G4LENDModel::create_used_target_map()
             G4int iA = anElement->GetIsotope( i_iso )->GetN();
             G4int iIsomer = anElement->GetIsotope( i_iso )->Getm();
 
-            G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA );  
+            G4LENDUsedTarget* aTarget = new G4LENDUsedTarget ( proj , default_evaluation , iZ , iA , iIsomer );  
             if ( allow_nat == true ) aTarget->AllowNat();
             if ( allow_any == true ) aTarget->AllowAny();
             usedTarget_map.insert( std::pair< G4int , G4LENDUsedTarget* > ( lend_manager->GetNucleusEncoding( iZ , iA , iIsomer ) , aTarget ) );

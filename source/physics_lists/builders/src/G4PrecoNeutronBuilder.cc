@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PrecoNeutronBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4PrecoNeutronBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -49,26 +50,6 @@ G4PrecoNeutronBuilder()
   theMin = 0;
   theMax = 170.*MeV;
   theModel = new G4PreCompoundModel(new G4ExcitationHandler);
-}
-
-G4PrecoNeutronBuilder::
-~G4PrecoNeutronBuilder() 
-{
-}
-
-void G4PrecoNeutronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
-void G4PrecoNeutronBuilder::
-Build(G4HadronFissionProcess * )
-{
-}
-
-void G4PrecoNeutronBuilder::
-Build(G4HadronCaptureProcess * )
-{
 }
 
 void G4PrecoNeutronBuilder::

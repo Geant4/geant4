@@ -27,7 +27,7 @@
 /// \brief Main program of the radioactivedecay/rdecay01 example
 //
 //
-// $Id: rdecay01.cc 101866 2016-12-02 13:10:44Z gcosmo $
+// $Id: rdecay01.cc 102027 2016-12-16 14:46:49Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(std::max(4,G4Threading::G4GetNumberOfCores()));
+  runManager->SetNumberOfThreads(std::min(4,G4Threading::G4GetNumberOfCores()));
 #else
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);

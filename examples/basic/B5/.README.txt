@@ -194,7 +194,6 @@
    - 2D histograms:
      - Drift Chamber 1 X vs Y positions
      - Drift Chamber 2 X vs Y positions
-     - Total energy deposit vs time of flight  
    
    - Ntuple:
      - Number of hits in Chamber 1

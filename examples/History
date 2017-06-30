@@ -17,6 +17,59 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th June 2017  Gabriele Cosmo (examples-V10-03-06)
+- Updated reference outputs according to reference tag geant4-10-03-ref-06.
+- Includes tags: doxygen-V10-03-00, hadrontherapy-V10-03-10, testem0-V10-03-00,
+                 exampleB4-V10-03-01, dmparticle-V10-03-04, monopole-V10-03-00,
+                 DICOM-V10-03-01, chem2-V10-03-00, dnaphysics-V10-03-04,
+                 G02-V10-03-01, rdecay01-V10-03-08, rdecay02-V10-03-00.
+
+8th June 2017  Gabriele Cosmo (examples-V10-03-05)
+- Updated reference outputs according to reference tag geant4-10-03-ref-05.
+- Includes tags: ccal-V10-03-00, hadrontherapy-V10-03-06, dmparticle-V10-03-03,
+                 medical_linac-V10-03-00, testem5-V10-03-05, testem7-V10-03-00,
+                 channelingExample-V10-03-01, LXe-V10-03-00, exicsd-V10-03-01,
+                 fieldex01-V10-03-00, fieldex02-V10-03-02, fieldex03-V10-03-00,
+                 OpNovice-V10-03-01, WLS-V10-03-00, exampleRE05-V10-03-00,
+                 exRadioactivedecay-V10-03-00.
+
+5th May 2017  Gabriele Cosmo (examples-V10-03-04)
+- Updated reference outputs according to reference tag geant4-10-03-ref-04.
+- Includes tags: nanobeam-V10-03-03, exampleB5-V10-03-01, testem1-V10-03-00,
+                 testem4-V10-03-00, testem5-V10-03-04, testem11-V10-03-00,
+                 testem12-V10-03-01, testem13-V10-03-00, testem14-V10-03-00,
+                 testem18-V10-03-00, exhadr03-V10-03-03, exhadr04-V10-03-01,
+                 exhadr06-V10-03-03, exhadr07-V10-03-01, gtherapy-V10-03-06,
+                 NeutronSource-V10-03-03, exdna-V10-03-00, dnaphysics-V10-03-02,
+                 neuron-V10-03-01, spower-V10-03-02, svalue-V10-03-01,
+                 wvalue-V10-03-01, fano2-V10-03-00, ThreadsafeScorers-V10-03-01,
+                 rdecay01-V10-03-07, exVisualization-V10-03-02.
+
+31st March 2017  Gabriele Cosmo (examples-V10-03-03)
+- Updated reference outputs according to reference tag geant4-10-03-ref-03.
+- Includes tags: air_shower-V10-03-00, hadrontherapy-V10-03-05,
+                 microbeam-V10-03-01, exampleB5-V10-03-00, B01-V10-03-00,
+                 B02-V10-03-00, B03-V10-03-01, testem5-V10-03-03, G01-V10-03-01,
+                 mctruthex-V10-03-00, g3tog4Tests-V10-03-01, neuron-V10-03-00,
+                 slowing-V10-03-01, spower-V10-03-00, fano-V10-03-01,
+                 G02-V10-03-00, G03-V10-03-00, rdecay01-V10-03-06.
+
+28th February 2017  Gabriele Cosmo (examples-V10-03-02)
+- Updated reference outputs according to reference tag geant4-10-03-ref-02.
+- Includes tags: hadrontherapy-V10-03-01, testem5-V10-03-02,
+                 phononExample-V10-03-04, ExUCN-V10-03-00, exhadr06-V10-03-01,
+                 NeutronSource-V10-03-01, microdosimetry-V10-03-02,
+                 pdb4dna-V10-03-00, wholeNuclearDNA-V10-03-00,
+                 rdecay01-V10-03-04.
+
+31st January 2017  Gabriele Cosmo (examples-V10-03-01)
+- Updated reference outputs according to reference tag geant4-10-03-ref-01.
+- Includes tags: microbeam-V10-03-00, nanobeam-V10-03-01, XrayFluo-V10-03-00,
+                 exampleB3-V10-03-00, testem5-V10-03-00, testem12-V10-03-00,
+                 phononExample-V10-03-03, microdosimetry-V10-03-01,
+                 dnaphysics-V10-03-01, range-V10-03-00, svalue-V10-03-00,
+                 wvalue-V10-03-00, rdecay01-V10-03-03.
+
 8th December 2016  Gabriele Cosmo (examples-V10-03-00)
 - Updated reference outputs according to reference tag geant4-10-03-ref-00.
 - Includes tags: doxygen-V10-02-03, air_shower-V10-02-03, brachy-V10-02-02,

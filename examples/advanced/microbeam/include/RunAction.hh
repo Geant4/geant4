@@ -48,44 +48,43 @@ class RunAction : public G4UserRunAction
 {
 public:
   
-  RunAction(DetectorConstruction*);
-  ~RunAction();
+  RunAction(const DetectorConstruction*);
+  virtual ~RunAction();
 
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run*);
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
     
-  void  SetRndmFreq(G4int   val)  {fSaveRndm = val;}
-  G4int GetRndmFreq()             {return fSaveRndm;}
+  void  SetRndmFreq(G4int val) {fSaveRndm = val;}
+  G4int GetRndmFreq()    const {return fSaveRndm;}
 
-  void AddDoseN(G4double dose){ fDoseN += dose;}
-  void SetDoseN(G4double dose){ fDoseN = dose;}
-  G4double GetDoseN(){return fDoseN;}
+  void AddDoseN(G4double dose) {fDoseN += dose;}
+  void SetDoseN(G4double dose) {fDoseN = dose;}
+  G4double GetDoseN()    const {return fDoseN;}
 
-  void AddDoseC(G4double dose){ fDoseC += dose;}
-  void SetDoseC(G4double dose){ fDoseC = dose;}
-  G4double GetDoseC(){return fDoseC;}
+  void AddDoseC(G4double dose) {fDoseC += dose;}
+  void SetDoseC(G4double dose) {fDoseC = dose;}
+  G4double GetDoseC()    const {return fDoseC;}
 
-  G4int GetNumEvent(){return fNumEvent;}
-  void SetNumEvent(G4int i){fNumEvent = i;}
+  G4int GetNumEvent()    const {return fNumEvent;}
+  void SetNumEvent(G4int i)    {fNumEvent = i;}
 
-  G4int GetNbOfHitsGas(){return fNbOfHitsGas;}
-  void AddNbOfHitsGas(){fNbOfHitsGas = fNbOfHitsGas+1;}
+  G4int GetNbOfHitsGas() const {return fNbOfHitsGas;}
+  void AddNbOfHitsGas()        {fNbOfHitsGas = fNbOfHitsGas+1;}
 
-  void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
-  G4double GetMassNucleus(){return fMassNucleus;}
+  void SetMassNucleus(G4double mN) {fMassNucleus = mN;}
+  G4double GetMassNucleus()  const {return fMassNucleus;}
 
-  void SetMassCytoplasm(G4double mC){ fMassCytoplasm = mC;}
-  G4double GetMassCytoplasm(){return fMassCytoplasm;}
+  void SetMassCytoplasm(G4double mC) {fMassCytoplasm = mC;}
+  G4double GetMassCytoplasm()  const {return fMassCytoplasm;}
 
-  void AddDoseBox(G4int i, G4double x){ fDose3DDose[i] +=x;}
-  G4double GetDoseBox(G4int i){ return fDose3DDose[i];}
+  void AddDoseBox(G4int i, G4double x) {fDose3DDose[i] +=x;}
+  G4double GetDoseBox(G4int i)   const {return fDose3DDose[i];}
   
-  G4ThreeVector GetVectCell(G4int i) {return fMapVoxels[i];}
+  G4ThreeVector GetVectCell(G4int i) const {return fMapVoxels[i];}
 
 private:
 
-  DetectorConstruction* fDetector;    
-  CellParameterisation * fMyCellParameterisation;  
+  const DetectorConstruction* fDetector;    
 
   G4int fSaveRndm;
   G4int fNumEvent;

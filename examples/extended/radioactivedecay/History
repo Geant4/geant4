@@ -1,4 +1,4 @@
-$Id: History 98257 2016-07-04 17:39:46Z gcosmo $
+$Id: History 104237 2017-05-19 15:26:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+April 14, 2017      M. Maire
+- Add example Activation
 
 July 04, 2016      I. Hrivnacova - exRadioactivedecay-V10-02-00
 - Fixes for Doxygen documentation

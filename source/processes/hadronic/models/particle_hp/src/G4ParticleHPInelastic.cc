@@ -234,12 +234,15 @@ throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do w
   G4ParticleHPInelastic::~G4ParticleHPInelastic()
   {
 //    delete [] theInelastic;
-     if ( theInelastic != NULL ) {
-        for ( std::vector<G4ParticleHPChannelList*>::iterator 
-              it = theInelastic->begin() ; it != theInelastic->end() ; it++ ) {
-           delete *it;
+    //Vector is shared, only master deletes
+    if ( !G4Threading::IsWorkerThread() ) {
+        if ( theInelastic != NULL ) {
+            for ( std::vector<G4ParticleHPChannelList*>::iterator
+                it = theInelastic->begin() ; it != theInelastic->end() ; it++ ) {
+                delete *it;
+            }
+            theInelastic->clear();
         }
-        theInelastic->clear();
      }
   }
   

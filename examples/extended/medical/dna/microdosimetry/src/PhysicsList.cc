@@ -262,8 +262,9 @@ void PhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(
           new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
 
-    } else if (particleName == "GenericIon")
-    { // THIS IS NEEDED FOR STANDARD ALPHA G4ionIonisation PROCESS
+    } else if (particleName == "GenericIon") { 
+    
+      // THIS IS NEEDED FOR STANDARD ALPHA G4ionIonisation PROCESS
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();

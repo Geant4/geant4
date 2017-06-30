@@ -3,6 +3,9 @@
 # To be run preferably in batch, without graphics:
 # % exampleB1 run2.mac
 #
+#/run/numberOfWorkers 4
+/run/initialize
+#
 /control/verbose 2
 /run/verbose 2
 #

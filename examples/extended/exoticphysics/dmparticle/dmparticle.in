@@ -1,0 +1,32 @@
+#
+#
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+#
+/testex/det/setMat G4_W
+/testex/det/setSizeZ  130 cm
+/testex/det/setSizeXY 30 cm
+#
+#/testex/run/binSize 0.2 mm
+#
+/process/em/verbose 1
+#
+# emstandard_opt0
+#
+/testex/phys/addPhysics emstandard_opt0
+#
+/run/initialize
+#
+#/particle/process/dump
+#
+/run/printProgress 10
+#
+/gun/particle proton
+#/gun/particle e-
+#
+#/gun/energy 4 GeV
+#/gun/energy 450 GeV
+#
+/run/beamOn 100
+#

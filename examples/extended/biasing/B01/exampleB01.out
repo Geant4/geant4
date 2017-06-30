@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -100,7 +100,7 @@ Going to assign importance: 131072, to volume: cell_18
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -113,6 +113,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -778,10 +784,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     2
 =======================================================================
 Number of de-excitation channels                    8
 ++ ConcreteSD/Collisions id 0
@@ -801,71 +808,24 @@ Number of de-excitation channels                    8
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            39 |           133 |            39 |            39 |       0.10904 |         1.847 |             1 |       7314.45 |       7314.45 |       5023.53 |       13509.8 |       547.766 |
-       cell_01 |           150 |           174 |           529 |           529 |     0.0191438 |        4.3571 |             1 |       24776.1 |       24776.1 |        158346 |        107952 |       3031.35 |
-       cell_02 |           185 |           281 |          1161 |         580.5 |     0.0113294 |        2.8294 |           0.5 |       42409.6 |       21204.8 |        166951 |         59997 |       1891.45 |
-       cell_03 |           259 |           378 |          2045 |        511.25 |    0.00701385 |       2.36574 |          0.25 |       69002.2 |       17250.6 |        192206 |       40810.4 |       1348.11 |
-       cell_04 |           332 |           477 |          2669 |       333.625 |    0.00556124 |        1.9901 |         0.125 |       86766.9 |       10845.9 |        134430 |       21584.3 |       747.597 |
-       cell_05 |           375 |           572 |          3490 |       218.125 |    0.00411284 |       1.60753 |        0.0625 |        108628 |       6789.22 |       96286.5 |       10913.9 |       396.011 |
-       cell_06 |           374 |           544 |          3382 |       105.688 |    0.00406769 |       1.42661 |       0.03125 |        103232 |       3226.01 |       44105.6 |       4602.27 |       179.408 |
-       cell_07 |           390 |           558 |          3678 |       57.4688 |    0.00235337 |        1.1076 |      0.015625 |        103117 |       1611.21 |       31041.7 |       1784.58 |       73.0524 |
-       cell_08 |           322 |           465 |          3122 |       24.3906 |    0.00263579 |       1.08198 |     0.0078125 |         87754 |       685.578 |       12004.9 |       741.778 |       31.6423 |
-       cell_09 |           300 |           413 |          2794 |       10.9141 |    0.00277678 |       1.02977 |    0.00390625 |       81975.2 |       320.216 |       5016.14 |       329.747 |       13.9287 |
-       cell_10 |           268 |           402 |          2512 |       4.90625 |    0.00300105 |       1.12219 |    0.00195312 |       73299.7 |       143.163 |       2229.69 |       160.657 |        6.6914 |
-       cell_11 |           215 |           315 |          2083 |       2.03418 |    0.00351093 |       1.21322 |   0.000976562 |       63135.3 |       61.6556 |       866.631 |       74.8015 |       3.04268 |
-       cell_12 |           182 |           288 |          1698 |      0.829102 |    0.00336218 |       1.26154 |   0.000488281 |       51732.6 |       25.2601 |       377.732 |       31.8666 |          1.27 |
-       cell_13 |           179 |           281 |          1860 |      0.454102 |    0.00329636 |       1.18124 |   0.000244141 |       55119.6 |       13.4569 |       198.138 |       15.8958 |      0.653134 |
-       cell_14 |           194 |           286 |          1783 |      0.217651 |    0.00388223 |       1.21878 |    0.00012207 |       54032.7 |       6.59579 |       86.0927 |       8.03883 |      0.334232 |
-       cell_15 |           209 |           307 |          2009 |       0.12262 |    0.00340077 |       1.19782 |   6.10352e-05 |       61609.1 |       3.76032 |       57.2078 |        4.5042 |       0.19455 |
-       cell_16 |           191 |           296 |          1721 |     0.0525208 |    0.00419752 |       1.23058 |   3.05176e-05 |       53101.7 |       1.62053 |       20.4162 |        1.9942 |     0.0856975 |
-       cell_17 |           173 |           260 |          1725 |     0.0263214 |     0.0029313 |       1.10115 |   1.52588e-05 |       50473.6 |      0.770166 |       12.4802 |      0.848072 |     0.0365832 |
-       cell_18 |           111 |           205 |          1151 |    0.00878143 |    0.00451357 |        1.1056 |   7.62939e-06 |       34016.7 |      0.259527 |       2.83551 |      0.286934 |     0.0127983 |
-       cell_19 |            71 |            71 |            71 |   0.000541687 |    0.00684046 |        1.6655 |   7.62939e-06 |       10890.2 |     0.0830856 |      0.786876 |      0.138379 |     0.0053826 |
+       cell_00 |            43 |           138 |            43 |            43 |      0.269961 |       3.09155 |             1 |       9161.62 |       9161.62 |       3818.59 |       28323.6 |       1030.87 |
+       cell_01 |           171 |           197 |           706 |           706 |    0.00862421 |       3.77294 |             1 |       27455.7 |       27455.7 |        345351 |        103589 |       2978.38 |
+       cell_02 |           157 |           253 |          1287 |         643.5 |     0.0105644 |       2.51164 |           0.5 |       44945.9 |       22472.9 |        176267 |       56443.8 |       1862.14 |
+       cell_03 |           199 |           288 |          1682 |         420.5 |    0.00512669 |       1.77678 |          0.25 |         53927 |       13481.7 |        172114 |       23954.1 |       882.374 |
+       cell_04 |           233 |           334 |          2042 |        255.25 |    0.00514352 |       1.50029 |         0.125 |         65550 |       8193.75 |       92443.9 |         12293 |       475.487 |
+       cell_05 |           230 |           326 |          1850 |       115.625 |    0.00391072 |       1.37799 |        0.0625 |       59125.6 |       3695.35 |       52216.3 |       5092.16 |       204.204 |
+       cell_06 |           203 |           309 |          1988 |        62.125 |    0.00319642 |       1.33752 |       0.03125 |       58141.9 |       1816.94 |       29517.1 |        2430.2 |        94.349 |
+       cell_07 |           170 |           260 |          1672 |        26.125 |     0.0027297 |       1.23743 |      0.015625 |       47737.8 |       745.903 |       13292.8 |       923.002 |       36.2854 |
+       cell_08 |           152 |           232 |          1533 |       11.9766 |    0.00237476 |       1.16653 |     0.0078125 |       43290.8 |       338.209 |       6726.91 |        394.53 |       15.9748 |
+       cell_09 |           138 |           201 |          1328 |        5.1875 |    0.00289986 |       1.12155 |    0.00390625 |       39387.3 |       153.856 |       2508.87 |       172.557 |       7.27537 |
+       cell_10 |           116 |           172 |           965 |       1.88477 |    0.00296304 |       1.42684 |    0.00195312 |         29202 |       57.0351 |       1100.65 |       81.3799 |       3.26127 |
+       cell_11 |           117 |           167 |           868 |      0.847656 |    0.00360388 |       1.50224 |   0.000976562 |       27770.3 |       27.1194 |       449.216 |       40.7398 |       1.61892 |
+       cell_12 |           111 |           163 |          1021 |      0.498535 |    0.00399791 |       1.24975 |   0.000488281 |       31225.7 |       15.2469 |       201.653 |       19.0548 |      0.806192 |
+       cell_13 |           114 |           158 |          1055 |      0.257568 |    0.00243184 |      0.997498 |   0.000244141 |       31752.9 |       7.75216 |       143.025 |       7.73276 |      0.347814 |
+       cell_14 |           120 |           166 |          1173 |      0.143188 |    0.00207952 |      0.888924 |    0.00012207 |       32908.9 |       4.01721 |       77.0525 |       3.57099 |      0.160232 |
+       cell_15 |            99 |           145 |          1112 |     0.0678711 |    0.00219222 |      0.831228 |   6.10352e-05 |       31192.2 |       1.90382 |       34.6344 |       1.58251 |     0.0759262 |
+       cell_16 |            79 |           115 |           822 |     0.0250854 |    0.00289135 |      0.887379 |   3.05176e-05 |       23636.4 |      0.721327 |       10.5454 |       0.64009 |     0.0304905 |
+       cell_17 |            63 |            95 |           610 |    0.00930786 |    0.00219074 |      0.919001 |   1.52588e-05 |       17962.7 |      0.274089 |       5.02528 |      0.251888 |     0.0110091 |
+       cell_18 |            40 |            72 |           473 |     0.0036087 |     0.0018605 |       0.83893 |   7.62939e-06 |       13544.1 |      0.103333 |       2.24491 |     0.0866894 |    0.00417665 |
+       cell_19 |            25 |            25 |            25 |   0.000190735 |     0.0214968 |       1.67404 |   7.62939e-06 |        3507.2 |     0.0267578 |     0.0907225 |     0.0447937 |    0.00195024 |
 =============================================
-=== G4ProcessPlacer::RemoveProcess: for: neutron
-  ProcessName: ImportanceProcess, will be removed!
-  The initial AlongStep Vectors: 
-GPIL Vector: 
-   ImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   ImportanceProcess
-  The initial PostStep Vectors: 
-GPIL Vector: 
-   nKiller
-   nCapture
-   neutronInelastic
-   hadElastic
-   Decay
-   ImportanceProcess
-   Transportation
-DoIt Vector: 
-   Transportation
-   ImportanceProcess
-   Decay
-   hadElastic
-   neutronInelastic
-   nCapture
-   nKiller
-  The final AlongStep Vectors: 
-GPIL Vector: 
-   Transportation
-DoIt Vector: 
-   Transportation
-  The final PostStep Vectors: 
-GPIL Vector: 
-   nKiller
-   nCapture
-   neutronInelastic
-   hadElastic
-   Decay
-   Transportation
-DoIt Vector: 
-   Transportation
-   Decay
-   hadElastic
-   neutronInelastic
-   nCapture
-   nKiller
-================================================

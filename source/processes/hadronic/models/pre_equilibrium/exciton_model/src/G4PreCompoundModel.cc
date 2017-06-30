@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 96603 2016-04-25 13:29:51Z gcosmo $
+// $Id: G4PreCompoundModel.cc 104867 2017-06-23 14:00:18Z gcosmo $
 //
 // by V. Lara
 //
@@ -150,6 +150,8 @@ G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
   G4int Ap = 1;
   if(primary == proton) { Zp = 1; }
 
+  G4double timePrimary=thePrimary.GetGlobalTime();
+
   G4int A = theNucleus.GetA_asInt();
   G4int Z = theNucleus.GetZ_asInt();
    
@@ -176,10 +178,15 @@ G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
   for(G4ReactionProductVector::iterator i= result->begin(); 
       i != result->end(); ++i)
     {
-      G4DynamicParticle * aNew = 
-	new G4DynamicParticle((*i)->GetDefinition(),
+      G4DynamicParticle * aNewDP =
+	       new G4DynamicParticle((*i)->GetDefinition(),
 			      (*i)->GetTotalEnergy(),
 			      (*i)->GetMomentum());
+      G4HadSecondary aNew =  G4HadSecondary(aNewDP);
+      G4double time=(*i)->GetFormationTime();
+      if(time < 0.0) { time = 0.0; }
+      aNew.SetTime(timePrimary + time);
+      aNew.SetCreatorModelType((*i)->GetCreatorModel());
       delete (*i);
       theResult.AddSecondary(aNew);
     }

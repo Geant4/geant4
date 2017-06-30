@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 99176 2016-09-07 09:46:36Z gcosmo $
+# $Id: sources.cmake 103926 2017-05-03 13:43:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -60,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4CallbackModel.hh
         G4DigiFilterFactories.hh
         G4DigiModel.hh
+        G4GPSModel.hh
         G4HitFilterFactories.hh
         G4HitsModel.hh
         G4LogicalVolumeModel.hh
@@ -109,6 +110,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4BoundingSphereScene.cc
         G4DigiFilterFactories.cc
         G4DigiModel.cc
+        G4GPSModel.cc
         G4HitFilterFactories.cc
         G4HitsModel.cc
         G4LogicalVolumeModel.cc

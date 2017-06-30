@@ -1,4 +1,4 @@
-$Id: History 102724 2017-02-20 13:00:39Z gcosmo $
+$Id: History 104779 2017-06-16 09:20:56Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -15,16 +15,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-16 February 2017 Vladimir Ivanchenko (hadr-mod-util-V10-02-10)
+16 June 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-07)
+- G4Fragment - improved printout
+
+14 June 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-06)
+- G4Fragment - added non-const method NuclearPolarization() allowing 
+    get non-const pointer to the G4NuclearPolarization object;
+    removed G4Fragment printout by pointer, because this method
+    is a problem for debigging 
+
+13 June 2017  Alberto Ribon (hadr-mod-util-V10-03-05)
+- G4LegendrePolynomial : applied Jason Detwiler's caching to speed up
+    the calculations.
+
+1 June 2017  Dennis Wright (hadr-mod-util-V10-03-04)
+- G4PolynomialPDF: apply Jason Detwiler's fix to divide by zero bug
+
+30 May 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-03)
+- G4Fragment - fixed destructor and printout
+
+16 February 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-02)
 - G4PolynomialPDF - added control on printout
 
-14 February 2017 Vladimir Ivanchenko
+14 February 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-01) 
 - G4Fragment - added method SetExcEnergyAndMomentum(...) allowing preserve
     excitation energy value without any precision lost, 4-momentum 
     is recomputed; added class member and  Get/Set method for floating
     levels number which was missing before
 
-16 December 2016 Vladimir Ivanchenko (hadr-mod-util-V10-02-09)
+16 December 2016 Vladimir Ivanchenko (hadr-mod-util-V10-03-00)
 - G4Fragment - minor cleanup of check on excitation energy of
     a ground state 
 

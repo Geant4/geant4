@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/fanoCavity.cc
 /// \brief Main program of the medical/fanoCavity example
 //
-// $Id: fanoCavity.cc 90848 2015-06-10 13:44:30Z gcosmo $
+// $Id: fanoCavity.cc 103257 2017-03-23 08:54:31Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,13 +66,15 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
     
   //Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    G4int nThreads = G4Threading::G4GetNumberOfCores();
-    if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    G4int nThreads = 2; 
+    if (argc==3) {
+      int iTmp = G4UIcommand::ConvertToInt(argv[2]);
+      nThreads = (iTmp<0)? G4Threading::G4GetNumberOfCores() : iTmp;
+    }
     runManager->SetNumberOfThreads(nThreads);
 #else
     G4VSteppingVerbose::SetInstance(new SteppingVerbose);

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PairProductionRelModel.hh 104477 2017-06-01 07:39:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -55,6 +55,8 @@
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
 #include "G4NistManager.hh"
+#include "G4Log.hh"
+#include "G4Exp.hh"
 
 class G4ParticleChangeForGamma;
 
@@ -63,7 +65,7 @@ class G4PairProductionRelModel : public G4VEmModel
 
 public:
 
-  explicit G4PairProductionRelModel(const G4ParticleDefinition* p = 0, 
+  explicit G4PairProductionRelModel(const G4ParticleDefinition* p = nullptr, 
 				    const G4String& nam = "BetheHeitlerLPM");
  
   virtual ~G4PairProductionRelModel();
@@ -152,10 +154,9 @@ protected:
   static const G4double facFel;
   static const G4double facFinel;
 
-  static const G4double preS1, logTwo, xsfactor, Egsmall;
+  static const G4double preS1, logTwo, xsfactor, Egsmall, Eghigh;
 
 };
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -217,77 +218,50 @@ inline void G4PairProductionRelModel::SetCurrentElement(G4double Z)
 
 inline G4double G4PairProductionRelModel::Phi1(G4double delta) const
 {
-   G4double screenVal;
-
-   if (delta > 1.)
-     screenVal = 21.12 - 4.184*std::log(delta+0.952);
-   else
-     screenVal = 20.868 - delta*(3.242 - 0.625*delta);
-
-   return screenVal;
+  return (delta > 1.) 
+    ? 21.12 - 4.184*G4Log(delta+0.952)
+    : 20.868 - delta*(3.242 - 0.625*delta);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PairProductionRelModel::Phi2(G4double delta) const
 {
-   G4double screenVal;
-
-   if (delta > 1.)
-     screenVal = 21.12 - 4.184*std::log(delta+0.952);
-   else
-     screenVal = 20.209 - delta*(1.930 + 0.086*delta);
-
-   return screenVal;
+  return (delta > 1.)
+    ? 21.12 - 4.184*G4Log(delta+0.952)
+    : 20.209 - delta*(1.930 + 0.086*delta);
 }
 
 inline G4double G4PairProductionRelModel::ScreenFunction1(G4double ScreenVariable)
-
 // compute the value of the screening function 3*PHI1 - PHI2
-
 {
-   G4double screenVal;
-
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
-
-   return screenVal;
+  return (ScreenVariable > 1.)
+    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
+    : 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4PairProductionRelModel::ScreenFunction2(G4double ScreenVariable)
-
 // compute the value of the screening function 1.5*PHI1 + 0.5*PHI2
-
 {
-   G4double screenVal;
-
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
-   else
-     screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
-
-   return screenVal;
+  return (ScreenVariable > 1.)
+    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
+    : 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 
 inline G4double G4PairProductionRelModel::DeltaMax() const
 {
   // k > 50 MeV
   G4double FZ = 8.*(lnZ/3. + fCoulomb);
-  return std::exp( (42.24-FZ)/8.368 ) + 0.952;
+  return G4Exp( (42.24-FZ)/8.368 ) + 0.952;
 }
 
 inline G4double G4PairProductionRelModel::DeltaMin(G4double k) const
 {
-  return 4.*136./z13*(CLHEP::electron_mass_c2/k);
+  return 544.*CLHEP::electron_mass_c2/(z13*k);
 }
-
-
 
 #endif

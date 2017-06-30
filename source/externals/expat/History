@@ -14,6 +14,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+03-February-2017: Ben Morgan expat-V10-03-00
+- Set interface include directories on G4expat{-static} targets
+  in CMakeLists.txt. This provides the needed interface to allow transparent
+  usage of internal/external expat via targets and without needing to use
+  include_directories explicitly. Only set include paths in BUILD
+  interface for consistency with other targets.
+
 24-September-2015: Ben Morgan  expat-V10-01-01
 - CMakeLists.txt : Add XML_STATIC to public compile definitions 
   of G4expat-static. Required on Windows platforms to ensure correct

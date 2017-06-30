@@ -1,4 +1,4 @@
-$Id: History 101384 2016-11-16 11:03:44Z gcosmo $
+$Id: History 104525 2017-06-02 07:22:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,63 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 17, 2017 J.Apostolakis             - field-V10-03-03, -04 (resubmit)
+--------------------------
+G4FieldManager::SetDetectorField
+  Fixed default of 'fail mode' parameter in 
+     to 0 (silent) - not 1 which was used for debugging.
+  In case of existing G4ChordFinder, use 'max' (1, failMode) not min.
+
+
+May 11, 2017 J.Apostolakis             - field-V10-03-02
+-------------------------- 
+Reintroduced changes of field-V10-01-05, 06 and 07  to address
+issue recalled by ATLAS.
+
+New fixes/refinements (since field-V10-01-07)
+- Extra check for missing equation. (Fix)
+- Renamed G4FieldManager::SetFieldChangesEnergy() method to
+     InitialiseFieldChangesEnergy() to clarify its utility.
+
+Original functionality change (copied from field-V10-01-05, & -07) :
+- G4FieldManager.cc : Revised behaviour of SetDetector - it now
+   passes the Field to the Equation, as is the natural user expectation
+   The previous behaviour is possible, using extra argument 'failMode' 
+      flag. Values: 0           = silent ; 
+                    1 (default) = warning; 
+                    2 or other  = fatal exception.
+
+   This change is to ensure that user expectation is met: 
+      if the field is changed for an existing, working stepper it must 
+      be propagated to the equation of motion.
+   Note: this causes potential conflict between the type of the equation
+         and the field, which will need to be solved in the future.
+
+   Old behaviour (just set our own pointer) is still available in new method:
+     ProposeDetectorField(G4Field *detectorField) 
+
+  Note: Error reporting behaviour of SetDetector is 'soft'. It does not 
+   complain by default if ChordFinder is not (yet) set.
+    ( The default values of failMode = 0 i.e. quiet. )
+   If a chord-finder exists, it will still warn for other errors.
+   
+   To obtain have noisy extra checks call SetDetectorField with failMode > 0
+   or by using the new method for an existing field:
+      ChangeDetectorField(G4Field *detectorField)    
+
+--------------------------
+
+  OLD: Co-works and requires new tag in geometry/navigation: geomnav-V10-01-24.
+
+Mar  22, 2017 G.Cosmo                   - field-V10-03-01
+---------------------
+- Revert change made in previous tag and add simple accessor to return
+  singleton pointer.
+
+Mar  17, 2017 G.Cosmo                   - field-V10-03-00
+---------------------
+- Define G4FieldManagerStore as normal singleton and corrected destructor.
+
 Oct   7, 2016 J.Apostolakis             - field-V10-02-24, 25
 ---------------------------
 - Checked loops for termination for infinite loops and annotated 

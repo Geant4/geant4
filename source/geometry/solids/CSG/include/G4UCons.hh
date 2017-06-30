@@ -43,16 +43,19 @@
 #ifndef G4UCONS_HH
 #define G4UCONS_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UCons.hh"
+#include <volumes/UnplacedCone.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UCons : public G4USolid
+class G4UCons : public G4UAdapter<vecgeom::UnplacedCone>
 {
+  using Shape_t = vecgeom::UnplacedCone;
+  using Base_t = G4UAdapter<vecgeom::UnplacedCone>;
+
   public:  // with description
 
     G4UCons(const G4String& pName,
@@ -69,8 +72,6 @@ class G4UCons : public G4USolid
                             const G4VPhysicalVolume* pRep );
 
     G4VSolid* Clone() const;
-
-    inline UCons* GetShape() const;
 
     G4double GetInnerRadiusMinusZ() const;
     G4double GetOuterRadiusMinusZ() const;
@@ -94,7 +95,7 @@ class G4UCons : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -118,11 +119,6 @@ class G4UCons : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UCons* G4UCons::GetShape() const
-{
-  return (UCons*) fShape;
-}
 
 inline G4GeometryType G4UCons::GetEntityType() const
 {

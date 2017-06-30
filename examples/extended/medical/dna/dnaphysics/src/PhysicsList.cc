@@ -36,10 +36,20 @@
 
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
+
 #include "G4EmDNAPhysics.hh"
-#include "G4EmDNAPhysicsActivator.hh"
+#include "G4EmDNAPhysics_option1.hh"
+#include "G4EmDNAPhysics_option2.hh"
+#include "G4EmDNAPhysics_option3.hh"
+#include "G4EmDNAPhysics_option4.hh"
+#include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
+#include "G4EmDNAPhysics_option7.hh"
+
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
+
+#include "G4EmDNAPhysicsActivator.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -53,12 +63,28 @@ PhysicsList::PhysicsList()
   //  using a Geant4-DNA Physics constructor only
   //
   //  RegisterPhysics(new G4EmDNAPhysics());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option1());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option2());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option3());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option4());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option5());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option6());
+  // or
+  //  RegisterPhysics(new G4EmDNAPhysics_option7());
   
   // or SECOND METHOD TO ACTIVATE Geant4-DNA Physics
   // (this includes combination with Geant4 EM Physics)
   
   RegisterPhysics(new G4EmStandardPhysics_option4());
+  
   RegisterPhysics(new G4DecayPhysics());
+  
   RegisterPhysics(new G4EmDNAPhysicsActivator());
 
   G4ProductionCutsTable::GetProductionCutsTable()->
@@ -68,6 +94,4 @@ PhysicsList::PhysicsList()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::~PhysicsList()
-{
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+{}

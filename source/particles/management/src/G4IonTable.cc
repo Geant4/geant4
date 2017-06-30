@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc 99621 2016-09-29 10:14:44Z gcosmo $
+// $Id: G4IonTable.cc 102916 2017-03-02 12:58:58Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -1870,9 +1870,10 @@ G4double G4IonTable::GetLifeTime(G4int Z, G4int A, G4double E,
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetMuonicAtom(G4Ions const* base)
 {
-  if (base==0 || !IsIon(base))
+  if (base==0 || !IsIon(base)){
     G4Exception("G4IonTable::GetMuonicAtom()", "PART987654321",FatalException,"Constructor argument is not a G4Ions");
-
+    return 0;
+  }
   // We're assuming here that we get a base that is actually
   // constructed and unexcited ... strip excitations, Lambdas, and
   // isomers from the encoding

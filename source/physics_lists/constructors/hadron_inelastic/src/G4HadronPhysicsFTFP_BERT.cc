@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT.cc 102624 2017-02-10 08:22:14Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT.cc 102618 2017-02-10 07:59:27Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //

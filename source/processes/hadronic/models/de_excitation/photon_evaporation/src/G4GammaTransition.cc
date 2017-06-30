@@ -174,10 +174,17 @@ void G4GammaTransition::SampleDirection(G4Fragment* nuc, G4double ratio,
   } 
 
   fPolTrans.SetGammaTransitionData(twoJ1, twoJ2, L0, mpRatio, Lp);
-  G4NuclearPolarization* np = nuc->GetNuclearPolarization();
 
+  //AR-13Jun2017: Temporary workaround to avoid very long computations.
+  G4NuclearPolarization* np = nuc->GetNuclearPolarization();
   G4double cosTheta, phi;
-  if(!np) {
+
+  if(np && twoJ1 > 6) { 
+    np->Unpolarize(); 
+    cosTheta = 2*G4UniformRand() - 1.0;
+    phi = CLHEP::twopi*G4UniformRand();
+
+  } else if(!np) {
     // initial state is non-polarized - create polarization
     np = new G4NuclearPolarization();
     nuc->SetNuclearPolarization(np);

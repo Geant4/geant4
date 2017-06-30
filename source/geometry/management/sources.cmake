@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 100683 2016-10-31 10:56:21Z gcosmo $
+# $Id: sources.cmake 104304 2017-05-24 08:57:31Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -69,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4SmartVoxelStat.hh
         G4SolidStore.hh
         G4TouchableHandle.hh
+        G4UAdapter.hh
         G4USolid.hh
         G4VCurvedTrajectoryFilter.hh
         G4VNestedParameterisation.hh

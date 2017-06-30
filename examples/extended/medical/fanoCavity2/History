@@ -1,4 +1,4 @@
-$Id: History 100263 2016-10-17 08:08:40Z gcosmo $
+$Id: History 103507 2017-04-11 14:15:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-04-17 S.Elles (fano2-V10-03-00)
+- switch to NIST material description (keeping material densities defined in previous version)
+- default thread number is not set to the maximum available cores 
 
 14-10-16 G.Folger (fano2-V10-02-01)
 - remove direct use of {a,the}ParticleIterator, use GetParticleTableIterator().

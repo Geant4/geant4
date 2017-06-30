@@ -47,7 +47,7 @@ G4String G4LevelManager::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
 G4LevelManager::G4LevelManager(size_t ntrans,
-                               const std::vector<G4float>& energies,
+                               const std::vector<G4double>& energies,
 			       const std::vector<G4int>& spin,
 			       const std::vector<const G4NucLevel*>& levels)
   : nTransitions(0)
@@ -73,21 +73,20 @@ G4LevelManager::~G4LevelManager()
 }
 
 size_t  
-G4LevelManager::NearestLevelIndex(G4double ener, size_t index) const
+G4LevelManager::NearestLevelIndex(G4double energy, size_t index) const
 {
   //G4cout<< "index= " << index << " max= " << nTransitions << " exc= " << ener 
   //	 << " Emax= " << fLevelEnergy[nTransitions] << G4endl;
   size_t idx = std::min(index, nTransitions);
-  G4float energy = (G4float)ener;
-  static const G4float tolerance = 1.0f-6;
-  if(0 == nTransitions || std::fabs(energy - fLevelEnergy[idx]) <= tolerance) {
+  static const G4double tolerance = 1.0f-6;
+  if(0 == nTransitions || std::abs(energy - fLevelEnergy[idx]) <= tolerance) {
     return idx;
   }
   // ground state
-  if(energy <= fLevelEnergy[1]*0.5f)  
+  if(energy <= fLevelEnergy[1]*0.5)  
     { idx = 0; }
   // take top level
-  else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5f <= energy) 
+  else if((fLevelEnergy[nTransitions] + fLevelEnergy[nTransitions-1])*0.5 <= energy) 
     { idx = nTransitions; }
 
   // if shortcuts are not working, make binary search

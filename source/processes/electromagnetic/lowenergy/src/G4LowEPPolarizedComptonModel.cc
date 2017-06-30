@@ -45,7 +45,7 @@
 // |                                                                   |
 // | The author acknowledges the work of the Geant4 collaboration      |
 // | in developing the following algorithms that have been employed    |
-// | or adapeted for the present software:                             |
+// | or adapeted for the present software:                             |    
 // |                                                                   |
 // |  # sampling of photon scattering angle,                           |
 // |  # target element selection in composite materials,               |
@@ -57,14 +57,17 @@
 // | History:                                                          |
 // | --------                                                          |
 // |                                                                   |
-// | Jan. 2015 JMCB       - 1st Version based on G4LowEPPComptonModel   |
+// | Jan. 2015 JMCB       - 1st Version based on G4LowEPPComptonModel  |
+// | Feb. 2016 JMCB       - Geant4 10.2 FPE fix for bug 1676           |
+// | Nov. 2016 JMCB       - Polarisation tracking fix in collaboration |
+// |                        of Dr. Merlin Reynaard Kole,               |
+// |                        University of Geneva                       |
 // |                                                                   |
 // *********************************************************************
 
 #include "G4LowEPPolarizedComptonModel.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Exp.hh"
 
 //****************************************************************************
 
@@ -83,8 +86,8 @@ G4LowEPPolarizedComptonModel::G4LowEPPolarizedComptonModel(const G4ParticleDefin
 {
   verboseLevel=1 ;
   // Verbosity scale:
-  // 0 = nothing
-  // 1 = warning for energy non-conservation
+  // 0 = nothing 
+  // 1 = warning for energy non-conservation 
   // 2 = details of energy budget
   // 3 = calculation of cross sections, file openings, sampling of atoms
   // 4 = entering in methods
@@ -173,7 +176,7 @@ void G4LowEPPolarizedComptonModel::Initialise(const G4ParticleDefinition* partic
   }
 
   if(isInitialised) { return; }
-
+  
   fParticleChange = GetParticleChangeForGamma();
   fAtomDeexcitation  = G4LossTableManager::Instance()->AtomDeexcitation();
   isInitialised = true;
@@ -242,7 +245,7 @@ void G4LowEPPolarizedComptonModel::ReadData(size_t Z, const char* path)
 //****************************************************************************
 
 
-G4double
+G4double 
 G4LowEPPolarizedComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
                                                     G4double GammaEnergy,
                                                     G4double Z, G4double,
@@ -323,7 +326,7 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();
 
-
+  
   // Polarisation: check orientation of photon propagation direction and polarisation
   // Fix if needed
 
@@ -440,7 +443,7 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
 
       // ******************************************
       // |     Determine scatter photon energy    |
-      // ******************************************
+      // ******************************************   
 
  do
     {
@@ -460,18 +463,18 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
       // Randomly sample bound electron momentum (memento: the data set is in Atomic Units)
       ePAU = profileData->RandomSelectMomentum(Z,shellIdx);
 
-      // Convert to SI units
+      // Convert to SI units     
       G4double ePSI = ePAU * momentum_au_to_nat;
 
       //Calculate bound electron velocity and normalise to natural units
       u_temp = sqrt( ((ePSI*ePSI)*(vel_c*vel_c)) / ((e_mass_kg*e_mass_kg)*(vel_c*vel_c)+(ePSI*ePSI)) )/vel_c;
 
-      // Sample incident electron direction, amorphous material, to scattering photon scattering plane
+      // Sample incident electron direction, amorphous material, to scattering photon scattering plane 
 
       e_alpha = pi*G4UniformRand();
       e_beta = twopi*G4UniformRand();
 
-      // Total energy of system
+      // Total energy of system  
 
       G4double eEIncident = electron_mass_c2 / sqrt( 1 - (u_temp*u_temp));
       G4double systemE = eEIncident + pEIncident;
@@ -493,14 +496,14 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
 
    // *******************************************************
    // |     Determine ejected Compton electron direction    |
-   // *******************************************************
+   // *******************************************************      
 
-      // Calculate velocity of ejected Compton electron
+      // Calculate velocity of ejected Compton electron   
 
       G4double a_temp = eERecoil / electron_mass_c2;
       G4double u_p_temp = sqrt(1 - (1 / (a_temp*a_temp)));
 
-      // Coefficients and terms from simulatenous equations
+      // Coefficients and terms from simulatenous equations     
 
       G4double sinAlpha = std::sin(e_alpha);
       G4double cosAlpha = std::cos(e_alpha);
@@ -548,7 +551,7 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
 
      // Check if diff is less than zero, if so ensure it is due to FPE
 
-     //Confirm that diff less than zero is due FPE, i.e if abs of diff / diff1 and diff/ diff2 is less
+     //Confirm that diff less than zero is due FPE, i.e if abs of diff / diff1 and diff/ diff2 is less 
      //than 10^(-g4d_order), then set diff to zero
 
      if ((diff < 0.0) && (abs(diff / diff1) < g4d_limit) && (abs(diff / diff2) < g4d_limit) )
@@ -556,19 +559,29 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
            diff = 0.0;
      }
 
-
       // Plus and minus of quadratic
       G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
       G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
 
 
-      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+      // Floating point precision protection
+      // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
+      // Issue due to propagation of FPE and only impacts 8th sig fig onwards
+
+      if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
+      if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
+
+      // End of FP protection
+
       G4double ThetaE = 0.;
-      G4double sol_select = G4UniformRand();
+
+
+      // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
+       G4double sol_select = G4UniformRand();
 
       if (sol_select < 0.5)
       {
-          ThetaE = std::acos(X_p);
+           ThetaE = std::acos(X_p);
       }
       if (sol_select > 0.5)
       {
@@ -592,7 +605,7 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
 
     } while ( (iteration <= maxDopplerIterations) && (abs(cosPhiE) > 1));
 
-   // Revert to original if maximum number of iterations threshold has been reached
+   // Revert to original if maximum number of iterations threshold has been reached     
   if (iteration >= maxDopplerIterations)
     {
       pERecoil = photonEnergy0 ;
@@ -605,8 +618,10 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
   // Set "scattered" photon direction and energy
 
   G4ThreeVector photonDirection1(dirx,diry,dirz);
-  photonDirection1.rotateUz(photonDirection0);
-  photonPolarization1.rotateUz(photonDirection0);
+  SystemOfRefChange(photonDirection0,photonDirection1,
+		    photonPolarization0,photonPolarization1);
+
+
   if (pERecoil > 0.)
     {
      fParticleChange->SetProposedKineticEnergy(pERecoil) ;
@@ -622,7 +637,9 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
      G4double eKineticEnergy = pEIncident - pERecoil - bindingE;
 
      G4ThreeVector eDirection(eDirX,eDirY,eDirZ);
-     eDirection.rotateUz(photonDirection0);
+     SystemOfRefChangeElect(photonDirection0,eDirection,
+                  photonPolarization0);
+
      G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),
                                                    eDirection,eKineticEnergy) ;
      fvect->push_back(dp);
@@ -651,7 +668,7 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
         for (size_t i=nbefore; i<nafter; ++i) {
-          //Check if there is enough residual energy
+          //Check if there is enough residual energy 
           if (bindingE >= ((*fvect)[i])->GetKineticEnergy())
            {
              //Ok, this is a valid secondary: keep it
@@ -716,7 +733,7 @@ G4LowEPPolarizedComptonModel::InitialiseForElement(const G4ParticleDefinition*,
 
 //****************************************************************************
 
-//Fitting data to compute scattering function
+//Fitting data to compute scattering function 
 
 const G4double G4LowEPPolarizedComptonModel::ScatFuncFitParam[101][9] = {
 {  0,    0.,          0.,      0.,    0.,       0.,     0.,     0.,    0.},
@@ -902,7 +919,7 @@ G4ThreeVector G4LowEPPolarizedComptonModel::GetPerpendicularPolarization
 (const G4ThreeVector& photonDirection, const G4ThreeVector& photonPolarization) const
 {
 
-  //
+  // 
   // The polarization of a photon is always perpendicular to its momentum direction.
   // Therefore this function removes those vector component of photonPolarization, which
   // points in direction of photonDirection
@@ -936,7 +953,7 @@ G4ThreeVector G4LowEPPolarizedComptonModel::SetNewPolarization(G4double LowEPPCe
   // "Detection of Gamma Ray Polarization Using a 3-D Position Sensitive CdZnTe Detector"
   // IEEE TNS, Vol. 52(4), 1160-1164, 2005.
 
-  // Determination of Theta
+  // Determination of Theta 
 
   G4double theta;
 
@@ -980,3 +997,48 @@ G4ThreeVector G4LowEPPolarizedComptonModel::SetNewPolarization(G4double LowEPPCe
   return photonPolarization1;
 
 }
+void G4LowEPPolarizedComptonModel::SystemOfRefChange(G4ThreeVector& direction0,
+                                                    G4ThreeVector& direction1,
+                                                    G4ThreeVector& polarization0,
+                                                    G4ThreeVector& polarization1)
+{
+  // direction0 is the original photon direction ---> z
+  // polarization0 is the original photon polarization ---> x
+  // need to specify y axis in the real reference frame ---> y 
+  G4ThreeVector Axis_Z0 = direction0.unit();
+  G4ThreeVector Axis_X0 = polarization0.unit();
+  G4ThreeVector Axis_Y0 = (Axis_Z0.cross(Axis_X0)).unit(); // to be confirmed;
+
+  G4double direction_x = direction1.getX();
+  G4double direction_y = direction1.getY();
+  G4double direction_z = direction1.getZ();
+  
+  direction1 = (direction_x*Axis_X0 + direction_y*Axis_Y0 + direction_z*Axis_Z0).unit();
+  G4double polarization_x = polarization1.getX();
+  G4double polarization_y = polarization1.getY();
+  G4double polarization_z = polarization1.getZ();
+
+  polarization1 = (polarization_x*Axis_X0 + polarization_y*Axis_Y0 + polarization_z*Axis_Z0).unit();
+
+}
+
+void G4LowEPPolarizedComptonModel::SystemOfRefChangeElect(G4ThreeVector& pdirection,
+                                                    G4ThreeVector& edirection,
+                                                    G4ThreeVector& ppolarization)
+{
+  // direction0 is the original photon direction ---> z
+  // polarization0 is the original photon polarization ---> x
+  // need to specify y axis in the real reference frame ---> y 
+  G4ThreeVector Axis_Z0 = pdirection.unit();
+  G4ThreeVector Axis_X0 = ppolarization.unit();
+  G4ThreeVector Axis_Y0 = (Axis_Z0.cross(Axis_X0)).unit(); // to be confirmed;
+
+  G4double direction_x = edirection.getX();
+  G4double direction_y = edirection.getY();
+  G4double direction_z = edirection.getZ();
+
+  edirection = (direction_x*Axis_X0 + direction_y*Axis_Y0 + direction_z*Axis_Z0).unit();
+
+}
+
+

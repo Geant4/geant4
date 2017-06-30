@@ -1,4 +1,4 @@
-// $Id: Doxymodules_field.h 98299 2016-07-05 13:54:27Z gcosmo $
+// $Id: Doxymodules_field.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_field.h
@@ -74,6 +74,7 @@
  *  @{
  */
 
+  class F03ActionInitialization {};
   class F03CalorHit {};
   class F03CalorimeterSD {};
   class F03DetectorConstruction {};
@@ -95,6 +96,7 @@
  *  @{
  */
 
+  class F04ActionInitialization {};
   class F04DetectorConstruction {};
   class F04DetectorMessenger {};
   class F04ElementField {};

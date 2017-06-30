@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4eCoulombScatteringModel.hh 104307 2017-05-24 09:01:45Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -51,9 +51,9 @@
 //
 // Class Description:
 //
-// Implementation of eCoulombScattering of pointlike charge particle 
+// Implementation of eCoulombScattering of a charge particle 
 // on Atomic Nucleus for interval of scattering anles in Lab system 
-// thetaMin - ThetaMax, nucleus recoil is neglected.
+// thetaMin - ThetaMax.
 //   The model based on analysis of J.M.Fernandez-Varea et al. 
 // NIM B73(1993)447 originated from G.Wentzel Z.Phys. 40(1927)590 with 
 // screening parameter from H.A.Bethe Phys. Rev. 89 (1953) 1256.

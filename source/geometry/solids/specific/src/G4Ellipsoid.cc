@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Ellipsoid.cc 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4Ellipsoid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Ellipsoid
 //
@@ -33,9 +33,8 @@
 //
 // 10.11.99 G.Horton-Smith: first writing, based on G4Sphere class
 // 25.02.05 G.Guerrieri: Modified for future Geant4 release
-// 26.10.16 E.Tcherniaev: Added Extent(pmin,pmax),
-//            reimplemented CalculateExtent() using G4BoundingEnvelope,
-//            removed CreateRotatedVertices()
+// 26.10.16 E.Tcherniaev: reimplemented CalculateExtent() using
+//                        G4BoundingEnvelope, removed CreateRotatedVertices()
 //
 // --------------------------------------------------------------------
 
@@ -199,7 +198,7 @@ void G4Ellipsoid::ComputeDimensions(G4VPVParameterisation* p,
 //
 // Get bounding box
 
-void G4Ellipsoid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Ellipsoid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double dx = GetSemiAxisMax(0);
   G4double dy = GetSemiAxisMax(1);
@@ -218,7 +217,8 @@ void G4Ellipsoid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Ellipsoid::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Ellipsoid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -236,7 +236,7 @@ G4Ellipsoid::CalculateExtent(const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

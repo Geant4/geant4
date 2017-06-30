@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,7 +40,7 @@
 
 
  Material: Titanium    density:  4.420 g/cm3   RadL:   3.727 cm   Nucl.Int.Length:  28.416 cm 
-                       Imean: 228.544 eV 
+                       Imean: 228.544 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Titanium (Ti)   Z = 22.0   N =    48   A = 47.867 g/mole
          --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:  8.250 %
@@ -61,7 +61,7 @@
 
 
  Material:    Mylar    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.923 cm 
-                       Imean:  75.967 eV 
+                       Imean:  75.967 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -90,7 +90,7 @@
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.880 cm 
-                       Imean: 166.000 eV 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Aluminium (Al)   Z = 13.0   N =    27   A = 26.982 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
@@ -98,7 +98,7 @@
 
 
  Material: Beryllium    density:  1.850 g/cm3   RadL:  35.666 cm   Nucl.Int.Length:  39.530 cm 
-                       Imean:  63.700 eV 
+                       Imean:  63.700 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Beryllium (Be)   Z =  4.0   N =     9   A =  9.122 g/mole
          --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.000 %
@@ -106,7 +106,7 @@
 
 
  Material: Graphite    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.768 cm 
-                       Imean:  81.000 eV 
+                       Imean:  81.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -115,7 +115,7 @@
 
 
  Material:   Copper    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.658 cm 
-                       Imean: 322.000 eV 
+                       Imean: 322.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Copper (Cu)   Z = 29.0   N =    64   A = 63.546 g/mole
          --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance: 69.170 %
@@ -124,7 +124,7 @@
 
 
  Material: Tantalum    density: 16.650 g/cm3   RadL:   4.095 mm   Nucl.Int.Length:  11.890 cm 
-                       Imean: 718.000 eV 
+                       Imean: 718.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Tantalum (Ta)   Z = 73.0   N =   181   A = 180.948 g/mole
          --->  Isotope: Ta180   Z = 73   N = 180   A = 179.95 g/mole   abundance:  0.012 %
@@ -133,7 +133,7 @@
 
 
  Material:     Gold    density: 19.300 g/cm3   RadL:   3.348 mm   Nucl.Int.Length:  10.551 cm 
-                       Imean: 790.000 eV 
+                       Imean: 790.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Gold (Au)   Z = 79.0   N =   197   A = 196.967 g/mole
          --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.000 %
@@ -288,7 +288,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.69s Real=6.71s Sys=0.01s
+  User=7.51s Real=7.53s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -298,7 +298,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1486323506, 1626161219
+ Current couple of seeds = 1048476458, 185116483
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -309,6 +309,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 11
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
@@ -317,11 +318,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00288 MB
-Pool ID '7G4Track', size : 0.00481 MB
+Pool ID '7G4Track', size : 0.00577 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.029 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.03 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

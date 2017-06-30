@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PrecoProtonBuilder.cc 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4PrecoProtonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,14 +51,6 @@ G4PrecoProtonBuilder()
   theMin = 0;
   theMax = 170.*MeV;
   theModel = new G4PreCompoundModel(new G4ExcitationHandler);
-}
-
-G4PrecoProtonBuilder::
-~G4PrecoProtonBuilder() {}
-
-void G4PrecoProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
 }
 
 void G4PrecoProtonBuilder::

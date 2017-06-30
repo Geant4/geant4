@@ -1,15 +1,15 @@
 # - Finds ROOT instalation
-# This module sets up ROOT information 
+# This module sets up ROOT information
 # It defines:
 # ROOT_FOUND          If the ROOT is found
 # ROOT_INCLUDE_DIR    PATH to the include directory (deprecated)
 # ROOT_INCLUDE_DIRS   PATH to the include directory
 # ROOT_LIBRARIES      Most common libraries
-# ROOT_LIBRARY_DIR    PATH to the library directory 
+# ROOT_LIBRARY_DIR    PATH to the library directory
 # ROOT_BIN_DIR	      PATH to the excutables directory
 # ROOT_PYTHONVER      Compatible python version string
 
-# First search for ROOTConfig.cmake on the path defined via user setting 
+# First search for ROOTConfig.cmake on the path defined via user setting
 # ROOT_DIR
 
 if(EXISTS ${ROOT_DIR}/ROOTConfig.cmake)
@@ -25,16 +25,16 @@ find_program(ROOT_CONFIG_EXECUTABLE root-config
 
 if(NOT ROOT_CONFIG_EXECUTABLE)
   set(ROOT_FOUND FALSE)
-else()    
+else()
   set(ROOT_FOUND TRUE)
 
   execute_process(
-    COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix 
-    OUTPUT_VARIABLE ROOTSYS 
+    COMMAND ${ROOT_CONFIG_EXECUTABLE} --prefix
+    OUTPUT_VARIABLE ROOTSYS
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
   execute_process(
-    COMMAND ${ROOT_CONFIG_EXECUTABLE} --version 
+    COMMAND ${ROOT_CONFIG_EXECUTABLE} --version
     OUTPUT_VARIABLE ROOT_VERSION
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 
@@ -57,7 +57,7 @@ else()
     COMMAND ${ROOT_CONFIG_EXECUTABLE} --bindir
     OUTPUT_VARIABLE ROOT_BIN_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-    
+
 
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lThread -lMinuit -lHtml -lVMC -lEG -lGeom -lTreePlayer -lXMLIO -lProof)
   #set(ROOT_LIBRARIES ${ROOT_LIBRARIES} -lProofPlayer -lMLP -lSpectrum -lEve -lRGL -lGed -lXMLParser -lPhysics)
@@ -75,18 +75,18 @@ endif()
 if (NOT ROOT_FOUND)
   if (ROOT_FIND_REQUIRED)
     message(FATAL_ERROR "ROOT required, but not found")
-  endif (ROOT_FIND_REQUIRED)   
+  endif (ROOT_FIND_REQUIRED)
 endif()
 
-include(CMakeMacroParseArguments)
+include(CMakeParseArguments)
 find_program(ROOTCINT_EXECUTABLE rootcint PATHS $ENV{ROOTSYS}/bin)
 find_program(GENREFLEX_EXECUTABLE genreflex PATHS $ENV{ROOTSYS}/bin)
 find_package(GCCXML)
 
 #----------------------------------------------------------------------------
-# function ROOT_GENERATE_DICTIONARY( dictionary   
-#                                    header1 header2 ... 
-#                                    LINKDEF linkdef1 ... 
+# function ROOT_GENERATE_DICTIONARY( dictionary
+#                                    header1 header2 ...
+#                                    LINKDEF linkdef1 ...
 #                                    OPTIONS opt1...)
 function(ROOT_GENERATE_DICTIONARY dictionary)
   CMAKE_PARSE_ARGUMENTS(ARG "" "" "LINKDEF;OPTIONS" "" ${ARGN})
@@ -109,7 +109,7 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
   # rootcint (info from Andrea Dotti, and info from post:
   # http://root.cern.ch/phpBB3/viewtopic.php?f=3&t=15086
   get_directory_property(incdirs INCLUDE_DIRECTORIES)
-  set(includedirs) 
+  set(includedirs)
   foreach( d ${incdirs})
     if(NOT ${d} STREQUAL "/usr/include")
      set(includedirs ${includedirs} -I${d})
@@ -120,7 +120,7 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
   foreach( f ${ARG_LINKDEF})
     if( IS_ABSOLUTE ${f})
       set(linkdefs ${linkdefs} ${f})
-    else() 
+    else()
       if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/inc/${f})
         set(linkdefs ${linkdefs} ${CMAKE_CURRENT_SOURCE_DIR}/inc/${f})
       else()
@@ -130,17 +130,17 @@ function(ROOT_GENERATE_DICTIONARY dictionary)
   endforeach()
   #---call rootcint------------------------------------------
   add_custom_command(OUTPUT ${dictionary}.cxx ${dictionary}.h
-                     COMMAND ${ROOTCINT_EXECUTABLE} -cint -f  ${dictionary}.cxx 
-                                          -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs} 
+                     COMMAND ${ROOTCINT_EXECUTABLE} -cint -f  ${dictionary}.cxx
+                                          -c ${ARG_OPTIONS} ${includedirs} ${headerfiles} ${linkdefs}
                      DEPENDS ${headerfiles} ${linkdefs})
 endfunction()
 
 #----------------------------------------------------------------------------
-# function REFLEX_GENERATE_DICTIONARY(dictionary   
-#                                     header1 header2 ... 
-#                                     SELECTION selectionfile ... 
+# function REFLEX_GENERATE_DICTIONARY(dictionary
+#                                     header1 header2 ...
+#                                     SELECTION selectionfile ...
 #                                     OPTIONS opt1...)
-function(REFLEX_GENERATE_DICTIONARY dictionary)  
+function(REFLEX_GENERATE_DICTIONARY dictionary)
   CMAKE_PARSE_ARGUMENTS(ARG "" "" "SELECTION;OPTIONS" "" ${ARGN})
   #---Get the list of header files-------------------------
   set(headerfiles)
@@ -157,18 +157,18 @@ function(REFLEX_GENERATE_DICTIONARY dictionary)
   #---Get Selection file------------------------------------
   if(IS_ABSOLUTE ${ARG_SELECTION})
     set(selectionfile ${ARG_SELECTION})
-  else() 
+  else()
     set(selectionfile ${CMAKE_CURRENT_SOURCE_DIR}/${ARG_SELECTION})
   endif()
   #---Get the list of include directories------------------
   get_directory_property(incdirs INCLUDE_DIRECTORIES)
-  set(includedirs) 
-  foreach( d ${incdirs})    
+  set(includedirs)
+  foreach( d ${incdirs})
     set(includedirs ${includedirs} -I${d})
   endforeach()
   #---Get preprocessor definitions--------------------------
   get_directory_property(defs COMPILE_DEFINITIONS)
-  foreach( d ${defs})    
+  foreach( d ${defs})
    set(definitions ${definitions} -D${d})
   endforeach()
   #---Names and others---------------------------------------
@@ -179,7 +179,7 @@ function(REFLEX_GENERATE_DICTIONARY dictionary)
     set(gccxmlopts "--gccxmlopt=--gccxml-compiler g++ ")
   else()
     set(gccxmlopts)
-  endif()  
+  endif()
   #set(rootmapname ${dictionary}Dict.rootmap)
   #set(rootmapopts --rootmap=${rootmapname} --rootmap-lib=${libprefix}${dictionary}Dict)
   #---Check GCCXML and get path-----------------------------
@@ -189,9 +189,9 @@ function(REFLEX_GENERATE_DICTIONARY dictionary)
     message(WARNING "GCCXML not found. Install and setup your environment to find 'gccxml' executable")
   endif()
   #---Actual command----------------------------------------
-  add_custom_command(OUTPUT ${gensrcdict} ${rootmapname}     
+  add_custom_command(OUTPUT ${gensrcdict} ${rootmapname}
                      COMMAND ${GENREFLEX_EXECUTABLE} ${headerfiles} -o ${gensrcdict} ${gccxmlopts} ${rootmapopts} --select=${selectionfile}
                              --gccxmlpath=${gccxmlpath} ${ARG_OPTIONS} ${includedirs} ${definitions}
                      DEPENDS ${headerfiles} ${selectionfile})
 endfunction()
-  
+

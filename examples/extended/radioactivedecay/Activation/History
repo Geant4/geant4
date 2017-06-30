@@ -1,0 +1,25 @@
+$Id: History 71654 2013-06-19 18:20:04Z maire $
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Activation History file
+                    -----------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+21-04-17 Ivana Hrivnacova
+- Make the Run::fIonMap, fIonId static and added lock in Run::GetIonId()
+  where these data are updated. This makes the code working in MT mode. 
+- Simplified code in Run class:
+  - Introduced C++11 range for-loops
+  - Added a private function for merging particle data maps to avoid code duplication
+
+07-02-17 Michel Maire
+- created from Hadr06

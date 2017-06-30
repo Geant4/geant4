@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KaonBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4KaonBuilder.hh 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,29 +34,29 @@
 //
 // Modified:
 // 16.11.2005 G.Folger: don't  keep processes as data members, but new these
-// 13.06.2006 G.Folger: (re)move elastic scatterring 
+// 13.06.2006 G.Folger: (re)move elastic scatterring
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4KaonBuilder_h
 #define G4KaonBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VKaonBuilder.hh"
-
 #include <vector>
 
-class G4KaonBuilder
+class G4KaonBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4KaonBuilder();
-    virtual ~G4KaonBuilder();
+    virtual ~G4KaonBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VKaonBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4KaonPlusInelasticProcess*  theKaonPlusInelastic;

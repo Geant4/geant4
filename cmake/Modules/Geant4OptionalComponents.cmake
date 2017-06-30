@@ -19,29 +19,41 @@
 #  FREETYPE - For analysis module, find external FreeType install
 
 #-----------------------------------------------------------------------
-# Find required CLHEP package
-# We prefer to use our internal CLHEP library, but provide an option
-# to allow an external CLHEP to be used should the user require this.
-# We also allow that it can be automatically enabled by providing
-# the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
+# CLHEP
+# ^^^^^
 #
-# As requested by ATLAS, an additional option for preferring use of
-# CLHEP's granular libs is provided when using a system CLHEP.
+# By default, Geant4 is built with its own internal copy of the CLHEP
+# libraries and headers. An external install of CLHEP may be used
+# instead by setting the `GEANT4_USE_SYSTEM_CLHEP` to `ON`.
 #
-# KNOWNISSUE : For internal CLHEP, how to deal with static and shared?
+# CMake can be pointed to the required external install of CLHEP
+# by providing the `CLHEP_ROOT_DIR` option. Setting this variable
+# will automatically enable use of an external CLHEP.
+#
+# When using an external install of CLHEP, the default is to link
+# to the full CLHEP library. An additional advanced option
+# `GEANT4_USE_SYSTEM_CLHEP_GRANULAR` is available to configure
+# use of the modular CLHEP libraries.
+#
 if(CLHEP_ROOT_DIR)
   set(_default_use_system_clhep ON)
+  # CLHEP_ROOT_DIR is non-standard for Config mode, so attempt temporary translation
+  # into CMAKE_PREFIX_PATH. Could also add as PATHS to find_package,
+  # but CMAKE_PREFIX_PATH has higher search priority.
+  list(INSERT CMAKE_PREFIX_PATH 0 "${CLHEP_ROOT_DIR}")
 else()
   set(_default_use_system_clhep OFF)
 endif()
 
 option(GEANT4_USE_SYSTEM_CLHEP "Use system CLHEP library" ${_default_use_system_clhep})
+cmake_dependent_option(GEANT4_USE_SYSTEM_CLHEP_GRANULAR
+  "Use system CLHEP granular libraries" OFF
+  "GEANT4_USE_SYSTEM_CLHEP" OFF
+  )
+mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
 
 if(GEANT4_USE_SYSTEM_CLHEP)
   set(__system_clhep_mode " (singular)")
-  # Further advanced option to select granular CLHEP libs
-  option(GEANT4_USE_SYSTEM_CLHEP_GRANULAR "Use system CLHEP granular libraries" OFF)
-  mark_as_advanced(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
 
   if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
     set(__g4_clhep_components
@@ -53,32 +65,35 @@ if(GEANT4_USE_SYSTEM_CLHEP)
     set(__system_clhep_mode " (granular)")
   endif()
 
-  # Find CLHEP using package-mode (i.e. FindCLHEP)
-  # This will set up imported targets for us, but we need
-  # to set CLHEP_LIBRARIES afterwards to use these
-  find_package(CLHEP 2.3.3.0 REQUIRED ${__g4_clhep_components})
-
-  set(CLHEP_LIBRARIES CLHEP::CLHEP)
-  if(GEANT4_USE_SYSTEM_CLHEP_GRANULAR)
-    set(CLHEP_LIBRARIES)
-    foreach(_comp ${__g4_clhep_components})
-      list(APPEND CLHEP_LIBRARIES  "CLHEP::${_comp}")
-    endforeach()
-  endif()
-
-  set(GEANT4_USE_SYSTEM_CLHEP TRUE)
+  # Find CLHEP using config-mode (i.e. CLHEPConfig)
+  # Note that the imported targets have different properties
+  # depending on version:
+  # >= 2.3.3.0 Imported targets have INTERFACE_INCLUDE_DIRECTORIES
+  # >= 2.3.1.0 Imported targets are namespaced, all components available
+  # < 2.3.1.0 Only CLHEP/CLHEPS available as imported targets
+  #
+  # By supplying components, CLHEP_LIBRARIES is populated with the
+  # appropriate set of imported targets.
+  find_package(CLHEP 2.3.3.0 REQUIRED ${__g4_clhep_components} CONFIG)
 else()
   set(CLHEP_FOUND TRUE)
-  set(GEANT4_USE_BUILTIN_CLHEP TRUE)
+  # TODO: CLHEP_INCLUDE_DIRS still required for windows support
+  #       Current way of building DLLs requires build of a temporary
+  #       archive lib, and this does not link to dependencies, hence
+  #       it does not get their usage requirements.
+  #       May be fixable by linking or use of better DLL build mechanism
+  #       available in CMake >= 3.4
+  #       As other externals will need the same treatment, return
+  #       to old CLHEP_INCLUDE_DIRS setting
+  #
   set(CLHEP_INCLUDE_DIRS "${PROJECT_SOURCE_DIR}/source/externals/clhep/include")
-  if(BUILD_SHARED_LIBS)
-    set(CLHEP_LIBRARIES G4clhep)
-  else()
-    set(CLHEP_LIBRARIES G4clhep-static)
-  endif()
+
+  # All G4*** targets are handled internally to use static or shared
+  # as appropriate, so only need to declare core target name
+  set(CLHEP_LIBRARIES G4clhep)
 endif()
 
-GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library${__system_clhep_mode}")
+geant4_add_feature(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library${__system_clhep_mode}")
 
 #-----------------------------------------------------------------------
 # Find required EXPAT package
@@ -241,13 +256,14 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     endforeach()
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
+  list (APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS ${VECGEOM_DEFINITIONS})
 
   # Combined definitions
   add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # Add USolids inc dirs here - can be removed once USolids supports
   # INTERFACE_INCLUDE_DIRECTORIES
-  include_directories(${USOLIDS_INCLUDE_DIRS})
+  include_directories(${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 
 

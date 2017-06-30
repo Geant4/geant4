@@ -1,4 +1,4 @@
-$Id: History 102848 2017-02-27 13:09:25Z gcosmo $
+$Id: History 103532 2017-04-13 14:00:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,22 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-February 24, 2017 I. Hrivnacova (analysis-V10-02-26)
+April 12, 2017 I. Hrivnacova (analysis-V10-03-03)
+- Corrected handling of open file failure 
+  (This fixes problem report #1957.)
+
+March 14, 2017 I. Hrivnacova (analysis-V10-03-02)
+- Added GetP[1,2]Id(const G4String&) functions to 
+  the G4AnaysisManager public interface.
+  (This fixes problem report #1949.)
+
+March 03, 2017 I. Hrivnacova (analysis-V10-03-01)
+- Fixed problem of removing non-empty ntuple files 
+  in user application where ntuples are created after
+  open file.
+  (This mode is used in dna examples, eg. dnaphysics.)
+
+February 24, 2017 I. Hrivnacova (analysis-V10-03-00)
 - Restored clean-up of Root empty files in MT mode
   (which was lost with previous updates)
 

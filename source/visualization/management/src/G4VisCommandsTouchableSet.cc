@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsTouchableSet.cc 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id: G4VisCommandsTouchableSet.cc 104163 2017-05-15 06:52:42Z gcosmo $
 
 // /vis/touchable/set commands - John Allison  8th October 2012
 
@@ -38,7 +38,6 @@
 #include "G4UIcmdWithAString.hh"
 
 #include <sstream>
-#include <cctype>
 
 ////////////// /vis/touchable/set/colour ///////////////////////////////////////
 
@@ -52,9 +51,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetColour->SetGuidance("Set colour of current touchable.");
   fpCommandSetColour->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
-  fpCommandSetColour->SetGuidance
-  ("If \"red\" is a string understood by the vis system it will be taken."
-   "\n  Otherwise the values of \red\", \"green\", etc., are used.");
+  fpCommandSetColour->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red", 's', omitable = true);
   parameter->SetDefaultValue("1.");
   fpCommandSetColour->SetParameter(parameter);
@@ -184,21 +181,7 @@ void G4VisCommandsTouchableSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(1,1,1,1);  // Default white and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-        if (fpVisManager->GetVerbosity() >= G4VisManager::warnings) {
-          G4cout << "WARNING: Colour \"" << redOrString
-          << "\" not found.  Defaulting to white and opaque."
-          << G4endl;
-        }
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertToDouble(redOrString), green, blue);
-    }
-    colour = G4Colour
-    (colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
-    
+    ConvertToColour(colour, redOrString, green, blue, opacity);    
     workingVisAtts.SetColour(colour);
     workingVP.AddVisAttributesModifier
     (G4ModelingParameters::VisAttributesModifier

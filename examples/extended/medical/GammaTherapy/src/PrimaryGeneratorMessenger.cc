@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PrimaryGeneratorMessenger.cc 103795 2017-04-27 13:38:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/PrimaryGeneratorMessenger.cc
 /// \brief Implementation of the PrimaryGeneratorMessenger class
@@ -45,7 +45,8 @@
 
 #include "PrimaryGeneratorMessenger.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "Histo.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
 #include "G4UImanager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,9 +55,9 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
                            PrimaryGeneratorAction* gen):
   fGen(gen)
 {
-  if(1 < (Histo::GetPointer())->GetVerbose()) {
-    G4cout << "PrimaryGeneratorMessenger: Construct " << G4endl;
-  }
+  fVerbose = gen->GetVerbose();
+  if(fVerbose) G4cout << "PrimaryGeneratorMessenger: Construct " << G4endl;
+
   fBeamXCmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/beamX",this);
   fBeamXCmd->SetGuidance("Set X position of the center of the beam.");
   fBeamXCmd->SetParameterName("beamX",true);
@@ -74,6 +75,12 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
   fBeamZCmd->SetParameterName("beamZ",true);
   fBeamZCmd->SetUnitCategory("Length");
   fBeamZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  fBeamECmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/beamE",this);
+  fBeamECmd->SetGuidance("Set the beam kinetic energy");
+  fBeamECmd->SetParameterName("beamE",false);
+  fBeamECmd->SetUnitCategory("Energy");
+  fBeamECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fSigmaXCmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/sigmaX",this);
   fSigmaXCmd->SetGuidance("Set the beam Gussian width for X");
@@ -98,12 +105,6 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
   fSigmaECmd->SetParameterName("sigmaE",false);
   fSigmaECmd->SetUnitCategory("Energy");
   fSigmaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fBeamECmd = new G4UIcmdWithADoubleAndUnit("/testem/gun/beamE",this);
-  fBeamECmd->SetGuidance("Set the beam kinetic energy");
-  fBeamECmd->SetParameterName("beamE",false);
-  fBeamECmd->SetUnitCategory("Energy");
-  fBeamECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   fRandCmd = new G4UIcmdWithAString("/testem/gun",this);
   fRandCmd->SetGuidance("Set the name of the random distribution (gauss,flat)");
@@ -130,14 +131,16 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
   delete fBeamXCmd;
   delete fBeamYCmd;
   delete fBeamZCmd;
+
   delete fSigmaXCmd;
   delete fSigmaYCmd;
   delete fSigmaZCmd;
   delete fSigmaECmd;
+
   delete fBeamECmd;
+  delete fRandCmd;
   delete fMaxThetaCmd;
   delete fThetaCmd;
-  delete fRandCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,11 +148,9 @@ PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
                                             G4String newValue)
 {
-
-  if(1 < (Histo::GetPointer())->GetVerbose()) {
+  if(fVerbose)  
     G4cout << "PrimaryGeneratorMessenger: Next command value = "
            << newValue << G4endl;
-  }
 
   if(command == fBeamXCmd)
     {fGen->SetBeamX(fBeamXCmd->GetNewDoubleValue(newValue));}
@@ -168,19 +169,17 @@ void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
   if(command == fBeamECmd) {
     G4double e = fBeamECmd->GetNewDoubleValue(newValue);
     fGen->SetBeamEnergy(e);
-    Histo* theHisto = Histo::GetPointer();
-    if(theHisto->GetMaxEnergy() == 0.0) theHisto->SetMaxEnergy(e);
   }
   if(command == fMaxThetaCmd)
-    {fGen->SetBeamMinCosTheta(std::cos(fMaxThetaCmd->GetNewDoubleValue(newValue)));}
+    {fGen->SetBeamMinCosTheta(
+                     std::cos(fMaxThetaCmd->GetNewDoubleValue(newValue)));}
   if(command == fThetaCmd)
     {fGen->SetSigmaTheta(fThetaCmd->GetNewDoubleValue(newValue));}
   if(command == fRandCmd)
     {fGen->SetRandom(newValue);}
 
 
-  if(1 < (Histo::GetPointer())->GetVerbose())
-    {G4cout << "PrimaryGeneratorMessenger: O'K " << G4endl;}
+  if(fVerbose) G4cout << "PrimaryGeneratorMessenger: O'K " << G4endl;
   }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

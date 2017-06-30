@@ -1,4 +1,4 @@
-$Id: History 99316 2016-09-13 09:53:31Z gcosmo $
+$Id: History 103488 2017-04-11 10:16:44Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,7 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+11-04-17 mma  (exhadr03-V10-03-03)
+- BeginOfRunAction() : remove SetRandomNumberStore()
+
 10-09-16 mma (exhadr03-V10-02-02)
 - change name : GammaPhysics --> GammaNuclearPhysics.
 

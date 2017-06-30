@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.cc 100399 2016-10-20 07:38:12Z gcosmo $
+// $Id: G4BetheHeitlerModel.cc 104555 2017-06-06 07:31:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -178,7 +178,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   G4ParticleMomentum GammaDirection = aDynamicGamma->GetMomentumDirection();
 
   G4double epsil ;
-  G4double epsil0 = electron_mass_c2/GammaEnergy ;
+  G4double epsil0 = electron_mass_c2/GammaEnergy;
   if(epsil0 > 1.0) { return; }
 
   // do it fast if GammaEnergy < Egsmall
@@ -188,7 +188,7 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
-  static const G4double Egsmall=2.*MeV;
+  static const G4double Egsmall=2.*CLHEP::MeV;
   if (GammaEnergy < Egsmall) {
 
     epsil = epsil0 + (0.5-epsil0)*rndmEngine->flat();
@@ -198,16 +198,18 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     // Extract Coulomb factor for this Element
     G4double FZ = 8.*(anElement->GetIonisation()->GetlogZ3());
-    if (GammaEnergy > 50.*MeV) { FZ += 8.*(anElement->GetfCoulomb()); }
+    static const G4double midEnergy = 50.*CLHEP::MeV;
+    if (GammaEnergy > midEnergy) { FZ += 8.*(anElement->GetfCoulomb()); }
 
     // limits of the screening variable
     G4double screenfac = 136.*epsil0/(anElement->GetIonisation()->GetZ3());
-    G4double screenmax = exp ((42.24 - FZ)/8.368) - 0.952 ;
-    G4double screenmin = min(4.*screenfac,screenmax);
+    G4double screenmax = G4Exp ((42.24 - FZ)/8.368) + 0.952 ;
+    G4double screenmin = std::min(4.*screenfac, screenmax);
 
     // limits of the energy sampling
     G4double epsil1 = 0.5 - 0.5*sqrt(1. - screenmin/screenmax) ;
-    G4double epsilmin = max(epsil0,epsil1) , epsilrange = 0.5 - epsilmin;
+    G4double epsilmin = std::max(epsil0,epsil1);
+    G4double epsilrange = 0.5 - epsilmin;
 
     //
     // sample the energy rate of the created electron (or positron)
@@ -217,8 +219,8 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     G4double F10 = ScreenFunction1(screenmin) - FZ;
     G4double F20 = ScreenFunction2(screenmin) - FZ;
-    G4double NormF1 = max(F10*epsilrange*epsilrange,0.); 
-    G4double NormF2 = max(1.5*F20,0.);
+    G4double NormF1 = std::max(F10*epsilrange*epsilrange, 0.); 
+    G4double NormF2 = std::max(1.5*F20, 0.);
 
     do {
       if ( NormF1/(NormF1+NormF2) > rndmEngine->flat()) {
@@ -260,16 +262,22 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // (Geant3 manual (1993) Phys211),
   //  derived from Tsai distribution (Rev Mod Phys 49,421(1977))
 
-  G4double u= - G4Log(rndmEngine->flat()*rndmEngine->flat());
+  static const G4double a1 = 1.6;
+  static const G4double a2 = a1/3.;
+  G4double uu = -G4Log(rndmEngine->flat()*rndmEngine->flat());
+  G4double u = (0.25 > rndmEngine->flat()) ? uu*a1 : uu*a2;
 
-  if (9. > 36.*rndmEngine->flat()) { u *= 1.6; }
-  else                             { u *= 0.53333; } 
+  G4double thetaEle = u*electron_mass_c2/ElectTotEnergy;
+  G4double sinte = std::sin(thetaEle);
+  G4double coste = std::cos(thetaEle);
 
-  G4double TetEl = u*electron_mass_c2/ElectTotEnergy;
-  G4double TetPo = u*electron_mass_c2/PositTotEnergy;
-  G4double Phi  = twopi * rndmEngine->flat();
-  G4double dxEl= sin(TetEl)*cos(Phi),dyEl= sin(TetEl)*sin(Phi),dzEl=cos(TetEl);
-  G4double dxPo=-sin(TetPo)*cos(Phi),dyPo=-sin(TetPo)*sin(Phi),dzPo=cos(TetPo);
+  G4double thetaPos = u*electron_mass_c2/PositTotEnergy;
+  G4double sintp = std::sin(thetaPos);
+  G4double costp = std::cos(thetaPos);
+
+  G4double phi  = twopi * rndmEngine->flat();
+  G4double sinp = std::sin(phi);
+  G4double cosp = std::cos(phi);
    
   //
   // kinematic of the created pair
@@ -277,9 +285,9 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // the electron and positron are assumed to have a symetric
   // angular distribution with respect to the Z axis along the parent photon.
 
-  G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2);
+  G4double ElectKineEnergy = std::max(0.,ElectTotEnergy - electron_mass_c2);
 
-  G4ThreeVector ElectDirection (dxEl, dyEl, dzEl);
+  G4ThreeVector ElectDirection (sinte*cosp, sinte*sinp, coste);
   ElectDirection.rotateUz(GammaDirection);   
 
   // create G4DynamicParticle object for the particle1  
@@ -288,9 +296,8 @@ void G4BetheHeitlerModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   
   // the e+ is always created (even with Ekine=0) for further annihilation.
 
-  G4double PositKineEnergy = max(0.,PositTotEnergy - electron_mass_c2);
-
-  G4ThreeVector PositDirection (dxPo, dyPo, dzPo);
+  G4double PositKineEnergy = std::max(0.,PositTotEnergy - electron_mass_c2);
+  G4ThreeVector PositDirection (-sintp*cosp, -sintp*sinp, costp);
   PositDirection.rotateUz(GammaDirection);   
 
   // create G4DynamicParticle object for the particle2 

@@ -1,4 +1,4 @@
-$Id: README 93738 2015-10-30 11:03:07Z gcosmo $
+$Id: README 104417 2017-05-30 08:30:48Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -130,10 +130,6 @@ $Id: README 93738 2015-10-30 11:03:07Z gcosmo $
 	13	"(transmit, charged) : projected angle at exit of world"
 	14	"(transmit, charged) : projected position at exit of world"
 	15	"(transmit, charged) : radius at exit of world"	
-  16      "energy of Auger e- at creation"
-  17      "energy of fluorescence gamma at creation"
-  18      "energy of Auger e- at creation (log scale)"
-  19      "energy of fluorescence gamma at creation (log scale)"
 	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
@@ -146,10 +142,18 @@ $Id: README 93738 2015-10-30 11:03:07Z gcosmo $
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
-  44      "energy of PIXE Auger e- at creation"
-  45      "energy of PIXE gamma at creation"
-  46      "energy of PIXE Auger e- at creation (log scale)"
-  47      "energy of PIXE gamma at creation (log scale)"
+        50      "energy of Auger e- at creation"
+        51      "energy of fluorescence gamma at creation"
+        52      "energy of Auger e- at creation (log scale)"
+        53      "energy of fluorescence gamma at creation (log scale)"
+        54      "energy of PIXE Auger e- at creation"
+        55      "energy of PIXE gamma at creation"
+        56      "energy of PIXE Auger e- at creation (log scale)"
+        57      "energy of PIXE gamma at creation (log scale)"
+        58      "energy of G4DNA Auger e- at creation"
+        59      "energy of G4DNA gamma at creation"
+        60      "energy of G4DNA Auger e- at creation (log scale)"
+        61      "energy of G4DNA gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
  

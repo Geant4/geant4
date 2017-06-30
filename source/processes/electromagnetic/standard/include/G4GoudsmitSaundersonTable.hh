@@ -4,7 +4,7 @@
 // *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software License,  included in the file *
+// * conditions of the Geant4 Software Liscense,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
 // *                                                                  *
@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.hh 93663 2015-10-28 09:50:49Z gcosmo $
+// $Id: G4GoudsmitSaundersonTable.hh 103884 2017-05-03 08:04:50Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -55,12 +55,17 @@
 //            The new version is several times faster, more robust and accurate
 //            compared to the earlier version (G4GoudsmitSaundersonMscModel class
 //            that use these data has been also completely replaced)
+// 28.04.2017 M. Novak: the GS angular distributions has been recomputed, the 
+//            data size has been reduced from 16 MB down to 5 MB by using a new 
+//            representation, the class has been modified significantly due to 
+//            this new data representation.
 //
 // References:
 //   [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
 //   [2] I.Kawrakow, A.F.Bielajew, NIMB 134(1998) 325-336
 //
 // -----------------------------------------------------------------------------
+
 
 #ifndef G4GoudsmitSaundersonTable_h
 #define G4GoudsmitSaundersonTable_h 1
@@ -69,35 +74,36 @@
 
 #include "G4Types.hh"
 
-class G4GoudsmitSaundersonTable
-{
+
+class G4GoudsmitSaundersonTable {
+
 public:
+  G4GoudsmitSaundersonTable();
+ ~G4GoudsmitSaundersonTable();
 
-  G4GoudsmitSaundersonTable(){};
-  ~G4GoudsmitSaundersonTable();
-
-  // initialie:
-  //   - loads the precomputed MSC angular CDFs into memory
-  //   - init. material dependent MSC parameters (Moliere's screening)
-  //  (- only Master thread and only once)
   void Initialise();
 
-  // samples cos(theta) i.e. angular deflection from the precomputed angular
-  // distributions in the real multiple scattering case
-  G4double SampleCosTheta(G4double, G4double, G4double, G4double, G4double, G4double);
-  G4double SampleCosThetaII(G4double, G4double, G4double, G4double, G4double, G4double);
+  // structure to store one GS transformed angular distribution (for a given s/lambda_el,s/lambda_elG1)
+  struct GSMSCAngularDtr {
+    G4int     fNumData;    // # of data points
+    G4double  fQScale;
+    G4double *fUValues;    // array of transformed variables
+    G4double *fParamA;     // array of interpolation parameters a
+    G4double *fParamB;     // array of interpolation parameters b
+  };
 
-  // returns with the screening parameter value that results with the first
-  // transport coefficient (G1) received as input parameter according to the
-  // screened Rutherford DCS. Used only when fgIsUsePWATotalXsecData is TRUE
-  // in G4GoudsmitSaundersonMscModel i.e. when PWA screeing is used instead of
-  // Moliere's one.
-  G4double GetScreeningParam(G4double);
+  void LoadMSCData();
+  GSMSCAngularDtr* GetOne(G4int indx) {return fGSMSCAngularDistributions1[indx];}
 
-  // samples angular deflection cos(theta) and sin(theta) for electrons/positrons
-  // involving sampling of no scattering, single scattering, "few" scattering and
-  // real multiple scattering
-  void Sampling(G4double, G4double, G4double,  G4double&, G4double&);
+  void   Sampling(G4double lambdaval, G4double qval, G4double scra, 
+                  G4double &cost, G4double &sint);
+  G4double SampleCosTheta(G4double lambdaval, G4double qval, G4double scra, 
+                          G4double rndm1, G4double rndm2, G4double rndm);
+  G4double SampleCosTheta1(G4double lambdaval, G4double qval, G4double scra, 
+                           G4double rndm1, G4double rndm2, G4double rndm);
+  G4double SampleCosTheta2(G4double lambdaval, G4double qval, G4double scra,
+                           G4double rndm1, G4double rndm2, G4double rndm);
+  G4double GetScreeningParam(G4double G1);
 
   // material dependent MSC parameters (computed at initialisation) regarding
   // Moliere's screening parameter
@@ -105,63 +111,51 @@ public:
   G4double GetMoliereXc2(G4int matindx){return (*fgMoliereXc2)[matindx];}
 
 private:
-
-  //  hide assignment operator and cpy ctr.
-  G4GoudsmitSaundersonTable & operator=(const  G4GoudsmitSaundersonTable &right);
-  G4GoudsmitSaundersonTable(const  G4GoudsmitSaundersonTable&);
-
-  // load precomputed CDFs of MSC angular distributions over a 2D parameter grid
-  // CDFs are stored in a variable transformed, equally probable intervall form
-  // together with the corresponding rational interpolation paraneters
-  void LoadMSCData();
-  void LoadMSCDataII();
-
   // initialisation of material dependent Moliere's MSC parameters
   void InitMoliereMSCParams();
 
-private:
-   //@{
-   /** size of grids of some parameters */
-   static const G4int fgNumLambdas =  76;  /** number of \f$ s/\lambda_{e} $\f-values      */
-   static const G4int fgNumLamG1   =  21;  /** number of \f$ s/\lambda_{e}G_{1} $\f-values */
-   static const G4int fgNumLamG1II   =  22;  /** number of \f$ s/\lambda_{e}G_{1} $\f-values */
-   static const G4int fgNumUvalues = 101;  /** number of u-vaues                           */
-   static const G4int fgNumScreeningParams = 160; /** number of A-vaues                    */
-   //@}
 
-   //@{
-   /** girds of fixed parameter values */
-   /** the grid \f$ s/\lambda_{e} $\f-values; size = fgNumLambdas = 76        */
-   static const G4double fgLambdaValues[];
-   /** the grid of \f$ s/\lambda_{e}G_{1} $\f-values; size = fgNumLamG1 = 11 */
-   static const G4double fgLamG1Values[];
-   static const G4double fgLamG1ValuesII[];
+ private:
+   static bool             gIsInitialised;         // are the precomputed angular distributions already loaded in?
+   static constexpr G4int    gLAMBNUM = 64;        // # L=s/lambda_el in [fLAMBMIN,fLAMBMAX]
+   static constexpr G4int    gQNUM1   = 15;        // # Q=s/lambda_el G1 in [fQMIN1,fQMAX1] in the 1-st Q grid
+   static constexpr G4int    gQNUM2   = 32;        // # Q=s/lambda_el G1 in [fQMIN2,fQMAX2] in the 2-st Q grid
+   static constexpr G4int    gNUMSCR1 = 201;       // # of screening parameters in the A(G1) function
+   static constexpr G4int    gNUMSCR2 = 51;        // # of screening parameters in the A(G1) function
+   static constexpr G4double gLAMBMIN = 1.0;       // minimum s/lambda_el
+   static constexpr G4double gLAMBMAX = 100000.0;  // maximum s/lambda_el
+   static constexpr G4double gQMIN1   = 0.001;     // minimum s/lambda_el G1 in the 1-st Q grid
+   static constexpr G4double gQMAX1   = 0.99;      // maximum s/lambda_el G1 in the 1-st Q grid
+   static constexpr G4double gQMIN2   = 0.99;      // minimum s/lambda_el G1 in the 1-st Q grid
+   static constexpr G4double gQMAX2   = 7.99;      // maximum s/lambda_el G1 in the 1-st Q grid
+   // precomputed A(G1) function with its interpolation parameters
+   static constexpr G4double gSCRMIN1  = 1.93214991408357e-12;
+   static constexpr G4double gSCRMAX1  = 2.42974344203683e-01;
+   static constexpr G4double gSCRMAX2  = 5.50564555556202e+01;
+   //
+   static const G4double gG1Values1[];
+   static const G4double gScrAValues1[];
+   static const G4double gScrBValues1[];
+   static const G4double gG1Values2[];
+   static const G4double gScrAValues2[];
+   static const G4double gScrBValues2[];
 
-   /** the grid of u-values; size = fgNumUvalues = 101 */
-   static const G4double fgUValues[];
-   //@}
 
-   // precomputed G1(A) function as a table -> run time interpolation to determine
-   // the screening parameter value A that gives back the given first transport
-   // coefficient G1
-   static const G4double fgG1Values[];
-   static const G4double fgScreeningParam[];
-   static const G4double fgSrcAValues[];
-   static const G4double fgSrcBValues[];
-   //@{
-   /** Precomputed equaly probable inverse CDF-s over the 3D parameter grid plus
-    *  precomputed parameters necessary for proper rational interpolation of the
-    *  inverse CDF.
-    */
-   static G4double fgInverseQ2CDFs[fgNumLambdas*fgNumLamG1*fgNumUvalues];
-   static G4double fgInterParamsA2[fgNumLambdas*fgNumLamG1*fgNumUvalues];
-   static G4double fgInterParamsB2[fgNumLambdas*fgNumLamG1*fgNumUvalues];
-   static G4double fgInverseQ2CDFsII[fgNumLambdas*fgNumLamG1II*fgNumUvalues];
-   static G4double fgInterParamsA2II[fgNumLambdas*fgNumLamG1II*fgNumUvalues];
-   static G4double fgInterParamsB2II[fgNumLambdas*fgNumLamG1II*fgNumUvalues];
+   G4double fLogLambda0;          // ln(gLAMBMIN)
+   G4double fLogDeltaLambda;      // ln(gLAMBMAX/gLAMBMIN)/(gLAMBNUM-1)
+   G4double fInvLogDeltaLambda;   // 1/[ln(gLAMBMAX/gLAMBMIN)/(gLAMBNUM-1)]
+   G4double fInvDeltaQ1;          // 1/[(gQMAX1-gQMIN1)/(gQNUM1-1)]
+   G4double fDeltaQ2;             // [(gQMAX2-gQMIN2)/(gQNUM2-1)]
+   G4double fInvDeltaQ2;          // 1/[(gQMAX2-gQMIN2)/(gQNUM2-1)]
+   // for the precumputed A(G1) function
+   G4double fLogG1FuncMin1;
+   G4double fInvLogDeltaG1Func1;
+   G4double fLogG1FuncMin2;
+   G4double fInvLogDeltaG1Func2;
 
-   //@}
-
+   // vector to store all GS transformed angular distributions
+   std::vector<GSMSCAngularDtr*> fGSMSCAngularDistributions1;
+   std::vector<GSMSCAngularDtr*> fGSMSCAngularDistributions2;
 
    //@{
    /** Precomputed \f$ b_lambda_{c} $\f and \f$ \chi_c^{2} $\f material dependent
@@ -172,11 +166,8 @@ private:
    */
    static std::vector<G4double> *fgMoliereBc;
    static std::vector<G4double> *fgMoliereXc2;
-   //@}
-
-   // flag to check if data are alredy in memory
-   static G4bool fgIsInitialised;
 
 };
 
 #endif
+

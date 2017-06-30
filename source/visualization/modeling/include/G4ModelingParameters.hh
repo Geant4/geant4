@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id: G4ModelingParameters.hh 103627 2017-04-19 13:30:26Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -39,6 +39,7 @@
 #include "globals.hh"
 #include "G4VisExtent.hh"
 #include "G4VisAttributes.hh"
+#include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
 #include <vector>
@@ -77,8 +78,14 @@ public: // With description
 
   class PVNameCopyNo {
   public:
-    PVNameCopyNo(G4String name, G4int copyNo):
-    fName(name), fCopyNo(copyNo) {}
+    // Normal constructor
+    PVNameCopyNo(G4String name, G4int copyNo)
+    : fName(name), fCopyNo(copyNo) {}
+    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
+    PVNameCopyNo
+    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
+    : fName(nodeID.GetPhysicalVolume()->GetName())
+    , fCopyNo(nodeID.GetCopyNo()) {}
     const G4String& GetName() const {return fName;}
     G4int GetCopyNo() const {return fCopyNo;}
     G4bool operator!=(const PVNameCopyNo&) const;
@@ -87,9 +94,30 @@ public: // With description
     G4String fName;
     G4int fCopyNo;
   };
-
   typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
   typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
+
+  class PVPointerCopyNo {
+  public:
+    // Normal constructor
+    PVPointerCopyNo(G4VPhysicalVolume* pPV, G4int copyNo)
+    : fpPV(pPV), fCopyNo(copyNo) {}
+    // Constructor from G4PhysicalVolumeModel::G4PhysicalVolumeNodeID
+    PVPointerCopyNo
+    (const G4PhysicalVolumeModel::G4PhysicalVolumeNodeID& nodeID)
+    : fpPV(nodeID.GetPhysicalVolume())
+    , fCopyNo(nodeID.GetCopyNo()) {}
+    const G4String& GetName() const;
+    const G4VPhysicalVolume* GetPVPointer() const {return fpPV;}
+    G4int GetCopyNo() const {return fCopyNo;}
+    G4bool operator!=(const PVPointerCopyNo&) const;
+    G4bool operator==(const PVPointerCopyNo& rhs) const {return !operator!=(rhs);}
+  private:
+    G4VPhysicalVolume* fpPV;
+    G4int fCopyNo;
+  };
+  typedef std::vector<PVPointerCopyNo> PVPointerCopyNoPath;
+  typedef PVPointerCopyNoPath::const_iterator PVPointerCopyNoPathConstIterator;
 
   class VisAttributesModifier {
   public:
@@ -183,6 +211,9 @@ public: // With description
   (std::ostream& os, const PVNameCopyNoPath&);
 
   friend std::ostream& operator <<
+  (std::ostream& os, const PVPointerCopyNoPath&);
+
+  friend std::ostream& operator <<
   (std::ostream& os,
    const std::vector<VisAttributesModifier>&);
 
@@ -211,6 +242,9 @@ std::ostream& operator <<
 
 std::ostream& operator <<
 (std::ostream& os, const G4ModelingParameters::PVNameCopyNoPath&);
+
+std::ostream& operator <<
+(std::ostream& os, const G4ModelingParameters::PVPointerCopyNoPath&);
 
 std::ostream& operator <<
 (std::ostream& os,

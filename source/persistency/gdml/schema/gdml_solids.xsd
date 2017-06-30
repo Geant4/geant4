@@ -145,10 +145,35 @@
   </xs:element>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:group name="OpticalSurfacePropertiesGroup">
+    <xs:annotation>
+      <xs:documentation>General optical surface properties</xs:documentation>
+    </xs:annotation>
+    <xs:sequence>
+	  <xs:choice minOccurs="0">
+	    <xs:element maxOccurs="unbounded" name="property">
+	      <xs:annotation>
+		<xs:documentation>General optical surface property (const or vector)</xs:documentation>
+	      </xs:annotation>
+	      <xs:complexType>
+		<xs:complexContent>
+		  <xs:extension base="ReferenceType">
+		    <xs:attribute name="name" type="xs:string" use="required"></xs:attribute>
+		  </xs:extension>
+		</xs:complexContent>
+	      </xs:complexType>
+	    </xs:element>
+          </xs:choice>
+    </xs:sequence>
+  </xs:group>
+
+  
   <xs:complexType name="SurfacePropertyType">
     <xs:annotation>
       <xs:documentation>Base surface type</xs:documentation>
     </xs:annotation>
+    <xs:group ref="OpticalSurfacePropertiesGroup"></xs:group> 
     <xs:attribute name="name" type="xs:ID" use="required"></xs:attribute>
     <xs:attribute name="type" type="xs:string" default="dielectric_dielectric"></xs:attribute>
   </xs:complexType>
@@ -950,8 +975,8 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
-  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->  
-
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  
   <xs:element name="opticalsurface" substitutionGroup="SurfaceProperty">
     <xs:annotation>
       <xs:documentation>Optical surface used by Geant4 optical processes</xs:documentation>

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4NuclearStopping.cc 103955 2017-05-04 11:29:54Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -61,7 +61,6 @@ G4NuclearStopping::G4NuclearStopping(const G4String& processName)
   SetBuildTableFlag(false);
   enableAlongStepDoIt = true; 
   enablePostStepDoIt = false; 
-  modelICRU49 = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -84,8 +83,7 @@ void G4NuclearStopping::InitialiseProcess(const G4ParticleDefinition*)
     isInitialized = true;
 
     if(!EmModel(1)) {
-      modelICRU49 = new G4ICRU49NuclearStoppingModel();
-      SetEmModel(modelICRU49);
+      SetEmModel(new G4ICRU49NuclearStoppingModel());
     }
     AddEmModel(1, EmModel());
     EmModel()->SetParticleChange(&nParticleChange);
@@ -116,7 +114,7 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
   G4double T2 = step.GetPostStepPoint()->GetKineticEnergy();
 
   const G4ParticleDefinition* part = track.GetParticleDefinition();
-  G4double Z = std::fabs(part->GetPDGCharge()/eplus);
+  G4double Z = std::abs(part->GetPDGCharge()/eplus);
 
   if(T2 > 0.0 && T2*proton_mass_c2 < Z*Z*MeV*part->GetPDGMass()) {
 
@@ -130,14 +128,12 @@ G4VParticleChange* G4NuclearStopping::AlongStepDoIt(const G4Track& track,
       G4VEmModel* mod = SelectModel(T, couple->GetIndex());
 
       // sample stopping
-      if(modelICRU49) { modelICRU49->SetFluctuationFlag(true); }
       G4double nloss = 
 	length*mod->ComputeDEDXPerVolume(couple->GetMaterial(), part, T);
       if(nloss > T1) { nloss = T1; }
       nParticleChange.SetProposedKineticEnergy(T1 - nloss);
       nParticleChange.ProposeLocalEnergyDeposit(nloss);
       nParticleChange.ProposeNonIonizingEnergyDeposit(nloss);
-      if(modelICRU49) { modelICRU49->SetFluctuationFlag(false); }
     }
   }
   return &nParticleChange;

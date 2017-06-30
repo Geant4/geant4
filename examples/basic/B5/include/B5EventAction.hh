@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.hh 101036 2016-11-04 09:00:23Z gcosmo $
+// $Id: B5EventAction.hh 103553 2017-04-18 09:00:54Z gcosmo $
 //
 /// \file B5EventAction.hh
 /// \brief Definition of the B5EventAction class
@@ -36,6 +36,14 @@
 #include "globals.hh"
 
 #include <vector>
+#include <array>
+
+// named constants
+const G4int kEm = 0;
+const G4int kHad = 1;
+const G4int kH1 = 0;
+const G4int kH2 = 1;
+const G4int kDim = 2;
 
 /// Event action
 
@@ -48,18 +56,18 @@ public:
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
-    std::vector<G4double>& GetEmCalEdep() { return fEmCalEdep; }
-    std::vector<G4double>& GetHadCalEdep() { return fEmCalEdep; }
+    std::vector<G4double>& GetEmCalEdep() { return fCalEdep[kEm]; }
+    std::vector<G4double>& GetHadCalEdep() { return fCalEdep[kHad]; }
     
 private:
-    G4int fHodHC1ID;
-    G4int fHodHC2ID;
-    G4int fDriftHC1ID;
-    G4int fDriftHC2ID;
-    G4int fEmCalHCID;
-    G4int fHadCalHCID;
-    std::vector<G4double> fEmCalEdep;
-    std::vector<G4double> fHadCalEdep;
+    // hit collections Ids
+    std::array<G4int, kDim> fHodHCID;
+    std::array<G4int, kDim> fDriftHCID;
+    std::array<G4int, kDim> fCalHCID;
+    // histograms Ids
+    std::array<std::array<G4int, kDim>, kDim> fDriftHistoID;
+    // energy deposit in calorimeters cells
+    std::array<std::vector<G4double>, kDim> fCalEdep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

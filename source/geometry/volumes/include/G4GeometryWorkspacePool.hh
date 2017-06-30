@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.hh 79096 2014-02-14 16:07:39Z gcosmo $
+// $Id: G4GeometryWorkspacePool.hh 103041 2017-03-10 11:47:01Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -75,9 +75,6 @@ class G4GeometryWorkspacePool
       // To be called once at the end of the job
   
   protected:
-
-    void ReleaseAndDestroyWorkspace(G4GeometryWorkspace*);
-      // Destroy workspace after releasing it
 
     // void RegisterWarehouse( G4GeometryWarehouse *);
       // The (optional) warehouse keeps a list of free workspaces

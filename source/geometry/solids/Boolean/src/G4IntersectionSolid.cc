@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc 102530 2017-02-08 13:41:59Z gcosmo $
+// $Id: G4IntersectionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -139,11 +139,12 @@ G4IntersectionSolid::operator = (const G4IntersectionSolid& rhs)
 // Get bounding box
 
 void
-G4IntersectionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+G4IntersectionSolid::BoundingLimits(G4ThreeVector& pMin,
+                                    G4ThreeVector& pMax) const
 {
   G4ThreeVector minA,maxA, minB,maxB;
-  fPtrSolidA->Extent(minA,maxA);
-  fPtrSolidB->Extent(minB,maxB);
+  fPtrSolidA->BoundingLimits(minA,maxA);
+  fPtrSolidB->BoundingLimits(minB,maxB);
 
   pMin.set(std::max(minA.x(),minB.x()),
            std::max(minA.y(),minB.y()),
@@ -162,7 +163,7 @@ G4IntersectionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4IntersectionSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4IntersectionSolid::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Paraboloid.cc 101819 2016-12-01 08:13:36Z gcosmo $
+// $Id: G4Paraboloid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Paraboloid
 //
@@ -167,7 +167,8 @@ G4Paraboloid& G4Paraboloid::operator = (const G4Paraboloid& rhs)
 //
 // Get bounding box
 
-void G4Paraboloid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Paraboloid::BoundingLimits(G4ThreeVector& pMin,
+                                  G4ThreeVector& pMax) const
 {
   pMin.set(-r2,-r2,-dz);
   pMax.set( r2, r2, dz);
@@ -181,7 +182,8 @@ void G4Paraboloid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Paraboloid::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Paraboloid::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -199,7 +201,7 @@ G4Paraboloid::CalculateExtent(const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

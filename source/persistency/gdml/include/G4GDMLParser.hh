@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLParser.hh 96673 2016-04-29 12:08:20Z gcosmo $
+// $Id: G4GDMLParser.hh 104688 2017-06-12 12:16:28Z gcosmo $
 //
 //
 // class G4GDMLParser
@@ -127,6 +127,9 @@ class G4GDMLParser
    inline void SetRegionExport(G4bool);
    inline void SetEnergyCutsExport(G4bool);
    inline void SetSDExport(G4bool);
+
+   inline G4int GetMaxExportLevel() const;  // Manage max number of levels
+   inline void SetMaxExportLevel(G4int);    // to export
 
    inline void Clear();                  // Clears the evaluator
 

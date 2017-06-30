@@ -46,12 +46,14 @@
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 #include "G4VisExecutive.hh"
+#ifdef G4UI_USE_QT
+#include "G4UIQt.hh"
+#endif
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "CommandLineParser.hh"
-#include "G4UIQt.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -99,6 +101,7 @@ int main(int argc,char** argv)
 #endif
 
   // Set mandatory user initialization classes
+
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   
@@ -113,16 +116,17 @@ int main(int argc,char** argv)
   runManager->Initialize();
 
   // Initialize visualization
+
   G4VisManager* visManager = new G4VisExecutive;
-  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 
   // Get the pointer to the User Interface manager
+  
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4UIExecutive* ui(0);
 
   // interactive mode : define UI session
+  
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
     ui = new G4UIExecutive(argc, argv,

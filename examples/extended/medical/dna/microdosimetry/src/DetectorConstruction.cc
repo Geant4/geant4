@@ -34,6 +34,7 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "DetectorConstruction.hh"
+
 #include "G4SystemOfUnits.hh"
 #include "G4Region.hh"
 #include "G4ProductionCuts.hh"
@@ -78,6 +79,7 @@ void DetectorConstruction::DefineMaterials()
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
   // WORLD VOLUME
+  
   G4double worldSizeX  = 1*mm;
   G4double worldSizeY  = 1*mm;
   G4double worldSizeZ  = 1*mm;
@@ -120,6 +122,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                     0);           //copy number
 
   // Visualization attributes
+  
   G4VisAttributes* worldVisAtt =
       new G4VisAttributes(G4Colour(1.0,1.0,1.0)); //White
   worldVisAtt->SetVisibility(true);

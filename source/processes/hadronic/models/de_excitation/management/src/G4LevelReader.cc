@@ -54,10 +54,11 @@ G4String G4LevelReader::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
 G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr) 
-  : fData(ptr),fAlphaMax(9.0f+9),fVerbose(0),fLevelMax(632),fTransMax(80)
+  : fData(ptr),fAlphaMax(9.0e9f),fVerbose(0),fLevelMax(632),fTransMax(145)
 {
+  //G4cout << "### G4LevelReader AlphaMax= " << fAlphaMax << G4endl;
   fParam = fData->GetParameters();
-  fTimeFactor = (G4float)(CLHEP::second/G4Pow::GetInstance()->logZ(2));
+  fTimeFactor = CLHEP::second/G4Pow::GetInstance()->logZ(2);
   char* directory = getenv("G4LEVELGAMMADATA");
   if(directory) {
     fDirectory = directory;
@@ -74,242 +75,18 @@ G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr)
   for(G4int i=0; i<nbuf2; ++i)   { buff2[i] = ' '; }
   bufp[0] = bufp[1] = bufp[2] = ' ';
 
-  fEnergy = fCurrEnergy = fTrEnergy = 0.0;
-  fTime = fProb = fSpin = fAlpha = fRatio = fNorm1 = 0.0f;
+  fEnergy = fCurrEnergy = fTrEnergy = fTime = 0.0;
+  fProb = fSpin = fAlpha = fRatio = fNorm1 = 0.0f;
 
   vTrans.resize(fTransMax,0);
   vRatio.resize(fTransMax,0.0f);
   vGammaCumProbability.resize(fTransMax,0.0f);
   vGammaProbability.resize(fTransMax,0.0f);
   vShellProbability.resize(fTransMax,nullptr);
-  vMpRatio.resize(fTransMax,0.0f);
 
-  vEnergy.resize(fLevelMax,0.0f);
+  vEnergy.resize(fLevelMax,0.0);
   vSpin.resize(fLevelMax,0);
   vLevel.resize(fLevelMax,nullptr);
-}
-
-const G4LevelManager* 
-G4LevelReader::CreateLevelManager(G4int Z, G4int A)
-{
-  std::ostringstream ss;
-  ss << "/z" << Z << ".a" << A;
-  G4String st =  G4String(ss.str());
-  fFile = fDirectory + st;
-  return MakeLevelManager(Z, A, fFile);
-}
-
-const G4LevelManager* 
-G4LevelReader::MakeLevelManager(G4int Z, G4int A, const G4String& filename)
-{
-  vEnergy.resize(1,0.0f);
-  vSpin.resize(1,0);
-  vLevel.resize(1,nullptr);
-
-  vTrans.clear();
-  vGammaCumProbability.clear();
-  vGammaProbability.clear();
-  vShellProbability.clear();
-  vMpRatio.clear();
-
-  std::ifstream infile(filename, std::ios::in);
-
-  // file is not opened
-  if (!infile.is_open()) {
-    if (fVerbose > 0) {
-      G4cout << " G4LevelReader: fail open file for Z= " 
-	     << Z << " A= " << A 
-	     << " <" << filename << ">" <<  G4endl;
-    }
-
-  } else {
-
-    G4bool allLevels = fParam->StoreAllLevels();
-    if (fVerbose > 0) {
-      G4cout << "G4LevelReader: open file for Z= " 
-	     << Z << " A= " << A 
-	     << " <" << filename << ">" <<  G4endl;
-    }
-    // read line by line
-    G4bool end  = false;
-    G4bool next = true;
-    G4int nline = -1;
-    G4int  spin;
-    G4int  index(0);
-    fCurrEnergy = DBL_MAX;
-    do {
-      fPol = "  ";
-      ++nline;
-      G4bool isOK = (ReadDataItem(infile,fEnergy)   &&
-		     ReadDataItem(infile,fTrEnergy) &&
-		     ReadDataItem(infile,fProb)     &&
-		     ReadDataItem(infile,fPol)      &&
-		     ReadDataItem(infile,fTime)     &&
-		     ReadDataItem(infile,fSpin)     &&
-		     ReadDataItem(infile,fAlpha));
-      /*
-      G4cout << fEnergy << " " << fTrEnergy << " " << fProb << " " 
-	     << fPol << " " << fTime << " " << fSpin << " " << fAlpha 
-	     << " " << isOK << " " << fVerbose << G4endl;
-      */
-      fEnergy   *= CLHEP::keV;
-      fTrEnergy *= CLHEP::keV;
-
-      if(isOK) {
-	for(G4int i=0; i<10; ++i) { 
-	  isOK = (isOK && (ReadDataItem(infile,fICC[i])));
-	}
-      }
-      if(!isOK) {
-	end = true; 
-	next = false; 
-      }
-      if(fVerbose > 1) {
-	G4cout << "#Line " << nline << " " << fEnergy << " " << fTrEnergy 
-	       << " " << fProb << " " <<  fPol << " " << fTime << " " 
-	       << fSpin << " " << fAlpha << G4endl;
-	G4cout << "      ";
-	for(G4int i=0; i<10; ++i) { G4cout << fICC[i] << " "; }
-	G4cout << G4endl;
-      }
-      // end of nuclear level data
-      if(end || fEnergy > fCurrEnergy) {
-	size_t nn = vTrans.size();
-	if(nn > 0) {
-	  --nn;
-	  if(fVerbose > 1) {
-	    G4cout << "Reader: new level E= " << fEnergy 
-		   << " Ntransitions= " << nn+1 << " fNorm1= " << fNorm1 
-		   << G4endl;
-	  } 
-	  if(fNorm1 > 0.0f) { 
-	    fNorm1 = 1.0f/fNorm1; 
-	    for(size_t i=0; i<nn; ++i) {
-	      vGammaCumProbability[i]  *= fNorm1;
-	      if(fVerbose > 2) {
-		G4cout << "Probabilities[" << i 
-		       << "]= " << vGammaCumProbability[i]
-		       << " idxTrans= " << index
-		       << G4endl;
-	      }
-	    }
-	    vGammaCumProbability[nn]  = 1.0f;
-	    if(fVerbose > 2) {
-	      G4cout << "Probabilities[" << nn << "]= " 
-		     << vGammaCumProbability[nn]
-		     << " IdxTrans= " << index
-		     << G4endl;
-	    }
-	    vLevel.push_back(new G4NucLevel(vTrans.size(), fTime,
-					    vTrans,
-					    vGammaCumProbability,
-					    vGammaProbability,
-					    vMpRatio,
-					    vShellProbability));
-	    //case of X-level
-	  } else {
-            spin += 100000;
-            fTime = 0.0f;
-	    vLevel.push_back(nullptr);
-	  }
-	} else {
-	  vLevel.push_back(nullptr);
-	}
-	vSpin.push_back(spin);      
-	vTrans.clear();
-	vGammaCumProbability.clear();
-	vGammaProbability.clear();
-	vShellProbability.clear();
-	vMpRatio.clear();
-        if(!end) { next = true; }
-      }
-      G4float ener = (G4float)fEnergy;
-      // begin nuclear level data
-      if(next) {
-	if(fVerbose > 1) {
-	  G4cout << "== Reader: begin of new level E= " << fEnergy 
-		 << "  Prob= " << fProb << G4endl;
-	} 
-	// protection for bad level energy
-	size_t nn = vEnergy.size();
-	if(0 < nn && vEnergy[nn-1] > ener) { 
-	  ener = vEnergy[nn-1]; 
-	} 
-	vEnergy.push_back(ener);
-        fCurrEnergy = fEnergy;
-	fTime *= fTimeFactor;
-	if(fSpin > 20.0f) { fSpin = 0.0; }
-        spin = (G4int)(fSpin+fSpin);
-	fNorm1 = 0.0f;
-	next = false;
-      } 
-      // continue filling level data
-      if(!end) {
-        if(fProb > 0.0f) {
-	  // by default transition to a ground state
-          G4float efinal = (G4float)std::max(fEnergy - fTrEnergy,0.0);
-          G4float elevel = 0.0f;
-          size_t  idxLevel = 0;
-	  G4int tnum = 0;
-	  // do not check initial energy
-	  size_t nn = vEnergy.size();
-	  static const G4float x_energy = (G4float)(0.1*CLHEP::eV);
-	  if(1 < nn) {
-	    G4float ediffMin = (G4float)fEnergy;
-	    for(size_t i=0; i<nn-1; ++i) {
-              G4float ediff = std::abs(efinal - vEnergy[i]);
-	      /*
-	      G4cout << "Elevel[" << i << "]= " << vEnergy[i] 
-		     << " Efinal= " << efinal
-		     << " Ediff= " << ediff
-		     << " EdiffMin= " << ediffMin << G4endl;
-	      */
-	      if(ediff < ediffMin) {
-		ediffMin = ediff;
-		elevel   = vEnergy[i];
-		idxLevel = i;
-                if(ediff <= x_energy) { break; }
-	      }
-	    }
-	    if(std::abs(vEnergy[nn-1] - elevel) < x_energy) { tnum = 1; }
-	  }
-	  G4float x = 1.0f + fAlpha;
-	  fNorm1 += x*fProb;
-	  vGammaCumProbability.push_back(fNorm1);
-	  vGammaProbability.push_back(1.0f/x);
-	  vMpRatio.push_back(0.0f);
-	  vTrans.push_back(tnum + idxLevel*10000);
-	  if(allLevels && fAlpha > 0.0f) {
-	    vShellProbability.push_back(NormalizedICCProbability(Z));
-	  } else {
-	    vShellProbability.push_back(nullptr);
-	  }
-	}
-      }
-      if(nline > 10000) {
-	G4cout << "G4LevelReader: Line #" << nline << " Z= " << Z << " A= "
-	       << " this file is too long - stop loading" << G4endl;
-	end = true;
-      }
-      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
-    } while (!end);
-    infile.close();
-  }
-
-  G4LevelManager* man = nullptr;
-  if(vEnergy.size() >= 2) {
-    man = new G4LevelManager(vEnergy.size(),vEnergy,vSpin,vLevel); 
-    if(fVerbose > 0) {
-      G4cout << "=== Reader: new manager for Z= " << Z << " A= " << A 
-	     << " Nlevels= " << vEnergy.size() << " E[0]= " 
-	     << vEnergy[0]/CLHEP::MeV << " MeV   Emax= " 
-	     << man->MaxLevelEnergy()/CLHEP::MeV << " MeV "
-	     << " S: " <<  vEnergy.size() 
-	     << " " << vSpin.size() << " " << vLevel.size() 
-	     << G4endl;
-    }
-  } 
-  return man;
 }
 
 G4bool G4LevelReader::ReadData(std::istringstream& stream, G4double& x)
@@ -428,22 +205,37 @@ const std::vector<G4float>* G4LevelReader::NormalizedICCProbability(G4int Z)
 }
 
 const G4LevelManager* 
-G4LevelReader::CreateLevelManagerNEW(G4int Z, G4int A)
+G4LevelReader::CreateLevelManager(G4int Z, G4int A)
 {
   std::ostringstream ss;
-  ss << "/correlated_gamma/z" << Z << ".a" << A;
+  ss << "/z" << Z << ".a" << A;
   G4String st = G4String(ss.str());
   fFile = fDirectory + st;
   std::ifstream infile(fFile, std::ios::in);
 
+  return LevelManager(Z, A, 0, infile);
+}
+
+const G4LevelManager* 
+G4LevelReader::MakeLevelManager(G4int Z, G4int A, const G4String& filename)
+{
+  fFile = filename;
+  std::ifstream infile(filename, std::ios::in);
+  return LevelManager(Z, A, 0, infile);
+}
+
+const G4LevelManager* 
+G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
+			    std::ifstream& infile)
+{
   // file is not opened
   if (!infile.is_open()) {
-    if(fVerbose > 0) {
+    if(Z < 6 || fVerbose > 0) {
       G4ExceptionDescription ed;
       ed << " for Z= " << Z << " A= " << A  
 	 << " <" << fFile << "> is not opened!"; 
-      G4Exception("G4LevelReader::CreateLevelManagerNEW(..)","had014",
-		  JustWarning, ed, "");
+      G4Exception("G4LevelReader::LevelManager(..)","had014",
+		  FatalException, ed, "");
     }
     return nullptr;
   }
@@ -452,39 +244,9 @@ G4LevelReader::CreateLevelManagerNEW(G4int Z, G4int A)
 	   << Z << " A= " << A 
 	   << " <" << fFile << ">" <<  G4endl;
   }
-  return LevelManager(Z, A, 0, infile);
-}
 
-const G4LevelManager* 
-G4LevelReader::MakeLevelManagerNEW(G4int Z, G4int A,
-				   const G4String& filename)
-{
-  std::ifstream infile(filename, std::ios::in);
-
-  // file is not opened
-  if (!infile.is_open()) {
-    G4ExceptionDescription ed;
-    ed << " for Z= " << Z << " A= " << A  
-       << " data file <" << filename << "> is not opened!";
-    G4Exception("G4LevelReader::MakeLevelManagerNEW(..)","had014",
-		JustWarning, ed, "Check G4LEVELGAMMADATA");
-    return nullptr;
-  }
-  if (fVerbose > 0) {
-    G4cout << "G4LevelReader: open file for Z= " 
-	   << Z << " A= " << A 
-	   << " <" << filename << ">" <<  G4endl;
-  }
-  return LevelManager(Z, A, 0, infile);
-}
-
-const G4LevelManager* 
-G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
-			    std::ifstream& infile)
-{
   G4bool allLevels = fParam->StoreAllLevels();
 
-  static const G4double fkev = CLHEP::keV;
   G4int nlevels = (0 == nlev) ? fLevelMax : nlev;
   if(fVerbose > 0) {
     G4cout << "## New isotope Z= " << Z << "  A= " << A;
@@ -493,7 +255,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
   }
   if(nlevels > fLevelMax) {
     fLevelMax = nlevels;
-    vEnergy.resize(fLevelMax,0.0f);
+    vEnergy.resize(fLevelMax,0.0);
     vSpin.resize(fLevelMax,0);
     vLevel.resize(fLevelMax,nullptr);
   }
@@ -501,7 +263,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
   G4int i2;    // Level number at which transition ends
   G4int tnum;  // Multipolarity index
   G4String xf("  ");
-  G4float x, ener, tener;
+  G4double ener, tener;
 
   for(i=0; i<nlevels; ++i) {
     infile >> i1 >> xf;    // Level number and floating level
@@ -531,8 +293,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
       }
       break;
     }
-    fTime = std::max(fTime, 0.0f); 
-    ener *= fkev;
+    ener *= CLHEP::keV;
     for(k=0; k<nfloting; ++k) {
       if(xf == fFloatingLevels[k]) {
 	break;
@@ -550,7 +311,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
       }
     }
     vEnergy[i] = ener;
-    fTime     *= fTimeFactor;
+    if(fTime > 0.0f)  { fTime *= fTimeFactor; }
     if(fSpin > 20.0f) { fSpin = 0.0f; }
     vSpin[i]   = (G4int)(100 + fSpin + fSpin) + k*100000;
     if(fVerbose > 1) {
@@ -560,7 +321,14 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	     << " ntr= " << ntrans << G4endl;
     }
     vLevel[i] = nullptr;
-    if(ntrans > 0) {
+    if(ntrans == 0 && fTime < 0.0) {
+      vLevel[i] = new G4NucLevel(0, fTime,
+				 vTrans,
+				 vGammaCumProbability,
+				 vGammaProbability,
+				 vRatio,
+				 vShellProbability);
+    } else if(ntrans > 0) {
 
       // there are transitions
       if(ntrans > fTransMax) {
@@ -570,13 +338,12 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	vGammaCumProbability.resize(fTransMax);
 	vGammaProbability.resize(fTransMax);
 	vShellProbability.resize(fTransMax);
-	vMpRatio.resize(fTransMax);
       }
       fNorm1 = 0.0f;
       for(G4int j=0; j<ntrans; ++j) {
        
 	if(!(ReadDataItem(infile,i2)        &&
-	     ReadDataItem(infile,tener) &&
+	     ReadDataItem(infile,tener)     &&
 	     ReadDataItem(infile,fProb)     &&
 	     ReadDataItem(infile,tnum)      &&
 	     ReadDataItem(infile,vRatio[j]) &&
@@ -598,7 +365,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	}
 	vTrans[j] = i2*10000 + tnum;
         if(fAlpha < fAlphaMax) {
-	  x = 1.0f + fAlpha;
+	  G4float x = 1.0f + fAlpha;
 	  fNorm1 += x*fProb;
 	  vGammaCumProbability[j] = fNorm1;
 	  vGammaProbability[j] = 1.0f/x;
@@ -612,7 +379,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	if(fVerbose > 1) { 
 	  G4int prec = G4cout.precision(4);
 	  G4cout << "### Transition #" << j << " to level " << i2 
-		 << " i2= " << i2 <<  " Etrans(MeV)= " << tener*fkev
+		 << " i2= " << i2 <<  " Etrans(MeV)= " << tener*CLHEP::keV
 		 << "  fProb= " << fProb << " MultiP= " << tnum
 		 << "  fMpRatio= " << fRatio << " fAlpha= " << fAlpha 
 		 << G4endl;
@@ -665,12 +432,12 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 				 vTrans,
 				 vGammaCumProbability,
 				 vGammaProbability,
-				 vMpRatio,
+				 vRatio,
 				 vShellProbability);
     }
   }
   G4LevelManager* lman = nullptr;
-  if(1 < i) { 
+  if(1 <= i) { 
     lman = new G4LevelManager((size_t)i,vEnergy,vSpin,vLevel);
     if(fVerbose > 0) {
       G4cout << "=== Reader: new manager for Z= " << Z << " A= " << A 

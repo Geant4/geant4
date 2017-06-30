@@ -1,5 +1,3 @@
-/tracking/storeTrajectory 1
-
 /run/initialize
 
 /process/inactivate nuclearStopping

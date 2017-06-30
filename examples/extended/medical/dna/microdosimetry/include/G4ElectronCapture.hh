@@ -101,7 +101,5 @@ private:
   G4ParticleChangeForGamma fParticleChange;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
 

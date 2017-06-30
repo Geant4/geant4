@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.hh 102590 2017-02-09 10:13:30Z gcosmo $
+// $Id: G4PhotonEvaporation.hh 103899 2017-05-03 08:26:53Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -154,7 +154,7 @@ G4PhotonEvaporation::InitialiseLevelManager(G4int Z, G4int A)
     theA = A;
     fIndex = 0;
     fLevelManager = fNuclearLevelData->GetLevelManager(theZ, theA);
-    fLevelEnergyMax = fLevelManager ? fLevelManager->MaxLevelEnergy() : 0.0f;
+    fLevelEnergyMax = fLevelManager ? fLevelManager->MaxLevelEnergy() : 0.0;
   }
 }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4hIonisation.cc 102525 2017-02-08 11:23:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -187,11 +187,21 @@ void G4hIonisation::InitialiseEnergyLossProcess(
     ratio = electron_mass_c2/mass;
     eth   = 2.0*MeV*mass/proton_mass_c2;
 
+    G4EmParameters* param = G4EmParameters::Instance();
+    G4double emin = std::min(param->MinKinEnergy(), 0.1*eth);
+    G4double emax = std::max(param->MaxKinEnergy(), 100*eth);
+
+    if(emin != param->MinKinEnergy() || emax != param->MaxKinEnergy()) {
+      SetMinKinEnergy(emin);
+      SetMaxKinEnergy(emax);
+      G4int bin = G4lrint(param->NumberOfBinsPerDecade()*std::log10(emax/emin));
+      SetDEDXBinning(bin);
+    }
+
     if (!EmModel(1)) { 
       if(q > 0.0) { SetEmModel(new G4BraggModel(),1); }
       else { SetEmModel(new G4ICRU73QOModel(),1); }
     }
-    G4EmParameters* param = G4EmParameters::Instance();
     EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
     EmModel(1)->SetHighEnergyLimit(eth);
     AddEmModel(1, EmModel(1), new G4IonFluctuations());

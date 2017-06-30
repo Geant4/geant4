@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniKaonBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4BertiniKaonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -62,15 +62,6 @@ G4BertiniKaonBuilder()
    theModel->SetMaxEnergy(theMax); 
  }
 
-G4BertiniKaonBuilder::~G4BertiniKaonBuilder() 
-{
-  /*
-   delete ChipsKaonMinus;
-   delete ChipsKaonPlus;
-   delete ChipsKaonZero;
-  */
-}
-
 void G4BertiniKaonBuilder::
 Build(G4KaonPlusInelasticProcess * aP)
  {
@@ -107,7 +98,3 @@ Build(G4KaonZeroSInelasticProcess * aP)
    aP->AddDataSet(ChipsKaonZero);
  }
 
-void G4BertiniKaonBuilder::
-Build(G4HadronElasticProcess * ) {}
-
-         

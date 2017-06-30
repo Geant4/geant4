@@ -26,7 +26,7 @@
 /// \file particles/src/G4PhononLong.cc
 /// \brief Implementation of the G4PhononLong class
 //
-// $Id: G4PhononLong.cc 75122 2013-10-28 09:51:40Z gcosmo $
+// $Id: G4PhononLong.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 
 #include "G4PhononLong.hh"
@@ -61,7 +61,7 @@ G4PhononLong*  G4PhononLong::Definition()
                     0,               0,             0,
                     0,               0,             0,
              "phonon",               0,             0,         0,
-                 true,             0.0,          NULL,
+                 true,            -1.0,          NULL,
                 false,        "phononL",           0
              );
   }

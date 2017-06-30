@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4QGSPPionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,6 +36,7 @@
 // 17.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -81,9 +82,6 @@ G4QGSPPionBuilder::
   delete theStringModel;
   delete theQGSM;
 }
-
-void G4QGSPPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4QGSPPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)

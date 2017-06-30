@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -53,14 +54,15 @@ class G4BinaryTritonBuilder : public G4VTritonBuilder
 {
   public: 
     G4BinaryTritonBuilder();
-    virtual ~G4BinaryTritonBuilder();
+    virtual ~G4BinaryTritonBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4TritonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4TritonInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VTritonBuilder::Build; //Prvent compiler warning
 
   private:
 

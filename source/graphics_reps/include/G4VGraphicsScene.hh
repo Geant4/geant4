@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh 99153 2016-09-07 08:05:30Z gcosmo $
+// $Id: G4VGraphicsScene.hh 102801 2017-02-22 15:17:53Z gcosmo $
 // John Allison  19th July 1996
 //
 // Class Description:
@@ -160,8 +160,7 @@ public: // With description
   virtual void AddPrimitive (const G4Polyhedron&) = 0;
 
   virtual const G4VisExtent& GetExtent() const;
-  // The concrete class should overload this or
-  // G4VisExtent::NullExtent will be returned.
+  // The concrete class should overload this or a null extent will be returned.
   // See G4VScenHandler for example.
 
 };

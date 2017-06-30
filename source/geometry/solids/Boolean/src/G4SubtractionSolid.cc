@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.cc 102530 2017-02-08 13:41:59Z gcosmo $
+// $Id: G4SubtractionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation of methods for the class G4IntersectionSolid
 //
@@ -139,12 +139,13 @@ G4SubtractionSolid::operator = (const G4SubtractionSolid& rhs)
 // Get bounding box
 
 void
-G4SubtractionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+G4SubtractionSolid::BoundingLimits(G4ThreeVector& pMin,
+                                   G4ThreeVector& pMax) const
 {
   // Since it is unclear how the shape of the first solid will be changed
   // after subtraction, just return its original bounding box.
   //
-  fPtrSolidA->Extent(pMin,pMax);
+  fPtrSolidA->BoundingLimits(pMin,pMax);
 
   // Check correctness of the bounding box
   //
@@ -155,7 +156,7 @@ G4SubtractionSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4SubtractionSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4SubtractionSolid::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }

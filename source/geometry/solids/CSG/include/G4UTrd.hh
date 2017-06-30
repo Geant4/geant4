@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UTrd to make use of UTrd from USolids module.
+//   Wrapper class for G4Trd to make use of VecGeom Trd.
 
 // History:
 // 13.09.13 G.Cosmo, CERN/PH
@@ -42,16 +42,19 @@
 #ifndef G4UTRD_HH
 #define G4UTRD_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTrd.hh"
+#include <volumes/UnplacedTrd.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTrd : public G4USolid 
+class G4UTrd : public G4UAdapter<vecgeom::UnplacedTrd> 
 {
+  using Shape_t = vecgeom::UnplacedTrd;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedTrd>;
+
   public:  // with description
 
     G4UTrd(const G4String& pName,
@@ -67,8 +70,6 @@ class G4UTrd : public G4USolid
                            const G4VPhysicalVolume* pRep);
 
     G4VSolid* Clone() const;
-
-    inline UTrd* GetShape() const;
 
     G4double GetXHalfLength1() const;
     G4double GetXHalfLength2() const;
@@ -87,7 +88,7 @@ class G4UTrd : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -111,11 +112,6 @@ class G4UTrd : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTrd* G4UTrd::GetShape() const
-{
-  return (UTrd*) fShape;
-}
 
 inline G4GeometryType G4UTrd::GetEntityType() const
 {

@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G01 example
 //
 //
-// $Id: load_gdml.cc 98062 2016-07-01 16:26:46Z gcosmo $
+// $Id: load_gdml.cc 103272 2017-03-23 13:47:10Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -47,20 +47,15 @@
 #include "G01DetectorConstruction.hh"
 #include "FTFP_BERT.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "G4GDMLParser.hh"
 
 void print_aux(const G4GDMLAuxListType* auxInfoList, G4String prepend="|")
 {  
-  for(std::vector<G4GDMLAuxStructType>::const_iterator iaux = auxInfoList->begin();
-      iaux != auxInfoList->end(); iaux++ )
+  for(std::vector<G4GDMLAuxStructType>::const_iterator
+      iaux = auxInfoList->begin(); iaux != auxInfoList->end(); iaux++ )
     {
       G4String str=iaux->type;
       G4String val=iaux->value;
@@ -73,6 +68,7 @@ void print_aux(const G4GDMLAuxListType* auxInfoList, G4String prepend="|")
   return;
 }
 
+// --------------------------------------------------------------
 
 int main(int argc,char **argv)
 {
@@ -111,6 +107,11 @@ int main(int argc,char **argv)
 
    runManager->Initialize();
 
+   // Initialize visualization
+   G4VisManager* visManager = new G4VisExecutive;
+   visManager->Initialize();
+
+   // Get the pointer to the User Interface manager
    G4UImanager* UImanager = G4UImanager::GetUIpointer();
  
    ///////////////////////////////////////////////////////////////////////
@@ -160,12 +161,14 @@ int main(int argc,char **argv)
      parser.AddAuxiliary(myaux);
 
 
-     // example of setting auxiliary info for world volume (can be set for any volume)
+     // example of setting auxiliary info for world volume
+     // (can be set for any volume)
      
      G4GDMLAuxStructType mylocalaux = {"sometype", "somevalue", "someunit", 0};
 
-     parser.AddVolumeAuxiliary(mylocalaux, G4TransportationManager::GetTransportationManager()
-                               ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+     parser.AddVolumeAuxiliary(mylocalaux,
+       G4TransportationManager::GetTransportationManager()
+       ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
 */
      parser.SetRegionExport(true);
      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
@@ -181,24 +184,14 @@ int main(int argc,char **argv)
    }
    else           // interactive mode
    {
-#ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-     G4VisManager* visManager = new G4VisExecutive;
-     visManager->Initialize();
      UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
      ui->SessionStart();
-#ifdef G4VIS_USE
-     delete visManager;
-#endif
      delete ui;
-#endif
    }
 
+   delete visManager;
    delete runManager;
 
    return 0;
 }
-
-   

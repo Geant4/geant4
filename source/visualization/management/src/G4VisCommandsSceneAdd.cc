@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc 98766 2016-08-09 14:17:17Z gcosmo $
+// $Id: G4VisCommandsSceneAdd.cc 104163 2017-05-15 06:52:42Z gcosmo $
 // /vis/scene/add commands - John Allison  9th August 1998
 
 #include "G4VisCommandsSceneAdd.hh"
@@ -36,6 +36,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4HitsModel.hh"
 #include "G4DigiModel.hh"
+#include "G4GPSModel.hh"
 #include "G4MagneticFieldModel.hh"
 #include "G4PSHitsModel.hh"
 #include "G4TrajectoriesModel.hh"
@@ -77,6 +78,7 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4GeneralParticleSourceData.hh"
 
 #include <sstream>
 
@@ -151,7 +153,8 @@ void G4VisCommandSceneAddArrow::SetNewValue (G4UIcommand*, G4String newValue)
 
   G4VModel* model = new G4ArrowModel
     (x1, y1, z1, x2, y2, z2,
-     arrowWidth, fCurrentColour, newValue);
+     arrowWidth, fCurrentColour, newValue,
+     fCurrentArrow3DLineSegmentsPerCircle);
 
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
@@ -515,7 +518,7 @@ void G4VisCommandSceneAddDigis::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4DigiModel* model = new G4DigiModel;
+  G4VModel* model = new G4DigiModel;
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
@@ -787,7 +790,7 @@ void G4VisCommandSceneAddExtent::Extent::operator()
 
 G4VisCommandSceneAddFrame::G4VisCommandSceneAddFrame () {
   fpCommand = new G4UIcommand("/vis/scene/add/frame", this);
-  fpCommand -> SetGuidance ("Adds frame to current scene.");
+  fpCommand -> SetGuidance ("Add frame to current scene.");
   G4bool omitable;
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("size", 'd', omitable = true);
@@ -859,6 +862,75 @@ void G4VisCommandSceneAddFrame::Frame::operator()
   sceneHandler.EndPrimitives2D();
 }
 
+  ////////////// /vis/scene/add/gps ///////////////////////////////////////
+
+  G4VisCommandSceneAddGPS::G4VisCommandSceneAddGPS () {
+    G4bool omitable;
+    G4UIparameter* parameter;
+    fpCommand = new G4UIcommand ("/vis/scene/add/gps", this);
+    fpCommand -> SetGuidance
+    ("A representation of the source(s) of the General Particle Source"
+     "\nwill be added to current scene and drawn, if applicable.");
+    fpCommand->SetGuidance(ConvertToColourGuidance());
+    fpCommand->SetGuidance("Default: red and transparent.");
+    parameter = new G4UIparameter("red_or_string", 's', omitable = true);
+    parameter -> SetDefaultValue ("1.");
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter("green", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.);
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter ("blue", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.);
+    fpCommand -> SetParameter (parameter);
+    parameter = new G4UIparameter ("opacity", 'd', omitable = true);
+    parameter -> SetDefaultValue (0.3);
+    fpCommand -> SetParameter (parameter);
+  }
+
+  G4VisCommandSceneAddGPS::~G4VisCommandSceneAddGPS () {
+    delete fpCommand;
+  }
+
+  G4String G4VisCommandSceneAddGPS::GetCurrentValue (G4UIcommand*) {
+    return "";
+  }
+
+  void G4VisCommandSceneAddGPS::SetNewValue (G4UIcommand*, G4String newValue) {
+
+    G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+    G4bool warn(verbosity >= G4VisManager::warnings);
+
+    G4Scene* pScene = fpVisManager->GetCurrentScene();
+    if (!pScene) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
+      }
+      return;
+    }
+
+    G4String redOrString;
+    G4double green, blue, opacity;
+    std::istringstream iss(newValue);
+    iss >> redOrString >> green >> blue >> opacity;
+    G4Colour colour(1.,0.,0.,0.3);  // Default red and transparent.
+    ConvertToColour(colour, redOrString, green, blue, opacity);
+
+    G4VModel* model = new G4GPSModel(colour);
+    const G4String& currentSceneName = pScene -> GetName ();
+    G4bool successful = pScene -> AddRunDurationModel (model, warn);
+    if (successful) {
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout <<
+"A representation of the source(s) of the General Particle Source will be drawn"
+"\n  in colour " << colour << " for scene \""
+        << currentSceneName << "\" if applicable."
+        << G4endl;
+      }
+    }
+    else G4VisCommandsSceneAddUnsuccessful(verbosity);
+    UpdateVisManagerScene (currentSceneName);
+  }
+  
 ////////////// /vis/scene/add/hits ///////////////////////////////////////
 
 G4VisCommandSceneAddHits::G4VisCommandSceneAddHits () {
@@ -890,7 +962,7 @@ void G4VisCommandSceneAddHits::SetNewValue (G4UIcommand*, G4String) {
     return;
   }
 
-  G4HitsModel* model = new G4HitsModel;
+  G4VModel* model = new G4HitsModel;
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfEventModel (model, warn);
   if (successful) {
@@ -1745,7 +1817,7 @@ G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
    "\nthe default number of data points, so try reducing to 2 or 3, e.g:"
    "\n  /vis/scene/add/magneticField 3"
    "\nor, if only a small part of the scene has a field:"
-   "\n  /vis/scene/add/magneticField 50 # or more");
+   "\n  /vis/scene/add/magneticField 50 or more");
   fpCommand -> SetGuidance
   ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
@@ -1791,8 +1863,9 @@ void G4VisCommandSceneAddMagneticField::SetNewValue
   if (representation == "lightArrow") {
     modelRepresentation = G4MagneticFieldModel::lightArrow;
   }
-  G4MagneticFieldModel* model =
-  new G4MagneticFieldModel(nDataPointsPerHalfScene,modelRepresentation);
+  G4VModel* model =
+  new G4MagneticFieldModel(nDataPointsPerHalfScene,modelRepresentation,
+                           fCurrentArrow3DLineSegmentsPerCircle);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -1850,7 +1923,7 @@ void G4VisCommandSceneAddPSHits::SetNewValue
     return;
   }
 
-  G4PSHitsModel* model = new G4PSHitsModel(newValue);
+  G4VModel* model = new G4PSHitsModel(newValue);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddEndOfRunModel (model, warn);
   if (successful) {
@@ -2553,7 +2626,7 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
     }
   }
 
-  G4TrajectoriesModel* model = new G4TrajectoriesModel();
+  G4VModel* model = new G4TrajectoriesModel();
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddEndOfEventModel (model, warn);
 

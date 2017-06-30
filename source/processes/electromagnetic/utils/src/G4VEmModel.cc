@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4VEmModel.cc 104457 2017-05-31 15:52:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,9 +70,11 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   highLimit(100.0*CLHEP::TeV),eMinActive(0.0),eMaxActive(DBL_MAX),
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
-  isMaster(true),fElementData(nullptr),pParticleChange(nullptr),xSectionTable(nullptr),
-  theDensityFactor(nullptr),theDensityIdx(nullptr),fCurrentCouple(nullptr),
-  fCurrentElement(nullptr),fCurrentIsotope(nullptr),nsec(5) 
+  isMaster(true),fElementData(nullptr),pParticleChange(nullptr),
+  xSectionTable(nullptr),theDensityFactor(nullptr),theDensityIdx(nullptr),
+  lossFlucFlag(true),fCurrentCouple(nullptr),
+  fCurrentElement(nullptr),fCurrentIsotope(nullptr),
+  fTripletModel(nullptr),nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;
@@ -124,6 +126,7 @@ G4ParticleChangeForLoss* G4VEmModel::GetParticleChangeForLoss()
     p = new G4ParticleChangeForLoss();
     pParticleChange = p;
   }
+  if(fTripletModel) { fTripletModel->SetParticleChange(p); }
   return p;
 }
 
@@ -138,6 +141,7 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
     p = new G4ParticleChangeForGamma();
     pParticleChange = p;
   }
+  if(fTripletModel) { fTripletModel->SetParticleChange(p); }
   return p;
 }
 
@@ -418,7 +422,7 @@ void
 G4VEmModel::SetParticleChange(G4VParticleChange* p, G4VEmFluctuationModel* f)
 {
   if(p && pParticleChange != p) { pParticleChange = p; }
-  flucModel = f;
+  if(flucModel != f) { flucModel = f; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -411,7 +411,8 @@ G4double G4GenericPolycone::DistanceToIn( const G4ThreeVector &p ) const
 // Get bounding box
 
 void
-G4GenericPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+G4GenericPolycone::BoundingLimits(G4ThreeVector& pMin,
+                                  G4ThreeVector& pMax) const
 {
   G4double rmin = kInfinity, rmax = -kInfinity;
   G4double zmin = kInfinity, zmax = -kInfinity;
@@ -450,7 +451,7 @@ G4GenericPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("GenericG4Polycone::Extent()", "GeomMgt0001",
+    G4Exception("GenericG4Polycone::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }
@@ -471,7 +472,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -513,7 +514,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
 
   // set trigonometric values
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
 
   G4double sphi   = GetStartPhi();
   G4double ephi   = GetEndPhi();

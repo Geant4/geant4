@@ -1,4 +1,4 @@
-$Id: History 92201 2015-08-21 10:04:19Z gcosmo $
+$Id: History 104689 2017-06-12 12:17:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 12th, 2017  Gabriele Cosmo G02-V10-03-01
+- Added commented block in G02DetectorConstruction to show how to limit
+  the number of levels in the geometry hierarchy to be exported.
+
+March 23rd, 2017  Gabriele Cosmo G02-V10-03-00
+- Updated setup for visualization in main program.
 
 August 20th, 2015  John Allison G02-V10-01-00
 - CMakeLists.txt: Added mbb.geom mbb.tree to G02_SCRIPTS.

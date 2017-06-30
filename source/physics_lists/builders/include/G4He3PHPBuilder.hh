@@ -29,6 +29,9 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 
@@ -47,21 +50,22 @@ class G4He3PHPBuilder : public G4VHe3Builder
 {
 public: 
   G4He3PHPBuilder();
-  virtual ~G4He3PHPBuilder();
+  virtual ~G4He3PHPBuilder() {}
   
-public: 
-  virtual void Build(G4He3InelasticProcess * aP);
-  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4He3InelasticProcess * aP) final override;
+  virtual void Build(G4HadronElasticProcess * aP) final override;
   
-  void SetMinEnergy(G4double aM) 
+  virtual void SetMinEnergy(G4double aM) final override
   {
     theMin=aM;
   }
-  void SetMaxEnergy(G4double aM) 
+  virtual void SetMaxEnergy(G4double aM) final override
   {
     theMax=aM;
   }
   
+  using G4VHe3Builder::Build; //Prevent compiler warning
+
 private:
   G4double theMin;
   G4double theMax;

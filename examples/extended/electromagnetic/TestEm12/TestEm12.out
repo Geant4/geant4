@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,7 +27,7 @@ userDetector->Construct() start.
 ---> The Absorber is a sphere of 3 cm  radius of G4_WATER divided in 1 slices of 3 cm 
  
  Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.375 cm 
-                       Imean:  78.000 eV 
+                       Imean:  78.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =     1   A =  1.008 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -139,6 +139,7 @@ Range factor for msc step limit for e+-            0.04
 Range factor for msc step limit for muons/hadrons  0.2
 Geometry factor for msc step limitation of e+-     2.5
 Skin parameter for msc step limitation of e+-      1
+Screening factor                                   1
 Step function for e+-                              (0.2, 1 mm)
 Step function for muons/hadrons                    (0.2, 0.1 mm)
 Number of bins in tables                           77
@@ -164,24 +165,24 @@ Type of PIXE cross section for e+-                 Livermore
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.54s Real=1.54s Sys=0s
+  User=1.32s Real=1.32s Sys=0s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.944 MeV +- 219.484 keV
+ Total Energy deposited        = 3.945 MeV +- 223.388 keV
 
- Track length of primary track = 2.048 cm  +- 2.795 mm 
+ Track length of primary track = 2.049 cm  +- 2.802 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.323 cm  +- 3.654 mm 
+ Projected range               = 1.325 cm  +- 3.607 mm 
 
- Nb of steps of primary track  = 16.34 +- 3.05	 Step size= 1.291 mm  +- 278.606 um 
+ Nb of steps of primary track  = 16.36 +- 3.05	 Step size= 1.290 mm  +- 278.956 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 869053278, 1714630125
+ Current couple of seeds = 406096966, 957157783
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -192,6 +193,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00673 MB

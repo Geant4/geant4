@@ -83,9 +83,9 @@ CellParameterisation::CellParameterisation
       if (nlines == 0) 
       {
         ncols = fscanf(fMap,"%i %i %i",&fPhantomTotalPixels,&fNucleusTotalPixels,&fCytoplasmTotalPixels);
-	fMapCell  = new G4ThreeVector[fPhantomTotalPixels];
-        fMaterial = new G4double[fPhantomTotalPixels];
-        fMass     = new G4double[fPhantomTotalPixels];
+	fMapCell    = new G4ThreeVector[fPhantomTotalPixels];
+        fMaterial   = new G4double[fPhantomTotalPixels];
+        fMass       = new G4double[fPhantomTotalPixels];
         fTissueType = new G4int[fPhantomTotalPixels];
       }
       
@@ -151,8 +151,7 @@ CellParameterisation::CellParameterisation
 		}
 	  } 
 	  	  	  
-	  //
-	  
+	  //	  
 	  	  
 	  if (std::abs(mat-2)<1.e-30) // NUCLEUS
     	  {
@@ -225,27 +224,28 @@ CellParameterisation::~CellParameterisation()
 void CellParameterisation::ComputeTransformation
 (const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-  G4ThreeVector
-    origin(
+  G4ThreeVector origin
+  (
       fMapCell[copyNo].x()*fDimCellBoxX,
       fMapCell[copyNo].y()*fDimCellBoxY,
-      fMapCell[copyNo].z()*fDimCellBoxZ);
+      fMapCell[copyNo].z()*fDimCellBoxZ
+  );
 
-    physVol->SetTranslation(origin);   
+  physVol->SetTranslation(origin);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void CellParameterisation::ComputeDimensions
-(G4Box& /*trackerChamber*/, const G4int /*copyNo*/, const G4VPhysicalVolume*) const
+(G4Box&, const G4int, const G4VPhysicalVolume*) const
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Material*
 CellParameterisation::ComputeMaterial(const G4int copyNo,
-                                               G4VPhysicalVolume* physVol,
-                                               const G4VTouchable*)
+                                      G4VPhysicalVolume* physVol,
+                                      const G4VTouchable*)
 {
     if( fMaterial[copyNo] == 2 ) // fMaterial 2 is nucleus
         {

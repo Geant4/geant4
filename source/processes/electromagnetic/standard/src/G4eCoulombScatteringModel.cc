@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eCoulombScatteringModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4eCoulombScatteringModel.cc 104802 2017-06-19 07:11:40Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,19 +87,19 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
   fNistManager = G4NistManager::Instance();
   theIonTable  = G4ParticleTable::GetParticleTable()->GetIonTable();
   theProton    = G4Proton::Proton();
-  currentMaterial = 0; 
+  currentMaterial = nullptr; 
   fixedCut = -1.0;
 
   pCuts = nullptr;
 
-  recoilThreshold = 0.*keV; // by default does not work
+  recoilThreshold = 0.0; // by default does not work
 
   particle = nullptr;
   currentCouple = nullptr;
-  wokvi = new G4WentzelOKandVIxSection(combined);
+  wokvi = nullptr;
 
   currentMaterialIndex = 0;
-  mass = proton_mass_c2;
+  mass = CLHEP::proton_mass_c2;
   elecRatio = 0.0;
 }
 
@@ -115,9 +115,12 @@ G4eCoulombScatteringModel::~G4eCoulombScatteringModel()
 void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 					   const G4DataVector& cuts)
 {
-  SetupParticle(part);
-  currentCouple = 0;
+  if(!wokvi) { wokvi = new G4WentzelOKandVIxSection(); }
 
+  SetupParticle(part);
+  currentCouple = nullptr;
+
+  // defined theta limit between single and multiple scattering 
   if(isCombined) {
     cosThetaMin = 1.0;
     G4double tet = PolarAngleLimit();
@@ -144,7 +147,7 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
     fParticleChange = GetParticleChangeForGamma();
   }
   if(IsMaster() && mass < GeV && part->GetParticleName() != "GenericIon") {
-    InitialiseElementSelectors(part,cuts);
+    InitialiseElementSelectors(part, cuts);
   }
 }
 
@@ -175,7 +178,7 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
 
   // select lightest element
   G4int Z = 300;
-  for (G4int j=0; j<nelm; ++j) {        
+  for (G4int j=0; j<nelm; ++j) {
     Z = std::min(Z,(*theElementVector)[j]->GetZasInt());
   }
   G4int A = G4lrint(fNistManager->GetAtomicMassAmu(Z));
@@ -203,26 +206,25 @@ G4double G4eCoulombScatteringModel::ComputeCrossSectionPerAtom(
   if(kinEnergy <= 0.0) { return cross; }
   DefineMaterial(CurrentCouple());
   G4double costmin = wokvi->SetupKinematic(kinEnergy, currentMaterial);
+
   if(cosThetaMax < costmin) {
     G4int iz = G4lrint(Z);
-    G4double cut = cutEnergy;
-    if(fixedCut > 0.0) { cut = fixedCut; }
+    G4double cut = (0.0 < fixedCut) ? fixedCut : cutEnergy;
     costmin = wokvi->SetupTarget(iz, cut);
-    G4double costmax = cosThetaMax; 
-    if(iz == 1 && costmax < 0.0 && particle == theProton) { 
-      costmax = 0.0; 
-    }
+    G4double costmax = (1 == iz && particle == theProton && cosThetaMax < 0.0)
+      ? 0.0 : cosThetaMax; 
     if(costmin > costmax) {
       cross = wokvi->ComputeNuclearCrossSection(costmin, costmax)
 	+ wokvi->ComputeElectronCrossSection(costmin, costmax);
     }
-    /*  
-  if(p->GetParticleName() == "mu+") 
-  G4cout << "e(MeV)= " << kinEnergy/MeV << " cross(b)= " << cross/barn  
-	 << " 1-costmin= " << 1-costmin
-	 << " 1-costmax= " << 1-costmax
-	 << " 1-cosThetaMax= " << 1-cosThetaMax
-	 << G4endl;
+    /*    
+  if(p->GetParticleName() == "e-") 
+    G4cout << "Z= " << Z << " e(MeV)= " << kinEnergy/MeV 
+	   << " cross(b)= " << cross/barn << " 1-costmin= " << 1-costmin
+	   << " 1-costmax= " << 1-costmax 
+	   << " 1-cosThetaMax= " << 1-cosThetaMax
+	   << "  " << currentMaterial->GetName()
+	   << G4endl;
     */
   }
   return cross;  
@@ -246,8 +248,7 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   	 << " cut= " << cutEnergy<< G4endl;
   */
   // Choose nucleus
-  G4double cut = cutEnergy;
-  if(fixedCut > 0.0) { cut = fixedCut; }
+  G4double cut = (0.0 < fixedCut) ? fixedCut : cutEnergy;
 
   wokvi->SetupKinematic(kinEnergy, currentMaterial);
 
@@ -257,23 +258,21 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4int iz = currentElement->GetZasInt();
 
   G4double costmin = wokvi->SetupTarget(iz, cut);
-  G4double costmax = cosThetaMax; 
-  if(iz == 1 && costmax < 0.0 && particle == theProton) { 
-    costmax = 0.0; 
-  }
+  G4double costmax = (1 == iz && particle == theProton && cosThetaMax < 0.0) 
+    ? 0.0 :  cosThetaMax; 
+  if(costmin <= costmax) { return; }
 
-  if(costmin > costmax) {
-    G4double cross = wokvi->ComputeNuclearCrossSection(costmin, costmax);
-    G4double ecross = wokvi->ComputeElectronCrossSection(costmin, costmax);
-    G4double ratio = ecross/(cross + ecross);
+  G4double cross = wokvi->ComputeNuclearCrossSection(costmin, costmax);
+  G4double ecross = wokvi->ComputeElectronCrossSection(costmin, costmax);
+  G4double ratio = ecross/(cross + ecross);
 
-    G4int ia = SelectIsotopeNumber(currentElement);
-    G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
-    wokvi->SetTargetMass(targetMass);
+  G4int ia = SelectIsotopeNumber(currentElement);
+  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+  wokvi->SetTargetMass(targetMass);
 
-    G4ThreeVector newDirection = 
-      wokvi->SampleSingleScattering(costmin, costmax, ratio);
-    G4double cost = newDirection.z();
+  G4ThreeVector newDirection = 
+    wokvi->SampleSingleScattering(costmin, costmax, ratio);
+  G4double cost = newDirection.z();
     /*
       G4cout << "SampleSec: e(MeV)= " << kinEnergy/MeV   
              << " 1-costmin= " << 1-costmin
@@ -282,53 +281,50 @@ void G4eCoulombScatteringModel::SampleSecondaries(
              << " ratio= " << ratio
              << G4endl;
     */
-    G4ThreeVector direction = dp->GetMomentumDirection(); 
-    newDirection.rotateUz(direction);   
+  G4ThreeVector direction = dp->GetMomentumDirection(); 
+  newDirection.rotateUz(direction);   
 
-    fParticleChange->ProposeMomentumDirection(newDirection);   
+  fParticleChange->ProposeMomentumDirection(newDirection);   
 
-    // recoil sampling assuming a small recoil
-    // and first order correction to primary 4-momentum
-    G4double mom2 = wokvi->GetMomentumSquare();
-    G4double trec = mom2*(1.0 - cost)
-      /(targetMass + (mass + kinEnergy)*(1.0 - cost));
+  // recoil sampling assuming a small recoil
+  // and first order correction to primary 4-momentum
+  G4double mom2 = wokvi->GetMomentumSquare();
+  G4double trec = mom2*(1.0 - cost)
+    /(targetMass + (mass + kinEnergy)*(1.0 - cost));
 
-    // the check likely not needed
-    if(trec > kinEnergy) { trec = kinEnergy; }
-    G4double finalT = kinEnergy - trec; 
-    G4double edep = 0.0;
+  // the check likely not needed
+  if(trec > kinEnergy) { trec = kinEnergy; }
+  G4double finalT = kinEnergy - trec; 
+  G4double edep = 0.0;
     /*
     G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
 	  <<trec << " Z= " << iz << " A= " << ia
 	  << " tcut(keV)= " << (*pCuts)[currentMaterialIndex]/keV << G4endl;
     */
-    G4double tcut = recoilThreshold;
-    if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
+  G4double tcut = recoilThreshold;
+  if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
-    if(trec > tcut) {
-      G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
-      G4ThreeVector dir = (direction*sqrt(mom2) - 
-			   newDirection*sqrt(finalT*(2*mass + finalT))).unit();
-      G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
-      fvect->push_back(newdp);
-    } else {
-      edep = trec;
-      fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
-    }
+  if(trec > tcut) {
+    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
+    G4ThreeVector dir = (direction*sqrt(mom2) - 
+			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
+    G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
+    fvect->push_back(newdp);
+  } else {
+    edep = trec;
+    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
+  }
 
     // finelize primary energy and energy balance
     // this threshold may be applied only because for low-enegry
     // e+e- msc model is applied
-    if(finalT < 0.0) { 
-      edep += finalT;  
-      finalT = 0.0;
-      if(edep < 0.0) { edep = 0.0; }
-    } 
-    fParticleChange->SetProposedKineticEnergy(finalT);
-    fParticleChange->ProposeLocalEnergyDeposit(edep);
-  }
+  if(finalT < 0.0) { 
+    edep += finalT;  
+    finalT = 0.0;
+  } 
+  edep = std::max(edep, 0.0);
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

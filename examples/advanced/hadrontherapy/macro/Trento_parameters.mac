@@ -1,0 +1,159 @@
+#
+# Macro file recommended for the use with proton beams and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+#
+
+#########################
+# Set of the verboses 
+#
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 1
+/event/verbose 0
+
+#######
+# Select geometry
+/geometrySetup/selectGeometry TrentoLine
+
+
+
+##########################
+# Set of the physic models
+#
+/Physics/addPhysics HADRONTHERAPY_1
+
+/random/setSeeds 891 61
+
+##########################
+# Initialisation procedure
+#
+/run/numberOfThreads 1
+
+/run/initialize
+
+
+#########################
+# Set the primary particle type,
+# energy and position along the X direction
+#
+#---------------------------gps-----------------
+
+/gps/pos/type Beam
+/gps/pos/shape Circle
+/gps/pos/centre -95. 0. 0. cm
+#/gps/pos/centre -82. 0. 0. cm
+#/gps/pos/radius 0. mm
+#/gps/pos/sigma_r 4.515 mm
+/gps/pos/sigma_x 1.805 mm
+/gps/pos/sigma_y 2.835 mm
+/gps/particle proton
+/gps/direction 1 0 0
+
+# the incident surface is in the y-z plane
+
+/gps/pos/rot1 0 1 0
+/gps/pos/rot2 0 0 1
+
+# the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
+#
+
+/gps/ang/rot1 0 0 1
+/gps/ang/rot2 0 1 0
+/gps/ang/type beam2d
+#/gps/ang/focuspoint 0 0 0 cm
+/gps/ang/sigma_x 0.00321 rad
+/gps/ang/sigma_y 0.00364 rad
+#/gps/ang/sigma_r 0 deg
+
+
+# the beam energy is in gaussian profile
+#
+/gps/ene/type Gauss
+/gps/ene/mono 147.1 MeV
+/gps/ene/sigma 1.1 MeV
+
+
+##########################
+# Set here the cut and the step max for the tracking. 
+# Suggested values of cut and step:
+# Set cuts OUTSIDE the detector
+# 
+#/run/setCut 0.1 mm
+
+# Set cuts ONLY inside the detector
+#
+/run/setCutForRegion DetectorLog 0.01 mm
+
+/Step/waterPhantomStepMax 0.1 mm 
+
+######################### GEOMETRY OF BEAM LINE DESCRIPTION
+####################################################################################################
+#/beamLine/ScatteringFoil/thickness 0.25 cm
+#/beamLine/ScatteringFoil/material G4_Pb
+#/beamLine/ScatteringFoil/material G4_Ta
+#/beamLine/ScatteringFoil/material G4_Cu
+#/beamLine/preCollimator/ZSize  mm
+#(cambia la dimensione lungo x dato che è ruotato)
+#/beamLine/preCollimator/XPosition  150. cm
+#/beamLine/preCollimator/innerRadius 2.5 mm
+#/beamLine/FirstCollimator/innerRadius 2.5 mm
+
+
+
+######################### DETECTOR DESCRIPTION
+###################################################
+# USE THE FOLLOWING FOUR LINES FOR DEFINITION OF PHANTOM
+###################################################
+#
+#/changePhantom/position 220. 0. 0. cm
+#/changePhantom/update
+
+#/changePhantom/size 20 20 40  cm
+#/changePhantom/position 20 0 0 cm
+
+###################################################
+# USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
+###################################################
+#
+
+
+/changeDetector/size 20 10 10 cm    #size for Giraffe
+#/changeDetector/size 20 20 20 cm   #large detector for dose calculation
+/changeDetector/voxelSize 0.02 1 1 cm
+
+# Put the detector in the lower left corner of the phantom
+#
+/changeDetector/displacement 0 15 15 cm     #displacement when detector is small
+#/changeDetector/displacement 0 10 10 cm    #displacement when detector is larger
+/changePhantom/update
+
+
+# Visualisation 
+#
+/vis/scene/create
+/vis/open OGL
+/vis/viewer/flush
+/vis/viewer/set/viewpointThetaPhi 30 140 deg
+/vis/viewer/zoomTo 1
+/vis/viewer/panTo 100  20 cm
+/vis/viewer/panTo -10  0 cm
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate 1
+/vis/viewer/update
+
+#########################
+# Display the event number
+# during the run
+# 
+/event/printEventNumber 500
+
+
+# Default material is liquid water (G4_WATER)
+
+# For dose average LET computations of primary and secondary particles
+#/analysis/computeLet
+
+/run/beamOn 10
+
+

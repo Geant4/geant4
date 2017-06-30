@@ -1,4 +1,4 @@
-$Id: History 101727 2016-11-23 08:49:05Z gcosmo $
+$Id: History 103236 2017-03-22 15:54:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 22, 2017 - G.Cosmo (geomnav-V10-03-04)
+------------------------
+- Avoid eletion of field-manager pointer in destructor of
+  G4TransportationManager, as it is being deleted by G4FieldManagerStore.
+
+March 21, 2017 - G.Cosmo (geomnav-V10-03-03, 02, 01)
+------------------------
+- Provide simple accessor GetInstanceIfExist() for G4PathFinder and
+  G4TransportationManager singletons.
+
+March 17, 2017 - G.Cosmo (geomnav-V10-03-00)
+------------------------
+- Correction in destructors of G4TransportationManager and G4PathFinder.
 
 October 23, 2016 - G.Cosmo (geomnav-V10-02-21)
 --------------------------

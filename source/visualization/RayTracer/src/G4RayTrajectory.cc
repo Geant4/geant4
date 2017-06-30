@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTrajectory.cc 71495 2013-06-17 09:13:30Z gcosmo $
+// $Id: G4RayTrajectory.cc 104015 2017-05-08 07:28:08Z gcosmo $
 //
 //
 //
@@ -35,6 +35,7 @@
 
 #include "G4RayTrajectory.hh"
 #include "G4RayTrajectoryPoint.hh"
+#include "G4RayTracerSceneHandler.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4VisManager.hh"
@@ -86,29 +87,52 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
     = theNavigator->GetLocalToGlobalTransform().TransformAxis(theLocalNormal);
   trajectoryPoint->SetSurfaceNormal(theGrobalNormal);
 
-  G4VPhysicalVolume* prePhys = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  const G4VisAttributes* preVisAtt = prePhys->GetLogicalVolume()->GetVisAttributes();
   G4VisManager* visManager = G4VisManager::GetInstance();
-  if(visManager) {
-    G4VViewer* viewer = visManager->GetCurrentViewer();
-    if (viewer) {
-      preVisAtt = viewer->GetApplicableVisAttributes(preVisAtt);
-    }
-  }
-  trajectoryPoint->SetPreStepAtt(preVisAtt);
+  G4RayTracerSceneHandler* sceneHandler =
+  static_cast<G4RayTracerSceneHandler*>(visManager->GetCurrentSceneHandler());
+  const auto& sceneVisAttsMap = sceneHandler->GetSceneVisAttsMap();
 
-  const G4VPhysicalVolume* postPhys = aStep->GetPostStepPoint()->GetPhysicalVolume();
-  const G4VisAttributes* postVisAtt = NULL;
-  if(postPhys) {
-    postVisAtt = postPhys->GetLogicalVolume()->GetVisAttributes();
-    if(visManager) {
-      G4VViewer* viewer = visManager->GetCurrentViewer();
-      if (viewer) {
-	postVisAtt = viewer->GetApplicableVisAttributes(postVisAtt);
-      }
-    }
+  // Make a path from the preStepPoint touchable
+  G4StepPoint* preStepPoint = aStep -> GetPreStepPoint();
+  const G4VTouchable* preTouchable = preStepPoint->GetTouchable();
+  G4int preDepth = preTouchable->GetHistoryDepth();
+  G4ModelingParameters::PVPointerCopyNoPath localPrePVPointerCopyNoPath;
+  for (G4int i = preDepth; i >= 0; --i) {
+    localPrePVPointerCopyNoPath.push_back
+    (G4ModelingParameters::PVPointerCopyNo
+     (preTouchable->GetVolume(i),preTouchable->GetCopyNumber(i)));
   }
-  trajectoryPoint->SetPostStepAtt(postVisAtt);
+
+  // Pick up the vis atts, if any, from the scene handler
+  auto preIterator = sceneVisAttsMap.find(localPrePVPointerCopyNoPath);
+  const G4VisAttributes* preVisAtts;
+  if (preIterator != sceneVisAttsMap.end()) {
+    preVisAtts = &preIterator->second;
+  } else {
+    preVisAtts = 0;
+  }
+  trajectoryPoint->SetPreStepAtt(preVisAtts);
+
+  // Make a path from the postStepPoint touchable
+  G4StepPoint* postStepPoint = aStep -> GetPostStepPoint();
+  const G4VTouchable* postTouchable = postStepPoint->GetTouchable();
+  G4int postDepth = postTouchable->GetHistoryDepth();
+  G4ModelingParameters::PVPointerCopyNoPath localPostPVPointerCopyNoPath;
+  for (G4int i = postDepth; i >= 0; --i) {
+    localPostPVPointerCopyNoPath.push_back
+    (G4ModelingParameters::PVPointerCopyNo
+     (postTouchable->GetVolume(i),postTouchable->GetCopyNumber(i)));
+  }
+
+  // Pick up the vis atts, if any, from the scene handler
+  auto postIterator = sceneVisAttsMap.find(localPostPVPointerCopyNoPath);
+  const G4VisAttributes* postVisAtts;
+  if (postIterator != sceneVisAttsMap.end()) {
+    postVisAtts = &postIterator->second;
+  } else {
+    postVisAtts = 0;
+  }
+  trajectoryPoint->SetPostStepAtt(postVisAtts);
 
   positionRecord->push_back(trajectoryPoint);
 }

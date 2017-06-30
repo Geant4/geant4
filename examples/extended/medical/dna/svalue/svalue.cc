@@ -25,16 +25,11 @@
 //
 /// \file medical/dna/svalue/svalue.cc
 /// \brief Main program of the medical/dna/svalue example
-//
-// $Id: svalue.cc 85260 2014-10-27 08:53:35Z gcosmo $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+ #include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+ #include "G4RunManager.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -113,5 +108,3 @@ int main(int argc,char** argv) {
 
   return 0;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 99173 2016-09-07 09:36:59Z gcosmo $
+# $Id: sources.cmake 103803 2017-04-27 14:03:05Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -104,6 +104,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4VUPLSplitter.hh
         rundefs.hh
         G4RNGHelper.hh 
+        G4PhysicsBuilderInterface.hh
    SOURCES
         G4AdjointPrimaryGeneratorAction.cc
         G4AdjointSimManager.cc

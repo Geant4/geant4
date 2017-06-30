@@ -61,6 +61,7 @@
 #include "G4MscStepLimitType.hh"
 #include "G4NuclearFormfactorType.hh"
 #include "G4EmSaturation.hh"
+#include "G4Threading.hh"
 #include <vector>
 
 class G4EmParametersMessenger;
@@ -191,6 +192,9 @@ public:
   void SetMscSkin(G4double val);
   G4double MscSkin() const;
 
+  void SetScreeningFactor(G4double val);
+  G4double ScreeningFactor() const;
+
   void SetStepFunction(G4double v1, G4double v2);
 
   void SetStepFunctionMuHad(G4double v1, G4double v2);
@@ -242,6 +246,10 @@ public:
   void AddMsc(const G4String& region, const G4String& type);
   const std::vector<G4String>& RegionsMsc() const;
   const std::vector<G4String>& TypesMsc() const;
+
+  void AddPhysics(const G4String& region, const G4String& type);
+  const std::vector<G4String>& RegionsPhysics() const;
+  const std::vector<G4String>& TypesPhysics() const;
 
   void SetSubCutoff(G4bool val, const G4String& region = "");
 
@@ -329,6 +337,7 @@ private:
   G4double finalRange;
   G4double dRoverRangeMuHad;
   G4double finalRangeMuHad;
+  G4double factorScreen;
 
   G4int nbins;
   G4int nbinsPerDecade;
@@ -376,6 +385,9 @@ private:
   std::vector<G4double>  m_factBiasedSec;
   std::vector<G4double>  m_elimBiasedSec;
 
+#ifdef G4MULTITHREADED
+  static G4Mutex emParametersMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

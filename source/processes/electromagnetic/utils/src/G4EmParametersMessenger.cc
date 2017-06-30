@@ -275,6 +275,11 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   skinCmd->SetParameterName("skin",true);
   skinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  screCmd = new G4UIcmdWithADouble("/process/msc/ScreeningFactor",this);
+  screCmd->SetGuidance("Set screening factor");
+  screCmd->SetParameterName("screen",true);
+  screCmd->AvailableForStates(G4State_Idle);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for EM tables");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -565,6 +570,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete fr1Cmd;
   delete fgCmd;
   delete skinCmd;
+  delete screCmd;
 
   delete dedxCmd;
   delete lamCmd;
@@ -698,6 +704,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == skinCmd) { 
     theParameters->SetMscSkin(skinCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
+  } else if (command == screCmd) { 
+    theParameters->SetScreeningFactor(screCmd->GetNewDoubleValue(newValue));
 
   } else if (command == dedxCmd) { 
     theParameters->SetNumberOfBins(dedxCmd->GetNewIntValue(newValue));
@@ -758,7 +766,7 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     G4String s1(""),s2("");
     std::istringstream is(newValue);
     is >> s1 >> s2;
-    theParameters->AddMsc(s1, s2);
+    theParameters->AddPhysics(s1, s2);
   } else if (command == dumpCmd) {
     theParameters->Dump();
   } else if (command == SubSecCmd) {

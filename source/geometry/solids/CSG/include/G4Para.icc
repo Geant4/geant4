@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Para.icc 104452 2017-05-31 15:41:24Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -37,114 +37,106 @@
 inline
 G4double G4Para::GetZHalfLength() const
 {
-  return fDz ;
+  return fDz;
 }
 
 inline
 G4ThreeVector G4Para::GetSymAxis() const
 {
-  G4double cosTheta = 1.0/std::sqrt(1+fTthetaCphi*fTthetaCphi +
-                               fTthetaSphi*fTthetaSphi) ;
-
-  return G4ThreeVector(fTthetaCphi*cosTheta,
-                       fTthetaSphi*cosTheta,
-                       cosTheta) ;
+  return G4ThreeVector(fTthetaCphi,fTthetaSphi,1.).unit();
 }
 
 inline
 G4double G4Para::GetYHalfLength() const
 {
-  return fDy ;
+  return fDy;
 }
 
 inline
 G4double G4Para::GetXHalfLength() const
 {
-  return fDx ;
+  return fDx;
 }
 
 inline
 G4double G4Para::GetTanAlpha() const
 {
-  return fTalpha ;
+  return fTalpha;
 }
     
 inline
 void G4Para::SetXHalfLength(G4double val)
 {
-  fDx= val;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
+  fDx = val;
+
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
+
+  CheckParameters();
+  MakePlanes();
 }
 
 inline
 void G4Para::SetYHalfLength(G4double val)
 {
-  fDy= val;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
+  fDy = val;
+
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
+
+  CheckParameters();
+  MakePlanes();
 }
 
 inline
 void G4Para::SetZHalfLength(G4double val)
 {
-  fDz= val;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
+  fDz = val;
+
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
+
+  CheckParameters();
+  MakePlanes();
 }
 
 inline
 void G4Para::SetAlpha(G4double alpha)
 {
-  fTalpha= std::tan(alpha);
-  fSurfaceArea= 0.;
-  fCubicVolume= 0.;
+  fTalpha = std::tan(alpha);
+
+  fSurfaceArea = 0.;
+  fCubicVolume = 0.;
   fRebuildPolyhedron = true;
+
+  MakePlanes();
 }
 
 inline
 void G4Para::SetTanAlpha(G4double val)
 {
-  fTalpha= val;
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
+  fTalpha = val;
+
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
+
+  MakePlanes();
 }
 
 inline
-void G4Para::SetThetaAndPhi(double pTheta, double pPhi)    
+void G4Para::SetThetaAndPhi(double pTheta, double pPhi)
 {
-  fTthetaCphi=std::tan(pTheta)*std::cos(pPhi);
-  fTthetaSphi=std::tan(pTheta)*std::sin(pPhi);
-  fCubicVolume= 0.;
-  fSurfaceArea= 0.;
+  G4double tanTheta = std::tan(pTheta);
+  fTthetaCphi = tanTheta*std::cos(pPhi);
+  fTthetaSphi = tanTheta*std::sin(pPhi);
+
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
-}
 
-inline
-G4double G4Para::GetCubicVolume()
-{
-  //
-  // It is like G4Box, since para transformations keep the volume to be const
-
-  if(fCubicVolume != 0.) {;}
-  else   fCubicVolume = 8*fDx*fDy*fDz; 
-  return fCubicVolume;
-}
-
-inline
-G4double G4Para::GetSurfaceArea()
-{
-  if(fSurfaceArea != 0.) {;}
-  else
-  {  
-     fSurfaceArea = 8*(fDx*fDy 
-                     + fDx*fDz*std::sqrt(1+fTthetaSphi*fTthetaSphi)
-                     + fDy*fDz*std::sqrt(1+fTalpha*fTalpha
-                              +std::pow(fTthetaCphi-fTthetaSphi*fTalpha, 2)) );
-  } 
-  return fSurfaceArea;
+  MakePlanes();
 }

@@ -32,7 +32,6 @@ c1->Divide(4,3);
 // INTENSITY HISTOGRAMS 
 //*********************
 
-
 FILE * fp = fopen("phantom.dat","r");
 Float_t xVox, yVox, zVox, tmp, den, dose;
 
@@ -169,7 +168,7 @@ c1->cd(3);  // axe YX
 //
 
 system ("rm -rf microbeam.root");
-system ("hadd microbeam.root microbeam_*.root");
+system ("hadd -O microbeam.root microbeam_*.root");
 
 TFile f("microbeam.root"); 
 
@@ -258,7 +257,6 @@ c1->cd(9);
 	gaus->SetLineColor(6);
 	h2bis->Fit("gaus");
 
-
 //**************
 // RANGE IN CELL
 //**************
@@ -298,23 +296,10 @@ for (Int_t i=0;i<nentries;i++)
 c1->cd(10);
   ntupleR->Draw("X2:Z2","abs(X2)<50","surf3");
   gPad->SetLogz();
-  /*
-  htemp->GetXaxis()->SetLabelSize(0.025);
-  htemp->GetYaxis()->SetLabelSize(0.025);
-  htemp->GetZaxis()->SetLabelSize(0.025);
-  htemp->GetXaxis()->SetTitleSize(0.035);
-  htemp->GetYaxis()->SetTitleSize(0.035);
-  htemp->GetXaxis()->SetTitleOffset(1.4);
-  htemp->GetYaxis()->SetTitleOffset(1.4);
-  htemp->GetXaxis()->SetTitle("Z (µm)");
-  htemp->GetYaxis()->SetTitle("X (µm)");
-  htemp->SetTitle("Range in cell");
-  */
 
 //****************
 // ENERGY DEPOSITS 
 //****************
-
 
 gStyle->SetOptStat(0000);
 gStyle->SetOptFit();
@@ -337,7 +322,6 @@ c1->cd(11);
   histbis->GetYaxis()->SetTitle("X (um)");
   histbis->SetTitle("Mean energy deposit -transverse- (z axis in eV)");
 
-  
 c1->cd(12);
   TH2F *histter = new TH2F("histter","histter",50,-20,20,50,-20,20);
   ntuple4->Draw("x*0.359060:(z+1500/0.162810+21)*0.162810>>histter","doseV","contz");
@@ -382,7 +366,6 @@ c1->cd(4);
   	h77->SetTitle("Beam X position on cell");
 	h77->SetFillColor(4);
 	h77->SetLineColor(4);
-	//gaus->SetLineColor(6);
 	h77->Fit("gaus");
 
 c1->cd(8);
@@ -401,7 +384,5 @@ c1->cd(8);
   	h88->SetTitle("Beam Y position on cell");
 	h88->SetFillColor(4);
 	h88->SetLineColor(4);
-	//gaus->SetLineColor(6);
 	h88->Fit("gaus");
-
 }

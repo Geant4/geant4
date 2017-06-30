@@ -320,15 +320,12 @@ void Run::EndOfRun()
  
   //normalize histograms
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();        
-  for (G4int ih=1; ih<14; ih++) {
-    G4double binWidth = analysisManager->GetH1Width(ih);
-    G4double unit     = analysisManager->GetH1Unit(ih);  
-    G4double fac = unit/binWidth;
-    ///G4double fac = unit/(numberOfEvent*binWidth);
-    if (ih == 2) fac = (1./(numberOfEvent*binWidth))*(mm/MeV);    
-    analysisManager->ScaleH1(ih,fac);
-  }  
-           
+
+  G4int ih = 2;
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);    
+  analysisManager->ScaleH1(ih,fac);
+
   //remove all contents in fProcCounter, fCount 
   fProcCounter.clear();
   fParticleDataMap2.clear();

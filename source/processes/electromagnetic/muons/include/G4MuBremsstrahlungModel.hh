@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlungModel.hh 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuBremsstrahlungModel.hh 103220 2017-03-22 11:35:04Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -146,8 +146,6 @@ protected:
   G4double bh1;
   G4double btf;
   G4double btf1;
-
-private:
 
   G4ParticleDefinition*       theGamma;
   G4ParticleChangeForLoss*    fParticleChange;

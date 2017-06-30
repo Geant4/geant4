@@ -328,9 +328,9 @@ G4double G4GEMChannelVI::FindLevel(const G4LevelManager* man,
 {
   size_t idx = man->NearestLowEdgeLevelIndex(exc);
   size_t idxm = man->NumberOfTransitions();
-  G4double e1 = (G4double)man->LevelEnergy(idx);
+  G4double e1 = man->LevelEnergy(idx);
   if(idx + 1 < idxm) {
-    G4double e2 = (G4double)man->LevelEnergy(idx+1);
+    G4double e2 = man->LevelEnergy(idx+1);
     if(e2 <= exclim) {
       G4int s1 = std::abs(man->SpinParity(idx))+1;
       G4int s2 = std::abs(man->SpinParity(idx+1))+1;

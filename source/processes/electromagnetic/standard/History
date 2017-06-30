@@ -1,4 +1,4 @@
-$Id: History 101837 2016-12-01 13:38:22Z gcosmo $
+$Id: History 104802 2017-06-19 07:11:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,14 +18,112 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+16 June 17: V.Ivanchenko (emstand-V10-03-22)
+- G4eCoulombScatteringModel, G4WentzelVIModel, 
+  G4hCoulombScatteringModel - fixed problem of computation
+    of cross section introduced in emstand-V10-03-11
+
+15 June 17: V.Ivanchenko (emstand-V10-03-21)
+- G4UniversalFluctuation - restore emstand-V10-03-20
+
+12 June 17: V.Ivanchenko (emstand-V10-03-21)
+- G4UniversalFluctuation - copied from G4UniversalFluctuation2017
+
+09 June 17: V.Ivanchenko (emstand-V10-03-20)
+- G4UniversalFluctuation2017 - fixed rare division by zero
+
+09 June 17: V.Ivanchenko (emstand-V10-03-19)
+- G4WentzelOKandVIxSection - fixed trivial Coverity warning
+
+02 May 17: V.Ivanchenko (emstand-V10-03-18)
+- G4BetheHeitlerModel, G4PairProductionRelModel - a small change
+    in angular sampling
+
+01 June 17: V.Ivanchenko (emstand-V10-03-17)
+- G4WentzelVIRelModel - fixed typo responsible for numerical crash 
+
+31 May 17: V.Ivanchenko (emstand-V10-03-16)
+- G4BetheHeitlerModel, G4PairProductionRelModel - code cleanup and 
+    speedup, replaced remain log,exp by G4Log and G4Exp
+
+31 May 17: V.Ivanchenko (emstand-V10-03-15)
+- G4eBremsstrahlungRelModel - use new interface to triplet model 
+
+29 May 17: V.Ivanchenko (emstand-V10-03-14)
+- G4UniversalFluctuation, G4UniversalFluctuation2017 - L.Urban fixed 
+    numerical problem for very small steps for all particle types
+
+26 May 17: V.Ivanchenko (emstand-V10-03-13)
+- G4UniversalFluctuation, G4UniversalFluctuation2017 - fixed numerical
+    problem for sampling low-energy anti-protons with very small steps
+- G4eBremsstrahlungRelModel - added class members and cross sections
+    for sampling of electron recoil
+
+24 May 17: V.Ivanchenko (emstand-V10-03-12)
+- G4UniversalFluctuation - revert to 10.3 version
+- G4UniversalFluctuation2017 - new class includes recent developments,
+    cloned from recent G4UniversalFluctuation (ref-04)
+
+23 May 17: V.Ivanchenko (emstand-V10-03-11)
+- G4WentzelOKandVIxSection, G4eCoulombScatteringModel, 
+  G4WentzelVIModel, G4hCoulombScatteringModel - code and interface cleanup 
+  G4WentzelVIRelModel - use inheritance from G4WentzelVIModel
+  G4WentzelVIRelXSection - use inheritance from G4WentzelOKandVIxSection
+
+18 May 17: L.Urban (emstand-V10-03-10)
+ - correction to G4UniversalFluctuation in order to get
+   better FWHM values
+
+4 May 17: V.Ivanchenko (emstand-V10-03-09)
+- G4SauterGavrilaAngularDistribution - Marilena Bandieramonte 
+    introduced more efficient algorithm of sampling using
+    Penelope-2014 prescription; expected that simulation will be 
+    faster
+
+3 May 17: V.Ivanchenko (emstand-V10-03-08)
+- G4NuclearStopping, G4ICRU49NuclearStoppingModel - fixed nuclear
+    stopping power computation addressed issue discussed in
+    http://hypernews.slac.stanford.edu/HyperNews/geant4/get/hadronprocess/1595/1.html
+
+2  May 17: M.Novak (emstand-V10-03-07)
+- G4GoudsmitSaundersonTable fix FPE
+
+28 April 17: M.Novak (emstand-V10-03-06)
+- G4GoudsmitSaundersonTable new representation of the GS angular
+    distributions (data size reduced from 16MB down to 5 MB)
+    
+22 April 17: L.Urban (emstand-V10-03-05)
+- G4UniversalFluctuation correction to get results closer to data
+
+27 March 17: L.Urban (emstand-V10-03-04)
+- G4UniversalFluctuation correction in order to get better E_mp and 
+  FWHM in the case of small steps
+
+24 March 17: V.Ivanchenko (emstand-V10-03-03)
+- G4WentzelOKandVIxSection, G4WentzelVIRelXSection - added 
+    "ScreeningFactor" parameter to study accuracy of scattering models
+
+20 March 17: F.Hariri (emstand-V10-03-02)
+- G4PairProductionRelModel - fixed the inconsistency in calculating
+     the LPM suppression for the pair production model
+
+07 February 17: V.Ivanchenko (emstand-V10-03-01)
+- G4hIonisation - fixed min/max energy for dEdx table for the case,
+    when the mass of a hadron is very different from the mass of
+    proton
+
+23 January 17: L. Urban (emstand-V10-03-00)
+- G4UniversalFluctuation : correction in order to get better
+  results for small steps
+
 01 December 16: V.Ivanchenko (emstand-V10-02-33)
 - G4UniversalFluctuation - G.Folger switch to std::sqrt from sqrt
-- G4MottCoefficients, G4ScreeningMottCrossSection, 
+- G4MottCoefficients, G4ScreeningMottCrossSection,
   G4eSingleCoulombScatteringModel - use Nuclear Formfactor options
     via G4EmParameters
 
 09 November 16: V.Ivanchenko (emstand-V10-02-32)
-- G4eplusAnnihilation - fixed polarisation of final gamma at rest 
+- G4eplusAnnihilation - fixed polarisation of final gamma at rest
 
 08 November 16: V.Ivanchenko (emstand-V10-02-31)
 - G4eeToTwoGammaModel - fixed polarisation of final gamma
@@ -50,7 +148,7 @@ committal in the CVS repository !
 
 19 July 16: V.Ivanchenko (emstand-V10-02-25)
 - G4SeltzerBergerModel, G4eBremsstrahlungRelModel, G4eBremParametrizedModel
-    added c++11 keywords explicit, override, delete; use nullptr and 
+    added c++11 keywords explicit, override, delete; use nullptr and
     use G4Element::GetZasInt()
 
 18 July 16: L.Urban (emstand-V10-02-24)
@@ -71,17 +169,17 @@ committal in the CVS repository !
     by default use old algorithm, for Opt3,4 - new
 
 07 June 16: V.Ivanchenko (emstand-V10-02-20)
-- G4eMultipleScattering, G4hMultipleScattering - roll back previous 
+- G4eMultipleScattering, G4hMultipleScattering - roll back previous
     version to avoid necessity to change user code
 
 02 June 16: V.Ivanchenko (emstand-V10-02-19)
-- G4eMultipleScattering, G4hMultipleScattering - fixed model 
+- G4eMultipleScattering, G4hMultipleScattering - fixed model
     initialisation (do not create extra unneccesary objects)
 
 31 May 16: M. Novak (emstand-V10-02-18)
 - G4eBremsstrahlungRelModel - change LPM constant such that it gives
     suppression variable that consistent to Migdal's one; fix small
-    bug in LPM function computation; 
+    bug in LPM function computation;
 
 23 May 16: V.Ivanchenko (emstand-V10-02-17)
 - G4UrbanMscModel - use new displacement in all PhysList
@@ -117,8 +215,8 @@ committal in the CVS repository !
     added c++11 keywords explicit, override, delete, final
 
 24 February 16: V.Ivanchenko (emstand-V10-02-08)
-- G4BetheBlochModel - removed unused class members to address clang 
-    warnings 
+- G4BetheBlochModel - removed unused class members to address clang
+    warnings
 
 24 February 16: V.Ivanchenko (emstand-V10-02-07)
 - G4BraggModel, G4BraggIonModel, G4BetheBlochModel - use float for
@@ -132,25 +230,25 @@ committal in the CVS repository !
   The sampling is symmetrical around emean now
 
 12 February 16: V.Ivanchenko (emstand-V10-02-05)
-- G4eSingleCoulombScatteringModel - fixed sampling of scattering 
+- G4eSingleCoulombScatteringModel - fixed sampling of scattering
   angle (problem report #1823)
 
 11 February 16: M.Novak (emstand-V10-02-04)
-- G4GoudsmitSaundersonMscModel - handle special case (when gun is on 
+- G4GoudsmitSaundersonMscModel - handle special case (when gun is on
   the boundary) in the step limitation
- 
+
 10 February 16: V.Ivanchenko (emstand-V10-02-03)
 - G4ASTARStopping, G4PSTARStopping, G4NISTStoppingData,
   G4BraggModel - data arrays become float, computation is left double
 
 23 January 16: V.Ivanchenko (emstand-V10-02-02)
 - G4ScreeningMottCrossSection - a bit cleanup the code to be
-    more fast: keep fixed static array of angles, use G4Pow::powN 
+    more fast: keep fixed static array of angles, use G4Pow::powN
     method instead of pow (Mauro Tacconi)
 
 17 December 15: M.Novak (emstand-V10-02-01)
-- G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable - updated step 
-    limitations, fixed coverity problems and improved comments.      
+- G4GoudsmitSaundersonMscModel G4GoudsmitSaundersonTable - updated step
+    limitations, fixed coverity problems and improved comments.
 
 17 December 15: V.Ivanchenko (emstand-V10-02-00)
 - G4ScreeningMottCrossSection - fixed FPE problem (Mauro Tacconi)
@@ -161,7 +259,7 @@ committal in the CVS repository !
 28 October 15: V.Ivanchenko (emstand-V10-01-40)
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable -
     M. Novak revised GS model for new release, requires updated
-    data set G4EMLOW6.48  
+    data set G4EMLOW6.48
 
 28 October 15: V.Ivanchenko (emstand-V10-01-39)
 - G4ScreeningMottCrossSection revision of the class, optimal usage
@@ -174,10 +272,10 @@ committal in the CVS repository !
     not affecting calorimeter response (L.Urban)
 
 24 October 15: V.Ivanchenko (emstand-V10-01-37)
-- G4UrbanMscModel, G4IonFluctuations, G4MollerBhabhaModel - instead 
-    of computation take from material class the value of effective Z 
+- G4UrbanMscModel, G4IonFluctuations, G4MollerBhabhaModel - instead
+    of computation take from material class the value of effective Z
     (fixed potantial source of non-reproducibility)
-- G4hCoulombScatteringModel, G4eCoulombScatteringModel, 
+- G4hCoulombScatteringModel, G4eCoulombScatteringModel,
   G4SeltzerBergerModel, G4ICRU73QOModel, G4ICRU49NuclearStoppingModel,
   G4BraggModel, G4BraggIonModel, G4eBremsstrahlungRelModel - use
     G4lrint to convert double Z into integer
@@ -187,14 +285,14 @@ committal in the CVS repository !
     recoil kinematics completed (problem report #1778)
 
 16 October 15: V.Ivanchenko (emstand-V10-01-35)
-- G4KleinNishinaCompton, G4KleinNishinaModel, G4BraggModel, 
+- G4KleinNishinaCompton, G4KleinNishinaModel, G4BraggModel,
   G4BraggIonModel, G4BetheBlochModel, G4SeltzerBergerModel,
   G4MollerBhabhaModel, G4PEEffectFluoModel - use nullptr,
     use  rndmEngine->flatArray(n, rndm) in sampling algorithms
 - G4IonCoulombScatteringModel, G4hCoulombScatteringModel - fixed
-    recoil kinematics 
-- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel 
-    (code update was provided by Mauro Tacconi) 
+    recoil kinematics
+- G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel
+    (code update was provided by Mauro Tacconi)
 
 15 September 15: L.Urban (emstand-V10-01-34)
 - G4UrbanMscModel - modification in new lateral algorithm
@@ -216,14 +314,14 @@ committal in the CVS repository !
 
 28 July 15:  V.Ivanchenko (emstand-V10-01-29)
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
-  G4hCoulombScatteringModel - removed low-energy limits from 
+  G4hCoulombScatteringModel - removed low-energy limits from
     scattering models, because it is now implemented inside ionisation
 - G4BraggIonModel - fixed non reproducibility problem #1771
 - G4ASTARStopping, G4ESTARStopping, G4PSTARStopping - build
-    spline at initialisation of a vector 
+    spline at initialisation of a vector
 
 13 July 15:  V.Ivanchenko (emstand-V10-01-28)
-- G4UrbanMscModel - (L.Urban) updated new lateral correlation 
+- G4UrbanMscModel - (L.Urban) updated new lateral correlation
     algorithm; removed upper limit for computation of e+ correction
 - G4hCoulombScatteringModel, G4WentzelVIRelXSection - (K.Maksimov)
     fully implemented scattring in CM rest frame of projectile/target
@@ -233,7 +331,7 @@ committal in the CVS repository !
 - G4GoudsmitSaundersonTable - M. Novak fixed problem #1767
 
 08 July 15:  V.Ivanchenko (emstand-V10-01-26)
-- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - fixed 
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - fixed
     problem #1763 (wrong kinematics for the recoil), removed
     unused class members
 
@@ -244,11 +342,11 @@ committal in the CVS repository !
 - G4PWATotalXsecTable - attempt to fix compillation warning at Windows
 
 10 June 15:  V.Ivanchenko (emstand-V10-01-21)
-- G4UrbanMscModel - L.Urban revert back step limit algorithm, two 
-    methods are added for sampling of lateral displacement (one old 
-    from 10.1 and one new disabled by default), flags are added 
-    to switch between lateral displacement methods and to enable/disable 
-    special treatment of positrons below 1 MeV 
+- G4UrbanMscModel - L.Urban revert back step limit algorithm, two
+    methods are added for sampling of lateral displacement (one old
+    from 10.1 and one new disabled by default), flags are added
+    to switch between lateral displacement methods and to enable/disable
+    special treatment of positrons below 1 MeV
 - G4PWATotalXsecTable - M.Novak fix Coverity report
 
 02 June 15:  V.Ivanchenko (emstand-V10-01-20)
@@ -267,16 +365,16 @@ committal in the CVS repository !
 - G4PAIPhotonModel - removed as obsolete
 
 26 May 15:  R.Hatcher (emstand-V10-01-16)
-- G4IonCoulombScatteringModel, G4eSingleCoulombScatteringModel - remove 
-    unnecessary "using namespace std" from header files that causes 
+- G4IonCoulombScatteringModel, G4eSingleCoulombScatteringModel - remove
+    unnecessary "using namespace std" from header files that causes
     problems w/ G4AnyMethod & G4GenericPhysicsList
 
 22 May 15:  V.Ivanchenko (emstand-V10-01-15)
 - G4UrbanMscModel - small change in initialisation of the new track
 
 18 May 15:  V.Ivanchenko (emstand-V10-01-14)
-- G4UrbanMscModel - ( L.Urban) bugfix in ComputeTruePathLengthLimit 
-    in order not to get many extreme small steps due to msc; use 
+- G4UrbanMscModel - ( L.Urban) bugfix in ComputeTruePathLengthLimit
+    in order not to get many extreme small steps due to msc; use
     "distance" instead of "range" to compare with safety; code
     optimisation (>5% speedup for EM shower simulation in calorimeters)
 
@@ -292,7 +390,7 @@ committal in the CVS repository !
     in SampleScattering optimized use of random engine
 - G4UrbanMscModel - repeat check on safety for each new step,
     add extra limit for very small step regime
-- G4PAIModel, G4PAIModelData, G4PAIPhotModel, G4PAIPhotModelData - 
+- G4PAIModel, G4PAIModelData, G4PAIPhotModel, G4PAIPhotModelData -
     (V.Grichine) last part of fixes for the problem report #1731:
     when next run is initialized old data class is deleted and
     a new one is created
@@ -308,8 +406,8 @@ committal in the CVS repository !
 - G4PAIModel, G4PAIModelData - fixes of problem report #1731:
     cuts are not used in Initialise method but only in run time methods;
     added copy of vector of G4MaterialCutsCouple from master to worker
-    threads 
-- G4KleinNishinaModel, G4WentzelOKandVIxSection - accurate 
+    threads
+- G4KleinNishinaModel, G4WentzelOKandVIxSection - accurate
     initialisation of G4ThreeVectors and G4LorentzVector in constructors
 
 14 April 15: V.Ivanchenko (emstand-V10-01-07)
@@ -317,24 +415,24 @@ committal in the CVS repository !
 
 14 April 15: V.Ivanchenko (emstand-V10-01-06)
 - G4UrbanMscModel - (L.Urban) new lateral displacement,correlation and
-  positron correction; code cleanup - define some const members of the 
+  positron correction; code cleanup - define some const members of the
   class and const static values
 
 04 March 15: V.Ivanchenko (emstand-V10-01-05)
-- G4hMultipleScattering - do not redefine step limit type 
+- G4hMultipleScattering - do not redefine step limit type
 
 26 January 15: V.Ivanchenko (emstand-V10-01-04)
 - G4BraggModel, G4BraggIonModel, G4BetheBlochModel - more clean
-    definition of spin correction to ionisation 
+    definition of spin correction to ionisation
 
 16 January 15: V.Ivanchenko (emstand-V10-01-03)
-- G4UniversalFluctuation - switch to use 
-  G4Random::getTheEngine() to have more clean code 
+- G4UniversalFluctuation - switch to use
+  G4Random::getTheEngine() to have more clean code
 
 15 January 15: V.Ivanchenko (emstand-V10-01-02)
 - G4GoudsmitSaundersonMscModel, G4UrbanMscModel,G4WentzelVIModel,
-  G4WentzelVIRelModel, G4UniversalFluctuation - redefine random 
-    engine pointer in StartTracking() method to address problem 
+  G4WentzelVIRelModel, G4UniversalFluctuation - redefine random
+    engine pointer in StartTracking() method to address problem
     reported by CMS
 
 17 December 14: V.Ivanchenko (emstand-V10-01-01)
@@ -344,21 +442,21 @@ committal in the CVS repository !
     backscattering result is obtained for 10.1 as for 10.0
 
 12 December 14: V.Ivanchenko (emstand-V10-01-00)
-- G4KleinNishinaModel - fixed very rare crash (reported by L.Urban) 
+- G4KleinNishinaModel - fixed very rare crash (reported by L.Urban)
     happens when de-excitation module is active and de-excitation energy
     is slightly larger than available energy; now secondary
     energy slightly modified to keep energy balance instead
     of deletion of secondary particle
 - G4PEEffFluoModel - use the same pattern as G4KleinNishinaModel
     for de-excitation products
-   
+
 
 21 November 14: V.Ivanchenko (emstand-V10-00-52)
 - G4PAIPhotonModel - fixed Coverity report (V.Grichine)
 
 15 November 14: V.Ivanchenko (emstand-V10-00-51)
-- G4PEEffectFluoModel - make internal array per material and 
-    not per materialCutsCouple allowing model be used in unit tests 
+- G4PEEffectFluoModel - make internal array per material and
+    not per materialCutsCouple allowing model be used in unit tests
 
 07 November 14: V.Ivanchenko (emstand-V10-00-50)
 - G4GoudsmitSaundersonMscModel - fixed displacement computation
@@ -371,13 +469,13 @@ committal in the CVS repository !
     use G4EmParameters class for initialisation
 
 24 October 14: V.Ivanchenko (emstand-V10-00-47)
-- G4DeltaAngle - comment out warning happens frequently for 
+- G4DeltaAngle - comment out warning happens frequently for
     low-enegry electrons
 
 24 October 14: V.Ivanchenko (emstand-V10-00-46)
 - G4CoulombScattering - use G4EmParameters
 - G4WentzelVIModel - refinment of lateral displacement
-- G4UrbanMscModel - refinment of lateral displacement 
+- G4UrbanMscModel - refinment of lateral displacement
 - G4WentzelOKandVIxSection - fixed sampling in single scattering
 
 16 October 14: V.Ivanchenko (emstand-V10-00-45)
@@ -391,13 +489,13 @@ committal in the CVS repository !
 
 07 October 14: L.Urban
 - G4UrbanMscModel corrs to speed up (if --> min,max,
-  random numbers using rndmEngineMod pointer) 
+  random numbers using rndmEngineMod pointer)
 
 06 October 14: L. Urban (emstand-V10-00-43)
-- G4UrbanMscModel - added new step limit type UseSafetyPlus 
+- G4UrbanMscModel - added new step limit type UseSafetyPlus
 
 8 September 14: V.Ivanchenko (emstand-V10-00-42)
-- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added 
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added
     protection at initialisation for the case when user artifitially
     reducing high energy limit of the model (bug #1670)
 
@@ -405,17 +503,17 @@ committal in the CVS repository !
 - G4PAIxSection - fixed memory leak reported by Coverity
 
 12 August 14: V.Ivanchenko (emstand-V10-00-40)
-- G4WentzelVIModel - fixed bug in single scattering mode (recently 
+- G4WentzelVIModel - fixed bug in single scattering mode (recently
     introduced)
 
 08 August 14: V.Ivanchenko (emstand-V10-00-39)
 - G4PAIModel - updated sampling of delta electron energy
 - G4PAIModelData - proper deletion of physics vectors end of run,
     use spline interpolation, fixed sampling of delta-electrons
-- G4DeltaAngle - added check on length of do/while loop 
+- G4DeltaAngle - added check on length of do/while loop
 - G4PAIxSection - added protection to avoid division by zero
 - G4PAIxSection, G4PAIPhotData, G4PAIPhotModel - proper deletion
-    end of job  
+    end of job
 
 21 July 14: V.Ivanchenko (emstand-V10-00-38)
 - G4ASTARStopping, G4PSTARStopping, G4BraggModel, G4BraggIonModel
@@ -423,23 +521,23 @@ committal in the CVS repository !
     chemical formula and not only by material name
 
 21 July 14: V.Ivanchenko (emstand-V10-00-37)
-- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, 
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping,
   G4WaterStopping - reduced memory churn by using static data,
-    delete physics vectors at destruction 
-- G4ASTARStopping, G4PSTARStopping changed interface to be 
+    delete physics vectors at destruction
+- G4ASTARStopping, G4PSTARStopping changed interface to be
     always const in run time (shared between threads)
 - G4BraggModel - use static pointer to G4PSTARStopping class,
-    which is initialized once 
+    which is initialized once
 - G4BraggIonModel - use static pointer to G4ASTARStopping class,
-    which is initialized once 
+    which is initialized once
 
 17 July 14: V.Ivanchenko (emstand-V10-00-36)
 17 July 14: V.Ivanchenko (emstand-V10-00-35)
 16 July 14: V.Ivanchenko (emstand-V10-00-34)
-- G4WentzelVIModel - define single scattering mode before 
+- G4WentzelVIModel - define single scattering mode before
     transformation from true to geom step length to avoid
     many smell steps for very low-energy particles
-- G4UrbanMscModel - fixed numerical problem for the case when 
+- G4UrbanMscModel - fixed numerical problem for the case when
     range is nearly truePathLength
 
 13 July 14: V.Ivanchenko (emstand-V10-00-33)
@@ -451,17 +549,17 @@ committal in the CVS repository !
 
 07 July 14: V.Ivanchenko (emstand-V10-00-31)
 - G4ComptonScattering - set startFromNull flag to "true" - for all
-    models forced to zero cross section for the low energy in the 
+    models forced to zero cross section for the low energy in the
     cross section table
-- G4KleinNishinaModel, G4KleinNishinaCompton, 
-  G4HeatedKleinNishinaCompton - do not sample final 
-    state below low limit of the model (default 100 eV); 
+- G4KleinNishinaModel, G4KleinNishinaCompton,
+  G4HeatedKleinNishinaCompton - do not sample final
+    state below low limit of the model (default 100 eV);
     added protection to do/while loop; added check on secondary
     energy of both gamma and electron using internal limit
 - G4HeatedKleinNishinaCompton - use inheritence from G4KleinNishinaCompton
-- G4WentzelVIModel - added more accurate transition to the single 
+- G4WentzelVIModel - added more accurate transition to the single
     scattering mode
-- G4WentzelOKandVIxSection - return back method of 10.0 single 
+- G4WentzelOKandVIxSection - return back method of 10.0 single
     scattering sampling
 - G4IonCoulombScatteringModel - fixed non-initialised (Coverity report)
 
@@ -479,13 +577,13 @@ committal in the CVS repository !
     /run/setCut command
 
 27 May 14: V.Ivanchenko (emstand-V10-00-28)
-- G4IonCoulombCrossSection - tunned computation of the screen 
-    factor 
+- G4IonCoulombCrossSection - tunned computation of the screen
+    factor
 - G4UrbanMscModel - changed ComputeGeomPathLength() method - instead
-    of many return use the one for easier printouts; no change in 
-    algorithms 
+    of many return use the one for easier printouts; no change in
+    algorithms
 - G4UniversalFluctuations - implemented Andrea Dotti suggestion
-    to use more vectorized code (use random engine pointer, use 
+    to use more vectorized code (use random engine pointer, use
     flatArray method) for CPU performance improvement;
     no change of the algorithm
 - G4eCoulombScattering - fixed simple Coverity report
@@ -493,12 +591,12 @@ committal in the CVS repository !
     1.25
 
 05 May 14: V.Ivanchenko (emstand-V10-00-27)
-- G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection, 
+- G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection,
   G4eCoulombScatteringModel - revised and make consistent definition
     of min and max scattering angle for single scattering mode,
     removed unused class members
 - G4IonCoulombCrossSection - fixed screen factor for projectile
-    and target Z=1 
+    and target Z=1
 
 02 May 14: V.Ivanchenko (emstand-V10-00-26)
 - G4WentzelVIModel, G4WentzelOKandVIxSection - a small optimisation
@@ -511,8 +609,8 @@ committal in the CVS repository !
 - G4WentzelVIModel - fixed minor bug introduced in the previous tag
 
 03 April 14: V.Ivanchenko (emstand-V10-00-23)
-- G4WentzelVIModel - optimized transition between multiple and single 
-    scattering modes; changed order of displacement and angular 
+- G4WentzelVIModel - optimized transition between multiple and single
+    scattering modes; changed order of displacement and angular
     deflection (second order effect)
 - G4WentzelOKandVIxSection - some cleanup for sampling
 - G4IonCoulombScatteringModel - fixed for scattering off Hydrogen
@@ -530,7 +628,7 @@ committal in the CVS repository !
 - G4WentzelVIModel - fixed step limitation
 - G4WentzelOKandVIxSection - fixed initialisation for low-energy
     model (this model is not combined with single scattering);
-    fixed small inaccuracy for sampling 
+    fixed small inaccuracy for sampling
 - G4GammaConversion - switch default number of bins from 77 to 220
 
 28 March 14: V.Ivanchenko (emstand-V10-00-19)
@@ -552,7 +650,7 @@ committal in the CVS repository !
 - G4UrbanMscModel - correction improves efficiency in UseSafety mode
 
 28 February 14: V.Ivanchenko (emstand-V10-00-16)
-- G4WentzelVIModel - make part of members of the class and one method 
+- G4WentzelVIModel - make part of members of the class and one method
     protected in order to allow inheritence for derived models
 
 28 February 14: L.Urban
@@ -560,8 +658,8 @@ committal in the CVS repository !
   1-14 % (depending on the setup and cut)
 
 27 February 14: V.Ivanchenko (emstand-V10-00-15)
-- G4DeltaAngle - added implementation of SampleDirectionForShell 
-    virtual method; improved sampling 
+- G4DeltaAngle - added implementation of SampleDirectionForShell
+    virtual method; improved sampling
 
 27 February 14: V.Ivanchenko (emstand-V10-00-14)
 - G4WentzelVIModel - added possibility to compute second momentum
@@ -572,25 +670,25 @@ committal in the CVS repository !
 
 16 February 14: L.Urban
 - G4UrbanMscModel : change in optimization for fUseSafety case by
-    usage std::min/std::max instead of "if" constructions 
+    usage std::min/std::max instead of "if" constructions
 
 14 February 14: V.Ivanchenko (emstand-V10-00-12)
 - G4UrbanMscModel : cosmetic changings
 
 14 February 14: L.Urban (emstand-V10-00-11)
 - G4UrbanMscModel : method SampleDisplacement removed, its code has been
-   put into SampleScattering 
+   put into SampleScattering
 
 13 February 14: V.Ivanchenko (emstand-V10-00-10)
 - G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
   G4WentzelVIRelModel, G4eCoulombScatteringModel, G4hCoulombScatteringModel
     added boolean flag showing that in Physics List msc and single scattering
-    are combined or not 
+    are combined or not
 
 10 February 14: V.Ivanchenko (emstand-V10-00-09)
 - G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,
   SampleDisplacement,LatCorrelation have been inlined in order
-  to improve timing (K. Genser suggesting) in these methods use 
+  to improve timing (K. Genser suggesting) in these methods use
   class member "third" to reduce number of divisions
 - G4PAIxSection - trivial fix of Coverity report
 
@@ -606,7 +704,7 @@ committal in the CVS repository !
 - G4NuclearStopping - do not change ion charge (fixed problem reported
     by Michel Maire)
 - G4ionIonisation - do not instantiate extra model at high enegry
-    if G4IonParameterisedModel is used 
+    if G4IonParameterisedModel is used
 
 24 January 14: V.Ivanchenko (emstand-V10-00-05)
 - G4PAIxSection - trivial fix of Coverity report
@@ -623,17 +721,17 @@ committal in the CVS repository !
     extra class members
 
 11 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-02)
-- G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp() 
+- G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp()
 
 08 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-01)
-- G4UrbanMscModel - bug fix (1st normal step in StepLimitType 2 mode   
-                    was not randomized)  
+- G4UrbanMscModel - bug fix (1st normal step in StepLimitType 2 mode
+                    was not randomized)
 - G4UniversalFluctuation - energy loss for extreme small cuts was too small,
-                           it is fixed now        
+                           it is fixed now
 
 18 December 13: V.Ivanchenko (emstand-V10-00-00)
 - G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - get pointer
-    to the vector of cuts from parameter of Initialise(..) method and 
+    to the vector of cuts from parameter of Initialise(..) method and
     not from G4ProductionCutsTable - this is more convinient for
     unit tests, results unchanged
 
@@ -644,18 +742,18 @@ committal in the CVS repository !
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
   G4eSingleCoulombScatteringModel, G4hCoulombScatteringModel
     if primary particle is below low-energy threshold and is
-    killed add its energy to energy deposition and not to recoil 
+    killed add its energy to energy deposition and not to recoil
     energy; no effect on ordinary simulation
 
 08 November 13: V.Ivanchenko (emstand-V09-06-77)
-- G4PAIPhotonModel - do not delete PhysVectors 
+- G4PAIPhotonModel - do not delete PhysVectors
 
 07 November 13: V.Ivanchenko (emstand-V09-06-76)
-- G4PAIModelData, G4PAIPhotData - do not delete PhysVectors 
+- G4PAIModelData, G4PAIPhotData - do not delete PhysVectors
 
 06 November 13: V.Ivanchenko (emstand-V09-06-75)
 - G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, G4PAIModelData,
-  G4PAIPhotData - do not delete PhysVectors 
+  G4PAIPhotData - do not delete PhysVectors
 
 05 November 13: V.Ivanchenko (emstand-V09-06-74)
 - G4PAIxSection, G4PAIySection - V.Grichine completly understand
@@ -665,12 +763,12 @@ committal in the CVS repository !
 - G4PAIxSection, G4PAIySection - V.Grichine fixed problem of division
     by zero
 - G4eBremsstrahlungRelModel, G4eCoulombScatteringModel - implemented
-    MinPrimaryEnergy method needed to set low-energy limit for 
+    MinPrimaryEnergy method needed to set low-energy limit for
     cross section tables
 
 28 October 13: V.Ivanchenko (emstand-V09-06-72)
 - G4eBremsstrahlungModel - removed as obsolete
-- G4ESTARStopping, G4GoudsmitSaundersonTable, 
+- G4ESTARStopping, G4GoudsmitSaundersonTable,
   G4GoudsmitSaundersonMscModel - fixed Coverity reports
 
 21 October 13: V.Ivanchenko (emstand-V09-06-71)
@@ -680,7 +778,7 @@ committal in the CVS repository !
 20 October 13: V.Ivanchenko (emstand-V09-06-70)
 - G4WentzelVIModel - added GetWVICrossSEction - access method
     to cross section class
-- V.Grichine G4PAIPhotModel ans G4PAIPhotData classes were in 
+- V.Grichine G4PAIPhotModel ans G4PAIPhotData classes were in
 secondary electron/X-ray mode.
 
 15 October 13: V.Ivanchenko (emstand-V09-06-69)
@@ -691,7 +789,7 @@ secondary electron/X-ray mode.
 - G4ESTARStopping - added reading from G4LEDATA
 
 12 October 13: V.Ivanchenko (emstand-V09-06-67)
-- G4WentzelVIModel, G4eCoulombScatteringModel - added fixedCut 
+- G4WentzelVIModel, G4eCoulombScatteringModel - added fixedCut
     member of the class and Get/Set method, will be used
     in fanoCavity and other tests
 - New classes G4PAIPhotModel, G4PAIPhotData (V.Grichine)
@@ -703,10 +801,10 @@ secondary electron/X-ray mode.
 
 02 October 13: V.Ivanchenko (emstand-V09-06-65)
 - G4ESTARStopping - added ESTAR stopping power data
-- General cleanup of many classes: use G4Log and G4Exp, 
-    moved 'static const G4double var = expression' lines our of 
-    the source to avoid any problem in MT mode, significant speedup 
-    of initialisation and some speedup in run time 
+- General cleanup of many classes: use G4Log and G4Exp,
+    moved 'static const G4double var = expression' lines our of
+    the source to avoid any problem in MT mode, significant speedup
+    of initialisation and some speedup in run time
 
 11 September 13: V.Ivanchenko (emstand-V09-06-64)
 - G4PairProductionRelModel - add SetupForMaterial(..) call
@@ -721,10 +819,10 @@ secondary electron/X-ray mode.
 
 30 August 13: V.Ivanchenko (emstand-V09-06-61)
 - G4SeltzerBergerModel - if in the method ComputeDXSectionPerAtom
-    it turs out that data for given Z are not uploaded call 
-    InitialiseForElement instead of ReadData in order to set 
+    it turs out that data for given Z are not uploaded call
+    InitialiseForElement instead of ReadData in order to set
     AutoLock - this is kind of sanity for MT mode
-- G4PAIModel - do not upply hard-coded low-limit on energy, because 
+- G4PAIModel - do not upply hard-coded low-limit on energy, because
     it should done coherently inside G4PAIModelData
 - G4PAIModelData - scale internal differential cross section
     table as 1/t^2, where t is energy transfer in oreder to more
@@ -748,30 +846,30 @@ secondary electron/X-ray mode.
     between energy bins of internal tables
 
 23 August 13: V.Ivanchenko (emstand-V09-06-57)
-- G4IonFluctuations, G4UniversalFluctuations - use G4Pow for log, exp, 
+- G4IonFluctuations, G4UniversalFluctuations - use G4Pow for log, exp,
     pow in run time methods - expected slightly improve CPU performance
 
 21 August 13: V.Ivanchenko (emstand-V09-06-56)
 - G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 are removed
-    only one version of the model G4UrbanMscModel  is left  
+    only one version of the model G4UrbanMscModel  is left
 
 19 August 13: V.Ivanchenko (emstand-V09-06-55)
 - G4PAIModelData - new class to handle PAI internal data
-- G4PAIModel - data handling extracted to G4PAIModelData, is data 
+- G4PAIModel - data handling extracted to G4PAIModelData, is data
     class may be shared between threads; code cleanup
 
 12 August 13: V.Ivanchenko (emstand-V09-06-54)
 - G4BetheBlochModel, G4BraggIonModel - returned back method MinEnergyCut
-    in order to protect from the bug #1481 
+    in order to protect from the bug #1481
 
 03 July 13: V.Ivanchenko (emstand-V09-06-53)
 - G4BohrFluctuations, G4IonFluctuations, G4PAIModel, G4PAIPhotonModel,
-  G4UniversalFluctuation - changed interface to G4VEmFluctuationModel 
-    in SampleFluctuations G4Material pointer is substituted 
-    by G4MaterialCutsCouple pointer, this is needed for PAI model 
+  G4UniversalFluctuation - changed interface to G4VEmFluctuationModel
+    in SampleFluctuations G4Material pointer is substituted
+    by G4MaterialCutsCouple pointer, this is needed for PAI model
 
 01 July 13: V.Ivanchenko (emstand-V09-06-52)
-- G4PAIModel - correct usage of indexes 
+- G4PAIModel - correct usage of indexes
 
 19 June 13: V.Ivanchenko (emstand-V09-06-51)
 - correct branch tag
@@ -793,8 +891,8 @@ secondary electron/X-ray mode.
  G4PAIxSection - V.Grichine fix compillation warning
 
 13 June 13: V.Ivanchenko (emstand-V09-06-46)
-12 June 13 -  V.Grichine, G4PAIPhotonModel, G4PAIxSection - modified 
-    initialisation call G4SandiaTable over memory crash free method; 
+12 June 13 -  V.Grichine, G4PAIPhotonModel, G4PAIxSection - modified
+    initialisation call G4SandiaTable over memory crash free method;
     G4PAIxSection was modified: arrays->G4DataVectors
 
 10 May 13: V.Ivanchenko (emstand-V09-06-45)
@@ -804,7 +902,7 @@ secondary electron/X-ray mode.
 - G4hIonisation - add special treatment for ions
 
 06 May 13: V.Ivanchenko (emstand-V09-06-43)
-- G4PEEffectFluoModel - revert back previous tag -41, because 
+- G4PEEffectFluoModel - revert back previous tag -41, because
     tag -42 does not help to resolve non-reproducibility at Windows
 
 06 May 13: V.Ivanchenko (emstand-V09-06-42)
@@ -812,18 +910,18 @@ secondary electron/X-ray mode.
     to fix non-reproducibility
 
 06 May 13: V.Ivanchenko (emstand-V09-06-41)
-- G4PEEffectFluoModel - more safe computation of secondary 
+- G4PEEffectFluoModel - more safe computation of secondary
     electron energy and energy concervation
 
 05 May 13: V.Ivanchenko (emstand-V09-06-40)
 - G4PAIPhotonModel - (V.Grichine) added extra methods
-- G4SeltzerBergerModel, G4eBremsstrahlungRelModel - use IsMaster() 
+- G4SeltzerBergerModel, G4eBremsstrahlungRelModel - use IsMaster()
     method at initialisation
 03 June 13: L. Urban
 - G4PEEffectFluoModel - correction to ensure energy conservation
-  when fluo is on` 
+  when fluo is on`
 - G4KleinNishinaModel - correction to ensure energy conservation
-  when fluo is on` 
+  when fluo is on`
 
 30 May 13: V.Ivanchenko (emstand-V09-06-39)
 - G4SeltzerBergerModel, G4eBremsstrahlungRelModel - implemented
@@ -831,27 +929,27 @@ secondary electron/X-ray mode.
 
 29 May 13: V.Ivanchenko (emstand-V09-06-38)
 - G4SeltzerBergerModel - increased elowlimit in the method
-    SamplingSecondaries() from 10 to 20 keV in order to removed 
+    SamplingSecondaries() from 10 to 20 keV in order to removed
 
 29 May 13: V.Ivanchenko (emstand-V09-06-37)
 - G4eCoulombScatteringModel, G4hCoulombScatteringModel,
   G4eSingleCoulombScatteringModel - use G4IonTable::GetIon instead
     of G4ParticleTable interface to create a recoil ion
 - G4KleinNishinaModel - added protection and warning against
-    possible energy non-conservation due to inconsistency in 
+    possible energy non-conservation due to inconsistency in
     shell energies
 - G4PEEffectFluoModel - use binding energy from G4LEDATA and not
     from G4AtomicShell class in the case when fluoresence is enabled
     in order to provide energy balance
 - G4SeltzerBergerModel - increased elowlimit in the method
-    SamplingSecondaries() from 10 to 20 keV in order to removed 
+    SamplingSecondaries() from 10 to 20 keV in order to removed
     problem of majoranta exceeded in heavy media (annoing warnings
     messages should not appear anymore)
 
 23 May 13: V.Ivanchenko (emstand-V09-06-36)
 - G4PAIModel - G4SandiaTable is added as a class member
 - G4PAIModel, G4PAIySection - V.Grichine modified initialisation
-    call G4SandiaTable over memory crash free method; G4PAIySection 
+    call G4SandiaTable over memory crash free method; G4PAIySection
     was modified: arrays->G4DataVectors
 
 16 May 13: V.Ivanchenko (emstand-V09-06-35)
@@ -863,7 +961,7 @@ secondary electron/X-ray mode.
 08 May 13: V.Ivanchenko (emstand-V09-06-33)
 - removed debug printpout at initialisation from previous tag
 - G4SeltzerBergerModel - reduce limit on number of warning printouts
-    to reduce log files for MT developments 
+    to reduce log files for MT developments
 
 07 May 13: V.Ivanchenko (emstand-V09-06-32)
 - G4WentzelOKandVIxSection - fixed old problem - difference in
@@ -872,14 +970,14 @@ secondary electron/X-ray mode.
 
 30 April 13: V.Ivanchenko (emstand-V09-06-31)
 - G4HeatedKleinNishinaCompton, G4IonFluctuations, G4PAIModel,
-   G4PAIPhotonModel, G4UniversalFluctuation - CLHEP::Rand 
+   G4PAIPhotonModel, G4UniversalFluctuation - CLHEP::Rand
      substituted by G4Rand (needed for MT)
 - G4PAIySection restore original algorith of cheking of
     maxenergy transfer
 
 25 April 13: V.Ivanchenko (emstand-V09-06-30)
-- G4UrbanMscModel95, G4UrbanMscModel96 - added usage of G4Pow and 
-- G4PAIySection, G4PAIModel, G4PAIPhotonModel - return back working 
+- G4UrbanMscModel95, G4UrbanMscModel96 - added usage of G4Pow and
+- G4PAIySection, G4PAIModel, G4PAIPhotonModel - return back working
   versions from the tag emstand-V09-06-28
 
 22 April 13: V.Ivanchenko (emstand-V09-06-29)
@@ -889,10 +987,10 @@ secondary electron/X-ray mode.
 20 April 13: V.Ivanchenko (emstand-V09-06-28)
 - G4PAIySection - fixed usage array length
 - G4WentzelVIModel - minor optimisation of the code (no effect on
-    physics results)  
+    physics results)
 
 19 April 13: V.Ivanchenko (emstand-V09-06-27)
-- G4WentzelOKandVIxSection - fixed initialisation - really different 
+- G4WentzelOKandVIxSection - fixed initialisation - really different
     screening parameter for e+- and heavy particles
 
 18 April 13: V.Ivanchenko (emstand-V09-06-26)
@@ -910,16 +1008,16 @@ secondary electron/X-ray mode.
 
 10 April 13: V.Ivanchenko (emstand-V09-06-24)
 - G4PAIModel, G4PAIPhotonModel - change Initilise method allowing to
-    work with these models in unit test where geometry is not 
-    constructed 
+    work with these models in unit test where geometry is not
+    constructed
 
 04 April 13: V.Ivanchenko (emstand-V09-06-23)
 - G4UrbanMscModel - use G4Pow in compute transport cross section
 
-09 April 13: L.Urban 
-- G4UrbanMscModel - random first step/ random first step in volume 
+09 April 13: L.Urban
+- G4UrbanMscModel - random first step/ random first step in volume
    instead of sampling z (the geam. step length). After this modification
-   there in no zero step length for eIoni,eBrem and annihilation in flight 
+   there in no zero step length for eIoni,eBrem and annihilation in flight
 
 04 April 13: V.Ivanchenko (emstand-V09-06-22)
 - G4eplusAnnihilation - use G4VParticleChange interface to add
@@ -927,8 +1025,8 @@ secondary electron/X-ray mode.
 
 22 March 13: V.Ivanchenko (emstand-V09-06-21)
 - G4MottCoefficients, G4BetheHeitlerModel, G4ASTARStopping, G4BraggIonModel,
-  G4BraggModel, G4InitXscPAI, G4IonFluctuations, G4ModifiedTsai,  
-  G4MottCoefficients, G4PAIySection, G4PSTARStopping, 
+  G4BraggModel, G4InitXscPAI, G4IonFluctuations, G4ModifiedTsai,
+  G4MottCoefficients, G4PAIySection, G4PSTARStopping,
   G4PairProductionRelModel, G4SauterGavrilaAngularDistribution,
   G4ScreeningMottCrossSection, G4SeltzerBergerModel, G4UrbanMscModel,
   G4WentzelVIModel, G4WentzelVIRelModel, G4eBremsstrahlungModel
@@ -936,18 +1034,18 @@ secondary electron/X-ray mode.
 
 18 March 13: V.Ivanchenko (emstand-V09-06-20)
 - G4UrbanMscModel - L.Urban have added a new geometrical limit
-    0.01 nm to allow scattering in very small steps; 
+    0.01 nm to allow scattering in very small steps;
 - G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95 -
     warning printout about large angle scattering is commented out
 
 07 March 13: V.Ivanchenko (emstand-V09-06-19)
-- G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95, 
+- G4UrbanMscModel, G4UrbanMscModel93, G4UrbanMscModel95,
     G4UrbanMscModel96 - comment out extra printout
   G4UrbanMscModel96 - added warning that it is an obsolete class
 
 28 February 13: V.Ivanchenko (emstand-V09-06-18)
 - G4PEEffectFluoModel - changed interface to SandiaTable allowing
-    materials to be shared between threads 
+    materials to be shared between threads
 
 23 February 13: V.Ivanchenko (emstand-V09-06-17)
 - G4PEEffectFluoModel - attempt to fix compillation problems
@@ -963,14 +1061,14 @@ secondary electron/X-ray mode.
 - G4UrbanMscModel - modified format of warning about big scatterings
 
 19 February 13: V.Ivanchenko (emstand-V09-06-14)
-- G4SeltzerBergerModel, G4PAIxSection, G4PAIySection, 
+- G4SeltzerBergerModel, G4PAIxSection, G4PAIySection,
   G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel
     - removed G4endl from G4ExceptionDescription
   G4UrbanMscModel - copied from G4UrbanMscModel96 and become
     default for G4eMultipleScattering, G4hMultipleScattering
 
 18 February 13: V.Ivanchenko (emstand-V09-06-13)
-- G4eBremsstrahlungModel, G4WentzelVIRelXSection, 
+- G4eBremsstrahlungModel, G4WentzelVIRelXSection,
   G4WentzelOKandVIxSection, G4SeltzerBergerModel, G4PAIxSection,
   G4PAIySection, G4IonFluctuations, G4ICRU49NuclearStoppingModel,
   G4ICRU49NuclearStoppingModel, G4GoudsmitSaundersonTable,
@@ -981,13 +1079,13 @@ secondary electron/X-ray mode.
     added warning printout for particles with E>20 MeV and value
     of c < 1.6
 - G4UrbanMscModel96 - extra tuning of probability of no scattering
-    in thin layers to be more similar to the single scattering model 
+    in thin layers to be more similar to the single scattering model
     (L.Urban)
 
 29 January 13: V.Ivanchenko (emstand-V09-06-11)
 - G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96:
-    added limit c>1.9 for the main parameter responsible for 
-    sumpling of tail of scattering (fix for ATLAS large scattering 
+    added limit c>1.9 for the main parameter responsible for
+    sumpling of tail of scattering (fix for ATLAS large scattering
     angle problem)
 - G4WentzelVIModel - more clean logic of sampling for single
     scattering mode
@@ -1037,7 +1135,7 @@ secondary electron/X-ray mode.
 - G4WentzelVIModel - fixed minor problem in single scattering mode
 
 08 November 12: V.Ivanchenko (emstand-V09-05-62)
-- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - do not sample 
+- G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - do not sample
     scattering if energy is below 1 eV
 - G4WentzelVIModel - added "no scattering" check inside SampleScattering
     method
@@ -1047,7 +1145,7 @@ secondary electron/X-ray mode.
 03 November 12: V.Ivanchenko (emstand-V09-05-61)
 - G4XrayRayleighModel - fixed minor Coverity warning
 
-26 October 12: V. Grichine - bug fixed in G4XrayRayleighModel for calculating 
+26 October 12: V. Grichine - bug fixed in G4XrayRayleighModel for calculating
 of the atomic form factor in the SampleSecondaries method.
 
 26 October 12: V.Ivanchenko (emstand-V09-05-60)
@@ -1064,24 +1162,24 @@ of the atomic form factor in the SampleSecondaries method.
 
 21 October 12: V.Ivanchenko (emstand-V09-05-57)
 - G4eBremsstrahlung, G4eIonisation,  G4hIonisation, G4ionIonisation -
-    secondary particle type defined in constructors and not in Initialise() 
+    secondary particle type defined in constructors and not in Initialise()
     method, this is needed for correct initialisation at G4_PreInit
 
 20 October 12: V.Ivanchenko (emstand-V09-05-56)
 - G4CoulombScattering, G4NuclearStopping, G4eMultipleScattering,
-  G4hMultipleScattering, G4ComptonScattering - substitute methods 
+  G4hMultipleScattering, G4ComptonScattering - substitute methods
     Model(), SetModel() by EmModel(), SetEmModel()
-- G4NuclearStopping - added check on ion energy at the process level 
+- G4NuclearStopping - added check on ion energy at the process level
     to speedup computations
-- G4CoulombScattering - close possibility to change polar angle limit 
+- G4CoulombScattering - close possibility to change polar angle limit
     after first initialisation
 - added warning to obsolete methods and classes
 
 18 October 12: V.Ivanchenko (emstand-V09-05-55)
--  G4BetheBlochModel, G4BraggIonModel, G4BraggModel - define flag isIon 
+-  G4BetheBlochModel, G4BraggIonModel, G4BraggModel - define flag isIon
      for all nucleus except deuteron, triton and special DNA ions
 
-14 October 12: V.Ivanchenko (emstand-V09-05-54) 
+14 October 12: V.Ivanchenko (emstand-V09-05-54)
 - G4XrayRayleighModel - V. Grichine, update of xsc and angular distribution
 - G4eBremParametrizedModel - use G4DipBustGenerator for angular distribution
 - G4ModifiedTsai - removed old obsolete interface
@@ -1091,7 +1189,7 @@ of the atomic form factor in the SampleSecondaries method.
 
 05 October 12: V.Ivanchenko (emstand-V09-05-52)
 - G4UrbanMscModel95 - added protection into GetTrueStepLength method (true
-    legth cannot exceed physics path length 
+    legth cannot exceed physics path length
 - G4UrbanMscModel96 - new version of the model
 
 01 October 12: V.Ivanchenko (emstand-V09-05-51)
@@ -1106,8 +1204,8 @@ of the atomic form factor in the SampleSecondaries method.
 - G4eBremssrahlungRelModel - return back G4ModifiedTsai as a default
 
 28 September 12: V.Ivanchenko (emstand-V09-05-48)
-- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93, 
-  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel - fixed computations 
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+  G4UrbanMscModel95, G4GoudsmitSaundersonMscModel - fixed computations
     of effective electron energy at a step
 - G4ModifiedTsai - fixed angular distribution in backward hemisphere
 - G4GammaConversion - explicit inclusion of header for units.
@@ -1115,22 +1213,22 @@ of the atomic form factor in the SampleSecondaries method.
 
 21 September 12: V.Ivanchenko (emstand-V09-05-47)
 - G4DipBustGenerator, G4SauterGavrilaAngularDistribution - added
-    protection to angular sampling theta < pi, and optimise 
+    protection to angular sampling theta < pi, and optimise
     computation for ultrarelativistic particles
 
 20 September 12: V.Ivanchenko (emstand-V09-05-46)
-- G4GammaConversion - changed low energy limit of the high energy 
+- G4GammaConversion - changed low energy limit of the high energy
     model from 100 to 80 GeV
 - G4eBremsstrahlungRelModel - use G4DipBustGenerator for sampling of
     bremsstrahlung angle instead of G4ModifiedTsai
 - G4SeltzerBergerModel - for the cut on gamma energy below 5% added
     extra factor 1.2 to max value of the cross section when sample
-    gamma energy (reduced number of cases when differencial cross 
-    section exceed estimated maximum of the cross section. 
+    gamma energy (reduced number of cases when differencial cross
+    section exceed estimated maximum of the cross section.
 
 18 September 12: V.Ivanchenko (emstand-V09-05-45)
-- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93, 
-    G4UrbanMscModel95, G4WentzelVIModel, 
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
+    G4UrbanMscModel95, G4WentzelVIModel,
     G4GoudsmitSaundersonMscModel - added protection: step limit
     from msc cannot be smaller than tlimitminfix (to address bug#1345)
 - G4IonFluctuations - added simplified fluctuations for very small steps
@@ -1142,15 +1240,15 @@ of the atomic form factor in the SampleSecondaries method.
 
 24 August 12: V.Ivanchenko (emstand-V09-05-43)
 - G4CoulombScatteringModel, G4eCoulombScatteringModel, G4UrbanMscModel90
-  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95, 
+  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95,
   G4WentzelVIModel, G4GoudsmitSaundersonMscModel - sampling of scattering
     moved from PostStep to AlongStep
 - G4KleinNishinaModel - added simplified PDF function
 
 27 July 12: V.Ivanchenko (emstand-V09-05-42)
-- G4NuclearStopping - added check of upper energy limit (for CPU 
+- G4NuclearStopping - added check of upper energy limit (for CPU
     performance reasons)
-- G4ICRU49NuclearStoppingModel - reduced upper limit for protons from 
+- G4ICRU49NuclearStoppingModel - reduced upper limit for protons from
     100 MeV to 1 MeV (for CPU performance reasons)
 
 26 July 12: V.Ivanchenko (emstand-V09-05-41)
@@ -1164,35 +1262,35 @@ of the atomic form factor in the SampleSecondaries method.
     interface
 - G4SauterGavrilaAngularDistribution extracted from G4PEEffectModel,
     limit gamma fator is changed from 5 to 30 (no angular sampling
-    above ~15 MeV instead of 2.5 MeV) 
+    above ~15 MeV instead of 2.5 MeV)
 
 20 July 12: V.Ivanchenko (emstand-V09-05-38)
-- G4ModifiedTsai - improved sampling of bremsstarhlung in backward 
-    hemisphere 
+- G4ModifiedTsai - improved sampling of bremsstarhlung in backward
+    hemisphere
 
 20 July 12: V.Ivanchenko (emstand-V09-05-37)
 - WentzelVIModel - return back old step limitation
 - G4DipBustGenerator, G4ModifiedTsai, G4SeltzerBergerModel,
-  G4eBremParametrizedModel, G4eBremsstrahlungModel, 
+  G4eBremParametrizedModel, G4eBremsstrahlungModel,
   G4eBremsstrahlungRelModel - use SampleDirection interface of the
   G4VEmAngularDistribution interface
 
 17 July 12: V.Ivanchenko (emstand-V09-05-36)
-- G4UniversalFluctuation, G4IonFluctuations - fixed bug in sampling 
+- G4UniversalFluctuation, G4IonFluctuations - fixed bug in sampling
     in the case of Gamma-distribution (thick target at low energy)
 
 17 July 12: V.Ivanchenko (emstand-V09-05-35)
 - G4SeltzerBergerModel - optimisation of sampling for e+
 - WentzelVIModel - optimisation of sampling of scattering for
     large value of mean scattering angle
-- G4UniversalFluctuation, G4IonFluctuations - improved sampling for 
+- G4UniversalFluctuation, G4IonFluctuations - improved sampling for
     "thick" absorber
 
 13 July 12: V.Ivanchenko (emstand-V09-05-34)
 - G4GammaConversion - use relativistic model above 100 GeV - more
     accurate cross sections + LPM effect at very high energy
 - G4ComptonScattering, G4CoulombScattering, G4PhotoElectricEffect,
-    G4eplusAnnihilation use EmModel and SetEmModel methods of the base 
+    G4eplusAnnihilation use EmModel and SetEmModel methods of the base
     class at initialisation
 
 13 July 12: V.Ivanchenko (emstand-V09-05-33)
@@ -1211,23 +1309,23 @@ of the atomic form factor in the SampleSecondaries method.
 - G4GammaConversion, G4KleinNishinaModel, G4KleinNishinaCompton,
   G4PEEffectFluoModel - minor cleanup of initialisation
 - G4PhotoElectricEffect - build cross section table above 200 keV
-- G4ComptonScattering - build 2 cross section tables - below and above 
+- G4ComptonScattering - build 2 cross section tables - below and above
     1 MeV using different technique for interpolation
-- G4CoulombScattering - improved list of options/flags in the 
-    constructor to reduce size of cross section tables 
+- G4CoulombScattering - improved list of options/flags in the
+    constructor to reduce size of cross section tables
 
 22 June 12: V.Ivanchenko (emstand-V09-05-29)
-- Fixed non-reproducibility in msc models for the case if more than 
+- Fixed non-reproducibility in msc models for the case if more than
     several models defined for different energy interval
 
 15 June 12: V.Ivanchenko (emstand-V09-05-28)
-- G4GoudsmitSaundersonMscModel - fixed precision lost providing FPE 
+- G4GoudsmitSaundersonMscModel - fixed precision lost providing FPE
 
 14 June 12: V.Ivanchenko (emstand-V09-05-27)
 - G4ScreeningMottCrossSection - added extra protections against FPE
 
 11 June 12: V.Ivanchenko (emstand-V09-05-26)
-- G4SeltzerBergerModel - more accurate majoranta definition for 
+- G4SeltzerBergerModel - more accurate majoranta definition for
     low-energy e-
 - G4ScreeningMottCrossSection - added protection against FPE
     due to low-energy value of internal table
@@ -1243,14 +1341,14 @@ of the atomic form factor in the SampleSecondaries method.
 
 07 June 12: V.Ivanchenko (emstand-V09-05-22)
 - G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel -
-    C. Consolandi and P.G. Rancoita provided updated version of 
+    C. Consolandi and P.G. Rancoita provided updated version of
     electron scattering code based on analytical approximation of
-    the Mott cross section by means Hose coefficients  
+    the Mott cross section by means Hose coefficients
 - G4MottCoefficients - new class by above scattring model
 
 07 June 12: V.Ivanchenko (emstand-V09-05-21)
 - G4WentzelVIModel - fixed sampling of single scattering
-- G4eMultipleScattering, G4hMultipleScattering - minor optimisation 
+- G4eMultipleScattering, G4hMultipleScattering - minor optimisation
     of initialisation
 
 01 June 12: V.Ivanchenko (emstand-V09-05-20)
@@ -1261,23 +1359,23 @@ of the atomic form factor in the SampleSecondaries method.
 
 31 May 12: V.Ivanchenko (emstand-V09-05-18)
 - G4SeltzerBergerModel - fixed minor problem of sampling for positrons;
-                       - make internal data structure static to be used 
+                       - make internal data structure static to be used
                          by both e+ and e- models - some memory reduction
                        - used simplified computation of majoranta valid
                          for data with more detailed grid;
-                       - make internal data vectors static to reduce 
+                       - make internal data vectors static to reduce
                          size of data in run time
 - G4DipBustGenerator - fixed model description
-- G4eBremsstrahlungRelModel (A.Schaelicke switch full screening off) 
+- G4eBremsstrahlungRelModel (A.Schaelicke switch full screening off)
 - G4eplusAnnihilation (D. Sawkey) fixed propagate weight to secondaries
 
 09 May 12: V.Ivanchenko (emstand-V09-05-17)
-- G4CoulombScattering - minor modification of initialisation allowing 
+- G4CoulombScattering - minor modification of initialisation allowing
     to have add custom model with specific paraaameters but reuse
     low andhigh energy limits defined for the process
 
 24 April 12: V.Ivanchenko (emstand-V09-05-16)
-- G4CoulombScattering - added method MinPrimaryEnergy allowing to 
+- G4CoulombScattering - added method MinPrimaryEnergy allowing to
     define low edge of physics table when Coulomb scattering is combined with
     multiple or single scattering
 - G4WentzelVIModel - fixed a bug introduced in previous tag
@@ -1286,23 +1384,23 @@ of the atomic form factor in the SampleSecondaries method.
 
 20 April 12: V.Ivanchenko (emstand-V09-05-15)
 - G4CoulombScatteringModel, G4eCoulombScatteringModel, G4UrbanMscModel90
-  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95, 
+  G4UrbanMscModel92, G4UrbanMscModel93, G4UrbanMscModel95,
   G4WentzelVIModel, G4GoudsmitSaundersonMscModel - moved
     cross section table from process to model, removed method GetLambda
 - G4GoudsmitSaundersonMscModel - improved method of definition of
     screening parameter
 
-16 April 12: A.Schaelicke & F.Garay 
+16 April 12: A.Schaelicke & F.Garay
 - G4eBremsstrahlungRelModel fixed use of screening function
 
 13 April 12: L.Urban
-- G4UrbanMscModel95 - fixed tail using single scattering model 
+- G4UrbanMscModel95 - fixed tail using single scattering model
 
 28 March 12: V.Ivanchenko (emstand-V09-05-14)
 - source.cmake fixed - G4UrbanMscModel92 was forgotten
 
 15 March 12: V.Ivanchenko (emstand-V09-05-13)
-- G4GoudsmitSaundersonMscModel - fixed FPE bug - lateral displacemnt 
+- G4GoudsmitSaundersonMscModel - fixed FPE bug - lateral displacemnt
     should not be sampled for plural scattering
 
 12 March 12: V.Ivanchenko (emstand-V09-05-12)
@@ -1327,22 +1425,22 @@ of the atomic form factor in the SampleSecondaries method.
 - G4WentzelOKandVIxSection, G4WentzelVIModel - cleanup of previous modifications
 
 10 February 12: V.Ivanchenko (emstand-V09-05-07)
-- G4WentzelVIModel - improved algorithm of sampling of scattering angle and 
+- G4WentzelVIModel - improved algorithm of sampling of scattering angle and
     displacement: chice between 1 or 2 sub-steps
 
 09 February 12: V.Ivanchenko (emstand-V09-05-06)
 - G4WentzelOKandVIxSection - fixed typo
 
 09 February 12: V.Ivanchenko (emstand-V09-05-05)
-- G4UniversalFluctuation L.Urban improved parameterisation for 
+- G4UniversalFluctuation L.Urban improved parameterisation for
     thin gas layers
-- G4WentzelOKandVIxSection - different screening functions for 
+- G4WentzelOKandVIxSection - different screening functions for
     e+- and heavy particles
 
 31 January 12: V.Ivanchenko (emstand-V09-05-04)
 31 January 12: V.Ivanchenko (emstand-V09-05-03)
 - G4WentzeVIModel - fixed bug in computation of lateral displacement
-    (Leif Raedel report# 1114 in HyperNews forum) 
+    (Leif Raedel report# 1114 in HyperNews forum)
 
 27 January 12: V.Ivanchenko (emstand-V09-05-02)
 - G4WentzeVIModel - added G4Exception to identify misuse of transport
@@ -1354,21 +1452,21 @@ of the atomic form factor in the SampleSecondaries method.
 
 12 January 12: V.Ivanchenko (emstand-V09-05-00)
 - G4UniversalFluctuation - (L.Urban) fixed sampling at small steps
-    (below 10 um) in heavy media reported at 8th Space User Workshop 
+    (below 10 um) in heavy media reported at 8th Space User Workshop
     (Tsukuba, December, 2012) about shift in range of 3 MeV muons
-- G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel - fixed 
-    compillation problem at Ubuntu; the problem was in non-accurate 
+- G4GoudsmitSaundersonTable, G4GoudsmitSaundersonMscModel - fixed
+    compillation problem at Ubuntu; the problem was in non-accurate
     usage of fscanf function reading data file
- 
+
 25 November 11: V.Ivanchenko (emstand-V09-04-55)
 - G4UrbanMscModel90, G4UrbanMscModel93, G4UrbanMscModel95 - added
-  protection against numerical problems of sampling scattering with 
+  protection against numerical problems of sampling scattering with
   small step at high energy to avoid reflection back;
-  added G4Exception to control reflection back - it issues a warning  
+  added G4Exception to control reflection back - it issues a warning
 
 18 November 11: V.Ivanchenko (emstand-V09-04-54)
-- G4UrbanMscModel95 - optimized "samplez" sampling - applied it 
-    only for for medium step size, not apply to small steps and 
+- G4UrbanMscModel95 - optimized "samplez" sampling - applied it
+    only for for medium step size, not apply to small steps and
     on steps equal to electron range
 
 17 November 11: V.Ivanchenko (emstand-V09-04-53)
@@ -1376,7 +1474,7 @@ of the atomic form factor in the SampleSecondaries method.
     electrons (E < 1 keV)
 
 14 November 11: V.Ivanchenko (emstand-V09-04-52)
-- G4SeltzerBergerModel - fixed cross section for positrons 
+- G4SeltzerBergerModel - fixed cross section for positrons
 
 12 November 11: V.Ivanchenko (emstand-V09-04-51)
 - G4SeltzerBergerModel - added correction for cross section for positrons
@@ -1388,62 +1486,62 @@ of the atomic form factor in the SampleSecondaries method.
   G4UrbanMscModel90, G4SeltzerBergerModel, G4ScreeningMottCrossSection,
   G4PEEffectModel, G4PEEffectFluoModel, G4PAIPhotonModel, G4PAIModel,
   G4MollerBhabhaModel, G4KleinNishinaModel, G4KleinNishinaCompton, G4ICRU73QOModel,
-  G4BraggModel, G4BetheBlochModel, G4PAIxSection, G4InitXscPAI - fixed trivial 
-    problems (mainly pedantic initialisation) reported by the Coverity tool 
+  G4BraggModel, G4BetheBlochModel, G4PAIxSection, G4InitXscPAI - fixed trivial
+    problems (mainly pedantic initialisation) reported by the Coverity tool
 - G4alphaIonisation - warning is added saying that the process should not be used
 
 2 November 11: G.Cosmo (emstand-V09-04-49)
 - Correction in sources.cmake script.
 
 1 November 11: V.Ivanchenko (emstand-V09-04-48)
-- G4eCoulombScatteringModel - fixed compilation problem introduced 
+- G4eCoulombScatteringModel - fixed compilation problem introduced
     in the previous tag
 
 31 October 11: V.Ivanchenko (emstand-V09-04-47)
 - G4eCoulombScatteringModel - rename local member and set method
     SetLowEnergyThreshold to avoid hidden of the method of the
     base class (addressed bug# 1256)
- 
+
 28 October 11: V.Ivanchenko (emstand-V09-04-46)
 - G4PAIxSection, G4PAIySection,
-- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - migration to 
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - migration to
     the new G4Exception signature
 - G4ScreeningMottCrossSection, G4eSingleCoulombScatteringModel - new classes
 - G4eBremsstrahlungRelModel - only members used in a derived class are
                               protected, other moved to be private
 - G4UrbanMscModel95 - return back default FacSafety = 0.3
-- G4SeltzerBergerModel - G4LEDATA is used as a path to the data structure  
+- G4SeltzerBergerModel - G4LEDATA is used as a path to the data structure
 - G4eCoulombScatteringModel - low-limit is increased from 10 eV to 1 keV
-    for the reason of HEP production, may be changed by low-energy user 
+    for the reason of HEP production, may be changed by low-energy user
 
 10 October 11: V.Ivanchenko (emstand-V09-04-45)
 - G4UrbanMscModel95 - speadup a bit in the case UseSafety (FacSafety = 0.5)
 - G4eeToTwoGammaModel - added polarization
 - G4eBremsstrahlungRelModel - make few methods and class members protected
     to be used in G4SeltzerBergerModel
-- G4SeltzerBergerModel - new model for bremsstrahlung 
+- G4SeltzerBergerModel - new model for bremsstrahlung
 
 16 September 11: V.Ivanchenko (emstand-V09-04-44)
-- G4BetheBlochModel - added protection for high correction to 
-    energy loss (important if a step length is nearly the range) 
+- G4BetheBlochModel - added protection for high correction to
+    energy loss (important if a step length is nearly the range)
 
 14 September 11: V.Ivanchenko (emstand-V09-04-43)
-- G4eCoulombScatteringModel - low-limit is increased from 1 eV to 
-    10 eV; particles below this limit are killed - a protection 
+- G4eCoulombScatteringModel - low-limit is increased from 1 eV to
+    10 eV; particles below this limit are killed - a protection
     against low-energy particles doing many steps
 
 4 September 11: V.Ivanchenko (emstand-V09-04-42)
 - G4UrbanMscModel95 - L.Urban return back optimisation of step
-    limitation using FactorSafety parameter for the UseSafety 
-    option of step limitation (important for CPU performance 
-    of default Physics List) 
+    limitation using FactorSafety parameter for the UseSafety
+    option of step limitation (important for CPU performance
+    of default Physics List)
 
 20 August 11: V.Ivanchenko (emstand-V09-04-41)
 - G4UrbanMscModel95 - minor change of arithmetic computation
 
 18 August 11: V.Ivanchenko (emstand-V09-04-40)
-- G4MollerBhabhaModel - removed limitations on cut value to be 
-                        able to combined with LIvermore and 
+- G4MollerBhabhaModel - removed limitations on cut value to be
+                        able to combined with LIvermore and
                         Penelope models
 
 18 August 11: V.Ivanchenko (emstand-V09-04-39)
@@ -1455,13 +1553,13 @@ of the atomic form factor in the SampleSecondaries method.
                     on facsafety, which not allowed to have precise
                     simulation in vicinity of geometrical boundary;
                     V.Ivanchenko added minor optimisation into
-                    inline method UpdateCache() 
+                    inline method UpdateCache()
 
 28 July 11: V.Ivanchenko (emstand-V09-04-37)
-- G4PAIxSection, G4InitXscPAI - fixed typo in tag 035 
+- G4PAIxSection, G4InitXscPAI - fixed typo in tag 035
 
 28 July 11: V.Ivanchenko (emstand-V09-04-36)
--  G4KleinNishinaModel, G4PEEffectFluoModel - initialise deexcitation 
+-  G4KleinNishinaModel, G4PEEffectFluoModel - initialise deexcitation
    flag;
 -  G4GoudsmitSaundersonMscModel - fixed Coverity warnings
 
@@ -1480,19 +1578,19 @@ of the atomic form factor in the SampleSecondaries method.
 
 14 May 11: V.Ivanchenko (emstand-V09-04-32)
 - G4WentzelOKandVIxSection - tuned screening function
-- G4GoudsmitSaundersonMscModel - added protection against infinite loop 
-  for solving equation for the screening parameter (bug#1221) 
+- G4GoudsmitSaundersonMscModel - added protection against infinite loop
+  for solving equation for the screening parameter (bug#1221)
 
 08 May 11: V.Ivanchenko (emstand-V09-04-31)
 - G4UrbanMscModel95 - enable sampling along the step for displacement
-- G4PEEffectFluoModel - added protection  
+- G4PEEffectFluoModel - added protection
 - G4KleinNishinaModel - limitFactor is set to 4 (was 10)
 
 27 May 11: V.Ivanchenko (emstand-V09-04-30)
 - G4MollerBhabhaModel - more coherent usage of cut at low-energy
                         for dedx and x-section computation,
                         important for cuts below 1 keV
-- G4eeToTwoGammaModel - added numerical protection in cross section 
+- G4eeToTwoGammaModel - added numerical protection in cross section
     computation for very small energy
 
 26 May 11: V.Ivanchenko (emstand-V09-04-29)
@@ -1524,7 +1622,7 @@ of the atomic form factor in the SampleSecondaries method.
   G4PAIxSection, G4PAIySection  - fixed gcc-4.6.0 warnings
 
 04 May 2011: V.Ivant (emstand-V09-04-22)
-- Removed obsolete unused classes: G4ionGasIonisation, 
+- Removed obsolete unused classes: G4ionGasIonisation,
   G4CoulombScatteringModel, G4UniversalFluctuation93,
   G4UrbanMscModel92
 - Fixed Coverity warnings
@@ -1548,7 +1646,7 @@ of the atomic form factor in the SampleSecondaries method.
 
 27 April 2011: V.Ivant (emstand-V09-04-17)
 - G4UrbanMscModel95 - L.Urban fixed FPE problems in the new model,
-  now by default samplez=true (complite sampling of the displacement) 
+  now by default samplez=true (complite sampling of the displacement)
 - G4ModifiedTsai - V. Grichine clean-up of PolarAngle(Tkin,...) method
 
 18 April 2011: V.Ivant (emstand-V09-04-16)
@@ -1558,17 +1656,17 @@ of the atomic form factor in the SampleSecondaries method.
 - G4eBremParametrizedModel (A.Schaelicke) - new model
 
 07 April 2011: V.Ivant (emstand-V09-04-14)
-- G4IonFluctuation, G4UniversalFluctuations - replaced Gauss 
+- G4IonFluctuation, G4UniversalFluctuations - replaced Gauss
     sampling by Gamma function sampling
-- G4MollerBhabhaModel - modified parameterisation of dedx at 
+- G4MollerBhabhaModel - modified parameterisation of dedx at
     very low energy providing more smooth shape
 
 30 March 2011: V.Ivant (emstand-V09-04-13)
-- G4WentzelOKandVIxSection, G4eCoulombScatteringModel - fixed problem 
+- G4WentzelOKandVIxSection, G4eCoulombScatteringModel - fixed problem
     introduced in previous tags for compounds
 
 29 March 2011: V.Ivant (emstand-V09-04-12)
-- G4WentzelOKandVIxSection - return back to the version of 9.4 
+- G4WentzelOKandVIxSection - return back to the version of 9.4
 
 29 March 2011: V.Ivant (emstand-V09-04-11)
 - G4UrbanMscModel95 - set samplez=false to avoid numerical problem
@@ -1576,7 +1674,7 @@ of the atomic form factor in the SampleSecondaries method.
 28 March 2011: V.Ivant (emstand-V09-04-10)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
   G4UrbanMscModel95, G4GoudsmitSaundersonMscModel,
-  G4WentzelVIModel - updated G4VMscModel methods signature 
+  G4WentzelVIModel - updated G4VMscModel methods signature
 
 25 March 2011: V.Ivant (emstand-V09-04-09)
 - G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93,
@@ -1587,17 +1685,17 @@ of the atomic form factor in the SampleSecondaries method.
 - G4ComptonScattering - use by default old G4KleinNishinaCompton
 
 24 March 2011: V.Ivant (emstand-V09-04-08)
-- G4UrbanMscModel95 - (L.Urban) new version of msc model which 
-   includes improved sampling of the tail of angular distribution, 
+- G4UrbanMscModel95 - (L.Urban) new version of msc model which
+   includes improved sampling of the tail of angular distribution,
    sampling of lateral displacement and true step length
 - G4WentzelOKandVIxSection - fixed sampling of single scattering
 
 22 March 2011: V.Ivant (emstand-V09-04-07)
-- General cleanup - removed MinEnergyCut methods, improved comments  
+- General cleanup - removed MinEnergyCut methods, improved comments
 
 21 March 2011: V.Ivant (emstand-V09-04-06)
-- G4PAIySection - added method ComputeLowEnergyCof and usage of 
-   this method allowing extend low energy limit of the model down 
+- G4PAIySection - added method ComputeLowEnergyCof and usage of
+   this method allowing extend low energy limit of the model down
    to 10 eV (V.Grichine)
 - G4MollerBhabhaModel - cleanup
 - G4ComptonScattering - use G4KleinNishinaModel as a default
@@ -1607,7 +1705,7 @@ of the atomic form factor in the SampleSecondaries method.
 - G4GoudsmitSaundersonMscModel - restore version of 9.3ref05
 
 25 February 2011: V.Ivant (emstand-V09-04-05)
-- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 use 
+- G4UrbanMscModel90, G4UrbanMscModel92, G4UrbanMscModel93 use
    simpified computation of geom path length if true path length
    is equal to the range (minor CPU improvement and more stable
    computation)
@@ -1626,17 +1724,17 @@ of the atomic form factor in the SampleSecondaries method.
 04 January 2011: V.Ivant (emstand-V09-04-01)
 - G4GoudsmitSaundersonMscModel, G4UrbanMscModel90, G4UrbanMscModel92,
   G4UrbanMscModel93 use recommended method Value(e) to access transport
-  cross section instead of obsolete GetValue 
+  cross section instead of obsolete GetValue
 - G4KleinNishinaModel - improved computation of kinematics
 
 23 December 2010: V.Ivant (emstand-V09-04-00)
-- G4IonCoulombScatteringModel, G4GoudsmitSaundersonMscModel, 
-  G4GoudsmitSaundersonTable - fixed Coverity warnings making more 
+- G4IonCoulombScatteringModel, G4GoudsmitSaundersonMscModel,
+  G4GoudsmitSaundersonTable - fixed Coverity warnings making more
   pedantic initialisation
 
 29 November 2010: V.Ivant (emstand-V09-03-31)
-- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - C.Consolandi 
-  added extra screening factor for low-energy heavy ions. 
+- G4IonCoulombScatteringModel, G4IonCoulombCrossSection - C.Consolandi
+  added extra screening factor for low-energy heavy ions.
 
 23 November 2010: V.Ivant (emstand-V09-03-30)
 - G4PAIModel, G4PAIySection - V.Grichine fix of a bug in G4_Ar
@@ -1657,40 +1755,40 @@ of the atomic form factor in the SampleSecondaries method.
 12 November 2010: V.Ivant (emstand-V09-03-26)
 - G4IonCoulombCrossSection and G4IonCoulombScatteringModel -
   new model of single scattering of ions (C.Consolandi)
-- G4BetheBlochModel - Shell corrections factor according to ICRU'49 
+- G4BetheBlochModel - Shell corrections factor according to ICRU'49
                       (returned back to version of 9.3)
 - G4WentzelVIModel - added usage of geometry factor and the option
-  UseDistanceToBoundary; 
+  UseDistanceToBoundary;
 
 04 November 2010: V.Ivant (emstand-V09-03-25)
 - Fixed warnings of the Coverity tool (pedantic initialisation);
 
 26 October 2010: V.Ivant (emstand-V09-03-24)
-- Fixed problem reported by the Coverity tool (mainly pedantic 
+- Fixed problem reported by the Coverity tool (mainly pedantic
   initialisation);
-- G4BetheHeitlerModel, G4PairProductionRelModel - removed unused 
+- G4BetheHeitlerModel, G4PairProductionRelModel - removed unused
   internal table of cross section
 - G4WaterStopping - fixed bug in index of data for Fe ion
 
 14 October 2010: V.Ivant (emstand-V09-03-23)
 - G4ModifiedTsai - added (moved from lowenergy)
-- G4PairProductionRelModel, G4eBremsstrahlungRelModel - return back 
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - return back
      the version of 9.4beta (disable tag 21); use general interface
      to sample polar angular distribution (G4ModifiedTsai - default)
 
 28 September 2010: V.Ivant (emstand-V09-03-22)
-- G4ionIonisation, G4alphaIonisation - removed obsolete nuclear stopping 
+- G4ionIonisation, G4alphaIonisation - removed obsolete nuclear stopping
       flag and Get/Set methods (nuclear stopping is simulated by the
       dedicated G4NuclearStopping process)
 
 12 September 2010: V.Ivant (emstand-V09-03-21)
 - G4BetheBlochModel - fixed shell corrections
-- G4PairProductionRelModel, G4eBremsstrahlungRelModel - fixed 
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - fixed
      SetCurrentElement method, fix is important for unit tests
 
 12 August 2010: V.Ivant (emstand-V09-03-20)
-- G4UniversalFluctuation - L.Urban revision of width correction 
-  providing better results for thin targets and a good tail  
+- G4UniversalFluctuation - L.Urban revision of width correction
+  providing better results for thin targets and a good tail
 
 14 June 2010:  V.Ivant (emstand-V09-03-19)
 - G4UniversalFluctuation93 new class keeping version of the release 9.3
@@ -1698,21 +1796,21 @@ of the atomic form factor in the SampleSecondaries method.
 - G4UniversalFluctuation - improved comments
 
 11 June 2010:  V.Ivant (emstand-V09-03-18)
-- G4UniversalFluctuation - L.Urban fixed anomaly at the tail of 
+- G4UniversalFluctuation - L.Urban fixed anomaly at the tail of
                            distribution for thin targets
 
 4 June 2010:  V.Ivant (emstand-V09-03-17)
 - G4ICRU73QOModel - fixed problems and add factor for transition to
                     Bethe-Bloch at 2 MeV
-- G4hIonisation - use G4ICRU73QOModel for negatively charged particles 
+- G4hIonisation - use G4ICRU73QOModel for negatively charged particles
                   below 2 MeV
 - G4BraggModel - above 2 MeV use ICRU'49 parameterisation for all atoms
 
-June 3, 2010, V. Grichine 
-- G4PAIModel.cc, G4PAIPhotonModel.cc cout for the model initialisation 
+June 3, 2010, V. Grichine
+- G4PAIModel.cc, G4PAIPhotonModel.cc cout for the model initialisation
 
 1 June 2010:  V.Ivant (emstand-V09-03-16)
-- G4WentzelOKandVIxSection - optimized computation of the transport 
+- G4WentzelOKandVIxSection - optimized computation of the transport
                              cross section
 - G4WentzelVIModel - optimized method of step limitation
 
@@ -1722,12 +1820,12 @@ June 3, 2010, V. Grichine
 - G4ICRU73QOModel (A.Bagulya) new model for anti-particles
 - G4hIonisation - use G4ICRU73QOModel for anti-particles
 - G4WentzelOKandVIxSection - new class to compute cross sections and
-                             sample scattering angle  
+                             sample scattering angle
 - G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel
                     use new class G4WentzelOKandVIxSection
 
 20 May 2010:  V.Ivant (emstand-V09-03-14)
-- G4UrbanMscModel93 - L.Urban removed randomisation of step limit for the 
+- G4UrbanMscModel93 - L.Urban removed randomisation of step limit for the
                       first step in any volume in the case of UseSafety
 - Removed obsolete models: G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel71,
   G4MultipleScattering, G4ComptonScattering52, G4PolarizedComptonScattering
@@ -1736,45 +1834,45 @@ June 3, 2010, V. Grichine
 - G4WentzelVIModel, G4eCoulombScatteringModel - added momentum dependent
        limit of scattering angle between single and multiple scattering
        which allowing to use  G4WentzelVIModel with optical model
-       of hadron scattering 
+       of hadron scattering
 
 17 May 2010:  V.Ivant (emstand-V09-03-12)
-- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) - 
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) -
        optimized code to improve speed by addition extra class members
 
 30 April 2010:  V.Ivant (emstand-V09-03-11)
-- G4UrbanMscModel93 - L.Urban add randomisation of step limit for the 
+- G4UrbanMscModel93 - L.Urban add randomisation of step limit for the
                       first step in any volume
 
 28 April 2010:  V.Ivant (emstand-V09-03-10)
 G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 26 April 2010:  V.Ivant (emstand-V09-03-09)
-- G4ASTARStopping, G4PSTARTStopping - C-arrays sustituted by G4PhysicsVector 
+- G4ASTARStopping, G4PSTARTStopping - C-arrays sustituted by G4PhysicsVector
             with spline; reviewed names of materials (G4_He, G4_PHOTO_EMULSION,
             G4_NYLON-6-6)
-- G4ASTARStopping - fixed G4_O data 
+- G4ASTARStopping - fixed G4_O data
 - G4PSTARStopping - fixed G4_Pt and G4_PROPANE data
 - G4WaterStopping - cleanup GetElectronicDEDX method
 
 16 April 2010:  V.Ivant (emstand-V09-03-08)
-- G4GoudsmitSaundersonMscModel (O.Kadri) - improved numerical stability 
-            of computations for small angles by  direct xsection calculation 
-            not inverse of the inverse angular sampling without large angle 
-            rejection method longitudinal displacement is computed exactly 
+- G4GoudsmitSaundersonMscModel (O.Kadri) - improved numerical stability
+            of computations for small angles by  direct xsection calculation
+            not inverse of the inverse angular sampling without large angle
+            rejection method longitudinal displacement is computed exactly
             from <z>
-- G4GoudsmitSaundersonTable (O.Kadri)    - improved numerical stability by 
-            minimum of used arrays in computation within the dichotomy 
+- G4GoudsmitSaundersonTable (O.Kadri)    - improved numerical stability by
+            minimum of used arrays in computation within the dichotomy
             finding method
 - G4eMultipleScattering, G4hMultipleScattering - improved printout at
                                                  initialisation
 
 15 April 2010:  V.Ivant (emstand-V09-03-07)
 - G4hMultipleScattering - removed old unused header of G4UrbanMscModel
-- G4ASTARStopping.cc - disabled corrupted data for Oxygen 
+- G4ASTARStopping.cc - disabled corrupted data for Oxygen
 
 06 April 2010:  V.Ivant (emstand-V09-03-06)
-- G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut 
+- G4eBremsstrahlungRelModel, G4MollerBhabhaModel - set minimum cut
                       value to 0.1 keV
 
 30 March 2010:  V.Ivant (emstand-V09-03-05)
@@ -1782,12 +1880,12 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 22 March 2010:  V.Ivant (emstand-V09-03-04)
 - G4eBremsstrahlungModel - reduced minThreshold to 0.1 keV
-- G4MollerBhabhaModel - reduced minimum cut value to mean ionisation 
+- G4MollerBhabhaModel - reduced minimum cut value to mean ionisation
                       potential
 
 01 March 2010:  V.Ivant (emstand-V09-03-03)
 - G4WentzelVIModel - added protections, added DefineMaterial() call
-                     before computing cross section 
+                     before computing cross section
 
 31 March 2010:  V.Ivant (emstand-V09-03-02a)
 - G4PolarizedComptonScattering - add message that this process is obsolete
@@ -1798,7 +1896,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - make a tag co-working with emutils-V09-03-02
 
 19 February 2010:  V.Ivant (emstand-V09-03-01)
-- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri) 
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable (O.Kadri)
       - fixed problems of small angle theta distributions
 
 17 February 2010:  V.Ivant (emstand-V09-03-00)
@@ -1806,7 +1904,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4eCoulombScatteringModel - Added method SetLowEnergyLimit, default
                               value is set to 1 eV (before was 100 eV)
 - G4CoulombScattering - Removed inclined method SetBuildTableFlag because
-                        the method exist in the base class 
+                        the method exist in the base class
 
 03 December 09:  V.Ivant (emstand-V09-02-36)
 - G4BetheBlochModel - (A.Lechner) return back commented out CorrectionAlongStep
@@ -1816,10 +1914,10 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4CoulombScatteringModel - (C.Consaldi) fixed relativistic formula
 
 27 November 09:  V.Ivant (emstand-V09-02-34)
-- G4ionIonisation - set linLossLimit 0.02 
+- G4ionIonisation - set linLossLimit 0.02
 
 25 November 09:  V.Ivant (emstand-V09-02-33)
-- G4LindhardPartition - moved back to TestEm7 
+- G4LindhardPartition - moved back to TestEm7
 
 10 November 09:  V.Ivant (emstand-V09-02-32)
 - G4BetheBlochModel - minor speedup inside CorrectionsAlongStep method
@@ -1828,7 +1926,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4BetheBlochModel, G4BraggModel, G4BraggIonModel - remove computations
                        of nuclear stopping power, some CPU speadup
 - G4NuclearStopping - updated process for computation of nuclear stopping
-- G4ICRU49NuclearStoppingModel - model providing computation of nuclear 
+- G4ICRU49NuclearStoppingModel - model providing computation of nuclear
                       stopping
 
 10 November 09:  V.Ivant (emstand-V09-02-30)
@@ -1836,13 +1934,13 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 09 November 09:  V.Ivant (emstand-V09-02-29)
 - G4BetheBlochModel, G4MollerBhabhaModel - compute density effect correction
-                                           using method of G4IonisParamMat class 
+                                           using method of G4IonisParamMat class
                                            applying revised parameterisation
 
 09 November 09:  V.Ivant (emstand-V09-02-28)
 - G4GoudsmitSaundersonMscModel (O.Kadri) - tuning small angle theta distributions
                        assuming the case of lambdan<1 as single scattering regime;
-                       tuning theta sampling for theta below the screening angle 
+                       tuning theta sampling for theta below the screening angle
 - G4LindhardPartition - moved from TestEm7 to the source
 
 31 October 09:  V.Ivant (emstand-V09-02-27)
@@ -1850,7 +1948,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
                        version of the Urban model
 - Set default model G4UrbanMscModel92 for G4eMultipleScattering
 - Added warting to obsolete msc classes G4MultipleScattering, G4UrbanMscModel,
-                       G4UrbanMscMode2, G4MscModel71  
+                       G4UrbanMscMode2, G4MscModel71
 
 28 October 09:  V.Ivant (emstand-V09-02-26)
 - G4WentzelVIModel, G4eCoulombScatteringModel, G4CoulombScatteringModel - added
@@ -1866,26 +1964,26 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 02 October 09:  V.Ivant (emstand-V09-02-23)
 - G4eMultipleScattering - use as a default G4UrbanMscModel (the same as in 9.2)
-- G4CoulombScattering - fixed compillation problem 
+- G4CoulombScattering - fixed compillation problem
 
 30 September 09:  V.Ivant (emstand-V09-02-22)
 - G4CoulombScattering - added cut per recoil
 - G4BohrFluctuations - change internal parameter minNumberInteractionsBohr
                        from 10 to 2 to provide more smooth transition
-                       to Landau regime in the case of small cuts 
+                       to Landau regime in the case of small cuts
 - G4eCoulombScatteringModel - added effective mass factor
 
 28 August 09:  V.Ivant (emstand-V09-02-21)
-- G4PAIModel - fixed problem conneted with modifications for 
+- G4PAIModel - fixed problem conneted with modifications for
                G4PhysicsVector (removel of hidden bin)
 - G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - O.Kadri
-               speadup computations, in particular, by reducing of 
+               speadup computations, in particular, by reducing of
                number of calls to log
 
 12 August 09:  V.Ivant (emstand-V09-02-20)
 - G4PAIModel - fixed problem for high energy connected with bin number
-- G4WentzelVIModel and G4eCoulombScatteringModel - extended low-energy 
-               cross section to 0.1 keV 
+- G4WentzelVIModel and G4eCoulombScatteringModel - extended low-energy
+               cross section to 0.1 keV
 
 27 July 09:  V.Ivant (emstand-V09-02-19)
 - G4WentzelVIModel and G4eCoulombScatteringModel - fixed typo
@@ -1901,7 +1999,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 20 July 09:  V.Ivant (emstand-V09-02-16)
 - G4GoudsmitSaundersonMscModel - fixed computation of the displacement
-- G4MultipleScattering, G4eMultipleScattering, G4hMultipleScattering 
+- G4MultipleScattering, G4eMultipleScattering, G4hMultipleScattering
       - moved initialisation of models to the base class
 
 9 July 09:  V.Ivant (emstand-V09-02-15)
@@ -1911,14 +2009,14 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 19 June 09:  V.Ivant (emstand-V09-02-14)
 - G4WaterStopping - (A.Ivantchenko) added Fe ion data
-- G4GoudsmitSaundersonTable - reduce the size of the object file and 
+- G4GoudsmitSaundersonTable - reduce the size of the object file and
                               all standard library
-- G4GoudsmitSaundersonMscModel - (O.Kadri) fixed unphysical peak at 
+- G4GoudsmitSaundersonMscModel - (O.Kadri) fixed unphysical peak at
                               very small angles; extend model to 100 TeV
-- G4eCoulombScatteringModel, G4CoulombScatteringModel, G4WentzelVIModel, 
-                               - (C.Consolandi) fixed kinematic for ion/ion 
+- G4eCoulombScatteringModel, G4CoulombScatteringModel, G4WentzelVIModel,
+                               - (C.Consolandi) fixed kinematic for ion/ion
                                  scattering
- 
+
 19 May 09: V.Ivant (emstand-V09-02-13)
 - G4UrbanMscModel2  - (L.Urban) change in tail parameter
 
@@ -1927,7 +2025,7 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 
 15 May 09:  V.Ivant (emstand-V09-02-11)
 - G4WaterStopping  - fixed Ar data
-- G4PairProductionRelModel - (A.Schaelicke) new relativistic model for 
+- G4PairProductionRelModel - (A.Schaelicke) new relativistic model for
                               gamma conversion
 - G4UrbanMscModel2  - (L.Urban) new version of theta0 and tail tuning
 
@@ -1937,14 +2035,14 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
                       kinetic energy of the recoil 100 keV
 
 28 April 09: V.Ivant (emstand-V09-02-09)
-- G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the 
-                      tail of the angular distribution using the old e- 
-                      scattering data only (Phys. Rev. 84 (1951) 634; 
-                      Phys. Rev. 61 (1942) 254) 
-                    - corrected logic in ComputeTruePathLengthLimit method 
+- G4UrbanMscModel2  - (L.Urban) new tuning for the central part and for the
+                      tail of the angular distribution using the old e-
+                      scattering data only (Phys. Rev. 84 (1951) 634;
+                      Phys. Rev. 61 (1942) 254)
+                    - corrected logic in ComputeTruePathLengthLimit method
                       for type=fUseDistanceToBoundary
 - G4UrbanMscModel   - frozen version of G4UrbanMscModel2 of g4 9.2
-- G4WentzelVIModel, G4eCoulombScattering  - reduce low-limit from 1 keV to 0.1 keV 
+- G4WentzelVIModel, G4eCoulombScattering  - reduce low-limit from 1 keV to 0.1 keV
                       to provide smooth transport cross section table
 
 23 April 09: V.Ivant (emstand-V09-02-08)
@@ -1954,10 +2052,10 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 20 April 09: V.Ivant (emstand-V09-02-07)
 - G4BetheBlochModel - fixed and simplified initialisation for ions needed for
                       the new G4IonParametrisedLossModel of low-energy package
-- G4GoudsmitSaundersonMscModel - (O.Kadri) cleanup: discarded no scattering and 
-                      single scattering theta sampling from SampleCosineTheta() 
-                      which means the splitting step into two sub-steps occur 
-                      only for msc regime  
+- G4GoudsmitSaundersonMscModel - (O.Kadri) cleanup: discarded no scattering and
+                      single scattering theta sampling from SampleCosineTheta()
+                      which means the splitting step into two sub-steps occur
+                      only for msc regime
 
 12 April 09: V.Ivant (emstand-V09-02-06)
 - Simplified initialisation of all models
@@ -1968,11 +2066,11 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 - G4IonFluctuations - T.Toshito removed extra phenomenological factor
                       in fluctuation width
 - G4HeatedKleinNishinaCompton - V.Grichine added a prototype model for
-                                plasma 
+                                plasma
 
 21 March 09: V.Ivant (emstand-V09-02-04)
-- G4UniversalFluctuation - L.Urban introduce modification in width 
-    correction, the dependence of the correction on energy deposition 
+- G4UniversalFluctuation - L.Urban introduce modification in width
+    correction, the dependence of the correction on energy deposition
     at previous steps is removed (addresses T2K report)
 
 20 March 09: V.Ivant (emstand-V09-02-03)
@@ -1985,18 +2083,18 @@ G4eBremsstrahlungModel - fixed SelectRandomAtom method (bug report #1115)
 05 March 09: V.Ivant (emstand-V09-02-01)
 - New G4GoudsmitSaundersonMscModel is added
 - G4WentzelVIModel, G4eCoulombScattringModel:
-    o substitute scaling of low-energy limit by setting 1 keV for 
+    o substitute scaling of low-energy limit by setting 1 keV for
       all particles;
-    o use EGSnrc form of screening parameter (second order correction) 
+    o use EGSnrc form of screening parameter (second order correction)
 
 20 February 09: V.Ivant (emstand-V09-02-00)
 - Move all virtual methods from inline to source
-G4PEEffectModel - substitute ComputeMeanFreePath by CrossSectionPerVolume 
+G4PEEffectModel - substitute ComputeMeanFreePath by CrossSectionPerVolume
                   (minor CPU speadup for compound materials)
-G4PAIModel, G4PAIPhotonModel - remove usage of random numbers at 
+G4PAIModel, G4PAIPhotonModel - remove usage of random numbers at
                    initialisation (potential non-reproducibility)
 G4WentzelVIModel - use generic methods of G4VMscModel to access safety
-                   and other geometry information 
+                   and other geometry information
 
 24 November 08: V.Ivant (emstand-V09-01-45)
 G4PSTARStopping, G4ASTARStopping - fixed non-initialized variable
@@ -2016,7 +2114,7 @@ G4PSTARStopping - fixed SiO2 and TEFLON data
 G4ASTARStopping - fixed GRAFITE data
 
 29 October 08: V.Ivant (emstand-V09-01-41)
-G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90, G4WentzelVIModel 
+G4UrbanMscModel, G4UrbanMscModel2, G4UrbanMscModel90, G4WentzelVIModel
   use StepStatus from preStepPoint to identify first step for a given track
   instaed of step number in order to address ATLAS problem of small step
   limits happen with suspended tracks
@@ -2032,28 +2130,28 @@ G4UrbanMscModel2 - fixed screening parameter of the single scattering part
 G4eMultipleScattering - set default RangeFactor = 0.04
 
 22 October 08: V.Ivant (emstand-V09-01-38)
-G4IonFluctuations - added G4UniversalFluctuation model, which are used for 
+G4IonFluctuations - added G4UniversalFluctuation model, which are used for
     high energy; added comments and cleanup
-G4BetheBlochModel, G4BraggIonModel - take into account effective change 
+G4BetheBlochModel, G4BraggIonModel - take into account effective change
     change over the step
-G4hIonisation - switch off nuclear stopping for pi and K mesons   
+G4hIonisation - switch off nuclear stopping for pi and K mesons
 
 20 October 08: V.Ivant (emstand-V09-01-37)
 G4UrbanMscModel2 - return back ref-08 version
 G4IronStopping, G4MaterialStopping, G4SimpleMaterialStopping moved to materials
-G4eBremsstrahlungHEModel - temporary model is removed    
+G4eBremsstrahlungHEModel - temporary model is removed
 
 17 October 08: V.Ivant (emstand-V09-01-36)
 G4UrbanMscModel2 - use logic of 9.1 version for step limitation
                    option "UseSafety" to fix CPU penalty in sampling
                    calorimeters (L.Urban)
 G4UrbanMscModel2, G4UrbanMscModel, G4UrbanMscModel90 added protection
-                   against sampling scattering angle with zero transport 
-                   cross section   
+                   against sampling scattering angle with zero transport
+                   cross section
 
 15 October 08: V.Ivant (emstand-V09-01-35)
 For all process classes set sub-types according to the enumeration
-of G4EmProcessSubType.hh, improved cout 
+of G4EmProcessSubType.hh, improved cout
 G4UrbanMscModel2 - use screning function from G4eCoulombScatteringModel
 G4eBremsstrahlung - set relativistic model above 1 GeV by default
 G4eBremsstrahlungModel, G4eBremsstrahlungRelModel removed private member
@@ -2077,15 +2175,15 @@ G4BetheBlochModel, G4BraggModel, G4BraggIonModel - added methods
    needed for ions; define low and high energy limits inside the model
 G4ionIonisation, G4hIonisation - remove InitialiseMassCharge and
                                  CorrectionsAlongStep methods;
-                                 limits of kinetic energy for models 
+                                 limits of kinetic energy for models
                                  taken from the base class and from
-                                 models; separate trietment He ions 
+                                 models; separate trietment He ions
 
 09 September 08: V.Ivant (emstand-V09-01-31)
-G4WaterStopping, G4IronStopping, G4MaterialStopping, 
+G4WaterStopping, G4IronStopping, G4MaterialStopping,
 G4SimpleMaterialStopping - use mass number instead of atomic mass
                            (A.Lechner proposal)
-G4eBremsstrahlungModel - Migdal constant set to the vavue of 
+G4eBremsstrahlungModel - Migdal constant set to the vavue of
                          G4eBremsstrahlungRelModel (A.Schaelicke)
 
 28 August 08: V.Ivant (emstand-V09-01-30)
@@ -2093,7 +2191,7 @@ G4WaterStopping, G4IronStopping - add method AddData to speeed up
      compillation and cleanup
 G4WentzelVIModel - fixed bug in lateral displacement
 
-26 August 08: A.Schaelicke 
+26 August 08: A.Schaelicke
 G4eBremsstrahlungRelModel
    * define threshold energy for LPM effect
    * fix LPM calculation
@@ -2102,24 +2200,24 @@ G4eBremsstrahlungRelModel
 
 25 August 08: V.Ivant (emstand-V09-01-29)
 G4MaterialStopping, G4SimpleMaterialStopping - fixed compillation
-    problem at Windows by adding a new method AddData  
+    problem at Windows by adding a new method AddData
 
 25 August 08: V.Ivant (emstand-V09-01-28)
 23 August 08: V.Ivant (emstand-V09-01-27)
 G4UrbanMscModel2 - fixed NaN in sampling of cosine theta for 50 GeV e-
 
 22 August 08: V.Ivant (emstand-V09-01-26)
-Added new classes with stopping data G4MaterialStopping, 
-      G4SimpleMaterialStopping, G4IronStopping 
+Added new classes with stopping data G4MaterialStopping,
+      G4SimpleMaterialStopping, G4IronStopping
 
 13 August 08: V.Ivant (emstand-V09-01-25)
-G4eCoulombScatteringModel - added extra protection for precision lost in 
+G4eCoulombScatteringModel - added extra protection for precision lost in
                             computation of recoil energy
 G4eBremsstrahlungModel, G4eBremsstrahlungHEModel - define more precise names
                           of models
 
 11 August 08: V.Ivant (emstand-V09-01-24)
-G4IonFluctuations - do not perform loop over elements of material but use 
+G4IonFluctuations - do not perform loop over elements of material but use
                     effetive Z
 G4UrbanMscModel2 - bug fix in ComputeTruePathLengthLimit (L.Urban)
 
@@ -2143,13 +2241,13 @@ G4UrbanMscModel2 - central part of scattering angle (theta0) and
            using some e- and proton scattering data (L.Urban)
 
 21 July 08: V.Ivant (emstand-V09-01-20)
-G4eCoulombScatteringModel, G4CoulombScatteringModel  - added usage of 
+G4eCoulombScatteringModel, G4CoulombScatteringModel  - added usage of
          G4ElementSelector vector, do not use A in SetupTarget method
 G4WentzelVIModel - do not use A in SetupTarget method
-                            
+
 16 June 08: V.Ivant (emstand-V09-01-19)
 G4PAIPhotonModel - change model name
-G4MultipleScattering71 - move inline virtual method to source to avoid 
+G4MultipleScattering71 - move inline virtual method to source to avoid
                          compillation warning
 
 14 June 08: V.Ivant (emstand-V09-01-18)
@@ -2159,15 +2257,15 @@ G4MultipleScattering71 - move inline virtual method to source to avoid
 11 June 08: V.Ivant (emstand-V09-01-17)
 - G4eCoulombScatteringModel - SelectIsotope method moved from the derived
     class and sampling of the recoil ion is performed
-- G4CoulombScatteringModel - SelectIsotope method moved to the base class 
+- G4CoulombScatteringModel - SelectIsotope method moved to the base class
 - G4PAIxSection - new functions for resonance and Rutherford collisions
-- G4IonFluctuations - fixed index 
+- G4IonFluctuations - fixed index
 - G4ionIonisation - use G4BraggModel for low-energy ions heavier than He
-- G4hIonisation - build separate tables for kaons to allow use hadron 
+- G4hIonisation - build separate tables for kaons to allow use hadron
                   bremsstrahlung and pair production by kaons
 
 2 June 08: V.Ivant (emstand-V09-01-16)
-- G4IonFluctuations - added method SetParticleAndCharge 
+- G4IonFluctuations - added method SetParticleAndCharge
 - G4ionIonisation, G4ionGasIonisation - added pointer to G4IonFluctuations
              and use of method SetParticleAndCharge; compute nuclear
              stopping before adding corrections
@@ -2176,24 +2274,24 @@ G4MultipleScattering71 - move inline virtual method to source to avoid
 - G4IonFluctuations - summed fluctuation of components of a mixture instead
                       of computation for average Z
 - G4BetheBlochModel - added projectile form-factor in computation of max
-                      energy transfer and in sampling of the energy of e- 
+                      energy transfer and in sampling of the energy of e-
 
 13 May 08: A.Schaelicke
-- G4eBremsstrahlungHEModel - new model, which is an extension of the standard 
-                             bremsstrahlung model using a more sophisticated 
+- G4eBremsstrahlungHEModel - new model, which is an extension of the standard
+                             bremsstrahlung model using a more sophisticated
                              LPM approach
 
 09 May 08: V.Ivant (emstand-V09-01-14)
 - G4hMultipleScattering - added method AlongStepGetPhysicalInteractionLength
     in which for ions scaled energy normalized to one nucleon is used
-- G4ionGasIonisation - fixed bug in update of the dynamic charge of 
+- G4ionGasIonisation - fixed bug in update of the dynamic charge of
                         an ion
 
 21 April 08: V.Ivant (emstand-V09-01-13)
 - G4WentzelVIModel - new model of multiple scattering
-- G4WaterStopping - use spline 
+- G4WaterStopping - use spline
 - G4hMultipleScattering - do not build tables for particles with mass > GeV
-- G4ionIonisation, G4ionGasIonisation - updated usage of high order 
+- G4ionIonisation, G4ionGasIonisation - updated usage of high order
                                         corrections
 - G4CoulombScattering, G4eCoulombScatteringModel - use new parameter
                                                    polarAngleLimit
@@ -2207,15 +2305,15 @@ G4MultipleScattering71 - move inline virtual method to source to avoid
 - G4eCoulombScatteringModel - use SelectAtomRandomly method
 - G4UrbanMscModel2 (L.Urban):
            - Simplification of step limitation in ComputeTruePathLengthLimit,
-             + tlimitmin is the same for UseDistancetoBoundary and UseSafety       
+             + tlimitmin is the same for UseDistancetoBoundary and UseSafety
            - Reorganization of SampleCosineTheta + new method SimpleScattering
              SimpleScattering is used if the relative energy loss is too big
              or theta0 is too big (see data members rellossmax, theta0max)
-           - Tuning of the correction factor in ComputeTheta0 
+           - Tuning of the correction factor in ComputeTheta0
            - exponent c of the 'tail' model function is not equal to 2 any more,
              value of c has been extracted from some e- scattering data
            - Step limitation in ComputeTruePathLengthLimit has been
-             simplified further + some data members have been removed 
+             simplified further + some data members have been removed
 
 25 March 08: V.Ivant (emstand-V09-01-10)
 - G4BetheBlochModel - use formfactor for sampling
@@ -2235,9 +2333,9 @@ G4MultipleScattering71 - move inline virtual method to source to avoid
 - G4UrbanMscModel90, G4MscModel71 - fixed warnings for gcc 4.3.0
 
 10 March 08: V.Ivant (emstand-V09-01-07)
-- G4MultipleScattering, G4hMultipleScattering, G4UrbanMscModel, 
+- G4MultipleScattering, G4hMultipleScattering, G4UrbanMscModel,
   G4UrbanMscModel2, G4UrbanMscModel90 uses G4VMscModel interface
-- G4eMultipleScattering - new process specialized for e+,e- 
+- G4eMultipleScattering - new process specialized for e+,e-
 
 06 March 08: V.Ivant (emstand-V09-01-06)
 - G4UrbanMscModel2 is cloned from G4UrbanMscModel
@@ -2248,25 +2346,25 @@ G4eCoulombScatteringModel - speedup run-time computations using
   precomputed nuclear form-factors per element
 
 14 February 08: V.Ivant (emstand-V09-01-04)
-- G4ionIonisation, G4ionGasIonisation - use new method to compute 
+- G4ionIonisation, G4ionGasIonisation - use new method to compute
   corrections: IonHighOrderCorrections
-- G4BetheBlochModel - when computing dedx for ions use new 
+- G4BetheBlochModel - when computing dedx for ions use new
   method IonBarkasCorrection
 - G4IonFluctuations - added protection to the computation of
-  the correction factor to dispersion which provide smooth 
+  the correction factor to dispersion which provide smooth
   transition to small velocities of an ion
 
 04 February 08: V.Ivant (emstand-V09-01-03)
-- G4hIonisation, G4ionIonisation, G4ionGasIonisation - add extra 
+- G4hIonisation, G4ionIonisation, G4ionGasIonisation - add extra
    protections in computation of non-ionizing energy loss
 
 04 February 08: V.Ivant (emstand-V09-01-02)
-G4IonFluctuations - added protection in computation of dispersion 
+G4IonFluctuations - added protection in computation of dispersion
   on allowing have a corrected dispersion below Bohr value
 
 16 January 08: V.Ivant (emstand-V09-01-01)
 G4PAIModel, G4PAIPhotonModel - added an extra protection guaranteed
- correct usage of the last bin of the table of energy transfers 
+ correct usage of the last bin of the table of energy transfers
 
 14 January 08: V.Ivant (emstand-V09-01-00)
 - G4hIonisation, G4ionIonisation, G4ionGasIonisation - fixed
@@ -2279,7 +2377,7 @@ G4UrbanMscModel90 is created on base of G4UrbanMscModel of release 9.0
 G4hMultipleScattering uses G4UrbanMscModel90
 
 30 November 07: V.Ivant (emstand-V09-00-21)
-G4UrbanMscModel - L.Urban fix sign of mean scattering angle for 
+G4UrbanMscModel - L.Urban fix sign of mean scattering angle for
                   negatively changed particles
 
 29 November 07: V.Ivant (emstand-V09-00-20)
@@ -2287,16 +2385,16 @@ G4UrbanMscModel - added extra protection in sampling of angle - no
                   sampling if mean angle below tausmall
 
 28 November 07: V.Ivant (emstand-V09-00-19)
-G4UrbanMscModel - L.Urban added extra protection in sampling of angle 
-	          to avoid NaN 
+G4UrbanMscModel - L.Urban added extra protection in sampling of angle
+	          to avoid NaN
 G4eCoulombScatteringModel - added a protection against precision lost
 
 22 November 07: V.Ivant (emstand-V09-00-18)
-G4UrbanMscModel - change parameter tausmall to avoid lost of numerical 
+G4UrbanMscModel - change parameter tausmall to avoid lost of numerical
                   precision and NaN values
 
 20 November 07: V.Ivant (emstand-V09-00-17)
-G4eCoulombScatteringModel - fixed crash happens at initialisation when 
+G4eCoulombScatteringModel - fixed crash happens at initialisation when
                             several elements with the same Z are defined
 
 11 November 07: V.Ivant (emstand-V09-00-16)
@@ -2307,30 +2405,30 @@ G4eCoulombScatteringModel - fixed computation of transport cross section
   fill NIEL energy deposit
 
 29 October 07: V.Ivant (emstand-V09-00-14)
-- G4UrbanMscModel (V.Ivanchenko) - fixed nan for heavy ions introduced 
+- G4UrbanMscModel (V.Ivanchenko) - fixed nan for heavy ions introduced
 	                           in previous tag
 
 27 October 07: V.Ivant (emstand-V09-00-13)
 - G4eCoulombScatteringModel, G4CoulombScatteringModel use precomputed
-  Z^1/3 and log(A) values to speed up the code; revised nuclear size 
+  Z^1/3 and log(A) values to speed up the code; revised nuclear size
   correction
 
 - G4UrbanMscModel (L.Urban):
          - changed initialisation for ions - parameters are protected
-           from modification 
+           from modification
          - use sampleScattering method instead of SampleSecondaries
          - use different correction to Highland formula for different
            particle type (electron, muons, others)
-         - tuning ComputeGeomPathLength in order to get better low 
+         - tuning ComputeGeomPathLength in order to get better low
            energy behavior for heavy particles (mu, hadrons)
          - small modification of theta0 in ComputeTheta0 (based on data)
          - some old inconsistency/bug has been cured in SampleCosineTheta
            now the variable prob is always in [0,1]
 
 08 October 07: V.Ivant (emstand-V09-00-12)
-- G4eCoulombScatteringModel, G4CoulombScatteringModel  
+- G4eCoulombScatteringModel, G4CoulombScatteringModel
 	- add cut dependence for scattering off electrons
-        - reorganized protected methods 
+        - reorganized protected methods
 
 02 October 07: V.Ivant (emstand-V09-00-11)
 G4eplusAnnihilation - enable AtRest
@@ -2347,14 +2445,14 @@ G4BohrFluctuations - minor cleanup
 26 Septamber 07: V.Ivant (emstand-V09-00-09)
 G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
   e- and e+ and use it for definition of max energy transfer;
-  added control on all cout by fVerbose;  
+  added control on all cout by fVerbose;
 
 28 August 07: V.Ivant (emstand-V09-00-08)
-- G4eCoulombScatteringModel - fixed compilation warning 
+- G4eCoulombScatteringModel - fixed compilation warning
 
 15 August 07: V.Ivant (emstand-V09-00-07)
-- G4eCoulombScatteringModel and G4CoulombScatteringModel - fixed bug in 
-  computation of screening parameters in SampleSecondary method; 
+- G4eCoulombScatteringModel and G4CoulombScatteringModel - fixed bug in
+  computation of screening parameters in SampleSecondary method;
   reorganized initialisation of kinematics and screening parameters;
   used Z(Z+1) factor to take into account scattering off e-
 
@@ -2364,7 +2462,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
                     and NuclearStoppingFlag()
 - G4ionGasIonisation - added complete implementation of the method
                        CorrectionsAlongStep() and do not call base class
-- G4UrbanMscModel - tail of angular distribution modified; compare (L.Urban) 
+- G4UrbanMscModel - tail of angular distribution modified; compare (L.Urban)
                     safety with zero after lateral displacement (VI)
 
 02 August 07: V.Ivant (emstand-V09-00-05)
@@ -2379,8 +2477,8 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 30 July 07: V.Ivant (emstand-V09-00-03)
 30 July 07: L.Urban
 -  G4UrbanMscModel - new, simpler model functions to describe the angular
-   distribution; theta0 of this distribution has been changed too (now 
-   the form of theta0 is the same as in the Highland formula, but the 
+   distribution; theta0 of this distribution has been changed too (now
+   the form of theta0 is the same as in the Highland formula, but the
    parameter values are different for e+/e- and the other (heavy) particles;
    the change for the UseDistanseToBoundary case: tlimitmin = 10 stepmin;
    some cosmetics in ComputeTruePathLengthLimit.
@@ -2389,45 +2487,45 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4eCoulombScatteringModel - updated screen radius model
 - G4ionIonisation - remove obsolete method DefineMassCharge
 - G4ionGasIonisation - new ion ionisation process with descrete ion charge and
-                       no equilibrium between ion and media 
+                       no equilibrium between ion and media
 - G4BraggModel, G4BraggIonModel - more safe computation of scattering angle
 
 16 July 07: V.Ivant (emstand-V09-00-01)
-- G4CoulombScattering - update InitialiseProcess and PrintInfo methods 
+- G4CoulombScattering - update InitialiseProcess and PrintInfo methods
   to ensure parameters of models change between runs and more clear cout
 - G4eCoulombScatteringModel, G4CoulombScatteringModel - added nuclear size
   effect; added separate simulation of scattering on atomic electrons taking
-  into account cuts; fixed cross section for compounds. 
+  into account cuts; fixed cross section for compounds.
 
 13 July 07: V.Ivant (emstand-V09-00-00)
 - G4UniversalFluctuation - added protection such that no sampling of
   fluctuations is done if mean energy loss at the step is below minimal
   excitation energy of the media. The fix is important for cases of
   low-dense gases and very small steps.
-   
+
 19 June 07: V.Ivant (emstand-V08-03-10)
 - G4UrbanMscModel for skin > 0 use range instead of TrueStepLimit
   for computation of distance to boundary, this provides stable
   step limitation by GeomFactor (L.Urban)
 
 11 May 07: V.Ivant (emstand-V08-03-09)
-- G4MultipleScattering, G4hMultipleScattering - substitute name 
+- G4MultipleScattering, G4hMultipleScattering - substitute name
   "G4v71" -> "Minimal"
 
 29 May 07:  V.Ivanchenko (emstand-V08-03-08)
 - G4MultipleScattering, G4hMultipleScattering - fix initialisation
   of lateral displacement (bug introduced in previuos tag)
-  
+
 23 May 07:  V.Ivanchenko (emstand-V08-03-07)
-- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess 
+- In all processes inherit from G4VEnergyLossProcess or G4VEmProcess
   remove method SecondaryPostStep;
 - G4eBremsstrahlung - remove definition of gamma threshold from constructor,
-  define this parameter at initialisation of the process from 
+  define this parameter at initialisation of the process from
   G4LossTableManager
 - G4eeToTwoGammaModel use fParticleChange inside SampleSecondaries
 
 22 May 07:  V.Ivanchenko (emstand-V08-03-06)
-- G4VEmModel - changed interface of SampleSecondary method, it become 
+- G4VEmModel - changed interface of SampleSecondary method, it become
   void, extra parameter std::vector<G4DynamicParticle*>*, all
   classes using or inhereting this interface are modified.
   About 5% speedup of EM shower simulation
@@ -2440,15 +2538,15 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4ionIonisation - added NuclearStopping flag
 
 18 May 07:  V.Ivanchenko (emstand-V08-03-03)
-- remove obsolete G4VeEnergyLoss and G4VhEnergyLoss 
+- remove obsolete G4VeEnergyLoss and G4VhEnergyLoss
 
 18 May 07:  V.Ivanchenko (emstand-V08-03-02)
-- G4MultipleScattering, G4hMultipleScattering - reorganized methods 
+- G4MultipleScattering, G4hMultipleScattering - reorganized methods
                                                 for setting msc
                                                 parameters
 - G4UrbanMscModel - reorganized initialisation; use G4MscStepLimitType
                     enumerator to choose step limit algorithm
-                                                
+
 
 16 May 07:  V.Ivanchenko (emstand-V08-03-01)
 - Remove obsolete classes G4GammaConversion52,
@@ -2468,9 +2566,9 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
                              (about 5% CPU save)
 
 24 April 07:  V.Ivanchenko (emstand-V08-02-14)
-- G4MultipleScattering - use by default skin=0, because the current 
-	                 interface to G4SafetyHelper does not allow 
-                         it to provide a valid step in the case of 
+- G4MultipleScattering - use by default skin=0, because the current
+	                 interface to G4SafetyHelper does not allow
+                         it to provide a valid step in the case of
                          magnetic field
 
 23 April 07:  V.Ivanchenko (emstand-V08-02-13)
@@ -2493,7 +2591,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4MultipleScattering   - set default skin=0 for 8.3
 
 22 March 07: V.Ivanchenko (emstand-V08-02-11)
-- G4MultipleScattering   - use skin parameter from the base class 
+- G4MultipleScattering   - use skin parameter from the base class
 - G4UniversalFluctuation - L.Urban: minor optimisation
 
 20 March 07: V.Ivanchenko (emstand-V08-02-10)
@@ -2515,20 +2613,20 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
 03 March 07
 - G4UrbanMscModel - single scattering allowed near to boundaries only,
-                    not everywhere 
+                    not everywhere
 
 24 February 07: V.Ivanchenko (emstand-V08-02-08)
-- G4UrbanMscModel - L.Urban step reduction before boundary for  
-	            geomlimit<geombig only 
+- G4UrbanMscModel - L.Urban step reduction before boundary for
+	            geomlimit<geombig only
 
 23 February 07: V.Ivanchenko (emstand-V08-02-07)
 - G4hIonisation - remove dependence on K+ and K- particles
 - G4BetheHeitlerModel - for any initial energy select atom of the material
-                        on which conversion occur (needed for 
-                        polarisation library)   
+                        on which conversion occur (needed for
+                        polarisation library)
 - G4UrbanMscModel - use tPathLength inside ComputeStep instead of geombig
 
-15-Feb-07: 
+15-Feb-07:
 - G4UrbanMscModel - L.Urban: small steps with single scattering before and
                     after boundary for skin > 1, for skin=0 and skin=1
                     it works as earlier
@@ -2537,13 +2635,13 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4eBremsstrahlungModel: correct LPMconstant by factor 2, thanks to G. Depaola
 
 13 February 07: V.Ivanchenko (emstand-V08-02-05)
-12 February 07: 
+12 February 07:
 - G4UrbanMscModel - L.Urban: stepping algorithm changed for skin=0,
                     now there are 3 stepping mode :
-                    stepping a la 7.1 
+                    stepping a la 7.1
                     skin=0 designed for high energy simulations with
                            or without magnetic field
-                    skin=1 designed for 'precision' simulations 
+                    skin=1 designed for 'precision' simulations
                            without magnetic field (default)
 
 06 February 07: V.Ivanchenko (emstand-V08-02-04)
@@ -2555,16 +2653,16 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4UrbanMscModel - V.Ivanchenko add extra protection inside SampleDisplacement
                                  move SetMscStepLimitation from header to source
                                  and add inside extra initialisation
-                    L.Urban      add protection for case when energy loss 
-                                 inactivated; fix computation of skindepth value 
+                    L.Urban      add protection for case when energy loss
+                                 inactivated; fix computation of skindepth value
 
 29 January 07: V.Ivanchenko (emstand-V08-02-03)
 - G4UrbanMscModel - V.Ivanchenko add protections agains NaN values
                     in two places: protection of lateral displacement,
                     sampling of theta when tau = 0;
                     add protection inside ComputeTrueStepLength for
-                    the case very small (zero) geometry length 
-                    true length set equal to geometry length  
+                    the case very small (zero) geometry length
+                    true length set equal to geometry length
 
 19 January 07: V.Ivanchenko (emstand-V08-02-02)
 - G4UrbanMscModel - L.Urban add protection inside lateral displacement
@@ -2573,7 +2671,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 18 January 07: V.Ivanchenko (emstand-V08-02-01)
 - Fix crash in PrintInfo methods
 - G4UrbanMscModel - remove Locate call to navigator
-     
+
 15 January 07: mma (emstand-V08-02-00)
 - use SetEmModel(index) add SetFluctModel() from G4VEnergyLossProcess
   in eIonisation, hIonisation, ionIonisation, eBremstrahlung
@@ -2584,13 +2682,13 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
 23 Nov 06:  V.Ivanchenko (emstand-V08-01-15)
 - G4MultipleScattering - set default skin=1 only for e+-,
-  for all other particles default skin=0 
+  for all other particles default skin=0
 
 20 Nov 06: V.Ivanchenko (emstand-V08-01-14)
 20 Nov 06:
 - G4UrbanMscModel - fix in the single scattering part of SampleCosineTheta,
   now there is single scattering just before boundary crossings (and not
-  inside a volume)    
+  inside a volume)
 
 15 Nov 06: V.Ivanchenko (emstand-V08-01-13)
 - G4UrbanMscModel - fix NaN inside SampleCosineTheta (L.Urban)
@@ -2617,11 +2715,11 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
 20 Oct 06: V.Ivanchenko (emstand-V08-01-08)
 - G4CoulombScatteringModel inherit from G4eCoulombScatteringModel,
-  screening parameter computation is done in inline function 
-- G4eeToTwoGammaModel - introduce member theGamma 
+  screening parameter computation is done in inline function
+- G4eeToTwoGammaModel - introduce member theGamma
 
 20 Oct 06: L.Urban cleanup of msc
-- theta0 parameter for SampleCosineTheta is computed in a public 
+- theta0 parameter for SampleCosineTheta is computed in a public
   function ComputeTheta0;
 - default value of skin = 0 (there is no small step with single scattering if
   skin <=0, and there are ~skin small steps if skin >0
@@ -2630,10 +2728,10 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - PostStep ComputeSafety(pos) is used
 
 16 Oct 06: V.Ivanchenko (emstand-V08-01-07)
-- Add extra protection to G4eplusAnnihilation52 
-- Add warning to all processes 52 and 71 type 
+- Add extra protection to G4eplusAnnihilation52
+- Add warning to all processes 52 and 71 type
 
-16 Oct 06: L.Urban 
+16 Oct 06: L.Urban
 - new msc version (G4MultipleScattering, G4UrbanMscModel):
   -  Stepping has been modified:
      -  min. steplimit in 8.1: tlimitmin = max(lambda/25, 5 nanometer)
@@ -2648,7 +2746,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
      - the step restriction is weaker for particles with higher energy,
        i.e. bigger effective facrange value is used in this case
-       in 8.0/8.1 this 'scaling' depends on Tkin, new version : 
+       in 8.0/8.1 this 'scaling' depends on Tkin, new version :
        scaling depends on lambda, giving smaller material dependence
 
   - Angular distribution has been changed:
@@ -2658,25 +2756,25 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
      - parameter theta0 has been (sligtly) modified
 
-     - tail of the distribution has been modified, now the parameter 
+     - tail of the distribution has been modified, now the parameter
        describing the tail is material (i.e. Z) dependent
 
-14 Sept 06: mma (emstand-V08-01-06)  
+14 Sept 06: mma (emstand-V08-01-06)
 - move the function SetModel() in G4VEmProcess
-     
-09 Sept 06: mma (emstand-V08-01-05)  
+
+09 Sept 06: mma (emstand-V08-01-05)
 - add/modify the function SetModel() in G4PhotoElectric, G4ComptonScattering,
   G4GammaConversion, G4eplusAnnihilation
 
-08 Sep 06: V.Ivanchenko (emstand-V08-01-04) 
-- Bug fixed in PAI model concerning Tmax for electrons and positrons. Tmax 
+08 Sep 06: V.Ivanchenko (emstand-V08-01-04)
+- Bug fixed in PAI model concerning Tmax for electrons and positrons. Tmax
   is defined  now for each particle independently (V.Grichine)
 
 30 Aug 06: V.Ivanchenko (emstand-V08-01-03)
 - Provide changings required for new processes/models with  polarization:
   G4KleinNishinaCompton - make some members protected
   G4MollerBhabhaModel - make some members protected
-  G4eBremsstrahlungModel - reorganize SelectRandomAom method and make 
+  G4eBremsstrahlungModel - reorganize SelectRandomAom method and make
 	some members protected
 
 29 Aug 06: V.Ivanchenko (emstand-V08-01-02)
@@ -2687,10 +2785,10 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - Fix energy non-conservation in G4PAIModel for positrons (V.Grichine)
 
 08 Aug 06: V.Ivanchenko (emstand-V08-01-00)
-- Fix problems and add comments in the classes prototype Coulomb 
+- Fix problems and add comments in the classes prototype Coulomb
   elastic scattering:  G4CoulombScattering,  G4CoulombScatteringModel,
   G4eCoulombScatteringModel
-- Set default limit on scattering angle to zero 
+- Set default limit on scattering angle to zero
 
 22 May 06: V.Ivanchenko (emstand-V08-00-25)
 - G4eBremsstrahlung - use gammaThreshold from G4LossTableManager for
@@ -2698,7 +2796,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 
 17 May 06: V.Ivanchenko (emstand-V08-00-24)
 - G4UrbanMscModel - L.Urban improve scattering in thin layers
-- G4ASTARStopping, G4PSTARStopping improve comments  
+- G4ASTARStopping, G4PSTARStopping improve comments
 
 15 May 06: V.Ivanchenko (emstand-V08-00-23)
 - G4MollerBhabhaMOdel - fix MinEnergyCut
@@ -2708,7 +2806,7 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 - G4ionIonisation - add possibility top use user data on stopping power
 
 11 May 06: L.Urban
-- G4MultipleScattering : values of data members tkinlimit, factail 
+- G4MultipleScattering : values of data members tkinlimit, factail
   has been changed
 - G4MscUrbanModel : new data members, changes in ComputeTruePathLengthLimit
   and in SampleCosineTheta,
@@ -2717,11 +2815,11 @@ G4PAIphotonModel, G4PAIModel - fixed MaxSecondaryEnergy method for
 10 May 06: V.Ivanchenko (emstand-V08-00-21)
 - G4MultipleScattering and G4MscUrbanModel - provide a possibility of
   reinitialisation of facrange and steppingAlgorithm parameters
-  between runs; 
+  between runs;
 - Fix compilation warning at SUN;
 
 04 May 06: V.Ivanchenko (emstand-V08-00-20)
-- G4BetheBlochModel - use different formula for muons and hadrons for tmax (VI) 
+- G4BetheBlochModel - use different formula for muons and hadrons for tmax (VI)
 - G4UrbanMscModel - fix SUN compilation warning (VI)
 
 26 April 06: V.Ivanchenko (emstand-V08-00-19)
@@ -2737,10 +2835,10 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 28 March 06: V.Ivanchenko (emstand-V08-00-17)
 - G4eBremsstrahlungModel - fix problem of energy loss calculation below 10 MeV
-- G4KleinNishinaModel - remove upper energy limit to have a smooth cross section 
-27 March 06 : V.Grichine, G4SynchrotronRadiation updated to set polarisation and 
-              new methods for angular distribution  
-- G4PAImodel and G4PAIPhotonMOdel fixes important for very low energy hadrons (VG)    
+- G4KleinNishinaModel - remove upper energy limit to have a smooth cross section
+27 March 06 : V.Grichine, G4SynchrotronRadiation updated to set polarisation and
+              new methods for angular distribution
+- G4PAImodel and G4PAIPhotonMOdel fixes important for very low energy hadrons (VG)
 
 23 March 06: V.Ivanchenko (emstand-V08-00-16)
 23 March 06: L.Urban
@@ -2748,7 +2846,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 
 21 March 06 : V.Ivanchenko (emstand-V08-00-15)
-- G4eBremsstrahlungModel - fix problem of initialisation in the case when 
+- G4eBremsstrahlungModel - fix problem of initialisation in the case when
   cuts are not defined (needed for Extrapolator and for unit tests)
 - add prototypes of elastic Coulomb scattering - only for testing
 
@@ -2767,60 +2865,60 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 07 March 06 : V.Ivanchenko (emstand-V08-00-11)
 - Fix bug in cross section in G4MscModel71 introduced in 08-00-10
-- Create G4UrbanMscModel and optimize interface for msc models 
+- Create G4UrbanMscModel and optimize interface for msc models
 04 March 06 : V. Grichine
 - update of G4SynchrotronRadiation to work in locally (in a volume)
   set magnetic field
 
 17 February 06 : V.Ivanchenko (emstand-V08-00-10)
-- G4MscModel and G4MscModel71 - compute really transport cross section, 
+- G4MscModel and G4MscModel71 - compute really transport cross section,
   not mfp
-     
+
 16 February 06 : L.Urban (emstand-V08-00-09)
-- G4MultipleScattering: set function for data member factail, 
+- G4MultipleScattering: set function for data member factail,
   z sampling by default
 - G4MscModel: data members b, xsi removed, code cleaning,
-  revised 'z' sampling and samplez = true by default   
+  revised 'z' sampling and samplez = true by default
 
-15 February 06 : mma (emstand-V08-00-08)     
+15 February 06 : mma (emstand-V08-00-08)
 - added functions G4BraggModel::ComputeCrossSectionPerElectron/Atom()
 - added functions G4BraggIonModel::ComputeCrossSectionPerElectron/Atom()
 - remove obsolete G4SCProcessorStand (V.Ivanchenko)
-   
+
 11 February 06 : mma (emstand-V08-00-07)
 - added functions G4BetheBlochModel::ComputeCrossSectionPerElectron/Atom()
 - move G4LossTableManager::Instance()->EmCorrections() in constructor
-     
+
 08 February 06 : mma (emstand-V08-00-06)
 - G4hIonisation52, G4eIonisation52, G4eBremsstrahlung52 : the functions
   ComputeCrossSectionPerAtom() and ComputeRestrictedMeandEdx() are made public.
-- added test programs : CrossSectionStd.cc and CrossSectionV52.cc 
-       
+- added test programs : CrossSectionStd.cc and CrossSectionV52.cc
+
 07 February 06 : mma
 - added function  G4PEEffectModel::ComputeMeanFreePath()
 - added functions G4eeToTwoGammaModel::ComputeCrossSectionPerElectron/Atom()
 - added functions G4MollerBhabhaModel::ComputeCrossSectionPerElectron/Atom()
 - added function  G4eBremsstrahlungModel::ComputeCrossSectionPerAtom()
-     
+
 02 February 06 : mma
 - G4BetheHeitlerModel : remove InitialiseCrossSectionPerAtom()
-    
+
 31 January 06 : mma (emstand-V08-00-05)
-- emstand-V08-00-04 + emstand_p01-V08-00-00     
-     
+- emstand-V08-00-04 + emstand_p01-V08-00-00
+
 30 January 06 : mma (emstand_p01-V08-00-00)
 - build on top of geant4-08-00-ref-00
 - G4PolarizedComptonScattering : return G4ComptonScattering52::PostStepDoIt()
- 
+
 26 January 05: V.Ivant (emstand-V08-00-04)
-26 January 06: V. Grichine 
-- fix nan value for delta direction for the case of zero cut 
-     
+26 January 06: V. Grichine
+- fix nan value for delta direction for the case of zero cut
+
 25 January 05: mma (emstand-V08-00-03)
-- G4eplusAnnihilation::AtRestDoIt() : remove cut dependance 
+- G4eplusAnnihilation::AtRestDoIt() : remove cut dependance
 
 24 January 05: V.Ivant (emstand-V08-00-02)
-24 January 06: V. Grichine 
+24 January 06: V. Grichine
 - fVerbose for G4PAIModel providing hiding of some technical messages
 
 20 January 05: V.Ivant (emstand-V08-00-01)
@@ -2831,26 +2929,26 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 10 January 05: V.Ivant (emstand-V08-00-00)
 - substitute the method SetStepLimits by SetStepFunction
-- move initialisation of default values to the constructor 
+- move initialisation of default values to the constructor
 
 12 December 05: L.Urban (emstand-V07-01-30)
 
 - G4MultipleScattering: data member rangecut removed, step limit
                         does not depend on cut any more
-     
+
  8 December 05: mma (emstand-V07-01-29)
 - G4MultipleScattering: world is now: navigator->GetWorldVolume()
-     
+
  7 December 05: mma (emstand-V07-01-28)
 - G4MultipleScattering: tlimitmin = facrange*rangecut(e-) for every particle
 - rangecut computed using index instead of particle name
 - volume name World removed
-        
+
  5 December 05: mma (emstand-V07-01-27)
 - particleChange.SetProposedKineticEnergy(0.) for killed particle in
   G4PEEffectModel, G4BetheHeilterModel, G4eplusAnnihilation.
-  
-			 
+
+
  1 December 05: V.Ivant (emstand-V07-01-26)
 - G4MultipleScattering - add control on verbosity inside SetStepLimitation
                          and extend PrintInfo output
@@ -2860,21 +2958,21 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
   CLHEP 2.0.X series.
 
 29 November 05: V.Ivant (emstand-V07-01-24)
-- Do not use G4Alpha inside G4BraggIonModel to avoid clash with 
+- Do not use G4Alpha inside G4BraggIonModel to avoid clash with
   new particle design
-     
+
 16 November 05: mma (emstand-V07-01-23)
 - replace RandBit() by G4UniformRand() in G4GammaConversion52 and
   G4BetheHeitlerModel
-     
+
 16 November 05: V. Ivanchenko (emstand-V07-01-22)
 - G4eBremsstrahlungModel.cc: add electron deviation
-     
+
 13 November 05: L.urban (emstand-V07-01-21)
 - G4MultipleScattering: some code cleaning, slightly better timing
   for sampling calorimeters (by 1 - 6 %, depending on cut and
   geometry)
-- additionnal printing in G4PAIModel  
+- additionnal printing in G4PAIModel
 
 05 November 05: L.Urban
 - G4MultipleScattering: minimum stepsize depends on cut in range
@@ -2883,7 +2981,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 27 October 05: mma (emstand-V07-01-20)
 - G4MultipleScattering: stepLimitAlgorithm renamed to steppingAlgorithm;
   Function MscStepLimitation (G4bool algorithm, G4double facrange)
-     
+
 25 October 05: L.Urban
 - G4MultipleScattering: data member prec renamed to stepLimitAlgorithm
   SetstepLimitAlgorithm(G4bool) triggers 'default' facrange
@@ -2892,7 +2990,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 23 October 05: L.Urban
 - G4MultipleScattering: 'new' msc stepping + 7.1 like stepping
   together, one can choose between them using data members
-  prec and facrange 
+  prec and facrange
 
 23 October 05: V.Ivant (emstand-V07-01-05b)
 - a tag included fixes in G4BraggModel.cc and  G4BraggIonModel.cc
@@ -2930,19 +3028,19 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 4 October 05: V.Ivant (emstand-V07-01-11)
 - Move G4MultipleScattering80 and G4MscModel80 into
-  G4MultipleScattering and G4MscModel   
+  G4MultipleScattering and G4MscModel
 
 3 October 05: L.Urban (emstand-V07-01-10)
-- G4MultipleScattering80 : weaker step limitation above 
+- G4MultipleScattering80 : weaker step limitation above
   Tkinlimit = 2 MeV for e+/e- (limit scaled with mass
   for other particles).Soft limit: facrange increases
   linearly with energy above Tkinlimit.
 - G4UniversalFluctuation : cut dependence of the en.loss
   distribution has been reduced
-     
+
 2 October 05: mma (emstand-V07-01-09)
 - G4eIonisation, G4hIonisation : SetStepLimits (0.2, 1*mm) + integral on
-     
+
 2 October 05: L.Urban
 - conditions for step limit now are considered 'final' in
   G4MultipleScattering80.cc + code cleaning
@@ -2951,13 +3049,13 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
   tabulated cross section values for Tkin > 10 MeV
 
 16 September 05: L.Urban
-- reordering of the conditions in TruePathLengthLimit of 
+- reordering of the conditions in TruePathLengthLimit of
   G4MultipleScattering80.cc (It gives the same result than
   preceding version, but it is faster)
 
 12 September 05: L.Urban
 - new version of  G4MultipleScattering80, now the true pathlength
-  limit is determined by the physics (facrange) + geometry 
+  limit is determined by the physics (facrange) + geometry
 
 2 September 05: V.Ivant. (emstand-V07-01-08)
 - G4hIonisation : SetStepLimits (0.2, 0.1*mm) + integral off
@@ -2966,46 +3064,46 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - G4eIonisation : integral off
 
 2 September 05: V.Ivant. (emstand-V07-01-06)
-- G4eIonisation : SetStepLimits (0.2, 0.1*mm) 
+- G4eIonisation : SetStepLimits (0.2, 0.1*mm)
 - add G4MultipleScattering80 and G4MscModel80
 
 2 September 05: V.Ivant. (emstand-V07-01-05)
 - This tag is 7.1 + bug fixes
 - G4eIonisation : SetStepLimits (1, 1*mm)
 - G4hIonisation : SetStepLimits (0.2, 1*mm)
-     
+
 12 August 05: mma (emstand-V07-01-04)
 - G4eIonisation and G4hIonisation : SetStepLimits (0.2, 0.1*mm)
-     
+
 11 August 05: Laszlo + mma (emstand-V07-01-03)
 - add G4MultipleScattering80 and G4MscModel80
- 
+
 03 August 05: V.Ivant (emstand-V07-01-02)
-- Fix intialisation G4eBremsstrahlungModel 
+- Fix intialisation G4eBremsstrahlungModel
 
 25 July 05: V.Ivant (emstand-V07-01-01)
-- Fix in G4MollerBhabhaModel: add protection in calculation of recoil direction 
+- Fix in G4MollerBhabhaModel: add protection in calculation of recoil direction
   for the case of complete energy transfer from e+ to e-
 
 30 June 05: V.Ivant (emstand-V07-01-00)
 24 May 05: V.Ivant (stand-V07-00-12)
 - Change G4BaggIonModel and G4BaggModel in order to have parameterization
   of chemical effect be independent on method of material definition (by
-  number of atoms or by mass fractions); 
+  number of atoms or by mass fractions);
 - Increase number of bins for internal table of G4BetheHeitlerModel
 - Add protection for (tmax < meanPot and pot0) in G4UniversalFluctuations
 
 30 May 05: V.Ivant (stand-V07-00-11)
-- Fix compilation warning at SUN in G4BaggIonModel; 
+- Fix compilation warning at SUN in G4BaggIonModel;
 
 12 May 05: V.Ivant (stand-V07-00-10)
-- Move G4BaggIonModel to updated interfaces; 
+- Move G4BaggIonModel to updated interfaces;
 - cleanup
 
 03 May 05: V.Ivant (stand-V07-00-09)
 - move v70 processes (model interface) to be default and old to be 52
   (Compton, GammaConversion, PhotoElectricEffect, eplusAnnihilation)
-     
+
 03 May 05: mma (stand-V07-00-08)
 - last tag before permutation v70 -> stand ->v52 for photon processes
 - G4eplusAnnihilation70 : suppress Integral option
@@ -3040,7 +3138,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 10 Feb 05: V.Ivant (stand-V07-00-01)
 - Extra protection in G4PAIModel (V.Grichine)
-     
+
 07 Feb 05: mma (stand-V07-00-00)
 - G4MultipleScattering.cc : make the Setsamplez function working
 - G4UniversalFluctuation.hh and .cc : define problim = 5.e-3
@@ -3082,12 +3180,12 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - Add process and model classes for e+ annihilation to pi+pi-
 
 30 Aug 04: V.Ivant (stand-V06-02-04)
-- Remove obsolete process G4IonisationByLogicalVolume and 
+- Remove obsolete process G4IonisationByLogicalVolume and
   obsolete interfaces to particle cathegory
 
 20 Aug 04: V.Ivant (stand-V06-02-03)
 - Bug fix for e- ionisation in PAI model for small cuts (VG)
-     
+
 13 Aug 04: mma (stand-V06-02-02)
 - in all discrete processes make ComputeCrossSection() public and virtual
 - suppress icc files
@@ -3095,13 +3193,13 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 12 Aug 04: V.Ivant (stand-V06-02-01)
 - G4ionIonisation - effective charge is taken from util class (VI)
 - G4eplusAnnihilation70 introduced (VI)
-     
+
 05 Aug 04: mma
 - suppress G4eplusAnnihilation.icc, G4GammaConversionToMuons.icc
-     
+
 29 Jun 04: mma (stand-V06-02-00)
 - G4ComptonScattering.cc : improve totalCrossSection parametrization below
-  15 keV (Laszlo). 
+  15 keV (Laszlo).
 
 07 Jun 04: G.Cosmo (stand-V06-01-03)
 - G4PAIxSection.cc: fix in constructor for compilation error in VC++ 6.0
@@ -3119,11 +3217,11 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - (L.Urban) Minor fix in G4eBremsstrahlung - units properly used
 
 04 May 04: V.Ivant (stand-V06-01-00)
-- (V.Grichine) Updated PAI model - use precise integrator, 
+- (V.Grichine) Updated PAI model - use precise integrator,
   add photon emission, add G4PAIwithPhotons and G4PAIxSection classes
-     
+
 15 Mar 04: mma (stand-V06-00-04)
-     
+
 10 Mar 04: V.Ivant
 - constructor of all discrete processes: name, type
 
@@ -3133,7 +3231,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 06 Feb 04: V.Ivant (stand-a-V06-00-00)
 - Tag for the patch include:
 - Fix in G4PAIModel.cc
-- Minor change in G4PAIonisation.cc 
+- Minor change in G4PAIonisation.cc
 
 03 Feb 04: V.Ivant (stand-V06-00-02)
 - Fix in G4PAIModel.cc
@@ -3237,28 +3335,28 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 05 feb 03: V.Ivant (stand-V05-00-03)
 - Fix on warnings at SUN for STD classes
 - Add Initialise method to STD classes to calculate PartialSumSigma
-- Subsitute Material by MaterialCutsCouple for PostStep STD 
+- Subsitute Material by MaterialCutsCouple for PostStep STD
 
 04 feb 03: mma
 - AnnihiToMuPair.hh and cc : first implementation from Helmut Burkhardt.
   Cosmetic simplifications (mma)
-  
+
 24 jan 03: V.Ivant (stand-V05-00-02)
 - Migration to "cut per region"
 
-15 jan 03: mma 
+15 jan 03: mma
 - PhotoElectricEffect::ElecThetaDistribution : if gamma>5 --> costeta=1
- 
+
 13 jan 03: V.Ivant (stand-V05-00-01)
-- Fix problem in cut control in G4PAIonisation.cc 
+- Fix problem in cut control in G4PAIonisation.cc
 
 06 jan 03: V.Ivant (stand-V05-00-00)
-- Update interfaces to STD classes in order to be ready to migrade 
+- Update interfaces to STD classes in order to be ready to migrade
   to "cut per region"
 
 04 dec 02: V.Ivant (stand-V04-01-07)
 - fix d-electron spectra for STD
-     
+
 20 nov 02: G.Cosmo (stand-V04-01-06)
 - G4PAIonisation[.hh.icc.cc]: patched access to public static data.
   Added static accessor to be used in the kernel for inline functions
@@ -3266,54 +3364,54 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 12 nov 02: V.Ivant (stand-V04-01-05)
 - eBremsstrahlung::BuiltLossTable: fix of division by 0 (G4int nn)
- 
+
 28 oct 02: V.Ivant (stand-V04-01-04)
 - fix compilation warnings for STD classes
 
 17 oct 02: V.Ivant (stand-V04-01-03)
 - few changes in all xSTD processes in connection with LossTableBuilder
-    
+
 15 oct 02: V.Ivant (stand-V04-01-02)
 - redesign for a Model approach: files processNameSTD and processNameModel
-     
+
 14 oct 02: mma (stand-V04-01-01)
 - G4PAIxSection and G4PAIonisation : put back on the HEAD the versions as they
   are in Geant4-04-01-ref-03, namely:
   G4PAIxSection  hh:1.7             cc:1.10
   G4PAIonisation hh:1.12  icc:1.10  cc:1.23
-  
+
   G4PAIxSectionTest.cc:1.7   G4PAIdNdxTest.cc:1.1   GNUmakefile:1.1
-      
+
 07 aug 02: mma (stand-V04-01-00)
-- GammaConversionToMuons::DoIt : missprint in OR conditions | instead of || 
+- GammaConversionToMuons::DoIt : missprint in OR conditions | instead of ||
 
 10 jun 02: mma (stand-V04-00-13)
 - bug fixed for stopping hadrons, V.Ivanchenko
-     
-04 jun 02: mma (stand-V04-00-12) 
+
+04 jun 02: mma (stand-V04-00-12)
 - suppress the G4PAIonisation stuff which crash in TestEm8
   (back to stand-V04-00-10)
-     
-24 may 02: mma (stand-V04-00-11) 
+
+24 may 02: mma (stand-V04-00-11)
 - G4PAIonosation: production of delta-electrons > cut
 - a bug fixed in G4PAIxSection.cc for GenericIon
 - G4PAIxSection : new class members for transverse/longitudinal transfer
-     
+
 06 may 02: mma (stand-V04-00-10)
 - compilation error in G4GammaConversionToMuons
-     
+
 29 apr 02: mma (stand-V04-00-09)
 - G4PhotoElectric: Generate theta angle of the photoelectron from Sauter-Gravila
-  distribution  
-     
+  distribution
+
 18 apr 02: mma (stand-V04-00-08)
 - new process: G4GammaConversionToMuons
-     
+
 18 apr 02: mma (stand-V04-00-07)
 - G4ComptonScattering: LowestEnergyLimit=1*keV
 - G4PhotoElectric: Keep only Sandia crossSections. Remove BuildPhysicsTables.
-  Simplify public interface.     
-     
+  Simplify public interface.
+
 27 mar 02: V.Ivanchenko (stand-V04-00-06)
 - G4hIonisation: Bug fix in scaling of lambda tabledelta-electrons > cut
 
@@ -3323,40 +3421,40 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 22 mar 02: V. Grichine (stand-V04-00-04)
 - modifications in G4PAIxSection allowing to get additional information on
   transverse and longitudinal excitations at atomic frequences.
-     
+
 21 mar 02: mma (stand-V04-00-03)
 - G4GammaConversion::DoIt() correction of e+e- angular distribution (bug 363)
-     
+
 27 fev 02: mma (stand-V04-00-02)
 - V.Ivanchenko remove the fix for GenericIons in G4VhEnergyLoss, G4hIonisation;
 
 27 fev 02: mma (stand-V04-00-01)
 - V.Ivanchenko fix G4VhEnergyLoss, G4hIonisation for GenericIons;
-- G4VeEnergyLoss and G4VhEnergyLoss : error in TouchebleHandle - take from 
-  PreStepPoint  
-     
+- G4VeEnergyLoss and G4VhEnergyLoss : error in TouchebleHandle - take from
+  PreStepPoint
+
 10 fev 02: mma (stand-V04-00-00)
 - G4VeEnergyLoss and G4VhEnergyLoss : error in SetMindeltaCutInRange,
-  was set in Energy !  
-     
+  was set in Energy !
+
 11 jan 02: mma
-- gammaConversion::ComputeCrossSection(): correction of extrapolation below 
+- gammaConversion::ComputeCrossSection(): correction of extrapolation below
   EnergyLimit
-        
-10 jan 02: mma 
+
+10 jan 02: mma
 - photoEffect: rearrangement in the inlined functions
-     
+
 12 nov 01: mma (stand-V03-02-14)
 - ParticleMass and Charge : local variables
 - merge 11a + 13
-- some cleanup in G4hEnergyLoss.hh and .cc 
-     
+- some cleanup in G4hEnergyLoss.hh and .cc
+
 29 oct 01: mma (stand-V03-02-13)
 - all static functions no more inlined
-     
+
 23 oct 01: mma (stand-V03-02-12)
 - cut per material: Ve(h)EnergyLoss, e(h)Ionisation, eBremsstrahlung,
-  PAIEnergyLoss, PAIonisation, SynchrotronRadiation     
+  PAIEnergyLoss, PAIonisation, SynchrotronRadiation
 
 08 nov 01: G.Cosmo (stand-V03-02-11a)
 - Introduced changes to G4VeEnergyLoss.cc and G4VhEnergyLoss.cc for reference
@@ -3372,63 +3470,63 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 11 oct 01: G.Cosmo (stand-V03-02-09)
 - G4VPAIenergyLoss.hh: removed redundant inclusion of RW wrapper header.
- 
+
 01 oct 01: mma (stand-V03-02-08)
 - Phot,Comp,Conv,Annil: come back to BuildPhysicsTable(particleDefinition)
   invoked from the process manager
-       
+
 28 sep 01: mma (stand-V03-02-07)
 - StorePhysicsTable(): ParticleName included in fileName.
-  Completion of Store/Retrieve functions 
-     
+  Completion of Store/Retrieve functions
+
 21 sep 01: mma (stand-V03-02-06)
-- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni     
-     
+- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni
+
 19 sep 01: mma (stand-V03-02-05)
 - come back to the previous ProcessNames
-     
+
 17 sep 01: mma (stand-V03-02-04)
 - modifs in almost all classes for the migration of Materials to pure STL,
-  but backward compatible with g4rw   
+  but backward compatible with g4rw
 
 13 sep 01: L.Urban (stand-V03-02-03)
 -G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation
-    
+
 11 sep 01: L.Urban (stand-V03-02-02)
 - G4VhEnergyLoss+G4VeEnergyLoss: bugfix in subcutoff delta generation
-     
+
 29 aug 01: mma (stand-V03-02-01)
 - G4hIonisation::PostStepDoIt grecj term for spin 1/2 (not 1)
-     
+
 13 aug 01: mma
 - G4eIonisation: new function ComputeRestrictedMeandEdx()
 - G4hIonisation: new function ComputeRestrictedMeandEdx() + 'cleanup'
-    
+
 10 aug 01: mma
 - store/retrieve PhysicsTables implemented in photelec, compton, gamaconv,
-  annihil, eIonisa, eBrems, mulscat, hIonisa      
-     
+  annihil, eIonisa, eBrems, mulscat, hIonisa
+
 17 jul 01: mma (stand-V03-02-00)
 - suppression of the production threshold in phot,compt,conv,annih
 
 11 jul 01: mma
 - GammaConversion::PostStepDoIt : sample epsil->power (rndm,0.333333)
 
-29 may 01: V.Ivanchenko 
+29 may 01: V.Ivanchenko
 - clean up againist Linux ANSI strict compilation mode.
-     
+
 27 mar 01 mma (stand-V03-00-05)
 - commented out the printing of subcutoff energies at initialization
-     
+
 05 mar 01 mma (stand-V03-00-04)
 - new subdirectory: integral
   migration of all G4I.. processes from muons, standard, utils into integral
-       
+
 22 feb 01: mma (stand-V03-00-03)
 - G4PhotoElectricEffect.  DoIt: removed protection against low energy gamma,
     after correction in SandiaTable (materials-V03-00-05)
 - G4EplusAnnihilation. PostStepDoIt: check with fStopButAlive instead of
-   energy == 0. 
+   energy == 0.
 
 05 feb 01: G.Cosmo (stand-V03-00-02)
 - Migration to STL for G4DataVector and G4OrderedTable.
@@ -3439,7 +3537,7 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - corrections in e/hEnergyLoss.cc: AlongStepDoIt L.Urban 23-01-01
   PostStep information is not used any more in AlongStepDoIt
   when generating sub-cutoff delta rays. (bug found by Babar)
-     
+
 16 jan 01: mma (stand-V03-00-00)
 - small corrections in e/hEnergyLoss.cc L.Urban 11-01-01
   to ensure consistency between cut in range and step limitation
@@ -3449,15 +3547,15 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
   it was too big for big cut values.
 
 17 Nov 00 mma : stand-V02-00-04
-     
+
 12 Nov 00 Corrections by Rui Curado da Silva (Polarized Compton)
 - Sampling of Phi
-- Depolarization probability 
-     
+- Depolarization probability
+
 08 Nov 00 mma (stand-V02-00-03)
 -  eBrem
    07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
-   21/09/00  corrections in the LPM implementation, L.Urban   
+   21/09/00  corrections in the LPM implementation, L.Urban
 -  30/10/00  signature in GetLossWithFluct changed L.Urban
 
 01 Nov 00 G.Cosmo (stand-V02-00-02)
@@ -3467,13 +3565,13 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
    from geometry.
 
 11 Aug 00 mma
-   tag stand-V02-00-01     
+   tag stand-V02-00-01
 
 10 Aug 00 V.Ivanchenko
--  Change G4VhEnergyLoss.cc, G4VhEnergyLoss.hh, G4hIonisation.cc 
+-  Change G4VhEnergyLoss.cc, G4VhEnergyLoss.hh, G4hIonisation.cc
    in order to simulate energy losses of ions; correction to
    cross section for particles with spin 1 is inserted as well.
-   Class G4ionIonisation is removed. 
+   Class G4ionIonisation is removed.
 
 03 Aug 00 Gabriele Cosmo
 - Fixes for events' reproducibility:
@@ -3484,22 +3582,22 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 
 31 Jul 00 Gonzalo Gracia
 - G4IhIonisation.cc: initialisisation to zero of several  G4PhysicsTable*
-  is included in constructor. Some tests were crashing 
+  is included in constructor. Some tests were crashing
   on NT because of the missing initialisation
 
 18 jul 00: V.Ivanchenko (stand-V01-??)
-- fix in G4VhEnergyLoss and G4ionIonisation in AlongStepDoIt 
+- fix in G4VhEnergyLoss and G4ionIonisation in AlongStepDoIt
   for particles with Charge^2 > 1; Reorganisation in
   GetConstrain for G4ionIonisation
-     
+
 22 jun 00: mma (stand-V01-01-05)
 - stop very low energy photons in photo electric effect
 - ElossMessenger moved --> G4VEnergyLoss
-       
+
 13 jun 00: mma (stand-V01-01-04)
 - static pointer MinDeltaEnergy removed from destructor of
   G4VeEnergyLoss and G4VhEnergyLoss
-     
+
 07 jun 00: mma (stand-V01-01-03)
 - virtual destructor for G4VEnergyLoss
 
@@ -3508,21 +3606,21 @@ G4SynchrotronRadiation - bug fixed for unit polarisation in PostStepDoIt
 - minCut=10 KeV for brems
 - corrections in ionisation (Laszlo)
 
-       
+
 27 apr 00 mma  (em-V01-01-01)
-- G4endl (dec/iso)      
-     
+- G4endl (dec/iso)
+
 26 apr 00 mma  (em-V01-01-00)
-- all EnergyLoss classes renamed G4V... 
+- all EnergyLoss classes renamed G4V...
   Most classes in standard and muons affected.
 - G4Muls moved in utils
-- bugs fixe in MuPairProduction  
+- bugs fixe in MuPairProduction
 - cowork with geant4-01-01-ref-02
-     
+
 02 mar 00 mma  (em-V01-00-00)
 - new G4VEnergyLoss class and related structure
 - cowork with geant4-01-00-ref-06
-     
+
 10 nov 99 mma  (em-V00-01-03)
 - migration to STL: remove RWT hash dictionnary
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: PrimaryGeneratorMessenger.hh 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: PrimaryGeneratorMessenger.hh 103795 2017-04-27 13:38:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/PrimaryGeneratorMessenger.hh
 /// \brief Definition of the PrimaryGeneratorMessenger class
@@ -71,6 +71,7 @@ private:
   PrimaryGeneratorMessenger(const PrimaryGeneratorMessenger&);
 
   PrimaryGeneratorAction*  fGen;
+  G4bool fVerbose;
 
   G4UIcmdWithADoubleAndUnit* fBeamXCmd;
   G4UIcmdWithADoubleAndUnit* fBeamYCmd;
@@ -80,13 +81,10 @@ private:
   G4UIcmdWithADoubleAndUnit* fSigmaYCmd;
   G4UIcmdWithADoubleAndUnit* fSigmaZCmd;
   G4UIcmdWithADoubleAndUnit* fSigmaECmd;
+
+  G4UIcmdWithAString* fRandCmd;
   G4UIcmdWithADoubleAndUnit* fMaxThetaCmd;
   G4UIcmdWithADoubleAndUnit* fThetaCmd;
-  G4UIcmdWithADouble* fBeamBetaCmd;
-  G4UIcmdWithADouble* fSigmaBetaCmd;
-  G4UIcmdWithAString* fPartCmd;
-  G4UIcmdWithAString* fRandCmd;
-
 };
 
 #endif

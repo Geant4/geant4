@@ -27,7 +27,7 @@
 /// \brief Implementation of the F01FieldSetup class
 //
 //
-// $Id: F01FieldSetup.cc 100688 2016-10-31 11:21:51Z gcosmo $
+// $Id: F01FieldSetup.cc 104350 2017-05-26 07:20:25Z gcosmo $
 //
 //   User Field setup class implementation.
 //
@@ -136,21 +136,22 @@ F01FieldSetup::~F01FieldSetup()
 
 void F01FieldSetup::CreateStepperAndChordFinder()
 {
+  delete fChordFinder;
+  fChordFinder= nullptr;
+   
   // Update field
-
-  G4cout<< " F01FieldSetup::CreateStepperAndChordFinder() called "
-        << " to reset Stepper."  << G4endl;
+  G4cout << " F01FieldSetup::CreateStepperAndChordFinder() called. " << G4endl
+         << "                 1. Creating Stepper."  << G4endl;
 
   SetStepper();
   G4cout<<"The minimal step is equal to "<<fMinStep/mm<<" mm"<<G4endl;
 
-  fFieldManager->SetDetectorField(fMagneticField );
-
-  if (fChordFinder) delete fChordFinder;
-
+  G4cout  << "                 2. Creating ChordFinder."  << G4endl;
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper );
 
+  G4cout  << "                 3. Updating Field Manager."  << G4endl;  
   fFieldManager->SetChordFinder( fChordFinder );
+  fFieldManager->SetDetectorField(fMagneticField );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -232,13 +233,13 @@ void F01FieldSetup::SetStepper()
     case 457:
     case 745:
       fStepper = new G4DormandPrince745( fEquation );
-      G4cout<<"G4DormandPrince745 Stepper is chosen"<<G4endl;       
+      G4cout<<"G4DormandPrince745 Stepper is chosen"<<G4endl;
       break;
     default:
       fStepper = new G4ClassicalRK4( fEquation );
       G4cout<<"G4ClassicalRK4 Stepper (default) is chosen"<<G4endl;
       // fStepper = new G4DormandPrince745( fEquation );
-      // G4cout<<"G4DormandPrince745 (default) Stepper is chosen"<<G4endl;             
+      // G4cout<<"G4DormandPrince745 (default) Stepper is chosen"<<G4endl;
       break;      
   }
 }

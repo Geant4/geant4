@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryNeutronBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4FTFBinaryNeutronBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -60,14 +61,15 @@ class G4FTFBinaryNeutronBuilder : public G4VNeutronBuilder
     G4FTFBinaryNeutronBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFBinaryNeutronBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4HadronFissionProcess * aP);
-    virtual void Build(G4HadronCaptureProcess * aP);
-    virtual void Build(G4NeutronInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4HadronFissionProcess *) final override {}
+    virtual void Build(G4HadronCaptureProcess *) final override {}
+    virtual void Build(G4NeutronInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VNeutronBuilder::Build; //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;

@@ -51,11 +51,6 @@ G4NeutronLENDBuilder( G4String eva )
   evaluation = eva;
 
 }
-
-G4NeutronLENDBuilder::
-~G4NeutronLENDBuilder() 
-{}
-
 void G4NeutronLENDBuilder::
 Build(G4HadronElasticProcess * aP)
 {

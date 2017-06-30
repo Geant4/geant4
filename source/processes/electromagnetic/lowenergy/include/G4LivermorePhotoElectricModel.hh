@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh 79446 2014-02-28 14:29:47Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.hh 104410 2017-05-30 07:17:09Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -68,8 +68,8 @@ public:
                                 const G4ParticleDefinition*,
                                       G4double energy, 
                                       G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
+                                      G4double A=0., 
+                                      G4double cut=0.,
                                       G4double emax=DBL_MAX);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -89,7 +89,7 @@ protected:
 
 private:
 
-  void ReadData(G4int Z, const char* path = 0);
+  void ReadData(G4int Z, const char* path = nullptr);
 
   G4LivermorePhotoElectricModel & operator=(const G4LivermorePhotoElectricModel &right);
   G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&);

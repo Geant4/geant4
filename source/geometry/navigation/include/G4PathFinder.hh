@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh 87869 2015-01-16 08:24:36Z gcosmo $
+// $Id: G4PathFinder.hh 103219 2017-03-22 11:30:15Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -65,7 +65,11 @@ class G4PathFinder
 
    static G4PathFinder* GetInstance();
      //
-     // Retrieve singleton instance
+     // Retrieve singleton instance and create it if not existing.
+
+   static G4PathFinder* GetInstanceIfExist();
+     //
+     // Retrieve singleton instance pointer.
 
    G4double ComputeStep( const G4FieldTrack &pFieldTrack,
                          G4double  pCurrentProposedStepLength,
@@ -171,6 +175,9 @@ class G4PathFinder
    G4String& LimitedString( ELimited lim );
      // Convert ELimited to string
 
+   ~G4PathFinder();
+     // Destructor
+
  protected:  // without description
 
   G4double  DoNextLinearStep(  const G4FieldTrack  &FieldTrack,
@@ -199,7 +206,6 @@ class G4PathFinder
  protected:
 
    G4PathFinder();  //  Singleton 
-  ~G4PathFinder();
 
   inline G4Navigator* GetNavigator(G4int n) const;
 

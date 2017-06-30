@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc 100906 2016-11-03 09:59:32Z gcosmo $
+// $Id: G4VSolid.cc 104317 2017-05-24 13:08:38Z gcosmo $
 //
 // class G4VSolid
 //
@@ -32,7 +32,6 @@
 //
 // History:
 //
-//  03.11.16 E.Tcherniaev, added Extent()
 //  06.12.02 V.Grichine, restored original conditions in ClipPolygon()
 //  10.05.02 V.Grichine, ClipPolygon(): clip only other axis and limited voxels
 //  15.04.02 V.Grichine, bug fixed in ClipPolygon(): clip only one axis
@@ -623,13 +622,14 @@ G4VSolid::ClipPolygonToSimpleLimits( G4ThreeVectorList& pPolygon,
 //
 // Throw exception (warning) for solids not implementing the method
 
-void G4VSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4VSolid::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   std::ostringstream message;
   message << "Not implemented for solid: "
           << GetEntityType() << " !"
           << "\nReturning infinite boundinx box.";
-  G4Exception("G4VSolid::Extent()", "GeomMgt1001", JustWarning, message);
+  G4Exception("G4VSolid::BoundingLimits()", "GeomMgt1001",
+              JustWarning, message);
 
   pMin.set(-kInfinity,-kInfinity,-kInfinity);
   pMax.set( kInfinity, kInfinity, kInfinity);

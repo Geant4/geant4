@@ -31,14 +31,21 @@
 // 
 // If you use this example, please cite the following publication:
 // Rad. Prot. Dos. 133 (2009) 2-11
+//
+// Based on purging magnet advanced example.
+//
 
 #include "EMField.hh"
 #include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
 EMField::EMField() 
-{    
-}
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EMField::GetFieldValue(const double point[4], double *Bfield ) const
 { 
@@ -122,8 +129,8 @@ if ( (z >= limitMinEntrance) && (z < limitMaxEntrance) )
 // - HEART OF SWITCHING MAGNET 	  
 		
  if ( 
- 	(z >= limitMaxEntrance)  
-   &&  (( x*x + (z -(beamStart+zS))*(z -(beamStart+zS)) < limitMinExit*limitMinExit)) 
+          (z >= limitMaxEntrance)  
+     &&   (( x*x + (z -(beamStart+zS))*(z -(beamStart+zS)) < limitMinExit*limitMinExit)) 
     )  	
 {
    Bx=0; 
@@ -134,11 +141,11 @@ if ( (z >= limitMinEntrance) && (z < limitMaxEntrance) )
 // - EXIT OF SWITCHING MAGNET
 
 if ( 
- 	(z >= limitMaxEntrance)  
-   &&	(( x*x + (z -(beamStart+zS))*(z -(beamStart+zS))) >= limitMinExit*limitMinExit) 
-   && 	(( x*x + (z -(beamStart+zS))*(z -(beamStart+zS))) < limitMaxExit*limitMaxExit)
+        (z >= limitMaxEntrance)  
+     && (( x*x + (z -(beamStart+zS))*(z -(beamStart+zS))) >= limitMinExit*limitMinExit) 
+     && (( x*x + (z -(beamStart+zS))*(z -(beamStart+zS))) < limitMaxExit*limitMaxExit)
 
-    )  	
+   )  	
 {
 
   xcenter = 0;
@@ -307,7 +314,7 @@ if (z>=-1400*mm && z <-200*mm)
 		}
 
 	 
-	  if ( z_local < -z2[i] )
+	 if ( z_local < -z2[i] )
 	 {
 	  G0=0;
 	  G1=0;
@@ -334,37 +341,37 @@ if (z>=-1400*mm && z <-200*mm)
 	 if ( ((z_local>=-z2[i]) & (z_local<-z1[i])) ||  ((z_local>z1[i]) & (z_local<=z2[i])) ) 
 	 {
 
-	 vars = ( z_local - z1[i]) / a0[i] ;
-  	 if (z_local<-z1[i]) vars = ( - z_local - z1[i]) / a0[i] ;
+	  vars = ( z_local - z1[i]) / a0[i] ;
+  	  if (z_local<-z1[i]) vars = ( - z_local - z1[i]) / a0[i] ;
 
 
-	 P0 = c0[i]+c1[i]*vars+c2[i]*vars*vars;
+	  P0 = c0[i]+c1[i]*vars+c2[i]*vars*vars;
 
-	 P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];
-	 if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];
+	  P1 = c1[i]/a0[i]+2*c2[i]*(z_local-z1[i])/a0[i]/a0[i];
+	  if (z_local<-z1[i])  P1 = -c1[i]/a0[i]+2*c2[i]*(z_local+z1[i])/a0[i]/a0[i];
 
-	 P2 = 2*c2[i]/a0[i]/a0[i];
+	  P2 = 2*c2[i]/a0[i]/a0[i];
 
-	 cte = 1 + G4Exp(c0[i]);
+	  cte = 1 + G4Exp(c0[i]);
 
-	 K1 = -cte*P1*G4Exp(P0)/( (1+G4Exp(P0))*(1+G4Exp(P0)) );
+	  K1 = -cte*P1*G4Exp(P0)/( (1+G4Exp(P0))*(1+G4Exp(P0)) );
 
-	 K2 = -cte*G4Exp(P0)*(
-	  P2/( (1+G4Exp(P0))*(1+G4Exp(P0)) )
-	 +2*P1*K1/(1+G4Exp(P0))/cte
-	 +P1*P1/(1+G4Exp(P0))/(1+G4Exp(P0))
-	 );
- 
-	 K3 = -cte*G4Exp(P0)*(
-	 (3*P2*P1+P1*P1*P1)/(1+G4Exp(P0))/(1+G4Exp(P0))
-	 +4*K1*(P1*P1+P2)/(1+G4Exp(P0))/cte
-	 +2*P1*(K1*K1/cte/cte+K2/(1+G4Exp(P0))/cte)
+	  K2 = -cte*G4Exp(P0)*(
+	   P2/( (1+G4Exp(P0))*(1+G4Exp(P0)) )
+	  +2*P1*K1/(1+G4Exp(P0))/cte
+	  +P1*P1/(1+G4Exp(P0))/(1+G4Exp(P0))
 	  );
+ 
+	  K3 = -cte*G4Exp(P0)*(
+	  (3*P2*P1+P1*P1*P1)/(1+G4Exp(P0))/(1+G4Exp(P0))
+	  +4*K1*(P1*P1+P2)/(1+G4Exp(P0))/cte
+	  +2*P1*(K1*K1/cte/cte+K2/(1+G4Exp(P0))/cte)
+	   );
 	  
-	 G0 = gradient[i]*cte/(1+G4Exp(P0));
-	 G1 = gradient[i]*K1;
-	 G2 = gradient[i]*K2;
-	 G3 = gradient[i]*K3;
+	  G0 = gradient[i]*cte/(1+G4Exp(P0));
+	  G1 = gradient[i]*K1;
+	  G2 = gradient[i]*K2;
+	  G3 = gradient[i]*K3;
 
 	 }
 	  
@@ -468,11 +475,11 @@ if (z>=-1400*mm && z <-200*mm)
    
   if 
   (
-     x <= slope1 * z + cte1
-  && x >= slope3 * z + cte3
-  && x <= slope4 * z + cte4
-  && x >= slope2 * z + cte2    
-  && std::abs(y)<=electricPlateWidth1/2
+       x <= slope1 * z + cte1
+    && x >= slope3 * z + cte3
+    && x <= slope4 * z + cte4
+    && x >= slope2 * z + cte2    
+    && std::abs(y)<=electricPlateWidth1/2
   )  
 
   {
@@ -510,11 +517,11 @@ if (z>=-1400*mm && z <-200*mm)
 
   if 
   (     
-     x <= slope1 * z + cte1
-  && x >= slope3 * z + cte3
-  && x <= slope4 * z + cte4
-  && x >= slope2 * z + cte2    
-  && std::abs(y)<=electricPlateSpacing2/2
+       x <= slope1 * z + cte1
+    && x >= slope3 * z + cte3
+    && x <= slope4 * z + cte4
+    && x >= slope2 * z + cte2    
+    && std::abs(y)<=electricPlateSpacing2/2
   )
 
   {  

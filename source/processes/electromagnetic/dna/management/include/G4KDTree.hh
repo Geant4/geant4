@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDTree.hh 100802 2016-11-02 14:55:27Z gcosmo $
+// $Id: G4KDTree.hh 102616 2017-02-10 07:57:14Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -52,8 +52,7 @@
 #include "G4KDTreeResult.hh"
 
 class G4KDMap;
-template<typename PointT>
-  class G4KDNode;
+template<typename PointT> class G4KDNode;
 
 //__________________________________
 // Methods to act on kdnode

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AntiBarionBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4AntiBarionBuilder.hh 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,27 +32,28 @@
 // Author: 2011 J. Apostolakis
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4AntiBarionBuilder_h
 #define G4AntiBarionBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VAntiBarionBuilder.hh"
-
 #include <vector>
 
-class G4AntiBarionBuilder
+class G4AntiBarionBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4AntiBarionBuilder();
-    virtual ~G4AntiBarionBuilder();
+    virtual ~G4AntiBarionBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VAntiBarionBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4AntiProtonInelasticProcess*   theAntiProtonInelastic;

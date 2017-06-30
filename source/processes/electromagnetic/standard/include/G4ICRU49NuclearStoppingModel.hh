@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ICRU49NuclearStoppingModel.hh 100399 2016-10-20 07:38:12Z gcosmo $
+// $Id: G4ICRU49NuclearStoppingModel.hh 103955 2017-05-04 11:29:54Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -53,6 +53,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4VEmModel.hh"
+#include "G4Threading.hh"
 
 class G4ParticleChangeForLoss;
 class G4Pow;
@@ -83,9 +84,9 @@ public:
 				 const G4DynamicParticle*, 
 				 G4double, G4double) final;
 
-  inline void SetFluctuationFlag(G4bool);
-
 private:
+
+  void InitialiseArray();
 
   G4double NuclearStoppingPower(G4double kineticEnergy,
 				G4double Z1, G4double Z2,
@@ -97,17 +98,13 @@ private:
   G4ICRU49NuclearStoppingModel(const  G4ICRU49NuclearStoppingModel&) = delete;
 
   G4Pow* g4calc;
-
   G4double theZieglerFactor;
+  static G4double Z23[100];
 
-  // flags
-  G4bool   lossFlucFlag;
+#ifdef G4MULTITHREADED
+  static G4Mutex ICRU49NuclearMutex;
+#endif
 };
-
-inline void G4ICRU49NuclearStoppingModel::SetFluctuationFlag(G4bool val)
-{
-  lossFlucFlag = val;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

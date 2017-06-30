@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-May-2017 - G.Cosmo (externals-V10-03-02)
+- CLHEP: fixed shadowing compilation warnings on RotationA.cc.
+
+09-May-2017 - G.Cosmo (externals-V10-03-01)
+- Updated to CLHEP-2.3.4.4.
+- CLHEP: fix in HepRotation::axis() for proper treatment of degenerating cases.
+  Fixed compilation warnings on gcc-7.1 in Evaluator.cc.
+
+28-February-2017 - G.Cosmo (externals-V10-03-00)
+- Adapted CMake scripts to new configuration for internal/external
+  packages of CLHEP, expat and zlib.
+
 04-November-2016 - G.Cosmo (externals-V10-02-11)
 - Updated to CLHEP-2.3.4.3.
 - CLHEP: fixed array initialisation in Evaluator static method function().

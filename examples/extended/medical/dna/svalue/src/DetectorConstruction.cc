@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/svalue/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-// $Id: DetectorConstruction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -92,7 +87,6 @@ void DetectorConstruction::DefineMaterials()
   G4NistManager* man = G4NistManager::Instance();
   
   man->FindOrBuildMaterial("G4_WATER");
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -173,5 +167,3 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

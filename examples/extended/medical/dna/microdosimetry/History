@@ -9,6 +9,15 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+23-02-17 I. Hrivnacova - microdosimetry-V10-03-02
+- fixed compilation (G4UIQt.hh include)
+
+31-12-16 S. Incerti - microdosimetry-V10-03-01
+- fixed comlpilation
+
+30-12-16 S. Incerti - microdosimetry-V10-03-00
+- cleanup and reordering of processes
+
 14-10-16 G.Folger - microdosimetry-V10-02-04
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC

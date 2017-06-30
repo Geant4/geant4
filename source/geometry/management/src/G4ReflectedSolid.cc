@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc 100906 2016-11-03 09:59:32Z gcosmo $
+// $Id: G4ReflectedSolid.cc 104317 2017-05-24 13:08:38Z gcosmo $
 //
 //
 // Implementation for G4ReflectedSolid class
@@ -152,9 +152,10 @@ void G4ReflectedSolid::SetDirectTransform3D(G4Transform3D& transform)
 //
 // Get bounding box
 
-void G4ReflectedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4ReflectedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                      G4ThreeVector& pMax) const
 {
-  fPtrSolid->Extent(pMin,pMax);
+  fPtrSolid->BoundingLimits(pMin,pMax);
   G4double xmin = pMin.x(), ymin = pMin.y(), zmin = pMin.z();
   G4double xmax = pMax.x(), ymax = pMax.y(), zmax = pMax.z();
   G4double xx = fDirectTransform3D->xx();
@@ -203,7 +204,7 @@ void G4ReflectedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4ReflectedSolid::Extent()", "GeomMgt0001",
+    G4Exception("G4ReflectedSolid::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }

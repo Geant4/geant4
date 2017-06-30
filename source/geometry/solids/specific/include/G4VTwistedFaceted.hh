@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTwistedFaceted.hh 99781 2016-10-05 10:18:54Z gcosmo $
+// $Id: G4VTwistedFaceted.hh 104316 2017-05-24 13:04:23Z gcosmo $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -79,7 +79,7 @@ class G4VTwistedFaceted: public G4VSolid
                                  const G4int,
                                  const G4VPhysicalVolume*  );
  
-  virtual void Extent(G4ThreeVector &pMin, G4ThreeVector &pMax) const;
+  virtual void BoundingLimits(G4ThreeVector &pMin, G4ThreeVector &pMax) const;
 
   virtual G4bool CalculateExtent(const EAxis               pAxis,
                                  const G4VoxelLimits      &pVoxelLimit,

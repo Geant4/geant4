@@ -1,4 +1,4 @@
-$Id: History 102573 2017-02-09 08:50:23Z gcosmo $
+$Id: History 103926 2017-05-03 13:43:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,13 +20,23 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
-10 January 2017  Fred Jones (openinventor-V10-02-04)
+13 January 2017  Frederick Jones
+- G4OpenInventorXtExaminerViewer:
+  In lookAtSceneElementCB disabled default height setting for
+  ortho camera prior to moveCamera().
+  In moveCamera removed unnecessary distance calculation
+  for ortho camera and fixed incorrect camera position
+  setting to preserve the focal distance.
+  Restored focal distance setting to maintain correct
+  target point (center of rotation) for perspective camera.
+
+10 January 2017  Fred Jones (openinventor-V10-03-00)
 - G4OpenInventorXtExtendedViewer:
   Added viewer button for Wireframe/Solid switching.
   Added workaround to prevent empty second page in
   PS and PDF output (due to superimposed scene).
 
-01 June 2016  John Allison (openinventor-V10-02-03)
+01 June 2016  Fred Jones (openinventor-V10-02-03)
 - G4OpenInventorXtExtendedViewer.hh:
   Removed fPDFButton - not used.  Fixes Coverity warning.
 

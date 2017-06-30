@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EllipticalCone.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4EllipticalCone.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // Implementation of G4EllipticalCone class
 //
@@ -41,6 +41,7 @@
 
 #include "G4EllipticalCone.hh"
 
+#include "G4GeomTools.hh"
 #include "G4ClippablePolygon.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -170,7 +171,8 @@ G4EllipticalCone& G4EllipticalCone::operator = (const G4EllipticalCone& rhs)
 //
 // Get bounding box
 
-void G4EllipticalCone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4EllipticalCone::BoundingLimits(G4ThreeVector& pMin,
+                                      G4ThreeVector& pMax) const
 {
   G4double zcut   = GetZTopCut();
   G4double height = GetZMax(); 
@@ -188,7 +190,7 @@ void G4EllipticalCone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4EllipticalCone::Extent()", "GeomMgt0001",
+    G4Exception("G4EllipticalCone::BoundingLimits()", "GeomMgt0001",
                 JustWarning, message);
     DumpInfo();
   }
@@ -209,7 +211,7 @@ G4EllipticalCone::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -1023,6 +1025,42 @@ G4ThreeVector G4EllipticalCone::GetPointOnSurface() const
                        rRand1*ySemiAxis*(zheight-zTopCut)*sinphi, zTopCut);
 }
 
+/////////////////////////////////////////////////////////////////////////
+//
+// Get cubic volume
+//
+G4double G4EllipticalCone::GetCubicVolume()
+{
+  if (fCubicVolume == 0)
+  {
+    G4double x0 = xSemiAxis*zheight; // x semi axis at z=0
+    G4double y0 = ySemiAxis*zheight; // y semi axis at z=0
+    G4double v0 = CLHEP::pi*x0*y0*zheight/3.;
+    G4double kmin = (zTopCut >= zheight ) ? 0. : (zheight - zTopCut)/zheight;
+    G4double kmax = (zTopCut >= zheight ) ? 2. : (zheight + zTopCut)/zheight;
+    fCubicVolume = (kmax - kmin)*(kmax*kmax + kmax*kmin + kmin*kmin)*v0;
+  }
+  return fCubicVolume;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Get surface area
+//
+G4double G4EllipticalCone::GetSurfaceArea()
+{
+  if (fSurfaceArea == 0)
+  {
+    G4double x0 = xSemiAxis*zheight; // x semi axis at z=0
+    G4double y0 = ySemiAxis*zheight; // y semi axis at z=0
+    G4double s0 = G4GeomTools::EllipticConeLateralArea(x0,y0,zheight);
+    G4double kmin = (zTopCut >= zheight ) ? 0. : (zheight - zTopCut)/zheight;
+    G4double kmax = (zTopCut >= zheight ) ? 2. : (zheight + zTopCut)/zheight;
+    fSurfaceArea = (kmax - kmin)*(kmax + kmin)*s0 + CLHEP::pi*x0*y0*(kmin*kmin + kmax*kmax);
+  }
+  return fSurfaceArea;
+}
+
 //
 // Methods for visualisation
 //
@@ -1037,7 +1075,7 @@ G4VisExtent G4EllipticalCone::GetExtent() const
   // Define the sides of the box into which the solid instance would fit.
   //
   G4ThreeVector pmin,pmax;
-  Extent(pmin,pmax);
+  BoundingLimits(pmin,pmax);
   return G4VisExtent(pmin.x(),pmax.x(),
                      pmin.y(),pmax.y(),
                      pmin.z(),pmax.z());

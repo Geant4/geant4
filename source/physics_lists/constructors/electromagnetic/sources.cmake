@@ -11,7 +11,7 @@
 #
 # Generated on : 10/01/2013
 #
-# $Id: sources.cmake 98736 2016-08-09 10:55:12Z gcosmo $
+# $Id: sources.cmake 104020 2017-05-08 07:34:58Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -75,13 +75,19 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_option3.hh
     G4EmDNAPhysics_option4.hh
     G4EmDNAPhysics_option5.hh
+    G4EmDNAPhysics_option6.hh
     G4EmDNAPhysics_option7.hh
+    G4EmDNAPhysics_stationary.hh
+    G4EmDNAPhysics_stationary_option2.hh
+    G4EmDNAPhysics_stationary_option4.hh
+    G4EmDNAPhysics_stationary_option6.hh
     G4EmDNAPhysicsActivator.hh
     G4EmLEPTSPhysics.hh
     G4EmLivermorePhysics.hh
     G4EmLivermorePolarizedPhysics.hh
     G4EmLowEPPhysics.hh
     G4EmModelActivator.hh
+    G4EmParticleList.hh
     G4EmPenelopePhysics.hh
     G4EmStandardPhysics.hh
     G4EmStandardPhysicsGS.hh
@@ -102,13 +108,19 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     G4EmDNAPhysics_option3.cc
     G4EmDNAPhysics_option4.cc
     G4EmDNAPhysics_option5.cc
+    G4EmDNAPhysics_option6.cc
     G4EmDNAPhysics_option7.cc
+    G4EmDNAPhysics_stationary.cc
+    G4EmDNAPhysics_stationary_option2.cc
+    G4EmDNAPhysics_stationary_option4.cc
+    G4EmDNAPhysics_stationary_option6.cc
     G4EmDNAPhysicsActivator.cc
     G4EmLEPTSPhysics.cc
     G4EmLivermorePhysics.cc
     G4EmLivermorePolarizedPhysics.cc
     G4EmLowEPPhysics.cc
     G4EmModelActivator.cc
+    G4EmParticleList.cc
     G4EmPenelopePhysics.cc
     G4EmStandardPhysics.cc
     G4EmStandardPhysicsGS.cc

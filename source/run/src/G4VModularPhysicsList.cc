@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.cc 100421 2016-10-21 12:49:57Z gcosmo $
+// $Id: G4VModularPhysicsList.cc 103803 2017-04-27 14:03:05Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -35,6 +35,7 @@
 //  
 #include "G4VModularPhysicsList.hh"
 #include "G4StateManager.hh"
+#include <algorithm>
 
 // This macros change the references to fields that are now encapsulated
 // in the class G4VMPLData.
@@ -58,8 +59,7 @@ G4VModularPhysicsList::G4VModularPhysicsList()
 
 G4VModularPhysicsList::~G4VModularPhysicsList()
 {
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  for (auto itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
     delete (*itr);
   }
   G4MT_physicsVector->clear();
@@ -93,8 +93,7 @@ G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysics
     verboseLevel = right.verboseLevel;
     
     if(G4MT_physicsVector !=0) {
-      G4PhysConstVector::iterator itr;
-      for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+      for (auto itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
 	delete (*itr);
       }
       G4MT_physicsVector->clear();
@@ -108,8 +107,7 @@ G4VModularPhysicsList & G4VModularPhysicsList::operator=(const G4VModularPhysics
 void G4VModularPhysicsList::ConstructParticle()
 {
   // create particles
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  for (auto itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
     (*itr)->ConstructParticle();;
   }
 }
@@ -131,8 +129,7 @@ void G4VModularPhysicsList::ConstructProcess()
     G4AutoLock l(&constructProcessMutex); //Protection to be removed (A.Dotti)
  AddTransportation();
     
- G4PhysConstVector::iterator itr;
- for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+ for (auto itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
     (*itr)->ConstructProcess();
  }
 }
@@ -169,8 +166,8 @@ void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
   }
    
   // Check if physics with the physics_type same as one of given physics 
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  auto itr = G4MT_physicsVector->begin();
+  for (; itr!= G4MT_physicsVector->end(); ++itr) {
     if ( pType == (*itr)->GetPhysicsType()) break;
   }
   if (itr!= G4MT_physicsVector->end()) {
@@ -228,7 +225,7 @@ void G4VModularPhysicsList::ReplacePhysics(G4VPhysicsConstructor* fPhysics)
   }
 
   // Check if physics with the physics_type same as one of given physics 
-  G4PhysConstVector::iterator itr= G4MT_physicsVector->begin();
+  auto itr= G4MT_physicsVector->begin();
   for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
     if ( pType == (*itr)->GetPhysicsType()) break;
   }
@@ -266,23 +263,23 @@ void  G4VModularPhysicsList::RemovePhysics(G4int pType)
     return;
   }
 
-  for (G4PhysConstVector::iterator itr = G4MT_physicsVector->begin(); 
-                                     itr!= G4MT_physicsVector->end();) {
-    if ( pType  == (*itr)->GetPhysicsType()) {
-      G4String pName = (*itr)->GetPhysicsName();  
+  for (auto itr = G4MT_physicsVector->begin();
+      itr!= G4MT_physicsVector->end();) {
+      if ( pType  == (*itr)->GetPhysicsType()) {
+	  G4String pName = (*itr)->GetPhysicsName();
 #ifdef G4VERBOSE
-      if (verboseLevel > 0){
-	G4cout << "G4VModularPhysicsList::RemovePhysics: "
-	       <<  pName  << "  is removed" 
-	       << G4endl;
-      }
+	  if (verboseLevel > 0){
+	      G4cout << "G4VModularPhysicsList::RemovePhysics: "
+		     <<  pName  << "  is removed"
+		     << G4endl;
+	  }
 #endif
-      G4MT_physicsVector->erase(itr);
-      break;
-    } else {
-      itr++;
+	  G4MT_physicsVector->erase(itr);
+	  break;
+      } else {
+	  itr++;
+      }
     }
-  }
 }
 
 void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
@@ -296,7 +293,7 @@ void G4VModularPhysicsList::RemovePhysics(G4VPhysicsConstructor* fPhysics)
     return;
   }
 
-  for (G4PhysConstVector::iterator itr = G4MT_physicsVector->begin(); 
+  for (auto itr = G4MT_physicsVector->begin();
                                      itr!= G4MT_physicsVector->end();) {
     if ( fPhysics == (*itr)) {
       G4String pName = (*itr)->GetPhysicsName();  
@@ -325,7 +322,7 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
     return;
   }
 
-  for (G4PhysConstVector::iterator itr = G4MT_physicsVector->begin(); 
+  for (auto itr = G4MT_physicsVector->begin();
                                      itr!= G4MT_physicsVector->end();) {
     G4String pName = (*itr)->GetPhysicsName();  
     if ( name == pName) {
@@ -347,7 +344,7 @@ void G4VModularPhysicsList::RemovePhysics(const G4String& name)
 const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(G4int idx) const
 {
   G4int i;
-  G4PhysConstVector::iterator itr= G4MT_physicsVector->begin();
+  auto itr= G4MT_physicsVector->begin();
   for (i=0; i<idx && itr!= G4MT_physicsVector->end() ; ++i) ++itr;
   if (itr!= G4MT_physicsVector->end()) return (*itr);
   else return 0;
@@ -355,8 +352,8 @@ const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(G4int idx) const
 
 const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(const G4String& name) const
 {
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  auto itr = G4MT_physicsVector->begin();
+  for (; itr!= G4MT_physicsVector->end(); ++itr) {
     if ( name == (*itr)->GetPhysicsName()) break;
   }
   if (itr!= G4MT_physicsVector->end()) return (*itr);
@@ -365,8 +362,8 @@ const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(const G4String& n
 
 const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysicsWithType(G4int pType) const
 {
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  auto itr = G4MT_physicsVector->begin();
+  for (; itr!= G4MT_physicsVector->end(); ++itr) {
     if ( pType == (*itr)->GetPhysicsType()) break;
   }
   if (itr!= G4MT_physicsVector->end()) return (*itr);
@@ -377,11 +374,17 @@ const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysicsWithType(G4int pTy
 void G4VModularPhysicsList::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
-  
   // Loop over constructors
-  G4PhysConstVector::iterator itr;
-  for (itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
+  for (auto itr = G4MT_physicsVector->begin(); itr!= G4MT_physicsVector->end(); ++itr) {
     (*itr)->SetVerboseLevel(verboseLevel);
   }
 
+}
+
+void G4VModularPhysicsList::TerminateWorker()
+{
+  //See https://jira-geant4.kek.jp/browse/DEV-284
+  std::for_each( G4MT_physicsVector->begin() , G4MT_physicsVector->end() ,
+		 [](G4PhysConstVector::value_type el) { el->TerminateWorker();});
+  G4VUserPhysicsList::TerminateWorker();
 }

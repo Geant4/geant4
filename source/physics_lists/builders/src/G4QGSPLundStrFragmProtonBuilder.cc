@@ -29,6 +29,7 @@
 // ClassName:   QGSPStrFragmLundProtonBuilder
 //
 // Author: Julia Yarba, FNAL/CD (2014)
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //
 //----------------------------------------------------------------------------
@@ -71,11 +72,6 @@ Build(G4ProtonInelasticProcess * aP)
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
- }
-
-void G4QGSPLundStrFragmProtonBuilder::
-Build(G4HadronElasticProcess * )
- {
  }
 
 G4QGSPLundStrFragmProtonBuilder::~G4QGSPLundStrFragmProtonBuilder() 

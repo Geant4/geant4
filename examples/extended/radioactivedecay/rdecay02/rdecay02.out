@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -22,7 +22,7 @@ Command is ignored.
  Detector : Length = 5 cm  Tickness = 2 cm  Material = Germanium
 
  Material: G4_CESIUM_IODIDE    density:  4.510 g/cm3   RadL:   1.860 cm   Nucl.Int.Length:  39.306 cm 
-                       Imean: 553.100 eV 
+                       Imean: 553.100 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Cs (Cs)   Z = 55.0   N =   133   A = 132.905 g/mole
          --->  Isotope: Cs133   Z = 55   N = 133   A = 132.91 g/mole   abundance: 100.000 %
@@ -33,7 +33,7 @@ Command is ignored.
           ElmMassFraction:  48.85 %  ElmAbundance  50.00 % 
 
  Material: Germanium    density:  5.323 g/cm3   RadL:   2.301 cm   Nucl.Int.Length:  27.431 cm 
-                       Imean: 350.000 eV 
+                       Imean: 350.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ge (Ge)   Z = 32.0   N =    73   A = 72.610 g/mole
          --->  Isotope:  Ge70   Z = 32   N =  70   A =  69.92 g/mole   abundance: 20.840 %
@@ -52,12 +52,12 @@ Command is ignored.
  for proton :  3 to 12 GeV
  for neutron : 3 to 12 GeV
 
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
 #
 /process/list
      Transportation,                msc,              hIoni,            ionIoni
@@ -290,12 +290,12 @@ muPairProd:   for  mu-    SubType= 4
       Sampling table 21x1001 from 1 GeV to 100 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 meV   Emax=      100 TeV
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
 
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -612,10 +612,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1442.7
 Use new data files                                  1
 Use complete data files                             1
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     0
 =======================================================================
 Number of de-excitation channels                    8
 
@@ -664,51 +665,51 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.17s Real=1.18s Sys=0s
+  User=1.47s Real=1.49s Sys=0s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 811.47 keV  rms = 424.76 keV
- Mean energy deposit in detector, in time window = 18.94 keV  rms = 108.4 keV
+ Mean energy deposit in target,   in time window = 811.5 keV  rms = 423.75 keV
+ Mean energy deposit in detector, in time window = 18.74 keV  rms = 106.88 keV
 
  Process calls frequency in target :
-     RadioactiveDecay=  60798        Transportation=  50217               annihil=    157
-                compt=   4288                  conv=    161                 eIoni=  26011
-              ionIoni=  29996                   msc=   3404                  phot=   1543
+     RadioactiveDecay=  60791        Transportation=  50214               annihil=    158
+                compt=   4313                  conv=    161                 eIoni=  26030
+              ionIoni=  29995                   msc=   3445                  phot=   1538
 
 
  Process calls frequency in detector:
-       Transportation=  45844               annihil=    352                 compt=  22683
-                 conv=    354                 eIoni=  27696                   msc=   6940
-                 phot=   4357 
+       Transportation=  45816               annihil=    351                 compt=  22669
+                 conv=    354                 eIoni=  27727                   msc=   7062
+                 phot=   4398 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.123 eV 	( 41.932 eV  --> 815.8 eV )
-  Mg24[1368.672]:    9996  Emean =  170.05 eV 	( 133.97 eV  --> 431.48 eV )
-  Mg24[4122.889]:    9979  Emean =  39.088 eV 	( 36.02 meV --> 74.642 eV )
-  Mg24[5235.120]:      12  Emean =  3.6436 eV 	( 731.32 meV --> 6.8699 eV )
-           Na24:    9996  Emean =  4.9944 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     809  Emean =  28.556 eV 	( 240.28 meV --> 53.094 eV )
-  Na24[472.207]:   10000  Emean =  67.665 eV 	( 185.29 meV --> 133.78 eV )
+           Mg24:   10000  Emean =  42.197 eV 	( 41.932 eV  --> 815.8 eV )
+  Mg24[1368.672]:    9995  Emean =  170.05 eV 	( 133.97 eV  --> 431.48 eV )
+  Mg24[4122.889]:    9978  Emean =  39.119 eV 	( 36.02 meV --> 74.642 eV )
+  Mg24[5235.120]:      12  Emean =  3.7333 eV 	( 731.32 meV --> 5.6161 eV )
+           Na24:    9995  Emean =  4.9955 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     805  Emean =  28.449 eV 	( 240.28 meV --> 53.094 eV )
+  Na24[472.207]:   10000  Emean =  67.662 eV 	( 185.29 meV --> 133.78 eV )
   Na24[563.199]:       6  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =   976.8 keV	( 30.073 keV --> 4.5508 MeV)
-             e+:     161  Emean =   788.9 keV	( 1.0566 keV --> 1.6036 MeV)
-             e-:   26004  Emean =  639.74 keV	( 72.339 eV  --> 5.4715 MeV)
-          gamma:   31106  Emean =  1.5044 MeV	( 90.991 keV --> 3.8661 MeV)
+      anti_nu_e:   20000  Emean =  976.86 keV	( 30.073 keV --> 4.5508 MeV)
+             e+:     161  Emean =  805.54 keV	( 1.0566 keV --> 1.6238 MeV)
+             e-:   26027  Emean =  641.07 keV	( 72.339 eV  --> 5.4715 MeV)
+          gamma:   31100  Emean =  1.5045 MeV	( 90.991 keV --> 3.8661 MeV)
 
  List of generated particles in detector:
-             e+:     354  Emean =  796.27 keV	( 20.294 keV --> 1.6471 MeV)
-             e-:   27383  Emean =  379.92 keV	( 101.6 eV  --> 3.5685 MeV)
-          gamma:     704  Emean =  514.44 keV	( 393.5 keV --> 1.0468 MeV)
+             e+:     354  Emean =  791.26 keV	( 20.294 keV --> 1.6706 MeV)
+             e-:   27409  Emean =  378.86 keV	( 101.6 eV  --> 3.5685 MeV)
+          gamma:     702  Emean =  516.03 keV	( 393.02 keV --> 1.0493 MeV)
 
 ... write Root file : rdecay02.root - done
 ... close Root file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 846327058, 881305136
+ Current couple of seeds = 227804932, 1591453627
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

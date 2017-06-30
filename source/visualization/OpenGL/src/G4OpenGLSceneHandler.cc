@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc 102570 2017-02-09 08:40:47Z gcosmo $
+// $Id: G4OpenGLSceneHandler.cc 104288 2017-05-23 13:23:23Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -192,7 +192,7 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to numeric with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;
+        fEntitiesFlushInterval = 1;  // fallthrough
         // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
@@ -246,7 +246,7 @@ void G4OpenGLSceneHandler::ScaledFlush()
         break;
       case eachPrimitive:
         // This is equivalent to NthPrimitive with fEntitiesFlushInterval == 1.
-        fEntitiesFlushInterval = 1;
+        fEntitiesFlushInterval = 1;  // fallthrough
         // Fall through to NthPrimitive.
       case NthPrimitive:
       { // Encapsulate in scope {} brackets to satisfy Windows.
@@ -426,12 +426,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
         //filled = false;
         break;
       case G4VMarker::hashed:
-        if (!hashedWarned) {
+        if (!hashedWarned) {  // fallthrough
           G4cout << "Hashed fill style in G4OpenGLSceneHandler."
           << "\n  Not implemented.  Using G4VMarker::filled."
           << G4endl;
           hashedWarned = true;
-        }
+        }  // fallthrough
         // Maybe use
         //glPolygonStipple (fStippleMaskHashed);
         // Drop through to filled...
@@ -450,7 +450,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polymarker& polymarker)
     switch (polymarker.GetMarkerType()) {
     default:
     case G4Polymarker::dots:
-      size = 1.;
+        size = 1.;  // fallthrough
       // Drop through to circles
     case G4Polymarker::circles:
       nSides = GetNoOfSides(fpVisAttribs);

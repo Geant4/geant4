@@ -35,6 +35,7 @@
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
 #include "G4GeomTools.hh"
+#include "G4GeometryTolerance.hh"
 #include "G4AffineTransform.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4BoundingEnvelope.hh"
@@ -55,10 +56,16 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
                            const G4double zPlane[],
                            const G4double rInner[],
                            const G4double rOuter[]  )
-  : G4USolid(name, new UPolyhedra(name,phiStart, phiTotal, numSide,
-                                  numZPlanes, zPlane, rInner, rOuter))
+  : Base_t(name, phiStart, phiTotal, numSide,
+           numZPlanes, zPlane, rInner, rOuter)
 {
-  wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
+  fGenericPgon = false;
+  SetOriginalParameters();
+  wrStart = phiStart;
+  while (wrStart < 0)
+  {
+    wrStart += twopi;
+  }
   wrDelta = phiTotal;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
   {
@@ -95,10 +102,15 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
                                  G4int    numRZ,
                            const G4double r[],
                            const G4double z[]   )
-  : G4USolid(name, new UPolyhedra(name, phiStart, phiTotal, numSide,
-                                  numRZ, r, z))
+  : Base_t(name, phiStart, phiTotal, numSide, numRZ/2, r, z)
 {
-  wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
+  fGenericPgon = true;
+  SetOriginalParameters();
+  wrStart = phiStart;
+  while (wrStart < 0)
+  {
+    wrStart += twopi;
+  }
   wrDelta = phiTotal;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
   {
@@ -122,7 +134,7 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
 //                            for usage restricted to object persistency.
 //
 G4UPolyhedra::G4UPolyhedra( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -141,8 +153,10 @@ G4UPolyhedra::~G4UPolyhedra()
 // Copy constructor
 //
 G4UPolyhedra::G4UPolyhedra( const G4UPolyhedra &source )
-  : G4USolid( source )
+  : Base_t( source )
 {
+  fGenericPgon = source.fGenericPgon;
+  fOriginalParameters = source.fOriginalParameters;
   wrStart   = source.wrStart;
   wrDelta   = source.wrDelta;
   wrNumSide = source.wrNumSide;
@@ -158,7 +172,9 @@ G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra &source )
 {
   if (this == &source) return *this;
 
-  G4USolid::operator=( source );
+  Base_t::operator=( source );
+  fGenericPgon = source.fGenericPgon;
+  fOriginalParameters = source.fOriginalParameters;
   wrStart   = source.wrStart;
   wrDelta   = source.wrDelta;
   wrNumSide = source.wrNumSide;
@@ -210,7 +226,7 @@ G4bool G4UPolyhedra::IsOpen() const
 }
 G4bool G4UPolyhedra::IsGeneric() const
 {
-  return GetShape()->IsGeneric();
+  return fGenericPgon;
 }
 G4int G4UPolyhedra::GetNumRZCorner() const
 {
@@ -225,61 +241,81 @@ G4PolyhedraSideRZ G4UPolyhedra::GetCorner(G4int index) const
 }
 G4PolyhedraHistorical* G4UPolyhedra::GetOriginalParameters() const
 {
-  UPolyhedraHistorical* pars = GetShape()->GetOriginalParameters();
-  G4PolyhedraHistorical* pdata = new G4PolyhedraHistorical(pars->fNumZPlanes);
-  pdata->Start_angle = pars->fStartAngle;
-  pdata->Opening_angle = pars->fOpeningAngle;
-  pdata->numSide = pars->fNumSide;
-  for (G4int i=0; i<pars->fNumZPlanes; ++i)
+  return new G4PolyhedraHistorical(fOriginalParameters);
+}
+void G4UPolyhedra::SetOriginalParameters()
+{
+  G4int numPlanes = GetZSegmentCount() + 1;
+  delete [] fOriginalParameters.Z_values;
+  delete [] fOriginalParameters.Rmin;
+  delete [] fOriginalParameters.Rmax;
+  fOriginalParameters.Z_values = new G4double[numPlanes];
+  fOriginalParameters.Rmin = new G4double[numPlanes];
+  fOriginalParameters.Rmax = new G4double[numPlanes];
+
+  for (G4int j=0; j<numPlanes; ++j)
   {
-    pdata->Z_values[i] = pars->fZValues[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
+    fOriginalParameters.Z_values[j] = GetZPlanes()[j];
+    fOriginalParameters.Rmax[j]     = GetRMax()[j];
+    fOriginalParameters.Rmin[j]     = GetRMin()[j];
   }
-  return pdata;
+
+  fOriginalParameters.Start_angle   = GetPhiStart();
+  fOriginalParameters.Opening_angle = GetPhiDelta();
+  fOriginalParameters.Num_z_planes  = numPlanes;
+  fOriginalParameters.numSide       = GetSideCount();
 }
 void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
 {
-  UPolyhedraHistorical* pdata = GetShape()->GetOriginalParameters();
-  pdata->fStartAngle = pars->Start_angle;
-  pdata->fOpeningAngle = pars->Opening_angle;
-  pdata->fNumSide = pars->numSide;
-  pdata->fNumZPlanes = pars->Num_z_planes;
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
-  {
-    pdata->fZValues[i] = pars->Z_values[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
+  fOriginalParameters = *pars;
   fRebuildPolyhedron = true;
+  Reset();
+}
 
-  wrStart = pdata->fStartAngle; while (wrStart < 0) wrStart += twopi;
-  wrDelta = pdata->fOpeningAngle;
+G4bool G4UPolyhedra::Reset()
+{
+  if (fGenericPgon)
+  {
+    std::ostringstream message;
+    message << "Solid " << GetName() << " built using generic construct."
+            << G4endl << "Not applicable to the generic construct !";
+    G4Exception("G4UPolyhedra::Reset()", "GeomSolids1001",
+                JustWarning, message, "Parameters NOT resetted.");
+    return true;  // error code set
+  }
+
+  //
+  // Rebuild polyhedra based on original parameters
+  //
+  wrStart = fOriginalParameters.Start_angle;
+  while (wrStart < 0)
+  {
+    wrStart += twopi;
+  }
+  wrDelta = fOriginalParameters.Opening_angle;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
   {
     wrDelta = twopi;
   }
-  wrNumSide = pdata->fNumSide;
+  wrNumSide = fOriginalParameters.numSide;
   G4double convertRad = 1./std::cos(0.5*wrDelta/wrNumSide);
   rzcorners.resize(0);
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
+  for (G4int i=0; i<fOriginalParameters.Num_z_planes; ++i)
   {
-    G4double z = pdata->fZValues[i];
-    G4double r = pdata->Rmax[i]*convertRad;
+    G4double z = fOriginalParameters.Z_values[i];
+    G4double r = fOriginalParameters.Rmax[i]*convertRad;
     rzcorners.push_back(G4TwoVector(r,z));
   }
-  for (G4int i=pdata->fNumZPlanes-1; i>=0; --i)
+  for (G4int i=fOriginalParameters.Num_z_planes-1; i>=0; --i)
   {
-    G4double z = pdata->fZValues[i];
-    G4double r = pdata->Rmin[i]*convertRad;
+    G4double z = fOriginalParameters.Z_values[i];
+    G4double r = fOriginalParameters.Rmin[i]*convertRad;
     rzcorners.push_back(G4TwoVector(r,z));
   }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
-}
-G4bool G4UPolyhedra::Reset()
-{
-  return GetShape()->Reset();
+
+  return false;  // error code unset
 }
 
 
@@ -310,7 +346,8 @@ G4VSolid* G4UPolyhedra::Clone() const
 //
 // Get bounding box
 
-void G4UPolyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UPolyhedra::BoundingLimits(G4ThreeVector& pMin,
+                                  G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
   static G4bool checkPhi  = true;
@@ -372,7 +409,8 @@ void G4UPolyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UPolyhedra::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UPolyhedra::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -380,8 +418,8 @@ void G4UPolyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
@@ -394,7 +432,8 @@ void G4UPolyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UPolyhedra::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UPolyhedra::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -403,23 +442,25 @@ void G4UPolyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkPhi)
   {
-    if (GetStartPhi() != GetShape()->GetStartPhi() ||
-	GetEndPhi()   != GetShape()->GetEndPhi()   ||
-        IsOpen()      != GetShape()->IsOpen()      ||
-	GetNumSide()  != GetShape()->GetNumSide())
+    if (GetStartPhi() != GetPhiStart() ||
+	GetEndPhi()   != GetPhiEnd()   ||
+	GetNumSide()  != GetSideCount() ||
+        IsOpen()      != (Base_t::GetPhiDelta() < twopi))
     {
       std::ostringstream message;
       message << "Inconsistency in Phi angles or # of sides for solid: "
               << GetName() << " !"
               << "\nPhi start  : wrapper = " << GetStartPhi()
-              << " solid = " <<     GetShape()->GetStartPhi()
+              << " solid = " <<     GetPhiStart()
               << "\nPhi end    : wrapper = " << GetEndPhi()
-              << " solid = " <<     GetShape()->GetEndPhi()
-              << "\nPhi is open: wrapper = " << (IsOpen() ? "true" : "false")
-              << " solid = " <<     (GetShape()->IsOpen() ? "true" : "false")
+              << " solid = " <<     GetPhiEnd()
               << "\nPhi # sides: wrapper = " << GetNumSide()
-              << " solid = " <<     GetShape()->GetNumSide();
-      G4Exception("G4UPolyhedra::Extent()", "GeomMgt0001", JustWarning, message);
+              << " solid = " <<     GetSideCount()
+              << "\nPhi is open: wrapper = " << (IsOpen() ? "true" : "false")
+              << " solid = "
+              << ((Base_t::GetPhiDelta() < twopi) ? "true" : "false");
+      G4Exception("G4UPolyhedra::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkPhi = false;
     }
   }
@@ -440,7 +481,7 @@ G4UPolyhedra::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -552,17 +593,13 @@ G4Polyhedron* G4UPolyhedra::CreatePolyhedron() const
 {
   if (!IsGeneric())
   {
-    G4PolyhedraHistorical* original_parameters = GetOriginalParameters();
-    G4PolyhedronPgon*
-      polyhedron = new G4PolyhedronPgon( GetOriginalParameters()->Start_angle,
-                                 GetOriginalParameters()->Opening_angle,
-                                 GetOriginalParameters()->numSide,
-                                 GetOriginalParameters()->Num_z_planes,
-                                 GetOriginalParameters()->Z_values,
-                                 GetOriginalParameters()->Rmin,
-                                 GetOriginalParameters()->Rmax);
-    delete original_parameters;  // delete local copy 
-    return polyhedron;
+    return new G4PolyhedronPgon( fOriginalParameters.Start_angle,
+                                 fOriginalParameters.Opening_angle,
+                                 fOriginalParameters.numSide,
+                                 fOriginalParameters.Num_z_planes,
+                                 fOriginalParameters.Z_values,
+                                 fOriginalParameters.Rmin,
+                                 fOriginalParameters.Rmax);
   }
   else
   {

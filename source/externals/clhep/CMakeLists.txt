@@ -231,6 +231,17 @@ set(G4clhep_SOURCES
 include(Geant4MacroLibraryTargets)
 GEANT4_LIBRARY_TARGET(NAME G4clhep SOURCES ${G4clhep_SOURCES} ${G4clhep_HEADERS})
 
+# Interface usage requirements (build time clients only)
+foreach(__g4clhep_target G4clhep G4clhep-static)
+  if(TARGET ${__g4clhep_target})
+    target_include_directories(${__g4clhep_target}
+      PUBLIC
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+      )
+  endif()
+endforeach()
+
+
 #----------------------------------------------------------------------------
 # Ensure the header directory gets added to the list of ones to export
 #

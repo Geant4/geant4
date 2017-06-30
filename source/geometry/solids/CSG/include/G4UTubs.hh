@@ -35,7 +35,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UTubs to make use of UTubs from USolids module.
+//   Wrapper class for G4Tubs to make use of VecGeom Tube.
 
 // History:
 // 30.10.13 G.Cosmo, CERN/PH
@@ -44,16 +44,19 @@
 #ifndef G4UTUBS_HH
 #define G4UTUBS_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTubs.hh"
+#include <volumes/UnplacedTube.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTubs : public G4USolid
+class G4UTubs : public G4UAdapter<vecgeom::GenericUnplacedTube>
 {
+  using Shape_t = vecgeom::GenericUnplacedTube;
+  using Base_t = G4UAdapter<vecgeom::GenericUnplacedTube>;
+
   public:  // with description
 
     G4UTubs( const G4String& pName,
@@ -71,8 +74,6 @@ class G4UTubs : public G4USolid
                             const G4VPhysicalVolume* pRep );
 
     G4VSolid* Clone() const;
-
-    inline UTubs* GetShape() const;
 
     G4double GetInnerRadius   () const;
     G4double GetOuterRadius   () const;
@@ -92,7 +93,7 @@ class G4UTubs : public G4USolid
     
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -117,11 +118,6 @@ class G4UTubs : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTubs* G4UTubs::GetShape() const
-{
-  return (UTubs*) fShape;
-}
 
 inline G4GeometryType G4UTubs::GetEntityType() const
 {

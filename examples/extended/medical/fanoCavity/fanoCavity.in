@@ -1,10 +1,12 @@
-# $Id: fanoCavity.in 93258 2015-10-14 08:34:50Z gcosmo $
+# $Id: fanoCavity.in 103180 2017-03-21 10:33:40Z gcosmo $
 #
 /control/verbose 2
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /testem/phys/addPhysics standard_opt3
+#
+/process/eLoss/StepFunction 0.2 10 um
 #
 /run/initialize
 #

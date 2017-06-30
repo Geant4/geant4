@@ -42,7 +42,7 @@
 #include "HadrontherapyModulator.hh"
 #include "PassiveProtonBeamLine.hh"
 #include "PassiveProtonBeamLineMessenger.hh"
-//#include "FaradayCup.hh"
+
 
 //G4bool PassiveProtonBeamLine::doCalculation = false;
 /////////////////////////////////////////////////////////////////////////////
@@ -57,8 +57,7 @@ physiHoleFirstCollimatorModulatorBox(0), physiSecondCollimatorModulatorBox(0),
 physiHoleSecondCollimatorModulatorBox(0), physiMOPIMotherVolume(0),
 physiFirstMonitorLayer1(0), physiFirstMonitorLayer2(0), physiFirstMonitorLayer3(0),
 physiFirstMonitorLayer4(0), physiSecondMonitorLayer1(0), physiSecondMonitorLayer2(0),
-physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0), physiNozzleSupport(0), //physiHoleNozzleSupport(0),
-physiBrassTube(0), solidFinalCollimator(0), physiFinalCollimator(0)
+physiSecondMonitorLayer3(0), physiSecondMonitorLayer4(0), physiNozzleSupport(0), physiBrassTube(0), solidFinalCollimator(0), physiFinalCollimator(0)
 {
     // Messenger to change parameters of the passiveProtonBeamLine geometry
     passiveMessenger = new PassiveProtonBeamLineMessenger(this);
@@ -70,22 +69,14 @@ physiBrassTube(0), solidFinalCollimator(0), physiFinalCollimator(0)
     G4cout << "Going to register Parallel world...";
     RegisterParallelWorld(RO);
     G4cout << "... done" << G4endl;
-    //***************************** PW ***************************************
-    /* // For the Faraday Cup activation
-    if (name)
-    {
-        doCalculation = true;
-	}*/
+
 }
 /////////////////////////////////////////////////////////////////////////////
 PassiveProtonBeamLine::~PassiveProtonBeamLine()
 {
     delete passiveMessenger;
     delete hadrontherapyDetectorConstruction;
-    /* if (!pFaradayCup)
-    {
-        delete pFaradayCup;
-	}*/
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -111,11 +102,7 @@ G4VPhysicalVolume* PassiveProtonBeamLine::Construct()
     hadrontherapyDetectorConstruction->InitializeDetectorROGeometry(RO,hadrontherapyDetectorConstruction->GetDetectorToWorldPosition());
     
     //***************************** PW ***************************************
-    /*  if (doCalculation)
-    {
-        pFaradayCup = new FaradayCup(physicalTreatmentRoom);
-        G4cout << "Faraday Cup detector has been activated" << G4endl;
-	}*/
+
     return physicalTreatmentRoom;
 }
 
@@ -604,7 +591,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
     const G4double beamLineSupportYPosition = -230. *mm;
     const G4double beamLineSupportZPosition = 0.*mm;
     
-    G4Box* beamLineSupport = new G4Box("BeamLineSupport",
+  G4Box* beamLineSupport = new G4Box("BeamLineSupport",
                                        beamLineSupportXSize,
                                        beamLineSupportYSize,
                                        beamLineSupportZSize);
@@ -622,7 +609,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
     // Visualisation attributes of the beam line support
     
     logicBeamLineSupport -> SetVisAttributes(gray);
-    
+
     //---------------------------------//
     //  Beam line cover 1 (left panel) //
     //---------------------------------//
@@ -634,7 +621,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
     const G4double beamLineCoverYPosition = -1000.*mm;
     const G4double beamLineCoverZPosition = 600.*mm;
     
-    G4Box* beamLineCover = new G4Box("BeamLineCover",
+   G4Box* beamLineCover = new G4Box("BeamLineCover",
                                      beamLineCoverXSize,
                                      beamLineCoverYSize,
                                      beamLineCoverZSize);
@@ -666,12 +653,13 @@ void PassiveProtonBeamLine::HadrontherapyBeamLineSupport()
                                             0);
     
     logicBeamLineCover -> SetVisAttributes(blue);
-}
+
+    }
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
 {
-    // ------------//
+   // ------------//
     // VACUUM PIPE //
     //-------------//
     //
@@ -704,6 +692,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
     // THE KAPTON WINDOWS //
     //--------------------//
     //It prmits the passage of the beam from vacuum to air
+ 
     G4Box* solidKaptonWindow = new G4Box("KaptonWindow",
                                          kaptonWindowXSize,
                                          kaptonWindowYSize,
@@ -779,6 +768,8 @@ void PassiveProtonBeamLine::HadrontherapyBeamScatteringFoils()
                                                   0);
     
     logicSecondScatteringFoil -> SetVisAttributes(skyBlue);
+ 
+ 
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyRangeShifter()
@@ -788,6 +779,8 @@ void PassiveProtonBeamLine::HadrontherapyRangeShifter()
     // -----------------------------//
     // It is a slab of PMMA acting as energy degreader of
     // primary beam
+ 
+    
     solidRangeShifterBox = new G4Box("RangeShifterBox",
                                      rangeShifterXSize,
                                      rangeShifterYSize,
@@ -806,10 +799,14 @@ void PassiveProtonBeamLine::HadrontherapyRangeShifter()
     
     
     logicRangeShifterBox -> SetVisAttributes(yellow);
+     
+    
 }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
 {
+    
+    
     // -----------------//
     // FIRST COLLIMATOR //
     // -----------------//
@@ -821,6 +818,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
     const G4double firstCollimatorXPosition = -2673.00*mm;
     const G4double firstCollimatorYPosition = 0.*mm;
     const G4double firstCollimatorZPosition = 0.*mm;
+    
     
     G4Box* solidFirstCollimator = new G4Box("FirstCollimator",
                                             firstCollimatorXSize,
@@ -914,7 +912,7 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
     const G4double firstCollimatorModulatorYPosition = 0.*mm;
     const G4double firstCollimatorModulatorZPosition = 0.*mm;
     
-    G4Box* solidFirstCollimatorModulatorBox = new G4Box("FirstCollimatorModulatorBox",
+   G4Box* solidFirstCollimatorModulatorBox = new G4Box("FirstCollimatorModulatorBox",
                                                         firstCollimatorModulatorXSize,
                                                         firstCollimatorModulatorYSize,
                                                         firstCollimatorModulatorZSize);
@@ -1013,7 +1011,10 @@ void PassiveProtonBeamLine::HadrontherapyBeamCollimators()
     logicFirstCollimator -> SetVisAttributes(yellow);
     logicFirstCollimatorModulatorBox -> SetVisAttributes(blue);
     logicSecondCollimatorModulatorBox -> SetVisAttributes(blue);
-}
+
+
+  
+  }
 
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
@@ -1036,7 +1037,9 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
     const G4double monitor1XPosition = -1262.47498 *mm;
     const G4double monitor2XPosition = -4.500011*mm;
     const G4double monitor4XPosition = 4.500011*mm;
+  
     
+
     G4Box* solidFirstMonitorLayer1 = new G4Box("FirstMonitorLayer1",
                                                monitor1XSize,
                                                monitorYSize,
@@ -1117,10 +1120,13 @@ void PassiveProtonBeamLine::HadrontherapyBeamMonitoring()
     
     logicFirstMonitorLayer3 -> SetVisAttributes(white);
     
-}
+
+    
+     }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 {
+
     // --------------------------------//
     //        THE MOPI DETECTOR        //
     // --------------------------------//
@@ -1292,7 +1298,8 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
     logicMOPIFirstAirGap -> SetVisAttributes(darkGreen);
     logicMOPISecondAirGap -> SetVisAttributes(darkGreen);
     
-}
+    
+    }
 /////////////////////////////////////////////////////////////////////////////
 void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
 {
@@ -1370,7 +1377,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
     
     logicHoleNozzleSupport -> SetVisAttributes(darkOrange3);
     
-    
     // ---------------------------------//
     //     BRASS TUBE 1 (phantom side)    //
     // ---------------------------------//
@@ -1405,7 +1411,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
                                        0);
     
     logicBrassTube -> SetVisAttributes(darkOrange3);
-     
     
     // ----------------------------------------------//
     //     BRASS TUBE 2 (inside the PMMA support)    //
@@ -1416,7 +1421,6 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
     const G4double startAngleBrassTube2 = 0.*deg;
     const G4double spanningAngleBrassTube2 = 360.*deg;
     
-    //  const G4double brassTube2XPosition = -227.5 *mm;
     
     G4Tubs* solidBrassTube2 = new G4Tubs("BrassTube2",
                                          innerRadiusBrassTube2,
@@ -1429,19 +1433,16 @@ void PassiveProtonBeamLine::HadrontherapyBeamNozzle()
                                                            brassTube2Material,
                                                            "BrassTube2",
                                                            0, 0, 0);
-    G4bool checkOverlaps = true;
-
-    new G4PVPlacement(0,
-                      G4ThreeVector(),
-                      logicBrassTube2,
-                      "BrassTube2",
-                      logicHoleNozzleSupport,
-                      false,
-                      0,
-                      checkOverlaps);
+    
+    physiBrassTube2 = new G4PVPlacement(0,
+                                        G4ThreeVector(0,0.,0.),
+                                        logicBrassTube2,
+                                        "BrassTube2",
+                                        logicHoleNozzleSupport,
+                                        false,
+                                        0);
     
     logicBrassTube2 -> SetVisAttributes(darkOrange3);
-    
     
     
     // --------------------------------------//

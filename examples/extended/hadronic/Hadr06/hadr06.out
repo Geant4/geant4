@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,7 +23,7 @@
  The Absorber is 30 cm  of Li7
  
  Material:      Li7    density:  1.850 g/cm3   RadL:  45.229 cm   Nucl.Int.Length:  36.218 cm 
-                       Imean:  40.000 eV 
+                       Imean:  40.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Li7 (Li7)   Z =  3.0   N =     7   A =  7.016 g/mole
          --->  Isotope:   Li7   Z =  3   N =   7   A =   7.02 g/mole   abundance: 100.000 %
@@ -36,15 +36,15 @@
  for proton :  3 to 12 GeV
  for neutron : 3 to 12 GeV
 
-/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
-@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+/cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+@@@ G4ParticleHPInelasticData instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
 ### ===  Auger cascade flag: 1
@@ -72,17 +72,17 @@ hBertiniCaptureAtRest,muMinusCaptureAtRest,      photonNuclear,                m
 /run/printProgress 1000
 #
 /run/beamOn 10000
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
-@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Inelastic
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/geant4-10-03-patches_branch/build/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/6_nat_Carbon
+@@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/6_nat_Carbon
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -387,10 +387,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1442.7
 Use new data files                                  1
 Use complete data files                             1
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     0
 =======================================================================
 Number of de-excitation channels                    8
 
@@ -431,45 +432,45 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=10.47s Real=10.5s Sys=0s
+  User=12.03s Real=12.1s Sys=0.01s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-     RadioactiveDecay= 198614        Transportation=  72653               annihil=    204
-                compt= 399871                  conv=    203            dInelastic=      1
-                eIoni= 409335                 hIoni=    461            hadElastic= 182227
-         ionInelastic=      2               ionIoni= 198971                   msc=    186
-             nCapture=     29      neutronInelastic=  16519                  phot=  20620
-
+                Decay=      1      RadioactiveDecay= 196874        Transportation=  72032
+              annihil=    192                 compt= 396781                  conv=    190
+           dInelastic=      1                 eIoni= 406412                 hIoni=    466
+           hadElastic= 180553               ionIoni= 197210                   msc=    204
+             nCapture=     24      neutronInelastic=  16425                  phot=  20617
+        photonNuclear=      1 
 
  List of generated particles:
-  Be8[3030.000]:      29  Emean =  6.2856 keV	( 1.0586 keV --> 12.085 keV)
-            C13:       1  Emean =  622.09 keV	( 622.09 keV --> 622.09 keV)
-            He6:     136  Emean =  2.1535 MeV	( 64.098 keV --> 4.9245 MeV)
-            Li6:     728  Emean =  1.6108 MeV	( 29.436 eV  --> 6.6297 MeV)
-            Li7:  197692  Emean =  328.92 keV	( 0.17008 meV --> 6.1909 MeV)
-            Li8:      29  Emean =  45.034 keV	( 75.3 eV  --> 1.2892 MeV)
-          alpha:     386  Emean =  1.2644 MeV	( 49.515 keV --> 11.58 MeV)
-      anti_nu_e:     165  Emean =  2.7919 MeV	( 460.79 keV --> 10.579 MeV)
-       deuteron:     462  Emean =  4.4899 MeV	( 104.05 keV --> 23.591 MeV)
-             e+:     203  Emean =  1.4349 MeV	( 30.978 keV --> 3.8253 MeV)
-             e-:  409314  Emean =  86.932 keV	( 100.01 eV  --> 10.573 MeV)
-          gamma:   46053  Emean =  1.1983 MeV	( 1.0001 keV --> 10.995 MeV)
-        neutron:   17303  Emean =  3.3595 MeV	( 2.1118 keV --> 13.639 MeV)
+  Be8[3030.000]:      24  Emean =  6.7973 keV	( 1.0586 keV --> 12.085 keV)
+            He6:     157  Emean =  2.2365 MeV	( 84.269 keV --> 4.9248 MeV)
+            Li6:     752  Emean =  1.5818 MeV	( 29.436 eV  --> 6.6297 MeV)
+            Li7:  195917  Emean =  331.47 keV	( 0.84674 meV --> 6.1982 MeV)
+            Li8:      24  Emean =  681.83 eV 	( 75.3 eV  --> 3.5123 keV)
+          alpha:     360  Emean =  1.2205 MeV	( 91.342 keV --> 3.8631 MeV)
+      anti_nu_e:     181  Emean =  2.5164 MeV	( 460.79 keV --> 11.558 MeV)
+       deuteron:     466  Emean =  4.3596 MeV	( 104.05 keV --> 23.591 MeV)
+             e+:     190  Emean =  1.4267 MeV	( 25.979 keV --> 3.9762 MeV)
+             e-:  406391  Emean =  87.584 keV	( 100.01 eV  --> 10.573 MeV)
+          gamma:   45752  Emean =  1.2038 MeV	( 1.0001 keV --> 10.415 MeV)
+        neutron:   17173  Emean =  3.3761 MeV	( 3.4393 keV --> 13.63 MeV)
+         triton:       1  Emean =   1.293 MeV	( 1.293 MeV --> 1.293 MeV)
 
- Mean energy deposit per event = 10.471 MeV  rms = 3.4442 MeV
- Mean energy flow per event    = 3.0464 MeV  rms = 3.2184 MeV
+ Mean energy deposit per event = 10.464 MeV  rms = 3.4286 MeV
+ Mean energy flow per event    = 3.0346 MeV  rms = 3.2299 MeV
 
  List of particles emerging from the absorber :
-      anti_nu_e:     165  Emean =  2.7919 MeV	( 460.79 keV --> 10.579 MeV) 	Eflow/event = 46.066 keV
-             e-:     168  Emean =   1.235 MeV	( 15.602 keV --> 4.9829 MeV) 	Eflow/event = 20.747 keV
-          gamma:   25230  Emean =   772.6 keV	( 4.7878 keV --> 10.995 MeV) 	Eflow/event = 1.9493 MeV
-        neutron:   10755  Emean =  957.96 keV	( 3.2303 meV --> 14.1 MeV) 	Eflow/event = 1.0303 MeV
+      anti_nu_e:     181  Emean =  2.5164 MeV	( 460.79 keV --> 11.558 MeV) 	Eflow/event = 45.548 keV
+             e-:     155  Emean =  1.0885 MeV	( 15.602 keV --> 3.9814 MeV) 	Eflow/event = 16.872 keV
+          gamma:   24944  Emean =  778.37 keV	( 1.8578 keV --> 5.8833 MeV) 	Eflow/event = 1.9416 MeV
+        neutron:   10724  Emean =  961.02 keV	( 6.3259 meV --> 14.1 MeV) 	Eflow/event = 1.0306 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 310869879, 831874429
+ Current couple of seeds = 1490445430, 863021880
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

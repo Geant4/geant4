@@ -1,4 +1,4 @@
-$Id: History 101687 2016-11-21 09:43:18Z gcosmo $
+$Id: History 104834 2017-06-21 08:42:45Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 June 2017 Witek Pokorski (gdml-V10-03-03)
+- added optical surface properties to the schema
+
+12 June 2017 Gabriele Cosmo (gdml-V10-03-02)
+- Added ability to export limited number of levels in the geometry hierarchy,
+  by specifying this through the G4GDMLParser::SetMaxExportLevel(G4int) method.
+
+7 April 2017 Gabriele Cosmo (gdml-V10-03-01)
+- Enabled import/export of G4MultiUnion as a native type, no longer bound
+  to USolids module only. Requires co-working tags in geometry.
+
+23 March 2017 Witek Pokorski (gdml-V10-03-00)
+- Fixed schema for replicas along angular axis.
+  Changing the schema to GDML version 3.1.5.
+  Addressing problem report #1917.
+- Added possibility to specify material properties tables for optical
+  surfaces (Wouter Deconinck). Addressing enhancement request #1947.
+
 18 November 2016 Witek Pokorski (gdml-V10-02-09)
-- Fixing check for correctness of the units for replicas in case of angular axis.
+- Fixing check for correctness of the units for replicas in case of angular
+  axis.
 
 13 September Gabriele Cosmo (gdml-V10-02-08)
 - Replaced obsolete call to 'Invisible' with 'G4VisAttributes::GetInvisible()'

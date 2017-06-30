@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,19 +82,19 @@ MotherVolume: physicalWorld
 sensitivity : 0
 Construct Head with mother physicalWorld
 Checking overlaps for volume physicalHead ... OK! 
-Volume of Head = 4657.81 cm^3
+Volume of Head = 4657.42 cm^3
 Material of Head = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Head = 4596.79 g
+Mass of Head = 4596.41 g
 MotherVolume: physicalHead
 sensitivity : 0
 Construct Skull with mother volume physicalHead
 Checking overlaps for volume physicalSkull ... OK! 
 Skull created !!!!!!
-Volume of Skull = 847.905 cm^3
+Volume of Skull = 847.131 cm^3
 Material of Skull = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Skull = 1260.16 g
+Mass of Skull = 1259.01 g
 Construct Brain with mother physicalHead
 Checking overlaps for volume physicalBrain ... OK! 
 Volume of Brain = 1470.27 cm^3
@@ -106,10 +106,10 @@ sensitivity : 0
 Construct Trunk with mother volume physicalWorld
 Checking overlaps for volume physicalTrunk ... OK! 
 Trunk created !!!!!!
-Volume of Trunk = 43978.7 cm^3
+Volume of Trunk = 43982.3 cm^3
 Material of Trunk = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Trunk = 43402.6 g
+Mass of Trunk = 43406.1 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct LeftLeg with mother volume physicalWorld
@@ -133,19 +133,19 @@ sensitivity : 0
 Construct LeftArmBone with mother physicalTrunk
 Checking overlaps for volume physicalLeftArmBone ... OK! 
 LeftArmBone created !!!!!!
-Volume of LeftArmBone = 819.252 cm^3
+Volume of LeftArmBone = 819.39 cm^3
 Material of LeftArmBone = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of LeftArmBone = 1217.57 g
+Mass of LeftArmBone = 1217.78 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightArmBone with mother volume physicalTrunk
 Checking overlaps for volume physicalRightArmBone ... OK! 
 RightArmBone created !!!!!!
-Volume of RightArmBone = 819.744 cm^3
+Volume of RightArmBone = 819.39 cm^3
 Material of RightArmBone = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RightArmBone = 1218.3 g
+Mass of RightArmBone = 1217.78 g
 MotherVolume: physicalLeftLeg
 sensitivity : 0
 Construct LeftLegBone with mother volume physicalLeftLeg
@@ -169,28 +169,28 @@ sensitivity : 0
 Construct UpperSpine with mother volume physicalHead
 Checking overlaps for volume physicalUpperSpine ... OK! 
 UpperSpine created !!!!!!
-Volume of UpperSpine = 126.468 cm^3
+Volume of UpperSpine = 126.288 cm^3
 Material of UpperSpine = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of UpperSpine = 187.957 g
+Mass of UpperSpine = 187.689 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct LeftScapula with mother volume physicalTrunk
 Checking overlaps for volume physicalLeftScapula ... OK! 
 LeftScapula created !!!!!!
-Volume of LeftScapula = 100.858 cm^3
+Volume of LeftScapula = 102.727 cm^3
 Material of LeftScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of LeftScapula = 149.896 g
+Mass of LeftScapula = 152.673 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct RightScapula with mother volume physicalTrunk
 Checking overlaps for volume physicalRightScapula ... OK! 
 RightScapula created !!!!!!
-Volume of RightScapula = 103.399 cm^3
+Volume of RightScapula = 100.712 cm^3
 Material of RightScapula = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RightScapula = 153.672 g
+Mass of RightScapula = 149.678 g
 Construct LeftAdrenal with mother physicalTrunk
 Checking overlaps for volume physicalLeftAdrenal ... OK! 
 Left LeftAdrenal created !!!!!!
@@ -233,10 +233,10 @@ Mass of RightClavicle = 20.3099 g
 Construct SmallIntestine with mother volume physicalTrunk
 Checking overlaps for volume physicalSmallIntestine ... OK! 
 SmallIntestine created !!!!!!
-Volume of SmallIntestine = 1020.24 cm^3
+Volume of SmallIntestine = 1018.5 cm^3
 Material of SmallIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of SmallIntestine = 1006.87 g
+Mass of SmallIntestine = 1005.16 g
 Construct RibCage with mother volume physicalTrunk
 Checking overlaps for volume physicalRibCage ... OK! 
 Checking overlaps for volume physicalRib ... OK! 
@@ -252,26 +252,26 @@ Checking overlaps for volume physicalRib ... OK!
 Checking overlaps for volume physicalRib ... OK! 
 Checking overlaps for volume physicalRib ... OK! 
 RibCage created !!!!!!
-Volume of RibCage = 693.461 cm^3
+Volume of RibCage = 691.401 cm^3
 Material of RibCage = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of RibCage = 1030.62 g
+Mass of RibCage = 1027.56 g
 MotherVolume: physicalTrunk
 sensitivity : 0
 Construct MiddleLowerSpine with mother volume physicalTrunk
 Checking overlaps for volume physicalMiddleLowerSpine ... OK! 
 MiddleLowerSpine created !!!!!!
-Volume of MiddleLowerSpine = 753.971 cm^3
+Volume of MiddleLowerSpine = 753.982 cm^3
 Material of MiddleLowerSpine = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of MiddleLowerSpine = 1120.55 g
+Mass of MiddleLowerSpine = 1120.57 g
 Construct Pelvis with mother volume physicalTrunk
 Checking overlaps for volume physicalPelvis ... OK! 
 Pelvis created !!!!!!
-Volume of Pelvis = 608.745 cm^3
+Volume of Pelvis = 605.767 cm^3
 Material of Pelvis = skeleton
 Density of Material = 1.4862 g/cm^3
-Mass of Pelvis = 904.717 g
+Mass of Pelvis = 900.292 g
 Construct Stomach with mother volume physicalTrunk
 Checking overlaps for volume physicalStomach ... OK! 
 Stomach created !!!!!!
@@ -282,17 +282,17 @@ Mass of Stomach = 396.856 g
 Construct UpperLargeIntestine with mother volume physicalTrunk
 Checking overlaps for volume physicalUpperLargeIntestine ... OK! 
 UpperLargeIntestine created !!!!!!
-Volume of UpperLargeIntestine = 433.819 cm^3
+Volume of UpperLargeIntestine = 434.363 cm^3
 Material of UpperLargeIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of UpperLargeIntestine = 428.136 g
+Mass of UpperLargeIntestine = 428.673 g
 Construct LowerLargeIntestine with mother volume physicalTrunk
 Checking overlaps for volume physicalLowerLargeIntestine ... OK! 
 LowerLargeIntestine created !!!!!!
-Volume of LowerLargeIntestine = 344.493 cm^3
+Volume of LowerLargeIntestine = 343.654 cm^3
 Material of LowerLargeIntestine = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of LowerLargeIntestine = 339.98 g
+Mass of LowerLargeIntestine = 339.152 g
 Construct Spleen with mother volume physicalTrunk
 Checking overlaps for volume physicalSpleen ... OK! 
 Spleen created !!!!!!
@@ -303,40 +303,40 @@ Mass of Spleen = 173.625 g
 Construct Pancreas with mother volume physicalTrunk
 Checking overlaps for volume physicalPancreas ... OK! 
 Pancreas created !!!!!!
-Volume of Pancreas = 60.9318 cm^3
+Volume of Pancreas = 61.0052 cm^3
 Material of Pancreas = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of Pancreas = 60.1336 g
+Mass of Pancreas = 60.206 g
 Construct LeftKidney with mother volume physicalTrunk
 Checking overlaps for volume physicalLeftKidney ... OK! 
 Left LeftKidney created !!!!!!
-Volume of LeftKidney = 143.977 cm^3
+Volume of LeftKidney = 143.907 cm^3
 Material of LeftKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of LeftKidney = 142.091 g
+Mass of LeftKidney = 142.021 g
 Construct RightKidney with mother volume physicalTrunk
 Checking overlaps for volume physicalRightKidney ... OK! 
 RightKidney created !!!!!!
-Volume of RightKidney = 144.185 cm^3
+Volume of RightKidney = 144.065 cm^3
 Material of RightKidney = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of RightKidney = 142.297 g
+Mass of RightKidney = 142.177 g
 Construct UrinaryBladder with mother volume physicalTrunk
 Checking overlaps for volume physicalUrinaryBladder ... OK! 
 UrinaryBladder created !!!!!!
-Volume of UrinaryBladder = 45.7701 cm^3
+Volume of UrinaryBladder = 45.8512 cm^3
 Material of UrinaryBladder = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of UrinaryBladder = 45.1705 g
+Mass of UrinaryBladder = 45.2505 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct MaleGenitalia with mother volume physicalWorld
 Checking overlaps for volume physicalMaleGenitalia ... OK! 
 MaleGenitalia created !!!!!!
-Volume of MaleGenitalia = 229.503 cm^3
+Volume of MaleGenitalia = 229.196 cm^3
 Material of MaleGenitalia = soft_tissue
 Density of Material = 0.9869 g/cm^3
-Mass of MaleGenitalia = 226.496 g
+Mass of MaleGenitalia = 226.193 g
 MotherVolume: physicalWorld
 sensitivity : 0
 Construct LeftTeste with mother volume physicalMaleGenitalia
@@ -419,7 +419,7 @@ msc:   for e-    SubType= 10
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 MeV
         MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
@@ -454,7 +454,7 @@ msc:   for e+    SubType= 10
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              PenIoni :  Emin=        0 eV    Emax=        1 MeV
         MollerBhabha :  Emin=        1 MeV   Emax=       10 TeV   deltaVI
@@ -492,7 +492,7 @@ msc:   for proton    SubType= 10
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -562,7 +562,7 @@ msc:   for anti_proton    SubType= 10
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.02, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=        2 MeV   deltaVI
           BetheBloch :  Emin=        2 MeV   Emax=       10 TeV   deltaVI
@@ -599,7 +599,7 @@ msc:   for kaon+    SubType= 10
 hIoni:   for  kaon+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
@@ -632,7 +632,7 @@ msc:   for kaon-    SubType= 10
 hIoni:   for  kaon-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV   deltaVI
           BetheBloch :  Emin=  1.05231 MeV   Emax=       10 TeV   deltaVI
@@ -665,7 +665,7 @@ msc:   for mu+    SubType= 10
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -699,7 +699,7 @@ msc:   for mu-    SubType= 10
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=      200 keV   deltaVI
           BetheBloch :  Emin=      200 keV   Emax=        1 GeV   deltaVI
@@ -733,7 +733,7 @@ msc:   for pi+    SubType= 10
 hIoni:   for  pi+    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
@@ -766,7 +766,7 @@ msc:   for pi-    SubType= 10
 hIoni:   for  pi-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV, 20 bins per decade, spline: 1
-      finalRange(mm)= 0.05, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      finalRange(mm)= 0.01, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV   deltaVI
           BetheBloch :  Emin=  297.505 keV   Emax=       10 TeV   deltaVI
@@ -819,47 +819,47 @@ Index : 2     used in the geometry : Yes
 ### Run 0 start.
 Number of events = 100
 Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
-Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 2.4465
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 3.03709
 Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 10.3807
-Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 10.0981
+Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0.0451217
 Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftTeste, ID: 13, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLowerLargeIntestine, ID: 14, Energy Deposition (MeV): 0
-Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 3.06759
+Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 1.88767
 Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 1.11094
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 12.7482
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 4.88805
 Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightScapula, ID: 29, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightTeste, ID: 30, Energy Deposition (MeV): 0
-Energy Total in Run:logicalSkull, ID: 31, Energy Deposition (MeV): 0.408342
+Energy Total in Run:logicalSkull, ID: 31, Energy Deposition (MeV): 0.803185
 Energy Total in Run:logicalSmallIntestine, ID: 32, Energy Deposition (MeV): 0
 Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
 Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
-Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 22.5338
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 27.5208
 Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
-Total Energy deposit in the body is: 52.6961 MeV
+Total Energy deposit in the body is: 48.2799 MeV
 Graphics systems deleted.
 Visualization Manager deleting...

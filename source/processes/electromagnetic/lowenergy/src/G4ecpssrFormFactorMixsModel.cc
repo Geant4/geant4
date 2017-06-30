@@ -54,22 +54,22 @@ G4ecpssrFormFactorMixsModel::G4ecpssrFormFactorMixsModel()
 { 
   interpolation = new G4LinInterpolation();
 
-  for (G4int i=62; i<93; i++) 
+  for (G4int i=29; i<93; i++) 
   {
       protonM1DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonM1DataSetMap[i]->LoadData("pixe/ecpssr/proton/m1-");
+      protonM1DataSetMap[i]->LoadData("pixe/ecpssr/proton/m1-i01m001c01-");
 	    
       protonM2DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonM2DataSetMap[i]->LoadData("pixe/ecpssr/proton/m2-");
+      protonM2DataSetMap[i]->LoadData("pixe/ecpssr/proton/m2-i01m001c01-");
 	    
       protonM3DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonM3DataSetMap[i]->LoadData("pixe/ecpssr/proton/m3-");
+      protonM3DataSetMap[i]->LoadData("pixe/ecpssr/proton/m3-i01m001c01-");
 	    
       protonM4DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonM4DataSetMap[i]->LoadData("pixe/ecpssr/proton/m4-");
+      protonM4DataSetMap[i]->LoadData("pixe/ecpssr/proton/m4-i01m001c01-");
 	    
       protonM5DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonM5DataSetMap[i]->LoadData("pixe/ecpssr/proton/m5-");
+      protonM5DataSetMap[i]->LoadData("pixe/ecpssr/proton/m5-i01m001c01-");
   }
 
   protonMiXsVector.push_back(protonM1DataSetMap);
@@ -79,22 +79,22 @@ G4ecpssrFormFactorMixsModel::G4ecpssrFormFactorMixsModel()
   protonMiXsVector.push_back(protonM5DataSetMap);
 
 
-  for (G4int i=62; i<93; i++) 
+  for (G4int i=29; i<93; i++) 
   {
       alphaM1DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaM1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m1-");
+      alphaM1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m1-i02m004c02-");
 	     
       alphaM2DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaM2DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m2-");
+      alphaM2DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m2-i02m004c02-");
 	     
       alphaM3DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaM3DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m3-");
+      alphaM3DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m3-i02m004c02-");
 	     
       alphaM4DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaM4DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m4-");
+      alphaM4DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m4-i02m004c02-");
 	     
       alphaM5DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaM5DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m5-");
+      alphaM5DataSetMap[i]->LoadData("pixe/ecpssr/alpha/m5-i02m004c02-");
 
   }
 
@@ -139,7 +139,7 @@ G4double G4ecpssrFormFactorMixsModel::CalculateMiCrossSection(G4int zTarget,G4do
   G4double sigma = 0;
   G4int mShellIndex = mShellId -1;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 10*MeV && zTarget < 93 && zTarget > 61) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100*MeV && zTarget < 93 && zTarget > 28) {
 
     if (massIncident == aProton->GetPDGMass())
       {      

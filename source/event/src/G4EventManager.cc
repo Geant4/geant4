@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EventManager.cc 94950 2016-01-07 11:53:14Z gcosmo $
+// $Id: G4EventManager.cc 104522 2017-06-02 07:19:30Z gcosmo $
 //
 //
 //
@@ -48,6 +48,7 @@ G4EventManager* G4EventManager::GetEventManager()
 
 G4EventManager::G4EventManager()
 :currentEvent(nullptr),trajectoryContainer(nullptr),
+ trackIDCounter(0),
  verboseLevel(0),tracking(false),abortRequested(false),
  storetRandomNumberStatusToG4Event(false)
 {
@@ -233,8 +234,10 @@ void G4EventManager::DoProcessing(G4Event* anEvent)
         break;
 
       case fAlive:
-        G4cout << "Illeagal TrackStatus returned from G4TrackingManager!"
-             << G4endl;
+        G4Exception("G4EventManager::DoProcessing","Event004",JustWarning,
+            "Illegal trackstatus returned from G4TrackingManager. Continue with"\
+            "simulation.");
+        break;
       case fKillTrackAndSecondaries:
         //if( secondaries ) secondaries->clearAndDestroy();
         if( secondaries )

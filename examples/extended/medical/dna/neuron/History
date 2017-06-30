@@ -1,0 +1,14 @@
+
+     =========================================================
+ 		      Geant4 - neuron example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+20 April 2017 - S. Incerti - tag neuron-V10-03-01
+- Windows fix by Oleg and Batmunkh
+
+10 February 2017 - M. Batmunkh, O.V. Belov - tag neuron-V10-03-00
+- Package created
+

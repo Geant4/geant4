@@ -1,4 +1,4 @@
-// $Id: Doxymodules_optical.h 76473 2013-11-11 10:35:14Z gcosmo $
+// $Id: Doxymodules_optical.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_optical.h
@@ -24,6 +24,7 @@
   class OpNovicePrimaryGeneratorMessenger {};
   class OpNoviceRunAction {};
   class OpNoviceStackingAction {};
+  class OpNoviceSteppingAction {};
   class OpNoviceSteppingVerbose {}; 
 
 /** @} */
@@ -35,6 +36,7 @@
  *  @{
  */
 
+  class LXeActionInitialization {};
   class LXeDetectorConstruction {};
   class LXeDetectorMessenger {};
   class LXeEMPhysics {};
@@ -43,10 +45,11 @@
   class LXeGeneralPhysics {};
   class LXeMainVolume {};
   class LXeMuonPhysics {};
-  class LXePhysicsList {};
   class LXePMTHit {};
   class LXePMTSD {};
+  class LXePhysicsList {};
   class LXePrimaryGeneratorAction {};
+  class LXeRecorderBase {};
   class LXeRunAction {};
   class LXeScintHit {};
   class LXeScintSD {};

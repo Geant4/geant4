@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4Hype.cc 104316 2017-05-24 13:04:23Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -220,7 +220,7 @@ void G4Hype::ComputeDimensions(G4VPVParameterisation* p,
 //
 // Get bounding box
 
-void G4Hype::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Hype::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   pMin.set(-endOuterRadius,-endOuterRadius,-halfLenZ);
   pMax.set( endOuterRadius, endOuterRadius, halfLenZ);
@@ -234,7 +234,8 @@ void G4Hype::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Hype::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Hype::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -251,7 +252,7 @@ G4bool G4Hype::CalculateExtent(const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

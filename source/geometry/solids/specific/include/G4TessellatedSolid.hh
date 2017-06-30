@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.hh 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4TessellatedSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -106,7 +106,7 @@
 
 #include "G4VSolid.hh"
 #include "G4Types.hh"
-#include "G4SurfaceVoxelizer.hh"
+#include "G4Voxelizer.hh"
 
 struct G4VertexInfo
 {
@@ -180,14 +180,14 @@ class G4TessellatedSolid : public G4VSolid
 
     inline void SetMaxVoxels(G4int max);
 
-    inline G4SurfaceVoxelizer &GetVoxels();
+    inline G4Voxelizer &GetVoxels();
 
     virtual G4bool CalculateExtent(const EAxis pAxis,
                                    const G4VoxelLimits& pVoxelLimit,
                                    const G4AffineTransform& pTransform,
                                          G4double& pMin, G4double& pMax) const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4double      GetMinXExtent () const;
     G4double      GetMaxXExtent () const;
@@ -291,7 +291,7 @@ class G4TessellatedSolid : public G4VSolid
 
     G4int fMaxTries;
 
-    G4SurfaceVoxelizer fVoxels;  // Pointer to the voxelized solid
+    G4Voxelizer fVoxels;  // Pointer to the voxelized solid
 
     G4SurfBits fInsides;
 };
@@ -310,7 +310,7 @@ inline void G4TessellatedSolid::SetMaxVoxels(G4int max)
   fVoxels.SetMaxVoxels(max);
 }
 
-inline G4SurfaceVoxelizer &G4TessellatedSolid::GetVoxels()
+inline G4Voxelizer &G4TessellatedSolid::GetVoxels()
 {
   return fVoxels;
 }

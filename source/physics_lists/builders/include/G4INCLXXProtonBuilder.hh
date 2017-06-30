@@ -55,30 +55,31 @@ class G4INCLXXProtonBuilder : public G4VProtonBuilder
 {
   public: 
     G4INCLXXProtonBuilder();
-    virtual ~G4INCLXXProtonBuilder();
+    virtual ~G4INCLXXProtonBuilder() {}
 
-  public: 
   /**
    * Build elastic process.
    *
    * No elastic process is built.
    */
-    virtual void Build(G4HadronElasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
 
   /**
    * Build inelastic process.
    */
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4ProtonInelasticProcess * aP) final override;
     
   /**
    * Set the minimum energy limit for the model.
    */
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
   /**
    * Set the maximum energy limit for the model.
    */
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VProtonBuilder::Build; //Prevent compiler warning
 
   private:
     G4INCLXXInterface * theModel;    

@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+26/06/17 M. Maire      (exampleB4-V10-03-01)
+- Improved plotHisto.C, added plotNtuple.C and updated documentation
+
+23/06/17 M. Maire      (exampleB4-V10-03-00)
+- add the script plotHisto.C
 
 19/11/16 A. Dotti      (exampleB4-V10-02-04)
 - explicit set of SDs to manager

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticFieldModel.cc 94206 2015-11-09 08:11:59Z gcosmo $
+// $Id: G4MagneticFieldModel.cc 101958 2016-12-12 08:04:35Z gcosmo $
 //
 // 
 // John Allison  17th August 2013
@@ -51,15 +51,18 @@ G4MagneticFieldModel::~G4MagneticFieldModel () {}
 
 G4MagneticFieldModel::G4MagneticFieldModel
 (G4int nDataPointsPerMaxHalfScene,
- Representation representation)
+ Representation representation,
+ G4int arrow3DLineSegmentsPerCircle)
 : fNDataPointsPerMaxHalfScene(nDataPointsPerMaxHalfScene)
 , fRepresentation(representation)
+, fArrow3DLineSegmentsPerCircle(arrow3DLineSegmentsPerCircle)
 {
   fType = "G4MagneticFieldModel";
   fGlobalTag = fType;
   std::ostringstream oss;
-  oss << fNDataPointsPerMaxHalfScene;
-  fGlobalDescription = fType + ':' + oss.str();
+  oss << ':' << fNDataPointsPerMaxHalfScene
+  << ':' << fArrow3DLineSegmentsPerCircle;
+  fGlobalDescription = fType + oss.str();
 }
 
 void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
@@ -108,14 +111,6 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
           << G4endl;
           warned = true;
         }
-      }
-    } else {
-      static G4bool warned = false;
-      if (!warned) {
-        G4cout  << intro
-        << "No global field exists."
-        << G4endl;
-        warned = true;
       }
     }
   } else {
@@ -270,7 +265,9 @@ void G4MagneticFieldModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
         const G4double y2 = y1 + arrowLength * By / B;
         const G4double z2 = z1 + arrowLength * Bz / B;
         if (fRepresentation == Representation::fullArrow) {
-          G4ArrowModel BArrow(x1,y1,z1,x2,y2,z2,arrowLength/5,arrowColour);
+          G4ArrowModel BArrow(x1,y1,z1,x2,y2,z2,arrowLength/5,arrowColour,
+                              "BField",
+                              fArrow3DLineSegmentsPerCircle);
           BArrow.DescribeYourselfTo(sceneHandler);
         } else if (fRepresentation == Representation::lightArrow) {
           G4Polyline BArrowLite;

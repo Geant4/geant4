@@ -1,4 +1,4 @@
-$Id: History 101659 2016-11-21 09:02:47Z gcosmo $
+$Id: History 102186 2017-01-09 13:35:29Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22/12/16 M. Maire      (exampleB3-V10-03-00)
+- PhysicsList : register Electromagnetic before RadioactiveDecay
+
 
 19/11/16 A. Dotti      (exampleB3-V10-02-04)
 - explicit set of SD to manager

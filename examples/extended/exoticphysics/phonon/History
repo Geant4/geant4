@@ -1,4 +1,4 @@
-$Id: History 101663 2016-11-21 09:07:05Z gcosmo $
+$Id: History 102480 2017-02-01 10:47:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,32 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 January 2017 G.Folger    (phononExample-V10-03-04)
+-  correct new timing.out-MT: remove last newline from file
+
+25 January 2017 G.Folger    (phononExample-V10-03-03)
+-  Update timing.out-MT
+
+24 January 2017 Ben Morgan (phononExample-V10-03-02)
+- CTestDefinitions.txt: Use non-dereference form of variable expansion
+  to resolve CMP0054 related warnings on Windows platforms where
+  the compiler ID variable (MSVC) is also the name of a cmake
+  variable.
+
+19 January 2017 Ben Morgan (phononExample-V10-03-01)
+- ComparePhonon.cmake: New script to perform comparison of
+  timing and caustic output/reference files. When comparison
+  fails, prints contents of files to screen, hence running
+  comparison in script.
+- CTestDefinitions.txt: Migrate comparison tests to use new
+  ComparePhonon.cmake script.
+
+18 January 2017 Ben Morgan (phononExample-V10-03-00)
+- Split build/run/compare test into three: build and run,
+  compare timing outputs, compare caustic outputs.
+  Needed due to use of multiple POSTCMD calls, when
+  geant4_add_test only supports one.
 
 19 November 2016 A.Dotti     (phononExample-V10-02-08)
 - explicit set of SD to manager

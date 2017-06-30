@@ -43,64 +43,58 @@
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::HadrontherapyEventAction() :
-  drawFlag("all" ),printModulo(10), pointerEventMessenger(0)
-{ 
-  hitsCollectionID = -1;
-  pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
+drawFlag("all" ),printModulo(10), pointerEventMessenger(0)
+{
+    hitsCollectionID = -1;
+    pointerEventMessenger = new HadrontherapyEventActionMessenger(this);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyEventAction::~HadrontherapyEventAction()
 {
- delete pointerEventMessenger;
-}  
+    delete pointerEventMessenger;
+}
 
 /////////////////////////////////////////////////////////////////////////////
-void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
-{ 
-  G4int evtNb = evt->GetEventID();
-  //printing survey
-  if (evtNb%printModulo == 0)
-     G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-   
-  G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
-  if(hitsCollectionID == -1)
-    hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
-  
+void HadrontherapyEventAction::BeginOfEventAction(const G4Event*)
+{
+    G4SDManager* pSDManager = G4SDManager::GetSDMpointer();
+    if(hitsCollectionID == -1)
+        hitsCollectionID = pSDManager -> GetCollectionID("HadrontherapyDetectorHitsCollection");
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
-{ 
-  if(hitsCollectionID < 0)
-  return;
-  G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
-
-  // Clear voxels hit list 
-  HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
-  if (matrix) matrix -> ClearHitTrack(); 
-
-  if(HCE)
-  {
-    HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
-    if(CHC)
-     {
-       if(matrix)
-	  { 
-	      // Fill the matrix with the information: voxel and associated energy deposit 
-          // in the detector at the end of the event
-
-	  G4int HitCount = CHC -> entries();
-	  for (G4int h=0; h<HitCount; h++)
-	    {
-	      G4int i = ((*CHC)[h]) -> GetXID();
-	      G4int j = ((*CHC)[h]) -> GetYID();
-	      G4int k = ((*CHC)[h]) -> GetZID();
-              G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
-              matrix -> Fill(i, j, k, energyDeposit/MeV);              
-	    }
-	  }
+{
+    if(hitsCollectionID < 0)
+        return;
+    G4HCofThisEvent* HCE = evt -> GetHCofThisEvent();
+    
+    // Clear voxels hit list
+    HadrontherapyMatrix* matrix = HadrontherapyMatrix::GetInstance();
+    if (matrix) matrix -> ClearHitTrack();
+    
+    if(HCE)
+    {
+        HadrontherapyDetectorHitsCollection* CHC = (HadrontherapyDetectorHitsCollection*)(HCE -> GetHC(hitsCollectionID));
+        if(CHC)
+        {
+            if(matrix)
+            {
+                // Fill the matrix with the information: voxel and associated energy deposit
+                // in the detector at the end of the event
+                
+                G4int HitCount = CHC -> entries();
+                for (G4int h=0; h<HitCount; h++)
+                {
+                    G4int i = ((*CHC)[h]) -> GetXID();
+                    G4int j = ((*CHC)[h]) -> GetYID();
+                    G4int k = ((*CHC)[h]) -> GetZID();
+                    G4double energyDeposit = ((*CHC)[h]) -> GetEdep();
+                    matrix -> Fill(i, j, k, energyDeposit/MeV);              
+                }
+            }
+        }
     }
-  }
 }
 

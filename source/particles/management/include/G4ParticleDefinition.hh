@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.hh 101025 2016-11-04 08:36:30Z gcosmo $
+// $Id: G4ParticleDefinition.hh 103108 2017-03-16 13:00:35Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -208,19 +208,23 @@ class G4ParticleDefinition
       inline G4ProcessManager* GetMasterProcessManager() const;
       // Returns the process manager master pointer.
       inline void SetMasterProcessManager(G4ProcessManager* aNewPM);
-      //Sets the shadow master pointer (not to be used by user)
+      // Sets the shadow master pointer (not to be used by user)
 
       inline G4int GetInstanceID() const;
       // Returns the instance ID.
 
       static const G4PDefManager& GetSubInstanceManager();
       // Returns the private data instance manager.
+
+      static void Clean();
+      // Clear memory allocated by sub-instance manager.
+
  private:
       // --- Shadow of master pointers.
 
       G4ProcessManager *theProcessManagerShadow;
-      //  Each worker thread can access this field from the master thread
-      //  through this pointer.
+      // Each worker thread can access this field from the master thread
+      // through this pointer.
 
       G4int g4particleDefinitionInstanceID;
       // This field is used as instance ID.

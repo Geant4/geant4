@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniPionBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4BertiniPionBuilder.hh 103593 2017-04-19 08:10:21Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -34,6 +34,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -49,22 +50,22 @@
 #include "G4VPionBuilder.hh"
 
 #include "G4PiNuclearCrossSection.hh"
-#include "G4CascadeInterface.hh"   
+#include "G4CascadeInterface.hh"
 
 class G4BertiniPionBuilder : public G4VPionBuilder
 {
   public: 
     G4BertiniPionBuilder();
-    virtual ~G4BertiniPionBuilder();
+    virtual ~G4BertiniPionBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
+    using G4VPionBuilder::Build; //Prevent compiler warning
   private:
     G4PiNuclearCrossSection* thePiData;
     G4CascadeInterface * theModel;    

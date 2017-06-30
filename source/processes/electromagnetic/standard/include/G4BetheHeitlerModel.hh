@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BetheHeitlerModel.hh 100399 2016-10-20 07:38:12Z gcosmo $
+// $Id: G4BetheHeitlerModel.hh 104477 2017-06-01 07:39:33Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -109,33 +109,20 @@ private:
 inline G4double G4BetheHeitlerModel::ScreenFunction1(G4double ScreenVariable)
 
 // compute the value of the screening function 3*PHI1 - PHI2
-
 {
-   G4double screenVal;
-
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
-   else
-     screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
-
-   return screenVal;
+  return (ScreenVariable > 1.)
+    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
+    : 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4BetheHeitlerModel::ScreenFunction2(G4double ScreenVariable)
-
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
-
 {
-   G4double screenVal;
-
-   if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*G4Log(ScreenVariable+0.952);
-   else
-     screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
-
-   return screenVal;
+  return (ScreenVariable > 1.)
+    ? 42.24 - 8.368*G4Log(ScreenVariable+0.952)
+    : 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

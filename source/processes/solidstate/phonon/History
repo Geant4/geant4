@@ -1,0 +1,95 @@
+$Id: History 84149 2014-10-08 18:04:16Z mkelsey $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  SVN log-message one should put at every
+committal in the SVN repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+8 October 2014  Michael Kelsey (prophonon-V10-00-01)
+----------------------------------------------------
+- G4LatticeManager:  Change to globally shared object (simple "static", not
+  G4ThreadLocal).  Fixes null-pointer crash in MT phononExample.
+
+13 March 2014  Gabriele Cosmo (prophonon-V10-00-00)
+---------------------------------------------------
+- Removed inline keywords in methods in G4PhononDownconversion.cc
+  and make coherent use of G4 types.
+
+15 November 2013  Michael Kelsey (prophonon-V09-06-07)
+------------------------------------------------------
+- G4PhononDownconversion.cc:  Address Coverity #53462, initialize data
+  buffers in ctor.
+
+- G4PhononReflection.cc:  Address Coverity #53407, throw exception if input
+  track polarization is invalid (i.e., track is not a phonon).
+
+- G4LatticeManager.hh:  Address Coverity #53461, drop lattice counters.
+
+- G4LatticeReader.hh:  Move ctor, dtor implementations to .cc file; fix
+  comment on psLatfile, as stream is owned by reader.
+
+- G4LatticeReader.cc:  Address Coverity #53491-53495, check input data fNX
+  and fNY against allowed size of lattice array (G4LatticeLogical::MAXRES)
+  before using them.  NOTE:  Requires materials-V09-06-32 or later.
+
+15 November 2013  Michael Kelsey (prophonon-V09-06-06)
+------------------------------------------------------
+- G4VPhononProcess.cc:  Add verbosity reporting of vgroup before and after
+  rotation.
+
+13 November 2013  Michael Kelsey (prophonon-V09-06-05)
+------------------------------------------------------
+- G4LatticeManager:  Avoid double-delete at end of job by registering unique
+  lattice pointers into std::set<>, and deleting those instead of std::map
+  entries.  Supporting non-virtual utility functions for use in ctor/dtor.
+
+12 November 2013  Michael Kelsey (prophonon-V09-06-04)
+------------------------------------------------------
+- G4LatticeReader.cc:  Per G.Folger, errors processing input file should
+  throw fatal exception, not return null pointer.
+
+12 November 2013  Michael Kelsey (prophonon-V09-06-03)
+------------------------------------------------------
+- G4VPhononProcess.cc:  Add verboseLevel-controlled output to show
+  generation of secondaries.
+
+- G4PhononDownConversion.cc, G4PhononScattering.cc:  Add verboseLevel output
+  to show MFP.
+
+11 November 2013  Michael Kelsey (prophonon-V09-06-02)
+------------------------------------------------------
+- G4PhononTrackMap:  Move implementation of Clear() to .cc file.  Called
+  from constructor to try to ensure that map data member isn't wonky on
+  Windows.
+
+6 November 2013  Michael Kelsey (prophonon-V09-06-01)
+-----------------------------------------------------
+- G4LatticeReader.cc:  Fix compiler warning about implicit cast of string
+  literal to char*, by casting getenv() to (const char*).
+
+5 November 2013  Michael Kelsey (prophonon-V09-06-00)
+-----------------------------------------------------
+NEW PACKAGE for Release 10, containing processes for phonon propagation
+and interaction in materials:
+
+	README
+	G4LatticeManager.hh,.cc
+	G4LatticeReader.hh,.cc
+	G4PhononDownconversion.hh,.cc
+	G4PhononPolarization.hh,.cc
+	G4PhononReflection.hh,.cc
+	G4PhononScattering.hh,.cc
+	G4PhononTrackMap.hh,.cc
+	G4VPhononProcess.hh,.cc

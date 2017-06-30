@@ -5,7 +5,7 @@
                        Package History file
                        --------------------
 
-23 February 2017 - I. Hrivnacova - wholeNuclearDNA-V10-02-02
+23 February 2017 - I. Hrivnacova - wholeNuclearDNA-V10-03-00
 - fixed compilation (G4UIQt.hh include)
 
 09 July 2016 - S. Incerti - tag wholeNuclearDNA-V10-02-01

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 101381 2016-11-16 10:58:00Z gcosmo $
+$Id: History 104099 2017-05-11 07:41:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,9 @@ $Id: History 101381 2016-11-16 10:58:00Z gcosmo $
 
                       Example History file
                       ---------------------
+
+11.05.2017 - G. Cosmo   (ccal-V10-03-00)
+- Fixed compilation warning on gcc-7.1 in CCalAnalysis constructor.
 
 01.08.2016 - A. Dotti   (ccal-V10-02-02)
 - Fix issues with a char* length 

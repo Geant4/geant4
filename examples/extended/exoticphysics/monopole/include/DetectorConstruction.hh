@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: DetectorConstruction.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,13 +35,14 @@
 #define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 #include "globals.hh"
 
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
 class G4MonopoleFieldSetup;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,15 +59,19 @@ public:
   void SetSizeX(G4double);
   void SetSizeYZ(G4double);              
   void SetMaterial(const G4String&);            
-  void SetMagField(G4double);
+  void SetMagField   (G4double v) { fZMagFieldValue = v; }
   void SetMaxStepSize(G4double);
   void UpdateGeometry();
+
+  virtual void ConstructSDandField();
           
   // access to geometry
   inline G4double     GetWorldSizeX()    {return fWorldSizeX;};
   inline G4double     GetAbsorSizeX()    {return fAbsorSizeX;};
   inline G4double     GetMaxStepSize()   {return fMaxStepSize;};
   inline const G4Material* GetAbsorMaterial() {return fAbsorMaterial;};
+
+  G4MonopoleFieldSetup* GetMonopoleFieldSetup() const { return fMonFieldSetup; }
                            
 private:
 
@@ -79,11 +84,11 @@ private:
   G4double            fAbsorSizeYZ;
   G4double            fMaxStepSize;
   G4Material*         fAbsorMaterial;
-
-  G4UniformMagField*    fMagField;
-  G4MonopoleFieldSetup* fMonFieldSetup;
-
   G4LogicalVolume*    fLogAbsor;
+
+  G4MonopoleFieldSetup* fMonFieldSetup;
+  G4double              fZMagFieldValue;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
                
   DetectorMessenger*  fDetectorMessenger;
 

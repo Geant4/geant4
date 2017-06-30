@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4AntiBarionBuilder.cc 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4AntiBarionBuilder.cc 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -32,6 +32,7 @@
 // Author: 2011 J. Apostolakis
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -51,17 +52,6 @@ G4AntiBarionBuilder(): wasActivated(false)
   theAntiAlphaInelastic=new G4AntiAlphaInelasticProcess;
 }
 
-G4AntiBarionBuilder::
-~G4AntiBarionBuilder(){
-  /*
-  delete theAntiProtonInelastic;
-  delete theAntiNeutronInelastic;
-  delete theAntiDeuteronInelastic;
-  delete theAntiTritonInelastic;
-  delete theAntiHe3Inelastic;
-  delete theAntiAlphaInelastic;
-  */
-}
 
 void G4AntiBarionBuilder::
 Build()
@@ -98,3 +88,12 @@ Build()
   theProcMan->AddDiscreteProcess(theAntiAlphaInelastic);
 }
 
+void G4AntiBarionBuilder::RegisterMe(G4PhysicsBuilderInterface* aB ) {
+  auto bld = dynamic_cast<G4VAntiBarionBuilder*>(aB);
+  if ( bld != nullptr ) {
+      theModelCollections.push_back(bld);
+  } else {
+      G4PhysicsBuilderInterface::RegisterMe(aB);
+  }
+
+}

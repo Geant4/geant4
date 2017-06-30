@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/G4MonopoleTransportation.hh
 /// \brief Definition of the G4MonopoleTransportation class
 //
-// $Id: G4MonopoleTransportation.hh 69705 2013-05-13 09:09:52Z gcosmo $
+// $Id: G4MonopoleTransportation.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -137,6 +137,8 @@ class G4MonopoleTransportation : public G4VProcess
                              const G4Step&
                             ) {return 0;};
      // No operation in  AtRestDoIt.
+
+  G4double GetZmagFieldValue() const { return fMagSetup-> GetZmagFieldValue(); }
 
   virtual void StartTracking(G4Track* aTrack);
        // Reset state for new (potentially resumed) track 

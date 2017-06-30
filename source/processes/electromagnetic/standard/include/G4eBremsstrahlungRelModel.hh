@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungRelModel.hh 98737 2016-08-09 12:51:38Z gcosmo $
+// $Id: G4eBremsstrahlungRelModel.hh 104373 2017-05-29 09:56:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -151,8 +151,14 @@ protected:
   G4double densityFactor;
   G4double densityCorr;
 
-  G4int    currentZ;
-  G4bool   isElectron;
+  // scattering off electrons
+  G4double nucTerm;
+  G4double sumTerm;
+
+  G4bool scatOffElectron;
+  G4bool isElectron;
+
+  G4int  currentZ;
 
 private:
 
@@ -181,6 +187,7 @@ private:
 
   // flags
   G4bool   use_completescreening;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

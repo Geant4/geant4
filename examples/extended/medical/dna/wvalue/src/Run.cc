@@ -25,15 +25,9 @@
 //
 /// \file medical/dna/wvalue/src/Run.cc
 /// \brief Implementation of the Run class
-//
-// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
-
 #include "HistoManager.hh"
 #include "PrimaryGeneratorAction.hh"
 
@@ -187,8 +181,8 @@ void Run::EndOfRun()
   {
     FILE *myFile;
     myFile = fopen ("wvalue.txt","a");
-    fprintf (myFile, "%e %e %e %e %e \n", fEkin/eV, fNbInelastic, rms, fEkin/eV/fNbInelastic, 
-      (fEkin/eV)*rms/(fNbInelastic*fNbInelastic) );
+    fprintf (myFile, "%e %e %e %e %e \n", fEkin/eV, fNbInelastic, rms, 
+      fEkin/eV/fNbInelastic, (fEkin/eV)*rms/(fNbInelastic*fNbInelastic) );
     fclose (myFile);
   }
   //
@@ -260,5 +254,3 @@ void Run::EndOfRun()
   G4cout.precision(prec);
     
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

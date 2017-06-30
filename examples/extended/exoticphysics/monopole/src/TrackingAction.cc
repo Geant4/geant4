@@ -26,20 +26,21 @@
 /// \file exoticphysics/monopole/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: TrackingAction.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-#include "RunAction.hh"
+#include "G4RunManager.hh"
+#include "Run.hh"
+
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(RunAction* run)
- : G4UserTrackingAction(), 
-   fRunAction(run)
+TrackingAction::TrackingAction()
+ : G4UserTrackingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,9 +54,11 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
   // extract Projected Range of primary particle
   if (aTrack->GetTrackID() == 1) {
-    G4double x = aTrack->GetPosition().x() - fRunAction->GetOffsetX();
-    fRunAction->AddProjRange(x);
-  }  
+    Run* run = static_cast<Run*>(
+              G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+    G4double x = aTrack->GetPosition().x() - run->GetOffsetX();
+    run->AddProjRange(x);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicsConstructor.hh 101155 2016-11-08 08:21:41Z gcosmo $
+// $Id: G4VPhysicsConstructor.hh 103953 2017-05-04 11:27:35Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -56,6 +56,7 @@
 //    first version                      12 Nov. 2000 by H.Kurashige 
 //    Add   physicsType                  14 Mar. 2011 by H.Kurashige
 //    Add   RegisterProcess               1 May  2011 by H.Kurashige
+//    Add   G4PhysicsBuilderInterface	 21 Apr	 2017 by A.Dotti
 // ------------------------------------------------------------
 #ifndef G4VPhysicsConstructor_h
 #define G4VPhysicsConstructor_h 1
@@ -66,15 +67,19 @@
 #include "G4ParticleTable.hh"
 #include "G4PhysicsListHelper.hh"
 #include "G4VUPLSplitter.hh"
+#include <vector>
 
+class G4PhysicsBuilderInterface;
 
 class G4VPCData
 {
     //Encapsulate the fields of class G4VPhysicsConstructor
     //that are per-thread.
 public:
+    using PhysicsBuilders_V=std::vector<G4PhysicsBuilderInterface*>;
     void initialize();
     G4ParticleTable::G4PTblDicIterator* _aParticleIterator;
+    PhysicsBuilders_V * _builders;
 };
 
 // The type G4VPCManager is introduced to encapsulate the methods used by
@@ -166,13 +171,19 @@ class G4VPhysicsConstructor
     G4int g4vpcInstanceID;
     G4RUN_DLL static G4VPCManager subInstanceManager;
     G4ParticleTable::G4PTblDicIterator* GetParticleIterator() const;
+    using PhysicsBuilder_V=G4VPCData::PhysicsBuilders_V;
+    //This returns a copy of the vector of pointers
+    PhysicsBuilder_V GetBuilders() const;
+    void AddBuilder(G4PhysicsBuilderInterface* bld);
 public:
     inline G4int GetInstanceID() const;
     static const G4VPCManager& GetSubInstanceManager();
-    //G4ParticleTable::G4PTblDicIterator* aParticleIterator;
-    // the particle table has the complete List of existing particle types
 
-    //G4PhysicsListHelper* aPLHelper;
+    //Method called by kernel to destroy thread-local
+    //data, equivalent to destructor in sequential mode
+    //Derived classes implementing this method, must also call
+    //this base class method.
+    virtual void TerminateWorker();
 };
 
 // Inlined methods

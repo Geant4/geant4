@@ -31,27 +31,28 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+//// 12.04.2017 A.Dotti move to new design with base class
 //----------------------------------------------------------------------------
 //
 #ifndef G4He3Builder_h
 #define G4He3Builder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4He3InelasticProcess.hh"
 #include "G4VHe3Builder.hh"
-
 #include <vector>
 
-class G4He3Builder
+class G4He3Builder : public G4PhysicsBuilderInterface
 {
   public: 
     G4He3Builder();
-    virtual ~G4He3Builder();
+    virtual ~G4He3Builder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VHe3Builder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4He3InelasticProcess * theHe3Inelastic;

@@ -1,4 +1,4 @@
-// $Id: Doxymodules_eventgenerator.h 94561 2015-11-24 09:17:12Z gcosmo $
+// $Id: Doxymodules_eventgenerator.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_eventgenerator.h
@@ -85,16 +85,11 @@
 /** @} */
 
 /** @defgroup extended_eventgenerator_HepMC_MCTruth MCTruth
- *  Eventgenerator HepMC example MCTruth 
- *  @ingroup extended_eventgenerator_HepMC
+ *  Eventgenerator example MCTruth has its 
+ *  <a href="../html_MCTruth/html/index.html"> standalone documentation </a>
+ *  @ingroup extended_eventgenerator
  *  @{
  */
-
-  class MCTruthConfig {};
-  class MCTruthEventAction {};
-  class MCTruthManager {};
-  class MCTruthTrackInformation {};
-  class MCTruthTrackingAction {};
 
 /** @} */
 

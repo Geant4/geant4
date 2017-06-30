@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-May-2017, Sebastien Incerti          (phys-ctor-fact-V10-03-00)
+- added Geant4-DNA stationary constructors
+
 17-Oct-2016, Michel Maire               (phys-ctor-fact-V10-02-04)
 - add README
 

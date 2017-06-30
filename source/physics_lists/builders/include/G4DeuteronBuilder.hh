@@ -31,27 +31,29 @@
 //
 // Author: 2013 P. Arce
 //
+// Modified
+// 12.04.2017 A.Dotti move to new design with base class
+//
 //----------------------------------------------------------------------------
 //
 #ifndef G4DeuteronBuilder_h
 #define G4DeuteronBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4DeuteronInelasticProcess.hh"
 #include "G4VDeuteronBuilder.hh"
-
 #include <vector>
 
-class G4DeuteronBuilder
+class G4DeuteronBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4DeuteronBuilder();
-    virtual ~G4DeuteronBuilder();
+    virtual ~G4DeuteronBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VDeuteronBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4DeuteronInelasticProcess * theDeuteronInelastic;

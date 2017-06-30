@@ -60,6 +60,8 @@
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
 #include "G4WentzelVIModel.hh"
+#include "G4WentzelVIRelModel.hh"
+#include "G4hCoulombScatteringModel.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -181,20 +183,24 @@ void G4EmStandardPhysicsWVI::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->SetEmModel(new G4WentzelVIModel());
+  mumsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* muss = new G4CoulombScattering();
+  muss->SetEmModel(new G4hCoulombScatteringModel(), 1);
 
   G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->SetEmModel(new G4WentzelVIModel());
+  pimsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* piss = new G4CoulombScattering();
+  piss->SetEmModel(new G4hCoulombScatteringModel(), 1);
 
   G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->SetEmModel(new G4WentzelVIModel());
+  kmsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* kss = new G4CoulombScattering();
+  kss->SetEmModel(new G4hCoulombScatteringModel(), 1);
 
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->SetEmModel(new G4WentzelVIModel());
+  pmsc->SetEmModel(new G4WentzelVIRelModel());
   G4CoulombScattering* pss = new G4CoulombScattering();
+  pss->SetEmModel(new G4hCoulombScatteringModel(), 1);
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 

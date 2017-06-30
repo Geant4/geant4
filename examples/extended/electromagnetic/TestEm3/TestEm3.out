@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,7 +34,7 @@ userDetector->Construct() start.
 
 
  Material:     Lead    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
-                       Imean: 823.000 eV 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -45,7 +45,7 @@ userDetector->Construct() start.
 
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.064 cm   Nucl.Int.Length:  86.076 cm 
-                       Imean: 188.000 eV 
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.948 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -81,7 +81,7 @@ physicsList->setCut() start.
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -94,6 +94,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -499,28 +505,28 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.04s Real=2.04s Sys=0s
+  User=2.68s Real=2.69s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 781.36 MeV :  16.18 MeV      2.07 +- 0.207 %      54.9 cm  +- 1.16 cm 
-   liquidArgon: 208.37 MeV :   14.6 MeV     7.008 +- 0.7008 %      1.03 m   +- 7.41 cm 
+          Lead: 781.04 MeV :  16.68 MeV     2.136 +- 0.2136 %      55.2 cm  +-  1.3 cm 
+   liquidArgon: 209.27 MeV :  15.56 MeV     7.436 +- 0.7436 %      1.04 m   +- 8.05 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       509
- Mean number of e-          870
- Mean number of e+          53.3
- Mean number of charged steps  3566.83
- Mean number of neutral steps  3632.77
+ Mean number of gamma       510
+ Mean number of e-          873
+ Mean number of e+          53.2
+ Mean number of charged steps  3570.92
+ Mean number of neutral steps  3700.01
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 781.359 MeV
-liquidArgon:	 208.174 MeV
+      Lead:	 781.037 MeV
+liquidArgon:	 209.273 MeV
 
 ------------------------------------------------------------
 
@@ -543,7 +549,7 @@ liquidArgon:	 208.174 MeV
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -556,6 +562,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -944,28 +956,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.99s Real=1.99s Sys=0s
+  User=2.35s Real=2.38s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 778.93 MeV :   19.2 MeV     2.464 +- 0.2464 %      52.3 cm  +- 1.21 cm 
-   liquidArgon: 207.83 MeV :  13.97 MeV     6.722 +- 0.6722 %      98.7 cm  +- 6.94 cm 
+          Lead: 777.73 MeV :  18.97 MeV     2.439 +- 0.2439 %      52.2 cm  +- 1.26 cm 
+   liquidArgon: 211.94 MeV :  15.39 MeV     7.262 +- 0.7262 %         1 m   +- 7.02 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       292
- Mean number of e-          555
- Mean number of e+          54
- Mean number of charged steps  3017.38
- Mean number of neutral steps  2928.07
+ Mean number of gamma       291
+ Mean number of e-          556
+ Mean number of e+          53.4
+ Mean number of charged steps  3052.19
+ Mean number of neutral steps  2929.8
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 780.232 MeV
-liquidArgon:	 209.618 MeV
+      Lead:	 777.014 MeV
+liquidArgon:	 213.451 MeV
 
 ------------------------------------------------------------
 
@@ -979,15 +991,16 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 159
+TransportationManager deleted.
+Total navigation history collections cleaned: 161
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.245 MB
+Pool ID '20G4NavigationLevelRep', size : 0.248 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.0394 MB
-Pool ID '7G4Track', size : 0.0788 MB
+Pool ID '7G4Track', size : 0.0779 MB
 Pool ID '18G4TouchableHistory', size : 0.0192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.00288 MB
 Number of memory pools allocated: 9 of which, static: 0

@@ -46,6 +46,7 @@
 #include "GammaNuclearPhysics.hh"
 
 #include "ElectromagneticPhysics.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -84,6 +85,7 @@ PhysicsList::PhysicsList()
   
   // EM physics
   RegisterPhysics(new ElectromagneticPhysics());
+  ////RegisterPhysics(new G4EmStandardPhysics());
   
   // Decay
   RegisterPhysics(new G4DecayPhysics());

@@ -125,6 +125,9 @@ G4bool G4RootFileManager::WriteFile(std::shared_ptr<tools::wroot::file> rfile,
                                     const G4String& /*fileName*/)
 #endif
 {
+  // Do nothing if there is no file
+  if ( ! fIsOpenFile ) return true;
+
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("write", "file", fileName);
@@ -149,6 +152,9 @@ G4bool G4RootFileManager::CloseFile(std::shared_ptr<tools::wroot::file> rfile,
                                     const G4String& /*fileName*/)
 #endif
 {
+  // Do nothing if there is no file
+  if ( ! fIsOpenFile ) return true;
+
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("close", "file", fileName);
@@ -183,6 +189,7 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   fFile->set_compression(fState.GetCompressionLevel());
   
   if ( ! fFile->is_open() ) {
+    fFile = nullptr;
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << fileName;
     G4Exception("G4RootAnalysisManager::OpenFile()",

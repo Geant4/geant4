@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/src/SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
-//
-// $Id: SteppingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
 #include "Run.hh"
@@ -42,12 +37,12 @@
 
 SteppingAction::SteppingAction()
 :G4UserSteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,4 +56,3 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     aStep->GetTrack()->SetTrackStatus(fStopAndKill);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

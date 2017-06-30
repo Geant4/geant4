@@ -25,15 +25,10 @@
 //
 /// \file medical/dna/wvalue/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
-//
-// $Id: DetectorMessenger.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorMessenger.hh"
-
 #include "DetectorConstruction.hh"
+
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -103,5 +98,3 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fTrackingCutCmd )
    { fDetector->SetTrackingCut(fTrackingCutCmd->GetNewDoubleValue(newValue));}
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

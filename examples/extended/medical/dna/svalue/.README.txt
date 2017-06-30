@@ -33,7 +33,8 @@ Med. Phys. 37 (2010) 4692-4708
 \section svalue_s2 GEOMETRY SET-UP
 
 The geometry is a 10-nm radius sphere of liquid water (G4_WATER
-material). Particles are shot randomly inside the sphere.
+material). Particles are shot randomly inside the sphere. Surrounding
+medium is not considered.
 
 Radius of the sphere, particle type and energy can be controlled by the 
 svalue.in macro file.

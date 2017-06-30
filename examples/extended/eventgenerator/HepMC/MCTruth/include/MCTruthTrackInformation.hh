@@ -27,7 +27,7 @@
 /// \brief Definition of the MCTruthTrackInformation class
 //
 //
-// $Id: MCTruthTrackInformation.hh 99841 2016-10-07 10:09:34Z gcosmo $
+// $Id: MCTruthTrackInformation.hh 103182 2017-03-21 10:36:09Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -54,8 +54,8 @@ public:
 
   void Print() const {};
 
-  void SetDirectParent(G4bool value) { directParent = value; }
-  G4bool GetDirectParent() const { return directParent; }
+  void SetDirectParent(G4bool value) { fDirectParent = value; }
+  G4bool GetDirectParent() const { return fDirectParent; }
 
 private:
 

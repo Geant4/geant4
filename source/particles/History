@@ -1,4 +1,4 @@
-$Id: History 102541 2017-02-08 14:11:03Z gcosmo $
+$Id: History 103892 2017-05-03 08:11:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,19 +17,52 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 9 January 2017 Hisaya Kurashige (particles-V10-02-35)
+- 1 May 2017 Tatsumi Koi  ( particles-V10-03-08 )
+- Fix inconsistency between enum definition of G4FloatLevelBase 
+  and initialization of G4Ions::G4FloatLevelBase flb[].
+
+- 16 March 2017 Gabriele Cosmo  ( particles-V10-03-07 )
+- Fixed leak at construction for data allocated through G4ParticleDefinition
+  for the sub-instance offset in the splitter. Added static method Clean() to
+  G4ParticleDefinition, called as last in the destructor of G4ParticleTable.
+
+- 2 March 2017 Hisaya Kurashige  ( particles-V10-03-06 )
+- Fix Coverity defects(68969, 62788)
+
+- 1 March 2017 Hisaya Kurashige  ( particles-V10-03-05 )
+- Update width of Bc+,Bc- according to PDG2016 
+
+- 28 February 2017 Hisaya Kurashige  ( particles-V10-03-04 )
+- Update particle properties according to PDG2016 
+ 
+- 27 February 2017 Hisaya Kurashige  ( particles-V10-03-03)
+- Set life time to -1.0 for all stable particles
+
+- 8 February 2017 Hisaya Kurashige
+- Reverted head to particles-V10-03-00
+
+- 6 February 2017 Krzysztof Genser ( particles-V10-03-02 )
+- Corrected G4MuonicAtom Channels to avoid warning 
+
+- 6 February 2017 Krzysztof Genser ( particles-V10-03-01 )
+- Added muatoms and placed G4MuonicAtom and G4GenericMuonicAtom there
+- Defined preliminary API for G4MuonicAtom Channels
+- Expanded G4MuonicAtomHelper
+- Allowed creation of muatoms in non 'PreInit' states
+
+- 9 January 2017 Hisaya Kurashige ( particles-V10-03-00 )
 - Fix a bug in G4MuonRadiativeDecayWithSpin (#1928)
-- Add G4AdjointElectronFI
+- Add G4AdjointElectronFI (partadjoint-V10-03-00)
 
-- 4 November 2016 Gunter Folger (particles-V10-02-34)
--  remove G4PDefSplitter.
--  reformat G4PDefManager.cc, and move G4PDefData::initialize() to .cc
+- 4 November 2016 Gunter Folger ( particles-V10-02-34)
+- Remove G4PDefSplitter.
+- Reformat G4PDefManager.cc, and move G4PDefData::initialize() to .cc
 
-- 3 November 2016 Gunter Folger (particles-V10-02-33)
+- 3 November 2016 Gunter Folger ( particles-V10-02-33)
 - Obsolete G4PDefSplitter, and replace 
-    "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
-    with implementation. This addresses initialistaion problems of 
-    static data previously in template.
+  "typedef G4PDefManager G4PDefSplitter<PDefData>" by concrete class,
+  with implementation. This addresses initialistaion problems of 
+  static data previously in template.
  
 - 2 November 2016 Tatsumi Koi (particles-V10-02-32)
 - Improve error message for potentially using a wrong version of ENSDFSTATE data in use.
@@ -49,10 +82,10 @@ committal in the CVS repository !
 
 - 29 September 2016 Tatsumi Koi (particles-V10-02-28)
 - Migration to ENSDFSTATE2.0
-- Fix bux the case of two or more levels have a same excitation energy
+- Fix bug the case of two or more levels have a same excitation energy
 
 - 28 September 2016 Tatsumi Koi (particles-V10-02-27)
-- Fix Circular dependency between management and leptons
+- Fix circular dependency between management and leptons
 
 - 27 September 2016 Tatsumi Koi for Kevin Lynch (particles-V10-02-26)
 - 22 September 2016 Kevin Lynch 

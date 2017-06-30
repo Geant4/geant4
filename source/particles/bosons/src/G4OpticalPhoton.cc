@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalPhoton.cc 67971 2013-03-13 10:13:24Z gcosmo $
+// $Id: G4OpticalPhoton.cc 102841 2017-02-27 13:00:47Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------------
@@ -70,7 +70,7 @@ G4OpticalPhoton*  G4OpticalPhoton::Definition()
                     2,              -1,            -1,
                     0,               0,             0,
       "opticalphoton",               0,             0,         0,
-                 true,             0.0,          NULL,
+                 true,            -1.0,          NULL,
 	        false,        "photon",               0
 	     );
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BinaryPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4BinaryPionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,6 +31,8 @@
 //
 // Author: 2011 Gunter Folger
 //
+// Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -55,14 +57,6 @@ G4BinaryPionBuilder()
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax); 
 }
-
-G4BinaryPionBuilder::
-~G4BinaryPionBuilder()
-{
-}
-
-void G4BinaryPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4BinaryPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)

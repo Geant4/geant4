@@ -68,7 +68,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
- // keep only outgoing particle
+ // keep only emerging particles
  G4StepStatus status = track->GetStep()->GetPostStepPoint()->GetStepStatus();
  if (status != fWorldBoundary) return; 
  

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.cc 79096 2014-02-14 16:07:39Z gcosmo $
+// $Id: G4GeometryWorkspacePool.cc 103041 2017-03-10 11:47:01Z gcosmo $
 //
 // 
 // Class G4GeometryWorkspacePool - implementation
@@ -124,6 +124,12 @@ void G4GeometryWorkspacePool::Recycle( G4GeometryWorkspace *geometryWrk )
 //
 void G4GeometryWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
+   if (fMyWorkspace)
+   {
+      fMyWorkspace->DestroyWorkspace();
+      delete fMyWorkspace;
+      fMyWorkspace=0;
+   }
 }
 
 // ----------------------------------------------------------------------

@@ -183,6 +183,132 @@ class G4USolid : public G4VSolid
     mutable G4Polyhedron* fPolyhedron;
 };
 
+// Inline implementations
+
+inline
+EInside G4USolid::Inside(const G4ThreeVector& p) const
+{
+  UVector3 pt;
+  VUSolid::EnumInside in_temp;
+  EInside in = kOutside;
+  pt.x() = p.x();
+  pt.y() = p.y();
+  pt.z() = p.z(); // better assign at construction
+
+  in_temp = fShape->Inside(pt);
+
+  if (in_temp == VUSolid::EnumInside::eInside) in = kInside;
+  else if (in_temp == VUSolid::EnumInside::eSurface) in = kSurface;
+
+  return in;
+}
+
+inline
+G4ThreeVector G4USolid::SurfaceNormal(const G4ThreeVector& pt) const
+{
+  UVector3 p;
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z();
+  UVector3 n;
+  fShape->Normal(p, n);
+  return G4ThreeVector(n.x(), n.y(), n.z());
+}
+
+inline
+G4double G4USolid::DistanceToIn(const G4ThreeVector& pt,
+                                const G4ThreeVector& d) const
+{
+  UVector3 p;
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
+  UVector3 v;
+  v.x() = d.x();
+  v.y() = d.y();
+  v.z() = d.z(); // better assign at construction
+  G4double dist = fShape->DistanceToIn(p, v);
+//  return  (dist > halfTolerance) ? dist : 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+inline
+G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
+{
+  UVector3 p;
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
+  G4double dist = fShape->SafetyFromOutside(p); // true?
+//  return (dist > halfTolerance) ? dist : 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+inline
+G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
+                                 const G4ThreeVector& d,
+                                 const G4bool calcNorm,
+                                 G4bool* validNorm,
+                                 G4ThreeVector* norm) const
+{
+  UVector3 p;
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
+  UVector3 v;
+  v.x() = d.x();
+  v.y() = d.y();
+  v.z() = d.z(); // better assign at construction
+  UVector3 n;
+  G4bool valid;
+  G4double dist = fShape->DistanceToOut(p, v, n, valid); // should use local variable
+  if(calcNorm)
+  {
+    if(valid){ *validNorm = true; }
+    else { *validNorm = false; }
+    if(*validNorm)  // *norm = n, but only after calcNorm check
+    {
+      norm->setX(n.x());
+      norm->setY(n.y());
+      norm->setZ(n.z());
+    }
+  }
+//  return (dist > halfTolerance) ? dist : 0.0;
+  return (dist > kInfinity) ? kInfinity : dist;
+}
+
+inline
+G4double G4USolid::DistanceToOut(const G4ThreeVector& pt) const
+{
+  UVector3 p;
+  p.x() = pt.x();
+  p.y() = pt.y();
+  p.z() = pt.z(); // better assign at construction
+  G4double dist = fShape->SafetyFromInside(p); // true?
+//  return (dist > halfTolerance) ? dist : 0.0;
+  return dist;
+}
+
+inline
+G4double G4USolid::GetCubicVolume()
+{
+  return fShape->Capacity();
+}
+
+inline
+G4double G4USolid::GetSurfaceArea()
+{
+  return fShape->SurfaceArea();
+}
+
+inline
+G4ThreeVector G4USolid::GetPointOnSurface() const
+{
+  UVector3 p;
+  p = fShape->GetPointOnSurface();
+  return G4ThreeVector(p.x(), p.y(), p.z());
+}
+
 #endif  // G4GEOM_USE_USOLIDS
 
 #endif

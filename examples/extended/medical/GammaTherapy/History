@@ -1,4 +1,4 @@
-$Id: History 101245 2016-11-10 08:45:38Z gcosmo $
+$Id: History 103888 2017-05-03 08:07:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,28 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+02-05-17 S.Elles (gtherapy-V10-03-06)
+- Fix bug in RunAction destructor (non MT Geant4 release)
+
+28-04-17 S.Elles (gtherapy-V10-03-05)
+- Fix bug in RunAction constructor
+
+27-04-17 S.Elles (gtherapy-V10-03-04)
+- Fix memory leaks in PrimageryGeneratorMessenger and ActionInitialization
+
+20-04-17 S.Elles (gtherapy-V10-03-03)
+- Fix bug in PrimageryGeneratorAction
+
+11-04-17 S.Elles (gtherapy-V10-03-02)
+- Fix Windows gcc warnings
+- Fix memcheck warning
+
+10-04-17 S.Elles (gtherapy-V10-03-01)
+- Fix gcc warnings
+- Fix package memory leaks 
+
+06-04-17 S.Elles (gtherapy-V10-03-00)
+- Porting to MT
 
 09-11-16  V.Ivant (gtherapy-V10-02-01)
 - PhysicsList - removed warnings, use G4EmParameters

@@ -62,7 +62,7 @@ G4double G4PolarizationTransition::FCoefficient(G4int K, G4int LL, G4int Lprime,
   fCoeff *= G4Clebsch::Wigner6J(2*LL, 2*Lprime, 2*K, twoJ1, twoJ1, twoJ2);
   if(fCoeff == 0) return 0;
   if(((twoJ1+twoJ2)/2 - 1) %2) fCoeff = -fCoeff;
-  return fCoeff*sqrt((2*K+1)*(twoJ1+1)*(2*LL+1)*(2*Lprime+1));
+  return fCoeff*std::sqrt(G4double((2*K+1)*(twoJ1+1)*(2*LL+1)*(2*Lprime+1)));
 }
 
 G4double G4PolarizationTransition::F3Coefficient(G4int K, G4int K2, G4int K1, 
@@ -75,7 +75,11 @@ G4double G4PolarizationTransition::F3Coefficient(G4int K, G4int K2, G4int K1,
 				2*K2, 2*K, 2*K1);
   if(fCoeff == 0) return 0;
   if((Lprime+K2+K1+1) % 2) fCoeff = -fCoeff;
-  return fCoeff*sqrt((twoJ1+1)*(twoJ2+1)*(2*LL+1)*(2*Lprime+1)*(2*K+1)*(2*K1+1)*(2*K2+1));
+
+  //AR-13Jun2017 : apply Jason Detwiler's conversion to double 
+  //               in the argument of sqrt() to avoid integer overflows.
+  return fCoeff*std::sqrt(G4double((twoJ1+1)*(twoJ2+1)*(2*LL+1))
+			  *G4double((2*Lprime+1)*(2*K+1)*(2*K1+1)*(2*K2+1)));
 }
 
 void G4PolarizationTransition::SetGammaTransitionData(G4int twoJ1, G4int twoJ2, 
@@ -122,17 +126,29 @@ G4double G4PolarizationTransition::GenerateGammaCosTheta(const POLAR& pol)
   // terms to generate cos theta distribution
   vector<G4double> polyPDFCoeffs(length, 0.0);
   for(size_t k = 0; k < length; k += 2) {
-    if(std::abs(((pol)[k])[0].imag()) > kEps && fVerbose > 0) {
-      G4cout << "G4PolarizationTransition::GenerateGammaCosTheta WARNING: \n"
+    if ((pol[k]).size() > 0 ) {
+      if(std::abs(((pol)[k])[0].imag()) > kEps && fVerbose > 0) {
+        G4cout << "G4PolarizationTransition::GenerateGammaCosTheta WARNING: \n"
 	     << "          fPolarization[" 
 	     << k << "][0] has imag component: = " 
 	     << ((pol)[k])[0].real() << " + " 
-	     << ((pol)[k])[0].imag() << "*i" << G4endl;
+  	     << ((pol)[k])[0].imag() << "*i" << G4endl;
+      }
+      G4double a_k = std::sqrt((G4double)(2*k+1))*GammaTransFCoefficient(k)*((pol)[k])[0].real();
+      for(size_t iCoeff=0; iCoeff < fgLegendrePolys.GetNCoefficients(k); ++iCoeff) {
+        polyPDFCoeffs[iCoeff] += a_k*fgLegendrePolys.GetCoefficient(iCoeff, k);
+      }
+    } else {
+      G4cout << "G4PolarizationTransition::GenerateGammaCosTheta: WARNING: \n"
+             << " size of pol[" << k << "] = " << (pol[k]).size()
+             << " returning isotropic " << G4endl;
+     return G4UniformRand()*2.-1.; 
     }
-    G4double a_k = sqrt(2*k+1)*GammaTransFCoefficient(k)*((pol)[k])[0].real();
-    for(size_t iCoeff=0; iCoeff < fgLegendrePolys.GetNCoefficients(k); ++iCoeff) {
-      polyPDFCoeffs[iCoeff] += a_k*fgLegendrePolys.GetCoefficient(iCoeff, k);
-    }
+  }
+  if(polyPDFCoeffs[polyPDFCoeffs.size()-1] == 0 && fVerbose > 0) {
+    G4cout << "G4PolarizationTransition::GenerateGammaCosTheta: WARNING: "
+           << "got zero highest-order coefficient." << G4endl;
+    DumpTransitionData(pol);
   }
   kPolyPDF.SetCoefficients(polyPDFCoeffs);
   return kPolyPDF.GetRandomX();
@@ -152,6 +168,11 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double cosTheta,
   }
   if(phiIsIsotropic) { return G4UniformRand()*CLHEP::twopi; }
 
+  map<G4int, map<G4int, G4double> > cache;
+  map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
+  if(length > 10) cachePtr = &cache;
+
+
   // Otherwise, P(phi) can be written as a sum of cos(kappa phi + phi_kappa).
   // Calculate the amplitude and phase for each term
   std::vector<G4double> amp(length, 0.0);
@@ -159,12 +180,19 @@ G4double G4PolarizationTransition::GenerateGammaPhi(G4double cosTheta,
   for(size_t kappa = 0; kappa < length; ++kappa) {
     G4complex cAmpSum(0.,0.);
     for(size_t k = kappa + (kappa % 2); k < length; k += 2) {
-      if(kappa >= length || std::abs(((pol)[k])[kappa]) < kEps) { continue; }
-      G4double tmpAmp = GammaTransFCoefficient(k);
-      if(tmpAmp == 0) { continue; }
-      tmpAmp *= sqrt(2*k+1) * fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta);
-      if(kappa > 0) tmpAmp *= 2.*G4Exp(0.5*(LnFactorial(k-kappa) - LnFactorial(k+kappa)));
-      cAmpSum += ((pol)[k])[kappa]*tmpAmp;
+      if ((pol[k]).size() > 0 ) {
+        if(kappa >= length || std::abs(((pol)[k])[kappa]) < kEps) { continue; }
+        G4double tmpAmp = GammaTransFCoefficient(k);
+        if(tmpAmp == 0) { continue; }
+        tmpAmp *= sqrt(2*k+1) * fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta, cachePtr);
+        if(kappa > 0) tmpAmp *= 2.*G4Exp(0.5*(LnFactorial(k-kappa) - LnFactorial(k+kappa)));
+        cAmpSum += ((pol)[k])[kappa]*tmpAmp;
+      } else {
+        G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
+               << " size of pol[" << k << "] = " << (pol[k]).size()
+               << " returning isotropic " << G4endl;
+        return G4UniformRand()*CLHEP::twopi;
+      }
     }
     if(kappa == 0 && std::abs(cAmpSum.imag()) > kEps && fVerbose > 0) {
       G4cout << "G4PolarizationTransition::GenerateGammaPhi: WARNING: \n"
@@ -214,7 +242,7 @@ void G4PolarizationTransition::UpdatePolarizationToFinalState(G4double cosTheta,
 							      G4double phi,
 							      G4Fragment* frag)
 {
-  G4NuclearPolarization* nucpol = frag->GetNuclearPolarization();
+  G4NuclearPolarization* nucpol = frag->NuclearPolarization();
   if(nucpol == nullptr) {
     if(fVerbose > 0) {
       G4cout << "G4PolarizationTransition::UpdatePolarizationToFinalState ERROR: "
@@ -231,6 +259,11 @@ void G4PolarizationTransition::UpdatePolarizationToFinalState(G4double cosTheta,
   const POLAR& pol = nucpol->GetPolarization();
   size_t newlength = fTwoJ2+1;
   POLAR newPol(newlength);
+
+  map<G4int, map<G4int, G4double> > cache;
+  map<G4int, map<G4int, G4double> >* cachePtr = nullptr;
+  if(newlength > 10 || pol.size() > 10) cachePtr = &cache;
+
 
   for(size_t k2=0; k2<newlength; ++k2) {
     (newPol[k2]).assign(k2+1, 0);
@@ -260,7 +293,10 @@ void G4PolarizationTransition::UpdatePolarizationToFinalState(G4double cosTheta,
             if(std::abs(tmpAmp) < kEps) continue;
             tmpAmp *= ((kappa1+(G4int)k1)%2 ? -1. : 1.) 
 	      * sqrt((2.*k+1.)*(2.*k1+1.)/(2.*k2+1.));
-            tmpAmp *= fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta);
+            //AR-13Jun2017 Useful for debugging very long computations
+            //G4cout << "G4PolarizationTransition::UpdatePolarizationToFinalState : k1=" << k1 
+            //       << " ; k2=" << k2 << " ; kappa1=" << kappa1 << " ; kappa2=" << kappa2 << G4endl;
+            tmpAmp *= fgLegendrePolys.EvalAssocLegendrePoly(k, kappa, cosTheta, cachePtr);
             if(kappa != 0) {
               tmpAmp *= G4Exp(0.5*(LnFactorial(((G4int)k)-kappa) 
 				   - LnFactorial(((G4int)k)+kappa)));

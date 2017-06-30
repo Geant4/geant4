@@ -1,4 +1,4 @@
-$Id: History 88801 2015-03-10 14:38:27Z gcosmo $
+$Id: History 102994 2017-03-07 16:31:28Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 7th, 2017 A.Howard (geombias-V10-03-00)
+- Added mutex locks to methods within G4IStore and G4ImportanceAlgorithm
+  should fix bug#1945 (created by me) - erratic behaviour in MT-mode and
+  crashing if bounds-checking was switched on (with many threads+events)
 
 March 10th, 2015 G.Cosmo (geombias-V10-01-00)
 - Made G4IStore and G4WeightWindowStore singletons thread-local to avoid

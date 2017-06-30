@@ -58,14 +58,4 @@ Build(G4DeuteronInelasticProcess * aP)
   aP->RegisterMe(theModel);
 }
 
-G4BinaryDeuteronBuilder::
-~G4BinaryDeuteronBuilder() 
-{
-}
-
-void G4BinaryDeuteronBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
 // 2002 by J.P. Wellisch

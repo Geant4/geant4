@@ -56,10 +56,13 @@ class G4PolynomialPDF
     // Setters and Getters for coefficients
     inline void SetNCoefficients(size_t n) { fCoefficients.resize(n); fChanged = true; }
     inline size_t GetNCoefficients() const { return fCoefficients.size(); }
-    inline void SetCoefficients(const std::vector<G4double>& v) { fCoefficients = v; }
+    inline void SetCoefficients(const std::vector<G4double>& v) { 
+      fCoefficients = v; fChanged = true; Simplify(); 
+    }
     inline G4double GetCoefficient(size_t i) const { return fCoefficients[i]; }
-    void SetCoefficient(size_t i, G4double value);
+    void SetCoefficient(size_t i, G4double value, bool doSimplify);
     void SetCoefficients(size_t n, const G4double* coeffs);
+    void Simplify();
 
     // Set the domain over which random numbers are generated and over which
     // the CDF is evaluated

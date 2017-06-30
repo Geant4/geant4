@@ -66,19 +66,17 @@ public:
   G4float GetG3 () {return fG3;};
   G4float GetG4 () {return fG4;};
   
-  void UpdateGeometry();
-
   G4int GetModel(){return fModel;};
-  void SetModel (G4int);
+  void  SetModel (G4int);
   
   G4int GetCoef();
-  void SetCoef(G4int val);
+  void  SetCoef(G4int val);
   
   G4int GetProfile(){return fProfile;};
-  void SetProfile(G4int myProfile);
+  void  SetProfile(G4int myProfile);
   
   G4int GetGrid(){return fGrid;};
-  void SetGrid(G4int myGrid);
+  void  SetGrid(G4int myGrid);
 
   G4LogicalVolume* GetLogicalWorld() {return fLogicWorld;};
   G4LogicalVolume* GetLogicalVol() {return fLogicVol;};
@@ -115,19 +113,11 @@ private:
   G4Material*        fDefaultMaterial;
   G4Material*        fGridMaterial;
 
-  G4bool fGradientsInitialized;
   DetectorMessenger* fDetectorMessenger;
   
   //
-  
   static G4ThreadLocal TabulatedField3D * fField;
-
-  G4FieldManager * fFieldMgr;
-  G4MagIntegratorStepper * fStepper;
-  G4Mag_UsualEqRhs * fEquation;
-  G4ChordFinder * fChordFinder ;
-  G4PropagatorInField * fPropInField;
-
+  
 };
 #endif
 

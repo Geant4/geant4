@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 96129 2016-03-16 22:05:08Z gcosmo $
+# $Id: sources.cmake 103464 2017-04-11 07:24:03Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -22,6 +22,8 @@ include_directories(${USOLIDS_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
@@ -41,15 +43,14 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4MultiUnion.hh
         G4ScaledSolid.hh
         G4SubtractionSolid.hh
-        G4UMultiUnion.hh
         G4UnionSolid.hh
     SOURCES
         G4BooleanSolid.cc
         G4DisplacedSolid.cc
         G4IntersectionSolid.cc
+        G4MultiUnion.cc
         G4ScaledSolid.cc
         G4SubtractionSolid.cc
-        G4UMultiUnion.cc
         G4UnionSolid.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
@@ -57,7 +58,8 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4graphics_reps
         G4intercoms
         G4volumes
-        G4GeomUSolids
+        G4csg
+        G4specsolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps

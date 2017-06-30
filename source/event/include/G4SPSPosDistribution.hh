@@ -38,6 +38,9 @@
 // CHANGE HISTORY
 // --------------
 // 
+// 30/04/2017  J Allison
+//    Added GetRotx,y,z access functions.
+//
 // 06/06/2014  A Dotti
 //    For thread safety: this is a shared object,
 //    mutex has been added to control access to shared resources (data members).
@@ -202,6 +205,13 @@ public:
   G4double GetHalfY() const;
   G4double GetHalfZ() const;
   G4double GetRadius() const;
+  G4double GetRadius0() const {return Radius0;}
+  G4double GetParAlpha() const {return ParAlpha;}
+  G4double GetParTheta() const {return ParTheta;}
+  G4double GetParPhi()   const {return ParPhi;}
+  const G4ThreeVector& GetRotx() const {return Rotx;}
+  const G4ThreeVector& GetRoty() const {return Roty;}
+  const G4ThreeVector& GetRotz() const {return Rotz;}
 
     G4ThreeVector GetSideRefVec1() const;
     G4ThreeVector GetSideRefVec2() const;

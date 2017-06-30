@@ -35,6 +35,7 @@
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 #ifdef G4MULTITHREADED
 G4Mutex G4DeexPrecoParameters::deexPrecoMutex = G4MUTEX_INITIALIZER;
@@ -58,7 +59,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoLowEnergy = 0.1*CLHEP::MeV; 
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1.0*CLHEP::microsecond;
+  fMaxLifeTime = 1000*CLHEP::second;
   fMinExPerNucleounForMF = 100*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
@@ -74,6 +75,8 @@ void G4DeexPrecoParameters::SetDefaults()
   fCorrelatedGamma = false;
   fStoreAllLevels = false;
   fDeexChannelType = fEvaporation;
+  fInternalConversionID = 
+    G4PhysicsModelCatalog::Register("e-InternalConvertion");
 #ifdef G4MULTITHREADED
   G4MUTEXUNLOCK(&G4DeexPrecoParameters::deexPrecoMutex);
 #endif
@@ -193,16 +196,13 @@ void G4DeexPrecoParameters::SetUseAngularGen(G4bool val)
   fUseAngularGen = val;
 }
 
-void G4DeexPrecoParameters::SetUseFilesNEW(G4bool val)
-{
-  if(IsLocked()) { return; }
-  fUseLongFiles = val;
-}
+void G4DeexPrecoParameters::SetUseFilesNEW(G4bool)
+{}
 
 void G4DeexPrecoParameters::SetCorrelatedGamma(G4bool val)
 {
   if(IsLocked()) { return; }
-  fCorrelatedGamma = val;
+  fCorrelatedGamma = val; 
 }
 
 void G4DeexPrecoParameters::SetStoreAllLevels(G4bool val)
@@ -234,6 +234,7 @@ std::ostream& G4DeexPrecoParameters::StreamInfo(std::ostream& os) const
   os << "Use new data files                                  " << fUseLongFiles << "\n";
   os << "Use complete data files                             " << fStoreAllLevels << "\n";
   os << "Correlated gamma emission flag                      " << fCorrelatedGamma << "\n";
+  os << "Electron internal conversion ID                     " << fInternalConversionID << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);
   return os;
@@ -252,6 +253,5 @@ std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)
 G4bool G4DeexPrecoParameters::IsLocked() const
 {
   return (!G4Threading::IsMasterThread() ||
-	  (fStateManager->GetCurrentState() != G4State_PreInit &&
-	   fStateManager->GetCurrentState() != G4State_Idle));
+	  (fStateManager->GetCurrentState() != G4State_PreInit));
 }

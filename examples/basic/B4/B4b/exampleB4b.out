@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -66,7 +66,7 @@ Available colours:
 ***** Table : Nb of materials = 3 *****
 
  Material:    G4_Pb    density: 11.350 g/cm3   RadL:   5.613 mm   Nucl.Int.Length:  18.248 cm 
-                       Imean: 823.000 eV 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.217 g/mole
          --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
@@ -77,7 +77,7 @@ Available colours:
 
 
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
-                       Imean: 188.000 eV 
+                       Imean: 188.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ar (Ar)   Z = 18.0   N =    40   A = 39.950 g/mole
          --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:  0.337 %
@@ -115,7 +115,7 @@ Checking overlaps for volume Gap ... OK!
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -128,6 +128,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -793,10 +799,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     2
 =======================================================================
 Number of de-excitation channels                    8
 ### Run 0 starts.
@@ -804,37 +811,37 @@ Number of de-excitation channels                    8
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 288.973 MeV       total track length:  20.951 cm 
-        Gap: total energy: 7.92506 MeV       total track length: 3.60411 cm 
+   Absorber: total energy: 267.062 MeV       total track length: 19.0834 cm 
+        Gap: total energy: 9.63246 MeV       total track length: 5.07935 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 288.973 MeV rms = 0 eV 
- EGap : mean = 7.92506 MeV rms = 0 eV 
- LAbs : mean = 20.951 cm  rms = 0 fm 
- LGap : mean = 3.60411 cm  rms = 0 fm 
+ EAbs : mean = 267.062 MeV rms = 0 eV 
+ EGap : mean = 9.63246 MeV rms = 0 eV 
+ LAbs : mean = 19.0834 cm  rms = 0 fm 
+ LGap : mean = 5.07935 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
      Transportation,                msc,              hIoni,            ionIoni
              hBrems,          hPairProd,        CoulombScat,              eIoni
               eBrem,            annihil,               phot,              compt
-               conv,             muIoni,            muBrems,         muPairProd
-      photonNuclear,    electronNuclear,    positronNuclear,        muonNuclear
-              Decay,         hadElastic,   neutronInelastic,           nCapture
-    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
-     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
-anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
-anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
-  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
-anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
-anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
-         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
-       ionInelastic,            nKiller
+               conv,               Rayl,             muIoni,            muBrems
+         muPairProd,      photonNuclear,    electronNuclear,    positronNuclear
+        muonNuclear,              Decay,         hadElastic,   neutronInelastic
+           nCapture,    protonInelastic,       pi+Inelastic,       pi-Inelastic
+     kaon+Inelastic,     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic
+    lambdaInelastic,anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic
+    sigma+Inelastic,anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic
+       xi0Inelastic,  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic
+anti_protonInelastic,anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic
+  anti_He3Inelastic,anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest
+muMinusCaptureAtRest,         dInelastic,         tInelastic,       He3Inelastic
+     alphaInelastic,       ionInelastic,            nKiller
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -847,6 +854,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -1195,22 +1208,22 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 257.259 MeV       total track length: 18.7821 cm 
-        Gap: total energy:  19.948 MeV       total track length:  10.183 cm 
+   Absorber: total energy: 284.965 MeV       total track length: 20.5096 cm 
+        Gap: total energy: 15.5384 MeV       total track length: 7.91371 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 257.259 MeV rms = 0 eV 
- EGap : mean = 19.948 MeV rms = 0 eV 
- LAbs : mean = 18.7821 cm  rms = 0 fm 
- LGap : mean = 10.183 cm  rms = 0 fm 
+ EAbs : mean = 284.965 MeV rms = 0 eV 
+ EGap : mean = 15.5384 MeV rms = 0 eV 
+ LAbs : mean = 20.5096 cm  rms = 0 fm 
+ LGap : mean = 7.91371 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -1223,6 +1236,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -1571,15 +1590,15 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 457.539 MeV       total track length: 32.8939 cm 
-        Gap: total energy: 22.9867 MeV       total track length: 11.5387 cm 
+   Absorber: total energy: 452.281 MeV       total track length: 32.8474 cm 
+        Gap: total energy: 30.1405 MeV       total track length: 15.7021 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 457.539 MeV rms = 0 eV 
- EGap : mean = 22.9867 MeV rms = 0 eV 
- LAbs : mean = 32.8939 cm  rms = 0 fm 
- LGap : mean = 11.5387 cm  rms = 0 fm 
+ EAbs : mean = 452.281 MeV rms = 0 eV 
+ EGap : mean = 30.1405 MeV rms = 0 eV 
+ LAbs : mean = 32.8474 cm  rms = 0 fm 
+ LGap : mean = 15.7021 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
 Graphics systems deleted.

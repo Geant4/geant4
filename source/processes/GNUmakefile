@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 94124 2015-11-06 09:47:51Z gcosmo $
+# $Id: GNUmakefile 103669 2017-04-20 15:46:39Z gcosmo $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -11,7 +11,7 @@ endif
 
 GLOBLIBS  = libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
-GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib libG4analysis.lib
 GLOBLIBS += libG4intercoms.lib libG4global.lib
 GLOBLIBS += libG4expat.lib libG4zlib.lib
 
@@ -19,8 +19,9 @@ include $(G4INSTALL)/config/architecture.gmk
 
 SUBDIRS  = management 
 SUBDIRS += cuts 
+SUBDIRS += solidstate/channeling
+SUBDIRS += solidstate/phonon
 SUBDIRS += optical 
-SUBDIRS += phonon
 SUBDIRS += decay 
 SUBDIRS += scoring
 SUBDIRS += biasing/management
@@ -47,6 +48,7 @@ SUBDIRS += electromagnetic/polarisation
 SUBLIBS  = G4procman 
 SUBLIBS += G4cuts 
 SUBLIBS += G4optical 
+SUBLIBS += G4channeling
 SUBLIBS += G4phonon
 SUBLIBS += G4decay
 SUBLIBS += G4scoring

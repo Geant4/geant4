@@ -1,4 +1,4 @@
-$Id: History 101700 2016-11-21 16:16:14Z gcosmo $
+$Id: History 104670 2017-06-09 10:01:02Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,64 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 9, 2017 G.Cosmo                       geommng-V10-03-18
+- Corrections and improvements to G4UAdapter.
+
+June 1, 2017 G.Cosmo                       geommng-V10-03-17
+- Made G4UAdapter compliant with latest modifications in VecGeom for
+  renaming of GetPointOnSurface() method to SamplePointOnSurface().
+
+May 24, 2017 G.Cosmo                       geommng-V10-03-16
+- Renamed ambiguous name Extent() in G4VSolid to BoundingLimits().
+  Modified G4ReflectedSolid accordingly.
+  Change required in order to avoid signature conflict with VecGeom
+  in G4U* wrappers.
+
+May 24, 2017 G.Cosmo                       geommng-V10-03-15
+- Added adapter class G4UAdapter for interfacing G4U* wrappers with VecGeom.
+  Will replace G4USolid bridge class, deprecating USolids API in favour of
+  direct use of VecGeom signatures and removal of one extra-level of
+  indirection/inheritance.
+
+May 9, 2017 G.Cosmo                        geommng-V10-03-14
+- Moved few key methods to be inline in G4USolid.
+
+March 28, 2017 G.Cosmo                     geommng-V10-03-13
+- Enabled deletion of solids in G4SolidsStore destructor also for MT mode. 
+
+March 22, 2017 G.Cosmo                     geommng-V10-03-12
+- Define IsGeometryClosed() in G4GeometryManager as a static method, to
+  avoid call to GetInstance(). Made related Boolean flag thread-local.
+
+March 21, 2017 G.Cosmo                     geommng-V10-03-11, 10
+- Restore singleton pointer to thread-local and provide simple accessor to it.
+
+March 17, 2017 G.Cosmo                     geommng-V10-03-09
+- Define G4GeometryManager as normal singleton.
+
+March 15, 2017 G.Cosmo                     geommng-V10-03-08
+- Refined deletion of subinstance offsets in stores.
+
+March 14, 2017 G.Cosmo                     geommng-V10-03-07
+- Removed additional wrong lock in G4GeomSplitter for function
+  SlaveReCopySubInstanceArray().
+- Disable cleaning of subinstance offsets on Windows.
+
+March 10, 2017 G.Cosmo                     geommng-V10-03-06,5,4,3
+- Fixed static memory leak from G4LogicalVolume, G4VPhysicalVolume and
+  G4Region, for offsets allocated in sequential mode.
+
+February 27, 2017 E.Tcherniaev             geommng-V10-03-02
+- Added functions EllipsePerimeter(), EllipticConeLateralArea() and
+  comp_ellint_2() to G4GeomTools.
+
+December 16, 2016 G.Cosmo                  geommng-V10-03-01
+- Fixed compilation warning on gcc-6.2 for last changes in G4GeomTools.
+
+December 14, 2016 E.Tcherniaev             geommng-V10-03-00
+- Added methods TriangelAreaNormal(), QuadAreaNormal(), PolygonAreaNormal(),
+  ClosestPointOnSegment() and ClosestPointOnTriangle() to G4GeomTools.
 
 November 8, 2016 G.Cosmo                   geommng-V10-02-32
 - Fixed header inclusions in G4LogicalCrystalVolume and make use of

@@ -1,4 +1,4 @@
-$Id: History 101665 2016-11-21 09:11:07Z gcosmo $
+$Id: History 104352 2017-05-26 07:23:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 24, 2017 J.Apostolakis   - fieldex02-V10-03-02
+- Fixed F02ElectricFieldSetup UpdateIntegrator() method (avoid double
+    deletion of driver - done by chord finder already. )
+
+May 17, 2017 J.Apostolakis   - fieldex02-V10-03-00, 01
+- Fixed F02ElectricFieldSetup Update...() method.
+  * Now all old objects are deleted first, and then new objects are created.
+  * Renamed UpdateStepper() to UpdateIntegrator() to clarify its role
 
 November 19, 2016 A.Dotti   - fieldex02-V10-02-03
 - explicit set of SD to manager

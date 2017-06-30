@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvn.cc 67982 2013-03-13 10:36:03Z gcosmo $
+// $Id: G4gsdvn.cc 104024 2017-05-08 14:44:25Z gcosmo $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
 
@@ -64,7 +64,7 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
     
     G4String newName = vname;
     if (i>0) {
-      char index[5]; sprintf(index, "%d", i);
+      char index[12]; sprintf(index, "%d", i);
       newName.append(gSeparator); newName = newName + index;
     }	
 

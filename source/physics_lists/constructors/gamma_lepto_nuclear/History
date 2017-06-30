@@ -1,4 +1,4 @@
-$Id: History 101023 2016-11-04 08:29:28Z gcosmo $
+$Id: History 104601 2017-06-07 09:01:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-November-2015, V.Ivanchenko (phys-ctor-glnuclear-V10-02-04)
+06-June-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-01)
+- G4EmExtraPhysics, G4EmMessenger - added extra UI commands to define 
+    cross section factors for rare processes (requirement of ShiP 
+    experiment for dark matter search) 
+
+04-May-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-00)
+- G4EmExtraPhysics, G4EmMessenger, G4BertiniElectroNuclearBuilder 
+    added option and UI command to enable/disable e+- nuclear process
+
+12-Nov-2016, V.Ivanchenko (phys-ctor-glnuclear-V10-02-04)
 - G4EmExtraPhysics, G4EmMessenger - added rare high energy EM processes, 
     disabled by default
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 98778 2016-08-09 14:41:08Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 104349 2017-05-26 07:18:59Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -1295,7 +1295,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
       atomDeexcitation->AlongStepDeexcitation(scTracks, step, 
                                               eloss, currentCoupleIndex);
       if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
-      if(eloss < 0.0) { eloss = 0.0; }
+      eloss = std::max(eloss, 0.0);
     }
     fParticleChange.SetProposedKineticEnergy(0.0);
     fParticleChange.ProposeLocalEnergyDeposit(eloss);

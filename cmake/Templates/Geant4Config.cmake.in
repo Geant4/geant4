@@ -95,10 +95,11 @@
 # argument is set. This is because these options do not depend on specific
 # components being available.
 #
-# You can also query whether the Geant4 found uses the builtin versions
-# of CLHEP, ZLIB, or Expat after calling find_package via the variables
+# You can also query whether the Geant4 found uses the builtin or system
+# versions of CLHEP, ZLIB, or Expat after calling find_package via the variables
 #
 #  Geant4_builtin_clhep_FOUND   (TRUE if Geant4 built with internal CLHEP)
+#  Geant4_system_clhep_FOUND    (TRUE if Geant4 built with external CLHEP)
 #  Geant4_builtin_expat_FOUND   (TRUE if Geant4 built with internal Expat)
 #  Geant4_builtin_zlib_FOUND    (TRUE if Geant4 built with internal Zlib)
 #
@@ -264,19 +265,32 @@ unset(Geant4_DATASET_DESCRIPTIONS)
 # but require additional compile definitions.
 #
 # Builtin/External packages
-set(Geant4_builtin_clhep_FOUND @GEANT4_USE_BUILTIN_CLHEP@)
-if(NOT Geant4_builtin_clhep_FOUND)
+set(Geant4_system_clhep_FOUND @GEANT4_USE_SYSTEM_CLHEP@)
+
+if(Geant4_system_clhep_FOUND)
+  set(Geant4_builtin_clhep_FOUND FALSE)
   set(Geant4_system_clhep_ISGRANULAR @GEANT4_USE_SYSTEM_CLHEP_GRANULAR@)
 
-  set(CLHEP_ROOT_DIR "@CLHEP_ROOT_DIR@")
-  set(__GEANT4_OLD_CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH})
-  set(CMAKE_MODULE_PATH "${_geant4_thisdir}/Modules" ${CMAKE_MODULE_PATH})
-  find_package(CLHEP @CLHEP_VERSION@ REQUIRED @__g4_clhep_components@)
-  set(CMAKE_MODULE_PATH ${__GEANT4_OLD_CMAKE_MODULE_PATH})
-  unset(CLHEP_ROOT_DIR)
-  unset(__GEANT4_OLD_CMAKE_MODULE_PATH)
-  #CLHEP doesn't use target properties fully yet, so always include_directories
+  # TODO: Review hard-coding of build-time CLHEP_DIR, as this prevents
+  # full relocatability, but minimizes client configuration. It is
+  # also required by the testing system (due to tests/example *builds*
+  # being tests.
+  # TODO: See if hard-coded variables can be stored in an optional
+  # "build settings" file that can be optionally installed/included
+  set(CLHEP_DIR "@CLHEP_DIR@")
+  find_package(CLHEP @CLHEP_VERSION@ EXACT REQUIRED @__g4_clhep_components@ CONFIG)
+
+  # HACK: Explicitly use include_directories.
+  # - Geant4 and CLHEP use full imported targets with usage requirements,
+  #   but ROOT (used in the examples), ignores usage requirements in dictionary
+  #   generation steps.
+  #   To retain comptibility with examples, explictly include_directories
+  #   for CLHEP. This is a *pure workaround* for the use case of a project
+  #   using ROOT that generates dictionaries for class headers that
+  #   #include Geant4 headers...
   include_directories(${CLHEP_INCLUDE_DIRS})
+else()
+  set(Geant4_builtin_clhep_FOUND TRUE)
 endif()
 
 set(Geant4_builtin_expat_FOUND @GEANT4_USE_BUILTIN_EXPAT@)

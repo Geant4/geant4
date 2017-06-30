@@ -28,7 +28,9 @@
 
 #include "HadrontherapyPrimaryGeneratorAction.hh"
 #include "HadrontherapyPrimaryGeneratorMessenger.hh"
-#include "HadrontherapyAnalysisManager.hh"
+
+#include "HadrontherapyMatrix.hh"
+#include "HadrontherapyDetectorSD.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -36,36 +38,46 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
+#include "G4IonTable.hh"
+
+
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Event.hh"
+#include "G4Timer.hh"
+
+#include "G4RunManager.hh"
+
+
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPrimaryGeneratorAction::HadrontherapyPrimaryGeneratorAction()
 {
-  
-   SetDefaultPrimaryParticle();  
-  
-  // Definition of the General particle Source
-  particleGun = new G4GeneralParticleSource();
-}  
+    PrimaryGeneratorMessenger = new HadrontherapyPrimaryGeneratorMessenger(this);
+    SetDefaultPrimaryParticle();
+    particleGun = new G4GeneralParticleSource();
+
+}
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPrimaryGeneratorAction::~HadrontherapyPrimaryGeneratorAction()
 {
-  delete particleGun;
-  
+delete PrimaryGeneratorMessenger;
+delete  particleGun;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPrimaryGeneratorAction::SetDefaultPrimaryParticle()
-{ 
- 
+{
+    
 }
-  /////////////////////////////////////////////////////////////////////////////
-  void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
-  {
-#ifdef G4ANALYSIS_USE_ROOT
-    // Increment the event counter
-    HadrontherapyAnalysisManager::GetInstance()->startNewEvent();
-#endif
-    particleGun -> GeneratePrimaryVertex( anEvent ); 
-    } 
+
+/////////////////////////////////////////////////////////////////////////////
+void HadrontherapyPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+        particleGun->GeneratePrimaryVertex(anEvent);
+
+}
+
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc 100690 2016-10-31 11:25:43Z gcosmo $
+// $Id: G4EvaporationChannel.cc 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -110,11 +110,13 @@ G4double G4EvaporationChannel::GetEmissionProbability(G4Fragment* fragment)
 	   << G4endl;
     */
     // for OPTxs >0 penetration under the barrier is taken into account
-    G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier*0.7;
+    // G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier*0.5;
+    static const G4double dCB = 3.5*CLHEP::MeV;
+    G4double elim = (0 == OPTxs) ? CoulombBarrier : CoulombBarrier - dCB*theZ;
     if(ExEnergy >= delta0 && Mass >= ResMass + EvapMass + elim) {
       G4double xm2 = (Mass - EvapMass)*(Mass - EvapMass);
       G4double xm  = Mass - EvapMass - elim;
-      MinKinEnergy = (0.0 == elim) ? 0.0 : std::max(0.5*(xm2 - xm*xm)/Mass, 0.0);
+      MinKinEnergy = (0.0 >= elim) ? 0.0 : std::max(0.5*(xm2 - xm*xm)/Mass, 0.0);
       MaxKinEnergy = std::max(0.5*(xm2 - ResMass*ResMass)/Mass, 0.0);
       //G4cout << "Emin= " << MinKinEnergy << " Emax= " << MaxKinEnergy 
       //     << "  xm= " << xm  << G4endl;

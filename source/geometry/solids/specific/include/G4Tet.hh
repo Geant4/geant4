@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh 99781 2016-10-05 10:18:54Z gcosmo $
+// $Id: G4Tet.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -47,7 +47,7 @@
 // 10.02.2005 - D.Anninos (CERN) - Added GetPointOnSurface() method.
 // 12.11.2006 - M.H.Mendenhall - Added GetSurfaceArea() concrete implementation.
 // 20.09.2010 - G.Cosmo (CERN) - Added copy-ctor and operator=().
-// 24.09.2016 - E.Tcherniaev - Added Extent(), removed CreateRotatedVertices().
+// 24.09.2016 - E.Tcherniaev - Removed CreateRotatedVertices().
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
@@ -81,7 +81,7 @@ class G4Tet : public G4VSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -133,7 +133,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh 99781 2016-10-05 10:18:54Z gcosmo $"; }
+      { return "$Id: G4Tet.hh 104316 2017-05-24 13:04:23Z gcosmo $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)

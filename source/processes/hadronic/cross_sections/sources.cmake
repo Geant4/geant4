@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 94008 2015-11-05 10:06:41Z gcosmo $
+# $Id: sources.cmake 104263 2017-05-23 12:13:24Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -93,8 +93,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4IonsShenCrossSection.hh
 	G4IonsSihverCrossSection.hh
 	G4KokoulinMuonNuclearXS.hh
+        G4NeutrinoElectronCcXsc.hh
+        G4NeutrinoElectronNcXsc.hh
 	G4NeutronCaptureXS.hh
 	G4NeutronElasticXS.hh
+        G4NeutronElectronElXsc.hh
 	G4NeutronInelasticCrossSection.hh
 	G4NeutronInelasticXS.hh
 	G4NucleonNuclearCrossSection.hh
@@ -162,8 +165,11 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
 	G4IonsShenCrossSection.cc
 	G4IonsSihverCrossSection.cc
 	G4KokoulinMuonNuclearXS.cc
+        G4NeutrinoElectronCcXsc.cc
+        G4NeutrinoElectronNcXsc.cc
 	G4NeutronCaptureXS.cc
 	G4NeutronElasticXS.cc
+        G4NeutronElectronElXsc.cc
 	G4NeutronInelasticCrossSection.cc
 	G4NeutronInelasticXS.cc
 	G4NucleonNuclearCrossSection.cc

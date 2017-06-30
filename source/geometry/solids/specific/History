@@ -1,4 +1,4 @@
-$Id: History 102532 2017-02-08 13:44:45Z gcosmo $
+$Id: History 104759 2017-06-15 12:46:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-December-2016  G.Cosmo         (geom-specific-V10-02-26)
+15-June-2017  G.Cosmo             (geom-specific-V10-03-08)
+- Enabled adapter also in G4UPolycone wrapper.
+- Added check on open solid for G4UPolyhedra wrapper.
+
+6-June-2017  G.Cosmo              (geom-specific-V10-03-07)
+- Enable adapter for VecGeom shapes in G4U* wrappers for: paraboloid,
+  polyhedra and GenericTrap. From now on, wrappers depends directly on
+  VecGeom shapes implementation. USolids API is deprecated and no longer
+  supported.
+
+24-May-2017  G.Cosmo              (geom-specific-V10-03-06)
+- Renamed ambiguous name Extent() in all solids and G4U* wrappers to
+  BoundingLimits(). Change required in order to avoid signature conflict
+  with VecGeom in G4U* wrappers.
+  Requires tag geommng-V10-03-16.
+
+11-May-2017  G.Cosmo              (geom-specific-V10-03-05)
+- Removed potential race condition in G4VTwistSurface::AmIOnLeftSide().
+  Addressing problem report #1972.
+
+7-April-2017  G.Cosmo             (geom-specific-V10-03-04)
+- Renamed G4SurfaceVoxelizer to G4Voxelizer and extended to support
+  voxelisation of shapes in 3D space. Adapted G4TessellatedSolid accordingly.
+
+13-March-2017  G.Cosmo            (geom-specific-V10-03-03)
+- G4SolidsWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  to be called by worker threads. Removed declaration (i.e. not implemented)
+  of protected method ReleaseAndDestroyWorkspace().
+
+2-March-2017  E.Tcherniaev        (geom-specific-V10-03-02)
+- Fixed possible rounding off error in calculation of 'astep' (max angle
+  for one step) in CalculateExtent() for G4Polycone, G4GenericPolycone
+  and related USolids wrappers.
+
+27-February-2017  E.Tcherniaev    (geom-specific-V10-03-01)
+- Revised implementation of GetCubicVolume() and GetSurfaceArea() for
+  G4EllipticalTube, to return exact values.
+- Revised implementation of GetSurfaceArea() for G4EllipticalCone, to
+  return exact value; moved both GetCubicVolume() and GetSurfaceArea() to
+  be not inline.
+
+13-December-2016  G.Cosmo         (geom-specific-V10-03-00)
 - Correction in G4UExtrudedSolid to signature for CalculateExtent().
   Fixes issue of undefined symbol if extruded-solid not included in the
   list of VecGeom wrappers to activate.

@@ -24,31 +24,72 @@
 // ********************************************************************
 //
 //
-// $Id: G4coutDestination.cc 82279 2014-06-13 14:44:00Z gcosmo $
+// $Id: G4coutDestination.cc 103661 2017-04-20 14:57:11Z gcosmo $
 //
-// 
 // ----------------------------------------------------------------------
 // G4coutDestination
-//
+// ----------------------------------------------------------------------
 
 #include "G4coutDestination.hh"
 
-G4coutDestination* G4coutDestination::masterG4coutDestination = 0;
+#include <algorithm>
 
-G4coutDestination::G4coutDestination()
-{
-}
+G4coutDestination* G4coutDestination::masterG4coutDestination = 0;
 
 G4coutDestination::~G4coutDestination()
 {
 }
 
-G4int G4coutDestination::ReceiveG4cout(const G4String&)
+void G4coutDestination::ResetTransformers()
 {
+  transformersCout.clear(); transformersCerr.clear();
+}
+
+G4int G4coutDestination::ReceiveG4cout(const G4String& msg)
+{
+  std::cout<<msg<<std::flush;
   return 0;
 }
 
-G4int G4coutDestination::ReceiveG4cerr(const G4String&)
+G4int G4coutDestination::ReceiveG4cerr(const G4String& msg)
 {
+  std::cerr<<msg<<std::flush;
   return 0;
+}
+
+G4int G4coutDestination::ReceiveG4cout_(const G4String& msg)
+{
+  // Avoid copy of string if not necessary
+  if( transformersCout.size() > 0 )
+  {
+    G4String m = msg;
+    G4bool result = true;
+    for ( const auto& el : transformersCout )
+    {
+      result &= el(m);
+      if ( ! result ) break;
+    }
+    return ( result ? ReceiveG4cout(m) : 0 );
+  }
+  else
+  {
+    return ReceiveG4cout(msg);
+  }
+}
+
+G4int G4coutDestination::ReceiveG4cerr_(const G4String& msg)
+{
+  if( transformersCout.size() > 0 )
+  {
+    G4String m = msg;
+    std::for_each( transformersCerr.begin() , transformersCerr.end() ,
+                   [&m](const Transformer& t) { t(m); }
+                   // Call transforming function on message
+                 );
+    return ReceiveG4cerr(m);
+  }
+  else
+  {
+    return ReceiveG4cerr(msg);
+  }
 }

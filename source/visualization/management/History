@@ -1,4 +1,4 @@
-$Id: History 102575 2017-02-09 09:07:12Z gcosmo $
+$Id: History 104163 2017-05-15 06:52:42Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,8 +26,67 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-12th December 2016  Brian Smith, Laurent Garnier  (visman-V10-02-38)
+14th May 2017  John Allison  (visman-V10-03-12)
+- Needs modeling-V10-03-07.
+- Add user-selected colour to /vis/scene/add/gps.
+
+12th May 2017  John Allison  (visman-V10-03-11)
+- Added G4VVisCommand::ConvertToColourGuidance.  This avoids having to
+  repeat it for every command that uses it.
+- /vis/viewer/save: Add .g4view if an extension us not supplied by the user.
+- /vis/viewer/set/defaultTextColour: Changed default to blue and opaque to
+  agree with default text vis attributes.
+
+11th May 2017  John Allison  (visman-V10-03-10)
+- Added #include <cctype> for Windows compiler and removed where no
+  longer necessary because isalpha is now encapsulated in
+  G4VVisCommand::ConverToColour.
+
+10th May 2017  John Allison  (visman-V10-03-09)
+- Needs greps-V10-03-04.
+- Added G4VVisCommand::ConvertToColour.
+- Now used throughout vis commands.
+
+1st May 2017  John Allison  (visman-V10-03-08)
+- G4VisCommandsViewer.cc:
+  o /vis/viewer/interpolate:
+    Add ShowView to be sure file-writing viewers close the file.
+
+1st May 2017  John Allison  (visman-V10-03-07)
+- Added /vis/scene/add/gps.
+
+23rd April 2017  John Allison  (visman-V10-03-05)
+- Improved command guidance.
+
+18th April 2017  John Allison  (visman-V10-03-04)
+- G4VisManager.cc: Improved error trapping in G4VisManager::CreateViewer.
+
+22nd February 2017  John Allison  (visman-V10-03-03)
+- Replaced G4VisExtent::NullExtent by G4VisExtent() throughout.
+
+12th December 2016  Brian Smith, Laurent Garnier  (visman-V10-03-02)
 - /vis/viewer/interpolate: Now works for WIN32.
+
+7th December 2016  John Allison (visman-V10-03-01)
+- G4VisManager:
+  o Moved SetUserAction out of line and added warning message:
+    "Deprecated.  Use RegisterRunDurationUserVisAction."
+ 
+9th December 2016  John Allison (visman-V10-03-00)
+- Coworks with modeling-V10-03-00.
+- G4VVisCommand:
+  o Added fCurrentArrow3DLineSegmentsPerCircle.
+  o Improved ConvertToDoublePair to return false if unit is not recognised.
+- G4VisCommandsSet:
+  o Introduced /vis/set/arrow3DLineSegmentsPerCircle.
+- G4Scene.cc: Improved user messages in AddRunDurationModel.
+- G4VisCommandsSceneAdd.cc:
+  o Adapted to augmented G4ArrowModel and G4MagneticFieldModel in
+    modeling-V10-03-00.
+- G4VisCommandsViewerSet.cc:
+  o Uses new ConvertToDoublePair.  Prevents crash is user inadvertently
+    enters unrecognised unit.
+- G4VisManager.cc: Registered /vis/set/arrow3DLineSegmentsPerCircle.
 
 27th November 2016  John Allison (visman-V10-02-37)
 - G4VisManager.cc: Fix for OpenGLXm.  An extra refresh should come

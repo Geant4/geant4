@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc 100428 2016-10-21 12:59:37Z gcosmo $
+// $Id: G4Region.cc 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4Region Implementation
@@ -339,6 +339,15 @@ void G4Region::RemoveRootLogicalVolume(G4LogicalVolume* lv, G4bool scan)
   // Set region as modified
   //
   fRegionMod = true;
+}
+
+// ********************************************************************
+// Clean
+// ********************************************************************
+//
+void G4Region::Clean()
+{
+  subInstanceManager.FreeSlave();
 }
 
 // *******************************************************************

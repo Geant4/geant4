@@ -404,6 +404,8 @@ class G4VAnalysisManager
     G4int GetH1Id(const G4String& name, G4bool warn = true) const;
     G4int GetH2Id(const G4String& name, G4bool warn = true) const;
     G4int GetH3Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP1Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP2Id(const G4String& name, G4bool warn = true) const;
    
     // Methods to manipulate histogram, profiles & ntuples additional information
     //

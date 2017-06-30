@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.cc 101245 2016-11-10 08:45:38Z gcosmo $
+// $Id: DetectorMessenger.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
@@ -44,13 +44,14 @@
 
 #include "DetectorMessenger.hh"
 #include "DetectorConstruction.hh"
-#include "Histo.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
+
+//#include "g4root.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -116,11 +117,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
   fZMagFieldCmd->SetUnitCategory("Length");
   fZMagFieldCmd->AvailableForStates(G4State_PreInit);
 
-  fHistoCmd = new G4UIcmdWithAString("/testem/histoName",this);
-  fHistoCmd->SetGuidance("Set the name of the histo file");
-  fHistoCmd->SetParameterName("histo",false);
-  fHistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fNumOfAbsCmd = new G4UIcmdWithAnInteger("/testem/numberDivR",this);
   fNumOfAbsCmd->SetGuidance("Set number divisions R");
   fNumOfAbsCmd->SetParameterName("NR",false);
@@ -153,7 +149,10 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction* h):
 
 DetectorMessenger::~DetectorMessenger()
 {
-  delete fNumOfAbsCmd;
+  delete fDetDir;
+  delete fDetDir1;
+  delete fDetDir2;
+
   delete fAbsMaterCmd;
   delete fAbsThickCmd;
   delete fAbsGapCmd;
@@ -163,20 +162,19 @@ DetectorMessenger::~DetectorMessenger()
   delete fXMagFieldCmd;
   delete fYMagFieldCmd;
   delete fZMagFieldCmd;
-  delete fHistoCmd;
+  delete fNumOfAbsCmd;
   delete fNumOfEvt;
   delete fVerbCmd;
   delete fIntCmd;
-  delete fDetDir;
-  delete fDetDir1;
-  delete fDetDir2;
   delete fDeltaECmd;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
+
   if( command == fAbsMaterCmd )
    { fDetector->SetTarget1Material(newValue);}
 
@@ -206,27 +204,23 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fZMagFieldCmd )
    { fDetector->SetAbsorberShiftZ(fZMagFieldCmd->GetNewDoubleValue(newValue));}
 
-  if( command == fHistoCmd )
-   { (Histo::GetPointer())->SetHistoName(newValue);}
-
   if( command == fNumOfAbsCmd )
-   {(Histo::GetPointer())
-     ->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));}
+   {
+     fDetector->SetNumberDivR(fNumOfAbsCmd->GetNewIntValue(newValue));
+   }
 
   if( command == fNumOfEvt )
-   {(Histo::GetPointer())->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));}
+   { fDetector->SetNumberDivZ(fNumOfEvt->GetNewIntValue(newValue));}
+
+  if( command == fIntCmd )
+   { fDetector->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));}
+  if( command == fDeltaECmd )
+   { fDetector->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
 
   if( command == fVerbCmd ){
      G4int ver = fVerbCmd->GetNewIntValue(newValue);
-     (Histo::GetPointer())->SetVerbose(ver);
+     fDetector->SetVerbose(ver);
    }
-
-  if( command == fIntCmd )
-   {(Histo::GetPointer())->SetNumberDivE(fIntCmd->GetNewIntValue(newValue));}
-
-  if( command == fDeltaECmd )
-   {(Histo::GetPointer())
-     ->SetMaxEnergy(fDeltaECmd->GetNewDoubleValue(newValue));}
 
 }
 

@@ -34,6 +34,7 @@
 // Description: Modified version of G4FTFPPiKBuilder to include on kaons.
 //
 // Modified
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -60,15 +61,16 @@ class G4FTFPKaonBuilder : public G4VKaonBuilder
     G4FTFPKaonBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFPKaonBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4KaonPlusInelasticProcess * aP);
-    virtual void Build(G4KaonMinusInelasticProcess * aP);
-    virtual void Build(G4KaonZeroLInelasticProcess * aP);
-    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {};
+    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override{theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VKaonBuilder::Build; //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;

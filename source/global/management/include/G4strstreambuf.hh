@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id: G4strstreambuf.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4strstreambuf.hh 103661 2017-04-20 14:57:11Z gcosmo $
+//
 // ====================================================================
 //
 //   G4strstreambuf
@@ -33,9 +34,10 @@
 #ifndef G4_STR_STREAM_BUF_HH
 #define G4_STR_STREAM_BUF_HH
 
+#include <streambuf>
+
 #include "globals.hh"
 #include "G4coutDestination.hh"
-#include <streambuf>
 
 class G4strstreambuf;
 
@@ -68,6 +70,7 @@ class G4strstreambuf : public std::basic_streambuf<char>
 #endif
 
     void SetDestination(G4coutDestination* dest);
+    inline G4coutDestination* GetDestination() const;
     inline G4int ReceiveString ();
   
   private:
@@ -84,4 +87,3 @@ class G4strstreambuf : public std::basic_streambuf<char>
 #include "G4strstreambuf.icc"
 
 #endif
-

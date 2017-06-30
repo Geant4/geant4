@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 100662 2016-10-31 10:21:14Z gcosmo $
+// $Id: G4Material.cc 102843 2017-02-27 13:02:28Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -665,16 +665,11 @@ std::ostream& operator<<(std::ostream& flux, const G4Material* material)
     << "\n" << std::setw(30)   
     << "  Imean: "           << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),
-		  "Energy");
-    
-  if(material->fState == kStateGas) {
-    flux
-      << "  temperature: " << std::setw(6) << std::setprecision(2)  
-      << (material->fTemp)/kelvin << " K"
-      << "  pressure: "    << std::setw(6) << std::setprecision(2)   
-      << (material->fPressure)/atmosphere << " atm";
-  }
-  flux << "\n";
+		  "Energy")
+    << "  temperature: " << std::setw(6) << std::setprecision(2)  
+    << (material->fTemp)/kelvin << " K"
+    << "  pressure: "    << std::setw(6) << std::setprecision(2)   
+    << (material->fPressure)/atmosphere << " atm" << "\n";
   
   for (G4int i=0; i<material->fNumberOfElements; i++) {
     flux 

@@ -14,22 +14,59 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21 February 2017  V.Ivanchenko  radioactive_decay-V10-02-18
+12 June 2017  Dennis Wright  radioactive_decay-V10-03-11
+--------------------------------------------------------
+- due to run and compile errors on Mac, go back to radioactive_decay-V10-03-07,
+  remove all cached variables and delete instance of photonEvaporation in 
+  G4RadioactiveDecay::dtor
+
+3 June 2017  Dennis Wright  radioactive_decay-V10-03-10
+-------------------------------------------------------
+- G4RadioactiveDecay: store polarizedNucleus as a heap object instead of stack
+  in order to improve multithreading behavior
+- G4ITDecay::DecayIt: change code to deal with polarizedNucleus as a heap object  
+
+31 May 2017  Dennis Wright  radioactive_decay-V10-03-09
+-------------------------------------------------------
+- G4ITDecay: remove unused pointer to daughterNucleus
+
+29 May 2017  Dennis Wright  radioactive_decay-V10-03-08
+-------------------------------------------------------
+- G4RadioactiveDecay: add static thread local G4Fragment to act as cache for
+    nuclear polarization in G4ITDecay
+- G4RadioactiveDecay::dtor:  delete photonEvaporation
+- G4ITDecay: store in static G4Fragment the nuclear polarization after each 
+    decay so that it can be used as initial polarization for next decay 
+
+12 May 2017  Dennis Wright  radioactive_decay-V10-03-07
+-------------------------------------------------------
+- G4RadioactiveDecay: instantiate G4PhotonEvaporation in ctor and pass ptr to
+    G4ITDecay
+- G4ITDecay: remove instantiation of G4PhotonEvaporation and use ptr from
+    G4RadioactiveDecay instead
+
+ 7 March 2017  Dennis Wright  radioactive_decay-V10-03-06
+---------------------------------------------------------
+- G4RadioactiveDecay::DecayIt() : add line
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
+  to propagate weight of parent track.  Fixes Bug #1946.
+
+21 February 2017  V.Ivanchenko  radioactive_decay-V10-03-05
 ------------------------------------------------------------
 - G4ITDecay: make daughterNucleus a pointer and store previous 
     state of the G4Fragment there
 - G4RadioactiveDecay - removed G4ThreadLocal G4Fragment
 
-20 February 2017  A. Ribon       radioactive_decay-V10-02-17
+20 February 2017  A. Ribon      radioactive_decay-V10-03-04
 ------------------------------------------------------------
 - G4RadioactiveDecay: switch off temporarily the correlated gamma emission,
                       to limit the non-reproducibility violations.
 
-16 February 2017  V.Ivanchenko
+16 February 2017  V.Ivanchenko  radioactive_decay-V10-03-03
 ------------------------------------------------------------
 - G4ITDecay: fixed old mass variable
 
-14 February 2017  Dennis Wright
+14 February 2017  Dennis Wright  radioactive_decay-V10-03-02
 ------------------------------------------------------------
 - G4ITDecay: Vladimir's changes from trunk which fix warnings:
     added check on Z, A, excitation energy in order to be
@@ -39,7 +76,7 @@ track of all tags.
 
 - G4RadioactiveDecay: use Laurent's level tolerence level of 10 eV 
  
-10 February 2017  Dennis Wright
+10 February 2017  Dennis Wright  radioactive_decay-V10-03-01
 ------------------------------------------------------------
 - G4RadioactiveDecay: add static G4ThreadLocal G4Fragment polarizedNucleus
   to serve as cache for polarized nucleus
@@ -54,7 +91,7 @@ track of all tags.
 - G4ITDecay: use G4RadioactiveDecay::polarizedNucleus as a cache to enable
   chain decay with polarization
 
-20 December 2016  Dennis Wright  radioactive_decay-V10-02-16
+20 December 2016  Dennis Wright  radioactive_decay-V10-03-00
 ------------------------------------------------------------
 - G4ITDecay::G4ITDecay(): make G4PhotonEvaporation a class member 
   and intialize only once to avoid memory churn

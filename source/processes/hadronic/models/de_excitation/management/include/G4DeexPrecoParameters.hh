@@ -80,6 +80,8 @@ public:
 
   inline G4double GetMinExPerNucleounForMF() const;
 
+  inline G4int GetInternalConversionID() const;
+
   inline G4int GetMinZForPreco() const;
 
   inline G4int GetMinAForPreco() const;
@@ -194,13 +196,16 @@ private:
   // Multi-fragmentation model
   G4double fMinExPerNucleounForMF;
 
-  // Preco model
-  G4int fMinZForPreco;
-  G4int fMinAForPreco;
-
   // Cross section type
   G4int fPrecoType;
   G4int fDeexType;
+
+  // Internal conversion model ID
+  G4int fInternalConversionID;
+
+  // Preco model
+  G4int fMinZForPreco;
+  G4int fMinAForPreco;
 
   // Preco flags
   G4bool fNeverGoBack;
@@ -266,6 +271,11 @@ inline G4double G4DeexPrecoParameters::GetMaxLifeTime() const
 inline G4double G4DeexPrecoParameters::GetMinExPerNucleounForMF() const
 {
   return fMinExPerNucleounForMF;
+}
+
+inline G4int G4DeexPrecoParameters::GetInternalConversionID() const
+{
+  return fInternalConversionID;
 }
 
 inline G4int G4DeexPrecoParameters::GetMinZForPreco() const

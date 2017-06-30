@@ -27,7 +27,7 @@
 /// \brief Main program of the persistency/gdml/G02 example
 //
 //
-// $Id: geotest.cc 68025 2013-03-13 13:43:46Z gcosmo $
+// $Id: geotest.cc 103277 2017-03-23 14:05:55Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -51,17 +51,13 @@
 #include "G02PrimaryGeneratorAction.hh"
 #include "G02RunAction.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
+
+// --------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
-       
   // Construct the default run manager
   //
   G4RunManager* runManager = new G4RunManager;
@@ -78,10 +74,10 @@ int main(int argc, char** argv)
   // Initialisation of runManager via macro for the interactive mode
   // This gives possibility to give different names for GDML file to READ
  
-#ifdef G4VIS_USE
+  // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
   // Open a UI session: will stay there until the user types "exit"
   //
@@ -89,31 +85,24 @@ int main(int argc, char** argv)
 
   if ( argc==1 )   // Automatically run default macro for writing... 
   {
-#ifdef G4UI_USE
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
     UImanager->ApplyCommand("/control/execute vis.mac");     
-#endif
     ui->SessionStart();
     delete ui;
-#endif
-  } else {            // Provides macro in input
-#ifdef G4UI_USE
+  }
+  else             // Interactive, provides macro in input
+  {
     G4UIExecutive* ui = new G4UIExecutive(argc, argv);
     G4String command = "/control/execute "; 
     G4String fileName = argv[1]; 
     UImanager->ApplyCommand(command+fileName); 
     ui->SessionStart();
     delete ui;
-#endif
   }
-  
-#ifdef G4VIS_USE
-  delete visManager;
-#endif
   
   // Job termination
   //
+  delete visManager;  
   delete runManager;
 
   return 0;

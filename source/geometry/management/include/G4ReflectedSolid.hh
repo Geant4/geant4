@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh 100906 2016-11-03 09:59:32Z gcosmo $
+// $Id: G4ReflectedSolid.hh 104317 2017-05-24 13:08:38Z gcosmo $
 //
 //
 // class G4ReflectedSolid
@@ -63,7 +63,7 @@ class G4ReflectedSolid : public G4VSolid
 
     EInside Inside( const G4ThreeVector& p ) const; 
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,

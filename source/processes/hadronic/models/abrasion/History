@@ -13,6 +13,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19-Mar-2017  Vladimir Ivanchenko (had-abrasion-V10-03-01)
+----------------------------------------------------
+- G4WilsonAbrasionModel - C. Mancini Terracciano fixed crash at 
+    initialisation
+
+07-Mar-2017  Vladimir Ivanchenko (had-abrasion-V10-03-00)
+----------------------------------------------------
+- G4WilsonAbrasionModel - removed dependence on G4FermiBreakUp,
+    G4Evaporation, G4MultiFragmentation - not needed redefinition
+    of default objects
+
 07-Aug-2015  Alberto Ribon  (had-abrasion-V10-01-01)
 ----------------------------------------------------
 - G4WilsonAbrasionModel : checking of 'while' loops.

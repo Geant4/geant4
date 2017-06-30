@@ -24,14 +24,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 101118 2016-11-07 09:10:59Z gcosmo $
+// $Id: G4TessellatedSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
 // CHANGE HISTORY
 // --------------
 // 23 October 2016,   E Tcherniaev, reimplemented CalculateExtent() to make
-//                    use of G4BoundingEnvelope, added Extent().
+//                    use of G4BoundingEnvelope.
 //
 // 12 October 2012,   M Gayer, CERN, complete rewrite reducing memory
 //                    requirements more than 50% and speedup by a factor of
@@ -1825,7 +1825,8 @@ G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 //
 // Get bounding box
 //
-void G4TessellatedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4TessellatedSolid::BoundingLimits(G4ThreeVector& pMin,
+                                        G4ThreeVector& pMax) const
 {
   pMin = fMinExtent;
   pMax = fMaxExtent;
@@ -1839,7 +1840,7 @@ void G4TessellatedSolid::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4TessellatedSolid::Extent()",
+    G4Exception("G4TessellatedSolid::BoundingLimits()",
                 "GeomMgt0001", JustWarning, message);
     DumpInfo();
   }
@@ -1860,7 +1861,7 @@ G4TessellatedSolid::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

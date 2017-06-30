@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh 99469 2016-09-22 15:04:36Z gcosmo $
+// $Id: G4Box.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -75,7 +75,7 @@ class G4Box : public G4CSGSolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -129,11 +129,6 @@ class G4Box : public G4CSGSolid
     G4Box(const G4Box& rhs);
     G4Box& operator=(const G4Box& rhs); 
       // Copy constructor and assignment operator.
-
-  protected:  // without description
-
-    enum ESide {kUndefined,kPX,kMX,kPY,kMY,kPZ,kMZ};
-      // Codes for faces (kPX= +x face, kMY= -y face, etc...)
 
   private:
 

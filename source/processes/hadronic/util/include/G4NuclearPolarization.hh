@@ -91,7 +91,6 @@ public:
   G4bool operator==(const G4NuclearPolarization &right) const;
   G4bool operator!=(const G4NuclearPolarization &right) const;
 
-  friend std::ostream& operator<<(std::ostream&, const G4NuclearPolarization*);
   friend std::ostream& operator<<(std::ostream&, const G4NuclearPolarization&);
 
 private:

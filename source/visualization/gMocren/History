@@ -1,4 +1,4 @@
-$Id: History 99263 2016-09-09 13:19:14Z gcosmo $
+$Id: History 104291 2017-05-23 13:25:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
+
+23rd May 2017  John Allison  (gMocren-V10-03-00)
+- Fixes for gcc-7.1 warnings.
 
 8th September 2016  Akinori Kimura (gMocren-V10-02-03)
 - G4GMocrenFileSceneHandler.cc: Fixed a bug in AddSolid(const G4Box&).

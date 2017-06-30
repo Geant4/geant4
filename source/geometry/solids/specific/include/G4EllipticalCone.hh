@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.hh 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4EllipticalCone.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -104,12 +104,12 @@ class G4EllipticalCone : public G4VSolid
     inline void SetSemiAxis (G4double x, G4double y, G4double z);
     inline void SetZCut (G4double newzTopCut);
 
-    inline G4double GetCubicVolume(); 
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume(); 
+    G4double GetSurfaceArea();
 
     // Solid standard methods
     //
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PionBuilder.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4PionBuilder.hh 103801 2017-04-27 13:59:03Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,27 +33,27 @@
 //  devired from G4PiKBuilder
 //
 // Modified:
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4PionBuilder_h
 #define G4PionBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4VPionBuilder.hh"
-
 #include <vector>
 
-class G4PionBuilder
+class G4PionBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4PionBuilder();
-    virtual ~G4PionBuilder();
+    virtual ~G4PionBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VPionBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    virtual void RegisterMe(G4PhysicsBuilderInterface * aB) final override;
 
   private:
     G4PionPlusInelasticProcess*  thePionPlusInelastic;

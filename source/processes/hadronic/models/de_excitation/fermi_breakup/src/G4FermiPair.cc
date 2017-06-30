@@ -32,11 +32,11 @@
 #include "G4FermiPair.hh"
 #include "G4NucleiProperties.hh"
 
-G4FermiPair::G4FermiPair(const G4FermiFragment* f1, const G4FermiFragment* f2,
-			 G4double Eex)
-  :  excitEnergy(Eex), fragment1(f1), fragment2(f2)
+G4FermiPair::G4FermiPair(const G4FermiFragment* f1, const G4FermiFragment* f2)
+  :  fragment1(f1), fragment2(f2)
 {
   totalZ = f1->GetZ() + f2->GetZ();
   totalA = f1->GetA() + f2->GetA();
   mass = G4NucleiProperties::GetNuclearMass(totalA, totalZ);
+  excitEnergy = f1->GetTotalEnergy() + f2->GetTotalEnergy() - mass;
 }

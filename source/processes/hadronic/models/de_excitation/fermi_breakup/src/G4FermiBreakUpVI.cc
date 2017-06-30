@@ -51,8 +51,10 @@ G4FermiBreakUpVI::G4FermiBreakUpVI()
   frag.reserve(10);
   lvect.reserve(10);
   Z = A = spin = 0;
-  mass = elim = excitation = tolerance = 0.0;  
+  mass = elim = excitation = 0.0;
+  tolerance = CLHEP::MeV;  
   frag1 = frag2 = nullptr;
+  prob.resize(12,0.0);
   Initialise();
 }
 
@@ -66,10 +68,13 @@ G4FermiBreakUpVI::~G4FermiBreakUpVI()
 
 void G4FermiBreakUpVI::Initialise()
 {
+  if(verbose > 0) {
+    G4cout << "### G4FermiBreakUpVI::Initialise(): " << thePool << G4endl;
+  }
   if(thePool == nullptr) { InitialisePool(); }
   theDecay = thePool->FermiDecayProbability();
   elim = thePool->GetEnergyLimit();
-  tolerance = thePool->GetTolerance();
+  //tolerance = thePool->GetTolerance();
 }
 
 void G4FermiBreakUpVI::InitialisePool()
@@ -121,13 +126,16 @@ void G4FermiBreakUpVI::BreakFragment(G4FragmentVector* theResult,
   static const G4int imax = 100; 
 
   // loop over vector of Fermi fragments
-  // vector may grouw at each iteraction
+  // vector may grow at each iteraction
   for(size_t i=0; i<frag.size(); ++i) {
     Z = frag[i]->GetZ();
     A = frag[i]->GetA();
     spin = frag[i]->GetSpin();
     mass = frag[i]->GetTotalEnergy();
-    excitation = frag[i]->GetExcitationEnergy();
+    excitation = 0.0;
+    if(thePool->IsPhysical(Z, A)) {
+      excitation = frag[i]->GetExcitationEnergy();
+    }
     lv0 = lvect[i];
     if(verbose > 0) {
       G4cout << "# FermiFrag " << i << ".  Z= " << Z << " A= " << A 
@@ -176,7 +184,7 @@ G4bool G4FermiBreakUpVI::SampleDecay()
 
       // recompute probabilities
       const std::vector<const G4FermiPair*>& pvect = chan->GetChannels();
-      prob.resize(nn, 0.0);
+      if(nn > 12) { prob.resize(nn, 0.0); }
       G4double ptot = 0.0;
       if(verbose > 1) { 
 	G4cout << "Start recompute probabilities" << G4endl;

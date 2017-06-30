@@ -1,4 +1,4 @@
-$Id: History 100828 2016-11-02 15:25:59Z gcosmo $
+$Id: History 103022 2017-03-09 11:12:29Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,113 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+09-Mar-2017 A. Ribon         (had-hadronization-V10-03-05)
+-  G4LundStringFragmentation : fixed memory leaks.
+
+10-Feb-2017 V. Uzhinsky      (had-hadronization-V10-03-04)
+-  First implementation of rotating strings with introduction of
+   Mt distribution of hadrons.
+   Changes are in G4LundSyringFragmentation.cc and .hh
+                  G4FragmentingString.hh
+                  G4LongitudinalStringDecay.hh
+   Parameters are tuned using NA49 exp. data on pp-interactions.
+   Good results are obtained for Pi+-, K+-. For P and Pbar <Pt> - xF
+   correlations are not quite well.
+
+13-Jan-2017 V. Uzhinsky      (had-hadronization-V10-03-03)
+-  Re-organized and cleaned G4LUNDStringFragmentatio.
+   The variant is tuned using NA49 exp. data on pp->p/pi/K +X. 
+
+14-Dec-2016 A. Ribon         (had-hadronization-V10-03-02)
+-  After the release G4 10.3, with "stable" version, this tag brings back
+   the "development" version, similar (although not identical because
+   of some code clean-up and the (internal) tag had-hadronization-V10-03-00,
+   see below) to G4 10.2.ref10.
+   (Please note that the changes in G4LundStringFragmentation.cc of the
+   (internal) tag had-hadronization-V10-03-01 have been excluded in the
+   present tag, in order to test one change at the time.)
+
+30-Nov-2016 V. Uzhinsky      (had-hadronization-V10-03-01)
+   G4LundStringFragmentation.cc - Mt distribution for produced hadrons
+   was introduced.
+
+ 9-Nov-2016 A. Ribon         (had-hadronization-V10-03-00)
+   G4ExcitedStringDecay : increased the number of max attempts to
+   fragment strings from 10 to 100.
+
+ 8-Sep-2016 V. Uzhinsky      (had-hadronization-V10-02-14)
+   Clearing of LUNDstringFragmentation. Bugs are fixed.
+
+ 7-Sep-2016 A. Ribon         (had-hadronization-V10-02-13)
+   Created tag on branch of 10.2.ref07 to fix a bug on the method
+   G4ExcitedStringDecay::FragmentStrings .
+   Note that this bug has been already fixed in the trunk.
+
+20-July-2016 A. Ribon        (had-hadronization-V10-02-12)
+   G4LundStringFragmentation: V.U. erased the warring messages from
+   the previous tag.
+
+19-July-2016 V. Uzhinsky     (had-hadronization-V10-02-11)
+   G4LundStringFragmentation: Method SetMinimalStringMass was essential improved.
+   Energy-momentum conservation was restored for processes with Delta-isobar
+   production.
+
+30-June-2016 V. Uzhinsky     (had-hadronization-V10-02-10)
+   One more misprint was found in G3LundStringFragmentaion.cc
+   MinStringMass method.
+
+29-June-2016 V. Uzhinsky     (had-hadronization-V10-02-09)
+   Alberto found a misstype in the previous G3LundStringFragmentaion.cc
+   The tag will be redone.
+
+29-June-2016 V. Uzhinsky     (had-hadronization-V10-02-08)
+   The method of G4VLongitudinalStringDecay::Splitup was transferd to FTF
+   and QGS model because now the treat differently Delta isobars.
+
+27-June-2016 V. Uzhinsky     (had-hadronization-V10-02-07)
+   G4LundStringFragmentation.cc algorithm was improved.
+   Fragmentation is made a'la LUND fragmentation.
+
+13-June-2016 V. Uzhinsky     (had-hadronization-V10-02-06)
+   G4LundStringFragmentation::Sample4Momentum() was improved.
+   Average transvers momentum is set to 475 MeV for mesons and baryons,
+   and <Pt> for barion 3/2 production - 800 MeV/c. 
+
+   G4LundStringFragmentation::GetLightConeZ - alund=0.233 GeV^2 for strange
+   meson produced by a quark, and alund=0.175 GeV^2 for q->baryon.
+
+   di-quark fragmentation function into baryon (1/2) z^1.5, and z^(-0.25)
+   for baryon (3/2). 
+   Note: the tag was made accidentally in the wrong directory (src/).
+
+ 6-June-2016 V. Uzhinsky     (had-hadronization-V10-02-05)
+   Re-tag of previouse tag. Compilation warning is erased.
+
+ 4-June-2016 V. Uzhinsky     (had-hadronization-V10-02-04)
+   A solution of the baryon puzzle of NA49 data has been found! <Pt>
+   of baryons 1/2 at a string fragmentation is setting up at 435 MeV/c,
+   and <Pt> for barion 3/2 production - 900 MeV/c.
+
+ 1-June-2016 V. Uzhinsky     (had-hadronization-V10-02-03)
+   Fine tuning of G4LundStringFragmentation.cc. <Pt> of mesons created at 
+   quark fragmentation is decreased. <Pt> of baryons created at quark and
+   diquark is increased. Fragmentation functions of qq-> B(1/2) and B(3/2)
+   are implemented correctly.
+
+28-May-2016 V. Uzhinsky      (had-hadronization-V10-02-02)
+   <Pt^2> is increased in 2 times in G4LundStringFragmentation.cc.
+   It is very important for a description of NA49 exp. data on
+   pp-interactions at 158 GeV/c, especially for xF and Pt distributions.
+
+23-May-2016 V. Uzhinsky      (had-hadronization-V10-02-01)
+   Di-quark fragmentation into baryons is improved in LUND
+   string fragmentation. Description of NA49 and NA61/SHINE
+   exp. data on p+p->p+X is improved.
+
+12-May-2016 V. Uzhinsky      (had-hadronization-V10-02-00)
+ - G4LundStringFragmentation.cc, the method SetMinimalStringMass was improved
+   which is important for Pbar P annihilation.
 
 13-Aug-2015 A. Ribon      (had-hadronization-V10-01-09)
  - G4QGSMFragmentation, G4FragmentingString : Coverity fix.

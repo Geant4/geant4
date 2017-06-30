@@ -62,13 +62,13 @@ if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
 
 // for triplet and whole line
 
-    && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
+         && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
          && (step->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
          && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->
                    GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->
                   GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName())
-     )
+    )
       
      {
          fXIn = step->GetPostStepPoint()->GetPosition().x();
@@ -111,12 +111,12 @@ if (fDetector->GetProfile()==1)
 {
 
    if  (
-       (step->GetTrack()->GetDynamicParticle()->GetDefinition()
-             == G4Proton::ProtonDefinition())
+            (step->GetTrack()->GetDynamicParticle()->GetDefinition()== G4Proton::ProtonDefinition())
          && (step->GetPreStepPoint()->GetTouchableHandle()
              ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()
-            ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalVol()->GetName()) )
+            ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalVol()->GetName()) 
+       )
    {
          fXIn = step->GetPostStepPoint()->GetPosition().x();
          fYIn = step->GetPostStepPoint()->GetPosition().y();
@@ -134,12 +134,12 @@ if (fDetector->GetGrid()==1)
 {
 
    if  (
-       (step->GetTrack()->GetDynamicParticle()->GetDefinition()
-             == G4Proton::ProtonDefinition())
+            (step->GetTrack()->GetDynamicParticle()->GetDefinition()== G4Proton::ProtonDefinition())
          && (step->GetPreStepPoint()->GetTouchableHandle()
              ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalGrid()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()
-             ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName()) )
+             ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName()) 
+       )
    {
          fXIn = step->GetPostStepPoint()->GetPosition().x();
          fYIn = step->GetPostStepPoint()->GetPosition().y();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 101035 2016-11-04 08:48:17Z gcosmo $
+// $Id: G4PhysicalVolumeModel.cc 103926 2017-05-03 13:43:27Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -720,6 +720,7 @@ G4bool G4PhysicalVolumeModel::Validate (G4bool warn)
     transportationManager->GetWorldsIterator();
   for (size_t i = 0; i < nWorlds; ++i, ++iterWorld) {
     G4VPhysicalVolume* world = (*iterWorld);
+    if (!world) break; // This can happen if geometry has been cleared/destroyed.
     // The idea now is to seek a PV with the same name and copy no
     // in the hope it's the same one!!
     G4PhysicalVolumeModel searchModel (world);

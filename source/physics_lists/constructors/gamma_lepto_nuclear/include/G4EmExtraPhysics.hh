@@ -70,20 +70,28 @@ public:
   void Synch(G4bool val);
   void SynchAll(G4bool val);
   void GammaNuclear(G4bool val);
+  void ElectroNuclear(G4bool val);
   void MuonNuclear(G4bool val);
   void GammaToMuMu(G4bool val);
   void PositronToMuMu(G4bool val);
   void PositronToHadrons(G4bool val);
+  void GammaToMuMuFactor(G4double val);
+  void PositronToMuMuFactor(G4double val);
+  void PositronToHadronsFactor(G4double val);
 
 private:
 
   static G4bool gnActivated;
+  static G4bool eActivated;
   static G4bool munActivated;
   static G4bool synActivated;
   static G4bool synActivatedForAll;
   static G4bool gmumuActivated;
   static G4bool pmumuActivated;
   static G4bool phadActivated;
+  static G4double gmumuFactor;
+  static G4double pmumuFactor;
+  static G4double phadFactor;
 
   static G4ThreadLocal G4BertiniElectroNuclearBuilder* theGNPhysics;
   static G4ThreadLocal G4SynchrotronRadiation* theSynchRad;

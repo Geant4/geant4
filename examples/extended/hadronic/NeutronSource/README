@@ -42,16 +42,21 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
   objects rather than complete pre-defined G4 physics lists. This alternative 
   way gives more freedom to register physics.
   
-  PhysicsConstructors are either predefined G4 PhysicsConstructors or 'local'. 
-  They include : HadronElastic (including neutronHP), HadronInelastic,
-  IonsInelastic, GammaNuclear physics, RadioactiveDecay and Electromagnetic physics.
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
+  RadioactiveDecay and Electomagnetic.
   (see geant4/source/physics_lists/constructors)
-  
-  ElectromagneticPhysics is a variante of EmStandard. No step constraint is imposed for 
-  energy loss mechanism (ionisation and brems). This is enough when spatial distribution
-  of deposited energy do not need to be accurate.
-  (see param->SetStepFunction(1., 1*mm))
-    
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
+  This is enough when spatial distribution of deposited energy do not need
+  to be accurate (see param->SetStepFunction(1., 1*mm)).
+
   Several hadronic physics options are controlled by environment variables.
   To trigger them, an envHadronic.csh has been added in this example.
   One must select the options wished, and do
@@ -82,16 +87,16 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
             1     "total energy deposit"
             2     "dummy"
             3     "total kinetic energy flow"
-            4     "gamma flux (dN/dE) at exit"
-            5     "e+- flux (dN/dE) at exit"
-            6     "neutrons flux (dN/dE) at exit"
-            7     "protons flux (dN/dE) at exit"
-            8     "deuterons flux (dN/dE) at exit"
-            9     "alphas flux (dN/dE) at exit"
-            10    "all others ions flux (dN/dE) at exit"
-            11    "all others baryons flux (dN/dE) at exit"
-            12    "all others mesons flux (dN/dE) at exit"
-            13    "all others leptons flux (dN/dE) at exit" 
+            4     "energy spectrum of emerging gamma"
+            5     "energy spectrum of emerging e+-"
+            6     "energy spectrum of emerging neutrons"
+            7     "energy spectrum of emerging protons"
+            8     "energy spectrum of emerging deuterons"
+            9     "energy spectrum of emerging alphas"
+            10    "energy spectrum of all others emerging ions"
+            11    "energy spectrum of all others emerging baryons"
+            12    "energy spectrum of all others emerging mesons"
+            13    "energy spectrum of all others emerging leptons (neutrinos)" 
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :

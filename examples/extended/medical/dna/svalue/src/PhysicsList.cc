@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/svalue/src/PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
-//
-// $Id: PhysicsList.cc 85260 2014-10-27 08:53:35Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
@@ -40,6 +35,7 @@
 #include "G4EmDNAPhysics_option3.hh"
 #include "G4EmDNAPhysics_option4.hh"
 #include "G4EmDNAPhysics_option5.hh"
+#include "G4EmDNAPhysics_option6.hh"
 #include "G4EmDNAPhysics_option7.hh"
 #include "G4EmStandardPhysics_option3.hh"
 
@@ -169,6 +165,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics_option5();
   }
+  else if (name == "dna_opt6") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option6();
+  }
   else if (name == "dna_opt7") {
     fEmName = name;
     delete fEmPhysicsList;
@@ -203,5 +204,4 @@ void PhysicsList::AddTrackingCut()
       ph->RegisterProcess(new G4UserSpecialCuts(), particle); 
   }
 }
-      
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

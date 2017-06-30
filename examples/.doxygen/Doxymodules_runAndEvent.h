@@ -1,4 +1,4 @@
-// $Id: Doxymodules_runAndEvent.h 76473 2013-11-11 10:35:14Z gcosmo $
+// $Id: Doxymodules_runAndEvent.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_runAndEvent.h
@@ -25,7 +25,6 @@
   class RE01DetectorParameterDef {};
   class RE01EventAction {};
   class RE01Field {};
-  class RE01PhysicsList {};
   class RE01PrimaryGeneratorAction {};
   class RE01PrimaryGeneratorMessenger {};
   class RE01RegionInformation {};
@@ -38,7 +37,6 @@
   class RE01TrackInformation {};
   class RE01TrackingAction {};
   class RE01Trajectory {};
-  class RE01UnknownDecayPhysics {};
 
 /** @} */
 
@@ -52,13 +50,13 @@
   class RE02DetectorConstruction {};
   class RE02EventAction {};
   class RE02NestedPhantomParameterisation {};
-  class RE02PrimaryGeneratorAction {};
   class RE02PSCellFlux {};
   class RE02PSEnergyDeposit {};
   class RE02PSFlatSurfaceCurrent {};
   class RE02PSFlatSurfaceFlux {};
   class RE02PSNofStep {};
   class RE02PSPassageCellFlux {};
+  class RE02PrimaryGeneratorAction {};
   class RE02RunAction {};
   class RE02Run {};
 
@@ -88,7 +86,6 @@
   class RE04EventAction {};
   class RE04ParallelWorldConstruction {};
   class RE04ParallelWorldParam {};
-  class RE04PhysicsList {};
   class RE04PrimaryGeneratorAction {};
   class RE04SteppingAction {};
   class RE04TrackingAction {};

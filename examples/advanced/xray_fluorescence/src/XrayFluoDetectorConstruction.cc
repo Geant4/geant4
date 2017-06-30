@@ -592,7 +592,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 			       Dia1SizeXY/2,
 			       Dia1Thickness/2,
 			       0,
-			       360);//size
+			       360*deg);//size
 	
 	
 	logicDia1 = new G4LogicalVolume(solidDia1,	//its solid
@@ -623,7 +623,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 			       Dia3SizeXY/2,
 			       Dia3Thickness/2,
 			       0,
-			       360);
+			       360*deg);
 	
 	
       logicDia3 = new G4LogicalVolume(solidDia3,	//its solid

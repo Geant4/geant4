@@ -14,6 +14,55 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 Jun 2017 - Alberto Ribon (hadr-cross-V10-03-08)
+----------------------------------------------------
+-  G4NeutronElectronElXsc, G4ComponentGGHadronNucleusXsc : Coverity fixes.
+
+29 May 2017 - Alberto Ribon (hadr-cross-V10-03-07)
+----------------------------------------------------
+- Proposing the same tag as before, which was wrongly rejected.
+
+29 May 2017 - Alberto Ribon (hadr-cross-V10-03-06)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc, G4NeutrinoElectronCcXsc, G4NeutronElectronElXsc :
+  added possibility of biasing these cross sections.
+
+23 May 2017 - Alberto Ribon (hadr-cross-V10-03-05)
+----------------------------------------------------
+- G4NeutronElectronElXsc : fixed declaration of variables
+  (double wrongly declared as integer).
+
+23 May 2017 - Alberto Ribon (hadr-cross-V10-03-04)
+----------------------------------------------------
+- G4NeutronElectronElXsc : added new class by Vladimir Grichine
+  for the cross section of neutrons on atomic electrons. 
+  Ultra-relativistic approximation of the Rosenbluth formula is used,
+  since this is more relevant for detector applications. In particular,
+  for dark matter searches, this process can produce elctrons with high
+  energy, if there are high energy neutrons (more than 10 GeV).
+
+28 April 2017 - Alberto Ribon (hadr-cross-V10-03-03)
+----------------------------------------------------
+- G4NeutrinoElectronCcXsc : added new class by Vladimir Grichine
+  for the cross section of neutrino-electron inelastic interaction
+  (charge current).
+
+18 April 2017 - Alberto Ribon (hadr-cross-V10-03-02)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc : corrected name anti_nu_mu .
+
+11 April 2017 - Alberto Ribon (hadr-cross-V10-03-01)
+----------------------------------------------------
+- Forgot to add the (new) class G4NeutrinoElectronNcXsc in the sources.cmake.
+
+11 April 2017 - Alberto Ribon (hadr-cross-V10-03-00)
+----------------------------------------------------
+- G4NeutrinoElectronNcXsc : added new class by Vladimir Grichine
+  for the cross section of elastic neutrino-electron scattering.
+  This class is useful for dark matter and neutrino experiments.
+  Note that the cross section is small : ~10^-44 - 10^-42 cm^2
+  in the neutrino energy range 1-100 GeV.
+
 12 August 2016 - Alberto Ribon (hadr-cross-V10-02-04)
 -----------------------------------------------------
 - G4CrossSectionDataStore : added "throw" to hadronic exception;

@@ -1,4 +1,4 @@
-.$Id: History 101714 2016-11-22 08:53:13Z gcosmo $
+.$Id: History 104290 2017-05-23 13:24:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+23rd May 2017  John Allison  (vis-HepRep-V10-03-00)
+- Fixes for gcc-7.1 warnings.
 
 18th November 2016  John Allison (vis-HepRep-V10-02-04)
 - Fixed the GetColour() problem.

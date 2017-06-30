@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWorldProcess.cc 95193 2016-01-29 08:23:25Z gcosmo $
+// $Id: G4ParallelWorldProcess.cc 103731 2017-04-25 08:01:05Z gcosmo $
 // GEANT4 tag $Name: geant4-09-04-ref-00 $
 //
 //
@@ -351,6 +351,7 @@ void G4ParallelWorldProcess::CopyStep(const G4Step & step)
   fGhostStep->SetTotalEnergyDeposit(step.GetTotalEnergyDeposit());
   fGhostStep->SetNonIonizingEnergyDeposit(step.GetNonIonizingEnergyDeposit());
   fGhostStep->SetControlFlag(step.GetControlFlag());
+  fGhostStep->SetSecondary((const_cast<G4Step&>(step)).GetfSecondary());
 
   *fGhostPreStepPoint = *(step.GetPreStepPoint());
   *fGhostPostStepPoint = *(step.GetPostStepPoint());

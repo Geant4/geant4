@@ -33,6 +33,7 @@
 //
 // Modified:
 // 02.04.2009 V.Ivanchenko remove add cross section, string builderis reponsible 
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -56,16 +57,6 @@ Build(G4TritonInelasticProcess * aP)
   theModel->SetMinEnergy(theMin);
   theModel->SetMaxEnergy(theMax);
   aP->RegisterMe(theModel);
-}
-
-G4BinaryTritonBuilder::
-~G4BinaryTritonBuilder() 
-{
-}
-
-void G4BinaryTritonBuilder::
-Build(G4HadronElasticProcess * )
-{
 }
 
 // 2002 by J.P. Wellisch

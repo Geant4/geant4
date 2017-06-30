@@ -1,4 +1,4 @@
-$Id: History 102588 2017-02-09 10:00:46Z gcosmo $
+$Id: History 103591 2017-04-19 07:53:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,14 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07-February-2017 V.Ivanchenko  (phys-lists-V10-02-11)
+19-April-2017 V.Ivanchenko  (phys-lists-V10-03-02)
+- G4PhysListFactory - fixed  EM option "__SS" - problem report #1966
+
+21-March-2017 Koi, Tatsumi (phys-lists-V10-03-01)
+- Fix problem of LBE physics list on radioactive decay model 
+
+
+07-February-2017 V.Ivanchenko  (phys-lists-V10-03-00)
 - G4PhysListFactory - add single scattering EM option (required by
     several user groups), one need to add "__SS" to the reference
     physics list name

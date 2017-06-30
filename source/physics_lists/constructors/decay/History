@@ -1,4 +1,4 @@
-$Id: History 102586 2017-02-09 09:51:41Z gcosmo $
+$Id: History 104632 2017-06-08 13:51:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,13 +14,19 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-23-Dec-2016, Laurent Desorgher (phys-ctor-decay-V10-02-09)
+27-Feb-2017, Vladimir Ivanchenko        (phys-ctor-decay-V10-03-02)
+- G4RadioactiveDecayPhysics - set time limit for the de-excitation module
+    the same as in G4NuclideTable, so only states from this table will
+    be created as ions
+
+23-Dec-2016, Laurent Desorgher (phys-ctor-decay-V10-03-01)
 -G4RadioactiveDecayPhysics switch on  the storing of all internal conversion data vector
   (G4NuclearLevelData::GetInstance()->GetParameters()->SetStoreAllLevels(true)) for 
  correct gamma deexcitation modeling in radioactive decay. 
 
-16-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-08)
-- G4RadioactiveDecayPhysics - simplified list of EM parameters.
+16-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-03-00)
+- G4RadioactiveDecayPhysics - simplified list of EM parameters;
+    use a new method AddPhysics() instead of old AddMsc()
 
 02-Dec-2016, Vladimir Ivanchenko        (phys-ctor-decay-V10-02-07)
 - G4RadioactiveDecayPhysics - fixed initialisation (also for the 

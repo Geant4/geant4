@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedStringDecay.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4ExcitedStringDecay.hh 102048 2016-12-19 09:02:38Z gcosmo $
 //
 #ifndef G4ExcitedStringDecay_h
 #define G4ExcitedStringDecay_h 1

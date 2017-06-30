@@ -34,32 +34,29 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4LPhysicsFreeVector.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4Log.hh"
 
 class G4BoldyshevTripletModel : public G4VEmModel
 {
 
 public:
   
-  G4BoldyshevTripletModel(const G4ParticleDefinition* p = 0, const G4String& nam = "BoldyshevTripletConversion");
+  explicit G4BoldyshevTripletModel(const G4ParticleDefinition* p = nullptr, 
+				   const G4String& nam = "BoldyshevTripletConversion");
   
   virtual ~G4BoldyshevTripletModel();
   
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4DataVector&);
 
-  //MT
-  virtual void InitialiseLocal(const G4ParticleDefinition*, 
-			             G4VEmModel* masterModel);
-
   virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-  //END MT
 
   virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double kinEnergy, 
                                       G4double Z, 
-                                      G4double A=0, 
-                                      G4double cut=0,
+                                      G4double A=0., 
+                                      G4double cut=0.,
                                       G4double emax=DBL_MAX);
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
@@ -74,48 +71,29 @@ public:
 
 private:
 
-  void ReadData(size_t Z, const char* path = 0);
+  void ReadData(size_t Z, const char* path = nullptr);
 
   G4double ScreenFunction1(G4double screenVariable);
   G4double ScreenFunction2(G4double screenVariable);
 
-  G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right);
-  G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&);
+  G4BoldyshevTripletModel & operator=(const  G4BoldyshevTripletModel &right) = delete;
+  G4BoldyshevTripletModel(const  G4BoldyshevTripletModel&) = delete;
 
-  G4bool isInitialised;
   G4int verboseLevel;
 
   G4double lowEnergyLimit;  
   G4double smallEnergy;
+  G4double energyThreshold;
+  G4double momentumThreshold_c;
+  G4double xb;
+  G4double xn;
   
-  //MT
   static G4int maxZ;
   static G4LPhysicsFreeVector* data[100]; // 100 because Z range is 1-99
-                                          // in LivermoreRayleighModel, 101
-					  //  because Z range is 1-100
-  //END MT
   
   G4ParticleChangeForGamma* fParticleChange;
 
-  G4double asinh (G4double value);
-
-
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....                                                                                                           
-
-inline G4double G4BoldyshevTripletModel::asinh (G4double value)
-{
-  G4double out;
-
-  if (value>0)
-    out = std::log(value+std::sqrt(value*value+1));
-  else
-    out = -std::log(-value+std::sqrt(value*value+1));
-
-  return out;
-}
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

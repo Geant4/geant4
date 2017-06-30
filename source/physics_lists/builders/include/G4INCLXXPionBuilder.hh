@@ -58,16 +58,16 @@ class G4INCLXXPionBuilder : public G4VPionBuilder
 {
   public: 
     G4INCLXXPionBuilder();
-    virtual ~G4INCLXXPionBuilder();
+    virtual ~G4INCLXXPionBuilder() {}
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *) final override {}
+    virtual void Build(G4PionPlusInelasticProcess * aP) final override;
+    virtual void Build(G4PionMinusInelasticProcess * aP) final override;
 
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
 
+    using G4VPionBuilder::Build; //Prevent compiler warning
   private:
     G4VCrossSectionDataSet* thePiData;
     G4INCLXXInterface * theModel;    

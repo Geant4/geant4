@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.hh 99509 2016-09-26 07:48:56Z gcosmo $
+// $Id: G4Trd.hh 104894 2017-06-26 13:30:00Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -51,7 +51,7 @@
 // 17.02.95 P.Kent: Exiting normal return
 // 19.08.96 P.Kent, V.Grichine: Fs in accordance with G4Box
 // 21.04.97 J.Apostolakis: Added Set Methods
-// 19.11.99 V.Grichine: kUndefined was added to Eside enum 
+// 19.11.99 V.Grichine: kUndefined was added to Eside enum
 // --------------------------------------------------------------------
 
 #ifndef G4TRD_HH
@@ -69,7 +69,7 @@
 #include "G4CSGSolid.hh"
 #include "G4Polyhedron.hh"
 
-class G4Trd : public G4CSGSolid 
+class G4Trd : public G4CSGSolid
 {
   public:  // with description
 
@@ -100,16 +100,20 @@ class G4Trd : public G4CSGSolid
     inline void SetYHalfLength2(G4double val);
     inline void SetZHalfLength(G4double val);
 
+    void SetAllParameters ( G4double pdx1, G4double pdx2,
+                            G4double pdy1, G4double pdy2,
+                            G4double pdz );
+
     // Methods of solid
 
-    inline G4double GetCubicVolume();
-    inline G4double GetSurfaceArea();
+    G4double GetCubicVolume();
+    G4double GetSurfaceArea();
 
     void ComputeDimensions(       G4VPVParameterisation* p,
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -133,17 +137,9 @@ class G4Trd : public G4CSGSolid
 
     G4double DistanceToOut( const G4ThreeVector& p ) const;
 
-    void CheckAndSetAllParameters ( G4double pdx1, G4double pdx2,
-                                    G4double pdy1, G4double pdy2,
-                                    G4double pdz );
-
-    void SetAllParameters ( G4double pdx1, G4double pdx2,
-                            G4double pdy1, G4double pdy2,
-                            G4double pdz );
-
     G4GeometryType GetEntityType() const;
 
-    G4ThreeVector GetPointOnSurface() const; 
+    G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
 
@@ -156,17 +152,22 @@ class G4Trd : public G4CSGSolid
 
   public:  // without description
 
-    enum ESide {kUndefined, kPX,kMX,kPY,kMY,kPZ,kMZ};
-      // Codes for faces (kPX=plus x face,kMY= minus y face etc)
-
     G4Trd(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
     G4Trd(const G4Trd& rhs);
-    G4Trd& operator=(const G4Trd& rhs); 
-      // Copy constructor and assignment operator.
+    G4Trd& operator=(const G4Trd& rhs);
+      // Copy constructor and assignment operator
+
+  private:
+
+    void CheckParameters();
+      // Check parameters
+
+    void MakePlanes();
+      // Set side planes
 
     G4ThreeVector ApproxSurfaceNormal( const G4ThreeVector& p ) const;
       // Algorithm for SurfaceNormal() following the original
@@ -174,7 +175,9 @@ class G4Trd : public G4CSGSolid
 
   private:
 
+    G4double halfCarTolerance;
     G4double fDx1,fDx2,fDy1,fDy2,fDz;
+    struct { G4double a,b,c,d; } fPlanes[4];
 };
 
 #include "G4Trd.icc"

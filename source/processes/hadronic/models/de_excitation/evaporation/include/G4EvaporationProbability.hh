@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationProbability.hh 99962 2016-10-12 14:09:03Z gcosmo $
+// $Id: G4EvaporationProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -50,21 +50,18 @@ public:
 
   virtual ~G4EvaporationProbability();
 
-  inline G4int GetZ(void) const { return theZ; }
-	
-  inline G4int GetA(void) const { return theA; }
+  // not used for evaporation
+  virtual G4double EmissionProbability(const G4Fragment& fragment,
+				       G4double maxKineticEnergy);
 
-  // obsolete method
-  G4double EmissionProbability(const G4Fragment& fragment,
-			       G4double maxKineticEnergy);
-
+  // general method used for evaporation
   G4double TotalProbability(const G4Fragment& fragment,
 			    G4double minKineticEnergy,
 			    G4double maxKineticEnergy,
 			    G4double CoulombBarrier = 0.0);
 
-  G4double ProbabilityDistributionFunction(G4double K, 
-					   G4double CoulombBarrier = 0.0);
+  // main method to compute full probability for OPTx > 2
+  virtual G4double ComputeProbability(G4double K, G4double kBarrier);
 
   // Samples fragment kinetic energy and excitation energy 
   // of the residual nucleaus
@@ -80,9 +77,6 @@ protected:
 
 private:
 
-  G4double IntegrateEmissionProbability(G4double low, G4double up,
-					G4double CoulombBarrier);
-
   G4double CrossSection(G4double K, G4double CoulombBarrier);  
 
   // Copy constructor
@@ -95,8 +89,6 @@ private:
 
   G4NuclearLevelData* fLevelData;
 
-  G4int theA;
-  G4int theZ;
   G4int fragA;
   G4int fragZ;
   G4int resA;

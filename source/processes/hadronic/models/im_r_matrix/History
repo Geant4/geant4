@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-21-December 2016 Gunter Folger            had-im_r-V10-02-00
+21-December 2016 Gunter Folger            had-im_r_V10-03-00
 - G4VScatteringCollision: Fix memory leak in MT, bug report 1905
 
 13-November 2015 Gunter Folger            had-im_r-V10-01-05

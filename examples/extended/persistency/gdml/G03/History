@@ -1,4 +1,4 @@
-$Id: History 89110 2015-03-20 08:18:27Z gcosmo $
+$Id: History 103280 2017-03-23 14:18:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Mar  19th, 2015  Gabriele Cosmo G03-V10-01-00
+March 23rd, 2017  Gabriele Cosmo G03-V10-03-00
+- Updated setup for visualization in main program.
+
+March 19th, 2015  Gabriele Cosmo G03-V10-01-00
 - Corrected visualization commands in read/write input macros.
 - Updated README.
 
-May  17th, 2013  Witek Pokorski G03-V09-06-00
+May 17th, 2013  Witek Pokorski G03-V09-06-00
 - Changes to comply to coding rule 2.1
 
 July  27th, 2012  Witek Pokorski G03-V09-05-00

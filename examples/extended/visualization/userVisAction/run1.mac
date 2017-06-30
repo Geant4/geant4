@@ -3,8 +3,13 @@
 # Can be run in batch, without graphic
 # or interactively: Idle> /control/execute run1.mac
 #
-/control/verbose 2
+# Change the default number of workers (in multi-threading mode) 
+#/run/numberOfWorkers 4
 #
+# Initialize kernel
+/run/initialize
+#
+/control/verbose 2
 /run/verbose 2
 /event/verbose 0
 /tracking/verbose 1

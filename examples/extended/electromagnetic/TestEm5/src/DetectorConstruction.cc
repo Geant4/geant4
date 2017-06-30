@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 98752 2016-08-09 13:44:40Z gcosmo $
+// $Id: DetectorConstruction.cc 103050 2017-03-10 15:50:39Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,7 +180,7 @@ void DetectorConstruction::DefineMaterials()
 
   //Havar
   //
-  G4Element* Cr = new G4Element("Chrome", "Cr", z=25, a=  51.996*g/mole);
+  G4Element* Cr = new G4Element("Chrome", "Cr", z=24, a=  51.996*g/mole);
   G4Element* Fe = new G4Element("Iron"  , "Fe", z=26, a=  55.845*g/mole);
   G4Element* Co = new G4Element("Cobalt", "Co", z=27, a=  58.933*g/mole);
   G4Element* Ni = new G4Element("Nickel", "Ni", z=28, a=  58.693*g/mole);

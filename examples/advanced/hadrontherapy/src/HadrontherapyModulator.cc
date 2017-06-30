@@ -61,7 +61,7 @@ HadrontherapyModulator::HadrontherapyModulator(): physiMotherMod(0),
 						 solidMod2(0),         logicMod2(0),          physiMod2(0),
 						 solidMod3(0),         logicMod3(0),          physiMod3(0),
 						 solidMod4(0),         logicMod4(0),          physiMod4(0),
-						 FileName("ModoulWeight.txt")
+						 FileName("Modulators/Modulator009_02.txt")
 { 
    pi=4*atan(1.);
    StepNumbers=22;

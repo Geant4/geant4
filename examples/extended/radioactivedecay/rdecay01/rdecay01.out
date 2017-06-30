@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
 ### ===  Auger cascade flag: 1
-### ===  Ignore cuts flag:   1
+### ===  Ignore cuts flag:   0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -71,7 +71,6 @@ Available colours:
 #
 /rdecay01/fullChain false
 #
-/control/cout/ignoreThreadsExcept 1
 /tracking/verbose 2
 /run/beamOn 1
 
@@ -131,7 +130,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.02s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -139,9 +138,9 @@ Run Summary
 
  Nb of generated particles: 
 
-   Ni60[2505.753]:       1  Emean =  1.818 eV 	( 1.818 eV  --> 1.818 eV )
-        anti_nu_e:       1  Emean =  188.1 keV	( 188.1 keV --> 188.1 keV)
-               e-:       1  Emean =  128.9 keV	( 128.9 keV --> 128.9 keV)
+   Ni60[2505.753]:       1  Emean =  1.818 eV 	( 1.818 eV  --> 1.818 eV )	mean life = 4.761 ps 
+        anti_nu_e:       1  Emean =  188.1 keV	( 188.1 keV --> 188.1 keV)	stable
+               e-:       1  Emean =  128.9 keV	( 128.9 keV --> 128.9 keV)	stable
 
    Ekin Total (Q single decay): mean =  317.1 keV	( 317.1 keV --> 317.1 keV)
 
@@ -155,7 +154,6 @@ Run Summary
 
 
 #
-/control/cout/ignoreThreadsExcept 0
 /tracking/verbose 0
 /run/printProgress 10000
 #
@@ -206,7 +204,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.86s Real=0.86s Sys=0s
+  User=1.57s Real=1.56s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -214,10 +212,10 @@ Run Summary
 
  Nb of generated particles: 
 
-   Ni60[1332.514]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )
-   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008295 eV  --> 3.757 eV )
-        anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)
-               e-:  100000  Emean =  95.49 keV	( 2.058 eV  --> 1.358 MeV)
+   Ni60[1332.514]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )	mean life = 1.06 ps 
+   Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008295 eV  --> 3.757 eV )	mean life = 4.761 ps 
+        anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)	stable
+               e-:  100000  Emean =  95.49 keV	( 2.058 eV  --> 1.358 MeV)	stable
 
    Ekin Total (Q single decay): mean =  318.4 keV	( 317.1 keV --> 1.49 MeV)
 
@@ -280,7 +278,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.99s Real=1.99s Sys=0s
+  User=2.87s Real=2.9s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -288,13 +286,13 @@ Run Summary
 
  Nb of generated particles: 
 
-             Ni60:  100000  Emean =  29.77 eV 	( 0.01064 eV  --> 84.79 eV )
-   Ni60[1332.514]:   99999  Emean =  13.83 eV 	( 0.45 eV  --> 33.14 eV )
-   Ni60[2158.632]:       8  Emean =  3.024 eV 	( 0.3664 eV  --> 5.569 eV )
-   Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )
-        anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)
-               e-:  100035  Emean =  96.28 keV	( 5.686 eV  --> 1.436 MeV)
-            gamma:  199840  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)
+             Ni60:  100000  Emean =  29.77 eV 	( 0.01064 eV  --> 84.79 eV )	stable
+   Ni60[1332.514]:   99999  Emean =  13.83 eV 	( 0.45 eV  --> 33.14 eV )	mean life = 1.06 ps 
+   Ni60[2158.632]:       8  Emean =  3.024 eV 	( 0.3664 eV  --> 5.569 eV )	mean life = 0.8512 ps 
+   Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )	mean life = 4.761 ps 
+        anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)	stable
+               e-:  100035  Emean =  96.27 keV	( 5.686 eV  --> 1.436 MeV)	stable
+            gamma:  199840  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
 
    Ekin Total (Q single decay): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)
 

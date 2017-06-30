@@ -38,10 +38,6 @@ G4ProtonPHPBuilder()
   theParticlePHPModel = 0;
 }
 
-G4ProtonPHPBuilder::
-~G4ProtonPHPBuilder() 
-{}
-
 void G4ProtonPHPBuilder::
 Build(G4HadronElasticProcess *)
 {

@@ -175,7 +175,7 @@ int main(int , char **)
 
   //  runManager->BeamOn(numberOfEvents);
 
-  pgs.ClearSampling();
+  // pgs.ClearSampling();
 
   delete runManager;
  

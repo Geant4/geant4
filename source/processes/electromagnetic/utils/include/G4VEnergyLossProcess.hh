@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh 96139 2016-03-17 14:10:31Z gcosmo $
+// $Id: G4VEnergyLossProcess.hh 104349 2017-05-26 07:18:59Z gcosmo $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -809,11 +809,9 @@ G4VEnergyLossProcess::GetCSDARange(G4double& kineticEnergy,
                                    const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = DBL_MAX;
-  if(theCSDARangeTable) {
-    x=GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  }
-  return x;
+  return (theCSDARangeTable) ? 
+    GetLimitScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor
+    : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -824,11 +822,7 @@ G4VEnergyLossProcess::GetRangeForLoss(G4double& kineticEnergy,
 {
   //  G4cout << "GetRangeForLoss: Range from " << GetProcessName() << G4endl;
   DefineMaterial(couple);
-  G4double x = 
-    GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
-  //G4cout << "GetRangeForLoss: Range from " << GetProcessName() 
-  //         << "  e= " << kineticEnergy << " r= " << x << G4endl;
-  return x;
+  return GetScaledRangeForScaledEnergy(kineticEnergy*massRatio)*reduceFactor;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -848,11 +842,7 @@ G4VEnergyLossProcess::GetLambda(G4double& kineticEnergy,
                                 const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
-  G4double x = 0.0;
-  if(theLambdaTable) { 
-    x = GetLambdaForScaledEnergy(kineticEnergy*massRatio); 
-  }
-  return x;
+  return theLambdaTable ? GetLambdaForScaledEnergy(kineticEnergy*massRatio) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

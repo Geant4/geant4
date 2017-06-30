@@ -1,0 +1,35 @@
+$Id: History  $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  SVN log-message one should put at every
+committal in the SVN repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+19 June 2017 E. Bagli channeling-V10-03-01
+-----------------------------------------------------
+- Coverity bug removal
+
+17 May 2017  E. Bagli channeling-V10-03-00
+-----------------------------------------------------
+- Removed spin modification
+
+20 April 2017  G. Cosmo
+-----------------------------------------------------
+- Removed inclusion if non-existing G4ChargeState.hh header in G4Channeling.cc. 
+- Corrected GNUmakefile and sources.cmake scripts.
+
+6 April 2017  E. Bagli
+-----------------------------------------------------
+- Created

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteSolids.hh 96133 2016-03-16 22:21:17Z gcosmo $
+// $Id: G4GDMLWriteSolids.hh 103265 2017-03-23 11:14:00Z gcosmo $
 //
 //
 // class G4GDMLWriteSolids
@@ -141,6 +141,8 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    void RZPointWrite(xercesc::DOMElement*, const G4double&,const G4double&);
    void OpticalSurfaceWrite(xercesc::DOMElement*,
                     const G4OpticalSurface* const);
+   void PropertyWrite(xercesc::DOMElement*, const G4OpticalSurface* const);
+
 
   protected:
 

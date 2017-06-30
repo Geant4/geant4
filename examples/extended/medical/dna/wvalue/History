@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-04-2017 SI (wvalue-V10-03-01)
+- updated wvalue.in and plot.C
+
+31-12-2016 SI (wvalue-V10-03-00)
+- cleanup
+
 14-10-2016 SI (wvalue-V10-02-05)
 - updated README (bis)
 

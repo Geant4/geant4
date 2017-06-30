@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 102575 2017-02-09 09:07:12Z gcosmo $
+// $Id: G4VisManager.cc 103926 2017-05-03 13:43:27Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -414,6 +414,7 @@ void G4VisManager::RegisterMessengers () {
   directory -> SetGuidance
     ("Set quantities for use in future commands where appropriate.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandSetArrow3DLineSegmentsPerCircle);
   RegisterMessenger(new G4VisCommandSetColour);
   RegisterMessenger(new G4VisCommandSetLineWidth);
   RegisterMessenger(new G4VisCommandSetTextColour);
@@ -443,6 +444,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddEventID);
   RegisterMessenger(new G4VisCommandSceneAddExtent);
   RegisterMessenger(new G4VisCommandSceneAddFrame);
+  RegisterMessenger(new G4VisCommandSceneAddGPS);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
   RegisterMessenger(new G4VisCommandSceneAddLine2D);
@@ -1056,7 +1058,7 @@ void G4VisManager::CreateViewer
 
   if (!p) {
     if (fVerbosity >= errors) {
-      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer: null pointer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer creation.\n  No action taken."
 	     << G4endl;
@@ -1068,7 +1070,7 @@ void G4VisManager::CreateViewer
     if (fVerbosity >= errors) {
       G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
-	     << " viewer initialisation.\n  No action taken."
+	     << " viewer instantiation.\n  No action taken."
 	     << G4endl;
     }
     return;
@@ -1081,6 +1083,15 @@ void G4VisManager::CreateViewer
   initialvp.SetXGeometryString(XGeometry); //parse string and store parameters
   p -> SetViewParameters(initialvp);
   p -> Initialise ();  // (Viewer itself may change view parameters further.)
+  if (p -> GetViewId() < 0) {
+    if (fVerbosity >= errors) {
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
+	     << fpGraphicsSystem -> GetName ()
+	     << " viewer initialisation.\n  No action taken."
+	     << G4endl;
+    }
+    return;
+  }
 
   fpViewer = p;                             // Make current.
   fpSceneHandler -> AddViewerToList (fpViewer);
@@ -1267,6 +1278,17 @@ void G4VisManager::DispatchToModel(const G4VTrajectory& trajectory)
   if (IsValidView()) {
       trajectoryModel->Draw(trajectory, visible);
   }
+}
+
+void G4VisManager::SetUserAction
+(G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  if (fVerbosity >= warnings) {
+    G4cout <<
+  "WARNING: SetUserAction is deprecated. Use RegisterRunDurationUserVisAction."
+    << G4endl;
+  }
+  RegisterRunDurationUserVisAction("SetUserAction",pVisAction,extent);
 }
 
 void G4VisManager::RegisterRunDurationUserVisAction

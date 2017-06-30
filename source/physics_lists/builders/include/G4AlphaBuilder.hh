@@ -30,28 +30,28 @@
 // ClassName:   G4AlphaBuilder
 //
 // Author: 2013 P. Arce
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4AlphaBuilder_h
 #define G4AlphaBuilder_h 1
 
+#include "G4PhysicsBuilderInterface.hh"
 #include "globals.hh"
 
 #include "G4AlphaInelasticProcess.hh"
 #include "G4VAlphaBuilder.hh"
-
 #include <vector>
 
-class G4AlphaBuilder
+class G4AlphaBuilder : public G4PhysicsBuilderInterface
 {
   public: 
     G4AlphaBuilder();
-    virtual ~G4AlphaBuilder();
+    virtual ~G4AlphaBuilder() {}
 
-  public: 
-    void Build();
-    void RegisterMe(G4VAlphaBuilder * aB) {theModelCollections.push_back(aB);}
+    virtual void Build() final override;
+    void RegisterMe(G4PhysicsBuilderInterface * aB) final override;// {theModelCollections.push_back(aB);}
 
   private:
     G4AlphaInelasticProcess * theAlphaInelastic;

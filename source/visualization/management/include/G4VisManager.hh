@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh 97316 2016-06-01 12:12:58Z gcosmo $
+// $Id: G4VisManager.hh 102802 2017-02-22 15:19:00Z gcosmo $
 //
 // 
 
@@ -180,13 +180,20 @@ public: // With description
   // /vis/scene/add/userAction.
   void RegisterRunDurationUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
   void RegisterEndOfEventUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
   void RegisterEndOfRunUserVisAction
   (const G4String& name, G4VUserVisAction*,
-   const G4VisExtent& = G4VisExtent::NullExtent);
+   const G4VisExtent& = G4VisExtent());
+  void SetUserAction
+  (G4VUserVisAction* pVisAction,
+   const G4VisExtent& = G4VisExtent());
+  // SetUserAction is deprecated.  Use RegisterRunDurationUserVisAction
+  // or other of the above.
+  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
+
 
   G4bool RegisterGraphicsSystem (G4VGraphicsSystem*);
   // Register an individual graphics system.  Normally this is done in
@@ -407,10 +414,6 @@ public: // With description
   G4bool                       GetWaitOnEventQueueFull     () const;
 #endif
 
-  void SetUserAction
-  (G4VUserVisAction* pVisAction,
-   const G4VisExtent& = G4VisExtent::NullExtent);  // Register run-duration.
-  void SetUserActionExtent (const G4VisExtent&);  //Legacy: deprecated.
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem*);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler*);

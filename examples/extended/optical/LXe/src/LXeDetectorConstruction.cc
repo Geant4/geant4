@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeDetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id: LXeDetectorConstruction.cc 104474 2017-06-01 07:35:19Z gcosmo $
 //
 /// \file optical/LXe/src/LXeDetectorConstruction.cc
 /// \brief Implementation of the LXeDetectorConstruction class
@@ -430,7 +430,6 @@ void LXeDetectorConstruction::SetDefaults() {
   if(fLXe_mt)fLXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV);
   if(fMPTPStyrene)fMPTPStyrene->AddConstProperty("SCINTILLATIONYIELD",10./keV);
 
-  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

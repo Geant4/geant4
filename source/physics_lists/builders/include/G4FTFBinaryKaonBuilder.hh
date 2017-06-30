@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryKaonBuilder.hh 81935 2014-06-06 15:41:42Z gcosmo $
+// $Id: G4FTFBinaryKaonBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -31,7 +31,8 @@
 //
 // Author: 2008 G.Folger
 //
-//
+// Modified:
+// 12.04.2017 A.Dotti move to new design with base class//
 //----------------------------------------------------------------------------
 //
 #ifndef G4FTFBinaryKaonBuilder_h
@@ -59,15 +60,16 @@ class G4FTFBinaryKaonBuilder : public G4VKaonBuilder
     G4FTFBinaryKaonBuilder(G4bool quasiElastic=false);
     virtual ~G4FTFBinaryKaonBuilder();
 
-  public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4KaonPlusInelasticProcess * aP);
-    virtual void Build(G4KaonMinusInelasticProcess * aP);
-    virtual void Build(G4KaonZeroLInelasticProcess * aP);
-    virtual void Build(G4KaonZeroSInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * aP) final override;
+    virtual void Build(G4KaonPlusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonMinusInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroLInelasticProcess * aP) final override;
+    virtual void Build(G4KaonZeroSInelasticProcess * aP) final override;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
+    virtual void SetMaxEnergy(G4double aM) final override {theMax = aM;}
+
+    using G4VKaonBuilder::Build; //Prevent compiler warning
 
   private:
     G4TheoFSGenerator * theModel;

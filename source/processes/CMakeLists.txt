@@ -8,7 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 94124 2015-11-06 09:47:51Z gcosmo $
+# $Id: CMakeLists.txt 103639 2017-04-20 09:03:42Z gcosmo $
 #
 # 20130225  M. Kelsey -- Remove cascade/evaporation, cascade/utils
 #------------------------------------------------------------------------------
@@ -26,7 +26,7 @@ add_subdirectory(electromagnetic)
 add_subdirectory(hadronic)
 add_subdirectory(management)
 add_subdirectory(optical)
-add_subdirectory(phonon)
+add_subdirectory(solidstate)
 add_subdirectory(parameterisation)
 add_subdirectory(scoring)
 add_subdirectory(transportation)
@@ -98,7 +98,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/util/sources.cmake
             management/sources.cmake
             optical/sources.cmake
-	    phonon/sources.cmake
+            solidstate/phonon/sources.cmake
+            solidstate/channeling/sources.cmake
             parameterisation/sources.cmake
             scoring/sources.cmake
             transportation/sources.cmake

@@ -47,17 +47,6 @@ G4INCLXXProtonBuilder()
   theModel = new G4INCLXXInterface(thePreCompoundModel);
 }
 
-G4INCLXXProtonBuilder::
-~G4INCLXXProtonBuilder() 
-{
-  //delete theModel;
-}
-
-void G4INCLXXProtonBuilder::
-Build(G4HadronElasticProcess * )
-{
-}
-
 void G4INCLXXProtonBuilder::
 Build(G4ProtonInelasticProcess * aP)
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Orb.cc 102528 2017-02-08 13:37:51Z gcosmo $
+// $Id: G4Orb.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Orb
 //
@@ -31,7 +31,7 @@
 //
 // History:
 //
-// 27.10.16 E.Tcherniaev - added Extent(), reimplemented CalculateExtent()
+// 27.10.16 E.Tcherniaev - reimplemented CalculateExtent()
 // 05.04.12 M.Kelsey   - GetPointOnSurface() throw flat in cos(theta)
 // 30.06.04 V.Grichine - bug fixed in DistanceToIn(p,v) on Rmax surface
 // 20.08.03 V.Grichine - created
@@ -157,7 +157,7 @@ void G4Orb::ComputeDimensions(       G4VPVParameterisation* p,
 //
 // Get bounding box
 
-void G4Orb::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Orb::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double radius = GetRadius();
   pMin.set(-radius,-radius,-radius);
@@ -172,7 +172,7 @@ void G4Orb::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Orb::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Orb::BoundingLimits()", "GeomMgt0001", JustWarning, message);
     DumpInfo();
   }
 }
@@ -190,7 +190,7 @@ G4bool G4Orb::CalculateExtent(const EAxis pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);

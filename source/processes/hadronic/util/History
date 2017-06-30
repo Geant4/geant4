@@ -14,6 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 June 2017 Vladimir Ivanchenko (hadr-util-V10-03-04)
+--------------------------------------------------------
+- G4NuclearPolarization - improved printout
+
+28 April 2017 Tatsumi Koi (hadr-util-V10-03-03)
+--------------------------------------------------------
+- Fix warning message in previous tag  
+
+14 April 2017 Tatsumi Koi (hadr-util-V10-03-02)
+--------------------------------------------------------
+- Fix warning message in previous tag  
+
+10 April 2017 Tatsumi Koi (hadr-util-V10-03-01)
+--------------------------------------------------------
+- Introduce G4HadronicDeveloperParameter which helps 
+sharing a parameter between developer and experineced user  
+
+08 March 2017 Vladimir Ivanchenko (hadr-util-V10-03-00)
+--------------------------------------------------------
+- G4GHEKinematicsVector - fixed variable shadowing
+
  5 December 2016  Dennis Wright    (hadr-util-V10-02-01)
 --------------------------------------------------------
 - G4Nucleus::GetThermalNucleus: fix mistake in branch on total energy 

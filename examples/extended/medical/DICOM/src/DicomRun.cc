@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomRun.cc 92820 2015-09-17 15:22:14Z gcosmo $
+// $Id: DicomRun.cc 104917 2017-06-29 07:39:14Z gcosmo $
 //
 /// \file medical/DICOM/src/DicomRun.cc
 /// \brief Implementation of the DicomRun class
@@ -150,7 +150,7 @@ void DicomRun::ConstructMFD(const std::vector<G4String>& mfdName)
 //  is accumulated during a Run.
 void DicomRun::RecordEvent(const G4Event* aEvent)
 {
-  numberOfEvent++;  // This is an original line.
+  G4Run::RecordEvent(aEvent);
   
   //G4cout << "Dicom Run :: Recording event " << aEvent->GetEventID() 
   //<< "..." << G4endl;
@@ -180,9 +180,7 @@ void DicomRun::RecordEvent(const G4Event* aEvent)
     //G4cout << "Null pointer to EvtMap at " << i << "..." << G4endl;
     //}
   }
-  
-  G4Run::RecordEvent(aEvent);
-  
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

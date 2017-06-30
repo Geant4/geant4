@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomDetectorConstruction.cc 101807 2016-11-30 13:42:28Z gunter $
+// $Id: DicomDetectorConstruction.cc 104917 2017-06-29 07:39:14Z gcosmo $
 //
 /// \file  medical/DICOM/src/DicomDetectorConstruction.cc
 /// \brief Implementation of the DicomDetectorConstruction class
@@ -167,10 +167,10 @@ void DicomDetectorConstruction::InitialisationOfMaterials()
                                     z = 17.0, a = 35.453* g/mole );
     G4Element* elK = new G4Element( name = "Potassium",
                                    symbol = "P",
-                                   z = 19.0, a = 30.0983* g/mole );
+                                   z = 19.0, a = 39.0983* g/mole );
     G4Element* elP = new G4Element( name = "Phosphorus",
                                    symbol = "P",
-                                   z = 30.0, a = 30.973976* g/mole );
+                                   z = 15.0, a = 30.973976* g/mole );
     G4Element* elFe = new G4Element( name = "Iron",
                                     symbol = "Fe",
                                     z = 26, a = 56.845* g/mole );

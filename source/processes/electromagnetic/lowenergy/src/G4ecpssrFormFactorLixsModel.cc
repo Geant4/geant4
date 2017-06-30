@@ -54,28 +54,28 @@ G4ecpssrFormFactorLixsModel::G4ecpssrFormFactorLixsModel()
 { 
   interpolation = new G4LinInterpolation();
 
-  for (G4int i=6; i<93; i++) 
+  for (G4int i=11; i<93; i++) 
   {
       protonL1DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonL1DataSetMap[i]->LoadData("pixe/ecpssr/proton/l1-");
+      protonL1DataSetMap[i]->LoadData("pixe/ecpssr/proton/l1-i01m001c01-");
 
       protonL2DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonL2DataSetMap[i]->LoadData("pixe/ecpssr/proton/l2-");
+      protonL2DataSetMap[i]->LoadData("pixe/ecpssr/proton/l2-i01m001c01-");
 
       protonL3DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      protonL3DataSetMap[i]->LoadData("pixe/ecpssr/proton/l3-");
+      protonL3DataSetMap[i]->LoadData("pixe/ecpssr/proton/l3-i01m001c01-");
   }
 
-  for (G4int i=6; i<93; i++) 
+  for (G4int i=11; i<93; i++) 
   {
       alphaL1DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaL1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l1-");
+      alphaL1DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l1-i02m004c02-");
 	     
       alphaL2DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaL2DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l2-");
+      alphaL2DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l2-i02m004c02-");
 	     
       alphaL3DataSetMap[i] = new G4EMDataSet(i,interpolation);
-      alphaL3DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l3-");
+      alphaL3DataSetMap[i]->LoadData("pixe/ecpssr/alpha/l3-i02m004c02-");
   }
 
 }
@@ -104,7 +104,7 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL1CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 5) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 10) {
 
     if (massIncident == aProton->GetPDGMass())
       {      
@@ -135,7 +135,7 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL2CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 5) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 10) {
 
     if (massIncident == aProton->GetPDGMass())
       {      
@@ -166,7 +166,7 @@ G4double G4ecpssrFormFactorLixsModel::CalculateL3CrossSection(G4int zTarget,G4do
   G4Alpha* aAlpha = G4Alpha::Alpha();  
   G4double sigma = 0;
 
-  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 5) {
+  if (energyIncident > 0.1*MeV && energyIncident < 100.*MeV && zTarget < 93 && zTarget > 10) {
 
     if (massIncident == aProton->GetPDGMass())
       {      

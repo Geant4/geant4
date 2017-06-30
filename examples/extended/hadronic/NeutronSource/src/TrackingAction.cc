@@ -92,15 +92,15 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  if (charge > 3.)  ih = 10; 
  else if (particle == G4Gamma::Gamma())       ih = 4;
  else if (particle == G4Electron::Electron()) ih = 5;
- else if (particle == G4Positron::Positron()) ih = 5;  
+ else if (particle == G4Positron::Positron()) ih = 5;
  else if (particle == G4Neutron::Neutron())   ih = 6;
  else if (particle == G4Proton::Proton())     ih = 7;
  else if (particle == G4Deuteron::Deuteron()) ih = 8;
- else if (particle == G4Alpha::Alpha())       ih = 9;       
+ else if (particle == G4Alpha::Alpha())       ih = 9;
  else if (type == "nucleus")                  ih = 10;
- else if (type == "baryon")                   ih = 11;         
+ else if (type == "baryon")                   ih = 11;
  else if (type == "meson")                    ih = 12;
- else if (type == "lepton")                   ih = 13;        
+ else if (type == "lepton")                   ih = 13;
  if (ih > 0) analysis->FillH1(ih,energy);
 }
 

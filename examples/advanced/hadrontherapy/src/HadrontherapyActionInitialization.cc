@@ -85,8 +85,6 @@ void HadrontherapyActionInitialization::Build() const
   HadrontherapySteppingAction* steppingAction = new HadrontherapySteppingAction(pRunAction); 
   SetUserAction(steppingAction);  
 
-
-       
-}  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

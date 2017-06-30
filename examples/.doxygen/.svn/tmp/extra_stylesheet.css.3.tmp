@@ -1,0 +1,41 @@
+/* The standard CSS for doxygen 1.8.5 */
+/* Extension for Geant4 example documentation */
+
+/* header style */			
+#g4header {
+  color: black;
+  background-color: #CCCC99;
+  border: 1px solid #999966;
+/*  border: 10px solid white; */
+  padding-top: .5em;
+  padding-right: 1em;
+  width: 100%;
+  margin-bottom: .5em;
+  -moz-border-radius: 15px;
+}
+
+#g4header img {
+  padding-left: 1em;	
+  background: #cccc99;
+}
+
+#breadcrumb { 
+  color: #003366; 
+  background-color: #9999FF;
+  border: 0;
+  border-right: 1em solid white;
+  font-weight: bold;
+  text-align: left;
+  font-size: 90%;
+}
+
+/* overwrite default size of \section and \subsection titles: 150% */
+h1 {
+  font-size: 130%;
+}
+h2 {
+  font-size: 110%;
+}
+h3 {
+  font-size: 100%;
+}

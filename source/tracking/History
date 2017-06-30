@@ -1,4 +1,4 @@
-$Id: History 102568 2017-02-09 08:37:41Z gcosmo $
+$Id: History 102436 2017-01-27 08:28:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
-Dec 22, 2016 L.Desorgher  (tracking-V10-02-06)
+Dec 22, 2016 L.Desorgher  (tracking-V10-03-00)
 - Modification in G4AdjointSteppingAction for correction of a bug in the case of reverse
   track splitting.
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -24,7 +24,7 @@
 
 
  Material:      H2O    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
-                       Imean:  68.998 eV 
+                       Imean:  68.998 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -75,7 +75,7 @@
 
 
  Material:       Pl    density: 21.400 g/cm3   RadL:   3.058 mm   Nucl.Int.Length:   9.486 cm 
-                       Imean: 790.000 eV 
+                       Imean: 790.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Pt (Pt)   Z = 78.0   N =   195   A = 195.090 g/mole
          --->  Isotope: Pt190   Z = 78   N = 190   A = 189.96 g/mole   abundance:  0.014 %
@@ -102,7 +102,7 @@
 
 
  Material: Polyprop    density: 900.000 mg/cm3  RadL:  49.764 cm   Nucl.Int.Length:  75.110 cm 
-                       Imean:  56.518 eV 
+                       Imean:  56.518 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -116,7 +116,7 @@
 
 
  Material:    Si3N4    density:  3.440 g/cm3   RadL:   7.644 cm   Nucl.Int.Length:  28.008 cm 
-                       Imean: 128.337 eV 
+                       Imean: 128.337 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Silicon (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -131,7 +131,7 @@
 
 
  Material:     SiO2    density:  2.500 g/cm3   RadL:  10.819 cm   Nucl.Int.Length:  38.343 cm 
-                       Imean: 125.663 eV 
+                       Imean: 125.663 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Silicon (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -147,7 +147,7 @@
 
 
  Material:   Laiton    density:  8.500 g/cm3   RadL:   1.487 cm   Nucl.Int.Length:  16.512 cm 
-                       Imean: 326.043 eV 
+                       Imean: 326.043 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Cuivre (Cu)   Z = 29.0   N =    64   A = 63.546 g/mole
          --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance: 69.170 %
@@ -164,7 +164,7 @@
 
 
  Material: Cytoplasm1    density:  1.000 g/cm3   RadL:  36.091 cm   Nucl.Int.Length:  75.366 cm 
-                       Imean:  69.016 eV 
+                       Imean:  69.016 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -179,7 +179,7 @@
 
 
  Material: Cytoplasm2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV 
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -208,7 +208,7 @@
 
 
  Material: Cytoplasm3    density:  1.000 g/cm3   RadL:  36.091 cm   Nucl.Int.Length:  75.366 cm 
-                       Imean:  69.016 eV 
+                       Imean:  69.016 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -223,7 +223,7 @@
 
 
  Material: Nucleus1    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV 
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -252,7 +252,7 @@
 
 
  Material: Nucleus2    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV 
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -281,7 +281,7 @@
 
 
  Material: Nucleus3    density:  1.000 g/cm3   RadL:  36.185 cm   Nucl.Int.Length:  75.569 cm 
-                       Imean:  69.752 eV 
+                       Imean:  69.752 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -317,7 +317,6 @@
  ==========> Voxel size Y (um)=0.35906
  ==========> Voxel size Z (um)=0.16281
 
-PhysicsList::SetCuts:CutLength : 10 nm 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -716,121 +715,31 @@ hPairProd:   for  pi-    SubType= 4
       Sampling table 12x1001 from 1.11656 GeV to 1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=        1 TeV
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes
- Material : Vacuum
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes
- Material : Pl
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 2     used in the geometry : Yes
- Material : Butane
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 3     used in the geometry : Yes
- Material : Laiton
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : Yes
- Material : Si3N4
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 5     used in the geometry : Yes
- Material : Air
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 6     used in the geometry : Yes
- Material : Polyprop
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 7     used in the geometry : Yes
- Material : H2O
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : Yes
- Material : Cytoplasm1
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 9     used in the geometry : Yes
- Material : Nucleus1
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 10     used in the geometry : Yes
- Material : Nucleus2
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 11     used in the geometry : Yes
- Material : Cytoplasm2
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 12     used in the geometry : Yes
- Material : SiO2
- Range cuts        :  gamma  10 nm     e-  10 nm     e+  10 nm  proton 10 nm 
- Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 1 eV 
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-##### Create analysis manager   0x29eaa60
+##### Create analysis manager   0x154dec0
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 2 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.31436595880725
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.027585773498585
 
 -> Event # 3 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.28094991961464
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.07113226903203
 
 -> Event # 4 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.31521082337251
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.0519444271045
 
 -> Event # 5 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.26027653312574
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.045289661672963
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.33775514908262
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.05092335583091
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -839,17 +748,21 @@ All Ntuples have been created
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.29171468348048
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.026827784943745
 
 -> Event # 9 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.32183120798728
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.043732080728164
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.33467520432143
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.036039698548268
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.2953272710055
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.04543035142464
 
--> Total number of particles detected by the gas detector : 2
+-> Total number of particles detected by the gas detector : 7
 
 Graphics systems deleted.
 Visualization Manager deleting...

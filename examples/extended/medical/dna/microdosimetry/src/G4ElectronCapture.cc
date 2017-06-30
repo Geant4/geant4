@@ -136,6 +136,5 @@ G4double G4ElectronCapture::GetMeanFreePath(const G4Track&,G4double,
     G4ForceCondition*)
 {
   return DBL_MAX;
-}    
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

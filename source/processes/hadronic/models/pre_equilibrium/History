@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23-Jun-2017 Gunter Folger hadr-pre-V10-03-01
+- Fix memory leak introduced in tag below.
+
+12-Jun-2017 Gunter Folger hadr-pre-V10-03-00
+- G4PreCompoundModel::ApplyYourself(): pass creator model and time
+
 22-Oct-2016 V.Ivanchenko  hadr-pre-V10-02-09
 - G4VPreCompoundFragment, G4PreCompoundFragment - minor performance
     improvement

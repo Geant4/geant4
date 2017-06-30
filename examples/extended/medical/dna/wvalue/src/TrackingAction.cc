@@ -25,14 +25,8 @@
 //
 /// \file medical/dna/wvalue/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
-//
-// $Id: TrackingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
-
 #include "Run.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
@@ -85,6 +79,3 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
    run->AddStepSize(nbOfSteps,stepSize);
  }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity2/fanoCavity2.cc
 /// \brief Main program of the medical/fanoCavity2 example
 //
-// $Id: fanoCavity2.cc 90829 2015-06-10 08:37:55Z gcosmo $
+// $Id: fanoCavity2.cc 103507 2017-04-11 14:15:33Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,10 +68,12 @@ int main(int argc,char** argv) {
  
 
 #ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
-    G4int nThreads = G4Threading::G4GetNumberOfCores();
-    if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    runManager->SetNumberOfThreads(nThreads);
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== fanoCavity2 is started with " 
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
     G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     G4RunManager* runManager = new G4RunManager;

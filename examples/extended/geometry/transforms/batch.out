@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -23,8 +23,6 @@
    [ (           0          -0.5      0.866025)
      (           0      0.866025           0.5)
      (          -1             0             0) ]
-Current application state is Idle
-Warning : Geant4 kernel is not Init state : Assuming Init state.
 Obsolete world logical volume is removed from the default region.
 World is registered to the default region.
 ###/placement/setMethod WithInverseMatrix
@@ -99,6 +97,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 5
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.00577 MB

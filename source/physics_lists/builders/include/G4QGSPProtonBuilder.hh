@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.hh 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4QGSPProtonBuilder.hh 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -33,6 +33,7 @@
 //
 // Modified:
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -62,11 +63,12 @@ class G4QGSPProtonBuilder : public G4VProtonBuilder
     virtual ~G4QGSPProtonBuilder();
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4ProtonInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess *)  final override {}
+    virtual void Build(G4ProtonInelasticProcess * aP)  final override ;
     
-    void SetMinEnergy(G4double aM) {theMin = aM;}
+    virtual void SetMinEnergy(G4double aM) final override {theMin = aM;}
 
+    using G4VProtonBuilder::Build; //Prevent compiler warning
   private:
 
     G4TheoFSGenerator * theModel;

@@ -30,37 +30,44 @@
 #include "G4SolidsWorkspace.hh"
 
 #include "G4AutoLock.hh"
-namespace {
-    G4Mutex singletonMutexSWP = G4MUTEX_INITIALIZER;
+
+namespace
+{
+  G4Mutex singletonMutexSWP = G4MUTEX_INITIALIZER;
 }
 
 G4ThreadLocal G4SolidsWorkspace* G4SolidsWorkspacePool::fMyWorkspace=0;
-
 G4SolidsWorkspacePool* G4SolidsWorkspacePool::thePool=0;
 
-// static
 G4SolidsWorkspacePool* G4SolidsWorkspacePool::GetInstance()
 {
-   G4AutoLock l(&singletonMutexSWP);
-   if( !thePool ) thePool= new G4SolidsWorkspacePool();
-   return thePool;
+  G4AutoLock l(&singletonMutexSWP);
+  if( !thePool )  { thePool= new G4SolidsWorkspacePool(); }
+  return thePool;
 }
 
 // For use with MT and current G4WorkerThread -- which uses static methods
+//
 G4SolidsWorkspace* G4SolidsWorkspacePool::CreateWorkspace()
 {
   G4SolidsWorkspace* geometryWrk=0;
-  if( !fMyWorkspace ){
+  if( !fMyWorkspace )
+  {
     geometryWrk= new G4SolidsWorkspace();
 
-    if( !geometryWrk ) {
+    if( !geometryWrk )
+    {
       G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
                   FatalException, "Failed to create workspace.");
-    }else{
-       // geometryWrk->UseWorkspace();  // Do not assign it already.
-       fMyWorkspace= geometryWrk;
     }
-  }else{
+    else
+    {
+      // geometryWrk->UseWorkspace();  // Do not assign it already.
+      fMyWorkspace= geometryWrk;
+    }
+  }
+  else
+  {
     G4Exception("GeometryWorspacePool::CreateWorkspace", "Geom-003",
                 FatalException,
                 "Cannot create workspace twice for the same thread.");
@@ -70,8 +77,9 @@ G4SolidsWorkspace* G4SolidsWorkspacePool::CreateWorkspace()
   return geometryWrk;
 }
 
-
-void G4SolidsWorkspacePool::CreateAndUseWorkspace()  // Create it (as above) and use it
+// Create it (as above) and use it
+//
+void G4SolidsWorkspacePool::CreateAndUseWorkspace()
 {
   (this->CreateWorkspace())->UseWorkspace();
 }
@@ -80,43 +88,35 @@ void G4SolidsWorkspacePool::CreateAndUseWorkspace()  // Create it (as above) and
 //
 G4SolidsWorkspace* G4SolidsWorkspacePool::FindOrCreateWorkspace()
 {
-   G4SolidsWorkspace* geometryWrk= fMyWorkspace;
-   if( !geometryWrk ){ 
-      geometryWrk= this->CreateWorkspace(); 
-   } 
-   geometryWrk->UseWorkspace();
+  G4SolidsWorkspace* geometryWrk= fMyWorkspace;
+  if( !geometryWrk )
+  { 
+    geometryWrk= this->CreateWorkspace(); 
+  } 
+  geometryWrk->UseWorkspace();
   
-   fMyWorkspace= geometryWrk; // assign it for use by this thread.
-   return geometryWrk;
+  fMyWorkspace= geometryWrk; // assign it for use by this thread.
+  return geometryWrk;
 }
 
-#if 0
-void G4SolidsWorkspacePool::ReleaseAndDestroyMyWorkspace()
-{
-  ReleaseAndDestroyWorkspace(fMyWorkspace);
-  fMyWorkspace=0;
-}
 
-void G4SolidsWorkspacePool::ReleaseAndDestroyWorkspace(G4SolidsWorkspace *geometryWrk)
-{
-   geometryWrk->ReleaseWorkspace(); 
-   delete geometryWrk; 
-}
-#endif 
-
+// Keep the unused Workspace - for recycling
+//
 void G4SolidsWorkspacePool::Recycle( G4SolidsWorkspace *geometryWrk )
 {
-   geometryWrk->ReleaseWorkspace(); 
-//   if( fWarehouse ){ 
-//   } else {
-    delete geometryWrk;
-//   }
+  geometryWrk->ReleaseWorkspace(); 
+  delete geometryWrk;
 }
-      // Keep the unused Workspace - for recycling
 
 
 void G4SolidsWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 {
+  if (fMyWorkspace)
+  {
+     fMyWorkspace->DestroyWorkspace();
+     delete fMyWorkspace;
+     fMyWorkspace=0;
+  }
 }
 
 
@@ -125,9 +125,7 @@ G4SolidsWorkspacePool::G4SolidsWorkspacePool()
 //  fWarehouse=0;
 }
 
+
 G4SolidsWorkspacePool::~G4SolidsWorkspacePool()
 {
 }
-
-
-

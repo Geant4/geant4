@@ -106,7 +106,7 @@ class CellParameterisation : public G4VPVParameterisation
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    G4int GetNoBoxes() {return fPhantomTotalPixels;}
+    G4int GetNoBoxes() const {return fPhantomTotalPixels;}
 
     G4Material* ComputeMaterial(const G4int copyNo,
                                       G4VPhysicalVolume* physVol,
@@ -114,27 +114,26 @@ class CellParameterisation : public G4VPVParameterisation
 
    // NEW
    
-   G4int   GetPhantomTotalPixels()   {return fPhantomTotalPixels;}  
-   G4int   GetNucleusTotalPixels()   {return fNucleusTotalPixels;}  
-   G4int   GetCytoplasmTotalPixels() {return fCytoplasmTotalPixels;}  
-   G4double GetPixelSizeX() {return fDimCellBoxX;}  
-   G4double GetPixelSizeY() {return fDimCellBoxY;}  
-   G4double GetPixelSizeZ() {return fDimCellBoxZ;}  
-   G4double GetCytoplasmMass() {return fCytoplasmMass;}  
-   G4double GetNucleusMass()   {return fNucleusMass;}  
+   G4int    GetPhantomTotalPixels()   const {return fPhantomTotalPixels;}  
+   G4int    GetNucleusTotalPixels()   const {return fNucleusTotalPixels;}  
+   G4int    GetCytoplasmTotalPixels() const {return fCytoplasmTotalPixels;}  
+   G4double GetPixelSizeX()           const {return fDimCellBoxX;}  
+   G4double GetPixelSizeY()           const {return fDimCellBoxY;}  
+   G4double GetPixelSizeZ()           const {return fDimCellBoxZ;}  
+   G4double GetCytoplasmMass()        const {return fCytoplasmMass;}  
+   G4double GetNucleusMass()          const {return fNucleusMass;}  
 
-   G4ThreeVector GetVoxelThreeVector(G4int i) {return fMapCell[i];}
-   G4double GetMaterialVector(G4int i) {return fMaterial[i];}
-   G4double GetMassVector(G4int i) {return fMass[i];}
-   G4int GetTissueType(G4int i) {return fTissueType[i];}
+   G4ThreeVector GetVoxelThreeVector(G4int i) const {return fMapCell[i];}
+   G4double      GetMaterialVector(G4int i)   const {return fMaterial[i];}
+   G4double      GetMassVector(G4int i)       const {return fMass[i];}
+   G4int         GetTissueType(G4int i)       const {return fTissueType[i];}
 
-//SINGLETON
+   // SINGLETON
 
    static CellParameterisation * Instance()
    {
      return gInstance; 
    }
-//
    
   private:
 
@@ -152,10 +151,10 @@ class CellParameterisation : public G4VPVParameterisation
     G4VisAttributes * fNucleusAttributes3;
     G4VisAttributes * fCytoplasmAttributes3;
     
-    G4ThreeVector * fMapCell ; // VOXEL COORDINATES
-    G4double * fMaterial      ; // MATERIAL 
-    G4double * fMass          ; // DENSITY REGION
-    G4int * fTissueType    ; // DENSITY REGION
+    G4ThreeVector * fMapCell;    // VOXEL COORDINATES
+    G4double *      fMaterial;   // MATERIAL 
+    G4double *      fMass;       // DENSITY REGION
+    G4int *         fTissueType; // DENSITY REGION
 
     G4int fPhantomTotalPixels;
     G4int fNucleusTotalPixels;

@@ -43,25 +43,26 @@
 #ifndef G4UGENERICTRAP_hh
 #define G4UGENERICTRAP_hh
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UGenericTrap.hh"
+#include <volumes/UnplacedGenTrap.h>
 #include "G4TwoVector.hh"
 
 #include "G4Polyhedron.hh"
 
-class G4UGenericTrap : public G4USolid 
+class G4UGenericTrap : public G4UAdapter<vecgeom::UnplacedGenTrap> 
 {
+  using Shape_t = vecgeom::UnplacedGenTrap;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedGenTrap>;
+
   public:  // with description
 
     G4UGenericTrap(const G4String& name, G4double halfZ,
                    const std::vector<G4TwoVector>& vertices);
 
    ~G4UGenericTrap();
-
-    inline UGenericTrap* GetShape() const;
 
     G4double    GetZHalfLength() const;
     G4int       GetNofVertices() const;
@@ -72,6 +73,7 @@ class G4UGenericTrap : public G4USolid
     G4int       GetVisSubdivisions() const;
     void        SetVisSubdivisions(G4int subdiv);
     void        SetZHalfLength(G4double);
+    void Initialise(const std::vector<G4TwoVector>& v);
 
     inline G4GeometryType GetEntityType() const;
 
@@ -86,7 +88,7 @@ class G4UGenericTrap : public G4USolid
     G4UGenericTrap &operator=(const G4UGenericTrap& source);
       // Copy constructor and assignment operator.
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -94,16 +96,17 @@ class G4UGenericTrap : public G4USolid
                                  G4double& pMin, G4double& pMax) const;
 
     G4Polyhedron* CreatePolyhedron() const;
+
+  private:
+
+    G4int                    fVisSubdivisions;
+    std::vector<G4TwoVector> fVertices;
+
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UGenericTrap* G4UGenericTrap::GetShape() const
-{
-  return (UGenericTrap*) fShape;
-}
 
 inline G4GeometryType G4UGenericTrap::GetEntityType() const
 {

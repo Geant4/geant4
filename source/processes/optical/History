@@ -16,6 +16,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 May 17: P. Gumplinger (op-V10-03-02)
+- This version of Mariele Stockhoff's DAVIS model includes not only
+  reflection but also the capability of transmitting photons based on LUTs
+
+22 Mar 17: P. Gumplinger (op-V10-03-00/op-V10-03-01)
+- add Mariele Stockhoff's DAVIS model
+
 03 Oct 16: P. Gumplinger (op-V10-02-02)
 - act on bug report 1888
 

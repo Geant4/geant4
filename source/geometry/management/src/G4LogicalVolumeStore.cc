@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc 66872 2013-01-15 01:25:57Z japost $
+// $Id: G4LogicalVolumeStore.cc 103235 2017-03-22 15:53:48Z gcosmo $
 //
 // G4LogicalVolumeStore
 //
@@ -63,7 +63,8 @@ G4LogicalVolumeStore::G4LogicalVolumeStore()
 //
 G4LogicalVolumeStore::~G4LogicalVolumeStore()
 {
-  Clean();
+  Clean();  // Delete all volumes in the store
+  G4LogicalVolume::Clean();  // Delete allocated sub-instance data
 }
 
 // ***************************************************************************
@@ -74,7 +75,7 @@ void G4LogicalVolumeStore::Clean()
 {
   // Do nothing if geometry is closed
   //
-  if (G4GeometryManager::GetInstance()->IsGeometryClosed())
+  if (G4GeometryManager::IsGeometryClosed())
   {
     G4cout << "WARNING - Attempt to delete the logical volume store"
            << " while geometry closed !" << G4endl;

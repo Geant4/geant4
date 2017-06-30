@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.hh 97172 2016-05-27 12:37:57Z gcosmo $
+// $Id: G4HadronicProcess.hh 104121 2017-05-11 13:49:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -197,12 +197,15 @@ protected:
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);
 
 private:
+
+  void InitialiseLocal();
+
   G4double XBiasSurvivalProbability();
   G4double XBiasSecondaryWeight();
 
   // hide assignment operator as private 
-  G4HadronicProcess& operator=(const G4HadronicProcess& right);
-  G4HadronicProcess(const G4HadronicProcess&);
+  G4HadronicProcess& operator=(const G4HadronicProcess& right) = delete;
+  G4HadronicProcess(const G4HadronicProcess&) = delete;
 
   // Set E/p conservation check levels from environment variables
   void GetEnergyMomentumCheckEnvvars();
@@ -232,6 +235,10 @@ private:
   bool useIntegralXS;
 
   G4int nMatWarn;
+
+  G4int nICelectrons;
+
+  G4int idxIC;
 
   // Energy-momentum checking
   std::pair<G4double, G4double> epCheckLevels;

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option4.cc 99938 2016-10-12 08:06:52Z gcosmo $
+// $Id: G4EmStandardPhysics_option4.cc 104020 2017-05-08 07:34:58Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -275,7 +275,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);
+      eIoni->SetStepFunction(0.2, 10*um);
       G4PenelopeIonisationModel* pen = new G4PenelopeIonisationModel();
       pen->SetHighEnergyLimit(penEnergyLimit);
       eIoni->AddEmModel(0, pen, new G4UniversalFluctuation());
@@ -317,7 +317,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);
+      eIoni->SetStepFunction(0.2, 10*um);
       G4PenelopeIonisationModel* pen = new G4PenelopeIonisationModel();
       pen->SetHighEnergyLimit(penEnergyLimit);
       eIoni->AddEmModel(0, pen, new G4UniversalFluctuation());
@@ -344,7 +344,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
                particleName == "mu-"    ) {
 
       G4MuIonisation* muIoni = new G4MuIonisation();
-      muIoni->SetStepFunction(0.2, 50*um);          
+      muIoni->SetStepFunction(0.2, 10*um);          
 
       ph->RegisterProcess(mumsc, particle);
       ph->RegisterProcess(muIoni, particle);
@@ -376,9 +376,8 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetStepFunction(0.2, 10*um);
 
       ph->RegisterProcess(pimsc, particle);
       ph->RegisterProcess(hIoni, particle);
@@ -389,9 +388,8 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetStepFunction(0.2, 10*um);
 
       ph->RegisterProcess(kmsc, particle);
       ph->RegisterProcess(hIoni, particle);
@@ -402,9 +400,8 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.1, 20*um);
+      hIoni->SetStepFunction(0.1, 10*um);
 
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(hIoni, particle);

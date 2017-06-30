@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 68036 2013-03-13 14:13:45Z gcosmo $
+// $Id: RunAction.hh 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,13 +35,13 @@
 #define RunAction_h 1
 
 #include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4Run.hh"
 
+class Run;
 class DetectorConstruction;
-class RunActionMessenger;
 class PrimaryGeneratorAction;
-class G4Run;
-class Histo;
+class HistoManager;
+class RunActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,34 +52,25 @@ public:
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   virtual ~RunAction();
 
+  virtual G4Run* GenerateRun();    
+
   virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
 
-  void FillHisto(G4int id, G4double x, G4double weight = 1.0);
-           
-  //  G4double GetBinLength() {return binLength;};
-  inline void SetBinSize(G4double size) { fBinLength =  size; }
-  inline G4double GetOffsetX()          { return fOffsetX;} 
-
+  void SetBinSize(G4double size);
   inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose;}
   inline G4int GetVerbose()             { return fVerboseLevel;}
-    
-  inline void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x; };
-                   
+
 private:  
 
-  Histo*                  fHisto;    
   DetectorConstruction*   fDetector;
   PrimaryGeneratorAction* fKinematic;
-  RunActionMessenger*     fRunActionMessenger;
-
-  G4int                   fVerboseLevel;
+  Run*                    fRun;        
+  HistoManager*           fHistoManager;
+  RunActionMessenger*     fMessenger;
 
   G4double                fBinLength;
-  G4double                fOffsetX;
-  G4double                fProjRange; 
-  G4double                fProjRange2;
-
+  G4int                   fVerboseLevel;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

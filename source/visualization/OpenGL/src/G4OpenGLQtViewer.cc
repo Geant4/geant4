@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 101105 2016-11-07 08:09:26Z gcosmo $
+// $Id: G4OpenGLQtViewer.cc 104288 2017-05-23 13:23:23Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -98,15 +98,15 @@
 #include "G4Threading.hh"
 #endif
 
+#ifdef G4MULTITHREADED
 namespace
 {
-#ifdef G4MULTITHREADED
   G4Mutex mWaitForVisSubThreadQtOpenGLContextMoved = G4MUTEX_INITIALIZER;
   G4Mutex mWaitForVisSubThreadQtOpenGLContextInitialized = G4MUTEX_INITIALIZER;
   G4Condition c1_VisSubThreadQtOpenGLContextInitialized = G4CONDITION_INITIALIZER;
   G4Condition c2_VisSubThreadQtOpenGLContextMoved = G4CONDITION_INITIALIZER;
-#endif
 }
+#endif
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -1290,8 +1290,14 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
  */
 void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
 {
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+
+  // factorX == factorY
+  double factorX =  ((double)viewport[2]/fGLWidget->width());
+  double factorY =  ((double)viewport[3]/fGLWidget->height());
   fSpinningDelay = fLastEventTime->elapsed();
-  QPoint delta = (fLastPos3-fLastPos1);
+  QPoint delta = (fLastPos3-fLastPos1)*factorX;
   
   // reset cursor state
   fGLWidget->setCursor(QCursor(Qt::ArrowCursor));
@@ -1300,7 +1306,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
     if ((delta.x() != 0) || (delta.y() != 0)) {
       return;
     }
-    updatePickInfosWidget(evnt->pos().x(),evnt->pos().y());
+    updatePickInfosWidget(evnt->pos().x()*factorX,evnt->pos().y()*factorY);
     
   } else if (fSpinningDelay < fLaunchSpinDelay ) {
     if ((delta.x() == 0) && (delta.y() == 0)) {
@@ -2135,7 +2141,7 @@ bool G4OpenGLQtViewer::exportImage(std::string name, int width, int height) {
     setExportSize(width, height);
   }
   // first, try to do it with generic function
-  if (G4OpenGLViewer::exportImage()) {
+  if (G4OpenGLViewer::exportImage(name, width, height)) {
     return true;
 
   // Then try Qt saving functions
@@ -4446,7 +4452,7 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
     createPickInfosWidget();
   }
 
-  std::vector < G4OpenGLViewerPickMap* >  pickMap = GetPickDetails(aX,aY);
+  const std::vector < G4OpenGLViewerPickMap* > & pickMap = GetPickDetails(aX,aY);
   
   // remove all previous widgets
   if (fPickInfosWidget) {
@@ -4472,8 +4478,41 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   for (unsigned int a=0; a< pickMap.size(); a++) {
     // Add a box inside the pick viewer box
     std::ostringstream label;
-    label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
-    
+    if (pickMap[a]->getAttributes().size() > 0) {
+      std::string txt = pickMap[a]->getAttributes()[0].data();
+
+      // Look for Volumes
+      std::size_t pos = txt.find("Physical Volume Path (PVPath):") + 31;
+      if (pos != 31-1) {
+        std::size_t pos2 = txt.find("\n",pos);
+        label << "Volume: " + txt.substr(pos,pos2-pos);
+      } else  {
+        // Look for tracks
+        if (pickMap[a]->getAttributes().size() > 1) {
+          std::string txt1 = pickMap[a]->getAttributes()[1].data();
+          
+          pos = txt.find("Run ID (RunID):") + 16;
+          if (pos != 16-1) {
+            std::size_t pos2 = txt.find("\n",pos);
+            std::size_t posEID = txt.find("Event ID (EventID):",pos2) + 20;
+            std::size_t posEID2 = txt.find("\n",posEID);
+            std::size_t posPN = txt1.find("Particle Name (PN):") + 20;
+            std::size_t posPN2 = txt1.find("\n",posPN);
+            std::size_t posCh = txt1.find("Charge (Ch):",posPN2) + 13;
+            std::size_t posCh2 = txt1.find("\n",posCh);
+            label << "RunID:" << txt.substr(pos,pos2-pos)
+            << " EventID:" << txt.substr(posEID,posEID2-posEID)
+            << " PN:" << txt1.substr(posPN,posPN2-posPN)
+            << " Ch:" << txt1.substr(posCh,posCh2-posCh);
+          }
+        } else {
+          label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
+        }
+          
+      }
+    } else {
+      label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
+    }
     QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
     pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
     pickCoutButton->setIcon(*fTreeIconClosed);
@@ -4505,7 +4544,7 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   pushUp->setSizePolicy(vPolicy);
   fPickInfosWidget->layout()->addWidget(pushUp);
   
-  // highlight the first one :
+/*  // highlight the first one :
   
   // first un-highlight the last selected
   changeColorAndTransparency(fLastHighlightName,fLastHighlightColor);
@@ -4519,16 +4558,20 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
     
     updateQWidget();
   }
+ */
   QDialog* dial = static_cast<QDialog*> (fUIPickInfosWidget->parent());
   if (dial) {
     // change name
+    std::ostringstream oss;
     if (pickMap.size() == 0) {
-      dial->setWindowTitle(QString("No object selected - ")+GetName());
+      oss << "No object";
     } else if (pickMap.size() == 1) {
-      dial->setWindowTitle(QString("1 object selected - ")+GetName());
+      oss << "1 object";
     } else {
-      dial->setWindowTitle(QString::number(pickMap.size())+" objects selected - "+GetName());
+      oss << QString::number(pickMap.size()).toStdString() << " objects";
     }
+    oss << " selected - " << GetName();
+    dial->setWindowTitle(oss.str().c_str());
   }
   // set picking cout visible
   fPickInfosScrollArea->setVisible(true);

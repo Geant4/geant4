@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFModel.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4FTFModel.cc 102029 2016-12-16 14:53:08Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -84,8 +84,8 @@ G4FTFModel::G4FTFModel( const G4String& modelName ) :
     TheInvolvedNucleonsOfProjectile[i] = 0;
   }
 
-  //LowEnergyLimit = 2000.0*MeV;
-  LowEnergyLimit = 1000.0*MeV;
+//  LowEnergyLimit = 2000.0*MeV;   // Uzhi March 2015
+  LowEnergyLimit = 1000.0*MeV;     // Uzhi May 2015
 
   HighEnergyInter = true;
 
@@ -188,7 +188,7 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
     ProjectileResidualMassNumber = std::abs( theProjectile.GetDefinition()->GetBaryonNumber() );
     ProjectileResidualCharge = G4int( theProjectile.GetDefinition()->GetPDGCharge() );
     ProjectileResidualExcitationEnergy = 0.0;
-    //G4double ProjectileResidualMass = theProjectile.GetMass();
+    // G4double ProjectileResidualMass = theProjectile.GetMass();
     ProjectileResidual4Momentum.setVect( theProjectile.GetMomentum() );
     ProjectileResidual4Momentum.setE( theProjectile.GetTotalEnergy() );
     if ( PlabPerParticle < LowEnergyLimit ) {
@@ -246,7 +246,7 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
 
   // Init target nucleus
   theParticipants.Init( aNucleus.GetA_asInt(), aNucleus.GetZ_asInt() );
-  //theParticipants.Init( aNucleus.GetA_asInt(), 0 ); // For h+neutron
+//theParticipants.Init( aNucleus.GetA_asInt(), 0 ); //For h+neutron // Uzhi March 2016
 
   if ( theParameters != 0 ) delete theParameters;
   theParameters = new G4FTFParameters( theProjectile.GetDefinition(), aNucleus.GetA_asInt(),
@@ -262,8 +262,9 @@ void G4FTFModel::Init( const G4Nucleus& aNucleus, const G4DynamicParticle& aProj
   G4cout << "FTF end of Init" << G4endl << G4endl;
   #endif
 
-  //if ( std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1  &&
-  //     aNucleus.GetA_asInt() < 2 ) theParameters->SetProbabilityOfElasticScatt( 0.0 );
+//  if ( (std::abs( theProjectile.GetDefinition()->GetBaryonNumber() ) <= 1 ) &&        // Uzhi 29.05.2015
+//       (aNucleus.GetA_asInt() < 2) ) theParameters->SetProbabilityOfElasticScatt(0.);
+
 }
 
 
@@ -464,7 +465,7 @@ void G4FTFModel::ReggeonCascade() {
 
           Neighbour->Hit( targetSplitable );
           targetSplitable->SetTimeOfCreation( CreationTime ); 
-          targetSplitable->SetStatus( 3 );  // 2->3
+          targetSplitable->SetStatus( 3 );                       // 2->3  Uzhi Oct 2014
         }
       }
     }
@@ -480,7 +481,7 @@ void G4FTFModel::ReggeonCascade() {
   // Nucleus-Nucleus Interaction : Destruction of Projectile
   G4int InitNINp = NumberOfInvolvedNucleonsOfProjectile;
 
-  //for ( G4int InvPN = 0; InvPN < NumberOfInvolvedNucleonsOfProjectile; InvPN++ ) { 
+//  for ( G4int InvPN = 0; InvPN < NumberOfInvolvedNucleonsOfProjectile; InvPN++ ) { 
   for ( G4int InvPN = 0; InvPN < InitNINp; InvPN++ ) { 
     G4Nucleon* aProjectileNucleon = TheInvolvedNucleonsOfProjectile[ InvPN ];
 
@@ -904,7 +905,7 @@ G4bool G4FTFModel::ExciteParticipants() {
           if ( ! Result ) continue;
         } 
         if ( G4UniformRand() < 
-             ( 1.0 - target->GetSoftCollisionCount()     / MaxNumOfInelCollisions )  *
+             ( 1.0 - target->GetSoftCollisionCount()     / MaxNumOfInelCollisions )  *  // Uzhi March 2015
              ( 1.0 - projectile->GetSoftCollisionCount() / MaxNumOfInelCollisions ) ) {
           //if ( ! HighEnergyInter ) {
           //  G4bool Annihilation = false;
@@ -925,8 +926,8 @@ G4bool G4FTFModel::ExciteParticipants() {
           } else {
 
             Successfull = theElastic->ElasticScattering( projectile, target, theParameters )
-                          &&  Successfull;
- 
+                          &&  Successfull; 
+//                          ||  Successfull; 
             #ifdef debugBuildString
             G4cout << "FTF excitation Non Successfull -> Elastic scattering " 
                    << Successfull << G4endl;
@@ -952,7 +953,7 @@ G4bool G4FTFModel::ExciteParticipants() {
         #ifdef debugBuildString
         G4cout << "Annihilation" << G4endl;
         #endif
-
+// //  Uzhi March 2016       
         // Skipping possible interactions of the annihilated nucleons 
         while ( theParticipants.Next() ) {   /* Loop checking, 10.08.2015, A.Ribon */  
           G4InteractionContent& acollision = theParticipants.GetInteraction();
@@ -962,7 +963,7 @@ G4bool G4FTFModel::ExciteParticipants() {
             acollision.SetStatus( 0 );
           }
         }
-
+// // Uzhi March 2016
         // Return to the annihilation
         theParticipants.StartLoop(); 
         for ( G4int I = 0; I < CurrentInteraction; I++ ) theParticipants.Next();
@@ -986,21 +987,19 @@ G4bool G4FTFModel::ExciteParticipants() {
           #endif
 
           if ( AdditionalString != 0 ) theAdditionalString.push_back( AdditionalString );
-
-          /*
-          if ( target->GetStatus() == 4 ) {
-            // Skipping possible interactions of the annihilated nucleons 
-            while ( theParticipants.Next() ) {    
-              G4InteractionContent& acollision = theParticipants.GetInteraction();
-              G4VSplitableHadron* NextProjectileNucleon = acollision.GetProjectile();
-              G4VSplitableHadron* NextTargetNucleon = acollision.GetTarget();
-              if ( target == NextTargetNucleon ) { acollision.SetStatus( 0 ); }
-            }
-          }
-          theParticipants.StartLoop(); 
-          for ( G4int I = 0; I < CurrentInteraction; I++ ) theParticipants.Next();
-          */
-
+/* Uzhi March 2016
+if(target->GetStatus() == 4){
+        // Skipping possible interactions of the annihilated nucleons 
+        while ( theParticipants.Next() ) {    
+          G4InteractionContent& acollision = theParticipants.GetInteraction();
+          G4VSplitableHadron* NextProjectileNucleon = acollision.GetProjectile();
+          G4VSplitableHadron* NextTargetNucleon = acollision.GetTarget();
+          if ( target == NextTargetNucleon ) {acollision.SetStatus( 0 );}
+        }
+}
+        theParticipants.StartLoop(); 
+        for ( G4int I = 0; I < CurrentInteraction; I++ ) theParticipants.Next();
+*/ //Uzhi March 2016
         }
       } 
     }
@@ -1113,13 +1112,10 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
     G4int TResidualMassNumber = TargetResidualMassNumber - 1;
     G4int TResidualCharge = TargetResidualCharge - 
                             G4int( TargetNucleon->GetDefinition()->GetPDGCharge() );
-
-    //AR-30May2016 : brought back residual excitation energy as it was in G4 10.1
-    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy + 
-                                         ExcitationEnergyPerWoundedNucleon;
-    //AR-30May2016  G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy - 
-    //AR-30May2016   ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand());
-
+//Uzhi    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy + 
+//                                         ExcitationEnergyPerWoundedNucleon;
+    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy -        // Uzhi April 2015
+                                         ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand());
     if ( TResidualMassNumber <= 1 ) {
       TResidualExcitationEnergy = 0.0;
     }
@@ -1183,7 +1179,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
         #endif
 
         SumMasses = SqrtS - TResidualExcitationEnergy;
-        //TResidualExcitationEnergy =0.0;
+        //TResidualExcitationEnergy =0.0;             
         Stopping = true;
       }
 
@@ -1267,11 +1263,11 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
 
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;
-    do {
+    do { // while ( ! OuterSuccess )
       OuterSuccess = true;
 
       const G4int maxNumberOfTries = 10000;
-      do {
+      do { // while ( SqrtS < Mprojectile + std::sqrt( M2target) )
 
         NumberOfTries++;
 
@@ -1326,7 +1322,8 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
 
         } else {
           XminusNucleon  = 1.0;
-          XminusResidual = 1.0;  // It must be 0, but in the case calculation of Pz, E is problematic
+          XminusResidual = 1.0;  // It must be 0, but in the case calculation of Pz,
+                                 // E is problematic.
         }
 
         M2target = ( sqr( TNucleonMass ) + PtNucleon.mag2() ) / XminusNucleon + 
@@ -1392,7 +1389,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
     G4cout << "Proj after in CMS " << Pprojectile << G4endl;
     #endif
 
-    Pprojectile.transform( toLab );  // The work with the projectile is finished at the moment
+    Pprojectile.transform( toLab ); // The work with the projectile is finished at the moment.
 
     SelectedAntiBaryon->Set4Momentum( Pprojectile );
 
@@ -1491,11 +1488,10 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
     G4int TResidualMassNumber = ProjectileResidualMassNumber - 1;
     G4int TResidualCharge = ProjectileResidualCharge 
                           - std::abs( G4int(ProjectileNucleon->GetDefinition()->GetPDGCharge()) );
-    //AR-11Oct2016 : brought back residual excitation energy as it was in G4 10.1
-    G4double TResidualExcitationEnergy = ProjectileResidualExcitationEnergy + 
-                                         ExcitationEnergyPerWoundedNucleon;
-    //AR-11Oct2016  G4double TResidualExcitationEnergy = ProjectileResidualExcitationEnergy -
-    //AR-11Oct2016                                       ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand() );
+//Uzhi    G4double TResidualExcitationEnergy = ProjectileResidualExcitationEnergy + 
+//                                         ExcitationEnergyPerWoundedNucleon;
+    G4double TResidualExcitationEnergy = ProjectileResidualExcitationEnergy -   // Uzhi April 2015 
+                                         ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand());
     if ( TResidualMassNumber <= 1 ) {
       TResidualExcitationEnergy = 0.0;
     }
@@ -1816,11 +1812,10 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
     G4int PResidualMassNumber = ProjectileResidualMassNumber - 1;
     G4int PResidualCharge = ProjectileResidualCharge - 
                             std::abs( G4int(ProjectileNucleon->GetDefinition()->GetPDGCharge()) );
-    //AR-11Oct2016 : brought back residual excitation energy as it was in G4 10.1
-    G4double PResidualExcitationEnergy = ProjectileResidualExcitationEnergy +
-                                         ExcitationEnergyPerWoundedNucleon;
-    //AR-11Oct2016  G4double PResidualExcitationEnergy = ProjectileResidualExcitationEnergy -
-    //AR-11Oct2016                                       ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand() );
+//Uzhi    G4double PResidualExcitationEnergy = ProjectileResidualExcitationEnergy +
+//                                         ExcitationEnergyPerWoundedNucleon;
+    G4double PResidualExcitationEnergy = ProjectileResidualExcitationEnergy - 
+                                         ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand());
     if ( PResidualMassNumber <= 1 ) {
       PResidualExcitationEnergy = 0.0;
     }
@@ -1836,11 +1831,10 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
     G4int TResidualMassNumber = TargetResidualMassNumber - 1;
     G4int TResidualCharge = TargetResidualCharge - 
                             G4int( TargetNucleon->GetDefinition()->GetPDGCharge() );
-    //AR-11Oct2016 : brought back residual excitation energy as it was in G4 10.1
-    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy +
-                                         ExcitationEnergyPerWoundedNucleon;
-    //AR-11Oct2016  G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy -
-    //AR-11Oct2016                                       ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand() );
+//Uzhi    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy +
+//                                         ExcitationEnergyPerWoundedNucleon;
+    G4double TResidualExcitationEnergy = TargetResidualExcitationEnergy -   
+                                         ExcitationEnergyPerWoundedNucleon*G4Log( G4UniformRand());
     if ( TResidualMassNumber <= 1 ) {
       TResidualExcitationEnergy = 0.0;
     }
@@ -1881,6 +1875,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
 
       if ( SqrtS < SumMasses + PResidualExcitationEnergy + TResidualExcitationEnergy ) { 
         Stopping = true; 
+        //AR-14Aug2013  return false;
         if ( PResidualExcitationEnergy <= 0.0 ) {
           TResidualExcitationEnergy = SqrtS - SumMasses;
         } else if ( TResidualExcitationEnergy <= 0.0 ) {
@@ -2032,7 +2027,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
 
         G4double Mtarget = std::sqrt( sqr( TNucleonMass )  + PtNucleonT.mag2() ) + 
                            std::sqrt( sqr( TResidualMass ) + PtResidualT.mag2() );
-        M2target = sqr( Mtarget );
+        M2target = sqr( Mtarget );        
 
         if ( SqrtS < Mprojectile + Mtarget ) {
           OuterSuccess = false; 
@@ -2052,7 +2047,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
 
             #ifdef debugAdjust
             //G4cout << "XplusNucleon 1 " << XplusNucleon << G4endl;
-            //G4int Uzhi; G4cin >> Uzhi;
+            //{ G4int Uzhi; G4cin >> Uzhi; }
             #endif
 
             if ( XplusNucleon <= 0.0 || XplusNucleon >= 1.0 ) {
@@ -2273,43 +2268,62 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
 
     for ( unsigned int ahadron = 0; ahadron < primaries.size(); ahadron++ ) {
       G4bool isProjectile( true );
-      //G4cout << "primaries[ ahadron ] " << primaries[ ahadron ] << G4endl;
-      //if ( primaries[ ahadron ]->GetStatus() <= 1 ) isProjectile = true;
+      //G4cout << "primaries[ahadron] " << primaries[ahadron] << G4endl;
+      //if ( primaries[ahadron]->GetStatus() <= 1 ) isProjectile=true;
       FirstString = 0; SecondString = 0;
-      if ( primaries[ ahadron ]->GetStatus() <= 1 ) {
-        theExcitation->CreateStrings( primaries[ ahadron ], isProjectile, 
-                                      FirstString, SecondString, theParameters );
-      } else if ( primaries[ ahadron ]->GetStatus() == 2 ) {
-        G4LorentzVector ParticleMomentum = primaries[ ahadron ]->Get4Momentum();
-        G4KineticTrack* aTrack = new G4KineticTrack(
-                                       primaries[ ahadron ]->GetDefinition(),
-                                       primaries[ ahadron ]->GetTimeOfCreation(),
-                                       primaries[ ahadron ]->GetPosition(),
-                                       ParticleMomentum );
-        FirstString = new G4ExcitedString( aTrack );
-      } else {
-        G4cout << "Something wrong in FTF Model Build String" << G4endl;
+      if ( primaries[ahadron]->GetStatus() == 0 )                                    // Uzhi May 2016
+      {
+       theExcitation->CreateStrings( primaries[ ahadron ], isProjectile, 
+                                     FirstString, SecondString, theParameters );
       }
+      else if ( primaries[ahadron]->GetStatus() == 1  
+             && primaries[ahadron]->GetSoftCollisionCount() != 0 )                   // Uzhi May 2016
+      {
+       theExcitation->CreateStrings( primaries[ ahadron ], isProjectile, 
+                                     FirstString, SecondString, theParameters );
+      }
+      else if ( primaries[ahadron]->GetStatus() == 1  
+             && primaries[ahadron]->GetSoftCollisionCount() == 0 )                   // Uzhi May 2016
+      {
+       G4LorentzVector ParticleMomentum=primaries[ahadron]->Get4Momentum();
+       G4KineticTrack* aTrack=new G4KineticTrack(
+                                  primaries[ahadron]->GetDefinition(),
+                                  primaries[ahadron]->GetTimeOfCreation(),
+                                  primaries[ahadron]->GetPosition(),
+                                  ParticleMomentum);
+       FirstString=new G4ExcitedString(aTrack);
+      }
+      else if(primaries[ahadron]->GetStatus() == 2)
+      {
+       G4LorentzVector ParticleMomentum=primaries[ahadron]->Get4Momentum();
+       G4KineticTrack* aTrack=new G4KineticTrack(
+                                  primaries[ahadron]->GetDefinition(),
+                                  primaries[ahadron]->GetTimeOfCreation(),
+                                  primaries[ahadron]->GetPosition(),
+                                  ParticleMomentum);
+       FirstString=new G4ExcitedString(aTrack);
+      }
+      else {G4cout<<"Something wrong in FTF Model Build String" << G4endl;}
 
       if ( FirstString  != 0 ) strings->push_back( FirstString );
       if ( SecondString != 0 ) strings->push_back( SecondString );
 
       #ifdef debugBuildString
       G4cout << "FirstString & SecondString? " << FirstString << " " << SecondString << G4endl;
-      if ( FirstString->IsExcited() ) {
-        G4cout << "Quarks on the FirstString ends " << FirstString->GetRightParton()->GetPDGcode()
-               << " " << FirstString->GetLeftParton()->GetPDGcode() << G4endl;
-      } else {
-        G4cout << "Kinetic track is stored" << G4endl;
-      }
+      if(FirstString->IsExcited())
+      {
+       G4cout<< "Quarks on the FirstString ends " << FirstString->GetRightParton()->GetPDGcode()
+             << " " << FirstString->GetLeftParton()->GetPDGcode() << G4endl;
+      } else {G4cout<<"Kinetic track is stored"<<G4endl;}
       #endif
 
     }
 
     #ifdef debugBuildString
-    if ( FirstString->IsExcited() ) {
-      G4cout << "Check 1 string " << strings->operator[](0)->GetRightParton()->GetPDGcode() 
-             << " " << strings->operator[](0)->GetLeftParton()->GetPDGcode() << G4endl << G4endl;
+    if(FirstString->IsExcited())
+    {
+     G4cout << "Check 1 string " << strings->operator[](0)->GetRightParton()->GetPDGcode() 
+            << " " << strings->operator[](0)->GetLeftParton()->GetPDGcode() << G4endl << G4endl;
     }
     #endif
 
@@ -2340,18 +2354,17 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
              << " " << aProjectile->GetStatus() << G4endl;
       #endif
 
+      FirstString = 0; SecondString = 0;
       if ( aProjectile->GetStatus() == 0 ) { // A nucleon took part in non-diffractive interaction
 
         #ifdef debugBuildString
         G4cout << "Case1 aProjectile->GetStatus() == 0 " << G4endl;
         #endif
 
-        FirstString = 0; SecondString = 0;
         theExcitation->CreateStrings( 
                            TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron(),
                            isProjectile, FirstString, SecondString, theParameters );
-        if ( FirstString  != 0 ) strings->push_back( FirstString );
-        if ( SecondString != 0 ) strings->push_back( SecondString );
+
       } else if ( aProjectile->GetStatus() == 1 && aProjectile->GetSoftCollisionCount() != 0 ) { 
         // Nucleon took part in diffractive interaction
 
@@ -2359,12 +2372,10 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
         G4cout << "Case2 aProjectile->GetStatus() !=0 St==1 SoftCol!=0" << G4endl;
         #endif
 
-        FirstString = 0; SecondString = 0;
         theExcitation->CreateStrings( 
                            TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron(),
                            isProjectile, FirstString, SecondString, theParameters );
-        if ( FirstString  != 0 ) strings->push_back( FirstString );
-        if ( SecondString != 0 ) strings->push_back( SecondString );
+
       } else if ( aProjectile->GetStatus() == 1  &&  aProjectile->GetSoftCollisionCount() == 0  &&
                   HighEnergyInter ) {
         // Nucleon was considered as a paricipant of an interaction,
@@ -2375,34 +2386,36 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
         G4cout << "Case3 aProjectile->GetStatus() !=0 St==1 SoftCol==0" << G4endl;
         #endif
 
-        FirstString = 0; SecondString = 0;
-        theExcitation->CreateStrings( 
-                           TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron(),
-                           isProjectile, FirstString, SecondString, theParameters );
-        if ( FirstString  != 0 ) strings->push_back( FirstString );
-        if ( SecondString != 0 ) strings->push_back( SecondString );
+        G4LorentzVector ParticleMomentum=aProjectile->Get4Momentum();
+        G4KineticTrack* aTrack=new G4KineticTrack(
+                                   aProjectile->GetDefinition(),
+                                   aProjectile->GetTimeOfCreation(),
+                                   aProjectile->GetPosition(),
+                                   ParticleMomentum);
+        FirstString=new G4ExcitedString(aTrack);
 
         #ifdef debugBuildString
         G4cout << " Strings are built for nucleon marked for an interaction, but"
                << " the interaction was skipped." << G4endl;
         #endif
 
-      } else if ( aProjectile->GetStatus() == 2  ||  aProjectile->GetStatus() == 3 ) {
+      } else if ( (aProjectile->GetStatus() == 2) || (aProjectile->GetStatus() == 3) ) {    // Uzhi Nov. 2014
         // Nucleon which was involved in the Reggeon cascading
 
         #ifdef debugBuildString
         G4cout << "Case4 aProjectile->GetStatus() !=0 St==2 " << G4endl;
         #endif
 
-        FirstString = 0; SecondString = 0;
-        theExcitation->CreateStrings( 
-                         TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron(),
-                         isProjectile, FirstString, SecondString, theParameters );
-        if ( FirstString  != 0 ) strings->push_back( FirstString );
-        if ( SecondString != 0 ) strings->push_back( SecondString );
+        G4LorentzVector ParticleMomentum=aProjectile->Get4Momentum();
+        G4KineticTrack* aTrack=new G4KineticTrack(
+                                   aProjectile->GetDefinition(),
+                                   aProjectile->GetTimeOfCreation(),
+                                   aProjectile->GetPosition(),
+                                   ParticleMomentum);
+        FirstString=new G4ExcitedString(aTrack);
 
         #ifdef debugBuildString
-        G4cout << " Strings are build for involved nucleon." << G4endl;
+        G4cout << " A track is build for involved nucleon." << G4endl;
         #endif
 
       } else {
@@ -2419,8 +2432,11 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
         #endif
 
       }
-    }
-  } 
+
+      if ( FirstString  != 0 ) strings->push_back( FirstString );
+      if ( SecondString != 0 ) strings->push_back( SecondString );
+    } // end of for ( G4int ahadron = 0; ahadron < NumberOfInvolvedNucleonsOfProjectile
+  }   // ens of if ( ! GetProjectileNucleus() )
 
   #ifdef debugBuildString
   G4cout << "Building of target-like strings" << G4endl;
@@ -2435,25 +2451,20 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
            << aNucleon->GetStatus() << " " << aNucleon->GetSoftCollisionCount()<<G4endl;;
     #endif
 
-    if ( aNucleon->GetStatus() == 0 ) { // A nucleon took part in non-diffractive interaction
-      FirstString = 0 ; SecondString = 0;
+    FirstString = 0 ; SecondString = 0;
+
+    if ( aNucleon->GetStatus() == 0 ) { 
+      // A nucleon took part in non-diffractive interaction
       theExcitation->CreateStrings( aNucleon, isProjectile, 
                                     FirstString, SecondString, theParameters );
-      if ( FirstString  != 0 ) strings->push_back( FirstString );
-      if ( SecondString != 0 ) strings->push_back( SecondString );
-
       #ifdef debugBuildString
       G4cout << " 1 case A string is build" << G4endl;
       #endif
 
     } else if ( aNucleon->GetStatus() == 1  &&  aNucleon->GetSoftCollisionCount() != 0 ) {
       // A nucleon took part in diffractive interaction
-      FirstString = 0; SecondString = 0;
       theExcitation->CreateStrings( aNucleon, isProjectile,
                                     FirstString, SecondString, theParameters );
-      if ( FirstString  != 0 ) strings->push_back( FirstString );
-      if ( SecondString != 0 ) strings->push_back( SecondString );
-
       #ifdef debugBuildString
       G4cout << " 2 case A string is build, nucleon was excited." << G4endl;
       #endif
@@ -2463,26 +2474,18 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       // A nucleon was considered as a participant but due to annihilation
       // its interactions were skipped. It will be considered as involved one
       // at high energies.
-      FirstString = 0; SecondString = 0;
-      theExcitation->CreateStrings( aNucleon, isProjectile,
-                                    FirstString, SecondString, theParameters );
 
-      if ( SecondString == 0 ) {
-        G4LorentzVector ParticleMomentum = aNucleon->Get4Momentum();
-        G4KineticTrack* aTrack = new G4KineticTrack(
-                                       aNucleon->GetDefinition(),
-                                       aNucleon->GetTimeOfCreation(),
-                                       FirstString->GetPosition(),
-                                       ParticleMomentum );
-        delete FirstString;
-        FirstString = new G4ExcitedString( aTrack );
-      };
+      G4LorentzVector ParticleMomentum=aNucleon->Get4Momentum();
+      G4KineticTrack* aTrack=new G4KineticTrack(
+                                  aNucleon->GetDefinition(),
+                                  aNucleon->GetTimeOfCreation(),
+                                  aNucleon->GetPosition(),
+                                  ParticleMomentum);
 
-      if ( FirstString  != 0 ) strings->push_back( FirstString );
-      if ( SecondString != 0 ) strings->push_back( SecondString );
+      FirstString=new G4ExcitedString(aTrack);
 
       #ifdef debugBuildString
-      G4cout << "3 case A string is build" << G4endl;
+      G4cout << "3 case A track is build" << G4endl;
       #endif
 
     } else if ( aNucleon->GetStatus() == 1  &&  aNucleon->GetSoftCollisionCount() == 0  &&
@@ -2490,35 +2493,28 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       // A nucleon was considered as a participant but due to annihilation
       // its interactions were skipped. It will be returned to nucleus
       // at low energies energies.
-      aNucleon->SetStatus( 5 );  // 4->5
-      // ??? delete aNucleon;
+      aNucleon->SetStatus( 5 );
+      // ????????? delete aNucleon;
 
       #ifdef debugBuildString
       G4cout << "4 case A string is not build" << G4endl;
       #endif
 
-    } else if ( aNucleon->GetStatus() == 2  ||   // A nucleon took part in quark exchange
-                aNucleon->GetStatus() == 3  ) {  // A nucleon was involved in Reggeon cascading
-      FirstString = 0; SecondString = 0;
-      theExcitation->CreateStrings( aNucleon, isProjectile, 
-                                    FirstString, SecondString, theParameters );
+    } else if(( aNucleon->GetStatus() == 2 )||   // A nucleon took part in quark exchange 
+              ( aNucleon->GetStatus() == 3 )  ){ // A nucleon was involved in Reggeon cascading
 
-      if ( SecondString == 0 ) {
-        G4LorentzVector ParticleMomentum = aNucleon->Get4Momentum();
-        G4KineticTrack* aTrack = new G4KineticTrack(
-                                       aNucleon->GetDefinition(),
-                                       aNucleon->GetTimeOfCreation(),
-                                       aNucleon->GetPosition(), //FirstString->GetPosition(),
-                                       ParticleMomentum );
-        delete FirstString; 
-        FirstString = new G4ExcitedString( aTrack );
-      };
 
-      if ( FirstString  != 0 ) strings->push_back( FirstString );
-      if ( SecondString != 0 ) strings->push_back( SecondString );
+      G4LorentzVector ParticleMomentum=aNucleon->Get4Momentum();
+      G4KineticTrack* aTrack=new G4KineticTrack(
+                                 aNucleon->GetDefinition(),
+                                 aNucleon->GetTimeOfCreation(),
+                                 aNucleon->GetPosition(), //FirstString->GetPosition(),
+                                 ParticleMomentum);
+
+      FirstString=new G4ExcitedString(aTrack);
 
       #ifdef debugBuildString
-      G4cout << "5 case A string is build" << G4endl;
+      G4cout << "5 case A track is build" << G4endl;
       #endif
 
     } else {
@@ -2528,7 +2524,11 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       #endif
 
     }
-  }
+
+    if ( FirstString  != 0 ) strings->push_back( FirstString );
+    if ( SecondString != 0 ) strings->push_back( SecondString );
+
+  }   // end of for ( G4int ahadron = 0; ahadron < NumberOfInvolvedNucleonsOfTarget
 
   #ifdef debugBuildString
   G4cout << G4endl << "theAdditionalString.size() " << theAdditionalString.size() 
@@ -2538,7 +2538,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
   isProjectile = true;
   if ( theAdditionalString.size() != 0 ) {
     for ( unsigned int  ahadron = 0; ahadron < theAdditionalString.size(); ahadron++ ) {
-      //if ( theAdditionalString[ ahadron ]->GetStatus() <= 1 ) isProjectile = true; 
+      // if ( theAdditionalString[ ahadron ]->GetStatus() <= 1 ) isProjectile = true; 
       FirstString = 0; SecondString = 0;
       theExcitation->CreateStrings( theAdditionalString[ ahadron ], isProjectile,
                                     FirstString, SecondString, theParameters );
@@ -2592,82 +2592,87 @@ void G4FTFModel::GetResiduals() {
       aNucleon->SetBindingEnergy( DeltaExcitationE );
     }
 
-    if ( TargetResidualMassNumber != 0 ) {
-      G4ThreeVector bstToCM = TargetResidual4Momentum.findBoostToCM();
+//-------------------------------------
+    if( TargetResidualMassNumber != 0 )
+    {
+     G4ThreeVector bstToCM =TargetResidual4Momentum.findBoostToCM();
 
-      G4V3DNucleus* theTargetNucleus = GetTargetNucleus();
-      G4LorentzVector residualMomentum( 0.0, 0.0, 0.0, 0.0 );
-      G4Nucleon* aNucleon = 0;
-      theTargetNucleus->StartLoop();
-      while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-        if ( ! aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum(); tmp.boost( bstToCM );
-          aNucleon->SetMomentum( tmp );
-          residualMomentum += tmp;
-        }
-      }
+     G4V3DNucleus* theTargetNucleus = GetTargetNucleus();
+     G4LorentzVector residualMomentum(0.,0.,0.,0.);
+     G4Nucleon* aNucleon = 0;
+     theTargetNucleus->StartLoop();
+     while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+         G4LorentzVector tmp=aNucleon->Get4Momentum(); tmp.boost(bstToCM);
+         aNucleon->SetMomentum(tmp);
+         residualMomentum +=tmp;
+       }
+     }
 
-      residualMomentum /= TargetResidualMassNumber;
+     residualMomentum/=TargetResidualMassNumber;
 
-      G4double Mass = TargetResidual4Momentum.mag();
-      G4double SumMasses = 0.0;
+     G4double Mass = TargetResidual4Momentum.mag();
+     G4double SumMasses=0.;
   
-      aNucleon = 0;
-      theTargetNucleus->StartLoop();
-      while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-        if ( ! aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum() - residualMomentum;
-          G4double E = std::sqrt( tmp.vect().mag2() +
-                                  sqr( aNucleon->GetDefinition()->GetPDGMass() - aNucleon->GetBindingEnergy() ) );
-          tmp.setE( E );  aNucleon->SetMomentum( tmp );
-          SumMasses += E;
-        }
-      }
+     aNucleon = 0;
+     theTargetNucleus->StartLoop();
+     while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+         G4LorentzVector tmp=aNucleon->Get4Momentum() - residualMomentum;
+         G4double E=std::sqrt(tmp.vect().mag2()+
+                              sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+         tmp.setE(E);  aNucleon->SetMomentum(tmp);
+         SumMasses+=E;
+       }
+     }
 
-      G4double Chigh = Mass / SumMasses; G4double Clow = 0.0; G4double C;
-      const G4int maxNumberOfLoops = 1000;
-      G4int loopCounter = 0;
-      do {
-        C = ( Chigh + Clow ) / 2.0;
-        SumMasses = 0.0;
-        aNucleon = 0;
-        theTargetNucleus->StartLoop();
-        while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-          if ( ! aNucleon->AreYouHit() ) { 
-            G4LorentzVector tmp = aNucleon->Get4Momentum();
-            G4double E = std::sqrt( tmp.vect().mag2()*sqr(C) +
-                                    sqr( aNucleon->GetDefinition()->GetPDGMass() - aNucleon->GetBindingEnergy() ) );
-            SumMasses += E;
-          }
-        }
+     G4double Chigh=Mass/SumMasses; G4double Clow=0; G4double C;
+     const G4int maxNumberOfLoops = 1000;
+     G4int loopCounter = 0;
+     do
+     {
+      C=(Chigh+Clow)/2.;
 
-        if ( SumMasses > Mass ) Chigh = C;
-        else                    Clow  = C;
-
-      } while ( Chigh - Clow > 0.01  &&
-                ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
-      if ( loopCounter >= maxNumberOfLoops ) {
-        #ifdef debugFTFmodel
-        G4cout << "BAD situation: forced exit of the first while loop in G4FTFModel::GetResidual" << G4endl
-               << "\t return immediately from the method!" << G4endl;
-        #endif
-        return;
-      }
-
+      SumMasses=0.;
       aNucleon = 0;
       theTargetNucleus->StartLoop();
       while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
         if ( !aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum()*C;
-          G4double E = std::sqrt( tmp.vect().mag2()+
-                                  sqr( aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy() ) );
-          tmp.setE( E ); tmp.boost( -bstToCM );  
-          aNucleon->SetMomentum( tmp );     
+         G4LorentzVector tmp=aNucleon->Get4Momentum();
+         G4double E=std::sqrt(tmp.vect().mag2()*sqr(C)+
+                              sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+         SumMasses+=E;
         }
       }
-    }
 
-    if ( ! GetProjectileNucleus() ) return;  // The projectile is a hadron
+      if(SumMasses > Mass) {Chigh=C;}
+      else                 {Clow =C;}
+
+     } while( (Chigh-Clow > 0.01) &&  // end do
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+     if ( loopCounter >= maxNumberOfLoops ) {
+       #ifdef debugFTFmodel
+       G4cout << "BAD situation: forced exit of the first while loop in G4FTFModel::GetResidual" << G4endl
+              << "\t return immediately from the method!" << G4endl;
+       #endif
+       return;
+     }
+
+     aNucleon = 0;
+     theTargetNucleus->StartLoop();
+     while ( ( aNucleon = theTargetNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+        G4LorentzVector tmp=aNucleon->Get4Momentum()*C;
+        G4double E=std::sqrt(tmp.vect().mag2()+
+                             sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+        tmp.setE(E); tmp.boost(-bstToCM);  
+        aNucleon->SetMomentum(tmp);     
+       }
+     }
+    }   // End of if( TargetResidualMassNumber != 0 )
+//-------------------------------------
+
+    if ( ! GetProjectileNucleus() ) return; // The projectile is a hadron
 
     #ifdef debugFTFmodel
     G4cout << "NumberOfInvolvedNucleonsOfProjectile " << NumberOfInvolvedNucleonsOfProjectile
@@ -2694,82 +2699,85 @@ void G4FTFModel::GetResiduals() {
       aNucleon->SetBindingEnergy( DeltaExcitationE );
     }
 
-    if ( ProjectileResidualMassNumber != 0 ) {
-      G4ThreeVector bstToCM = ProjectileResidual4Momentum.findBoostToCM();
+//-------------------------------------
+    if( ProjectileResidualMassNumber != 0 )
+    {
+     G4ThreeVector bstToCM =ProjectileResidual4Momentum.findBoostToCM();
 
-      G4V3DNucleus* theProjectileNucleus = GetProjectileNucleus();
-      G4LorentzVector residualMomentum( 0.0, 0.0, 0.0, 0.0);
-      G4Nucleon* aNucleon = 0;
-      theProjectileNucleus->StartLoop();
-      while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-        if ( ! aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum(); tmp.boost( bstToCM );
-          aNucleon->SetMomentum( tmp );
-          residualMomentum += tmp;
-        }
-      }
+     G4V3DNucleus* theProjectileNucleus = GetProjectileNucleus();
+     G4LorentzVector residualMomentum(0.,0.,0.,0.);
+     G4Nucleon* aNucleon = 0;
+     theProjectileNucleus->StartLoop();
+     while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+         G4LorentzVector tmp=aNucleon->Get4Momentum(); tmp.boost(bstToCM);
+         aNucleon->SetMomentum(tmp);
+         residualMomentum +=tmp;
+       }
+     }
 
-      residualMomentum /= ProjectileResidualMassNumber;
+     residualMomentum/=ProjectileResidualMassNumber;
 
-      G4double Mass = ProjectileResidual4Momentum.mag();
-      G4double SumMasses= 0.0;
+     G4double Mass = ProjectileResidual4Momentum.mag();
+     G4double SumMasses=0.;
   
+     aNucleon = 0;
+     theProjectileNucleus->StartLoop();
+     while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+         G4LorentzVector tmp=aNucleon->Get4Momentum() - residualMomentum;
+         G4double E=std::sqrt(tmp.vect().mag2()+
+                              sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+         tmp.setE(E);  aNucleon->SetMomentum(tmp);
+         SumMasses+=E;
+       }
+     }
+
+     G4double Chigh=Mass/SumMasses; G4double Clow=0; G4double C;
+     const G4int maxNumberOfLoops = 1000;
+     G4int loopCounter = 0;
+     do
+     {
+      C=(Chigh+Clow)/2.;
+
+      SumMasses=0.;
       aNucleon = 0;
       theProjectileNucleus->StartLoop();
       while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-        if ( ! aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum() - residualMomentum;
-          G4double E=std::sqrt( tmp.vect().mag2() +
-                                sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy() ) );
-          tmp.setE( E );  aNucleon->SetMomentum( tmp );
-          SumMasses += E;
+        if ( !aNucleon->AreYouHit() ) { 
+         G4LorentzVector tmp=aNucleon->Get4Momentum();
+         G4double E=std::sqrt(tmp.vect().mag2()*sqr(C)+
+                              sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+         SumMasses+=E;
         }
       }
 
-      G4double Chigh = Mass / SumMasses; G4double Clow = 0.0; G4double C;
-      const G4int maxNumberOfLoops = 1000;
-      G4int loopCounter = 0;
-      do {
-        C = ( Chigh + Clow ) / 2.0;
+      if(SumMasses > Mass) {Chigh=C;}
+      else                 {Clow =C;}
 
-        SumMasses = 0.0;
-        aNucleon = 0;
-        theProjectileNucleus->StartLoop();
-        while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-          if ( ! aNucleon->AreYouHit() ) { 
-            G4LorentzVector tmp = aNucleon->Get4Momentum();
-            G4double E = std::sqrt( tmp.vect().mag2()*sqr(C) +
-                                    sqr( aNucleon->GetDefinition()->GetPDGMass() - aNucleon->GetBindingEnergy() ) );
-            SumMasses += E;
-          }
-        }
+     } while( (Chigh-Clow > 0.01) &&  // end do
+              ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+     if ( loopCounter >= maxNumberOfLoops ) {
+       #ifdef debugFTFmodel
+       G4cout << "BAD situation: forced exit of the second while loop in G4FTFModel::GetResidual" << G4endl
+              << "\t return immediately from the method!" << G4endl;
+       #endif
+       return;
+     }
 
-        if ( SumMasses > Mass) Chigh = C;
-        else                   Clow  = C;
-
-      } while ( Chigh - Clow > 0.01  &&
-                ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
-      if ( loopCounter >= maxNumberOfLoops ) {
-        #ifdef debugFTFmodel
-        G4cout << "BAD situation: forced exit of the second while loop in G4FTFModel::GetResidual" << G4endl
-               << "\t return immediately from the method!" << G4endl;
-        #endif
-        return;
-      }
-
-      aNucleon = 0;
-      theProjectileNucleus->StartLoop();
-      while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
-        if ( ! aNucleon->AreYouHit() ) { 
-          G4LorentzVector tmp = aNucleon->Get4Momentum()*C;
-          G4double E = std::sqrt( tmp.vect().mag2() +
-                                  sqr( aNucleon->GetDefinition()->GetPDGMass() - aNucleon->GetBindingEnergy() ) );
-          tmp.setE( E ); tmp.boost( -bstToCM );  
-          aNucleon->SetMomentum( tmp ); 
-        }
-      }
-    }   // End of if ( ProjectileResidualMassNumber != 0 )
-  
+     aNucleon = 0;
+     theProjectileNucleus->StartLoop();
+     while ( ( aNucleon = theProjectileNucleus->GetNextNucleon() ) ) {  /* Loop checking, 10.08.2015, A.Ribon */
+       if ( !aNucleon->AreYouHit() ) { 
+        G4LorentzVector tmp=aNucleon->Get4Momentum()*C;
+        G4double E=std::sqrt(tmp.vect().mag2()+
+                             sqr(aNucleon->GetDefinition()->GetPDGMass()-aNucleon->GetBindingEnergy()));
+        tmp.setE(E); tmp.boost(-bstToCM);  
+        aNucleon->SetMomentum(tmp);     
+       }
+     }
+    }   // End of if( ProjectileResidualMassNumber != 0 )
+//-------------------------------------  
     #ifdef debugFTFmodel
     G4cout << "End projectile" << G4endl;
     #endif
@@ -2818,7 +2826,7 @@ void G4FTFModel::GetResiduals() {
            << "TargetResidual4Momentum  " << TargetResidual4Momentum << G4endl;
     #endif
 
-    if ( ! GetProjectileNucleus() ) return;  // The projectile is a hadron
+    if ( ! GetProjectileNucleus() ) return; // The projectile is a hadron
 
     #ifdef debugFTFmodel
     G4cout << "Low energy interaction: Projectile nucleus --------------" << G4endl
@@ -2880,23 +2888,55 @@ void G4FTFModel::GetResiduals() {
 
 
 //============================================================================
-
+/*                                                                                Closed by Uzhi, May 2016
 G4ThreeVector G4FTFModel::GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const {
   //  @@ this method is used in FTFModel as well. Should go somewhere common!
-
+G4cout<<"MaxPt^2 "<<maxPtSquare<<" "<<G4endl;
+G4cout<<"Enter AveragePt2"<<G4endl; 
+{do
+ {
+  G4cin>>AveragePt2;
+  G4cout<<AveragePt2<<" "<<maxPtSquare<<" "<<G4endl;
+  G4cout<<"Argument and G4Exp( -maxPtSquare/AveragePt2 ) "<<maxPtSquare/AveragePt2<<" "<<G4Exp( -maxPtSquare/AveragePt2)<<G4endl;
+ } while(true);
+}
   G4double Pt2( 0.0 );
+
   if ( AveragePt2 <= 0.0 ) {
     Pt2 = 0.0;
   } else {
     Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
-                                     ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+                                        ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
   }
+
   G4double Pt = std::sqrt( Pt2 );
   G4double phi = G4UniformRand() * twopi;
 
   return G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0.0 );    
 }
+*/
+//
+//============================================================================ Uzhi 2016
 
+G4ThreeVector G4FTFModel::GaussianPt( G4double AveragePt2, G4double maxPtSquare ) const {
+
+  G4double Pt2( 0.0 );
+
+  if(AveragePt2 > 0.0) {
+    if(maxPtSquare/AveragePt2 < 1.0e+9) {
+      Pt2 = -AveragePt2 * G4Log( 1.0 + G4UniformRand() * 
+                                     ( G4Exp( -maxPtSquare/AveragePt2 ) -1.0 ) );
+    } else {
+      Pt2 = -AveragePt2 * G4Log( 1.0 - G4UniformRand() ); 
+    }
+  }
+
+  G4double Pt = std::sqrt( Pt2 );
+  G4double phi = G4UniformRand() * twopi;
+ 
+  return G4ThreeVector( Pt*std::cos(phi), Pt*std::sin(phi), 0.0 );    
+}
+//
 
 //============================================================================
 
@@ -2947,11 +2987,8 @@ ComputeNucleusProperties( G4V3DNucleus* nucleus,               // input paramete
                               +  aNucleon->Get4Momentum().perp2() );                     
       sumMasses += 20.0*MeV;  // Separation energy for a nucleon
 
-      //AR-11Oct2016 : brought back residual excitation energy as it was in G4 10.1
-      residualExcitationEnergy += ExcitationEnergyPerWoundedNucleon;
-      //AR-11Oct2016  residualExcitationEnergy += -ExcitationEnergyPerWoundedNucleon*
-      //AR-11Oct2016                              G4Log( G4UniformRand());
-
+      residualExcitationEnergy += -ExcitationEnergyPerWoundedNucleon*
+                                   G4Log( G4UniformRand());
       residualMassNumber--;
       // The absolute value below is needed only in the case of anti-nucleus.
       residualCharge -= std::abs( G4int( aNucleon->GetDefinition()->GetPDGCharge() ) );
@@ -2976,7 +3013,7 @@ ComputeNucleusProperties( G4V3DNucleus* nucleus,               // input paramete
     if ( residualMassNumber == 1 ) {
       residualExcitationEnergy = 0.0;
     }
-    residualMass += residualExcitationEnergy;  // Uzhi March 2016 ?
+    residualMass += residualExcitationEnergy;       // Uzhi March 2016 ????
   }
   sumMasses += std::sqrt( sqr( residualMass ) + residualMomentum.perp2() );
   return true;
@@ -3008,7 +3045,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
   if ( sqrtS < 0.0  ||  numberOfInvolvedNucleons <= 0  ||  sumMasses < 0.0 ) return false;
 
   //const G4double ProbDeltaIsobar = 0.05;
-  //const G4double ProbDeltaIsobar = 0.25; 
+  //const G4double ProbDeltaIsobar = 0.25;
   const G4double probDeltaIsobar = 0.05;  // A.R. 07.08.2013 0.10 -> 0.05 Uzhi March 2016
 
   G4int maxNumberOfDeltas = G4int( (sqrtS - sumMasses)/(400.0*MeV) );
@@ -3039,7 +3076,7 @@ GenerateDeltaIsobar( const G4double sqrtS,                  // input parameter
         splitableHadron->SetDefinition( old_def );
         break;
       } else {  // Change is accepted
-        sumMasses += ( massDelta - massNuc );  // Uzhi March 2016 ?
+        sumMasses += ( massDelta - massNuc );        // Uzhi March 2016 ???
       }
     } 
   }
@@ -3081,24 +3118,20 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
   } 
 
   G4bool success = true;                            
-
   G4double SumMasses = residualMass; 
-
-  /*
+//                                                         // Uzhi March 2016 ???
   for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
     G4Nucleon* aNucleon = involvedNucleons[i];
     if ( ! aNucleon ) continue;
     SumMasses += aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass();
   }
-  */
-
+//
   const G4int maxNumberOfLoops = 1000;
   G4int loopCounter = 0;
-  do {
+  do {  // while ( ! success )
 
     success = true;
-
-    // Sampling of nucleon Pt 
+//======================================= Sampling of nucleon Pt ===============
     G4ThreeVector ptSum( 0.0, 0.0, 0.0 );
 
     for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
@@ -3106,12 +3139,14 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
       if ( ! aNucleon ) continue;
       G4ThreeVector tmpPt = GaussianPt( averagePt2, maxPt2 );
       ptSum += tmpPt;
-      G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), 0.0, 0.0 );
+
+      G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), 0., 0.);
       aNucleon->SetMomentum( tmp );
     }
 
     G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;
     G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
+
 
     SumMasses = residualMass;
     for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
@@ -3122,11 +3157,10 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
       G4double MtN = std::sqrt( sqr( aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass() )
                               + sqr( px ) + sqr( py ) );
       SumMasses += MtN;
-      G4LorentzVector tmp( px, py, 0.0, MtN);
+      G4LorentzVector tmp( px, py, 0., MtN);
       aNucleon->SetMomentum( tmp );
     }
-
-    // Sampling X of nucleon
+//======================================== Sampling X of nucleon ===============
     G4double xSum = 0.0;
 
     for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
@@ -3134,7 +3168,8 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
       if ( ! aNucleon ) continue;
 
       G4ThreeVector tmpX = GaussianPt( dCor*dCor, 1.0 );
-      //G4double x = tmpX.x() + aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()/SumMasses;
+//      G4double x = tmpX.x() +                                 // Uzhi 2016
+//                   aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass()/SumMasses;
       G4double x = tmpX.x() + aNucleon->Get4Momentum().e()/SumMasses;
       if ( x < 0.0  ||  x > 1.0 ) { 
         success = false; 
@@ -3142,9 +3177,8 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
       }
       xSum += x;
       //AR The energy is in the lab (instead of cms) frame but it will not be used.
-      //G4LorentzVector tmp( tmpPt.x(), tmpPt.y(), x, aNucleon->Get4Momentum().e() );
       G4LorentzVector tmp( aNucleon->Get4Momentum().x(), aNucleon->Get4Momentum().y(), 
-                           x, aNucleon->Get4Momentum().e() );
+                                    x, aNucleon->Get4Momentum().e() );
       aNucleon->SetMomentum( tmp );
     }
 
@@ -3152,9 +3186,10 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
 
     if ( ! success ) continue;
 
-    //G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;
-    //G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
+//    G4double deltaPx = ( ptSum.x() - pResidual.x() ) / numberOfInvolvedNucleons;  // Uzhi 2016
+//    G4double deltaPy = ( ptSum.y() - pResidual.y() ) / numberOfInvolvedNucleons;
     G4double delta = 0.0;
+
     if ( residualMassNumber == 0 ) {
       delta = ( xSum - 1.0 ) / numberOfInvolvedNucleons;
     } else {
@@ -3163,6 +3198,7 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
 
     xSum = 1.0;
     mass2 = 0.0;
+
     for ( G4int i = 0; i < numberOfInvolvedNucleons; i++ ) {
       G4Nucleon* aNucleon = involvedNucleons[i];
       if ( ! aNucleon ) continue;
@@ -3179,25 +3215,25 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
           break;
         }
       }                                          
-
-      /*
+/*                                                            // Uzhi 2016
       G4double px = aNucleon->Get4Momentum().px() - deltaPx;
       G4double py = aNucleon->Get4Momentum().py() - deltaPy;
       mass2 += ( sqr( aNucleon->GetSplitableHadron()->GetDefinition()->GetPDGMass() )
-               + sqr( px ) + sqr( py ) ) / x;
+                    + sqr( px ) + sqr( py ) ) / x;
       G4LorentzVector tmp( px, py, x, aNucleon->Get4Momentum().e() );
-      */
-
+*/
       mass2 += sqr( aNucleon->Get4Momentum().e() ) / x;
       G4LorentzVector tmp( aNucleon->Get4Momentum().px(), aNucleon->Get4Momentum().py(), 
                                  x, aNucleon->Get4Momentum().e() );
       aNucleon->SetMomentum( tmp );
     }
+
     if ( ! success ) continue;
+//=======================================================
 
     if ( success  &&  residualMassNumber != 0 ) {
-      //mass2 += ( sqr( residualMass ) + pResidual.perp2() ) / xSum;
-      mass2 += sqr( residualMass ) / xSum;
+      mass2 += ( sqr( residualMass ) + pResidual.perp2() ) / xSum;      // Uzhi 2016
+//      mass2 += sqr( residualMass ) / xSum;
     }
 
     #ifdef debugPutOnMassShell
@@ -3205,7 +3241,7 @@ SamplingNucleonKinematics( G4double averagePt2,                   // input param
     #endif
 
   } while ( ( ! success ) &&
-            ++loopCounter < maxNumberOfLoops );  /* Loop checking, 10.08.2015, A.Ribon */
+            ++loopCounter < maxNumberOfLoops );
   if ( loopCounter >= maxNumberOfLoops ) {
     return false;
   }
@@ -3238,6 +3274,8 @@ CheckKinematics( const G4double sValue,                 // input parameter
   // and setting the parameter success to false in the case that the kinematics should
   // be rejeted.
 
+//G4cout<<"sqrtS Mp Mt sum "<<std::sqrt(sValue)<<"  "<<std::sqrt(projectileMass2)<<" "<<std::sqrt(targetMass2)<<" "<<std::sqrt(projectileMass2)+std::sqrt(targetMass2)<<G4endl;
+
   G4double decayMomentum2 = sqr( sValue ) + sqr( projectileMass2 ) + sqr( targetMass2 )
                             - 2.0*sValue*projectileMass2 - 2.0*sValue*targetMass2 
                             - 2.0*projectileMass2*targetMass2;
@@ -3246,10 +3284,12 @@ CheckKinematics( const G4double sValue,                 // input parameter
   projectileWplus = sqrtS - targetMass2/targetWminus;
   G4double projectilePz = projectileWplus/2.0 - projectileMass2/2.0/projectileWplus;
   G4double projectileE  = projectileWplus/2.0 + projectileMass2/2.0/projectileWplus;
+
   G4double projectileY  = 0.5 * G4Log( (projectileE + projectilePz)/
                                        (projectileE - projectilePz) );
   G4double targetPz = -targetWminus/2.0 + targetMass2/2.0/targetWminus;
   G4double targetE  =  targetWminus/2.0 + targetMass2/2.0/targetWminus;
+
   G4double targetY  = 0.5 * G4Log( (targetE + targetPz)/(targetE - targetPz) );
 
   #ifdef debugPutOnMassShell
@@ -3404,4 +3444,3 @@ void G4FTFModel::ModelDescription( std::ostream& desc ) const {
        << "model parameter tuning a wide set of experimental  \n"
        << "data.                                              \n";
 }
-

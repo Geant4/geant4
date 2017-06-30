@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: RE05PrimaryGeneratorAction.cc 98775 2016-08-09 14:30:39Z gcosmo $
+// $Id: RE05PrimaryGeneratorAction.cc 104017 2017-05-08 07:31:29Z gcosmo $
 //
 /// \file RE05/src/RE05PrimaryGeneratorAction.cc
 /// \brief Implementation of the RE05PrimaryGeneratorAction class
@@ -55,11 +55,13 @@ RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
   fMessenger(0),
   fUseHEPEvt(false)
 {
+  G4AutoLock lock(&RE05PrimGenDestrMutex);
   if(!fHEPEvt)
   {
     const char* filename = "pythia_event.data";
     fHEPEvt = new G4HEPEvtInterface(filename,1);
   }
+  lock.unlock();
 
   G4int n_particle = 1;
   G4ParticleGun* particleGun = new G4ParticleGun(n_particle);

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc 99418 2016-09-21 09:18:42Z gcosmo $
+// $Id: G4Scene.cc 101958 2016-12-12 08:04:35Z gcosmo $
 //
 // 
 // Scene data  John Allison  19th July 1996.
@@ -37,6 +37,8 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4TransportationManager.hh"
 
+#include <set>
+
 G4Scene::G4Scene (const G4String& name):
   fName (name),
   fRefreshAtEndOfEvent(true),
@@ -46,7 +48,8 @@ G4Scene::G4Scene (const G4String& name):
 
 G4Scene::~G4Scene () {}
 
-G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
+G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn)
+{
   std::vector<Model>::const_iterator i;
   for (i = fRunDurationModelList.begin ();
        i != fRunDurationModelList.end (); ++i) {
@@ -64,8 +67,31 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
     }
     return false;
   }
+
+  for (i = fRunDurationModelList.begin ();
+       i != fRunDurationModelList.end (); ++i) {
+    if (pModel -> GetGlobalTag () ==
+        i->fpModel->GetGlobalTag ()) break;
+  }
+  if (i != fRunDurationModelList.end ()) {
+    if (warn) {
+      G4cout
+      << "G4Scene::AddRunDurationModel: The tag \""
+      << pModel->GetGlobalTag()
+      << "\"\n  duplicates one already in scene \""
+      << fName
+      <<
+  "\".\n  This may be intended but if not, you may inspect the scene with"
+  "\n  \"/vis/scene/list\" and deactivate unwanted models with"
+  "\n  \"/vis/scene/activateModel\". Or create a new scene."
+      << G4endl;
+    }
+  }
+
   fRunDurationModelList.push_back (Model(pModel));
+
   CalculateExtent ();
+
   return true;
 }
 

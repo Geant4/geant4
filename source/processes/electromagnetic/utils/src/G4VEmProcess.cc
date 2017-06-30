@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc 98778 2016-08-09 14:41:08Z gcosmo $
+// $Id: G4VEmProcess.cc 104349 2017-05-26 07:18:59Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -149,9 +149,17 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   lManager->Register(this);
   secID = fluoID = augerID = biasID = -1;
   mainSecondaries = 100;
-  if("phot" == GetProcessName() || "compt" == GetProcessName()) { 
-    mainSecondaries = 1; 
-  }
+  if("phot" == GetProcessName() || "compt" == GetProcessName()
+      || "e-_G4DNAIonisation" == GetProcessName()
+      || "hydrogen_G4DNAIonisation" == GetProcessName()
+      || "helium_G4DNAIonisation" == GetProcessName()
+      || "alpha_G4DNAIonisation" == GetProcessName()
+      || "alpha+_G4DNAIonisation" == GetProcessName()
+      || "proton_G4DNAIonisation" == GetProcessName()
+      || "GenericIon_G4DNAIonisation" == GetProcessName() ) 
+    { 
+      mainSecondaries = 1; 
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -361,13 +369,15 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
   // defined ID of secondary particles
   G4String nam1 = GetProcessName();
-  G4String nam2 = nam1 + "_fluo" ;
-  G4String nam3 = nam1 + "_auger";
-  G4String nam4 = nam1 + "_split";
   secID   = G4PhysicsModelCatalog::Register(nam1); 
-  fluoID  = G4PhysicsModelCatalog::Register(nam2); 
-  augerID = G4PhysicsModelCatalog::Register(nam3); 
-  biasID  = G4PhysicsModelCatalog::Register(nam4); 
+  if(100 > mainSecondaries) {
+    G4String nam2 = nam1 + "_fluo" ;
+    G4String nam3 = nam1 + "_auger";
+    G4String nam4 = nam1 + "_split";
+    fluoID  = G4PhysicsModelCatalog::Register(nam2); 
+    augerID = G4PhysicsModelCatalog::Register(nam3); 
+    biasID  = G4PhysicsModelCatalog::Register(nam4);
+  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -846,9 +856,12 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
           } else {
             t->SetCreatorModelIndex(biasID);
           }
- 
-          //G4cout << "Secondary(post step) has weight " << t->GetWeight() 
-          // << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
+	  /* 
+          G4cout << "Secondary(post step) has weight " << t->GetWeight() 
+		 << ", Ekin= " << t->GetKineticEnergy()/MeV << " MeV "
+		 << GetProcessName() << " fluoID= " << fluoID
+		 << " augerID= " << augerID <<G4endl;
+	  */
         } else {
           delete dp;
           edep += e;

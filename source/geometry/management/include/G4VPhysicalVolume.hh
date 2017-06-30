@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh 99379 2016-09-20 09:45:19Z gcosmo $
+// $Id: G4VPhysicalVolume.hh 103096 2017-03-15 15:21:33Z gcosmo $
 //
 //
 // class G4VPhysicalVolume
@@ -211,6 +211,9 @@ class G4VPhysicalVolume
 
     static const G4PVManager& GetSubInstanceManager();
       // Returns the private data instance manager.
+
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
 
   protected:
 

@@ -1,4 +1,4 @@
-$Id: History 102545 2017-02-08 14:20:36Z gcosmo $
+$Id: History 102433 2017-01-27 08:24:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
-
-27 Jan 2017: L. Desorgher (emadjoint-V10-02-04)
+27 Jan 2017: L. Desorgher (emadjoint-V10-03-00)
 -Correction of occurence of FPE in G4AdjointForcedInteractionForGamma.
  
 27 Octb 2016: L. Desorgher (emadjoint-V10-02-03)

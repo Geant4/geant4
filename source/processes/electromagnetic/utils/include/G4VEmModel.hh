@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4VEmModel.hh 104457 2017-05-31 15:52:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -315,6 +315,10 @@ public:
 
   inline G4VEmAngularDistribution* GetAngularDistribution();
 
+  inline G4VEmModel* GetTripletModel();
+
+  inline void SetTripletModel(G4VEmModel*);
+
   inline void SetAngularDistribution(G4VEmAngularDistribution*);
 
   inline G4double HighEnergyLimit() const;
@@ -358,6 +362,8 @@ public:
   inline void SetDeexcitationFlag(G4bool val);
 
   inline void SetForceBuildTable(G4bool val);
+
+  inline void SetFluctuationFlag(G4bool val);
 
   inline void SetMasterThread(G4bool val);
 
@@ -424,6 +430,7 @@ protected:
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
+  G4bool                       lossFlucFlag;
   const static G4double        inveplus;       
 
   // ======== Cached values - may be state dependent ================
@@ -433,6 +440,7 @@ private:
   const G4MaterialCutsCouple* fCurrentCouple;
   const G4Element*            fCurrentElement;
   const G4Isotope*            fCurrentIsotope;
+  G4VEmModel*                 fTripletModel;
 
   G4int                  nsec;
   std::vector<G4double>  xsec;
@@ -630,6 +638,23 @@ inline void G4VEmModel::SetAngularDistribution(G4VEmAngularDistribution* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline G4VEmModel* G4VEmModel::GetTripletModel()
+{
+  return fTripletModel;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::SetTripletModel(G4VEmModel* p)
+{
+  if(p != fTripletModel) {
+    delete fTripletModel;
+    fTripletModel = p;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 inline G4double G4VEmModel::HighEnergyLimit() const
 {
   return highLimit;
@@ -703,6 +728,13 @@ inline G4bool G4VEmModel::UseAngularGeneratorFlag() const
 inline void G4VEmModel::SetAngularGeneratorFlag(G4bool val)
 {
   useAngularGenerator = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VEmModel::SetFluctuationFlag(G4bool val)
+{
+  lossFlucFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

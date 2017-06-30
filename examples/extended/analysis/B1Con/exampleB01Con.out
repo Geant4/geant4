@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,7 +68,7 @@ Available colours:
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -81,6 +81,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -743,10 +749,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     2
 =======================================================================
 Number of de-excitation channels                    8
 ### Run 0 start.
@@ -772,53 +779,53 @@ Number of de-excitation channels                    8
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.181
-             MEAN =   4.45231e-14
-              VAR =   1.56685e-26
-               SD =   1.25174e-13
-                R =     0.0889053
-            SHIFT =   1.78837e-13
-              VOV =     0.0089262
-              FOM =       1581.45
-THE LARGEST SCORE =   5.55155e-13 and it happend at 5th event
-    Affected Mean =   4.50333e-14 and its ratio to orignal is 1.01146
-     Affected VAR =   1.59133e-26 and its ratio to orignal is 1.01562
-       Affected R =      0.088538 and its ratio to orignal is 0.995868
-   Affected SHIFT =   1.79324e-13 and its ratio to orignal is 1.00273
-     Affected FOM =       1581.45 and its ratio to orignal is 1
-MEAN distribution is  RANDOM
+       EFFICIENCY =         0.161
+             MEAN =   4.25146e-14
+              VAR =   1.54255e-26
+               SD =   1.24199e-13
+                R =     0.0923808
+            SHIFT =   1.82211e-13
+              VOV =    0.00924203
+              FOM =       1673.94
+THE LARGEST SCORE =   5.47818e-13 and it happend at 944th event
+    Affected Mean =   4.30194e-14 and its ratio to orignal is 1.01187
+     Affected VAR =   1.56652e-26 and its ratio to orignal is 1.01554
+       Affected R =     0.0919572 and its ratio to orignal is 0.995415
+   Affected SHIFT =   1.82602e-13 and its ratio to orignal is 1.00214
+     Affected FOM =       1673.94 and its ratio to orignal is 1
+MEAN distribution is not RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0889053
+r is less than 0.1. r = 0.0923808
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
 Number of non zero history too small to calculate SLOPE
-This result passes 6 / 8 Convergence Test.
+This result passes 5 / 8 Convergence Test.
 
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62  5.47726e-14  1.89905e-26  1.37806e-13     0.316982     0.127305      124.406  1.79367e-13     0.206349    0.0610501    0.0378328
-   2   124  5.73411e-14  2.07988e-26  1.44218e-13     0.224956    0.0547426       247.01  1.77575e-13          0.2        0.032    0.0182005
-   3   187  4.59343e-14  1.62797e-26  1.27592e-13     0.202585    0.0496736      304.575    1.837e-13     0.175532    0.0249839    0.0158385
-   4   249  4.76015e-14  1.67468e-26   1.2941e-13      0.17194    0.0361214      422.822  1.83419e-13         0.18    0.0182222    0.0112228
-   5   312  5.01532e-14  1.71426e-26   1.3093e-13     0.147559    0.0255973      574.085  1.74495e-13     0.191693    0.0134718   0.00823242
-   6   374   4.5541e-14  1.58633e-26  1.25949e-13     0.142816    0.0245389       612.85  1.80888e-13     0.181333    0.0120392   0.00830289
-   7   437  4.21231e-14  1.47979e-26  1.21647e-13     0.137989    0.0231649      656.483  1.83892e-13     0.171233    0.0110502   0.00794715
-   8   499  4.33339e-14  1.50823e-26   1.2281e-13     0.126742    0.0189683       778.16  1.79575e-13        0.174   0.00949425   0.00653715
-   9   562  4.35618e-14   1.5546e-26  1.24684e-13     0.120628    0.0165036      859.036  1.81574e-13     0.168739   0.00875012   0.00577523
-  10   624  4.56042e-14  1.63614e-26  1.27912e-13     0.112193     0.013885      993.071  1.80607e-13        0.176   0.00749091   0.00507617
-  11   687   4.6396e-14  1.65308e-26  1.28572e-13     0.105651    0.0121191      1119.86  1.78001e-13     0.175872   0.00681097   0.00433488
-  12   749  4.49456e-14  1.60642e-26  1.26745e-13      0.10297    0.0117228      1178.93  1.80157e-13     0.174667   0.00630025   0.00428846
-  13   812  4.47091e-14  1.60861e-26  1.26831e-13     0.099491    0.0108767      1262.82  1.81016e-13     0.177122   0.00571443   0.00417186
-  14   874  4.44065e-14  1.58666e-26  1.25963e-13     0.095894     0.010173      1359.34  1.80158e-13     0.177143   0.00530876   0.00387639
-  15   937  4.54158e-14  1.59159e-26  1.26158e-13       0.0907   0.00923288      1519.48  1.77302e-13     0.181237   0.00481625   0.00340147
-  16   999  4.45231e-14  1.56685e-26  1.25174e-13    0.0889053    0.0089262      1581.45  1.78837e-13        0.181   0.00452486   0.00337139
+   1    62  3.40756e-14    1.169e-26   1.0812e-13     0.399755     0.193578      89.3952  1.76156e-13     0.142857    0.0952381    0.0620294
+   2   124   3.7305e-14  1.24846e-26  1.11734e-13     0.267895    0.0843864      199.054   1.7151e-13        0.168     0.039619    0.0315748
+   3   187  3.38144e-14  1.08501e-26  1.04164e-13     0.224665    0.0641222      283.029  1.70577e-13     0.164894    0.0269389    0.0232671
+   4   249  3.66953e-14  1.25461e-26  1.12009e-13     0.193052    0.0437165      383.313  1.76936e-13        0.168    0.0198095    0.0173104
+   5   312  3.82984e-14  1.31861e-26  1.14831e-13     0.169475    0.0331906      497.382  1.77553e-13     0.175719    0.0149869    0.0136431
+   6   374   3.8084e-14  1.29136e-26  1.13638e-13     0.154087    0.0282091      601.686  1.76945e-13     0.181333    0.0120392    0.0116403
+   7   437  4.06757e-14  1.41925e-26  1.19132e-13     0.139945    0.0229197      729.436  1.80819e-13     0.184932    0.0100626   0.00947732
+   8   499  4.05023e-14  1.43164e-26  1.19651e-13     0.132115      0.02026      818.461  1.82727e-13         0.18   0.00911111   0.00830834
+   9   562  4.08697e-14  1.45715e-26  1.20713e-13     0.124479    0.0178644      921.953  1.83762e-13     0.174067   0.00842788   0.00703966
+  10   624   4.1034e-14  1.46085e-26  1.20866e-13      0.11782    0.0158029      1029.12  1.82451e-13       0.1712   0.00774579   0.00611351
+  11   687  4.02906e-14  1.43288e-26  1.19703e-13     0.113268    0.0147095      1113.49  1.82967e-13     0.168605    0.0071672    0.0056438
+  12   749  4.03982e-14  1.43251e-26  1.19688e-13     0.108182    0.0135081      1220.65  1.82937e-13        0.168   0.00660317   0.00508463
+  13   812  4.16191e-14  1.49498e-26   1.2227e-13     0.103034    0.0118253      1345.68  1.82589e-13     0.166052    0.0061774   0.00442554
+  14   874  4.06759e-14  1.46139e-26  1.20888e-13     0.100471    0.0113087       1415.2  1.83187e-13     0.163429   0.00585015    0.0042328
+  15   937  4.13664e-14  1.49574e-26    1.223e-13    0.0965338    0.0103097         1533  1.83417e-13     0.162047   0.00551285   0.00379598
+  16   999  4.25146e-14  1.54255e-26  1.24199e-13    0.0923808   0.00924203      1673.94  1.82211e-13        0.161   0.00521118   0.00331449
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 44.5231 picoGy  +- 3.95636 picoGy 
+ Dose in scoring volume : 42.5146 picoGy  +- 3.92557 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 start.
@@ -844,53 +851,53 @@ i/16 till_ith      mean          var           sd            r          vov     
 ---> Begin of event: 900
 
 G4ConvergenceTester Output Result of DOSE_TALLY
-       EFFICIENCY =         0.631
-             MEAN =   5.03046e-12
-              VAR =   2.09456e-23
-               SD =   4.57663e-12
-                R =     0.0287699
-            SHIFT =   1.36898e-15
-              VOV =   0.000182109
-              FOM =        2013.6
-THE LARGEST SCORE =   1.06427e-11 and it happend at 133th event
-    Affected Mean =   5.03607e-12 and its ratio to orignal is 1.00111
-     Affected VAR =   2.09561e-23 and its ratio to orignal is 1.0005
-       Affected R =     0.0287307 and its ratio to orignal is 0.998638
-   Affected SHIFT =  -2.82122e-15 and its ratio to orignal is -2.06081
-     Affected FOM =        2013.6 and its ratio to orignal is 1
-MEAN distribution is not RANDOM
+       EFFICIENCY =           0.6
+             MEAN =   4.82914e-12
+              VAR =   2.15446e-23
+               SD =   4.64162e-12
+                R =     0.0303948
+            SHIFT =   2.00047e-13
+              VOV =   0.000163779
+              FOM =       2460.07
+THE LARGEST SCORE =   1.07334e-11 and it happend at 461th event
+    Affected Mean =   4.83504e-12 and its ratio to orignal is 1.00122
+     Affected VAR =   2.15579e-23 and its ratio to orignal is 1.00062
+       Affected R =     0.0303519 and its ratio to orignal is 0.998589
+   Affected SHIFT =   1.95654e-13 and its ratio to orignal is 0.978042
+     Affected FOM =       2460.07 and its ratio to orignal is 1
+MEAN distribution is  RANDOM
 r follows 1/std::sqrt(N)
 r is monotonically decrease 
-r is less than 0.1. r = 0.0287699
+r is less than 0.1. r = 0.0303948
 VOV follows 1/std::sqrt(N)
 VOV is monotonically decrease 
 FOM distribution is not RANDOM
 SLOPE is not large enough
-This result passes 5 / 8 Convergence Test.
+This result passes 6 / 8 Convergence Test.
 
 
 G4ConvergenceTester Output History of DOSE_TALLY
 i/16 till_ith      mean          var           sd            r          vov          fom        shift            e        r2eff        r2int
-   1    62   4.8425e-12  2.11277e-23  4.59649e-12     0.119588   0.00320077       116.54  1.24176e-13     0.571429    0.0119048   0.00216943
-   2   124   4.5137e-12  2.08137e-23   4.5622e-12    0.0904038   0.00172398      203.927  4.25225e-13        0.568   0.00608451   0.00202296
-   3   187   4.5484e-12  2.12944e-23  4.61459e-12    0.0739938  0.000987755      304.409   3.9034e-13     0.558511   0.00420466    0.0012413
-   4   249  4.65867e-12  2.11346e-23  4.59724e-12    0.0624117   0.00076412      427.875  3.34298e-13        0.584   0.00284932   0.00103032
-   5   312   4.6235e-12  2.17027e-23  4.65861e-12    0.0569525  0.000548115      513.834  3.80465e-13      0.56869   0.00242309  0.000810138
-   6   374  4.63931e-12  2.13445e-23  4.62001e-12    0.0514249  0.000490849      630.233  3.53744e-13     0.578667   0.00194163  0.000695843
-   7   437  4.57617e-12  2.12164e-23  4.60613e-12    0.0480947   0.00044567      720.534  4.12199e-13     0.577626   0.00166946  0.000638353
-   8   499   4.6657e-12  2.12777e-23  4.61277e-12    0.0442141  0.000359186      852.566   3.1898e-13        0.586   0.00141297  0.000538004
-   9   562  4.72049e-12  2.10569e-23  4.58878e-12     0.040969  0.000333495      992.974  2.74593e-13     0.596803   0.00119999  0.000475487
-  10   624  4.79255e-12  2.11101e-23  4.59457e-12    0.0383476  0.000287207      1133.37  2.10887e-13       0.6016   0.00105957  0.000408614
-  11   687  4.87204e-12   2.1073e-23  4.59053e-12    0.0359218  0.000262284      1291.61  1.46399e-13     0.610465  0.000927464  0.000361036
-  12   749  4.92191e-12  2.10199e-23  4.58474e-12    0.0340134  0.000243613      1440.61  1.03457e-13        0.616  0.000831169  0.000324203
-  13   812  5.00885e-12  2.10157e-23  4.58429e-12    0.0320988  0.000221836       1617.6  1.61632e-14     0.622386  0.000746272  0.000282792
-  14   874  4.97202e-12  2.09478e-23  4.57688e-12    0.0311195  0.000207449      1721.01  4.91775e-14     0.622857  0.000692005  0.000275311
-  15   937  4.99055e-12  2.08759e-23  4.56902e-12    0.0298932  0.000195212       1865.1  3.32652e-14     0.628998  0.000628817  0.000263836
-  16   999  5.03046e-12  2.09456e-23  4.57663e-12    0.0287699  0.000182109       2013.6  1.36898e-15        0.631  0.000584786  0.000242091
+   1    62  4.61605e-12  2.02026e-23  4.49473e-12     0.122677    0.0036813      151.015  3.23951e-13     0.587302     0.011154   0.00365674
+   2   124  4.94168e-12  2.11282e-23  4.59654e-12    0.0831958   0.00144817      328.356  8.40351e-14        0.624   0.00482051   0.00204565
+   3   187  5.01399e-12  2.16044e-23  4.64805e-12    0.0676096   0.00080685        497.2  4.86855e-14      0.62766   0.00315543   0.00139131
+   4   249  4.91852e-12   2.1617e-23  4.64941e-12    0.0597852  0.000626354      635.857  1.55479e-13        0.624   0.00241026   0.00114972
+   5   312  4.77435e-12  2.17727e-23  4.66613e-12    0.0552421  0.000502584      744.743  2.65612e-13     0.600639   0.00212426  0.000917682
+   6   374  4.71702e-12  2.14274e-23  4.62898e-12    0.0506759  0.000478646      885.003   3.3192e-13     0.602667   0.00175811  0.000803086
+   7   437  4.75373e-12  2.13108e-23  4.61637e-12    0.0464012  0.000411752      1055.58  2.84585e-13     0.605023   0.00149048  0.000657672
+   8   499  4.78615e-12  2.13725e-23  4.62304e-12    0.0431973  0.000352538      1217.96  2.55312e-13         0.61   0.00127869  0.000583584
+   9   562  4.81217e-12  2.11693e-23  4.60101e-12    0.0402957  0.000321526      1399.68  2.12971e-13     0.614565   0.00111397  0.000506884
+  10   624   4.8333e-12  2.13487e-23  4.62046e-12    0.0382386  0.000279963      1554.33  2.03166e-13       0.6096   0.00102467  0.000435179
+  11   687  4.80129e-12  2.14584e-23  4.63232e-12    0.0367829  0.000249576      1679.79  2.31226e-13     0.600291  0.000967819  0.000383196
+  12   749  4.80302e-12  2.14777e-23  4.63441e-12    0.0352329  0.000229314      1830.84  2.32084e-13          0.6  0.000888889  0.000350816
+  13   812  4.73793e-12  2.14408e-23  4.63042e-12    0.0342756  0.000216971      1934.53   2.8748e-13     0.594096  0.000840381  0.000332994
+  14   874  4.80178e-12  2.15371e-23   4.6408e-12    0.0326729  0.000189084      2128.99  2.25037e-13     0.597714  0.000769189  0.000297107
+  15   937  4.80226e-12  2.15669e-23  4.64402e-12    0.0315753  0.000174641      2279.57  2.25381e-13     0.597015  0.000719616  0.000276318
+  16   999  4.82914e-12  2.15446e-23  4.64162e-12    0.0303948  0.000163779      2460.07  2.00047e-13          0.6  0.000666667  0.000256255
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.03046 nanoGy  +- 144.653 picoGy 
+ Dose in scoring volume : 4.82914 nanoGy  +- 146.708 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

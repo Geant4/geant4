@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IT.hh 102637 2017-02-10 11:08:17Z gcosmo $
+// $Id: G4IT.hh 102616 2017-02-10 07:57:14Z gcosmo $
 //
 // Author: Mathieu Karamitros
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc 99781 2016-10-05 10:18:54Z gcosmo $
+// $Id: G4VTwistedFaceted.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -302,8 +302,8 @@ void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
 //=====================================================================
 //* Extent ------------------------------------------------------------
 
-void G4VTwistedFaceted::Extent(G4ThreeVector &pMin,
-                               G4ThreeVector &pMax) const
+void G4VTwistedFaceted::BoundingLimits(G4ThreeVector &pMin,
+                                       G4ThreeVector &pMax) const
 {
   G4double maxRad = std::sqrt(fDx*fDx + fDy*fDy);
   pMin.set(-maxRad,-maxRad,-fDz);
@@ -324,7 +324,7 @@ G4VTwistedFaceted::CalculateExtent( const EAxis              pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

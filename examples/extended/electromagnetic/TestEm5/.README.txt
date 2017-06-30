@@ -142,6 +142,18 @@
  - 41 :  "(reflect , neutral) : ener fluence: dE(MeV)/dOmega"      
  - 42 :  "(reflect , neutral) : space angle dN/dOmega"
  - 43 :  "(reflect , neutral) : projected angle at exit of world"
+ - 50 :  "energy of Auger e- at creation"
+ - 51 :  "energy of fluorescence gamma at creation"
+ - 52 :  "energy of Auger e- at creation (log scale)"
+ - 53 :  "energy of fluorescence gamma at creation (log scale)"
+ - 54 :  "energy of PIXE Auger e- at creation"
+ - 55 :  "energy of PIXE gamma at creation"
+ - 56 :  "energy of PIXE Auger e- at creation (log scale)"
+ - 57 :  "energy of PIXE gamma at creation (log scale)"
+ - 58 :  "energy of G4DNA Auger e- at creation"
+ - 59 :  "energy of G4DNA gamma at creation"
+ - 60 :  "energy of G4DNA Auger e- at creation (log scale)"
+ - 61 :  "energy of G4DNA gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
  

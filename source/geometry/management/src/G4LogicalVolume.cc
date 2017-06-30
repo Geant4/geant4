@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc 100906 2016-11-03 09:59:32Z gcosmo $
+// $Id: G4LogicalVolume.cc 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4LogicalVolume Implementation
@@ -188,6 +188,15 @@ InitialiseWorker( G4LogicalVolume* /*pMasterObject*/,
     AssignFieldManager(workerFldMgr);
   }
 #endif
+}
+
+// ********************************************************************
+// Clean
+// ********************************************************************
+//
+void G4LogicalVolume::Clean()
+{
+  subInstanceManager.FreeSlave();
 }
 
 // ********************************************************************

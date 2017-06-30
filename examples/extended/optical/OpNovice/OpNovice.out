@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -254,6 +254,16 @@ RINDEX
 3.877e-06   1
 4.002e-06   1
 4.136e-06   1
+LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1/Rough_LUT.dat read in! 
+Reflectivity LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1/Rough_LUTR.dat read in! 
+  Surface type   = 3
+  Surface finish = 30
+  Surface model  = 3
+
+  Surface parameter 
+  ----------------- 
+0
+
   Surface type   = 1
   Surface finish = 0
   Surface model  = 0
@@ -282,7 +292,7 @@ EFFICIENCY
 REFLECTIVITY
 2.034e-06   0.3
 4.136e-06   0.5
-### Birks coeffitients used in run time
+### Birks coefficients used in run time
    Water     0.126 mm/MeV     0.0126 g/cm^2/MeV  massFactor=  85.0756 effCharge= 62.0606
  AddDiscreteProcess to OpticalPhoton 
 Visualization Manager instantiating with verbosity "warnings (3)"...
@@ -581,9 +591,9 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 start.
-Number of Scintillation photons produced in this event : 71
-Number of Cerenkov photons produced in this event : 25
-number of event = 1 User=0.01s Real=0.01s Sys=0s
+Number of Scintillation photons produced in this event : 80
+Number of Cerenkov photons produced in this event : 23
+number of event = 1 User=0s Real=0s Sys=0s
 #
 Graphics systems deleted.
 Visualization Manager deleting...

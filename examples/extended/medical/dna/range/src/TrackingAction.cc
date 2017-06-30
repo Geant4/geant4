@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/range/src/TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
-//
-// $Id: TrackingAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 
@@ -157,5 +152,3 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
  };
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

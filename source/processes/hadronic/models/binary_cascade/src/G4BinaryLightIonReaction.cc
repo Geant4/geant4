@@ -44,6 +44,12 @@
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4Log.hh"
 
+#ifdef G4MULTITHREADED
+   G4Mutex G4BinaryLightIonReaction::BLIRMutex = G4MUTEX_INITIALIZER;
+#endif
+   G4int G4BinaryLightIonReaction::theBLIR_ID = -1;
+
+
 //#define debug_G4BinaryLightIonReaction
 //#define debug_BLIR_finalstate
 //#define debug_BLIR_result
@@ -63,6 +69,18 @@ G4BinaryLightIonReaction::G4BinaryLightIonReaction(G4VPreCompoundModel* ptr)
 	}
 	theModel = new G4BinaryCascade(theProjectileFragmentation);
 	theHandler = theProjectileFragmentation->GetExcitationHandler();
+	if ( theBLIR_ID == -1 ) {
+#ifdef G4MULTITHREADED
+       G4MUTEXLOCK(&G4BinaryLightIonReaction::BLIRMutex);
+       if ( theBLIR_ID == -1 ) {
+#endif
+    	   theBLIR_ID = G4PhysicsModelCatalog::Register("Binary Light Ion Reaction");
+#ifdef G4MULTITHREADED
+       }
+       G4MUTEXUNLOCK(&G4BinaryLightIonReaction::BLIRMutex);
+#endif
+    }
+
 
 	debug_G4BinaryLightIonReactionResults=getenv("debug_G4BinaryLightIonReactionResults")!=0;
 }
@@ -94,7 +112,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	pZ=G4lrint(aTrack.GetDefinition()->GetPDGCharge()/eplus);
 	tA=targetNucleus.GetA_asInt();
 	tZ=targetNucleus.GetZ_asInt();
-
+	G4double timePrimary = aTrack.GetGlobalTime();
 	G4LorentzVector mom(aTrack.Get4Momentum());
    //G4cout << "proj mom : " << mom << G4endl;
 	G4LorentzRotation toBreit(mom.boostVector());
@@ -175,6 +193,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
       cascaders = new G4ReactionProductVector;
 
       G4LorentzVector pspectators=SortResult(result,spectators,cascaders);
+        // this also sets spectatorA and spectatorZ
 
       //      pFinalState=std::accumulate(cascaders->begin(),cascaders->end(),pFinalState,ReactionProduct4Mom);
 
@@ -224,10 +243,13 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
    	if (spectatorA > 0 )
 		{
 		   // check spectator momentum
-		   if ( momentum.vect().mag() - momentum.e()> 10*keV )
+		   if ( momentum.vect().mag() - momentum.e()< 10*keV )
 		   {
+   	   	   	   // DeExciteSpectatorNucleus() also handles also case of A=1, Z=0,1
+               DeExciteSpectatorNucleus(spectators, cascaders, theStatisticalExEnergy, momentum);
 
-		      for (iter=spectators->begin();iter!=spectators->end();iter++)
+		   } else {   // momentum non-conservation --> fail
+			  for (iter=spectators->begin();iter!=spectators->end();iter++)
 		      {
 		    	 delete *iter;
 		      }
@@ -266,10 +288,7 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 		      theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
 		      return &theResult;
 		   }
-
-		   	   	   	   // DeExciteSpectatorNucleus() also handles also case of A=1, Z=0,1
-		   DeExciteSpectatorNucleus(spectators, cascaders, theStatisticalExEnergy, momentum);
-		} else {
+		} else {    // no spectators
 		   delete spectators;
 		}
 	}
@@ -294,11 +313,11 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 	{
 		if((*iter)->GetNewlyAdded())
 		{
-			G4DynamicParticle * aNew =
+			G4DynamicParticle * aNewDP =
 					new G4DynamicParticle((*iter)->GetDefinition(),
 							(*iter)->GetTotalEnergy(),
 							(*iter)->GetMomentum() );
-			G4LorentzVector tmp = aNew->Get4Momentum();
+			G4LorentzVector tmp = aNewDP->Get4Momentum();
              #ifdef debug_BLIR_result
 			     p_raw+= tmp;
              #endif
@@ -308,7 +327,13 @@ ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
 				tmp.setVect(-tmp.vect());
 			}
 			tmp *= toLab;
-			aNew->Set4Momentum(tmp);
+			aNewDP->Set4Momentum(tmp);
+			G4HadSecondary aNew = G4HadSecondary(aNewDP);
+            G4double time = 0;                     //(*iter)->GetCreationTime();
+            //if(time < 0.0) { time = 0.0; }
+            aNew.SetTime(timePrimary + time);
+            aNew.SetCreatorModelType((*iter)->GetCreatorModel());
+
 			theResult.AddSecondary(aNew);
 			ptot += tmp;
 			        //G4cout << "BLIC: Secondary " << aNew->GetDefinition()->GetParticleName()

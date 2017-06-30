@@ -67,6 +67,7 @@
 #include "G4DummyModel.hh"
 #include "G4EmProcessSubType.hh"
 #include "G4PhysicsListHelper.hh"
+#include "G4EmParticleList.hh"
 
 #include "G4MicroElecElastic.hh"
 #include "G4MicroElecElasticModel.hh"
@@ -86,6 +87,7 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 #include "G4ionIonisation.hh"
+#include "G4KleinNishinaModel.hh"
 
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
@@ -94,6 +96,7 @@
 #include "G4RayleighScattering.hh" 
 #include "G4UrbanMscModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4LowEPComptonModel.hh"
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermoreComptonModel.hh"
@@ -142,15 +145,15 @@ G4EmModelActivator::G4EmModelActivator(const G4String& emphys)
 
 void G4EmModelActivator::ActivateEmOptions()
 {
-  const std::vector<G4String> regnamesMSC = theParameters->RegionsMsc();
-  G4int nreg = regnamesMSC.size();
+  const std::vector<G4String> regnamesPhys = theParameters->RegionsPhysics();
+  G4int nreg = regnamesPhys.size();
   if(0 == nreg) { return; }
   G4int verbose = theParameters->Verbose() - 1; 
   if(verbose > 0) {
     G4cout << "### G4EmModelActivator::ActivateEmOptions for " << nreg << " regions"
            << G4endl;
   }
-  const std::vector<G4String> typesMSC = theParameters->TypesMsc();
+  const std::vector<G4String> typesPhys = theParameters->TypesMsc();
 
   // start configuration of models
   const G4ParticleDefinition* elec = G4Electron::Electron();
@@ -159,18 +162,19 @@ void G4EmModelActivator::ActivateEmOptions()
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4EmConfigurator* em_config = man->EmConfigurator();
   G4VAtomDeexcitation* adeexc = man->AtomDeexcitation(); 
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
   G4VEmModel* mod;
 
   for(G4int i=0; i<nreg; ++i) {
-    G4String reg = regnamesMSC[i];
+    G4String reg = regnamesPhys[i];
     if(verbose > 0) {
-      G4cout << i << ". region <" << reg << ">; type <" << typesMSC[i] << "> " 
+      G4cout << i << ". region <" << reg << ">; type <" << typesPhys[i] << "> " 
 	     << G4endl;
     }
    
-    if(baseName == typesMSC[i]) { continue; }
+    if(baseName == typesPhys[i]) { continue; }
 
-    if("G4EmStandard" == typesMSC[i]) {
+    if("G4EmStandard" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       msc->SetLocked(true);
       em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, 100*MeV);
@@ -178,8 +182,8 @@ void G4EmModelActivator::ActivateEmOptions()
       msc->SetLocked(true);
       em_config->SetExtraEmModel("e+", "msc", msc, reg, 0.0, 100*MeV);
 
-    } else if("G4EmStandard_opt1" == typesMSC[i] || 
-	      "G4EmStandard_opt2" == typesMSC[i]) {
+    } else if("G4EmStandard_opt1" == typesPhys[i] || 
+	      "G4EmStandard_opt2" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       msc->SetStepLimitType(fMinimal);
       msc->SetRangeFactor(0.2);
@@ -191,7 +195,7 @@ void G4EmModelActivator::ActivateEmOptions()
       msc->SetLocked(true);
       em_config->SetExtraEmModel("e+", "msc", msc, reg, 0.0, 100*MeV);
       
-    } else if("G4EmStandard_opt3" == typesMSC[i]) { 
+    } else if("G4EmStandard_opt3" == typesPhys[i]) { 
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       msc->SetStepLimitType(fUseDistanceToBoundary);
       msc->SetLocked(true);
@@ -212,8 +216,14 @@ void G4EmModelActivator::ActivateEmOptions()
       FindOrAddProcess(phot, "Rayl");
       mod = new G4LivermoreRayleighModel();
       em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
+      FindOrAddProcess(phot, "phot");
+      mod = new G4LivermorePhotoElectricModel();
+      em_config->SetExtraEmModel("gamma", "phot", mod, reg);
+      FindOrAddProcess(phot, "compt");
+      mod = new G4KleinNishinaModel();
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
 
-    } else if("G4EmStandard_opt4" == typesMSC[i]) {
+    } else if("G4EmStandard_opt4" == typesPhys[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
       msc->SetStepLimitType(fUseDistanceToBoundary);
       msc->SetRangeFactor(0.02);
@@ -226,13 +236,24 @@ void G4EmModelActivator::ActivateEmOptions()
       em_config->SetExtraEmModel("e+", "msc", msc, reg, 0.0, 100*MeV);
       if(G4Threading::IsMasterThread()) {
         theParameters->SetDeexActiveRegion(reg, true, false, false);
+        theParameters->SetStepFunction(0.2, 10*um);
+        theParameters->SetStepFunctionMuHad(0.2, 10*um);
       }
       theParameters->DefineRegParamForDeex(adeexc);
       FindOrAddProcess(phot, "Rayl");
       mod = new G4LivermoreRayleighModel();
       em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
+      FindOrAddProcess(phot, "phot");
+      mod = new G4LivermorePhotoElectricModel();
+      em_config->SetExtraEmModel("gamma", "phot", mod, reg);
+      FindOrAddProcess(phot, "compt");
+      mod = new G4KleinNishinaModel();
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
+      mod = new G4LowEPComptonModel();
+      mod->SetHighEnergyLimit(20*MeV);
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
 
-    } else if("G4EmStandardGS" == typesMSC[i]) {
+    } else if("G4EmStandardGS" == typesPhys[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();
       msc->SetStepLimitType(fUseSafetyPlus);
       msc->SetRangeFactor(0.1);
@@ -244,7 +265,7 @@ void G4EmModelActivator::ActivateEmOptions()
       msc->SetLocked(true);
       em_config->SetExtraEmModel("e+", "msc", msc, reg, 0.0, 100*MeV);
 
-    } else if("G4EmStandardWVI" == typesMSC[i]) {
+    } else if("G4EmStandardWVI" == typesPhys[i]) {
       G4WentzelVIModel* msc = new G4WentzelVIModel();
       msc->SetLocked(true);
       em_config->SetExtraEmModel("e-", "msc", msc, reg, 0.0, 100*MeV);
@@ -260,48 +281,36 @@ void G4EmModelActivator::ActivateEmOptions()
       em_config->SetExtraEmModel("e+", "CoulombScat", mod, reg, 0.0, 100*MeV);
 
       if(G4Threading::IsMasterThread()) {
-        theParameters->SetDeexActiveRegion(regnamesMSC[i], true, false, false);
+        theParameters->SetDeexActiveRegion(regnamesPhys[i], true, false, false);
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-    } else if("G4EmStandardSS" == typesMSC[i] && 
+    } else if("G4EmStandardSS" == typesPhys[i] && 
 	      baseName != "G4EmStandard_opt3") {
-      G4eCoulombScatteringModel* sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("e-", "CoulombScat", sc, reg);
-
-      sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("e+", "CoulombScat", sc, reg);
-
-      sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("mu+", "CoulombScat", sc, reg);
-
-      sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("pi+", "CoulombScat", sc, reg);
-
-      sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("kaon+", "CoulombScat", sc, reg);
-
-      sc = new G4eCoulombScatteringModel();
-      sc->SetPolarAngleLimit(0.0);
-      sc->SetLocked(true);
-      em_config->SetExtraEmModel("proton", "CoulombScat", sc, reg);
-
+      G4EmParticleList emList;
+      for(const auto& particleName : emList.PartNames()) {
+	G4ParticleDefinition* particle = table->FindParticle(particleName);
+        if(particle && 0.0 != particle->GetPDGCharge()) {
+	  FindOrAddProcess(particle, "CoulombScat");
+	  G4eCoulombScatteringModel* sc = new G4eCoulombScatteringModel();
+	  sc->SetPolarAngleLimit(0.0);
+	  sc->SetLocked(true);
+	  em_config->SetExtraEmModel(particleName, "CoulombScat", sc, reg);
+          if(particleName == "mu+" || particleName == "mu-") {
+	    em_config->SetExtraEmModel(particleName, "muMsc", 
+				       new G4DummyModel(), reg);
+	  } else {
+	    em_config->SetExtraEmModel(particleName, "msc", 
+				       new G4DummyModel(), reg);
+	  }
+	}
+      }
       if(G4Threading::IsMasterThread()) {
-        theParameters->SetDeexActiveRegion(regnamesMSC[i], true, true, true);
+        theParameters->SetDeexActiveRegion(regnamesPhys[i], true, true, true);
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-    } else if("G4EmLivermore" == typesMSC[i]) {
+    } else if("G4EmLivermore" == typesPhys[i]) {
 
       mod = new G4LivermorePhotoElectricModel();
       em_config->SetExtraEmModel("gamma", "phot", mod, reg);
@@ -321,11 +330,11 @@ void G4EmModelActivator::ActivateEmOptions()
       em_config->SetExtraEmModel("e-", "eBrem", mod, reg, 0.0, 1*GeV);
 
       if(G4Threading::IsMasterThread()) {
-        theParameters->SetDeexActiveRegion(regnamesMSC[i], true, false, false);
+        theParameters->SetDeexActiveRegion(regnamesPhys[i], true, false, false);
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-    } else if("G4EmPenelope" == typesMSC[i]) {
+    } else if("G4EmPenelope" == typesPhys[i]) {
       mod = new G4PenelopePhotoElectricModel();
       em_config->SetExtraEmModel("gamma", "phot", mod, reg);
       mod = new G4PenelopeComptonModel();
@@ -352,11 +361,11 @@ void G4EmModelActivator::ActivateEmOptions()
       em_config->SetExtraEmModel("e+", "annihil", mod, reg, 0.0, 1*GeV);
 
       if(G4Threading::IsMasterThread()) {
-        theParameters->SetDeexActiveRegion(regnamesMSC[i], true, false, false);
+        theParameters->SetDeexActiveRegion(regnamesPhys[i], true, false, false);
       }
       theParameters->DefineRegParamForDeex(adeexc);
 
-    } else if("G4RadioactiveDecay" == typesMSC[i]) {
+    } else if("G4RadioactiveDecay" == typesPhys[i]) {
 
       if(G4Threading::IsMasterThread()) {
 	theParameters->SetFluo(true);
@@ -369,7 +378,7 @@ void G4EmModelActivator::ActivateEmOptions()
     } else {
       if(verbose > 0 && G4Threading::IsMasterThread()) {
         G4cout << "### G4EmModelActivator::ActivateEmOptions WARNING: \n"
-	       << "    EM Physics configuration name <" << typesMSC[i]
+	       << "    EM Physics configuration name <" << typesPhys[i]
 	       << "> is not known - ignored" << G4endl;
       }
     }

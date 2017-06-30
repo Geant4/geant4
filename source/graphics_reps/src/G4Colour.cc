@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.cc 78955 2014-02-05 09:45:46Z gcosmo $
+// $Id: G4Colour.cc 104093 2017-05-11 07:29:45Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -46,6 +46,30 @@ red (v.x()), green (v.y()), blue (v.z()), alpha (1.)
   if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
   if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
   if( blue  > 1.0 ){blue  = 1.0;} if( blue  < 0.0 ){blue  = 0.0;}
+}
+
+void G4Colour::SetRed (G4double r)
+{
+  red = r;
+  if( red   > 1.0 ){red   = 1.0;} if( red   < 0.0 ){red   = 0.0;}
+}
+
+void G4Colour::SetGreen (G4double gr)
+{
+  green = gr;
+  if( green > 1.0 ){green = 1.0;} if( green < 0.0 ){green = 0.0;}
+}
+
+void G4Colour::SetBlue (G4double b)
+{
+  blue = b;
+  if( blue  > 1.0 ){blue  = 1.0;} if( blue  < 0.0 ){blue  = 0.0;}
+}
+
+void G4Colour::SetAlpha (G4double a)
+{
+  alpha = a;
+  if( alpha > 1.0 ){alpha = 1.0;} if( alpha < 0.0 ){alpha = 0.0;}
 }
 
 G4Colour::operator G4ThreeVector() {

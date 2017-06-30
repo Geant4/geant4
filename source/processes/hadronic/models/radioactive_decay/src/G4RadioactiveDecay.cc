@@ -139,19 +139,17 @@
 #include "G4LossTableManager.hh"
 #include "G4VAtomDeexcitation.hh"
 #include "G4UAtomicDeexcitation.hh"
+#include "G4PhotonEvaporation.hh"
 
 #include <vector>
 #include <sstream>
 #include <algorithm>
 #include <fstream>
-// #include "G4PhotonEvaporation.hh"
 
 using namespace CLHEP;
 
-// const G4double G4RadioactiveDecay::levelTolerance = 0.1*keV;
 const G4double G4RadioactiveDecay::levelTolerance = 10.0*eV;
 const G4ThreeVector G4RadioactiveDecay::origin(0.,0.,0.);
-//G4ThreadLocal G4Fragment G4RadioactiveDecay::polarizedNucleus=nullptr;
 
 #ifdef G4MULTITHREADED
 #include "G4AutoLock.hh"
@@ -174,6 +172,12 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 
   theRadioactiveDecaymessenger = new G4RadioactiveDecaymessenger(this);
   pParticleChange = &fParticleChangeForRadDecay;
+
+  // Set up photon evaporation for use in G4ITDecay
+  photonEvaporation = new G4PhotonEvaporation();
+  // photonEvaporation->SetVerboseLevel(2);
+  photonEvaporation->RDMForced(true);
+  photonEvaporation->SetICM(true);
 
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
@@ -216,6 +220,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
 G4RadioactiveDecay::~G4RadioactiveDecay()
 {
   delete theRadioactiveDecaymessenger;
+  delete photonEvaporation;
   for (DecayTableMap::iterator i = dkmap->begin(); i != dkmap->end(); i++) {
     delete i->second;
   }
@@ -741,7 +746,7 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 
     G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
     param->SetUseFilesNEW(true);
-    //param->SetCorrelatedGamma(true);  //AR-20Feb2017: Temporary, to fix non-reproducibility problems
+    param->SetCorrelatedGamma(true);
   }
 }
 
@@ -873,7 +878,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
               case IT:
                 {
                 G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, decayModeTotal,
-                                                       0.0, 0.0);
+                                                       0.0, 0.0, photonEvaporation);
                 anITChannel->SetHLThreshold(halflifethreshold);
                 anITChannel->SetARM(applyARM);
                 theDecayTable->Insert(anITChannel);
@@ -1095,7 +1100,8 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   if (!found && levelEnergy > 0) {
     // Case where IT cascade for excited isotopes has no entries in RDM database
     // Decay mode is isomeric transition.
-    G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, 1.0, 0.0, 0.0);
+    G4ITDecay* anITChannel = new G4ITDecay(&theParentNucleus, 1.0, 0.0, 0.0,
+                                           photonEvaporation);
     anITChannel->SetHLThreshold(halflifethreshold);
     anITChannel->SetARM(applyARM);
     theDecayTable->Insert(anITChannel);
@@ -1302,7 +1308,8 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
           switch ( i ) {
           case 0:
             // Decay mode is isomeric transition
-            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0);
+            theITChannel = new G4ITDecay(aParentNucleus, brs[0], 0.0, 0.0,
+                                         photonEvaporation);
 
             summedDecayTable->Insert(theITChannel);
             break;
@@ -1574,6 +1581,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   // Initialize G4ParticleChange object, get particle details and decay table
 
   fParticleChangeForRadDecay.Initialize(theTrack);
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
   const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
 
@@ -2032,7 +2040,8 @@ void G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition
   G4double elevel=((const G4Ions*)(apartDef))->GetExcitationEnergy();
   G4double life_time=apartDef->GetPDGLifeTime();
   while (life_time <halflifethreshold && elevel>0.) {
-    G4ITDecay* anITChannel = new G4ITDecay(apartDef, 100., elevel,elevel);
+    G4ITDecay* anITChannel = new G4ITDecay(apartDef, 100., elevel,elevel,
+                                           photonEvaporation);
     G4DecayProducts* pevap_products = anITChannel->DecayIt(0.);
     G4int nb_pevapSecondaries = pevap_products->entries();
     for (G4int ind = 0; ind < nb_pevapSecondaries; ind++) {

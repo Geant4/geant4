@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc 102726 2017-02-20 13:15:29Z gcosmo $
+// $Id: G4ExcitationHandler.cc 104780 2017-06-16 09:23:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -69,6 +69,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleTypes.hh"
 #include "G4Ions.hh"
+#include "G4Electron.hh"
 
 #include "G4VMultiFragmentation.hh"
 #include "G4VFermiBreakUp.hh"
@@ -76,8 +77,8 @@
 #include "G4VEvaporation.hh"
 #include "G4VEvaporationChannel.hh"
 #include "G4Evaporation.hh"
+#include "G4PhotonEvaporation.hh"
 #include "G4StatMF.hh"
-#include "G4FermiBreakUp.hh"
 #include "G4FermiBreakUpVI.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4Pow.hh"
@@ -98,7 +99,10 @@ G4ExcitationHandler::G4ExcitationHandler()
   results.reserve(30);
   theEvapList.reserve(30);
   thePhotoEvapList.reserve(10);
+
   SetParameters();
+  electron = G4Electron::Electron();
+  
   if(fVerbose > 0) { G4cout << "### New handler " << this << G4endl; }
 }
 
@@ -116,8 +120,12 @@ void G4ExcitationHandler::SetParameters()
     G4NuclearLevelData::GetInstance()->GetParameters();
   minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
-  if(!theFermiModel) { theFermiModel = new G4FermiBreakUpVI(); }
-  theEvaporation->SetFermiBreakUp(theFermiModel);
+  icID = param->GetInternalConversionID();
+  if(!thePhotonEvaporation) { 
+    SetPhotonEvaporation(new G4PhotonEvaporation()); 
+  } 
+  if(!theFermiModel) { SetFermiModel(new G4FermiBreakUpVI()); }
+  if(!theMultiFragmentation) { SetMultiFragmentation(new G4StatMF()); }
 }
 
 void G4ExcitationHandler::Initialise()
@@ -126,12 +134,13 @@ void G4ExcitationHandler::Initialise()
   if(fVerbose > 0) {
     G4cout << "G4ExcitationHandler::Initialise() started " << this << G4endl;
   }
-  G4NuclearLevelData::GetInstance()->GetParameters()->Dump();
+  G4DeexPrecoParameters* param = 
+    G4NuclearLevelData::GetInstance()->GetParameters();
   isInitialised = true;
   SetParameters();
-  theMultiFragmentation = new G4StatMF();
   theFermiModel->Initialise();
   theEvaporation->InitialiseChannels();
+  param->Dump();
   if(G4Threading::IsMasterThread()) {
     G4cout << "Number of de-excitation channels                    " 
 	   << theEvaporation->GetNumberOfChannels();
@@ -423,7 +432,12 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   kkmax = theResults.size();
   for (kk=0; kk<kkmax; ++kk) {
     frag = theResults[kk];
-    if(fVerbose > 1) { G4cout << *frag << G4endl; }
+    if(fVerbose > 1) { 
+      G4cout << kk << "-th fragment " << frag;
+      if(frag->GetNuclearPolarization()) { G4cout << "  " << frag->GetNuclearPolarization(); }
+      G4cout << G4endl;
+      G4cout << *frag << G4endl; 
+    }
 
     theFragmentA = frag->GetA_asInt();
     theFragmentZ = frag->GetZ_asInt();
@@ -456,10 +470,10 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 
       theKindOfFragment = theTableOfIons->GetIon(theFragmentZ,theFragmentA,eexc,
                                                  G4Ions::FloatLevelBase(idxf));
-      if(fVerbose > 2) {            	
+      if(fVerbose > 1) {
 	G4cout << "### EXCH: Find ion Z= " << theFragmentZ << " A= " << theFragmentA
-	       << " Eexc(MeV)= " << eexc/MeV << "  " << theKindOfFragment 
-	       << G4endl;
+	       << " Eexc(MeV)= " << eexc/MeV << " idx= " << idxf 
+	       << "  " <<  theKindOfFragment << G4endl;
       }
     }
     // fragment identified
@@ -468,6 +482,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       theNew->SetMomentum(frag->GetMomentum().vect());
       theNew->SetTotalEnergy(etot);
       theNew->SetFormationTime(frag->GetCreationTime());
+      if(theKindOfFragment == electron) { theNew->SetCreatorModel(icID); }
       theReactionProductVector->push_back(theNew);
 
       // fragment not found out ground state is created
@@ -495,6 +510,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
       }
     }
     delete frag;
+    if(fVerbose > 1) { G4cout << "G4Fragment #" << kk << " is deleted" << G4endl; }
   }
   if(fVerbose > 2) { 	
     G4cout << "@@@@@@@@@@ End G4Excitation Handler "<< G4endl;

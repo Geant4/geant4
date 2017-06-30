@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GMocrenFileSceneHandler.cc 99263 2016-09-09 13:19:14Z gcosmo $
+// $Id: G4GMocrenFileSceneHandler.cc 104291 2017-05-23 13:25:51Z gcosmo $
 //
 //
 // Created:  Mar. 31, 2009  Akinori Kimura  
@@ -39,6 +39,8 @@
 #include <cstdlib>
 #include <cstring>
 #include <sstream>
+#include <sstream>
+#include <iomanip>
 
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
@@ -230,11 +232,11 @@ void G4GMocrenFileSceneHandler::SetGddFileName()
       }
 
     // re-determine file name as G4GMocrenFile_DEST_DIR/g4_XX.gdd 
-    if( i >=  0 && i <= 9 ) { 
-      std::sprintf( kGddFileName, "%s%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, "0", i );
-    } else {
-      std::sprintf( kGddFileName, "%s%s%d.gdd" , kGddDestDir,  GDD_FILE_HEADER, i );
-    }
+    std::ostringstream filename;
+    filename
+    << kGddDestDir << GDD_FILE_HEADER
+    << std::setw(2) << std::setfill('0') << i << ".wrl";
+    strncpy(kGddFileName,filename.str().c_str(),sizeof(kGddFileName));
 
     // check validity of the file name
     std::ifstream fin(kGddFileName); 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh 96834 2016-05-12 09:19:10Z gcosmo $
+// $Id: G4EmCalculator.hh 103954 2017-05-04 11:29:22Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -327,9 +327,11 @@ private:
   const G4ParticleDefinition*  lambdaParticle;
   const G4ParticleDefinition*  baseParticle;
   const G4PhysicsTable*        currentLambda;
-        G4VEmModel*            currentModel;
-        G4VEmModel*            loweModel;
-        G4VEnergyLossProcess*  currentProcess;
+
+  G4VEmModel*                  currentModel;
+  G4VEmModel*                  loweModel;
+  G4VEnergyLossProcess*        currentProcess;
+  G4VProcess*                  curProcess;
 
   const G4ParticleDefinition*  theGenericIon;
   G4ionEffectiveCharge*        ionEffCharge;

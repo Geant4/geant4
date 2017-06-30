@@ -1,7 +1,7 @@
 # to read user's data file
 /control/cout/ignoreThreadsExcept 0
 #
-#/grdm/setPhotoEvaporationFile 102 252 UserData/UserEvapData_z102.a252
+/grdm/setPhotoEvaporationFile 102 252 ../UserData/UserEvapData_z102.a252
 #
 /gun/particle ion
 /gun/ion 102 252 0 3.2070e+02 

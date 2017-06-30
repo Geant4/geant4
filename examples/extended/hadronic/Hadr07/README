@@ -44,16 +44,21 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
   objects rather than complete pre-defined G4 physics lists. This alternative 
   way gives more freedom to register physics.
   
-  PhysicsConstructors are either predefined G4 PhysicsConstructors or 'local'. 
-  They include : HadronElastic (including neutronHP), HadronInelastic,
-  IonsInelastic, GammaNuclear physics, RadioactiveDecay and Electomagnetic physics.
+  Physics constructors are either constructors provided in Geant4 (with G4 prefix)
+  or 'local'. They include : HadronElastic, HadronInelastic, IonsInelastic, GammaNuclear,
+  RadioactiveDecay and Electomagnetic.
   (see geant4/source/physics_lists/constructors)
- 
- ElectromagneticPhysics is a variante of EmStandard. No step constraint is imposed for 
- energy loss mechanism (ionisation and brems). This is enough when spatial distribution
- of deposited energy do not need to be accurate.
- (see param->SetStepFunction(1., 1*mm))
- 
+
+  HadronElasticPhysicsHP include a model for thermalized neutrons, under the control of a command
+  defined in NeutronHPMesseger.
+
+  GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
+
+  ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
+  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
+  This is enough when spatial distribution of deposited energy do not need
+  to be accurate (see param->SetStepFunction(1., 1*mm)).
+
   Several hadronic physics options are controlled by environment variables.
   To trigger them, an envHadronic.csh has been added in this example.
   One must select the options wished, and do

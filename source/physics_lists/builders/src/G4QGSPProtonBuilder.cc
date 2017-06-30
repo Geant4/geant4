@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4QGSPProtonBuilder.cc 83616 2014-09-04 13:30:16Z gcosmo $
+// $Id: G4QGSPProtonBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -35,6 +35,7 @@
 // 17.11.2010 G.Folger, use G4CrossSectionPairGG for relativistic rise of cross
 //             section at high energies.
 // 30.03.2009 V.Ivanchenko create cross section by new
+// 12.04.2017 A.Dotti move to new design with base class
 //
 //----------------------------------------------------------------------------
 //
@@ -75,11 +76,6 @@ Build(G4ProtonInelasticProcess * aP)
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(100*TeV);
    aP->RegisterMe(theModel);
- }
-
-void G4QGSPProtonBuilder::
-Build(G4HadronElasticProcess * )
- {
  }
 
 G4QGSPProtonBuilder::~G4QGSPProtonBuilder() 

@@ -6,22 +6,42 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
  
          ====================================================
              History file of the Hadrontherapy application
-         ====================================================	    
+         ====================================================
 
-07.02.2017 G.A.P.Cirrone, G.Petringa;  Tag: hadrontherapy-V10-02-06
-	   - Physics list corrected
-31.01.2017 G.A.P.Cirrone, L.Pandola, J.Pipek
-	   - Fixed Bugzilla #1879 (remaining edge cases)
-19.11.2016 A.Dotti; Tag: hadrontherapy-V10-02-05
-       	   - explicit set of SD to manager
-07.11.2016 G.Folger; Tag: hadrontherapy-V10-02-04
-       - Remove direct use of theParticleIterator, and use GetParticleIterator() method.
-03.11.2016 L. Pandola and J. Pipek. Tag: hadrontherapy-V10-02-03
-	   - Fixed Bugzilla #1879
-22.09.2016 GAP Cirrone Tag: hadrontherapy-V10-02-02
-	   - Updated and improved the main file
-	   - Coorected an overlap in the geometry of the passive beamline
-	   - Code cleaning
+24.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-10
+	  - Added the batch.mac file 
+
+23.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-09
+	  - Removed the obsolete /experimentalData/iaeaBenchmark folder and batch.mac file
+	  - Added the batch.mac file 
+
+22.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-08
+	  - Removed crash due to a bad pointer
+
+22.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-07
+	   - Physics list cleaned
+	   - The local and obsolete ion-ion physics list has been removed
+
+06.05.2017 G. Petringa, G.A.P. Cirrone, L. Pandola, F. Romano, F. Tommasino; Tag: hadrontherapy-V10-03-06 
+           - Removed the SetCuts() method from the PhysicsList.cc
+           — RippleFilter geometry on PassiveCarbonBeamLine
+           — Added TIFPA beam line
+ 
+28.03.2017 L. Pandola, G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-05
+	    - G4SetCuts definition added in the PhysicsList
+27.03.2017 G.Petringa, G.A.P.Cirrone, G. Cuttone; Tag: hadrontherapy-V10-03-04
+	    - Carbon beamline geometry corrected and updated and corresponding code 
+               revised;
+            - G4Region definition corrected
+22.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-03
+            - Fixed cmakelist error 
+19.03.2017 G.Petringa, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-02
+	    - Carbon beam line geometry corrected and new modulators added 
+07.02.2017 G.A.P.Cirrone, G.Petringa; Tag: hadrontherapy-V10-03-01
+	    - Physics list corrected 
+31.01.2017 G. Petringa, J.Pipek, L.Pandola, G.A.P.Cirrone; Tag: hadrontherapy-V10-03-00
+           - HadrontherapyAnalysisManager.cc class deleted and G4tools inserted in HadrontherapyMatrix.cc class
+           - Fixed Bugzilla #1879 (remaining edge cases)	    
 19.05.2016 F. Romano, B. Jia Tag: hadrontherapy-V10-02-00
            - new modulator class implemented
 31.10.2015 F. Romano, J. Pipek Tag: hadrontherapy-V10-01-03

@@ -39,8 +39,6 @@
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
 #include "G4PhotoElectricEffect.hh"
-#include "G4RayleighScattering.hh"
-#include "G4KleinNishinaModel.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4eIonisation.hh"
@@ -105,13 +103,13 @@ void ElectromagneticPhysics::ConstructProcess()
     } else if (particleName == "e-") {
     
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      ph->RegisterProcess(new G4eIonisation,           particle);
+      ph->RegisterProcess(new G4eIonisation(),         particle);
       ph->RegisterProcess(new G4eBremsstrahlung(),     particle);
             
     } else if (particleName == "e+") {
     
       ph->RegisterProcess(new G4eMultipleScattering(), particle);
-      ph->RegisterProcess(new G4eIonisation,           particle);
+      ph->RegisterProcess(new G4eIonisation(),         particle);
       ph->RegisterProcess(new G4eBremsstrahlung(),     particle);
       ph->RegisterProcess(new G4eplusAnnihilation(),   particle);
                   
@@ -119,7 +117,7 @@ void ElectromagneticPhysics::ConstructProcess()
                particleName == "mu-"    ) {
 
       ph->RegisterProcess(new G4MuMultipleScattering(), particle);
-      ph->RegisterProcess(new G4MuIonisation,           particle);
+      ph->RegisterProcess(new G4MuIonisation(),         particle);
       ph->RegisterProcess(new G4MuBremsstrahlung(),     particle);
       ph->RegisterProcess(new G4MuPairProduction(),     particle);
                    
@@ -128,13 +126,13 @@ void ElectromagneticPhysics::ConstructProcess()
                particleName == "pi+"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);      
-      ph->RegisterProcess(new G4hIonisation,           particle);
+      ph->RegisterProcess(new G4hIonisation(),         particle);
      
     } else if( particleName == "alpha" || 
                particleName == "He3"    ) {
 
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
-      ph->RegisterProcess(new G4ionIonisation,         particle);
+      ph->RegisterProcess(new G4ionIonisation(),       particle);
       ph->RegisterProcess(new G4NuclearStopping(),     particle);
             
     } else if( particleName == "GenericIon" ) {

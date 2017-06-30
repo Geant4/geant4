@@ -1,4 +1,4 @@
-$Id: README 93666 2015-10-28 09:52:00Z gcosmo $
+$Id: README 102179 2017-01-09 13:27:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -52,6 +52,12 @@ $Id: README 93666 2015-10-28 09:52:00Z gcosmo $
                    low-energy models
   - "dna"          process and models for Geant4-DNA
   - "dna_opt1"     process and models for Geant4-DNA
+  - "dna_opt2"     process and models for Geant4-DNA
+  - "dna_opt3"     process and models for Geant4-DNA
+  - "dna_opt4"     process and models for Geant4-DNA
+  - "dna_opt5"     process and models for Geant4-DNA
+  - "dna_opt6"     process and models for Geant4-DNA
+  - "dna_opt7"     process and models for Geant4-DNA
  
   A local builder, PhysListEmStandard "local" (similar to opt0) is also
   available.

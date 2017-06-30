@@ -311,19 +311,17 @@ void Run::EndOfRun()
   
   G4int ih = 1;
   G4double binWidth = analysisManager->GetH1Width(ih);
-  G4double unit     = analysisManager->GetH1Unit(ih);  
-  G4double fac = unit/(TotNbofEvents*binWidth);
+  G4double fac = 1./(TotNbofEvents*binWidth);
   analysisManager->ScaleH1(ih,fac);
 
   ih = 10;
   binWidth = analysisManager->GetH1Width(ih);
-  unit     = analysisManager->GetH1Unit(ih);  
-  fac = unit/(TotNbofEvents*binWidth);
+  fac = 1./(TotNbofEvents*binWidth);
   analysisManager->ScaleH1(ih,fac);
 
   ih = 12;
   analysisManager->ScaleH1(ih,1./TotNbofEvents);
-                    
+
   // reset default precision
   G4cout.precision(prec);
 }   

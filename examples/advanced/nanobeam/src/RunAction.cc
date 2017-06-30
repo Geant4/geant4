@@ -43,7 +43,7 @@ using namespace std;
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* pri)
 :fDetector(det),fPrimary(pri)
-{;}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,23 +63,21 @@ void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
    fThetaVector = CLHEP::HepVector(32);
    fPhiVector = CLHEP::HepVector(32);
    
-  // Histograms
+   // Histograms
   
-  // Get/create analysis manager
-  G4cout << "##### Create analysis manager " << "  " << this << G4endl;
+   // Get/create analysis manager
+   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   
-  G4AnalysisManager* man = G4AnalysisManager::Instance();
+   G4AnalysisManager* man = G4AnalysisManager::Instance();
   
-  G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
+   G4cout << "Using " << man->GetType() << " analysis manager" << G4endl;
 
-  
    // Open an output file
    man->OpenFile("nanobeam");
    man->SetFirstHistoId(1);
    man->SetFirstNtupleId(1);
   
    // Create 1st ntuple (id = 1)
-   //
    man->CreateNtuple("ntuple0", "BeamProfile");
    man->CreateNtupleDColumn("xIn");
    man->CreateNtupleDColumn("yIn");
@@ -88,7 +86,6 @@ void RunAction::BeginOfRunAction(const G4Run* /*aRun*/)
    G4cout << "Ntuple-1 created" << G4endl;
 
    // Create 2nd htuple (id = 2)
-   //
    man->CreateNtuple("ntuple1","Grid");
    man->CreateNtupleDColumn("xIn");
    man->CreateNtupleDColumn("yIn");

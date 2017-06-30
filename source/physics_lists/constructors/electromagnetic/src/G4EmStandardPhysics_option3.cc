@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option3.cc 99938 2016-10-12 08:06:52Z gcosmo $
+// $Id: G4EmStandardPhysics_option3.cc 104571 2017-06-06 13:45:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -61,6 +61,7 @@
 #include "G4DummyModel.hh"
 #include "G4WentzelVIModel.hh"
 #include "G4CoulombScattering.hh"
+#include "G4UniversalFluctuation2017.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -227,7 +228,8 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering();
 
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
+      eIoni->SetStepFunction(0.2, 100*um);
+      eIoni->SetFluctModel(new G4UniversalFluctuation2017());
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -250,6 +252,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
+      eIoni->SetFluctModel(new G4UniversalFluctuation2017());
 
       G4eBremsstrahlung* brem = new G4eBremsstrahlung();
       G4SeltzerBergerModel* br1 = new G4SeltzerBergerModel();
@@ -331,6 +334,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetFluctModel(new G4UniversalFluctuation2017());
 
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(hIoni, particle);

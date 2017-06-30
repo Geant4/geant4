@@ -1,4 +1,4 @@
-$Id: History 102778 2017-02-22 10:50:10Z gcosmo $
+$Id: History 104015 2017-05-08 07:28:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,50 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
-22nd February 2017  John Allison (raytracer-V10-02-02)
+7th May 2017  John Allison (raytracer-V10-03-04)
+- G4RayTracerViewer.cc:
+  o Expanded filename numbering to 4 digits, zero filled, e.g.,
+      g4RayTracer.viewer-1_0000.jpeg
+      g4RayTracer.viewer-1_0001.jpeg
+    etc.
+  o Useful for producing many files for a movie.
+
+5th May 2017  John Allison (raytracer-V10-03-03)
+- Pick up vis attributes of the geometry from the vis scene (G4Scene).
+  Make a map of the vis attributes by touchable path from the G4Scene in
+  G4RayTracerSceneHandler. When a touchable is encountered in the Ray
+  Tracer, pick up the vis attributes from the map instead of from the
+  geometry tree.  For simple use, for example
+    /vis/open RayTracer  # or RayTracerX
+    /vis/drawVolume
+    /vis/viewer/flush
+  the result will be the same as before. But when a user selects a
+  sub-component, for example
+    /vs/drawVolume Shape1
+  the Ray Tracer will now draw only Shape1. The Ray Tracer will also
+  follow changes made in other viewers by copying the view. For example
+  the user can chose a viewing angle and zoom, and change the visibility
+  and colour of volumes, using, say, a Qt viewer (say viewer-0), and see
+  the effect in the Ray Tracer:
+    /vis/open RayTracer  # Gets the same scene as the Qt viewer
+    /vis/viewer/copyViewFrom viewer-0  # Copies camera parameters, or...
+    /vis/viewer/set/all viewer-0       # ...copies all parameters
+    /vis/viewerflush
+
+19th February 2017  John Allison (raytracer-V10-03-02)
+- G4RTXScanner.cc:
+  o Changed back to XA_RGB_BEST_MAP. (I don't know what was going on
+    but it seems OK now.)
+- G4RayTracer.cc and G4RayTracerViewer.cc:
+  o The ray tracer pointer is now passed from G4RayTracer to
+    G4RayTracerViewer so that there is no need to instantiate it there.
+    This works for both sequential and MT modes.  (G4RayTracerViewer.cc
+    no longer has any need for special action for G4MULTITHREADED - it
+    is all done in G4RayTracer.cc.)
+  o Introduced G4RayTracerViewer::Initialise.  Fixes a bug whereby the
+    jpeg for RayTracer was always 600x600.
+
+22nd February 2017  John Allison (raytracer-V10-03-00)
 - G4RTXScanner.cc: Changed XA_RGB_BEST_MAP to XA_RGB_DEFAULT_MAP.
   (It seems XA_RGB_BEST_MAP no longer available on Mac XQuartz 2.7.11.)
 

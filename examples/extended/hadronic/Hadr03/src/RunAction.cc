@@ -26,7 +26,7 @@
 /// \file RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 98265 2016-07-04 17:47:54Z gcosmo $
+// $Id: RunAction.cc 103488 2017-04-11 10:16:44Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,6 @@
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -77,8 +76,7 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {    
-  // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
+  // show Rndm status
   if (isMaster) G4Random::showEngineStatus();
     
   // keep run condition

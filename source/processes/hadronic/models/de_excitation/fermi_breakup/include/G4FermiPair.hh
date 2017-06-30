@@ -40,8 +40,7 @@ class G4FermiPair
 {
 public:
 
-  explicit G4FermiPair(const G4FermiFragment* f1, const G4FermiFragment* f2,
-		       G4double Eex);
+  explicit G4FermiPair(const G4FermiFragment* f1, const G4FermiFragment* f2);
 
   inline G4int GetA() const;
   inline G4int GetZ() const;

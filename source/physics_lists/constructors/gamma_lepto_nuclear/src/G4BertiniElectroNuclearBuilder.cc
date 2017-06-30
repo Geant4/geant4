@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BertiniElectroNuclearBuilder.cc 81364 2014-05-27 12:55:46Z gcosmo $
+// $Id: G4BertiniElectroNuclearBuilder.cc 104018 2017-05-08 07:32:45Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -51,12 +51,12 @@
 #include "G4ProcessManager.hh"
 
 
-G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder() : 
-    thePhotoNuclearProcess(0), theElectronNuclearProcess(0), 
-    thePositronNuclearProcess(0), theElectroReaction(0), 
-    theGammaReaction(0), theModel(0), theCascade(0), 
-    theStringModel(0), theFragmentation(0), theStringDecay(0), 
-   wasActivated(false)
+G4BertiniElectroNuclearBuilder::G4BertiniElectroNuclearBuilder(G4bool eNucl) : 
+  thePhotoNuclearProcess(nullptr), theElectronNuclearProcess(nullptr), 
+  thePositronNuclearProcess(nullptr), theElectroReaction(nullptr), 
+  theGammaReaction(nullptr), theModel(nullptr), theCascade(nullptr), 
+  theStringModel(nullptr), theFragmentation(nullptr), theStringDecay(nullptr), 
+  wasActivated(false), eActivated(eNucl)
 {
 }
 
@@ -65,14 +65,6 @@ G4BertiniElectroNuclearBuilder::~G4BertiniElectroNuclearBuilder()
   if(wasActivated) {
     delete theFragmentation;
     delete theStringDecay;
-    //delete theStringModel;
-    //delete thePhotoNuclearProcess; 
-    //delete theElectronNuclearProcess;
-    //delete thePositronNuclearProcess;
-    //delete theElectroReaction;
-    //delete theGammaReaction;
-    //delete theModel;
-    //delete theCascade; 
   }
 }
 
@@ -82,10 +74,11 @@ void G4BertiniElectroNuclearBuilder::Build()
   wasActivated=true;
   
   thePhotoNuclearProcess = new G4PhotoNuclearProcess;
-  theElectronNuclearProcess = new G4ElectronNuclearProcess;
-  thePositronNuclearProcess = new G4PositronNuclearProcess;
-  //  theElectroReaction = new G4ElectroNuclearReaction;
-  theElectroReaction = new G4ElectroVDNuclearModel;
+  if(eActivated) {
+    theElectronNuclearProcess = new G4ElectronNuclearProcess;
+    thePositronNuclearProcess = new G4PositronNuclearProcess;
+    theElectroReaction = new G4ElectroVDNuclearModel;
+  }
   theGammaReaction = new G4CascadeInterface;
 
   theModel = new G4TheoFSGenerator;
@@ -99,7 +92,7 @@ void G4BertiniElectroNuclearBuilder::Build()
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
 
-  G4ProcessManager * aProcMan = 0;
+  G4ProcessManager * aProcMan = nullptr;
   
   aProcMan = G4Gamma::Gamma()->GetProcessManager();
   theGammaReaction->SetMaxEnergy(3.5*GeV);
@@ -108,13 +101,15 @@ void G4BertiniElectroNuclearBuilder::Build()
   theModel->SetMaxEnergy(100*TeV);
   thePhotoNuclearProcess->RegisterMe(theModel);
   aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
+
+  if(eActivated) {  
+    aProcMan = G4Electron::Electron()->GetProcessManager();
+    theElectronNuclearProcess->RegisterMe(theElectroReaction);
+    aProcMan->AddDiscreteProcess(theElectronNuclearProcess);
   
-  aProcMan = G4Electron::Electron()->GetProcessManager();
-  theElectronNuclearProcess->RegisterMe(theElectroReaction);
-  aProcMan->AddDiscreteProcess(theElectronNuclearProcess);
-  
-  aProcMan = G4Positron::Positron()->GetProcessManager();
-  thePositronNuclearProcess->RegisterMe(theElectroReaction);
-  aProcMan->AddDiscreteProcess(thePositronNuclearProcess);
+    aProcMan = G4Positron::Positron()->GetProcessManager();
+    thePositronNuclearProcess->RegisterMe(theElectroReaction);
+    aProcMan->AddDiscreteProcess(thePositronNuclearProcess);
+  }
 }
 

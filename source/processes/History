@@ -1,4 +1,4 @@
-$Id: History 94124 2015-11-06 09:47:51Z gcosmo $
+$Id: History 103673 2017-04-20 15:48:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 20, 2017 G.Cosmo (processes-V10-03-03)
+- Tag based on geant4-10-03-ref-03, plus the following:
+  emutils-V10-03-05,  hadr-cross-V10-03-02, hadr-casc-V10-03-00,
+  hadr-cohe-V10-03-01 and hadr-deex-V10-03-27.
+- Includes new 'solidstate' module.
+
+April 6, 2017 E.Bagli
+- Added 'solidstate' module.
+- Moved 'phonon' module into 'solidstate' module.
 
 November 6, 2015 G.Cosmo
 - Removed module 'neutron_hp', now merged in 'particle_hp'.

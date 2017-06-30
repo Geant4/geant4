@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc 101035 2016-11-04 08:48:17Z gcosmo $
+// $Id: G4VisCommandsViewerSet.cc 104163 2017-05-15 06:52:42Z gcosmo $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
 
@@ -42,7 +42,6 @@
 #include "G4SystemOfUnits.hh"
 
 #include <sstream>
-#include <cctype>
 
 G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fLightsVector    (G4ThreeVector(1.,1.,1.)),
@@ -56,8 +55,11 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandAll->SetGuidance
     ("Copies view parameters.");
   fpCommandAll->SetGuidance
-    ("Copies view parameters (except the autoRefresh status) from"
-     "\nfrom-viewer to current viewer.");
+  ("Copies ALL view parameters (except the autoRefresh status) from"
+   "\nfrom-viewer to current viewer. You may need \"/vis/viewer/rebuild\".");
+  fpCommandAll->SetGuidance
+  ("Note: to copy only the camera-specific parameters use"
+   "\n\"/vis/viewer/copyfrom\".");
   fpCommandAll->SetParameterName ("from-viewer-name",omitable = false);
 
   fpCommandAutoRefresh = new G4UIcmdWithABool
@@ -82,12 +84,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/background",this);
   fpCommandBackground->SetGuidance
     ("Set background colour and transparency (default black and opaque).");
-  fpCommandBackground->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent background.");
+  fpCommandBackground->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
   parameter -> SetDefaultValue ("0.");
   fpCommandBackground -> SetParameter (parameter);
@@ -146,12 +143,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/defaultColour",this);
   fpCommandDefaultColour->SetGuidance
     ("Set defaultColour colour and transparency (default white and opaque).");
-  fpCommandDefaultColour->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+  fpCommandDefaultColour->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
   parameter -> SetDefaultValue ("1.");
   fpCommandDefaultColour -> SetParameter (parameter);
@@ -168,18 +160,13 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandDefaultTextColour = new G4UIcommand
     ("/vis/viewer/set/defaultTextColour",this);
   fpCommandDefaultTextColour->SetGuidance
-    ("Set defaultTextColour colour and transparency (default white and opaque).");
-  fpCommandDefaultTextColour->SetGuidance
-    ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-     "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-     "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-     "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-     "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+    ("Set defaultTextColour colour and transparency (default blue and opaque).");
+  fpCommandDefaultTextColour->SetGuidance(ConvertToColourGuidance());
   parameter = new G4UIparameter("red_or_string", 's', omitable = true);
-  parameter -> SetDefaultValue ("1.");
+  parameter -> SetDefaultValue ("0.");
   fpCommandDefaultTextColour -> SetParameter (parameter);
   parameter = new G4UIparameter("green", 'd', omitable = true);
-  parameter -> SetDefaultValue (1.);
+  parameter -> SetDefaultValue (0.);
   fpCommandDefaultTextColour -> SetParameter (parameter);
   parameter = new G4UIparameter ("blue", 'd', omitable = true);
   parameter -> SetDefaultValue (1.);
@@ -549,6 +536,10 @@ void G4VisCommandsViewerSet::SetNewValue
 	     << "\"."
 	     << G4endl;
     }
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout << "You may need \"/vis/viewer/rebuild\"."
+	     << G4endl;
+    }
   }
 
   else if (command == fpCommandAutoRefresh) {
@@ -593,20 +584,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(0.,0.,0.);  // Default black and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to black and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     vp.SetBackgroundColour(colour);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Background colour "
@@ -710,20 +688,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to white and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     G4VisAttributes va = vp.GetDefaultVisAttributes();
     va.SetColour(colour);
     vp.SetDefaultVisAttributes(va);
@@ -741,20 +706,7 @@ void G4VisCommandsViewerSet::SetNewValue
     std::istringstream iss(newValue);
     iss >> redOrString >> green >> blue >> opacity;
     G4Colour colour(1.,1.,1.);  // Default white and opaque.
-    const size_t iPos0 = 0;
-    if (std::isalpha(redOrString[iPos0])) {
-      if (!G4Colour::GetColour(redOrString, colour)) {
-	if (verbosity >= G4VisManager::warnings) {
-	  G4cout << "WARNING: Text colour \"" << redOrString
-		 << "\" not found.  Defaulting to white and opaque."
-		 << G4endl;
-	}
-      }
-    } else {
-      colour = G4Colour(G4UIcommand::ConvertTo3Vector(newValue));
-    }
-    // Add opacity
-    colour = G4Colour(colour.GetRed(), colour.GetGreen(), colour.GetBlue(), opacity);
+    ConvertToColour(colour, redOrString, green, blue, opacity);
     G4VisAttributes va = vp.GetDefaultTextVisAttributes();
     va.SetColour(colour);
     vp.SetDefaultTextVisAttributes(va);
@@ -906,15 +858,16 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandLightsThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fLightsVector = G4ThreeVector (x, y, z);
-    vp.SetLightpointDirection(fLightsVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Lights direction set to "
-	     << vp.GetLightpointDirection() << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fLightsVector = G4ThreeVector (x, y, z);
+      vp.SetLightpointDirection(fLightsVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Lights direction set to "
+        << vp.GetLightpointDirection() << G4endl;
+      }
     }
   }
 
@@ -1129,14 +1082,15 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandUpThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fUpVector = G4ThreeVector (x, y, z);
-    vp.SetUpVector(fUpVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fUpVector = G4ThreeVector (x, y, z);
+      vp.SetUpVector(fUpVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
+      }
     }
   }
 
@@ -1150,18 +1104,19 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandViewpointThetaPhi) {
     G4double theta, phi;
-    ConvertToDoublePair(newValue, theta, phi);
-    G4double x = std::sin (theta) * std::cos (phi);
-    G4double y = std::sin (theta) * std::sin (phi);
-    G4double z = std::cos (theta);
-    fViewpointVector = G4ThreeVector (x, y, z);
-    vp.SetViewAndLights(fViewpointVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Viewpoint direction set to "
-	     << vp.GetViewpointDirection() << G4endl;
-      if (vp.GetLightsMoveWithCamera ()) {
-	G4cout << "Lightpoint direction set to "
-	       << vp.GetActualLightpointDirection () << G4endl;
+    if (ConvertToDoublePair(newValue, theta, phi)) {
+      G4double x = std::sin (theta) * std::cos (phi);
+      G4double y = std::sin (theta) * std::sin (phi);
+      G4double z = std::cos (theta);
+      fViewpointVector = G4ThreeVector (x, y, z);
+      vp.SetViewAndLights(fViewpointVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Viewpoint direction set to "
+        << vp.GetViewpointDirection() << G4endl;
+        if (vp.GetLightsMoveWithCamera ()) {
+          G4cout << "Lightpoint direction set to "
+          << vp.GetActualLightpointDirection () << G4endl;
+        }
       }
     }
   }

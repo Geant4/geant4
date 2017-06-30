@@ -17,11 +17,40 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 19, 2016 G.Cosmo (global-V10-02-34)
+June 21, 2017 G.Cosmo     (global-V10-03-08)
+- Corrected TLS setup in tls.hh for gcc compiler.
+
+April 20, 2017 G.Cosmo     (global-V10-03-07)
+- Removed obsolete internal definition of abs() in templates.hh.
+- Code cleanup/formatting in recent G4cout* classes.
+
+April 18, 2017 A.Dotti     (global-V10-03-06)
+- Fixed WIN compilation error.
+
+April 18, 2017 A.Dotti     (global-V10-03-05)
+- Fixed compiler error for gcc < 5.
+- Fixed compilation warning on Mac OS  10.11 clang-8.
+
+April 18, 2017 A.Dotti     (global-V10-03-04)
+- New structure for G4coutDestination functionality with division
+  between sink and filter. 
+
+April 6, 2017 E.Tcherniaev (global-V10-03-03)
+- Added function G4RandomDirection(G4double cosTheta) to G4RandomDirection.hh.
+  Addressing enhancement request #1961.
+
+March 14, 2017 G.Cosmo (global-V10-03-02)
+- Fix in destructor of G4ThreadLocalSingleton to destroy mutex as last
+  action. Fixes contention reported by Valgrind/DRD.
+
+March 13, 2017 G.Cosmo (global-V10-03-01)
+- G4TWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),
+  and Recycle() to be called by worker threads.
+
+December 19, 2016 G.Cosmo (global-V10-03-00)
 - Removed obsolete utility class G4SubString used internally in G4String,
   as no longer necessary and also including unnecessary and buggy operators.
   Addressing problem report #1864.
-- Updated date and version for 10.3.p01.
 
 November 16, 2016 G.Cosmo (global-V10-02-33)
 - Fixed compilation warning on MacOS Sierra in MT mode in function

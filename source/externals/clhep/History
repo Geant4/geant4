@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 May 2017 - G.Cosmo
+- Fixed shadowing compilation warnings on RotationA.cc.
+
+09 May 2017 - G.Cosmo
+- Updated to CLHEP-2.3.4.4.
+- Fix in HepRotation::axis() for proper treatment of degenerating cases.
+- Fixed compilation warnings on gcc-7.1 in Evaluator.cc.
+
+03 February 2017 - B.Morgan (clhep-V10-03-00)
+- Set interface include directories on G4clhep{-static} targets
+  in CMakeLists.txt. This provides the needed interface to allow transparent
+  usage of internal/external CLHEP via targets and without needing to use
+  include_directories explicitly. Only set include paths in BUILD
+  interface for consistency with other targets.
+
 04 November 2016 - G.Cosmo
 - Updated to CLHEP-2.3.4.3.
 - Fixed array initialisation in Evaluator static method function().

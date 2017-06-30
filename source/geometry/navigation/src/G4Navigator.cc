@@ -1003,6 +1003,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
        if ((!fPushed) && (fWarnPush))
        {
          std::ostringstream message;
+         message.precision(16);
          message << "Track stuck or not moving." << G4endl
                  << "          Track stuck, not moving for " 
                  << fNumberZeroSteps << " steps" << G4endl

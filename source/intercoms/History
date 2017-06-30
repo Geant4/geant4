@@ -1,4 +1,4 @@
-$Id: History 102562 2017-02-09 08:27:31Z gcosmo $
+$Id: History 104431 2017-05-31 07:45:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8 February, 2017 Makoto Asai (intercoms-V10-02-06)
+30 May, 2017 Ivana Hrivnacova (intercoms-V10-03-01)
+- Fixed G4GenericMessenger::Command::SetUnit:
+  Do not ignore setting and issue a warning when running sequantial application
+  built against Geant4 libraries compiled with MT enabled 
+
+8 February, 2017 Makoto Asai (intercoms-V10-03-00)
 - Introducing /control/useDoublePrecision command to use 17 digits
   print out for the current parameter values. Addressing to bug
   report #1921.

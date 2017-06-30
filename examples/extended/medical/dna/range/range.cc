@@ -25,16 +25,11 @@
 //
 /// \file medical/dna/range/range.cc
 /// \brief Main program of the medical/dna/range example
-//
-// $Id: w.cc 85260 2014-10-27 08:53:35Z gcosmo $
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
+ #include "G4MTRunManager.hh"
 #else
-#include "G4RunManager.hh"
+ #include "G4RunManager.hh"
 #endif
 
 #include "G4UImanager.hh"
@@ -50,7 +45,7 @@
 #endif
 
 #ifdef G4UI_USE
-#include "G4UIExecutive.hh"
+ #include "G4UIExecutive.hh"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,4 +115,3 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

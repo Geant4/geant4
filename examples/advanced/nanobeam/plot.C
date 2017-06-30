@@ -11,7 +11,7 @@
   c1->Divide(2,2);
 
   system ("rm -rf nanobeam.root");
-  system ("hadd nanobeam.root nanobeam_*.root");
+  system ("hadd -O nanobeam.root nanobeam_*.root");
   
   TFile f("nanobeam.root"); 
 

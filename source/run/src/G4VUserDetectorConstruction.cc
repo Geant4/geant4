@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserDetectorConstruction.cc 101679 2016-11-21 09:30:00Z gcosmo $
+// $Id: G4VUserDetectorConstruction.cc 104521 2017-06-02 07:17:28Z gcosmo $
 //
 
 #include "G4VUserDetectorConstruction.hh"
@@ -250,6 +250,15 @@ void G4VUserDetectorConstruction::SetSensitiveDetector
 
   //Get existing SD if already set and check if it is of the special type
   G4VSensitiveDetector* originalSD = logVol->GetSensitiveDetector();
+  if ( originalSD == aSD ) {
+      G4ExceptionDescription msg;
+      msg << "Attempting to add multiple times the same sensitive detector (\"";
+      msg << originalSD->GetName()<<"\") is not allowed, skipping.";
+      G4Exception("G4VUserDetectorConstruction::SetSensitiveDetector",
+                  "Run0054",JustWarning,msg);
+      return;
+
+  }
   if ( originalSD == nullptr ) {
       logVol->SetSensitiveDetector(aSD);
   } else {

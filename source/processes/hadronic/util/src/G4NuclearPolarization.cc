@@ -57,23 +57,20 @@ G4bool G4NuclearPolarization::operator!=(const G4NuclearPolarization &right) con
   return (fPolarization != right.fPolarization);
 }
 
-std::ostream& operator<<(std::ostream& out, const G4NuclearPolarization* p)
+std::ostream& operator<<(std::ostream& out, const G4NuclearPolarization& p)
 {
-  out << " P = [ { ";
-  for(size_t k=0; k<p->fPolarization.size(); ++k) {
-    if(k>0) { out << " }, { "; }
-    for(size_t kappa=0; kappa<p->fPolarization[k].size(); ++kappa) {
-      if(kappa > 0) { out << ", "; }
-      out << p->fPolarization[k][kappa].real() << " + " 
-	  << p->fPolarization[k][kappa].imag() << "*i";
+  out << " P = [ {";
+  size_t kk = p.fPolarization.size();
+  for(size_t k=0; k<kk; ++k) {
+    if(k>0) { out << "       {"; }
+    size_t kpmax = (p.fPolarization[k]).size();
+    for(size_t kappa=0; kappa<kpmax; ++kappa) {
+      if(kappa > 0) { out << "}  {"; }
+      out << p.fPolarization[k][kappa].real() << " + " 
+	  << p.fPolarization[k][kappa].imag() << "*i";
     }
+    if(k+1 < kk) { out << "}" << G4endl; }
   }
-  out << " } ]" << G4endl;
-  return out; 
-}
-
-std::ostream& operator<<(std::ostream& out, const G4NuclearPolarization& np)
-{
-  out << &np;
+  out << "} ]" << G4endl;
   return out; 
 }

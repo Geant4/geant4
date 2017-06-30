@@ -1,4 +1,4 @@
-$Id: History 101684 2016-11-21 09:38:27Z gcosmo $
+$Id: History 104417 2017-05-30 08:30:48Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,27 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+30-05-17 SI (testem5-V10-03-05)
+- Addition of DNA constructors in PhysicsList
+- Addition of DNA histograms in HistoManager
+- Addition of flags in StackingAction
+- Update of README
+
+19-04-17 mma  (testem5-V10-03-04)
+- BeginOfRunAction() : remove SetRandomNumberStore(true)
+
+10-03-17 mma (testem5-V10-03-03)
+- DetectorConstruction : correct definition of element Chrome
+
+17-02-17 mma (testem5-V10-03-02)
+- Run.cc : modify normalisation of histo 1 and 10
+
+01-02-17 V.Ivanchenko (testem5-V10-03-01)
+- PhysicsList - use more uniform builder names
+
+27-12-16 S. Incerti (testem5-V10-03-00)
+- updated pixe.mac
 
 19-11-16 L.Urban (testem5-V10-02-07)
 - typos corrected in Run.cc  

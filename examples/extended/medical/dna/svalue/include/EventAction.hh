@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/svalue/include/EventAction.hh
 /// \brief Definition of the EventAction class
-//
-// $Id: EventAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EventAction_h
 #define EventAction_h 1
@@ -45,7 +40,6 @@ public:
   EventAction();
   ~EventAction();
 
-public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void EndOfEventAction(const G4Event*);
 
@@ -57,8 +51,6 @@ public:
 private:
   G4double fTotalEdep;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

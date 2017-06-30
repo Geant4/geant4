@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/svalue/include/RunAction.hh
 /// \brief Definition of the RunAction class
-//
-// $Id: RunAction.hh 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef RunAction_h
 #define RunAction_h 1
@@ -47,10 +42,10 @@ class HistoManager;
 class RunAction: public G4UserRunAction
 {
 public:
+
   RunAction();
   ~RunAction();
 
-public:
   virtual void BeginOfRunAction(const G4Run*);
   virtual void EndOfRunAction(const G4Run*);
   virtual G4Run* GenerateRun();
@@ -60,8 +55,6 @@ private:
   Run* fpRun;
   HistoManager* fpHistoManager;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

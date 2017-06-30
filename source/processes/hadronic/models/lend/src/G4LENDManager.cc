@@ -143,6 +143,40 @@ G4LENDManager::G4LENDManager()
    ionTable = G4ParticleTable::GetParticleTable()->GetIonTable();
    nistElementBuilder = new G4NistElementBuilder( 0 );
 
+   //Prepare table of excitation energy of excited isomers
+   G4int pdgCode;
+   //              iZ        iA    iM ->Co58m1
+   pdgCode= 10000 * 27 + 10 * 58 + 1;
+   pdgCode = GetNucleusEncoding( 27 , 58 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 24890 *CLHEP::eV));
+   pdgCode= 10000 * 47 + 10 * 110 + 1;
+   pdgCode = GetNucleusEncoding( 47 , 110 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 117590 *CLHEP::eV));
+   pdgCode= 10000 * 48 + 10 * 115 + 1;
+   pdgCode = GetNucleusEncoding( 48 , 115 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 181000 *CLHEP::eV));
+   pdgCode= 10000 * 52 + 10 * 127 + 1;
+   pdgCode = GetNucleusEncoding( 52 , 127 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode,  88260 *CLHEP::eV));
+   pdgCode= 10000 * 52 + 10 * 129 + 1;
+   pdgCode = GetNucleusEncoding( 52 , 129 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 105280 *CLHEP::eV));
+   pdgCode= 10000 * 61 + 10 * 148 + 1;
+   pdgCode = GetNucleusEncoding( 61 , 148 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 137900 *CLHEP::eV));
+   pdgCode= 10000 * 67 + 10 * 166 + 1;
+   pdgCode = GetNucleusEncoding( 67 , 166 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode,   5985 *CLHEP::eV));
+   pdgCode= 10000 * 95 + 10 * 242 + 1;
+   pdgCode = GetNucleusEncoding( 95 , 242 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode,  48600 *CLHEP::eV));
+   pdgCode= 10000 * 95 + 10 * 244 + 1;
+   pdgCode = GetNucleusEncoding( 95 , 244 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode, 87999.9*CLHEP::eV));
+   pdgCode= 10000 * 99 + 10 * 254 + 1;
+   pdgCode = GetNucleusEncoding( 99 , 254 , 1 );
+   mExcitationEnergy.insert(std::pair<G4int,G4double>( pdgCode,  84200 *CLHEP::eV));
+
 }
    
 
@@ -368,4 +402,21 @@ G4bool G4LENDManager::RequestChangeOfVerboseLevel( G4int newValue )
    }
 
    return result;
+}
+
+G4double G4LENDManager::GetExcitationEnergyOfExcitedIsomer( G4int iZ , G4int iA , G4int iM )
+{
+   G4double EE = 0.0;
+   G4int nucCode = GetNucleusEncoding( iZ , iA , iM );
+   auto it = mExcitationEnergy.find( nucCode );
+   if ( it != mExcitationEnergy.end() ) {
+      EE = it->second;
+   } else {
+      if ( iM == 0 ) {
+         G4cout << "G4LENDManager::GetExcitationEnergyOfExcitedIsomer is called for ground state (iM=0) nucleus" << G4endl;
+      } else {
+         G4cout << "Can not find excitation energy for Z = " << iZ << ", A = " << iA << ", M = " << iM << " and the energy set to 0." << G4endl;
+      }
+   }
+   return EE;
 }

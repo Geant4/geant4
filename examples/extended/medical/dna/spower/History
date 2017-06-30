@@ -1,0 +1,25 @@
+$Id: History 85260 2014-10-27 08:53:35Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    spower History file
+                    --------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+	 
+03-05-17 SI (spower-V10-03-02)
+- updated README
+
+30-04-17 SI (spower-V10-03-01)
+- moved stationary constructors to physics_lists
+
+16-03-17 SI (spower-V10-03-00)
+- created 

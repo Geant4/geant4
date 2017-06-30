@@ -1,7 +1,11 @@
-$Id: History 88189 2015-02-02 17:22:55Z gcosmo $
+$Id: History 104024 2017-05-08 14:44:25Z gcosmo $
 --------------------------------------------------------------------
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V10-03-00 8-May-2017 G.Cosmo
+- Fixed compilation warning on gcc-7.1 in
+  G4gsdvn::G4CreateCloneVTEWithDivision().
 
 g3tog4-V10-01-00 2-Feb-2015 G.Cosmo
 - Fix to sources.cmake script to include missing dependency on external library.

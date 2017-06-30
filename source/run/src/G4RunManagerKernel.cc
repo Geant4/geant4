@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 102620 2017-02-10 08:11:22Z gcosmo $
+// $Id: G4RunManagerKernel.cc 103291 2017-03-24 14:00:49Z gcosmo $
 //
 //
 
@@ -37,7 +37,9 @@
 #include "G4ExceptionHandler.hh"
 #include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
+#include "G4FieldManagerStore.hh"
 #include "G4NavigationHistoryPool.hh"
+#include "G4PathFinder.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -292,6 +294,20 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
 
+  // deletion of path-finder field-manager store, geometry and transportation manager
+  G4PathFinder* pFinder = G4PathFinder::GetInstanceIfExist();
+  if (pFinder) delete pFinder;
+  G4FieldManagerStore* fmStore = G4FieldManagerStore::GetInstanceIfExist();
+  if (fmStore) delete fmStore;
+  G4GeometryManager* gManager = G4GeometryManager::GetInstanceIfExist();
+  if (gManager) delete gManager;
+  G4TransportationManager* tManager = G4TransportationManager::GetInstanceIfExist();
+  if (tManager)
+  {
+    delete tManager;
+    if(verboseLevel>1) G4cout << "TransportationManager deleted." << G4endl;
+  }
+
   // deletion of navigation levels
   if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
@@ -347,10 +363,10 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_Init)
   {
-    G4cout << "Current application state is "
-        << stateManager->GetStateString(currentState) << G4endl;
     if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
     {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
       G4Exception("G4RunManagerKernel::DefineWorldVolume",
 		"DefineWorldVolumeAtIncorrectState",
 		FatalException,
@@ -361,8 +377,8 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
       //        "DefineWorldVolumeAtIncorrectState",
       //        JustWarning,
       //        "Geant4 kernel is not Init state : Assuming Init state.");
-      G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
-            <<G4endl;
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
       stateManager->SetNewState(G4State_Init); 
     }
   }
@@ -411,10 +427,10 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_Init)
   {
-    G4cout << "Current application state is "
-        << stateManager->GetStateString(currentState) << G4endl;
     if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
     {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
       G4Exception("G4RunManagerKernel::DefineWorldVolume",
 		"DefineWorldVolumeAtIncorrectState",
 		FatalException,
@@ -425,8 +441,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
       //        "DefineWorldVolumeAtIncorrectState",
       //        JustWarning,
       //        "Geant4 kernel is not Init state : Assuming Init state.");
-      G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
-            <<G4endl;
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
       stateManager->SetNewState(G4State_Init); 
     }
   }

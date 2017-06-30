@@ -26,25 +26,19 @@
 /// \file exoticphysics/monopole/monopole.cc
 /// \brief Main program of the exoticphysics/monopole example
 //
-// $Id: monopole.cc 92500 2015-09-02 07:26:32Z gcosmo $
+// $Id: monopole.cc 104872 2017-06-23 14:19:16Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
-#include "globals.hh"
-
-#include "DetectorConstruction.hh"
-#include "G4MonopolePhysics.hh"
-#include "G4PhysListFactory.hh"
-#include "G4VModularPhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-
-#include "RunAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -53,6 +47,14 @@
 #ifdef G4UI_USE
 #include "G4UIExecutive.hh"
 #endif
+
+#include "DetectorConstruction.hh"
+#include "G4MonopolePhysics.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
+#include "ActionInitialization.hh"
+
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,8 +65,21 @@ int main(int argc,char** argv) {
   //CLHEP::HepRandom::setTheEngine(new CLHEP::Ranlux64Engine);
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanluxEngine);
 
-  //Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+  // Construct the default run manager
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== Monopole is started with " 
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+#else
+  G4RunManager* runManager = new G4RunManager();
+#endif
+
+  // set mandatory initialization classes
+  DetectorConstruction* det = new DetectorConstruction();
+  runManager->SetUserInitialization(det);
 
   //create physicsList
   // Physics List is defined via environment variable PHYSLIST
@@ -74,62 +89,42 @@ int main(int argc,char** argv) {
   // monopole physics is added
   G4MonopolePhysics * theMonopole = new G4MonopolePhysics();
   phys->RegisterPhysics(theMonopole);
-    
-  // visualization manager
-#ifdef G4VIS_USE
-  G4VisManager* visManager = 0;
-#endif
-        
-  //get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-  // Setup monopole
-  G4String s = ""; 
-  if(argc > 2) { s = argv[2]; }
-  UImanager->ApplyCommand("/control/verbose 1");
-  UImanager->ApplyCommand("/monopole/setup "+s);
-
-  // mandator user classes
-  DetectorConstruction* det = new DetectorConstruction();
-
-  runManager->SetUserInitialization(det);  
   runManager->SetUserInitialization(phys);
 
-  PrimaryGeneratorAction* kin = new PrimaryGeneratorAction(det);
-  runManager->SetUserAction(kin);
+  // set user action classes
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
-  //user action classes
-  RunAction* run;
+  // get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  runManager->SetUserAction(run = new RunAction(det, kin));
-  runManager->SetUserAction(new TrackingAction(run));
-  runManager->SetUserAction(new SteppingAction(run));
-
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);    
-    }
-  else
-    {  // interactive mode : define UI session
 #ifdef G4VIS_USE
-      //visualization manager
-      visManager = new G4VisExecutive;
-      visManager->Initialize();
+  G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
 #endif
+
+  if (argc==1)   // Define UI terminal for interactive mode
+    {
 #ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");     
+#endif
       ui->SessionStart();
       delete ui;
 #endif
     }
+  else if (argc>1) // Batch mode with 1 or more files
+    {
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UImanager->ApplyCommand(command+fileName);
+    }
 
-  //job termination
 #ifdef G4VIS_USE
   delete visManager;
 #endif
- 
+
+  // job termination
   delete runManager;
 
   return 0;

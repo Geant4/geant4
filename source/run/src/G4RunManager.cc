@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc 99345 2016-09-19 06:51:23Z gcosmo $
+// $Id: G4RunManager.cc 103291 2017-03-24 14:00:49Z gcosmo $
 //
 // 
 
@@ -963,6 +963,12 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
   {
     kernel->GeometryHasBeenModified();
     geometryInitialized = false;
+    // Notify the VisManager as well
+    if(G4Threading::IsMasterThread())
+    {
+      G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+      if(pVVisManager) pVVisManager->GeometryHasChanged();
+    }
   }
 }
 

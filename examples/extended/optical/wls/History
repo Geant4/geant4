@@ -1,4 +1,4 @@
-$Id: History 101671 2016-11-21 09:18:37Z gcosmo $
+$Id: History 104079 2017-05-10 14:51:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
  
      ----------------------------------------------------------
+
+May 10, 2017 V.Ivanchenko   (WLS-V10-03-00)
+- WLSDetectorConstruction, WLSSteppingAction - fixed gcc 7.1 warnings
 
 Nov 19, 2016 A.Dotti   (WLS-V10-02-04,-05)
 - Explicit set of SD to manager

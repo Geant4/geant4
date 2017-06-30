@@ -97,6 +97,8 @@ G4PhysicsListWorkspace::InitialiseWorkspace()
     //   just copy the contents !!
     fpVUPLSIM->NewSubInstances();
     fpVPCSIM->NewSubInstances();
+    // The following line is fundamental! If we call NewSubInstances it will not work
+    // See: https://jira-geant4.kek.jp/browse/DEV-284
     fpVMPLSIM->WorkerCopySubInstanceArray();
 
     // Additional initialization if needed - beyond copying memory

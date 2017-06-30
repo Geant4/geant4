@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc 101819 2016-12-01 08:13:36Z gcosmo $
+// $Id: G4Polyhedra.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -573,7 +573,8 @@ G4double G4Polyhedra::DistanceToIn( const G4ThreeVector &p ) const
 //
 // Get bounding box
 
-void G4Polyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Polyhedra::BoundingLimits(G4ThreeVector& pMin,
+                                 G4ThreeVector& pMax) const
 {
   G4double rmin = kInfinity, rmax = -kInfinity;
   G4double zmin = kInfinity, zmax = -kInfinity;
@@ -632,7 +633,8 @@ void G4Polyhedra::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Polyhedra::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Polyhedra::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -651,7 +653,7 @@ G4bool G4Polyhedra::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

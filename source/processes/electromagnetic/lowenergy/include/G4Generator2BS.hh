@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Generator2BS.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4Generator2BS.hh 104410 2017-05-30 07:17:09Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -58,6 +58,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VEmAngularDistribution.hh"
+#include "G4Log.hh"
 
 class G4Pow;
 
@@ -66,14 +67,14 @@ class G4Generator2BS : public G4VEmAngularDistribution
 
 public:
 
-  G4Generator2BS(const G4String& name="");
+  explicit G4Generator2BS(const G4String& name="");
 
   virtual ~G4Generator2BS();
 
   virtual G4ThreeVector& SampleDirection(const G4DynamicParticle* dp,
                                          G4double out_energy,
                                          G4int Z,
-                                         const G4Material* mat = 0);
+                                         const G4Material* mat = nullptr);
 
   void PrintGeneratorInformation() const;
 
@@ -84,8 +85,8 @@ protected:
 private:
 
   // hide assignment operator 
-  G4Generator2BS & operator=(const  G4Generator2BS &right);
-  G4Generator2BS(const  G4Generator2BS&);
+  G4Generator2BS & operator=(const  G4Generator2BS &right)= delete;
+  G4Generator2BS(const  G4Generator2BS&) = delete;
 
   G4double fz;
   G4double ratio;
@@ -102,7 +103,7 @@ inline G4double G4Generator2BS::RejectionFunction(G4double y) const
 {
   G4double y2 = (1 + y)*(1 + y);
   G4double x  = 4*y*ratio/y2;
-  return 4*x - ratio1 - (ratio2 - x)*std::log(delta + fz/y2); 
+  return 4*x - ratio1 - (ratio2 - x)*G4Log(delta + fz/y2); 
 }
 
 #endif

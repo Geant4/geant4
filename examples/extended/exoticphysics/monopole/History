@@ -1,4 +1,4 @@
-$Id: History 92500 2015-09-02 07:26:32Z gcosmo $
+$Id: History 104872 2017-06-23 14:19:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23 June 17: S. Elles (monopole-V10-03-00)
+- add MT interface
+- switch ActionInitialization, Run and RunAction classes
+- switch to G4AnalysisManager
 
 01 September 15: I. Hrivnacova (monopole-V10-01-00)
 - Removed EventAction and EventActionMessenger classes, now obsolete, and 

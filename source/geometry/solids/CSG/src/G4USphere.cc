@@ -229,7 +229,7 @@ G4VSolid* G4USphere::Clone() const
 //
 // Get bounding box
 
-void G4USphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4USphere::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
 
@@ -278,7 +278,8 @@ void G4USphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4USphere::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4USphere::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -300,7 +301,8 @@ void G4USphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4USphere::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4USphere::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -318,7 +320,7 @@ G4bool G4USphere::CalculateExtent(const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

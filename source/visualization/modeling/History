@@ -1,4 +1,4 @@
-$Id: History 101035 2016-11-04 08:48:17Z gcosmo $
+$Id: History 104164 2017-05-15 06:53:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,28 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+14th May 2017  John Allison (modeling-V10-03-07)
+- G4GPSModel: Added user-selectable colour.
+
+3rd May 2017  John Allison (modeling-V10-03-06)
+- Needs event-V10-03-01.
+- Completed G4GPSModel for visualisation of General Particle Source. Can
+  be used with command /vis/scene/add/gps.
+
+3rd May 2017  John Allison (modeling-V10-03-05)
+- Added prototype/skeleton G4GPSModel.
+- G4PhysicalVolumeModel::Validate:
+  o Check world pointer (can be null if geometry has been cleared/destroyed).
+
+19th April 2017  John Allison (modeling-V10-03-01)
+- Added G4ModelingParameters::PVPointerCopyNo.
+
+9th December 2016  John Allison (modeling-V10-03-00)
+- Coworks with visman-V10-03-00.
+- G4MagneticFieldModel: Augmented to take lineSegmentsPerCircle.
+  Default is 6 for rapid yet adequate drawing, but this my be changed
+  with /vis/set/arrow3DLineSegmentsPerCircle.
 
 3rd November 2016  John Allison (modeling-V10-02-17)
 - G4ModelingParameters and G4PhysicalVolumeModel:

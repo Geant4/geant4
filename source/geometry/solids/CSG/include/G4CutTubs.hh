@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.hh 100820 2016-11-02 15:18:48Z gcosmo $
+// $Id: G4CutTubs.hh 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -77,7 +77,7 @@ class G4CutTubs : public G4OTubs
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -136,7 +136,7 @@ class G4CutTubs : public G4OTubs
 
     void GetMaxMinZ(G4double& zmin,G4double& zmax)const;
       // Get Max and Min values of Z on Cutted Plane,
-      // Used for Calculate Extent()
+      // Used for Calculate BoundingLimits()
 
   private:
 

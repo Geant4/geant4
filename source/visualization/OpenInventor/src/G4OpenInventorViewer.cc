@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpenInventorViewer.cc 102573 2017-02-09 08:50:23Z gcosmo $
+// $Id: G4OpenInventorViewer.cc 102233 2017-01-13 15:59:06Z gcosmo $
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 

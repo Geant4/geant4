@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm5/include/StackingAction.hh
 /// \brief Definition of the StackingAction class
 //
-// $Id: StackingAction.hh 83921 2014-09-23 09:14:40Z gcosmo $
+// $Id: StackingAction.hh 104417 2017-05-30 08:30:48Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +64,22 @@ class StackingAction : public G4UserStackingAction
     G4int               fComptAuger;
     G4int               fPixeGamma;
     G4int               fPixeAuger;
+
+    G4int               fElectronDNAGamma;
+    G4int               fElectronDNAAuger;
+    G4int               fProtonDNAGamma;
+    G4int               fProtonDNAAuger;
+    G4int               fHydrogenDNAGamma;
+    G4int               fHydrogenDNAAuger;
+    G4int               fAlphaDNAGamma;
+    G4int               fAlphaDNAAuger;
+    G4int               fAlphaPlusDNAGamma;
+    G4int               fAlphaPlusDNAAuger;
+    G4int               fHeliumDNAGamma;
+    G4int               fHeliumDNAAuger;
+    G4int               fGenericIonDNAGamma;
+    G4int               fGenericIonDNAAuger;
+
     G4bool              fIDdefined;
         
 };

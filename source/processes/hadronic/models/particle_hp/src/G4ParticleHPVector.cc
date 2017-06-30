@@ -316,7 +316,6 @@
       if ( x1-x2 == 0 ) {
       //Following block added for avoiding div 0 error on Release + G4FPE_DEBUG 
          for ( G4int j=start; j<current; j++ ) {
-	    x = theData[j].GetX();
 	    y = (y2+y1)/2.;
 	    if ( std::abs( y-theData[j].GetY() ) > precision*y ) {
 	        aBuff[++count] = theData[current-1]; // for this one, everything was fine

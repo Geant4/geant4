@@ -1,4 +1,4 @@
-$Id: History 101678 2016-11-21 09:28:32Z gcosmo $
+$Id: History 103976 2017-05-05 12:22:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,47 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 2, 2017 J. Madsen (digits_hits-V10-03-01)
+- Update to G4THitsMap to fix issue where G4Colour was
+  using G4THitsMap<G4StatDouble> and the allocation
+  was causing += to white instead of += to black
+  
+April 20, 2017 J. Madsen (digit_hits-V10-03-00)
+- Files modified : hits/include/G4THitsMap.hh
+- Extension of the G4THitsMap class + bug fix
+  - Renamed G4THitsMap to G4VTHitsMap
+    - although G4VTHitsMap is not a pure virtual class
+      it has an additional template parameter for the map
+      type, so it is not intended to be used directly
+  - Made G4VTHitsMap more generic in accepting the type
+    of data stored (with more generic template overloads not
+    specific to G4double and G4StatDouble)
+  - Fixed a bug in initializing G4StatDouble entries
+    - G4StatDouble(0) is not the same as G4StatDouble().
+      The former starts off with a count = 1, and the
+      latter starts with a count = 0.
+  - Added G4THitsMap
+    - deriving from G4VTHitsMap and having the same
+      functionality as before
+  - Added G4THitsMultiMap
+    - which functions like G4THitsMap but all entries are
+      stored
+  - Added G4THitsUnorderedMap
+    - which functions like G4THitsMap but uses an
+      unordered_map
+  - Added G4THitsUnorderedMultiMap
+    - which functions like G4THitsMap but stores all
+      entries in an unordered multimap
+  - typedef for map_type, value_type, iterator, and const_iterator
+    for future generic usage
+    - e.g. replacing
+      std::map<G4int, G4double*> theMap = this->GetMap()
+      with
+      map_type theMap = this->GetMap()
+  - defined begin(), end(), cbegin(), cend() so now
+    G4VTHitsMap can be used in range-based loops
+    - e.g. for(auto itr : hitMap) { ... }
+  
 Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
 - Fix bug #1908, remove implicit addition to manager of 
   SD passed via G4MultiSD proxy

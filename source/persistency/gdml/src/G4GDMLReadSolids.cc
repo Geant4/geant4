@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 96190 2016-03-29 08:07:36Z gcosmo $
+// $Id: G4GDMLReadSolids.cc 103463 2017-04-11 07:22:55Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -69,6 +69,7 @@
 #include "G4OpticalSurface.hh"
 #include "G4UnitsTable.hh"
 #include "G4SurfaceProperty.hh"
+#include "G4MaterialPropertiesTable.hh"
 
 G4GDMLReadSolids::G4GDMLReadSolids() : G4GDMLReadMaterials()
 {
@@ -574,17 +575,6 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-#if !defined(G4GEOM_USE_USOLIDS)
-void G4GDMLReadSolids::
-MultiUnionNodeRead(const xercesc::DOMElement* const,
-                   G4MultiUnion* const)
-{
-   G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()",
-               "InvalidSetup", FatalException,
-               "Installation with USolids primitives required!");
-   return;
-}
-#else
 void G4GDMLReadSolids::
 MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
                    G4MultiUnion* const multiUnionSolid)
@@ -653,18 +643,7 @@ MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
    G4Transform3D transform(GetRotationMatrix(rotation),position);
    multiUnionSolid->AddNode(*solidNode, transform);
 }
-#endif
 
-#if !defined(G4GEOM_USE_USOLIDS)
-void G4GDMLReadSolids::
-MultiUnionRead(const xercesc::DOMElement* const)
-{
-   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
-               "InvalidSetup", FatalException,
-               "Installation with USolids primitives required!");
-   return;
-}
-#else
 void G4GDMLReadSolids::
 MultiUnionRead(const xercesc::DOMElement* const unionElement)
 {
@@ -723,7 +702,6 @@ MultiUnionRead(const xercesc::DOMElement* const unionElement)
    }
    multiUnion->Voxelize();
 }
-#endif
 
 void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 {
@@ -2467,6 +2445,75 @@ RZPointRead(const xercesc::DOMElement* const zplaneElement)
 }
 
 void G4GDMLReadSolids::
+PropertyRead(const xercesc::DOMElement* const propertyElement,
+             G4OpticalSurface* opticalsurface)
+{
+   G4String name;
+   G4String ref;
+   G4GDMLMatrix matrix;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = propertyElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+      { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::PropertyRead()", "InvalidRead",
+                    FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name") { name = GenerateName(attValue); } else
+      if (attName=="ref")  { matrix = GetMatrix(ref=attValue); }
+   }
+
+   /*
+   if (matrix.GetCols() != 2)
+   {
+     G4String error_msg = "Referenced matrix '" + ref
+            + "' should have \n two columns as a property table for opticalsurface: "
+            + opticalsurface->GetName();
+     G4Exception("G4GDMLReadSolids::PropertyRead()", "InvalidRead",
+                 FatalException, error_msg);
+   }
+   */
+
+   if (matrix.GetRows() == 0) { return; }
+
+   G4MaterialPropertiesTable* matprop=opticalsurface->GetMaterialPropertiesTable();
+   if (!matprop)
+   {
+     matprop = new G4MaterialPropertiesTable();
+     opticalsurface->SetMaterialPropertiesTable(matprop);
+   }
+   if (matrix.GetCols() == 1)  // constant property assumed
+   {
+     matprop->AddConstProperty(Strip(name), matrix.Get(0,0));
+   }
+   else  // build the material properties vector
+   {
+     G4MaterialPropertyVector* propvect = new G4MaterialPropertyVector();
+     for (size_t i=0; i<matrix.GetRows(); i++)
+     {
+       propvect->InsertValues(matrix.Get(i,0),matrix.Get(i,1));
+     }
+     matprop->AddProperty(Strip(name),propvect);
+   }
+}
+
+void G4GDMLReadSolids::
 OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 {
    G4String name;
@@ -2586,7 +2633,26 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
       { type = firsov; }
    else { type = x_ray; }
 
-   new G4OpticalSurface(name,model,finish,type,value);
+   G4OpticalSurface* opticalsurface
+         = new G4OpticalSurface(name,model,finish,type,value);
+
+   for (xercesc::DOMNode* iter = opticalsurfaceElement->getFirstChild();
+        iter != 0;iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::OpticalSurfaceRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="property") { PropertyRead(child,opticalsurface); }
+   }
 }
 
 void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement)

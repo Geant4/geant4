@@ -25,14 +25,8 @@
 //
 /// \file medical/dna/wvalue/src/EventAction.cc
 /// \brief Implementation of the EventAction class
-//
-// $Id: EventAction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-
 #include "Run.hh"
 #include "HistoManager.hh"
 
@@ -74,7 +68,8 @@ void EventAction::EndOfEventAction(const G4Event*)
     
     run->AddInelastic(fNbInelastic);
     
-    //G4cout << "*** Nb of cumulated inelastic interactions = " << run->GetInelastic() << G4endl;
+    //G4cout << "*** Nb of cumulated inelastic interactions = " 
+    // << run->GetInelastic() << G4endl;
     
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
     analysisManager->FillH1(1,fNbInelastic);
@@ -97,5 +92,3 @@ void EventAction::EndOfEventAction(const G4Event*)
   }  
 
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

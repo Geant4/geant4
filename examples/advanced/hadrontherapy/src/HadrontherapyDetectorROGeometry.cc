@@ -324,7 +324,7 @@ void HadrontherapyDetectorROGeometry::ConstructSD()
  G4String sensitiveDetectorName = "RODetector";
  
  HadrontherapyDetectorSD* detectorSD = new HadrontherapyDetectorSD(sensitiveDetectorName);
- G4SDManager::GetSDMpointer()->AddNewDetector(detectorSD);
+
  SetSensitiveDetector(sensitiveLogicalVolume,detectorSD);
 
 

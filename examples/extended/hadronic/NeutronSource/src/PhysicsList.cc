@@ -49,6 +49,7 @@
 #include "GammaNuclearPhysics.hh"
 
 #include "ElectromagneticPhysics.hh"
+#include "G4EmStandardPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -74,20 +75,21 @@ PhysicsList::PhysicsList()
   RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));
-  
+
   // Ion Physics
   RegisterPhysics( new G4IonPhysics(verb));
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
-  
+
   // stopping Particles
   ///RegisterPhysics( new G4StoppingPhysics(verb));
-      
+
   // Gamma-Nuclear Physics
   RegisterPhysics( new GammaNuclearPhysics("gamma"));
-  
+
   // EM physics
   RegisterPhysics(new ElectromagneticPhysics());
-  
+  ////RegisterPhysics(new G4EmStandardPhysics());
+
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc 101714 2016-11-22 08:53:13Z gcosmo $
+// $Id: G4VSceneHandler.cc 102802 2017-02-22 15:19:00Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -136,7 +136,8 @@ const G4VisExtent& G4VSceneHandler::GetExtent() const
   if (fpScene) {
     return fpScene->GetExtent();
   } else {
-    return G4VisExtent::NullExtent;
+    static const G4VisExtent defaultExtent = G4VisExtent();
+    return defaultExtent;
   }
 }
 

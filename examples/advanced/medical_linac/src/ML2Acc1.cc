@@ -810,7 +810,7 @@ bool CML2Acc1::MLC()
 	for (i=1;i<(int)leavesA.size(); i++)
 	{
 		G4String str;
-		char appo[10];
+		char appo[12];
 		sprintf(appo,"%d",i);
 		str=appo;
 		PVname="leafA"+str;
@@ -824,7 +824,7 @@ bool CML2Acc1::MLC()
 	for (i=1;i<(int)leavesB.size(); i++)
 	{
 		G4String str;
-		char appo[10];
+		char appo[12];
 		sprintf(appo,"%d",i);
 		str=appo;
 		PVname="leafB"+str;

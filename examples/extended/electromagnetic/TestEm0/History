@@ -1,5 +1,5 @@
 
-$Id: History 100291 2016-10-17 08:49:09Z gcosmo $
+$Id: History 104822 2017-06-20 12:24:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+19-06-17 mma  (testem0-V10-03-00)
+- RunAction : update max energy for CSDARange table
 
 14-10-16 G.Folger (testem0-V10-02-06)
 - remove direct use of theParticleIterator, use GetParticleTableIterator().

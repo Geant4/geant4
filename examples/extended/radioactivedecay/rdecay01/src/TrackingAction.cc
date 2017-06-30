@@ -26,7 +26,7 @@
 /// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 98257 2016-07-04 17:39:46Z gcosmo $
+// $Id: TrackingAction.cc 102948 2017-03-06 15:57:14Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,6 +40,7 @@
 
 #include "G4Track.hh"
 #include "G4ParticleTypes.hh"
+#include "G4IonTable.hh"
 #include "G4RunManager.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -89,10 +90,14 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4int ID      = track->GetTrackID();
   
   G4bool condition = false;
-
+  
+  // check LifeTime
+  //
+  G4double meanLife = particle->GetPDGLifeTime();
+  
   //count particles
   //
-  if (ID>1) run->ParticleCount(name, Ekin);
+  if (ID>1) run->ParticleCount(name, Ekin, meanLife);
   
   //energy spectrum
   //

@@ -1,4 +1,4 @@
-$Id: History 102543 2017-02-08 14:16:52Z gcosmo $
+$Id: History 104571 2017-06-06 13:45:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,9 +14,59 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-19-January-2017 P. Gumplinger (phys-ctor-em-V10-02-39)
+06-June-2017 V.Ivanchenko (phys-ctor-em-V10-03-12)
+- G4EmStandardPhysics_option3 - use G4UniversalFluctuation2017
+    for energy loss fluctuation of e+-, protons, anti_protons 
+
+01-June-2017 V.Ivanchenko (phys-ctor-em-V10-03-11)
+- G4EmStandardPhysicsSS - use G4hCoulombScatteringModel to take into 
+    account relativistic corrections
+
+01-June-2017 V.Ivanchenko (phys-ctor-em-V10-03-10)
+- G4EmStandardPhysicsWVI - use G4WentzelVIRelModel and 
+    G4hCoulombScatteringModel to take into account relativistic 
+    corrections
+
+08-May-2017 V.Ivanchenko (phys-ctor-em-V10-03-09)
+- G4EmStandardPhysics - use RayleighScattering and LivermorePhotoElectricModel 
+
+04-May-2017 V.Ivanchenko (phys-ctor-em-V10-03-08)
+- G4EmStandardPhysics_option4 - set finalStep for all changed 
+    10 um (except GenericIon), this will somehow slow down the 
+    simulation but increase accuracy of range simulation
+- G4EmParticleList - new class with the list of particles,
+    for whichg EM processes are instantiated
+- G4EmModelActivator - fixed Opt4 and SS per region 
+
+29-April-2017 S.Incerti (phys-ctor-em-V10-03-07)
+- added stationary Geant4-DNA constructors
+
+25-April-2017 V.Ivanchenko (phys-ctor-em-V10-03-06)
+- G4EmStandardPhysicsWVI - revert back
+- G4EmStandardPhysicsSS - apply single scattering to all particles
+    (bug fix #1966) 
+
+27-March-2017 V.Ivanchenko (phys-ctor-em-V10-03-05)
+- G4EmStandardPhysicsWVI - use G4WentzelVIRelModel and 
+    G4hCoulombScatteringModel to take into account relativistic 
+    corrections
+
+19-January-2017 P. Gumplinger (phys-ctor-em-V10-03-04)
 - add setCerenkov/ScintillationStackPhotons commands to
   G4OpticalPhysicsMessenger and use them in G4OpticalPhysics
+
+02-January-2017 S. Incerti (phys-ctor-em-V10-03-03)
+- added elastic scattering process for ions to all DNA constructors
+
+27-December-2016 S. Incerti (phys-ctor-em-V10-03-02)
+- fixed compilation error
+
+27-December-2016 S. Incerti (phys-ctor-em-V10-03-01)
+- added G4EmDNAPhysics_option6
+
+16-December-2016 V.Ivanchenko (phys-ctor-em-V10-03-00)
+- G4EmModelActivator - use new access methods RegionsPhysics() and
+    TypesPhysics() instead of RegionsMsc() and TypesMsc()
 
 02-December-2016 V.Ivanchenko (phys-ctor-em-V10-02-38)
 - G4EmModelActivator - added initialisation of atomic deexcitation

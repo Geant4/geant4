@@ -52,10 +52,15 @@ G4UPolycone::G4UPolycone( const G4String& name,
                         const G4double zPlane[],
                         const G4double rInner[],
                         const G4double rOuter[]  )
-  : G4USolid(name,  new UPolycone(name, phiStart, phiTotal,
-                                  numZPlanes, zPlane, rInner, rOuter))
+  : Base_t(name, phiStart, phiTotal, numZPlanes, zPlane, rInner, rOuter)
 {
-  wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
+  fGenericPcon = false;
+  SetOriginalParameters();
+  wrStart = phiStart;
+  while (wrStart < 0)
+  {
+    wrStart += twopi;
+  }
   wrDelta = phiTotal;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
   {
@@ -90,8 +95,10 @@ G4UPolycone::G4UPolycone(const G4String& name,
                                G4int    numRZ,
                          const G4double r[],
                          const G4double z[]   )
-  : G4USolid(name, new UPolycone(name, phiStart, phiTotal, numRZ, r, z))
+  : Base_t(name, phiStart, phiTotal, numRZ, r, z)
 { 
+  fGenericPcon = true;
+  SetOriginalParameters();
   wrStart = phiStart; while (wrStart < 0) wrStart += twopi;
   wrDelta = phiTotal;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
@@ -115,7 +122,7 @@ G4UPolycone::G4UPolycone(const G4String& name,
 //                            for usage restricted to object persistency.
 //
 G4UPolycone::G4UPolycone( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -134,8 +141,10 @@ G4UPolycone::~G4UPolycone()
 // Copy constructor
 //
 G4UPolycone::G4UPolycone( const G4UPolycone &source )
-  : G4USolid( source )
+  : Base_t( source )
 {
+  fGenericPcon = source.fGenericPcon;
+  fOriginalParameters = source.fOriginalParameters;
   wrStart   = source.wrStart;
   wrDelta   = source.wrDelta;
   rzcorners = source.rzcorners;
@@ -150,7 +159,9 @@ G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
 {
   if (this == &source) return *this;
   
-  G4USolid::operator=( source );
+  Base_t::operator=( source );
+  fGenericPcon = source.fGenericPcon;
+  fOriginalParameters = source.fOriginalParameters;
   wrStart   = source.wrStart;
   wrDelta   = source.wrDelta;
   rzcorners = source.rzcorners;
@@ -166,6 +177,10 @@ G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
 G4double G4UPolycone::GetStartPhi() const
 {
   return wrStart;
+}
+G4double G4UPolycone::GetDeltaPhi() const
+{
+  return wrDelta;
 }
 G4double G4UPolycone::GetEndPhi() const
 {
@@ -212,59 +227,79 @@ G4PolyconeSideRZ G4UPolycone::GetCorner(G4int index) const
 }
 G4PolyconeHistorical* G4UPolycone::GetOriginalParameters() const
 {
-  UPolyconeHistorical* pars = GetShape()->GetOriginalParameters();
-  G4PolyconeHistorical* pdata = new G4PolyconeHistorical(pars->fNumZPlanes);
-  pdata->Start_angle = pars->fStartAngle;
-  pdata->Opening_angle = pars->fOpeningAngle;
-  for (G4int i=0; i<pars->fNumZPlanes; ++i)
+  return new G4PolyconeHistorical(fOriginalParameters);
+}
+void G4UPolycone::SetOriginalParameters()
+{
+  G4int numPlanes = GetNSections()+1;
+  delete [] fOriginalParameters.Z_values;
+  delete [] fOriginalParameters.Rmin;
+  delete [] fOriginalParameters.Rmax;
+  fOriginalParameters.Z_values = new G4double[numPlanes];
+  fOriginalParameters.Rmin = new G4double[numPlanes];
+  fOriginalParameters.Rmax = new G4double[numPlanes];
+
+  for (G4int j=0; j<numPlanes; ++j)
   {
-    pdata->Z_values[i] = pars->fZValues[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
+    fOriginalParameters.Z_values[j] = GetZAtPlane(j);
+    fOriginalParameters.Rmax[j]     = GetRmaxAtPlane(j);
+    fOriginalParameters.Rmin[j]     = GetRminAtPlane(j);
   }
-  return pdata;
+
+  fOriginalParameters.Start_angle   = Base_t::GetStartPhi();
+  fOriginalParameters.Opening_angle = Base_t::GetDeltaPhi();
+  fOriginalParameters.Num_z_planes  = numPlanes;
 }
 void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
 {
-  UPolyconeHistorical* pdata = GetShape()->GetOriginalParameters();
-  pdata->fStartAngle = pars->Start_angle;
-  pdata->fOpeningAngle = pars->Opening_angle;
-  pdata->fNumZPlanes = pars->Num_z_planes;
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
-  {
-    pdata->fZValues[i] = pars->Z_values[i];
-    pdata->Rmin[i] = pars->Rmin[i];
-    pdata->Rmax[i] = pars->Rmax[i];
-  }
+  fOriginalParameters = *pars;
   fRebuildPolyhedron = true;
+  Reset();
+}
 
-  wrStart = pdata->fStartAngle; while (wrStart < 0) wrStart += twopi;
-  wrDelta = pdata->fOpeningAngle;
+G4bool G4UPolycone::Reset()
+{
+  if (fGenericPcon)
+  {
+    std::ostringstream message;
+    message << "Solid " << GetName() << " built using generic construct."
+            << G4endl << "Not applicable to the generic construct !";
+    G4Exception("G4UPolycone::Reset()", "GeomSolids1001",
+                JustWarning, message, "Parameters NOT resetted.");
+    return true;  // error code set
+  }
+
+  //
+  // Rebuild polycone based on original parameters
+  //
+  wrStart = fOriginalParameters.Start_angle;
+  while (wrStart < 0)
+  {
+    wrStart += twopi;
+  }
+  wrDelta = fOriginalParameters.Opening_angle;
   if (wrDelta <= 0 || wrDelta >= twopi*(1-DBL_EPSILON))
   {
     wrStart = 0;
     wrDelta = twopi;
   }
   rzcorners.resize(0);
-  for (G4int i=0; i<pdata->fNumZPlanes; ++i)
+  for (G4int i=0; i<fOriginalParameters.Num_z_planes; ++i)
     {
-      G4double z = pdata->fZValues[i];
-      G4double r = pdata->Rmax[i];
+      G4double z = fOriginalParameters.Z_values[i];
+      G4double r = fOriginalParameters.Rmax[i];
       rzcorners.push_back(G4TwoVector(r,z));
     }
-  for (G4int i=pdata->fNumZPlanes-1; i>=0; --i)
+  for (G4int i=fOriginalParameters.Num_z_planes-1; i>=0; --i)
     {
-      G4double z = pdata->fZValues[i];
-      G4double r = pdata->Rmin[i];
+      G4double z = fOriginalParameters.Z_values[i];
+      G4double r = fOriginalParameters.Rmin[i];
       rzcorners.push_back(G4TwoVector(r,z));
     }
   std::vector<G4int> iout;
   G4GeomTools::RemoveRedundantVertices(rzcorners,iout,2*kCarTolerance);
-}
-G4bool G4UPolycone::Reset()
-{
-  GetShape()->Reset();
-  return 0;
+
+  return false;  // error code unset
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -293,7 +328,8 @@ G4VSolid* G4UPolycone::Clone() const
 //
 // Get bounding box
 
-void G4UPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UPolycone::BoundingLimits(G4ThreeVector& pMin,
+                                 G4ThreeVector& pMax) const
 {
   static G4bool checkBBox = true;
   static G4bool checkPhi  = true;
@@ -335,7 +371,8 @@ void G4UPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UPolycone::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UPolycone::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 
@@ -343,8 +380,8 @@ void G4UPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
@@ -357,7 +394,8 @@ void G4UPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
               << GetName() << " !"
               << "\nBBox min: wrapper = " << pMin << " solid = " << vmin
               << "\nBBox max: wrapper = " << pMax << " solid = " << vmax;
-      G4Exception("G4UPolycone::Extent()", "GeomMgt0001", JustWarning, message);
+      G4Exception("G4UPolycone::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkBBox = false;
     }
   }
@@ -366,20 +404,22 @@ void G4UPolycone::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkPhi)
   {
-    if (GetStartPhi() != GetShape()->GetStartPhi() ||
-        GetEndPhi()   != GetShape()->GetEndPhi()   ||
-        IsOpen()      != GetShape()->IsOpen())
+    if (GetStartPhi() != Base_t::GetStartPhi() ||
+        GetEndPhi()   != Base_t::GetEndPhi()   ||
+        IsOpen()      != (Base_t::GetDeltaPhi() < twopi))
     {
       std::ostringstream message;
       message << "Inconsistency in Phi angles or # of sides for solid: "
               << GetName() << " !"
               << "\nPhi start  : wrapper = " << GetStartPhi()
-              << " solid = " <<     GetShape()->GetStartPhi()
+              << " solid = " <<     Base_t::GetStartPhi()
               << "\nPhi end    : wrapper = " << GetEndPhi()
-              << " solid = " <<     GetShape()->GetEndPhi()
+              << " solid = " <<     Base_t::GetEndPhi()
               << "\nPhi is open: wrapper = " << (IsOpen() ? "true" : "false")
-              << " solid = " <<     (GetShape()->IsOpen() ? "true" : "false");
-      G4Exception("G4UPolycone::Extent()", "GeomMgt0001", JustWarning, message);
+              << " solid = "
+              << ((Base_t::GetDeltaPhi() < twopi) ? "true" : "false");
+      G4Exception("G4UPolycone::BoundingLimits()", "GeomMgt0001",
+                  JustWarning, message);
       checkPhi = false;
     }
   }
@@ -399,7 +439,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);
@@ -443,7 +483,7 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
 
   // set trigonometric values
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
 
   G4double sphi   = GetStartPhi();
   G4double ephi   = GetEndPhi();
@@ -522,17 +562,13 @@ G4bool G4UPolycone::CalculateExtent(const EAxis pAxis,
 //
 G4Polyhedron* G4UPolycone::CreatePolyhedron() const
 {
-  G4PolyconeHistorical* original_parameters = GetOriginalParameters();
   G4PolyhedronPcon*
-  polyhedron = new G4PolyhedronPcon( original_parameters->Start_angle,
-                                     original_parameters->Opening_angle,
-                                     original_parameters->Num_z_planes,
-                                     original_parameters->Z_values,
-                                     original_parameters->Rmin,
-                                     original_parameters->Rmax );
-
-  delete original_parameters;  // delete local copy 
-
+  polyhedron = new G4PolyhedronPcon( fOriginalParameters.Start_angle,
+                                     fOriginalParameters.Opening_angle,
+                                     fOriginalParameters.Num_z_planes,
+                                     fOriginalParameters.Z_values,
+                                     fOriginalParameters.Rmin,
+                                     fOriginalParameters.Rmax );
   return polyhedron;
 }
 

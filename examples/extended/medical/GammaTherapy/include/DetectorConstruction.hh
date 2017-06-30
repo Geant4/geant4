@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.hh 101245 2016-11-10 08:45:38Z gcosmo $
+// $Id: DetectorConstruction.hh 103795 2017-04-27 13:38:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -79,16 +79,52 @@ public:
   inline void SetAbsorberZ(G4double val)      { fAbsorberZ = val; }
   inline void SetAbsorberShiftZ(G4double val) { fAbsorberShiftZ = val; }
 
+  inline void SetNumberDivZ(G4int val)        { fNumZ = val; };
+  inline void SetNumberDivR(G4int val)        { fNumR = val; };
+
+  const G4VPhysicalVolume* GetCheckVolume() const   { return fCheckVolume; }
+  const G4VPhysicalVolume* GetGasVolume() const     { return  fGasVolume; }
+  const G4VPhysicalVolume* GetPhantom() const       { return  fPhantom; }
+  const G4VPhysicalVolume* GetTarget1() const       { return  fTarget1; }
+  const G4VPhysicalVolume* GetTarget2() const       { return  fTarget2; }
+
+  G4double GetAbsorberZ() const               { return fPhantomZ; }
+  G4double GetAbsorberR() const               { return fAbsorberRadius; }
+  G4double GetScoreZ() const                  { return fAbsorberShiftZ; }
+
+  G4int GetNumberDivZ() const                 { return fNumZ; }
+  G4int GetNumberDivR() const                 { return fNumR; }
+
+  void SetMaxEnergy(G4double e) { fMaxEnergy = e; }
+  inline G4double GetMaxEnergy() const { return fMaxEnergy; }
+  G4int GetNumberDivE() const          { return fNumE; }
+  inline void SetNumberDivE(G4int val)        { fNumE = val; };
+
+  void SetVerbose(G4bool v) { fVerbose = v; }
+  inline G4bool GetVerbose() const { return fVerbose; }
+
+  void DumpGeometryParameters();
+
 private:  
 
   void InitialiseGeometryParameters();
 
   DetectorConstruction & operator=(const DetectorConstruction &right);
   DetectorConstruction(const DetectorConstruction&);
+  void ConstructSDandField();
 
-  CheckVolumeSD* fCheckSD;
-  PhantomSD*     fPhantomSD;
-  TargetSD*      fTargetSD;
+  G4bool fVerbose;
+
+  G4int fNumZ;
+  G4int fNumR;
+
+  G4int fNumE;
+  G4double fMaxEnergy;
+
+  G4LogicalVolume* fLogicCheckVolume;
+  std::vector<G4LogicalVolume*> fLogicRing;
+  G4LogicalVolume* fLogicPh;
+  G4LogicalVolume* fLogicAbsorber;
 
   G4double fWorldXY, fWorldZ;
   G4double fDelta;
@@ -101,6 +137,7 @@ private:
   G4double fAirZ, fMylarVolumeZ, fMylarPosZ;
   G4double fCheckVolumeRadius, fCheckVolumeZ, fCheckShiftZ, fCheckVolumePosZ;
   G4double fTargetVolumeZ, fTargetVolumePosZ;
+  G4double fShiftZPh;
 
   G4double fPhantomRadius, fPhantomZ, fPhantomPosZ;
   G4double fAbsorberRadius, fAbsorberZ, fAbsorberShiftZ, fAbsorberPosZ;
@@ -118,6 +155,12 @@ private:
 
   G4LogicalVolume* fLogicTarget1;
   G4LogicalVolume* fLogicTarget2;
+
+  G4VPhysicalVolume* fCheckVolume;
+  G4VPhysicalVolume* fGasVolume;
+  G4VPhysicalVolume* fPhantom;
+  G4VPhysicalVolume* fTarget1;
+  G4VPhysicalVolume* fTarget2;
 
   DetectorMessenger* fMessenger;
 };

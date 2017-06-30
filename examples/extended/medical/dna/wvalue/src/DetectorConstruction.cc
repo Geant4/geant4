@@ -25,11 +25,6 @@
 //
 /// \file medical/dna/wvalue/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
-//
-// $Id: DetectorConstruction.cc 78723 2014-01-20 10:32:17Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
 #include "DetectorMessenger.hh"
@@ -172,5 +167,3 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   if (pttoMaterial) fAbsorMaterial = pttoMaterial;
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();  
 }
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

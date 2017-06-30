@@ -1,4 +1,4 @@
-$Id: History 101666 2016-11-21 09:12:08Z gcosmo $
+$Id: History 104351 2017-05-26 07:23:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May  24, 2017 - J.Apostolakis - fieldex03-V10-03-00
+- fixed valgrind issues in field setup's update method: first
+    delete all dependent objects, then create new ones.
 
 November 19, 2016 A.Dotti   - fieldex03-V10-02-04
 - explicit set of SD to manager

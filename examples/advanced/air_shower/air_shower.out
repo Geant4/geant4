@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -59,6 +59,11 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+/run/verbose 2
+/event/verbose 0
+/tracking/verbose 0
+/run/initialize
+userDetector->Construct() start.
 
 ***** Table : Nb of materials = 4 *****
 
@@ -78,7 +83,7 @@ Available colours:
 
 
  Material: Aluminum    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
-                       Imean: 166.000 eV 
+                       Imean: 166.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Al (Al)   Z = 13.0   N =    27   A = 26.980 g/mole
          --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.000 %
@@ -86,7 +91,7 @@ Available colours:
 
 
  Material:   Quartz    density:  2.640 g/cm3   RadL:  10.246 cm   Nucl.Int.Length:  36.311 cm 
-                       Imean: 125.663 eV 
+                       Imean: 125.663 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Silicon (Si)   Z = 14.0   N =    28   A = 28.090 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -102,7 +107,7 @@ Available colours:
 
 
  Material:  Acrylic    density:  1.190 g/cm3   RadL:  34.080 cm   Nucl.Int.Length:  62.658 cm 
-                       Imean:  68.609 eV 
+                       Imean:  68.609 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Carbon (C)   Z =  6.0   N =    12   A = 12.010 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -160,11 +165,11 @@ Available colours:
 #                                                    #
 ######################################################
 Using mirror reflecting surface 
-### Birks coeffitients used in run time
-/run/verbose 2
-/event/verbose 0
-/tracking/verbose 0
-/run/initialize
+World is registered to the default region.
+physicsList->Construct() start.
+### Birks coefficients used in run time
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
 /gps/particle mu-
 /gps/direction 0.0 0.0 -1.0
 /gps/pos/centre 0.0 0.0 100. cm
@@ -240,8 +245,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ooo Run 0 starts (global).
 
 --------- Ranlux engine status ---------
- Initial seed = 1488210955
- float_seed_table[] = 0.413425 0.964008 0.989274 0.875768 0.158226 0.456335 0.97817 0.649406 0.479017 0.515979 0.475296 0.618467 0.514229 0.511209 0.620325 0.679511 0.114656 0.907577 0.84133 0.024806 0.748973 0.526127 0.498029 0.301567 
+ Initial seed = 1498729087
+ float_seed_table[] = 0.372294 0.134618 0.745975 0.555614 0.467548 0.459726 0.623951 0.803975 0.401252 0.864915 0.710693 0.707306 0.155621 0.178644 0.407868 0.484932 0.200683 0.278625 0.0259286 0.608261 0.107463 0.139536 0.480097 0.790497 
  i_lag = 23, j_lag = 9
  carry = 0, count24 = 0
  luxury = 3 nskip = 199
@@ -252,7 +257,7 @@ mu- Mono Plane
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.69s Real=2.69s Sys=0s
+  User=3.57s Real=3.59s Sys=0s
 ### Run 0 (global) ended.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -266,6 +271,7 @@ RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
+TransportationManager deleted.
 Total navigation history collections cleaned: 9
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0115 MB
@@ -275,13 +281,13 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0317 MB
-Pool ID '7G4Track', size : 0.0625 MB
+Pool ID '17G4DynamicParticle', size : 0.0298 MB
+Pool ID '7G4Track', size : 0.0596 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
-Pool ID '15UltraOpticalHit', size : 0.00481 MB
+Pool ID '15UltraOpticalHit', size : 0.00577 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.12 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.11 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

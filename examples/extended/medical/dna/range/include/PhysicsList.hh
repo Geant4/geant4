@@ -25,16 +25,6 @@
 //
 /// \file medical/dna/range/include/PhysicsList.hh
 /// \brief Definition of the PhysicsList class
-//
-//
-// $Id: PhysicsList.hh 82461 2014-06-23 10:44:06Z gcosmo $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PhysicsList_h
 #define PhysicsList_h 1
@@ -66,8 +56,6 @@ private:
 
   PhysicsListMessenger* fMessenger;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

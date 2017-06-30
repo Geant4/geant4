@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Molecule.cc 102637 2017-02-10 11:08:17Z gcosmo $
+// $Id: G4Molecule.cc 103042 2017-03-10 11:50:07Z gcosmo $
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file

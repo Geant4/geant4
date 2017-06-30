@@ -40,6 +40,9 @@
 
 #include <vector>
 
+static const G4int maxZ = 9;
+static const G4int maxA = 17;
+
 class G4FermiFragmentsPoolVI
 {
 public:
@@ -54,7 +57,9 @@ public:
 
   void Dump() const;
  
-  G4bool IsApplicable(G4int ZZ, G4int AA, G4double etot) const;
+  G4bool IsApplicable(G4int Z, G4int A, G4double etot) const;
+
+  G4bool IsPhysical(G4int Z, G4int A) const;
 
   inline const G4FermiDecayProbability* FermiDecayProbability() const;
 
@@ -72,17 +77,17 @@ private:
 
   G4bool IsInThePool(G4int Z, G4int A, G4double exc) const;
 
-  G4bool IsInPhysPairs(const G4FermiFragment* f1, const G4FermiFragment* f2,
-		       G4double exc) const;
+  G4bool IsInPhysPairs(const G4FermiFragment* f1, 
+		       const G4FermiFragment* f2) const;
 
-  G4bool IsInUnphysPairs(const G4FermiFragment* f1, const G4FermiFragment* f2,
-			 G4double exc) const;
+  G4bool IsInUnphysPairs(const G4FermiFragment* f1, 
+                         const G4FermiFragment* f2) const;
 
-  G4int maxZ;
-  G4int maxA;
   G4double tolerance;
   G4double elim;
-  G4double elim_unstable;
+
+  G4float timelim;
+  G4float elimf;
 
   G4FermiDecayProbability theDecay;
 
@@ -93,18 +98,18 @@ private:
   // lists of configurations sorted by A 
 
   // "stable" fragments
-  std::vector<const G4FermiFragment*> list_f[17]; 
+  std::vector<const G4FermiFragment*> list_f[maxA]; 
   // list of channels for "stable" fragments
-  std::vector<G4FermiChannels*> list_c[17];
+  std::vector<G4FermiChannels*>       list_c[maxA];
   // pairs of stable fragments 
-  std::vector<const G4FermiPair*>     list_p[17]; 
+  std::vector<const G4FermiPair*>     list_p[maxA]; 
 
   // "unstable" fragments
-  std::vector<const G4FermiFragment*> list_g[17]; 
+  std::vector<const G4FermiFragment*> list_g[maxA]; 
   // list of channels of stable and unstable fragments 
-  std::vector<G4FermiChannels*> list_d[17];
+  std::vector<G4FermiChannels*>       list_d[maxA];
   // pairs of stable and unstable fragments 
-  std::vector<const G4FermiPair*>     list_u[17]; 
+  std::vector<const G4FermiPair*>     list_u[maxA]; 
 
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FTFBinaryPionBuilder.cc 83699 2014-09-10 07:18:25Z gcosmo $
+// $Id: G4FTFBinaryPionBuilder.cc 103555 2017-04-18 09:04:37Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -81,9 +81,6 @@ G4FTFBinaryPionBuilder:: ~G4FTFBinaryPionBuilder()
   //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
-
-void G4FTFBinaryPionBuilder::
-Build(G4HadronElasticProcess * ) {}
 
 void G4FTFBinaryPionBuilder::
 Build(G4PionPlusInelasticProcess * aP)

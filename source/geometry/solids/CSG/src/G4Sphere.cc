@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc 100820 2016-11-02 15:18:48Z gcosmo $
+// $Id: G4Sphere.cc 104316 2017-05-24 13:04:23Z gcosmo $
 //
 // class G4Sphere
 //
@@ -32,9 +32,8 @@
 //
 // History:
 //
-// 26.10.16 E.Tcherniaev: added Extent(pmin,pmax), re-implemented
-//                      CalculateExtent() using G4BoundingEnvelope,
-//                      removed CreateRotatedVertices()
+// 26.10.16 E.Tcherniaev: re-implemented CalculateExtent() using
+//                      G4BoundingEnvelope, removed CreateRotatedVertices()
 // 05.04.12 M.Kelsey:   GetPointOnSurface() throw flat in cos(theta), sqrt(r)
 // 14.09.09 T.Nikitina: fix for phi section in DistanceToOut(p,v,..),as for
 //                      G4Tubs,G4Cons 
@@ -230,7 +229,7 @@ void G4Sphere::ComputeDimensions(       G4VPVParameterisation* p,
 //
 // Get bounding box
 
-void G4Sphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4Sphere::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double rmin = GetInnerRadius();
   G4double rmax = GetOuterRadius();
@@ -277,7 +276,8 @@ void G4Sphere::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4Sphere::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4Sphere::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     DumpInfo();
   }
 }
@@ -294,7 +294,7 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
   G4ThreeVector bmin, bmax;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Find extent
   G4BoundingEnvelope bbox(bmin,bmax);

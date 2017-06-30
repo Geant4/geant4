@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 8th, 2017 A. Howard - B03-V10-03-01
+- B03PhysicsList - removed obsolete unnececssary instantiation of 
+    de-excitation sub-models
+
+Mar 7th, 2017 A. Howard - B03-V10-03-00
+- Removed unnecessary clear sampling from B03
+
 October 14th, 2016 G.Folger   - B03-V10-02-01
 - remove direct use of theParticleIterator, use GetParticleTableIterator().
     fix required by clang39 on Linux and MAC

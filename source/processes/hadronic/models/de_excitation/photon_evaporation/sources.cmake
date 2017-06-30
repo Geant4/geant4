@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 98739 2016-08-09 12:56:55Z gcosmo $
+# $Id: sources.cmake 102988 2017-03-07 16:22:20Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -50,14 +50,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_deex_photon_evaporation
         G4GammaTransition.hh
         G4NeutronRadCapture.hh
         G4PhotonEvaporation.hh
-        G4PolarizedGammaTransition.hh
         G4PolarizationTransition.hh
         G4VGammaTransition.hh
     SOURCES
         G4GammaTransition.cc
         G4NeutronRadCapture.cc
         G4PhotonEvaporation.cc
-        G4PolarizedGammaTransition.cc
         G4PolarizationTransition.cc
     GRANULAR_DEPENDENCIES
         G4baryons

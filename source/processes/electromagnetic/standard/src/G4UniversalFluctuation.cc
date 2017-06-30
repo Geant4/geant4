@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc 98942 2016-08-22 14:46:10Z gcosmo $
+// $Id: G4UniversalFluctuation.cc 104682 2017-06-12 08:45:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -85,7 +85,7 @@ using namespace std;
 
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
-  particle(0),
+  particle(nullptr),
   minNumberInteractionsBohr(10.0),
   minLoss(10.*eV),
   nmaxCont(16.),
@@ -231,16 +231,21 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   for (G4int istep=0; istep < nstep; ++istep) {
     
     loss = a1 = a2 = a3 = 0.;
+    e1 = e1Fluct;
+    e2 = e2Fluct;
 
     if(tmax > ipotFluct) {
       G4double w2 = G4Log(2.*electron_mass_c2*beta2*gam2)-beta2;
 
       if(w2 > ipotLogFluct)  {
-        G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
-        a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
         if(w2 > e2LogFluct) {
+	  G4double C = meanLoss*(1.-rate)/(w2-ipotLogFluct);
+	  a1 = C*f1Fluct*(w2-e1LogFluct)/e1Fluct;
           a2 = C*f2Fluct*(w2-e2LogFluct)/e2Fluct;
-        }
+        } else {
+          a1 = meanLoss*(1.-rate)/e1;
+	}
+
         if(a1 < nmaxCont) { 
           //small energy loss
           G4double sa1 = sqrt(a1);
@@ -249,13 +254,11 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
               e1 = esmall;
               a1 = meanLoss*(1.-rate)/e1;
               a2 = 0.;
-              e2 = e2Fluct;
             } 
           else
             {
               a1 = sa1 ;    
               e1 = sa1*e1Fluct;
-              e2 = e2Fluct;
             }
 
         } else {
@@ -263,7 +266,6 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
           //correction to get better fwhm value
           a1 /= fw;
           e1 = fw*e1Fluct;
-          e2 = e2Fluct;
         }
       }   
     }
@@ -304,9 +306,9 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
         }
 
       G4double w2 = alfa*e0;
-      G4double w  = (tmax-w2)/tmax;
-      if(w > 0.0) {
-        const G4int nb = G4Poisson(p3);
+      if(tmax > w2) {
+	G4double w  = (tmax-w2)/tmax;
+        G4int nb = G4Poisson(p3);
         if(nb > 0) {
           if(nb > sizearray) {
             sizearray = nb;

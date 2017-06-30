@@ -1,4 +1,4 @@
-// $Id: Doxymodules_exoticphysics.h 86514 2014-11-13 09:10:24Z gcosmo $
+// $Id: Doxymodules_exoticphysics.h 104750 2017-06-15 08:47:26Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_exoticphysics.h
@@ -11,61 +11,26 @@
  */
 
 /** @defgroup extended_exoticphysics_channeling channeling
- *  Exotic physics example channeling
+ *  Exotic physics example channeling has its
+ *  <a href="../html_channeling/html/index.html">standalone documentation </a>
  *  @ingroup extended_exoticphysics
  *  @{
  */
 
-  class ExExChAnalysis {};
-  class ExExChAntiBarionBuilder {};
-  class ExExChDetectorConstruction {};
-  class ExExChDetectorConstructionMessenger {};
-  class ExExChEventAction {};
-  class ExExChHadronElasticPhysics {};
-  class ExExChHadronPhysicsQGSP_BIC {};
-  class ExExChHyperonFTFPBuilder {};
-  class ExExChIonPhysics {};
-  class ExExChParticleUserInfo {};
-  class ExExChPhysicsList {};
-  class ExExChPhysicsListMessenger {};
-  class ExExChPhysListEmStandardSS {};
-  class ExExChPiKBuilder {};
-  class ExExChPrimaryGeneratorAction {};
-  class ExExChProcessChanneling {};
-  class ExExChProtonBuilder {};
-  class ExExChRunAction {};
-  class ExExChSensitiveDetector {};
-  class ExExChSensitiveDetectorHit {};
-  class ExExChStackingAction {};
-  class ExExChStackingActionMessenger {};
-  class ExExChTrackingAction {};
-  class ExExChUserActionInitialization {};
-  class XCrystalCharacteristicArray {};
-  class XCrystalIntegratedDensityHub {};
-  class XCrystalIntegratedDensityPlanar {};
-  class XCrystalPlanarMoliereElectricField {};
-  class XCrystalPlanarMoliereElectronDensity {};
-  class XCrystalPlanarMolierePotential {};
-  class XCrystalPlanarMoliereTempPotential {};
-  class XCrystalPlanarNucleiDensity {};
-  class XLatticeManager3 {};
-  class XLogicalAtomicLatticeDiamond {};
-  class XLogicalAtomicLattice {};
-  class XLogicalAtomicLatticeSingleAtom {};
-  class XLogicalBase {};
-  class XLogicalLattice {};
-  class XPhysicalLattice {};
-  class XUnitCell {};
-  class XVCrystalCharacteristic {};
-  class XVCrystalIntegratedDensity {};
-  class XVCrystalPlanarAnalytical {};
-  class XWrapperContinuousDiscreteProcess {};
-  class XWrapperDiscreteProcess {};
-
 /** @} */
+
 /** @defgroup extended_exoticphysics_monopole monopole
  *  Exoticphysics monopole example has its
  *  <a href="../html_monopole/html/index.html">standalone documentation </a>
+ *  @ingroup extended_exoticphysics
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_exoticphysics_dmparticle dmparticle
+ *  Exoticphysics dmparticle example has its
+ *  <a href="../html_dmparticle/html/index.html">standalone documentation </a>
  *  @ingroup extended_exoticphysics
  *  @{
  */

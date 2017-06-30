@@ -1,4 +1,4 @@
-$Id: History 98774 2016-08-09 14:28:06Z gcosmo $
+$Id: History 103006 2017-03-08 08:12:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 7th, 2017 A. Howard - B01-V10-03-00
+- Removed unnecessary clear sampling from B01
 
 Jul 20th, 2016 I. Hrivnacova
 - Coding guidelines (redundant empty lines)

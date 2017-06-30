@@ -1,4 +1,4 @@
-$Id: History 102548 2017-02-08 14:33:25Z gcosmo $
+$Id: History 104457 2017-05-31 15:52:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-14 December 16: V.Ivant (emutils-V10-02-39)
+31 May 17: V.Ivant (emutils-V10-03-10)
+- G4VEmModel - added triplet model pointer and Get/Set methods
+
+26 May 17: V.Ivant (emutils-V10-03-09)
+- G4EmSaturation - fixed typo
+
+25 May 17: V.Ivant (emutils-V10-03-08)
+- G4VEmProcess - added DNA ionisation process for hydrogen and helium
+    to the list of processes, which have auger and fluo flags
+
+24 May 17: V.Ivant (emutils-V10-03-07)
+- G4VEnergyLossProcess, G4LossTableManager - minor cleanup of inline
+    methods
+
+03 May 17: V.Ivant (emutils-V10-03-06)
+- G4VEmProcess - added DNA ionisation process to the list of 
+    discrete processes, which have auger and fluo flags for 
+    secondary particles
+- G4VEmModel - added extra protected class member for nuclear 
+    stopping
+- G4EmCorrections - removed computation of nuclear stopping power
+- G4EmCalculator - for computation of the nuclear stopping power
+    use concrete model (applied in run time) instead of 
+    G4EmCorrections emulation; to get cross section per volume 
+    for discrete processes use interface of the process, addressing
+    http://hypernews.slac.stanford.edu/HyperNews/geant4/get/hadroprocess/1595/1.html
+
+03 April 17: V.Ivant (emutils-V10-03-05)
+- G4EmParameters - G4EmSaturation may be created at any
+    moment (G4Mutex is used)
+
+24 March 17: V.Ivant (emutils-V10-03-02)
+- G4EmParametersMessenger, G4EmParameters - added parameter 
+    "ScreeningFactor" Get/Set methods and UI command
+
+14 December 16: V.Ivant (emutils-V10-03-00)
 - G4EmParametersMessenger - fixed typo (#1929)
+- G4EmParameters - added method with more correct name AddPhysics() 
+    in order to replace AddMsc in future (no change in functionality)
 
 19 November 16: V.Ivant (emutils-V10-02-38)
 - G4EmParametersMessenger - fixed typo 

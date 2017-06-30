@@ -27,7 +27,7 @@
 // $Id: $
 //
 //
-// class G4GeomTools Implementation
+// class G4GeomTools implementation
 //
 // Author: evgueni.tcherniaev@cern.ch
 //
@@ -81,11 +81,12 @@ G4double G4GeomTools::QuadArea(const G4TwoVector& A,
 
 G4double G4GeomTools::PolygonArea(const G4TwoVectorList& p)
 {
-  G4double area = 0.0;
   G4int n = p.size();
-  for(G4int i=0,k=n-1; i<n; k=i,++i)
+  if (n < 3) return 0; // degerate polygon
+  G4double area = p[n-1].x()*p[0].y() - p[0].x()*p[n-1].y();
+  for(G4int i=1; i<n; ++i)
   {
-    area += p[k].x()*p[i].y() - p[i].x()*p[k].y();
+    area += p[i-1].x()*p[i].y() - p[i].x()*p[i-1].y();
   }
   return area*0.5;
 }
@@ -192,7 +193,7 @@ G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
 // Triangulation of a simple polygon by "ear clipping"
 
 G4bool G4GeomTools::TriangulatePolygon(const G4TwoVectorList& polygon,
-				             std::vector<G4int>& result)
+                                             std::vector<G4int>& result)
 {
   result.resize(0);
 
@@ -283,9 +284,6 @@ G4bool G4GeomTools::CheckSnip(const G4TwoVectorList& contour,
   return true;
 }
 
-
-
-
 ///////////////////////////////////////////////////////////////////////
 //
 // Remove collinear and coincident points from 2D polygon
@@ -346,7 +344,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
       G4double area = std::abs(e1.x()*e2.y()-e1.y()*e2.x())*0.5;
       if (area/std::sqrt(lmax) <= std::abs(tolerance))
       {
-	polygon[icur].setX(removeIt); nout++;
+        polygon[icur].setX(removeIt); nout++;
       }
     }
   }
@@ -373,7 +371,7 @@ void G4GeomTools::RemoveRedundantVertices(G4TwoVectorList& polygon,
 
 ///////////////////////////////////////////////////////////////////////
 //
-// Find bounding box of a disk sector
+// Find bounding rectangle of a disk sector
 
 G4bool G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
                                G4double startPhi, G4double delPhi,
@@ -405,7 +403,7 @@ G4bool G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
 
 ///////////////////////////////////////////////////////////////////////
 //
-// Find bounding box of a disk sector, fast version.
+// Find bounding rectangle of a disk sector, fast version.
 // No check of parameters !!!
 
 void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
@@ -515,11 +513,115 @@ void G4GeomTools::DiskExtent(G4double rmin, G4double rmax,
 
 ///////////////////////////////////////////////////////////////////////
 //
+// Compute the circumference (perimeter) of an ellipse
+
+G4double G4GeomTools::EllipsePerimeter(G4double pA, G4double pB)
+{
+  G4double x = std::abs(pA);
+  G4double y = std::abs(pB);
+  G4double a = std::max(x,y);
+  G4double b = std::min(x,y);
+  G4double e = std::sqrt((1. - b/a)*(1. + b/a));
+  return 4. * a * comp_ellint_2(e);
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Compute the lateral surface area of an elliptic cone
+
+G4double G4GeomTools::EllipticConeLateralArea(G4double pA,
+                                              G4double pB,
+                                              G4double pH)
+{
+  G4double x = std::abs(pA);
+  G4double y = std::abs(pB);
+  G4double h = std::abs(pH);
+  G4double a = std::max(x,y);
+  G4double b = std::min(x,y);
+  G4double e = std::sqrt((1. - b/a)*(1. + b/a)) / std::hypot(1.,b/h);
+  return 2. * a * std::hypot(b,h) * comp_ellint_2(e);
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Compute Elliptical Integral of the Second Kind
+//
+// The algorithm is based upon Carlson B.C., "Computation of real
+// or complex elliptic integrals", Numerical Algorithms,
+// Volume 10, Issue 1, 1995 (see equations 2.36 - 2.39)
+//
+// The code was adopted from C code at:
+// http://paulbourke.net/geometry/ellipsecirc/
+
+G4double G4GeomTools::comp_ellint_2(G4double e)
+{
+  const G4double eps = 1. / 134217728.; // 1 / 2^27
+
+  G4double a = 1.;
+  G4double b = std::sqrt((1. - e)*(1. + e));
+  if (b == 1.) return CLHEP::halfpi;
+  if (b == 0.) return 1.;
+
+  G4double x = 1.;
+  G4double y = b;
+  G4double S = 0.;
+  G4double M = 1.;
+  while (x - y > eps*y) {
+    G4double tmp = (x + y) * 0.5;
+    y = std::sqrt(x*y);
+    x = tmp;
+    M += M;
+    S += M * (x - y)*(x - y);
+  }
+  return 0.5 * CLHEP::halfpi * ((a + b)*(a + b) - S) / (x + y);
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Calcuate area of a triangle in 3D
+
+G4ThreeVector G4GeomTools::TriangleAreaNormal(const G4ThreeVector& A,
+                                              const G4ThreeVector& B,
+                                              const G4ThreeVector& C)
+{
+  return ((B-A).cross(C-A))*0.5;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Calcuate area of a quadrilateral in 3D
+
+G4ThreeVector G4GeomTools::QuadAreaNormal(const G4ThreeVector& A,
+                                          const G4ThreeVector& B,
+                                          const G4ThreeVector& C,
+                                          const G4ThreeVector& D)
+{
+  return ((C-A).cross(D-B))*0.5;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Calculate area of a polygon in 3D
+
+G4ThreeVector G4GeomTools::PolygonAreaNormal(const G4ThreeVectorList& p)
+{
+  G4int n = p.size();
+  if (n < 3) return G4ThreeVector(0,0,0); // degerate polygon
+  G4ThreeVector normal = p[n-1].cross(p[0]);
+  for(G4int i=1; i<n; ++i)
+  {
+    normal += p[i-1].cross(p[i]);
+  }
+  return normal*0.5;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
 // Calculate distance between point P and line segment AB in 3D
 
-G4double G4GeomTools::DistancePointSegment(G4ThreeVector P,
-                                           G4ThreeVector A,
-                                           G4ThreeVector B)
+G4double G4GeomTools::DistancePointSegment(const G4ThreeVector& P,
+                                           const G4ThreeVector& A,
+                                           const G4ThreeVector& B)
 {
   G4ThreeVector AP = P - A;
   G4ThreeVector AB = B - A;
@@ -533,6 +635,137 @@ G4double G4GeomTools::DistancePointSegment(G4ThreeVector P,
   return ((u/len2)*AB - AP).mag();   // distance to line
 }
 
+///////////////////////////////////////////////////////////////////////
+//
+// Find closest point on line segment in 3D
+
+G4ThreeVector
+G4GeomTools::ClosestPointOnSegment(const G4ThreeVector& P,
+                                   const G4ThreeVector& A,
+                                   const G4ThreeVector& B)
+{
+  G4ThreeVector AP = P - A;
+  G4ThreeVector AB = B - A;
+
+  G4double u = AP.dot(AB);
+  if (u <= 0) return A;      // closest point is A
+
+  G4double len2 = AB.mag2();
+  if (u >= len2) return B;   // closest point is B
+
+  G4double t = u/len2;
+  return A + t*AB;           // closest point on segment
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Find closest point on triangle in 3D.
+//
+// The implementation is based on the algorithm published in
+// "Geometric Tools for Computer Graphics", Philip J Scheider and
+// David H Eberly, Elsevier Science (USA), 2003.
+// 
+// The algorithm is also available at:
+// http://www.geometrictools.com/Documentation/DistancePoint3Triangle3.pdf
+
+G4ThreeVector
+G4GeomTools::ClosestPointOnTriangle(const G4ThreeVector& P,
+                                    const G4ThreeVector& A,
+                                    const G4ThreeVector& B,
+                                    const G4ThreeVector& C)
+{
+  G4ThreeVector diff  = A - P;
+  G4ThreeVector edge0 = B - A;
+  G4ThreeVector edge1 = C - A;
+
+  G4double a = edge0.mag2();
+  G4double b = edge0.dot(edge1);
+  G4double c = edge1.mag2();
+  G4double d = diff.dot(edge0);
+  G4double e = diff.dot(edge1);
+
+  G4double det = a*c - b*b;
+  G4double t0  = b*e - c*d;
+  G4double t1  = b*d - a*e;
+
+  /*
+             ^ t1
+         \ 2 |
+          \  |
+           \ |     regions
+            \|
+             C
+             |\
+         3   | \   1
+             |  \
+             | 0 \
+             |    \
+        ---- A --- B ----> t0
+             |      \
+         4   |   5   \   6
+             |        \
+  */
+
+  G4int region = -1;
+  if (t0+t1 <= det)
+    region = (t0 < 0) ? ((t1 < 0) ? 4 : 3) : ((t1 < 0) ? 5 : 0);
+  else
+    region = (t0 < 0) ? 2 : ((t1 < 0) ? 6 : 1);
+
+  switch (region)
+  {
+  case 0:  // interior of triangle
+    {
+      G4double invDet = 1./det;
+      return A + (t0*invDet)*edge0 + (t1*invDet)*edge1;
+    }
+  case 1:  // edge BC
+    {
+      G4double numer = c + e - b - d; 
+      if (numer <= 0) return C;
+      G4double denom = a - 2*b + c;
+      return (numer >= denom) ? B : C + (numer/denom)*(edge0-edge1);
+    }
+  case 2:  // edge AC or BC
+    {
+      G4double tmp0 = b + d;
+      G4double tmp1 = c + e;
+      if (tmp1 > tmp0)
+      {
+        G4double numer = tmp1 - tmp0;
+        G4double denom = a - 2*b + c;
+        return (numer >= denom) ? B : C + (numer/denom)*(edge0-edge1);
+      }
+      // same:  (e >= 0) ? A : ((-e >= c) ? C : A + (-e/c)*edge1)
+      return (tmp1 <= 0) ? C : (( e >= 0) ? A : A + (-e/c)*edge1);
+    }
+  case 3:  // edge AC
+    return (e >= 0) ? A : ((-e >= c) ? C : A + (-e/c)*edge1);
+
+  case 4:  // edge AB or AC
+    if (d < 0)      return (-d >= a) ? B : A + (-d/a)*edge0;
+    return (e >= 0) ? A : ((-e >= c) ? C : A + (-e/c)*edge1);
+
+  case 5:  // edge AB
+    return (d >= 0) ? A : ((-d >= a) ? B : A + (-d/a)*edge0);
+
+  case 6:  // edge AB or BC
+    {
+      G4double tmp0 = b + e;
+      G4double tmp1 = a + d;
+      if (tmp1 > tmp0)
+      {
+        G4double numer = tmp1 - tmp0;
+        G4double denom = a - 2*b + c;
+        return (numer >= denom) ? C : B + (numer/denom)*(edge1-edge0);
+      }
+      // same:  (d >= 0) ? A : ((-d >= a) ? B : A + (-d/a)*edge0)
+      return (tmp1 <= 0) ? B : (( d >= 0) ? A : A + (-d/a)*edge0);
+    }
+  default: // impossible case 
+    return G4ThreeVector(kInfinity,kInfinity,kInfinity);
+  }
+}
 
 ///////////////////////////////////////////////////////////////////////
 //

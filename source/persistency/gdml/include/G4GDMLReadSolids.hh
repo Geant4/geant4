@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadSolids.hh 96133 2016-03-16 22:21:17Z gcosmo $
+// $Id: G4GDMLReadSolids.hh 103265 2017-03-23 11:14:00Z gcosmo $
 //
 //
 // class G4GDMLReadSolids
@@ -49,6 +49,7 @@ class G4VSolid;
 class G4QuadrangularFacet;
 class G4TriangularFacet;
 class G4SurfaceProperty;
+class G4OpticalSurface;
 
 class G4GDMLReadSolids : public G4GDMLReadMaterials
 {
@@ -107,6 +108,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    zplaneType ZplaneRead(const xercesc::DOMElement* const);
    rzPointType RZPointRead(const xercesc::DOMElement* const);
    void OpticalSurfaceRead(const xercesc::DOMElement* const);
+   void PropertyRead(const xercesc::DOMElement* const,G4OpticalSurface*);
   
 };
 

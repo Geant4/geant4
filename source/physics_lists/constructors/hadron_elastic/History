@@ -1,4 +1,4 @@
-$Id: History 101061 2016-11-04 13:07:09Z gcosmo $
+$Id: History 104019 2017-05-08 07:34:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,10 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-May-2017, V.Ivanchenko     (phys-ctor-helastic-V10-03-00)
+- G4ThermalNeutrons - new class for addition of thermal neutron
+    scattering below 4 eV (backported from CMS simulation)
 
 04-Nov-2016, Alberto Ribon    (phys-ctor-helastic-V10-02-04)
 - Written first draft of the README

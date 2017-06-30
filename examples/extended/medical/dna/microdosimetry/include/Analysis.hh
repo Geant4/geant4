@@ -32,6 +32,7 @@
 // $ID$
 /// \file Analysis.hh
 /// \brief Tell G4analysis which output file to use
+
 #ifndef Analysis_h
 #define Analysis_h 1
 

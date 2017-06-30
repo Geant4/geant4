@@ -1,4 +1,4 @@
-$Id: History 101306 2016-11-14 11:22:45Z gcosmo $
+$Id: History 103900 2017-05-03 08:29:10Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+28 April 2017 Alberto Ribon (hadr-lepnuc-V10-03-01)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : fixed a few warnings.
+
+28 April 2017 Alberto Ribon (hadr-lepnuc-V10-03-00)
+---------------------------------------------------
+- G4NeutrinoElectronCcModel : added new class by Vladimir Grichine
+  for the final-state model of neutrino-electron inelastic interaction
+  (charge current).
 
 11 November 2016 Vladimir Ivanchenko (hadr-lepnuc-V10-02-03)
 ------------------------------------------------------

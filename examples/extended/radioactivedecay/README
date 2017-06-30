@@ -16,3 +16,9 @@ rdecay02
 
  This example illustrates more advanced features of the package:
  selected decay channels, time window, bias and variance reduction technique.
+
+Activation
+----------
+
+ Compute and plot time evolution of each nuclide in an hadronic cascade.
+ Compute and plot activity of emerging particles.

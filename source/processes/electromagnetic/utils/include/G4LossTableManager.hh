@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 99151 2016-09-07 08:03:17Z gcosmo $
+// $Id: G4LossTableManager.hh 104349 2017-05-26 07:18:59Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -320,7 +320,7 @@ G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
     if ((pos = loss_map.find(aParticle)) != loss_map.end()) {
       currentLoss = (*pos).second;
     } else {
-      currentLoss = 0;
+      currentLoss = nullptr;
       if ((pos = loss_map.find(theGenericIon)) != loss_map.end()) {
         currentLoss = (*pos).second;
       }
@@ -337,9 +337,7 @@ G4double G4LossTableManager::GetDEDX(const G4ParticleDefinition *aParticle,
                                      const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = 0.0;
-  if(currentLoss) { x = currentLoss->GetDEDX(kineticEnergy, couple); }
-  return x;
+  return currentLoss ? currentLoss->GetDEDX(kineticEnergy, couple) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -350,9 +348,7 @@ G4double G4LossTableManager::GetSubDEDX(const G4ParticleDefinition *aParticle,
                                         const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = 0.0;
-  if(currentLoss) { x = currentLoss->GetDEDXForSubsec(kineticEnergy, couple); }
-  return x;
+  return currentLoss ? currentLoss->GetDEDXForSubsec(kineticEnergy, couple) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -363,9 +359,7 @@ G4double G4LossTableManager::GetCSDARange(const G4ParticleDefinition *aParticle,
                                           const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = DBL_MAX;
-  if(currentLoss) { x = currentLoss->GetCSDARange(kineticEnergy, couple); }
-  return x;
+  return currentLoss ? currentLoss->GetCSDARange(kineticEnergy, couple) : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -377,9 +371,7 @@ G4double G4LossTableManager::GetRangeFromRestricteDEDX(
                              const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = DBL_MAX;
-  if(currentLoss) { x = currentLoss->GetRangeForLoss(kineticEnergy, couple); }
-  return x;
+  return currentLoss ? currentLoss->GetRangeForLoss(kineticEnergy, couple) : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -390,11 +382,7 @@ G4double G4LossTableManager::GetRange(const G4ParticleDefinition *aParticle,
                                       const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = DBL_MAX;
-  if(currentLoss) {
-    x = currentLoss->GetRange(kineticEnergy, couple); 
-  }
-  return x;
+  return currentLoss ? currentLoss->GetRange(kineticEnergy, couple) : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -405,9 +393,7 @@ G4double G4LossTableManager::GetEnergy(const G4ParticleDefinition *aParticle,
                                        const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = 0;
-  if(currentLoss) { x = currentLoss->GetKineticEnergy(range, couple); }
-  return x;
+  return currentLoss ? currentLoss->GetKineticEnergy(range, couple) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -420,9 +406,7 @@ G4double G4LossTableManager::GetDEDXDispersion(
 {
   const G4ParticleDefinition* aParticle = dp->GetParticleDefinition();
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
-  G4double x = 0.0;
-  if(currentLoss) { currentLoss->GetDEDXDispersion(couple, dp, length); }
-  return x;
+  return currentLoss ? currentLoss->GetDEDXDispersion(couple, dp, length) : 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

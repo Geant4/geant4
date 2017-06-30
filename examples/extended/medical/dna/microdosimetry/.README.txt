@@ -46,10 +46,10 @@ The code can be compiled with cmake.
 It works in MT mode.
 
 \section microdosimetry_s4 HOW TO RUN THE EXAMPLE                                         
-In interactive mode, run:
+Normal mode, run:
 
 \verbatim
-./microdosimetry -mt 2 -root myRootFile.mac
+./microdosimetry -mt 2 -out microdosimetry
 \endverbatim
 
 (or more generally
@@ -58,9 +58,13 @@ In interactive mode, run:
 \endverbatim
 )
 
-The macro microdosimetry.in is executed by default.
+The macro microdosimetry.in is executed by default; to select another one:
 
-To get visualization:
+\verbatim
+./microdosimetry -mac myMacro.mac
+\endverbatim
+
+To get visualization and interactivity:
 
 \verbatim
 ./microdosimetry -gui
@@ -71,7 +75,6 @@ or you may use your own visualization driver, for instance:
 \verbatim
 ./microdosimetry -vis "DAWNFILE"
 \endverbatim
-The geometry will be printed into a file.
 
 \section microdosimetry_s5 PHYSICS
 
@@ -106,6 +109,7 @@ file plot.C; to do so :
 The naming scheme on the displayed ROOT plots is as follows (see SteppingAction.cc):
 
 - particles: \n
+gamma    : 0 \n 
 e-       : 1 \n 
 proton   : 2 \n
 hydrogen : 3 \n
@@ -114,32 +118,39 @@ alpha+   : 5 \n
 helium   : 6 \n
 \n
 - processes: \n
-msc				10 \n
+
+e--G4DNAElectronSolvation       10 \n
 e-_G4DNAElastic			11 \n
 e-_G4DNAExcitation		12 \n
 e-_G4DNAIonisation		13 \n
 e-_G4DNAAttachment		14 \n
 e-_G4DNAVibExcitation		15 \n
-eCapture			16 \n \n
-proton_G4DNAExcitation		17 \n
-proton_G4DNAIonisation		18 \n
-proton_G4DNAChargeDecrease	19 \n \n
-hydrogen_G4DNAExcitation	20 \n
-hydrogen_G4DNAIonisation	21 \n
-hydrogen_G4DNAChargeIncrease	22 \n \n
-alpha_G4DNAExcitation		23 \n
-alpha_G4DNAIonisation		24 \n
-alpha_G4DNAChargeDecrease	25 \n \n
-alpha+_G4DNAExcitation		26 \n
-alpha+_G4DNAIonisation		27 \n
-alpha+_G4DNAChargeDecrease	28 \n
-alpha+_G4DNAChargeIncrease	29 \n \n
-helium_G4DNAExcitation		30 \n
-helium_G4DNAIonisation		31 \n
-helium_G4DNAChargeIncrease	32 \n \n
-hIoni				33 \n
-eIoni				34 \n
-\n
+eCapture			16 \n
+msc				17 \n
+eIoni                           130 \n \n
+proton_G4DNAElastic		21 \n
+proton_G4DNAExcitation		22 \n
+proton_G4DNAIonisation		23 \n
+proton_G4DNAChargeDecrease	24 \n
+hIoni				230 \n \n
+hydrogen_G4DNAElastic		31 \n
+hydrogen_G4DNAExcitation	32 \n
+hydrogen_G4DNAIonisation	33 \n
+hydrogen_G4DNAChargeIncrease	35 \n \n
+alpha_G4DNAElastic		41 \n
+alpha_G4DNAExcitation		42 \n
+alpha_G4DNAIonisation		43 \n
+alpha_G4DNAChargeDecrease	44 \n \n
+alpha+_G4DNAElastic		51 \n
+alpha+_G4DNAExcitation		52 \n
+alpha+_G4DNAIonisation		53 \n
+alpha+_G4DNAChargeDecrease	54 \n
+alpha+_G4DNAChargeIncrease	55 \n \n
+helium_G4DNAElastic             61 \n
+helium_G4DNAExcitation		62 \n
+helium_G4DNAIonisation		63 \n
+helium_G4DNAChargeIncrease	65 \n \n
+GenericIon_G4DNAIonisation      73 \n \n
 
 ---------------------------------------------------------------------------
 

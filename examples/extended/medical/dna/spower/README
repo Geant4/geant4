@@ -1,0 +1,85 @@
+     =========================================================
+ 		  Geant4 - spower example
+     =========================================================
+
+                                README file
+                          ----------------------
+
+                           CORRESPONDING AUTHOR 
+
+S. Incerti et al. (a, *)
+a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan 
+(CENBG), IN2P3 / CNRS / Bordeaux University, 33175 Gradignan, France
+* e-mail:incerti@cenbg.in2p3.fr
+
+---->0. INTRODUCTION.                                                    
+                                                                       
+The spower example shows how to calculate stopping power of particles 
+in liquid water using the Geant4-DNA physics processes and models. 
+
+This example is provided by the Geant4-DNA collaboration.
+
+These processes and models are further described at:
+http://geant4-dna.org
+
+Any report or published results obtained using the Geant4-DNA software 
+shall cite the following Geant4-DNA collaboration publications:
+Phys. Med. 31 (2015) 861-874
+Med. Phys. 37 (2010) 4692-4708
+
+and for this example:
+Nucl. Instrum. Meth. B 397 (2017) 45-50
+
+---->1. GEOMETRY SET-UP.
+ 
+The geometry is a 1 m radius sphere of liquid water (G4_WATER
+material). Particles are shot randomly from the sphere centre.
+
+Radius of the sphere, physics constructor, primary particle and 
+energy can be controlled by the spower.in macro file.
+
+The PrimaryGeneratorAction class is adapted (G4 state dependent) 
+in order to enable generic physics list usage 
+(empty modular physics list).
+
+---->2. SET-UP 
+                                                                        
+Make sure G4LEDATA points to the low energy electromagnetic data files.
+
+The code can be compiled with cmake.
+
+It works in MT mode.
+
+---->3. HOW TO RUN THE EXAMPLE                                         
+
+In interactive mode, run:
+
+./spower spower.in
+
+The spower.in macro allows a full control of the simulation.
+
+The computation of stopping power is performed in the 
+SteppingAction::UserSteppingAction method.
+
+---->4. PHYSICS
+
+Specific physics constructors, called G4EmDNAPhysics_stationary*
+and adapted from G4EmDNAPhysics* are available to set all inelastic
+models in a stationary mode for the computation of the stopping
+power.
+
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
+
+The accuracy of results may depend on incident statistics as well as
+on number of steps specified in the SteppingAction::UserSteppingAction 
+method.
+
+The output results consist in a text file (spower.txt), containing :
+- energy of incident particles (in eV)
+- stopping power (in keV/um)
+- rms (i.e. standard deviation) on stopping power (in keV/um)
+
+---------------------------------------------------------------------------
+
+Should you have any enquiry, please do not hesitate to contact: 
+incerti@cenbg.in2p3.fr

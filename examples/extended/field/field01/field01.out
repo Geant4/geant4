@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -14,7 +14,7 @@
 ***** Table : Nb of materials = 11 *****
 
  Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.319 cm 
-                       Imean:  75.967 eV 
+                       Imean:  75.967 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
          --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
@@ -34,7 +34,7 @@
 
 
  Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.282 cm 
-                       Imean:  56.518 eV 
+                       Imean:  56.518 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =     1   A =  1.010 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance: 99.989 %
@@ -201,9 +201,12 @@
  Z position of the (middle of the) absorber 21990  mm.
 
  F01FieldSetup: magnetic field set to Uniform( (0.0033,0,0) ) 
- F01FieldSetup::CreateStepperAndChordFinder() called  to reset Stepper.
+ F01FieldSetup::CreateStepperAndChordFinder() called. 
+                 1. Creating Stepper.
 G4ClassicalRK4 (default) is chosen
 The minimal step is equal to 1 mm
+                 2. Creating ChordFinder.
+                 3. Updating Field Manager.
 
  FTFP_BERT : new threshold between BERT and FTFP is over the interval 
  for pions :   3 to 12 GeV
@@ -261,14 +264,17 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
- F01FieldSetup::CreateStepperAndChordFinder() called  to reset Stepper.
+ F01FieldSetup::CreateStepperAndChordFinder() called. 
+                 1. Creating Stepper.
 G4ClassicalRK4 (default) is chosen
 The minimal step is equal to 0.1 mm
+                 2. Creating ChordFinder.
+                 3. Updating Field Manager.
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma    SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -281,6 +287,12 @@ conv:   for  gamma    SubType= 14  BuildTable= 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -946,10 +958,11 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
+Electron internal conversion ID                     2
 =======================================================================
 Number of de-excitation channels                    8
 
@@ -1102,9 +1115,12 @@ Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
- F01FieldSetup::CreateStepperAndChordFinder() called  to reset Stepper.
+ F01FieldSetup::CreateStepperAndChordFinder() called. 
+                 1. Creating Stepper.
 G4ClassicalRK4 (default) is chosen
 The minimal step is equal to 0.1 mm
+                 2. Creating ChordFinder.
+                 3. Updating Field Manager.
 Setting Field strength to 1000 Gauss. Magnetic field vector is (0,0,1000) G 
 
 ========= Table of registered couples ==============================

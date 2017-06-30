@@ -6,43 +6,55 @@
 #Check if we are in a MT specific build
 set(_MTsuffix "")
 if(GEANT4_BUILD_MULTITHREADED)
-#                 use MATCHES to match also AppleClang
-   if   ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
-	  set(_MTsuffix "-clang-MT")
-	elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-	  set(_MTsuffix "-MT")
-	elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")   
-	  set(_MTsuffix "-clang-MT")
-	endif()
+  # use MATCHES to match also AppleClang
+  if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(_MTsuffix "-clang-MT")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(_MTsuffix "-MT")
+  elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Intel")
+    set(_MTsuffix "-clang-MT")
+  endif()
 endif()
 
+set(_compareScript ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/ComparePhonon.cmake)
 set(_causticRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caustic.out)
 set(_timingRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out)
 
 #Check if specific OS references are available, if not use default
 if(EXISTS ${_causticRef}${_MTsuffix})
-   set(_causticRef ${_causticRef}${_MTsuffix})
+  set(_causticRef ${_causticRef}${_MTsuffix})
 else()
-   message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
-	   " caustic.out${_MTsuffix} references, using default caustic.out")
+  message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+    " caustic.out${_MTsuffix} references, using default caustic.out")
 endif()
 
 if(EXISTS ${_timingRef}${_MTsuffix})
-   set(_timingRef ${_timingRef}${_MTsuffix})
+  set(_timingRef ${_timingRef}${_MTsuffix})
 else()
-   message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
-	   " timing.out${_MTsuffix} references, using default timing.out")
+  message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+    " timing.out${_MTsuffix} references, using default timing.out")
 endif()
 
-
+# Split tests into build-run, then comparison
 GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
-                        ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
-                POSTCMD ${CMAKE_COMMAND} -E compare_files timing.ssv ${_timingRef}
-                POSTCMD ${CMAKE_COMMAND} -E compare_files caustic.ssv ${_causticRef}
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
-                BUILD XGeBox PROJECT dmc
-                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                            G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
-		)
+  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon/XGeBox
+  ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/run.in
+  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon
+  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  BUILD XGeBox PROJECT dmc
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+  G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
+  )
+
+GEANT4_ADD_TEST(example-ext-exoticphysics-phonons-timecomp
+  DEPENDS example-ext-exoticphysics-phonons
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  COMMAND ${CMAKE_COMMAND} -Dtest_file=timing.ssv -Dreference_file=${_timingRef} -P ${_compareScript}
+  )
+
+GEANT4_ADD_TEST(example-ext-exoticphysics-phonons-causticcomp
+  DEPENDS example-ext-exoticphysics-phonons
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
+  COMMAND ${CMAKE_COMMAND} -Dtest_file=caustic.ssv -Dreference_file=${_causticRef} -P ${_compareScript}
+  )
+

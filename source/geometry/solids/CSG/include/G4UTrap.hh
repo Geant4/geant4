@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UTrap to make use of UTrap from USolids module.
+//   Wrapper class for G4Trap to make use of VecGeom Trapezoid.
 
 // History:
 // 13.09.13 G.Cosmo, CERN/PH
@@ -42,16 +42,19 @@
 #ifndef G4UTrap_HH
 #define G4UTrap_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTrap.hh"
+#include <volumes/UnplacedTrapezoid.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTrap : public G4USolid 
+class G4UTrap : public G4UAdapter<vecgeom::UnplacedTrapezoid> 
 {
+  using Shape_t = vecgeom::UnplacedTrapezoid;
+  using Base_t = G4UAdapter<vecgeom::UnplacedTrapezoid>;
+
   public:  // with description
 
     G4UTrap( const G4String& pName,
@@ -103,17 +106,18 @@ class G4UTrap : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UTrap* GetShape() const;
+    using Base_t::GetTanAlpha1;
+    using Base_t::GetTanAlpha2;
 
     G4double GetZHalfLength()  const;
     G4double GetYHalfLength1() const;
     G4double GetXHalfLength1() const;
     G4double GetXHalfLength2() const;
-    G4double GetTanAlpha1()    const;
     G4double GetYHalfLength2() const;
     G4double GetXHalfLength3() const;
     G4double GetXHalfLength4() const;
-    G4double GetTanAlpha2()    const;
+    G4double GetThetaCphi()    const;
+    G4double GetThetaSphi()    const;
     TrapSidePlane GetSidePlane(G4int n) const;
     G4ThreeVector GetSymAxis() const;
 
@@ -126,7 +130,7 @@ class G4UTrap : public G4USolid
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -150,11 +154,6 @@ class G4UTrap : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTrap* G4UTrap::GetShape() const
-{
-  return (UTrap*) fShape;
-}
 
 inline G4GeometryType G4UTrap::GetEntityType() const
 {

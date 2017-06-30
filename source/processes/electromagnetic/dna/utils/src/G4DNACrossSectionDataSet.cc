@@ -25,7 +25,7 @@
 //
 //
 
-// $Id: G4DNACrossSectionDataSet.cc 70171 2013-05-24 13:34:18Z gcosmo $
+// $Id: G4DNACrossSectionDataSet.cc 104122 2017-05-11 13:50:22Z gcosmo $
 //
 // Author: Riccardo Capra <capra@ge.infn.it>
 // Code review by MGP October 2007: removed inheritance from concrete class
@@ -160,31 +160,23 @@ G4bool G4DNACrossSectionDataSet::LoadData(const G4String & argFileName)
 	      comment=false;
 	      space=true;
 	      break;
-     
+
 	    case '#':
 	      comment=true;
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }
@@ -318,31 +310,23 @@ G4bool G4DNACrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 	      comment=false;
 	      space=true;
 	      break;
-     
+
 	    case '#':
 	      comment=true;
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }

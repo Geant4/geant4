@@ -47,15 +47,15 @@ class G4NeutronPHPBuilder : public G4VNeutronBuilder
 {
   public: 
     G4NeutronPHPBuilder();
-    virtual ~G4NeutronPHPBuilder();
+    virtual ~G4NeutronPHPBuilder() {}
 
   public: 
-    virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4HadronFissionProcess * aP);
-    virtual void Build(G4HadronCaptureProcess * aP);
-    virtual void Build(G4NeutronInelasticProcess * aP);
+    virtual void Build(G4HadronElasticProcess * aP) final override;
+    virtual void Build(G4HadronFissionProcess * aP) final override;
+    virtual void Build(G4HadronCaptureProcess * aP) final override;
+    virtual void Build(G4NeutronInelasticProcess * aP) final override;
 
-    void SetMinEnergy(G4double aM) 
+    virtual void SetMinEnergy(G4double aM) final override
     {
       theMin=aM;
       theIMin = theMin;
@@ -64,7 +64,7 @@ class G4NeutronPHPBuilder : public G4VNeutronBuilder
     {
       theIMin=aM;
     }
-    void SetMaxEnergy(G4double aM) 
+    virtual void SetMaxEnergy(G4double aM) final override
     {
       theIMax = aM;
       theMax=aM;
@@ -74,6 +74,7 @@ class G4NeutronPHPBuilder : public G4VNeutronBuilder
       theIMax = aM;
     }
 
+    using G4VNeutronBuilder::Build; //Prevent compiler warning
 
   private:
 

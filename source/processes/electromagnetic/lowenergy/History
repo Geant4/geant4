@@ -1,4 +1,4 @@
-$Id: History 101820 2016-12-01 08:34:05Z gcosmo $
+$Id: History 104801 2017-06-19 07:10:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,43 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.06.2017 S.Incerti, emlowen-V10-03-10
+- bugzilla 1980 and C++ nullptr in G4LivermorePhotoElectricModel
+
+09.06.2017 V.Ivanchenko, emlowen-V10-03-09
+- G4BoldyshevTripletModel - fixed trivial Coverity warning
+
+05.06.2017 V.Ivanchenko, emlowen-V10-03-08
+- G4LivermoreGammaConversionModel, G4BoldyshevTripletModel - fixed
+  triplet production
+
+31.05.2017 V.Ivanchenko, emlowen-V10-03-07
+- G4LivermoreGammaConversionModel - added possibility of triplet
+    simulation, cleanup the code
+- G4BoldyshevTripletModel - cleanup of the code
+
+29.05.2017 V.Ivanchenko, emlowen-V10-03-06
+- G4LivermorePhotoElectricModel, G4LivermoreRayleighModel - minor
+    code cleanup, a small speedup foreseen
+- G4BoldyshevTripletModel, G4Generator2BS - use G4Log
+
+13.05.2017 V.Ivanchenko, emlowen-V10-03-05
+- G4MicroElecCrossSectionDataSet - fixed gcc 7.1 warnings
+
+12.05.2017 V.Ivanchenko, emlowen-V10-03-04
+10.05.2017 V.Ivanchenko, emlowen-V10-03-03
+- G4CrossSectionDataSet, G4MuElecCrossSectionDataSet - fixed gcc 7.1 warnings
+
+30.01.2016 JMC Brow, S. Incerti, emlowen-V10-03-02
+- fix of G4LowEPPolarizedComptonModel
+
+19.12.2016 S. Incerti, emlowen-V10-03-01
+- extended coverage of shell ionisation models by M. Reis and A. Taborda
+
+19.12.2016 V.Ivanchenko, emlowen-V10-03-00
+- G4LivermoreNuclearGammaConversionModel, G4BoldyshevTripletModel
+    fixed file name to read data from G4LEDATA structure
 
 01.12.2016 L.Pandola, emlowen-V10-02-11
 - Fix memory leak in G4PenelopeBremsstrahlungFS 

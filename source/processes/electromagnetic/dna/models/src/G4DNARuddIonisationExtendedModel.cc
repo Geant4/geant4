@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationExtendedModel.cc 96060 2016-03-11 12:58:04Z gcosmo $
+// $Id: G4DNARuddIonisationExtendedModel.cc 104430 2017-05-31 07:43:44Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 // Modified by Z. Francis, S. Incerti to handle HZE 
@@ -742,7 +742,8 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
     if (pos2 != highEnergyLimit.end())highLim = pos2->second;
 
-    if (k >= lowLim && k < highLim)
+    if (k >= lowLim && k <= highLim) 
+    // SI: no strict limits, like in the non extended version of the model
     {
         G4ParticleDefinition* definition = particle->GetDefinition();
         G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcess.cc 98000 2016-06-30 13:01:05Z gcosmo $
+// $Id: G4HadronicProcess.cc 104121 2017-05-11 13:49:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -70,6 +70,7 @@
 
 #include "G4AutoLock.hh"
 #include "G4NistManager.hh"
+#include "G4PhysicsModelCatalog.hh"
 
 #include <typeinfo>
 #include <sstream>
@@ -88,21 +89,8 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
  : G4VDiscreteProcess(processName, procType)
 {
   SetProcessSubType(fHadronInelastic);	// Default unless subclass changes
-  
-  theTotalResult = new G4ParticleChange();
-  theTotalResult->SetSecondaryWeightByProcess(true);
-  theInteraction = nullptr;
-  theCrossSectionDataStore = new G4CrossSectionDataStore();
-  theProcessStore = G4HadronicProcessStore::Instance();
-  theProcessStore->Register(this);
-  theInitialNumberOfInteractionLength = 0.0;
-  aScaleFactor = 1;
-  xBiasOn = false;
-  nMatWarn = 0;
-  useIntegralXS = true;
-  theLastCrossSection = 0.0;
-  G4HadronicProcess_debug_flag = false;
-  GetEnergyMomentumCheckEnvvars();
+
+  InitialiseLocal();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -113,6 +101,17 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
 {
   SetProcessSubType(aHadSubType);
 
+  InitialiseLocal();
+}
+
+G4HadronicProcess::~G4HadronicProcess()
+{
+  theProcessStore->DeRegister(this);
+  delete theTotalResult;
+  delete theCrossSectionDataStore;
+}
+
+void G4HadronicProcess::InitialiseLocal() {  
   theTotalResult = new G4ParticleChange();
   theTotalResult->SetSecondaryWeightByProcess(true);
   theInteraction = nullptr;
@@ -122,19 +121,13 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   theInitialNumberOfInteractionLength = 0.0;
   aScaleFactor = 1;
   xBiasOn = false;
-  useIntegralXS = true;
   nMatWarn = 0;
+  useIntegralXS = true;
   theLastCrossSection = 0.0;
+  nICelectrons = 0;
+  idxIC = -1;
   G4HadronicProcess_debug_flag = false;
   GetEnergyMomentumCheckEnvvars();
-}
-
-
-G4HadronicProcess::~G4HadronicProcess()
-{
-  theProcessStore->DeRegister(this);
-  delete theTotalResult;
-  delete theCrossSectionDataStore;
 }
 
 void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
@@ -431,7 +424,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   return theTotalResult;
 }
 
-
 void G4HadronicProcess::ProcessDescription(std::ostream& outFile) const
 {
   outFile << "The description for this process has not been written yet.\n";
@@ -506,11 +498,16 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   //	 << "  fKill= " << fStopAndKill << G4endl;
 
   // check secondaries: apply rotation and Lorentz transformation
+  nICelectrons = 0;
+  if(idxIC == -1) { 
+    G4int idx = G4PhysicsModelCatalog::GetIndex("e-InternalConvertion");
+    idxIC =  -1 == idx ? -2 : idx; 
+  } 
   G4int nSec = aR->GetNumberOfSecondaries();
   theTotalResult->SetNumberOfSecondaries(nSec);
   G4double weight = aT.GetWeight();
 
-  if (nSec > 0) {
+  if (nSec > 0) { 
     G4double time0 = aT.GetGlobalTime();
     for (G4int i = 0; i < nSec; ++i) {
       G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
@@ -518,6 +515,9 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       theM *= aR->GetTrafoToLab();
       aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
 
+      if(idxIC == aR->GetSecondary(i)->GetCreatorModelType()) 
+	{ ++nICelectrons; }
+      
       // time of interaction starts from zero
       G4double time = aR->GetSecondary(i)->GetTime();
       if (time < 0.0) { time = 0.0; }
@@ -670,14 +670,15 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
   G4int target_A=aNucleus.GetA_asInt();
   G4int target_Z=aNucleus.GetZ_asInt();
   G4double targetMass = G4NucleiProperties::GetNuclearMass(target_A,target_Z);
-  G4LorentzVector target4mom(0, 0, 0, targetMass);
+  G4LorentzVector target4mom(0, 0, 0, targetMass 
+			     + nICelectrons*CLHEP::electron_mass_c2);
 
   G4LorentzVector projectile4mom = aTrack.GetDynamicParticle()->Get4Momentum();
   G4int track_A = aTrack.GetDefinition()->GetBaryonNumber();
   G4int track_Z = G4lrint(aTrack.GetDefinition()->GetPDGCharge());
 
   G4int initial_A = target_A + track_A;
-  G4int initial_Z = target_Z + track_Z;
+  G4int initial_Z = target_Z + track_Z - nICelectrons;
 
   G4LorentzVector initial4mom = projectile4mom + target4mom;
 

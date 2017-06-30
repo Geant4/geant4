@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh 100397 2016-10-20 07:34:38Z gcosmo $
+// $Id: G4LogicalVolume.hh 103096 2017-03-15 15:21:33Z gcosmo $
 //
 // 
 // class G4LogicalVolume
@@ -360,14 +360,12 @@ class G4LogicalVolume
   
     inline G4int GetInstanceID() const;
       // Returns the instance ID.
-    static const G4LVManager& GetSubInstanceManager();
- 
-      // Sets the private data instance manager - in order to use a particular Workspace
 
-    // static const G4LVManager* GetSubInstanceManagerPtr(); 
-    // static const G4LVManager  SetSubInstanceManager(G4LVManager* subInstanceManager);
-      // Revised Implementation - to enable Workspaces which can used by different
-      //   threads at different times (only one thread or task can use a workspace at a time. ) 
+    static const G4LVManager& GetSubInstanceManager();
+      // Returns the private data instance manager.
+
+    static void Clean();
+      // Clear memory allocated by sub-instance manager.
 
     inline void Lock();
       // Set lock identifier for final deletion of entity.

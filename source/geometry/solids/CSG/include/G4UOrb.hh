@@ -42,16 +42,19 @@
 #ifndef G4ORB_HH
 #define G4ORB_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UOrb.hh"
+#include <volumes/UnplacedOrb.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UOrb : public G4USolid
+class G4UOrb : public G4UAdapter<vecgeom::UnplacedOrb>
 {
+  using Shape_t = vecgeom::UnplacedOrb;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedOrb>;
+
   public:  // with description
 
     G4UOrb(const G4String& pName, G4double pRmax);
@@ -64,14 +67,13 @@ class G4UOrb : public G4USolid
 
     G4VSolid* Clone() const;
 
-    inline UOrb* GetShape() const;
-
     G4double GetRadius() const;
     void SetRadius(G4double newRmax);
+    G4double GetRadialTolerance() const;
 
     inline G4GeometryType GetEntityType() const;
 
-    void Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
+    void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -95,11 +97,6 @@ class G4UOrb : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UOrb* G4UOrb::GetShape() const
-{
-  return (UOrb*) fShape;
-}
 
 inline G4GeometryType G4UOrb::GetEntityType() const
 {

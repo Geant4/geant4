@@ -62,6 +62,10 @@
 
 G4EmParameters* G4EmParameters::theInstance = nullptr;
 
+#ifdef G4MULTITHREADED
+  G4Mutex G4EmParameters::emParametersMutex = G4MUTEX_INITIALIZER;
+#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4EmParameters* G4EmParameters::Instance()
@@ -139,6 +143,7 @@ void G4EmParameters::Initialise()
   finalRange = CLHEP::mm;
   dRoverRangeMuHad = 0.2;
   finalRangeMuHad = 0.1*CLHEP::mm;
+  factorScreen = 1.0;
 
   nbins  = 77;
   nbinsPerDecade = 7;
@@ -356,12 +361,17 @@ G4bool G4EmParameters::Integral() const
 
 void G4EmParameters::SetBirksActive(G4bool val)
 {
-  if(IsLocked()) { return; }
   birks = val;
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4EmParameters::emParametersMutex);
+#endif
   if(birks) {
     if(!emSaturation) { emSaturation = new G4EmSaturation(1); }
     emSaturation->InitialiseG4Saturation();
   }
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4EmParameters::emParametersMutex);
+#endif
 }
 
 G4bool G4EmParameters::BirksActive() const
@@ -374,6 +384,7 @@ void G4EmParameters::SetEmSaturation(G4EmSaturation* ptr)
   if(emSaturation != ptr) {
     delete emSaturation;
     emSaturation = ptr;
+    SetBirksActive(true);
   }
 }
 
@@ -655,6 +666,24 @@ G4double G4EmParameters::MscSkin() const
   return skin;
 }
 
+void G4EmParameters::SetScreeningFactor(G4double val)
+{
+  if(IsLocked()) { return; }
+  if(val > 0.0) {
+    factorScreen = val;
+  } else {
+    G4ExceptionDescription ed;
+    ed << "Value of factorScreen is out of range: " 
+       << val << " is ignored"; 
+    PrintWarning(ed);
+  }
+}
+
+G4double G4EmParameters::ScreeningFactor() const
+{
+  return factorScreen;
+}
+
 void G4EmParameters::SetStepFunction(G4double v1, G4double v2)
 {
   if(IsLocked()) { return; }
@@ -908,6 +937,27 @@ const std::vector<G4String>& G4EmParameters::RegionsMsc() const
 }
 
 const std::vector<G4String>& G4EmParameters::TypesMsc() const
+{
+  return m_typesMsc;
+}
+
+void G4EmParameters::AddPhysics(const G4String& region, const G4String& type)
+{
+  G4String r = CheckRegion(region);
+  G4int nreg =  m_regnamesMsc.size();
+  for(G4int i=0; i<nreg; ++i) {
+    if(r == m_regnamesMsc[i]) { return; }
+  }
+  m_regnamesMsc.push_back(r);
+  m_typesMsc.push_back(type);
+}
+
+const std::vector<G4String>& G4EmParameters::RegionsPhysics() const
+{
+  return m_regnamesMsc;
+}
+
+const std::vector<G4String>& G4EmParameters::TypesPhysics() const
 {
   return m_typesMsc;
 }
@@ -1175,6 +1225,7 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
   os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
   os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
+  os << "Screening factor                                   " <<factorScreen << "\n";
   os << "Step function for e+-                              " <<"("<< dRoverRange
      << ", " << finalRange << " mm)\n";
   os << "Step function for muons/hadrons                    " <<"("<< dRoverRangeMuHad

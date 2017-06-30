@@ -50,7 +50,7 @@ using namespace CLHEP;
 //             
 
 G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
-  : G4USolid(pName, new UOrb(pName, pRmax))
+  : Base_t(pName, pRmax)
 {
 }
 
@@ -60,7 +60,7 @@ G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
 //                            for usage restricted to object persistency.
 //
 G4UOrb::G4UOrb( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -77,7 +77,7 @@ G4UOrb::~G4UOrb()
 // Copy constructor
 
 G4UOrb::G4UOrb(const G4UOrb& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -93,7 +93,7 @@ G4UOrb& G4UOrb::operator = (const G4UOrb& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -104,13 +104,18 @@ G4UOrb& G4UOrb::operator = (const G4UOrb& rhs)
 
 G4double G4UOrb::GetRadius() const
 {
-  return GetShape()->GetRadius();
+  return Base_t::GetRadius();
 }
 
 void G4UOrb::SetRadius(G4double newRmax)
 {
-  GetShape()->SetRadius(newRmax);
+  Base_t::SetRadius(newRmax);
   fRebuildPolyhedron = true;
+}
+
+G4double G4UOrb::GetRadialTolerance() const
+{
+  return Base_t::GetRadialTolerance();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -138,7 +143,7 @@ G4VSolid* G4UOrb::Clone() const
 //
 // Get bounding box
 
-void G4UOrb::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UOrb::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   G4double radius = GetRadius();
   pMin.set(-radius,-radius,-radius);
@@ -153,7 +158,8 @@ void G4UOrb::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UOrb::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UOrb::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 }
@@ -172,7 +178,7 @@ G4UOrb::CalculateExtent(const EAxis pAxis,
   G4bool exist;
 
   // Get bounding box
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
 
   // Check bounding box
   G4BoundingEnvelope bbox(bmin,bmax);

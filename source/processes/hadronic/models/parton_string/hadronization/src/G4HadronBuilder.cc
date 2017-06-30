@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronBuilder.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4HadronBuilder.cc 102717 2017-02-20 10:37:13Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -55,16 +55,15 @@ G4ParticleDefinition * G4HadronBuilder::Build(G4ParticleDefinition * black, G4Pa
 
 	if (black->GetParticleSubType()== "di_quark" || white->GetParticleSubType()== "di_quark" ) {
 
-           // Baryon
+//    Barion
 	   Spin spin = (G4UniformRand() < barionSpinMix) ? SpinHalf : SpinThreeHalf;
 	   return Barion(black,white,spin);
 
 	} else {	
 
-           // Meson
+//    Meson
 	   Spin spin = (G4UniformRand() < mesonSpinMix) ? SpinZero : SpinOne;
 	   return Meson(black,white,spin);
-
 	}
 }
 
@@ -75,9 +74,9 @@ G4ParticleDefinition * G4HadronBuilder::BuildLowSpin(G4ParticleDefinition * blac
 	if ( black->GetParticleSubType()== "quark" && white->GetParticleSubType()== "quark" ) {
 		return Meson(black,white, SpinZero);
 	} else {
-                // will return a SpinThreeHalf Baryon if all quarks the same
+//		      will return a SpinThreeHalf Barion if all quarks the same
 		return Barion(black,white, SpinHalf); 
-	}
+	}	
 }
 
 //-------------------------------------------------------------------------
@@ -96,33 +95,35 @@ G4ParticleDefinition * G4HadronBuilder::BuildHighSpin(G4ParticleDefinition * bla
 G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black, 
 					      G4ParticleDefinition * white, Spin theSpin)
 {
-        #ifdef G4VERBOSE
-        //  Verify Input Charge
-        G4double charge =  black->GetPDGCharge() + white->GetPDGCharge();	 
-        if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )   // 1.001 to avoid int(.9999) -> 0
-        {
+#ifdef G4VERBOSE
+//  Verify Input Charge
+   
+   G4double charge =  black->GetPDGCharge() 
+                    + white->GetPDGCharge();	 
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )   // 1.001 to avoid int(.9999) -> 0
+       	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
 	    G4cerr << "    Invalid total charge found for on input: " 
-		   << charge<< G4endl;
+			<< charge<< G4endl;
 	    G4cerr << "    PGDcode input quark1/quark2 : " <<
 			black->GetPDGEncoding() << " / "<< 
 			white->GetPDGEncoding() << G4endl;
 	    G4cerr << G4endl;
-        } 
-        #endif	
+	} 
+#endif	
 	
 	G4int id1= black->GetPDGEncoding();
 	G4int id2= white->GetPDGEncoding();
-        //G4int ifl1= std::max(std::abs(id1), std::abs(id2));
+//	G4int ifl1= std::max(std::abs(id1), std::abs(id2));
 	if ( std::abs(id1) < std::abs(id2) )
-	{
+	   {
 	   G4int xchg = id1; 
 	   id1 = id2;  
 	   id2 = xchg;
-	}
+	   }
 	
 	if (std::abs(id1) > 3 ) 
-	  throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Meson : Illegal Quark content as input");
+	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Meson : Illegal Quark content as input");
 	
         G4int PDGEncoding=0;
 
@@ -145,11 +146,11 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 	   if( (IsUp && IsAnti ) || (!IsUp && !IsAnti ) ) 
 	      PDGEncoding = - PDGEncoding;
  	}
-	      
+	   
+	   
 	G4ParticleDefinition * MesonDef=
 		G4ParticleTable::GetParticleTable()->FindParticle(PDGEncoding);
-
-        #ifdef G4VERBOSE
+#ifdef G4VERBOSE
 	if (MesonDef == 0 ) {
 		G4cerr << " G4HadronBuilder - Warning: No particle for PDGcode= "
 		       << PDGEncoding << G4endl;
@@ -162,38 +163,39 @@ G4ParticleDefinition * G4HadronBuilder::Meson(G4ParticleDefinition * black,
 			<< " resulting Hadron " << MesonDef->GetParticleName() 
 			<< G4endl;
 	}
-        #endif
+#endif
 
 	return MesonDef;
 }
 
 
 G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black, 
-					       G4ParticleDefinition * white,Spin theSpin)
+					      G4ParticleDefinition * white,Spin theSpin)
 {
 
-        #ifdef G4VERBOSE
-        //  Verify Input Charge
-        G4double charge =  black->GetPDGCharge() + white->GetPDGCharge();	 
-        if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )
+#ifdef G4VERBOSE
+//  Verify Input Charge
+   G4double charge =  black->GetPDGCharge() 
+                    + white->GetPDGCharge();	 
+   if (std::abs(charge) > 2 || std::abs(3.*charge - 3*G4int(charge*1.001)) > perCent )
    	{
 	    G4cerr << " G4HadronBuilder::Build()" << G4endl;
-	    G4cerr << "    Invalid total charge found for on input: " << charge<< G4endl;
+	    G4cerr << "    Invalid total charge found for on input: " 
+			<< charge<< G4endl;
 	    G4cerr << "    PGDcode input quark1/quark2 : " <<
 			black->GetPDGEncoding() << " / "<< 
 			white->GetPDGEncoding() << G4endl;
 	    G4cerr << G4endl;
 	} 
-        #endif
-	
+#endif	
 	G4int id1= black->GetPDGEncoding();
 	G4int id2= white->GetPDGEncoding();
 	if ( std::abs(id1) < std::abs(id2) )
-	{
+	   {
 	   G4int xchg = id1; 
 	   id1 = id2;  
 	   id2 = xchg;
-	}
+	   }
 
 	if (std::abs(id1) < 1000 || std::abs(id2) > 3 ) 
 	   throw G4HadronicException(__FILE__, __LINE__, "G4HadronBuilder::Barion: Illegal quark content as input");   
@@ -203,10 +205,10 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	G4int diquarkSpin = std::abs(id1)%10; 
 	G4int ifl3 = id2;
 	if (id1 < 0)
-	{
+	   {
 	   ifl1 = - ifl1;
 	   ifl2 = - ifl2;
-	}
+	   }
 	//... Construct barion, distinguish Lambda and Sigma barions.
 	G4int kfla = std::abs(ifl1);
 	G4int kflb = std::abs(ifl2);
@@ -224,10 +226,10 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 
 	G4int kfll = 0;
 	if(theSpin == SpinHalf && kfld > kfle && kfle > kflf) { 
-           // Spin J=1/2 and all three quarks different
-           // Two states exist: (uds -> lambda or sigma0)
-           //   -  lambda: s(ud)0 s : 3122; ie. reverse the two lighter quarks
-           //   -  sigma0: s(ud)1 s : 3212
+// Spin J=1/2 and all three quarks different
+// Two states exist: (uds -> lambda or sigma0)
+//   -  lambda: s(ud)0 s : 3122; ie. reverse the two lighter quarks
+//   -  sigma0: s(ud)1 s : 3212
 	   if(diquarkSpin == 1 ) {
 	      if ( kfla == kfld) {   // heaviest quark in diquark
 	         kfll = 1;
@@ -240,29 +242,31 @@ G4ParticleDefinition * G4HadronBuilder::Barion(G4ParticleDefinition * black,
 	}
 	
 	G4int PDGEncoding;
-	if (kfll == 1) PDGEncoding = 1000 * kfld + 100 * kflf + 10 * kfle + theSpin;
-	else           PDGEncoding = 1000 * kfld + 100 * kfle + 10 * kflf + theSpin;
+	if (kfll == 1)
+	   PDGEncoding = 1000 * kfld + 100 * kflf + 10 * kfle + theSpin;
+	else    
+	   PDGEncoding = 1000 * kfld + 100 * kfle + 10 * kflf + theSpin;
 
-	if (id1 < 0)   PDGEncoding = -PDGEncoding;
+	if (id1 < 0)
+	   PDGEncoding = -PDGEncoding;
+
 
 	G4ParticleDefinition * BarionDef=
 		G4ParticleTable::GetParticleTable()->FindParticle(PDGEncoding);
-
-        #ifdef G4VERBOSE
+#ifdef G4VERBOSE
 	if (BarionDef == 0 ) {
 		G4cerr << " G4HadronBuilder - Warning: No particle for PDGcode= "
 		       << PDGEncoding << G4endl;
 	} else if  ( (  black->GetPDGCharge() + white->GetPDGCharge()
 	       		- BarionDef->GetPDGCharge() ) > perCent   ) {
 	      	G4cerr << " G4HadronBuilder - Warning: Incorrect Charge : "
-		       << " DiQuark/Quark = " 
-		       << black->GetParticleName() << " / "
-		       << white->GetParticleName() 
-		       << " resulting Hadron " << BarionDef->GetParticleName() 
-		       << G4endl;
+			<< " DiQuark/Quark = " 
+			<< black->GetParticleName() << " / "
+			<< white->GetParticleName() 
+			<< " resulting Hadron " << BarionDef->GetParticleName() 
+			<< G4endl;
 	}
-        #endif
+#endif
 
 	return BarionDef;
 }
-

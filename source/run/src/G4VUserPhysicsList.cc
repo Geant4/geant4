@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc 101155 2016-11-08 08:21:41Z gcosmo $
+// $Id: G4VUserPhysicsList.cc 103803 2017-04-27 14:03:05Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -150,6 +150,12 @@ void G4VUserPhysicsList::InitializeWorker()
     G4MT_theMessenger = new G4UserPhysicsListMessenger(this);
 }
 
+void G4VUserPhysicsList::TerminateWorker()
+{
+  RemoveProcessManager();
+  delete G4MT_theMessenger;
+  G4MT_theMessenger = nullptr;
+}
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::~G4VUserPhysicsList()
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: GammaTherapy.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: GammaTherapy.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/GammaTherapy.cc
 /// \brief Main program of the medical/GammaTherapy example
@@ -43,7 +43,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
@@ -57,10 +62,7 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "TrackingAction.hh"
-#include "RunAction.hh"
-#include "Histo.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,10 +70,19 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager();
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),2);
+  if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
+  runManager->SetNumberOfThreads(nThreads);
+  G4cout << "===== GammaTherapy is started with " 
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
+#else
+  G4RunManager* runManager = new G4RunManager();
+#endif
 
   // set mandatory initialization classes
   DetectorConstruction* det = new DetectorConstruction();
@@ -80,9 +91,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
-  runManager->SetUserAction(new PrimaryGeneratorAction(det));
-  runManager->SetUserAction(new RunAction());
-  runManager->SetUserAction(new TrackingAction());
+   runManager->SetUserInitialization(new ActionInitialization(det));
 
   // get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

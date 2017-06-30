@@ -132,7 +132,7 @@ std::vector<G4ThreeVector> G4UTet::GetVertices() const
 //
 // Get bounding box
 
-void G4UTet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
+void G4UTet::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
 {
   UVector3 vmin, vmax;
   GetShape()->Extent(vmin,vmax);
@@ -148,7 +148,8 @@ void G4UTet::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
             << GetName() << " !"
             << "\npMin = " << pMin
             << "\npMax = " << pMax;
-    G4Exception("G4UTet::Extent()", "GeomMgt0001", JustWarning, message);
+    G4Exception("G4UTet::BoundingLimits()", "GeomMgt0001",
+                JustWarning, message);
     StreamInfo(G4cout);
   }
 }
@@ -168,7 +169,7 @@ G4UTet::CalculateExtent(const EAxis pAxis,
 
   // Check bounding box (bbox)
   //
-  Extent(bmin,bmax);
+  BoundingLimits(bmin,bmax);
   G4BoundingEnvelope bbox(bmin,bmax);
 #ifdef G4BBOX_EXTENT
   if (true) return bbox.CalculateExtent(pAxis,pVoxelLimit,pTransform,pMin,pMax);

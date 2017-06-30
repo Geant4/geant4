@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: CheckVolumeSD.cc 67994 2013-03-13 11:05:39Z gcosmo $
+// $Id: CheckVolumeSD.cc 103469 2017-04-11 07:29:36Z gcosmo $
 //
 /// \file medical/GammaTherapy/src/CheckVolumeSD.cc
 /// \brief Implementation of the CheckVolumeSD class
@@ -42,20 +42,22 @@
 #include "CheckVolumeSD.hh"
 
 #include "G4RunManager.hh"
+#include "Run.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
-#include "globals.hh"
-#include "Histo.hh"
 #include "G4Gamma.hh"
 #include "G4SystemOfUnits.hh"
+
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 CheckVolumeSD::CheckVolumeSD(const G4String& name)
- :G4VSensitiveDetector(name), fHisto(Histo::GetPointer())
-{}
+ :G4VSensitiveDetector(name)
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -71,6 +73,9 @@ void CheckVolumeSD::Initialize(G4HCofThisEvent*)
 
 G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+
   const G4Track* track = aStep->GetTrack();
   G4double e = track->GetKineticEnergy();
   if (track->GetDefinition() == G4Gamma::Gamma()) {
@@ -78,9 +83,9 @@ G4bool CheckVolumeSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4double x = p.x();
     G4double y = p.y();
     G4double r = std::sqrt(x*x + y*y);
-    fHisto->AddPhantomGamma(e,r);
+    run->AddPhantomGamma(e,r);
   }
-  if(1 < fHisto->GetVerbose()) {
+  if(run->GetVerbose()) {
       G4cout << "CheckVolumeSD: energy = " << e/MeV
              << G4endl;
   }

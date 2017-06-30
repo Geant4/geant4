@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 92393 2015-08-31 14:07:30Z gcosmo $
+# $Id: sources.cmake 103471 2017-04-11 07:31:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -94,7 +94,6 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4hepnumerics
         G4intercoms
         G4volumes
-        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps

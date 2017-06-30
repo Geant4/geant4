@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Ions.hh 98732 2016-08-09 10:50:57Z gcosmo $
+// $Id: G4Ions.hh 103892 2017-05-03 08:11:00Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -244,7 +244,7 @@ inline
 {
   static G4Ions::G4FloatLevelBase flb[] = 
   { noFloat,
-    plusU, plusV, plusW, plusX, plusY, plusZ,
+    plusX, plusY, plusZ, plusU, plusV, plusW, 
     plusR, plusS, plusT, plusA, plusB, plusC, plusD, plusE };
   return flb[flbIdx];
 }

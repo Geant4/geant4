@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSDiffractiveExcitation.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4QGSDiffractiveExcitation.cc 102316 2017-01-20 16:12:52Z gcosmo $
 // ------------------------------------------------------------
 //      GEANT 4 class implemetation file
 //
@@ -60,6 +60,11 @@
 #include "G4Log.hh"
 #include "G4Pow.hh"
 
+//============================================================================
+
+//#define debugDoubleDiffraction
+
+//============================================================================
 
 G4QGSDiffractiveExcitation::G4QGSDiffractiveExcitation()
 {
@@ -71,358 +76,301 @@ G4QGSDiffractiveExcitation::~G4QGSDiffractiveExcitation()
 
 
 G4bool G4QGSDiffractiveExcitation::
-ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target) const
+ExciteParticipants(G4VSplitableHadron *projectile, G4VSplitableHadron *target, G4bool ) const  // Uzhi Oct. 2016 , G4bool ProjectileDiffraction
 {
-  G4LorentzVector Pprojectile=projectile->Get4Momentum();
+  #ifdef debugDoubleDiffraction
+     G4cout<<G4endl<<"G4QGSDiffractiveExcitation::ExciteParticipants - Double diffraction."<<G4endl;
+     G4cout<<"Proj Targ "<<projectile->GetDefinition()->GetParticleName()<<" "<<target->GetDefinition()->GetParticleName()<<G4endl;
+     G4cout<<"Proj 4 Mom "<<projectile->Get4Momentum()<<" "<<projectile->Get4Momentum().mag()<<G4endl;
+     G4cout<<"Targ 4 Mom "<<target->Get4Momentum()    <<" "<<target->Get4Momentum().mag()    <<G4endl;
+  #endif
 
-  // -------------------- Projectile parameters -----------------------------------
-  G4bool PutOnMassShell=0;
 
-  //G4double M0projectile=projectile->GetDefinition()->GetPDGMass();  // With de-excitation
-  G4double M0projectile = Pprojectile.mag();                        // Without de-excitation
 
-  if(M0projectile < projectile->GetDefinition()->GetPDGMass())
-  {
-    PutOnMassShell=1;
-    M0projectile=projectile->GetDefinition()->GetPDGMass();
-  }
+	G4LorentzVector Pprojectile=projectile->Get4Momentum();
 
-  G4double Mprojectile2 = M0projectile * M0projectile;
+	// -------------------- Projectile parameters -----------------------------------
+	G4bool PutOnMassShell=0;
 
-  G4int    PDGcode=projectile->GetDefinition()->GetPDGEncoding();
-  G4int    absPDGcode=std::abs(PDGcode);
-  G4double ProjectileDiffCut;
-  G4double AveragePt2;
+	G4double M0projectile = Pprojectile.mag();                        // Without de-excitation
 
-  if( absPDGcode > 1000 )                        //------Projectile is baryon --------
-  {
-    ProjectileDiffCut = 1.1;                    // GeV
-    AveragePt2 = 0.3;                           // GeV^2
-  }
-  else if( absPDGcode == 211 || PDGcode ==  111) //------Projectile is Pion -----------
-  {
-    ProjectileDiffCut = 1.0;                   // GeV
-    AveragePt2 = 0.3;                          // GeV^2
-  }
-  else if( absPDGcode == 321 || PDGcode == -311) //------Projectile is Kaon -----------
-  {
-    ProjectileDiffCut = 1.1;                    // GeV
-    AveragePt2 = 0.3;                           // GeV^2
-  }
-  else                                           //------Projectile is undefined, Nucleon assumed
-  {
-    ProjectileDiffCut = 1.1;                    // GeV
-    AveragePt2 = 0.3;                           // GeV^2
-  };
+	if(M0projectile < projectile->GetDefinition()->GetPDGMass())
+	{
+		PutOnMassShell=1;
+		M0projectile=projectile->GetDefinition()->GetPDGMass();
+	}
 
-  ProjectileDiffCut = ProjectileDiffCut * GeV;
-  AveragePt2 = AveragePt2 * GeV*GeV;
+	// -------------------- Target parameters ----------------------------------------------
+	G4LorentzVector Ptarget=target->Get4Momentum();
 
-  // -------------------- Target parameters ----------------------------------------------
-  G4LorentzVector Ptarget=target->Get4Momentum();
+	G4double M0target = Ptarget.mag();
 
-  G4double M0target = Ptarget.mag();
+	if(M0target < target->GetDefinition()->GetPDGMass())
+	{
+		PutOnMassShell=1;
+		M0target=target->GetDefinition()->GetPDGMass();
+	}
 
-  if(M0target < target->GetDefinition()->GetPDGMass())
-  {
-    PutOnMassShell=1;
-    M0target=target->GetDefinition()->GetPDGMass();
-  }
+	G4LorentzVector Psum=Pprojectile+Ptarget;
+	G4double S=Psum.mag2();
+	G4double SqrtS=std::sqrt(S);
 
-  G4double Mtarget2 = M0target * M0target;                      //Ptarget.mag2(); // for AA-inter.
+	if(SqrtS < M0projectile + M0target) {return false;} // The model cannot work for pp-interactions
+	                                                    // at Plab < 1.3 GeV/c. Uzhi
 
-  G4double NuclearNucleonDiffCut = 1.1*GeV;
+	G4double Mprojectile2 = M0projectile * M0projectile;
+	G4double Mtarget2     = M0target     * M0target;    //Ptarget.mag2(); // for AA-inter.
 
-  G4double ProjectileDiffCut2 = ProjectileDiffCut * ProjectileDiffCut;
-  G4double NuclearNucleonDiffCut2 = NuclearNucleonDiffCut * NuclearNucleonDiffCut;
+	// Transform momenta to cms and then rotate parallel to z axis;
 
-  // Transform momenta to cms and then rotate parallel to z axis;
+	G4LorentzRotation toCms(-1*Psum.boostVector());
 
-  G4LorentzVector Psum;
-  Psum=Pprojectile+Ptarget;
+	G4LorentzVector Ptmp=toCms*Pprojectile;
 
-  G4LorentzRotation toCms(-1*Psum.boostVector());
+	if ( Ptmp.pz() <= 0. )
+	{
+		// "String" moving backwards in  CMS, abort collision !!
+		//G4cout << " abort Collision!! " << G4endl;
+		return false;
+	}
 
-  G4LorentzVector Ptmp=toCms*Pprojectile;
+	toCms.rotateZ(-1*Ptmp.phi());
+	toCms.rotateY(-1*Ptmp.theta());
 
-  if ( Ptmp.pz() <= 0. )
-  {
-    // "String" moving backwards in  CMS, abort collision !!
-    //G4cout << " abort Collision!! " << G4endl;
-    return false;
-  }
+	G4LorentzRotation toLab(toCms.inverse());
 
-  toCms.rotateZ(-1*Ptmp.phi());
-  toCms.rotateY(-1*Ptmp.theta());
+	Pprojectile.transform(toCms);
+	Ptarget.transform(toCms);
 
-  G4LorentzRotation toLab(toCms.inverse());
+	G4double PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
+			 2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
 
-  Pprojectile.transform(toCms);
-  Ptarget.transform(toCms);
+	if(PZcms2 < 0) {return false;}   // It can be in an interaction with off-shell nuclear nucleon
 
-  G4double Pt2;
-  G4double ProjMassT2, ProjMassT;
-  G4double TargMassT2, TargMassT;
-  G4double PZcms2, PZcms;
-  G4double PMinusNew, TPlusNew;
+	G4double PZcms = std::sqrt(PZcms2);
 
-  G4double S=Psum.mag2();
-  G4double SqrtS=std::sqrt(S);
+	if(PutOnMassShell)
+	{
+		if(Pprojectile.z() > 0.)
+		{
+			Pprojectile.setPz( PZcms);
+			Ptarget.setPz(    -PZcms);
+		}
+		else
+		{
+			Pprojectile.setPz(-PZcms);
+			Ptarget.setPz(     PZcms);
+		};
 
-  if(SqrtS < 2200*MeV) {return false;}   // The model cannot work for pp-interactions
-  // at Plab < 1.3 GeV/c. Uzhi
+		Pprojectile.setE(std::sqrt(Mprojectile2+sqr(Pprojectile.x())+sqr(Pprojectile.y())+PZcms2));
+		Ptarget.setE(    std::sqrt(    Mtarget2+sqr(    Ptarget.x())+sqr(    Ptarget.y())+PZcms2));
+	}
 
-  PZcms2=(S*S+Mprojectile2*Mprojectile2+Mtarget2*Mtarget2-
-	  2*S*Mprojectile2-2*S*Mtarget2-2*Mprojectile2*Mtarget2)/4./S;
-  if(PZcms2 < 0)
-  {return false;}   // It can be in an interaction with off-shell nuclear nucleon
+	G4double maxPtSquare = PZcms2;
 
-  PZcms = std::sqrt(PZcms2);
+  #ifdef debugDoubleDiffraction
+	G4cout << "Pprojectile after boost to CMS: " << Pprojectile <<" "<<Pprojectile.mag()<<G4endl;
+	G4cout << "Ptarget     after boost to CMS: " << Ptarget     <<" "<<Ptarget.mag()    <<G4endl;
+  #endif
 
-  if(PutOnMassShell)
-  {
-    if(Pprojectile.z() > 0.)
-    {
-      Pprojectile.setPz( PZcms);
-      Ptarget.setPz(    -PZcms);
-    } else
-    {
-      Pprojectile.setPz(-PZcms);
-      Ptarget.setPz(     PZcms);
-    };
+	G4int    PrPDGcode=projectile->GetDefinition()->GetPDGEncoding();
+	G4int    absPrPDGcode=std::abs(PrPDGcode);
+	G4double MinPrDiffMass(0.);
+	G4double AveragePt2(0.);
 
-    Pprojectile.setE(std::sqrt(Mprojectile2+
-			       Pprojectile.x()*Pprojectile.x()+
-			       Pprojectile.y()*Pprojectile.y()+
-			       PZcms2));
-    Ptarget.setE(std::sqrt(    Mtarget2    +
-			       Ptarget.x()*Ptarget.x()+
-			       Ptarget.y()*Ptarget.y()+
-			       PZcms2));
-  }
+	if(M0projectile <= projectile->GetDefinition()->GetPDGMass())
+        { // Normal projectile 
+	  if( absPrPDGcode > 1000 )                         //------Projectile is baryon --------
+	  {
+		MinPrDiffMass = 1.16;                       // GeV
+		AveragePt2 = 0.3;                           // GeV^2
+	  }
+	  else if( absPrPDGcode == 211 || PrPDGcode ==  111) //------Projectile is Pion -----------
+	  {
+		MinPrDiffMass = 1.0;                       // GeV
+		AveragePt2 = 0.3;                          // GeV^2
+	  }
+	  else if( absPrPDGcode == 321 || absPrPDGcode == 130 || absPrPDGcode == 310) //-Projectile is Kaon-
+	  {
+		MinPrDiffMass = 1.1;                        // GeV
+		AveragePt2 = 0.3;                           // GeV^2
+	  }
+	  else                                              //------Projectile is undefined, Nucleon assumed
+	  {
+		MinPrDiffMass = 1.16;                       // GeV
+		AveragePt2 = 0.3;                           // GeV^2
+	  }
+        }
+        else
+        { // Excited projectile
+		MinPrDiffMass = M0projectile + 220.0*MeV;
+		AveragePt2 = 0.3; 
+        }
 
-  G4double maxPtSquare = PZcms2;
+	MinPrDiffMass = MinPrDiffMass * GeV;
+	AveragePt2 = AveragePt2 * GeV*GeV;
+//---------------------------------------------
+	G4double MinTrDiffMass = 1.16*GeV;
 
-  //G4cout << "Pprojectile aft boost : " << Pprojectile << G4endl;
-  //G4cout << "Ptarget aft boost : " << Ptarget << G4endl;
-  //	   G4cout << "cms aft boost : " << (Pprojectile+ Ptarget) << G4endl;
-  //	   G4cout << " Projectile Xplus / Xminus : " <<
-  //	   	     Pprojectile.plus() << " / " << Pprojectile.minus() << G4endl;
-  //	   G4cout << " Target Xplus / Xminus : " <<
-  //	   	     Ptarget.plus() << " / " << Ptarget.minus() << G4endl;
+	if(SqrtS < MinPrDiffMass + MinTrDiffMass) {return false;}   // The model cannot work at low energy
 
-  G4LorentzVector Qmomentum;
-  G4double Qminus, Qplus;
+	G4double MinPrDiffMass2 = MinPrDiffMass * MinPrDiffMass;
+	G4double MinTrDiffMass2 = MinTrDiffMass * MinTrDiffMass;
 
-  G4int whilecount=0;
-  do {
-    //  Generate pt
+	G4double Pt2;
+	G4double ProjMassT2, ProjMassT;
+	G4double TargMassT2, TargMassT;
+	G4double PMinusNew, TPlusNew;
 
-    if (whilecount++ >= 500 && (whilecount%100)==0)
-      //G4cout << "G4QGSDiffractiveExcitation::ExciteParticipants possibly looping"
-      //       << ", loop count/ maxPtSquare : "
-      //       << whilecount << " / " << maxPtSquare << G4endl;
+	G4LorentzVector Qmomentum;
+	G4double Qminus, Qplus;
 
-    if (whilecount > 1000 )
-    {
-      Qmomentum=G4LorentzVector(0.,0.,0.,0.);
-      return false; 	  //  Ignore this interaction
-    }
+	G4int whilecount=0;
+	do {
+		if (whilecount++ >= 500 && (whilecount%100)==0)
+			//	   	 G4cout << "G4QGSDiffractiveExcitation::ExciteParticipants possibly looping"
+			//	   	 << ", loop count/ maxPtSquare : "
+			//           	 << whilecount << " / " << maxPtSquare << G4endl;
+			if (whilecount > 1000 )
+			{
+				Qmomentum=G4LorentzVector(0.,0.,0.,0.);
+				return false; 	  //  Ignore this interaction
+			}
 
-    Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
+		//  Generate pt
+		Qmomentum=G4LorentzVector(GaussianPt(AveragePt2,maxPtSquare),0);
 
-    //G4cout << "generated Pt " << Qmomentum << G4endl;
-    //G4cout << "Pprojectile with pt : " << Pprojectile+Qmomentum << G4endl;
-    //G4cout << "Ptarget with pt : " << Ptarget-Qmomentum << G4endl;
+		Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
+		ProjMassT2=MinPrDiffMass2+Pt2;
+		ProjMassT =std::sqrt(ProjMassT2);
 
-    //  Momentum transfer
-    /*
-    G4double Xmin = minmass / ( Pprojectile.e() + Ptarget.e() );
-    G4double Xmax=1.;
-    G4double Xplus =ChooseX(Xmin,Xmax);
-    G4double Xminus=ChooseX(Xmin,Xmax);
+		TargMassT2=MinTrDiffMass2+Pt2;
+		TargMassT =std::sqrt(TargMassT2);
 
-    //G4cout << " X-plus  " << Xplus << G4endl;
-    //G4cout << " X-minus " << Xminus << G4endl;
+                if(SqrtS < ProjMassT + TargMassT) continue;
+ 
+		PZcms2=(S*S+ProjMassT2*ProjMassT2+
+				TargMassT2*TargMassT2-
+				2.*S*ProjMassT2-2.*S*TargMassT2-
+				2.*ProjMassT2*TargMassT2)/4./S;
+		if(PZcms2 < 0 ) {PZcms2=0;};
+		PZcms =std::sqrt(PZcms2);
 
-    G4double pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-    G4double Qplus =-1 * pt2 / Xminus/Ptarget.minus();
-    G4double Qminus=     pt2 / Xplus /Pprojectile.plus();
-    */
+		G4double PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
+		G4double PMinusMax=SqrtS-TargMassT;
 
-    Pt2=G4ThreeVector(Qmomentum.vect()).mag2();
-    ProjMassT2=Mprojectile2+Pt2;
-    ProjMassT =std::sqrt(ProjMassT2);
+		PMinusNew=ChooseP(PMinusMin,PMinusMax);
+		Qminus=PMinusNew-Pprojectile.minus();
 
-    TargMassT2=Mtarget2+Pt2;
-    TargMassT =std::sqrt(TargMassT2);
+		G4double TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
+		G4double TPlusMax=SqrtS-ProjMassT;
 
-    PZcms2=(S*S+ProjMassT2*ProjMassT2+
-	    TargMassT2*TargMassT2-
-	    2.*S*ProjMassT2-2.*S*TargMassT2-
-	    2.*ProjMassT2*TargMassT2)/4./S;
-    if(PZcms2 < 0 ) {PZcms2=0;};
-    PZcms =std::sqrt(PZcms2);
+		TPlusNew=ChooseP(TPlusMin, TPlusMax);
+		Qplus=-(TPlusNew-Ptarget.plus());
 
-    G4double PMinusMin=std::sqrt(ProjMassT2+PZcms2)-PZcms;
-    G4double PMinusMax=SqrtS-TargMassT;
+		Qmomentum.setPz( (Qplus-Qminus)/2 );
+		Qmomentum.setE(  (Qplus+Qminus)/2 );
 
-    PMinusNew=ChooseP(PMinusMin,PMinusMax);
-    Qminus=PMinusNew-Pprojectile.minus();
+	} while ( (Pprojectile+Qmomentum).mag2() <  MinPrDiffMass2 ||      // Uzhi No without excitation
+		  (Ptarget    -Qmomentum).mag2() <  MinTrDiffMass2   ); 
 
-    G4double TPlusMin=std::sqrt(TargMassT2+PZcms2)-PZcms;
-    G4double TPlusMax=SqrtS-ProjMassT;
+	Pprojectile += Qmomentum;
+	Ptarget     -= Qmomentum;
 
-    TPlusNew=ChooseP(TPlusMin, TPlusMax);
-    Qplus=-(TPlusNew-Ptarget.plus());
+	// Transform back and update SplitableHadron Participant.
+	Pprojectile.transform(toLab);
+	Ptarget.transform(toLab);
 
-    Qmomentum.setPz( (Qplus-Qminus)/2 );
-    Qmomentum.setE(  (Qplus+Qminus)/2 );
+  #ifdef debugDoubleDiffraction
+	G4cout << "Pprojectile after boost to Lab: " << Pprojectile <<" "<<Pprojectile.mag()<<G4endl;
+	G4cout << "Ptarget     after boost to Lab: " << Ptarget     <<" "<<Ptarget.mag()    <<G4endl;
+  #endif
 
-    //G4cout << "Qplus / Qminus " << Qplus << " / " << Qminus<<G4endl;
-    //G4cout << "pt2" << pt2 << G4endl;
-    //G4cout << "Qmomentum " << Qmomentum << G4endl;
-    //G4cout << " Masses (P/T) : " << (Pprojectile+Qmomentum).mag() <<
-    //	   		   " / " << (Ptarget-Qmomentum).mag() << G4endl;
-  /*
-  } while ( (Pprojectile+Qmomentum).mag2() <= Mprojectile2 ||
-	   	     (Ptarget-Qmomentum).mag2()     <= Mtarget2 );
-  */
-  } while (  /* Loop checking, 26.10.2015, A.Ribon */
-            ( (Pprojectile+Qmomentum).mag2() <  Mprojectile2       ||        // No without excitation
-	      (Ptarget    -Qmomentum).mag2() <  Mtarget2             ) ||  
-	      ( (Pprojectile+Qmomentum).mag2()  <  ProjectileDiffCut2 &&     // No double Diffraction
-	      (Ptarget    -Qmomentum).mag2()  <  NuclearNucleonDiffCut2) ); 
+	target->Set4Momentum(Ptarget);
+	projectile->Set4Momentum(Pprojectile);
 
-  if((Ptarget-Qmomentum).mag2() < NuclearNucleonDiffCut2)         // Uzhi Projectile diffraction
-  {
-    G4double TMinusNew=SqrtS-PMinusNew;
-    Qminus=Ptarget.minus()-TMinusNew;
-    TPlusNew=TargMassT2/TMinusNew;
-    Qplus=Ptarget.plus()-TPlusNew;
-
-    Qmomentum.setPz( (Qplus-Qminus)/2 );
-    Qmomentum.setE(  (Qplus+Qminus)/2 );
-  }
-  else if((Pprojectile+Qmomentum).mag2() <  ProjectileDiffCut2)   // Uzhi Target diffraction
-  {
-    G4double PPlusNew=SqrtS-TPlusNew;
-    Qplus=PPlusNew-Pprojectile.plus();
-    PMinusNew=ProjMassT2/PPlusNew;
-    Qminus=PMinusNew-Pprojectile.minus();
-
-    Qmomentum.setPz( (Qplus-Qminus)/2 );
-    Qmomentum.setE(  (Qplus+Qminus)/2 );
-  };
-
-  Pprojectile += Qmomentum;
-  Ptarget     -= Qmomentum;
-
-  // Vova
-
-  /*
-  Pprojectile.setPz(0.);
-  Pprojectile.setE(SqrtS-M0target);
-  Ptarget.setPz(0.);
-  Ptarget.setE(M0target);
-  */
-
-  //G4cout << "Pprojectile with Q : " << Pprojectile << G4endl;
-  //G4cout << "Ptarget with Q : " << Ptarget << G4endl;
-  //G4cout << "Projectile back: " << toLab * Pprojectile << G4endl;
-  //G4cout << "Target back: " << toLab * Ptarget << G4endl;
-
-  // Transform back and update SplitableHadron Participant.
-  Pprojectile.transform(toLab);
-  Ptarget.transform(toLab);
-
-  //G4cout << "Pprojectile with Q M: " << Pprojectile<<" "<<  Pprojectile.mag() << G4endl;
-  //G4cout << "Ptarget     with Q M: " << Ptarget    <<" "<<  Ptarget.mag()     << G4endl;
-  //G4cout << "Target	 mass  " <<  Ptarget.mag() << G4endl;
-
-  target->Set4Momentum(Ptarget);
-
-  //G4cout << "Projectile mass  " <<  Pprojectile.mag() << G4endl;
-
-  projectile->Set4Momentum(Pprojectile);
-
-  return true;
+	return true;
 }
 
 
 G4ExcitedString * G4QGSDiffractiveExcitation::
 String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 {
-  hadron->SplitUp();
-  G4Parton *start= hadron->GetNextParton();
-  if ( start==NULL) { 
-    G4cout << " G4FTFModel::String() Error:No start parton found"<< G4endl;
-    return NULL;
-  }
-  G4Parton *end  = hadron->GetNextParton();
-  if ( end==NULL) { 
-    G4cout << " G4FTFModel::String() Error:No end parton found"<< G4endl;
-    return NULL;
-  }
+	hadron->SplitUp();
+	G4Parton *start= hadron->GetNextParton();
+	if ( start==NULL) 
+	{ G4cout << " G4QGSDiffractiveExcitation::String() Error:No start parton found"<< G4endl;
+	return NULL;
+	}
+	G4Parton *end  = hadron->GetNextParton();
+	if ( end==NULL) 
+	{ G4cout << " G4QGSDiffractiveExcitation::String() Error:No end parton found"<< G4endl;
+	return NULL;
+	}
 
-  G4ExcitedString * string;
-  if ( isProjectile )  {
-    string= new G4ExcitedString(end,start, +1);
-  } else {
-    string= new G4ExcitedString(start,end, -1);
-  }
+	G4ExcitedString * string;
+	if ( isProjectile ) 
+	{
+		string= new G4ExcitedString(end,start, +1);
+	} else {
+		string= new G4ExcitedString(start,end, -1);
+	}
 
-  string->SetPosition(hadron->GetPosition());
+	string->SetPosition(hadron->GetPosition());
 
-  // momenta of string ends
-  G4double ptSquared= hadron->Get4Momentum().perp2();
-  G4double transverseMassSquared= hadron->Get4Momentum().plus()
-				* hadron->Get4Momentum().minus();
+	// momenta of string ends
+/*                                                                  // Uzhi 2016
+	G4double ptSquared= hadron->Get4Momentum().perp2();
+	G4double transverseMassSquared= hadron->Get4Momentum().plus()
+				    		*	hadron->Get4Momentum().minus();
 
-  G4double maxAvailMomentumSquared=
-    sqr( std::sqrt(transverseMassSquared) - std::sqrt(ptSquared) );
 
-  G4double widthOfPtSquare = 0.25;          // Uzhi <Pt^2>=0.25 ???
-  G4ThreeVector pt=GaussianPt(widthOfPtSquare,maxAvailMomentumSquared);
+	G4double maxAvailMomentumSquared=
+			sqr( std::sqrt(transverseMassSquared) - std::sqrt(ptSquared) );
+*/
+	G4double maxAvailMomentumSquared=sqr(hadron->Get4Momentum().mag()/2.);  // Uzhi 2016
 
-  G4LorentzVector Pstart(G4LorentzVector(pt,0.));
-  G4LorentzVector Pend;
-  Pend.setPx(hadron->Get4Momentum().px() - pt.x());
-  Pend.setPy(hadron->Get4Momentum().py() - pt.y());
+	G4double widthOfPtSquare = 0.5*sqr(GeV);   //0.25; // Uzhi 2016 // Uzhi <Pt^2>=0.25 ??????????????????
+	G4ThreeVector pt=GaussianPt(widthOfPtSquare,maxAvailMomentumSquared);
 
-  G4double tm1=hadron->Get4Momentum().minus() +
-	       ( Pend.perp2()-Pstart.perp2() ) / hadron->Get4Momentum().plus();
+	G4LorentzVector Pstart(G4LorentzVector(pt,0.));
+	G4LorentzVector Pend;
+	Pend.setPx(hadron->Get4Momentum().px() - pt.x());
+	Pend.setPy(hadron->Get4Momentum().py() - pt.y());
 
-  G4double tm2= std::sqrt( std::max(0., sqr(tm1) -
-			   4. * Pend.perp2() * hadron->Get4Momentum().minus()
-			   /  hadron->Get4Momentum().plus() ));
+	G4double tm1=hadron->Get4Momentum().minus() +
+			( Pend.perp2()-Pstart.perp2() ) / hadron->Get4Momentum().plus();
 
-  G4int Sign= isProjectile ? -1 : 1;
+	G4double tm2= std::sqrt( std::max(0., sqr(tm1) -
+			4. * Pend.perp2() * hadron->Get4Momentum().minus()
+			/  hadron->Get4Momentum().plus() ));
 
-  G4double endMinus  = 0.5 * (tm1 + Sign*tm2);
-  G4double startMinus= hadron->Get4Momentum().minus() - endMinus;
+	G4int Sign= isProjectile ? -1 : 1;
 
-  G4double startPlus= Pstart.perp2() /  startMinus;
-  G4double endPlus  = hadron->Get4Momentum().plus() - startPlus;
+	G4double endMinus  = 0.5 * (tm1 + Sign*tm2);
+	G4double startMinus= hadron->Get4Momentum().minus() - endMinus;
 
-  Pstart.setPz(0.5*(startPlus - startMinus));
-  Pstart.setE(0.5*(startPlus + startMinus));
+	G4double startPlus= Pstart.perp2() /  startMinus;
+	G4double endPlus  = hadron->Get4Momentum().plus() - startPlus;
 
-  Pend.setPz(0.5*(endPlus - endMinus));
-  Pend.setE(0.5*(endPlus + endMinus));
+	Pstart.setPz(0.5*(startPlus - startMinus));
+	Pstart.setE(0.5*(startPlus + startMinus));
 
-  start->Set4Momentum(Pstart);
-  end->Set4Momentum(Pend);
+	Pend.setPz(0.5*(endPlus - endMinus));
+	Pend.setE(0.5*(endPlus + endMinus));
 
-  #ifdef G4_FTFDEBUG
-  G4cout << " generated string flavors          " << start->GetPDGcode() << " / " << end->GetPDGcode() << G4endl;
-  G4cout << " generated string momenta:   quark " << start->Get4Momentum() << "mass : " <<start->Get4Momentum().mag()<< G4endl;
-  G4cout << " generated string momenta: Diquark " << end ->Get4Momentum() << "mass : " <<end->Get4Momentum().mag()<< G4endl;
-  G4cout << " sum of ends                       " << Pstart+Pend << G4endl;
-  G4cout << " Original                          " << hadron->Get4Momentum() << G4endl;
-  #endif
+	start->Set4Momentum(Pstart);
+	end->Set4Momentum(Pend);
 
-  return string;	
+	#ifdef debugQGSdiffExictation
+		G4cout << " generated string flavors          " << start->GetPDGcode()   << " / " << end->GetPDGcode() << G4endl;
+		G4cout << " generated string momenta:   quark " << start->Get4Momentum() << "mass : " <<start->Get4Momentum().mag()<< G4endl;
+		G4cout << " generated string momenta: Diquark " << end ->Get4Momentum()  << "mass : " <<end->Get4Momentum().mag()<< G4endl;
+		G4cout << " sum of ends                       " << Pstart+Pend << G4endl;
+		G4cout << " Original                          " << hadron->Get4Momentum() << G4endl;
+	#endif
+
+	return string;	
 }
 
 
@@ -430,46 +378,33 @@ String(G4VSplitableHadron * hadron, G4bool isProjectile) const
 
 G4double G4QGSDiffractiveExcitation::ChooseP(G4double Pmin, G4double Pmax) const
 {
-  // choose an x between Xmin and Xmax with P(x) ~ 1/x
-  //  to be improved...
+	// choose an x between Xmin and Xmax with P(x) ~ 1/x
+	//  to be improved...
 
-  G4double range=Pmax-Pmin;
+	G4double range=Pmax-Pmin;
 
-  if ( Pmin <= 0. || range <=0. ) 
-  {
-    G4cout << " Pmin, range : " << Pmin << " , " << range << G4endl;
-    throw G4HadronicException(__FILE__, __LINE__, "G4QGSDiffractiveExcitation::ChooseP : Invalid arguments ");
-  }
+	if ( Pmin <= 0. || range <=0. ) 
+	{
+		G4cout << " Pmin, range : " << Pmin << " , " << range << G4endl;
+		throw G4HadronicException(__FILE__, __LINE__, "G4QGSDiffractiveExcitation::ChooseP : Invalid arguments ");
+	}
 
-  G4double P;
-  /*
-  do {
-    x=Xmin + G4UniformRand() * range;
-  }  while ( Xmin/x < G4UniformRand() );
-  */
-
-  P=Pmin * G4Pow::GetInstance()->powA(Pmax/Pmin,G4UniformRand());
-
-  //debug-hpw	cout << "DiffractiveX "<<x<<G4endl;
-  return P;
+	G4double P;
+	P=Pmin * G4Pow::GetInstance()->powA(Pmax/Pmin,G4UniformRand());
+	//debug-hpw	cout << "DiffractiveX "<<x<<G4endl;
+	return P;
 }
 
 G4ThreeVector G4QGSDiffractiveExcitation::GaussianPt(G4double AveragePt2, G4double maxPtSquare) const
 {            //  @@ this method is used in FTFModel as well. Should go somewhere common!
 
-  G4double Pt2;
-  /*
-  do {
-    pt2=widthSquare * G4Log( G4UniformRand() );
-  } while ( pt2 > maxPtSquare);
-  */
+	G4double Pt2;
 
-  Pt2 = -AveragePt2 * G4Log(1. + G4UniformRand() * (G4Exp(-maxPtSquare/AveragePt2)-1.));
+	Pt2 = -AveragePt2 * G4Log(1. + G4UniformRand() * (G4Exp(-maxPtSquare/AveragePt2)-1.));
 
-  G4double Pt=std::sqrt(Pt2);
+	G4double Pt=std::sqrt(Pt2);
 
-  G4double phi=G4UniformRand() * twopi;
+	G4double phi=G4UniformRand() * twopi;
 
-  return G4ThreeVector (Pt*std::cos(phi), Pt*std::sin(phi), 0.);    
+	return G4ThreeVector (Pt*std::cos(phi), Pt*std::sin(phi), 0.);    
 }
-

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 66892 2013-01-17 10:57:59Z gunter $
+# $Id: GNUmakefile 103042 2017-03-10 11:50:07Z gcosmo $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -33,7 +33,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/processes/electromagnetic/dna/molecules/management/include \
             -I$(G4BASE)/processes/electromagnetic/dna/molecules/types/include \
-            -I$(G4BASE)/processes/electromagnetic/dna/management/include
+            -I$(G4BASE)/processes/electromagnetic/dna/management/include \
+            -I$(G4BASE)/analysis/management/include
 
 include $(G4INSTALL)/config/common.gmk
 

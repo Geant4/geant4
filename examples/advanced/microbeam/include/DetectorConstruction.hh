@@ -58,37 +58,36 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 public:
 
   DetectorConstruction();
-  ~DetectorConstruction();
+  virtual ~DetectorConstruction();
 
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
   
-  void ConstructSDandField();
+  virtual void ConstructSDandField();
      
-  void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
-  G4double GetMassNucleus(){return fMassNucleus;}          
+  void SetMassNucleus(G4double mN) {fMassNucleus = mN;}
+  G4double GetMassNucleus() const  {return fMassNucleus;}          
 
-  void SetMassCytoplasm(G4double mC){ fMassCytoplasm = mC;}
-  G4double GetMassCytoplasm(){return fMassCytoplasm;}          
+  void SetMassCytoplasm(G4double mC) {fMassCytoplasm = mC;}
+  G4double GetMassCytoplasm() const  {return fMassCytoplasm;}          
 
-  void SetNbOfPixelsInPhantom(G4int nP){ fNbOfPixelsInPhantom = nP;}
-  G4int GetNbOfPixelsInPhantom(){return fNbOfPixelsInPhantom;}          
+  void SetNbOfPixelsInPhantom(G4int nP) {fNbOfPixelsInPhantom = nP;}
+  G4int GetNbOfPixelsInPhantom() const {return fNbOfPixelsInPhantom;}          
 
-  // Returns the logical volumes
-
-  G4LogicalVolume* GetLogicalCollDetYoke() {return fLogicYoke2;};
-  G4LogicalVolume* GetLogicalIsobutane() {return fLogicBoiteIso;};
-  G4LogicalVolume* GetLogicalCollDetGap4() {return fLogic4Gap;};
-  G4LogicalVolume* GetLogicalPolyprop() {return fLogicBoite3;};
-  G4LogicalVolume* GetLogicalKgm() {return fLogicKgm;};
+  const G4LogicalVolume* GetLogicalCollDetYoke() const {return fLogicYoke2;};
+  const G4LogicalVolume* GetLogicalIsobutane()   const {return fLogicBoiteIso;};
+  const G4LogicalVolume* GetLogicalCollDetGap4() const {return fLogic4Gap;};
+  const G4LogicalVolume* GetLogicalPolyprop()    const {return fLogicBoite3;};
+  const G4LogicalVolume* GetLogicalKgm()         const {return fLogicKgm;};
   
-  G4Material * GetNucleusMaterial1() {return  fNucleusMaterial1;};
-  G4Material * GetNucleusMaterial2() {return  fNucleusMaterial2;};
-  G4Material * GetNucleusMaterial3() {return  fNucleusMaterial3;};
-  G4Material * GetCytoplasmMaterial1() {return  fCytoplasmMaterial1;};
-  G4Material * GetCytoplasmMaterial2() {return  fCytoplasmMaterial2;};
-  G4Material * GetCytoplasmMaterial3() {return  fCytoplasmMaterial3;};
+  const G4Material * GetNucleusMaterial1()   const {return  fNucleusMaterial1;};
+  const G4Material * GetNucleusMaterial2()   const {return  fNucleusMaterial2;};
+  const G4Material * GetNucleusMaterial3()   const {return  fNucleusMaterial3;};
+  const G4Material * GetCytoplasmMaterial1() const {return  fCytoplasmMaterial1;};
+  const G4Material * GetCytoplasmMaterial2() const {return  fCytoplasmMaterial2;};
+  const G4Material * GetCytoplasmMaterial3() const {return  fCytoplasmMaterial3;};
   
-  CellParameterisation * GetCellParameterisation() {return fMyCellParameterisation;};
+  const CellParameterisation * GetCellParameterisation() const 
+        {return fMyCellParameterisation;};
   
 private:
 
@@ -100,34 +99,34 @@ private:
   G4double fDensityCytoplasm;
   G4int    fNbOfPixelsInPhantom;
     
-  G4double      fWorldSizeXY;
-  G4double      fWorldSizeZ;
-  G4double      fCollObjSizeXY;
-  G4double      fCollObjSizeZ;
+  G4double fWorldSizeXY;
+  G4double fWorldSizeZ;
+  G4double fCollObjSizeXY;
+  G4double fCollObjSizeZ;
 
-  G4double 	fCiblePositionX;
-  G4double 	fCiblePositionY;
-  G4double 	fCiblePositionZ;
+  G4double fCiblePositionX;
+  G4double fCiblePositionY;
+  G4double fCiblePositionZ;
   
-  G4double 	fLineAngle;
+  G4double fLineAngle;
  
 // Materials
 
-  G4Material*   fDefaultMaterial;
-  G4Material*   fCollimatorMaterial;
-  G4Material*   fBoiteMaterial;
-  G4Material*   fCathodeMaterial;
-  G4Material*   fVerreMaterial;
-  G4Material*   fVerre2Material;
-  G4Material*   fKgmMaterial;
-  G4Material*   fBoite2Material;
-  G4Material*   fBoite3Material;
-  G4Material*   fNucleusMaterial1;
-  G4Material*   fCytoplasmMaterial1;
-  G4Material*   fNucleusMaterial2;
-  G4Material*   fCytoplasmMaterial2;
-  G4Material*   fNucleusMaterial3;
-  G4Material*   fCytoplasmMaterial3;
+  G4Material* fDefaultMaterial;
+  G4Material* fCollimatorMaterial;
+  G4Material* fBoiteMaterial;
+  G4Material* fCathodeMaterial;
+  G4Material* fVerreMaterial;
+  G4Material* fVerre2Material;
+  G4Material* fKgmMaterial;
+  G4Material* fBoite2Material;
+  G4Material* fBoite3Material;
+  G4Material* fNucleusMaterial1;
+  G4Material* fCytoplasmMaterial1;
+  G4Material* fNucleusMaterial2;
+  G4Material* fCytoplasmMaterial2;
+  G4Material* fNucleusMaterial3;
+  G4Material* fCytoplasmMaterial3;
 
 // Volumes
 
@@ -211,21 +210,9 @@ private:
 
   CellParameterisation * fMyCellParameterisation;
   
-  //
+  // EM FIELD
   
   static G4ThreadLocal EMField * fField;
-
-  G4FieldManager * fFieldMgr;
-  G4MagIntegratorStepper * fStepper;
-  G4EqMagElectricField * fEquation;
-  G4MagInt_Driver * fIntgrDriver;
-  G4ChordFinder * fChordFinder ;
-  
-  // FROM NANOBEAM EX. TUNINGS
-  
-  // G4PropagatorInField * fPropInField;
-
-  //
   
   void DefineMaterials();
   G4VPhysicalVolume* ConstructLine();     

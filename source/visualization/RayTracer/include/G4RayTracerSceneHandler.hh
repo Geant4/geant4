@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracerSceneHandler.hh 99152 2016-09-07 08:04:30Z gcosmo $
+// $Id: G4RayTracerSceneHandler.hh 104015 2017-05-08 07:28:08Z gcosmo $
 
 // John Allison  17th March 2000
 
@@ -33,14 +33,24 @@
 
 #include "G4VSceneHandler.hh"
 
-class G4RayTracerSceneHandler: public G4VSceneHandler {
+#include "G4ModelingParameters.hh"
+#include <map>
 
+class G4RayTracerSceneHandler: public G4VSceneHandler
+{
 public:
 
   G4RayTracerSceneHandler(G4VGraphicsSystem& system,
 			  const G4String& name = "");
   virtual ~G4RayTracerSceneHandler();
 
+  void BuildVisAttsMap (const G4VSolid& solid);
+  // BuildVisAttsMap is the appropriate name for what it does in this class
+  // but it is actually an override of G4VSceneHandler::RequestPrimitives.
+  void RequestPrimitives (const G4VSolid& solid)
+  {BuildVisAttsMap(solid);}
+
+  // Required pure virtual functions, not used in Ray Tracer.
   void AddPrimitive(const G4Polyline&){}
   void AddPrimitive(const G4Text&){}
   void AddPrimitive(const G4Circle&){}
@@ -49,27 +59,26 @@ public:
   void AddPrimitive(const G4Polymarker&){}
   void AddPrimitive(const G4Scale&){}
 
-  void AddSolid(const G4Box&){}
-  void AddSolid(const G4Cons&){}
-  void AddSolid(const G4Tubs&){}
-  void AddSolid(const G4Trd&){}
-  void AddSolid(const G4Trap&){}
-  void AddSolid(const G4Sphere&){}
-  void AddSolid(const G4Para&){}
-  void AddSolid(const G4Torus&){}
-  void AddSolid(const G4Polycone&){}
-  void AddSolid(const G4Polyhedra&){}
-  void AddSolid(const G4Orb&){}
-  void AddSolid(const G4Ellipsoid&){}
-  void AddSolid(const G4VSolid&){}
-  void AddCompound(const G4VTrajectory&){}
-  void AddCompound(const G4VHit&){}
-  void AddCompound(const G4VDigi&){}
-  void AddCompound(const G4THitsMap<G4double>&) {}
-  void AddCompound(const G4THitsMap<G4StatDouble>&) {}
+  void ClearStore ();
+
+  struct PathLessThan
+  {G4bool operator()
+    (const G4ModelingParameters::PVPointerCopyNoPath&,
+     const G4ModelingParameters::PVPointerCopyNoPath&) const;
+  };
+
+  const std::map
+  <G4ModelingParameters::PVPointerCopyNoPath,G4VisAttributes,PathLessThan>&
+  GetSceneVisAttsMap() const
+  {return fSceneVisAttsMap;}
 
 private:
-  static G4int    fSceneIdCount;  // Counter for RayTracer scene handlers.
+  
+  static G4int fSceneIdCount;  // Counter for RayTracer scene handlers.
+
+  std::map
+  <G4ModelingParameters::PVPointerCopyNoPath,G4VisAttributes,PathLessThan>
+  fSceneVisAttsMap;
 };
 
 #endif

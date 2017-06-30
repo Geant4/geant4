@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,7 +38,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 ***** Table : Nb of materials = 26 *****
 
  Material: MadaBasaltMain    density:  3.000 g/cm3   RadL:   7.783 cm   Nucl.Int.Length:  33.596 cm 
-                       Imean: 141.985 eV 
+                       Imean: 141.985 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -106,7 +106,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: MadaBasaltTraces    density:  3.000 g/cm3   RadL:   3.460 cm   Nucl.Int.Length:  51.757 cm 
-                       Imean: 369.885 eV 
+                       Imean: 369.885 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ti (Ti)   Z = 22.0   N =    48   A = 47.867 g/mole
          --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:  8.250 %
@@ -268,7 +268,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: MadaBasalt    density:  3.000 g/cm3   RadL:   7.684 cm   Nucl.Int.Length:  33.718 cm 
-                       Imean: 143.221 eV 
+                       Imean: 143.221 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -486,7 +486,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: IceBasaltMain    density:  3.000 g/cm3   RadL:   7.775 cm   Nucl.Int.Length:  33.778 cm 
-                       Imean: 145.009 eV 
+                       Imean: 145.009 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -561,7 +561,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: IceBasaltTraces    density:  3.000 g/cm3   RadL:   4.081 cm   Nucl.Int.Length:  46.694 cm 
-                       Imean: 302.160 eV 
+                       Imean: 302.160 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ba (Ba)   Z = 56.0   N =   137   A = 137.327 g/mole
          --->  Isotope: Ba130   Z = 56   N = 130   A = 129.91 g/mole   abundance:  0.106 %
@@ -694,7 +694,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: IceBasalt    density:  3.000 g/cm3   RadL:   7.759 cm   Nucl.Int.Length:  33.799 cm 
-                       Imean: 145.224 eV 
+                       Imean: 145.224 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -891,7 +891,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: Dolorite    density:  3.000 g/cm3   RadL:   7.550 cm   Nucl.Int.Length:  33.898 cm 
-                       Imean: 144.832 eV 
+                       Imean: 144.832 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -959,7 +959,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: TracesOfDolorite    density:  3.000 g/cm3   RadL:   3.976 cm   Nucl.Int.Length:  48.092 cm 
-                       Imean: 323.948 eV 
+                       Imean: 323.948 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nb (Nb)   Z = 41.0   N =    93   A = 92.906 g/mole
          --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.000 %
@@ -1064,7 +1064,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: Dolorite    density:  3.000 g/cm3   RadL:   7.531 cm   Nucl.Int.Length:  33.926 cm 
-                       Imean: 145.127 eV 
+                       Imean: 145.127 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nb (Nb)   Z = 41.0   N =    93   A = 92.906 g/mole
          --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.000 %
@@ -1233,7 +1233,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: Mars1 Main components    density:  3.000 g/cm3   RadL:   8.190 cm   Nucl.Int.Length:  32.982 cm 
-                       Imean: 135.060 eV 
+                       Imean: 135.060 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -1301,7 +1301,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: TracesOfMars1    density:  3.000 g/cm3   RadL:   3.406 cm   Nucl.Int.Length:  52.132 cm 
-                       Imean: 375.468 eV 
+                       Imean: 375.468 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nb (Nb)   Z = 41.0   N =    93   A = 92.906 g/mole
          --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.000 %
@@ -1409,7 +1409,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material:    Mars1    density:  3.000 g/cm3   RadL:   8.138 cm   Nucl.Int.Length:  33.037 cm 
-                       Imean: 135.607 eV 
+                       Imean: 135.607 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Nb (Nb)   Z = 41.0   N =    93   A = 92.906 g/mole
          --->  Isotope:  Nb93   Z = 41   N =  93   A =  92.91 g/mole   abundance: 100.000 %
@@ -1581,7 +1581,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: HawaiianWD    density:  3.000 g/cm3   RadL:   7.956 cm   Nucl.Int.Length:  33.391 cm 
-                       Imean: 139.765 eV 
+                       Imean: 139.765 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -1641,7 +1641,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: HawaiianRF    density:  3.000 g/cm3   RadL:   7.991 cm   Nucl.Int.Length:  33.335 cm 
-                       Imean: 139.256 eV 
+                       Imean: 139.256 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -1709,7 +1709,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: IcelandicWD    density:  3.000 g/cm3   RadL:   7.888 cm   Nucl.Int.Length:  33.422 cm 
-                       Imean: 139.884 eV 
+                       Imean: 139.884 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -1769,7 +1769,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: IcelandicRF    density:  3.000 g/cm3   RadL:   7.795 cm   Nucl.Int.Length:  33.529 cm 
-                       Imean: 140.665 eV 
+                       Imean: 140.665 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -1833,7 +1833,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: GabbroWD    density:  3.000 g/cm3   RadL:   7.677 cm   Nucl.Int.Length:  33.731 cm 
-                       Imean: 142.657 eV 
+                       Imean: 142.657 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -1893,7 +1893,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: GabbroRF    density:  3.000 g/cm3   RadL:   7.608 cm   Nucl.Int.Length:  33.845 cm 
-                       Imean: 143.625 eV 
+                       Imean: 143.625 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -1961,7 +1961,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: Anorthosite    density:  2.800 g/cm3   RadL:   8.510 cm   Nucl.Int.Length:  35.737 cm 
-                       Imean: 139.030 eV 
+                       Imean: 139.030 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -2099,7 +2099,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material:   Gabbro    density:  3.000 g/cm3   RadL:   7.622 cm   Nucl.Int.Length:  33.828 cm 
-                       Imean: 143.753 eV 
+                       Imean: 143.753 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -2167,7 +2167,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: gallium arsenide    density:  5.320 g/cm3   RadL:   2.292 cm   Nucl.Int.Length:  27.414 cm 
-                       Imean: 340.641 eV 
+                       Imean: 340.641 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Ga (Ga)   Z = 31.0   N =    70   A = 69.723 g/mole
          --->  Isotope:  Ga69   Z = 31   N =  69   A =  68.93 g/mole   abundance: 60.108 %
@@ -2180,7 +2180,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material: Scintillator    density:  1.032 g/cm3   RadL:  42.544 cm   Nucl.Int.Length:  69.969 cm 
-                       Imean:  64.684 eV 
+                       Imean:  64.684 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: C (C)   Z =  6.0   N =    12   A = 12.011 g/mole
          --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance: 98.930 %
@@ -2203,7 +2203,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material:   Basalt    density:  3.000 g/cm3   RadL:   7.851 cm   Nucl.Int.Length:  33.465 cm 
-                       Imean: 140.329 eV 
+                       Imean: 140.329 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Fe (Fe)   Z = 26.0   N =    56   A = 55.845 g/mole
          --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:  5.845 %
@@ -2253,7 +2253,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material:     SiLi    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.660 cm 
-                       Imean: 173.000 eV 
+                       Imean: 173.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Si (Si)   Z = 14.0   N =    28   A = 28.085 g/mole
          --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance: 92.230 %
@@ -2269,7 +2269,7 @@ G4NistMaterialBuilder::FindOrBuildMaterial WARNING: material <Cu> is not found o
 
 
  Material:       Cu    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.658 cm 
-                       Imean: 322.000 eV 
+                       Imean: 322.000 eV   temperature: 293.15 K  pressure:   1.00 atm
 
    --->  Element: Cu (Cu)   Z = 29.0   N =    64   A = 63.546 g/mole
          --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance: 69.170 %
@@ -2867,7 +2867,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.64s Real=0.75s Sys=0s
+  User=1s Real=1s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 ... close Root file : xrayfluo.root - done
@@ -2889,21 +2889,22 @@ XrayFluoSD deleted
 G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 7
+TransportationManager deleted.
+Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00865 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.322 MB
-Pool ID '7G4Track', size : 0.643 MB
+Pool ID '17G4DynamicParticle', size : 0.314 MB
+Pool ID '7G4Track', size : 0.629 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.98 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.96 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

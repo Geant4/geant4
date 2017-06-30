@@ -72,6 +72,7 @@
 
 class G4Fragment;
 class G4RadioactiveDecaymessenger;
+class G4PhotonEvaporation;
 
 typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
 typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
@@ -237,8 +238,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4VParticleChange* DecayIt(const G4Track& theTrack,
                                const G4Step&  theStep);
 
-  //    static G4ThreadLocal G4Fragment* polarizedNucleus;
-
   protected:
 
     G4DecayProducts* DoDecay(const G4ParticleDefinition& theParticleDef);
@@ -274,6 +273,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4RadioactiveDecay & operator=(const G4RadioactiveDecay &right);
 
     G4RadioactiveDecaymessenger* theRadioactiveDecaymessenger;
+    G4PhotonEvaporation* photonEvaporation;
 
     G4NucleusLimits theNucleusLimits;
 

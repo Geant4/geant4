@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 92392 2015-08-31 14:07:02Z gcosmo $
+# $Id: sources.cmake 103465 2017-04-11 07:24:57Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -71,8 +71,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4SolidExtentList.hh
         G4SolidsWorkspace.hh
         G4SolidsWorkspacePool.hh
-        G4SurfaceVoxelizer.hh
-        G4SurfaceVoxelizer.icc
         G4SurfBits.hh
         G4TessellatedGeometryAlgorithms.hh
         G4TessellatedSolid.hh
@@ -99,6 +97,8 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4VCSGface.hh
         G4VCSGfaceted.hh
         G4VFacet.hh
+        G4Voxelizer.hh
+        G4Voxelizer.icc
         G4VTwistSurface.hh
         G4VTwistSurface.icc
         G4VTwistedFaceted.hh
@@ -126,7 +126,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4SolidExtentList.cc
         G4SolidsWorkspace.cc
         G4SolidsWorkspacePool.cc
-        G4SurfaceVoxelizer.cc
         G4SurfBits.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc
@@ -152,6 +151,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4UTet.cc
         G4VCSGfaceted.cc
         G4VFacet.cc
+        G4Voxelizer.cc
         G4VTwistSurface.cc
         G4VTwistedFaceted.cc
     GRANULAR_DEPENDENCIES
@@ -162,7 +162,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4hepnumerics
         G4intercoms
         G4volumes
-        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps
