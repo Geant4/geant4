@@ -102,9 +102,9 @@ void G4BertiniElectroNuclearBuilder::Build()
   G4ProcessManager * aProcMan = 0;
   
   aProcMan = G4Gamma::Gamma()->GetProcessManager();
-  theGammaReaction->SetMaxEnergy(3.5*GeV);
+  theGammaReaction->SetMaxEnergy(10*GeV);
   thePhotoNuclearProcess->RegisterMe(theGammaReaction);
-  theModel->SetMinEnergy(3.*GeV);
+  theModel->SetMinEnergy(8.*GeV);
   theModel->SetMaxEnergy(100*TeV);
   thePhotoNuclearProcess->RegisterMe(theModel);
   aProcMan->AddDiscreteProcess(thePhotoNuclearProcess);
