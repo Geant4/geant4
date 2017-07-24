@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc 91869 2015-08-07 15:21:02Z gcosmo $
+// $Id: G4GammaConversionToMuons.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -57,7 +57,7 @@ G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
   : G4VDiscreteProcess (processName, type),
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
     Rc(elm_coupling/Mmuon),
-    LowestEnergyLimit (4*Mmuon), // 4*Mmuon
+    LowestEnergyLimit (4.*Mmuon), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
@@ -156,7 +156,7 @@ G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { 
-  if(Egam <= LowestEnergyLimit) return 0 ; // below threshold return 0
+  if(Egam <= LowestEnergyLimit) return 0.0 ; // below threshold return 0
 
   G4int Z = G4lrint(ZZ);
   G4double CrossSection = 0.0;
@@ -239,8 +239,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     }
   G4double Zthird=1./nist->GetZ13(Z); // Z**(-1/3)
   G4double Winfty=B*Zthird*Mmuon/(Dn*electron_mass_c2);
-  G4double C1Num=0.35*A027;
-  G4double C1Num2=C1Num*C1Num;
+  G4double C1Num=0.20*A027; // NT change 0.35*A027;  
+  // NT removed G4double C1Num2=C1Num*C1Num; 
   G4double C2Term2=electron_mass_c2/(183.*Zthird*Mmuon);
 
   G4double GammaMuonInv=Mmuon/Egam;
@@ -285,14 +285,16 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   do      // t, psi, rho generation start  (while angle < pi)
   {
     //generate t by the rejection method
-    G4double C1=C1Num2* GammaMuonInv/xPM;
-    G4double f1_max=(1.-xPM) / (1.+C1);
+    G4double C1sqrt = C1Num*GammaMuonInv/(2*xPM); // NT added
+    G4double C1= C1sqrt*C1sqrt; // NT changed C1Num2*GammaMuonInv/xPM;
+    G4double f1_max=(1.-xPM) / ((1.+C1)* (1.+C1)); // (1.+C1) NT changed denom
     G4double f1; // the probability density
     do
     { 
       ++nn;
       t=G4UniformRand();
-      f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
+      G4double den = (1.+C1/(t*t)); // NT new
+      f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / den*den;// NT edited denom. (1.+C1/(t*t));
       if(f1<0 || f1> f1_max) // should never happend
 	{
 	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
