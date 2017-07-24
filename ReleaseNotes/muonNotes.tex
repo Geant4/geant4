@@ -1,0 +1,74 @@
+\documentclass[11pt]{article}
+\usepackage{geometry}                % See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                % Activate for for rotated page geometry
+\usepackage[parfill]{parskip}    % Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\usepackage{amsmath}
+\usepackage{color}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\pal}{\parallel}
+\newcommand{\red}{\color[rgb]{1,0,0}}
+
+\title{Notes on Gamma Conversion to Muons in Geant4}
+\author{NataliaToro}
+\date{}                               % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+(equation numbers refer to the Geant4 10.2 physics reference manual)
+
+These notes summarize my understanding of Section 5.5 of the Geant4 physics reference manual, and the G4GammaConversionToMuons class.  My calculations suggest that eqns. (5.60) and (5.61), and the corresponding lines of code, have implemented the nuclear form factor incorrectly.  The discrepancies in the formulas look like small ``typos'', but I estimate that they impact the tails of the muon distribution relevant for LDMX by 2--3 orders of magnitude, as shown in Tim's slides.
+
+The form factor first appears in (5.60) and (5.61).  It seems these are trying to implement a standard form factor (c.f. (6.115))
+\be
+F_{exp}(q)=\left[1+\frac{1}{12} \left( \frac{q r_n}{\hbar} \right)^2 \right]^{-2} = {\left[ 1 + (0.20 A^{0.27} q/m_\mu)^2 \right]^{-2}}
+\label{formFactor}
+\ee
+where in the last expression we have used (c.f. (6.116)) $ r_n/\hbar = 1.27 A^{0.27} \,\rm{fm}/\hbar = 6.45/GeV$, $\frac{1}{\sqrt{12}} r_n\cdot m_\mu = 0.20$.
+
+To implement this form factor, we need to evaluate $q^2$ in terms of the kinematic variables introduced in (5.51):
+\be
+u_\pm = \gamma_\pm \theta_\pm, \qquad \gamma_\pm = \frac{E_\mu^\pm}{m_\mu}, \qquad q^2 = q_\pal^2 + q_\perp^2,
+\ee
+and the variables $t$, $rho$, and $\psi$ defined implicitly above and below (5.54):
+\be
+u_\pm = u \pm \xi/2, \qquad \beta = u \varphi; \qquad \xi = \rho \cos\psi, \qquad \beta = \rho \sin\psi; u^2 = 1/t -1
+\ee
+%\be
+%\Rightarrow u = (u_+ + u_-)/2, \qquad \rho = (u_+ - u_-)^2 + u^2 \varphi^2.
+%\ee
+In the approximation where we drop higher powers of $\beta$ and $\xi$, I find
+\be
+q^2 \approx q_\pal^2 + m_\mu^2 \rho^2,
+\ee
+where $q_\pal = q_{min}/t$ and $q_{min} = m_\mu^2 /(2 E_\gamma x_+ x_-)$.  
+
+Based on these formulas and (5.58), I would think the appropriate $t$ distribution in (5.60) would be
+\begin{eqnarray}
+f_1(t) dt & = (1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)) F_{exp}(q_\pal(t)) dt\nonumber \\
+& = \frac{1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)}{\left(1 + (0.20 A^{0.27} {q_{\min}}/(t \cdot m_\mu) )^2\right)^{2}}  dt\nonumber \\
+& = \frac{1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)}{(1 + C_1'/t^2)^{\red 2}}  dt \label{5p60v2}
+\end{eqnarray}
+where
+\be
+C_1' = \left(0.20 A^{0.27} q_{min}/m_\mu\right)^2 = \frac{({\red 0.20} A^{0.27})^2}{({\red 2} x_+ x_- E_\gamma/{m_\mu})^{\red 2}}. \label{5p61v2}
+\ee
+In the expressions \eqref{5p60v2} and \eqref{5p61v2}, I have highlighted in red the differences between my formulas and (5.60) and (5.61) in the physics reference manual.  
+
+The implementation in the G4GammaConversionToMuons class seems consistent with (5.60) and (5.61), but as written these seem rather unreasonable --- in particular, the effective ``form factor'' for any given nucleus isn't just a function of $q_\pal$ but of $q_{min}/t^2 \sim q_\pal/t$, which has no physical significance that I can see. 
+
+I've spent less time looking at the later steps of the generation, but it seems to me that (5.64) and (5.66) also seem discrepant with (5.55) and (5.56).  But, for example, I would have expected a $(\rho^2 + C)^2$  in the denominator of (5.64) rather than $\rho^4+C_2$, and $C = q_\pal^2/m_\mu^2$.
+
+%\section{}
+%\subsection{}
+
+
+
+\end{document}  
