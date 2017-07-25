@@ -299,7 +299,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	{
 	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
 		 << "outside allowed range f1=" << f1 << " is set to zero"
-	         << " ( t = " << t << ", xP = " <<  xP <<  ", f1_max=" << f1_max << ")"
+	         << " ( t = " << t << ", xP = " <<  xPlus <<  ", f1_max=" << f1_max << ")"
 		 << G4endl;
           f1 = 0.0;
 	}
