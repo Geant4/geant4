@@ -294,11 +294,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
       ++nn;
       t=G4UniformRand();
       G4double den = (1.+C1/(t*t)); // NT new
-      f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / den*den;// NT edited denom. (1.+C1/(t*t));
+      f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (den*den);// NT edited denom. (1.+C1/(t*t));
       if(f1<0 || f1> f1_max) // should never happend
 	{
 	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
 		 << "outside allowed range f1=" << f1 << " is set to zero"
+	         << " ( t = " << t << ", xP = " <<  xP <<  ", f1_max=" << f1_max << ")"
 		 << G4endl;
           f1 = 0.0;
 	}
