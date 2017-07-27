@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -331,11 +331,11 @@ Index : 0     used in the geometry : Yes
 
  
   compCrossSectionPerVolume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0338975 cm^-1	     0.600369 cm^-1
-  cross section per volume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	     0.271098 cm^-1	     0.837569 cm^-1
-  cross section per mass   : 	      1.43782 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      5.09295 mm2/g 	      15.7349 mm2/g 
+  cross section per volume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0339048 cm^-1	     0.600376 cm^-1
+  cross section per mass   : 	      1.43782 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      636.949 um2/mg	      11.2789 mm2/g 
  
-  mean free path           : 	      13.0659 cm 	      2.04108 cm 	 5.82593e+288 pc 	      3.68871 cm 	      1.19393 cm 
-        (g/cm2)            : 	      69.5499 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	       19.635 g/cm2 	      6.35529 g/cm2 
+  mean free path           : 	      13.0659 cm 	      2.04108 cm 	 5.82593e+288 pc 	      29.4944 cm 	      1.66562 cm 
+        (g/cm2)            : 	      69.5499 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      156.998 g/cm2 	       8.8661 g/cm2 
 
 -----------------------------------------------------------
 

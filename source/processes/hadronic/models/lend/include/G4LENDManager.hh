@@ -88,6 +88,7 @@ class G4LENDManager
 
       G4int GetVerboseLevel(){ return verboseLevel; };
       G4bool RequestChangeOfVerboseLevel( G4int );
+      G4double GetExcitationEnergyOfExcitedIsomer( G4int , G4int , G4int );
    
    private:
 
@@ -106,6 +107,9 @@ class G4LENDManager
 
       void printBanner();
 
+        //nucleus code
+        //of excited isomer target, excitation energy 
+      std::map< G4int , G4double > mExcitationEnergy;
 };
 
 #endif

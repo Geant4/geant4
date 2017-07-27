@@ -44,6 +44,6 @@ endif
 
 include $(G4INSTALL)/config/common.gmk
 
-ifndef DO_NOT_SET_PHP_AS_HP
+ifdef PHP_AS_HP
    CPPFLAGS += -DPHP_AS_HP
 endif

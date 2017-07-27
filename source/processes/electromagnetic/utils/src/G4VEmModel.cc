@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.cc 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4VEmModel.cc 105120 2017-07-13 13:24:43Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +71,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   polarAngleLimit(CLHEP::pi),secondaryThreshold(DBL_MAX),
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   isMaster(true),fElementData(nullptr),pParticleChange(nullptr),xSectionTable(nullptr),
-  theDensityFactor(nullptr),theDensityIdx(nullptr),fCurrentCouple(nullptr),
+  theDensityFactor(nullptr),theDensityIdx(nullptr),lossFlucFlag(true),fCurrentCouple(nullptr),
   fCurrentElement(nullptr),fCurrentIsotope(nullptr),nsec(5) 
 {
   xsec.resize(nsec);

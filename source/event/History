@@ -1,4 +1,4 @@
-$Id: History 101916 2016-12-08 08:04:03Z gcosmo $
+$Id: History 105135 2017-07-14 07:32:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 1, 2017 A.Dotti (event-V10-02-10)
+- Fixing gcc-7.1 warnings for fallthroughs in case statements
+  G4EventManager and G4StackingMessenger
 
 December 7, 2016 M.Asai (event-V10-02-09)
 - Set polarization to pre-assigned decay products. Addressing to

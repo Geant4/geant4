@@ -1,4 +1,4 @@
-$Id: History 102548 2017-02-08 14:33:25Z gcosmo $
+$Id: History 105120 2017-07-13 13:24:43Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 May 17: V.Ivant (emutils-V10-02-41)
+- G4EmSaturation - fixed typo
+
+03 May 17: V.Ivant
+- G4VEmProcess - added DNA ionisation process to the list of 
+    discrete processes, which have auger and fluo flags for 
+    secondary particles
+- G4VEmModel - added extra protected class member for nuclear 
+    stopping
 
 14 December 16: V.Ivant (emutils-V10-02-39)
 - G4EmParametersMessenger - fixed typo (#1929)

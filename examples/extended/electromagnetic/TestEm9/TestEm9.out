@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -50,12 +50,17 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+      ===== EM models for the G4Region  VertexDetector ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=      100 TeV  FluoActive
 
 conv:   for  gamma, applyCuts: 1     SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
@@ -490,39 +495,39 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.31s Real=1.33s Sys=0s
+  User=1.63s Real=1.63s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         400.8
-Average number of gamma      637.2
-Average number of e+         48.58
-Average number of steps      2953
-Edep 1x1 =                   0.8273 +- 0.002943  res=  3.557 %   100
-Edep 3x3 =                   0.9568 +- 0.00145  res=  1.515 %   100
-Edep 5x5 =                   0.9787 +- 0.001151  res=  1.176 %   100
+Average number of e-         403.8
+Average number of gamma      639.8
+Average number of e+         48
+Average number of steps      2960
+Edep 1x1 =                   0.834 +- 0.002747  res=  3.294 %   100
+Edep 3x3 =                   0.9588 +- 0.001276  res=  1.331 %   100
+Edep 5x5 =                   0.9798 +- 0.0009875  res=  1.008 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8647 +- 0.00287
-  E1/E25 =                   0.8454 +- 0.00298
-  E9/E25 =                   0.9776 +- 0.0008531
+  E1/E9  =                   0.8698 +- 0.002676
+  E1/E25 =                   0.8512 +- 0.002806
+  E9/E25 =                   0.9786 +- 0.0009105
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8273  delEdep1x1= -0.1727 nrms= -1.727
-Erms1x1: 0.02943  delErms1x1= -0.9706 nrms= -9.706
-Edep3x3: 0.9568  delEdep3x3= -0.04316 nrms= -0.4316
-Erms3x3: 0.0145  delErms3x3= -0.9855 nrms= -9.855
-Edep5x5: 0.9787  delEdep5x5= -0.02128 nrms= -0.2128
-Erms5x5: 0.01151  delErms5x5= -0.9885 nrms= -9.885
+Edep1x1: 0.834  delEdep1x1= -0.166 nrms= -1.66
+Erms1x1: 0.02747  delErms1x1= -0.9725 nrms= -9.725
+Edep3x3: 0.9588  delEdep3x3= -0.04121 nrms= -0.4121
+Erms3x3: 0.01276  delErms3x3= -0.9872 nrms= -9.872
+Edep5x5: 0.9798  delEdep5x5= -0.02023 nrms= -0.2023
+Erms5x5: 0.009875  delErms5x5= -0.9901 nrms= -9.901
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         155           0
-  53         259          41           0          43
-  55         280          48           0          51
+  13           0           0         157           0
+  53         263          41           0          45
+  55         279          48           0          48
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -600,22 +605,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.11s Real=2.11s Sys=0s
+  User=2.98s Real=2.97s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         72.29
-Average number of gamma      65.92
+Average number of e-         72.58
+Average number of gamma      66.04
 Average number of e+         3.666
-Average number of steps      437.1
-Edep 1x1 =                   0.01448 +- 0.0003348
-Edep 3x3 =                   0.01487 +- 0.0003763
-Edep 5x5 =                   0.01494 +- 0.0003829
+Average number of steps      437.3
+Edep 1x1 =                   0.01446 +- 0.0003509
+Edep 3x3 =                   0.01486 +- 0.0003976
+Edep 5x5 =                   0.01492 +- 0.0004048
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9832 +- 0.0007114
-  E1/E25 =                   0.9801 +- 0.0008122
-  E9/E25 =                   0.9969 +- 0.0001985
+  E1/E9  =                   0.9837 +- 0.0007251
+  E1/E25 =                   0.981 +- 0.0008159
+  E9/E25 =                   0.9972 +- 0.0001802
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -659,12 +664,17 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+      ===== EM models for the G4Region  VertexDetector ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=      100 TeV  FluoActive
 
 conv:   for  gamma, applyCuts: 1     SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
@@ -1099,22 +1109,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.9s Real=0.9s Sys=0s
+  User=1.07s Real=1.08s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         171.2
-Average number of gamma      223.1
-Average number of e+         47.51
-Average number of steps      1836
-Edep 1x1 =                   0.8321 +- 0.004127  res=  4.96 %   100
-Edep 3x3 =                   0.9609 +- 0.003228  res=  3.36 %   100
-Edep 5x5 =                   0.9823 +- 0.002989  res=  3.043 %   100
+Average number of e-         173.6
+Average number of gamma      221.2
+Average number of e+         47.34
+Average number of steps      1833
+Edep 1x1 =                   0.8334 +- 0.004088  res=  4.906 %   100
+Edep 3x3 =                   0.9564 +- 0.003385  res=  3.539 %   100
+Edep 5x5 =                   0.9789 +- 0.003414  res=  3.488 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8661 +- 0.003408
-  E1/E25 =                   0.8472 +- 0.003602
-  E9/E25 =                   0.9782 +- 0.001178
+  E1/E9  =                   0.8713 +- 0.002968
+  E1/E25 =                   0.8515 +- 0.003234
+  E9/E25 =                   0.9772 +- 0.001175
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1158,12 +1168,17 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+      ===== EM models for the G4Region  VertexDetector ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+   LowEPComptonModel :  Emin=        0 eV    Emax=       20 MeV  FluoActive
+        KleinNishina :  Emin=       20 MeV   Emax=      100 TeV  FluoActive
 
 conv:   for  gamma, applyCuts: 1     SubType= 14  BuildTable= 1
       Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
@@ -1598,22 +1613,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.22s Real=1.22s Sys=0s
+  User=1.62s Real=1.64s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         170.5
-Average number of gamma      362.4
-Average number of e+         47.18
-Average number of steps      1976
-Edep 1x1 =                   0.8337 +- 0.004  res=  4.799 %   100
-Edep 3x3 =                   0.9612 +- 0.003363  res=  3.498 %   100
-Edep 5x5 =                   0.9819 +- 0.003275  res=  3.335 %   100
+Average number of e-         172
+Average number of gamma      360.1
+Average number of e+         47.3
+Average number of steps      1978
+Edep 1x1 =                   0.8309 +- 0.004107  res=  4.944 %   100
+Edep 3x3 =                   0.9562 +- 0.004045  res=  4.23 %   100
+Edep 5x5 =                   0.9781 +- 0.004261  res=  4.357 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8675 +- 0.003251
-  E1/E25 =                   0.8493 +- 0.003627
-  E9/E25 =                   0.9789 +- 0.001134
+  E1/E9  =                   0.8692 +- 0.003051
+  E1/E25 =                   0.8498 +- 0.003187
+  E9/E25 =                   0.9777 +- 0.001079
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1621,6 +1636,6 @@ Beam Energy                  1 GeV
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.19 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.18 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

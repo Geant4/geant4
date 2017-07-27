@@ -305,7 +305,7 @@ void G4EmStandardPhysicsSS::ConstructProcess()
                particleName == "xi-" ) {
 
       ph->RegisterProcess(hmsc, particle);
-      ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
     }
   }
 

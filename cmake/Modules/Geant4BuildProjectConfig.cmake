@@ -79,7 +79,7 @@ if(GEANT4_USE_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
   # System USolids headers, because these do appear in Geant4's
   # public interface. The library should be in the link interface
   # of G4geometry (may need refinding)
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${USOLIDS_INCLUDE_DIRS})
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 
 # - Stuff from Geant4InterfaceOptions.cmake

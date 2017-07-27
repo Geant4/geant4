@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh 100820 2016-11-02 15:18:48Z gcosmo $
+// $Id: G4Orb.hh 105148 2017-07-14 08:35:13Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -69,6 +69,7 @@ class G4Orb : public G4CSGSolid
     // Accessors
        
     inline G4double GetRadius() const;
+    inline G4double GetRadialTolerance() const;
 
     // Modifiers
 

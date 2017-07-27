@@ -86,6 +86,7 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 #include "G4ionIonisation.hh"
+#include "G4KleinNishinaModel.hh"
 
 #include "G4CoulombScattering.hh"
 #include "G4eCoulombScatteringModel.hh"
@@ -94,6 +95,7 @@
 #include "G4RayleighScattering.hh" 
 #include "G4UrbanMscModel.hh"
 #include "G4GoudsmitSaundersonMscModel.hh"
+#include "G4LowEPComptonModel.hh"
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4LivermoreComptonModel.hh"
@@ -212,6 +214,12 @@ void G4EmModelActivator::ActivateEmOptions()
       FindOrAddProcess(phot, "Rayl");
       mod = new G4LivermoreRayleighModel();
       em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
+      FindOrAddProcess(phot, "phot");
+      mod = new G4LivermorePhotoElectricModel();
+      em_config->SetExtraEmModel("gamma", "phot", mod, reg);
+      FindOrAddProcess(phot, "compt");
+      mod = new G4KleinNishinaModel();
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
 
     } else if("G4EmStandard_opt4" == typesMSC[i]) {
       G4UrbanMscModel* msc = new G4UrbanMscModel();
@@ -231,6 +239,15 @@ void G4EmModelActivator::ActivateEmOptions()
       FindOrAddProcess(phot, "Rayl");
       mod = new G4LivermoreRayleighModel();
       em_config->SetExtraEmModel("gamma", "Rayl", mod, reg);
+      FindOrAddProcess(phot, "phot");
+      mod = new G4LivermorePhotoElectricModel();
+      em_config->SetExtraEmModel("gamma", "phot", mod, reg);
+      FindOrAddProcess(phot, "compt");
+      mod = new G4KleinNishinaModel();
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
+      mod = new G4LowEPComptonModel();
+      mod->SetHighEnergyLimit(20*MeV);
+      em_config->SetExtraEmModel("gamma", "compt", mod, reg);
 
     } else if("G4EmStandardGS" == typesMSC[i]) {
       G4GoudsmitSaundersonMscModel* msc = new G4GoudsmitSaundersonMscModel();

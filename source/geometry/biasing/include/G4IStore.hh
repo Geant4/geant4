@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.hh 88801 2015-03-10 14:38:27Z gcosmo $
+// $Id: G4IStore.hh 105146 2017-07-14 07:58:24Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4IStore
@@ -144,6 +144,11 @@ private:
   mutable G4GeometryCellImportance::const_iterator fCurrentIterator;
 
   static G4ThreadLocal G4IStore* fInstance;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex IStoreMutex;
+#endif
+
 };
 
 #endif

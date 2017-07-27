@@ -729,19 +729,20 @@ G4double G4ParticleHPThermalScattering::getMu( E_isoAng* anEPM  )
    else 
    {
        G4double x = random * (*anEPM).n;
-       G4double D = ( (*anEPM).isoAngle[ 0 ] - ( -1 ) ) + ( 1 - (*anEPM).isoAngle[ (*anEPM).n - 1 ] );
-       G4double ratio = ( (*anEPM).isoAngle[ 0 ] - ( -1 ) ) / D;
+       //Bugzilla 1971 
+       G4double ratio = 0.5;
+       G4double xx = G4UniformRand();
        if ( x <= ratio ) 
        {
           G4double mu_l = -1; 
           G4double mu_h = (*anEPM).isoAngle[ 0 ]; 
-          result = ( mu_h - mu_l ) * x + mu_l; 
+          result = ( mu_h - mu_l ) * xx + mu_l; 
        }
        else
        {
           G4double mu_l = (*anEPM).isoAngle[ (*anEPM).n - 1 ]; 
           G4double mu_h = 1;
-          result = ( mu_h - mu_l ) * x + mu_l; 
+          result = ( mu_h - mu_l ) * xx + mu_l; 
        }
    }
    return result;

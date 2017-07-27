@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ 7 March 2017  Dennis Wright  radioactive_decay-V10-02-19
+---------------------------------------------------------
+- G4RadioactiveDecay::DecayIt() : add line
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
+  to propagate weight of parent track.  Fixes Bug #1946.
+
 21 February 2017  V.Ivanchenko  radioactive_decay-V10-02-18
 ------------------------------------------------------------
 - G4ITDecay: make daughterNucleus a pointer and store previous 

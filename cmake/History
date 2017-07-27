@@ -31,6 +31,26 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+17th July 2017 - Gabriele Cosmo (cmake-V10-02-41)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake,
+  Modules/Geant4InterfaceOptions.cmake:
+  corrected Qt setup for GNUmake builds, avoid setting QTLIBS and GLQTLIBS
+  as already handled by the GNUmake system for Qt4 and Qt5.
+
+9th June 2017 - Gabriele Cosmo  (cmake-V10-02-40)
+- Corrected exporting of external packages paths from VecGeom.
+
+30th May 2017 - Gabriele Cosmo
+- Modules/Geant4OptionalComponents.cmake: added VECGEOM_EXTERNAL_INCLUDES
+  to include directories for USolids/VecGeom enabled build, in order to
+  allow for detection of external packages paths from VecGeom (e.g. Vc if
+  Vetor backend is chosen at installation of VecGeom).
+
+24th May 2017 - Gabriele Cosmo
+- Modules/Geant4OptionalComponents.cmake: appended VECGEOM_DEFINITIONS
+  to GEANT4_USOLIDS_COMPILE_DEFINITIONS. Preparing for introducing direct
+  dependency on VecGeom in G4U* wrappers, and deprecate USolids. 
+
 21st February 2017 - Gunter Folger  (cmake-V10-02-39)
 - Switch to PhotonEvaporation 4.3.2
 

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -789,7 +789,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -821,20 +821,20 @@ Number of de-excitation channels                    8
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 453.888 MeV +- 13.2285 MeV
- mean Energy in Gap      : 24.1872 MeV +- 7.10962 MeV
+ mean Energy in Absorber : 453.944 MeV +- 12.8687 MeV
+ mean Energy in Gap      : 23.9336 MeV +- 7.14867 MeV
 
- mean trackLength in Absorber : 32.4816 cm  +- 1.02109 cm 
- mean trackLength in Gap      : 11.9889 cm  +- 3.648 cm 
+ mean trackLength in Absorber : 32.4855 cm  +- 9.98936 mm 
+ mean trackLength in Gap      : 11.8606 cm  +- 3.67167 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 453.888 MeV rms = 13.2285 MeV
-EGap: mean = 24.1872 MeV rms = 7.10962 MeV
-LAbs: mean = 32.4816 cm  rms = 1.02109 cm 
-LGap: mean = 11.9889 cm  rms = 3.648 cm 
+EAbs: mean = 453.944 MeV rms = 12.8687 MeV
+EGap: mean = 23.9336 MeV rms = 7.14867 MeV
+LAbs: mean = 32.4855 cm  rms = 9.98936 mm 
+LGap: mean = 11.8606 cm  rms = 3.67167 cm 
 
 ----> Histograms and ntuples are saved
 

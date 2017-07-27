@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -816,7 +816,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -4065,17 +4065,17 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3   0.0227  -0.0217     -700    0.0038 0.000128   0.0113    0.0334     Chamber msc
     4   0.0166  -0.0304     -700   0.00354 0.000261    0.011    0.0444     Chamber msc
     5   0.0168  -0.0266     -700   0.00349 4.43e-05   0.0109    0.0553     Chamber msc
-    6   0.0251  -0.0216     -700   0.00324 0.000256   0.0133    0.0687     Chamber msc
+    6   0.0251  -0.0216     -700   0.00324 0.000255   0.0133    0.0687     Chamber msc
     7   0.0303  -0.0122     -700    0.0031 0.000138   0.0171    0.0857     Chamber msc
     8   0.0254  0.00553     -700   0.00281  0.00029   0.0269     0.113     Chamber msc
-    9  0.00886    0.024     -700   0.00222 0.000589    0.027      0.14     Chamber msc
+    9  0.00885    0.024     -700   0.00222 0.000588    0.027      0.14     Chamber msc
    10   0.0109   0.0244     -700   0.00204 0.000183     0.03      0.17     Chamber msc
    11   0.0155   0.0182     -700   0.00182 0.000221   0.0146     0.184     Chamber msc
    12   0.0193    0.012     -700    0.0017  0.00012   0.0113     0.195     Chamber msc
    13   0.0207   0.0187     -700   0.00163 6.73e-05   0.0113     0.207     Chamber msc
    14   0.0269   0.0192     -700   0.00145 0.000177   0.0109     0.218     Chamber msc
-   15   0.0279   0.0192     -700   0.00145        0  0.00134     0.219     Tracker Transportation
-   16   0.0521   0.0261     -700         0  0.00145   0.0499     0.269     Tracker msc
+   15   0.0279   0.0193     -700   0.00145        0  0.00134     0.219     Tracker Transportation
+   16   0.0521   0.0262     -700         0  0.00145     0.05     0.269     Tracker msc
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 1
@@ -4873,7 +4873,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 >>> Event: 80
     104 hits stored in this event
 >>> Event: 81
-    234 hits stored in this event
+    235 hits stored in this event
 >>> Event: 82
     456 hits stored in this event
 >>> Event: 83

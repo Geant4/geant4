@@ -1,4 +1,4 @@
-# $Id: binmake.gmk 101512 2016-11-18 15:28:47Z gcosmo $
+# $Id: binmake.gmk 105125 2017-07-13 14:06:47Z gcosmo $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -233,8 +233,7 @@ ifdef GLOBALLIBS
     LDLIBS2 += -lG3toG4
   endif
 
-  LDLIBS2 += -lG4analysis \
-             -lG4error_propagation \
+  LDLIBS2 += -lG4error_propagation \
              -lG4readout \
              -lG4physicslists \
              -lG4run \
@@ -248,6 +247,7 @@ ifdef GLOBALLIBS
              -lG4geometry \
              -lG4materials \
              -lG4graphics_reps \
+             -lG4analysis \
              -lG4intercoms \
              -lG4global
 

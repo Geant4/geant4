@@ -14,6 +14,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+11-05-2017, VI tag emdna-V10-02-40
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+
+10-05-2017, NL, MK, SI
+- fix for gcc 7.1 warnings in G4DNACrossSectionDataSet.cc.      
+
 09-02-2017, MK, tag emdna-V10-02-38
 - G4KDNode.hh: remove unused G4ThreeVector header
 - G4KDMap.hh: int->size_t + indentation

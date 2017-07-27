@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: WLSDetectorConstruction.cc 101671 2016-11-21 09:18:37Z gcosmo $
+// $Id: WLSDetectorConstruction.cc 105203 2017-07-14 12:23:01Z gcosmo $
 //
 /// \file optical/wls/src/WLSDetectorConstruction.cc
 /// \brief Implementation of the WLSDetectorConstruction class
@@ -442,6 +442,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
      logicPlacement = logicClad2;
      physiPlacement = physiClad2;
+     break;
 
     case 1:
 
@@ -482,6 +483,7 @@ void WLSDetectorConstruction::ConstructFiber()
 
      logicPlacement = logicClad1;
      physiPlacement = physiClad1;
+     break;
 
     default:
 

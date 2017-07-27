@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -898,7 +898,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -1265,13 +1265,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    56       -2   -0.922     -198    0.0187  0.00275 0.000411     0.125 PhantomSens msc
    57       -2   -0.922     -198    0.0147  0.00396 0.000374     0.125 PhantomSens msc
    58       -2   -0.922     -198   0.00999  0.00472  0.00038     0.126 PhantomSens msc
-   59       -2   -0.921     -198   0.00461  0.00538 0.000402     0.126 PhantomSens msc
-   60       -2   -0.921     -198         0  0.00461 0.000234     0.126 PhantomSens eIoni
+   59       -2   -0.921     -198   0.00462  0.00537 0.000402     0.126 PhantomSens msc
+   60       -2   -0.921     -198         0  0.00462 0.000234     0.126 PhantomSens eIoni
 >>> Event 9
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 11
   copy no.: 970200  Run Value : 0.356
@@ -1296,7 +1296,7 @@ Run Summary
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
  Number of entries 11
   copy no.: 970200  Run Value : 0.01579545990714856
-  copy no.: 989600  Run Value : 0.002564229466276565
+  copy no.: 989600  Run Value : 0.002564282018109282
   copy no.: 989603  Run Value : 0.01579545990714856
   copy no.: 989800  Run Value : 0.02484646621704845
   copy no.: 990401  Run Value : 0.001261629842865205

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc 101819 2016-12-01 08:13:36Z gcosmo $
+// $Id: G4Polycone.cc 105151 2017-07-14 08:53:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -625,7 +625,7 @@ G4bool G4Polycone::CalculateExtent(const EAxis pAxis,
 
   // set trigonometric values
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
 
   G4double sphi   = GetStartPhi();
   G4double ephi   = GetEndPhi();

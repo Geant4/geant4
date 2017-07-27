@@ -1,4 +1,4 @@
-$Id: History 102724 2017-02-20 13:00:39Z gcosmo $
+$Id: History 105171 2017-07-14 10:55:43Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,12 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+1 June 2017  Dennis Wright (hadr-mod-util-V10-02-11)
+- G4PolynomialPDF: apply Jason Detwiler's fix to divide by zero bug
+
+30 May 2017 Vladimir Ivanchenko
+- G4Fragment - fixed destructor and printout
 
 16 February 2017 Vladimir Ivanchenko (hadr-mod-util-V10-02-10)
 - G4PolynomialPDF - added control on printout

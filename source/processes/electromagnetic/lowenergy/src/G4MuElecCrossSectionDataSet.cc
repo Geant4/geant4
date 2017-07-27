@@ -27,14 +27,12 @@
 //  Based on G4DNACrossSectionDataSet
 // 
 
-
 #include "G4MuElecCrossSectionDataSet.hh"
 #include "G4VDataSetAlgorithm.hh"
 #include "G4EMDataSet.hh"
 #include <vector>
 #include <fstream>
 #include <sstream>
-
 
 G4MuElecCrossSectionDataSet::G4MuElecCrossSectionDataSet(G4VDataSetAlgorithm* argAlgorithm, 
 						   G4double argUnitEnergies, 
@@ -43,9 +41,7 @@ G4MuElecCrossSectionDataSet::G4MuElecCrossSectionDataSet(G4VDataSetAlgorithm* ar
    algorithm(argAlgorithm), unitEnergies(argUnitEnergies), unitData(argUnitData)
 {
   z = 0;
-
 }
-
 
 G4MuElecCrossSectionDataSet::~G4MuElecCrossSectionDataSet()
 {
@@ -138,27 +134,19 @@ G4bool G4MuElecCrossSectionDataSet::LoadData(const G4String & argFileName)
 	    case '#':
 	      comment=true;
 	      break;
-     
+
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }
@@ -296,27 +284,19 @@ G4bool G4MuElecCrossSectionDataSet::LoadNonLogData(const G4String & argFileName)
 	    case '#':
 	      comment=true;
 	      break;
-     
+
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }

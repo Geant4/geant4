@@ -1,4 +1,4 @@
-$Id: History 102769 2017-02-22 09:05:45Z gcosmo $
+$Id: History 105149 2017-07-14 08:36:13Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 21, 2017 E.Tcherniaev geom-csg-V10-02-22
+- Fix in G4CutTubs::Inside() for case where inside points were concidered
+  as points on surface. Addressing problem report #1973.
+
+April 11, 2017 G.Cosmo
+- Added accessor for radial tolerance also in G4UOrb wrapper.
+
+April 7, 2017 G.Cosmo
+- Added accessor to G4Orb for retrieving cached max radius tolerance.
+
+March 2, 2017 E.Tcherniaev
+- Fixed possible rounding off error in calculation of 'astep' (max angle
+  for one step) in CalculateExtent() for G4Cons, G4Tubs, G4CutTubs
+  and related USolids wrappers.
+- Increased tolerance in the check of consistency of bounding boxes in
+  G4UTrap::Extent().
 
 February 22, 2017 E.Tcherniaev geom-csg-V10-02-21
 - Fix in GetCubicVolume() and GetSurfaceArea() for G4CutTubs, to make

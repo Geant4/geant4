@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.cc 102588 2017-02-09 10:00:46Z gcosmo $
+// $Id: G4PhysListFactory.cc 105123 2017-07-13 13:52:40Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -193,6 +193,8 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
 	p->ReplacePhysics(new G4EmPenelopePhysics(verbose)); 
       } else if(7 == em_opt) {
 	p->ReplacePhysics(new G4EmStandardPhysicsGS(verbose)); 
+      } else if(8 == em_opt) {
+	p->ReplacePhysics(new G4EmStandardPhysicsSS(verbose)); 
       }
     }
     p->SetVerboseLevel(ver);

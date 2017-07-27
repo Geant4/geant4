@@ -1574,6 +1574,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   // Initialize G4ParticleChange object, get particle details and decay table
 
   fParticleChangeForRadDecay.Initialize(theTrack);
+  fParticleChangeForRadDecay.ProposeWeight(theTrack.GetWeight());
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
   const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
 

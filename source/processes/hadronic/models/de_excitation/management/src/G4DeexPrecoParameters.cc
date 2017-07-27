@@ -58,7 +58,7 @@ void G4DeexPrecoParameters::SetDefaults()
   fPrecoLowEnergy = 0.1*CLHEP::MeV; 
   fPhenoFactor = 1.0; 
   fMinExcitation = 10*CLHEP::eV;
-  fMaxLifeTime = 1.0*CLHEP::microsecond;
+  fMaxLifeTime = 1000*CLHEP::second;
   fMinExPerNucleounForMF = 100*CLHEP::GeV;
   fMinZForPreco = 3;
   fMinAForPreco = 5;
@@ -199,11 +199,8 @@ void G4DeexPrecoParameters::SetUseFilesNEW(G4bool val)
   fUseLongFiles = val;
 }
 
-void G4DeexPrecoParameters::SetCorrelatedGamma(G4bool val)
-{
-  if(IsLocked()) { return; }
-  fCorrelatedGamma = val;
-}
+void G4DeexPrecoParameters::SetCorrelatedGamma(G4bool)
+{}
 
 void G4DeexPrecoParameters::SetStoreAllLevels(G4bool val)
 {
@@ -252,6 +249,5 @@ std::ostream& operator<< (std::ostream& os, const G4DeexPrecoParameters& par)
 G4bool G4DeexPrecoParameters::IsLocked() const
 {
   return (!G4Threading::IsMasterThread() ||
-	  (fStateManager->GetCurrentState() != G4State_PreInit &&
-	   fStateManager->GetCurrentState() != G4State_Idle));
+	  (fStateManager->GetCurrentState() != G4State_PreInit));
 }

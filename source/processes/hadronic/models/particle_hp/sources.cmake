@@ -458,7 +458,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
   )
 
 # List any source specific properties here
-if(NOT "$ENV{DO_NOT_SET_PHP_AS_HP}")
+if("$ENV{PHP_AS_HP}")
 set_source_files_properties(
     ${G4had_par_hp_SOURCES}
     PROPERTIES COMPILE_DEFINITIONS PHP_AS_HP

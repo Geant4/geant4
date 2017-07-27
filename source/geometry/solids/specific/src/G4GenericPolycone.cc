@@ -513,7 +513,7 @@ G4GenericPolycone::CalculateExtent(const EAxis pAxis,
 
   // set trigonometric values
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
 
   G4double sphi   = GetStartPhi();
   G4double ephi   = GetEndPhi();

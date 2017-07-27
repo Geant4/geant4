@@ -15,8 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 April 2017  Michael Kelsey (hadr-casc-V10-02-06)
+---------------------------------------------------
+- G4CascadeCoalescence:  Remove clusterHash() function and triedClusters
+  registry.  Drop redundant calls of tryCluster() with subcombinatorics; all
+  combinations are handled, uniquely, in main loop over indices.  Eliminates
+  significant memory usage seen with high-energy applications of BERT.
+
+- test/clusterComb.cc, test/GNUmakefile:  New standalone test to exercise
+  combinatoric behaviour of G4CascadeCoalescence (used in testing above
+  changes).
+
 29 November 2016  Dennis Wright (hadr-casc-V10-02-05)
- ----------------------------------------------------
+-----------------------------------------------------
 - G4InuclCollider::photonuclearOkay(): fix segfault reported by Daren Sawkey
   in bug report #1883
 

@@ -27,7 +27,7 @@
 /// \brief Implementation of the MCTruthManager class
 //
 //
-// $Id: MCTruthManager.cc 99841 2016-10-07 10:09:34Z gcosmo $
+// $Id: MCTruthManager.cc 105215 2017-07-14 12:56:15Z gcosmo $
 //
 //
 // --------------------------------------------------------------
@@ -48,7 +48,7 @@ static MCTruthManager* instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-MCTruthManager::MCTruthManager() : event(0), fConfig(0) 
+MCTruthManager::MCTruthManager() : fEvent(0), fConfig(0) 
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

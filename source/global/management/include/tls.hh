@@ -44,7 +44,7 @@
       #  define G4ThreadLocal __thread
     #endif
   #elif ( (defined(__linux__) || defined(__MACH__)) && \
-          !defined(__INTEL_COMPILER) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__<9) || __GNUC__>=5 )
+          !defined(__INTEL_COMPILER) && defined(__GNUC__) && (__GNUC__>=4 && __GNUC_MINOR__<9))
     #if defined (G4USE_STD11)
       #  define G4ThreadLocalStatic static __thread
       #  define G4ThreadLocal thread_local

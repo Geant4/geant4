@@ -241,13 +241,14 @@ if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
     endforeach()
     GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
+  list (APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS ${VECGEOM_DEFINITIONS})
 
   # Combined definitions
   add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
   # Add USolids inc dirs here - can be removed once USolids supports
   # INTERFACE_INCLUDE_DIRECTORIES
-  include_directories(${USOLIDS_INCLUDE_DIRS})
+  include_directories(${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 
 

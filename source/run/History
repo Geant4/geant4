@@ -1,4 +1,4 @@
-$Id: History 102620 2017-02-10 08:11:22Z gcosmo $
+$Id: History 105177 2017-07-14 11:08:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 24, 2017, M. Asai (run-V10-02-42)
+- G4RunManagerKernel : remove unnecessary warning message.
 
 February 9, 2017, M. Asai (run-V10-02-41)
 - Banner on worker RunManager will no longer be printed.

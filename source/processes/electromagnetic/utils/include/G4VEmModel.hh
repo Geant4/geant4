@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4VEmModel.hh 105120 2017-07-13 13:24:43Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -359,6 +359,8 @@ public:
 
   inline void SetForceBuildTable(G4bool val);
 
+  inline void SetFluctuationFlag(G4bool val);
+
   inline void SetMasterThread(G4bool val);
 
   inline G4bool IsMaster() const;
@@ -424,6 +426,7 @@ protected:
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
+  G4bool                       lossFlucFlag;
   const static G4double        inveplus;       
 
   // ======== Cached values - may be state dependent ================
@@ -703,6 +706,11 @@ inline G4bool G4VEmModel::UseAngularGeneratorFlag() const
 inline void G4VEmModel::SetAngularGeneratorFlag(G4bool val)
 {
   useAngularGenerator = val;
+}
+
+inline void G4VEmModel::SetFluctuationFlag(G4bool val)
+{
+  lossFlucFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

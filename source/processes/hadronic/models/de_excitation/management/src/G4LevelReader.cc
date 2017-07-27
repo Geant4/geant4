@@ -54,7 +54,7 @@ G4String G4LevelReader::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
 
 G4LevelReader::G4LevelReader(G4NuclearLevelData* ptr) 
-  : fData(ptr),fAlphaMax(9.0f+9),fVerbose(0),fLevelMax(632),fTransMax(80)
+  : fData(ptr),fAlphaMax(9.0e9f),fVerbose(0),fLevelMax(632),fTransMax(145)
 {
   fParam = fData->GetParameters();
   fTimeFactor = (G4float)(CLHEP::second/G4Pow::GetInstance()->logZ(2));
@@ -463,11 +463,13 @@ G4LevelReader::MakeLevelManagerNEW(G4int Z, G4int A,
 
   // file is not opened
   if (!infile.is_open()) {
-    G4ExceptionDescription ed;
-    ed << " for Z= " << Z << " A= " << A  
-       << " data file <" << filename << "> is not opened!";
-    G4Exception("G4LevelReader::MakeLevelManagerNEW(..)","had014",
-		JustWarning, ed, "Check G4LEVELGAMMADATA");
+    if(Z < 6 || fVerbose > 0) {
+      G4ExceptionDescription ed;
+      ed << " for Z= " << Z << " A= " << A  
+	 << " data file <" << filename << "> is not opened!";
+      G4Exception("G4LevelReader::MakeLevelManagerNEW(..)","had014",
+		  FatalException, ed, "Check G4LEVELGAMMADATA");
+    }
     return nullptr;
   }
   if (fVerbose > 0) {
@@ -531,7 +533,6 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
       }
       break;
     }
-    fTime = std::max(fTime, 0.0f); 
     ener *= fkev;
     for(k=0; k<nfloting; ++k) {
       if(xf == fFloatingLevels[k]) {
@@ -550,7 +551,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
       }
     }
     vEnergy[i] = ener;
-    fTime     *= fTimeFactor;
+    if(fTime > 0.0) { fTime *= fTimeFactor; }
     if(fSpin > 20.0f) { fSpin = 0.0f; }
     vSpin[i]   = (G4int)(100 + fSpin + fSpin) + k*100000;
     if(fVerbose > 1) {
@@ -560,7 +561,14 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
 	     << " ntr= " << ntrans << G4endl;
     }
     vLevel[i] = nullptr;
-    if(ntrans > 0) {
+    if(ntrans == 0 && fTime < 0.0) {
+      vLevel[i] = new G4NucLevel(0, fTime,
+				 vTrans,
+				 vGammaCumProbability,
+				 vGammaProbability,
+				 vRatio,
+				 vShellProbability);
+    } else if(ntrans > 0) {
 
       // there are transitions
       if(ntrans > fTransMax) {
@@ -670,7 +678,7 @@ G4LevelReader::LevelManager(G4int Z, G4int A, G4int nlev,
     }
   }
   G4LevelManager* lman = nullptr;
-  if(1 < i) { 
+  if(1 <= i) { 
     lman = new G4LevelManager((size_t)i,vEnergy,vSpin,vLevel);
     if(fVerbose > 0) {
       G4cout << "=== Reader: new manager for Z= " << Z << " A= " << A 

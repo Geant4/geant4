@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -476,7 +476,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -489,7 +489,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -510,7 +510,7 @@ Number of de-excitation channels                    8
 *** G4Exception : GeomBias1001
       issued by : G4ImportanceAlgorithm::Warning()
 Calculate() - ipre_over_ipost ! in [0.25, 4].
-ipre_over_ipost = 8192.
+ipre_over_ipost = 1024.
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
@@ -530,79 +530,24 @@ ipre_over_ipost = 8192.
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            38 |           131 |             0 |             0 |      0.615797 |       3.54717 |             1 |       7764.55 |       7764.55 |       1446.41 |       27542.2 |       890.696 |
-       cell_01 |           141 |           172 |           559 |           559 |      0.452871 |       4.11041 |             1 |       23144.2 |       23144.2 |       5872.88 |         95132 |       2659.66 |
-       cell_02 |           149 |           263 |          1037 |         518.5 |      0.301368 |       3.06565 |           0.5 |       38748.3 |       19374.1 |       6035.26 |       59394.3 |       1818.83 |
-       cell_03 |           215 |           354 |          1670 |         417.5 |      0.243482 |       2.43315 |          0.25 |       58023.4 |       14505.9 |       4816.75 |       35294.9 |       1172.79 |
-       cell_04 |           227 |           381 |          1932 |         241.5 |      0.185452 |       2.07363 |         0.125 |         66787 |       8348.37 |       3257.61 |       17311.4 |       604.131 |
-       cell_05 |           244 |           411 |          2126 |       132.875 |      0.168608 |       1.81913 |        0.0625 |       69047.8 |       4315.49 |        1710.4 |       7850.42 |       288.386 |
-       cell_06 |           256 |           406 |          2148 |        67.125 |       0.16032 |        1.8576 |       0.03125 |       69619.5 |       2175.61 |       923.281 |       4041.42 |        148.02 |
-       cell_07 |           292 |           423 |          2391 |       37.3594 |      0.148577 |       1.57139 |      0.015625 |       75858.8 |       1185.29 |       484.816 |       1862.55 |       72.0325 |
-       cell_08 |           277 |           436 |          2431 |       18.9922 |      0.125756 |       1.42518 |     0.0078125 |       75164.9 |       587.226 |       267.904 |       836.902 |       33.6905 |
-       cell_09 |           261 |           413 |          2178 |       8.50781 |      0.137057 |       1.52669 |    0.00390625 |       69034.3 |       269.665 |       119.175 |       411.696 |       16.3338 |
-       cell_10 |           297 |           435 |          2365 |       4.61914 |      0.124018 |       1.36421 |    0.00195312 |       75338.1 |       147.145 |        67.432 |       200.736 |       8.36276 |
-       cell_11 |           316 |           478 |          2821 |       2.75488 |      0.114359 |       1.19705 |   0.000976562 |         87062 |       85.0215 |       39.8396 |       101.775 |         4.556 |
-       cell_12 |           278 |           431 |          2576 |       1.25781 |      0.112178 |       1.22026 |   0.000488281 |       75947.9 |       37.0839 |       17.4092 |       45.2521 |       1.95292 |
-       cell_13 |           252 |           371 |          2192 |      0.535156 |     0.0996486 |       1.11984 |   0.000244141 |         66109 |       16.1399 |       8.03034 |        18.074 |      0.800212 |
-       cell_14 |           221 |           336 |          2076 |      0.253418 |     0.0946568 |       1.13656 |    0.00012207 |       60910.8 |        7.4354 |       3.98966 |       8.45078 |      0.377648 |
-       cell_15 |           186 |           290 |          1861 |      0.113586 |      0.110914 |        1.0462 |   6.10352e-05 |       55839.9 |       3.40819 |       1.57606 |       3.56566 |      0.174807 |
-       cell_16 |           148 |           232 |          1494 |     0.0455933 |     0.0632583 |      0.797689 |   3.05176e-05 |       42309.8 |       1.29119 |      0.817666 |       1.02997 |     0.0517241 |
-       cell_17 |           115 |           181 |          1131 |     0.0172577 |       0.10909 |       1.04002 |   1.52588e-05 |       34875.2 |      0.532153 |      0.247801 |      0.553449 |     0.0270326 |
-       cell_18 |            69 |           132 |           780 |    0.00595093 |      0.102372 |      0.894151 |   7.62939e-06 |       23056.4 |      0.175906 |     0.0806366 |      0.157287 |    0.00825496 |
-       cell_19 |            42 |            42 |             0 |             0 |       0.19215 |       1.46111 |   7.62939e-06 |       6806.72 |     0.0519311 |     0.0177029 |     0.0758772 |     0.0034016 |
+       cell_00 |            36 |           132 |             0 |             0 |      0.392499 |       1.93695 |             1 |       7036.31 |       7036.31 |       1503.05 |         13629 |       589.947 |
+       cell_01 |           163 |           178 |           603 |           603 |      0.476028 |       4.11229 |             1 |       24922.1 |       24922.1 |       6083.92 |        102487 |       2896.12 |
+       cell_02 |           196 |           308 |          1367 |         683.5 |      0.291841 |       2.93567 |           0.5 |         52001 |       26000.5 |       8183.28 |         76329 |       2388.22 |
+       cell_03 |           280 |           453 |          2199 |        549.75 |      0.238712 |       2.45967 |          0.25 |       76441.7 |       19110.4 |       6619.99 |       47005.3 |       1580.27 |
+       cell_04 |           324 |           531 |          2716 |         339.5 |      0.175532 |       1.87449 |         0.125 |       89557.1 |       11194.6 |        4361.5 |       20984.2 |       765.582 |
+       cell_05 |           352 |           564 |          3046 |       190.375 |      0.177755 |       1.78212 |        0.0625 |       99012.2 |       6188.26 |       2328.48 |       11028.2 |       413.898 |
+       cell_06 |           437 |           639 |          3594 |       112.312 |      0.142871 |       1.51852 |       0.03125 |        112987 |       3530.86 |        1466.7 |       5361.68 |       209.549 |
+       cell_07 |           419 |           643 |          3867 |       60.4219 |      0.115514 |       1.35772 |      0.015625 |        114819 |       1794.04 |       854.514 |       2435.81 |       98.7088 |
+       cell_08 |           345 |           521 |          2927 |       22.8672 |      0.123734 |        1.4943 |     0.0078125 |       92359.9 |       721.561 |       337.641 |       1078.23 |       41.7779 |
+       cell_09 |           324 |           540 |          2716 |       10.6094 |      0.138011 |       1.61579 |    0.00390625 |       84539.4 |       330.232 |       146.291 |       533.586 |       20.1897 |
+       cell_10 |           314 |           480 |          2905 |       5.67383 |      0.139915 |       1.55203 |    0.00195312 |       89777.7 |       175.347 |       75.6898 |       272.144 |       10.5901 |
+       cell_11 |           334 |           525 |          2782 |        2.7168 |      0.140905 |       1.54125 |   0.000976562 |       89993.7 |       87.8844 |       38.2165 |       135.452 |       5.38489 |
+       cell_12 |           306 |           469 |          2498 |       1.21973 |      0.152945 |       1.45989 |   0.000488281 |       81671.2 |       39.8785 |       15.8478 |       58.2182 |       2.42384 |
+       cell_13 |           255 |           404 |          2328 |      0.568359 |      0.111648 |        1.2223 |   0.000244141 |       74376.6 |       18.1583 |       8.58842 |        22.195 |      0.958883 |
+       cell_14 |           239 |           343 |          2031 |      0.247925 |     0.0977054 |       1.25337 |    0.00012207 |       62710.2 |       7.65505 |       4.14351 |       9.59464 |      0.404844 |
+       cell_15 |           208 |           335 |          1771 |      0.108093 |      0.135435 |        1.4651 |   6.10352e-05 |       56002.6 |       3.41813 |       1.52097 |        5.0079 |      0.205992 |
+       cell_16 |           193 |           292 |          1719 |     0.0524597 |      0.137027 |       1.41152 |   3.05176e-05 |       56614.1 |       1.72772 |      0.738603 |       2.43872 |      0.101208 |
+       cell_17 |           203 |           329 |          1955 |     0.0298309 |      0.124595 |       1.26272 |   1.52588e-05 |       58599.2 |      0.894153 |      0.394898 |       1.12906 |     0.0492023 |
+       cell_18 |           144 |           280 |          1497 |     0.0114212 |      0.114878 |       1.17677 |   7.62939e-06 |       45815.5 |      0.349545 |      0.160895 |      0.411335 |     0.0184833 |
+       cell_19 |            91 |            91 |             0 |             0 |      0.278308 |       1.83819 |   7.62939e-06 |       15236.4 |      0.116245 |      0.031569 |      0.213679 |    0.00878591 |
 =============================================
-=== G4ProcessPlacer::RemoveProcess: for: neutron
-  ProcessName: ImportanceProcess, will be removed!
-  The initial AlongStep Vectors: 
-GPIL Vector: 
-   ImportanceProcess
-   ParaWorldProc_ParallelBiasingWorld
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ParaWorldProc_ParallelBiasingWorld
-   ImportanceProcess
-  The initial PostStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   Decay
-   nCapture
-   nFission
-   inelastic
-   hadElastic
-   ImportanceProcess
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ImportanceProcess
-   hadElastic
-   inelastic
-   nFission
-   nCapture
-   Decay
-   ParaWorldProc_ParallelBiasingWorld
-  The final AlongStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   ParaWorldProc_ParallelBiasingWorld
-  The final PostStep Vectors: 
-GPIL Vector: 
-   ParaWorldProc_ParallelBiasingWorld
-   Decay
-   nCapture
-   nFission
-   inelastic
-   hadElastic
-   CoupledTransportation
-DoIt Vector: 
-   CoupledTransportation
-   hadElastic
-   inelastic
-   nFission
-   nCapture
-   Decay
-   ParaWorldProc_ParallelBiasingWorld
-================================================

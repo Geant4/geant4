@@ -286,14 +286,15 @@ void G4UTrap::Extent(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
+    G4double tolerance = 1e-6;
     UVector3 vmin, vmax;
     GetShape()->Extent(vmin,vmax);
-    if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
-        std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
-        std::abs(pMin.z()-vmin.z()) > kCarTolerance ||
-        std::abs(pMax.x()-vmax.x()) > kCarTolerance ||
-        std::abs(pMax.y()-vmax.y()) > kCarTolerance ||
-        std::abs(pMax.z()-vmax.z()) > kCarTolerance)
+    if (std::abs(pMin.x()-vmin.x()) > tolerance ||
+        std::abs(pMin.y()-vmin.y()) > tolerance ||
+        std::abs(pMin.z()-vmin.z()) > tolerance ||
+        std::abs(pMax.x()-vmax.x()) > tolerance ||
+        std::abs(pMax.y()-vmax.y()) > tolerance ||
+        std::abs(pMax.z()-vmax.z()) > tolerance)
     {
       std::ostringstream message;
       message << "Inconsistency in bounding boxes for solid: "

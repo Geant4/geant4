@@ -3,11 +3,11 @@
 /run/verbose 2
 #
 # Use this open statement to create an OpenGL view:
-#/vis/open OGL 600x600-0+0
+/vis/open OGL 600x600-0+0
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
-/vis/open DAWNFILE
+#/vis/open DAWNFILE
 #
 # Use this open statement to create a .heprep file suitable for
 # viewing in HepRApp:
@@ -16,6 +16,17 @@
 # Use this open statement to create a .wrl file suitable for
 # viewing in a VRML viewer:
 #/vis/open VRML2FILE
+#
+# Set some default verbose
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Change the default number of threads (in multi-threaded mode)
+#/run/numberOfThreads 4
+#
+# Initialize kernel
+/run/initialize
 #
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:

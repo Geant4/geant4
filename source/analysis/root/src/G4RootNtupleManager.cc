@@ -109,6 +109,15 @@ void G4RootNtupleManager::CreateTNtuple(
   SetCreateMode();
 
   if ( fCreateMode == G4NtupleCreateMode::kNoMergeAfterOpen ) {
+    if ( ! fNtupleDirectory ) {
+      G4String inFunction = "G4RootNtupleManager::::CreateTNtuple";
+      G4ExceptionDescription description;
+      description << "      " 
+        << "Cannot create ntuple. Ntuple directory does not exist." << G4endl;
+      G4Exception(inFunction, "Analysis_W002", JustWarning, description);
+      return;
+    }
+
     ntupleDescription->fNtuple
       = new tools::wroot::ntuple(*fNtupleDirectory, name, title);
     ntupleDescription->fIsNtupleOwner = false;  
@@ -122,6 +131,16 @@ void G4RootNtupleManager::CreateTNtupleFromBooking(
   G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription)
 {
   if ( fCreateMode == G4NtupleCreateMode::kNoMergeBeforeOpen ) {
+
+    if ( ! fNtupleDirectory ) {
+      G4String inFunction = "G4RootNtupleManager::::CreateTNtuple";
+      G4ExceptionDescription description;
+      description << "      " 
+        << "Cannot create ntuple. Ntuple directory does not exist." << G4endl;
+      G4Exception(inFunction, "Analysis_W002", JustWarning, description);
+      return;
+    }
+    
     ntupleDescription->fNtuple
       = new tools::wroot::ntuple(
               *fNtupleDirectory, ntupleDescription->fNtupleBooking);

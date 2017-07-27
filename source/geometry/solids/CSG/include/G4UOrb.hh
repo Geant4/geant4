@@ -68,6 +68,7 @@ class G4UOrb : public G4USolid
 
     G4double GetRadius() const;
     void SetRadius(G4double newRmax);
+    G4double GetRadialTolerance() const;
 
     inline G4GeometryType GetEntityType() const;
 

@@ -280,12 +280,16 @@ int MCGIDI_outputChannel_sampleProductsAtE( statusMessageReporting *smr, MCGIDI_
                         break;
                     case MCGIDI_channelGenre_undefined_e :
                         printf( "Channel is undefined\n" );
+			break;
                     case MCGIDI_channelGenre_twoBodyDecay_e :
                         printf( "Channel is twoBodyDecay\n" );
+			break;
                     case MCGIDI_channelGenre_uncorrelatedDecay_e :
                         printf( "Channel is uncorrelatedDecay\n" );
+			break;
                     default :
                         printf( "Unsupported channel genre = %d\n", outputChannel->genre );
+			break;
                     }
                     if( !smr_isOk( smr ) ) return( -1 );
                     if( !secondTwoBody ) {

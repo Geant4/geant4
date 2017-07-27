@@ -179,6 +179,20 @@ G4int G4VAnalysisManager::GetH3Id(const G4String& name, G4bool warn) const
 
 //_____________________________________________________________________________
 inline 
+G4int G4VAnalysisManager::GetP1Id(const G4String& name, G4bool warn) const
+{
+  return fVP1Manager->GetP1Id(name, warn);
+}  
+
+//_____________________________________________________________________________
+inline 
+G4int G4VAnalysisManager::GetP2Id(const G4String& name, G4bool warn) const
+{
+  return fVP2Manager->GetP2Id(name, warn);
+}  
+
+//_____________________________________________________________________________
+inline 
 G4int G4VAnalysisManager::GetH1Nbins(G4int id) const
 {
   return fVH1Manager->GetH1Nbins(id);

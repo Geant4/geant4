@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc 101121 2016-11-07 09:18:01Z gcosmo $
+// $Id: G4Tubs.cc 105148 2017-07-14 08:35:13Z gcosmo $
 //
 // 
 // class G4Tubs
@@ -282,7 +282,7 @@ G4bool G4Tubs::CalculateExtent( const EAxis              pAxis,
   // Find bounding envelope and calculate extent
   //
   const G4int NSTEPS = 24;            // number of steps for whole circle
-  G4double astep  = (360/NSTEPS)*deg; // max angle for one step
+  G4double astep  = twopi/NSTEPS;     // max angle for one step
   G4int    ksteps = (dphi <= astep) ? 1 : (G4int)((dphi-deg)/astep) + 1;
   G4double ang    = dphi/ksteps;
 

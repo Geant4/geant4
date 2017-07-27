@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 102724 2017-02-20 13:00:39Z gcosmo $
+// $Id: G4Fragment.cc 105171 2017-07-14 10:55:43Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -92,8 +92,7 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
 
 G4Fragment::~G4Fragment()
 {
-  delete thePolarization;
-  thePolarization = nullptr;
+  SetNuclearPolarization(nullptr);
 }
 
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
@@ -221,7 +220,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment *theFragment)
       << G4endl;
 
   out << "    #spin= " << theFragment->GetSpin()
-      << "    #floatLevelNo= " << theFragment->GetFloatingLevelNumber();
+      << "    #floatLevelNo= " << theFragment->GetFloatingLevelNumber() << "  ";
        
   if(theFragment->GetNuclearPolarization()) { 
     out << theFragment->GetNuclearPolarization(); 

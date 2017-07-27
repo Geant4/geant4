@@ -1,4 +1,4 @@
-svn log $Id: History 101512 2016-11-18 15:28:47Z gcosmo $
+svn log $Id: History 105125 2017-07-13 14:06:47Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,11 +16,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18th November 2016 Gunter Folger   (config-V10-02-07)
+14th March 2017 Gabriele Cosmo  (config-V10-02-08)
+- Corrected order of linkage in binmake.gmk for analysis global library.
+
+18th November 2016 Gunter Folger  (config-V10-02-07)
 - add include for analysis/accumulables
 - revert change forcing load of libraries
 
-9th November 2016 Gunter Folger   (config-V10-02-06)  *tag REJECTED*
+9th November 2016 Gunter Folger  (config-V10-02-06)  *tag REJECTED*
 - Force loading of symbols for physics_lists/constructor and builders 
    libraries in granular mode for static libs
 	

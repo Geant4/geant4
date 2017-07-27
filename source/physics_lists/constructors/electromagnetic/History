@@ -1,4 +1,4 @@
-$Id: History 102543 2017-02-08 14:16:52Z gcosmo $
+$Id: History 105124 2017-07-13 13:57:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,13 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+04-May-2017 V.Ivanchenko (phys-ctor-em-V10-02-41)
+- G4EmModelActivator - fixed Opt4 and SS per region 
+
+25-April-2017 V.Ivanchenko
+- G4EmStandardPhysicsSS - apply single scattering to all particles
+    (bug fix #1966) 
 
 19-January-2017 P. Gumplinger (phys-ctor-em-V10-02-39)
 - add setCerenkov/ScintillationStackPhotons commands to

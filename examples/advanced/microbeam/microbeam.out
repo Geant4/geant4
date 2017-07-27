@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -812,7 +812,7 @@ Index : 12     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x29eaa60
+##### Create analysis manager   0x1711a30
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -828,9 +828,7 @@ All Ntuples have been created
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.26027653312574
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.045289661672963
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
@@ -846,10 +844,10 @@ All Ntuples have been created
 
 -> Event # 10 generated 
    ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.33467520432143
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.036039698548268
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.3254750455138
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.039484268513238
 
--> Total number of particles detected by the gas detector : 2
+-> Total number of particles detected by the gas detector : 1
 
 Graphics systems deleted.
 Visualization Manager deleting...

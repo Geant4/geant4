@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 102620 2017-02-10 08:11:22Z gcosmo $
+// $Id: G4RunManagerKernel.cc 105177 2017-07-14 11:08:42Z gcosmo $
 //
 //
 
@@ -347,10 +347,10 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_Init)
   {
-    G4cout << "Current application state is "
-        << stateManager->GetStateString(currentState) << G4endl;
     if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
     {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
       G4Exception("G4RunManagerKernel::DefineWorldVolume",
 		"DefineWorldVolumeAtIncorrectState",
 		FatalException,
@@ -361,8 +361,8 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
       //        "DefineWorldVolumeAtIncorrectState",
       //        JustWarning,
       //        "Geant4 kernel is not Init state : Assuming Init state.");
-      G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
-            <<G4endl;
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
       stateManager->SetNewState(G4State_Init); 
     }
   }
@@ -411,10 +411,10 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   G4ApplicationState currentState = stateManager->GetCurrentState();
   if(currentState!=G4State_Init)
   {
-    G4cout << "Current application state is "
-        << stateManager->GetStateString(currentState) << G4endl;
     if(!(currentState==G4State_Idle||currentState==G4State_PreInit))
     {
+      G4cout << "Current application state is "
+        << stateManager->GetStateString(currentState) << G4endl;
       G4Exception("G4RunManagerKernel::DefineWorldVolume",
 		"DefineWorldVolumeAtIncorrectState",
 		FatalException,
@@ -425,8 +425,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
       //        "DefineWorldVolumeAtIncorrectState",
       //        JustWarning,
       //        "Geant4 kernel is not Init state : Assuming Init state.");
-      G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
-            <<G4endl;
+      //G4cout<<"Warning : Geant4 kernel is not Init state : Assuming Init state."
+      //      <<G4endl;
       stateManager->SetNewState(G4State_Init); 
     }
   }

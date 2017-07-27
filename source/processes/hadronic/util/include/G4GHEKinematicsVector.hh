@@ -671,10 +671,10 @@ class G4GHEKinematicsVector
    }                 
 
   inline
-   void Print( G4int L)
+   void Print( G4int LLL)
    {
      G4cout << "G4GHEKinematicsVector: " 
-          << L << " " << momentum.x() << " " <<  momentum.y() << " " <<  momentum.z() << " "
+          << LLL << " " << momentum.x() << " " <<  momentum.y() << " " <<  momentum.z() << " "
           << energy << " " << kineticEnergy << " " << mass << " " << charge << " " 
           << timeOfFlight << " " << side << " " << flag << " " << code << particleDef << G4endl;
      return;                         

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -164,7 +164,7 @@ Type of PIXE cross section for e+-                 Livermore
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.54s Real=1.54s Sys=0s
+  User=1.12s Real=1.12s Sys=0s
 
  ======================== run summary =====================
 

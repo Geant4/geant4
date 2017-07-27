@@ -561,9 +561,17 @@ void G4LowEPPolarizedComptonModel::SampleSecondaries(std::vector<G4DynamicPartic
       G4double X_p = (-var_Y + sqrt (diff))/(2*var_W);
       G4double X_m = (-var_Y - sqrt (diff))/(2*var_W);
 
+      // Floating point precision protection
+      // Check if X_p and X_m are greater than or less than 1 or -1, if so clean up FPE 
+      // Issue due to propagation of FPE and only impacts 8th sig fig onwards
+
+      if(X_p >1){X_p=1;} if(X_p<-1){X_p=-1;}
+      if(X_m >1){X_m=1;} if(X_m<-1){X_m=-1;}
 
       // Randomly sample one of the two possible solutions and determin theta angle of ejected Compton electron
       G4double ThetaE = 0.;
+
+
       G4double sol_select = G4UniformRand();
 
       if (sol_select < 0.5)

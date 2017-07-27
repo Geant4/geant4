@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.icc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4Orb.icc 105148 2017-07-14 08:35:13Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -38,6 +38,12 @@ inline
 G4double G4Orb::GetRadius() const
 {
   return fRmax;
+}
+
+inline
+G4double G4Orb::GetRadialTolerance() const
+{
+  return fRmaxTolerance;
 }
 
 inline

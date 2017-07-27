@@ -1,3 +1,4 @@
+
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -134,31 +135,23 @@ G4bool G4MicroElecCrossSectionDataSet::LoadData(const G4String & argFileName)
 	      comment=false;
 	      space=true;
 	      break;
-     
+
 	    case '#':
 	      comment=true;
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }
@@ -298,25 +291,17 @@ G4bool G4MicroElecCrossSectionDataSet::LoadNonLogData(const G4String & argFileNa
 	      break;
      
 	    case '\t':
-	      c=' ';
 	    case ' ':
-	      if (space)
-		break;
+	      space = true;
+              break;
+
 	    default:
-	      if (comment)
-		break;
-     
-	      if (c==' ')
-		space=true;
-	      else
-		{
-		  if (space && (!first))
-		    (*stream) << ' ';
-      
-		  first=false;
-		  (*stream) << c;
-		  space=false;
-		}
+	      if (comment) { break; }
+	      if (space && (!first)) { (*stream) << ' '; }
+
+	      first=false;
+	      (*stream) << c;
+	      space=false;
 	    }
 	}
     }

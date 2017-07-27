@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x19b0340
+ creating G4RunManagerKernel 0x1bad310
 
 The materials defined are : 
 
@@ -73,8 +73,6 @@ The materials defined are :
 
 
  HalfWorldLength 2250
-Current application state is PreInit
-Warning : Geant4 kernel is not Init state : Assuming Init state.
 World is registered to the default region.
   G4ErrorRunManagerHelper::InitializePhysics 
 List of instantiated particles ============================================
@@ -83,15 +81,15 @@ Current application state is PreInit
 Warning : Geant4 kernel is not Init state : Assuming Init state.
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1bf90f0G4ErrorPhysicsList:: particle process manager e+ = 0x1bfb8f0
-0x1bf8f60G4ErrorPhysicsList:: particle process manager e- = 0x1bfcee0
-0x1bf8ca0G4ErrorPhysicsList:: particle process manager gamma = 0x1bfd150
-0x1bfa7a0G4ErrorPhysicsList:: particle process manager geantino = 0x1bfd3a0
-0x1bf9300G4ErrorPhysicsList:: particle process manager mu+ = 0x1bfd5f0
-0x1bf97a0G4ErrorPhysicsList:: particle process manager mu- = 0x1bfd840
-0x1bf9c40G4ErrorPhysicsList:: particle process manager pi+ = 0x1bfda90
-0x1bfa0c0G4ErrorPhysicsList:: particle process manager pi- = 0x1bfdce0
-0x1bfa540G4ErrorPhysicsList:: particle process manager proton = 0x1bfdf30
+0x1df60c0G4ErrorPhysicsList:: particle process manager e+ = 0x1df88c0
+0x1df5f30G4ErrorPhysicsList:: particle process manager e- = 0x1df9eb0
+0x1df5c70G4ErrorPhysicsList:: particle process manager gamma = 0x1dfa120
+0x1df7770G4ErrorPhysicsList:: particle process manager geantino = 0x1dfa370
+0x1df62d0G4ErrorPhysicsList:: particle process manager mu+ = 0x1dfa5c0
+0x1df6770G4ErrorPhysicsList:: particle process manager mu- = 0x1dfa810
+0x1df6c10G4ErrorPhysicsList:: particle process manager pi+ = 0x1dfaa60
+0x1df7090G4ErrorPhysicsList:: particle process manager pi- = 0x1dfacb0
+0x1df7510G4ErrorPhysicsList:: particle process manager proton = 0x1dfaf00
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

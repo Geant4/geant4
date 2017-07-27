@@ -97,6 +97,19 @@
    of 1 microsecond, and the gate is 2 microsecond for the coincidence spectrum.
    The target and detctor have a threshold of 10 keV in the anti-/coincidence 
    modes.
+
+   Initially, all histograms but histogram 6 are inactive.  They can all be turned on 
+   with the command
+
+      /analysis/h1/setActivationToAll true
+
+   or specific histograms can be turned on with the command
+
+      /analysis/h1/setActivation i true 
+
+   where i is the histogram index (0,... n).  
+   To turn off, set the final argument to false
+
    
    HistoManager includes also 4 ntuples whose contents are described in the above paragraphe
   (detector response) 

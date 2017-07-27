@@ -306,6 +306,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
          G4int maxA = 0;
          G4int jAtMaxA = 0;
          for ( G4int j = 0 ; j != (G4int)tmpHadrons->size() ; j++ ) {
+            //G4cout << __FILE__ << " " << __LINE__ << "th line: tmpHadrons->at(j)->GetDefinition()->GetParticleName() = " << tmpHadrons->at(j)->GetDefinition()->GetParticleName() << G4endl;
             if ( tmpHadrons->at(j)->GetDefinition()->GetBaryonNumber() > maxA ) {
                maxA = tmpHadrons->at(j)->GetDefinition()->GetBaryonNumber(); 
                jAtMaxA = j; 

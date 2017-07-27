@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -733,7 +733,7 @@ Type of pre-compound inverse x-section              3
 Type of de-excitation inverse x-section             3
 Min excitation energy (keV)                         0.01
 Level density (1/MeV)                               0.1
-Time limit for long lived isomeres (ns)             1000
+Time limit for long lived isomeres (ns)             1e+12
 Use new data files                                  1
 Use complete data files                             0
 Correlated gamma emission flag                      0
@@ -774,33 +774,33 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.19s Real=0.19s Sys=0s
+  User=0.2s Real=0.21s Sys=0.01s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.185   RMS(GeV) 4.665
-Average number of steps              52.62
-Average number of gamma              0.54
+Average energy deposit (GeV)         6.283   RMS(GeV) 4.535
+Average number of steps              53.5
+Average number of gamma              1.01
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           14.72
-Average number of protons            14.12
+Average number of neutrons           13.34
+Average number of protons            12.95
 Average number of antiprotons        0
-Average number of pi+ & pi-          9.97
-Average number of pi0                4.69
-Average number of kaons              0.43
+Average number of pi+ & pi-          8.12
+Average number of pi0                3.75
+Average number of kaons              0.37
 Average number of muons              0
-Average number of deuterons+tritons  1.86
-Average number of He3+alpha          1.04
-Average number of ions               0.27
+Average number of deuterons+tritons  2.1
+Average number of He3+alpha          1.18
+Average number of ions               0.35
 ========================================================
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.086 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.087 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

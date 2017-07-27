@@ -14,6 +14,36 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+16 June 2017 Vladimir Ivanchenko (hadr-deex-V10-02-73)
+- G4DeexPrecoParameters - disable parameter change in G4_Idle state,
+    only G4_PreInit is allowed
+
+14 June 2017 Vladimir Ivanchenko
+- G4DeexPrecoParameters - disable correlated gamma
+
+08 April 2017 Vladimir Ivanchenko
+- G4PhotonEvaporation - fixed second part of the bug #1950
+    always have gamma transition to the discrete level (if there is
+    no levels - to the ground state)
+- G4DeexPrecoParameters - set default MaxLifeTime = 1000 second 
+    (was 0.1 second)
+
+20 March 2017 Vladimir Ivanchenko
+- G4LevelReader - fixed bug #1942 (FatalException if data file is 
+    not opened)
+- G4PhotonEvaporation - fixed bug #1950 (perform transition to
+    the ground state of an isotope if the floating level has zero 
+    excitation energy) 
+
+27 February 2017 Vladimir Ivanchenko
+- G4LevelReader, G4LevelManager, G4PhotonEvaporation - for stable states 
+    (ground state isotopes) life time is set to "-1", change all checks 
+    accordingly
+- G4DeexPrecoParameters - default time limit 0.1s (if radioactive
+    decay is enabled this time is set to the limit of the
+    G4NuclideTable), this allows do not create extra isomeres
+    if radioactive decay is not included in the physics list
+
 21 February 2017 Vladimir Ivanchenko (hadr-deex-V10-02-72)
 - G4LevelReader - in the case of broken file structure or absence of
     a file G4Exception will be issued

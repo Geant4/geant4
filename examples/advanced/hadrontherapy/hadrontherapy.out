@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03    (9-December-2016)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -611,13 +611,13 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=7.9s Real=7.96s Sys=0.04s
+  User=3.04s Real=3.08s Sys=0.03s
 Dose is being written to Dose.out
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.38 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.42 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

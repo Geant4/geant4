@@ -1,4 +1,4 @@
-$Id: History 102588 2017-02-09 10:00:46Z gcosmo $
+$Id: History 105123 2017-07-13 13:52:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,9 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19-April-2017 V.Ivanchenko  (phys-lists-V10-02-12)
+- G4PhysListFactory - fixed  EM option "__SS" - problem report #1966
 
 07-February-2017 V.Ivanchenko  (phys-lists-V10-02-11)
 - G4PhysListFactory - add single scattering EM option (required by

@@ -1,4 +1,4 @@
-$Id: History 88804 2015-03-10 17:12:21Z gcosmo $
+$Id: History 105155 2017-07-14 09:08:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 7th, 2017  Alexander Howard (procbiasing-V10-02-00)
+- G4GeometrySampler: removed unnecessary ClearSampling from the destructor
 
 Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-01-00)
 - G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made

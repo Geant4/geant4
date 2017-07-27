@@ -1,4 +1,4 @@
-$Id: History 101667 2016-11-21 09:12:52Z gcosmo $
+$Id: History 105191 2017-07-14 12:09:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,6 +9,15 @@ $Id: History 101667 2016-11-21 09:12:52Z gcosmo $
 
                       ---------------------
 
+28.06.2017 - Pedro Arce  (DICOM-V10-02-05)
+	   - Bug correction of K and P materials
+
+18.01.2017 - Jonathan Madsen
+	   - Fix to DicomRun::RecordEvent that was incrementing the
+	     inherited numberOfEvent variable from G4Run twice
+	     causing the output of the number of events to be twice
+	     the actual value
+	     
 19.11.2016 - Andrea Dotti     (DICOM-V10-02-04)
            - explicit set of SD to manager
 

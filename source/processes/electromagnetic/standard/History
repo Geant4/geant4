@@ -1,4 +1,4 @@
-$Id: History 101837 2016-12-01 13:38:22Z gcosmo $
+$Id: History 105121 2017-07-13 13:38:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,11 +18,25 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+26 May 17: V.Ivanchenko (emstand-V10-02-34)
+- G4UniversalFluctuation, G4UniversalFluctuation2017 - fixed numerical
+    problem for sampling low-energy anti-protons with very small steps
+
+3 May 17: V.Ivanchenko
+- G4NuclearStopping, G4ICRU49NuclearStoppingModel - fixed nuclear
+    stopping power computation addressed issue discussed in
+    http://hypernews.slac.stanford.edu/HyperNews/geant4/get/hadronprocess/1595/1.html
+
 01 December 16: V.Ivanchenko (emstand-V10-02-33)
 - G4UniversalFluctuation - G.Folger switch to std::sqrt from sqrt
 - G4MottCoefficients, G4ScreeningMottCrossSection, 
   G4eSingleCoulombScatteringModel - use Nuclear Formfactor options
     via G4EmParameters
+
+07 February 17: V.Ivanchenko
+- G4hIonisation - fixed min/max energy for dEdx table for the case,
+    when the mass of a hadron is very different from the mass of
+    proton
 
 09 November 16: V.Ivanchenko (emstand-V10-02-32)
 - G4eplusAnnihilation - fixed polarisation of final gamma at rest 

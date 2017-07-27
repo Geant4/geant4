@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-01    (24-February-2017)
+ Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -167,31 +167,31 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=18.4s Real=18.5s Sys=0s
+  User=20.31s Real=20.4s Sys=0s
 
  The run is 1000 neutron of 2 MeV through 50 cm  of Water_ts (density: 1 g/cm3 )
 
  Process calls frequency :
-	hadElastic= 209953	nCapture= 999	neutronInelastic= 1
+	hadElastic= 213164	nCapture= 999	neutronInelastic= 1
 
  Parcours of incident neutron:
-   nb of collisions    E>1*eV= 16.406      E<1*eV= 194.55       total= 210.95
-   track length        E>1*eV= 20.651 cm   E<1*eV= 72.709 cm    total= 93.36 cm 
-   time of flight      E>1*eV= 735.19 ns  E<1*eV= 199.38 us   total= 200.12 us
+   nb of collisions    E>1*eV= 16.288      E<1*eV= 197.88       total= 214.16
+   track length        E>1*eV= 20.028 cm   E<1*eV= 74.179 cm    total= 94.207 cm 
+   time of flight      E>1*eV= 715.67 ns  E<1*eV= 202.73 us   total= 203.44 us
 
  List of generated particles:
-            C15:       1  Emean =  127.14 meV	( 127.14 meV --> 127.14 meV)
-            O16:    2998  Emean =  42.304 keV	( 2.1228 meV --> 446.24 keV)
-            O17:       1  Emean =  33.991 eV 	( 33.991 eV  --> 33.991 eV )
-            O18:       1  Emean =  50.117 meV	( 50.117 meV --> 50.117 meV)
-          alpha:       1  Emean =  30.171 meV	( 30.171 meV --> 30.171 meV)
-       deuteron:     998  Emean =  1.3191 keV	( 1.2209 keV --> 1.3701 keV)
-          gamma:    1002  Emean =  2.2185 MeV	( 3.4978 keV --> 2.2244 MeV)
-         proton:   22584  Emean =  82.989 keV	( 0.21066 meV --> 1.9995 MeV)
+            C14:       1  Emean =  404.19 keV	( 404.19 keV --> 404.19 keV)
+            O16:    2863  Emean =  38.897 keV	( 0.058208 meV --> 442.95 keV)
+            O17:       3  Emean =  80.886 keV	( 32.614 meV --> 242.6 keV)
+            O18:       5  Emean =  7.7253 keV	( 45.573 meV --> 28.035 keV)
+          alpha:       1  Emean =  1.4146 MeV	( 1.4146 MeV --> 1.4146 MeV)
+       deuteron:    1000  Emean =  3.0529 keV	( 1.2802 keV --> 1.7349 MeV)
+          gamma:     999  Emean =  2.2244 MeV	( 2.2243 MeV --> 2.2244 MeV)
+         proton:   22645  Emean =   83.36 keV	( 0.19429 meV --> 1.9999 MeV)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1076884491, 1347405794
+ Current couple of seeds = 1871640223, 1342779355
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -209,13 +209,13 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0173 MB
-Pool ID '7G4Track', size : 0.0336 MB
+Pool ID '17G4DynamicParticle', size : 0.0144 MB
+Pool ID '7G4Track', size : 0.0279 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '17G4ReactionProduct', size : 0.000961 MB
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.062 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.053 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

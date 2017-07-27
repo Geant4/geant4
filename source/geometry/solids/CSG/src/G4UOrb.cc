@@ -113,6 +113,11 @@ void G4UOrb::SetRadius(G4double newRmax)
   fRebuildPolyhedron = true;
 }
 
+G4double G4UOrb::GetRadialTolerance() const
+{
+  return GetShape()->GetRadialTolerance();
+}
+
 //////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
