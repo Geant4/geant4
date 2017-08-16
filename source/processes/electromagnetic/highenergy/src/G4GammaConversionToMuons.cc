@@ -333,7 +333,21 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     G4double uMinus = u-xiHalf;
 
     // Only do these calculations if kinematics is sensible...easier to do the u upper limit as a rejection than by changing the rho range
-    if(uPlus>0 && uPlus < xPlus*pi && uMinus>0 && uMinus<xMinus*pi)
+    if(uPlus > xPlus*pi/GammaMuonInv || uMinus > xMinus*pi/GammaMuonInv)
+      {
+	//	thetaPlus =GammaMuonInv*uPlus/xPlus;
+	if(debug) {
+	  G4cout << " [out of range] xP " << xPlus 
+		 << " t " << t 
+		 << " psi " << psi
+		 << " rho " << rho
+		 << " uPlus " << uPlus
+		 << " uMinus " << uMinus
+		 << " thetaPlus " << GammaMuonInv*uPlus/xPlus
+		 << " thetaMinus " << GammaMuonInv*uMinus/xMinus << G4endl;
+	}
+      }
+    else
       {
 	// Squared momentum transfer, in units of muon mass and GeV
 	G4double q2par = pow(delOverMmuon*(1+xMinus*uPlus*uPlus + xPlus*uMinus*uMinus),2.);
@@ -370,12 +384,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	
 	if(theWeight < 0 || theWeight > maxWeight)
 	  {
-	    G4cout << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
+	    G4cerr << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
 		   << " out of bounds 0 to " << maxWeight << G4endl;
 	  }
 	else if(theWeight > 1.0)
 	  {
-	    G4cout << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
+	    G4cerr << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
 		   << " is > 1! (This is just informational -- weights up to " << maxWeight << " are handled correctly)"<< G4endl;
 	  }
 	
@@ -402,10 +416,12 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
 	thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
       }
+    
+
   } while (nn<nmax && !goodEvent) ;
 
   if(!goodEvent) {
-    G4cout << "**** WARNING in G4GammaConversionToMuons.cc: failed to select a ME-weighted event after " << nmax << " tries.  Using unphysical event weight." << G4endl;
+    G4cerr << "**** WARNING in G4GammaConversionToMuons.cc: failed to select a ME-weighted event after " << nmax << " tries.  Using unphysical event weight." << G4endl;
   }
 
   // now construct the vectors
