@@ -258,7 +258,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4int nn = 0;
   const G4int nmax = 1000;
   const G4double maxWeight = 1.1; // NOT SURE WHAT THE PARAMETRICS IS!
-  // THe studies I have done show that the max weight over 1000 samples is ~0.7-1 for beam energies of 1-1000  GeV, so this seems fairly safe.
+  // THe studies I have done show that the max weight over 10000 samples can go up to ~1.3 for TeV beam energies; tends to be robustly below 1 for 1-10 GeV beam energies.  In the limit of rho<<u, calculations justify a max weight of 1.  Larger weights can occur for rho~u. 
 
   G4bool goodEvent = false;
   const G4bool debug = false;
@@ -271,9 +271,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 
   G4double thetaPlus=0.,thetaMinus=0.,phiHalf=0.; // final angular variables
 
-  // scale of q/mMu at which form factor sets in [PRM(6.115),muonNotes(1)]
+  // scale of q/mMu at which form factor sets in [PRM(6.115),muonNotes(10)]
   G4double qFormFactor = 1/(0.20*A027); 
-  G4double aRangeNorm = log((pow(qFormFactor,4.)+pow(2.*GammaMuonInv,4.))/pow(2.*GammaMuonInv,4.));  // scale for the log(rho) integral
+  G4double aRangeNorm = log((pow(qFormFactor,4.)+pow(2.*GammaMuonInv,4.))/pow(2.*GammaMuonInv,4.));  // scale for the log(rho) integral.  NOT the best definition (see discussion surrounding (8) and (9) in muonNotes), but within 10-25% for Tungsten at energies of interest to us.  Also worth noting that this normalization factor is only for convenience, so that we can reduce the photon-energy-dependence of the maxweight. 
 
   do
   { 
