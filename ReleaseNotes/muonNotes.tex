@@ -12,6 +12,9 @@
 
 \newcommand{\be}{\begin{equation}}
 \newcommand{\ee}{\end{equation}}
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+%\newcommand{\max}{\mathrm{max}}
 \newcommand{\pal}{\parallel}
 \newcommand{\red}{\color[rgb]{1,0,0}}
 
@@ -24,8 +27,100 @@
 
 (equation numbers refer to the Geant4 10.2 physics reference manual)
 
-These notes summarize my understanding of Section 5.5 of the Geant4 physics reference manual, and the G4GammaConversionToMuons class.  My calculations suggest that eqns. (5.60) and (5.61), and the corresponding lines of code, have implemented the nuclear form factor incorrectly.  The discrepancies in the formulas look like small ``typos'', but I estimate that they impact the tails of the muon distribution relevant for LDMX by 2--3 orders of magnitude, as shown in Tim's slides.
+These notes summarize my modifications to the \verb=G4GammaConversionToMuons::PostStepDoIt()= method to include a more exact parametrization of the matrix element for muon production.  The result is an almost complete rewrite of the phase-space sampling.  Major  conceptual changes are:
+\begin{itemize}
+\item Instead of trying to factorize the problem into sequential 1-dimensional rejection samplings of distributions in the $x_+$, $t$, $\psi$, and $\rho$ kinematic variables, I sample these four variables uniformly (in the case of $\rho$, uniformly in $log(1+\rho^2/c^2)$) and then rejection-sample the point in 4d phase space based on the full matrix element in (5.50).  
+\item This allows us to include the full $q$-dependence in the form factor, rather than just the $q_\parallel$ dependence included in the standard G4 sequential sampling.
+\item In addition, I have explicitly used the elastic form factor from (6.115), rather than the perplexing $t$-dependence in (5.60)-(5.61).  
+\item The above also allows to sample the entire kinematically allowed range of $\rho$, rather than the ad-hoc range used in the standard G4 code.
+\end{itemize}
+Some things that are \emph{not} included:
+\begin{itemize}
+\item Accurate full matrix element in large-angle region (the matrix element provided by geant4 seems to assume a small-angle approximation -- it's not physical for the matrix element to depend on the likes of $1+u^2$).   However, I think this will only be an $O(1)$ effect.  \textbf{Needs to be checked against MadGraph!}
+\item Muon production off individual protons (and neutrons) in the nucleus.  This should dominate over the elastic process at large $q$ -- in particular, at $q\gtrsim $GeV where the coherent elastic form factor is suppressed by a factor of $O(1/Z)$, there's no reason this incoherent piece wouldn't be comparable.  At these large $q$, the recoil of the kicked nucleon is also not experimentally negligible, so we need to find a parametrization that includes it; the recoil nucleon should go through some sort of intra-nuclear cascade.  \textbf{We should think more about how to model and/or bound this process. }
+\item Atomic screening, relevant for $q \lesssim a_0/Z^{1/3} \sim 0.01 $MeV, is not taken into account.  Since the minimum $q$ for muon production is of order $m_\mu^2/(2E_\gamma)$, this should only be relevant for $E_\gamma \gtrsim 600 $GeV and we can safely ignore it. 
+\end{itemize}
 
+\section{Kinematics: Variables, Transformations and Domains}\label{definitions}
+We use the kinematic variables $x_\pm \equiv E_\mu^\pm / E_\gamma$ and the variables introduced in (5.51):
+\be
+u_\pm = \gamma_\pm \theta_\pm, \qquad \gamma_\pm = \frac{E_\mu^\pm}{m_\mu}, \qquad q^2 = q_\pal^2 + q_\perp^2,
+\ee
+and the variables $t$, $\rho$, and $\psi$ defined implicitly above and below (5.54):
+\be
+u_\pm = u \pm \xi/2, \qquad \beta = u \varphi; \qquad \xi = \rho \cos\psi, \qquad \beta = \rho \sin\psi; u^2 = 1/t -1.
+\ee
+
+The kinematically allowed domains for these variables are:
+\begin{itemize}
+\item $x_\pm \in [\epsilon, 1-\epsilon]$ where $\epsilon \equiv m_\mu/E_\gamma$ (since $E_\mu^\pm \ge m_\mu$).  Since $x_- = 1 - x_+$ by conservation of energy (under the assumption that the nucleus carries away no energy), an in-range $x_+$ guarantees in-range $x_-$.  
+\item $\theta_\pm \in [0,\pi]$
+\item $\varphi \in [-\pi,\pi]$
+\item $u_\pm \in [0,x_\pm \pi/\epsilon]$ (follows from $\theta_\pm$ ranges).
+\end{itemize}
+
+In the high-energy limit,$u \in [0,\infty]$ so that $t \in [0,1]$.   $\xi$ and $\beta$ can have either sign, so that $\psi \in [0,2\pi]$, but an upper limit on $\rho$ comes from demanding that $|\varphi| < \pi$ ( $\Rightarrow \rho < \pi u/|\sin\phi|$) and that $\theta_\pm$ are both positive ($\Rightarrow \rho < 2 u/|cos\psi|$).  The tighter of these limits always implies a cutoff $\rho \lesssim u$, with $O(1)$ dependence on$\psi$.
+
+For finite beam energy, small $t$ and/or large $\rho$  can still lead to unphysically large $u_\pm$, i.e. $\theta_\pm > \pi$.  However, since this is rare (and there are several different sub-cases to check) it is easier to check for the pathology as part of the ``rejection'' step rather than in the initial sampling. \textbf{It's quite easy to impose a lower bound on $t$ motivated by the $u_{max}$ logic, and this may be worth doing.}
+
+To summarize: to generate physical kinematics we
+\begin{enumerate}
+\item sample $x_+ \in [\epsilon, 1-\epsilon]$ (uniform sampling)
+\item sample $t \in [0,1]$ (uniform sampling)
+\item sample $\psi \in [0,2\pi]$ (uniform sampling)
+\item sample $\rho \in [0,\rho_{\max}]$ with $\rho_{\max} = \min\left( \pi u/|\sin\phi|, 2 u/|cos\psi|\right)$ (uniformly sampling $a(\rho)$ defined below)
+\item reject events with $u_\pm > x_\pm \pi/\epsilon$.
+\end{enumerate}
+
+The $x_+$, $t$, and $\psi$ phase-space distributions are approximately flat (when the form factor is neglected), so that uniformly sampling the above ranges is an efficient starting point for event generation.  The $\psi$ distribution, however, is not, motivating a further change of variables.  As derived in (5.56), the $\rho$ distribution from the matrix element (again ignoring the form factor) is approximately 
+\be
+d\sigma/d\rho \propto \frac{\rho^3}{(c_2^2 + \rho^2)^2} \label{drho}
+\ee
+with $c_2 =\frac {q_\pal} {m_\mu} =  \frac{q_{\min}}{(t m_\mu)} = \frac{m_\mu }{2 E_\gamma x_+ x_- t}$.  
+A change of variables that turns this into a uniform integral is possible, but it is not easily (analytically) invertible.  A practical way to match the scaling at large and small $\rho$ is to uniformly sample $a(\rho) = \log(\rho^4+c_2^4) \in [a(0),a(\rho_{\max})]$ --- $da(\rho) \propto \frac{\rho^3}{\rho^4 + c_2^4}$, which approaches  \eqref{drho} at large and small $\rho$, is strictly greater than \eqref{drho}, and at most a factor of 2 larger than \eqref{drho}.  
+
+
+\section{Assigning Event Weights: Measure and Matrix Element Factors}
+Having defined a procedure for sampling phase space, we can now define an event weighting (rejection) scheme so that generated events are distributed according to the physical matrix element (5.50), up to an extra form-factor.  
+
+The above procedure will sample
+\be
+\frac{dx_+}{1-2\epsilon} \frac{dt}{1} \frac{d\psi}{2\pi} \frac{da}{a(\rho_{\max})-a(0)}. 
+\ee
+We wish to sample the differential cross-section 
+\be
+\frac{d\sigma}{dx_+ du_+ du_- d\varphi} \propto f(x_+, u_+, u_-, \varphi) F_{exp}(q^2),
+\ee
+where 
+\bea
+f(x_+, u_+, u_-, \varphi) = \frac{m_\mu^4}{q^4} u_+ u_- \bigg\{& \frac{ u_+^2 + u_-^2}{(1+u_+^2) (1+u_-^2)} -2 x_+ x_- \left[\frac{u_+^2 }{(1+u_+^2)^2} + \frac{u_-^2 }{(1+u_-^2)^2}\right]\nonumber\\
+& \qquad -\frac{2 u_+ u_- (1-2 x_+ x_-) cos\varphi}{(1+u_+^2) (1+u_-^2)} \bigg\}.
+\eea
+
+
+To do so, we should weight events by 
+\be
+g(x_+, t,\psi, \rho) = (1-2\epsilon) \frac{\log\left[1 + (\rho/c_2)^4\right]}{\Delta a_{ref}} f F_{exp}(q^2) \left| \frac{d x_+ du_- du_- d\varphi}{d x_+ d t d\psi d\rho}\right| \left(\frac{da}{d\rho}\right)^{-1}. 
+\ee
+The normalization $a_{ref}$ must be independent of the final-state kinematics, but should account for the overall scaling of the matrix element and of $\log\left( \frac{\rho^4 +c_2^4}{c_2^4}\right) = \log(1+(\rho/c_2)^4)$ with incident photon energy.
+
+Note that $\rho_{\max}$ is bounded from above by $\sqrt{\pi^2 + 2^2} u = \sqrt{\pi^2 + 2^2} \sqrt{1/t-1}$ for given $\rho$.  An absolute upper bound on $\rho/c_2$ is therefore:
+\be
+(\rho/c_2)_{MAX} = \sqrt{\pi^2 + 2^2} \cdot 2 \gamma_0 (x_+ x_-) \sqrt{t(1-t)}) \leq  2  \sqrt{\pi^2 + 2^2} \gamma_0 \tfrac{1}{4} \tfrac{1}{2} = \frac{ \sqrt{\pi^2 + 2^2}}{4} \gamma_0,\label{goodMAX}
+\ee
+where $\gamma_0 \equiv E_\gamma/m_\mu$.  Therefore, if we take $\Delta a_{ref} = \log\left[1+(\sqrt{\pi^2 + 2^2}\gamma_0/4)^4\right]$ then $(a(\rho_{\max})-a(0))/\Delta a_{ref}$ is always strictly less than unity.  
+
+To use $g$ as a weight, we need to divide by its maximum possible value.  
+The G4 physics reference manual formulas imply that the matrix element factor (including Jacobians -- i.e. $g$ above with the form-factor $F$ and $\Delta a/\Delta a_{ref}$ factors removed) is $<1$ in the limit $\rho \ll u$, but in the opposite limit this is no longer the case.  For example, if I take the limit of $E_\gamma\rightarrow \infty, u\rightarrow 0$ with $\varphi=\pi, \xi= u$ I find a matrix element weight proportional to $3(\pi^2 + 1)/16. (1-2 x_{+-} \approx 2$ for $x_+$ near zero or 1.
+
+(The version of the code used for our studies actually used a different, more ad-hoc $\Delta a_{ref}$:  based on the fact that the form factor suppresses events with $\rho >\rho_{ff} \equiv (0.20 A^{0.27}/m_\mu)^{-1}$, we defined
+\be
+\Delta a_{ref} =  \log\left[1+\left(\frac{\rho_{ff}}{c_{2,min}}\right)^4\right] = \log\left[1+\left(\gamma_0 \rho_{ff}/2\right)^4\right].
+\ee
+For Tungsten, these happen to be within 10-25\% of one another for multi-GeV beam energies --- \textbf{but a better solution would be to use the $\Delta a_{ref}$ from \eqref{goodMAX}}.
+
+
+\subsection{Form Factor}
 The form factor first appears in (5.60) and (5.61).  It seems these are trying to implement a standard form factor (c.f. (6.115))
 \be
 F_{exp}(q)=\left[1+\frac{1}{12} \left( \frac{q r_n}{\hbar} \right)^2 \right]^{-2} = {\left[ 1 + (0.20 A^{0.27} q/m_\mu)^2 \right]^{-2}}
@@ -33,24 +128,15 @@ F_{exp}(q)=\left[1+\frac{1}{12} \left( \frac{q r_n}{\hbar} \right)^2 \right]^{-2
 \ee
 where in the last expression we have used (c.f. (6.116)) $ r_n/\hbar = 1.27 A^{0.27} \,\rm{fm}/\hbar = 6.45/GeV$, $\frac{1}{\sqrt{12}} r_n\cdot m_\mu = 0.20$.
 
-To implement this form factor, we need to evaluate $q^2$ in terms of the kinematic variables introduced in (5.51):
-\be
-u_\pm = \gamma_\pm \theta_\pm, \qquad \gamma_\pm = \frac{E_\mu^\pm}{m_\mu}, \qquad q^2 = q_\pal^2 + q_\perp^2,
-\ee
-and the variables $t$, $rho$, and $\psi$ defined implicitly above and below (5.54):
-\be
-u_\pm = u \pm \xi/2, \qquad \beta = u \varphi; \qquad \xi = \rho \cos\psi, \qquad \beta = \rho \sin\psi; u^2 = 1/t -1
-\ee
-%\be
-%\Rightarrow u = (u_+ + u_-)/2, \qquad \rho = (u_+ - u_-)^2 + u^2 \varphi^2.
-%\ee
-In the approximation where we drop higher powers of $\beta$ and $\xi$, I find
-\be
-q^2 \approx q_\pal^2 + m_\mu^2 \rho^2,
-\ee
-where $q_\pal = q_{min}/t$ and $q_{min} = m_\mu^2 /(2 E_\gamma x_+ x_-)$.  
+  \textbf{It should be noted that even the ``full'' formulas for $q_\parallel$ and $q_\perp$ in the Physics Reference Manual (5.52) rely on small-angle approximations, and are inaccurate for muons at large polar angles.  I have used the (5.52) approximation for $q$ in both the form-factor calculation and the $1/q^4$ factor in the matrix element.}
 
-Based on these formulas and (5.58), I would think the appropriate $t$ distribution in (5.60) would be
+\appendix
+\section{Notes on Current Geant4 Formulas for sampling ``t'' (an ``opening angle''/``invariant mass'' variable)}
+My calculations suggest that eqns. (5.60) and (5.61), and the corresponding lines of code, have implemented the nuclear form factor incorrectly.  The discrepancies in the formulas look like small ``typos'', but I estimate that they impact the tails of the muon distribution relevant for LDMX by 2--3 orders of magnitude, as shown in Tim's slides.
+
+\emph{At first, I tried modifying the Geant4 implementation to take only this form factor revision into account.  I found that the distribution actually did \emph{not} become more consistent with a full matrix element generator (MadGraph/MadEvent4), because the approximation that $q \approx q_\parallel$ was very inaccurate. }
+
+Based on the formulas in \S\ref{definitions} and (5.58), I would think the appropriate $t$ distribution in (5.60) would be
 \begin{eqnarray}
 f_1(t) dt & = (1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)) F_{exp}(q_\pal(t)) dt\nonumber \\
 & = \frac{1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)}{\left(1 + (0.20 A^{0.27} {q_{\min}}/(t \cdot m_\mu) )^2\right)^{2}}  dt\nonumber \\
@@ -58,17 +144,109 @@ f_1(t) dt & = (1 - 2 x_+ x_- + 4 x_+ x_- t (1-t)) F_{exp}(q_\pal(t)) dt\nonumber
 \end{eqnarray}
 where
 \be
-C_1' = \left(0.20 A^{0.27} q_{min}/m_\mu\right)^2 = \frac{({\red 0.20} A^{0.27})^2}{({\red 2} x_+ x_- E_\gamma/{m_\mu})^{\red 2}}. \label{5p61v2}
+C_1' = \left(0.20 A^{0.27} q_{\min}/m_\mu\right)^2 = \frac{({\red 0.20} A^{0.27})^2}{({\red 2} x_+ x_- E_\gamma/{m_\mu})^{\red 2}}. \label{5p61v2}
 \ee
 In the expressions \eqref{5p60v2} and \eqref{5p61v2}, I have highlighted in red the differences between my formulas and (5.60) and (5.61) in the physics reference manual.  
 
-The implementation in the G4GammaConversionToMuons class seems consistent with (5.60) and (5.61), but as written these seem rather unreasonable --- in particular, the effective ``form factor'' for any given nucleus isn't just a function of $q_\pal$ but of $q_{min}/t^2 \sim q_\pal/t$, which has no physical significance that I can see. 
+The implementation in the G4GammaConversionToMuons class seems consistent with (5.60) and (5.61), but as written these seem rather unreasonable --- in particular, the effective ``form factor'' for any given nucleus isn't just a function of $q_\pal$ but of $q_{\min}/t^2 \sim q_\pal/t$, which has no physical significance that I can see. 
 
-I've spent less time looking at the later steps of the generation, but it seems to me that (5.64) and (5.66) also seem discrepant with (5.55) and (5.56).  But, for example, I would have expected a $(\rho^2 + C)^2$  in the denominator of (5.64) rather than $\rho^4+C_2$, and $C = q_\pal^2/m_\mu^2$.
+A second issue is that $f_1$ should also include a term proportional to the integral of the $\rho$ distribution.  This is \emph{not} $t$-independent; the approximation given in (5.56) fails badly at $t\rightarrow 0$ or $t\rightarrow 1$.  While we don't care much about $t\rightarrow 1$ for LDMX (this is $u\rightarrow 0$ --- forward pairs which are easier to veto), and $t\rightarrow 0$ is much \emph{more} heavily suppressed by the form factor, it's useful to lay things out correctly so we can compare more reliably to MG.
+
+\subsection{Sampling ``$\rho$'' -- and moving away from sequential sampling}
+The next step of generation aims to sample the $\rho$ distribution from  (5.55) and (5.56).  One might think of sampling the following function:
+\be
+f_3(\rho) d\rho = \frac{\rho^3}{(c_2^2 + \rho^2)^2} \frac{F(\sqrt{q_\pal^2 + m_\mu^2 \rho^2})}{F(q_\pal)},
+\ee
+with $c_2 =\frac {q_\pal} {m_\mu} =  \frac{q_{\min}}{(t m_\mu)} = \frac{m_\mu }{2 E_\gamma x_+ x_- t}$.
+
+Note that this is different from the $f_3$ quoted in (5.64), in two ways: (i) the denominator is $(c_2^2 + \rho^2)^2$ rather than $C_2 +\rho^4$, and (ii) I have included the "ratio of $F$'s" factor to account for the form-factor penalty of going to large $\rho$.
+
+This approach is incorrect, though: a rejection sampling on $\rho$ (where rejection leads to resampling $\rho$ but \emph{not} previously sampled kinematic variables $x_+$, $t$, and $\psi$), this will sample a distribution $f_3/\int f_3$  of unit norm, which is definitely not what we want! That was part of the motivation for using the multivariate rejection approach, as described elsewhere in these notes. 
+
+%
+%Even without the form-factor, the above is amenable to simple analytical integration, but (in contrast to the form in the physics manual) this integrand is not easily inverted, so we need to use a rejection method to sample $\rho$.  At the same time, the distribution is far from flat, so we want to sample from a non-uniform distribution.  A good strategy is probably to sample trial values of $\rho$ from 
+%\be
+%\hat f_3(\rho) d\rho = \frac{\rho^3}{(c_2^4 + \rho^4)} = \frac{1}{4} d\left[\log(\rho^4 + c_2^4)\right],
+%\ee
+%much the way it is done in the reference manual; evaluate $g_3(\rho) \equiv f_3(\rho)/\hat f_3(\rho)$; and keep events if a random number sampled uniformly from $(0,1)$ is smaller than $g_3$.  If the random number is larger than $g_3$, we sample again and repeat.  
+%
+%Note, however, that our $c_2^4$ is not the same as the G4 reference manual value of $C_2$.  
+%
+%In addition, we need to be careful about how we nest the sampling and rejection.   If the result of ``rejection'' is to select a new $\rho$ (but keep the selected $t$ and $\psi$), then the $t$ and $\psi$ distributions should include the integrated $\rho$ distribution $f_3$.  If the result of ``rejection'' is to go back and select a new $t$ and $\psi$, then the $t$ and $\psi$ distributions should instead include the integral of $\hat f_3$.  (????)
+%
+%Finally, we should give some thought to the chosen $\rho_{\max}$ upper limit for the sampling.   The upper limit  $\rho_{\max}$ given in (5.65) of the Physics Reference Manual seems to be motivated by the form factor, but we would like to sample that phase space (with the correct suppression).  Instead, we want to sample out to the kinematic limit on $\rho$.  This limit can be derived from requiring physical solutions for $\psi$ and $\theta_\pm$ --- namely $\rho < 2 u/|cos\psi|$ so that $\theta_\pm$ are both positive, and $\rho < \pi u/|\sin\phi|$ so that $\varphi$ is well defined. 
 
 %\section{}
 %\subsection{}
 
+\section{Approaches to Factorizing the Matrix Element}
+The above approach is wrong, see first bullet below -- we have a few options:
+\begin{enumerate}
+\item Sequential sampling (as done in G4) --- here, the function we sample for $t$ should include the $t$-dependence of the \emph{integrals} of the $\psi$ and $ \rho$ distributions.  In practice, this doesn't seem tractable because the $\rho$-integral with the form factor is quite messy. 
+\item  Multivariate rejection: if we can define the domains independently for sampling $t$, $\psi$, and $\rho$, then we can just sample all three and \emph{then} reject if the \emph{multivariate} matrix element is less than a suitably normalized uniform random number.  This will be quite inefficient unless we can parametrize the distributions such  that the matrix elements are pretty flat.  
+\item A ``combination'' approach: write the matrix element as a product of two functions: $A(t,\psi,\rho)$ is evaluated by sequential sampling and $B$ by a multivariate rejection. In particular, it seems reasonable to include the form factor in $B$ and try to do sequential sampling for the kinematic parts of the matrix element.
+\end{enumerate}
+ 
+%
+%To deal with this I propose the following approach:
+%\begin{enumerate}
+%\item Sample $x_+$, according to the Geant4 distribution.
+%\item Sample the approximate full matrix element by writing as follows:
+%\bea
+%dt \bigg|_0^1 d\psi\bigg|_0^\pi d\rho|_0^{{\rho_{\max}}(t,\psi)} f_1(t,\psi) f_3(\rho,t,\psi) F(\rho,t,\psi).
+%\eea
+%where $f_1$ and $f_2$ are relatively flat; $f_3$ is a logarithmic integrand and does \emph{not} contain a form factor, but can be integrated analytically (the form factor is, instead, encoded explicitly in $F$). 
+%\begin{enumerate}
+%\item First we sample $t$ and $\psi$ uniformly.  We (tentatively) keep sampled values if a uniform random number $r_1$ is less than $f_1(t,\psi) \int_0^{{\rho_{\max}}(t,\psi)}  d\rho f_3(\rho,t,\psi)$; otherwise re-sample.  The range of $r_1$ is from zero to $\max\left[f_1(t,\psi) \int_0^{{\rho_{\max}}(t,\psi)}  d\rho f_3(\rho,t,\psi)\right]$.
+%\item Then, we sample $\rho$ between $0$ and ${\rho_{\max}}(t,\psi)$.  This can be done exactly by transforming a random $r_2$ rather than by rejection sampling.  
+%\item At this point, we have $t,\psi,\rho$ sampled properly from $f_1 f_3$ over the desired range.  We calculate another uniform random number 
+%$r_3<1$ and keep the event if $r_3 < F$ ($F_{\max}=1$); otherwise we go back to the beginning of the sampling procedure -- i.e. we pick a new $t$, $\psi$.   
+%\item In practice, we can also do a further rejection sampling with weight $g_1/(f_1 f_3)$ to reweigh from the approximate M.E. to a more exact M.E.  But I'm not sure if we need/want to do this. 
+%\be
+%F_1(t,\psi) = f_1(t) f_2(t,\psi)  
+%\ee
 
+\section{Basics of Multi-Variate Sampling}
+Selecting random $x\in [0,x_{{\max}}]$ and $y\in [0,y_{{\max}}]$ samples
+\be
+\frac{dx \big|_0^{x_{\max}}}{\int_0^{x_{\max}}}dx \frac{dy \big|_0^{y_{\max}}}{\int_0^{y_{\max}} dy}  = \frac{dx dy\big|_{\cal D}}{x_{{\max}} y_{\max}} \sim dx dy \big|_{\cal D}
+\ee
+(the sampling must, by definition, have an integral of one -- hence the division.  In the above, ${\cal D}$ is short for the previously specified domain, and $\sim$ denotes equivalence up to overall normalization. This is equivalent to sampling $dx dy$ over the desired domain {\cal D}, which differs only by normalization from the above.  But when the limits of $y$ integration depend on $x$, or I start doing rejection-sampling in $y$ by a function that depends on $x$, I need to be more careful.
+\subsection{Variable-dependent Domains of Integration}\label{domains}
+As a first example: If I replace the constant $y_{\max}$ above by  an $x$-dependent $y_{\max}(x)$, then the $y$ selection by itself is really sampling  
+\be
+\frac{dy \big|_0^{y_{\max}}}{y_{\max}(x)}
+\ee
+and so the sequential $x$ and $y$-selection samples
+\be
+\frac{dx \big|_0^{x_{\max}} dy \big|_0^{y_{\max}}/{y_{\max}(x)}}{\int_0^{x_{\max}} dx } \sim dx dy/y_{\max}(x) \big|_{\cal D}.
+\ee
+This can be compensated by selecting $x\in [0,x_{{\max}}]$, but rather than a uniform distribution for $x$ we select with weight $y_{\max}(x)/y_{MAX}$ ($y_{MAX} \equiv {\max}_{x\in[0,x_{\max}]} y_{\max}(x)$).
+
+\subsection{Rejection Sampling}\label{rejection}
+To sample $dx f(x)$, where $f(x) <1$ is a nontrivial weight, we can do the following: first, pick a uniform $x$, then pick a uniform random $r_x\in [0,1]$ and keep $x$ if $r_x< f(x)$.  If we only care about sampling the right distribution up to an overall proportionality factor, then we can repeat the sampling --- but when we do multi-variate sampling, we need to be careful about the loop logic.   What do we do when we "reject"? 
+
+Let $(x\in  [0,x_{{\max}}])_{f(x)}$ denote the ``loop'' of picking $x$ repeatedly \emph{until} the associated $r_x < f(x)$ is satisfied.  
+What this is really sampling (keeping track of normalization explicitly) is $\frac{dx|_0^{x_{\max}} f(x)}{\int_0^{x_{\max}} dx f(x)}$.
+So the following loops do different things:
+\bea
+\textrm{Loop A:} &  (x\in  [0,x_{\max}])_{f(x)}  (y\in  [0,y_{\max}])_{g(x,y)}\\
+\textrm{Loop B:} & (x\in  [0,x_{\max}] y\in  [0,y_{\max}])_{f(x)\,g(x,y)}
+\eea
+Loop A samples:
+\be
+\frac{dx|_0^{x_{\max}} f(x)}{\int_0^{x_{\max}} dx f(x)} \frac{dy|_0^{y_{\max}} g(x,y)}{\int_0^{y_{\max}} dy g(x,y)}
+\ee
+while Loop B samples:
+\be
+\frac{dx|_0^{x_{\max}} f(x) dy|_0^{y_{\max}} g(x,y)}{\int_0^{x_{\max}} dx \int_0^{y_{\max}} dy f(x) g(x,y)}.
+\ee
+Only Loop B is equivalent (up to normalization) to the quantity we presumably wanted to sample:  $dx dy f(x) g(x,y)$.
+We could also sample this quantity by taking 
+\bea
+\textrm{Loop A':} &  (x\in  [0,x_{\max}])_{f(x) G(x)}  (y\in  [0,y_{\max}])_{g(x,y)}\\
+\textrm{Loop C:} & \left((x\in  [0,x_{\max}]) y\in  [0,y_{\max}]\right)_{f(x)\,g(x,y)},
+\eea
+where $G(x)\equiv  \int_0^{y_{\max}} dy g(x,y)$.  The crucial difference between loop A and loop C is that in the latter case, ``failing'' $g$ leads to re-sampling \emph{both} $x$ and $y$, while in the former case it only resamples $y$.   Loop A' may be intractable if the integral $G(x)$ is complicated.  Loop C is slightly more efficient than B, because we abort the calculation sooner for $x$ that fail $f$, but $B$ lends itself more simply to using an exact matrix element.  Moreover, if $y_{\max}$ is a function of $x$ then, irrespective of how we do the loop, we still need to include an explicit $y_{\max}/y_{MAX}$ weight factor.  
 
 \end{document}  
