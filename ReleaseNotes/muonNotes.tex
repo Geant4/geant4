@@ -29,14 +29,14 @@
 
 These notes summarize my modifications to the \verb=G4GammaConversionToMuons::PostStepDoIt()= method to include a more exact parametrization of the matrix element for muon production.  The result is an almost complete rewrite of the phase-space sampling.  Major  conceptual changes are:
 \begin{itemize}
-\item Instead of trying to factorize the problem into sequential 1-dimensional rejection samplings of distributions in the $x_+$, $t$, $\psi$, and $\rho$ kinematic variables, I sample these four variables uniformly (in the case of $\rho$, uniformly in $log(1+\rho^2/c^2)$) and then rejection-sample the point in 4d phase space based on the full matrix element in (5.50).  
+\item Instead of trying to factorize the problem into sequential 1-dimensional rejection samplings of distributions in the $x_+$, $t$, $\psi$, and $\rho$ kinematic variables, I sample these four variables uniformly (in the case of $\rho$, uniformly in $log(1+\rho^2/c^2)$) and then rejection-sample the point in 4d phase space based on the full matrix element. 
 \item This allows us to include the full $q$-dependence in the form factor, rather than just the $q_\parallel$ dependence included in the standard G4 sequential sampling.
 \item In addition, I have explicitly used the elastic form factor from (6.115), rather than the perplexing $t$-dependence in (5.60)-(5.61).  
 \item The above also allows to sample the entire kinematically allowed range of $\rho$, rather than the ad-hoc range used in the standard G4 code.
+\item The matrix element (5.50) from Physics Reference Manual is evidently making small-angle approximations.  This seems to under-populate the large-angle phase space.  To model this region better, I have used a ME from the literature (Tsai 1974).   This seems to \emph{over-produce} the wide-angle tails by an O(1) factor, suggesting that I have made some mistake.  But using the code in its current form for studies should be conservative. 
 \end{itemize}
 Some things that are \emph{not} included:
 \begin{itemize}
-\item Accurate full matrix element in large-angle region (the matrix element provided by geant4 seems to assume a small-angle approximation -- it's not physical for the matrix element to depend on the likes of $1+u^2$).   However, I think this will only be an $O(1)$ effect.  \textbf{Needs to be checked against MadGraph!}
 \item Muon production off individual protons (and neutrons) in the nucleus.  This should dominate over the elastic process at large $q$ -- in particular, at $q\gtrsim $GeV where the coherent elastic form factor is suppressed by a factor of $O(1/Z)$, there's no reason this incoherent piece wouldn't be comparable.  At these large $q$, the recoil of the kicked nucleon is also not experimentally negligible, so we need to find a parametrization that includes it; the recoil nucleon should go through some sort of intra-nuclear cascade.  \textbf{We should think more about how to model and/or bound this process. }
 \item Atomic screening, relevant for $q \lesssim a_0/Z^{1/3} \sim 0.01 $MeV, is not taken into account.  Since the minimum $q$ for muon production is of order $m_\mu^2/(2E_\gamma)$, this should only be relevant for $E_\gamma \gtrsim 600 $GeV and we can safely ignore it. 
 \end{itemize}
