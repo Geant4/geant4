@@ -257,8 +257,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double xPlus,xMinus,xPM;
   G4int nn = 0;
   const G4int nmax = 1000;
-  const G4double maxWeight = 1.1; // NOT SURE WHAT THE PARAMETRICS IS!
+  const G4double maxWeight = 1.5; // NOT SURE WHAT THE PARAMETRICS IS!
   // THe studies I have done show that the max weight over 10000 samples can go up to ~1.3 for TeV beam energies; tends to be robustly below 1 for 1-10 GeV beam energies.  In the limit of rho<<u, calculations justify a max weight of 1.  Larger weights can occur for rho~u. 
+  // larger weights also seem to occur slightly more frequently with Tsai ME
 
   G4bool goodEvent = false;
   const G4bool debug = false;
@@ -337,7 +338,7 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
       {
 	//	thetaPlus =GammaMuonInv*uPlus/xPlus;
 	if(debug) {
-	  G4cout << " [out of range] xP " << xPlus 
+	  G4cerr << " [out of range] xP " << xPlus 
 		 << " t " << t 
 		 << " psi " << psi
 		 << " rho " << rho
@@ -349,9 +350,28 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
       }
     else
       {
-	// Squared momentum transfer, in units of muon mass and GeV
-	G4double q2par = pow(delOverMmuon*(1+xMinus*uPlus*uPlus + xPlus*uMinus*uMinus),2.);
-	G4double q2perp = pow(uPlus - uMinus,2.) + 2 * uPlus * uMinus * (1.-cos(phi));
+	// All kinematic quantities here are in units of mMuon except where GeV appears in variable names
+	G4double gamma0=1/GammaMuonInv;
+
+	G4double gammaPlus = gamma0*xPlus;
+	thetaPlus = GammaMuonInv*uPlus/xPlus;
+	G4double betaPlus = sqrt(1.-1./(gammaPlus*gammaPlus));
+	G4double kdotpPlus = gamma0 * gammaPlus * (1. - betaPlus * cos(thetaPlus));
+	G4double pPerpPlus = betaPlus * gammaPlus * sin(thetaPlus);
+
+	G4double gammaMinus = gamma0*xMinus;
+	thetaMinus = GammaMuonInv*uMinus/xMinus;
+	G4double betaMinus = sqrt(1.-1./(gammaMinus*gammaMinus));
+	G4double kdotpMinus = gamma0 * gammaMinus * (1. - betaMinus * cos(thetaMinus));
+	G4double pPerpMinus = betaMinus * gammaMinus * sin(thetaMinus);
+
+	// POSITIVE Squared momentum transfer, in units of muon mass and GeV
+	//	G4double q2par = pow(delOverMmuon*(1+xMinus*uPlus*uPlus + xPlus*uMinus*uMinus),2.);
+	//	G4double q2perp = pow(uPlus - uMinus,2.) + 2 * uPlus * uMinus * (1.-cos(phi));
+	G4double qpar = gamma0 - betaMinus * gammaMinus * cos(thetaMinus) 
+			     - betaPlus * gammaPlus * cos(thetaPlus);
+	G4double q2par = qpar*qpar;
+	G4double q2perp = pow(pPerpPlus - pPerpMinus,2.) + 2 * pPerpPlus * pPerpMinus * (1.-cos(phi));
 
 	G4double q2parApprox = pow(delOverMmuon/t,2.);
 	G4double q2perpApprox = rho*rho;
@@ -366,21 +386,34 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	G4double Jacobian_tRhoPsi_VS_uPuMPhi = rho/(t*(1.-t));
 	G4double fullJacobian = Jacobian_a_Vs_Rho * Jacobian_tRhoPsi_VS_uPuMPhi;
 
+	
+	//  OLD: Matrix Element from G4 physics reference manual
+
 	G4double dPlus = 1+uPlus*uPlus;
 	G4double dMinus = 1+uMinus*uMinus;
 
-    
 	G4double curlyBrace5_50_A = (uPlus*uPlus + uMinus*uMinus)/(dPlus * dMinus);
 	G4double curlyBrace5_50_B = -2.*xPlus*xMinus * 
 	  (uPlus*uPlus/(dPlus*dPlus) + uMinus*uMinus/(dMinus*dMinus));
 	G4double curlyBrace5_50_C = -2.*uPlus * uMinus* (1-2.*xPlus*xMinus)*cos(phi)/(dPlus*dMinus);
 	G4double curlyBrace5_50 = curlyBrace5_50_A + curlyBrace5_50_B + curlyBrace5_50_C;
-	G4double matrixEl5_50 = 1./(q2*q2) * uPlus * uMinus * curlyBrace5_50;
+	G4double matrixEl5_50 = 1./(q2*q2) * uPlus * uMinus * curlyBrace5_50; 
+	
+	// This matrix element comes from Tsai 1974 paper and should be exact up to 1/m_{Nucleus} corrections (which aren't hard to add) and inelastic terms (also possible to add if we know the appropriate weight and how to sample it...)
+	G4double term1Plus  = -(-q2+kdotpMinus)/(kdotpPlus);
+	G4double term1Minus = -(-q2+kdotpPlus)/(kdotpMinus);
+	G4double term2Plus  = (-q2/2. +2.* gammaMinus * gammaMinus)/(kdotpPlus * kdotpPlus);
+	G4double term2Minus = (-q2/2. +2.* gammaPlus * gammaPlus)/(kdotpMinus * kdotpMinus);
+	G4double mixedTerm = 2.*((1+q2/2.)*(-2.*gammaMinus * gammaPlus - q2/2.)+q2*gamma0*gamma0/2.)/(kdotpMinus * kdotpPlus);
+
+	G4double sumTerms = term1Plus + term1Minus + term2Plus + term2Minus + mixedTerm;
+	G4double matrixElTsai = 1./(4.*q2*q2) * sin(thetaPlus) * sin(thetaMinus) * sumTerms;
+
 	
 	G4double formFactorSqrt = 1./(1.+q2/(qFormFactor*qFormFactor));
 	G4double formFactor = formFactorSqrt*formFactorSqrt;
 	
-	G4double theWeight = integratedMeasure * fullJacobian * matrixEl5_50 * formFactor;
+	G4double theWeight = integratedMeasure * fullJacobian * matrixElTsai * formFactor;
 	
 	if(theWeight < 0 || theWeight > maxWeight)
 	  {
@@ -395,14 +428,25 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	
 
 	if(debug || theWeight < 0 || theWeight > maxWeight || theWeight > 1.0 ) {
-	  G4cout << " xP " << xPlus 
+	  G4cerr << " xP " << xPlus 
 		 << " t " << t 
 		 << " psi " << psi
 		 << " rho " << rho
 		 << " q2 " << q2
+		 << " 1+up2 " << 1+ uPlus*uPlus
+		 << " 2k.pxp " << 2.*kdotpPlus*xPlus
+		 << " 1+um2 " << 1+ uMinus*uMinus
+		 << " 2k.pxm " << 2.*kdotpMinus*xMinus
+		
+
+
+		 << "thetaP " << thetaPlus
+		 << " thetaM " << thetaMinus
 		 << " q2Approx " << q2perpApprox + q2parApprox
-		 << " curly " << curlyBrace5_50
+	    //		 << " curly " << curlyBrace5_50
 		 << " ME5.50 " << matrixEl5_50
+		 << " METsai " << matrixElTsai
+		 << " terms " << term1Plus << " " << term1Minus << " " << term2Plus << " " << term2Minus << " " << mixedTerm 
 		 << " measurr " << integratedMeasure 
 		 << " ff " << formFactor
 		 << " weight " << theWeight
@@ -413,8 +457,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 	  goodEvent = true;
 	
 	phiHalf=0.5*phi;
-	thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
-	thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
+	//	thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
+	//	thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
       }
     
 
