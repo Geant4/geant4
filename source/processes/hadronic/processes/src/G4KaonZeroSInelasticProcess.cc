@@ -40,7 +40,7 @@ G4KaonZeroSInelasticProcess::G4KaonZeroSInelasticProcess(const G4String& name)
 
 void G4KaonZeroSInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of K0S\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4KaonZeroSInelasticProcess handles the inelastic scattering of\n" 
+          << "K0S from nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross section sets.\n";
 }

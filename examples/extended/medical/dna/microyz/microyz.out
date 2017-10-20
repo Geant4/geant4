@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
+ Geant4 version Name: geant4-10-03-patch-03    (20-October-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -203,7 +203,7 @@ alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
 ### Run 0 starts.
-##### Create analysis manager   0xc7f480
+##### Create analysis manager   0x18f74b0
 Using Root analysis manager
 ... open Root analysis file : yz.root - done
 --> Event 0 starts.

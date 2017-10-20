@@ -40,7 +40,7 @@ G4TritonInelasticProcess::G4TritonInelasticProcess(const G4String& name)
 
 void G4TritonInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of tritons\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4TritonInelasticProcess handles the inelastic scattering of\n" 
+          << "tritons from nuclei by invoking one or more hadronic models and\n"
+          << "one or more hadronic cross section sets.\n";
 }

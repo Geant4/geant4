@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
+ Geant4 version Name: geant4-10-03-patch-03    (20-October-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -638,6 +638,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -652,6 +653,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -882,31 +884,31 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.52 seconds
+    Total CPU time elapsed for geometry optimisation: 0.29 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      51.92         0.27         0.00          152k EmModuleLogical
-      46.15         0.24         0.00          238k HadModuleLogical
-       1.92         0.01         0.00            0k FCALEnvelopeLogical
+      51.72         0.15         0.00          152k EmModuleLogical
+      48.28         0.14         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
+       0.00         0.00         0.00            0k FCALEnvelopeLogical
        0.00         0.00         0.00            0k SolidWLogical
        0.00         0.00         0.00            0k CuPlateLogical
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.17        238k      1385     2370       3792         0.24    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.27    EmModuleLogical
+      60.17        238k      1385     2370       3792         0.14    HadModuleLogical
+      38.50        152k      1129     1152       2426         0.15    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
        0.08          0k         1        4          6         0.00    LArgLogical
-       0.05          0k         1        2          4         0.01    FCALEnvelopeLogical
        0.05          0k         1        2          4         0.00    CryostatLogical
+       0.05          0k         1        2          4         0.00    FCALEnvelopeLogical
 ### Run 0 starts.
 ### Run 0 start.
 Read 2001 events from file data-tracks/tracks-20GeV.dat
@@ -1261,7 +1263,7 @@ Edep in FCAL1 FCAl2 : 18506.8 7.06229
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=13.78s Real=13.83s Sys=0s
+  User=12.6s Real=12.63s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronHElasticPhysics.cc 99978 2016-10-13 07:28:13Z gcosmo $
+// $Id: G4HadronHElasticPhysics.cc 106611 2017-10-16 14:51:20Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -72,6 +72,7 @@
 #include "G4ChipsKaonZeroElasticXS.hh"
 #include "G4ChipsHyperonElasticXS.hh"
 #include "G4ChipsAntiBaryonElasticXS.hh"
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
@@ -148,6 +149,9 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 
   G4NuclNuclDiffuseElastic* diffuseNuclNuclElastic = new G4NuclNuclDiffuseElastic();
   diffuseNuclNuclElastic->SetMinEnergy( elimitDiffuse );
+
+  G4VCrossSectionDataSet* theComponentGGHadronNucleusData = 
+    new G4CrossSectionElastic( new G4ComponentGGHadronNucleusXsc );
 
   G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
     new G4CrossSectionElastic( new G4ComponentGGNuclNuclXsc() );
@@ -272,13 +276,13 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 	        pname == "kaon0L" 
 	      ) {
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      if ( pname == "kaon-" ) {
-        hel->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonMinusElasticXS::Default_Name() ) );
-      } else if ( pname == "kaon+" ) {
-        hel->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4ChipsKaonPlusElasticXS::Default_Name() ) );
-      } else {
-        hel->AddDataSet( G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet( G4ChipsKaonZeroElasticXS::Default_Name() ) );
-      }
+      //AR-14Aug2017 : Replaced Chips elastic kaon cross sections with
+      //               Grichine's Glauber-Gribov ones. In this way, the
+      //               total (elastic + inelastic) kaon cross sections
+      //               are consistent with the PDG ones.
+      //               For the time being, kept Chips elastic as
+      //               final-state model.
+      hel->AddDataSet( theComponentGGHadronNucleusData );
       hel->RegisterMe( chips1 );
       pmanager->AddDiscreteProcess( hel );
       if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }

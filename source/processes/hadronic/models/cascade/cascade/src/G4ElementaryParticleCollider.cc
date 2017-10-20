@@ -488,6 +488,7 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
 	   << " for " << type2 << " dibaryon" << G4endl;
     particle_kinds.clear();
     masses.clear();
+    particles.clear();
     return;
   }
 

@@ -1,4 +1,4 @@
-$Id: History 105153 2017-07-14 09:03:15Z gcosmo $
+$Id: History 106571 2017-10-13 10:45:52Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 July, 2017 Ivana Hrivnacova (intercoms-V10-02-08)
+- Explicitly remove constness by means of remove_const.
+  Fixing problem report #1803 (with the patch provided here).  
 
 30 May, 2017 Ivana Hrivnacova (intercoms-V10-02-07)
 - Fixed G4GenericMessenger::Command::SetUnit:

@@ -1,4 +1,4 @@
-$Id: History 101678 2016-11-21 09:28:32Z gcosmo $
+$Id: History 106560 2017-10-13 08:18:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 1, 2017 M. Asai (digits_hits-V10-02-11)
+- G4SDStructure.cc : fix propagating warning flag. Addressing bug
+  report #1993.
 
 Nov 15, 2016, A.Dotti (digits_hits-V10-02-09,-10)
 - Fix bug #1908, remove implicit addition to manager of 

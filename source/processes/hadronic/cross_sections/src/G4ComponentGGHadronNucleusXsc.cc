@@ -49,7 +49,7 @@ G4ComponentGGHadronNucleusXsc::G4ComponentGGHadronNucleusXsc()
    fLowerLimit(10.*MeV),// fLowerLimit(3*GeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0)
+   fDiffractionXsc(0.0), fAxsc2piR2(0.0),fModelInLog(0.0)
 // , fHadronNucleonXsc(0.0)
 {
   theGamma    = G4Gamma::Gamma();
@@ -395,36 +395,28 @@ G4ComponentGGHadronNucleusXsc::GetIsoCrossSection(const G4DynamicParticle* aPart
     if (fElasticXsc < 0.) fElasticXsc = 0.;
   }
   else // H
-  {
-    fTotalXsc = sigma;
-    xsection  = sigma;
-
-    fInelasticXsc = hnXsc->GetInelasticHadronNucleonXsc();
-
-    if ( theParticle != theAProton ) 
     {
-     fElasticXsc = hnXsc->GetElasticHadronNucleonXsc();
-
-     //      sigma         = GetHNinelasticXsc(aParticle, A, Z);
-     // fInelasticXsc = sigma;
-     // fElasticXsc   = fTotalXsc - fInelasticXsc;      
+      if( theParticle == theKPlus   || 
+	  theParticle == theKMinus  || 
+	  theParticle == theK0S     || 
+	  theParticle == theK0L        ) 
+	{ 
+	  fTotalXsc = hnXsc->GetHadronNucleonXscNS(aParticle, theProton);
+	  xsection  = fTotalXsc;
+	  fInelasticXsc = hnXsc->GetInelasticHadronNucleonXsc();
+	  fElasticXsc = hnXsc->GetElasticHadronNucleonXsc(); 
+	}
+      else
+	{
+	  fTotalXsc = sigma;
+	  xsection  = sigma;
+	  
+	  fInelasticXsc = hpInXsc;
+	  fElasticXsc   = fTotalXsc - fInelasticXsc;
+	  
+	  if (fElasticXsc < 0.) fElasticXsc = 0.;
+	}
     }
-    else if( theParticle == theKPlus || 
-             theParticle == theKMinus  || 
-             theParticle == theK0S     || 
-             theParticle == theK0L        ) 
-    { 
-      fInelasticXsc = hpInXsc;
-      fElasticXsc   = fTotalXsc - fInelasticXsc;
-    }   
-    else
-    {
-      fInelasticXsc = hpInXsc;
-      fElasticXsc   = fTotalXsc - fInelasticXsc;
-    }
-    if (fElasticXsc < 0.) fElasticXsc = 0.;
-      
-  }
   return xsection; 
 }
 

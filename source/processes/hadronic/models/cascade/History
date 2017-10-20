@@ -15,6 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 May 2017  Dennis Wright (hadr-casc-V10-02-07)
+------------------------------------------------
+- G4ElementaryParticleCollider::generateSCMmuonAbsorption: fix rare seg fault
+  spotted and diagnosed by Ralf Ehrlich (mu2e/Virgina).  Added line
+      particles.clear();  
+  if GetThreeBodyMomenta() returns no momenta.
+
 13 April 2017  Michael Kelsey (hadr-casc-V10-02-06)
 ---------------------------------------------------
 - G4CascadeCoalescence:  Remove clusterHash() function and triedClusters

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
+ Geant4 version Name: geant4-10-03-patch-03    (20-October-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -740,6 +740,7 @@ hPairProd:   for  pi-    SubType= 4
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -755,6 +756,7 @@ hPairProd:   for  pi-    SubType= 4
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -2679,7 +2681,7 @@ Number of digits in this event =  36
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.51s Real=1.59s Sys=0.02s
+  User=2.87s Real=3.09s Sys=0.04s
 End of Run 0
 /gun/particle gamma
 /gun/energy 1 GeV
@@ -4233,7 +4235,7 @@ Number of digits in this event =  2
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11.21s Real=11.28s Sys=0.01s
+  User=15.35s Real=15.44s Sys=0s
 End of Run 1
 /gun/particle e-
 /gun/energy 1 GeV
@@ -7589,7 +7591,7 @@ Number of digits in this event =  11
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.1s Real=13.18s Sys=0s
+  User=20.5s Real=20.6s Sys=0.01s
 End of Run 2
 Graphics systems deleted.
 Visualization Manager deleting...

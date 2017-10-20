@@ -1,0 +1,84 @@
+
+                 Geant4 10.3 - patch-03 Release Notes
+                 ------------------------------------
+
+                                                               20 October 2017
+
+List of fixes included in this public patch since the public release 10.3.p02:
+
+  o Digits_hits:
+    -----------
+    + Fixed propagation of warning flag in G4SDStructure.
+      Addressing problem report #1993.
+
+  o Geometry:
+    --------
+    + magnetic-field:
+      o G4NystromRK4: fixed caching of momentum, field location & value.
+        Addressing problem report #1996, reported by ALICE.
+        Correction in call to getField().
+    + solids/specific:
+      o Twisted solids: fixed bug in drawing polyhedra with negative twist
+        angle. Addressing problem report #1995.
+      o G4SurfaceVoxelizer: directly set components for bounding-box instead
+        of recreating it in BuildBoundingBox(..).
+
+  o Global:
+    ------
+    + Updated date and version for 10.3.p03.
+
+  o Intercoms:
+    ---------
+    + Explicitly remove constness in G4AnyMethod by means of remove_const.
+      Addressing problem report #1803. 
+
+  o Interfaces:
+    ----------
+    + G4VBasicShell: fixed std::out_of_range exception in ModifyPath() when
+      typing 'ls' command at the top directory.
+      Addressing problem report #1989.
+    + G4UIQt: set always-on-top to the picking windows.
+
+  o Physics Lists:
+    -------------
+    + constructors/hadron_elastic:
+      o G4HadronElasticPhysics, G4HadronHElasticPhysics: changed kaon elastic
+        cross-sections from, respectively, Gheisha and Chips, to Glauber Gribov
+        ones. This way, the total (elastic + inelastic) kaon cross sections are
+        consistent with the PDG ones.
+
+  o Processes - Hadronic:
+    --------------------
+    + cross_sections:
+      o Bug fix in G4ComponentGGHadronNucleusXsc to use the correct cross-
+        sections for kaons on Hydrogen; use Starkov parameterization for them.
+    + models/cascade:
+      o G4ElementaryParticleCollider::generateSCMmuonAbsorption: fixed case of
+        rare segmentation-fault. Added clearing of particles if
+        GetThreeBodyMomenta() returns no momenta.
+    + processes:
+      o Use class name in process description.
+    + stopping:
+      o Fixed Coverity defect in G4AntiNeutronAnnihilationAtRest.
+        Removed static thread-local variables and simply made them local.
+
+  o Visualization:
+    -------------
+    + OpenGL:
+      o Fixed issue affecting repaint for external applications.
+        Addressing problem report #1959.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.3.p02.
+  o  Technical notes distributed for release 10.3 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.3.p03 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

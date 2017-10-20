@@ -40,7 +40,7 @@ G4SigmaPlusInelasticProcess::G4SigmaPlusInelasticProcess(const G4String& name)
 
 void G4SigmaPlusInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of Sigma+\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4SigmaPlusInelasticProcess handles the inelastic scattering of\n" 
+          << "Sigma+ from nuclei by invoking one or more hadronic models and\n"
+          << "one or more hadronic cross section sets.\n";
 }

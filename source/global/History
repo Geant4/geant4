@@ -17,8 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 21, 2017 G.Cosmo     (global-V10-02-35)
+October 13, 2017 G.Cosmo (global-V10-02-36)
+- Updated date and version for 10.3.p03.
+
+June 21, 2017 G.Cosmo (global-V10-02-35)
 - Corrected TLS setup in tls.hh for gcc compiler.
+- Updated date and version for 10.3.p02.
 
 December 19, 2016 G.Cosmo (global-V10-02-34)
 - Removed obsolete utility class G4SubString used internally in G4String,

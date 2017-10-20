@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4SurfaceVoxelizer.cc 92024 2015-08-13 14:16:00Z gcosmo $
+// $Id: G4SurfaceVoxelizer.cc 106567 2017-10-13 09:45:14Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -422,9 +422,9 @@ void G4SurfaceVoxelizer::BuildBoundingBox()
     fBoundingBoxSize[i] = (max-min)/2;
     fBoundingBoxCenter[i] = min + fBoundingBoxSize[i];
   }
-  //  sizes -= toleranceVector;
-  fBoundingBox = G4Box("TessBBox", fBoundingBoxSize.x(),
-                       fBoundingBoxSize.y(), fBoundingBoxSize.z());
+  fBoundingBox.SetXHalfLength(fBoundingBoxSize.x());
+  fBoundingBox.SetYHalfLength(fBoundingBoxSize.y());
+  fBoundingBox.SetZHalfLength(fBoundingBoxSize.z());
 }
 
 // algorithm - 

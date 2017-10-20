@@ -1,4 +1,4 @@
-$Id: History 101061 2016-11-04 13:07:09Z gcosmo $
+$Id: History 106611 2017-10-16 14:51:20Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,20 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14-Aug-2017, A. Ribon         (phys-ctor-helastic-V10-02-05)
+- G4HadronElasticPhysics, G4HadronHElasticPhysics : changed kaon elastic 
+  cross sections from, respectively, Gheisha (used in G4HadronElasticPhysics)
+  and Chips (used in G4HadronHElasticPhysics), to Grichine's Glauber Gribov
+  ones. In this way, the total (elastic + inelastic) kaon cross sections
+  are consistent with the PDG ones. 
+  Notes:
+  - For the time being, kept the original elastic final-state model
+    (i.e. Gheisha in G4HadronElasticPhysics and Chips in
+    G4HadronHElasticPhysics).
+  - These two changes should be used also for the next patch of G4 10.3
+    (i.e. for 10.3.p03 : the two files G4HadronElasticPhysics.cc and
+    G4HadronHElasticPhysics.cc can be taken directly).
 
 04-Nov-2016, Alberto Ribon    (phys-ctor-helastic-V10-02-04)
 - Written first draft of the README

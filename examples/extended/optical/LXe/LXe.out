@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-patch-02    (27-July-2017)
+ Geant4 version Name: geant4-10-03-patch-03    (20-October-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -255,7 +255,7 @@ Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.18s Real=0.18s Sys=0s
+  User=0.33s Real=0.34s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -303,7 +303,7 @@ Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.16s Real=0.16s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

@@ -1,4 +1,4 @@
-$Id: History 101384 2016-11-16 11:03:44Z gcosmo $
+$Id: History 106565 2017-10-13 09:20:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 13, 2017 G. Cosmo                   - field-V10-02-26
+---------------------------------------
+- G4NystromRK4: use consistenly G4 types for double and bool in G4NystromRK4.
+
+Aug 31, 2017 J. Apostolakis
+---------------------------------------
+- G4NystromRK4: used caching of momentum magnitude ( & its inverse)
+  to reduce overhead of fix in field-V10-03-10.
+
+Aug 24, 2017 D.Sorokin & J. Apostolakis
+---------------------------------------
+- G4NystromRK4: correction in call to getField: needs p[4], not p[3]
+    ( Spotted by D. Sorokin )
+  Also small cleanup of testing code into 2 small new methods.
+    ( J. Apostolakis )
+
+Aug 23, 2017 J.Apostolakis
+--------------------------
+- G4NystromRK4 - Fix the caching of momentum, field location & value.
+  Fixes issue reported by ALICE ( problem report #1996 ).
+  Thanks to Ruben Shahoyan for identifying and reporting the issue!
+
 Oct   7, 2016 J.Apostolakis             - field-V10-02-24, 25
 ---------------------------
 - Checked loops for termination for infinite loops and annotated 

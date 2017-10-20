@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc 100819 2016-11-02 15:17:36Z gcosmo $
+// $Id: G4TwistedTubs.cc 106567 2017-10-13 09:45:14Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -904,11 +904,12 @@ G4Polyhedron* G4TwistedTubs::CreatePolyhedron () const
 {
   // number of meshes
   //
-  G4double dA = std::max(fDPhi,fPhiTwist);
+  G4double absPhiTwist = std::abs(fPhiTwist);
+  G4double dA = std::max(fDPhi,absPhiTwist);
   const G4int k =
     G4int(G4Polyhedron::GetNumberOfRotationSteps() * dA / twopi) + 2;
   const G4int n =
-    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
+    G4int(G4Polyhedron::GetNumberOfRotationSteps() * absPhiTwist / twopi) + 2;
 
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;
   const G4int nfaces = 4*(k-1)*(n-1) + 2*(k-1)*(k-1) ;

@@ -1,4 +1,4 @@
-$Id: History 105151 2017-07-14 08:53:10Z gcosmo $
+$Id: History 106567 2017-10-13 09:45:14Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-September-2017  G.Cosmo        (geom-specific-V10-02-28)
+- G4SurfaceVoxelizer: directly set components for bounding-box instead of
+  recreating it in BuildBoundingBox(..).
+
+16-August-2017  J.Allison
+- Twisted solids: Fixed bug in drawing polyhedra with negative twist angle.
+  Addressing problem report #1995.
 
 11-May-2017  G.Cosmo              (geom-specific-V10-02-27)
 - Removed potential race condition in G4VTwistSurface::AmIOnLeftSide().
