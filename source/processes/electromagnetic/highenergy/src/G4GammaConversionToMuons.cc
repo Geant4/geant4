@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.cc 91869 2015-08-07 15:21:02Z gcosmo $
+// $Id: G4GammaConversionToMuons.cc 97391 2016-06-02 10:08:45Z gcosmo $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
@@ -53,11 +53,11 @@ static const G4double sqrte=sqrt(exp(1.));
 static const G4double PowSat=-0.88;
 
 G4GammaConversionToMuons::G4GammaConversionToMuons(const G4String& processName,
-						   G4ProcessType type)
+                                                   G4ProcessType type)
   : G4VDiscreteProcess (processName, type),
     Mmuon(G4MuonPlus::MuonPlus()->GetPDGMass()),
     Rc(elm_coupling/Mmuon),
-    LowestEnergyLimit (4*Mmuon), // 4*Mmuon
+    LowestEnergyLimit (4.*Mmuon), // 4*Mmuon
     HighestEnergyLimit(1e21*eV), // ok to 1e21eV=1e12GeV, then LPM suppression
     CrossSecFactor(1.)
 { 
@@ -151,12 +151,12 @@ G4double G4GammaConversionToMuons::GetCrossSectionPerAtom(
 
 G4double G4GammaConversionToMuons::ComputeCrossSectionPerAtom(
                          G4double Egam, G4double ZZ, G4double)
-			 
+                         
 // Calculates the microscopic cross section in GEANT4 internal units.
 // Total cross section parametrisation from H.Burkhardt
 // It gives a good description at any energy (from 0 to 10**21 eV)
 { 
-  if(Egam <= LowestEnergyLimit) return 0 ; // below threshold return 0
+  if(Egam <= LowestEnergyLimit) return 0.0 ; // below threshold return 0
 
   G4int Z = G4lrint(ZZ);
   G4double CrossSection = 0.0;
@@ -226,9 +226,10 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4int Z = G4lrint(anElement->GetZ());
   G4NistManager* nist = G4NistManager::Instance();
 
-  G4double B,Dn;
   G4double A027 = nist->GetA27(Z);
 
+  /*
+  G4double B,Dn;
   if(Z==1) // special case of Hydrogen
     { B=202.4;
       Dn=1.49;
@@ -239,9 +240,9 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
     }
   G4double Zthird=1./nist->GetZ13(Z); // Z**(-1/3)
   G4double Winfty=B*Zthird*Mmuon/(Dn*electron_mass_c2);
-  G4double C1Num=0.35*A027;
-  G4double C1Num2=C1Num*C1Num;
-  G4double C2Term2=electron_mass_c2/(183.*Zthird*Mmuon);
+  G4double C1Num=0.20*A027; // NT change 0.35*A027;  
+  // NT removed G4double C1Num2=C1Num*C1Num; 
+  G4double C2Term2=electron_mass_c2/(183.*Zthird*Mmuon);*/
 
   G4double GammaMuonInv=Mmuon/Egam;
   G4double sqrtx=sqrt(.25-GammaMuonInv);
@@ -249,106 +250,223 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
   G4double xmin=.5-sqrtx;
 
   // generate xPlus according to the differential cross section by rejection
-  G4double Ds2=(Dn*sqrte-2.);
-  G4double sBZ=sqrte*B*Zthird/electron_mass_c2;
-  G4double LogWmaxInv=1./G4Log(Winfty*(1.+2.*Ds2*GammaMuonInv)
-			       /(1.+2.*sBZ*Mmuon*GammaMuonInv));
-  G4double xPlus,xMinus,xPM,result,W;
+  /*  G4double Ds2=(Dn*sqrte-2.);
+      G4double sBZ=sqrte*B*Zthird/electron_mass_c2;
+      G4double LogWmaxInv=1./G4Log(Winfty*(1.+2.*Ds2*GammaMuonInv)
+      /(1.+2.*sBZ*Mmuon*GammaMuonInv));*/
+  G4double xPlus,xMinus,xPM;
   G4int nn = 0;
   const G4int nmax = 1000;
+  const G4double maxWeight = 1.5; // NOT SURE WHAT THE PARAMETRICS IS!
+  // THe studies I have done show that the max weight over 10000 samples can go up to ~1.3 for TeV beam energies; tends to be robustly below 1 for 1-10 GeV beam energies.  In the limit of rho<<u, calculations justify a max weight of 1.  Larger weights can occur for rho~u. 
+  // larger weights also seem to occur slightly more frequently with Tsai ME
+
+  G4bool goodEvent = false;
+  const G4bool debug = false;
+
+  // NT: This code samples all the parameters: xPlus, t, psi, rho, and then checks a full matrix element
+  // (for now, doesn't actually check the ME, just samples and evaluates ME.  I need to pick a reasonable maximum value for the rejection sampling.
+  // For now: no form factor at all!
+
+
+
+  G4double thetaPlus=0.,thetaMinus=0.,phiHalf=0.; // final angular variables
+
+  // scale of q/mMu at which form factor sets in [PRM(6.115),muonNotes(10)]
+  G4double qFormFactor = 1/(0.20*A027); 
+  G4double aRangeNorm = log((pow(qFormFactor,4.)+pow(2.*GammaMuonInv,4.))/pow(2.*GammaMuonInv,4.));  // scale for the log(rho) integral.  NOT the best definition (see discussion surrounding (8) and (9) in muonNotes), but within 10-25% for Tungsten at energies of interest to us.  Also worth noting that this normalization factor is only for convenience, so that we can reduce the photon-energy-dependence of the maxweight. 
+
   do
-  { xPlus=xmin+G4UniformRand()*(xmax-xmin);
+  { 
+    ++nn;
+
+    G4double xPRange=xmax-xmin;
+
+    // Sample xPlus from xmin to xmax
+    xPlus=xmin+G4UniformRand()*(xmax-xmin);
+
     xMinus=1.-xPlus;
     xPM=xPlus*xMinus;
-    G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
-    W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
+    //    G4double del=Mmuon*Mmuon/(2.*Egam*xPM);
+    G4double delOverMmuon=Mmuon/(2.*Egam*xPM);
+
+    /*    W=Winfty*(1.+Ds2*del/Mmuon)/(1.+sBZ*del);
     if(W<=1. || nn > nmax) { break; } // to avoid negative cross section at xmin
     G4double xxp=1.-4./3.*xPM; // the main xPlus dependence
     result=xxp*G4Log(W)*LogWmaxInv;
     if(result>1.) {
       G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
-	     << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
+             << " in dSigxPlusGen, result=" << result << " > 1" << G4endl;
     }
     ++nn;
     if(nn >= nmax) { break; }
-  }
-  // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  while (G4UniformRand() > result);
+    */
 
-  // now generate the angular variables via the auxilary variables t,psi,rho
-  G4double t;
-  G4double psi;
-  G4double rho;
+    // now generate the angular variables via the auxilary variables t,psi,rho
 
-  G4double thetaPlus,thetaMinus,phiHalf; // final angular variables
-  nn = 0;
-  do      // t, psi, rho generation start  (while angle < pi)
-  {
-    //generate t by the rejection method
-    G4double C1=C1Num2* GammaMuonInv/xPM;
-    G4double f1_max=(1.-xPM) / (1.+C1);
-    G4double f1; // the probability density
-    do
-    { 
-      ++nn;
-      t=G4UniformRand();
-      f1=(1.-2.*xPM+4.*xPM*t*(1.-t)) / (1.+C1/(t*t));
-      if(f1<0 || f1> f1_max) // should never happend
-	{
-	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
-		 << "outside allowed range f1=" << f1 << " is set to zero"
-		 << G4endl;
-          f1 = 0.0;
-	}
-      if(nn > nmax) { break; }
-    }
-    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-    while ( G4UniformRand()*f1_max > f1);
-    // generate psi by the rejection method
-    G4double f2_max=1.-2.*xPM*(1.-4.*t*(1.-t));
-
-    // long version
-    G4double f2;
-    do
-    { 
-      ++nn;
-      psi=2.*pi*G4UniformRand();
-      f2=1.-2.*xPM+4.*xPM*t*(1.-t)*(1.+cos(2.*psi));
-      if(f2<0 || f2> f2_max) // should never happend
-	{
-	  G4cout << "G4GammaConversionToMuons::PostStepDoIt WARNING:"
-		 << "outside allowed range f2=" << f2 << " is set to zero"
-		 << G4endl;
-          f2 = 0.0;
-	}
-      if(nn >= nmax) { break; }
-    }
-    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-    while ( G4UniformRand()*f2_max > f2);
-
-    // generate rho by direct transformation
-    G4double C2Term1=GammaMuonInv/(2.*xPM*t);
-    G4double C2=4./sqrt(xPM)*pow(C2Term1*C2Term1+C2Term2*C2Term2,2.);
-    G4double rhomax=1.9/A027*(1./t-1.);
-    G4double beta=G4Log( (C2+rhomax*rhomax*rhomax*rhomax)/C2 );
-    rho=G4Exp(G4Log(C2 *( G4Exp(beta*G4UniformRand())-1. ))*0.25);
-
-    //now get from t and psi the kinematical variables
+    // Sample t between 0 and 1
+    G4double t=G4UniformRand();
     G4double u=sqrt(1./t-1.);
+
+    // Sample psi between 0 and 2*pi
+    G4double psi=2.*pi*G4UniformRand();
+
+    G4double rhoMaxForTheta = 2.*u/fabs(cos(psi));
+    G4double rhoMaxForPhi = pi*u/fabs(sin(psi));
+
+    G4double rhoMax=fmin(rhoMaxForTheta,rhoMaxForPhi);
+    G4double c2 = delOverMmuon/t;
+
+    // Sample a=log(rho^4+c2^4) from rho=0 to rhoMax
+    G4double amin=log(pow(c2,4.));
+    G4double amax=log(pow(rhoMax,4.)+pow(c2,4.));
+    G4double aRange=amax-amin;
+
+    G4double a=amin+G4UniformRand()*aRange;
+    G4double rho=pow(G4Exp(a)-pow(c2,4.),0.25);
+
+
+    //now get the kinematical variables
     G4double xiHalf=0.5*rho*cos(psi);
-    phiHalf=0.5*rho/u*sin(psi);
+    G4double phi=rho/u*sin(psi);
 
-    thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
-    thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
+    G4double uPlus = u+xiHalf;
+    G4double uMinus = u-xiHalf;
 
-    // protection against infinite loop
-    if(nn > nmax) {
-      if(std::abs(thetaPlus)>pi) { thetaPlus = 0.0; }
-      if(std::abs(thetaMinus)>pi) { thetaMinus = 0.0; }
-    }
+    // Only do these calculations if kinematics is sensible...easier to do the u upper limit as a rejection than by changing the rho range
+    if(uPlus > xPlus*pi/GammaMuonInv || uMinus > xMinus*pi/GammaMuonInv)
+      {
+	//	thetaPlus =GammaMuonInv*uPlus/xPlus;
+	if(debug) {
+	  G4cerr << " [out of range] xP " << xPlus 
+		 << " t " << t 
+		 << " psi " << psi
+		 << " rho " << rho
+		 << " uPlus " << uPlus
+		 << " uMinus " << uMinus
+		 << " thetaPlus " << GammaMuonInv*uPlus/xPlus
+		 << " thetaMinus " << GammaMuonInv*uMinus/xMinus << G4endl;
+	}
+      }
+    else
+      {
+	// All kinematic quantities here are in units of mMuon except where GeV appears in variable names
+	G4double gamma0=1/GammaMuonInv;
 
-    // Loop checking, 07-Aug-2015, Vladimir Ivanchenko
-  } while ( std::abs(thetaPlus)>pi || std::abs(thetaMinus) >pi);
+	G4double gammaPlus = gamma0*xPlus;
+	thetaPlus = GammaMuonInv*uPlus/xPlus;
+	G4double betaPlus = sqrt(1.-1./(gammaPlus*gammaPlus));
+	G4double kdotpPlus = gamma0 * gammaPlus * (1. - betaPlus * cos(thetaPlus));
+	G4double pPerpPlus = betaPlus * gammaPlus * sin(thetaPlus);
+
+	G4double gammaMinus = gamma0*xMinus;
+	thetaMinus = GammaMuonInv*uMinus/xMinus;
+	G4double betaMinus = sqrt(1.-1./(gammaMinus*gammaMinus));
+	G4double kdotpMinus = gamma0 * gammaMinus * (1. - betaMinus * cos(thetaMinus));
+	G4double pPerpMinus = betaMinus * gammaMinus * sin(thetaMinus);
+
+	// POSITIVE Squared momentum transfer, in units of muon mass and GeV
+	//	G4double q2par = pow(delOverMmuon*(1+xMinus*uPlus*uPlus + xPlus*uMinus*uMinus),2.);
+	//	G4double q2perp = pow(uPlus - uMinus,2.) + 2 * uPlus * uMinus * (1.-cos(phi));
+	G4double qpar = gamma0 - betaMinus * gammaMinus * cos(thetaMinus) 
+			     - betaPlus * gammaPlus * cos(thetaPlus);
+	G4double q2par = qpar*qpar;
+	G4double q2perp = pow(pPerpPlus - pPerpMinus,2.) + 2 * pPerpPlus * pPerpMinus * (1.-cos(phi));
+
+	G4double q2parApprox = pow(delOverMmuon/t,2.);
+	G4double q2perpApprox = rho*rho;
+
+	G4double q2 = q2par + q2perp;
+	//    G4double q2GeV = q2 * Mmuon * Mmuon; 
+    
+	// Now evaluate the matrix element, with appropriate measure factors
+
+	G4double integratedMeasure = xPRange * aRange / aRangeNorm;  
+	G4double Jacobian_a_Vs_Rho = G4Exp(a) / (rho*rho*rho);
+	G4double Jacobian_tRhoPsi_VS_uPuMPhi = rho/(t*(1.-t));
+	G4double fullJacobian = Jacobian_a_Vs_Rho * Jacobian_tRhoPsi_VS_uPuMPhi;
+
+	
+	//  OLD: Matrix Element from G4 physics reference manual
+
+	G4double dPlus = 1+uPlus*uPlus;
+	G4double dMinus = 1+uMinus*uMinus;
+
+	G4double curlyBrace5_50_A = (uPlus*uPlus + uMinus*uMinus)/(dPlus * dMinus);
+	G4double curlyBrace5_50_B = -2.*xPlus*xMinus * 
+	  (uPlus*uPlus/(dPlus*dPlus) + uMinus*uMinus/(dMinus*dMinus));
+	G4double curlyBrace5_50_C = -2.*uPlus * uMinus* (1-2.*xPlus*xMinus)*cos(phi)/(dPlus*dMinus);
+	G4double curlyBrace5_50 = curlyBrace5_50_A + curlyBrace5_50_B + curlyBrace5_50_C;
+	G4double matrixEl5_50 = 1./(q2*q2) * uPlus * uMinus * curlyBrace5_50; 
+	
+	// This matrix element comes from Tsai 1974 paper and should be exact up to 1/m_{Nucleus} corrections (which aren't hard to add) and inelastic terms (also possible to add if we know the appropriate weight and how to sample it...)
+	G4double term1Plus  = -(-q2+kdotpMinus)/(kdotpPlus);
+	G4double term1Minus = -(-q2+kdotpPlus)/(kdotpMinus);
+	G4double term2Plus  = (-q2/2. +2.* gammaMinus * gammaMinus)/(kdotpPlus * kdotpPlus);
+	G4double term2Minus = (-q2/2. +2.* gammaPlus * gammaPlus)/(kdotpMinus * kdotpMinus);
+	G4double mixedTerm = 2.*((1+q2/2.)*(-2.*gammaMinus * gammaPlus - q2/2.)+q2*gamma0*gamma0/2.)/(kdotpMinus * kdotpPlus);
+
+	G4double sumTerms = term1Plus + term1Minus + term2Plus + term2Minus + mixedTerm;
+	G4double matrixElTsai = 1./(4.*q2*q2) * sin(thetaPlus) * sin(thetaMinus) * sumTerms;
+
+	
+	G4double formFactorSqrt = 1./(1.+q2/(qFormFactor*qFormFactor));
+	G4double formFactor = formFactorSqrt*formFactorSqrt;
+	
+	G4double theWeight = integratedMeasure * fullJacobian * matrixElTsai * formFactor;
+	
+	if(theWeight < 0 || theWeight > maxWeight)
+	  {
+	    G4cerr << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
+		   << " out of bounds 0 to " << maxWeight << G4endl;
+	  }
+	else if(theWeight > 1.0)
+	  {
+	    G4cerr << " **** WARNING in G4GammaConversionToMuons.cc: weight " <<theWeight 
+		   << " is > 1! (This is just informational -- weights up to " << maxWeight << " are handled correctly)"<< G4endl;
+	  }
+	
+
+	if(debug || theWeight < 0 || theWeight > maxWeight || theWeight > 1.0 ) {
+	  G4cerr << " xP " << xPlus 
+		 << " t " << t 
+		 << " psi " << psi
+		 << " rho " << rho
+		 << " q2 " << q2
+		 << " 1+up2 " << 1+ uPlus*uPlus
+		 << " 2k.pxp " << 2.*kdotpPlus*xPlus
+		 << " 1+um2 " << 1+ uMinus*uMinus
+		 << " 2k.pxm " << 2.*kdotpMinus*xMinus
+		
+
+
+		 << "thetaP " << thetaPlus
+		 << " thetaM " << thetaMinus
+		 << " q2Approx " << q2perpApprox + q2parApprox
+	    //		 << " curly " << curlyBrace5_50
+		 << " ME5.50 " << matrixEl5_50
+		 << " METsai " << matrixElTsai
+		 << " terms " << term1Plus << " " << term1Minus << " " << term2Plus << " " << term2Minus << " " << mixedTerm 
+		 << " measurr " << integratedMeasure 
+		 << " ff " << formFactor
+		 << " weight " << theWeight
+		 << G4endl;
+	}
+	
+	if(G4UniformRand() * maxWeight < theWeight) 
+	  goodEvent = true;
+	
+	phiHalf=0.5*phi;
+	//	thetaPlus =GammaMuonInv*(u+xiHalf)/xPlus;
+	//	thetaMinus=GammaMuonInv*(u-xiHalf)/xMinus;
+      }
+    
+
+  } while (nn<nmax && !goodEvent) ;
+
+  if(!goodEvent) {
+    G4cerr << "**** WARNING in G4GammaConversionToMuons.cc: failed to select a ME-weighted event after " << nmax << " tries.  Using unphysical event weight." << G4endl;
+  }
 
   // now construct the vectors
   // azimuthal symmetry, take phi0 at random between 0 and 2 pi
@@ -386,8 +504,8 @@ G4VParticleChange* G4GammaConversionToMuons::PostStepDoIt(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4Element* G4GammaConversionToMuons::SelectRandomAtom(
-		  const G4DynamicParticle* aDynamicGamma,
-		  G4Material* aMaterial)
+                  const G4DynamicParticle* aDynamicGamma,
+                  G4Material* aMaterial)
 {
   // select randomly 1 element within the material, invoked by PostStepDoIt
 
@@ -417,7 +535,7 @@ void G4GammaConversionToMuons::PrintInfoDefinition()
 {
   G4String comments ="gamma->mu+mu- Bethe Heitler process, SubType= ";
   G4cout << G4endl << GetProcessName() << ":  " << comments
-	 << GetProcessSubType() << G4endl;
+         << GetProcessSubType() << G4endl;
   G4cout << "        good cross section parametrization from "
          << G4BestUnit(LowestEnergyLimit,"Energy")
          << " to " << HighestEnergyLimit/GeV << " GeV for all Z." << G4endl;
