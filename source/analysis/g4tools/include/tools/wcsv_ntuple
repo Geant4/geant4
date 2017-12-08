@@ -40,7 +40,47 @@ public:
   
 public:
   template <class T>
-  class column : public virtual icol {
+  class column_ref : public virtual icol {
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return _cid(s_v)+10000;
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {m_writer << m_ref;}
+    virtual const std::string& name() const {return m_name;}
+  public:
+    column_ref(std::ostream& a_writer,const std::string& a_name,const T& a_ref)
+    :m_writer(a_writer)
+    ,m_name(a_name)
+    ,m_ref(a_ref)
+    {}
+    virtual ~column_ref(){}
+  protected:
+    column_ref(const column_ref& a_from)
+    :icol(a_from)
+    ,m_writer(a_from.m_writer)
+    ,m_name(a_from.m_name) 
+    ,m_ref(a_from.m_ref)
+    {}
+    column_ref& operator=(const column_ref& a_from){
+      m_name = a_from.m_name;
+      return *this;
+    }
+  protected:
+    std::ostream& m_writer;
+    std::string m_name;
+    const T& m_ref;
+  };
+
+  template <class T>
+  class column : public column_ref<T> {
+    typedef column_ref<T> parent;
   public:
     static cid id_class() {
       static const T s_v = T(); //do that for T = std::string.
@@ -52,27 +92,23 @@ public:
     }
     virtual cid id_cls() const {return id_class();}
   public: //icol
-    virtual void add() {
-      m_writer << m_tmp;
-      m_tmp = m_def;
-    }
-    virtual const std::string& name() const {return m_name;}
+    virtual void add() {parent::add();m_tmp = m_def;}
   public:
     column(std::ostream& a_writer,const std::string& a_name,const T& a_def)
-    :m_writer(a_writer)
-    ,m_name(a_name),m_def(a_def),m_tmp(a_def)
+    :parent(a_writer,a_name,m_tmp)
+    ,m_def(a_def)
+    ,m_tmp(a_def)
     {}
     virtual ~column(){}
   protected:
     column(const column& a_from)
     :icol(a_from)
-    ,m_writer(a_from.m_writer)
-    ,m_name(a_from.m_name) 
+    ,parent(a_from)
     ,m_def(a_from.m_def)
     ,m_tmp(a_from.m_tmp)
     {}
     column& operator=(const column& a_from){
-      m_name = a_from.m_name;
+      parent::operator=(a_from);
       m_def = a_from.m_def;
       m_tmp = a_from.m_tmp;
       return *this;
@@ -80,8 +116,6 @@ public:
   public:
     bool fill(const T& a_value) {m_tmp = a_value;return true;}
   protected:
-    std::ostream& m_writer;
-    std::string m_name;
     T m_def;
     T m_tmp;
   };
@@ -105,14 +139,14 @@ public:
     virtual cid id_cls() const {return id_class();}
   public: //icol
     virtual void add() {
-      if(m_user_vec.empty()) {
+      if(m_ref.empty()) {
         //m_writer << "none";
       } else {
         //std::string sep;sep+=m_vec_sep;
         //T value;
         typedef typename std::vector<T>::const_iterator it_t;
-        for(it_t it=m_user_vec.begin();it!=m_user_vec.end();++it) {
-          if(it!=m_user_vec.begin()) m_writer << m_vec_sep;
+        for(it_t it=m_ref.begin();it!=m_ref.end();++it) {
+          if(it!=m_ref.begin()) m_writer << m_vec_sep;
           m_writer << *it;
           //value = *it;escape(value,sep);
           //m_writer << value;
@@ -121,10 +155,10 @@ public:
     }
     virtual const std::string& name() const {return m_name;}
   public:
-    std_vector_column(std::ostream& a_writer,const std::string& a_name,std::vector<T>& a_user_vec,char a_vec_sep)
+    std_vector_column(std::ostream& a_writer,const std::string& a_name,const std::vector<T>& a_ref,char a_vec_sep)
     :m_writer(a_writer)
     ,m_name(a_name)
-    ,m_user_vec(a_user_vec)
+    ,m_ref(a_ref)
     ,m_vec_sep(a_vec_sep)
     {}
     virtual ~std_vector_column(){}
@@ -133,7 +167,7 @@ public:
     :icol(a_from)
     ,m_writer(a_from.m_writer)
     ,m_name(a_from.m_name) 
-    ,m_user_vec(a_from.m_user_vec)
+    ,m_ref(a_from.m_ref)
     ,m_vec_sep(a_from.m_vec_sep)
     {}
     std_vector_column& operator=(const std_vector_column& a_from){
@@ -144,7 +178,7 @@ public:
   protected:
     std::ostream& m_writer;
     std::string m_name;
-    std::vector<T>& m_user_vec;
+    const std::vector<T>& m_ref;
     char m_vec_sep;
   };
 
@@ -168,73 +202,92 @@ public:
     std::vector<column_booking>::const_iterator it;
     for(it=cols.begin();it!=cols.end();++it){
 
-      if((*it).cls_id()==_cid(char(0))) {
-        create_column<char>((*it).name());
-      } else if((*it).cls_id()==_cid(short(0))) {
-        create_column<short>((*it).name());
-      } else if((*it).cls_id()==_cid(int(0))) {
-        create_column<int>((*it).name());
-      } else if((*it).cls_id()==_cid(float(0))) {
-        create_column<float>((*it).name());
-      } else if((*it).cls_id()==_cid(double(0))) {
-        create_column<double>((*it).name());
-      } else if((*it).cls_id()==_cid(std::string())) {
-        create_column<std::string>((*it).name());
-
-      } else if((*it).cls_id()==_cid(byte(0))) {
-        create_column<byte>((*it).name());
-      } else if((*it).cls_id()==_cid((unsigned short)0)) {
-        create_column<unsigned short>((*it).name());
-      } else if((*it).cls_id()==_cid((unsigned int)0)) {
-        create_column<unsigned int>((*it).name());
-      } else if((*it).cls_id()==_cid(bool(true))) {
-        create_column<bool>((*it).name());
-      } else if((*it).cls_id()==_cid(uint64(0))) {
-        create_column<uint64>((*it).name());
+#define TOOLS_WCSV_NTUPLE_CREATE_COL(a__type) \
+      if((*it).cls_id()==_cid(a__type())) {\
+        a__type* user = (a__type*)(*it).user_obj();\
+        if(user) {\
+          if(!create_column_ref<a__type>((*it).name(),*user)) {\
+	    a_out << "tools::wcsv_ntuple::wcsv_ntuple : create_column_ref(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
+        } else {\
+          if(!create_column<a__type>((*it).name())) {\
+	    a_out << "tools::wcsv_ntuple::wcsv_ntuple : create_column(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
+	}\
+      }
 
 #define TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(a__type) \
-      } else if((*it).cls_id()==_cid_std_vector<a__type>()) {\
+      if((*it).cls_id()==_cid_std_vector<a__type>()) {\
         std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
         if(vec) {\
-          create_column<a__type>((*it).name(),*vec);\
+          if(!create_column<a__type>((*it).name(),*vec)) {\
+	    a_out << "tools::wcsv_ntuple::wcsv_ntuple : create_column(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
         } else {\
           a_out << "tools::wcsv_ntuple :"\
                 << " for std::vector column " << sout((*it).name())\
                 << ", the user vector pointer is null."\
                 << std::endl;\
-          tools::clear<icol>(m_cols);\
+          safe_clear<icol>(m_cols);\
           return;\
-        }
+        }\
+      }
 
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(char)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(short)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(float)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(double)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(std::string)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uchar)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(ushort)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint32)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(bool)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int64)
-      TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint64)
+           TOOLS_WCSV_NTUPLE_CREATE_COL(char)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(short)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(int)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(int64)
+      
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(float)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(double)
+      
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(byte)      
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(ushort)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(uint32)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(uint64)
+      
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(bool)
+      else TOOLS_WCSV_NTUPLE_CREATE_COL(std::string)
 
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(char)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(short)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(int64)
+      
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(float)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(double)
+      
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uchar)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(ushort)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint32)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(uint64)
+
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(std::string)
+      else TOOLS_WCSV_NTUPLE_CREATE_VEC_COL(bool)
+      
 #undef TOOLS_WCSV_NTUPLE_CREATE_VEC_COL
+#undef TOOLS_WCSV_NTUPLE_CREATE_COL
 
-      } else {
+      else {
         a_out << "tools::wcsv::ntuple :"
               << " for column " << sout((*it).name())
               << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
-        tools::clear<icol>(m_cols);
+        safe_clear<icol>(m_cols);
         return;
       }      
     }
   }
 
   virtual ~ntuple() {
-    tools::clear<icol>(m_cols);
+    safe_clear<icol>(m_cols);
   }
 protected:
   ntuple(const ntuple& a_from)
@@ -282,6 +335,15 @@ public:
   }
 
   template <class T>
+  column_ref<T>* create_column_ref(const std::string& a_name,const T& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_ref<T>* col = new column_ref<T>(m_writer,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
   column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
     column<T>* col = new column<T>(m_writer,a_name,a_def);
@@ -291,13 +353,20 @@ public:
   }
 
   template <class T>
-  std_vector_column<T>* create_column(const std::string& a_name,std::vector<T>& a_user_vec) {
+  std_vector_column<T>* create_column(const std::string& a_name,const std::vector<T>& a_ref) {
     //NOTE : to optimize, we do not handle a default std::vector value logic.
     if(find_named<icol>(m_cols,a_name)) return 0;
-    std_vector_column<T>* col = new std_vector_column<T>(m_writer,a_name,a_user_vec,m_vec_sep);
+    std_vector_column<T>* col = new std_vector_column<T>(m_writer,a_name,a_ref,m_vec_sep);
     if(!col) return 0;
     m_cols.push_back(col);
     return col;
+  }
+
+  template <class T>
+  column_ref<T>* find_column_ref(const std::string& a_name) {
+    icol* col = find_named<icol>(m_cols,a_name);
+    if(!col) return 0;
+    return id_cast<icol, column_ref<T> >(*col);
   }
 
   template <class T>

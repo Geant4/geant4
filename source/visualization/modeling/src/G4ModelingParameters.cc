@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.cc 103627 2017-04-19 13:30:26Z gcosmo $
+// $Id: G4ModelingParameters.cc 106122 2017-09-13 12:51:53Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -50,7 +50,7 @@ G4ModelingParameters::G4ModelingParameters ():
   fVisibleDensity        (0.01 * g / cm3),
   fCullCovered           (false),
   fExplodeFactor         (1.),
-  fNoOfSides             (72),
+  fNoOfSides             (24),
   fpSectionSolid         (0),
   fpCutawaySolid         (0),
   fpEvent                (0)

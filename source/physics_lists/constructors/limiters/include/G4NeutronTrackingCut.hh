@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.hh 83417 2014-08-21 15:29:32Z gcosmo $
+// $Id: G4NeutronTrackingCut.hh 107562 2017-11-22 15:39:24Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -63,8 +63,6 @@ public:
   inline void SetKineticEnergyLimit(G4double);
 
 private:
-
-  //G4NeutronKiller* pNeutronKiller;
 
   G4double timeLimit;
   G4double kineticEnergyLimit;

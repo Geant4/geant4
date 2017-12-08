@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 July 2017 Vladimir Ivanchenko (hadr-util-V10-03-05)
+--------------------------------------------------------
+- G4NuclearPolarization - added extra members and update the class
+    for correlated gamma emission
+
 16 June 2017 Vladimir Ivanchenko (hadr-util-V10-03-04)
 --------------------------------------------------------
 - G4NuclearPolarization - improved printout

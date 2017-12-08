@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/SteppingAction.cc
+/// \file SteppingAction.cc
 /// \brief Implementation of the SteppingAction class
 //
 // $Id: SteppingAction.cc 71404 2013-06-14 16:56:38Z maire $

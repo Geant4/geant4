@@ -72,7 +72,7 @@ public:
   }
 public:
   c3d();
-  c3d(const std::string&,int=-1);
+  c3d(const std::string&,int=base_cloud::UNLIMITED());
   virtual ~c3d(){delete m_histo;}
 public:
   c3d(const c3d& a_from)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpAbsorption.cc 88840 2015-03-12 10:31:04Z gcosmo $
+// $Id: G4OpAbsorption.cc 106117 2017-09-13 10:23:20Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon Absorption Class Implementation
@@ -137,7 +137,7 @@ G4double G4OpAbsorption::GetMeanFreePath(const G4Track& aTrack,
 
 	if ( aMaterialPropertyTable ) {
 	   AttenuationLengthVector = aMaterialPropertyTable->
-                                                GetProperty("ABSLENGTH");
+                                                GetProperty(kABSLENGTH);
            if ( AttenuationLengthVector ){
              AttenuationLength = AttenuationLengthVector->
                                          Value(thePhotonMomentum);

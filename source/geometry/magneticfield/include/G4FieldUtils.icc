@@ -1,0 +1,75 @@
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: $
+//
+//    Implementation by Dmitry Sorokin - GSoC 2017
+//       Work supported by Google as part of Google Summer of Code 2017.
+//    Supervision / code review: John Apostolakis
+
+namespace field_utils {
+
+namespace internal {
+
+template<class T>
+size_t getFirstIndex(const T& value) {
+    return static_cast<size_t>(value);
+}
+
+} // internal
+
+template <typename ArrayType>
+inline G4double getValue(const ArrayType& array, Value1D value)
+{
+    const auto begin = internal::getFirstIndex(value);
+    return array[begin];
+}
+
+template <typename ArrayType>
+G4double getValue2(const ArrayType& array, Value1D value)
+{
+    return sqr(getValue(array, value));
+}
+
+template <typename ArrayType>
+G4double getValue(const ArrayType& array, Value3D value)
+{
+    return std::sqrt(getValue2(array, value));
+}
+
+template <typename ArrayType>
+G4double getValue2(const ArrayType& array, const Value3D value)
+{
+    const auto begin = internal::getFirstIndex(value);
+    return sqr(array[begin]) + sqr(array[begin+1]) + sqr(array[begin+2]);
+}
+
+template <typename ArrayType>
+G4ThreeVector makeVector(const ArrayType& array, Value3D value)
+{
+    const auto begin = internal::getFirstIndex(value);
+    return G4ThreeVector(array[begin], array[begin + 1], array[begin + 2]);
+}
+
+} // field_utils

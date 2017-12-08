@@ -520,9 +520,9 @@ void PassiveCarbonBeamLine::HadrontherapyRippleFilter()
     
     LogicRippleFilterTrd -> SetVisAttributes(green);
     
-    G4int numberOfTrd = static_cast<int>(floor( RF_y / (RFtrd_bottom+distanceBetweenTrd) ));
+    G4int numberOfTrd = static_cast<int>(std::floor( RF_y / (RFtrd_bottom+distanceBetweenTrd) ));
     
-    G4int N = static_cast<int>( floor(numberOfTrd-1)/2 );
+    G4int N = static_cast<int>( std::floor(numberOfTrd-1)/2 );
     
     G4int copyNumber = 0;
     

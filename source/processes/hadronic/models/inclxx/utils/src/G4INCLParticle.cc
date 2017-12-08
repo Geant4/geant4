@@ -47,10 +47,17 @@
 
 namespace G4INCL {
 
-  G4ThreadLocal long Particle::nextID = 1;
+#ifdef INCLXX_IN_GEANT4_MODE
+    std::vector<G4double> Particle::INCLBiasVector;
+#else
+    G4ThreadLocal std::vector<G4double> Particle::INCLBiasVector;
+  //G4VectorCache<G4double> Particle::INCLBiasVector;
+#endif
+    G4ThreadLocal long Particle::nextID = 1;
+  G4ThreadLocal G4int Particle::nextBiasedCollisionID = 0;
 
   Particle::Particle()
-    : theZ(0), theA(0),
+    : theZ(0), theA(0), theS(0),
     theParticipantType(TargetSpectator),
     theType(UnknownParticle),
     theEnergy(0.0),
@@ -65,6 +72,7 @@ namespace G4INCL {
     thePotentialEnergy(0.0),
     rpCorrelated(false),
     uncorrelatedMomentum(0.),
+    theParticleBias(1.),
     theHelicity(0.0),
     emissionTime(0.0),
     outOfWell(false),
@@ -87,6 +95,7 @@ namespace G4INCL {
       thePotentialEnergy(0.),
       rpCorrelated(false),
       uncorrelatedMomentum(theMomentum.mag()),
+      theParticleBias(1.),
       theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
@@ -111,6 +120,7 @@ namespace G4INCL {
       thePotentialEnergy(0.),
       rpCorrelated(false),
       uncorrelatedMomentum(theMomentum.mag()),
+    theParticleBias(1.),
       theHelicity(0.0),
       emissionTime(0.0), outOfWell(false)
   {
@@ -166,5 +176,131 @@ namespace G4INCL {
     for(const_iterator i=begin(), e=end(); i!=e; ++i) {
       (*i)->boost(b);
     }
+  }
+
+  G4double ParticleList::getParticleListBias() const {
+    if(G4int((*this).size())==0) return 1.;
+    std::vector<G4int> MergedVector;
+    for(ParticleIter i = (*this).begin(), e = (*this).end(); i!=e; ++i){
+        MergedVector = Particle::MergeVectorBias(MergedVector,(*i));
+    }
+    return Particle::getBiasFromVector(MergedVector);
+  }
+
+  std::vector<G4int> ParticleList::getParticleListBiasVector() const {
+    std::vector<G4int> MergedVector;
+    if(G4int((*this).size())==0) return MergedVector;
+    for(ParticleIter i = (*this).begin(), e = (*this).end(); i!=e; ++i){
+        MergedVector = Particle::MergeVectorBias(MergedVector,(*i));
+    }
+    return MergedVector;
+  }
+
+  void Particle::FillINCLBiasVector(G4double newBias){
+// assert(G4int(Particle::INCLBiasVector.size())==nextBiasedCollisionID);
+    //assert(G4int(Particle::INCLBiasVector.Size())==nextBiasedCollisionID);
+// assert(std::fabs(newBias - 1.) > 1E-6);
+	Particle::INCLBiasVector.push_back(newBias);
+	//Particle::INCLBiasVector.Push_back(newBias);
+    Particle::nextBiasedCollisionID++;
+  }
+
+  G4double Particle::getBiasFromVector(std::vector<G4int> VectorBias) {
+    if(VectorBias.empty()) return 1.;
+    
+    G4double ParticleBias = 1.;
+    
+    for(G4int i=0; i<G4int(VectorBias.size()); i++){
+        ParticleBias *= Particle::INCLBiasVector[G4int(VectorBias[i])];
+    }
+    
+    return ParticleBias;
+  }
+  
+  std::vector<G4int> Particle::MergeVectorBias(Particle const * const p1, Particle const * const p2){
+    std::vector<G4int> MergedVectorBias;
+    std::vector<G4int> VectorBias1 = p1->getBiasCollisionVector();
+    std::vector<G4int> VectorBias2 = p2->getBiasCollisionVector();
+    G4int i = 0;
+    G4int j = 0;
+    if(VectorBias1.size()==0 && VectorBias2.size()==0) return MergedVectorBias;
+    else if(VectorBias1.size()==0) return VectorBias2;
+    else if(VectorBias2.size()==0) return VectorBias1;
+        
+    while(i < G4int(VectorBias1.size()) || j < G4int(VectorBias2.size())){
+        if(VectorBias1[i]==VectorBias2[j]){
+            MergedVectorBias.push_back(VectorBias1[i]);
+            i++;
+            j++;
+            if(i == G4int(VectorBias1.size())){
+                for(;j<G4int(VectorBias2.size());j++) MergedVectorBias.push_back(VectorBias2[j]);
+            }
+            if(j == G4int(VectorBias2.size())){
+                for(;i<G4int(VectorBias1.size());i++) MergedVectorBias.push_back(VectorBias1[i]);
+            }
+        } else if(VectorBias1[i]<VectorBias2[j]){
+            MergedVectorBias.push_back(VectorBias1[i]);
+            i++;
+            if(i == G4int(VectorBias1.size())){
+                for(;j<G4int(VectorBias2.size());j++) MergedVectorBias.push_back(VectorBias2[j]);
+            }
+        }
+        else {
+            MergedVectorBias.push_back(VectorBias2[j]);
+            j++;
+            if(j == G4int(VectorBias2.size())){
+                for(;i<G4int(VectorBias1.size());i++) MergedVectorBias.push_back(VectorBias1[i]);
+            }
+        }
+    }
+    return MergedVectorBias;
+  }
+  
+  std::vector<G4int> Particle::MergeVectorBias(std::vector<G4int> p1, Particle const * const p2){
+    std::vector<G4int> MergedVectorBias;
+    std::vector<G4int> VectorBias = p2->getBiasCollisionVector();
+    G4int i = 0;
+    G4int j = 0;
+    if(p1.size()==0 && VectorBias.size()==0) return MergedVectorBias;
+    else if(p1.size()==0) return VectorBias;
+    else if(VectorBias.size()==0) return p1;
+        
+    while(i < G4int(p1.size()) || j < G4int(VectorBias.size())){
+        if(p1[i]==VectorBias[j]){
+            MergedVectorBias.push_back(p1[i]);
+            i++;
+            j++;
+            if(i == G4int(p1.size())){
+                for(;j<G4int(VectorBias.size());j++) MergedVectorBias.push_back(VectorBias[j]);
+            }
+            if(j == G4int(VectorBias.size())){
+                for(;i<G4int(p1.size());i++) MergedVectorBias.push_back(p1[i]);
+            }
+        } else if(p1[i]<VectorBias[j]){
+            MergedVectorBias.push_back(p1[i]);
+            i++;
+            if(i == G4int(p1.size())){
+                for(;j<G4int(VectorBias.size());j++) MergedVectorBias.push_back(VectorBias[j]);
+            }
+        }
+        else {
+            MergedVectorBias.push_back(VectorBias[j]);
+            j++;
+            if(j == G4int(VectorBias.size())){
+                for(;i<G4int(p1.size());i++) MergedVectorBias.push_back(p1[i]);
+            }
+        }
+    }
+    return MergedVectorBias;
+  }
+
+  G4double Particle::getTotalBias() {
+      G4double TotalBias = 1.;
+      for(G4int i=0; i<G4int(INCLBiasVector.size());i++) TotalBias *= Particle::INCLBiasVector[i];
+      return TotalBias;
+  }
+
+  void Particle::setINCLBiasVector(std::vector<G4double> NewVector) {
+      Particle::INCLBiasVector = NewVector;
   }
 }

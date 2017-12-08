@@ -50,7 +50,6 @@ DetectorConstructionMessenger(
     fXtalMaterialCmd->SetParameterName("xMat",true);
     fXtalMaterialCmd->SetDefaultValue("G4_Si");
     
-    
     fXtalSizeCmd = new G4UIcmdWith3VectorAndUnit("/xtal/setSize",this);
     fXtalSizeCmd->SetGuidance("Set crystal size.");
     fXtalSizeCmd->SetParameterName("xtalSizeX",
@@ -68,7 +67,6 @@ DetectorConstructionMessenger(
                                  true);
     fXtalBRCmd->SetDefaultValue(G4ThreeVector(0.,0.,0.));
     fXtalBRCmd->SetDefaultUnit("m");
-    
     
     fXtalAngleCmd = new G4UIcmdWith3VectorAndUnit("/xtal/setAngle",this);
     fXtalAngleCmd->SetGuidance("Set crystal angles.");

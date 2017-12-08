@@ -1,4 +1,4 @@
-$Id: History 104019 2017-05-08 07:34:08Z gcosmo $
+$Id: History 107437 2017-11-13 07:37:11Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,31 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-Nov-2017, T. Koi         (phys-ctor-helastic-V10-03-04)
+-Dumpping LEND target information in G4HadronElasticPhysicsLEND
+
+7-Nov-2017, T. Koi         (phys-ctor-helastic-V10-03-03)
+- G4HadronElasticPhysicsLEND: Modify setting of selection of target data
+
+19-Oct-2017, A. Ribon         (phys-ctor-helastic-V10-03-02)
+- G4HadronHElasticPhysics : use G4NuclNuclDiffuseElastic for the elastic
+  scattering of light and generic ions (this is possible now because
+  the latest version of G4NuclNuclDiffuseElastic respects reproducibility).
+
+14-Aug-2017, A. Ribon         (phys-ctor-helastic-V10-03-01)
+- G4HadronElasticPhysics, G4HadronHElasticPhysics : changed kaon elastic 
+  cross sections from, respectively, Gheisha (used in G4HadronElasticPhysics)
+  and Chips (used in G4HadronHElasticPhysics), to Grichine's Glauber Gribov
+  ones. In this way, the total (elastic + inelastic) kaon cross sections
+  are consistent with the PDG ones. 
+  Notes:
+  - For the time being, kept the original elastic final-state model
+    (i.e. Gheisha in G4HadronElasticPhysics and Chips in
+    G4HadronHElasticPhysics).
+  - These two changes should be used also for the next patch of G4 10.3
+    (i.e. for 10.3.p03 : the two files G4HadronElasticPhysics.cc and
+    G4HadronHElasticPhysics.cc can be taken directly).
 
 04-May-2017, V.Ivanchenko     (phys-ctor-helastic-V10-03-00)
 - G4ThermalNeutrons - new class for addition of thermal neutron

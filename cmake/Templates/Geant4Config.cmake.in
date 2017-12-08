@@ -70,6 +70,7 @@
 #  gdml              (GDML support)
 #  g3tog4            (Geant3 geometry call list reader library)
 #  freetype          (G4analysis library has freetype support)
+#  hdf5              (G4analysis library has HDF5 support)
 #
 #  ui_tcsh           (TCsh Style Application Command Line Interface)
 #  ui_win32          (WIN32 Style Application Command Line Interface)
@@ -306,6 +307,12 @@ if(Geant4_multithreaded_FOUND)
   set(Geant4_TLS_MODEL "@GEANT4_BUILD_TLS_MODEL@")
 endif()
 
+# - Muonic Atom support
+set(Geant4_muonic_atoms_FOUND @GEANT4_BUILD_MUONIC_ATOMS_IN_USE@)
+if(Geant4_muonic_atoms_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS muonic_atoms)
+endif()
+
 # - GDML
 set(Geant4_gdml_FOUND @GEANT4_USE_GDML@)
 if(Geant4_gdml_FOUND)
@@ -331,6 +338,12 @@ endif()
 set(Geant4_freetype_FOUND @GEANT4_USE_FREETYPE@)
 if(Geant4_freetype_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS freetype)
+endif()
+
+# - HDF5
+set(Geant4_hdf5_FOUND @GEANT4_USE_HDF5@)
+if(Geant4_hdf5_FOUND)
+  list(REMOVE_ITEM Geant4_FIND_COMPONENTS hdf5)
 endif()
 
 # - UI : TCSH

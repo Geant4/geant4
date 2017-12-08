@@ -1,4 +1,4 @@
-.$Id: History 104290 2017-05-23 13:24:52Z gcosmo $
+.$Id: History 106384 2017-10-09 09:34:51Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+
+14th September 2017  John Allison  (vis-HepRep-V10-03-01)
+- G4HepRepMessenger.cc: Fix Coverity warning.
 
 23rd May 2017  John Allison  (vis-HepRep-V10-03-00)
 - Fixes for gcc-7.1 warnings.

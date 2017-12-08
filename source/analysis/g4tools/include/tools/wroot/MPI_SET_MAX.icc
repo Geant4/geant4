@@ -1,0 +1,25 @@
+
+#define TOOLS_WROOT_MPI_NTUPLE_LEAF_SET_LENGTH_MAX(a__type) \
+     {leaf_ref<a__type>* _pleaf_ = _pleaf?id_cast<base_leaf, leaf_ref<a__type> >(*_pleaf):0;\
+      if(_pleaf_) {\
+        if(!a_mpi.pack(_pleaf_->length())) return false;\
+        if(!a_mpi.pack(_pleaf_->get_max())) return false;\
+	set_done = true;\
+      }}
+
+#define TOOLS_WROOT_MPI_NTUPLE_LEAF_STD_VECTOR_SET_LENGTH_MAX(a__type) \
+     {leaf_std_vector_ref<a__type>* _pleaf_ = _pleaf?id_cast<base_leaf, leaf_std_vector_ref<a__type> >(*_pleaf):0;\
+      if(_pleaf_) {\
+        if(!a_mpi.pack(_pleaf_->length())) return false;\
+        if(!a_mpi.pack(_pleaf_->get_max())) return false;\
+	set_done = true;\
+      }}
+
+#define TOOLS_WROOT_MPI_NTUPLE_LEAF_STRING_SET_LENGTH_MAX \
+     {leaf_string_ref* _pleaf_ = _pleaf?id_cast<base_leaf,leaf_string_ref>(*_pleaf):0;\
+      if(_pleaf_) {\
+        if(!a_mpi.pack(_pleaf_->length())) return false;\
+        if(!a_mpi.pack(_pleaf_->get_max())) return false;\
+	set_done = true;\
+      }}
+

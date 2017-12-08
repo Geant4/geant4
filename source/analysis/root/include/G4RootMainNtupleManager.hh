@@ -55,6 +55,7 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
 
   public:
     explicit G4RootMainNtupleManager(G4RootNtupleManager* ntupleBuilder,
+                                     G4bool rowWise,
                                      const G4AnalysisManagerState& state);
     ~G4RootMainNtupleManager();
 
@@ -85,6 +86,7 @@ class G4RootMainNtupleManager : public G4BaseAnalysisManager
   private:
     // Data members
     G4RootNtupleManager*  fNtupleBuilder;
+    G4bool  fRowWise;
     std::shared_ptr<tools::wroot::file>  fNtupleFile;
     tools::wroot::directory*  fNtupleDirectory;
     std::vector<tools::wroot::ntuple*>   fNtupleVector;

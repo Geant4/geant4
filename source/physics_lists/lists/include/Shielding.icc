@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: Shielding.icc 101813 2016-11-30 18:05:43Z gunter $
+// $Id: Shielding.icc 107319 2017-11-08 16:29:22Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -70,16 +70,27 @@
 
 #include "G4DataQuestionaire.hh"
 #include "G4HadronPhysicsShielding.hh"
+#include "G4HadronPhysicsShieldingLEND.hh"
 
 //template<class T> TShielding<T>::TShielding(G4int ver):  T()
 template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model, 
                                              G4String HadrPhysVariant ): T()
 {
+  size_t find = LEN_model.find("LEND__");
+  G4String evaluation;
+  if ( find != G4String::npos )
+  {
+     evaluation=LEN_model;
+     evaluation.erase(0,find+6);
+     LEN_model="LEND";
+  }
+
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*CLHEP::mm;
   G4DataQuestionaire it(photon, neutron, radioactive);
   G4cout << "<<< Geant4 Physics List simulation engine: Shielding"
          << HadrPhysVariant<< " 2.1"<<G4endl;
+  if ( LEN_model=="LEND" ) G4cout << "<<< LEND will be used for low energy neutron and gammp projectiles" << G4endl;
   G4cout <<G4endl;
   this->defaultCutValue = 0.7*CLHEP::mm;  
   this->SetVerboseLevel(verbose);
@@ -92,21 +103,17 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model,
   //emOptions.SetPIXE(true); // To activate Particle Induced X-Ray Emission (PIXE)   
 
   // Synchroton Radiation & GN Physics
-  this->RegisterPhysics( new G4EmExtraPhysics(verbose) );
+  G4EmExtraPhysics* emExtraPhysics = new G4EmExtraPhysics(verbose);
+  if ( LEN_model == "LEND" ) {
+     // Use LEND model for Gamma Nuclear 
+     emExtraPhysics->LENDGammaNuclear(true);
+  }
+  this->RegisterPhysics( emExtraPhysics );
 
   // Decays 
   this->RegisterPhysics( new G4DecayPhysics(verbose) );
   //if ( rad == true ) this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
   this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
-
-  size_t find = LEN_model.find("LEND__");
-  G4String evaluation;
-  if ( find != G4String::npos )
-  {
-      evaluation=LEN_model;
-      evaluation.erase(0,find+6);
-      LEN_model="LEND";
-  }
 
   // Hadron Elastic scattering
   if ( LEN_model == "HP" ) 
@@ -126,29 +133,28 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model,
      this->RegisterPhysics( new G4HadronElasticPhysicsHP(verbose) );
   } 
 
-  G4HadronPhysicsShielding* hps;
-  // Hadron Physics
+  G4VPhysicsConstructor* hpc;
+  // Hadron Physics HP or LEND 
   if (HadrPhysVariant == "M") {
-    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
+     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
   } else {
-    hps = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
+     hpc = new G4HadronPhysicsShielding("hInelastic Shielding", verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
   }
-  if ( LEN_model == "HP" ) 
-  {
-     ;
-  }
-  else if ( LEN_model == "LEND" ) 
-  {
-     hps->UseLEND(evaluation); 
-  }
-  else 
-  {
+
+  if ( LEN_model == "LEND" ) {
+     delete hpc;
+     if (HadrPhysVariant == "M") {
+        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
+     } else {
+        hpc = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
+     }
+  } else {
      //G4cout << "Shielding Physics List: Warning." <<G4endl;
      //G4cout << "Name of Low Energy Neutron model " << LEN_model << " is invalid." <<G4endl;
      //G4cout << "Will use neutron HP package." <<G4endl;
   }
-  this->RegisterPhysics( hps );
-  //this->RegisterPhysics( new G4HadronPhysicsShielding(verbose,lend));
+  this->RegisterPhysics( hpc );
+
 
   if ( LEN_model == "HP" ) {
      //Activate prodcuton of fission fragments in neutronHP

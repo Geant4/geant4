@@ -17,7 +17,20 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 21, 2017 G.Cosmo     (global-V10-03-08)
+October 20, 2017 E.Tcherniaev (global-V10-03-11)
+- Use more performant G.Marsaglia (1972) algorithm for G4RandomDirection.
+  Thanks to Kostas Savvidy for the suggestion.
+- Updated unit test G4RandomDirectionTest.
+
+July 24, 2017 E.Tcherniaev (global-V10-03-10)
+- Added G4RandomPointOnEllipsoid() and G4RandomPointOnEllipse() to functions
+  collection in G4RandomTools.hh.
+
+July 20, 2017 E.Tcherniaev (global-V10-03-09)
+- Added G4RandomRadiusInRing() and G4RandomPointInEllipse() to functions
+  collection in G4RandomTools.hh.
+
+June 21, 2017 G.Cosmo      (global-V10-03-08)
 - Corrected TLS setup in tls.hh for gcc compiler.
 
 April 20, 2017 G.Cosmo     (global-V10-03-07)

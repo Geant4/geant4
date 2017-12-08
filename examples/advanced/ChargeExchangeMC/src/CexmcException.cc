@@ -46,7 +46,7 @@
 #include "CexmcCommon.hh"
 
 
-CexmcException::CexmcException( CexmcExceptionType  type ) : type( type )
+CexmcException::CexmcException( CexmcExceptionType  type_ ) : type( type_ )
 {
 }
 

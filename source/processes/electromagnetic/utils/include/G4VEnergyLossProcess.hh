@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh 104349 2017-05-26 07:18:59Z gcosmo $
+// $Id: G4VEnergyLossProcess.hh 106714 2017-10-20 09:38:06Z gcosmo $
 // GEANT4 tag $Name:
 //
 // -------------------------------------------------------------------
@@ -141,11 +141,14 @@ private:
 public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
   
-  virtual void PrintInfo() = 0;
+  // obsolete to be removed
+  virtual void PrintInfo() {};
 
-  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
+
+  virtual void StreamProcessInfo(std::ostream&, G4String) const {};
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
                                            const G4ParticleDefinition*) = 0;
@@ -175,9 +178,6 @@ public:
 
   // build a table
   G4PhysicsTable* BuildLambdaTable(G4EmTableType tType = fRestricted);
-
-  // summary printout after initialisation
-  void PrintInfoDefinition(const G4ParticleDefinition& part);
 
   // Called before tracking of each new G4Track
   virtual void StartTracking(G4Track*) override;
@@ -223,6 +223,11 @@ public:
                                       G4bool ascii) override;
 
 private:
+
+  // summary printout after initialisation
+  void StreamInfo(std::ostream& out, const G4ParticleDefinition& part,
+                  G4String endOfLine=G4String("\n")) const;
+
   // store a table
   G4bool StoreTable(const G4ParticleDefinition* p, 
                     G4PhysicsTable*, G4bool ascii,
@@ -306,11 +311,12 @@ public:
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
-  // Assign a model to a process
-  void SetEmModel(G4VEmModel*, G4int index=1);
+  // Assign a model to a process local list, to enable the list in run time 
+  // the derived process should execute AddEmModel(..) for all such models
+  void SetEmModel(G4VEmModel*, G4int index=0);
   
-  // return the assigned model
-  G4VEmModel* EmModel(G4int index=1) const;
+  // return a model from the local list
+  G4VEmModel* EmModel(size_t index=0) const;
   
   // Access to models
   G4VEmModel* GetModelByIndex(G4int idx = 0, G4bool ver = false) const;
@@ -318,7 +324,7 @@ public:
   G4int NumberOfModels() const;
 
   // Assign a fluctuation model to a process
-  void SetFluctModel(G4VEmFluctuationModel*);
+  inline void SetFluctModel(G4VEmFluctuationModel*);
   
   // return the assigned fluctuation model
   inline G4VEmFluctuationModel* FluctModel();

@@ -18,7 +18,7 @@ namespace sg {
 class vertices : public node {
   TOOLS_NODE(vertices,tools::sg::vertices,node)
 public:
-  sf<tools::gl::mode_t> mode;
+  sf<gl::mode_t> mode;
   mf<float> xyzs;
 public:
   virtual const std::vector<field_desc>& node_fields() const {
@@ -38,7 +38,7 @@ private:
   }
 public:
   virtual void render(render_action& a_action) {
-    if(tools::gl::is_line(mode.value())) {
+    if(gl::is_line(mode.value())) {
       //Same logic as Inventor SoLightModel.model = BASE_COLOR.
       const state& state = a_action.state();
       a_action.set_lighting(false);
@@ -62,7 +62,7 @@ public:
 public:
   vertices()
   :parent()
-  ,mode(tools::gl::line_strip()){
+  ,mode(gl::line_strip()){
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif

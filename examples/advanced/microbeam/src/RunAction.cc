@@ -168,17 +168,16 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
   
   for (G4int i=0; i<fNbOfPixels; i++) 
   {  
-    G4ThreeVector v;
-    v = fMapVoxels[i];
-    if ( (GetNumEvent()+1) !=0) 
-      {
-        //Fill ntuple #5
-        man->FillNtupleDColumn(5,0,v.x());
-        man->FillNtupleDColumn(5,1,v.y());
-        man->FillNtupleDColumn(5,2,v.z());
-        man->FillNtupleDColumn(5,3,fDose3DDose[i]/(GetNumEvent()+1));
-        man->AddNtupleRow(5);
-      }
+    if (fDose3DDose[i]>0)
+    {
+      G4ThreeVector v;
+      v = fMapVoxels[i];
+      man->FillNtupleDColumn(5,0,v.x());
+      man->FillNtupleDColumn(5,1,v.y());
+      man->FillNtupleDColumn(5,2,v.z());
+      man->FillNtupleDColumn(5,3,fDose3DDose[i]);
+      man->AddNtupleRow(5);
+    }
   }
    
   G4cout << "-> Total number of particles detected by the gas detector : " << GetNbOfHitsGas() << G4endl;  

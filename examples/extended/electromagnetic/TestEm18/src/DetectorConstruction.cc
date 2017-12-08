@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 68348 2013-03-22 10:00:19Z maire $
+// $Id: DetectorConstruction.cc 105252 2017-07-17 09:40:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -121,7 +121,7 @@ void DetectorConstruction::DefineMaterials()
   new G4Material("ArgonGas"   , z=18., a=39.948*g/mole, density= 1.782*mg/cm3,
                  kStateGas, 273.15*kelvin, 1*atmosphere);
                  
-  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+  ////G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -162,7 +162,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 void DetectorConstruction::PrintParameters()
 {
   G4cout << "\n The Box is " << G4BestUnit(fBoxSize,"Length")
-         << " of " << fMaterial->GetName() << G4endl;
+         << " of " << fMaterial->GetName() 
+         << "\n "  << fMaterial << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

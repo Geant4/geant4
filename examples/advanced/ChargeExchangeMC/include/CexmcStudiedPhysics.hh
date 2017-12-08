@@ -86,9 +86,10 @@ class  CexmcStudiedPhysics : public G4VPhysicsConstructor
 
 template  < typename  Process >
 CexmcStudiedPhysics< Process >::CexmcStudiedPhysics(
-                                    CexmcPhysicsManager *  physicsManager ) :
-    G4VPhysicsConstructor( "studiedPhysics" ), physicsManager( physicsManager ),
-    productionModel( NULL ), wasActivated( false )
+                                    CexmcPhysicsManager *  physicsManager_ ) :
+    G4VPhysicsConstructor( "studiedPhysics" ),
+    physicsManager( physicsManager_ ), productionModel( NULL ),
+    wasActivated( false )
 {
 }
 

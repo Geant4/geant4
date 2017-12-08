@@ -1,8 +1,8 @@
-# $Id: fanoCavity.in 103180 2017-03-21 10:33:40Z gcosmo $
+# $Id: fanoCavity.in 106553 2017-10-13 06:40:50Z gcosmo $
 #
-/control/verbose 2
+/control/verbose 1
 /control/cout/ignoreThreadsExcept 0
-/run/verbose 2
+/run/verbose 1
 #
 /testem/phys/addPhysics standard_opt3
 #

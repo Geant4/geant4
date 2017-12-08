@@ -107,5 +107,3 @@ inline void SensitiveDetectorHit::operator delete(void* aHit)
 }
 
 #endif
-
-

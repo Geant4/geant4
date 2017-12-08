@@ -264,7 +264,7 @@ public:
     float z;
     std::vector<pick_t>::const_iterator it;
     for(it=m_picks.begin();it!=m_picks.end();++it) {
-      if(tools::minimum((*it).zs(),z)) {
+      if(minimum((*it).zs(),z)) {
         pck = (pick_t*)&(*it);
         break;
       }
@@ -273,7 +273,7 @@ public:
     it++;
     for(;it!=m_picks.end();++it) {
       float zi;
-      if(tools::minimum((*it).zs(),zi)) {
+      if(minimum((*it).zs(),zi)) {
         if(zi<=z) {
           pck = (pick_t*)&(*it);
           z = zi;

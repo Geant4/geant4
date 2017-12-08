@@ -32,83 +32,58 @@
 // Author: Julia Yarba, FNAL/CD (2014)
 // Comment: somewhat "molded" after HadronPhysicsFTFP_BETT
 //
+// Modified:
+// 18.07.2017 A.Dotti: refactoring following new standard
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsNuBeam_h
 #define G4HadronPhysicsNuBeam_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
 
-#include "G4VPhysicsConstructor.hh"
-
-#include "G4PiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
+//#include "globals.hh"
+//#include "G4ios.hh"
+//
+//#include "G4VPhysicsConstructor.hh"
+//
+//#include "G4PiKBuilder.hh"
+//#include "G4BertiniPiKBuilder.hh"
+//#include "G4FTFPPiKBuilder.hh"
+//
+//#include "G4ProtonBuilder.hh"
+//#include "G4BertiniProtonBuilder.hh"
+//#include "G4FTFPNeutronBuilder.hh"
+//#include "G4FTFPProtonBuilder.hh"
 // specific to NuBeam case
-#include "G4QGSPLundStrFragmProtonBuilder.hh"
+//#include "G4QGSPLundStrFragmProtonBuilder.hh"
+//
+//#include "G4NeutronBuilder.hh"
+//#include "G4BertiniNeutronBuilder.hh"
+//#include "G4FTFPNeutronBuilder.hh"
+//
+//#include "G4HyperonFTFPBuilder.hh"
+//#include "G4AntiBarionBuilder.hh"
+//#include "G4FTFPAntiBarionBuilder.hh"
+//
+//class G4ComponentGGHadronNucleusXsc;
+//
 
-#include "G4NeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-
-
-class G4HadronPhysicsNuBeam : public G4VPhysicsConstructor
+class G4HadronPhysicsNuBeam : public G4HadronPhysicsFTFP_BERT
 {
 
   public: 
     G4HadronPhysicsNuBeam(G4int verbose =1);
     G4HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsNuBeam();
-
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    virtual ~G4HadronPhysicsNuBeam() {}
 
   private:
-    void CreateModels();
+    //Modify the minimum needed
+    virtual void Proton() override;
+    virtual void Pion() override;
+    virtual void Kaon() override;
+    virtual void DumpBanner() override {}
 
-    G4bool QuasiElastic;
-
-    // Simplify handling of TLS data, encapsulate everyhing in a structure
-    //
-    struct ThreadPrivate { 
-    
-       G4NeutronBuilder * theNeutrons;
-       G4BertiniNeutronBuilder * theBertiniNeutron;
-       G4FTFPNeutronBuilder * theFTFPNeutron;
- 
-       G4PiKBuilder * thePiK;
-       G4BertiniPiKBuilder * theBertiniPiK;
-       G4FTFPPiKBuilder * theFTFPPiK;
-    
-       G4ProtonBuilder * thePro;
-       G4BertiniProtonBuilder * theBertiniPro;
-       G4FTFPProtonBuilder * theFTFPPro;  
-       // specific to NuBeam  
-       G4QGSPLundStrFragmProtonBuilder * theQGSPPro;
-    
-       G4HyperonFTFPBuilder * theHyperon;
-    
-       G4AntiBarionBuilder * theAntiBaryon;
-       G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-       G4ComponentGGHadronNucleusXsc * xsKaon;
-       G4VCrossSectionDataSet * xsNeutronInelasticXS;
-       G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;   
+    double maxFTFP_proton;
 
 };
 

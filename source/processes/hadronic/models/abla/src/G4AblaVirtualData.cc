@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
+// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 #define ABLAXX_IN_GEANT4_MODE 1
@@ -70,6 +71,42 @@ bool G4AblaVirtualData::setPace2(int A, int Z, double value)
   return true;
 }
 
+bool G4AblaVirtualData::setRms(int A, int Z, double value)
+{
+  rms[A][Z] = value;
+
+  return true;
+}
+
+bool G4AblaVirtualData::setMexp(int A, int Z, double value)
+{
+  mexp[A][Z] = value;
+
+  return true;
+}
+
+bool G4AblaVirtualData::setMexpID(int A, int Z, int value)
+{
+  mexpid[A][Z] = value;
+
+  return true;
+}
+
+bool G4AblaVirtualData::setBeta2(int A, int Z, double value)
+{
+  beta2[A][Z] = value;
+
+  return true;
+}
+
+bool G4AblaVirtualData::setBeta4(int A, int Z, double value)
+{
+  beta4[A][Z] = value;
+
+  return true;
+}
+
+
 double G4AblaVirtualData::getAlpha(int A, int Z)
 {
   return alpha[A][Z];
@@ -88,6 +125,31 @@ double G4AblaVirtualData::getVgsld(int A, int Z)
 double G4AblaVirtualData::getPace2(int A, int Z)
 {
   return pace2[A][Z];
+}
+
+double G4AblaVirtualData::getRms(int A, int Z)
+{
+  return rms[A][Z];
+}
+
+double G4AblaVirtualData::getMexp(int A, int Z)
+{
+  return mexp[A][Z];
+}
+
+int G4AblaVirtualData::getMexpID(int A, int Z)
+{
+  return mexpid[A][Z];
+}
+
+double G4AblaVirtualData::getBeta2(int A, int Z)
+{
+  return beta2[A][Z];
+}
+
+double G4AblaVirtualData::getBeta4(int A, int Z)
+{
+  return beta4[A][Z];
 }
 
 int G4AblaVirtualData::getAlphaRows()

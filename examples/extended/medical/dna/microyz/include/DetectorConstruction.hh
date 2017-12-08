@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: DetectorConstruction.hh 73722 2013-09-09 10:23:05Z gcosmo $
 //
 /// \file DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
@@ -50,17 +49,16 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     DetectorConstruction();
     virtual ~DetectorConstruction();
 
-  public:
     virtual G4VPhysicalVolume* Construct();
     virtual void ConstructSDandField();
-
+    void PrintParameters() const;
+  
   private:
-    // methods
     void DefineMaterials();
     G4VPhysicalVolume* DefineVolumes();
   
-    // data members
     G4Material* fpWaterMaterial;
+    G4double fpTrackingCut;
 
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNARuddIonisationModel.cc 104430 2017-05-31 07:43:44Z gcosmo $
+// $Id: G4DNARuddIonisationModel.cc 105034 2017-07-06 08:34:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -77,10 +77,10 @@ G4DNARuddIonisationModel::G4DNARuddIonisationModel(const G4ParticleDefinition*,
     G4cout << "Rudd ionisation model is constructed " << G4endl;
   }
 
-  // define default angular generator
+  // Define default angular generator
   SetAngularDistribution(new G4DNARuddAngle());
 
-  //Mark this model as "applicable" for atomic deexcitation
+  // Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
   fAtomDeexcitation = 0;
   fParticleChangeForGamma = 0;
@@ -105,7 +105,7 @@ G4DNARuddIonisationModel::~G4DNARuddIonisationModel()
 
   // The following removal is forbidden since G4VEnergyLossmodel takes care of deletion
   // Coverity however will signal this as an error
-  //if (fAtomDeexcitation) {delete  fAtomDeexcitation;}
+  // if (fAtomDeexcitation) {delete  fAtomDeexcitation;}
 
 }
 
@@ -482,13 +482,6 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
     G4int ionizationShell = RandomSelect(k,particleName);
 
-    // sample deexcitation
-    // here we assume that H_{2}O electronic levels are the same of Oxigen.
-    // this can be considered true with a rough 10% error in energy on K-shell,
-
-    G4int secNumberInit = 0;// need to know at a certain point the enrgy of secondaries
-    G4int secNumberFinal = 0;// So I'll make the diference and then sum the energies
-
     G4double bindingEnergy = 0;
     bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
@@ -496,7 +489,47 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     if (k<bindingEnergy) return;
     //
 
+    // SI - For atom. deexc. tagging - 23/05/2017
     G4int Z = 8;
+    //
+    
+    G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
+
+    G4ThreeVector deltaDirection =
+    GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic,
+        Z, ionizationShell,
+        couple->GetMaterial());
+
+    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
+    fvect->push_back(dp);
+
+    // Ignored for ions on electrons
+    /*
+     G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
+
+     G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
+     G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
+     G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
+     G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+     finalPx /= finalMomentum;
+     finalPy /= finalMomentum;
+     finalPz /= finalMomentum;
+
+     G4ThreeVector direction;
+     direction.set(finalPx,finalPy,finalPz);
+
+     fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+    */
+     
+    fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
+
+    // sample deexcitation
+    // here we assume that H_{2}O electronic levels are the same of Oxigen.
+    // this can be considered true with a rough 10% error in energy on K-shell,
+
+    G4int secNumberInit = 0;// need to know at a certain point the enrgy of secondaries
+    G4int secNumberFinal = 0;// So I'll make the diference and then sum the energies
+
     if(fAtomDeexcitation)
     {
       G4AtomicShellEnumerator as = fKShell;
@@ -525,39 +558,11 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
       secNumberFinal = fvect->size();
     }
 
-    G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
-
-    G4ThreeVector deltaDirection =
-    GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic,
-        Z, ionizationShell,
-        couple->GetMaterial());
-
-    // Ignored for ions on electrons
-    /*
-     G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
-
-     G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
-     G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
-     G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-     G4double finalMomentum = std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
-     finalPx /= finalMomentum;
-     finalPy /= finalMomentum;
-     finalPz /= finalMomentum;
-
-     G4ThreeVector direction;
-     direction.set(finalPx,finalPy,finalPz);
-
-     fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
-     */
-    fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection);
-
     G4double scatteredEnergy = k-bindingEnergy-secondaryKinetic;
     G4double deexSecEnergy = 0;
     for (G4int j=secNumberInit; j < secNumberFinal; j++)
     {
-
       deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();
-
     }
 
     if (!statCode)
@@ -577,8 +582,12 @@ void G4DNARuddIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
     // = bindingEnergy-deexSecEnergy
     // SO deexSecEnergy=0 => LocalEnergyDeposit =  bindingEnergy
 
-    G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic);
-    fvect->push_back(dp);
+    // TEST //////////////////////////
+    // if (secondaryKinetic<0) abort();
+    // if (scatteredEnergy<0) abort();
+    // if (k-scatteredEnergy-secondaryKinetic-deexSecEnergy<0) abort();
+    // if (k-scatteredEnergy<0) abort();     
+    /////////////////////////////////
 
     const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
     G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,

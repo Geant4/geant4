@@ -111,6 +111,15 @@ int MCGIDI_outputChannel_parseFromTOM( statusMessageReporting *smr, xDataTOM_ele
         targetMass_MeV = MCGIDI_reaction_getTargetMass_MeV( smr, reaction );
         productMass_MeV = MCGIDI_product_getMass_MeV( smr, &(outputChannel->products[0]) );
         residualMass_MeV = MCGIDI_product_getMass_MeV( smr, &(outputChannel->products[1]) );
+
+        //TK 17-11-10 for v1.3
+        //A temporary fix for emission of gamma(2.2MeV) from n captured by H
+        //                  capture                     gamma                        D 
+        if ( reaction->ENDF_MT == 102 && productMass_MeV == 0 && ( outputChannel->products[1].pop->A == 2 && outputChannel->products[1].pop->Z == 1 ) ) {
+           //include/PoPs_data.h:#define e_Mass 5.4857990943e-4 /* electron mass in AMU */
+           residualMass_MeV += 5.4857990943e-4*MCGIDI_AMU2MeV;
+        }
+
         MCGIDI_product_setTwoBodyMasses( smr, &(outputChannel->products[0]), projectileMass_MeV, targetMass_MeV, productMass_MeV, residualMass_MeV );
     }
 

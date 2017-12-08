@@ -36,9 +36,11 @@
 
 //_____________________________________________________________________________
 G4RootMainNtupleManager::G4RootMainNtupleManager(G4RootNtupleManager* ntupleBuilder,
+                                                 G4bool rowWise,
                                                  const G4AnalysisManagerState& state)
  : G4BaseAnalysisManager(state),
    fNtupleBuilder(ntupleBuilder),
+   fRowWise(rowWise),
    fNtupleDirectory(nullptr),
    fNtupleVector()
 {}
@@ -48,10 +50,6 @@ G4RootMainNtupleManager::~G4RootMainNtupleManager()
 {
   // ntuple objects are deleted automatically when closing a file 
 }
-
-//
-// private functions
-//
 
 //
 // protected functions
@@ -84,7 +82,7 @@ void G4RootMainNtupleManager::CreateNtuple(const tools::ntuple_booking& ntupleBo
 #endif
 
   // Create ntuple
-  auto ntuple = new tools::wroot::ntuple(*fNtupleDirectory, ntupleBooking);
+  auto ntuple = new tools::wroot::ntuple(*fNtupleDirectory, ntupleBooking, fRowWise);
          // ntuple object is deleted automatically when closing a file
   auto basketSize = fNtupleBuilder->GetBasketSize();
   ntuple->set_basket_size(basketSize);

@@ -64,9 +64,9 @@ template class std::vector<G4INCL::IAvatar*>;
 namespace G4INCL {
 
   enum AvatarType {SurfaceAvatarType,
-		   CollisionAvatarType,
-		   DecayAvatarType,
-		   ParticleEntryAvatarType,
+           CollisionAvatarType,
+           DecayAvatarType,
+           ParticleEntryAvatarType,
                    UnknownAvatarType};
 
   class IAvatar {

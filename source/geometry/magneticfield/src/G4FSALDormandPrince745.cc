@@ -33,7 +33,6 @@
 //  G4FSALDormandPrince745.cc
 //  Geant4
 //
-//
 //    This is the source file of G4FSALDormandPrince745 class containing the
 //    definition of the stepper() method that evaluates one step in
 //    field propagation.
@@ -46,10 +45,15 @@
 //    8/9 | 19372/6561 −25360/2187 64448/6561 −212/729
 //    1   | 9017/3168  −355/33    46732/5247  49/176  −5103/18656
 //    1   | 35/384      0         500/1113    125/192 −2187/6784    11/84
-//    ----------f--------------------------------------------------------------
+//    ---------------------------------------------------------------------------
 //          35/384       0        500/1113    125/192  −2187/6784    11/84   0
 //          5179/57600   0       7571/16695  393/640  −92097/339200 187/2100 1/40
-
+//
+//    Implementation by Somnath Banerjee - GSoC 2015
+//       Work supported by Google as part of Google Summer of Code 2015.
+//    Supervision / code review: John Apostolakis
+//
+//  First version: June 2015 - Somnath Banerjee
 
 #include "G4FSALDormandPrince745.hh"
 #include "G4LineSection.hh"
@@ -59,7 +63,8 @@
 G4FSALDormandPrince745::G4FSALDormandPrince745(G4EquationOfMotion *EqRhs,
                                    G4int noIntegrationVariables,
                                    G4bool primary)
-: G4VFSALIntegrationStepper(EqRhs, noIntegrationVariables){
+   : G4VFSALIntegrationStepper(EqRhs, noIntegrationVariables)
+{
     
     const G4int numberOfVariables = noIntegrationVariables;
     
@@ -72,49 +77,59 @@ G4FSALDormandPrince745::G4FSALDormandPrince745(G4EquationOfMotion *EqRhs,
     ak5 = new G4double[numberOfVariables];
     ak6 = new G4double[numberOfVariables];
     ak7 = new G4double[numberOfVariables];
+    // Also always allocate arrays for interpolation stages    
+    ak8 = new G4double[numberOfVariables];
+    ak9 = new G4double[numberOfVariables];
     
     yTemp = new G4double[numberOfVariables] ;
     yIn = new G4double[numberOfVariables] ;
     
     pseudoDydx_for_DistChord = new G4double[numberOfVariables];
-    
+
+    fInitialDyDx = new G4double[numberOfVariables];    
     fLastInitialVector = new G4double[numberOfVariables] ;
     fLastFinalVector = new G4double[numberOfVariables] ;
     fLastDyDx = new G4double[numberOfVariables];
     
     fMidVector = new G4double[numberOfVariables];
     fMidError =  new G4double[numberOfVariables];
+    
+    fAuxStepper = nullptr;
     if( primary )
     {
         fAuxStepper = new G4FSALDormandPrince745(EqRhs, numberOfVariables,
                                            !primary);
     }
+    fLastStepLength = -1.0;
 }
 
 
 //Destructor
-G4FSALDormandPrince745::~G4FSALDormandPrince745(){
+G4FSALDormandPrince745::~G4FSALDormandPrince745()
+{
     //clear all previously allocated memory for stepper and DistChord
-    delete[] ak2;
-    delete[] ak3;
-    delete[] ak4;
-    delete[] ak5;
-    delete[] ak6;
-    delete[] ak7;
+    delete[] ak2;  ak2=nullptr;
+    delete[] ak3;  ak3=nullptr;
+    delete[] ak4;  ak4=nullptr;
+    delete[] ak5;  ak5=nullptr;
+    delete[] ak6;  ak6=nullptr;
+    delete[] ak7;  ak7=nullptr;
+    delete[] ak8;  ak8=nullptr;
+    delete[] ak9;  ak9=nullptr;
     
-    delete[] yTemp;
-    delete[] yIn;
+    delete[] yTemp; yTemp= nullptr;
+    delete[] yIn;   yIn= nullptr;
+
+    delete[] pseudoDydx_for_DistChord;  pseudoDydx_for_DistChord= nullptr;
+    delete[] fInitialDyDx;              fInitialDyDx=       nullptr;
     
-    delete[] fLastInitialVector;
-    delete[] fLastFinalVector;
-    delete[] fLastDyDx;
-    delete[] fMidVector;
-    delete[] fMidError;
+    delete[] fLastInitialVector;    fLastInitialVector= nullptr;
+    delete[] fLastFinalVector;      fLastFinalVector  = nullptr;
+    delete[] fLastDyDx;             fLastDyDx  = nullptr;
+    delete[] fMidVector;            fMidVector = nullptr;
+    delete[] fMidError;             fMidError  = nullptr;
     
-    delete fAuxStepper;
-    
-    delete[] pseudoDydx_for_DistChord;
-    
+    delete fAuxStepper;             fAuxStepper= nullptr;
 }
 
 
@@ -167,73 +182,70 @@ void G4FSALDormandPrince745::Stepper(const G4double yInput[],
     
     
     const G4int numberOfVariables= this->GetNumberOfVariables();
-    G4double *DyDx = new G4double[numberOfVariables];
-    
     // The number of variables to be integrated over
-    yOut[7] = yTemp[7]  = yIn[7];
+
     //  Saving yInput because yInput and yOut can be aliases for same array
-    
     for(i=0;i<numberOfVariables;i++)
     {
-        yIn[i]=yInput[i];
-        DyDx[i] = dydx[i];
+        yIn[i]          = yInput[i];
+        fInitialDyDx[i] = dydx[i];
     }
-    
-    
+    // Ensure that time is initialised - in case it is not integrated
+    yOut[7] = yTemp[7]  = yInput[7];
     
     // RightHandSide(yIn, DyDx) ;
     // 1st Step - Not doing, getting passed
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + b21*Step*DyDx[i] ;
+        yTemp[i] = yIn[i] + b21*Step*fInitialDyDx[i] ;
     }
     RightHandSide(yTemp, ak2) ;              // 2nd Step
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b31*DyDx[i] + b32*ak2[i]) ;
+        yTemp[i] = yIn[i] + Step*(b31*fInitialDyDx[i] + b32*ak2[i]) ;
     }
     RightHandSide(yTemp, ak3) ;              // 3rd Step
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b41*DyDx[i] + b42*ak2[i] + b43*ak3[i]) ;
+        yTemp[i] = yIn[i] + Step*(b41*fInitialDyDx[i] + b42*ak2[i] + b43*ak3[i]) ;
     }
     RightHandSide(yTemp, ak4) ;              // 4th Step
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b51*DyDx[i] + b52*ak2[i] + b53*ak3[i] +
+        yTemp[i] = yIn[i] + Step*(b51*fInitialDyDx[i] + b52*ak2[i] + b53*ak3[i] +
                                   b54*ak4[i]) ;
     }
     RightHandSide(yTemp, ak5) ;              // 5th Step
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yTemp[i] = yIn[i] + Step*(b61*DyDx[i] + b62*ak2[i] + b63*ak3[i] +
-                                  b64*ak4[i] + b65*ak5[i]) ;
+        yTemp[i] = yIn[i] + Step*(b61*fInitialDyDx[i] + b62*ak2[i] + b63*ak3[i] +
+                                  b64*ak4[i]          + b65*ak5[i]) ;
     }
     RightHandSide(yTemp, ak6) ;              // 6th Step
     
     for(i=0;i<numberOfVariables;i++)
     {
-        yOut[i] = yIn[i] + Step*(b71*DyDx[i] + b72*ak2[i] + b73*ak3[i] +
-                                  b74*ak4[i] + b75*ak5[i] + b76*ak6[i]);
+        yOut[i] = yIn[i] + Step*(b71*fInitialDyDx[i] + b72*ak2[i] + b73*ak3[i] +
+                                  b74*ak4[i]         + b75*ak5[i] + b76*ak6[i]);
     }
     RightHandSide(yOut, ak7);               //7th and Final step
     
     for(i=0;i<numberOfVariables;i++)
     {
         
-        yErr[i] = Step*(dc1*DyDx[i] + dc2*ak2[i] + dc3*ak3[i] + dc4*ak4[i] +
-                        dc5*ak5[i] + dc6*ak6[i] + dc7*ak7[i] ) ;
+        yErr[i] = Step*(dc1*fInitialDyDx[i] + dc2*ak2[i] + dc3*ak3[i] + dc4*ak4[i] +
+                        dc5*ak5[i]          + dc6*ak6[i] + dc7*ak7[i] ) ;
         
 
         // Store Input and Final values, for possible use in calculating chord
         fLastInitialVector[i] = yIn[i] ;
         fLastFinalVector[i]   = yOut[i];
-        fLastDyDx[i]          = DyDx[i];
+        fLastDyDx[i]          = fInitialDyDx[i];
         nextDydx[i] = ak7[i];
         
         
@@ -362,9 +374,6 @@ void G4FSALDormandPrince745::SetupInterpolate(const G4double yInput[],
     }
     
     yTemp[7]  = yIn[7];
-    
-    ak8 = new G4double[numberOfVariables];
-    ak9 = new G4double[numberOfVariables];
     
     //Evaluate the extra stages :
     for(int i=0;i<numberOfVariables;i++)

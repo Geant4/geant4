@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc 99915 2016-10-11 09:24:43Z gcosmo $
+// $Id: G4PropagatorInField.cc 105904 2017-08-28 07:36:13Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PropagatorInField Implementation
@@ -726,7 +726,7 @@ G4int G4PropagatorInField::SetVerboseLevel( G4int level )
   // Forward the verbose level 'reduced' to ChordFinder,
   // MagIntegratorDriver ... ? 
   //
-  G4MagInt_Driver* integrDriver= GetChordFinder()->GetIntegrationDriver(); 
+  auto integrDriver= GetChordFinder()->GetIntegrationDriver(); 
   integrDriver->SetVerboseLevel( fVerboseLevel - 2 );
   G4cout << "Set Driver verbosity to " << fVerboseLevel - 2 << G4endl;
 

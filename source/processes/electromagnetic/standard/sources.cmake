@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 104353 2017-05-26 07:24:51Z gcosmo $
+# $Id: sources.cmake 106953 2017-10-31 08:30:13Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -59,6 +59,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4DeltaAngleFreeScat.hh
         G4DipBustGenerator.hh
         G4ESTARStopping.hh
+        G4GSMottCorrection.hh
+        G4GSPWACorrections.hh
         G4GammaConversion.hh
         G4GoudsmitSaundersonMscModel.hh
         G4GoudsmitSaundersonTable.hh
@@ -84,14 +86,12 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIySection.hh
         G4PEEffectFluoModel.hh
         G4PSTARStopping.hh
-        G4PWATotalXsecTable.hh
         G4PairProductionRelModel.hh
         G4PhotoElectricEffect.hh
         G4SauterGavrilaAngularDistribution.hh
         G4ScreeningMottCrossSection.hh
         G4SeltzerBergerModel.hh
         G4UniversalFluctuation.hh
-        G4UniversalFluctuation2017.hh
         G4UrbanMscModel.hh
         G4WaterStopping.hh
         G4WentzelOKandVIxSection.hh
@@ -124,6 +124,8 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4BraggModel.cc
         G4ComptonScattering.cc
         G4CoulombScattering.cc
+        G4GSMottCorrection.cc
+        G4GSPWACorrections.cc
         G4GammaConversion.cc
         G4DeltaAngle.cc
         G4DeltaAngleFreeScat.cc
@@ -152,14 +154,12 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4PAIySection.cc
         G4PEEffectFluoModel.cc
         G4PSTARStopping.cc
-        G4PWATotalXsecTable.cc
         G4PairProductionRelModel.cc
         G4PhotoElectricEffect.cc
         G4SauterGavrilaAngularDistribution.cc
         G4ScreeningMottCrossSection.cc
         G4SeltzerBergerModel.cc
         G4UniversalFluctuation.cc
-        G4UniversalFluctuation2017.cc
         G4UrbanMscModel.cc
         G4WaterStopping.cc
         G4WentzelOKandVIxSection.cc

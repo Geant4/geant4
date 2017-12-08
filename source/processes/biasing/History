@@ -1,4 +1,4 @@
-$Id: History 103005 2017-03-08 08:08:35Z gcosmo $
+$Id: History 105924 2017-08-29 12:28:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 29th, 2017  Gabriele Cosmo (procbiasing-V10-03-03)
+- Removed duplicate class definition G4TrackTerminator.hh, which is part
+  of the processes/transportation module.
+
+July 14th, 2017  Gabriele Cosmo (procbiasing-V10-03-02)
+- G4ImportanceConfigurator: removed debug printout in destructor.
+
 March 7th, 2017  Alexander Howard (procbiasing-V10-03-01)
 - G4GeometrySampler: removed unnecessary ClearSampling from the destructor
-
-Mar 7th, 2015 Alexander Howard (procbiasing-V10-03-00)
-- G4ImportanceConfigurator: adjusted the ProcessPlacer in the destructor
-  of the G4ImportanceConfigurator so that it didn't cause an error in MT-mode
 
 Mar 10th, 2015 Gabriele Cosmo (procbiasing-V10-01-00)
 - G4ImportanceProcess, G4WeightCutOffProcess, G4WeightWindowProcess: made

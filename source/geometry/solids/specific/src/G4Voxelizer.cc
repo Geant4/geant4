@@ -487,8 +487,9 @@ void G4Voxelizer::BuildBoundingBox(G4ThreeVector& amin,
     fBoundingBoxSize[i] = (max - min) / 2 + tolerance * 0.5;
     fBoundingBoxCenter[i] = min + fBoundingBoxSize[i];
   }
-  fBoundingBox = G4Box("VoxBBox", fBoundingBoxSize.x(),
-                       fBoundingBoxSize.y(), fBoundingBoxSize.z());
+  fBoundingBox.SetXHalfLength(fBoundingBoxSize.x());
+  fBoundingBox.SetYHalfLength(fBoundingBoxSize.y());
+  fBoundingBox.SetZHalfLength(fBoundingBoxSize.z());
 }
 
 // algorithm - 

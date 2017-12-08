@@ -34,49 +34,40 @@
 #ifndef Run_h
 #define Run_h 1
 
-#include "DetectorConstruction.hh"
 #include "G4Run.hh"
+#include "globals.hh"
 #include "g4root.hh"
 
-#include "globals.hh"
-
-//class DetectorConstruction;
 class PrimaryGeneratorAction;
-class HistoManager;
-class G4ParticleDefinition;
-class G4Track;
-class G4MonopoleFieldSetup;
+class DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Run : public G4Run
 {
- public:
-  Run(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+public:
+  Run(DetectorConstruction*, PrimaryGeneratorAction*);
   ~Run();
-
- public:
     
-   virtual void Merge(const G4Run*);
-   void EndOfRun(double binLength);   
+  virtual void Merge(const G4Run*);
+  void EndOfRun(double binLength);   
 
-   void FillHisto(G4int id, G4double x, G4double weight = 1.0);
+  void FillHisto(G4int id, G4double x, G4double weight = 1.0);
            
-   inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose; }
-   inline G4int GetVerbose() const       { return fVerboseLevel; }
-   G4double GetOffsetX() const           { return fOffsetX; }
+  inline void SetVerbose(G4int verbose) { fVerboseLevel = verbose; }
+  inline G4int GetVerbose() const       { return fVerboseLevel; }
+  inline G4double GetOffsetX() const    { return fOffsetX; }
 
-   void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x; };
+  inline void AddProjRange (G4double x) { fProjRange += x; 
+                                          fProjRange2 += x*x; };
 
 private:
   
   DetectorConstruction*   fDetector;
   PrimaryGeneratorAction* fPrimary;    
-  HistoManager*           fHistoManager;
   G4AnalysisManager*      fAnalysisManager;
 
-  std::vector<G4int> fHistoId;
-  G4int fNevt;
+  G4int                   fNevt;
 
   G4double                fOffsetX;
   G4double                fProjRange; 

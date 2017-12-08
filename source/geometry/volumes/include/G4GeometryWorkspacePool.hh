@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryWorkspacePool.hh 103041 2017-03-10 11:47:01Z gcosmo $
+// $Id: G4GeometryWorkspacePool.hh 106171 2017-09-15 13:02:56Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -41,6 +41,7 @@
 #ifndef G4GEOMETRYWORKSPACEPOOL_HH
 #define G4GEOMETRYWORKSPACEPOOL_HH
 
+#include "geomwdefs.hh"
 #include "G4Types.hh"
 
 class G4GeometryWorkspace;
@@ -91,13 +92,12 @@ class G4GeometryWorkspacePool
     // void* fWarehouse;
     // G4GeometryWarehouse* fWarehouse;
       // This is "void" to hide the actual container type for workspaces
-      // Implementations: a simple STL contaier for MT or something better
+      // Implementations: a simple STL container for MT or something better
       // for tbb.
       // Further development: template parameter with portable default
 
-    static G4ThreadLocal G4GeometryWorkspace* fMyWorkspace;
+    G4GEOM_DLL static G4ThreadLocal G4GeometryWorkspace* fMyWorkspace;
       // The thread's workspace - if assigned.
-      //  --> Can we do without this ?  It is dirty!!
 };
 
 #endif

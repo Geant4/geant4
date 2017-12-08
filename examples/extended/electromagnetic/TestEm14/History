@@ -1,4 +1,4 @@
-$Id: History 103622 2017-04-19 13:23:00Z gcosmo $
+$Id: History 105728 2017-08-16 12:48:46Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+14-08-17 mma  (testem14-V10-03-01)
+- cosmetic in printout
 
 19-04-17 mma  (testem14-V10-03-00)
 - BeginOfRunAction() : remove SetRandomNumberStore(true)

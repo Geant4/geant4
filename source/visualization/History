@@ -1,4 +1,4 @@
-$Id: History 104015 2017-05-08 07:28:08Z gcosmo $
+$Id: History 107329 2017-11-08 16:41:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,63 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+7th November 2017  John Allison (vis-V10-03-10)
+- opengl-V10-03-04: Refine content of output of picking.
+
+29th October 2017  John Allison
+- visman-V10-03-16: Protect /vis/enable issued before run established.
+
+6th October 2017  John Allison (vis-V10-03-09)
+- Needs greps-V10-03-07.
+- visman-V10-03-15:
+  o Improve end of run printing when /vis/disable.
+  o Initialise G4Colour colour map.
+
+14th September 2017  John Allison
+- vis-HepRep-V10-03-01: Fix Coverity warning.
+
+13th September 2017  John Allison (vis-V10-03-08)
+- modeling-V10-03-08 and visman-V10-03-14:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+1st September 2017  Laurent Garnier (vis-V10-03-07)
+- opengl-V10-03-03: Add patch affecting repaint for external applications. See bugzilla #1959.
+
+21st June 2017  John Allison (vis-V10-03-06)
+- visman-V10-03-13: Implement /vis/drawOnlyKeptEvents.
+  To draw selected events the user should set this flag, then in a user action:
+    if ( some criterion ) {
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+    }
+
+23rd May 2017  John Allison
+- VRML-V10-03-01: Fixes for gcc-7.1 warnings.
+- gMocren-V10-03-00: Fixes for gcc-7.1 warnings.
+- vis-HepRep-V10-03-00: Fixes for gcc-7.1 warnings.
+- opengl-V10-03-02: Hopefully fix gcc-7.1 warnings.
+- visexternal-V10-03-00: Fix gcc-7.1 warning.
+
+14th May 2017  John Allison
+- modeling-V10-03-07: G4GPSModel: Added user-selectable colour.
+- visman-V10-03-12: Add user-selected colour to /vis/scene/add/gps.
+
+12th May 2017  John Allison
+- visman-V10-03-11:
+  o Improved guidance.
+  o /vis/viewer/save: Add .g4view if an extension us not supplied by the user.
+  o /vis/viewer/set/defaultTextColour: Changed default to blue and opaque to
+  agree with default text vis attributes.
+
+11th May 2017  John Allison
+- visman-V10-03-10: Fixed Windows compilation isse.
+
+10th May 2017  John Allison
+- visman-V10-03-09: Needs greps-V10-03-04. Added G4VVisCommand::ConvertToColour.
+
 7th May 2017  John Allison (vis-V10-03-05)
-- visman-V10-03-08: Fix /vis/viewer/interpolate for file wring viewers.
+- visman-V10-03-08: Fix /vis/viewer/interpolate for file writing viewers.
 - DAWN-V10-03-00:
   o Expand filename numbering to 4 digits, e.g., g4_0000.prim, g4_0001.prim,...
   o You may need

@@ -17,7 +17,8 @@ class b2 : public base_histo<TC,TO,TN,TW,TH> {
 protected:
   enum {AxisX=0,AxisY=1};
 public:
-  typedef axis<TC,TO> axis_t;
+  typedef base_histo<TC,TO,TN,TW,TH> base_histo_t;
+  typedef typename parent::axis_t axis_t;
   typedef typename parent::bn_t bn_t;
 public:
   virtual TH bin_error(int,int) const = 0; //for print

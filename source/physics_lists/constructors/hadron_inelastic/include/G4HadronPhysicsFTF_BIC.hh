@@ -22,7 +22,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTF_BIC.hh 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronPhysicsFTF_BIC.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -43,27 +43,11 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PionBuilder.hh"
-#include "G4KaonBuilder.hh"
-#include "G4BinaryPionBuilder.hh"
-#include "G4BertiniKaonBuilder.hh"
-#include "G4FTFBinaryPionBuilder.hh"
-#include "G4FTFBinaryKaonBuilder.hh"
 
-#include "G4ProtonBuilder.hh"
-#include "G4FTFBinaryProtonBuilder.hh"
-#include "G4BinaryProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4FTFBinaryNeutronBuilder.hh"
-#include "G4BinaryNeutronBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
+#include "G4Cache.hh"
 
 class G4ComponentGGHadronNucleusXsc;
-
+class G4VCrossSectionDataSet;
 
 class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
 {
@@ -72,41 +56,30 @@ class G4HadronPhysicsFTF_BIC : public G4VPhysicsConstructor
     G4HadronPhysicsFTF_BIC(const G4String& name,G4bool quasiElastic=false);
     virtual ~G4HadronPhysicsFTF_BIC();
 
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-  private:
-    void CreateModels();
-
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4FTFBinaryNeutronBuilder * theFTFBinaryNeutron;
-      G4BinaryNeutronBuilder * theBinaryNeutron;
-    
-      G4PionBuilder * thePion;
-      G4KaonBuilder * theKaon;
-      G4BinaryPionBuilder * theBICPion;
-      G4BertiniKaonBuilder * theBertiniKaon;
-      G4FTFBinaryPionBuilder * theFTFBinaryPion;
-      G4FTFBinaryKaonBuilder * theFTFBinaryKaon;
-    
-      G4ProtonBuilder * thePro;
-      G4FTFBinaryProtonBuilder * theFTFBinaryPro; 
-      G4BinaryProtonBuilder * theBinaryPro;
-    
-      G4HyperonFTFPBuilder * theHyperon;
-    
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronInelasticXS;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
+    virtual void ConstructParticle() override;
+    virtual void ConstructProcess() override;
+    virtual void TerminateWorker() override;
+  protected:
     G4bool QuasiElastic;
+    //This calls the specific ones for the different particles in order
+    virtual void CreateModels();
+    virtual void Neutron();
+    virtual void Proton();
+    virtual void Pion();
+    virtual void Kaon();
+    virtual void Others();
+    virtual void DumpBanner() {}
+    //This contains extra configurataion specific to this PL
+    virtual void ExtraConfiguration();
+    
+    G4double maxBIC_pion;
+    G4double maxBERT_kaon; //Bertini for kaons
+    G4double maxBIC_proton;
+    G4double maxBIC_neutron;
+   
+    //Thread-private data
+    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
+    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

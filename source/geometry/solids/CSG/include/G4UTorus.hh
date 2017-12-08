@@ -42,16 +42,19 @@
 #ifndef G4UTORUS_HH
 #define G4UTORUS_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "UTorus.hh"
+#include <volumes/UnplacedTorus2.h>
 
 #include "G4Polyhedron.hh"
 
-class G4UTorus : public G4USolid
+class G4UTorus : public G4UAdapter<vecgeom::UnplacedTorus2>
 {
+  using Shape_t = vecgeom::UnplacedTorus2;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedTorus2>;
+
   public:  // with description
 
     G4UTorus(const G4String& pName,
@@ -66,8 +69,6 @@ class G4UTorus : public G4USolid
                            const G4VPhysicalVolume* pRep);
 
     G4VSolid* Clone() const;
-
-    inline UTorus* GetShape() const;
 
     G4double GetRmin() const;
     G4double GetRmax() const;
@@ -114,11 +115,6 @@ class G4UTorus : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline UTorus* G4UTorus::GetShape() const
-{
-  return (UTorus*) fShape;
-}
 
 inline G4GeometryType G4UTorus::GetEntityType() const
 {

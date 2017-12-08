@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/src/HistoManager.cc
+/// \file medical/GammaTherapy/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
 //
@@ -146,7 +146,7 @@ void HistoManager::Update(DetectorConstruction* det, bool bForceActivation)
 
     // Check nBinsR / fAbsorberR histograms
     if(det->GetNumberDivR()!=fNBinsR||
-       fabs(det->GetAbsorberR()-fAbsorberR)>0.01*mm)
+       std::fabs(det->GetAbsorberR()-fAbsorberR)>0.01*mm)
       {
         fNBinsR = det->GetNumberDivR();
         fAbsorberR = det->GetAbsorberR();
@@ -160,7 +160,7 @@ void HistoManager::Update(DetectorConstruction* det, bool bForceActivation)
     
     // Check nBinsZ / fAbsorberZ histograms
     if(det->GetNumberDivZ()!=fNBinsZ||
-       fabs(det->GetAbsorberZ()-fAbsorberZ)>0.01*mm)
+       std::fabs(det->GetAbsorberZ()-fAbsorberZ)>0.01*mm)
       {
         fNBinsZ = det->GetNumberDivZ();
         fAbsorberZ = det->GetAbsorberZ();
@@ -173,7 +173,7 @@ void HistoManager::Update(DetectorConstruction* det, bool bForceActivation)
     
     // Check nBinsE / fAbsorberE histograms
     if(det->GetNumberDivE()!=fNBinsE||
-       fabs(det->GetMaxEnergy()-fMaxEnergy)>0.01)
+       std::fabs(det->GetMaxEnergy()-fMaxEnergy)>0.01)
       {
         fNBinsE = det->GetNumberDivE();
         fMaxEnergy = det->GetMaxEnergy();

@@ -47,7 +47,8 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
    G4HadFinalState* theResult = &theParticleChange;
    theResult->Clear();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
+   G4GIDI_target* aTarget = get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) );
+   if ( aTarget == NULL ) return returnUnchanged( aTrack , theResult );
    std::vector<G4GIDI_Product>* products = aTarget->getFissionFinalState( ke*MeV, temp, MyRNG, NULL );
    if ( products != NULL ) 
    {

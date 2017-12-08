@@ -84,7 +84,12 @@ void RunAction::BeginOfRunAction(const G4Run*)
   analysisManager->CreateNtupleDColumn("totalEnergyDeposit");
   analysisManager->CreateNtupleDColumn("stepLength");
   analysisManager->CreateNtupleDColumn("kineticEnergyDifference");
-  analysisManager->CreateNtupleIColumn("event");
+  analysisManager->CreateNtupleDColumn("kineticEnergy");
+  analysisManager->CreateNtupleDColumn("cosTheta");
+  analysisManager->CreateNtupleIColumn("eventID");
+  analysisManager->CreateNtupleIColumn("trackID");
+  analysisManager->CreateNtupleIColumn("parentID");
+  analysisManager->CreateNtupleIColumn("stepID");
   analysisManager->FinishNtuple();
 }
  

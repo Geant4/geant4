@@ -1,0 +1,134 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_test
+#define tools_test
+
+#include <ostream>
+#include <string>
+
+namespace tools {
+
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const std::string& a_v,const std::string& a_expected) {
+  if(a_v!=a_expected) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "strg value \"" << a_v << "\"" << std::endl
+	  << ", expected \"" << a_expected << "\"." << std::endl;
+    return false;
+  }
+  return true;
+}
+
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,bool a_v,bool a_expected) {
+  if(a_v!=a_expected) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "value " << (a_v?"true":"false") << ", expected " << (a_expected?"true":"false") << std::endl;
+    return false;
+  }
+  return true;
+}
+
+#define TOOLS_TEST_FUNC(a__func) \
+  if(!tools::equal(a_out,__FILE__,__LINE__,(a__func),true)) return false;
+
+template <class CLASS>
+inline bool valid_pointer(std::ostream& a_out,const char* a_file,int a_line,CLASS* a_p) {
+  if(!a_p) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "null pointer." << std::endl;
+    return false;
+  }
+  return true;
+}
+
+template <class INTEGER>
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const INTEGER a_v,const INTEGER& a_expected) {
+  if(a_v!=a_expected) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "value " << a_v << ", expected " << a_expected << std::endl;
+    return false;
+  }
+  return true;
+}
+
+template <class INTEGER>
+inline bool ge(std::ostream& a_out,const char* a_file,int a_line,const INTEGER a_v,const INTEGER& a_expected) {
+  if(a_v<a_expected) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "value " << a_v << " < " << a_expected << std::endl;
+    return false;
+  }
+  return true;
+}
+
+template <class REAL>
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const REAL& a_v,const REAL& a_expected,const REAL& a_tolerance,REAL(*a_fabs)(const REAL&)) {
+  REAL diff = a_fabs(a_v-a_expected);
+  if(diff>=a_tolerance) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "value " << a_v << ", expected " << a_expected << ",diff " << diff << std::endl;
+    return false;
+  }
+  return true;
+}
+
+template <class REAL> 
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,size_t a_size,const REAL* a_v,const REAL* a_expected,const REAL& a_tolerance,REAL(*a_fabs)(const REAL&)){
+  for(size_t index=0;index<a_size;index++) {
+    if(!equal<REAL>(a_out,a_file,a_line,a_v[index],a_expected[index],a_tolerance,a_fabs)) return false;
+  }
+  return true;
+}
+
+}
+
+#include <vector>
+
+namespace tools {
+
+inline bool equal(std::ostream& a_out,const char* a_file,int a_line,const std::vector<std::string>& a_v,const std::vector<std::string>& a_expected) {
+  if(a_v.size()!=a_expected.size()) {
+    a_out << "failed in file :" << std::endl
+          << a_file << std::endl
+          << "at line :" << std::endl
+          << a_line << std::endl
+          << "vector value.size() " << a_v.size() << ", expected " << a_expected.size() << std::endl;
+    return false;
+  }
+  std::vector<std::string>::const_iterator it1 = a_v.begin();
+  std::vector<std::string>::const_iterator it2 = a_expected.begin();
+  for(;it1!=a_v.end();++it1,++it2) {
+    if((*it1)!=(*it2)) {
+      a_out << "failed in file :" << std::endl
+            << a_file << std::endl
+            << "at line :" << std::endl
+            << a_line << std::endl
+            << "line value \"" << (*it1) << "\"" << std::endl
+	    << ", expected \"" << (*it2) << "\"" << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+}
+
+#endif

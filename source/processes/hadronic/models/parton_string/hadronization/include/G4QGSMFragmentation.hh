@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QGSMFragmentation.hh 102030 2016-12-16 14:54:30Z gcosmo $
+// $Id: G4QGSMFragmentation.hh 106967 2017-10-31 08:41:49Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -38,38 +38,36 @@
 
 //******************************************************************************
 class G4QGSMFragmentation:public G4VLongitudinalStringDecay
-   {
-public:
-      G4QGSMFragmentation();
-      ~G4QGSMFragmentation();
-      virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
+{
+  public:
+    G4QGSMFragmentation();
+    ~G4QGSMFragmentation();
+    virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
   private:
-     // not implemented to protect/forbid use
-   G4QGSMFragmentation(const G4QGSMFragmentation &right);
-   const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
-   int operator==(const G4QGSMFragmentation &right) const;
-   int operator!=(const G4QGSMFragmentation &right) const;
+    // not implemented to protect/forbid use
+    G4QGSMFragmentation(const G4QGSMFragmentation &right);
+    const G4QGSMFragmentation & operator=(const G4QGSMFragmentation &right);
+    int operator==(const G4QGSMFragmentation &right) const;
+    int operator!=(const G4QGSMFragmentation &right) const;
 
   private:
-   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding,  G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
+    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, G4int PartonEncoding, 
+                                   G4ParticleDefinition* pHadron, G4double Px, G4double Py);      
 
-   virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom, G4double AntiMass, G4double InitialMass); 
-   virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
-   virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+    virtual void Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G4LorentzVector* AntiMom,
+                                 G4double AntiMass, G4double InitialMass); 
+    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
+    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+    virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
+                                         G4FragmentingString * string,
+                                         G4FragmentingString * newString);
+    virtual G4bool SplitLast(G4FragmentingString * string, 
+		             G4KineticTrackVector * LeftVector,
+		             G4KineticTrackVector * RightVector);
 
-   virtual G4KineticTrack * Splitup(G4FragmentingString *string,              // Uzhi 28 June 2016
-                            G4FragmentingString *&newString);
-
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
-                                        G4FragmentingString * string,     // Uzhi
-                                        G4FragmentingString * newString); // Uzhi
-   virtual G4bool SplitLast(G4FragmentingString * string, 
-		    G4KineticTrackVector * LeftVector,
-		    G4KineticTrackVector * RightVector);
-
-   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
-                                         G4ParticleDefinition *&created);
+    virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
+                                                  G4ParticleDefinition *&created);
 
   private:
     // model parameters
@@ -79,10 +77,9 @@ public:
     const G4double ala;  
     const G4double aksi; 
     const G4double alft;
-
   };
 
-// Class G4QGSMFragmentation 
-#endif
+// Class G4QGSMFragmentation
 
+#endif
 

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-09-2017 S. Incerti (svalue-V10-03-03)
+- updated README
+
+26-07-2017 S. Incerti (svalue-V10-03-02)
+- added coding guidelines
+
 04-04-2017 S. Incerti (svalue-V10-03-01)
 - updated plot.C
 

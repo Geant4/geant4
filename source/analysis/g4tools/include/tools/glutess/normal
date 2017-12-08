@@ -37,6 +37,9 @@ inline/*static*/ void static_ComputeNormal( GLUtesselator *tess, GLUdouble norm[
 
   maxVal[0] = maxVal[1] = maxVal[2] = -2 * GLU_TESS_MAX_COORD;
   minVal[0] = minVal[1] = minVal[2] = 2 * GLU_TESS_MAX_COORD;
+  
+  minVert[0] = 0;minVert[1] = 0;minVert[2] = 0; //G.Barrand : to quiet Coverity.
+  maxVert[0] = 0;maxVert[1] = 0;maxVert[2] = 0; //G.Barrand : to quiet Coverity.
 
   for( v = vHead->next; v != vHead; v = v->next ) {
     for( i = 0; i < 3; ++i ) {
@@ -64,6 +67,7 @@ inline/*static*/ void static_ComputeNormal( GLUtesselator *tess, GLUdouble norm[
   maxLen2 = 0;
   v1 = minVert[i];
   v2 = maxVert[i];
+  if( !v1 || !v2 ) {norm[0] = 0; norm[1] = 0; norm[2] = 1;return;} //G.Barrand.
   d1[0] = v1->coords[0] - v2->coords[0];
   d1[1] = v1->coords[1] - v2->coords[1];
   d1[2] = v1->coords[2] - v2->coords[2];

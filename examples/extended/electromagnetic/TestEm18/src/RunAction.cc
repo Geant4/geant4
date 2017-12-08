@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 103621 2017-04-19 13:21:45Z gcosmo $
+// $Id: RunAction.cc 105930 2017-08-31 08:39:49Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,25 +64,147 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   //initialisation
   //
-  fEnergyDeposit = 0.;
-  
-  fNbCharged = fNbNeutral = 0;
-  fEnergyCharged = fEnergyNeutral = 0.;  
-  fEmin[0] = fEmin[1] = DBL_MAX;
-  fEmax[0] = fEmax[1] = 0.;    
-    
   fNbSteps = 0;
   fTrackLength = 0.;
-   
+  fStepMin = DBL_MAX;
+  fStepMax = 0.;
+
+  fEdepPrimary = fEdepSecondary = fEdepTotal = 0.;
+  fEdepPrimMin = fEdepSecMin = fEdepTotMin = DBL_MAX;
+  fEdepPrimMax = fEdepSecMax = fEdepTotMax = 0.;
+
+  fEnergyTransfered = 0.;
+  fEtransfMin = DBL_MAX;
+  fEtransfMax = 0.;
+
+  fEnergyLost = 0.;
+  fElostMin = DBL_MAX;
+  fElostMax = 0.;
+
+  fEnergyBalance = 0.;
+  fEbalMin = DBL_MAX;
+  fEbalMax = 0.;
+
   //histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
-  }       
+  }
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::CountProcesses(G4String procName) 
+{
+  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
+  if ( it == fProcCounter.end()) {
+    fProcCounter[procName] = 1;
+  }
+  else {
+    fProcCounter[procName]++; 
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::TrackLength (G4double step)
+{
+  fTrackLength += step; fNbSteps++;
+  if (step<fStepMin) fStepMin = step;
+  if (step>fStepMax) fStepMax = step;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EnergyDeposited (G4double edepPrim, G4double edepSecond)
+{
+  fEdepPrimary += edepPrim;
+  if (edepPrim<fEdepPrimMin) fEdepPrimMin = edepPrim;
+  if (edepPrim>fEdepPrimMax) fEdepPrimMax = edepPrim;
+  
+  fEdepSecondary += edepSecond;
+  if (edepSecond<fEdepSecMin) fEdepSecMin = edepSecond;
+  if (edepSecond>fEdepSecMax) fEdepSecMax = edepSecond;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EnergyTransferedByProcess(G4String process, G4double energy)
+{
+  std::map<G4String, MinMaxData>::iterator it = fEtransfByProcess.find(process);
+  if ( it == fEtransfByProcess.end()) {
+    fEtransfByProcess[process] = MinMaxData(1, energy, energy, energy);
+  }
+  else {
+    MinMaxData& data = it->second;
+    data.fCount++;
+    data.fVsum += energy;
+    //update min max
+    G4double emin = data.fVmin;
+    if (energy < emin) data.fVmin = energy;
+    G4double emax = data.fVmax;
+    if (energy > emax) data.fVmax = energy; 
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EnergyTransfered (G4double energy)
+{
+  fEnergyTransfered += energy;
+  if (energy<fEtransfMin) fEtransfMin = energy;
+  if (energy>fEtransfMax) fEtransfMax = energy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::TotalEnergyLost (G4double energy)
+{
+  fEnergyLost += energy;
+  if (energy<fElostMin) fElostMin = energy;
+  if (energy>fElostMax) fElostMax = energy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EnergyBalance (G4double energy)
+{
+  fEnergyBalance += energy;
+  if (energy<fEbalMin) fEbalMin = energy;
+  if (energy>fEbalMax) fEbalMax = energy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::TotalEnergyDeposit (G4double energy)
+{
+  fEdepTotal += energy;
+  if (energy<fEdepTotMin) fEdepTotMin = energy;
+  if (energy>fEdepTotMax) fEdepTotMax = energy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::EnergySpectrumOfSecondaries(G4String particle, G4double energy)
+{
+ std::map<G4String,MinMaxData>::iterator it = fEkinOfSecondaries.find(particle);
+  if ( it == fEkinOfSecondaries.end()) {
+    fEkinOfSecondaries[particle] = MinMaxData(1, energy, energy, energy);
+  }
+  else {
+    MinMaxData& data = it->second;
+    data.fCount++;
+    data.fVsum += energy;
+    //update min max
+    G4double emin = data.fVmin;
+    if (energy < emin) data.fVmin = energy;
+    G4double emax = data.fVmax;
+    if (energy > emax) data.fVmax = energy; 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -108,20 +230,25 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
          << G4BestUnit(length,"Length") << " of "
          << material->GetName() << " (density: " 
          << G4BestUnit(density,"Volumic Mass") << ")";
-  G4cout << "\n ===========================================================\n";
   G4cout << G4endl;
-  
-  //save histograms      
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
-  if ( analysisManager->IsActive() ) {
-    analysisManager->Write();
-    analysisManager->CloseFile();
-  }      
-    
+
   if (particle->GetPDGCharge() == 0.) return;
-   
-  G4cout.precision(5);
-  
+
+  G4cout.precision(4);
+
+  //frequency of processes
+  //
+  G4cout << "\n Process defining step :" << G4endl;
+  G4int index = 0;
+  for ( const auto& procCounter : fProcCounter ) {
+     G4String procName = procCounter.first;
+     G4int    count    = procCounter.second;
+     G4String space = " "; if (++index%4 == 0) space = "\n";
+     G4cout << " " << std::setw(15) << procName << "="<< std::setw(7) << count
+            << space;
+  }
+  G4cout << G4endl;
+
   //track length
   //
   G4double trackLPerEvent = fTrackLength/nbEvents;
@@ -129,52 +256,31 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double stepSize = fTrackLength/fNbSteps;
   
   G4cout 
-    << "\n TrackLength= " 
+    << "\n TrackLength = " 
     << G4BestUnit(trackLPerEvent, "Length")
-    << "\t nb of steps= " << nbStepPerEvent
-    << "  stepSize= " << G4BestUnit(stepSize, "Length")
+    << "  nb of steps = " << nbStepPerEvent
+    << "  stepSize = " << G4BestUnit(stepSize, "Length")
+    << "  ("  << G4BestUnit(fStepMin, "Length")
+    << "--> " << G4BestUnit(fStepMax, "Length") << ")"
     << G4endl;
-      
-  //charged secondaries (ionization, direct pair production)
-  //
-  G4double energyPerEvent = fEnergyCharged/nbEvents;
-  G4double nbPerEvent = double(fNbCharged)/nbEvents;
-  G4double meanEkin = 0.;
-  if (fNbCharged) meanEkin = fEnergyCharged/fNbCharged;
-  
-  G4cout 
-    << "\n d-rays  : eLoss/primary= " 
-    << G4BestUnit(energyPerEvent, "Energy")
-    << "\t  nb of d-rays= " << nbPerEvent
-    << "  <Tkin>= " << G4BestUnit(meanEkin, "Energy")
-    << "  Tmin= "   << G4BestUnit(fEmin[0], "Energy")
-    << "  Tmax= "   << G4BestUnit(fEmax[0], "Energy")
-    << G4endl;
-         
-  //neutral secondaries (bremsstrahlung, pixe)
-  //
-  energyPerEvent = fEnergyNeutral/nbEvents;
-  nbPerEvent = double(fNbNeutral)/nbEvents;
-  meanEkin = 0.;
-  if (fNbNeutral) meanEkin = fEnergyNeutral/fNbNeutral;
-  
-  G4cout 
-    << "\n gamma   : eLoss/primary= " 
-    << G4BestUnit(energyPerEvent, "Energy")
-    << "\t  nb of gammas= " << nbPerEvent
-    << "  <Tkin>= " << G4BestUnit(meanEkin, "Energy")
-    << "  Tmin= "   << G4BestUnit(fEmin[1],  "Energy")
-    << "  Tmax= "   << G4BestUnit(fEmax[1],  "Energy")
-    << G4endl;
-    
 
+  //continuous energy deposited by primary track dE1
+  //
+  G4double energyPerEvent = fEdepPrimary/nbEvents;
+  
+  G4cout 
+    << "\n Energy continuously deposited along primary track"
+    << " (restricted dE/dx)  dE1 = "
+    << G4BestUnit(energyPerEvent, "Energy")
+    << "  ("   << G4BestUnit(fEdepPrimMin, "Energy")
+    << " --> " << G4BestUnit(fEdepPrimMax, "Energy") << ")"
+    << G4endl;
+  
+  //eveluation of dE1 from reading restricted Range table
+  //
   G4EmCalculator emCal;
   
-  //local energy deposit
-  //
-  energyPerEvent = fEnergyDeposit/nbEvents;
-  //
-  G4double r0  = emCal.GetRangeFromRestricteDEDX(ePrimary,particle,material);  
+  G4double r0  = emCal.GetRangeFromRestricteDEDX(ePrimary,particle,material);
   G4double r1 = r0 - trackLPerEvent;
   G4double etry = ePrimary - energyPerEvent;  
   G4double efinal = 0.;
@@ -184,21 +290,67 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
     
   G4cout 
-    << "\n deposit : eLoss/primary= " 
-    << G4BestUnit(energyPerEvent, "Energy")
-    << "\t <dEcut > table= " 
+    << "\n Evaluation of dE1 from reading restricted Range table : dE1_table = "
     << G4BestUnit(dEtable, "Energy")
-    << "   ---> simul/reference= " << ratio           
+    << "   ---> dE1/dE1_table = " << ratio
     << G4endl;
-    
-  //total energy transferred
+  
+  // energy transfered to secondary particles by process : dE2
   //
-  G4double energyTotal = fEnergyDeposit + fEnergyCharged + fEnergyNeutral;
-  energyPerEvent = energyTotal/nbEvents;
+  G4cout << "\n Energy transfered to secondary particles :" << G4endl;
+  std::map<G4String,MinMaxData>::iterator it1;               
+  for (it1 = fEtransfByProcess.begin(); it1 != fEtransfByProcess.end(); it1++) {
+     G4String name = it1->first;
+     MinMaxData data = it1->second;
+     energyPerEvent = data.fVsum/nbEvents;
+     G4double eMin = data.fVmin;
+     G4double eMax = data.fVmax;
+
+     G4cout << "  " << std::setw(17) << "due to " + name << ":  dE2 = "
+            << std::setw(6) << G4BestUnit(energyPerEvent, "Energy")
+            << "  ("   << G4BestUnit(eMin, "Energy")
+            << " --> " << G4BestUnit(eMax, "Energy")
+            << ")" << G4endl;           
+  }
+
+  // total energy tranfered : dE3 = sum of dE2
   //
-  r0  = emCal.GetCSDARange(ePrimary,particle,material);  
+  energyPerEvent = fEnergyTransfered/nbEvents;
+  
+  G4cout 
+    << "\n Total energy transfered to secondaries : dE3 = sum of dE2 = "
+    << G4BestUnit(energyPerEvent, "Energy")
+    << "  ("   << G4BestUnit(fEtransfMin, "Energy")
+    << " --> " << G4BestUnit(fEtransfMax, "Energy") << ")"
+    << G4endl;
+
+  // total energy lost by incident particle : dE4 = dE1 + dE3
+  //
+  energyPerEvent = fEnergyLost/nbEvents;
+  
+  G4cout 
+    << "\n Total energy lost by incident particle : dE4 = dE1 + dE3 = "
+    << G4BestUnit(energyPerEvent, "Energy")
+    << "  ("   << G4BestUnit(fElostMin, "Energy")
+    << " --> " << G4BestUnit(fElostMax, "Energy") << ")"
+    << G4endl;
+  
+  // calcul of energy lost from energy balance : dE4_bal = E_in - E_out
+  //
+  energyPerEvent = fEnergyBalance/nbEvents;
+  
+  G4cout 
+    << "\n calcul of dE4 from energy balance : dE4_bal = E_in - E_out = "
+    << G4BestUnit(energyPerEvent, "Energy")
+    << "  ("   << G4BestUnit(fEbalMin, "Energy")
+    << " --> " << G4BestUnit(fEbalMax, "Energy") << ")"
+    << G4endl;
+  
+  //eveluation of dE4 from reading full Range table
+  //
+  r0  = emCal.GetCSDARange(ePrimary,particle,material);
   r1 = r0 - trackLPerEvent;
-  etry = ePrimary - energyPerEvent;
+  etry = ePrimary - energyPerEvent;  
   efinal = 0.;
   if (r1 > 0.) efinal = GetEnergyFromCSDARange(r1,particle,material,etry);
   dEtable = ePrimary - efinal;
@@ -206,14 +358,71 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   if (dEtable > 0.) ratio = energyPerEvent/dEtable;
     
   G4cout 
-    << "\n total   : eLoss/primary= " 
-    << G4BestUnit(energyPerEvent, "Energy")
-    << "\t <dEfull> table= " 
+    << "\n Evaluation of dE4 from reading full Range table : dE4_table = "
     << G4BestUnit(dEtable, "Energy")
-    << "   ---> simul/reference= " << ratio           
-    << G4endl; 
+    << "   ---> dE4/dE4_table = " << ratio
+    << G4endl;
+  
+  //energy spectrum of secondary particles
+  //
+  G4cout << "\n Energy spectrum of secondary particles :" << G4endl;
+  std::map<G4String,MinMaxData>::iterator it2;               
+  for (it2 = fEkinOfSecondaries.begin();it2 != fEkinOfSecondaries.end(); it2++){
+     G4String name = it2->first;
+     MinMaxData data = it2->second;
+     G4int count = data.fCount;
+     G4double eMean = data.fVsum/count;
+     G4double eMin = data.fVmin;
+     G4double eMax = data.fVmax;
 
+     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
+            << "  Emean = " << std::setw(6) << G4BestUnit(eMean, "Energy")
+            << "  ("   << G4BestUnit(eMin, "Energy")
+            << " --> " << G4BestUnit(eMax, "Energy")
+            << ")" << G4endl;           
+  }
+  G4cout << G4endl;
+  
+  //continuous energy deposited by secondary tracks dE5
+  // (only if secondary particles are tracked)
+  //
+  if (fEdepSecondary > 0.) {
+    energyPerEvent = fEdepSecondary/nbEvents;
+
+    G4cout 
+      << "\n Energy continuously deposited along secondary tracks"
+      << " (restricted dE/dx)  dE5 = "
+      << G4BestUnit(energyPerEvent, "Energy")
+      << "  ("   << G4BestUnit(fEdepSecMin, "Energy")
+      << " --> " << G4BestUnit(fEdepSecMax, "Energy") << ")"
+      << G4endl;
+
+    // total energy deposited : dE6 = dE1 + dE5
+    //
+    energyPerEvent = fEdepTotal/nbEvents;
+
+    G4cout 
+      << "\n Total energy deposited : dE6 = dE1 + dE5 = "
+      << G4BestUnit(energyPerEvent, "Energy")
+      << "  ("   << G4BestUnit(fEdepTotMin, "Energy")
+      << " --> " << G4BestUnit(fEdepTotMax, "Energy") << ") \n"
+      << G4endl;
+}
+  
   G4cout.precision(prec);
+  
+  //clear maps
+  //
+  fProcCounter.clear();
+  fEtransfByProcess.clear();
+  fEkinOfSecondaries.clear();
+
+  //save histograms      
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  if ( analysisManager->IsActive() ) {
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -248,7 +457,7 @@ G4double RunAction::GetEnergyFromRestrictedRange(G4double range,
     << "   iter = " << iter << G4endl;
   }         
          
-  return Energy;         
+  return Energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -280,7 +489,7 @@ G4double RunAction::GetEnergyFromCSDARange(G4double range,
     << "   iter = " << iter << G4endl;
   }         
          
-  return Energy;         
+  return Energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

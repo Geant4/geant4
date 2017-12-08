@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -57,9 +57,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 
 msc:   for e-    SubType= 10
       RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
@@ -78,35 +76,30 @@ eIoni:   for  e-    SubType= 2
         MollerBhabha :  Emin=        1 MeV   Emax=      100 TeV
 
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
- Total cross sections computed from DummyModel model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNAChampionElasticModel :  Emin=        0 eV    Emax=        1 MeV
 
 e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn
 
 e-_G4DNAAttachment:   for  e-    SubType= 55  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
 
 e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
@@ -115,20 +108,29 @@ DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+      ===== EM models for the G4Region  Target ======
+        WentzelVIUni :  Emin=        1 MeV   Emax=      100 TeV  Table with 56 bins Emin=      1 MeV   Emax=    100 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  eCoulombScattering :  Emin=        1 MeV   Emax=      100 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
-    BetheBlochGasIon :  Emin=        2 MeV   Emax=      100 TeV
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
-    BetheBlochGasIon :  Emin=      9.9 MeV   Emax=      100 TeV
+          BetheBloch :  Emin=      9.9 MeV   Emax=      100 TeV
 
 proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
- Total cross sections computed from DummyModel and DummyModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
@@ -136,17 +138,23 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
 DNABornExcitationModel :  Emin=      500 keV   Emax=       10 MeV
 
 proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
- Total cross sections computed from DummyModel and DummyModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd
 DNABornIonisationModel :  Emin=      500 keV   Emax=       10 MeV   deltaBorn
 
-proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
+proton_G4DNAElastic:   for  proton    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=       10 MeV
 
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -159,42 +167,134 @@ ionIoni:   for  GenericIon    SubType= 2
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         BraggIonGas :  Emin=        0 eV    Emax=        2 MeV
-    BetheBlochGasIon :  Emin=        2 MeV   Emax=      100 TeV
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+      ===== EM models for the G4Region  Target ======
+            UrbanMsc :  Emin=        1 MeV   Emax=      100 TeV  Table with 56 bins Emin=      1 MeV   Emax=    100 TeV
 
 ionIoni:   for  alpha    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
       Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         BraggIonGas :  Emin=        0 eV    Emax=   7.9452 MeV
-    BetheBlochGasIon :  Emin=   7.9452 MeV   Emax=      100 TeV
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
-    BetheBlochGasIon :  Emin=      9.9 MeV   Emax=      100 TeV
+          BetheBloch :  Emin=      9.9 MeV   Emax=      100 TeV
 
 alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=       10 MeV
 
 alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
- Total cross sections computed from DummyModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      100 TeV
       ===== EM models for the G4Region  Target ======
 DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV   deltaRudd
 
-alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
- Total cross sections computed from DNADingfelderChargeDecreaseModel model
+alpha_G4DNAElastic:   for  alpha    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=       10 MeV
+
+msc:   for alpha+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+      ===== EM models for the G4Region  Target ======
+            UrbanMsc :  Emin=        1 MeV   Emax=      100 TeV  Table with 56 bins Emin=      1 MeV   Emax=    100 TeV
+
+alpha+_G4DNAExcitation:   for  alpha+    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=       10 MeV
+
+alpha+_G4DNAIonisation:   for  alpha+    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV   deltaRudd
+
+alpha+_G4DNAElastic:   for  alpha+    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+alpha+_G4DNAChargeDecrease:   for  alpha+    SubType= 56  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=       10 MeV
+
+alpha+_G4DNAChargeIncrease:   for  alpha+    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=       10 MeV
+
+helium_G4DNAExcitation:   for  helium    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=       10 MeV
+
+helium_G4DNAIonisation:   for  helium    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV   deltaRudd
+
+helium_G4DNAElastic:   for  helium    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+helium_G4DNAChargeIncrease:   for  helium    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=       10 MeV
+
+hydrogen_G4DNAExcitation:   for  hydrogen    SubType= 52  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
+
+hydrogen_G4DNAIonisation:   for  hydrogen    SubType= 53  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV   deltaRudd
+
+hydrogen_G4DNAElastic:   for  hydrogen    SubType= 51  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+  DNAIonElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+hydrogen_G4DNAChargeIncrease:   for  hydrogen    SubType= 57  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          DummyModel :  Emin=        0 eV    Emax=      100 TeV
+      ===== EM models for the G4Region  Target ======
+DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=       10 MeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -243,12 +343,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=45.91s Real=46.09s Sys=0.01s
+  User=28.74s Real=28.8s Sys=0s
 Number and type of particles created outside region "Target" :
-N e- : 5111
+N e- : 771
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 45597
+N e- : 43880
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
@@ -261,15 +361,15 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 7
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00769 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 1.08 MB
-Pool ID '7G4Track', size : 2.16 MB
+Pool ID '17G4DynamicParticle', size : 1.09 MB
+Pool ID '7G4Track', size : 2.18 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0

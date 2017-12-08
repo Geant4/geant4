@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: eRositaPhysicsList.cc 107396 2017-11-10 08:28:08Z gcosmo $
 //
 
 #include "globals.hh"
@@ -35,12 +35,13 @@
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 
-#include "G4LowEnergyCompton.hh"
-#include "G4LowEnergyGammaConversion.hh"
-#include "G4LowEnergyPhotoElectric.hh"
-#include "G4LowEnergyRayleigh.hh"
-#include "G4LowEnergyIonisation.hh"
-#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4PhotoElectricEffect.hh"
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4RayleighScattering.hh"
+
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
 
 #include "G4eMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
@@ -177,6 +178,7 @@ void eRositaPhysicsList::ConstructProcess()
 
 void eRositaPhysicsList::ConstructEM()
 {
+  auto theParticleIterator=GetParticleIterator();
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -187,13 +189,13 @@ void eRositaPhysicsList::ConstructEM()
 
       // photon   
 
-      G4LowEnergyPhotoElectric* photoelectric = new G4LowEnergyPhotoElectric;
-      photoelectric->ActivateAuger(true);
-      photoelectric->SetCutForLowEnSecPhotons(0.250 * keV);
-      photoelectric->SetCutForLowEnSecElectrons(0.250 * keV);
-      G4LowEnergyCompton* compton = new G4LowEnergyCompton;
-      G4LowEnergyGammaConversion* gammaConversion = new G4LowEnergyGammaConversion;
-      G4LowEnergyRayleigh* rayleigh = new G4LowEnergyRayleigh;
+      G4PhotoElectricEffect* photoelectric = new G4PhotoElectricEffect;
+      //photoelectric->ActivateAuger(true);
+      //photoelectric->SetCutForLowEnSecPhotons(0.250 * keV);
+      //photoelectric->SetCutForLowEnSecElectrons(0.250 * keV);
+      G4ComptonScattering* compton = new G4ComptonScattering;
+      G4GammaConversion* gammaConversion = new G4GammaConversion;
+      G4RayleighScattering* rayleigh = new G4RayleighScattering;
 
       processManager -> AddDiscreteProcess(photoelectric);
       processManager -> AddDiscreteProcess(compton);
@@ -205,8 +207,8 @@ void eRositaPhysicsList::ConstructEM()
       // electron
 
       G4eMultipleScattering* eMultipleScattering = new G4eMultipleScattering();
-      G4LowEnergyIonisation* eIonisation = new G4LowEnergyIonisation();
-      G4LowEnergyBremsstrahlung* eBremsstrahlung = new G4LowEnergyBremsstrahlung();
+      G4eIonisation* eIonisation = new G4eIonisation();
+      G4eBremsstrahlung* eBremsstrahlung = new G4eBremsstrahlung();
 
       processManager -> AddProcess(eMultipleScattering, -1, 1, 1);
       processManager -> AddProcess(eIonisation, -1, 2, 2);
@@ -231,7 +233,7 @@ void eRositaPhysicsList::ConstructEM()
                particleName == "pi-" ||
                particleName == "pi+"    ) {
       //proton  
-
+      /*
       G4hImpactIonisation* hIonisation = new G4hImpactIonisation();
       hIonisation->SetPixeCrossSectionK("ecpssr");
       hIonisation->SetPixeCrossSectionL("ecpssr");
@@ -240,6 +242,8 @@ void eRositaPhysicsList::ConstructEM()
       hIonisation->SetPixeProjectileMaxEnergy(200. * MeV);
       hIonisation->SetCutForSecondaryPhotons(250. * eV);
       hIonisation->SetCutForAugerElectrons(250. * eV);
+      */
+      G4hIonisation* hIonisation = new G4hIonisation();
 
       G4hMultipleScattering* hMultipleScattering = new G4hMultipleScattering();
 
@@ -272,6 +276,7 @@ void eRositaPhysicsList::ConstructGeneral()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
+  auto theParticleIterator=GetParticleIterator();
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();

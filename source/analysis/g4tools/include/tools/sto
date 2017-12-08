@@ -51,7 +51,8 @@ inline bool to(const std::string& a_s,T& a_v,const T& a_def = T()) {
 template <class T>
 inline bool to(T& a_field,const std::string& a_s,bool& a_changed){
   T old = a_field;
-  if(!tools::to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
+  //if(!tools::to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
+  if(!to(a_s,a_field)) {a_field = old;a_changed=false;return false;}
   a_changed = a_field==old?false:true;
   return true;
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.cc 97520 2016-06-03 14:23:17Z gcosmo $
+// $Id: G4DNAChampionElasticModel.cc 105719 2017-08-16 12:36:37Z gcosmo $
 //
 
 #include "G4DNAChampionElasticModel.hh"
@@ -178,8 +178,8 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* particle,
 
   while(!eDiffCrossSection.eof())
   {
-    double tDummy;
-    double eDummy;
+    G4double tDummy;
+    G4double eDummy;
     eDiffCrossSection >> tDummy >> eDummy;
 
     // SI : mandatory eVecm initialization
@@ -337,19 +337,19 @@ G4double G4DNAChampionElasticModel::Theta(//G4ParticleDefinition * particleDefin
 
 //  if (particleDefinition == G4Electron::ElectronDefinition()) // necessaire ?
   {
-    std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
+    std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
                                                         eTdummyVec.end(), k);
-    std::vector<double>::iterator t1 = t2 - 1;
+    std::vector<G4double>::iterator t1 = t2 - 1;
 
-    std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
+    std::vector<G4double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
                                                          eVecm[(*t1)].end(),
                                                          integrDiff);
-    std::vector<double>::iterator e11 = e12 - 1;
+    std::vector<G4double>::iterator e11 = e12 - 1;
 
-    std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
+    std::vector<G4double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
                                                          eVecm[(*t2)].end(),
                                                          integrDiff);
-    std::vector<double>::iterator e21 = e22 - 1;
+    std::vector<G4double>::iterator e21 = e22 - 1;
 
     valueT1 = *t1;
     valueT2 = *t2;

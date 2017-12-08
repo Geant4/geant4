@@ -1,4 +1,4 @@
-$Id: History 103621 2017-04-19 13:21:45Z gcosmo $
+$Id: History 106588 2017-10-13 13:44:45Z gcosmo $
 ----------------------------------------------------
 
      =========================================================
@@ -14,6 +14,24 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+13-10-17 mma (testem18-V10-03-06)
+- add edep.mac
+
+31-08-17 G.Cosmo (testem18-V10-03-05)
+- Corrected initialisation of fEdepSecMin and fEdepSecMax.
+
+29-08-17 mma (testem18-V10-03-04)
+- in option, allow the tracking of secondary particles.
+
+24-07-17 mma (testem18-V10-03-03)
+- update readme
+
+16-07-17 mma (testem18-V10-03-02)
+- RunAction : fix compilation warning
+
+12-07-17 mma (testem18-V10-03-01)
+- entirely revised -> more explicit output
 
 19-04-17 mma  (testem18-V10-03-00)
 - BeginOfRunAction() : remove SetRandomNumberStore(true)

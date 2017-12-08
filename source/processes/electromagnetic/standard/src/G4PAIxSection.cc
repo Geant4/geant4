@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc 91726 2015-08-03 15:41:36Z gcosmo $
+// $Id: G4PAIxSection.cc 106442 2017-10-10 08:00:30Z gcosmo $
 // GEANT4 tag $Name: geant4-09-03-ref-06 $
 //
 // 
@@ -1658,7 +1658,7 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
    // b = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
    a += 1.;
-   if( std::fabs(a) < 1.e-6 ) 
+   if( std::abs(a) < 1.e-6 ) 
    {
       result = b*log(x1/x0);
    }
@@ -1667,7 +1667,7 @@ G4double G4PAIxSection::SumOverInterval( G4int i )
       result = y0*(x1*pow(c,a-1) - x0)/a;
    }
    a += 1.;
-   if( std::fabs(a) < 1.e-6 ) 
+   if( std::abs(a) < 1.e-6 ) 
    {
       fIntegralPAIxSection[0] += b*log(x1/x0);
    }
@@ -1881,7 +1881,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    b = y0/pow(x0,a);  // pow(10.,b);
    
    a += 1.;
-   if( std::fabs(a) < 1.e-6 )
+   if( std::abs(a) < 1.e-6 )
    {
       result = b*log(x0/e0);
    }
@@ -1890,7 +1890,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
       result = y0*(x0 - e0*pow(d,a-1))/a;
    }
    a += 1.;
-   if( std::fabs(a) < 1.e-6 )
+   if( std::abs(a) < 1.e-6 )
    {
       fIntegralPAIxSection[0] += b*log(x0/e0);
    }
@@ -1909,7 +1909,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    //  b0 = log10(y0) - a*log10(x0);
    b = y0/pow(x0,a);
    a += 1.;
-   if( std::fabs(a) < 1.e-6 )
+   if( std::abs(a) < 1.e-6 )
    {
       result += b*log(e0/x0);
    }
@@ -1918,7 +1918,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
       result += y0*(e0*pow(d,a-1) - x0)/a;
    }
    a += 1.;
-   if( std::fabs(a) < 1.e-6 ) 
+   if( std::abs(a) < 1.e-6 ) 
    {
       fIntegralPAIxSection[0] += b*log(e0/x0);
    }

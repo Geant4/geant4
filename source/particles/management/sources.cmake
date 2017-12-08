@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 101025 2016-11-04 08:36:30Z gcosmo $
+# $Id: sources.cmake 106143 2017-09-14 06:34:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -45,13 +45,11 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4Ions.hh
         G4IsotopeProperty.hh
         G4KL3DecayChannel.hh
+        G4MuonicAtom.hh
+        G4MuonicAtomHelper.hh
         G4MuonDecayChannel.hh
         G4MuonDecayChannelWithSpin.hh
         G4MuonRadiativeDecayChannelWithSpin.hh
-        G4MuonicAtom.hh
-        G4MuonicAtomDIODecayChannel.hh
-        G4MuonicAtomHelper.hh
-        G4MuonicAtomNuclearCaptureChannel.hh
         G4NeutronBetaDecayChannel.hh
         G4NucleiProperties.hh
         G4NucleiPropertiesTableAME03.hh
@@ -96,12 +94,10 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4Ions.cc
         G4IsotopeProperty.cc
         G4KL3DecayChannel.cc
+        G4MuonicAtom.cc
+        G4MuonicAtomHelper.cc
         G4MuonDecayChannel.cc
         G4MuonDecayChannelWithSpin.cc
-        G4MuonicAtom.cc
-        G4MuonicAtomDIODecayChannel.cc
-        G4MuonicAtomHelper.cc
-        G4MuonicAtomNuclearCaptureChannel.cc
         G4MuonRadiativeDecayChannelWithSpin.cc
         G4NeutronBetaDecayChannel.cc
         G4NucleiProperties.cc

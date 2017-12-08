@@ -125,6 +125,7 @@
 #include "G4LogicalVolumeStore.hh"
 #include "G4NuclearLevelData.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4EmParameters.hh"
 #include "G4LevelManager.hh"
 #include "G4ThreeVector.hh"
 #include "G4Electron.hh"
@@ -136,9 +137,6 @@
 
 #include "G4HadronicProcessType.hh"
 #include "G4HadronicException.hh"
-#include "G4LossTableManager.hh"
-#include "G4VAtomDeexcitation.hh"
-#include "G4UAtomicDeexcitation.hh"
 #include "G4PhotonEvaporation.hh"
 
 #include <vector>
@@ -178,7 +176,7 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // photonEvaporation->SetVerboseLevel(2);
   photonEvaporation->RDMForced(true);
   photonEvaporation->SetICM(true);
-
+  
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
 
@@ -214,6 +212,16 @@ G4RadioactiveDecay::G4RadioactiveDecay(const G4String& processName)
   // RDM applies to all logical volumes by default
   isAllVolumesMode = true;
   SelectAllVolumes();
+}
+
+
+void G4RadioactiveDecay::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "The radioactive decay process (G4RadioactiveDecay) handles the\n"
+          << "alpha, beta+, beta-, electron capture and isomeric transition\n"
+          << "decays of nuclei (G4GenericIon) with masses A > 4.\n"
+          << "The required half-lives and decay schemes are retrieved from\n"
+          << "the RadioactiveDecay database which was derived from ENSDF.\n";
 }
 
 
@@ -362,23 +370,21 @@ G4RadioactiveDecay::IsRateTableReady(const G4ParticleDefinition& aParticle)
   // Check whether the radioactive decay rates table for the ion has already
   // been calculated.
   G4String aParticleName = aParticle.GetParticleName();
-  for (size_t i = 0; i < theDecayRateTableVector.size(); i++) {
-    if (theDecayRateTableVector[i].GetIonName() == aParticleName) return true;
+  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+    if (theParentChainTable[i].GetIonName() == aParticleName) return true;
   }
   return false;
 }
 
-// GetDecayRateTable
 // retrieve the decayratetable for the specified aParticle
-
 void
-G4RadioactiveDecay::GetDecayRateTable(const G4ParticleDefinition& aParticle)
+G4RadioactiveDecay::GetChainsFromParent(const G4ParticleDefinition& aParticle)
 {
   G4String aParticleName = aParticle.GetParticleName();
 
-  for (size_t i = 0; i < theDecayRateTableVector.size(); i++) {
-    if (theDecayRateTableVector[i].GetIonName() == aParticleName) {
-      theDecayRateVector = theDecayRateTableVector[i].GetItsRates();
+  for (size_t i = 0; i < theParentChainTable.size(); i++) {
+    if (theParentChainTable[i].GetIonName() == aParticleName) {
+      theDecayRateVector = theParentChainTable[i].GetItsRates();
     }
   }
 #ifdef G4VERBOSE
@@ -720,7 +726,7 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack, G4double,
 
 ////////////////////////////////////////////////////////////////////////
 //                                                                    //
-//  BuildPhysicsTable - initialization of atomic de-excitation        //
+//  BuildPhysicsTable - enable print of parameters                    //
 //                                                                    //
 ////////////////////////////////////////////////////////////////////////
 
@@ -728,27 +734,53 @@ void G4RadioactiveDecay::BuildPhysicsTable(const G4ParticleDefinition&)
 {
   if (!isInitialised) {
     isInitialised = true;
-    G4LossTableManager* theManager = G4LossTableManager::Instance();
-    G4VAtomDeexcitation* p = theManager->AtomDeexcitation();
-    if (!p) {
-      G4ExceptionDescription ed;
-      ed << " Atomic deexcitation is not defined."; 
-      G4Exception("G4RadioactiveDecay::BuildPhysicsTable", "HAD_RDM_001",
-                  FatalException, ed);
-      /*
-      p = new G4UAtomicDeexcitation();
-      p->SetFluo(true);
-      p->SetAuger(true);
-      p->InitialiseAtomicDeexcitation();
-      theManager->SetAtomDeexcitation(p);
-      */
-    }
-
-    G4DeexPrecoParameters* param = G4NuclearLevelData::GetInstance()->GetParameters();
-    param->SetUseFilesNEW(true);
-    param->SetCorrelatedGamma(true);
+    if(G4Threading::IsMasterThread()) { StreamInfo(G4cout, "\n"); }
   }
 }
+
+////////////////////////////////////////////////////////////////////////
+//                                                                    //
+//  StreamInfo - stream out parameters                                //
+//                                                                    //
+////////////////////////////////////////////////////////////////////////
+
+void G4RadioactiveDecay::StreamInfo(std::ostream& os, const G4String& endline)
+{
+  G4DeexPrecoParameters* deex = 
+    G4NuclearLevelData::GetInstance()->GetParameters();
+  G4EmParameters* emparam = G4EmParameters::Instance();
+  
+  G4int prec = os.precision(5);
+  os << "=======================================================================" 
+     << endline;
+  os << "======       Radioactive Decay Physics Parameters              ========" 
+     << endline;
+  os << "=======================================================================" 
+     << endline;
+  os << "Max life time                                     " 
+     << deex->GetMaxLifeTime()/CLHEP::ps << " ps" << endline;
+  os << "Internal e- conversion flag                       " 
+     << deex->GetInternalConversionFlag() << endline;
+  os << "Stored internal conversion coefficients           " 
+     << deex->StoreICLevelData() << endline;
+  os << "Enable correlated gamma emission                  " 
+     << deex->CorrelatedGamma() << endline;
+  os << "Max 2J for sampling of angular correlations       " 
+     << deex->GetTwoJMAX() << endline;
+  os << "Atomic de-excitation enabled                      " 
+     << emparam->Fluo() << endline;
+  os << "Auger electron emission enabled                   " 
+     << emparam->Auger() << endline;
+  os << "Auger cascade enabled                             " 
+     << emparam->AugerCascade() << endline;
+  os << "Check EM cuts disabled for atomic de-excitation   " 
+     << emparam->DeexcitationIgnoreCut() << endline;
+  os << "Use Bearden atomic level energies                 " 
+     << emparam->BeardenFluoDir() << endline;
+  os << "=======================================================================" 
+     << endline;
+  os.precision(prec);
+}    
 
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
@@ -934,6 +966,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
             // indicated in the last column.
             a /= 1000.;
             c /= 1000.;
+            b/=100.;
             daughterFloatLevel = G4Ions::FloatLevelBase(daughterFloatFlag.back());
 
             switch (theDecayMode) {
@@ -1139,17 +1172,17 @@ G4RadioactiveDecay::SetDecayRate(G4int theZ, G4int theA, G4double theE,
 //  Why not make this a method of G4RadioactiveDecayRate? (e.g. SetParameters)
 { 
   //fill the decay rate vector 
-  theDecayRate.SetZ(theZ);
-  theDecayRate.SetA(theA);
-  theDecayRate.SetE(theE);
-  theDecayRate.SetGeneration(theG);
-  theDecayRate.SetDecayRateC(theCoefficients);
-  theDecayRate.SetTaos(theTaos);
+  ratesToDaughter.SetZ(theZ);
+  ratesToDaughter.SetA(theA);
+  ratesToDaughter.SetE(theE);
+  ratesToDaughter.SetGeneration(theG);
+  ratesToDaughter.SetDecayRateC(theCoefficients);
+  ratesToDaughter.SetTaos(theTaos);
 }
 
 
-void
-G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucleus)
+void G4RadioactiveDecay::
+CalculateChainsFromParent(const G4ParticleDefinition& theParentNucleus)
 {
   // Use extended Bateman equation to calculate the radioactivities of all
   // progeny of theParentNucleus.  The coefficients required to do this are 
@@ -1178,12 +1211,12 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   taos.push_back(tao);
   G4int nEntry = 0;
 
-  // Fill the decay rate container (G4RadioactiveDecayRate) with the parent 
-  // isotope data
-  SetDecayRate(Z,A,E,nGeneration,Acoeffs,taos);   // Fill TP with parent lifetime
+  // Fill the decay rate container (G4RadioactiveDecayRatesToDaughter) with
+  // the parent isotope data
+  SetDecayRate(Z,A,E,nGeneration,Acoeffs,taos);
 
   // store the decay rate in decay rate vector
-  theDecayRateVector.push_back(theDecayRate);
+  theDecayRateVector.push_back(ratesToDaughter);
   nEntry++;
 
   // Now start treating the secondary generations.
@@ -1232,7 +1265,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   while (!stable) {   /* Loop checking, 01.09.2015, D.Wright */
     loop++;
     if (loop > 10000) {
-      G4Exception("G4RadioactiveDecay::AddDecayRateTable()", "HAD_RDM_100", JustWarning, ed);
+      G4Exception("G4RadioactiveDecay::CalculateChainsFromParent()", "HAD_RDM_100", JustWarning, ed);
       break;
     }
     nGeneration++;
@@ -1244,7 +1277,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
       RP = theDecayRateVector[j].GetDecayRateC();
       TP = theDecayRateVector[j].GetTaos();
       if (GetVerboseLevel() > 0) {
-        G4cout << "G4RadioactiveDecay::AddDecayRateTable : daughters of ("
+        G4cout << "G4RadioactiveDecay::CalculateChainsFromParent: daughters of ("
                << ZP << ", " << AP << ", " << EP
                << ") are being calculated,  generation = " << nGeneration
                << G4endl;
@@ -1430,7 +1463,7 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
             theRate = -aRate1;
             Acoeffs.push_back(theRate); 	      
             SetDecayRate (Z,A,E,nGeneration,Acoeffs,taos);
-            theDecayRateVector.push_back(theDecayRate);
+            theDecayRateVector.push_back(ratesToDaughter);
             nEntry++;
           } // there are entries in the table
         } // nuclide is OK to decay
@@ -1449,13 +1482,13 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
 
   // fill the first part of the decay rate table
   // which is the name of the original particle (isotope)
-  theDecayRateTable.SetIonName(theParentNucleus.GetParticleName()); 
+  chainsFromParent.SetIonName(theParentNucleus.GetParticleName()); 
 
   // now fill the decay table with the newly completed decay rate vector
-  theDecayRateTable.SetItsRates(theDecayRateVector);
+  chainsFromParent.SetItsRates(theDecayRateVector);
 
   // finally add the decayratetable to the tablevector
-  theDecayRateTableVector.push_back(theDecayRateTable);
+  theParentChainTable.push_back(chainsFromParent);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1736,13 +1769,9 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       if (GetVerboseLevel()>0)
         G4cout << "DecayIt: Variance Reduction version " << G4endl;
 #endif
-      if (!IsRateTableReady(*theParticleDef)) {
-        // if the decayrates are not ready, calculate them and 
-        // add to the rate table vector 
-        AddDecayRateTable(*theParticleDef);
-      }
-      //retrieve the rates 
-      GetDecayRateTable(*theParticleDef);
+      // Get decay chains for the given nuclide 
+      if (!IsRateTableReady(*theParticleDef)) CalculateChainsFromParent(*theParticleDef);
+      GetChainsFromParent(*theParticleDef);
 
       // declare some of the variables required in the implementation
       G4ParticleDefinition* parentNucleus;
@@ -1866,19 +1895,19 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
             tempprods = DoDecay(*parentNucleus);
           }
 
-
           // save the secondaries for buffers
           numberOfSecondaries = tempprods->entries();
           currentTime = finalGlobalTime + theDecayTime;
           for (index = 0; index < numberOfSecondaries; index++) {
             asecondaryparticle = tempprods->PopProducts();
-            if (asecondaryparticle->GetDefinition()->GetBaryonNumber() < 5) {
+            if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
               pw.push_back(weight);
               ptime.push_back(currentTime);
               secondaryparticles.push_back(asecondaryparticle);
-            }
-            //Generate gammas and XRays from  excited nucleus, added by L.Desorgher
-            else if (((const G4Ions*)(asecondaryparticle->GetDefinition()))->GetExcitationEnergy()>0. && weight>0.){//Compute the gamma
+            } else if (((const G4Ions*)(asecondaryparticle->GetDefinition()))->GetExcitationEnergy() > 0.
+                                                                                           && weight > 0.) {
+              // Compute the gamma
+              // Generate gammas and XRays from excited nucleus, added by L.Desorgher
               G4ParticleDefinition* apartDef =asecondaryparticle->GetDefinition();
               AddDeexcitationSpectrumForBiasMode(apartDef,weight,currentTime,pw,ptime,secondaryparticles);
             }

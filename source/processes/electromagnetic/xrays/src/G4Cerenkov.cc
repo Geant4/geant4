@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 98002 2016-06-30 13:03:36Z gcosmo $
+// $Id: G4Cerenkov.cc 106116 2017-09-13 10:19:06Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -197,7 +197,7 @@ G4Cerenkov::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   if (!aMaterialPropertiesTable) return pParticleChange;
 
   G4MaterialPropertyVector* Rindex = 
-                aMaterialPropertiesTable->GetProperty("RINDEX"); 
+                aMaterialPropertiesTable->GetProperty(kRINDEX); 
   if (!Rindex) return pParticleChange;
 
   // particle charge
@@ -417,7 +417,7 @@ void G4Cerenkov::BuildThePhysicsTable()
       if (aMaterialPropertiesTable) {
          aPhysicsOrderedFreeVector = new G4PhysicsOrderedFreeVector();
          G4MaterialPropertyVector* theRefractionIndexVector = 
-                              aMaterialPropertiesTable->GetProperty("RINDEX");
+                              aMaterialPropertiesTable->GetProperty(kRINDEX);
 
          if (theRefractionIndexVector) {
 
@@ -524,7 +524,7 @@ G4double G4Cerenkov::PostStepGetPhysicalInteractionLength(
   G4MaterialPropertyVector* Rindex = NULL;
 
   if (aMaterialPropertiesTable)
-                     Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
+                     Rindex = aMaterialPropertiesTable->GetProperty(kRINDEX);
 
   G4double nMax;
   if (Rindex) {

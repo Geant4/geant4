@@ -958,45 +958,45 @@ public:
 
 public:
   bool add_primitive(gl::mode_t a_mode,const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_primitive(a_mode,a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_primitive_xy(gl::mode_t a_mode,const std::vector<float>& a_xys,bool a_stop = false,bool a_triangle_revert = false){
-    const float* _xys = tools::vec_data<float>(a_xys);
+    const float* _xys = vec_data<float>(a_xys);
     return add_primitive_xy(a_mode,a_xys.size(),_xys,a_stop,a_triangle_revert);
   }
   bool add_line_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_line_strip(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_line_loop(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_line_loop(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_lines(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_lines(a_xyzs.size(),_xyzs,a_stop);
   }
   bool add_points(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_points(a_xyzs.size(),_xyzs,a_stop);
   }
 
   bool add_triangle_strip(const std::vector<float>& a_xyzs,bool a_stop = false){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     return add_triangle_strip(a_xyzs.size(),_xyzs,a_stop);
   }
 
   bool add_points_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = tools::vec_data<float>(a_xys);
+    const float* _xys = vec_data<float>(a_xys);
     return add_points_xy(a_xys.size(),_xys,a_stop);
   }
   bool add_lines_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = tools::vec_data<float>(a_xys);
+    const float* _xys = vec_data<float>(a_xys);
     return add_lines_xy(a_xys.size(),_xys,a_stop);
   }
   bool add_triangle_strip_xy(const std::vector<float>& a_xys,bool a_stop = false){
-    const float* _xys = tools::vec_data<float>(a_xys);
+    const float* _xys = vec_data<float>(a_xys);
     return add_triangle_strip_xy(a_xys.size(),_xys,a_stop);
   }
 

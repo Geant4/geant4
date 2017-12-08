@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnknownDecay.hh 71045 2013-06-10 09:34:33Z gcosmo $
+// $Id: G4UnknownDecay.hh 105727 2017-08-16 12:47:05Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -65,24 +65,27 @@ class G4UnknownDecay : public G4VDiscreteProcess
      virtual G4VParticleChange *PostStepDoIt(
 			     const G4Track& aTrack,
                              const G4Step& aStep
-                            );
+                            ) override;
 
-     virtual void BuildPhysicsTable(const G4ParticleDefinition&); 
+     virtual void BuildPhysicsTable(const G4ParticleDefinition&) override; 
      // In G4UnknownDecay, thePhysicsTable stores values of
     //    beta * std::sqrt( 1 - beta*beta) 
     //  as a function of normalized kinetic enregy (=Ekin/mass),
     //  becasuse this table is universal for all particle types,
 
 
-    virtual G4bool IsApplicable(const G4ParticleDefinition&);
+    virtual G4bool IsApplicable(const G4ParticleDefinition&) override;
     // returns "true" if the decay process can be applied to
     // the particle type. 
  
+    virtual void ProcessDescription(std::ostream& outFile) const override;
+    //
+
   protected: // With Description
     virtual G4VParticleChange* DecayIt(
 			     const G4Track& aTrack,
 			     const G4Step&  aStep
-			    );
+			    ) ;
     // The DecayIt() method returns by pointer a particle-change object,
     // which has information of daughter particles.
 
@@ -92,7 +95,7 @@ class G4UnknownDecay : public G4VDiscreteProcess
                              const G4Track& track,
                              G4double   previousStepSize,
                              G4ForceCondition* condition
-                            );
+                            ) override;
 
 
   protected: // With Description
@@ -100,11 +103,7 @@ class G4UnknownDecay : public G4VDiscreteProcess
     virtual G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double   previousStepSize,
                               G4ForceCondition* condition
-                             );
-
-  public:
-     void  SetVerboseLevel(G4int value);
-     G4int GetVerboseLevel() const;
+                             ) override;
 
   private:
      G4int verboseLevel;
@@ -146,12 +145,6 @@ inline
   return remainder*CLHEP::c_light;
 
 }
-
-inline
- void  G4UnknownDecay::SetVerboseLevel(G4int value){ verboseLevel = value; }
-
-inline
- G4int G4UnknownDecay::GetVerboseLevel() const { return verboseLevel; }
 
 inline  
   G4VParticleChange* G4UnknownDecay::PostStepDoIt(

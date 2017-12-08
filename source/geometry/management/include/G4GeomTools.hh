@@ -94,11 +94,9 @@ class G4GeomTools
                                 const G4TwoVector& C);
     // Decide if point P is inside triangle ABC
 
-  /*
-  static G4bool PointInPolygon(const G4TwoVector& P
+  static G4bool PointInPolygon(const G4TwoVector& P,
                                const G4TwoVectorList& Polygon);
     // Decide if point P is inside Polygon
-  */
 
   static G4bool IsConvex(const G4TwoVectorList& polygon);
     // Decide if 2D polygon is convex, i.e. all internal angles are

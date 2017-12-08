@@ -55,7 +55,7 @@
 #include "G4H2O.hh"
 #include <G4Scheduler.hh>
 #include "G4MoleculeTable.hh"
-#include "math.h"
+#include <cmath>
 #include "Run.hh"
 #include "G4RunManager.hh"
 #include "G4LogicalVolume.hh"

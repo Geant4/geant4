@@ -1,4 +1,4 @@
-$Id: History 104597 2017-06-07 08:57:26Z gcosmo $
+$Id: History 105800 2017-08-21 07:36:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 18, 2017 J.Allison (OpNovice-V10-03-02)
+- Fix gui.mac, which executed vis.mac (it should not!).
 
 Mar 22, 2017 P.Gumplinger (OpNovice-V10-03-00/OpNovice-V10-03-01)
 - exercise the new DAVIS LUT surface model

@@ -154,7 +154,7 @@ public:
 #endif
   }
   virtual ~ntuple() {
-    tools::clear<read::icol>(m_cols);
+    safe_clear<read::icol>(m_cols);
 #ifdef TOOLS_MEM
     mem::decrement(s_class().c_str());
 #endif
@@ -187,7 +187,7 @@ public:
 
   std::istream& istrm() {return m_reader;}
 
-/* use tools::file::is_hippo for that.
+/* use file::is_hippo for that.
   static bool is_hippo(std::ostream& a_out,std::istream& a_reader) {
     // analyse two first data line.
 
@@ -209,7 +209,7 @@ public:
     if(s.find('\t')==std::string::npos) return false;
 
     //std::vector<std::string> labels;
-    //tools::words(s,"\t",false,labels);
+    //words(s,"\t",false,labels);
     //return labels.size()?true:false;
 
     return true;
@@ -294,14 +294,12 @@ public:
                   char a_sep = 0, //guessed
                   const std::string& a_suffix = "x", //col suffix
                   bool a_verbose = false) {
-    tools::clear<read::icol>(m_cols);
+    safe_clear<read::icol>(m_cols);
     m_sep = 0;
     m_sz = 0;
 
     if(a_suffix.empty()) {
-      a_out << "tools::rcsv::ntuple::initialize :"
-            << " expect a column suffix."
-            << std::endl;
+      a_out << "tools::rcsv::ntuple::initialize : expect a column suffix." << std::endl;
       return false;
     }
 
@@ -320,14 +318,26 @@ public:
     std::vector<std::string> labels;
     if(m_hippo) { //skip first two lines :
       std::string title;
-      if(!read_line(m_reader,m_sz,title)) {m_sz = 0;return false;}
+      if(!read_line(m_reader,m_sz,title)) {
+        a_out << "tools::rcsv::ntuple::initialize : read_line() failed." << std::endl;
+        m_sz = 0;
+        return false;
+      }
       std::string s;
-      if(!read_line(m_reader,m_sz,s)) {m_sz = 0;return false;}
-      tools::words(s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
+      if(!read_line(m_reader,m_sz,s)) {
+        a_out << "tools::rcsv::ntuple::initialize : (2) read_line() failed." << std::endl;
+        m_sz = 0;
+	return false;
+      }
+      words(s,"\t",false,labels); //false for glast.tnt that has a trailing \t.
     } else {
       while(skip_comment(m_reader,m_sz)){}
     }
-    if(m_reader.tellg()>=m_sz) {m_sz=0;return false;}
+    if(m_reader.tellg()>=m_sz) {
+      a_out << "tools::rcsv::ntuple::initialize : tellg() >= sz." << std::endl;
+      m_sz=0;
+      return false;
+    }
 
     // get first data line :
     std::string sfirst;
@@ -376,18 +386,18 @@ public:
 
     // in case sep is ' ', there is an ambiguity with some leading
     // space in front of first number.
-    if(m_sep==' ') tools::strip(sfirst,leading,' ');
+    if(m_sep==' ') strip(sfirst,leading,' ');
 
-    std::vector<std::string> words;
+    std::vector<std::string> ws;
    {std::string sep;
     sep += m_sep;
-    tools::words(sfirst,sep,m_hippo?false:true,words);}
+    words(sfirst,sep,m_hippo?false:true,ws);}
 
     // look if words are numbers :
-    if(a_verbose) a_out << "words " << words.size() << std::endl;
+    if(a_verbose) a_out << "words " << ws.size() << std::endl;
     unsigned int index = 0;
     std::vector<std::string>::iterator it;
-    for(it=words.begin();it!=words.end();++it,index++) {
+    for(it=ws.begin();it!=ws.end();++it,index++) {
       if(a_verbose) a_out << "word " << sout(*it) << "" << std::endl;
 /* with glast.tnt there is trailing \t that will induce an extra empty column.
       if((*it).empty()) {
@@ -395,13 +405,13 @@ public:
         //   <num><sep><num><sep><sep><num>...
         // but accept a trailing <sep> (glast.tnt) :
         //   <num><sep><num>....<sep><num><sep>
-        if(index==(words.size()-1)) {
+        if(index==(ws.size()-1)) {
           break;
         } else {
           a_out << "tools::rcsv::ntuple::initialize :"
                 << " empty word."
                 << std::endl;
-          tools::clear<read::icol>(m_cols);
+          safe_clear<read::icol>(m_cols);
           m_sep = 0;
           m_sz = 0;
           return false;
@@ -468,20 +478,21 @@ public:
          TOOLS_RCSV_NTUPLE_IF_CID(char,char)
     else TOOLS_RCSV_NTUPLE_IF_CID(short,short)
     else TOOLS_RCSV_NTUPLE_IF_CID(int,int)
+    else TOOLS_RCSV_NTUPLE_IF_CID(int64,int64)
+    
     else TOOLS_RCSV_NTUPLE_IF_CID(float,float)
     else TOOLS_RCSV_NTUPLE_IF_CID(double,double)
-
-    else if(a_id==column<std::string>::id_class()) {
-      static const std::string s_v("string");
-      return s_v;
-    }
 
     else TOOLS_RCSV_NTUPLE_IF_CID(uchar,uchar)
     else TOOLS_RCSV_NTUPLE_IF_CID(ushort,ushort)
     else TOOLS_RCSV_NTUPLE_IF_CID(uint,uint32)   //WARNING
-    else TOOLS_RCSV_NTUPLE_IF_CID(bool,bool)
-    else TOOLS_RCSV_NTUPLE_IF_CID(int64,int64)
     else TOOLS_RCSV_NTUPLE_IF_CID(uint64,uint64)
+
+    else TOOLS_RCSV_NTUPLE_IF_CID(bool,bool)
+    else if(a_id==column<std::string>::id_class()) {
+      static const std::string s_v("string");
+      return s_v;
+    }
 
     else if(a_id==column<csv_time>::id_class()) {
       static const std::string s_v("time");
@@ -491,20 +502,21 @@ public:
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(char,char)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(short,short)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(int,int)
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(int64,int64)
+
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(float,float)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(double,double)
-
-    else if(a_id==column< std::vector<std::string> >::id_class()) {
-      static const std::string s_v("string[]");
-      return s_v;
-    }
 
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uchar,uchar)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(ushort,ushort)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uint,uint32)   //WARNING
-    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(bool,bool)
-    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(int64,int64)
     else TOOLS_RCSV_NTUPLE_IF_VEC_CID(uint64,uint64)
+
+    else TOOLS_RCSV_NTUPLE_IF_VEC_CID(bool,bool)
+    else if(a_id==column< std::vector<std::string> >::id_class()) {
+      static const std::string s_v("string[]");
+      return s_v;
+    }
 
 #undef TOOLS_RCSV_NTUPLE_IF_CID
 #undef TOOLS_RCSV_NTUPLE_IF_VEC_CID
@@ -535,7 +547,7 @@ public:
   bool initialize(std::ostream& a_out,const ntuple_binding& a_bd = ntuple_binding()) {
     // it assumes a "commented header".
 
-    tools::clear<read::icol>(m_cols);
+    safe_clear<read::icol>(m_cols);
     m_sep = 0;
     m_sz = 0;
     m_hippo = false;
@@ -604,7 +616,7 @@ public:
         a_out << "tools::rcsv::ntuple::initialize(booking) :"
               << " unhandled column type " << sout(type)
               << std::endl;
-        tools::clear<read::icol>(m_cols);
+        safe_clear<read::icol>(m_cols);
         m_sep = 0;
         m_sz = 0;
         m_hippo = false;
@@ -628,6 +640,16 @@ public:
     //      << std::endl;
 
     return true;
+  }
+
+  bool initialize_from_commented_header(std::ostream& a_out) { // it assumes a "commented header".
+    std::string _title;
+    char _sep,_vec_sep;
+    std::vector<col_desc> _cols;
+    if(!read_commented_header(a_out,m_reader,_title,_sep,_vec_sep,_cols)) return false;
+    ntuple_binding nbd;
+   {tools_vforcit(col_desc,_cols,it) nbd.add_column_no_var((*it).second);} //user_var is 0.
+    return initialize(a_out,nbd);
   }
 
   bool get_row() const {
@@ -671,7 +693,7 @@ protected:
       if(!read_line(a_reader,sz,line)) break; //or return false ?
 
       std::vector<std::string> _words;
-      tools::words(line," ",false,_words);
+      words(line," ",false,_words);
       if(!_words.size()) {
         a_out << "tools::rcsv::ntuple::read_commented_header :"
               << " syntax error : empty header line."
@@ -921,14 +943,14 @@ protected:
     for(it=m_cols.begin();it!=m_cols.end();++it,index++) {
 
 #define TOOLS_RCSV_NTUPLE_IF_COL(a__type) \
-      if(col_##a__type* _col_##a__type = tools::id_cast<icol_t,col_##a__type>(*(*it))) {\
+      if(col_##a__type* _col_##a__type = id_cast<icol_t,col_##a__type>(*(*it))) {\
         a__type v;\
         if(!_read(m_reader,m_sz,m_sep,v)) return false;\
         _col_##a__type->set_value(v);\
       }
 
 #define TOOLS_RCSV_NTUPLE_IF_VEC_COL(a__type) \
-      if(col_vec_##a__type* _col_vec_##a__type = tools::id_cast<icol_t,col_vec_##a__type>(*(*it))) {\
+      if(col_vec_##a__type* _col_vec_##a__type = id_cast<icol_t,col_vec_##a__type>(*(*it))) {\
         std::vector<a__type> v;\
         if(!_vec_read(m_reader,m_sz,iss,tmp,m_sep,vec_sep,v)) return false;\
         _col_vec_##a__type->set_value(v);\
@@ -948,7 +970,7 @@ protected:
       else TOOLS_RCSV_NTUPLE_IF_COL(int64)
       else TOOLS_RCSV_NTUPLE_IF_COL(uint64)
 
-      else if(col_time* _col_time = tools::id_cast<icol_t,col_time>(*(*it))) {
+      else if(col_time* _col_time = id_cast<icol_t,col_time>(*(*it))) {
         time_t v;
         if(!_read_time(m_reader,m_sz,m_sep,v)) return false;
         csv_time ct;ct.m_l = long(v);
@@ -1039,9 +1061,9 @@ public:
     return m_freader.fail()?false:true;
   }
   bool initialize(std::ostream& a_out,
-                         char a_sep = 0, //guessed
-                         const std::string& a_suffix = "x", //col suffix
-                         bool a_verbose = false) {
+                  char a_sep = 0, //guessed
+                  const std::string& a_suffix = "x", //col suffix
+                  bool a_verbose = false) {
     if(!m_freader.is_open()) {
       m_freader.open(m_file.c_str());
       if(m_freader.fail()) {

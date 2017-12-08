@@ -1,4 +1,4 @@
-// $Id:$
+//
 // -*- C++ -*-
 //
 // -----------------------------------------------------------------------
@@ -7,38 +7,48 @@
 //                       class header file
 // -----------------------------------------------------------------------
 //
-// This file interfaces the PseudoRandom Number Generator 
+// This file interfaces the MixMax PseudoRandom Number Generator 
 // proposed by:
-// N.Z. Akopov, G.K.Saviddy & N.G. Ter-Arutyunian
-//   "Matrix Generator of Pseudorandom Numbers",
-//   J.Compt.Phy. 97, 573 (1991)
-//   Preprint: EPI-867(18)-86, Yerevan June 1986.
-// G. Savvidy & N. Savvidy
-//   "On the Monte Carlo Simulation of Physical Systems",
-//  J.Comput.Phys. 97 (1991) 566
-
+//
+// G.K.Savvidy and N.G.Ter-Arutyunian,
+//   On the Monte Carlo simulation of physical systems,
+//   J.Comput.Phys. 97, 566 (1991);
+//   Preprint EPI-865-16-86, Yerevan, Jan. 1986
+//   http://dx.doi.org/10.1016/0021-9991(91)90015-D
+//
+// K.Savvidy
+//   "The MIXMAX random number generator"
+//   Comp. Phys. Commun. (2015)
+//   http://dx.doi.org/10.1016/j.cpc.2015.06.003
+//
+// K.Savvidy and G.Savvidy
+//   "Spectrum and Entropy of C-systems. MIXMAX random number generator"
+//   Chaos, Solitons & Fractals, Volume 91, (2016) pp. 33-38
+//   http://dx.doi.org/10.1016/j.chaos.2016.05.003
+//
 // =======================================================================
-// Implementation by Konstantin Savvidy - 2004-2015
-//  Release 0.99 and later: released under the LGPL license version 3.0
-// =======================================================================
-// CLHEP interface implemented by 
-//     J. Apostolakis, G. Cosmo & K. Savvidy - Created: 6th July 2015
-//     CLHEP interface released under the LGPL license version 3.0
+// Implementation by Konstantin Savvidy - Copyright 2004-2017
 // =======================================================================
 
 #ifndef MixMaxRng_h
 #define MixMaxRng_h 1
 
+#include <array>
 #include "CLHEP/Random/RandomEngine.h"
-#include "CLHEP/Random/mixmax.h"
 
 namespace CLHEP {
-
+    
 /**
- * @author  K. Savvidy
- * @ingroup random
- */
+  * @author  K.Savvidy
+  * @ingroup random
+  */
+
+typedef unsigned long int myID_t;
+typedef unsigned long long int myuint_t;
+
 class MixMaxRng: public HepRandomEngine {
+
+  static const int N = 17;
 
 public:
 
@@ -46,14 +56,14 @@ public:
   MixMaxRng();
   MixMaxRng(long seed);
   MixMaxRng(int rowIndex, int colIndex);
-  virtual ~MixMaxRng();
+  ~MixMaxRng();
   // Constructor and destructor.
 
   MixMaxRng(const MixMaxRng& rng);
   MixMaxRng& operator=(const MixMaxRng& rng);
   // Copy constructor and assignment operator.
 
-  double flat();
+  double flat() { return (S.counter<=(N-1)) ? generate(S.counter):iterate(); }
   // Returns a pseudo random number between 0 and 1
   // (excluding the zero: in (0,1] )
   // smallest number which it will give is approximately 10^-19
@@ -88,21 +98,87 @@ public:
   static  std::string beginTag ( );
   virtual std::istream & getState ( std::istream & is );
 
-  std::string name() const;
-  static std::string engineName() {return "MixMaxRng";}
+  std::string name() const { return "MixMaxRng"; }
+  static std::string engineName();
 
   std::vector<unsigned long> put () const;
   bool get (const std::vector<unsigned long> & v);
   bool getState (const std::vector<unsigned long> & v);
-  
-  static const unsigned int VECTOR_STATE_SIZE = 2*N+4; // 2N+4 for MIXMAX
-  
+
 private:
 
-  // Pointer to the current status of the generator.
-  rng_state_st* fRngState;
-};
+  static constexpr long long int SPECIAL   = ((N==17)? 0 : ((N==240)? 487013230256099140ULL:0) ); // etc...
+  static constexpr long long int SPECIALMUL= ((N==17)? 36: ((N==240)? 51                   :53) ); // etc...
+  // Note the potential for confusion...
+  static constexpr int BITS=61;
+  static constexpr myuint_t M61=2305843009213693951ULL;
+  static constexpr double INV_M61=0.43368086899420177360298E-18;
+  static constexpr unsigned int VECTOR_STATE_SIZE = 2*N+4; // 2N+4 for MIXMAX
 
+  #define MIXMAX_MOD_MERSENNE(k) ((((k)) & M61) + (((k)) >> BITS) )
+
+  static constexpr int rng_get_N();
+  static constexpr long long int rng_get_SPECIAL();
+  static constexpr int rng_get_SPECIALMUL();
+  void seed_uniquestream( myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID );
+  void seed_spbox(myuint_t);
+  void print_state() const;
+  myuint_t precalc();
+  myuint_t get_next() ;
+  inline double get_next_float() { return get_next_float_packbits(); }
+  // Returns a random double with all 52 bits random, in the range (0,1]
+  
+  MixMaxRng Branch();
+  void BranchInplace(int id);
+
+  MixMaxRng(myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID );	   // Constructor with four 32-bit seeds
+  inline void seed64(myuint_t seedval) { seed_uniquestream( 0, 0, (myID_t)(seedval>>32), (myID_t)seedval ); } // seed with one 64-bit seed
+
+  double generate(int i);
+  double iterate();
+
+  double get_next_float_packbits();
+#if defined __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
+#endif
+  inline double convert1double(myuint_t u)
+  {
+    const double one = 1;
+    const myuint_t onemask = *(myuint_t*)&one;
+    myuint_t tmp = (u>>9) | onemask; // bits between 52 and 62 dont affect the result!
+    double d = *(double*)&tmp;
+    return d-1.0;
+  }
+#if defined __GNUC__
+#pragma GCC diagnostic pop
+#endif
+  myuint_t MOD_MULSPEC(myuint_t k);
+  myuint_t MULWU(myuint_t k);
+  void seed_vielbein( unsigned int i); // seeds with the i-th unit vector, i = 0..N-1,  for testing only
+  myuint_t iterate_raw_vec(myuint_t* Y, myuint_t sumtotOld);
+  myuint_t apply_bigskip(myuint_t* Vout, myuint_t* Vin, myID_t clusterID, myID_t machineID, myID_t runID, myID_t  streamID );
+  myuint_t modadd(myuint_t foo, myuint_t bar);
+#if defined(__x86_64__)
+  myuint_t mod128(__uint128_t s);
+  myuint_t fmodmulM61(myuint_t cum, myuint_t a, myuint_t b);
+#else // on all other platforms, including 32-bit linux, PPC and PPC64, ARM and all Windows
+  myuint_t fmodmulM61(myuint_t cum, myuint_t s, myuint_t a);
+#endif
+
+private:
+
+  struct rng_state_st
+  {
+      std::array<myuint_t, N> V;
+      myuint_t sumtot;
+      int counter;
+  };
+
+  typedef struct rng_state_st rng_state_t;     // struct alias
+  rng_state_t S;
+};
+    
 }  // namespace CLHEP
 
 #endif

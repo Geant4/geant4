@@ -145,7 +145,8 @@ public:
     if(!m_histo) const_cast<c1d&>(*this).convert_to_histogram();
     return *m_histo;
   }
-  bool fill_histogram(histo::h1d& a_histo) const {
+  template <class HISTO>
+  bool fill_histogram(HISTO& a_histo) const {
     size_t number = m_xs.size();
     for(size_t index=0;index<number;index++) {
       if(!a_histo.fill(m_xs[index],m_ws[index])) return false;
@@ -168,7 +169,7 @@ public:
   ,m_cnv_x_num(0),m_cnv_x_min(0),m_cnv_x_max(0),m_histo(0)
   {}
   
-  c1d(const std::string& a_title,int aLimit = -1)
+  c1d(const std::string& a_title,int aLimit = base_cloud::UNLIMITED())
   :base_cloud(aLimit)
   ,m_lower_x(0),m_upper_x(0)
   ,m_Sxw(0),m_Sx2w(0)
@@ -215,6 +216,11 @@ public:
     return *this;
   }
 
+public: //AIDA API
+  double lowerEdge() const {return lower_edge();}
+  double upperEdge() const {return upper_edge();}
+  template <class HISTO>
+  bool fillHistogram(HISTO& a_histo) const {return fill_histogram<HISTO>(a_histo);}
 protected:
   void clear(){
     m_lower_x = 0;

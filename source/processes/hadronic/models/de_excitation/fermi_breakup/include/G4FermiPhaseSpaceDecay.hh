@@ -63,9 +63,6 @@ private:
 
   inline G4double PtwoBody(G4double E, G4double P1, G4double P2) const;
   
-  inline G4ThreeVector IsotropicVector(G4double Magnitude, 
-				       CLHEP::HepRandomEngine*) const;
-
   inline G4double BetaKopylov(G4int, CLHEP::HepRandomEngine*) const; 
 
   std::vector<G4LorentzVector*> * 
@@ -114,21 +111,6 @@ G4FermiPhaseSpaceDecay::BetaKopylov(G4int K,
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
    } while ( Fmax*rndmEngine->flat() > F);  
   return chi;
-}
-
-inline G4ThreeVector 
-G4FermiPhaseSpaceDecay::IsotropicVector(G4double Magnitude, 
-					CLHEP::HepRandomEngine* rndmEngine) const
-  // Samples a isotropic random vectorwith a magnitud given by Magnitude.
-  // By default Magnitude = 1.0
-{
-  G4double CosTheta = 2.0*rndmEngine->flat() - 1.0;
-  G4double SinTheta = std::sqrt((1. - CosTheta)*(1. + CosTheta));
-  G4double Phi = CLHEP::twopi*rndmEngine->flat();
-  G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-		       Magnitude*std::sin(Phi)*SinTheta,
-		       Magnitude*CosTheta);
-  return Vector;
 }
 
 #endif

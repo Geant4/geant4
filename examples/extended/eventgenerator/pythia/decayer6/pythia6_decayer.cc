@@ -23,36 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pythia6_decayer.cc 100687 2016-10-31 11:20:33Z gcosmo $
+// $Id: pythia6_decayer.cc 106393 2017-10-09 09:46:03Z gcosmo $
 //
 /// \file eventgenerator/pythia/decayer6/pythia6_decayer.cc
 /// \brief Main program of the pythia6Decayer example
 
 #include "P6DExtDecayerPhysics.hh"
 
-#include "ExG4DetectorConstruction01.hh"
-#include "ExG4PrimaryGeneratorAction01.hh"
-#include "ExG4RunAction01.hh"
-#include "ExG4EventAction01.hh"
+#include "DetectorConstruction.hh"
+#include "GunPrimaryGeneratorAction.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4ThreeVector.hh"
 #include "QGSP_BERT.hh"
+#include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "Randomize.hh"
 
 int main(int argc,char** argv)
 {
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
+    ui = new G4UIExecutive(argc, argv);
+  }
+
   // Choose the Random engine
   //
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
@@ -63,63 +63,48 @@ int main(int argc,char** argv)
 
   // Set mandatory initialization classes
   //
-  runManager->SetUserInitialization(new ExG4DetectorConstruction01);
+  runManager->SetUserInitialization(new DetectorConstruction);
   
   //
   G4VModularPhysicsList* physicsList = new QGSP_BERT;
   physicsList->RegisterPhysics(new P6DExtDecayerPhysics());
   runManager->SetUserInitialization(physicsList);
-
-    
+ 
   // Set user action classes
   //
   runManager->SetUserAction(
-    new ExG4PrimaryGeneratorAction01("B-", 50.*MeV));
+    new GunPrimaryGeneratorAction("B-", 50.*MeV));
     // B- meson has not defined decay in Geant4
-  runManager->SetUserAction(new ExG4RunAction01);
-  runManager->SetUserAction(new ExG4EventAction01);
 
-  runManager->Initialize();
-  
-#ifdef G4VIS_USE
   // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+
+  // Process macro or start UI session
   //
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();      
-  
-  if (argc!=1) {
-    // batch mode{
+  if ( ! ui ) { 
+    // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);    
+    UImanager->ApplyCommand(command+fileName);
   }
-  else {  // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute init_vis.mac"); 
-#else
-    UImanager->ApplyCommand("/control/execute init.mac"); 
-#endif
+  else { 
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
     ui->SessionStart();
     delete ui;
-#endif
   }
 
-#ifdef G4VIS_USE
-  delete visManager;
-#endif                
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
   //                 owned and deleted by the run manager, so they should not
   //                 be deleted in the main() program !
+  delete visManager;
   delete runManager;
-
-  return 0;
 }

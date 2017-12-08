@@ -1,4 +1,4 @@
-$Id: History 104917 2017-06-29 07:39:14Z gcosmo $
+$Id: History 107433 2017-11-13 07:33:15Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,16 +7,42 @@ $Id: History 104917 2017-06-29 07:39:14Z gcosmo $
 
                       Category History file
 
-                      ---------------------
-28.06.2017 - Pedro Arce  (DICOM-V10-03-01)
-	   - Bug correction of K and P materials
+11.11.2017 - Marc Verderi (DICOM-V10-03-12)
+	     Retag as DICOM-V10-03-11 too quickly rejected
 
-18.01.2017 - Jonathan Madsen  (DICOM-V10-03-00)
-	   - Fix to DicomRun::RecordEvent that was incrementing the
-	     inherited numberOfEvent variable from G4Run twice
-	     causing the output of the number of events to be twice
-	     the actual value
-	     
+09.11.2017 - Ivana Hrivnacova (DICOM-V10-03-11)
+             Updated DICOM data version to 1.1
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-10)
+             Updated README and .README.txt
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-09)
+             .g4dmc created in the user directory and not in the DICOM library,
+             together with the .g4dcmb files.
+
+09.11.2017 - S. Guatelli (DICOM-V10-03-08)
+             DICOM_PATH changed
+             no writing .g4dcmb in the library DICOM
+
+08.11.2017 - Ivana Hrivnacova (DICOM-V10-03-07)
+             Added downloading DICOM data in CMake build
+             (used only with DICOM_USE_HEAD option)
+
+07.11.2017 - S. Guatelli (DICOM-V10-03-06). 
+             Warning deleted, updated README and .README.txt
+
+01.11.2017 - S. Guatelli (DICOM-V10-03-05). 
+             DICOM_HEAD library can be used as input to the DICOM   
+             DICOM_v1 does not need to be copied in the directory where the simulation is executed               
+
+01.11.2017 - S. Guatelli (DICOM-V10-03-04). DICOM_HEAD library can be used as input to the DICOM
+
+28.09.2017 - S. Guatelli (DICOM-V10-03-03). DICOM_HEAD Directory deleted
+
+16.09.2017 - S. Guatelli (DICOM-V10-03-02)
+           - New DICOM Digital Head included by S. Guatelli
+           - Updated README, .README.txt
+
 19.11.2016 - Andrea Dotti     (DICOM-V10-02-04)
            - explicit set of SD to manager
 

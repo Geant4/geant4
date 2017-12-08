@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4NistElementBuilder.hh 105820 2017-08-22 08:03:26Z gcosmo $
 
 #ifndef G4NistElementBuilder_h
 #define G4NistElementBuilder_h 1
@@ -59,6 +59,7 @@
 
 #include "globals.hh"
 #include "G4Element.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -152,6 +153,9 @@ private:
   G4int      verbose;
 
   std::vector<G4String>    elmNames;
+#ifdef G4MULTITHREADED
+  static G4Mutex nistElementMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc 104894 2017-06-26 13:30:00Z gcosmo $
+// $Id: G4Trd.cc 107555 2017-11-22 15:26:59Z gcosmo $
 //
 //
 // Implementation for G4Trd class
@@ -358,11 +358,17 @@ EInside G4Trd::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
 {
+  G4int nsurf = 0; // number of surfaces where p is placed
+
   // Check Z faces
   //
   G4double nz = 0;
   G4double dz = std::abs(p.z()) - fDz;
-  if (std::abs(dz) <= halfCarTolerance) nz = (p.z() < 0) ? -1 : 1;
+  if (std::abs(dz) <= halfCarTolerance)
+  {
+    nz = (p.z() < 0) ? -1 : 1;
+    ++nsurf;
+  }
 
   // Check Y faces
   //
@@ -373,11 +379,13 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   {
     ny += fPlanes[0].b;
     nz += fPlanes[0].c;
+    ++nsurf;
   }
   if (std::abs(dy2 - dy1) <= halfCarTolerance)
   {
     ny += fPlanes[1].b;
     nz += fPlanes[1].c;
+    ++nsurf;
   }
 
   // Check X faces
@@ -389,16 +397,17 @@ G4ThreeVector G4Trd::SurfaceNormal( const G4ThreeVector& p ) const
   {
     nx += fPlanes[2].a;
     nz += fPlanes[2].c;
+    ++nsurf;
   }
   if (std::abs(dx2 - dx1) <= halfCarTolerance)
   {
     nx += fPlanes[3].a;
     nz += fPlanes[3].c;
+    ++nsurf;
   }
 
   // Return normal
   //
-  G4int nsurf = nx*nx + ny*ny + nz*nz + 0.5;                  // get magnitude
   if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
   else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else

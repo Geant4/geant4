@@ -4,7 +4,7 @@
 // *                                                                  *
 // * The  Geant4 software  is  copyright of the Copyright Holders  of *
 // * the Geant4 Collaboration.  It is provided  under  the terms  and *
-// * conditions of the Geant4 Software Liscense,  included in the file *
+// * conditions of the Geant4 Software License,  included in the file *
 // * LICENSE and available at  http://cern.ch/geant4/license .  These *
 // * include a list of copyright holders.                             *
 // *                                                                  *
@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GoudsmitSaundersonTable.hh 103884 2017-05-03 08:04:50Z gcosmo $
+// $Id: G4GoudsmitSaundersonTable.hh 107824 2017-12-05 15:47:44Z gunter $
 //
 // -----------------------------------------------------------------------------
 //
@@ -55,10 +55,14 @@
 //            The new version is several times faster, more robust and accurate
 //            compared to the earlier version (G4GoudsmitSaundersonMscModel class
 //            that use these data has been also completely replaced)
-// 28.04.2017 M. Novak: the GS angular distributions has been recomputed, the 
-//            data size has been reduced from 16 MB down to 5 MB by using a new 
-//            representation, the class has been modified significantly due to 
+// 28.04.2017 M. Novak: the GS angular distributions has been recomputed, the
+//            data size has been reduced from 16 MB down to 5 MB by using a new
+//            representation, the class has been modified significantly due to
 //            this new data representation.
+// 23.08.2017 M. Novak: Added funtionality to handle Mott-correction to the
+//            base GS angular distributions and some other factors (screening
+//            parameter, first and second moments) when Mott-correction is
+//            activated in the GS-MSC model.
 //
 // References:
 //   [1] A.F.Bielajew, NIMB, 111 (1996) 195-208
@@ -74,41 +78,66 @@
 
 #include "G4Types.hh"
 
+class G4GSMottCorrection;
+class G4MaterialCutsCouple;
 
 class G4GoudsmitSaundersonTable {
 
 public:
-  G4GoudsmitSaundersonTable();
+  G4GoudsmitSaundersonTable(G4bool iselectron);
  ~G4GoudsmitSaundersonTable();
 
-  void Initialise();
+  void Initialise(G4double lownergylimit, G4double highenergylimit);
 
   // structure to store one GS transformed angular distribution (for a given s/lambda_el,s/lambda_elG1)
   struct GSMSCAngularDtr {
     G4int     fNumData;    // # of data points
-    G4double  fQScale;
     G4double *fUValues;    // array of transformed variables
     G4double *fParamA;     // array of interpolation parameters a
     G4double *fParamB;     // array of interpolation parameters b
   };
 
-  void LoadMSCData();
-  GSMSCAngularDtr* GetOne(G4int indx) {return fGSMSCAngularDistributions1[indx];}
+  void   LoadMSCData();
 
-  void   Sampling(G4double lambdaval, G4double qval, G4double scra, 
-                  G4double &cost, G4double &sint);
-  G4double SampleCosTheta(G4double lambdaval, G4double qval, G4double scra, 
-                          G4double rndm1, G4double rndm2, G4double rndm);
-  G4double SampleCosTheta1(G4double lambdaval, G4double qval, G4double scra, 
-                           G4double rndm1, G4double rndm2, G4double rndm);
-  G4double SampleCosTheta2(G4double lambdaval, G4double qval, G4double scra,
-                           G4double rndm1, G4double rndm2, G4double rndm);
-  G4double GetScreeningParam(G4double G1);
+  G4bool   Sampling(G4double lambdaval, G4double qval,  G4double scra,
+                    G4double &cost,     G4double &sint, G4double lekin,
+                    G4double beta2,     G4int matindx, GSMSCAngularDtr **gsDtr,
+                    G4int &mcekini, G4int &mcdelti, G4double &transfPar,
+                    G4bool isfirst);
+
+  G4double SampleCosTheta(G4double lambdaval, G4double qval,  G4double scra,
+                          G4double lekin,     G4double beta2, G4int matindx,
+                          GSMSCAngularDtr **gsDtr, G4int &mcekini, G4int &mcdelti,
+                          G4double &transfPar, G4bool isfirst);
+
+  G4double SampleGSSRCosTheta(const GSMSCAngularDtr* gsDrt, G4double transfpar);
+
+  G4double SingleScattering(G4double lambdaval, G4double scra, G4double lekin,
+                            G4double beta2, G4int matindx);
+
+  GSMSCAngularDtr* GetGSAngularDtr(G4double scra, G4double &lambdaval,
+                                   G4double &qval, G4double &transfpar);
 
   // material dependent MSC parameters (computed at initialisation) regarding
   // Moliere's screening parameter
-  G4double GetMoliereBc(G4int matindx){return (*fgMoliereBc)[matindx];}
-  G4double GetMoliereXc2(G4int matindx){return (*fgMoliereXc2)[matindx];}
+  G4double GetMoliereBc(G4int matindx)  { return gMoliereBc[matindx];  }
+
+  G4double GetMoliereXc2(G4int matindx) { return gMoliereXc2[matindx]; }
+
+  void     GetMottCorrectionFactors(G4double logekin, G4double beta2,
+                                    G4int matindx, G4double &mcToScr,
+                                    G4double &mcToQ1, G4double &mcToG2PerG1);
+
+  // set option to activate/inactivate Mott-correction
+  void     SetOptionMottCorrection(G4bool val) { fIsMottCorrection = val; }
+  // set option to activate/inactivate PWA-correction
+  void     SetOptionPWACorrection(G4bool val) { fIsPWACorrection = val; }
+
+  // this method returns with the scattering power correction (to avoid double counting of sub-threshold deflections)
+  // interpolated from tables prepared at initialisation
+  G4double ComputeScatteringPowerCorrection(const G4MaterialCutsCouple *matcut, G4double ekin);
+
+  void     InitSCPCorrection();
 
 private:
   // initialisation of material dependent Moliere's MSC parameters
@@ -116,46 +145,47 @@ private:
 
 
  private:
-   static bool             gIsInitialised;         // are the precomputed angular distributions already loaded in?
+   static G4bool             gIsInitialised;       // are the precomputed angular distributions already loaded in?
    static constexpr G4int    gLAMBNUM = 64;        // # L=s/lambda_el in [fLAMBMIN,fLAMBMAX]
    static constexpr G4int    gQNUM1   = 15;        // # Q=s/lambda_el G1 in [fQMIN1,fQMAX1] in the 1-st Q grid
-   static constexpr G4int    gQNUM2   = 32;        // # Q=s/lambda_el G1 in [fQMIN2,fQMAX2] in the 2-st Q grid
+   static constexpr G4int    gQNUM2   = 32;        // # Q=s/lambda_el G1 in [fQMIN2,fQMAX2] in the 2-nd Q grid
    static constexpr G4int    gNUMSCR1 = 201;       // # of screening parameters in the A(G1) function
    static constexpr G4int    gNUMSCR2 = 51;        // # of screening parameters in the A(G1) function
    static constexpr G4double gLAMBMIN = 1.0;       // minimum s/lambda_el
    static constexpr G4double gLAMBMAX = 100000.0;  // maximum s/lambda_el
    static constexpr G4double gQMIN1   = 0.001;     // minimum s/lambda_el G1 in the 1-st Q grid
    static constexpr G4double gQMAX1   = 0.99;      // maximum s/lambda_el G1 in the 1-st Q grid
-   static constexpr G4double gQMIN2   = 0.99;      // minimum s/lambda_el G1 in the 1-st Q grid
-   static constexpr G4double gQMAX2   = 7.99;      // maximum s/lambda_el G1 in the 1-st Q grid
-   // precomputed A(G1) function with its interpolation parameters
-   static constexpr G4double gSCRMIN1  = 1.93214991408357e-12;
-   static constexpr G4double gSCRMAX1  = 2.42974344203683e-01;
-   static constexpr G4double gSCRMAX2  = 5.50564555556202e+01;
+   static constexpr G4double gQMIN2   = 0.99;      // minimum s/lambda_el G1 in the 2-nd Q grid
+   static constexpr G4double gQMAX2   = 7.99;      // maximum s/lambda_el G1 in the 2-nd Q grid
    //
-   static const G4double gG1Values1[];
-   static const G4double gScrAValues1[];
-   static const G4double gScrBValues1[];
-   static const G4double gG1Values2[];
-   static const G4double gScrAValues2[];
-   static const G4double gScrBValues2[];
-
-
+   G4bool   fIsElectron;          // GS-table for e- (for e+ otherwise)
+   G4bool   fIsMottCorrection;    // flag to indicate if Mott-correction was requested to be used
+   G4bool   fIsPWACorrection;     // flag to indicate is PWA corrections were requested to be used
    G4double fLogLambda0;          // ln(gLAMBMIN)
    G4double fLogDeltaLambda;      // ln(gLAMBMAX/gLAMBMIN)/(gLAMBNUM-1)
    G4double fInvLogDeltaLambda;   // 1/[ln(gLAMBMAX/gLAMBMIN)/(gLAMBNUM-1)]
    G4double fInvDeltaQ1;          // 1/[(gQMAX1-gQMIN1)/(gQNUM1-1)]
    G4double fDeltaQ2;             // [(gQMAX2-gQMIN2)/(gQNUM2-1)]
    G4double fInvDeltaQ2;          // 1/[(gQMAX2-gQMIN2)/(gQNUM2-1)]
-   // for the precumputed A(G1) function
-   G4double fLogG1FuncMin1;
-   G4double fInvLogDeltaG1Func1;
-   G4double fLogG1FuncMin2;
-   G4double fInvLogDeltaG1Func2;
+   //
+   G4double fLowEnergyLimit;
+   G4double fHighEnergyLimit;
+   //
+   int      fNumSPCEbinPerDec;    // scattering power correction energy grid bins per decade
+   struct SCPCorrection {
+     bool   fIsUse;               //
+     double fPrCut;               // sec. e- production cut energy
+     double fLEmin;               // log min energy
+     double fILDel;               // inverse log delta kinetic energy
+     //std::vector<double> fVEkin;  // scattering power correction energies
+     std::vector<double> fVSCPC;  // scattering power correction vector
+   };
+   std::vector<SCPCorrection*>  fSCPCPerMatCuts;
 
-   // vector to store all GS transformed angular distributions
-   std::vector<GSMSCAngularDtr*> fGSMSCAngularDistributions1;
-   std::vector<GSMSCAngularDtr*> fGSMSCAngularDistributions2;
+
+   // vector to store all GS transformed angular distributions (cumputed based on the Screened-Rutherford DCS)
+   static std::vector<GSMSCAngularDtr*> gGSMSCAngularDistributions1;
+   static std::vector<GSMSCAngularDtr*> gGSMSCAngularDistributions2;
 
    //@{
    /** Precomputed \f$ b_lambda_{c} $\f and \f$ \chi_c^{2} $\f material dependent
@@ -164,10 +194,11 @@ private:
    *   screened Rutherford cross section approximation. (These are used in
    *   G4GoudsmitSaundersonMscModel if fgIsUsePWATotalXsecData is FALSE.)
    */
-   static std::vector<G4double> *fgMoliereBc;
-   static std::vector<G4double> *fgMoliereXc2;
-
+   static std::vector<double> gMoliereBc;
+   static std::vector<double> gMoliereXc2;
+   //
+   //
+   G4GSMottCorrection   *fMottCorrection;
 };
 
 #endif
-

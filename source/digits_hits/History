@@ -1,4 +1,4 @@
-$Id: History 103976 2017-05-05 12:22:53Z gcosmo $
+$Id: History 105753 2017-08-16 13:46:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+August 1, 2017 M. Asai (digits_hits-V10-03-02)
+- G4SDStructure.cc : fix propagating warning flag. Addressing bug
+  report #1993.
 
 May 2, 2017 J. Madsen (digits_hits-V10-03-01)
 - Update to G4THitsMap to fix issue where G4Colour was

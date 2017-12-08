@@ -56,66 +56,132 @@ namespace G4INCL {
     if(pS=="p" || pS=="proton") {
       theA = 1;
       theZ = 1;
+      theS = 0;
       theType = G4INCL::Proton;
     } else if(pS=="n" || pS=="neutron") {
       theA = 1;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::Neutron;
     } else if(pS=="delta++" || pS=="deltaplusplus") {
       theA = 1;
       theZ = 2;
+      theS = 0;
       theType = G4INCL::DeltaPlusPlus;
     } else if(pS=="delta+" || pS=="deltaplus") {
       theA = 1;
       theZ = 1;
+      theS = 0;
       theType = G4INCL::DeltaPlus;
     } else if(pS=="delta0" || pS=="deltazero") {
       theA = 1;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::DeltaZero;
     } else if(pS=="delta-" || pS=="deltaminus") {
       theA = 1;
       theZ = -1;
+      theS = 0;
       theType = G4INCL::DeltaMinus;
     } else if(pS=="pi+" || pS=="pion+" || pS=="piplus" || pS=="pionplus") {
       theA = 0;
       theZ = 1;
+      theS = 0;
       theType = G4INCL::PiPlus;
     } else if(pS=="pi0" || pS=="pion0" || pS=="pizero" || pS=="pionzero") {
       theA = 0;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::PiZero;
     } else if(pS=="pi-" || pS=="pion-" || pS=="piminus" || pS=="pionminus") {
       theA = 0;
       theZ = -1;
+      theS = 0;
       theType = G4INCL::PiMinus;
+    } else if(pS=="lambda" || pS=="l" || pS=="l0")  {
+      theA = 1;
+      theZ = 0;
+      theS = -1;
+      theType = G4INCL::Lambda;
+    } else if(pS=="s+" || pS=="sigma+" || pS=="sigmaplus")  {
+      theA = 1;
+      theZ = 1;
+      theS = -1;
+      theType = G4INCL::SigmaPlus;
+    } else if(pS=="s0" || pS=="sigma0" || pS=="sigmazero")  {
+      theA = 1;
+      theZ = 0;
+      theS = -1;
+      theType = G4INCL::SigmaZero;
+    } else if(pS=="s-" || pS=="sigma-" || pS=="sigmaminus")  { //Sm = Samarium
+      theA = 1;
+      theZ = -1;
+      theS = -1;
+      theType = G4INCL::SigmaMinus;
+    } else if(pS=="k+" || pS=="kaon+" || pS=="kplus" || pS=="kaonplus") {
+      theA = 0;
+      theZ = 1;
+      theS = 1;
+      theType = G4INCL::KPlus;
+    } else if(pS=="k0" || pS=="kaon0" || pS=="kzero" || pS=="kaonzero") {
+      theA = 0;
+      theZ = 0;
+      theS = 1;
+      theType = G4INCL::KZero;
+    } else if(pS=="k0b" || pS=="kzb" || pS=="kaon0bar" || pS=="kzerobar" || pS=="kaonzerobar") {
+      theA = 0;
+      theZ = 0;
+      theS = -1;
+      theType = G4INCL::KZeroBar;
+    } else if(pS=="k-" || pS=="kaon-" || pS=="kminus" || pS=="kaonminus") {
+      theA = 0;
+      theZ = -1;
+      theS = -1;
+      theType = G4INCL::KMinus;
+    } else if(pS=="k0s" || pS=="kshort" || pS=="ks" || pS=="kaonshort") {
+      theA = 0;
+      theZ = 0;
+      theS = -99;
+      theType = G4INCL::KShort;
+    } else if(pS=="k0l" || pS=="klong" || pS=="kl" || pS=="kaonlong") {
+      theA = 0;
+      theZ = 0;
+      theS = 99;
+      theType = G4INCL::KLong;
     } else if(pS=="d" || pS=="deuteron") {
       theA = 2;
       theZ = 1;
+      theS = 0;
       theType = G4INCL::Composite;
     } else if(pS=="t" || pS=="triton") {
       theA = 3;
       theZ = 1;
+      theS = 0;
       theType = G4INCL::Composite;
     } else if(pS=="a" || pS=="alpha") {
       theA = 4;
       theZ = 2;
+      theS = 0;
       theType = G4INCL::Composite;
     } else if(pS=="eta") {
       theA = 0;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::Eta;
     } else if(pS=="omega") {
       theA = 0;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::Omega;
     } else if(pS=="etaprime" || pS=="etap") {
       theA = 0;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::EtaPrime;
     } else if(pS=="photon") {
       theA = 0;
       theZ = 0;
+      theS = 0;
       theType = G4INCL::Photon;
     } else
       parseNuclide(pS);
@@ -124,13 +190,22 @@ namespace G4INCL {
   ParticleSpecies::ParticleSpecies(ParticleType const t) :
     theType(t),
     theA(ParticleTable::getMassNumber(theType)),
-    theZ(ParticleTable::getChargeNumber(theType))
+    theZ(ParticleTable::getChargeNumber(theType)),
+    theS(ParticleTable::getStrangenessNumber(theType))
   {}
 
   ParticleSpecies::ParticleSpecies(const G4int A, const G4int Z) :
     theType(Composite),
     theA(A),
-    theZ(Z)
+    theZ(Z),
+    theS(0)
+  {}
+
+  ParticleSpecies::ParticleSpecies(const G4int A, const G4int Z, const G4int S) :
+    theType(Composite),
+    theA(A),
+    theZ(Z),
+    theS(S)
   {}
 
   void ParticleSpecies::parseNuclide(std::string const &pS) {
@@ -311,8 +386,41 @@ namespace G4INCL {
 		case Photon:
 		    return 22;
 			break;
+		case Lambda:
+		    return 3122;
+			break;
+		case SigmaPlus:
+		    return 3222;
+			break;
+		case SigmaZero:
+		    return 3212;
+			break;
+		case SigmaMinus:
+		    return 3112;
+			break;
+		case KPlus:
+		    return 321;
+			break;
+		case KZero:
+		    return 311;
+			break;
+		case KZeroBar:
+		    return -311;
+			break;
+		case KShort:
+		    return 310;
+			break;
+		case KLong:
+		    return 130;
+			break;
+		case KMinus:
+		    return -321;
+			break;
 		case Composite:
-		    return theA+theZ*1000;
+			if(theA == 1 && theZ == 1 && theS == 0) return 2212;
+			else if(theA == 1 && theZ == 0 && theS == 0) return 2112;
+			else if(theA == 1 && theZ == 0 && theS == -1) return 3122;
+			else return theA+theZ*1000-theS*1e6; // Here -theS because hyper-nucleus -> theS < 0
 			break;
 		default:
 			INCL_ERROR("ParticleSpecies::getPDGCode: Unknown particle type." << '\n');

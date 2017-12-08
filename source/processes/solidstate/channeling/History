@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 July 2017 E. Bagli channeling-V10-03-03
+-----------------------------------------------------
+- Coverity bug removal
+
 19 June 2017 E. Bagli channeling-V10-03-01
 -----------------------------------------------------
 - Coverity bug removal

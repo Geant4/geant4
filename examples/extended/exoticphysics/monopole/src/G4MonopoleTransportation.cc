@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/G4MonopoleTransportation.cc
 /// \brief Implementation of the G4MonopoleTransportation class
 //
-// $Id: G4MonopoleTransportation.cc 104872 2017-06-23 14:19:16Z gcosmo $
+// $Id: G4MonopoleTransportation.cc 106979 2017-10-31 09:01:20Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -294,8 +294,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                particleMagneticCharge );   // in Mev/c 
 
      G4EquationOfMotion* equationOfMotion = 
-     (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
-     ->GetEquationOfMotion();
+       fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetEquationOfMotion();
 
      equationOfMotion
        ->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c

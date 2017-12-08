@@ -90,7 +90,7 @@ public:
     while(read_header_line(m_reader,file_sz,line)) {
 //      a_out << "line : " << sout(s) << std::endl;
       std::vector<std::string> _words;
-      tools::words(line," ",false,_words);
+      words(line," ",false,_words);
       if(!_words.size()) {
         a_out << "tools::rcsv::histo::read : syntax error : empty header line." << std::endl;
         return false;
@@ -259,7 +259,7 @@ public:
       return false;
     }
     if(a_verbose) a_out << "labels " << sout(line) << std::endl;
-    tools::words(line,",",false,labels);}
+    words(line,",",false,labels);}
 
     unsigned int valn = 3+2*hdata.m_dimension;
 

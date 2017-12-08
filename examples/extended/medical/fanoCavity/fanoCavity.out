@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -138,30 +138,20 @@
 
 DEBUG
 /control/cout/ignoreThreadsExcept 0
-/run/verbose 2
-#
+/run/verbose 1
 /testem/phys/addPhysics standard_opt3
 PhysicsList::AddPhysicsList: <standard_opt3>
-#
 /process/eLoss/StepFunction 0.2 10 um
 /run/physicsModified
-#
 /run/initialize
-userDetector->Construct() start.
 
 ---------------------------------------------------------
 ---> The Wall is 5 mm  of Water ( 1 g/cm3  )
      The Cavity is 2 mm  of Water_vapor ( 1 mg/cm3 )
 ---------------------------------------------------------
 
-Chamber is registered to the default region.
-physicsList->Construct() start.
-physicsList->CheckParticleList() start.
-physicsList->setCut() start.
 PhysicsList::SetCuts:CutLength : 10 km 
-#
 /run/printProgress 1000
-#
 /run/beamOn 4000
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
@@ -224,19 +214,6 @@ hIoni:   for  proton    SubType= 2
           BetheBloch :  Emin=        2 MeV   Emax=       10 GeV
       CSDA range table up to 10 GeV in 160 bins
 
-Region <DefaultRegionForTheWorld> --  -- appears in <Wall> world volume
- This region is in the mass world.
- Root logical volume(s) : Chamber 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Water Water_vapor G4_WATER_VAPOR 
- Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 10 km      e- 10 km      e+ 10 km  proton 10 km 
-
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes
@@ -262,93 +239,25 @@ Index : 2     used in the geometry : Yes
 
 ====================================================================
 
-Start closing geometry.
-G4GeometryManager::ReportVoxelStats -- Voxel Statistics
-
-    Total memory consumed for geometry optimisation:   0 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
 ### Run 0 start.
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 9876, 54321
-----------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
 
- ---> NbofEvents= 1000   NbOfelectr= 70812   Tkin= 586.881 keV (0.000 %)   NbOfelec in cav= 4554   Dose/EnFluence= 28.577 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70417   Tkin= 589.722 keV (0.000 %)   NbOfelec in cav= 4894   Dose/EnFluence= 31.512 cm2/g (0.000 %)
 --> Event 2000 starts.
 
- ---> NbofEvents= 2000   NbOfelectr= 141262   Tkin= 588.109 keV (0.209 %)   NbOfelec in cav= 9170   Dose/EnFluence= 28.530 cm2/g (-0.164 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140609   Tkin= 588.876 keV (-0.143 %)   NbOfelec in cav= 9566   Dose/EnFluence= 29.322 cm2/g (-6.948 %)
 --> Event 3000 starts.
 
- ---> NbofEvents= 3000   NbOfelectr= 212423   Tkin= 588.800 keV (0.118 %)   NbOfelec in cav= 13652   Dose/EnFluence= 28.043 cm2/g (-1.707 %)
+ ---> NbofEvents= 3000   NbOfelectr= 210652   Tkin= 589.125 keV (0.042 %)   NbOfelec in cav= 14502   Dose/EnFluence= 30.920 cm2/g (5.451 %)
  Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=19.34s Real=19.44s Sys=0.03s
-
- ======================== run summary ======================
-
- The run consists of 4000 gamma of 1.250 MeV through 2*5.000 mm  of Water (density: 1.000 g/cm3 )
-
- the cavity is 2.000 mm  of Water_vapor (density: 1.000 mg/cm3) Mass = 0.628 mg
-
- ============================================================
-
- Process calls frequency --->  compt= 282350  Transportation= 78907  msc= 2534076  eIoni= 1703616  phot= 1  conv= 1
-
- Gamma crossSections in wall material :  compt= 63.464 cm2/g  phot= 0.000 cm2/g  conv= 0.000 cm2/g   --> total= 63.464 cm2/g
-
- Mean energy of secondary e- = 589.4488 keV +- 0.1025 %  (--> range in wall material = 2.2273 mm )
- Mass_energy_transfer coef: 29.9269 cm2/g
-
- StoppingPower in wall   = 1.9637 MeV*cm2/g
-               in cavity = 1.9823 MeV*cm2/g
-
- Charged particle flow in cavity :
-      Enter --> nbParticles = 18793	 Energy = 9.4853 GeV
-      Exit  --> nbParticles = 18794	 Energy = 9.4827 GeV
-
- Total edep in cavity = 13.0502 MeV +- 2.7921 %	 Total charged trackLength = 51.9239 m     (mean value = 2.7629 mm )
- Total dose in cavity = 20.7700 MeV/mg
- Dose/EnergyFluence   = 29.3629 cm2/g
-
- (Dose/EnergyFluence)/Mass_energy_transfer = 0.98116 +- 0.02741
-
- StepSize of ch. tracks in wall   = 110.7568 um  +- 69.9966 um 	 (nbSteps/track = 15.1111)
- StepSize of ch. tracks in cavity = 1.2240 mm  +- 1.1511 mm 	 (nbSteps/track = 2.2573)
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 791634575, 961314712
-----------------------------------------
+  User=13.84s Real=13.85s Sys=0s
 G4 kernel has come to Quit state.
-UserDetectorConstruction deleted.
-UserPhysicsList deleted.
-UserActionInitialization deleted.
-UserRunAction deleted.
-UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
-EventManager deleted.
-Units table cleared.
-TransportationManager deleted.
-Total navigation history collections cleaned: 8
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00961 MB
-Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '7G4Event', size : 0.000961 MB
-Pool ID '15G4PrimaryVertex', size : 0.000961 MB
-Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0173 MB
-Pool ID '7G4Track', size : 0.0336 MB
-Pool ID '18G4TouchableHistory', size : 0.000961 MB
-Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.066 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.07 MB
 ============================================================
-G4Allocator objects are deleted.
-UImanager deleted.
-StateManager deleted.
 RunManagerKernel is deleted. Good bye :)

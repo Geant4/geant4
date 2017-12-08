@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairingCorrection.cc 96634 2016-04-27 09:31:49Z gcosmo $
+// $Id: G4PairingCorrection.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -34,22 +34,11 @@
 #include "G4PairingCorrection.hh"
 #include "G4SystemOfUnits.hh"
 
-G4PairingCorrection* G4PairingCorrection::theInstance = nullptr;
-
 G4PairingCorrection::G4PairingCorrection()
 {}
 
 G4PairingCorrection::~G4PairingCorrection()
 {}
-
-G4PairingCorrection* G4PairingCorrection::GetInstance()
-{
-  if (!theInstance)  { 
-    static G4PairingCorrection theCorrections;
-    theInstance = &theCorrections; 
-  }
-  return theInstance;
-}   
 
 G4double G4PairingCorrection::GetPairingCorrection(G4int A, G4int Z) const
 {

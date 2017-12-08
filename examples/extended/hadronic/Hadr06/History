@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-17 I. Hrivnacova  (exhadr06-V10-03-04)
+- Fixed Doxygen warnings
+
 27-04-17 mma  (exhadr06-V10-03-03)
 - update readme
 

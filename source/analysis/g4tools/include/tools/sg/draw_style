@@ -61,7 +61,7 @@ public:
     state.m_line_pattern = line_pattern;
     state.m_point_size = point_size;
     state.m_GL_CULL_FACE = cull_face;
-    state.m_winding = winding_ccw.value()?tools::sg::winding_ccw:tools::sg::winding_cw;
+    state.m_winding = winding_ccw.value()?sg::winding_ccw:sg::winding_cw;
 
     if(style.value()==lines) {
       //no LINE_STIPPLE in GLES.

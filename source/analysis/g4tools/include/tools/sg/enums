@@ -35,7 +35,8 @@ enum marker_style {
   marker_square_line,
   marker_square_filled,
   marker_penta_star_line,
-  marker_penta_star_filled
+  marker_penta_star_filled,
+  marker_minus
 };
 
 enum area_style {

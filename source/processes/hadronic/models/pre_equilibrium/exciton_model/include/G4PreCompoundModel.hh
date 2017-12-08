@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.hh 96527 2016-04-20 08:51:00Z gcosmo $
+// $Id: G4PreCompoundModel.hh 106233 2017-09-22 21:34:41Z gcosmo $
 //
 // by V. Lara
 //
@@ -125,6 +125,7 @@ private:
   //for the rest of external choices
   G4bool useSCO;
   G4bool isInitialised;
+  G4bool isActive;
 
   G4int  minZ;
   G4int  minA;

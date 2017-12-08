@@ -84,6 +84,16 @@
 
 #include "G4ElectronCapture.hh"
 
+//seb
+#include "G4PhysicsListHelper.hh"
+#include "G4WentzelVIModel.hh"
+#include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
+#include "G4BraggIonModel.hh"
+#include "G4BraggModel.hh"
+#include "G4BetheBlochModel.hh"
+#include "G4DNAElastic.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList():  G4VUserPhysicsList()
@@ -138,7 +148,7 @@ void PhysicsList::ConstructBarions()
   //  baryons
   G4Proton::ProtonDefinition();
   G4GenericIon::GenericIonDefinition();
-
+  
   // Geant4 DNA new particles
   G4DNAGenericIonsManager * genericIonsManager;
   genericIonsManager=G4DNAGenericIonsManager::Instance();
@@ -172,6 +182,8 @@ void PhysicsList::ConstructEM()
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
 
+    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+  
     // *********************************
     // 1) Processes for the World region
     // *********************************
@@ -181,18 +193,18 @@ void PhysicsList::ConstructEM()
       // STANDARD msc is active in the world
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->AddEmModel(1,new G4UrbanMscModel());
-      pmanager->AddProcess(msc, -1, 1, -1);
+      ph->RegisterProcess(msc, particle);
 
       // STANDARD ionisation is active in the world
       G4eIonisation* eion = new G4eIonisation();
       eion->SetEmModel(new G4MollerBhabhaModel(), 1);
-      pmanager->AddProcess(eion, -1, 2, 2);
+      ph->RegisterProcess(eion, particle);
 
       // DNA elastic is not active in the world 
       G4DNAElastic* theDNAElasticProcess = new G4DNAElastic("e-_G4DNAElastic");
       theDNAElasticProcess->SetEmModel(new G4DummyModel(),1);
       pmanager->AddDiscreteProcess(theDNAElasticProcess);
-
+      
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("e-_G4DNAExcitation");
       dnaex->SetEmModel(new G4DummyModel(),1);
@@ -219,20 +231,24 @@ void PhysicsList::ConstructEM()
       // Capture of low-energy e-
       G4ElectronCapture* ecap = new G4ElectronCapture("Target", 7.4*eV);
       pmanager->AddDiscreteProcess(ecap);
-      // 7.4 eV is compatible with the validity range of the Champion's model
+      // 7.4 eV is compatible with the validity range of the elastic model
       
     } else if ( particleName == "proton" ) {
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
-      msc->AddEmModel(1,new G4UrbanMscModel());
-      pmanager->AddProcess(msc, -1, 1, -1);
+      msc->AddEmModel(1,new G4WentzelVIModel());
+      ph->RegisterProcess(msc, particle);
+
+      // STANDARD Coulomb scattering is active in the world 
+      G4CoulombScattering* pcou = new G4CoulombScattering();
+      ph->RegisterProcess(pcou, particle);
 
       // STANDARD ionisation is active in the world 
       G4hIonisation* hion = new G4hIonisation();
-      hion->SetEmModel(new G4BraggIonGasModel(), 1);
-      hion->SetEmModel(new G4BetheBlochIonGasModel(), 2);
-      pmanager->AddProcess(hion, -1, 2, 2);
+      hion->SetEmModel(new G4BraggModel(), 1);
+      hion->SetEmModel(new G4BetheBlochModel(), 2);
+      ph->RegisterProcess(hion, particle);
 
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("proton_G4DNAExcitation");
@@ -246,49 +262,68 @@ void PhysicsList::ConstructEM()
       dnaioni->SetEmModel(new G4DummyModel(),2); 
       pmanager->AddDiscreteProcess(dnaioni);
 
-      // DNA charge decrease is ACTIVE in the world since
-      // no corresponding STANDARD process exist
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeDecrease("proton_G4DNAChargeDecrease"));
+      // DNA elastic is not active in the world 
+      G4DNAElastic* dnael = new G4DNAElastic("proton_G4DNAElastic");
+      dnael->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnael);
+
+      // DNA charge decrease is not active in the world 
+      G4DNAChargeDecrease* dnacd = new G4DNAChargeDecrease
+        ("proton_G4DNAChargeDecrease");
+      dnacd->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnacd);
 
     } else if ( particleName == "hydrogen" ) {
 
-      // DNA processes are ACTIVE in the world since
-      // no corresponding STANDARD processes exist
-      pmanager->AddDiscreteProcess(
-          new G4DNAIonisation("hydrogen_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAExcitation("hydrogen_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeIncrease("hydrogen_G4DNAChargeIncrease"));
+      // DNA excitation is not active in the world 
+      G4DNAExcitation* dnaex = new G4DNAExcitation("hydrogen_G4DNAExcitation");
+      dnaex->SetEmModel(new G4DummyModel(),1);
+      pmanager->AddDiscreteProcess(dnaex);
+
+      // DNA ionisation is not active in the world 
+      G4DNAIonisation* dnaioni = new G4DNAIonisation
+        ("hydrogen_G4DNAIonisation");
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaioni);
+
+      // DNA elastic is not active in the world 
+      G4DNAElastic* dnael = new G4DNAElastic("hydrogen_G4DNAElastic");
+      dnael->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnael);
+
+      // DNA charge increase is not active in the world 
+      G4DNAChargeIncrease* dnaci = new G4DNAChargeIncrease
+        ("hydrogen_G4DNAChargeIncrease");
+      dnaci->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaci);
 
     } else if (particleName == "GenericIon") { 
     
-      // THIS IS NEEDED FOR STANDARD ALPHA G4ionIonisation PROCESS
+      // WARNING : THIS IS NEEDED FOR STANDARD ALPHA G4ionIonisation PROCESS
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       msc->AddEmModel(1, new G4UrbanMscModel());
-      pmanager->AddProcess(msc, -1, 1, -1);
+      ph->RegisterProcess(msc, particle);
 
       // STANDARD ionisation is active in the world 
       G4ionIonisation* hion = new G4ionIonisation();
-      hion->SetEmModel(new G4BraggIonGasModel(),1);
-      hion->SetEmModel(new G4BetheBlochIonGasModel(), 2);
-      pmanager->AddProcess(hion, -1, 2, 2);
+      hion->SetEmModel(new G4BraggIonModel(), 1);
+      hion->SetEmModel(new G4BetheBlochModel(), 2);
+      ph->RegisterProcess(hion, particle);
 
     } else if ( particleName == "alpha" ) {
 
       // STANDARD msc is active in the world 
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       msc->AddEmModel(1, new G4UrbanMscModel());
-      pmanager->AddProcess(msc, -1, 1, -1);
+      ph->RegisterProcess(msc, particle);
 
       // STANDARD ionisation is active in the world 
       G4ionIonisation* hion = new G4ionIonisation();
-      hion->SetEmModel(new G4BraggIonGasModel(),1);
-      hion->SetEmModel(new G4BetheBlochIonGasModel(), 2);
-      pmanager->AddProcess(hion, -1, 2, 2);
+      hion->SetEmModel(new G4BraggIonModel(), 1);
+      hion->SetEmModel(new G4BetheBlochModel(), 2);
+      ph->RegisterProcess(hion, particle);
 
       // DNA excitation is not active in the world 
       G4DNAExcitation* dnaex = new G4DNAExcitation("alpha_G4DNAExcitation");
@@ -300,37 +335,84 @@ void PhysicsList::ConstructEM()
       dnaioni->SetEmModel(new G4DummyModel(),1); 
       pmanager->AddDiscreteProcess(dnaioni);
 
-      // DNA charge decrease is ACTIVE in the world since no
-      // corresponding STANDARD process exist
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeDecrease("alpha_G4DNAChargeDecrease"));
+      // DNA elastic is not active in the world 
+      G4DNAElastic* dnael = new G4DNAElastic("alpha_G4DNAElastic");
+      dnael->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnael);
 
-    } else if ( particleName == "alpha+" ) {
+      // DNA charge decrease is not active in the world 
+      G4DNAChargeDecrease* dnacd = new G4DNAChargeDecrease
+        ("alpha_G4DNAChargeDecrease");
+      dnacd->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnacd);
 
-      // DNA processes are ACTIVE in the world since no
-      // corresponding STANDARD processes exist
-      pmanager->AddDiscreteProcess(
-          new G4DNAExcitation("alpha+_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAIonisation("alpha+_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeDecrease("alpha+_G4DNAChargeDecrease"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeIncrease("alpha+_G4DNAChargeIncrease"));
+    }  else if ( particleName == "alpha+" ) {
+
+      // STANDARD msc is active in the world 
+      G4hMultipleScattering* msc = new G4hMultipleScattering();
+      msc->AddEmModel(1, new G4UrbanMscModel());
+      ph->RegisterProcess(msc, particle);
+
+      // STANDARD ionisation is active in the world 
+      G4ionIonisation* hion = new G4ionIonisation();
+      hion->SetEmModel(new G4BraggIonModel(),1);
+      hion->SetEmModel(new G4BetheBlochModel(), 2);
+      ph->RegisterProcess(hion, particle);
+
+      // DNA excitation is not active in the world 
+      G4DNAExcitation* dnaex = new G4DNAExcitation("alpha+_G4DNAExcitation");
+      dnaex->SetEmModel(new G4DummyModel(),1);
+      pmanager->AddDiscreteProcess(dnaex);
+
+      // DNA ionisation is not active in the world 
+      G4DNAIonisation* dnaioni = new G4DNAIonisation("alpha+_G4DNAIonisation");
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaioni);
+
+      // DNA elastic is not active in the world 
+      G4DNAElastic* dnael = new G4DNAElastic("alpha+_G4DNAElastic");
+      dnael->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnael);
+
+      // DNA charge decrease is not active in the world 
+      G4DNAChargeDecrease* dnacd = new G4DNAChargeDecrease
+        ("alpha+_G4DNAChargeDecrease");
+      dnacd->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnacd);
+
+      // DNA charge increase is not active in the world 
+      G4DNAChargeIncrease* dnaci = new G4DNAChargeIncrease
+        ("alpha+_G4DNAChargeIncrease");
+      dnaci->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaci);
 
     } else if ( particleName == "helium" ) {
 
-      // DNA processes are ACTIVE in the world since no
-      // corresponding STANDARD processes exist
-      pmanager->AddDiscreteProcess(
-          new G4DNAExcitation("helium_G4DNAExcitation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAIonisation("helium_G4DNAIonisation"));
-      pmanager->AddDiscreteProcess(
-          new G4DNAChargeIncrease("helium_G4DNAChargeIncrease"));
+      // DNA excitation is not active in the world 
+      G4DNAExcitation* dnaex = new G4DNAExcitation("helium_G4DNAExcitation");
+      dnaex->SetEmModel(new G4DummyModel(),1);
+      pmanager->AddDiscreteProcess(dnaex);
+
+      // DNA ionisation is not active in the world 
+      G4DNAIonisation* dnaioni = new G4DNAIonisation("helium_G4DNAIonisation");
+      dnaioni->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaioni);
+
+      // DNA elastic is not active in the world 
+      G4DNAElastic* dnael = new G4DNAElastic("helium_G4DNAElastic");
+      dnael->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnael);
+
+      // DNA charge increase is not active in the world 
+      G4DNAChargeIncrease* dnaci = new G4DNAChargeIncrease
+        ("helium_G4DNAChargeIncrease");
+      dnaci->SetEmModel(new G4DummyModel(),1); 
+      pmanager->AddDiscreteProcess(dnaci);
 
     }
   }
+  
+  
 
   // **************************************
   // 2) Define processes for Target region 
@@ -359,7 +441,7 @@ void PhysicsList::ConstructEM()
   em_config->SetExtraEmModel("e-","msc",mod,"Target");
 
   mod = new G4MollerBhabhaModel();
-  mod->SetActivationLowEnergyLimit(1*MeV);
+  mod->SetActivationLowEnergyLimit(1.*MeV);
   em_config->SetExtraEmModel("e-",
                              "eIoni",
                              mod,
@@ -395,16 +477,24 @@ void PhysicsList::ConstructEM()
   // *** proton
 
   // ---> STANDARD EM processes inactivated below standEnergyLimit
+  //      or below 1 MeV for scattering
 
-  // STANDARD msc is still active
   // Inactivate following STANDARD processes 
 
-  mod = new G4BraggIonGasModel();
+  mod =  new G4WentzelVIModel();
+  mod->SetActivationLowEnergyLimit(1.*MeV);
+  em_config->SetExtraEmModel("proton","msc",mod,"Target", 0, 100*TeV);
+
+  mod =  new G4eCoulombScatteringModel();
+  mod->SetActivationLowEnergyLimit(1.*MeV);
+  em_config->SetExtraEmModel("proton","CoulombScat",mod,"Target", 0, 100*TeV);
+
+  mod = new G4BraggModel();
   mod->SetActivationLowEnergyLimit(standEnergyLimit);
   em_config->SetExtraEmModel("proton","hIoni",
                              mod,"Target",0.0,2*MeV, new G4IonFluctuations());
 
-  mod = new G4BetheBlochIonGasModel();
+  mod = new G4BetheBlochModel();
   mod->SetActivationLowEnergyLimit(standEnergyLimit);
   em_config->SetExtraEmModel("proton","hIoni",
                              mod,"Target",2*MeV,100*TeV,
@@ -412,9 +502,13 @@ void PhysicsList::ConstructEM()
 
   // ---> DNA processes activated
 
+  mod = new G4DNAIonElasticModel();
+  em_config->SetExtraEmModel("proton","proton_G4DNAElastic",
+                             mod,"Target",100*eV,1.*MeV);
+
   mod = new G4DNARuddIonisationModel(); 
   em_config->SetExtraEmModel("proton","proton_G4DNAIonisation",
-                             mod,"Target",0.0,0.5*MeV);
+                             mod,"Target",100*eV,0.5*MeV);
 
   mod = new G4DNABornIonisationModel();
   em_config->SetExtraEmModel("proton","proton_G4DNAIonisation",
@@ -428,20 +522,51 @@ void PhysicsList::ConstructEM()
   em_config->SetExtraEmModel("proton","proton_G4DNAExcitation",
                              mod,"Target",0.5*MeV,10*MeV);
 
+  mod = new G4DNADingfelderChargeDecreaseModel();
+  em_config->SetExtraEmModel("proton","proton_G4DNAChargeDecrease",
+                             mod,"Target",100*eV,10*MeV);
+
+  // *** hydrogen
+
+  // ---> NO STANDARD EM processes 
+
+  // ---> DNA processes activated
+
+  mod = new G4DNAIonElasticModel();
+  em_config->SetExtraEmModel("hydrogen","hydrogen_G4DNAElastic",
+                             mod,"Target",100.*eV,1.*MeV);
+
+  mod = new G4DNARuddIonisationModel(); 
+  em_config->SetExtraEmModel("hydrogen","hydrogen_G4DNAIonisation",
+                             mod,"Target",100*eV,10*MeV);
+
+  mod = new G4DNAMillerGreenExcitationModel();
+  em_config->SetExtraEmModel("hydrogen","hydrogen_G4DNAExcitation",
+                             mod,"Target",10*eV,0.5*MeV);
+
+
+  mod = new G4DNADingfelderChargeIncreaseModel();
+  em_config->SetExtraEmModel("hydrogen","hydrogen_G4DNAChargeIncrease",
+                             mod,"Target",100*eV,10*MeV);
+
   // *** alpha
 
   // ---> STANDARD EM processes inactivated below standEnergyLimit
+  //      or below 1 MeV for scattering
 
-  // STANDARD msc is still active
   // Inactivate following STANDARD processes 
 
-  mod = new G4BraggIonGasModel();
+  mod =  new G4UrbanMscModel();
+  mod->SetActivationLowEnergyLimit(1.*MeV);
+  em_config->SetExtraEmModel("alpha","msc",mod,"Target", 0, 100*TeV);
+
+  mod = new G4BraggIonModel();
   mod->SetActivationLowEnergyLimit(standEnergyLimit);
   em_config->SetExtraEmModel("alpha","ionIoni",
                              mod,"Target",0.0,2*MeV/massFactor,
                              new G4IonFluctuations());
 
-  mod = new G4BetheBlochIonGasModel();
+  mod = new G4BetheBlochModel();
   mod->SetActivationLowEnergyLimit(standEnergyLimit);
   em_config->SetExtraEmModel("alpha","ionIoni",
                              mod,"Target",2*MeV/massFactor,100*TeV,
@@ -449,14 +574,89 @@ void PhysicsList::ConstructEM()
 
   // ---> DNA processes activated
 
+  mod = new G4DNAIonElasticModel();
+  em_config->SetExtraEmModel("alpha","alpha_G4DNAElastic",
+                             mod,"Target",100*eV,1.*MeV);
+
   mod = new G4DNARuddIonisationModel(); 
   em_config->SetExtraEmModel("alpha","alpha_G4DNAIonisation",
-                             mod,"Target",0.0,10*MeV);
+                             mod,"Target",1*keV,10*MeV);
 
   mod = new G4DNAMillerGreenExcitationModel();
   em_config->SetExtraEmModel("alpha","alpha_G4DNAExcitation",
                              mod,"Target",1*keV,10*MeV);
 
+  mod = new G4DNADingfelderChargeDecreaseModel();
+  em_config->SetExtraEmModel("alpha","alpha_G4DNAChargeDecrease",
+                             mod,"Target",1*keV,10*MeV);
+
+  // *** alpha+
+
+  // ---> STANDARD EM processes inactivated below standEnergyLimit
+  //      or below 1 MeV for scattering
+
+  // Inactivate following STANDARD processes 
+
+  mod =  new G4UrbanMscModel();
+  mod->SetActivationLowEnergyLimit(1.*MeV);
+  em_config->SetExtraEmModel("alpha+","msc",mod,"Target", 0, 100*TeV);
+
+  mod = new G4BraggIonModel();
+  mod->SetActivationLowEnergyLimit(standEnergyLimit);
+  em_config->SetExtraEmModel("alpha+","ionIoni",
+                             mod,"Target",0.0,2*MeV/massFactor,
+                             new G4IonFluctuations());
+
+  mod = new G4BetheBlochModel();
+  mod->SetActivationLowEnergyLimit(standEnergyLimit);
+  em_config->SetExtraEmModel("alpha+","ionIoni",
+                             mod,"Target",2*MeV/massFactor,100*TeV,
+                             new G4UniversalFluctuation());
+
+  // ---> DNA processes activated
+
+  mod = new G4DNAIonElasticModel();
+  em_config->SetExtraEmModel("alpha+","alpha+_G4DNAElastic",
+                             mod,"Target",100*eV,1.*MeV);
+
+  mod = new G4DNARuddIonisationModel(); 
+  em_config->SetExtraEmModel("alpha+","alpha+_G4DNAIonisation",
+                             mod,"Target",1*keV,10*MeV);
+
+  mod = new G4DNAMillerGreenExcitationModel();
+  em_config->SetExtraEmModel("alpha+","alpha+_G4DNAExcitation",
+                             mod,"Target",1*keV,10*MeV);
+
+  mod = new G4DNADingfelderChargeIncreaseModel();
+  em_config->SetExtraEmModel("alpha+","alpha+_G4DNAChargeIncrease",
+                             mod,"Target",1*keV,10*MeV);
+
+  mod = new G4DNADingfelderChargeDecreaseModel();
+  em_config->SetExtraEmModel("alpha+","alpha+_G4DNAChargeDecrease",
+                             mod,"Target",1*keV,10*MeV);
+
+  // *** helium
+  
+  // ---> NO STANDARD EM processes 
+
+  // ---> DNA processes activated
+
+  mod = new G4DNAIonElasticModel();
+  em_config->SetExtraEmModel("helium","helium_G4DNAElastic",
+                             mod,"Target",100*eV,1.*MeV);
+
+  mod = new G4DNARuddIonisationModel(); 
+  em_config->SetExtraEmModel("helium","helium_G4DNAIonisation",
+                             mod,"Target",1*keV,10*MeV);
+
+  mod = new G4DNAMillerGreenExcitationModel();
+  em_config->SetExtraEmModel("helium","helium_G4DNAExcitation",
+                             mod,"Target",1*keV,10*MeV);
+
+  mod = new G4DNADingfelderChargeIncreaseModel();
+  em_config->SetExtraEmModel("helium","helium_G4DNAChargeIncrease",
+                             mod,"Target",1*keV,10*MeV);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

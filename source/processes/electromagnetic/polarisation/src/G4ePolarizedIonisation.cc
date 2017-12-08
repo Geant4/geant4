@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ePolarizedIonisation.cc 97175 2016-05-27 12:42:05Z gcosmo $
+// $Id: G4ePolarizedIonisation.cc 105740 2017-08-16 13:05:44Z gcosmo $
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
@@ -137,7 +137,7 @@ void G4ePolarizedIonisation::InitialiseEnergyLossProcess(
     flucModel = FluctModel();
 
     emModel = new  G4PolarizedMollerBhabhaModel();
-    SetEmModel(emModel, 1);
+    SetEmModel(emModel);
     G4EmParameters* param = G4EmParameters::Instance();
     emModel->SetLowEnergyLimit(param->MinKinEnergy());
     emModel->SetHighEnergyLimit(param->MaxKinEnergy());

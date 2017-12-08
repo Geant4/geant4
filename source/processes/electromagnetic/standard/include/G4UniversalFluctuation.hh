@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh 104353 2017-05-26 07:24:51Z gcosmo $
+// $Id: G4UniversalFluctuation.hh 106204 2017-09-19 10:37:49Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -38,12 +38,6 @@
 //
 // Modifications:
 //
-// 09-12-02 remove warnings (V.Ivanchenko)
-// 28-12-02 add method Dispersion (V.Ivanchenko)
-// 07-02-03 change signature (V.Ivanchenko)
-// 13-02-03 Add name (V.Ivanchenko)
-// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
-// 07-02-05 define problem = 5.e-3 (mma)
 //
 // Class Description:
 //
@@ -130,7 +124,7 @@ private:
   G4double minNumberInteractionsBohr;
   G4double minLoss;
   G4double nmaxCont;
-  G4double rate,fw;
+  G4double rate,a0,fw; 
 
   G4int     sizearray;
   G4double* rndmarray;
@@ -148,10 +142,9 @@ G4UniversalFluctuation::AddExcitation(CLHEP::HepRandomEngine* rndm,
   if(ax > nmaxCont) {
     eav  += ax*ex;
     esig2 += ax*ex*ex;
-  } else if(ax > 0.) {
-    G4double p = G4double(G4Poisson(ax));
-    eloss += p*ex;
-    if(p > 0.) { eloss += (1.-2.*rndm->flat())*ex; }
+  } else {
+    G4int p = G4Poisson(ax);
+    if(p > 0) { eloss += ((p + 1) - 2.*rndm->flat())*ex; }
   }
 }
 
@@ -161,17 +154,14 @@ G4UniversalFluctuation::SampleGauss(CLHEP::HepRandomEngine* rndm,
                                     G4double& eloss)
 {
   G4double x = eav;
-  if(esig2 > 0.0) { 
-    G4double sig = std::sqrt(esig2);
-    G4double deltae = std::min(4.*sig, eav);
-    if(deltae < 0.25*sig) {
-      x += (2.*rndm->flat() - 1.)*deltae;
-    } else {
-      do { 
-        x = G4RandGauss::shoot(rndm, eav, sig);
-      } while (x < eav-deltae || x > eav+deltae);
-        // Loop checking, 23-Feb-2016, Vladimir Ivanchenko
-    }
+  G4double sig = std::sqrt(esig2);
+  if(eav < 0.25*sig) {
+    x += (2.*rndm->flat() - 1.)*eav;
+  } else {
+    do { 
+      x = G4RandGauss::shoot(rndm, eav, sig);
+    } while (x < 0.0 || x > 2*eav);
+    // Loop checking, 23-Feb-2016, Vladimir Ivanchenko
   }
   eloss += x;
 } 

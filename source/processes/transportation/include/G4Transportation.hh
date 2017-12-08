@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.hh 87829 2015-01-14 17:19:59Z gcosmo $
+// $Id: G4Transportation.hh 105913 2017-08-28 08:39:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -97,11 +97,6 @@ class G4Transportation : public G4VProcess
      G4PropagatorInField* GetPropagatorInField();
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
        // Access/set the assistant class that Propagate in a Field.
-
-     inline void   SetVerboseLevel( G4int verboseLevel );
-     inline G4int  GetVerboseLevel() const;
-       // Level of warnings regarding eg energy conservation
-       // in field integration.
 
      inline G4double GetThresholdWarningEnergy() const; 
      inline G4double GetThresholdImportantEnergy() const; 
@@ -207,13 +202,6 @@ class G4Transportation : public G4VProcess
      G4bool   fShortStepOptimisation; 
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
-
-  // Verbosity 
-     G4int    fVerboseLevel;
-       // Verbosity level for warnings
-       // eg about energy non-conservation in magnetic field.
-
-  // Whether to track state change from magnetic moment in a B-field
 
   private:
      friend class G4CoupledTransportation;

@@ -150,14 +150,14 @@ private:
         G4double t, 
         G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
   
   TriDimensionMap eDiffCrossSectionData[6];
   TriDimensionMap eNrjTransfData[6]; // for cumulated dcs
   
-  std::vector<double> eTdummyVec;
+  std::vector<G4double> eTdummyVec;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   
   VecMap eVecm;
   

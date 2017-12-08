@@ -50,6 +50,7 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4Alpha.hh"
+#include "G4RandomDirection.hh"
 
 G4NeutronRadCapture::G4NeutronRadCapture() 
   : G4HadronicInteraction("nRadCapture"),
@@ -121,15 +122,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
 	     << "  Z= " << Z << "  A= " << A << G4endl;
     }
     G4double e1 = (M - mass)*(M + mass)/(2*M);
-
-    G4double cost = 2.0*G4UniformRand() - 1.0;
-    if(cost > 1.0) {cost = 1.0;}
-    else if(cost < -1.0) {cost = -1.0;}
-    G4double sint = std::sqrt((1. - cost)*(1.0 + cost));
-    G4double phi  = G4UniformRand()*CLHEP::twopi;
-
-    G4LorentzVector lv2(e1*sint*std::cos(phi),e1*sint*std::sin(phi),
-			e1*cost,e1);
+    G4LorentzVector lv2(e1*G4RandomDirection(),e1);
     lv2.boost(bst);
     G4HadSecondary* news = 
       new G4HadSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));

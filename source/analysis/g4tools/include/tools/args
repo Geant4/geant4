@@ -106,6 +106,7 @@ public:
     a_value = a_def;
     return false;
   }
+#ifdef TOOLS_DEPRECATED
   std::vector<std::string> find(const std::string& a_key) const {
     std::vector<std::string> vals;
     tools_vforcit(arg,m_args,it) {
@@ -113,6 +114,14 @@ public:
     }
     return vals;
   }
+#endif
+  void find(const std::string& a_key,std::vector<std::string>& a_vals) const {
+    a_vals.clear();
+    tools_vforcit(arg,m_args,it) {
+      if((*it).first==a_key) a_vals.push_back((*it).second);
+    }
+  }
+  
   bool find(const std::string& a_string,bool& a_value,const bool& a_def = false) const {
     std::string s;
     if(!find(a_string,s)) {a_value = a_def;return false;}
@@ -124,6 +133,8 @@ public:
     if(!find(a_string,_s)) {a_value = a_def;return false;}
     return to<aT>(_s,a_value,a_def);
   }
+  
+#ifdef TOOLS_DEPRECATED
   std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
     std::vector<std::string> vec;
@@ -139,6 +150,20 @@ public:
       vec.push_back(s);
     }
     return vec;
+  }
+#endif
+  void to_vector(std::vector<std::string>& a_vec) const {
+    // Return a vector of string <name=value>
+    a_vec.clear();
+    std::string s;
+    tools_vforcit(arg,m_args,it) {
+      s = (*it).first;
+      if((*it).second.size()) {
+        s += "=";
+        s += (*it).second;
+      }
+      a_vec.push_back(s);
+    }
   }
 
   bool add(const std::string& a_key,const std::string& a_value = "",bool a_override = true){

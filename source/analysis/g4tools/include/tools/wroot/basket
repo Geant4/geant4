@@ -27,6 +27,8 @@ public: //ibo
     // in principle we pass here only for the last basket
     // of a branch when it is streamed from branch::stream().
 
+    // We pass also here in the case of filling "tree in a tree" (MEMPHYS sim).
+
     // some consitency checks :
     //G.Barrand : the below test is "too much". Someone
     //            may have to write a tree (and then a basket)
@@ -82,12 +84,12 @@ public: //ibo
     }
  
     if(m_data.to_displace()) {
-      //NOTE : how / when handle the displacements ?
-      m_out << "tools::wroot::basket::stream :" 
-            << " WARNING : m_data buffer has offsets to displace."
-            << std::endl;
-      //if(!const_cast<basket&>(*this).m_data.displace_mapped(m_key_length))
-      //  return false; //???
+      if(!const_cast<basket&>(*this).m_data.displace_mapped(m_key_length)) {
+        m_out << "tools::wroot::basket::stream :" 
+              << " m_data.displace_mapped() failed."
+              << std::endl;
+        return false;
+      }
     }
 
     buffer bref(m_out,a_buffer.byte_swap(),256);

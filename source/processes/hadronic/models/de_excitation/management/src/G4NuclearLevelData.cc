@@ -45,6 +45,9 @@
 #include "G4Element.hh"
 #include "G4ElementTable.hh"
 #include "G4DeexPrecoParameters.hh"
+#include "G4PairingCorrection.hh"
+#include "G4ShellCorrection.hh"
+#include <iomanip>
 
 G4NuclearLevelData* G4NuclearLevelData::theInstance = nullptr;
 
@@ -417,32 +420,38 @@ G4Mutex G4NuclearLevelData::nuclearLevelDataMutex = G4MUTEX_INITIALIZER;
 G4NuclearLevelData* G4NuclearLevelData::GetInstance()
 {
   if (!theInstance)  { 
-    static G4NuclearLevelData theData;
-    theInstance = &theData; 
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nuclearLevelDataMutex);
+    if (!theInstance)  { 
+#endif
+      static G4NuclearLevelData theData;
+      theInstance = &theData; 
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nuclearLevelDataMutex);
+#endif
   }
   return theInstance;
 }   
 
 G4NuclearLevelData::G4NuclearLevelData()
 {
-#ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
-#endif
   fDeexPrecoParameters = new G4DeexPrecoParameters();
   fLevelReader = new G4LevelReader(this);
   for(G4int Z=0; Z<ZMAX; ++Z) {
     (fLevelManagers[Z]).resize(AMAX[Z]-AMIN[Z]+1,nullptr);
     (fLevelManagerFlags[Z]).resize(AMAX[Z]-AMIN[Z]+1,false);
   }
-#ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
-#endif
+  fShellCorrection = new G4ShellCorrection();
+  fPairingCorrection = new G4PairingCorrection();
 }
 
 G4NuclearLevelData::~G4NuclearLevelData()
 {
   delete fLevelReader;
   delete fDeexPrecoParameters;
+  delete fShellCorrection;
+  delete fPairingCorrection;
   for(G4int Z=1; Z<ZMAX; ++Z) {
     size_t nn = (fLevelManagers[Z]).size();
     for(size_t j=0; j<nn; ++j) { 
@@ -472,16 +481,29 @@ G4bool
 G4NuclearLevelData::AddPrivateData(G4int Z, G4int A, const G4String& filename)
 {
   G4bool res = false; 
-  if(A >= AMIN[Z] && A <= AMAX[Z]) { 
-    const G4LevelManager* newman = nullptr;
-    newman = fLevelReader->MakeLevelManager(Z, A, filename);
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&nuclearLevelDataMutex);
+#endif
+  if(Z > 0 && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) { 
+    const G4LevelManager* newman = 
+      fLevelReader->MakeLevelManager(Z, A, filename);
     if(newman) { 
       delete (fLevelManagers[Z])[A - AMIN[Z]]; 
       (fLevelManagers[Z])[A - AMIN[Z]] = newman;
       (fLevelManagerFlags[Z])[A - AMIN[Z]] = true;
       res = true;
     }
+  } else {
+    G4ExceptionDescription ed;
+    ed << "private nuclear level data for Z= " << Z << " A= " << A
+       << " outside allowed limits ";
+    G4Exception("G4NuclearLevelData::AddPrivateData","had0433",FatalException,
+		ed,"Stop execution");
   }
+  G4cout << "AddPrivateData done" << G4endl;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&nuclearLevelDataMutex);
+#endif
   return res;
 }
 
@@ -498,7 +520,7 @@ G4int G4NuclearLevelData::GetMaxA(G4int Z) const
 void G4NuclearLevelData::InitialiseForIsotope(G4int Z, G4int A)
 {
 #ifdef G4MULTITHREADED
-  G4MUTEXLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
+  G4MUTEXLOCK(&nuclearLevelDataMutex);
 #endif
   if(!(fLevelManagerFlags[Z])[A - AMIN[Z]]) {
     (fLevelManagers[Z])[A - AMIN[Z]] = 
@@ -506,7 +528,7 @@ void G4NuclearLevelData::InitialiseForIsotope(G4int Z, G4int A)
     (fLevelManagerFlags[Z])[A - AMIN[Z]] = true;
   }
 #ifdef G4MULTITHREADED
-  G4MUTEXUNLOCK(&G4NuclearLevelData::nuclearLevelDataMutex);
+  G4MUTEXUNLOCK(&nuclearLevelDataMutex);
 #endif
 }
 
@@ -580,3 +602,25 @@ G4DeexPrecoParameters* G4NuclearLevelData::GetParameters()
   return fDeexPrecoParameters;
 }
 
+G4PairingCorrection* G4NuclearLevelData::GetPairingCorrection()
+{
+  return fPairingCorrection;
+}
+
+G4ShellCorrection* G4NuclearLevelData::GetShellCorrection()
+{
+  return fShellCorrection;
+}
+
+void G4NuclearLevelData::StreamLevels(std::ostream& os, 
+                                      G4int Z, G4int A) const
+{
+  if(0 < Z && Z < ZMAX && A >= AMIN[Z] && A <= AMAX[Z]) {
+    const G4LevelManager* man = (fLevelManagers[Z])[A - AMIN[Z]];
+    if(man) { 
+      os << "Level data for Z= " << Z << " A= " << A << "  " 
+	 << man->NumberOfTransitions() + 1 << " levels \n";
+      man->StreamInfo(os);
+    }
+  }
+}

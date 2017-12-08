@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NeutronTrackingCut.cc 102617 2017-02-10 07:58:33Z gcosmo $
+// $Id: G4NeutronTrackingCut.cc 107562 2017-11-22 15:39:24Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 #include "G4NeutronKiller.hh"
 #include "G4HadronicProcessStore.hh"
 
+#include "G4BuilderType.hh"
 #include "G4Threading.hh"
 
 // factory
@@ -54,19 +55,16 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4NeutronTrackingCut);
 //
 
 G4NeutronTrackingCut::G4NeutronTrackingCut(G4int ver)
-  :  G4VPhysicsConstructor("neutronTrackingCut")
-   , verbose(ver)
+  :  G4VPhysicsConstructor("neutronTrackingCut"), verbose(ver)
 {
   timeLimit          = 10.*microsecond;
   kineticEnergyLimit = 0.0;
+  SetPhysicsType(bUnknown);
 }
 
-G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String& name, G4int ver)
-  :  G4VPhysicsConstructor(name), verbose(ver)
-{
-  timeLimit          = 10.*microsecond;
-  kineticEnergyLimit = 0.0;
-}
+G4NeutronTrackingCut::G4NeutronTrackingCut(const G4String&, G4int ver)
+  :  G4NeutronTrackingCut(ver)
+{}
 
 G4NeutronTrackingCut::~G4NeutronTrackingCut()
 {}

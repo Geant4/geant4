@@ -28,22 +28,30 @@
 #include "G4XAnnihilationChannel.hh"
 #include "G4ConcreteMesonBaryonToResonance.hh"
 
+G4BaryonWidth*           G4ConcreteMesonBaryonToResonance::baryonWidth = nullptr;
+G4BaryonPartialWidth*    G4ConcreteMesonBaryonToResonance::baryonPartialWidth = nullptr;
+G4ParticleTypeConverter* G4ConcreteMesonBaryonToResonance::particleTypeConverter = nullptr;
+
+#ifdef G4MULTITHREADED
+G4Mutex G4ConcreteMesonBaryonToResonance::concreteMesonBaryonToResonanceMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4BaryonWidth & G4ConcreteMesonBaryonToResonance::theBaryonWidth()
 {
-  static G4ThreadLocal G4BaryonWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonWidth  ;  G4BaryonWidth &theWidth = *theWidth_G4MT_TLS_;
-  return theWidth;
+  if(!baryonWidth) { G4ConcreteMesonBaryonToResonance::InitialisePointers(); }
+  return *baryonWidth;
 }
 
 G4BaryonPartialWidth & G4ConcreteMesonBaryonToResonance::theBaryonPartialWidth()
 {
-  static G4ThreadLocal G4BaryonPartialWidth *theWidth_G4MT_TLS_ = 0 ; if (!theWidth_G4MT_TLS_) theWidth_G4MT_TLS_ = new  G4BaryonPartialWidth  ;  G4BaryonPartialWidth &theWidth = *theWidth_G4MT_TLS_;
-  return theWidth;
+  if(!baryonPartialWidth) { G4ConcreteMesonBaryonToResonance::InitialisePointers(); }
+  return *baryonPartialWidth;
 }
 
 G4ParticleTypeConverter & G4ConcreteMesonBaryonToResonance::myConv() 
 {
-    static G4ThreadLocal G4ParticleTypeConverter *theConv_G4MT_TLS_ = 0 ; if (!theConv_G4MT_TLS_) theConv_G4MT_TLS_ = new  G4ParticleTypeConverter  ;  G4ParticleTypeConverter &theConv = *theConv_G4MT_TLS_;
-    return theConv;
+  if(!particleTypeConverter) { G4ConcreteMesonBaryonToResonance::InitialisePointers(); }
+  return *particleTypeConverter;
 }
 
 G4ConcreteMesonBaryonToResonance::G4ConcreteMesonBaryonToResonance(const G4ParticleDefinition* aPrimary,
@@ -56,14 +64,30 @@ G4ConcreteMesonBaryonToResonance::G4ConcreteMesonBaryonToResonance(const G4Parti
 						  theBaryonWidth(),
 						  theBaryonPartialWidth(),
 						  partWidthLabel);
+  InitialisePointers();
 }
-
 
 G4ConcreteMesonBaryonToResonance::~G4ConcreteMesonBaryonToResonance()
 { 
   delete crossSectionSource;
 }
 
+void G4ConcreteMesonBaryonToResonance::InitialisePointers()
+{
+  if(!baryonWidth) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&concreteMesonBaryonToResonanceMutex);
+    if (!baryonWidth)  { 
+#endif
+      baryonWidth = new G4BaryonWidth();
+      baryonPartialWidth = new G4BaryonPartialWidth();
+      particleTypeConverter = new G4ParticleTypeConverter(); 
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&concreteMesonBaryonToResonanceMutex);
+#endif
+  }
+}
 
 G4bool G4ConcreteMesonBaryonToResonance::IsInCharge(const G4KineticTrack& trk1, 
 						    const G4KineticTrack& trk2) const

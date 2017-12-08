@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.cc 96794 2016-05-09 10:09:30Z gcosmo $
+// $Id: G4NistManager.cc 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -62,14 +62,25 @@
 #include "G4Isotope.hh"
 
 G4NistManager* G4NistManager::instance = nullptr;
+#ifdef G4MULTITHREADED
+  G4Mutex G4NistManager::nistManagerMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4NistManager* G4NistManager::Instance()
 {
   if (instance == nullptr) {
-    static G4NistManager manager;
-    instance = &manager;
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nistManagerMutex);
+    if (instance == nullptr) {
+#endif
+      static G4NistManager manager;
+      instance = &manager;
+#ifdef G4MULTITHREADED
+    }
+    G4MUTEXUNLOCK(&nistManagerMutex);
+#endif
   }
   return instance;
 }

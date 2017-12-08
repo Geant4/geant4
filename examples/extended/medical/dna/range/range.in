@@ -110,19 +110,3 @@
 #
 /gun/energy 5000 eV
 /run/beamOn 1000
-#
-/gun/energy 6000 eV
-/run/beamOn 1000
-#
-/gun/energy 7000 eV
-/run/beamOn 1000
-#
-/gun/energy 8000 eV
-/run/beamOn 1000
-#
-/gun/energy 9000 eV
-/run/beamOn 1000
-#
-/gun/energy 9999.9 eV
-/run/beamOn 1000
-

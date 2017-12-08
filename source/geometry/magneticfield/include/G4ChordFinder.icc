@@ -24,20 +24,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.icc 69699 2013-05-13 08:50:30Z gcosmo $
+// $Id: G4ChordFinder.icc 107059 2017-11-01 14:58:16Z gcosmo $
 //
 // G4ChordFinder inline implementations
 //
 // --------------------------------------------------------------------
 
 inline 
-void G4ChordFinder::SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver)
+void G4ChordFinder::SetIntegrationDriver(G4VIntegrationDriver* IntegrationDriver)
 {
   fIntgrDriver=IntegrationDriver;
 }
 
 inline
-G4MagInt_Driver* G4ChordFinder::GetIntegrationDriver()
+G4VIntegrationDriver* G4ChordFinder::GetIntegrationDriver()
 {
   return fIntgrDriver;
 }

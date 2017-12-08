@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 100678 2016-10-31 10:48:06Z gcosmo $
+# $Id: sources.cmake 106381 2017-10-09 09:31:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -65,6 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLCrossSectionsINCL46.hh
         G4INCLCrossSectionsMultiPions.hh
         G4INCLCrossSectionsMultiPionsAndResonances.hh
+        G4INCLCrossSectionsStrangeness.hh
         G4INCLCrossSectionsTruncatedMultiPions.hh
         G4INCLDecayAvatar.hh
         G4INCLDeJongSpin.hh
@@ -86,16 +87,53 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLKinematicsUtils.hh
         G4INCLNDeltaEtaProductionChannel.hh
         G4INCLNDeltaOmegaProductionChannel.hh
+        G4INCLNDeltaToDeltaLKChannel.hh
+        G4INCLNDeltaToDeltaSKChannel.hh
+        G4INCLNDeltaToNLKChannel.hh
+        G4INCLNDeltaToNNKKbChannel.hh
+        G4INCLNDeltaToNSKChannel.hh
         G4INCLNDFGaussian.hh
         G4INCLNDFHardSphere.hh
         G4INCLNDFModifiedHarmonicOscillator.hh
         G4INCLNDFParis.hh
         G4INCLNDFWoodsSaxon.hh
+        G4INCLNeutralKaonDecayChannel.hh
+        G4INCLNKbElasticChannel.hh
+        G4INCLNKbToL2piChannel.hh
+        G4INCLNKbToLpiChannel.hh
+        G4INCLNKbToNKb2piChannel.hh
+        G4INCLNKbToNKbChannel.hh
+        G4INCLNKbToNKbpiChannel.hh
+        G4INCLNKbToS2piChannel.hh
+        G4INCLNKbToSpiChannel.hh
+        G4INCLNKElasticChannel.hh
+        G4INCLNKToNK2piChannel.hh
+        G4INCLNKToNKChannel.hh
+        G4INCLNKToNKpiChannel.hh
+        G4INCLNLToNSChannel.hh
         G4INCLNNEtaToMultiPionsChannel.hh
         G4INCLNNOmegaToMultiPionsChannel.hh
+        G4INCLNNToMissingStrangenessChannel.hh
         G4INCLNNToMultiPionsChannel.hh
+        G4INCLNNToNLK2piChannel.hh
+        G4INCLNNToNLKChannel.hh
+        G4INCLNNToNLKpiChannel.hh
         G4INCLNNToNNEtaChannel.hh
+        G4INCLNNToNNKKbChannel.hh
         G4INCLNNToNNOmegaChannel.hh
+        G4INCLNNToNSK2piChannel.hh
+        G4INCLNNToNSKChannel.hh
+        G4INCLNNToNSKpiChannel.hh
+        G4INCLNpiToLK2piChannel.hh
+        G4INCLNpiToLKChannel.hh
+        G4INCLNpiToLKpiChannel.hh
+        G4INCLNpiToMissingStrangenessChannel.hh
+        G4INCLNpiToNKKbChannel.hh
+        G4INCLNpiToSK2piChannel.hh
+        G4INCLNpiToSKChannel.hh
+        G4INCLNpiToSKpiChannel.hh
+        G4INCLNSToNLChannel.hh
+        G4INCLNSToNSChannel.hh
         G4INCLNuclearDensity.hh
         G4INCLNuclearDensityFactory.hh
         G4INCLNuclearPotentialConstant.hh
@@ -103,6 +141,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialEnergyIsospinSmooth.hh
         G4INCLNuclearPotentialIsospin.hh
         G4INCLNucleus.hh
+        G4INCLNYElasticChannel.hh
         G4INCLOmegaNElasticChannel.hh
         G4INCLOmegaNToPiNChannel.hh
         G4INCLOmegaNToPiPiNChannel.hh
@@ -126,8 +165,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLProjectileRemnant.hh
         G4INCLRecombinationChannel.hh
         G4INCLReflectionChannel.hh
+        G4INCLSigmaZeroDecayChannel.hh
         G4INCLStandardPropagationModel.hh
         G4INCLStore.hh
+        G4INCLStrangeAbsorbtionChannel.hh
         G4INCLSurfaceAvatar.hh
         G4INCLTransmissionChannel.hh
 
@@ -148,6 +189,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLCrossSectionsINCL46.cc
         G4INCLCrossSectionsMultiPions.cc
         G4INCLCrossSectionsMultiPionsAndResonances.cc
+        G4INCLCrossSectionsStrangeness.cc
         G4INCLCrossSectionsTruncatedMultiPions.cc
         G4INCLDecayAvatar.cc
         G4INCLDeJongSpin.cc
@@ -163,11 +205,48 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLKinematicsUtils.cc
         G4INCLNDeltaEtaProductionChannel.cc
         G4INCLNDeltaOmegaProductionChannel.cc
+        G4INCLNDeltaToDeltaLKChannel.cc
+        G4INCLNDeltaToDeltaSKChannel.cc
+        G4INCLNDeltaToNLKChannel.cc
+        G4INCLNDeltaToNNKKbChannel.cc
+        G4INCLNDeltaToNSKChannel.cc
+        G4INCLNeutralKaonDecayChannel.cc
+        G4INCLNKbElasticChannel.cc
+        G4INCLNKbToL2piChannel.cc
+        G4INCLNKbToLpiChannel.cc
+        G4INCLNKbToNKb2piChannel.cc
+        G4INCLNKbToNKbChannel.cc
+        G4INCLNKbToNKbpiChannel.cc
+        G4INCLNKbToS2piChannel.cc
+        G4INCLNKbToSpiChannel.cc
+        G4INCLNKElasticChannel.cc
+        G4INCLNKToNK2piChannel.cc
+        G4INCLNKToNKChannel.cc
+        G4INCLNKToNKpiChannel.cc
+        G4INCLNLToNSChannel.cc
         G4INCLNNEtaToMultiPionsChannel.cc
         G4INCLNNOmegaToMultiPionsChannel.cc
+        G4INCLNNToMissingStrangenessChannel.cc
         G4INCLNNToMultiPionsChannel.cc
+        G4INCLNNToNLK2piChannel.cc
+        G4INCLNNToNLKChannel.cc
+        G4INCLNNToNLKpiChannel.cc
         G4INCLNNToNNEtaChannel.cc
+        G4INCLNNToNNKKbChannel.cc
         G4INCLNNToNNOmegaChannel.cc
+        G4INCLNNToNSK2piChannel.cc
+        G4INCLNNToNSKChannel.cc
+        G4INCLNNToNSKpiChannel.cc
+        G4INCLNpiToLK2piChannel.cc
+        G4INCLNpiToLKChannel.cc
+        G4INCLNpiToLKpiChannel.cc
+        G4INCLNpiToMissingStrangenessChannel.cc
+        G4INCLNpiToNKKbChannel.cc
+        G4INCLNpiToSK2piChannel.cc
+        G4INCLNpiToSKChannel.cc
+        G4INCLNpiToSKpiChannel.cc
+        G4INCLNSToNLChannel.cc
+        G4INCLNSToNSChannel.cc
         G4INCLNuclearDensity.cc
         G4INCLNuclearDensityFactory.cc
         G4INCLNuclearPotentialConstant.cc
@@ -175,6 +254,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLNuclearPotentialEnergyIsospinSmooth.cc
         G4INCLNuclearPotentialIsospin.cc
         G4INCLNucleus.cc
+        G4INCLNYElasticChannel.cc
         G4INCLOmegaNElasticChannel.cc
         G4INCLOmegaNToPiNChannel.cc
         G4INCLOmegaNToPiPiNChannel.cc
@@ -198,8 +278,10 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLProjectileRemnant.cc
         G4INCLRecombinationChannel.cc
         G4INCLReflectionChannel.cc
+        G4INCLSigmaZeroDecayChannel.cc
         G4INCLStandardPropagationModel.cc
         G4INCLStore.cc
+        G4INCLStrangeAbsorbtionChannel.cc
         G4INCLSurfaceAvatar.cc
         G4INCLTransmissionChannel.cc
 

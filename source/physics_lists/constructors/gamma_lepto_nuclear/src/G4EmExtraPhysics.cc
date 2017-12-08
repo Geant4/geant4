@@ -55,6 +55,7 @@
 
 #include "G4SynchrotronRadiation.hh"
 #include "G4BertiniElectroNuclearBuilder.hh"
+#include "G4LENDBertiniGammaElectroNuclearBuilder.hh"
 #include "G4MuonNuclearProcess.hh"
 #include "G4MuonVDNuclearModel.hh"
 
@@ -73,6 +74,7 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmExtraPhysics);
 
 G4bool G4EmExtraPhysics::gnActivated  = true;
 G4bool G4EmExtraPhysics::eActivated   = true;
+G4bool G4EmExtraPhysics::gLENDActivated = false;
 G4bool G4EmExtraPhysics::munActivated = true;
 G4bool G4EmExtraPhysics::synActivated = false;
 G4bool G4EmExtraPhysics::synActivatedForAll = false;
@@ -122,6 +124,11 @@ void G4EmExtraPhysics::SynchAll(G4bool val)
 void G4EmExtraPhysics::GammaNuclear(G4bool val)
 {
   gnActivated = val;
+}
+
+void G4EmExtraPhysics::LENDGammaNuclear(G4bool val)
+{
+  gLENDActivated = val;
 }
 
 void G4EmExtraPhysics::ElectroNuclear(G4bool val)
@@ -183,7 +190,11 @@ void G4EmExtraPhysics::ConstructProcess()
 
   G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
   if(gnActivated) {
+    if ( gLENDActivated != true ) {
     theGNPhysics = new G4BertiniElectroNuclearBuilder(eActivated);
+    } else {
+    theGNPhysics = new G4LENDBertiniGammaElectroNuclearBuilder(eActivated);
+    }
     theGNPhysics->Build();
   }
   if(munActivated) {

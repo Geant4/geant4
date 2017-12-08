@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 102246 2017-01-16 13:10:31Z gcosmo $
+// $Id: G4UIQt.cc 105742 2017-08-16 13:11:07Z gcosmo $
 //
 // L. Garnier
 
@@ -4379,6 +4379,8 @@ void G4UIQt::CreatePickInfosDialog() {
   layoutDialog->addWidget(fPickInfosWidget);
   layoutDialog->setContentsMargins(0,0,0,0);
   fPickInfosDialog->setLayout(layoutDialog);
+  fPickInfosDialog->setWindowFlags(Qt::WindowStaysOnTopHint);
+
 }
 
   

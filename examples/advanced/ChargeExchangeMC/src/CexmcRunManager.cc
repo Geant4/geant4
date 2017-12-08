@@ -102,14 +102,14 @@ namespace
 }
 
 
-CexmcRunManager::CexmcRunManager( const G4String &  projectId,
-                                  const G4String &  rProject,
+CexmcRunManager::CexmcRunManager( const G4String &  projectId_,
+                                  const G4String &  rProject_,
                                   G4bool  overrideExistingProject ) :
     basePhysicsUsed( CexmcPMFactoryInstance::GetBasePhysics() ),
     productionModelType( CexmcUnknownProductionModel ),
     gdmlFileName( "default.gdml" ), shouldGdmlFileBeValidated( true ),
-    zipGdmlFile( false ), projectsDir( "." ), projectId( projectId ),
-    rProject( rProject ), guiMacroName( "" ), cfFileName( "" ),
+    zipGdmlFile( false ), projectsDir( "." ), projectId( projectId_ ),
+    rProject( rProject_ ), guiMacroName( "" ), cfFileName( "" ),
     eventCountPolicy( CexmcCountAllEvents ),
     skipInteractionsWithoutEDTonWrite( true ),
     evDataVerboseLevel( CexmcWriteEventDataOnEveryEDT ),

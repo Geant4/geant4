@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 101685 2016-11-21 09:39:59Z gcosmo $
+$Id: History 107805 2017-12-04 15:31:29Z gcosmo $
 ---------------------------------------------------------------------
 
            History file for the Liege cascade INCL Model
@@ -15,6 +15,52 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+04 December 2017 - Alberto Ribon (hadr-inclxx-V10-03-20)
+---------------------------------------------------------------
+- G4INCLRandom : improved to avoid reproducibility problems. 
+  The method "gaussWithMemory" should be called twice for drawing a pair
+  of correlated gaussian variables, whereas the method "gauss" should be
+  used for usual, single and independent gaussian variables.
+
+10 November 2017 - Jean-Christophe David (hadr-inclxx-V10-03-19)
+---------------------------------------------------------------
+- INCL++ v6.0
+  o Fix bugs in eta/omega channels (v6.0 = strangeness + HFB)
+
+27 October 2017 - Jose Luis Rodriguez Sanchez (hadr-inclxx-V10-03-18)
+---------------------------------------------------------------
+- INCL++ v6.0_rc18 - Fix warnings
+
+26 October 2017 - Jose Luis Rodriguez Sanchez (hadr-inclxx-V10-03-16)
+---------------------------------------------------------------
+- INCL++ v6.0_rc16
+  o Fix minor bugs
+
+18 October 2017 - Jose Luis Rodriguez Sanchez (hadr-inclxx-V10-03-15)
+---------------------------------------------------------------
+- INCL++ v6.0_rc15
+  o Fix warning in Geant4 (interface --> newTargetS)
+
+18 October 2017 - Jose Luis Rodriguez Sanchez (hadr-inclxx-V10-03-14)
+---------------------------------------------------------------
+- INCL++ v6.0_rc14
+  o Separation energies improved and hypercluster emission added
+
+07 October 2017 - Jose Luis Rodriguez Sanchez (hadr-inclxx-V10-03-10)
+---------------------------------------------------------------
+- INCL++ v6.0_rc10
+  o Few nucleon removal improved
+
+27 September 2017 - Jason Hirtz (hadr-inclxx-V10-03-09)
+---------------------------------------------------------------
+- INCL++ v6.0_rc9
+  o Warnings fixed
+
+26 September 2017 - Jason Hirtz (hadr-inclxx-V10-03-08)
+---------------------------------------------------------------
+- INCL++ v6.0_rc8
+  o Implementation of strangeness (+ improvement of eta)
 
 18 November 2016 - Jean-Christophe David (hadr-inclxx-V10-02-05)
 ---------------------------------------------------------------

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.hh 69699 2013-05-13 08:50:30Z gcosmo $
+// $Id: G4ChordFinder.hh 107470 2017-11-15 07:14:28Z gcosmo $
 //
 // 
 // Class G4ChordFinder
@@ -42,8 +42,10 @@
 #ifndef G4CHORDFINDER_HH
 #define G4CHORDFINDER_HH
 
-#include "G4MagIntegratorDriver.hh"
-#include "G4FieldTrack.hh"
+#include "G4VIntegrationDriver.hh"
+#include "G4MagIntegratorStepper.hh"
+class G4VFSALIntegrationStepper;
+// #include "G4VFSALIntegratorSteper.hh"
 
 class G4MagneticField;  
 
@@ -51,11 +53,13 @@ class G4ChordFinder
 { 
    public:  // with description
 
-      G4ChordFinder( G4MagInt_Driver* pIntegrationDriver );
+      explicit G4ChordFinder( G4VIntegrationDriver* pIntegrationDriver );
 
       G4ChordFinder( G4MagneticField* itsMagField,
                      G4double         stepMinimum = 1.0e-2, // * mm 
-                     G4MagIntegratorStepper* pItsStepper = 0 );  
+                     G4MagIntegratorStepper* pItsStepper = nullptr,
+                     // G4bool           useHigherEfficiencyStepper = true,
+                     G4bool           useFSALstepper = false  );
         // A constructor that creates defaults for all "children" classes.
       
       virtual ~G4ChordFinder();
@@ -63,7 +67,7 @@ class G4ChordFinder
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
                                        G4double stepInitial,
                                        G4double epsStep_Relative,
-                                       const G4ThreeVector latestSafetyOrigin,
+                                       const G4ThreeVector& latestSafetyOrigin,
                                        G4double lasestSafetyRadius);
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
@@ -89,8 +93,8 @@ class G4ChordFinder
       inline G4double  GetDeltaChord() const;
       inline void      SetDeltaChord(G4double newval);
 
-      inline void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
-      inline G4MagInt_Driver* GetIntegrationDriver();
+      inline void SetIntegrationDriver(G4VIntegrationDriver* IntegrationDriver);
+      inline G4VIntegrationDriver* GetIntegrationDriver();
         // Access and set Driver.
 
       inline void ResetStepEstimate();
@@ -180,10 +184,11 @@ class G4ChordFinder
 
       //  DEPENDENT Objects
       //  ---------------------
-      G4MagInt_Driver*        fIntgrDriver;
-      G4MagIntegratorStepper* fDriversStepper; 
-      G4bool                  fAllocatedStepper;  // Bookkeeping of dependent object
-      G4EquationOfMotion*     fEquation; 
+      G4VIntegrationDriver*      fIntgrDriver;
+      G4MagIntegratorStepper*    fRegularStepperOwned= nullptr;
+      G4MagIntegratorStepper*    fNewFSALStepperOwned= nullptr;
+   // G4VFSALIntegrationStepper* fOldFSALStepperOwned= nullptr;
+      G4EquationOfMotion*        fEquation; 
 
       //  STATE information
       //  --------------------

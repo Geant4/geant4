@@ -114,24 +114,19 @@ endif()
 
 #-----------------------------------------------------------------------
 # - Examples build/install
-# NB: Build of examples is a *testing* proceedure. It is *not* intended
-# that examples be built and installed as part of a full Geant4 install.
-option(GEANT4_BUILD_EXAMPLES "Build all the examples of the project" OFF)
-GEANT4_ADD_FEATURE(GEANT4_BUILD_EXAMPLES "Build all the examples of the project")
-mark_as_advanced(GEANT4_BUILD_EXAMPLES)
+# ON by default for end users. Developers can switch this OFF if they
+# need to save time/space
+option(GEANT4_INSTALL_EXAMPLES "Install code and documentation for Geant4 examples" ON)
+mark_as_advanced(GEANT4_INSTALL_EXAMPLES)
 
-if(GEANT4_BUILD_EXAMPLES)
-  set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
-  add_subdirectory(examples)
+if(GEANT4_INSTALL_EXAMPLES)
+  install(DIRECTORY examples
+    DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
+    COMPONENT Examples
+    PATTERN "CVS" EXCLUDE
+    PATTERN ".svn" EXCLUDE
+    )
 endif()
-
-# - Install example code to datarootdir
-install(DIRECTORY examples
-  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
-  COMPONENT Examples
-  PATTERN "CVS" EXCLUDE
-  PATTERN ".svn" EXCLUDE
-  )
 
 #-----------------------------------------------------------------------
 # - CPack-aging

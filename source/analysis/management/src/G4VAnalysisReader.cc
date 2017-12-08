@@ -122,10 +122,11 @@ G4String G4VAnalysisReader::GetFileName() const
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::ReadH1(const G4String& h1Name, 
-                                const G4String& fileName)
+                                const G4String& fileName,
+                                const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadH1Impl(h1Name, fileName, true);
+    return ReadH1Impl(h1Name, fileName, dirName, true);
   }
   else {  
     if ( fFileManager->GetFileName() == "" ) {
@@ -136,16 +137,17 @@ G4int G4VAnalysisReader::ReadH1(const G4String& h1Name,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadH1Impl(h1Name, fFileManager->GetFileName(), false);
+    return ReadH1Impl(h1Name, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::ReadH2(const G4String& h2Name, 
-                                const G4String& fileName)
+                                const G4String& fileName,
+                                const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadH2Impl(h2Name, fileName, true);
+    return ReadH2Impl(h2Name, fileName, dirName, true);
   }
   else {  
     if ( fFileManager->GetFileName() == "" ) {
@@ -156,16 +158,17 @@ G4int G4VAnalysisReader::ReadH2(const G4String& h2Name,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadH2Impl(h2Name, fFileManager->GetFileName(), false);
+    return ReadH2Impl(h2Name, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::ReadH3(const G4String& h3Name, 
-                                const G4String& fileName)
+                                const G4String& fileName,
+                                const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadH3Impl(h3Name, fileName, true);
+    return ReadH3Impl(h3Name, fileName, dirName, true);
   }
   else {  
     if ( fFileManager->GetFileName() == "" ) {
@@ -176,16 +179,17 @@ G4int G4VAnalysisReader::ReadH3(const G4String& h3Name,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadH3Impl(h3Name, fFileManager->GetFileName(), false);
+    return ReadH3Impl(h3Name, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::ReadP1(const G4String& p1Name, 
-                                const G4String& fileName)
+                                const G4String& fileName,
+                                const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadP1Impl(p1Name, fileName, true);
+    return ReadP1Impl(p1Name, fileName, dirName, true);
   }
   else {  
     if ( fFileManager->GetFileName() == "" ) {
@@ -196,16 +200,17 @@ G4int G4VAnalysisReader::ReadP1(const G4String& p1Name,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadP1Impl(p1Name, fFileManager->GetFileName(), false);
+    return ReadP1Impl(p1Name, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::ReadP2(const G4String& p2Name, 
-                                const G4String& fileName)
+                                const G4String& fileName,
+                                const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadP2Impl(p2Name, fileName, true);
+    return ReadP2Impl(p2Name, fileName, dirName, true);
   }
   else {  
     if ( fFileManager->GetFileName() == "" ) {
@@ -216,7 +221,7 @@ G4int G4VAnalysisReader::ReadP2(const G4String& p2Name,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadP2Impl(p2Name, fFileManager->GetFileName(), false);
+    return ReadP2Impl(p2Name, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 
@@ -289,12 +294,14 @@ G4bool G4VAnalysisReader::SetFirstNtupleId(G4int firstId)
 
 //_____________________________________________________________________________
 G4int G4VAnalysisReader::GetNtuple(const G4String& ntupleName, 
-                                   const G4String& fileName)
+                                   const G4String& fileName,
+                                   const G4String& dirName)
 {
   if ( fileName != "" ) {
-    return ReadNtupleImpl(ntupleName, fileName, true);
+    return ReadNtupleImpl(ntupleName, fileName, dirName, true);
   }
-  else {  
+  else { 
+    // Check if fileName was set
     if ( fFileManager->GetFileName() == "" ) {
       G4ExceptionDescription description;
       description 
@@ -303,7 +310,7 @@ G4int G4VAnalysisReader::GetNtuple(const G4String& ntupleName,
                   "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
-    return ReadNtupleImpl(ntupleName, fFileManager->GetFileName(), false);
+    return ReadNtupleImpl(ntupleName, fFileManager->GetFileName(), dirName, false);
   }  
 }                                      
 

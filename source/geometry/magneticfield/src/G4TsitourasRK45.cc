@@ -55,7 +55,7 @@ G4TsitourasRK45::G4TsitourasRK45(G4EquationOfMotion *EqRhs,
     fLastStepLength(0.), fAuxStepper(0)
 {
   const G4int numberOfVariables = noIntegrationVariables;
-  G4cout << "G4TsitourasRK45 constructor called." << G4endl;
+  // G4cout << "G4TsitourasRK45 constructor called." << G4endl;
   
   ak2 = new G4double[numberOfVariables] ;  
   ak3 = new G4double[numberOfVariables] ; 

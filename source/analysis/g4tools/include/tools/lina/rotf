@@ -48,7 +48,7 @@ public:
   bool value(vec3f& a_from,float a_a) const {
     return parent::value(a_from,a_a,::sinf,::acosf); //WARNING acos and not cos
   }
-  void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
+  //void set_value(const mat4f& a_m) {parent::set_value(a_m,::sqrtf);}
   void value(mat4f& a_m) const {parent::value(a_m);}
 
   //NOTE : don't handle a static object because of mem balance.

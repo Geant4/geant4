@@ -1,0 +1,94 @@
+/control/verbose  1
+/run/verbose      1
+/event/verbose    0
+#/hits/verbose     0
+
+# here we define branching ratios of decay modes of eta meson
+# 0 - gamma gamma       (original 0.3942)
+# 1 - pi0 pi0 pi0       (original 0.3256)
+# 2 - pi0 pi+ pi-       (original 0.226)
+# 3 - gamma pi+ pi-     (original 0.0468)
+/particle/select eta
+/particle/property/decay/select 0
+/particle/property/decay/br 1
+/particle/property/decay/select 1
+/particle/property/decay/br 0
+/particle/property/decay/select 2
+/particle/property/decay/br 0
+/particle/property/decay/select 3
+/particle/property/decay/br 0
+/particle/property/decay/dump
+
+#/run/setCutForRegion Calorimeter 1 mm
+
+#/cexmc/detector/Monitor/ED/verbose 1
+#/cexmc/detector/VetoCounter/ED/verbose 1
+#/cexmc/detector/Calorimeter/ED/verbose 1
+#/cexmc/detector/Target/TP/verbose 1
+#/cexmc/detector/Monitor/TP/verbose 1
+#/cexmc/detector/VetoCounter/TP/verbose 1
+#/cexmc/detector/Calorimeter/TP/verbose 1
+
+/cexmc/detector/calorimeterTriggerAlgorithm inner
+
+/cexmc/detector/Monitor/ED/threshold 125 keV
+/cexmc/detector/VetoCounter/ED/threshold 250 keV
+/cexmc/detector/Calorimeter/ED/threshold 40 MeV
+
+/cexmc/detector/outerCrystalsVetoAlgorithm none
+/cexmc/detector/outerCrystalsVetoFraction 0.5
+
+/cexmc/detector/applyFiniteCrystalResolution true
+/cexmc/detector/addCrystalResolutionRange 0.   0.04 0.48
+/cexmc/detector/addCrystalResolutionRange 0.04 0.06 0.27
+/cexmc/detector/addCrystalResolutionRange 0.06 0.10 0.22
+/cexmc/detector/addCrystalResolutionRange 0.10 0.20 0.18
+/cexmc/detector/addCrystalResolutionRange 0.20 2.00 0.15
+
+/cexmc/gun/particle pi-
+/cexmc/gun/position 0 0 -36 cm
+/cexmc/gun/direction 0 0 1
+/cexmc/gun/momentumAmp 732.1 MeV
+/cexmc/gun/fwhmPosX 3.0 cm
+/cexmc/gun/fwhmPosY 3.5 cm
+/cexmc/gun/fwhmDirX 1.12 deg
+/cexmc/gun/fwhmDirY 1.35 deg
+/cexmc/gun/fwhmMomentumAmp 0.015
+
+/cexmc/physics/setMaxILCorrection 0
+/cexmc/physics/applyFermiMotionInTarget false
+#/cexmc/physics/setAngularRange 0.1 -0.1 2
+#/cexmc/physics/addAngularRange 1.0 0.0 10
+#/cexmc/physics/addAngularRange -0.5 -0.8 2
+/cexmc/physics/setAngularRange 1.0 -1.0 10
+
+/cexmc/reconstructor/momentumAmpDiff -2.1 MeV
+
+/cexmc/reconstructor/edCollectionAlgo all
+/cexmc/reconstructor/useInnerRefCrystal true
+/cexmc/reconstructor/entryPointDefinitionAlgo sqrt
+/cexmc/reconstructor/crystalSelectionAlgo all
+/cexmc/reconstructor/entryPointDepthDefinitionAlgo plain
+/cexmc/reconstructor/entryPointDepth 0 cm
+/cexmc/reconstructor/useTableMass false
+
+/cexmc/reconstructor/useMassCut false
+/cexmc/reconstructor/mCutOPCenter 530 MeV
+/cexmc/reconstructor/mCutNOPCenter 970 MeV
+/cexmc/reconstructor/mCutOPWidth 10 MeV
+/cexmc/reconstructor/mCutNOPWidth 30 MeV
+/cexmc/reconstructor/mCutAngle 45 deg
+
+/cexmc/reconstructor/useAbsorbedEnergyCut false
+/cexmc/reconstructor/aeCutCLCenter 310 MeV
+/cexmc/reconstructor/aeCutCRCenter 310 MeV
+/cexmc/reconstructor/aeCutCLWidth 100 MeV
+/cexmc/reconstructor/aeCutCRWidth 180 MeV
+/cexmc/reconstructor/aeCutAngle 45 deg
+
+/cexmc/run/eventCountPolicy trigger
+/cexmc/run/eventDataVerboseLevel trigger
+/cexmc/event/verbose 2
+/cexmc/vis/verbose 2
+
+/run/beamOn 10

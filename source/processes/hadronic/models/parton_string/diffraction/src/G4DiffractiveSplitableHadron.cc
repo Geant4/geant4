@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4DiffractiveSplitableHadron.cc 107317 2017-11-08 16:25:57Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -197,7 +197,6 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4double SuppresUUDDSS=1.0/2.0;
     if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
 
-//
     const G4int maxNumberOfLoops = 1000;
     G4int loopCounter = 0;
     do

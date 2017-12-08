@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundModel.cc 104867 2017-06-23 14:00:18Z gcosmo $
+// $Id: G4PreCompoundModel.cc 106233 2017-09-22 21:34:41Z gcosmo $
 //
 // by V. Lara
 //
@@ -70,7 +70,7 @@
 
 G4PreCompoundModel::G4PreCompoundModel(G4ExcitationHandler* ptr) 
   : G4VPreCompoundModel(ptr,"PRECO"),theEmission(nullptr),theTransition(nullptr),
-    useSCO(false),isInitialised(false),minZ(3),minA(5) 
+    useSCO(false),isInitialised(false),isActive(true),minZ(3),minA(5) 
 {
   //G4cout << "### NEW PrecompoundModel " << this << G4endl;
   if(!ptr) { SetExcitationHandler(new G4ExcitationHandler()); }
@@ -126,6 +126,8 @@ void G4PreCompoundModel::InitialiseModel()
   else { theTransition = new G4PreCompoundTransitions(); }
   theTransition->UseNGB(param->NeverGoBack());
   theTransition->UseCEMtr(param->UseCEM());
+
+  if(param->PrecoDummy()) { isActive = false; } 
 
   GetExcitationHandler()->Initialise();
 }
@@ -211,7 +213,7 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(G4Fragment& aFragment)
   //G4cout << aFragment << G4endl;
  
   // Perform Equilibrium Emission 
-  if ((Z < minZ && A < minA) || Eex < fLimitEnergy*A) {
+  if (!isActive || (Z < minZ && A < minA) || Eex < fLimitEnergy*A) {
     PerformEquilibriumEmission(aFragment, Result);
     return Result;
   }

@@ -1,0 +1,76 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mpi_basket_add
+#define tools_wroot_mpi_basket_add
+
+#include "branch"
+#include "mpi_protocol"
+#include "../impi"
+
+namespace tools {
+namespace wroot {
+
+class mpi_basket_add : public virtual branch::iadd_basket {
+  typedef branch::iadd_basket parent;
+public:
+  virtual bool add_basket(basket& a_basket) {
+    m_mpi.pack_reset();
+    if(!m_mpi.pack(mpi_protocol_basket())) return false;
+    if(!m_mpi.pack(m_id)) return false;
+    if(!m_mpi.pack(m_icol)) return false;
+    
+    if(!m_mpi.spack(a_basket.object_name())) return false;
+    if(!m_mpi.spack(a_basket.object_title())) return false;
+
+    if(!m_mpi.pack(a_basket.last())) return false;
+    if(!m_mpi.pack(a_basket.nev_buf_size())) return false;
+    if(!m_mpi.pack(a_basket.nev())) return false;
+      
+    if(a_basket.entry_offset()) {
+      if(!m_mpi.bpack(true)) return false;
+      if(!m_mpi.pack(a_basket.nev_buf_size(),a_basket.entry_offset())) return false;
+    } else {
+      if(!m_mpi.bpack(false)) return false;
+    }
+
+    if(a_basket.displacement()) {
+      if(!m_mpi.bpack(true)) return false;
+      if(!m_mpi.pack(a_basket.nev_buf_size(),a_basket.displacement())) return false;
+    } else {
+      if(!m_mpi.bpack(false)) return false;
+    }
+
+    if(!m_mpi.pack(a_basket.datbuf().length(),a_basket.datbuf().buf())) return false;
+
+    if(!m_mpi.send_buffer(m_dest,m_tag)) return false;
+      
+    return true;
+  }
+public:
+  mpi_basket_add(impi& a_mpi,int a_dest,int a_tag,uint32 a_id,uint32 a_icol)
+  :m_mpi(a_mpi),m_dest(a_dest),m_tag(a_tag),m_id(a_id),m_icol(a_icol)
+  {}
+protected:
+  mpi_basket_add(const mpi_basket_add& a_from):parent()
+  ,m_mpi(a_from.m_mpi),m_dest(a_from.m_dest),m_tag(a_from.m_tag)
+  ,m_id(a_from.m_id),m_icol(a_from.m_icol)
+  {}
+  mpi_basket_add& operator=(const mpi_basket_add& a_from){
+    m_dest = a_from.m_dest;
+    m_tag = a_from.m_tag;
+    m_id = a_from.m_id;
+    m_icol = a_from.m_icol;
+    return *this;
+  }
+protected:
+  impi& m_mpi;
+  int m_dest;
+  int m_tag;
+  uint32 m_id;
+  uint32 m_icol;
+};
+
+}}
+
+#endif

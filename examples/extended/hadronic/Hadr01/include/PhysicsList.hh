@@ -27,7 +27,7 @@
 /// \brief Definition of the PhysicsList class
 //
 //
-// $Id: PhysicsList.hh 101216 2016-11-09 13:54:13Z gcosmo $
+// $Id: PhysicsList.hh 107541 2017-11-22 08:24:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -49,6 +49,7 @@
 
 class G4VPhysicsConstructor;
 class PhysicsListMessenger;
+class G4PhysListFactoryMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,6 +77,7 @@ private:
   std::vector<G4VPhysicsConstructor*>  fHadronPhys;
     
   PhysicsListMessenger* fMessenger;
+  G4PhysListFactoryMessenger* fFactMessenger;
 
 };
 

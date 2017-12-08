@@ -64,6 +64,7 @@ class G4LENDModel : public G4HadronicInteraction
       void AllowAnyCandidateTarget(){ allow_any = true; recreate_used_target_map(); };
       //Same argument to the CrossSectionDataSet 
       void BuildPhysicsTable( const G4ParticleDefinition& ){ recreate_used_target_map(); };
+      void DumpLENDTargetInfo( G4bool force = false );
 
    private:
 
@@ -75,6 +76,9 @@ class G4LENDModel : public G4HadronicInteraction
 
       void create_used_target_map();
       void recreate_used_target_map();
+      G4GIDI_target* get_target_from_map( G4int nuclear_code );
+
+      G4HadFinalState* returnUnchanged( const G4HadProjectile& aTrack, G4HadFinalState* theResult );
 
       G4ParticleDefinition* proj;
       G4LENDManager* lend_manager;

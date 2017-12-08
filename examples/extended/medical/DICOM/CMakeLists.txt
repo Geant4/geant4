@@ -10,6 +10,9 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+if("$ENV{DICOM_USE_HEAD}")
+  add_definitions(-DDICOM_USE_HEAD)
+endif()
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
@@ -24,6 +27,16 @@ if("$ENV{DICOM_USE_DCMTK}")
   add_definitions(-DG4_DCMTK)
   add_subdirectory(dicomReader)
   set(DICOM_READER_LIBRARY dicomReader)
+endif()
+
+#----------------------------------------------------------------------------
+# Download DICOM_HEAD data 
+#
+if("$ENV{DICOM_USE_HEAD}")
+    set(CMAKE_MODULE_PATH 
+        ${CMAKE_SOURCE_DIR}/cmake
+        ${CMAKE_MODULE_PATH})
+  include(DownloadDICOMData)
 endif()
 
 #----------------------------------------------------------------------------
@@ -58,16 +71,17 @@ target_link_libraries(DICOM ${Geant4_LIBRARIES} ${DICOM_READER_LIBRARY} ${DCMTK_
 set(DICOM_MACROS
     run.mac vis.mac
     )
- 
+
+
 # original set of DICOM data
-set(DICOM_SCRIPTS
-    1.dcm 2.dcm 3.dcm 
-    1.g4  2.g4 3.g4 
-    1.g4dcm 2.g4dcm 3.g4dcm
-    ColourMap.dat CT2Density.dat 
-    Data.dat 
-  )
-  
+    set(DICOM_SCRIPTS
+     1.dcm 2.dcm 3.dcm 
+     1.g4  2.g4 3.g4 
+     1.g4dcm 2.g4dcm 3.g4dcm
+     ColourMap.dat CT2Density.dat 
+     Data.dat 
+   )
+ 
 # new DICOM data (in share directory)
 set(DICOM_SHARE
     AltData.dat SixSlice.dat

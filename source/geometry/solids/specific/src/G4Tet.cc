@@ -27,7 +27,7 @@
 // *                                                                  *
 // ********************************************************************
 //
-// $Id: G4Tet.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4Tet.cc 106603 2017-10-16 09:17:44Z gcosmo $
 //
 // class G4Tet
 //
@@ -57,9 +57,9 @@
 
 #include "G4Tet.hh"
 
-#if !defined(G4GEOM_USE_UTET)
+//#if !defined(G4GEOM_USE_UTET)
 
-const char G4Tet::CVSVers[]="$Id: G4Tet.cc 104316 2017-05-24 13:04:23Z gcosmo $";
+const char G4Tet::CVSVers[]="$Id: G4Tet.cc 106603 2017-10-16 09:17:44Z gcosmo $";
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -817,4 +817,4 @@ G4Polyhedron* G4Tet::GetPolyhedron () const
   return fpPolyhedron;
 }
 
-#endif
+//#endif

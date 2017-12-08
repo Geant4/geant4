@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hhIonisation.cc 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4hhIonisation.cc 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -140,6 +140,7 @@ void G4hhIonisation::InitialiseEnergyLossProcess(
   em = new G4BetheBlochNoDeltaModel();
   em->SetLowEnergyLimit(eth);
   em->SetHighEnergyLimit(emax);
+  SetEmModel(em);
   AddEmModel(1, em, flucModel);
 
   if(verboseLevel>1) {
@@ -154,6 +155,15 @@ void G4hhIonisation::PrintInfo()
 {
   G4cout << "      Delta-ray will not be produced; "
 	 << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hhIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "No description available.";
+  out << "<br>\n";
+  G4VEnergyLossProcess::ProcessDescription(out);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

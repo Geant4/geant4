@@ -1,4 +1,4 @@
-$Id: History 104759 2017-06-15 12:46:56Z gcosmo $
+$Id: History 107558 2017-11-22 15:29:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,65 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-November-2017  G.Cosmo         (geom-specific-V10-03-25)
+- Fix in SurfaceNormal() for G4ExtrudedSolid to assure explicit
+  counting of the surfaces where the point is placed on edg
+
+2-November-2017  G.Cosmo          (geom-specific-V10-03-24)
+- Fixed compilation warning introduced with last tag.
+
+31-October-2017  E.Tcherniaev     (geom-specific-V10-03-23)
+- Added specialised implementation for constructs defining a non-convex right
+  prism in G4ExtrudedSolid.
+
+20-October-2017  G.Cosmo          (geom-specific-V10-03-22)
+- G4TessellatedSolid: print also solid's name in StreamInfo().
+
+17-October-2017  G.Cosmo          (geom-specific-V10-03-21)
+- Added VecGeom wrapper G4UHype for G4Hype, not yet activated, pending
+  fixes in VecGeom.
+
+16-October-2017  G.Cosmo          (geom-specific-V10-03-20)
+- Temporarly disabled wrappers for G4Tet and G4GenericPolycone, pending
+  their corresponding implementation in VecGeom.
+
+28-September-2017  G.Cosmo        (geom-specific-V10-03-19)
+- Corrected initialisation of polyhedra by vertices in G4UPolyhdra wrapper
+  following the changes in VecGeom.
+
+15-September-2017  G.Cosmo        (geom-specific-V10-03-18)
+- G4SolidsWorkspacePool: use DLL export flag for static thread-local
+  symbol of the workspace.
+
+12-September-2017  G.Cosmo        (geom-specific-V10-03-17)
+- G4Voxelizer: directly set components for bounding-box instead of
+  recreating it in BuildBoundingBox(..).
+
+8-September-2017  E.Tcherniaev    (geom-specific-V10-03-16)
+- Added specialised implementation for constructs defining a convex right
+  prism in G4ExtrudedSolid.
+
+4-September-2017  G.Cosmo         (geom-specific-V10-03-15, 14)
+- Temporarly disabled wrapper for extruded-solid, pending implementation
+  of extruded-solid in VecGeom.
+
+16-August-2017  J.Allison         (geom-specific-V10-03-13)
+- Twisted solids: Fixed bug in drawing polyhedra with negative twist angle.
+  Addressing problem report #1995.
+
+27-July-2017  E.Tcherniaev        (geom-specific-V10-03-12)
+- G4EllipticalCone: corrected samping of random points on lateral surface in
+  function GetPointOnSurface().
+
+24-July-2017  E.Tcherniaev        (geom-specific-V10-03-11)
+- G4EllipticalCone: improved GetPointOnSurface() to have uniform sampling of
+  points, using function G4RandomPointOnEllipse().
+
+20-July-2017  E.Tcherniaev        (geom-specific-V10-03-10, 09)
+- G4EllipticalCone: reviewed implementation of Inside(), DistanceToIn/Out(p),
+  SurfaceNormal() and GetPointOnSurface(); made more compact and performant.
+  Addressing problem report #1974.
 
 15-June-2017  G.Cosmo             (geom-specific-V10-03-08)
 - Enabled adapter also in G4UPolycone wrapper.

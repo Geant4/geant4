@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4eplusAnnihilation.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -82,10 +82,14 @@ public:
                              G4ForceCondition* condition
                             ) override;
 
-  // Print out of the class parameters
-  virtual void PrintInfo() override;
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
+
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                             G4String endOfLine=G4String("\n")) const override;
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) override;
 

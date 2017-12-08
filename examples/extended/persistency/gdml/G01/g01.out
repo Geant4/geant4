@@ -1,13 +1,13 @@
 
 Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>
 
-G4GDML: Reading '/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-06_branch/10-03-ref-06_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
+G4GDML: Reading '/mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-06_branch/10-03-ref-06_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
+G4GDML: Reading '/mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -77,9 +77,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 
 
 Global auxiliary info:
@@ -143,7 +141,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
@@ -174,12 +172,12 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -205,8 +203,8 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -238,7 +236,7 @@ ionIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -265,12 +263,12 @@ hPairProd:   for  anti_proton    SubType= 4
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -297,12 +295,12 @@ hPairProd:   for  kaon+    SubType= 4
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -329,7 +327,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -362,7 +360,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -395,12 +393,12 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -427,12 +425,12 @@ hPairProd:   for  pi+    SubType= 4
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -459,7 +457,7 @@ hPairProd:   for  pi-    SubType= 4
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -659,6 +657,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -673,6 +672,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -781,16 +781,21 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
  This region is in the mass world.
@@ -1170,7 +1175,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -1537,7 +1542,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -1616,7 +1621,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -1655,7 +1660,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

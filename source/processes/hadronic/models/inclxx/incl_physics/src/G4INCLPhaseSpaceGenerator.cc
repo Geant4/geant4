@@ -58,7 +58,7 @@ namespace G4INCL {
       const ThreeVector pMomVec = biasMe->getMomentum();
       const G4double pMom = pMomVec.mag();
       const G4double pMomCosAng = pMomVec.dot(collisionAxis)/pMom;
-      const G4double pMomAng = Math::arcCos(pMomCosAng);
+      const G4double pMomAng = Math::arcCos(pMomCosAng); // Angle between the original axis of the dominant particle and is new one after generate
 
       // compute the target angle for the biasing
       // it is drawn from a exp(Bt) distribution

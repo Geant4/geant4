@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectroNuclearCrossSection.cc 94961 2016-01-08 16:31:48Z gcosmo $
+// $Id: G4ElectroNuclearCrossSection.cc 107592 2017-11-24 12:04:25Z gcosmo $
 //
 // G4 Physics class: G4ElectroNuclearCrossSection for gamma+A cross sections
 // Created: M.V. Kossov, CERN/ITEP(Moscow), 10-OCT-01
@@ -2182,12 +2182,12 @@ currentN(0), currentZ(0), lastZ(0),
 lastE(0), lastSig(0), lastG(0), lastL(0), mNeut(G4NucleiProperties::GetNuclearMass(1,0)), mProt(G4NucleiProperties::GetNuclearMass(1,1))
 {
     //Initialize caches
-    lastUsedCacheEl = new cacheEl_t;
+  lastUsedCacheEl = new cacheEl_t();
     nistmngr = G4NistManager::Instance();
     
     for (G4int i=0;i<120;i++)
     {
-        cache.push_back(0);
+        cache.push_back(nullptr);
     }
     
 }
@@ -2201,6 +2201,7 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
              delete[] (*it)->J1; (*it)->J1 = 0;
              delete[] (*it)->J2; (*it)->J2 = 0;
              delete[] (*it)->J3; (*it)->J3 = 0;
+             delete *it;
          }
      ++it;
      }
@@ -2252,9 +2253,9 @@ G4ElectroNuclearCrossSection::CrossSectionDescription(std::ostream& outFile) con
     << "all energies.\n";
 }
 
-G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int /*Z*/, const G4Material*)
+G4bool G4ElectroNuclearCrossSection::IsElementApplicable(const G4DynamicParticle* /*aParticle*/, G4int Z, const G4Material*)
 {
-    return true;
+  return (Z>0 && Z<120);
 }
 
 
@@ -2317,7 +2318,7 @@ G4double G4ElectroNuclearCrossSection::GetElementCrossSection(const G4DynamicPar
     if(lE<lEMa) // Linear fit is made explicitly to fix the last bin for the randomization
 	{
         G4double shift=(lE-lEMi)/dlnE;
-        G4int    blast=static_cast<int>(shift);
+        G4int    blast=static_cast<G4int>(shift);
         if(blast<0)   blast=0;
         if(blast>=mLL) blast=mLL-1;
         shift-=blast;

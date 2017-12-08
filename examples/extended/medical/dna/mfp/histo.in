@@ -1,0 +1,36 @@
+#
+/run/numberOfThreads 8
+#
+/mfp/det/setMat G4_WATER
+/mfp/det/setRadius 10 m
+#
+# Register physics constructor
+#/mfp/phys/addPhysics  G4EmDNAPhysics
+/mfp/phys/addPhysics  G4EmDNAPhysics_option2
+#/mfp/phys/addPhysics  G4EmDNAPhysics_option4
+#/mfp/phys/addPhysics  G4EmDNAPhysics_option6
+#
+/run/initialize
+#
+#/run/printProgress 10000
+#
+/tracking/verbose 0
+# 
+/analysis/h1/set 1  100 0.  1.1 keV	#energy  of primary  
+/analysis/h1/set 2  100 -1.1   +1.1 none	#costeta of primary
+/analysis/h1/set 3  100 0.  1.1 keV	#energy  of ch. secondary  
+/analysis/h1/set 4  100 -1.1   +1.1 none	#costeta of ch. secondary
+/analysis/h1/set 5  100 0.  1.1 keV	#energy  of ne. secondary  
+/analysis/h1/set 6  100 -1.1  +1.1 none	#costeta of ne. secondary
+#
+/gun/particle e-
+#
+#/process/inactivate e-_G4DNAExcitation
+#/process/inactivate e-_G4DNAIonisation
+#/process/inactivate e-_G4DNAElastic
+/process/inactivate e-_G4DNAVibExcitation
+/process/inactivate e-_G4DNAAttachment
+#
+/gun/energy 1 keV
+/run/beamOn 10000000
+

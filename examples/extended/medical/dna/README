@@ -10,6 +10,12 @@ This directory contains a set of Geant4-DNA examples.
        The dnaphysics example shows how to simulate track structures in liquid 
        water using the Geant4-DNA physics processes and models.
 
+   - icsd
+       This example shows how to use cross section models for DNA materials
+
+   - mfp
+       This example shows how to simulate mean free path in liquid water
+
    - microdosimetry 
        The microdosimetry example simulates the track of a 5 MeV proton in 
        liquid water. 
@@ -17,10 +23,13 @@ This directory contains a set of Geant4-DNA examples.
        models are used in a Target volume, declared as a Region.
 
    - microyz 
-       Simulation of microdosimetry spectra (beta version only, not finalized yet).
+       Simulation of microdosimetry spectra
 
    - range 
        Simulation of ranges.
+
+   - slowing 
+       Simulation of slowing down spectra.
 
    - spower 
        Simulation of stopping power.
@@ -32,9 +41,6 @@ This directory contains a set of Geant4-DNA examples.
    - wvalue
        This example shows how to simulate W-values in liquid water
        using the Geant4-DNA physics processes and models.
-
-   - slowing 
-       Simulation of slowing down spectra.
 
    - chem1   Simple activation of the chemistry module.
    - chem2   Usage of TimeStepAction in the chemistry module.

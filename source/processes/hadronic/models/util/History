@@ -1,4 +1,4 @@
-$Id: History 104779 2017-06-16 09:20:56Z gcosmo $
+$Id: History 107451 2017-11-14 11:27:57Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,36 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+14 November 2017  Alberto Ribon (hadr-mod-util-V10-03-15)
+- G4SampleResonance: added protection for rare cases when a wide parent
+    resonance, with a very small dynamic mass, decays into another wide
+    (daughter) resonance.
+
+07 October 2017  Dennis Wright  (hadr-mod-util-V10-03-14)
+- re-tag and propose because of mistaken rejection in system testing
+ 
+28 September 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-13)
+- G4NuclearPolarizationStore - use fix length array instead of vector 
+    of pointers
+
+05 September 2017  Dennis Wright (hadr-mod-util-V10-03-12)
+- G4NuclearPolarizationStore::~G4NuclearPolarizationStore(): remove printout
+  of pointer 
+
+04 July 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-11)
+- G4NuclearPolarizationStore - extend and cleanup
+- G4Fragment - improved printout
+
+03 July 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-10)
+03 July 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-09)
+- G4NuclearPolarizationStore - added class to handle G4NuclearPolarization
+    objects for correlated gamma emission simualtion
+
+30 June 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-08)
+- G4Fragment - do not delete G4NuclearPolarization object, after
+    this change other classes are responsible for new/delete
+    of G4NuclearPolarization
 
 16 June 2017 Vladimir Ivanchenko (hadr-mod-util-V10-03-07)
 - G4Fragment - improved printout

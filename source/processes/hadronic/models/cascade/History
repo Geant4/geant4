@@ -15,6 +15,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 November 2017  Dennis Wright (hadr-casc-V10-03-06)
+-----------------------------------------------------
+- G4CascadeInterface::createBullet, G4CascadeInterface::ApplyYourself: 
+  rotation to z-axis unnecessary and may 
+  cause irreproducibility.  Remove it according to bug report #1990. 
+
+20 October 2017  Tatsumi Koi (hadr-casc-V10-03-05)
+------------------------------------------------
+- G4CascadeParameters.cc FERMI_SCALE and RAD_TRAILING are added to changeable parameters from HDP
+Lower and upper limits of changeable parameters form HDP are registered 
+
+6 October 2017  Tatsumi Koi (hadr-casc-V10-03-04)
+------------------------------------------------
+- G4CascadeParameters.cc Remove protection for using G4HadronicDeveloperParameters
+
+5 October 2017  Tatsumi Koi (hadr-casc-V10-03-03)
+------------------------------------------------
+- Adding comment for BEST_PAR in G4CascadeParameters and test/README
+
 22 May 2017  Dennis Wright (hadr-casc-V10-03-02)
 ------------------------------------------------
 - G4ElementaryParticleCollider::generateSCMmuonAbsorption: fix rare seg fault

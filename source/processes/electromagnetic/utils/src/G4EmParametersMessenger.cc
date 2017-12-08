@@ -111,43 +111,49 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   deCmd->SetGuidance("Enable/disable atomic deexcitation");
   deCmd->SetParameterName("fluoFlag",true);
   deCmd->SetDefaultValue(false);
-  deCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  deCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   dirFluoCmd = new G4UIcmdWithABool("/process/em/fluoBearden",this);
   dirFluoCmd->SetGuidance("Enable/disable usage of Bearden fluorescence files");
   dirFluoCmd->SetParameterName("fluoBeardenFlag",true);
   dirFluoCmd->SetDefaultValue(false);
-  dirFluoCmd->AvailableForStates(G4State_PreInit);
+  dirFluoCmd->AvailableForStates(G4State_PreInit,G4State_Init);
 
   auCmd = new G4UIcmdWithABool("/process/em/auger",this);
   auCmd->SetGuidance("Enable/disable Auger electrons production");
   auCmd->SetParameterName("augerFlag",true);
   auCmd->SetDefaultValue(false);
-  auCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  auCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   auCascadeCmd = new G4UIcmdWithABool("/process/em/augerCascade",this);
   auCascadeCmd->SetGuidance("Enable/disable simulation of cascade of Auger electrons");
   auCascadeCmd->SetParameterName("augerCascadeFlag",true);
   auCascadeCmd->SetDefaultValue(false);
-  auCascadeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  auCascadeCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   pixeCmd = new G4UIcmdWithABool("/process/em/pixe",this);
   pixeCmd->SetGuidance("Enable/disable PIXE simulation");
   pixeCmd->SetParameterName("pixeFlag",true);
   pixeCmd->SetDefaultValue(false);
-  pixeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  pixeCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   dcutCmd = new G4UIcmdWithABool("/process/em/deexcitationIgnoreCut",this);
   dcutCmd->SetGuidance("Enable/Disable usage of cuts in de-excitation module");
   dcutCmd->SetParameterName("deexcut",true);
   dcutCmd->SetDefaultValue(false);
-  dcutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  dcutCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   latCmd = new G4UIcmdWithABool("/process/msc/LateralDisplacement",this);
   latCmd->SetGuidance("Enable/disable sampling of lateral displacement");
   latCmd->SetParameterName("lat",true);
   latCmd->SetDefaultValue(true);
   latCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  lat96Cmd = new G4UIcmdWithABool("/process/msc/LateralDisplacementAlg96",this);
+  lat96Cmd->SetGuidance("Enable/disable sampling of lateral displacement");
+  lat96Cmd->SetParameterName("lat96",true);
+  lat96Cmd->SetDefaultValue(false);
+  lat96Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   mulatCmd = new G4UIcmdWithABool("/process/msc/MuHadLateralDisplacement",this);
   mulatCmd->SetGuidance("Enable/disable sampling of lateral displacement for muons and hadrons");
@@ -183,7 +189,31 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   birksCmd->SetGuidance("Enable usage of built-in Birks saturation");
   birksCmd->SetParameterName("birks",true);
   birksCmd->SetDefaultValue(false);
-  birksCmd->AvailableForStates(G4State_PreInit);
+  birksCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+
+  dnafCmd = new G4UIcmdWithABool("/process/em/UseDNAFast",this);
+  dnafCmd->SetGuidance("Enable usage of fast sampling for DNA models");
+  dnafCmd->SetParameterName("dnaf",true);
+  dnafCmd->SetDefaultValue(false);
+  dnafCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+
+  dnasCmd = new G4UIcmdWithABool("/process/em/UseDNAStationary",this);
+  dnasCmd->SetGuidance("Enable usage of Stationary option for DNA models");
+  dnasCmd->SetParameterName("dnas",true);
+  dnasCmd->SetDefaultValue(false);
+  dnasCmd->AvailableForStates(G4State_PreInit,G4State_Init);
+
+  dnamscCmd = new G4UIcmdWithABool("/process/em/UseDNAElectronMsc",this);
+  dnamscCmd->SetGuidance("Enable usage of e- msc for DNA");
+  dnamscCmd->SetParameterName("dnamsc",true);
+  dnamscCmd->SetDefaultValue(false);
+  dnamscCmd->AvailableForStates(G4State_PreInit);
+
+  sharkCmd = new G4UIcmdWithABool("/process/em/UseGammaShark",this);
+  sharkCmd->SetGuidance("Enable gamma super-process");
+  sharkCmd->SetParameterName("shark",true);
+  sharkCmd->SetDefaultValue(false);
+  sharkCmd->AvailableForStates(G4State_PreInit);
 
   minSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
   minSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
@@ -219,6 +249,12 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   lowhEnCmd->SetParameterName("elowh",true);
   lowhEnCmd->SetUnitCategory("Energy");
   lowhEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  lowEn3Cmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestTripletEnergy",this);
+  lowEn3Cmd->SetGuidance("Set the lowest kinetic energy for triplet production");
+  lowEn3Cmd->SetParameterName("elow3",true);
+  lowEn3Cmd->SetUnitCategory("Energy");
+  lowEn3Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
   lllCmd->SetGuidance("Set linearLossLimit parameter");
@@ -442,7 +478,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   deexCmd->SetGuidance("  flagFluo  : Fluorescence");
   deexCmd->SetGuidance("  flagAuger : Auger");
   deexCmd->SetGuidance("  flagPIXE  : PIXE");
-  deexCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  deexCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 
   G4UIparameter* regNameD = new G4UIparameter("regName",'s',false);
   deexCmd->SetParameter(regNameD);
@@ -548,12 +584,17 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete pixeCmd;
   delete dcutCmd;
   delete latCmd;
+  delete lat96Cmd;
   delete mulatCmd;
   delete catCmd;
   delete delCmd;
   delete IntegCmd;
   delete mottCmd;
   delete birksCmd;
+  delete dnafCmd;
+  delete dnasCmd;
+  delete dnamscCmd;
+  delete sharkCmd;
 
   delete minSubSecCmd;
   delete minEnCmd;
@@ -561,6 +602,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete cenCmd;
   delete lowEnCmd;
   delete lowhEnCmd;
+  delete lowEn3Cmd;
   delete lllCmd;
   delete brCmd;
   delete labCmd;
@@ -644,6 +686,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
   } else if (command == latCmd) {
     theParameters->SetLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     physicsModified = true;
+  } else if (command == lat96Cmd) {
+    theParameters->SetLateralDisplacementAlg96(lat96Cmd->GetNewBoolValue(newValue));
+    physicsModified = true;
   } else if (command == mulatCmd) {
     theParameters->SetMuHadLateralDisplacement(mulatCmd->GetNewBoolValue(newValue));
     physicsModified = true;
@@ -659,6 +704,14 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetUseMottCorrection(mottCmd->GetNewBoolValue(newValue));
   } else if (command == birksCmd) {
     theParameters->SetBirksActive(birksCmd->GetNewBoolValue(newValue));
+  } else if (command == dnafCmd) {
+    theParameters->SetDNAFast(dnafCmd->GetNewBoolValue(newValue));
+  } else if (command == dnasCmd) {
+    theParameters->SetDNAStationary(dnasCmd->GetNewBoolValue(newValue));
+  } else if (command == dnamscCmd) {
+    theParameters->SetBirksActive(dnamscCmd->GetNewBoolValue(newValue));
+  } else if (command == sharkCmd) {
+    theParameters->SetGammaSharkActive(sharkCmd->GetNewBoolValue(newValue));
 
   } else if (command == minSubSecCmd) {
     theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));
@@ -673,6 +726,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == lowEnCmd) { 
     theParameters->SetLowestElectronEnergy(lowEnCmd->GetNewDoubleValue(newValue));
+    physicsModified = true;
+  } else if (command == lowEn3Cmd) { 
+    theParameters->SetLowestTripletEnergy(lowEn3Cmd->GetNewDoubleValue(newValue));
     physicsModified = true;
   } else if (command == lowhEnCmd) { 
     theParameters->SetLowestMuHadEnergy(lowhEnCmd->GetNewDoubleValue(newValue));

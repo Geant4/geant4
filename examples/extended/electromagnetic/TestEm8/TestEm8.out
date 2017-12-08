@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -489,7 +489,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
@@ -522,12 +522,12 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -556,8 +556,8 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -589,7 +589,7 @@ ionIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -619,12 +619,12 @@ hPairProd:   for  anti_proton    SubType= 4
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -654,12 +654,12 @@ hPairProd:   for  kaon+    SubType= 4
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -689,7 +689,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -725,7 +725,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -761,12 +761,12 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -796,12 +796,12 @@ hPairProd:   for  pi+    SubType= 4
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -831,7 +831,7 @@ hPairProd:   for  pi-    SubType= 4
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -840,21 +840,21 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 Index : 0     used in the geometry : Yes
  Material : G4_Galactic
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  100 eV     e-  100 eV     e+  100 eV  proton 50 keV
+ Energy thresholds :  gamma  25 eV     e-  25 eV     e+  25 eV  proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 1     used in the geometry : Yes
  Material : G4_MYLAR
  Range cuts        :  gamma  500 um     e-  500 um     e+  500 um  proton 500 um 
- Energy thresholds :  gamma  2.28209 keV    e-  263.027 keV    e+  257.04 keV proton 50 keV
+ Energy thresholds :  gamma  2.28293 keV    e-  264.842 keV    e+  257.302 keV proton 50 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
 Index : 2     used in the geometry : Yes
  Material : XeCH4C3H8
  Range cuts        :  gamma  1.8 mm     e-  1.8 mm     e+  1.8 mm  proton 1.8 mm 
- Energy thresholds :  gamma  100 eV     e-  5.4687 keV    e+  5.37444 keV proton 180 keV
+ Energy thresholds :  gamma  25 eV     e-  5.46578 keV    e+  5.39804 keV proton 180 keV
  Region(s) which use this couple : 
     GasDetector
 
@@ -868,8 +868,8 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.12s Sys=0s
-RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159235
+  User=0.07s Real=0.07s Sys=0s
+RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162951
  ====================================================
    Beam Particle: proton
    Ekin(MeV)    = 200000
@@ -878,31 +878,31 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159235
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 15.924 +- 0.38348 keV    RMS/Emean = 0.76156
-   Mean number of steps in absorber= 1.234  mean number of ion-clusters = 796.79 MeanCluster= 796.11
+   Mean energy deposit in absorber = 16.295 +- 0.37224 keV    RMS/Emean = 0.72238
+   Mean number of steps in absorber= 1.251  mean number of ion-clusters = 813.71 MeanCluster= 814.72
 
- ====== Energy deposit distribution   Noverflows= 0.013 ====== 
+ ====== Energy deposit distribution   Noverflows= 0.009 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           3       0.003
-    2         6         101       0.101
-    3         9         271       0.271
-    4        12         238       0.238
-    5        15         170        0.17
-    6        18          87       0.087
-    7        21          41       0.041
-    8        24          28       0.028
-    9        27          16       0.016
+    1         3           5       0.005
+    2         6         107       0.107
+    3         9         255       0.255
+    4        12         240        0.24
+    5        15         153       0.153
+    6        18          88       0.088
+    7        21          44       0.044
+    8        24          29       0.029
+    9        27          19       0.019
    10        30          12       0.012
    11        33           7       0.007
-   12        36           2       0.002
-   13        39           2       0.002
-   14        42           1       0.001
-   15        45           3       0.003
-   16        48           3       0.003
-   17        51           0           0
-   18        54           1       0.001
-   19        57           1       0.001
+   12        36           3       0.003
+   13        39           5       0.005
+   14        42           5       0.005
+   15        45           8       0.008
+   16        48           2       0.002
+   17        51           5       0.005
+   18        54           2       0.002
+   19        57           2       0.002
  ================== run end ==========================
 ... write Root file : testem8.root - done
 ... close Root file : testem8.root - done
@@ -910,6 +910,6 @@ RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0159235
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.023 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.017 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
+// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 #define ABLAXX_IN_GEANT4_MODE 1
@@ -85,10 +86,39 @@ public:
    */
   G4bool setPace2(G4int A, G4int Z, G4double value);
 
-  G4double getAlpha(G4int A, G4int Z);
+  /**
+   * Set the value of RMS.
+   */
+  G4bool setRms(G4int A, G4int Z, G4double value);
+
+  /**
+   * Set the value of experimental masses.
+   */
+  G4bool setMexp(G4int A, G4int Z, G4double value);
+
+  /**
+   * Set the value of experimental masses ID.
+   */
+  G4bool setMexpID(G4int A, G4int Z, G4int value);
+
+  /**
+   * Set the value of beta2 deformation.
+   */
+  G4bool setBeta2(G4int A, G4int Z, G4double value);
+
+  /**
+   * Set the value of beta4 deformation.
+   */
+  G4bool setBeta4(G4int A, G4int Z, G4double value);
+
 
   /**
    * Get the value of Alpha.
+   */
+  G4double getAlpha(G4int A, G4int Z);
+
+  /**
+   * Get the value of Ecnz.
    */
   G4double getEcnz(G4int A, G4int Z);
 
@@ -101,6 +131,31 @@ public:
    * Get the value of Pace2.
    */
   G4double getPace2(G4int A, G4int Z);
+
+  /**
+   * Get the value of RMS.
+   */
+  G4double getRms(G4int A, G4int Z);
+
+  /**
+   * Get the value of experimental masses.
+   */
+  G4double getMexp(G4int A, G4int Z);
+
+  /**
+   * Get the value of experimental masses ID.
+   */
+  G4int getMexpID(G4int A, G4int Z);
+
+  /**
+   * Get the value of beta2 deformation.
+   */
+  G4double getBeta2(G4int A, G4int Z);
+
+  /**
+   * Get the value of beta4 deformation.
+   */
+  G4double getBeta4(G4int A, G4int Z);
 
   G4int getAlphaRows();
   G4int getAlphaCols();
@@ -118,10 +173,24 @@ private:
   static const G4int paceRows = 500;
   static const G4int paceCols = 500;
 
+  static const G4int rmsRows = 154;
+  static const G4int rmsCols = 99;
+
+  static const G4int betaRows = 251;
+  static const G4int betaCols = 137;
+
+  static const G4int massRows = 154;
+  static const G4int massCols = 13;
+
   G4double alpha[alphaRows][alphaCols];
   G4double ecnz[alphaRows][alphaCols];
   G4double vgsld[alphaRows][alphaCols];
   G4double pace2[paceRows][paceCols];
+  G4double rms[rmsRows][rmsCols];
+  G4double mexp[massRows][massCols];
+  G4int mexpid[massRows][massCols];
+  G4double beta2[betaRows][betaCols];
+  G4double beta4[betaRows][betaCols];
 };
 
 #endif

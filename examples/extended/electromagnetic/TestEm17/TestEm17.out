@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -118,6 +118,7 @@
 /testem/det/setSize 1 m
 #
 /testem/phys/addPhysics emstandard_opt0
+PhysicsList::AddPhysicsList: <emstandard_opt0>
 /run/setCut 1 mm
 #
 /run/initialize
@@ -185,18 +186,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.32s Real=2.31s Sys=0s
+  User=1.7s Real=1.69s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 461964	muPairProd : 63763	muBrems : 690	CoulombScat : 5585
+ Number of process calls --->	muIoni : 461963	muPairProd : 63627	muBrems : 644	CoulombScat : 5518
 
- Simulation: total CrossSection = 0.532 /cm	 MeanFreePath = 1.8797 cm 	 massicCrossSection = 0.067599 cm2/g
+ Simulation: total CrossSection = 0.53175 /cm	 MeanFreePath = 1.8806 cm 	 massicCrossSection = 0.067567 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1261347044, 1004169331
+ Current couple of seeds = 669695371, 1670852432
 ----------------------------------------
 #
 /gun/particle pi+
@@ -231,7 +232,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1261347044, 1004169331
+ Current couple of seeds = 669695371, 1670852432
 ----------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -246,17 +247,17 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.8s Real=1.81s Sys=0s
+  User=1.6s Real=1.6s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hPairProd : 59747	hIoni : 433560	CoulombScat : 5586	hBrems : 379
+ Number of process calls --->	hIoni : 433927	hPairProd : 59359	CoulombScat : 5595	hBrems : 378
 
- Simulation: total CrossSection = 0.49927 /cm	 MeanFreePath = 2.0029 cm 	 massicCrossSection = 0.06344 cm2/g
+ Simulation: total CrossSection = 0.49926 /cm	 MeanFreePath = 2.003 cm 	 massicCrossSection = 0.063438 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 452146030, 1794725178
+ Current couple of seeds = 757017482, 302436013
 ----------------------------------------
 #
 /gun/particle proton
@@ -291,7 +292,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 452146030, 1794725178
+ Current couple of seeds = 757017482, 302436013
 ----------------------------------------
 --> Event 0 starts.
 --> Event 1000 starts.
@@ -306,17 +307,17 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.22s Real=2.22s Sys=0s
+  User=1.51s Real=1.51s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434938	hPairProd : 34325	CoulombScat : 5563	hBrems : 5
+ Number of process calls --->	hPairProd : 34564	hIoni : 434788	CoulombScat : 5656	hBrems : 3
 
- Simulation: total CrossSection = 0.47483 /cm	 MeanFreePath = 2.106 cm 	 massicCrossSection = 0.060334 cm2/g
+ Simulation: total CrossSection = 0.47501 /cm	 MeanFreePath = 2.1052 cm 	 massicCrossSection = 0.060357 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 118104363, 682782592
+ Current couple of seeds = 110692364, 989821367
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

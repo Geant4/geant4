@@ -190,12 +190,13 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   G4double TargetSizeZ =  fNeuronLoadParamz->GetdepthB()*um; 
   fTotMassSlice = fNeuronLoadParamz->GetTotMassSlice() ;  
   G4cout << " Overall dimensions (um) of neuron morphology : " << "\n"
-         << '\t'<< " width = " <<TargetSizeX/um<< " height = " << TargetSizeY/um
+         << '\t'<< " width = " <<TargetSizeX/um<< " height = " << 
+         TargetSizeY/um
          << " depth = " <<TargetSizeZ/um<<G4endl;  
   
   G4cout << " Volume (um3), surface (um2) and mass (ug) of Bounding Slice are"
       << " calculated : " << "\n"
-      << '\t'<<fNeuronLoadParamz->GetTotVolSlice()/pow(um,3)<<"; "<<'\t'
+      << '\t'<<fNeuronLoadParamz->GetTotVolSlice()/std::pow(um,3)<<"; "<<'\t'
       <<fNeuronLoadParamz->GetTotSurfSlice()/(um*um)
       <<"; "<<'\t'<<fNeuronLoadParamz->GetTotMassSlice()*1e6/g<< "\n "<<G4endl;   
  
@@ -227,7 +228,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
   G4cout <<  " Volume (um3), surface (um2) and mass(ug) of Neuron "
         << "are calculated : "<< "\n"
-        << '\t'<<fNeuronLoadParamz->GetTotVolNeuron()/pow(um,3)<<"; "<<'\t'
+        << '\t'<<fNeuronLoadParamz->GetTotVolNeuron()/std::pow(um,3)<<"; "<<'\t'
         <<fNeuronLoadParamz->GetTotSurfNeuron()/(um*um)
         <<"; "<<'\t'<<fNeuronLoadParamz->GetTotMassNeuron()*1e6/g<<G4endl;  
   fTotMassNeuron = fNeuronLoadParamz->GetTotMassNeuron() ;  
@@ -314,8 +315,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
                 "Soma",
                 boundingLV,
                 false,
-                0,
-                fCheckOverlaps);   
+                i);   
   fMassSomacomp[i] = fNeuronLoadParamz->GetMassSomacomp(i) ;
   fPosSomacomp[i] = fNeuronLoadParamz->GetPosSomacomp(i) ;
   fpRegion->SetProductionCuts(cuts);
@@ -367,8 +367,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
         "Dendrites",
         boundingLV,
         false,
-        0,
-        fCheckOverlaps);   
+        i);   
   fMassDendcomp[i] = fNeuronLoadParamz->GetMassDendcomp(i) ;
   fPosDendcomp[i] = fNeuronLoadParamz->GetPosDendcomp(i) ;
   fDistADendSoma[i] = fNeuronLoadParamz->GetDistADendSoma(i) ;
@@ -417,8 +416,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
          "Axon",
          boundingLV,
          false,
-         0,
-         fCheckOverlaps);   
+         i);   
   fMassAxoncomp[i] = fNeuronLoadParamz->GetMassAxoncomp(i) ;
   fPosAxoncomp[i] = fNeuronLoadParamz->GetPosAxoncomp(i) ;
   fDistAxonsoma[i] = fNeuronLoadParamz->GetDistAxonsoma(i) ;

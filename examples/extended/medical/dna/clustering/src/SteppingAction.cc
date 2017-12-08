@@ -56,7 +56,6 @@ SteppingAction::~SteppingAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 void SteppingAction::Initialize()
 {
   fpEventAction = (EventAction*) G4EventManager::GetEventManager()->

@@ -1,5 +1,5 @@
 argc 4
-Geometry data file: /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-06_branch/10-03-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat
+Geometry data file: /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat
 evaluating -m
 
         ############################################
@@ -7,69 +7,15 @@ evaluating -m
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-Instantiated G3toG4DetectorConstruction using call list file "/mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-06_branch/10-03-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat"
+Instantiated G3toG4DetectorConstruction using call list file "/mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat"
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
-Instantiated unit rotation matrix irot=0
-Reading the call List file /mnt/build/jenkins/workspace/g4-slc6/COMPILER/gcc49/LABEL/slc6/THREAD/Seq/release/RelWithDebInfo/10-03-ref-06_branch/10-03-ref-06_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat...
-G4ggclos: setting top-level VolTableEntry
-Dump of VTD - 26 entries:
-Instantiated 26 volume table entries 
-                      15 positions.
-G3VolTable element   0 name BOX1 has 1 daughters
-G3VolTable element   1 name BOX1_1 has 1 daughters
-G3VolTable element   2 name BOX1_2 has 1 daughters
-G3VolTable element   3 name BOX1_3 has 1 daughters
-G3VolTable element   4 name BOX1_4 has 1 daughters
-G3VolTable element   5 name BOX2 has 1 daughters
-G3VolTable element   6 name BOX2_1 has 1 daughters
-G3VolTable element   7 name BOX2_2 has 1 daughters
-G3VolTable element   8 name BOX2_3 has 1 daughters
-G3VolTable element   9 name BOX2_4 has 1 daughters
-G3VolTable element  10 name BOX2_5 has 1 daughters
-G3VolTable element  11 name BXD1 has 0 daughters
-G3VolTable element  12 name BXD1_1 has 0 daughters
-G3VolTable element  13 name BXD1_2 has 0 daughters
-G3VolTable element  14 name BXD1_2_ENV has 1 daughters
-G3VolTable element  15 name BXD1_3 has 0 daughters
-G3VolTable element  16 name BXD1_3_ENV has 1 daughters
-G3VolTable element  17 name BXD1_4 has 0 daughters
-G3VolTable element  18 name BXD1_4_ENV has 1 daughters
-G3VolTable element  19 name BXD1_5 has 0 daughters
-G3VolTable element  20 name BXD1_5_ENV has 1 daughters
-G3VolTable element  21 name HALL has 6 daughters
-G3VolTable element  22 name TBD1 has 0 daughters
-G3VolTable element  23 name TBD2 has 0 daughters
-G3VolTable element  24 name TUB1 has 1 daughters
-G3VolTable element  25 name TUB2 has 1 daughters
-Call List file read completed. Build geometry
-G3toG4 top level volume is HALL
-Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
-  linestyle: solid, line width: 1, min line segments per circle: 3
-  drawing style: not forced, auxiliary edge visibility: not forced
-  line segments per circle: not forced.
-  time range: (-1.79769e+308,1.79769e+308)
-  G4AttValue pointer is zero, G4AttDef pointer is zero
-Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
-  linestyle: solid, line width: 1, min line segments per circle: 3
-  drawing style: not forced, auxiliary edge visibility: not forced
-  line segments per circle: not forced.
-  time range: (-1.79769e+308,1.79769e+308)
-  G4AttValue pointer is zero, G4AttDef pointer is zero
-
- FTFP_BERT : new threshold between BERT and FTFP is over the interval 
- for pions :   3 to 12 GeV
- for kaons :   3 to 12 GeV
- for proton :  3 to 12 GeV
- for neutron : 3 to 12 GeV
-
-### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -116,9 +62,66 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+"/vis/list" to see available colours.
+userDetector->Construct() start.
+Instantiated unit rotation matrix irot=0
+Reading the call List file /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/g3tog4/clGeometry/data/testmodel.dat...
+G4ggclos: setting top-level VolTableEntry
+Dump of VTD - 26 entries:
+Instantiated 26 volume table entries 
+                      15 positions.
+G3VolTable element   0 name BOX1 has 1 daughters
+G3VolTable element   1 name BOX1_1 has 1 daughters
+G3VolTable element   2 name BOX1_2 has 1 daughters
+G3VolTable element   3 name BOX1_3 has 1 daughters
+G3VolTable element   4 name BOX1_4 has 1 daughters
+G3VolTable element   5 name BOX2 has 1 daughters
+G3VolTable element   6 name BOX2_1 has 1 daughters
+G3VolTable element   7 name BOX2_2 has 1 daughters
+G3VolTable element   8 name BOX2_3 has 1 daughters
+G3VolTable element   9 name BOX2_4 has 1 daughters
+G3VolTable element  10 name BOX2_5 has 1 daughters
+G3VolTable element  11 name BXD1 has 0 daughters
+G3VolTable element  12 name BXD1_1 has 0 daughters
+G3VolTable element  13 name BXD1_2 has 0 daughters
+G3VolTable element  14 name BXD1_2_ENV has 1 daughters
+G3VolTable element  15 name BXD1_3 has 0 daughters
+G3VolTable element  16 name BXD1_3_ENV has 1 daughters
+G3VolTable element  17 name BXD1_4 has 0 daughters
+G3VolTable element  18 name BXD1_4_ENV has 1 daughters
+G3VolTable element  19 name BXD1_5 has 0 daughters
+G3VolTable element  20 name BXD1_5_ENV has 1 daughters
+G3VolTable element  21 name HALL has 6 daughters
+G3VolTable element  22 name TBD1 has 0 daughters
+G3VolTable element  23 name TBD2 has 0 daughters
+G3VolTable element  24 name TUB1 has 1 daughters
+G3VolTable element  25 name TUB2 has 1 daughters
+Call List file read completed. Build geometry
+G3toG4 top level volume is HALL
+Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
+  linestyle: solid, line width: 1, min line segments per circle: 3
+  drawing style: not forced, auxiliary edge visibility: not forced
+  line segments per circle: not forced.
+  time range: (-1.79769e+308,1.79769e+308)
+  G4AttValue pointer is zero, G4AttDef pointer is zero
+Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1) (white)
+  linestyle: solid, line width: 1, min line segments per circle: 3
+  drawing style: not forced, auxiliary edge visibility: not forced
+  line segments per circle: not forced.
+  time range: (-1.79769e+308,1.79769e+308)
+  G4AttValue pointer is zero, G4AttDef pointer is zero
+HALL is registered to the default region.
+physicsList->Construct() start.
 
+ FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 12 GeV
+ for kaons :   3 to 12 GeV
+ for proton :  3 to 12 GeV
+ for neutron : 3 to 12 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+physicsList->CheckParticleList() start.
+physicsList->setCut() start.
 
 phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
@@ -166,7 +169,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
@@ -197,12 +200,12 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -228,8 +231,8 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -261,7 +264,7 @@ ionIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -288,12 +291,12 @@ hPairProd:   for  anti_proton    SubType= 4
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -320,12 +323,12 @@ hPairProd:   for  kaon+    SubType= 4
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -352,7 +355,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -385,7 +388,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -418,12 +421,12 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -450,12 +453,12 @@ hPairProd:   for  pi+    SubType= 4
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -482,7 +485,7 @@ hPairProd:   for  pi-    SubType= 4
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -682,6 +685,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -696,6 +700,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -804,16 +809,21 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -867,14 +877,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
        5.25          0k         1        4          4         0.00    BXD1_4_ENV
        5.25          0k         1        4          4         0.00    BXD1_5_ENV
 ### Run 0 starts.
-### Run 0 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -901,14 +907,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-### Run 1 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -935,14 +937,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 2 starts.
-### Run 2 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -969,14 +967,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 3 starts.
-### Run 3 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1003,14 +997,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 4 starts.
-### Run 4 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1037,14 +1027,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 5 starts.
-### Run 5 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1071,14 +1057,10 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 6 starts.
-### Run 6 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 Region <DefaultRegionForTheWorld> --  -- appears in <HALL> world volume
  This region is in the mass world.
@@ -1105,21 +1087,16 @@ Index : 0     used in the geometry : Yes
 ====================================================================
 
 ### Run 7 starts.
-### Run 7 start.
-WARNING: Scene "none" not found.
-  /vis/scene/list to see scenes.
  Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
-WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserActionInitialization deleted.
-UserRunAction deleted.
 UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.

@@ -1,4 +1,4 @@
-$Id: History 102436 2017-01-27 08:28:53Z gcosmo $
+$Id: History 106991 2017-10-31 10:13:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23, 2017, K.L.Genser (tracking-V10-03-02)
+- G4StackManager added #ifdef for the case when a particle IsMuonicAtom
+
+September 12, 2017, K.L.Genser (tracking-V10-03-01)
+- G4StackManager added a case when a particle IsMuonicAtom
+
 Dec 22, 2016 L.Desorgher  (tracking-V10-03-00)
 - Modification in G4AdjointSteppingAction for correction of a bug in the case of reverse
   track splitting.

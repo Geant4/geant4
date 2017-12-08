@@ -39,7 +39,7 @@
 
 #include "G4GenericPolycone.hh"
 
-#if !defined(G4GEOM_USE_UGENERICPOLYCONE)
+//#if !defined(G4GEOM_USE_UGENERICPOLYCONE)
 
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
@@ -946,4 +946,4 @@ G4Polyhedron* G4GenericPolycone::CreatePolyhedron() const
     }
 }
 
-#endif
+//#endif

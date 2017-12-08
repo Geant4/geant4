@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: DicomPhantomZSliceHeader.cc 101109 2016-11-07 08:14:53Z gcosmo $
+// $Id: DicomPhantomZSliceHeader.cc 107363 2017-11-09 10:51:28Z gcosmo $
 //
 /// \file DicomPhantomZSliceHeader.cc
 /// \brief Implementation of the DicomPhantomZSliceHeader class
@@ -38,7 +38,7 @@
 
 #include "DicomPhantomZSliceHeader.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(const G4String& fname)
 :   fNoVoxelX(0),fNoVoxelY(0),fNoVoxelZ(0),
     fMinX(0),fMinY(0),fMinZ(0),
@@ -48,13 +48,13 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(const G4String& fname)
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomPhantomZSliceHeader::~DicomPhantomZSliceHeader()
 {
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( 
                               const DicomPhantomZSliceHeader& rhs )
 {
@@ -74,7 +74,7 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader(
     fSliceLocation = rhs.fSliceLocation;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...
 DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
 {
     //----- Read material indices and names
@@ -90,8 +90,8 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
     for( G4int im = 0; im < nmate; im++ ){
         fin >> mateindex >> matename;
 #ifdef G4VERBOSE
-        //G4cout << " DicomPhantomZSliceHeader reading material " << im << " : "
-        //        << mateindex << "  " << matename << G4endl;
+        //G4cout << " DicomPhantomZSliceHeader reading material " 
+        // << im << " : "<< mateindex << "  " << matename << G4endl;
 #endif
 
         if( ! CheckMaterialExists( matename ) ) {
@@ -123,8 +123,8 @@ DicomPhantomZSliceHeader::DicomPhantomZSliceHeader( std::ifstream& fin )
     fSliceLocation = 0.5*(fMinZ + fMaxZ);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+G4bool DicomPhantomZSliceHeader::CheckMaterialExists(const G4String& mateName)
 {
     const G4MaterialTable* matTab = G4Material::GetMaterialTable();
     std::vector<G4Material*>::const_iterator matite;
@@ -141,13 +141,13 @@ G4bool DicomPhantomZSliceHeader::CheckMaterialExists( const G4String& mateName )
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-void DicomPhantomZSliceHeader::operator+=( const DicomPhantomZSliceHeader& rhs )
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void DicomPhantomZSliceHeader::operator+=( const DicomPhantomZSliceHeader& rhs)
 {
     *this = *this + rhs;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+( 
                        const DicomPhantomZSliceHeader& rhs )
 {
@@ -202,7 +202,7 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+(
     G4GeometryTolerance::GetInstance()->GetRadialTolerance() &&
        std::fabs( fMaxZ - rhs.GetMinZ() ) >
        G4GeometryTolerance::GetInstance()->GetRadialTolerance() ){
-        G4cerr << "DicomPhantomZSliceHeader error adding two slice headers: !!!\
+        G4cerr << "DicomPhantomZSliceHeader error adding two slice headers:!!!\
         Slices are not contiguous in Z "
         << "  Zmin= " << fMinZ << " & " << rhs.GetMinZ()
         << "  Zmax= " << fMaxZ << " & " << rhs.GetMaxZ()
@@ -222,10 +222,10 @@ DicomPhantomZSliceHeader DicomPhantomZSliceHeader::operator+(
     return temp;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..
 void DicomPhantomZSliceHeader::DumpToFile()
 {
-  
+
   G4cout << "DicomPhantomZSliceHeader::Dumping Z Slice data to " 
          << fFilename << "..." << G4endl;
   //sleep(5);
@@ -254,14 +254,17 @@ void DicomPhantomZSliceHeader::DumpToFile()
   out << fMinY << " " << fMaxY << std::endl;
   out << fMinZ << " " << fMaxZ << std::endl;
   
-  for(unsigned int i = 0; i < fMateIDs.size(); ++i) { Print(out,fMateIDs.at(i)," "); }
-  for(unsigned int i = 0; i < fValues.size(); ++i) { Print(out,fValues.at(i)," ",6); }
+  for(unsigned int i = 0; i < fMateIDs.size(); ++i) 
+                           { Print(out,fMateIDs.at(i)," "); }
+
+  for(unsigned int i = 0; i < fValues.size(); ++i) 
+                           { Print(out,fValues.at(i)," ",6); }
   
   out.close();
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 void DicomPhantomZSliceHeader::ReadDataFromFile()
 {
   std::ifstream in;
@@ -346,4 +349,4 @@ void DicomPhantomZSliceHeader::ReadDataFromFile()
   
   in.close();
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

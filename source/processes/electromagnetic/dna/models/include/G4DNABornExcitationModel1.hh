@@ -85,8 +85,8 @@ private:
   G4int verboseLevel;
   const G4ParticleDefinition* fParticleDefinition;
 
-  double fLowEnergy;
-  double fHighEnergy;
+  G4double fLowEnergy;
+  G4double fHighEnergy;
   G4String fTableFile;
   G4DNACrossSectionDataSet* fTableData;
 

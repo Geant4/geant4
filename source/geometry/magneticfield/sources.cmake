@@ -11,7 +11,7 @@
 #
 # Generated on : 29/9/2010
 #
-# $Id: sources.cmake 97598 2016-06-06 07:19:46Z gcosmo $
+# $Id: sources.cmake 107113 2017-11-02 14:47:33Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -61,6 +61,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManagerStore.hh
         G4FieldTrack.hh
         G4FieldTrack.icc
+        G4FieldUtils.hh
+        G4FieldUtils.icc
         G4FSALBogackiShampine45.hh
         G4FSALDormandPrince745.hh
         G4FSALIntegrationDriver.hh
@@ -74,6 +76,8 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4HelixMixedStepper.hh
         G4HelixSimpleRunge.hh
         G4ImplicitEuler.hh
+        G4IntegrationDriver.hh
+        G4IntegrationDriver.icc
         G4LineCurrentMagField.hh
         G4LineSection.hh
         G4MagErrorStepper.hh
@@ -93,6 +97,9 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4QuadrupoleMagField.hh
         G4RepleteEofM.hh
         G4RKG3_Stepper.hh
+        G4RK547FEq1.hh
+        G4RK547FEq2.hh
+        G4RK547FEq3.hh
         G4SimpleHeum.hh
         G4SimpleRunge.hh
         G4TrialsCounter.hh
@@ -101,6 +108,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4UniformElectricField.hh
         G4UniformGravityField.hh
         G4UniformMagField.hh
+        G4VIntegrationDriver.hh
     SOURCES
         G4BogackiShampine23.cc
         G4BogackiShampine45.cc
@@ -130,9 +138,9 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4FieldManager.cc
         G4FieldManagerStore.cc
         G4FieldTrack.cc
+        G4FieldUtils.cc
         G4FSALBogackiShampine45.cc
         G4FSALDormandPrince745.cc
-        G4FSALIntegrationDriver.cc
         G4VFSALIntegrationStepper.cc
         G4HarmonicPolMagField.cc
         G4HelixExplicitEuler.cc
@@ -156,6 +164,9 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4QuadrupoleMagField.cc
         G4RepleteEofM.cc
         G4RKG3_Stepper.cc
+        G4RK547FEq1.cc
+        G4RK547FEq2.cc
+        G4RK547FEq3.cc
         G4SimpleHeum.cc
         G4SimpleRunge.cc
         G4TrialsCounter.cc

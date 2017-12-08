@@ -39,6 +39,7 @@
 #include "G4ParticleTypeConverter.hh"
 #include "G4BaryonWidth.hh"
 #include "G4BaryonPartialWidth.hh"
+#include "G4Threading.hh"
 
 //class G4KineticTrack;
 
@@ -86,13 +87,24 @@ protected:
 
 private:  
 
+  static void InitialisePointers();
+
   G4VCrossSectionSource* crossSectionSource;
   const G4ParticleDefinition* thePrimary1;
   const G4ParticleDefinition* thePrimary2;
   const G4ParticleDefinition* theSecondary;
+
   static G4BaryonWidth & theBaryonWidth();
   static G4BaryonPartialWidth & theBaryonPartialWidth();
   static G4ParticleTypeConverter & myConv();
+
+  static G4BaryonWidth*           baryonWidth;
+  static G4BaryonPartialWidth*    baryonPartialWidth;
+  static G4ParticleTypeConverter* particleTypeConverter;
+
+#ifdef G4MULTITHREADED
+  static G4Mutex concreteMesonBaryonToResonanceMutex;
+#endif
 };
 
 #endif

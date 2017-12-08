@@ -41,16 +41,20 @@ enum G4DeexChannelType
 {
   fEvaporation = 0,
   fGEM,
-  fCombined
+  fCombined,
+  fDummy
 };
 
 class G4StateManager;
+class G4DeexParametersMessenger;
 
 class G4DeexPrecoParameters
 {
 public:
 
   explicit G4DeexPrecoParameters();
+
+  ~G4DeexPrecoParameters();
 
   void SetDefaults();
 
@@ -90,6 +94,8 @@ public:
 
   inline G4int GetDeexModelType() const;
 
+  inline G4int GetTwoJMAX() const;
+
   inline G4bool NeverGoBack() const;
 
   inline G4bool UseSoftCutoff() const;
@@ -102,11 +108,13 @@ public:
 
   inline G4bool UseAngularGen() const;
 
-  inline G4bool UseFilesNEW() const;
+  inline G4bool PrecoDummy() const;
 
   inline G4bool CorrelatedGamma() const;
 
-  inline G4bool StoreAllLevels() const;
+  inline G4bool GetInternalConversionFlag() const;
+
+  inline G4bool StoreICLevelData() const;
 
   inline G4DeexChannelType GetDeexChannelsType() const;
 
@@ -140,6 +148,8 @@ public:
 
   void SetDeexModelType(G4int);
 
+  void SetTwoJMAX(G4int);
+
   void SetNeverGoBack(G4bool);
 
   void SetUseSoftCutoff(G4bool);
@@ -152,23 +162,33 @@ public:
 
   void SetUseAngularGen(G4bool);
 
-  void SetUseFilesNEW(G4bool);
+  void SetPrecoDummy(G4bool);
 
   void SetCorrelatedGamma(G4bool);
 
+  void SetStoreICLevelData(G4bool);
+
+  // obsolete method (use previous)
   void SetStoreAllLevels(G4bool);
 
+  void SetInternalConversionFlag(G4bool);
+
   void SetDeexChannelsType(G4DeexChannelType);
+
+  // obsolete method (has no effect)
+  inline void SetUseFilesNEW(G4bool) {};
 
 private:
 
   G4bool IsLocked() const;
 
   G4DeexPrecoParameters(const G4DeexPrecoParameters & right) = delete;  
-  const G4DeexPrecoParameters& operator=(const G4DeexPrecoParameters &right) = delete;
+  const G4DeexPrecoParameters& operator=
+  (const G4DeexPrecoParameters &right) = delete;
   G4bool operator==(const G4DeexPrecoParameters &right) const = delete;
   G4bool operator!=(const G4DeexPrecoParameters &right) const = delete;
 
+  G4DeexParametersMessenger* theMessenger;
   G4StateManager* fStateManager;
 
   // Level density parameter
@@ -202,6 +222,7 @@ private:
 
   // Internal conversion model ID
   G4int fInternalConversionID;
+  G4int fTwoJMAX;
 
   // Preco model
   G4int fMinZForPreco;
@@ -214,11 +235,12 @@ private:
   G4bool fUseGNASH;
   G4bool fUseHETC;
   G4bool fUseAngularGen;
+  G4bool fPrecoDummy;
 
   // Deex flags
-  G4bool fUseLongFiles;
   G4bool fCorrelatedGamma;
   G4bool fStoreAllLevels;
+  G4bool fInternalConversion;
 
   // type of a set of e-exitation channels
   G4DeexChannelType fDeexChannelType;   
@@ -298,6 +320,11 @@ inline G4int G4DeexPrecoParameters::GetDeexModelType() const
   return fDeexType;
 }
 
+inline G4int G4DeexPrecoParameters::GetTwoJMAX() const
+{
+  return fTwoJMAX;
+}
+
 inline G4bool G4DeexPrecoParameters::NeverGoBack() const
 {
   return fNeverGoBack;
@@ -328,9 +355,9 @@ inline G4bool G4DeexPrecoParameters::UseAngularGen() const
   return fUseAngularGen;
 }
 
-inline G4bool G4DeexPrecoParameters::UseFilesNEW() const
+inline G4bool G4DeexPrecoParameters::PrecoDummy() const
 {
-  return fUseLongFiles;
+  return fPrecoDummy;
 }
 
 inline G4bool G4DeexPrecoParameters::CorrelatedGamma() const
@@ -338,9 +365,14 @@ inline G4bool G4DeexPrecoParameters::CorrelatedGamma() const
   return fCorrelatedGamma;
 }
 
-inline G4bool G4DeexPrecoParameters::StoreAllLevels() const
+inline G4bool G4DeexPrecoParameters::StoreICLevelData() const
 {
   return fStoreAllLevels;
+}
+
+inline G4bool G4DeexPrecoParameters::GetInternalConversionFlag() const
+{
+  return fInternalConversion;
 }
 
 inline G4DeexChannelType G4DeexPrecoParameters::GetDeexChannelsType() const

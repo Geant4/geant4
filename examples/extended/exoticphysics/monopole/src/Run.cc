@@ -33,21 +33,16 @@
 
 #include "Run.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
-#include "G4Track.hh"
-#include "G4VPhysicalVolume.hh"
-
+#include "DetectorConstruction.hh"
 #include "G4EmCalculator.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim, 
-         HistoManager* histoMgr)
-:fDetector(det), fPrimary(prim), fHistoManager(histoMgr)
+Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+ :fDetector(det), fPrimary(prim)
 {
   fAnalysisManager = G4AnalysisManager::Instance();
 
@@ -57,18 +52,13 @@ Run::Run(DetectorConstruction* det, PrimaryGeneratorAction* prim,
   fVerboseLevel = 1;
   fNevt = 0;
   fProjRange = fProjRange2 = 0.;
-
-  fHistoManager->Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::~Run()
-{ 
+{}
 
-}
-
- 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::Merge(const G4Run* run)
@@ -110,7 +100,7 @@ void Run::EndOfRun(double binLength)
            << G4BestUnit(fDetector->GetAbsorSizeX(),"Length") << " of "
            << matName << " (density: " 
            << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-    G4cout<<"Proj "<<fProjRange<<" "<<fProjRange2<<G4endl;
+    //G4cout<<"Proj "<<fProjRange<<" "<<fProjRange2<<G4endl;
   };
          
   //compute projected range and straggling
@@ -122,14 +112,14 @@ void Run::EndOfRun(double binLength)
 
   if(GetVerbose() > 0){
     G4cout.precision(5);       
-    G4cout << "\n projected Range= " << G4BestUnit(fProjRange, "Length")
+    G4cout << " Projected Range= " << G4BestUnit(fProjRange, "Length")
            << "   rms= "             << G4BestUnit(rms, "Length")
-           << G4endl;
+           << "\n" << G4endl;
   };
 
   G4double ekin[100], dedxproton[100], dedxmp[100];
   G4EmCalculator calc;
-  calc.SetVerbose(2);
+  //calc.SetVerbose(2);
   G4int i;
   for(i = 0; i < 100; ++i) {
     ekin[i] = std::pow(10., 0.1*G4double(i)) * keV;
@@ -141,9 +131,9 @@ void Run::EndOfRun(double binLength)
 
   if(GetVerbose() > 0){
     G4cout << "### Stopping Powers" << G4endl;
-    for(i=0; i<100; i++) {
-      G4cout << " E(MeV)= " << ekin[i] << "  dedxp= " << dedxproton[i]
-             << " dedxmp= " << dedxmp[i]
+    for(i=0; i<100; ++i) {
+      G4cout << " E(MeV)= " << ekin[i] << "  dedxp(MeV/mm)= " << dedxproton[i]
+             << " dedxmp(MeV/mm)= " << dedxmp[i]
              << G4endl;
     }
   }
@@ -151,7 +141,7 @@ void Run::EndOfRun(double binLength)
 
   // normalize histogram
   G4double fac = (mm/MeV) / (nEvents * binLength);
-  fHistoManager->Scale(1,fac);
+  fAnalysisManager->ScaleH1(1,fac);
 
   if(GetVerbose() > 0){
     G4cout << "Range table for " << matName << G4endl;
@@ -159,35 +149,13 @@ void Run::EndOfRun(double binLength)
 
   for(i=0; i<100; ++i) {
     G4double e = std::log10(ekin[i] / MeV) + 0.05;
-    fHistoManager->FillHisto(2, e, dedxproton[i]);
-    fHistoManager->FillHisto(3, e, dedxmp[i]);
-    fHistoManager->FillHisto(4, e, 
+    fAnalysisManager->FillH1(2, e, dedxproton[i]);
+    fAnalysisManager->FillH1(3, e, dedxmp[i]);
+    fAnalysisManager->FillH1(4, e, 
                    std::log10(calc.GetRange(ekin[i],"proton",matName)/mm));
-    fHistoManager->FillHisto(5, e, 
+    fAnalysisManager->FillH1(5, e, 
                    std::log10(calc.GetRange(ekin[i],"monopole",matName)/mm));
   }
-  
-
-  if(fAnalysisManager) {
-
-    if(fAnalysisManager->IsActive()) {
-
-      // Write histogram file
-      if(!fAnalysisManager->Write()) {
-        G4Exception ("Histo::Save()", "hist01", FatalException, 
-                     "Cannot write ROOT file.");
-      }
-      G4cout << "### Histo::Save: Histograms are saved" << G4endl;
-      if(fAnalysisManager->CloseFile() && fVerboseLevel) {
-        G4cout << "                 File is closed" << G4endl;
-      }
-    }
-    
-    delete fAnalysisManager;
-    fAnalysisManager = 0;
-  }
-
-
 }   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -195,8 +163,7 @@ void Run::EndOfRun(double binLength)
 
 void Run::FillHisto(G4int histoId, G4double v1, G4double v2)
 {
-  if(fAnalysisManager) 
-    fHistoManager->FillHisto(histoId, v1, v2);
+  fAnalysisManager->FillH1(histoId, v1, v2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

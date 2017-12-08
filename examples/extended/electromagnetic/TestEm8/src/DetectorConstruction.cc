@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id: DetectorConstruction.cc 106960 2017-10-31 08:35:19Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -82,6 +82,7 @@ DetectorConstruction::DetectorConstruction()
 {
   fGasThickness = 23.0*mm;
   fGasRadius    = 10.*cm;
+  fMaxStep      = DBL_MAX;
 
   fWindowThick  = 51.0*micrometer;
 
@@ -452,7 +453,6 @@ void DetectorConstruction::ChangeGeometry()
 
   fSolidDetector->SetOuterRadius(fGasRadius);
   fSolidDetector->SetZHalfLength(fGasThickness*0.5);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

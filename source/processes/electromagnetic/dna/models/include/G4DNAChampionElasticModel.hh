@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAChampionElasticModel.hh 97520 2016-06-03 14:23:17Z gcosmo $
+// $Id: G4DNAChampionElasticModel.hh 105719 2017-08-16 12:36:37Z gcosmo $
 //
 
 #ifndef G4DNAChampionElasticModel_h
@@ -80,11 +80,11 @@ public:
 
 private:
   // Cross section
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   VecMap eVecm;
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
   TriDimensionMap eDiffCrossSectionData;
-  std::vector<double> eTdummyVec;
+  std::vector<G4double> eTdummyVec;
 
   // Water density table
   const std::vector<G4double>* fpMolWaterDensity;

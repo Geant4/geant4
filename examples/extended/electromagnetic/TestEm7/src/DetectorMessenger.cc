@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 101250 2016-11-10 08:54:02Z gcosmo $
+// $Id: DetectorMessenger.cc 107330 2017-11-08 16:42:09Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,7 +107,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTalDefCmd->SetGuidance("  dimensions (3-vector with unit)");
   //
   G4UIparameter* fTalNbPrm = new G4UIparameter("tallyNb",'i',false);
-  fTalNbPrm->SetGuidance("tally number : from 1 to tallyNumber");
+  fTalNbPrm->SetGuidance("tally number : from 0 to tallyNumber");
   fTalNbPrm->SetParameterRange("tallyNb>=0");
   fTalDefCmd->SetParameter(fTalNbPrm);
   //
@@ -140,7 +140,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fTalPosiCmd->SetGuidance("  position (3-vector with unit)");
   //
   G4UIparameter* fTalNumPrm = new G4UIparameter("tallyNum",'i',false);
-  fTalNumPrm->SetGuidance("tally number : from 1 to tallyNumber");
+  fTalNumPrm->SetGuidance("tally number : from 0 to tallyNumber");
   fTalNumPrm->SetParameterRange("tallyNum>=0");
   fTalPosiCmd->SetParameter(fTalNumPrm);
   //    

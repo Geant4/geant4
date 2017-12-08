@@ -95,18 +95,24 @@ private:
   G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
+  G4UIcmdWithABool*          lat96Cmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          delCmd;
   G4UIcmdWithABool*          IntegCmd;
   G4UIcmdWithABool*          mottCmd;
   G4UIcmdWithABool*          birksCmd;
+  G4UIcmdWithABool*          dnafCmd;
+  G4UIcmdWithABool*          dnasCmd;
+  G4UIcmdWithABool*          dnamscCmd;
+  G4UIcmdWithABool*          sharkCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;
   G4UIcmdWithADoubleAndUnit* maxEnCmd;
   G4UIcmdWithADoubleAndUnit* cenCmd;
   G4UIcmdWithADoubleAndUnit* lowEnCmd;
+  G4UIcmdWithADoubleAndUnit* lowEn3Cmd;
   G4UIcmdWithADoubleAndUnit* lowhEnCmd;
   G4UIcmdWithADouble*        lllCmd;
   G4UIcmdWithADoubleAndUnit* brCmd;

@@ -359,7 +359,7 @@ protected:
                   double a_r,double a_g,double a_b,
                   const std::string& a_head,unsigned int a_index) {
     std::string stmp;
-    if(!tools::num2s(a_index,stmp)) {}
+    if(!num2s(a_index,stmp)) {}
     new_TColor(a_i,a_r,a_g,a_b,a_head+stmp);
   }
 
@@ -578,24 +578,24 @@ inline bool find_color(const cmaps_t& a_cmaps,
     //a_s of the form : <real:r> <real:g> <real:b> <string:name> 
     //a_s of the form : <real:r> <real:g> <real:b> <real:a> <string:name> 
 
-   {std::vector<std::string> words;
-    tools::words(a_s," ",false,words);
-    if(words.size()==3) {
+   {std::vector<std::string> ws;
+    words(a_s," ",false,ws);
+    if(ws.size()==3) {
       float r,g,b;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) ){
+      if( to<float>(ws[0],r) &&
+          to<float>(ws[1],g) &&
+          to<float>(ws[2],b) ){
         a_col = colorf(r,g,b);
         return true;
       }
 
-    } else if(words.size()==4) {
+    } else if(ws.size()==4) {
       float r,g,b,a;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) ){
+      if( to<float>(ws[0],r) &&
+          to<float>(ws[1],g) &&
+          to<float>(ws[2],b) ){
 
-        if(tools::to<float>(words[3],a)) {
+        if(to<float>(ws[3],a)) {
           a_col = colorf(r,g,b,a);
         } else {
           a_col = colorf(r,g,b,1);
@@ -603,12 +603,12 @@ inline bool find_color(const cmaps_t& a_cmaps,
         return true;
       }
 
-    } else if(words.size()==5) {
+    } else if(ws.size()==5) {
       float r,g,b,a;
-      if( tools::to<float>(words[0],r) &&
-          tools::to<float>(words[1],g) &&
-          tools::to<float>(words[2],b) &&
-          tools::to<float>(words[3],a) ){
+      if( to<float>(ws[0],r) &&
+          to<float>(ws[1],g) &&
+          to<float>(ws[2],b) &&
+          to<float>(ws[3],a) ){
         a_col = colorf(r,g,b,a);
         return true;
       }

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/src/DetectorMessenger.cc
 /// \brief Implementation of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.cc 68198 2013-03-18 16:39:51Z maire $
+// $Id: DetectorMessenger.cc 106960 2017-10-31 08:35:19Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -39,6 +39,8 @@
 ////////////////////////////////////////////////////////////////////////
 // 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "DetectorMessenger.hh"
 
 #include "DetectorConstruction.hh"
@@ -47,18 +49,10 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
-  : G4UImessenger(),fDetector(det),
-    fDetDir(0),
-    fGasMaterCmd(0),
-    fGasThickCmd(0),
-    fGasRadCmd(0),
-    fWinThickCmd(0),
-    fWindowMaterCmd(0),
-    fWorldMaterCmd(0),
-    fIonCmd(0)
+  : G4UImessenger(),fDetector(det)
 { 
   fDetDir = new G4UIdirectory("/testem/");
   fDetDir->SetGuidance("Detector control.");
@@ -112,9 +106,16 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * det)
   fIonCmd->SetDefaultUnit("MeV");
   fIonCmd->SetRange("en>0.");
   fIonCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
+
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length for charged particles");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::~DetectorMessenger()
 {
@@ -124,42 +125,32 @@ DetectorMessenger::~DetectorMessenger()
   delete fWinThickCmd; 
   delete fWindowMaterCmd;
   delete fWorldMaterCmd;
-  delete fIonCmd; 
+  delete fIonCmd;
+  delete fStepMaxCmd; 
   delete fDetDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-  if( command == fGasMaterCmd )
-    { 
-      fDetector->SetGasMaterial(newValue);
-    } 
-  else if( command == fWindowMaterCmd )
-    { 
-      fDetector->SetContainerMaterial(newValue);
-    } 
-  else if( command == fWorldMaterCmd )
-    { 
-      fDetector->SetWorldMaterial(newValue);
-    } 
-  else if( command == fGasThickCmd )
-    { 
-      fDetector->SetGasThickness(fGasThickCmd->GetNewDoubleValue(newValue));
-    } 
-  else if( command == fGasRadCmd )
-    { 
-      fDetector->SetGasRadius(fGasRadCmd->GetNewDoubleValue(newValue));
-    } 
-  else if( command == fWinThickCmd )
-    { 
-      fDetector->SetContainerThickness(fWinThickCmd->GetNewDoubleValue(newValue));
-    }
-  else if( command == fIonCmd )
-    { 
-      fDetector->SetPairEnergy(fIonCmd->GetNewDoubleValue(newValue));
-    }
+  if( command == fGasMaterCmd ) { 
+    fDetector->SetGasMaterial(newValue);
+  } else if( command == fWindowMaterCmd ) { 
+    fDetector->SetContainerMaterial(newValue);
+  } else if( command == fWorldMaterCmd ) { 
+    fDetector->SetWorldMaterial(newValue);
+  } else if( command == fGasThickCmd ) { 
+    fDetector->SetGasThickness(fGasThickCmd->GetNewDoubleValue(newValue));
+  } else if( command == fGasRadCmd ) { 
+    fDetector->SetGasRadius(fGasRadCmd->GetNewDoubleValue(newValue));
+  } else if( command == fWinThickCmd ) { 
+    fDetector->SetContainerThickness(fWinThickCmd->GetNewDoubleValue(newValue));
+  } else if( command == fStepMaxCmd ) { 
+    fDetector->SetMaxChargedStep(fStepMaxCmd->GetNewDoubleValue(newValue));
+  } else if( command == fIonCmd ) { 
+    fDetector->SetPairEnergy(fIonCmd->GetNewDoubleValue(newValue));
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

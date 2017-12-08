@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-November-2017 - G.Cosmo (externals-V10-03-08)
+- CLHEP: fixed print_state() method to proper C++ in MixMaxRng.
+
+13-November-2017 - G.Cosmo (externals-V10-03-07)
+- CLHEP: fixed shadowing warning in MixMaxRng.
+
+09-November-2017 - G.Cosmo (externals-V10-03-06, 05, 04)
+- CLHEP: updated MixMaxRng class to include latest C++ revision by K.Savvidy
+  based in MixMax-2.0. Replaced skipping coefficients optional set for
+  N=256 with N=240. Removed old C implementation files.
+  Set MixMax as the default random number generator in HepRandom.
+
+09-October-2017 - G.Cosmo (externals-V10-03-03)
+- CLHEP: added missing DLL_API specification for static data member in
+  Transform3D class.
+
 10-May-2017 - G.Cosmo (externals-V10-03-02)
 - CLHEP: fixed shadowing compilation warnings on RotationA.cc.
 

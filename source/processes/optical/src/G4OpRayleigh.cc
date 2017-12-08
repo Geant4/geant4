@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc 92045 2015-08-14 07:21:23Z gcosmo $
+// $Id: G4OpRayleigh.cc 106117 2017-09-13 10:23:20Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -234,7 +234,7 @@ void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
                                        material->GetMaterialPropertiesTable();
       G4PhysicsOrderedFreeVector* rayleigh = NULL;
       if ( materialProperties != NULL ) {
-         rayleigh = materialProperties->GetProperty( "RAYLEIGH" );
+         rayleigh = materialProperties->GetProperty( kRAYLEIGH );
          if ( rayleigh == NULL ) rayleigh = 
                                    CalculateRayleighMeanFreePaths( material );
       }
@@ -278,18 +278,18 @@ G4OpRayleigh::CalculateRayleighMeanFreePaths( const G4Material* material ) const
   if ( material->GetName() == "Water" )
     betat = 7.658e-23*m3/MeV;
   else if(materialProperties->ConstPropertyExists("ISOTHERMAL_COMPRESSIBILITY"))
-    betat = materialProperties->GetConstProperty("ISOTHERMAL_COMPRESSIBILITY");
+    betat = materialProperties->GetConstProperty(kISOTHERMAL_COMPRESSIBILITY);
   else
     return NULL;
 
   // If the material doesn't have a RINDEX property vector then return
-  G4MaterialPropertyVector* rIndex = materialProperties->GetProperty("RINDEX");
+  G4MaterialPropertyVector* rIndex = materialProperties->GetProperty(kRINDEX);
   if ( rIndex == NULL ) return NULL;
 
   // Retrieve the optional scale factor, (this just scales the scattering length
   G4double scaleFactor = 1.0;
   if( materialProperties->ConstPropertyExists( "RS_SCALE_FACTOR" ) )
-    scaleFactor= materialProperties->GetConstProperty("RS_SCALE_FACTOR" );
+    scaleFactor= materialProperties->GetConstProperty(kRS_SCALE_FACTOR );
 
   // Retrieve the material temperature. For backwards compatibility use a 
   // constant if the material is "Water"

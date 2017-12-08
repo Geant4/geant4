@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4GammaConversion.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 //
 //------------------ G4GammaConversion physics process------------------------
@@ -90,6 +90,9 @@ public:  // with description
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo() override;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 

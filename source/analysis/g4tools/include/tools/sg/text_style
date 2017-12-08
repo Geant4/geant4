@@ -47,6 +47,8 @@ public:
 
   // for text_freetype tessellation :
   sf_enum<winding_type> front_face;
+
+  sf_string options; //for gopaw.
 public:
   virtual const std::vector<field_desc>& node_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::text_style)
@@ -75,6 +77,7 @@ public:
       TOOLS_ADD_FIELD_DESC(translation)
 
       TOOLS_ADD_FIELD_DESC(front_face)
+      TOOLS_ADD_FIELD_DESC(options)
     }
     return s_v;
   }
@@ -102,6 +105,7 @@ private:
     add_field(&translation);
 
     add_field(&front_face);
+    add_field(&options);
   }
 public:
   text_style()
@@ -127,6 +131,7 @@ public:
   ,enforced(false)
   ,translation(vec3f(0,0,0))
   ,front_face(winding_ccw)
+  ,options("")
   {
     add_fields();
   }
@@ -154,6 +159,7 @@ public:
   ,enforced(a_from.enforced)
   ,translation(a_from.translation)
   ,front_face(a_from.front_face)
+  ,options(a_from.options)
   {
     add_fields();
   }
@@ -180,6 +186,7 @@ public:
     enforced = a_from.enforced;
     translation = a_from.translation;
     front_face = a_from.front_face;
+    options = a_from.options;
     return *this;
   }
 public:
@@ -209,6 +216,7 @@ public:
     sp.enforced(enforced.value());
     sp.translation(translation.value());
     sp.front_face(front_face.value());
+    sp.options(options.value());
 
     if(!sp.parse(a_out,a_cmaps,a_s)) {
       a_out << "tools::sg::text_style::from_string :"
@@ -239,6 +247,7 @@ public:
     enforced.value(sp.enforced());
     translation.value(sp.translation());
     front_face = sp.front_face();
+    options = sp.options();
 
     return true;
   }

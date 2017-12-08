@@ -63,7 +63,7 @@ G4MuonNuclearProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 void G4MuonNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles inelastic muon scattering from\n" 
+  outFile << "G4MuonNuclearProcess handles inelastic muon scattering from\n" 
           << "nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+          << "or more hadronic cross section sets.\n";
 }

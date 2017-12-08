@@ -1,7 +1,8 @@
 #ifndef tools_glutess_rename
 #define tools_glutess_rename
 
-/* G.Barrand : namespace protection : */
+/* G.Barrand : name space protection : */
+
 #define gluTessBeginContour tools_gluTessBeginContour
 #define gluTessBeginPolygon tools_gluTessBeginPolygon
 #define gluTessCallback     tools_gluTessCallback

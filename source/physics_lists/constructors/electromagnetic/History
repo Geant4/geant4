@@ -1,4 +1,4 @@
-$Id: History 104571 2017-06-06 13:45:47Z gcosmo $
+$Id: History 107332 2017-11-08 16:44:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,78 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-November-2017 V.Ivanchenko (phys-ctor-em-V10-03-37)
+- G4EmStandardPhysics_option4 - enable Auger cascade
+
+03-November-2017 V.Ivanchenko (phys-ctor-em-V10-03-36)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1, 
+  G4EmStandardPhysics_option2 - use defalt (one of 9.6) Urban msc 
+    lateral displacemet algorithm for e+- 
+- G4EmStandardPhysics_option3, G4EmLowEPPhysics, G4EmPenelopePhysics, 
+  G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics - use new
+    Urban lateral displacement algorithm
+
+30-October-2017 M.Novak (phys-ctor-em-V10-03-35)
+- G4EmStandardPhysicsGS, G4EmStandardPhysics_option4 
+    - default HEP settings of the GS physics constructor
+    - follow-up modification in opt4 according to recent (emstand-V10-03-45) 
+      changes in the GS msc model 
+
+28-October-2017 V.Ivanchenko (phys-ctor-em-V10-03-34)
+- G4EmDNAModelActivator - fixed for hydrogen
+
+25-October-2017 V.Ivanchenko (phys-ctor-em-V10-03-33)
+- G4EmDNAModelActivator - fixed for generic ions
+- G4EmStandardPhysics_option4 - use different G4NuclearStopping 
+    instance for G4GenericIon and other baryons
+
+12-October-2017 V.Ivanchenko (phys-ctor-em-V10-03-32)
+- G4EmDNAModelActivator - fixed for helium ions
+
+11-October-2017 V.Ivanchenko (phys-ctor-em-V10-03-31)
+- G4EmDNAModelActivator - fixed configuration of helium and Generic ions
+- G4EmStandardPhysics, G4EmStandardPhysics_option1,
+  G4EmStandardPhysics_option2 - use new parameter SetLateralDisplacementAlg96
+
+22-September-2017 M.Novak (phys-ctor-em-V10-03-30)
+- G4EmStandardPhysics_option4 - change msc model for e-/e+ below 
+    100 MeV from Urban + UseDistanceToBoundary stepping to 
+    GS + Mott-correction + error-free stepping.
+
+16-September-2017 V.Ivanchenko (phys-ctor-em-V10-03-29)
+- G4EmStandard_option3 - use default Urban model of fluctuations
+
+24-August-2017 M.Novak (phys-ctor-em-V10-03-27)
+- G4EmStandardPhysicsGS - use the most accurate settings for the GS
+    MSC model (error-free stepping and Mott-correction) for testing.
+
+24-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-26)
+- G4EmModelActivator - allow to use both "PAIphoton" and "pai_photon" 
+    names when activating PAIphoton model
+- G4EmLivermorePolarizedPhysics - use upper limit 100 TeV, do not apply
+    high energy limit 1 GeV to gamma processes
+- G4EmLivermorePhysics, G4EmPenelopePhysics - cleanup
+
+10-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-25)
+05-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-23)
+-  all DNA physics constructors use gamma configuration as in 
+   Livermore, fixed usage of SetEmModel() and AddEmModel()
+
+04-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-22)
+04-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-21)
+-  all EM physics constructors now does not share multiple and single
+   scattering processes between proton and anti_proton
+
+03-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-20)
+03-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-17)
+- all EM physics constructors now use G4EmParticleList
+- G4EmDNAPhysicsActivator - coherently initialise models
+
+02-August-2017 V.Ivanchenko (phys-ctor-em-V10-03-16)
+29-July-2017 V.Ivanchenko (phys-ctor-em-V10-03-13)
+- G4EmDNAPhysicsActivator - apply solatation model below 7.4 eV
+    (was 4 eV) in order to absorb low-energy e-; general cleanup
 
 06-June-2017 V.Ivanchenko (phys-ctor-em-V10-03-12)
 - G4EmStandardPhysics_option3 - use G4UniversalFluctuation2017

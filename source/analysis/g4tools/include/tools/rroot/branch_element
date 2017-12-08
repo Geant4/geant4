@@ -265,7 +265,7 @@ public: //branch
 */
   }
 
-  virtual bool find_entry(ifile& a_file,uint32 a_entry,uint32& a_nbytes){
+  virtual bool find_entry(ifile& a_file,uint64 a_entry,uint32& a_nbytes){
     //The below line will call the upper read_leaves.
     if(!parent::find_entry(a_file,a_entry,a_nbytes)) return false;
 
@@ -285,7 +285,7 @@ public: //branch
     return true;
   }
 
-  virtual bool show(std::ostream& a_out,ifile& a_file,uint32 a_entry){
+  virtual bool show(std::ostream& a_out,ifile& a_file,uint64 a_entry){
     uint32 n;
     if(!find_entry(a_file,a_entry,n)) return false;
 

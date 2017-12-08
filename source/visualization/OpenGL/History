@@ -1,4 +1,4 @@
-$Id: History 104288 2017-05-23 13:23:23Z gcosmo $
+$Id: History 107329 2017-11-08 16:41:26Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th November 2017  John Allison  (opengl-V10-03-04)
+- G4OpenGLViewer.cc, G4OpenGLQtViewer.cc:
+  o Refine content of output of picking.
+
+1st September 2017  Laurent Garnier (opengl-V10-03-03)
+- Add patch affecting repaint for external applications. See bugzilla #1959.
 
 23rd May 2017  John Allison (opengl-V10-03-02)
 - Hopefully fix gcc-7.1 warnings.

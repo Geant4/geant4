@@ -55,16 +55,19 @@ The Bogacki shampine method has the following Butcher's tableau
 #include "G4BogackiShampine23.hh"
 #include "G4LineSection.hh"
 
-using namespace std;
+// using namespace std;
 
 //Constructor
 G4BogackiShampine23::G4BogackiShampine23(G4EquationOfMotion *EqRhs,
 				 G4int noIntegrationVariables,
 				 G4bool primary)
   : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-    fLastStepLength(0.), fAuxStepper(0)
+    fLastStepLength(0.), fAuxStepper(nullptr)
 {
   const G4int numberOfVariables = noIntegrationVariables;
+
+  SetIntegrationOrder(2);  // Apparently 3-rd order extension not used
+  SetFSAL(true);
 
   ak2 = new G4double[numberOfVariables] ;
   ak3 = new G4double[numberOfVariables] ;
@@ -97,6 +100,7 @@ G4BogackiShampine23::~G4BogackiShampine23()
   delete[] ak2;
   delete[] ak3;
   delete[] ak4;
+  delete[] pseudoDydx_for_DistChord;
 
   delete[] yTemp;
   delete[] yIn;
@@ -131,19 +135,15 @@ G4BogackiShampine23::Stepper( const G4double yInput[],
                               	  G4double yOut[],
                               	  G4double yErr[])
 {
-    
  G4int i;
 
  const G4double  b21 = 0.5 ,
                  b31 = 0. , b32 = 3.0/4.0 ,
                  b41 = 2.0/9.0, b42 = 1.0/3.0 , b43 = 4.0/9.0;
 
-
  const G4double  dc1 = b41 - 7.0/24.0 ,  dc2 = b42 - 1.0/4.0 ,
   				 dc3 = b43 - 1.0/3.0 , dc4 = - 0.125 ;
     
-    
-
  // Initialise time to t0, needed when it is not updated by the integration.
  //        [ Note: Only for time dependent fields (usually electric)
  //                  is it neccessary to integrate the time.]
@@ -157,7 +157,7 @@ G4BogackiShampine23::Stepper( const G4double yInput[],
    {
      	yIn[i]=yInput[i];
    }
- // RightHandSide(yIn, dydx) ;              // 1st Step --Not doing, getting passed
+    // RightHandSide(yIn, dydx) ;              // 1st Step --Not doing, getting passed
     
     for(i=0;i<numberOfVariables;i++)
     {
@@ -170,20 +170,20 @@ G4BogackiShampine23::Stepper( const G4double yInput[],
         yTemp[i] = yIn[i] + Step*(b31*DyDx[i] + b32*ak2[i]) ;
     }
     RightHandSide(yTemp, ak3) ;              // 3rd Step
-    
+
     for(i=0;i<numberOfVariables;i++)
     {
         yOut[i] = yIn[i] + Step*(b41*DyDx[i] + b42*ak2[i] + b43*ak3[i]) ;
+        // yOut[i] = yIn[i] + Step*(c1*DyDx[i]+ c2*ak2[i] + c3*ak3[i] + c4*ak4[i]);
     }
+    // Extra step used only in calculation of error
     RightHandSide(yOut, ak4) ;              // 4th Step
+    // Derivative and end-point already calculated in 'ak4' ! => Can be used in FSAL version
     
     for(i=0;i<numberOfVariables;i++)
     {
-        //         yOut[i] = yIn[i] + Step*(c1*DyDx[i]+ c2*ak2[i] + c3*ak3[i] + c4*ak4[i]);
-        
         yErr[i] = Step*(dc1*DyDx[i] + dc2*ak2[i] + dc3*ak3[i] +
                         dc4*ak4[i] ) ;
-
         
         // Store Input and Final values, for possible use in calculating chord
         fLastInitialVector[i] = yIn[i] ;

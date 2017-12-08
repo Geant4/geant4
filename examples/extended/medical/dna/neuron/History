@@ -6,6 +6,15 @@
                        Package History file
                        --------------------
 
+28 November 2017 - I. Hrivnacova - tag neuron-V10-03-05
+- Fixed Doxygen warnings
+
+09 November 2017 - S. Incerti - tag neuron-V10-03-04
+- Removed warning
+
+07 November 2017 - S. Incerti - tag neuron-V10-03-03
+- Messaging update by Oleg and Batmunkh
+
 20 April 2017 - S. Incerti - tag neuron-V10-03-01
 - Windows fix by Oleg and Batmunkh
 

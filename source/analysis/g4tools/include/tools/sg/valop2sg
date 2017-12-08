@@ -1,0 +1,719 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_sg_valop2sg
+#define tools_sg_valop2sg
+
+#include "bbox_action"
+#include "strings"
+#include "separator"
+#include "matrix"
+#include "vertices"
+#include "base_freetype"
+#include "mnmx"
+
+#include "../valop"
+#include "../smath"
+
+namespace tools {
+
+class valop2sg : public virtual valop_visitor {
+public:
+  virtual bool binary(unsigned int a_type,const valop& a_1,const valop& a_2) {
+    sg::separator* sep = new sg::separator;
+
+    sg::separator* sep1 = new sg::separator;
+    sep->add(sep1);
+    sg::matrix* tsf1 = new sg::matrix;
+    sep1->add(tsf1);
+    vec3f mn1,mx1;
+   {valop2sg v(m_out,*sep1,m_ttf);
+    if(!v.visit(a_1)) {
+      delete sep;
+      return false;
+    }
+    mnmx(m_out,*sep1,mn1,mx1);}
+
+    sg::separator* op_sep = new sg::separator;
+    sep->add(op_sep);
+    sg::matrix* op_tsf = new sg::matrix;
+    op_sep->add(op_tsf);
+
+    sg::separator* sep2 = new sg::separator;
+    sep->add(sep2);
+    sg::matrix* tsf2 = new sg::matrix;
+    sep2->add(tsf2);
+    vec3f mn2,mx2;
+   {valop2sg v(m_out,*sep2,m_ttf);
+    if(!v.visit(a_2)) {
+      delete sep;
+      return false;
+    }
+    mnmx(m_out,*sep2,mn2,mx2);}
+
+    if((a_type==valop::ADD)   ||
+       (a_type==valop::SUB)   ||
+       (a_type==valop::MUL)   ||
+       (a_type==valop::EQUAL) ){
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+
+           if(a_type==valop::ADD)   unichar2sg(0x0002B,*tft); // +
+    //else if(a_type==valop::SUB)   unichar2sg(0x0002D,*tft); // -
+      else if(a_type==valop::SUB)   unichar2sg(0x02212,*tft);
+    //else if(a_type==valop::MUL)   unichar2sg(0x0002A,*tft); // *
+    //else if(a_type==valop::MUL)   unichar2sg(0x02219,*tft); // .
+      else if(a_type==valop::MUL)   unichar2sg(0x02A2F,*tft); // x
+      else if(a_type==valop::EQUAL) unichar2sg(0x0003D,*tft); // =
+      op_sep->add(tft);
+
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      float odx = omx[0]-omn[0];
+      float xmargin = odx*0.1f;
+
+      op_tsf->mul_translate(-omn[0]+mx1[0]+xmargin,0,0);
+
+      tsf2->mul_translate(-mn2[0]+mx1[0]+xmargin+odx+xmargin,0,0);
+
+    } else if( (a_type==valop::ASIDE) ||
+               (a_type==valop::NVMUL) ){
+
+      float xspace = (mx1[0]-mn1[0])*0.1f;
+
+      tsf2->mul_translate(-mn2[0]+mx1[0]+xspace,0,0);
+
+    } else if(a_type==valop::DIV) {
+
+      // the bar :
+      sg::vertices* vtcs = new sg::vertices;
+      op_sep->add(vtcs);
+      float w2 = 0.5f;
+      float h = 0.101f;
+      vtcs->add(-w2,0,0);
+      vtcs->add( w2,0,0);
+      vtcs->add( w2,h,0);
+      vtcs->add(-w2,h,0);
+      if(m_wf) {
+        vtcs->mode = gl::line_strip();
+        vtcs->add(-w2,0,0);
+      } else {
+        vtcs->mode = gl::triangle_fan();
+      }
+
+      float ymargin = h;
+
+      float osx = mx(mx1[0]-mn1[0],mx2[0]-mn2[0]);
+      osx *= 1.1f;
+
+      op_tsf->mul_scale(osx,1,1);
+
+      //put a_1 symbol in the middle of the bar.
+      //put a_1 symbol on top of the bar (with an ymargin).
+      float dx1 = -(mn1[0]+mx1[0])*0.5f;
+      float dy1 = -mn1[1]+h+ymargin;
+      tsf1->mul_translate(dx1,dy1,0);
+
+      //put a_2 symbol in the middle of the bar.
+      //put a_2 symbol under the bar (with an ymargin).
+      float dx2 = -(mn2[0]+mx2[0])*0.5f;
+      float dy2 = -mx2[1]-ymargin;
+      tsf2->mul_translate(dx2,dy2,0);
+
+    } else if(a_type==valop::SUPS) {
+
+      if(mx2[0]==mn2[0]) {
+        delete sep;
+        return false;
+      }
+
+      float s2 = 0.5f*(mx1[0]-mn1[0])/(mx2[0]-mn2[0]); //half a_1 horiz size.
+      tsf2->set_scale(s2,s2,1);
+      mnmx(m_out,*sep2,mn2,mx2);
+  
+      float xshift = (mx1[0]-mn1[0])*0.1f;
+      float dx2 = -mn2[0]+mx1[0]+xshift;
+
+      float yshift = (mx1[1]-mn1[1])*0.3f;
+      float dy2 = -mn2[1]+mx1[1]-yshift;
+
+      tsf2->set_translate(dx2,dy2,0);
+      tsf2->mul_scale(s2,s2,1); //applied first
+
+    } else if(a_type==valop::SUBS) {
+
+      if(mx2[0]==mn2[0]) {
+        delete sep;
+        return false;
+      }
+
+      float s2 = 0.5f*(mx1[0]-mn1[0])/(mx2[0]-mn2[0]); //half a_1 horiz size.
+      tsf2->set_scale(s2,s2,1);
+      mnmx(m_out,*sep2,mn2,mx2);
+  
+      float xshift = (mx1[0]-mn1[0])*0.1f;
+      float dx2 = -mn2[0]+mx1[0]+xshift;
+
+      float yshift = (mx1[1]-mn1[1])*0.3f;
+      float dy2 = -mn2[1]-yshift;
+
+      tsf2->set_translate(dx2,dy2,0);
+      tsf2->mul_scale(s2,s2,1); //applied first
+
+    } else {
+      delete sep;
+      return false;
+    }
+
+    m_group.add(sep);
+
+    return true;
+  }
+
+  virtual bool unary(unsigned int a_type,const valop& a_1) {
+    if(a_type==valop::MINUS) {
+      sg::separator* sep = new sg::separator;
+
+      sg::separator* sep1 = new sg::separator;
+      sep->add(sep1);
+      sg::matrix* tsf1 = new sg::matrix;
+      sep1->add(tsf1);
+      vec3f mn1,mx1;
+     {valop2sg v(m_out,*sep1,m_ttf);
+      if(!v.visit(a_1)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep1,mn1,mx1);}
+
+      m_group.add(sep);
+
+      ////////////////////////////////////////////////////////
+      /// minus symbol ///////////////////////////////////////
+      ////////////////////////////////////////////////////////
+      sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      //sg::matrix* op_tsf = new sg::matrix;
+      //op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      unichar2sg(0x0002D,*tft);
+      op_sep->add(tft);
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      float odx = omx[0]-omn[0];
+      float xmargin = odx*0.1f;
+
+      //push a_1 at right of minus symbol
+      tsf1->mul_translate(-mn1[0]+omx[0]+xmargin,0,0);
+
+      return true;
+
+    } else {
+      return false;
+    }
+  }
+
+  virtual bool variable(unsigned int a_type,const value& a_var) {
+
+    sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+    //TTNODE* tft = new TTNODE();       
+
+    if(a_type==valop::SYMBOL) {
+      if(rcmp(a_var.get_string(),s_psi())) {
+        unichar2sg(0x003C8,*tft);
+        m_group.add(tft);
+        return true;
+      } else if(rcmp(a_var.get_string(),s_gamma())) {
+        unichar2sg(0x003B3,*tft);
+        m_group.add(tft);
+        return true;
+      } else if(rcmp(a_var.get_string(),s_mu())) {
+        unichar2sg(0x003BC,*tft);
+        m_group.add(tft);
+        return true;
+      } else if(rcmp(a_var.get_string(),s_upper_delta())) {
+        unichar2sg(0x02206,*tft);
+        m_group.add(tft);
+        return true;
+      } else if(rcmp(a_var.get_string(),s_partial_derivative())){
+        unichar2sg(0x02202,*tft); //d ronde
+        m_group.add(tft);
+        return true;
+      } else if(rcmp(a_var.get_string(),s_h_bar())){
+        unichar2sg(0x0210F,*tft);
+        m_group.add(tft);
+        return true;
+      }
+
+    } else if(a_type==valop::REAL){
+      s2sg(value::to_string(a_var),*tft);
+      m_group.add(tft);
+      return true;
+
+    } else if(a_type==valop::STRING){
+      if(a_var.type()==value::STRING){
+        s2sg(a_var.get_string(),*tft);
+        m_group.add(tft);
+        return true;
+      } else {
+        m_out << "valop2sg::variable :"
+              << " expected a value::STRING."
+              << " Got " << a_var.stype() << "."
+              << std::endl;
+      }
+    }
+
+    delete tft;
+    return false;
+  }
+
+  virtual bool option(const valop& a_node) {
+    sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+    //TTNODE* tft = new TTNODE();       
+    s2sg(a_node.m_name,*tft);
+    m_group.add(tft);
+    return true;
+  }
+
+  virtual bool func_1(const valop& a_f,const valop& a_1) {
+    if(rcmp(a_f.m_function->name(),s_sqrt())) {
+
+      sg::separator* sep = new sg::separator;
+
+      sg::separator* sep1 = new sg::separator;
+      sep->add(sep1);
+      vec3f mn1,mx1;
+     {valop2sg v(m_out,*sep1,m_ttf);
+      if(!v.visit(a_1)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep1,mn1,mx1);}
+
+      m_group.add(sep);
+
+      ////////////////////////////////////////////////////////
+      /// sqrt symbol ////////////////////////////////////////
+      ////////////////////////////////////////////////////////
+      sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      unichar2sg(0x0221A,*tft);
+      op_sep->add(tft);
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      // upper bar :
+      sg::vertices* vtcs = new sg::vertices;
+      op_sep->add(vtcs);
+      float dx = 0.05f; //to cover the top of the sqrt symbol.
+      float w = mx1[0]-mn1[0];
+      w *= 1.05f;
+      float h = 0.09f;
+      vtcs->add(omx[0]-dx ,omx[1]-h,0);
+      vtcs->add(omx[0]+w  ,omx[1]-h,0);
+      vtcs->add(omx[0]+w  ,omx[1]  ,0);
+      vtcs->add(omx[0]-dx ,omx[1]  ,0);
+      if(m_wf) {
+        vtcs->mode = gl::line_strip();
+        vtcs->add(omx[0]-dx ,omx[1]-h,0);
+      } else {
+        vtcs->mode = gl::triangle_fan();
+      }
+
+      //float odx = omx[0]-omn[0];
+      //float xmargin = odx*0.1f;
+      float xmargin = 0;
+
+      //push  sqrt-symbol at left of a_1
+      //scale sqrt-symbol to match a_1 y height.
+      //y translate sqrt-symbol so that a_1 is under the bar :
+
+      float osy = (mx1[1]-mn1[1])/(omx[1]-omn[1]);
+      float ody = -omn[1]*osy + mn1[1];
+
+      osy *= 1.2f;
+
+      op_tsf->mul_translate(-omx[0]+mn1[0]-xmargin,ody,0); //second
+      op_tsf->mul_scale(1,osy,1);                          //first
+
+      return true;
+    } else {
+      // generic case : <func_name>(rep of a_1)
+
+      sg::separator* sep = new sg::separator;
+
+      sg::separator* sep1 = new sg::separator;
+      sep->add(sep1);
+      vec3f mn1,mx1;
+     {valop2sg v(m_out,*sep1,m_ttf);
+      if(!v.visit(a_1)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep1,mn1,mx1);}
+
+      m_group.add(sep);
+
+      ////////////////////////////////////////////////////////
+      /// left func symbol : <func_name> (       /////////////
+      ////////////////////////////////////////////////////////
+     {sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      s2sg(a_f.m_function->name(),*tft);
+      tft->unitext[0].push_back(0x00028); // (
+      op_sep->add(tft);
+
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      //push func-symbol at left of a_1 :
+      //float odx = omx[0]-omn[0];
+      //float xmargin = odx*0.1f;
+      float xmargin = 0;
+      op_tsf->mul_translate(-omx[0]+mn1[0]-xmargin,0,0);
+      } //end left op
+
+      ////////////////////////////////////////////////////////
+      /// right func symbol : )                  /////////////
+      ////////////////////////////////////////////////////////
+     {sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      unichar2sg(0x00029,*tft);
+      op_sep->add(tft);
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      //push func-symbol at right of a_1 :
+      //float odx = omx[0]-omn[0];
+      //float xmargin = odx*0.1f;
+      float xmargin = 0;
+      op_tsf->mul_translate(-omn[0]+mx1[0]+xmargin,0,0);
+      } //end right op
+
+      return true;
+    }
+  }
+  virtual bool func_2(const valop& a_f,const valop& a_1,const valop& a_2) {
+    if(rcmp(a_f.m_function->name(),s_pow())) {
+
+      sg::separator* sep = new sg::separator;
+
+      sg::separator* sep1 = new sg::separator;
+      sep->add(sep1);
+      sg::matrix* tsf1 = new sg::matrix;
+      sep1->add(tsf1);
+      vec3f mn1,mx1;
+     {valop2sg v(m_out,*sep1,m_ttf);
+      if(!v.visit(a_1)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep1,mn1,mx1);}
+  
+      //sg::separator* op_sep = new sg::separator;
+      //sep->add(op_sep);
+      //sg::matrix* op_tsf = new sg::matrix;
+      //op_sep->add(op_tsf);
+  
+      sg::separator* sep2 = new sg::separator;
+      sep->add(sep2);
+      sg::matrix* tsf2 = new sg::matrix;
+      sep2->add(tsf2);
+      vec3f mn2,mx2;
+     {valop2sg v(m_out,*sep2,m_ttf);
+      if(!v.visit(a_2)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep2,mn2,mx2);}
+
+      float s2 = 0.5f*(mx1[0]-mn1[0])/(mx2[0]-mn2[0]); //half a_1 horiz size.
+      if(mx2[0]==mn2[0]) {
+        delete sep;
+        return false;
+      }
+      tsf2->set_scale(s2,s2,1);
+      mnmx(m_out,*sep2,mn2,mx2);
+  
+      float xshift = (mx1[0]-mn1[0])*0.1f;
+      float dx2 = -mn2[0]+mx1[0]+xshift;
+
+      float yshift = (mx1[1]-mn1[1])*0.3f;
+      float dy2 = -mn2[1]+mx1[1]-yshift;
+
+      tsf2->set_identity();
+      tsf2->mul_translate(dx2,dy2,0);
+      tsf2->mul_scale(s2,s2,1); //applied first
+
+      m_group.add(sep);
+
+      return true;
+
+    } else {
+      // generic case : <func_name>(rep of a_1, rep of a_2)
+
+      sg::separator* sep = new sg::separator;
+
+      sg::separator* sep1 = new sg::separator;
+      sep->add(sep1);
+      vec3f mn1,mx1;
+     {valop2sg v(m_out,*sep1,m_ttf);
+      if(!v.visit(a_1)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep1,mn1,mx1);}
+
+      sg::separator* sep2 = new sg::separator;
+      sep->add(sep2);
+      sg::matrix* tsf2 = new sg::matrix;
+      sep2->add(tsf2);
+      vec3f mn2,mx2;
+     {valop2sg v(m_out,*sep2,m_ttf);
+      if(!v.visit(a_2)) {
+        delete sep;
+        return false;
+      }
+      mnmx(m_out,*sep2,mn2,mx2);}
+
+      m_group.add(sep);
+
+      ////////////////////////////////////////////////////////
+      /// left func symbol : <func_name> (       /////////////
+      ////////////////////////////////////////////////////////
+     {sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      s2sg(a_f.m_function->name(),*tft);
+      tft->unitext[0].push_back(0x00028); // (
+      op_sep->add(tft);
+
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      //push func-symbol at left of a_1 :
+      //float odx = omx[0]-omn[0];
+      //float xmargin = odx*0.1f;
+      float xmargin = 0;
+      op_tsf->mul_translate(-omx[0]+mn1[0]-xmargin,0,0);
+      } //end left op
+
+      ////////////////////////////////////////////////////////
+      /// ,                                      /////////////
+      ////////////////////////////////////////////////////////
+      float xend2 = 0;
+     {sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      unichar2sg(0x0002C,*tft); // ,
+      op_sep->add(tft);
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      //push comma-symbol at right of a_1 :
+      float odx = omx[0]-omn[0];
+      float xmargin = odx*0.1f;
+      op_tsf->mul_translate(-omn[0]+mx1[0]+xmargin,0,0);
+
+      float xendcomma = mx1[0]+xmargin+(omx[0]-omn[0]);
+
+      tsf2->mul_translate(-mn2[0]+xendcomma+xmargin,0,0);
+
+      xend2 = xendcomma+(mx2[0]-mn2[0]);
+      } //end comma
+
+      ////////////////////////////////////////////////////////
+      /// right func symbol : )                  /////////////
+      ////////////////////////////////////////////////////////
+     {sg::separator* op_sep = new sg::separator;
+      sep->add(op_sep);
+      sg::matrix* op_tsf = new sg::matrix;
+      op_sep->add(op_tsf);
+
+      sg::base_freetype* tft = sg::base_freetype::create(m_ttf);
+      //TTNODE* tft = new TTNODE();   
+      unichar2sg(0x00029,*tft);
+      op_sep->add(tft);
+      vec3f omn,omx;
+      mnmx(m_out,*tft,omn,omx);
+
+      //push ")" at right of a_2 :
+      //float odx = omx[0]-omn[0];
+      //float xmargin = odx*0.1f;
+      float xmargin = 0;
+      op_tsf->mul_translate(-omn[0]+xend2+xmargin,0,0);
+      } //end right op
+
+      return true;
+    }
+  }
+  virtual bool func_3(const valop&,const valop&,const valop&,const valop&) {
+    return false;
+  }
+  virtual bool func_4(const valop&,const valop&,const valop&,const valop&,const valop&) {
+    return false;
+  }
+  virtual bool func_5(const valop&,const valop&,const valop&,const valop&,const valop&,const valop&) {
+    return false;
+  }
+  virtual bool func_6(const valop&,const valop&,const valop&,const valop&,const valop&,const valop&,const valop&) {
+    return false;
+  }
+public:
+  valop2sg(std::ostream& a_out,
+           sg::group& a_group,
+           const sg::base_freetype& a_ttf)
+  :m_out(a_out)
+  ,m_group(a_group)
+  //,m_wf(true)
+  ,m_wf(false)
+  ,m_ttf(a_ttf)
+  {}
+  virtual ~valop2sg() {}
+public:
+  valop2sg(const valop2sg& a_from)
+  :valop_visitor(a_from)
+  ,m_out(a_from.m_out)
+  ,m_group(a_from.m_group)
+  ,m_wf(a_from.m_wf)
+  ,m_ttf(a_from.m_ttf)
+  {}
+  valop2sg& operator=(const valop2sg& a_from){
+    m_wf = a_from.m_wf;
+    return *this;
+  }
+protected:
+  typedef unsigned int unichar;
+
+  unichar char2stix(char a_c) {
+    if(a_c=='-') return 0x0002D;
+    if(a_c=='.') return 0x0002E;
+
+    if(a_c=='0') return 0x00030;
+    if(a_c=='1') return 0x00031;
+    if(a_c=='2') return 0x00032;
+    if(a_c=='3') return 0x00033;
+    if(a_c=='4') return 0x00034;
+    if(a_c=='5') return 0x00035;
+    if(a_c=='6') return 0x00036;
+    if(a_c=='7') return 0x00037;
+    if(a_c=='8') return 0x00038;
+    if(a_c=='9') return 0x00039;
+
+    if(a_c=='A') return 0x00041;
+    if(a_c=='B') return 0x00042;
+    if(a_c=='C') return 0x00043;
+    if(a_c=='D') return 0x00044;
+    if(a_c=='E') return 0x00045;
+    if(a_c=='F') return 0x00046;
+    if(a_c=='G') return 0x00047;
+    if(a_c=='H') return 0x00048;
+    if(a_c=='I') return 0x00049;
+    if(a_c=='J') return 0x0004A;
+    if(a_c=='K') return 0x0004B;
+    if(a_c=='L') return 0x0004C;
+    if(a_c=='M') return 0x0004D;
+    if(a_c=='N') return 0x0004E;
+    if(a_c=='O') return 0x0004F;
+    if(a_c=='P') return 0x00050;
+    if(a_c=='Q') return 0x00051;
+    if(a_c=='R') return 0x00052;
+    if(a_c=='S') return 0x00053;
+    if(a_c=='T') return 0x00054;
+    if(a_c=='U') return 0x00055;
+    if(a_c=='V') return 0x00056;
+    if(a_c=='W') return 0x00057;
+    if(a_c=='X') return 0x00058;
+    if(a_c=='Y') return 0x00059;
+    if(a_c=='Z') return 0x0005A;
+
+    if(a_c=='a') return 0x00061;
+    if(a_c=='b') return 0x00062;
+    if(a_c=='c') return 0x00063;
+    if(a_c=='d') return 0x00064;
+    if(a_c=='e') return 0x00065;
+    if(a_c=='f') return 0x00066;
+    if(a_c=='g') return 0x00067;
+    if(a_c=='h') return 0x00068;
+    if(a_c=='i') return 0x00069;
+    if(a_c=='j') return 0x0006A;
+    if(a_c=='k') return 0x0006B;
+    if(a_c=='l') return 0x0006C;
+    if(a_c=='m') return 0x0006D;
+    if(a_c=='n') return 0x0006E;
+    if(a_c=='o') return 0x0006F;
+    if(a_c=='p') return 0x00070;
+    if(a_c=='q') return 0x00071;
+    if(a_c=='r') return 0x00072;
+    if(a_c=='s') return 0x00073;
+    if(a_c=='t') return 0x00074;
+    if(a_c=='u') return 0x00075;
+    if(a_c=='v') return 0x00076;
+    if(a_c=='w') return 0x00077;
+    if(a_c=='x') return 0x00078;
+    if(a_c=='y') return 0x00079;
+    if(a_c=='z') return 0x0007A;
+
+    if(a_c=='_') return 0x0005F;
+
+    return 0x0003F; //?
+  }
+
+  void unichar2sg(unichar a_unichar,sg::base_freetype& a_node){
+
+    a_node.modeling.value(m_wf?sg::font_outline:sg::font_filled);
+    a_node.font.value(sg::font_stixgeneral_otf());
+
+    std::vector<unichar> line;
+    line.push_back(a_unichar);
+
+    a_node.unitext.add(line);
+  }
+
+  void s2sg(const std::string& a_s,sg::base_freetype& a_node){
+    a_node.modeling.value(m_wf?sg::font_outline:sg::font_filled);
+    a_node.font.value(sg::font_stixgeneral_otf());
+
+    std::vector<unichar> line;
+    tools_sforcit(a_s,it) line.push_back(char2stix(*it));
+
+    a_node.unitext.add(line);
+  }
+
+protected:
+  std::ostream& m_out;
+  sg::group& m_group;
+  bool m_wf;
+  const sg::base_freetype& m_ttf;
+};
+
+}
+
+#endif

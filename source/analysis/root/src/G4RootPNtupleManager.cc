@@ -44,7 +44,7 @@ namespace {
 //_____________________________________________________________________________
 G4RootPNtupleManager::G4RootPNtupleManager(G4RootMainNtupleManager* main,
                                            const G4AnalysisManagerState& state)
- : G4VNtupleManager(state),
+ : G4BaseNtupleManager(state),
    fCreateMode(G4PNtupleCreateMode::kUndefined),
    fMainNtupleManager(main),
    fNtupleVector()
@@ -83,13 +83,14 @@ G4RootPNtupleManager::GetNtupleDescriptionInFunction(
 }
 
 //_____________________________________________________________________________
-tools::wroot::pntuple* G4RootPNtupleManager::GetNtupleInFunction(
+tools::wroot::base_pntuple*  
+ G4RootPNtupleManager::GetNtupleInFunction(
   G4int id, G4String functionName, G4bool warn) const
 {                                      
   auto ntupleDescription = GetNtupleDescriptionInFunction(id, functionName);
   if ( ! ntupleDescription ) return nullptr;
 
-  if ( ! ntupleDescription->fNtuple ) {
+  if ( ! ntupleDescription->fBasePNtuple ) {
     if ( warn ) {
       G4String inFunction = "G4RootPNtupleManager::";
       inFunction += functionName;
@@ -99,7 +100,7 @@ tools::wroot::pntuple* G4RootPNtupleManager::GetNtupleInFunction(
     }
     return nullptr;
   }  
-  return ntupleDescription->fNtuple;
+  return ntupleDescription->fBasePNtuple;
 }
 
 //_____________________________________________________________________________
@@ -141,28 +142,52 @@ void G4RootPNtupleManager::CreateNtuple(G4RootPNtupleDescription* ntupleDescript
 #endif
 
   auto rfile = fMainNtupleManager->GetNtupleFile();
-  auto directory = fMainNtupleManager->GetNtupleDirectory();
+  // auto directory = fMainNtupleManager->GetNtupleDirectory();
 
   // Get parameters from main ntuple
+  auto mainBranch = mainNtuple->get_row_wise_branch();
+  auto rowWise = mainBranch ? true : false;
+
   ntupleDescription->fFile = rfile.get();
   mainNtuple->get_branches(ntupleDescription->fMainBranches);
 
-  std::vector<tools::uint32> basketSizes;
-  tools_vforcit(tools::wroot::branch*, ntupleDescription->fMainBranches, it) {
-    basketSizes.push_back((*it)->basket_size());
+  G4bool verbose = true;
+  if ( rowWise ) {
+    tools::wroot::mt_ntuple_row_wise* mtNtuple 
+      = new tools::wroot::mt_ntuple_row_wise(
+              G4cout, rfile->byte_swap(), rfile->compression(),
+              mainNtuple->dir().seek_directory(),
+              *mainBranch, mainBranch->basket_size(), 
+              ntupleDescription->fNtupleBooking, verbose);
+
+    ntupleDescription->fNtuple
+      = static_cast<tools::wroot::imt_ntuple*>(mtNtuple);
+    ntupleDescription->fBasePNtuple
+      = static_cast<tools::wroot::base_pntuple*>(mtNtuple);
+  } 
+  else {
+    std::vector<tools::uint32> basketSizes;
+    tools_vforcit(tools::wroot::branch*, ntupleDescription->fMainBranches, it) {
+      basketSizes.push_back((*it)->basket_size());
+    }
+   
+    tools::wroot::mt_ntuple_column_wise* mtNtuple =
+      new tools::wroot::mt_ntuple_column_wise(
+            G4cout, rfile->byte_swap(), rfile->compression(),
+            mainNtuple->dir().seek_directory(),
+            ntupleDescription->fMainBranches, basketSizes,
+            ntupleDescription->fNtupleBooking, verbose);
+    
+    ntupleDescription->fNtuple
+      = static_cast<tools::wroot::imt_ntuple*>(mtNtuple);
+    ntupleDescription->fBasePNtuple
+      = static_cast<tools::wroot::base_pntuple*>(mtNtuple);
   }
 
-  // Create pntuple
-  G4bool verbose = true;
-  ntupleDescription->fNtuple
-    = new tools::wroot::pntuple(
-            G4cout, rfile->byte_swap(), rfile->compression(),
-            directory->seek_directory(), basketSizes, 
-            ntupleDescription->fNtupleBooking, verbose);
-
   ntupleDescription->fIsNtupleOwner = true;  
-         // pntuple object is not deleted automatically
+  //        // pntuple object is not deleted automatically
   fNtupleVector.push_back(ntupleDescription->fNtuple);  
+
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL3() ) 
@@ -180,13 +205,16 @@ void G4RootPNtupleManager::CreateNtuplesFromMain()
   if ( fCreateMode == G4PNtupleCreateMode::kUndefined ) {
     if ( fNtupleDescriptionVector.size() ) {
       fCreateMode = G4PNtupleCreateMode::kSlaveBeforeOpen;
+      // G4cout << "Create mode: kSlaveBeforeOpen" <<  G4endl;
     } else {
       fCreateMode = G4PNtupleCreateMode::kSlaveAfterOpen;
+      // G4cout << "Create mode: kSlaveAfterOpen" <<  G4endl;
     }
   }
 
   if ( fCreateMode == G4PNtupleCreateMode::kSlaveAfterOpen ) {
     // ntuples are not yet booked
+    // G4cout << "Ntuples are not yet booked ?" <<  G4endl;
     return;
   }
 
@@ -246,41 +274,6 @@ G4int G4RootPNtupleManager::CreateNtuple(
 
 //_____________________________________________________________________________
 G4int G4RootPNtupleManager::CreateNtupleIColumn(
-  const G4String& name, std::vector<int>* vector)
-{
-  return CreateNtupleTColumn<int>(name, vector);
-}  
-
-//_____________________________________________________________________________
-G4int G4RootPNtupleManager::CreateNtupleFColumn(
-  const G4String& name, std::vector<float>* vector)
-{
-  return CreateNtupleTColumn<float>(name, vector);
-}  
-
-//_____________________________________________________________________________
-G4int G4RootPNtupleManager::CreateNtupleDColumn(
-  const G4String& name, std::vector<double>* vector)
-{
-  return CreateNtupleTColumn<double>(name, vector);
-}  
-
-//_____________________________________________________________________________
-G4int G4RootPNtupleManager::CreateNtupleSColumn(
-  const G4String& name)
-{
-  return CreateNtupleTColumn<std::string>(name, nullptr);
-}  
-
-//_____________________________________________________________________________
-void G4RootPNtupleManager::FinishNtuple()
-{ 
-  auto ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
-  FinishNtuple(ntupleId);
-}
-
-//_____________________________________________________________________________
-G4int G4RootPNtupleManager::CreateNtupleIColumn(
   G4int ntupleId, const G4String& name, std::vector<int>* vector)
 {
   return CreateNtupleTColumn<int>(ntupleId, name, vector);
@@ -325,40 +318,6 @@ void G4RootPNtupleManager::FinishNtuple(G4int ntupleId)
     CreateNtuple(ntupleDescription, mainNtuple);
   }
 }
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::FillNtupleIColumn(
-  G4int columnId, G4int value)
-{
-  return FillNtupleTColumn<int>(columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::FillNtupleFColumn(
-  G4int columnId, G4float value)
-{
-  return FillNtupleTColumn<float>(columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::FillNtupleDColumn(
-  G4int columnId, G4double value)
-{
-  return FillNtupleTColumn<double>(columnId, value);
-}                                         
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::FillNtupleSColumn(
-  G4int columnId, const G4String& value)
-{
-  return FillNtupleTColumn<std::string>(columnId, value);
-}  
-
-//_____________________________________________________________________________
-G4bool G4RootPNtupleManager::AddNtupleRow()
-{ 
-  return AddNtupleRow(fFirstId);
-}  
 
 //_____________________________________________________________________________
 G4bool G4RootPNtupleManager::FillNtupleIColumn(
@@ -411,7 +370,7 @@ G4bool G4RootPNtupleManager::AddNtupleRow(G4int ntupleId)
   mutex toolsLock(lock);
   auto result 
     = ntupleDescription->fNtuple
-      ->add_row(toolsLock, *ntupleDescription->fFile, ntupleDescription->fMainBranches);
+      ->add_row(toolsLock, *ntupleDescription->fFile);
 
   if ( ! result ) {
     G4ExceptionDescription description;
@@ -451,7 +410,7 @@ G4bool G4RootPNtupleManager::Merge()
     mutex toolsLock(lock);
     auto result 
       = ntupleDescription->fNtuple
-        ->end_fill(toolsLock, *ntupleDescription->fFile, ntupleDescription->fMainBranches);
+        ->end_fill(toolsLock, *ntupleDescription->fFile);
 
     if ( ! result ) {
       G4ExceptionDescription description;
@@ -525,6 +484,12 @@ G4bool  G4RootPNtupleManager::GetActivation(
 G4int G4RootPNtupleManager::GetNofNtuples() const
 {
   return fNtupleVector.size();
+}
+
+//_____________________________________________________________________________
+G4int G4RootPNtupleManager::GetNofNtupleBookings() const
+{
+  return fNtupleDescriptionVector.size();
 }
 
 //_____________________________________________________________________________

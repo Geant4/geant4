@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: 
+// $Id:
 //
 // -------------------------------------------------------------------
 //
@@ -52,10 +52,13 @@
 
 G4ThreadLocal G4PhysListRegistry* G4PhysListRegistry::theInstance = 0;
 
+const int doReplace  = 0x01;  // _ (ReplacePhysics) vs. + (RegisterPhysics)
+const int isCtorName = 0x02;  // true if actual physCtor name vs. ext name
+
 G4PhysListRegistry* G4PhysListRegistry::Instance()
 {
   if ( 0 == theInstance) {
-    static G4ThreadLocal G4PhysListRegistry *manager_G4MT_TLS_ = 0; 
+    static G4ThreadLocal G4PhysListRegistry *manager_G4MT_TLS_ = 0;
     if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new G4PhysListRegistry;
     G4PhysListRegistry &manager = *manager_G4MT_TLS_;
     theInstance = &manager;
@@ -70,8 +73,11 @@ G4PhysListRegistry* G4PhysListRegistry::Instance()
   theInstance->AddPhysicsExtension("PEN","G4EmPenelopePhysics");
   // the GS EM extension originally required double underscores
   // support either one or two as __GS is confusing to users
+  // same for __SS 
   theInstance->AddPhysicsExtension("GS","G4EmStandardPhysicsGS");
   theInstance->AddPhysicsExtension("_GS","G4EmStandardPhysicsGS");
+  theInstance->AddPhysicsExtension("SS","G4EmStandardPhysicsSS");
+  theInstance->AddPhysicsExtension("_SS","G4EmStandardPhysicsSS");
 
   return theInstance;
 }
@@ -105,15 +111,15 @@ void G4PhysListRegistry::AddPhysicsExtension(G4String name, G4String procname)
   physicsExtensions[name] = procname;
 }
 
-G4VModularPhysicsList* 
+G4VModularPhysicsList*
 G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
 {
-  // 
+  //
   //
   G4String plBase = "";
   std::vector<G4String> physExt;
   std::vector<G4int>    physReplace;
-  G4bool allKnown = 
+  G4bool allKnown =
     DeconstructPhysListName(name,plBase,physExt,physReplace,verbose);
 
   size_t npc = physExt.size();
@@ -121,13 +127,13 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
     G4cout << "G4PhysListRegistry::GetModularPhysicsList <"
            << name << ">"
            << ", as \"" << plBase << "\" with extensions \"";
-    for ( size_t ipc = 0; ipc < npc; ++ipc ) 
-      G4cout << ((physReplace[ipc]>0)?"_":"+") << physExt[ipc];
+    for ( size_t ipc = 0; ipc < npc; ++ipc )
+      G4cout << ((physReplace[ipc]&doReplace)?"_":"+") << physExt[ipc];
     G4cout << "\"" << G4endl;
   }
 
   if ( ! allKnown ) {
-    // couldn't match what the user wanted ... 
+    // couldn't match what the user wanted ...
     G4cout << "### G4PhysListRegistry WARNING: " << name
            << " is not known" << G4endl << G4endl;
     if ( ! unknownFatal ) return 0;
@@ -144,36 +150,37 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
       }
       ED << "]" << G4endl;
     }
-    G4Exception("G4PhysListRegistry::GetModularPhysicsList", 
+    G4Exception("G4PhysListRegistry::GetModularPhysicsList",
                 "PhysicsList002", FatalException, ED);
     return 0;
   }
 
   // if we want this method "const" then the next line becomes more complex
-  // because there is no const version of [] (which adds an entry if the 
+  // because there is no const version of [] (which adds an entry if the
   // key doesn't exist)
   G4VModularPhysicsList* pl = factories[plBase]->Instantiate(verbose);
-  G4PhysicsConstructorRegistry* pcRegistry = 
+  G4PhysicsConstructorRegistry* pcRegistry =
     G4PhysicsConstructorRegistry::Instance();
   G4int ver = pl->GetVerboseLevel();
   pl->SetVerboseLevel(0);
   for ( size_t ipc = 0; ipc < npc; ++ipc ) {
-    // got back a list of short names, need to use the map to get the 
+    // got back a list of short names, need to use the map to get the
     // full physics constructor name
     G4String extName = physExt[ipc];
-    G4String pcname = physicsExtensions[extName];
+    G4String pcname  =
+      ((physReplace[ipc]&isCtorName)) ? extName : physicsExtensions[extName];
     // this doesn't have a verbose option ... it should
     // but G4PhysicsConstructorFactory doesn't support it
     G4VPhysicsConstructor* pctor = pcRegistry->GetPhysicsConstructor(pcname);
     G4String reporreg = "";
-    if ( physReplace[ipc] > 0 ) {
+    if (( physReplace[ipc] & doReplace)) {
       pl->ReplacePhysics(pctor);
       reporreg = "ReplacePhysics ";
     } else {
       pl->RegisterPhysics(pctor);
       reporreg = "RegisterPhysics";
     }
-    if ( verbose > 0 ) G4cout << "<<< " << reporreg << " with " << pcname 
+    if ( verbose > 0 ) G4cout << "<<< " << reporreg << " with " << pcname
                               << " \"" << extName << "\"" << G4endl;
   }
   pl->SetVerboseLevel(ver);
@@ -183,10 +190,10 @@ G4PhysListRegistry::GetModularPhysicsList(const G4String& name)
   return pl;
 }
 
-G4VModularPhysicsList* 
+G4VModularPhysicsList*
 G4PhysListRegistry::GetModularPhysicsListFromEnv()
 {
-  // 
+  //
   // instantiate PhysList by environment variable "PHYSLIST"
   // if not set use default
   G4String name = "";
@@ -196,11 +203,11 @@ G4PhysListRegistry::GetModularPhysicsListFromEnv()
   } else {
     name = userDefault;
     G4cout << "### G4PhysListRegistry WARNING: "
-	   << " environment variable PHYSLIST is not defined"
-	   << G4endl
-	   << "    Default Physics Lists " << name 
-	   << " is instantiated" 
-	   << G4endl;
+           << " environment variable PHYSLIST is not defined"
+           << G4endl
+           << "    Default Physics Lists " << name
+           << " is instantiated"
+           << G4endl;
   }
   return GetModularPhysicsList(name);
 }
@@ -215,53 +222,42 @@ G4bool G4PhysListRegistry::IsReferencePhysList(G4String name) const
 }
 
 G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
-                                                   G4String& plBase, 
+                                                   G4String& plBase,
                                                    std::vector<G4String>& physExt,
                                                    std::vector<G4int>& replace,
                                                    G4int verb) const
 {
   // Take apart a name given to us by the user
   // this name might be a base PhysList + unknown number of extensions
-  // Extensions preceeded with a "_" should use 
+  // Extensions preceeded with a "_" should use
   //    ReplacePhysics()
   // those proceeded with a "+" should use
   //    RegisterPhysics()
-  // the former is in line with previous behaviour, while the second allows 
+  // the former is in line with previous behaviour, while the second allows
   // additional flexibility
   plBase = "";
   physExt.clear();
   replace.clear();
   bool allKnown = false;
-  
+
   G4String workingName = name;
 
-  const std::vector<G4String>& availBases = AvailablePhysLists();
+  const std::vector<G4String>& availBases  = AvailablePhysLists();
   const std::vector<G4String>& availExtras = AvailablePhysicsExtensions();
 
-  G4PhysicsConstructorRegistry* physConstRegistry = 
+  G4PhysicsConstructorRegistry* physConstRegistry =
     G4PhysicsConstructorRegistry::Instance();
+
+  const std::vector<G4String>& availPhysCtors  =
+    physConstRegistry->AvailablePhysicsConstructors();
 
   // find the longest base list that is contained in the user supplied name
   // and starts at the beginning
-  size_t nb = availBases.size();
-  for (size_t ib=0;  ib<nb; ++ib) {
-    const G4String& testBase = availBases[ib];
-    size_t ipos = workingName.find(testBase);
-    if ( ipos == 0 ) {
-      if ( testBase.size() > plBase.size() )  {
-        plBase = testBase;
-        allKnown = true;
-        if ( verb > 3 ) { G4cout << "  physlist current best guess: " << testBase << G4endl; }
-      } else {
-        if ( verb > 3 ) { G4cout << "  physlist match but shorter: " << testBase << G4endl; }
-      }
-    } else {
-      if ( verb > 3 ) { G4cout << "  physlist reject: " << testBase << G4endl; }
-    }
-  }
-  if ( verb > 2 ) { 
-    G4cout << "  physlist " << name << ", base known " << allKnown 
-           << " chosen plBase \"" << plBase << "\"" << G4endl; 
+  G4String bestBase = "";
+  allKnown = FindLongestMatch(workingName,"base",availBases,plBase);
+  if ( verb > 2 ) {
+    G4cout << "  " << name << ", base known=" << ((allKnown)?"true":"false")
+           << " chosen plBase \"" << plBase << "\"" << G4endl;
   }
   if ( ! allKnown ) {
     // didn't find any matching base physics list
@@ -271,75 +267,57 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
   // remove base name for working name
   workingName.erase(0,plBase.size());
 
-  // now start trying to match up extensions
+  // now start trying to match up extensions and/or physCtors
   // each should be preceeded by at "_" (replace) or "+" (register)
   // but don't freak if it isn't, just assume "_"
-  size_t ne = availExtras.size();
   while ( ! workingName.empty() ) {
     char c = workingName.data()[0];  // leading character
     if ( '_' == c || '+' == c ) workingName.erase(0,1);  // and remove it
-    G4int    replaceExtra = ( c != '+' );
+    G4int    replaceExtra = (( c != '+' ) ? doReplace : 0 );
     G4String extraName = "";
     G4bool   extraKnown = false;
-    for (size_t ie=0;  ie<ne; ++ie) {
-      const G4String& testExtra = availExtras[ie];
-      size_t ipos = workingName.find(testExtra);
-      if ( ipos == 0 ) {
-        if ( testExtra.size() > extraName.size() )  {
-          extraName = testExtra;
-          extraKnown = true;
-#ifdef G4VERBOSE
-          if ( verb > 3 ) { 
-            G4cout << "  physextra current best guess: " 
-                   << testExtra << G4endl; 
-          }
-        } else {
-          if ( verb > 3 ) { 
-            G4cout << "  physextra match but shorter: " 
-                   << testExtra << G4endl;
-          }
-#endif
-        }
-      } else {
-#ifdef G4VERBOSE
-        if ( verb > 3 ) { 
-          G4cout << "  physextra reject: " << testExtra << G4endl; 
-        }
-#endif
-      }
-    }
-#ifdef G4VERBOSE
-    if ( verb > 2 ) { 
-      G4cout << "  physextra " << name << " [" << workingName << "]"
-             <<", extra known " << extraKnown 
-             << " chosen extra \"" << extraName << "\"" 
-             << " replace " << replaceExtra << G4endl; 
-    }
-#endif
+
+    extraKnown = FindLongestMatch(workingName,"extNames",availExtras,extraName);
     if ( extraKnown ) {
       // physics mapping name is known, but is it actually linked to physics?
-      //const issue// G4String pcname = physicsExtensions[extraName]; 
-      std::map<G4String,G4String>::const_iterator itr = 
+      //const issue// G4String pcname = physicsExtensions[extraName];
+      std::map<G4String,G4String>::const_iterator itr =
         physicsExtensions.find(extraName);
       G4String pcname = "";
       if ( itr != physicsExtensions.end() ) pcname = itr->second;
       bool realknown = physConstRegistry->IsKnownPhysicsConstructor(pcname);
+      if ( ! realknown ) allKnown = false;
 #ifdef G4VERBOSE
-      if ( verb > 2 ) { 
+      if ( verb > 2 ) {
         G4cout << "  extraName \"" << extraName << "\" maps to physics ctor \""
                << pcname << "\" which is itself realknown " << realknown
                << G4endl;
       }
 #endif
-      if ( ! realknown ) allKnown = false;
+    } else {
+      // perhaps it's an explicit physCtor name
+      extraKnown =
+        FindLongestMatch(workingName,"physCtors",availPhysCtors,extraName);
+      if ( extraKnown ) replaceExtra |= isCtorName; // flag it
+    }
+#ifdef G4VERBOSE
+    if ( verb > 2 ) {
+      G4cout << "  physextra " << name << " [" << workingName << "]"
+             <<", extra known " << extraKnown
+             << " chosen extra \"" << extraName << "\""
+             << " replace " << replaceExtra << G4endl;
+    }
+#endif
+    if ( extraKnown ) {
       physExt.push_back(extraName);
       replace.push_back(replaceExtra);
       // and remove it so we can look for the next bit
       workingName.erase(0,extraName.size());
+
     } else {
 #ifdef G4VERBOSE
-      if ( verb > 2 ) { 
-        G4cout << "  workingName \"" << workingName << "\"" 
+      if ( verb > 2 ) {
+        G4cout << "  workingName \"" << workingName << "\""
                << " couldn't be found in the extensions list"
                << G4endl;
       }
@@ -352,6 +330,43 @@ G4bool G4PhysListRegistry::DeconstructPhysListName(const G4String& name,
 
   return allKnown;
 }
+
+G4bool G4PhysListRegistry::FindLongestMatch(const G4String& workingName,
+                                            const G4String& searchName,
+                                            const std::vector<G4String>& validNames,
+                                            G4String& bestMatch,
+                                            G4int verb) const
+{
+  bestMatch = "";
+  bool found = false;
+
+  size_t n = validNames.size();
+  for (size_t i=0;  i<n; ++i) {
+    const G4String& testName = validNames[i];
+    size_t ipos = workingName.find(testName);
+    if ( ipos == 0 ) {
+      if ( testName.size() > bestMatch.size() )  {
+        bestMatch = testName;
+        found     = true;
+        if ( verb > 3 ) {
+          G4cout << "  " << searchName << " current best guess: "
+                 << testName << G4endl;
+        }
+      } else {
+        if ( verb > 3 ) {
+          G4cout << "  " << searchName << " match but shorter: "
+                 << testName << G4endl;
+        }
+      }
+    } else {
+      if ( verb > 3 ) {
+        G4cout << "  " << searchName << " reject: " << testName << G4endl;
+      }
+    }
+  }
+  return found;
+}
+
 
 const std::vector<G4String>& G4PhysListRegistry::AvailablePhysLists() const
 {
@@ -378,7 +393,7 @@ const std::vector<G4String>& G4PhysListRegistry::AvailablePhysicsExtensions() co
 const std::vector<G4String>& G4PhysListRegistry::AvailablePhysListsEM() const
 {
   // in principle this method could weed out all the extensions that aren't
-  // EM replacements ... but for now just use it as a synonym for 
+  // EM replacements ... but for now just use it as a synonym for
   // AvailablePhysicsExtensions()
   return AvailablePhysicsExtensions();
 }
@@ -414,4 +429,3 @@ void G4PhysListRegistry::PrintAvailablePhysLists() const
          << "   to use ReplacePhysics() (\"_\") or RegisterPhysics() (\"+\")."
          << G4endl;
 }
-

@@ -32,24 +32,24 @@ public:
 public:
   size_t colorn() const {return m_colors.size();}
   size_t valn() const {return m_values.size();}
-  colorf color(unsigned int a_index) const {
+  colorf color(size_t a_index) const {
     size_t n = m_colors.size();
     if(a_index>=n) return colorf(0.5F,0.5F,0.5F);
     return m_colors[a_index];
   }
-  float value(unsigned int a_index) const {
+  float value(size_t a_index) const {
     size_t n = m_values.size();
     if(a_index>=n) return 0;
     return m_values[a_index];
   }
 public:
   // helper :
-  void set_colors(void(*aGet)(float,colorf&),unsigned int a_ncell) {
+  void set_colors(void(*aGet)(float,colorf&),size_t a_ncell) {
     m_colors.clear();
     m_colors.resize(a_ncell);
     if(!a_ncell) return;
     float d = 1.0F/(a_ncell-1);
-    for(unsigned int index=0;index<a_ncell;index++) {
+    for(size_t index=0;index<a_ncell;index++) {
       aGet(d*index,m_colors[index]);
     }
   }
@@ -283,7 +283,7 @@ public:
     else return 0;
   }
 public:
-  grey_scale_colormap(float a_min,float a_max,unsigned int a_ncell){
+  grey_scale_colormap(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -315,7 +315,7 @@ public:
     else return 0;
   }
 public:
-  grey_scale_inverse_colormap(float a_min,float a_max,unsigned int a_ncell){
+  grey_scale_inverse_colormap(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;
@@ -348,7 +348,7 @@ public:
     else return 0;
   }
 public:
-  violet_to_red_colormap(float a_min,float a_max,unsigned int a_ncell){
+  violet_to_red_colormap(float a_min,float a_max,size_t a_ncell){
     set(a_min,a_max,a_ncell);
   }
   violet_to_red_colormap(const violet_to_red_colormap& aFrom):base_colormap(aFrom){}
@@ -358,7 +358,7 @@ public:
   }
   virtual ~violet_to_red_colormap(){}
 public:
-  void set(float a_min,float a_max,unsigned int a_ncell){
+  void set(float a_min,float a_max,size_t a_ncell){
     m_values.resize(2);
     m_values[0] = a_min;
     m_values[1] = a_max;

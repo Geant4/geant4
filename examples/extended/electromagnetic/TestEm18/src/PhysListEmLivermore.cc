@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysListEmLivermore class
 //
 //
-// $Id: PhysListEmLivermore.cc 100275 2016-10-17 08:29:19Z gcosmo $
+// $Id: PhysListEmLivermore.cc 105252 2017-07-17 09:40:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,7 +88,11 @@ PhysListEmLivermore::PhysListEmLivermore(const G4String& name)
     param->SetMaxEnergy(10*TeV);
     param->SetNumberOfBinsPerDecade(10);
     param->SetBuildCSDARange(true);
+    param->SetMaxEnergyForCSDARange(10*TeV);
     SetPhysicsType(bElectromagnetic);
+  
+    param->SetVerbose(0);
+    param->Dump();
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

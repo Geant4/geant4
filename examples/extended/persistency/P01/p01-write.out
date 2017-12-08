@@ -1,0 +1,2406 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+<<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+
+The materials defined are : 
+
+
+***** Table : Nb of materials = 3 *****
+
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
+                       Imean:  85.703 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Nitrogen (N)   Z =  7.0   N =    14   A = 14.010 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance: 99.632 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:  0.368 %
+          ElmMassFraction:  70.00 %  ElmAbundance  72.71 % 
+
+   --->  Element: Oxygen (O)   Z =  8.0   N =    16   A = 16.000 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance: 99.757 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:  0.038 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:  0.205 %
+          ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
+
+
+ Material:     Lead    density: 11.350 g/cm3   RadL:   5.612 mm   Nucl.Int.Length:  18.247 cm 
+                       Imean: 823.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Pb (Pb)   Z = 82.0   N =   207   A = 207.190 g/mole
+         --->  Isotope: Pb204   Z = 82   N = 204   A = 203.97 g/mole   abundance:  1.400 %
+         --->  Isotope: Pb206   Z = 82   N = 206   A = 205.97 g/mole   abundance: 24.100 %
+         --->  Isotope: Pb207   Z = 82   N = 207   A = 206.98 g/mole   abundance: 22.100 %
+         --->  Isotope: Pb208   Z = 82   N = 208   A = 207.98 g/mole   abundance: 52.400 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material: XenonGas    density:  5.458 mg/cm3  RadL:  15.539 m    Nucl.Int.Length: 325.921 m  
+                       Imean: 482.000 eV   temperature: 293.15 K  pressure:   1.00 atm
+
+   --->  Element: Xe (Xe)   Z = 54.0   N =   131   A = 131.290 g/mole
+         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:  0.090 %
+         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:  0.090 %
+         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:  1.920 %
+         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance: 26.440 %
+         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:  4.080 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance: 21.180 %
+         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance: 26.890 %
+         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance: 10.440 %
+         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:  8.870 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+
+Target is 5 cm of Lead
+There are 5 chambers in the tracker region. The chambers are 200 mm of XenonGas
+ The distance between chamber is 80 cm
+1   CalorimeterSD name:  ExP01/TrackerChamberSD collection Name: ExP01/TrackerChamberSD_HC
+
+ FTFP_BERT : new threshold between BERT and FTFP is over the interval 
+ for pions :   3 to 12 GeV
+ for kaons :   3 to 12 GeV
+ for proton :  3 to 12 GeV
+ for neutron : 3 to 12 GeV
+
+### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+       Klein-Nishina :  Emin=        0 eV    Emax=      100 TeV
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 100 TeV in 63 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=      100 TeV   CullenGenerator
+
+msc:   for e-    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
+
+eIoni:   for  e-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
+
+eBrem:   for  e-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+
+CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=      100 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+
+msc:   for proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for GenericIon    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV
+
+ionIoni:   for  GenericIon    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
+      Stopping Power data for 17 ion/material pairs 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+
+msc:   for alpha    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+ionIoni:   for  alpha    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
+          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
+
+msc:   for anti_proton    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  anti_proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+
+hBrems:   for  anti_proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  anti_proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 17x1001 from 7.50618 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for kaon+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  kaon+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
+
+hBrems:   for  kaon+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  kaon+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for kaon-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  kaon-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  1.05231 MeV
+          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
+
+hBrems:   for  kaon-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  kaon-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 18x1001 from 3.94942 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of kaon+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for mu+    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for mu-    SubType= 10
+      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=      100 TeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 21x1001 from 1 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of mu+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for pi+    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+msc:   for pi-    SubType= 10
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=      100 TeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
+      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
+      Sampling table 20x1001 from 1.11656 GeV to 100 TeV 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=      100 TeV
+
+CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
+      Used Lambda table of pi+
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
+
+====================================================================
+                  HADRONIC PROCESSES SUMMARY (verbose level 1)
+
+---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
+                           Hadronic Processes for GenericIon
+
+  Process: ionInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_neutron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_neutronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_proton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_protonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100.1 MeV/n
+        Model:              AntiAElastic: 100 MeV/n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e+
+
+  Process: positronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for e-
+
+  Process: electronNuclear
+        Model:   G4ElectroVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:          ElectroNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for gamma
+
+  Process: photonNuclear
+        Model:            BertiniCascade: 0 eV  ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
+     Cr_sctns:            PhotoNuclearXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for kaon-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: kaon-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for lambda
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: lambdaInelastic
+        Model:            BertiniCascade: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns:   ChipsHyperonInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+  Process: muMinusCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for pi+
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi+Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for pi-
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 1.0001 GeV
+        Model:           hElasticGlauber: 1 GeV ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: pi-Inelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
+                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
+                           below 91 GeV, Glauber-Gribov above 
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hBertiniCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for proton
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:      ChipsProtonElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: protonInelastic
+        Model:                      FTFP: 3 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 12 GeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV /n ---> 100 TeV/n
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV /n ---> 4 GeV/n
+        Model:                      FTFP: 2 GeV/n ---> 100 TeV/n
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+================================================================
+=======================================================================
+======       Pre-compound/De-excitation Physics Parameters     ========
+=======================================================================
+Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
+Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
+Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
+Level density (1/MeV)                               0.1
+Time limit for long lived isomeres (ns)             1e+12
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
+Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
+=======================================================================
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead XenonGas 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Lead
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.5861 keV    e-  1.00386 MeV    e+  951.321 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : XenonGas
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  1.36845 keV    e+  1.34483 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            0k World
+       0.00         0.00         0.00            0k Tracker
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      66.30          0k         1        7         10         0.00    Tracker
+      33.70          0k         1        3          4         0.00    World
+### Run 0 starts.
+### Run 0 start.
+CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
+<ExP01/TrackerChamberSD_HC> is not found.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = proton,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.91 m       3 GeV     0 eV      0 fm      0 fm        World    initStep
+    1      0 fm      0 fm  -2.71 m       3 GeV  26.3 keV  20.1 cm   20.1 cm        World       hIoni
+    2   10.2 um  -13.4 um   -2.5 m       3 GeV  32.8 keV  21.4 cm   41.5 cm        World       hIoni
+    3   12.8 um  -18.3 um  -2.45 m       3 GeV  5.38 keV  4.54 cm     46 cm        World  Transportation
+    4   12.8 um  -18.4 um  -2.45 m       3 GeV   971 keV   719 um   46.1 cm       Target  CoulombScat
+    5     22 um  -3.43 um  -2.44 m    2.99 GeV    12 MeV  1.03 cm   47.1 cm       Target       hIoni
+    6   81.3 um   -265 um   -2.4 m    2.94 GeV  41.6 MeV  3.74 cm   50.8 cm       Target       hIoni
+    7     78 um   -257 um   -2.4 m    2.94 GeV  1.72 MeV  1.64 mm     51 cm       Target  Transportation
+    8   81.9 um   -239 um  -2.39 m    2.94 GeV  2.36 keV  7.17 mm   51.7 cm      Tracker       hIoni
+    9    120 um  -51.4 um  -2.32 m    2.94 GeV  9.73 keV  7.15 cm   58.9 cm      Tracker       hIoni
+   10    155 um    101 um  -2.26 m    2.94 GeV    10 keV   5.9 cm   64.8 cm      Tracker       hIoni
+   11    159 um    117 um  -2.26 m    2.94 GeV   607 eV   6.31 mm   65.4 cm      Tracker       hIoni
+   12    214 um    335 um  -2.17 m    2.94 GeV  13.7 keV  8.44 cm   73.8 cm      Tracker       hIoni
+   13    419 um   1.15 mm  -1.86 m    2.94 GeV  46.4 keV  30.7 cm   1.05 m       Tracker       hIoni
+   14    475 um   1.37 mm  -1.78 m    2.94 GeV  8.96 keV  8.51 cm   1.13 m       Tracker       hIoni
+   15    546 um   1.65 mm  -1.68 m    2.94 GeV  16.5 keV  10.3 cm   1.23 m       Tracker       hIoni
+   16    595 um   1.85 mm   -1.6 m    2.94 GeV    11 keV  7.63 cm   1.31 m       Tracker  Transportation
+   17    625 um   1.97 mm  -1.56 m    2.94 GeV  17.3 keV  4.36 cm   1.35 m       Chamber       hIoni
+   18    696 um   2.28 mm  -1.45 m    2.94 GeV  40.1 keV  10.9 cm   1.46 m       Chamber       hIoni
+   19    732 um    2.4 mm   -1.4 m    2.94 GeV  12.4 keV  4.79 cm   1.51 m       Chamber  Transportation
+   20    815 um   2.74 mm  -1.26 m    2.94 GeV  19.8 keV  13.5 cm   1.65 m       Tracker       hIoni
+   21    848 um   2.86 mm  -1.21 m    2.94 GeV  5.92 keV     5 cm    1.7 m       Tracker       hIoni
+   22    848 um   2.86 mm  -1.21 m    2.94 GeV     0 eV    197 um    1.7 m       Tracker       hIoni
+   23    860 um   2.91 mm   -1.2 m    2.94 GeV  2.04 keV  1.88 cm   1.71 m       Tracker       hIoni
+   24    885 um      3 mm  -1.16 m    2.94 GeV  5.18 keV  3.86 cm   1.75 m       Tracker       hIoni
+   25    898 um   3.05 mm  -1.14 m    2.94 GeV   4.2 keV  1.99 cm   1.77 m       Tracker       hIoni
+   26   1.04 mm   3.63 mm  -90.8 cm   2.94 GeV    35 keV    23 cm      2 m       Tracker       hIoni
+   27   1.05 mm   3.65 mm  -89.9 cm   2.94 GeV  1.96 keV  9.05 mm   2.01 m       Tracker       hIoni
+   28   1.05 mm   3.67 mm  -89.1 cm   2.94 GeV   739 eV   7.16 mm   2.02 m       Tracker       hIoni
+   29    1.1 mm   3.83 mm  -82.7 cm   2.94 GeV  7.31 keV   6.5 cm   2.08 m       Tracker       hIoni
+   30   1.11 mm   3.89 mm  -80.2 cm   2.94 GeV  2.98 keV  2.47 cm   2.11 m       Tracker       hIoni
+   31   1.11 mm   3.89 mm    -80 cm   2.94 GeV   505 eV    1.8 mm   2.11 m       Tracker  Transportation
+   32   1.24 mm   4.39 mm    -60 cm   2.94 GeV  68.8 keV    20 cm   2.31 m       Chamber  Transportation
+   33   1.34 mm   4.89 mm  -37.8 cm   2.94 GeV  35.4 keV  22.2 cm   2.53 m       Tracker       hIoni
+   34   1.45 mm   5.35 mm  -15.5 cm   2.94 GeV  30.1 keV  22.3 cm   2.76 m       Tracker       hIoni
+   35   1.46 mm   5.41 mm  -12.2 cm   2.94 GeV  6.17 keV  3.32 cm   2.79 m       Tracker       hIoni
+   36    1.5 mm   5.57 mm  -4.19 cm   2.94 GeV  12.1 keV  7.97 cm   2.87 m       Tracker       hIoni
+   37   1.53 mm   5.65 mm 0.0142 fm   2.94 GeV  5.64 keV  4.19 cm   2.91 m       Tracker  Transportation
+   38   1.57 mm   5.79 mm   6.89 cm   2.94 GeV  21.5 keV  6.89 cm   2.98 m       Chamber       hIoni
+   39   1.59 mm   5.87 mm   11.4 cm   2.94 GeV  11.7 keV   4.5 cm   3.02 m       Chamber       hIoni
+   40   1.62 mm   5.96 mm   16.1 cm   2.94 GeV  19.4 keV  4.67 cm   3.07 m       Chamber       hIoni
+   41   1.63 mm   6.01 mm   18.3 cm   2.94 GeV  7.66 keV  2.27 cm   3.09 m       Chamber       hIoni
+   42   1.63 mm   6.01 mm   18.6 cm   2.94 GeV   941 eV    3.1 mm    3.1 m       Chamber       hIoni
+   43   1.63 mm   6.04 mm     20 cm   2.94 GeV  2.24 keV  1.35 cm   3.11 m       Chamber  Transportation
+   44   1.65 mm   6.14 mm   25.1 cm   2.94 GeV  7.14 keV  5.12 cm   3.16 m       Tracker       hIoni
+   45   1.66 mm   6.17 mm     27 cm   2.94 GeV  3.05 keV  1.89 cm   3.18 m       Tracker       hIoni
+   46   1.67 mm    6.2 mm   28.3 cm   2.94 GeV  2.87 keV  1.27 cm   3.19 m       Tracker       hIoni
+   47   1.85 mm   6.91 mm   66.3 cm   2.94 GeV  61.3 keV    38 cm   3.57 m       Tracker       hIoni
+   48   1.86 mm   6.97 mm   69.5 cm   2.94 GeV  4.42 keV  3.22 cm   3.61 m       Tracker       hIoni
+   49   1.89 mm   7.08 mm   74.8 cm   2.94 GeV  5.14 keV  5.26 cm   3.66 m       Tracker       hIoni
+   50   1.91 mm   7.19 mm   79.9 cm   2.94 GeV  7.35 keV  5.16 cm   3.71 m       Tracker       hIoni
+   51   1.91 mm   7.19 mm     80 cm   2.94 GeV  29.1 eV    551 um   3.71 m       Tracker  Transportation
+   52   1.94 mm   7.36 mm   87.9 cm   2.94 GeV  28.1 keV  7.93 cm   3.79 m       Chamber       hIoni
+   53   1.94 mm   7.64 mm      1 m    2.94 GeV  40.7 keV  12.1 cm   3.91 m       Chamber  Transportation
+   54   1.95 mm   7.67 mm   1.01 m    2.94 GeV  2.36 keV  1.41 cm   3.92 m       Tracker       hIoni
+   55   2.07 mm   8.26 mm   1.28 m    2.94 GeV    40 keV  26.3 cm   4.19 m       Tracker       hIoni
+   56   2.07 mm   8.26 mm   1.28 m    2.94 GeV   100 eV    918 um   4.19 m       Tracker       hIoni
+   57   2.19 mm   8.94 mm   1.59 m    2.94 GeV  42.8 keV  31.7 cm    4.5 m       Tracker       hIoni
+   58    2.2 mm   8.95 mm    1.6 m    2.94 GeV   393 eV   5.13 mm   4.51 m       Tracker  Transportation
+   59   2.21 mm   9.01 mm   1.63 m    2.94 GeV  9.39 keV  2.79 cm   4.54 m       Chamber       hIoni
+   60   2.21 mm   9.12 mm   1.68 m    2.94 GeV    14 keV  5.06 cm   4.59 m       Chamber       hIoni
+   61   2.21 mm   9.21 mm   1.72 m    2.94 GeV  23.5 keV  4.37 cm   4.63 m       Chamber       hIoni
+   62   2.22 mm   9.29 mm   1.76 m    2.94 GeV  15.2 keV  3.66 cm   4.67 m       Chamber       hIoni
+   63   2.23 mm   9.36 mm    1.8 m    2.94 GeV    15 keV  4.12 cm   4.71 m       Chamber  Transportation
+   64   2.27 mm   9.52 mm   1.89 m    2.94 GeV  13.6 keV  8.52 cm    4.8 m       Tracker       hIoni
+   65   2.29 mm   9.59 mm   1.92 m    2.94 GeV  5.37 keV  3.58 cm   4.83 m       Tracker       hIoni
+   66   2.32 mm   9.69 mm   1.97 m    2.94 GeV  7.26 keV  5.02 cm   4.88 m       Tracker       hIoni
+   67   2.35 mm   9.81 mm   2.04 m    2.94 GeV  12.9 keV  6.51 cm   4.95 m       Tracker       hIoni
+   68   2.38 mm    9.9 mm   2.09 m    2.94 GeV  6.94 keV  5.05 cm      5 m       Tracker       hIoni
+   69   2.51 mm   1.04 cm   2.34 m    2.94 GeV  34.7 keV  25.6 cm   5.25 m       Tracker       hIoni
+   70   2.53 mm   1.04 cm   2.38 m    2.94 GeV  4.76 keV   3.4 cm   5.29 m       Tracker       hIoni
+   71   2.54 mm   1.05 cm    2.4 m    2.94 GeV   5.9 keV  2.35 cm   5.31 m       Tracker  Transportation
+   72   2.58 mm   1.06 cm   2.48 m    2.94 GeV    13 keV  8.38 cm   5.39 m         World       hIoni
+   73   2.58 mm   1.07 cm   2.49 m    2.94 GeV   760 eV   8.26 mm    5.4 m         World       hIoni
+   74   2.65 mm    1.1 cm   2.66 m    2.94 GeV  21.1 keV  17.3 cm   5.57 m         World       hIoni
+   75   2.67 mm   1.11 cm   2.72 m    2.94 GeV  8.01 keV  5.92 cm   5.63 m         World       hIoni
+   76   2.67 mm   1.11 cm   2.73 m    2.94 GeV   638 eV   6.61 mm   5.64 m         World       hIoni
+   77   2.69 mm   1.12 cm   2.76 m    2.94 GeV  2.11 keV  3.39 cm   5.67 m         World       hIoni
+   78    2.7 mm   1.12 cm    2.8 m    2.94 GeV  7.36 keV  3.26 cm   5.71 m         World       hIoni
+   79   2.74 mm   1.14 cm   2.91 m    2.94 GeV  14.9 keV  11.3 cm   5.82 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 62,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    2.7 mm   1.12 cm    2.8 m    50.9 keV     0 eV      0 fm      0 fm        World    initStep
+    1   3.47 mm   1.19 cm    2.8 m    48.3 keV   499 eV   1.09 mm   1.09 mm        World       eIoni
+    2   3.85 mm   1.22 cm    2.8 m    43.3 keV   187 eV    514 um   1.61 mm        World       eIoni
+    3   5.79 mm   1.32 cm    2.8 m    38.8 keV  1.22 keV   3.1 mm   4.71 mm        World       eIoni
+    4   1.01 cm   1.17 cm    2.8 m    31.8 keV  6.93 keV  7.53 mm   1.22 cm        World       eIoni
+    5   1.15 cm   1.26 cm    2.8 m    26.6 keV  1.39 keV  1.71 mm    1.4 cm        World       eIoni
+    6   1.48 cm   1.38 cm    2.8 m    21.2 keV   5.4 keV  4.54 mm   1.85 cm        World       eIoni
+    7   1.67 cm   1.35 cm   2.81 m      15 keV  4.41 keV  2.37 mm   2.09 cm        World       eIoni
+    8   1.69 cm   1.35 cm   2.81 m    14.9 keV   141 eV    131 um    2.1 cm        World       eIoni
+    9   1.84 cm   1.33 cm    2.8 m      12 keV  2.86 keV  2.47 mm   2.35 cm        World       eIoni
+   10   1.95 cm   1.25 cm    2.8 m    7.06 keV  4.95 keV  2.07 mm   2.55 cm        World       eIoni
+   11    1.9 cm   1.23 cm    2.8 m    1.64 keV  5.42 keV  1.26 mm   2.68 cm        World       eIoni
+   12   1.89 cm   1.23 cm    2.8 m       0 eV   1.64 keV   111 um   2.69 cm        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 67,   Parent ID = 62
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.67 cm   1.35 cm   2.81 m    1.78 keV     0 eV      0 fm      0 fm        World    initStep
+    1   1.67 cm   1.36 cm   2.81 m       0 eV   1.78 keV   126 um    126 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 66,   Parent ID = 62
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.15 cm   1.26 cm    2.8 m    3.85 keV     0 eV      0 fm      0 fm        World    initStep
+    1   1.15 cm   1.24 cm    2.8 m       0 eV   3.85 keV   452 um    452 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 65,   Parent ID = 62
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.79 mm   1.32 cm    2.8 m     3.3 keV     0 eV      0 fm      0 fm        World    initStep
+    1    5.9 mm   1.33 cm    2.8 m       0 eV    3.3 keV   345 um    345 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 64,   Parent ID = 62
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.85 mm   1.22 cm    2.8 m    4.82 keV     0 eV      0 fm      0 fm        World    initStep
+    1   3.96 mm   1.24 cm    2.8 m       0 eV   4.82 keV   670 um    670 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 63,   Parent ID = 62
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.47 mm   1.19 cm    2.8 m    2.15 keV     0 eV      0 fm      0 fm        World    initStep
+    1   3.46 mm    1.2 cm    2.8 m       0 eV   2.15 keV   170 um    170 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 61,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.69 mm   1.12 cm   2.76 m    1.48 keV     0 eV      0 fm      0 fm        World    initStep
+    1   2.71 mm   1.11 cm   2.76 m       0 eV   1.48 keV  94.7 um   94.7 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 60,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.67 mm   1.11 cm   2.73 m    2.82 keV     0 eV      0 fm      0 fm        World    initStep
+    1   2.56 mm   1.11 cm   2.73 m       0 eV   2.82 keV   265 um    265 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 59,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.67 mm   1.11 cm   2.72 m    1.73 keV     0 eV      0 fm      0 fm        World    initStep
+    1   2.68 mm   1.11 cm   2.72 m       0 eV   1.73 keV   120 um    120 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 58,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.65 mm    1.1 cm   2.66 m     1.4 keV     0 eV      0 fm      0 fm        World    initStep
+    1   2.63 mm   1.09 cm   2.66 m       0 eV    1.4 keV  87.2 um   87.2 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 57,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.58 mm   1.07 cm   2.49 m    3.03 keV     0 eV      0 fm      0 fm        World    initStep
+    1    2.7 mm   1.07 cm   2.49 m       0 eV   3.03 keV   299 um    299 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 56,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.58 mm   1.06 cm   2.48 m    2.32 keV     0 eV      0 fm      0 fm        World    initStep
+    1   2.63 mm   1.07 cm   2.48 m       0 eV   2.32 keV   192 um    192 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 55,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.53 mm   1.04 cm   2.38 m    1.51 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    2.5 mm   1.04 cm   2.38 m       0 eV   1.51 keV  97.3 um   97.3 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 54,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.51 mm   1.04 cm   2.34 m    1.43 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.52 mm   1.03 cm   2.34 m       0 eV   1.43 keV  89.6 um   89.6 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 53,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.35 mm   9.81 mm   2.04 m    1.58 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.38 mm   9.78 mm   2.04 m       0 eV   1.58 keV   105 um    105 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 52,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.32 mm   9.69 mm   1.97 m    1.41 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.32 mm   9.72 mm   1.97 m       0 eV   1.41 keV  88.1 um   88.1 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 51,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.29 mm   9.59 mm   1.92 m    6.24 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.67 mm   9.32 mm   1.92 m    4.48 keV  1.76 keV   546 um    546 um      Tracker         msc
+    2   2.87 mm   9.15 mm   1.92 m       0 eV   4.48 keV   589 um   1.13 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 50,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.27 mm   9.52 mm   1.89 m    6.38 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    2.7 mm   9.76 mm   1.89 m       0 eV   6.38 keV   1.1 mm    1.1 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 49,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.22 mm   9.29 mm   1.76 m    4.73 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    2.2 mm   9.33 mm   1.76 m       0 eV   4.73 keV   362 um    362 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 48,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.21 mm   9.21 mm   1.72 m    1.63 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    2.2 mm    9.2 mm   1.72 m       0 eV   1.63 keV  79.1 um   79.1 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 47,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.21 mm   9.12 mm   1.68 m    1.56 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    2.2 mm   9.12 mm   1.68 m       0 eV   1.56 keV  74.3 um   74.3 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 46,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.19 mm   8.94 mm   1.59 m    3.64 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.02 mm   8.88 mm   1.59 m       0 eV   3.64 keV   409 um    409 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 45,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.07 mm   8.26 mm   1.28 m    3.45 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.06 mm   8.09 mm   1.28 m       0 eV   3.45 keV   373 um    373 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 44,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.07 mm   8.26 mm   1.28 m    1.29 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.08 mm   8.23 mm   1.28 m       0 eV   1.29 keV  76.8 um   76.8 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 43,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.95 mm   7.67 mm   1.01 m    15.9 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.04 mm   6.02 mm   1.01 m    11.9 keV  3.94 keV  2.62 mm   2.62 mm      Tracker       eIoni
+    2   1.11 mm   4.96 mm   1.02 m    4.36 keV  7.58 keV  2.06 mm   4.68 mm      Tracker       eIoni
+    3    861 um   4.94 mm   1.02 m       0 eV   4.36 keV   562 um   5.24 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 42,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.94 mm   7.36 mm   87.9 cm   3.35 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   1.96 mm   7.35 mm   87.9 cm      0 eV   3.35 keV   215 um    215 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 41,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.91 mm   7.19 mm   79.9 cm   1.67 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.93 mm   7.15 mm   79.9 cm      0 eV   1.67 keV   113 um    113 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 40,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.89 mm   7.08 mm   74.8 cm   2.92 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.96 mm   6.98 mm   74.8 cm      0 eV   2.92 keV   281 um    281 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 39,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.86 mm   6.97 mm   69.5 cm   32.2 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.74 mm   3.17 mm   69.6 cm   23.6 keV  5.47 keV  5.08 mm   5.08 mm      Tracker       eIoni
+    2   4.18 mm   3.87 mm   69.9 cm   19.1 keV  4.54 keV  3.94 mm   9.02 mm      Tracker       eIoni
+    3    4.9 mm   5.86 mm     70 cm   14.1 keV     5 keV  3.13 mm   1.21 cm      Tracker       eIoni
+    4   5.75 mm   7.11 mm   70.1 cm   10.8 keV  3.22 keV  2.36 mm   1.45 cm      Tracker       eIoni
+    5   5.12 mm   7.45 mm   70.2 cm   6.12 keV  4.73 keV   1.9 mm   1.64 cm      Tracker       eIoni
+    6   4.76 mm   7.25 mm   70.2 cm   1.18 keV  4.94 keV  1.02 mm   1.74 cm      Tracker       eIoni
+    7   4.73 mm   7.24 mm   70.2 cm      0 eV   1.18 keV  67.6 um   1.75 cm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 68,   Parent ID = 39
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.74 mm   3.17 mm   69.6 cm   3.13 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.83 mm   3.06 mm   69.6 cm      0 eV   3.13 keV   315 um    315 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 38,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.85 mm   6.91 mm   66.3 cm    300 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    5.1 cm  -11.9 cm   73.8 cm    258 keV  36.9 keV  17.1 cm   17.1 cm      Tracker       eIoni
+    2   5.73 cm  -13.6 cm   74.7 cm    253 keV  2.87 keV  2.03 cm   19.2 cm      Tracker       eIoni
+    3   5.86 cm    -14 cm   74.9 cm    252 keV   402 eV   5.11 mm   19.7 cm      Tracker       eIoni
+    4   6.08 cm  -14.6 cm   75.3 cm    250 keV   893 eV   6.65 mm   20.3 cm      Tracker       eIoni
+    5   6.46 cm  -16.9 cm   76.5 cm    244 keV  3.54 keV   2.7 cm     23 cm      Tracker       eIoni
+    6   7.33 cm    -19 cm   77.4 cm    240 keV  4.04 keV  2.39 cm   25.4 cm      Tracker       eIoni
+    7   7.38 cm  -19.2 cm   77.5 cm    237 keV  1.16 keV  2.93 mm   25.7 cm      Tracker       eIoni
+    8   8.19 cm  -22.3 cm     80 cm    229 keV  7.95 keV  4.19 cm   29.9 cm      Tracker  Transportation
+    9   8.19 cm  -22.3 cm     80 cm    229 keV     0 eV      0 fm   29.9 cm      Chamber  Transportation
+   10    8.2 cm  -23.2 cm   79.8 cm    224 keV  2.77 keV  9.46 mm   30.9 cm      Tracker       eIoni
+   11   8.16 cm  -23.7 cm   79.6 cm    223 keV  1.36 keV  5.17 mm   31.4 cm      Tracker       eIoni
+   12   7.18 cm  -26.6 cm   78.9 cm    216 keV  6.39 keV  3.25 cm   34.6 cm      Tracker       eIoni
+   13   7.16 cm  -26.7 cm   78.9 cm    214 keV   122 eV    581 um   34.7 cm      Tracker       eIoni
+   14   7.16 cm  -26.7 cm   78.9 cm    213 keV     0 eV    210 um   34.7 cm      Tracker       eIoni
+   15   6.36 cm  -28.5 cm   78.9 cm    208 keV  3.43 keV  1.95 cm   36.7 cm      Tracker       eIoni
+   16   5.45 cm  -30.5 cm   79.9 cm    204 keV  4.72 keV  2.42 cm   39.1 cm      Tracker       eIoni
+   17   5.19 cm  -30.7 cm     80 cm    203 keV   634 eV   3.87 mm   39.5 cm      Tracker  Transportation
+   18   4.64 cm  -31.3 cm   80.6 cm    183 keV  10.7 keV  1.33 cm   40.8 cm      Chamber       eIoni
+   19   5.35 cm  -31.7 cm     81 cm    176 keV  4.81 keV  1.24 cm     42 cm      Chamber       eIoni
+   20   5.74 cm  -31.6 cm   81.4 cm    171 keV  3.97 keV  5.86 mm   42.6 cm      Chamber       eIoni
+   21   6.35 cm  -31.2 cm   81.1 cm    164 keV  4.36 keV  8.74 mm   43.5 cm      Chamber       eIoni
+   22   7.67 cm    -30 cm   81.2 cm    147 keV  17.2 keV  3.26 cm   46.8 cm      Chamber       eIoni
+   23   7.62 cm    -30 cm     81 cm    146 keV   466 eV   2.01 mm     47 cm      Chamber       eIoni
+   24   7.86 cm  -29.7 cm   80.2 cm    126 keV  17.8 keV  1.75 cm   48.7 cm      Chamber       eIoni
+   25   8.11 cm  -29.4 cm     80 cm    122 keV   4.1 keV   6.1 mm   49.3 cm      Chamber  Transportation
+   26   4.52 cm    -28 cm   78.5 cm    107 keV  14.2 keV  4.73 cm   54.1 cm      Tracker       eIoni
+   27   4.18 cm    -28 cm   78.2 cm    103 keV   1.9 keV  4.28 mm   54.5 cm      Tracker       eIoni
+   28   3.61 cm  -27.8 cm   77.7 cm   94.6 keV  3.81 keV  8.29 mm   55.3 cm      Tracker       eIoni
+   29   2.77 cm  -27.6 cm   76.1 cm   85.4 keV     8 keV  1.89 cm   57.2 cm      Tracker       eIoni
+   30   2.13 cm  -27.2 cm   75.4 cm   79.9 keV  3.57 keV   1.1 cm   58.3 cm      Tracker       eIoni
+   31   2.15 cm  -26.6 cm   73.4 cm   69.4 keV  10.5 keV  2.35 cm   60.6 cm      Tracker       eIoni
+   32   3.06 cm  -27.2 cm     72 cm   63.6 keV  5.86 keV  1.87 cm   62.5 cm      Tracker       eIoni
+   33   3.92 cm    -27 cm   70.9 cm   57.4 keV  6.15 keV  1.62 cm   64.1 cm      Tracker       eIoni
+   34   3.61 cm  -26.2 cm   70.2 cm   47.2 keV  7.85 keV  1.29 cm   65.4 cm      Tracker       eIoni
+   35   4.16 cm  -25.6 cm   70.1 cm   38.8 keV  8.46 keV  1.01 cm   66.4 cm      Tracker       eIoni
+   36      4 cm    -25 cm   70.1 cm   32.9 keV   5.9 keV  7.53 mm   67.2 cm      Tracker       eIoni
+   37   3.65 cm  -24.7 cm   70.4 cm   29.2 keV   3.7 keV  5.97 mm   67.8 cm      Tracker       eIoni
+   38   3.63 cm  -24.5 cm   70.8 cm   26.1 keV  3.07 keV  5.09 mm   68.3 cm      Tracker       eIoni
+   39   3.74 cm  -24.5 cm   70.8 cm   22.3 keV  2.47 keV  1.28 mm   68.4 cm      Tracker       eIoni
+   40      4 cm  -24.6 cm   70.7 cm   17.8 keV  4.49 keV  3.69 mm   68.8 cm      Tracker       eIoni
+   41   4.19 cm  -24.7 cm   70.6 cm   12.8 keV  5.06 keV  2.92 mm   69.1 cm      Tracker       eIoni
+   42   4.21 cm  -24.9 cm   70.7 cm   8.97 keV   3.8 keV  2.17 mm   69.3 cm      Tracker       eIoni
+   43   4.15 cm  -24.9 cm   70.6 cm   2.07 keV  6.89 keV  1.62 mm   69.5 cm      Tracker       eIoni
+   44   4.15 cm  -24.9 cm   70.6 cm      0 eV   2.07 keV   160 um   69.5 cm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 90,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.74 cm  -24.5 cm   70.8 cm    1.3 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.75 cm  -24.5 cm   70.8 cm      0 eV    1.3 keV    78 um     78 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 89,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.61 cm  -26.2 cm   70.2 cm   2.35 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.61 cm  -26.2 cm   70.2 cm      0 eV   2.35 keV   196 um    196 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 88,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.13 cm  -27.2 cm   75.4 cm   1.88 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.12 cm  -27.2 cm   75.4 cm      0 eV   1.88 keV   137 um    137 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 87,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.77 cm  -27.6 cm   76.1 cm   1.19 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   2.77 cm  -27.6 cm   76.1 cm      0 eV   1.19 keV  68.3 um   68.3 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 86,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   3.61 cm  -27.8 cm   77.7 cm    4.8 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   3.63 cm  -27.8 cm   77.6 cm      0 eV    4.8 keV   665 um    665 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 85,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.18 cm    -28 cm   78.2 cm   2.33 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   4.17 cm    -28 cm   78.2 cm      0 eV   2.33 keV   193 um    193 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 84,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.86 cm  -29.7 cm   80.2 cm   2.71 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   7.86 cm  -29.7 cm   80.2 cm      0 eV   2.71 keV   159 um    159 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 83,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.35 cm  -31.2 cm   81.1 cm   2.36 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   6.35 cm  -31.2 cm   81.1 cm      0 eV   2.36 keV   131 um    131 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 82,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.74 cm  -31.6 cm   81.4 cm   1.55 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   5.74 cm  -31.6 cm   81.4 cm      0 eV   1.55 keV  73.9 um   73.9 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 81,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.35 cm  -31.7 cm     81 cm   1.74 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   5.35 cm  -31.7 cm     81 cm      0 eV   1.74 keV  86.2 um   86.2 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 80,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.64 cm  -31.3 cm   80.6 cm   9.55 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   4.64 cm  -31.3 cm   80.6 cm   4.23 keV   1.9 keV   423 um    423 um      Chamber       eIoni
+    2   4.64 cm  -31.3 cm   80.6 cm      0 eV   4.23 keV   305 um    728 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 91,   Parent ID = 80
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   4.64 cm  -31.3 cm   80.6 cm   3.42 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   4.64 cm  -31.3 cm   80.6 cm      0 eV   3.42 keV   221 um    221 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 79,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.36 cm  -28.5 cm   78.9 cm   1.06 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   6.36 cm  -28.5 cm   78.9 cm      0 eV   1.06 keV  57.6 um   57.6 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 78,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.16 cm  -26.7 cm   78.9 cm   1.55 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   7.15 cm  -26.7 cm   78.9 cm      0 eV   1.55 keV   102 um    102 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 77,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.16 cm  -26.7 cm   78.9 cm   1.11 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   7.16 cm  -26.7 cm   78.9 cm      0 eV   1.11 keV  62.1 um   62.1 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 76,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.18 cm  -26.6 cm   78.9 cm    1.1 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   7.18 cm  -26.7 cm   78.9 cm      0 eV    1.1 keV  61.3 um   61.3 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 75,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    8.2 cm  -23.2 cm   79.8 cm   1.41 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    8.2 cm  -23.2 cm   79.8 cm      0 eV   1.41 keV  88.2 um   88.2 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 74,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   7.38 cm  -19.2 cm   77.5 cm   2.16 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   7.37 cm  -19.2 cm   77.5 cm      0 eV   2.16 keV   170 um    170 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 73,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.46 cm  -16.9 cm   76.5 cm   2.31 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   6.45 cm  -16.9 cm   76.5 cm      0 eV   2.31 keV   190 um    190 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 72,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   6.08 cm  -14.6 cm   75.3 cm   1.03 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   6.08 cm  -14.6 cm   75.3 cm      0 eV   1.03 keV  55.7 um   55.7 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 71,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.86 cm    -14 cm   74.9 cm   1.02 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   5.87 cm    -14 cm   74.9 cm      0 eV   1.02 keV    55 um     55 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 70,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   5.73 cm  -13.6 cm   74.7 cm   1.98 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   5.74 cm  -13.6 cm   74.7 cm      0 eV   1.98 keV   148 um    148 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 69,   Parent ID = 38
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    5.1 cm  -11.9 cm   73.8 cm   4.85 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   5.13 cm  -11.9 cm   73.9 cm      0 eV   4.85 keV   677 um    677 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 37,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.67 mm    6.2 mm   28.3 cm   1.56 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.65 mm   6.24 mm   28.3 cm      0 eV   1.56 keV   103 um    103 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 36,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.66 mm   6.17 mm     27 cm   4.45 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.42 mm   6.08 mm     27 cm      0 eV   4.45 keV   581 um    581 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 35,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.65 mm   6.14 mm   25.1 cm   3.35 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    1.6 mm   6.29 mm   25.1 cm      0 eV   3.35 keV   355 um    355 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 34,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.63 mm   6.01 mm   18.6 cm   31.1 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   2.14 mm    6.6 mm   18.7 cm   25.1 keV  5.97 keV  3.27 mm   3.27 mm      Chamber       eIoni
+    2   1.93 mm   6.13 mm   18.6 cm     18 keV  4.11 keV  1.54 mm   4.81 mm      Chamber       eIoni
+    3   1.76 mm   5.85 mm   18.6 cm   11.5 keV  6.46 keV  2.04 mm   6.85 mm      Chamber       eIoni
+    4   1.63 mm   5.94 mm   18.6 cm   4.17 keV  7.37 keV   1.4 mm   8.26 mm      Chamber       eIoni
+    5   1.65 mm   5.94 mm   18.6 cm      0 eV   4.17 keV   298 um   8.56 mm      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 92,   Parent ID = 34
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.93 mm   6.13 mm   18.6 cm   2.99 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   1.95 mm   6.12 mm   18.6 cm      0 eV   2.99 keV   182 um    182 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 33,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.63 mm   6.01 mm   18.3 cm   1.75 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   1.63 mm   6.02 mm   18.3 cm      0 eV   1.75 keV  86.8 um   86.8 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 32,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.62 mm   5.96 mm   16.1 cm   10.9 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    1.6 mm   6.11 mm   16.1 cm      0 eV   10.9 keV  1.32 mm   1.32 mm      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 31,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.59 mm   5.87 mm   11.4 cm   1.41 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    1.6 mm   5.87 mm   11.4 cm      0 eV   1.41 keV  65.3 um   65.3 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 30,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.57 mm   5.79 mm   6.89 cm   8.32 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   1.49 mm   5.77 mm   6.89 cm   4.82 keV   1.9 keV   182 um    182 um      Chamber       eIoni
+    2   1.44 mm   5.77 mm   6.89 cm      0 eV   4.82 keV   373 um    555 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 93,   Parent ID = 30
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.49 mm   5.77 mm   6.89 cm   1.61 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1   1.48 mm   5.76 mm   6.89 cm      0 eV   1.61 keV  77.4 um   77.4 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 29,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    1.5 mm   5.57 mm  -4.19 cm   3.87 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.32 mm   5.49 mm  -4.19 cm      0 eV   3.87 keV   455 um    455 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 28,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.46 mm   5.41 mm  -12.2 cm   3.11 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.36 mm    5.5 mm  -12.2 cm      0 eV   3.11 keV   313 um    313 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 27,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.45 mm   5.35 mm  -15.5 cm   2.44 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.54 mm   5.34 mm  -15.5 cm      0 eV   2.44 keV   208 um    208 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 26,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.34 mm   4.89 mm  -37.8 cm   1.77 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.39 mm   4.89 mm  -37.8 cm      0 eV   1.77 keV   125 um    125 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 25,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.11 mm   3.89 mm  -80.2 cm   1.62 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.09 mm   3.85 mm  -80.2 cm      0 eV   1.62 keV   109 um    109 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 24,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    1.1 mm   3.83 mm  -82.7 cm   2.06 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.05 mm   3.88 mm  -82.7 cm      0 eV   2.06 keV   159 um    159 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 23,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.05 mm   3.65 mm  -89.9 cm   10.2 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.51 mm   2.69 mm  -89.9 cm    6.4 keV  3.78 keV   1.8 mm    1.8 mm      Tracker       eIoni
+    2    1.3 mm   2.44 mm  -89.9 cm      0 eV    6.4 keV   1.1 mm   2.91 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 22,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.04 mm   3.63 mm  -90.8 cm      1 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   1.04 mm   3.61 mm  -90.8 cm      0 eV      1 keV  53.4 um   53.4 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 21,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    898 um   3.05 mm  -1.14 m    3.34 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    974 um   2.92 mm  -1.14 m       0 eV   3.34 keV   354 um    354 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 20,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    885 um      3 mm  -1.16 m    2.06 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    832 um   2.96 mm  -1.16 m       0 eV   2.06 keV   159 um    159 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 19,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    860 um   2.91 mm   -1.2 m    1.34 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    835 um   2.93 mm   -1.2 m       0 eV   1.34 keV    82 um     82 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 18,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    848 um   2.86 mm  -1.21 m    2.58 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    847 um   2.96 mm  -1.21 m       0 eV   2.58 keV   228 um    228 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 17,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    848 um   2.86 mm  -1.21 m    1.48 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    823 um   2.83 mm  -1.21 m       0 eV   1.48 keV  94.8 um   94.8 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 16,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    815 um   2.74 mm  -1.26 m    2.42 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    845 um   2.82 mm  -1.26 m       0 eV   2.42 keV   206 um    206 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    696 um   2.28 mm  -1.45 m    5.51 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    700 um   2.28 mm  -1.45 m     4.1 keV     0 eV   4.75 um   4.75 um      Chamber       eIoni
+    2    728 um   2.27 mm  -1.45 m       0 eV    4.1 keV   290 um    295 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 94,   Parent ID = 15
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    700 um   2.28 mm  -1.45 m    1.41 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    706 um   2.29 mm  -1.45 m       0 eV   1.41 keV  64.9 um   64.9 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 14,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    625 um   1.97 mm  -1.56 m       4 keV     0 eV      0 fm      0 fm      Chamber    initStep
+    1    643 um   1.94 mm  -1.56 m       0 eV      4 keV   280 um    280 um      Chamber       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 13,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    546 um   1.65 mm  -1.68 m    1.71 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    557 um    1.6 mm  -1.68 m       0 eV   1.71 keV   119 um    119 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 12,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    475 um   1.37 mm  -1.78 m    1.13 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    493 um   1.39 mm  -1.78 m       0 eV   1.13 keV  63.6 um   63.6 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 11,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    419 um   1.15 mm  -1.86 m    2.12 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    457 um   1.09 mm  -1.86 m       0 eV   2.12 keV   166 um    166 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 10,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    214 um    335 um  -2.17 m    10.9 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   -857 um    807 um  -2.17 m    7.31 keV  3.59 keV  1.91 mm   1.91 mm      Tracker       eIoni
+    2   -867 um    771 um  -2.17 m    1.72 keV  4.56 keV     1 mm   2.91 mm      Tracker       eIoni
+    3   -874 um    815 um  -2.17 m       0 eV   1.72 keV   119 um   3.03 mm      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 95,   Parent ID = 10
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -867 um    771 um  -2.17 m    1.03 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1   -852 um    764 um  -2.17 m       0 eV   1.03 keV  55.7 um   55.7 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    159 um    117 um  -2.26 m    1.15 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    151 um    143 um  -2.26 m       0 eV   1.15 keV  64.8 um   64.8 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    155 um    101 um  -2.26 m    1.34 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    142 um    133 um  -2.26 m       0 eV   1.34 keV  81.9 um   81.9 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    120 um  -51.4 um  -2.32 m    2.35 keV     0 eV      0 fm      0 fm      Tracker    initStep
+    1    137 um   32.6 um  -2.32 m       0 eV   2.35 keV   195 um    195 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   81.9 um   -239 um  -2.39 m     993 eV      0 eV      0 fm      0 fm      Tracker    initStep
+    1     91 um   -219 um  -2.39 m       0 eV    993 eV   52.7 um   52.7 um      Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   81.3 um   -265 um   -2.4 m    5.07 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1    272 um   21.6 um   -2.4 m    4.31 MeV   617 keV   536 um    536 um       Target       eBrem
+    2    310 um    583 um   -2.4 m     3.1 MeV  1.21 MeV   824 um   1.36 mm       Target         msc
+    3     99 um    722 um   -2.4 m    1.89 MeV   840 keV   726 um   2.09 mm       Target       eBrem
+    4    141 um    795 um   -2.4 m     216 keV  1.67 MeV  1.36 mm   3.45 mm       Target       eIoni
+    5    140 um    797 um   -2.4 m       0 eV    216 keV  91.8 um   3.54 mm       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0     22 um  -3.43 um  -2.44 m    1.21 MeV     0 eV      0 fm      0 fm       Target    initStep
+    1   64.4 um   21.1 um  -2.44 m     191 keV   827 keV   676 um    676 um       Target       eBrem
+    2   63.8 um   17.2 um  -2.44 m       0 eV    191 keV  75.7 um    752 um       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   10.2 um  -13.4 um   -2.5 m    1.15 keV     0 eV      0 fm      0 fm        World    initStep
+    1     14 um   13.1 um   -2.5 m       0 eV   1.15 keV    65 um     65 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm  -2.71 m    1.09 keV     0 eV      0 fm      0 fm        World    initStep
+    1  -24.6 um  -1.16 um  -2.71 m       0 eV   1.09 keV  60.1 um   60.1 um        World       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 98,   Parent ID = 4
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   64.4 um   21.1 um  -2.44 m     194 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.01 mm  -2.72 mm  -2.44 m       0 eV   88.3 keV  3.91 mm   3.91 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 97,   Parent ID = 5
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0     99 um    722 um   -2.4 m     375 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   -365 um   4.77 mm   -2.4 m     375 keV     0 eV   4.47 mm   4.47 mm       Target  Transportation
+    2  -27.5 cm    2.4 m    -1.3 m     375 keV     0 eV   2.65 m    2.65 m       Tracker  Transportation
+    3  -33.4 cm   2.91 m   -1.07 m     375 keV     0 eV   56.4 cm   3.22 m    OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = gamma,   Track ID = 96,   Parent ID = 5
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0    272 um   21.6 um   -2.4 m     142 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   94.2 um    1.1 mm   -2.4 m       0 eV   88.3 keV  1.12 mm   1.12 mm       Target        phot
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 100,   Parent ID = 96
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   94.2 um    1.1 mm   -2.4 m      54 keV     0 eV      0 fm      0 fm       Target    initStep
+    1   94.9 um    1.1 mm   -2.4 m       0 eV     54 keV  10.1 um   10.1 um       Target       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 99,   Parent ID = 98
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -2.01 mm  -2.72 mm  -2.44 m     106 keV     0 eV      0 fm      0 fm       Target    initStep
+    1  -2.01 mm  -2.72 mm  -2.44 m       0 eV    106 keV    30 um     30 um       Target       eIoni
+
+-------->Storing hits in the ROOT file: in this event there are 51 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.017281316807785  position[mm]: (0.62456304821863,1.9658763709458,-1556.3853732015)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.040120896090937  position[mm]: (0.69565344799243,2.2832706600904,-1447.8608575741)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.012410626626574  position[mm]: (0.73221064620234,2.4035756215724,-1400)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.068840256598322  position[mm]: (1.243763113568,4.3882454233507,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.021492089617089  position[mm]: (1.567775727244,5.7897201929635,68.893195609433)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.011708563564171  position[mm]: (1.5948725830325,5.873966845076,113.90853914733)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.019436693844139  position[mm]: (1.6229262219751,5.9627843958428,160.62955098465)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0076574970360241  position[mm]: (1.6298471235973,6.0064703430271,183.368452317)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00094126003280599  position[mm]: (1.630193681502,6.0130657469984,186.46948868695)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0022423592963092  position[mm]: (1.6312765302753,6.0415354209405,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.028062618383214  position[mm]: (1.9363344248218,7.3613663309219,879.34554013748)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.040669373815376  position[mm]: (1.9423292164772,7.6389253967285,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0093946561037916  position[mm]: (2.2059773283112,9.0078597684403,1627.9315174487)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.013997656254116  position[mm]: (2.2112455868348,9.118509044711,1678.537531273)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.023451640835624  position[mm]: (2.2090577237055,9.2115846597296,1722.2363430877)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.015153077533249  position[mm]: (2.2152859321242,9.2892656743354,1758.7918123481)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.01504283592752  position[mm]: (2.2269859360278,9.3635721964797,1800)
+  trackID: 49  chamberNb: 4  energy deposit[MeV]: 0.004728609765439  position[mm]: (2.1982366662792,9.3294934395316,1758.794807481)
+  trackID: 48  chamberNb: 4  energy deposit[MeV]: 0.0016318942012611  position[mm]: (2.2033488799083,9.2026360374297,1722.236800243)
+  trackID: 47  chamberNb: 4  energy deposit[MeV]: 0.001557863485191  position[mm]: (2.2016720418816,9.1153623830465,1678.5379429936)
+  trackID: 42  chamberNb: 3  energy deposit[MeV]: 0.0033509985070877  position[mm]: (1.9589840594661,7.3465389336213,879.34717089375)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.010748739214394  position[mm]: (46.44359022362,-312.70896720077,806.00147668577)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.0048068400976728  position[mm]: (53.513319134916,-317.08772055061,809.74307433448)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.0039697873217639  position[mm]: (57.449213385899,-316.27039958754,813.93239737222)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.0043550838530021  position[mm]: (63.484285240594,-311.8475183586,810.79252238806)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.0171760849716  position[mm]: (76.74721793469,-300.23962792815,811.90229191688)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.00046602450486657  position[mm]: (76.236558082054,-299.96009761242,810.0480543969)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.017823356411394  position[mm]: (78.593663101281,-297.168535459,802.17778307488)
+  trackID: 38  chamberNb: 3  energy deposit[MeV]: 0.0040958458835755  position[mm]: (81.107717236908,-294.49239867614,800)
+  trackID: 84  chamberNb: 3  energy deposit[MeV]: 0.0027124122670869  position[mm]: (78.609989828182,-297.17448249698,802.18863904673)
+  trackID: 83  chamberNb: 3  energy deposit[MeV]: 0.0023576296860538  position[mm]: (63.484172874581,-311.83347240311,810.80173897339)
+  trackID: 82  chamberNb: 3  energy deposit[MeV]: 0.0015508658847997  position[mm]: (57.446393057679,-316.2630298788,813.93859628466)
+  trackID: 81  chamberNb: 3  energy deposit[MeV]: 0.0017380605283768  position[mm]: (53.506872153711,-317.09475096467,809.74931241881)
+  trackID: 80  chamberNb: 3  energy deposit[MeV]: 0.0019026043090488  position[mm]: (46.401126990777,-312.79616140619,805.92912892302)
+  trackID: 80  chamberNb: 3  energy deposit[MeV]: 0.0042312507744689  position[mm]: (46.393984194989,-312.77804935256,805.96087012136)
+  trackID: 91  chamberNb: 3  energy deposit[MeV]: 0.0034151314970948  position[mm]: (46.418735295092,-312.81282974209,805.94272343154)
+  trackID: 34  chamberNb: 2  energy deposit[MeV]: 0.0059731013633047  position[mm]: (2.136592441395,6.6003384204155,186.60764522101)
+  trackID: 34  chamberNb: 2  energy deposit[MeV]: 0.0041082519034916  position[mm]: (1.9254375469389,6.1325549613189,186.44671336272)
+  trackID: 34  chamberNb: 2  energy deposit[MeV]: 0.0064616505276673  position[mm]: (1.7605521800517,5.8504283590523,186.49589357633)
+  trackID: 34  chamberNb: 2  energy deposit[MeV]: 0.0073689406667987  position[mm]: (1.625593144427,5.9440469971309,186.47611873111)
+  trackID: 34  chamberNb: 2  energy deposit[MeV]: 0.0041708876276308  position[mm]: (1.6547185026238,5.940371350084,186.45446553452)
+  trackID: 92  chamberNb: 2  energy deposit[MeV]: 0.0029896914153165  position[mm]: (1.9451457222821,6.1203377000986,186.44381877885)
+  trackID: 33  chamberNb: 2  energy deposit[MeV]: 0.0017462447868786  position[mm]: (1.6324326246453,6.017622924291,183.36891597084)
+  trackID: 32  chamberNb: 2  energy deposit[MeV]: 0.010873469119864  position[mm]: (1.6005333643988,6.1107284540062,160.64518088881)
+  trackID: 31  chamberNb: 2  energy deposit[MeV]: 0.0014149723772623  position[mm]: (1.6018397174711,5.8682525815014,113.90889137178)
+  trackID: 30  chamberNb: 2  energy deposit[MeV]: 0.0018951124415425  position[mm]: (1.4853427401871,5.7650063190024,68.901296207085)
+  trackID: 30  chamberNb: 2  energy deposit[MeV]: 0.0048190065214743  position[mm]: (1.4438506866437,5.7657844317354,68.918789106549)
+  trackID: 93  chamberNb: 2  energy deposit[MeV]: 0.0016059124419983  position[mm]: (1.4822642848724,5.7578165371453,68.894387022013)
+  trackID: 15  chamberNb: 0  energy deposit[MeV]: 0.0040972294242988  position[mm]: (0.72763358410407,2.2680825887579,-1447.8431630365)
+  trackID: 94  chamberNb: 0  energy deposit[MeV]: 0.0014084922797286  position[mm]: (0.70584650348153,2.2864065879522,-1447.866257406)
+  trackID: 14  chamberNb: 0  energy deposit[MeV]: 0.00400473578571  position[mm]: (0.64277457868988,1.9367371898102,-1556.3830826517)
+writing Event_1
+>>> Event 0
+    0 trajectories stored in this event.
+ Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.23s Real=1.66s Sys=0.11s
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Lead XenonGas 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 700 um      e- 700 um      e+ 700 um  proton 700 um 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Lead
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  94.586138310569 keV    e-  1.0038644857808 MeV    e+  951.32127129134 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes
+ Material : XenonGas
+ Range cuts        :  gamma  700 um     e-  700 um     e+  700 um  proton 700 um 
+ Energy thresholds :  gamma  990 eV     e-  1.3684530084265 keV    e+  1.3448250375664 keV proton 70 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 starts.
+### Run 1 start.
+CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
+<ExP01/TrackerChamberSD_HC> is not found.
+
+-------->Storing hits in the ROOT file: in this event there are 109 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0032441009266906  position[mm]: (-32.244878227946,21.615989851157,-1593.9254376814)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.047850791751068  position[mm]: (-38.923492419374,25.994005377234,-1438.2929425138)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.01123410457705  position[mm]: (-40.551836420181,27.075838241098,-1400)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0060377362709133  position[mm]: (-65.653315816145,44.941500264265,-782.09354066612)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0030773723205936  position[mm]: (-66.085076246846,45.22350427764,-771.92113026822)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.013640304512492  position[mm]: (-67.469780734245,46.107880487649,-739.8012983158)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0089083670121705  position[mm]: (-68.334842414,46.685512654861,-718.90120112569)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.030519250188294  position[mm]: (-71.996516887952,49.181466748839,-632.1154578631)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0096051130288831  position[mm]: (-73.327642909834,50.247863074829,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.00060156609382532  position[mm]: (-98.675202128094,70.67045038016,1.5632952490751)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.022273140748991  position[mm]: (-101.36884774425,72.714464259282,64.648623984623)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0018162560574629  position[mm]: (-101.5682098667,72.8484298566,69.477760623776)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.019809378819921  position[mm]: (-104.3749013615,74.730687853912,137.67199451003)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.021605308339739  position[mm]: (-106.0371010155,75.801866762905,177.32899642697)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.0099466381451061  position[mm]: (-107.07574189802,76.404439052881,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0095186456581356  position[mm]: (-135.90673776706,93.898600372702,834.35085339779)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.019778570557397  position[mm]: (-139.3600156483,95.840470716773,908.1955984796)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0045827777396741  position[mm]: (-140.04999987698,96.108869720501,922.04285617339)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0063684322956919  position[mm]: (-140.64970745768,96.328476355544,934.16467211082)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.004333810433654  position[mm]: (-141.41064663408,96.617846842478,949.63947212346)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0061966683732862  position[mm]: (-142.36473882712,96.960781938489,969.67329218731)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.010817737597515  position[mm]: (-143.60038400119,97.382313301122,995.87247628272)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0010075406000056  position[mm]: (-143.71279345598,97.423466567846,998.33676953579)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00022397715784337  position[mm]: (-143.78802093016,97.451575454952,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0054882919080885  position[mm]: (-171.93729619936,107.14615195308,1618.6566367416)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0030522497346439  position[mm]: (-172.61297816801,107.37289913674,1632.9903080741)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0057860283302267  position[mm]: (-172.94320992084,107.47141321651,1639.6713269795)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0085570281104408  position[mm]: (-174.11317474714,107.85346800869,1664.1589887343)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0021592598073459  position[mm]: (-174.27456834337,107.90275435676,1667.4716916034)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.009764778327097  position[mm]: (-176.14327593726,108.45930612174,1706.0727046293)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.017815483443411  position[mm]: (-178.29377751784,109.02972694713,1749.7230479179)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.017965720331475  position[mm]: (-180.04882482901,109.49116666829,1785.0186835067)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0029402126385217  position[mm]: (-180.8044785203,109.70512011913,1800)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0016746085477641  position[mm]: (-180.04913272475,109.50209273855,1785.0189771931)
+  trackID: 78  chamberNb: 4  energy deposit[MeV]: 0.0025984594754286  position[mm]: (-178.28198648667,109.04493178537,1749.7244574769)
+  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.0014589865283278  position[mm]: (-176.13755105802,108.45194824641,1706.0734542903)
+  trackID: 76  chamberNb: 4  energy deposit[MeV]: 0.0077486821662277  position[mm]: (-174.35925418424,107.93116609167,1667.4753397194)
+  trackID: 75  chamberNb: 4  energy deposit[MeV]: 0.0096702709120051  position[mm]: (-174.04695372601,108.0685565531,1664.1868057979)
+  trackID: 75  chamberNb: 4  energy deposit[MeV]: 0.0043927414821133  position[mm]: (-174.04694371822,108.10656717605,1664.1968237252)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0066877051214115  position[mm]: (-176.0943149133,107.8435016678,1640.4201833071)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.00016904572863895  position[mm]: (-176.09791151366,107.68441627802,1640.2862177789)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0055618351053968  position[mm]: (-176.61689916637,105.99391304339,1638.8325663722)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.008969171466566  position[mm]: (-174.32803678933,106.05958350591,1638.7837644652)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0051641091287475  position[mm]: (-175.56801043834,105.11575728922,1638.4729343368)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.010455484946785  position[mm]: (-174.66724424702,106.17894215096,1638.8120770443)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.010936353970685  position[mm]: (-175.10868554606,105.67871079048,1638.1324809134)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0069177452784428  position[mm]: (-175.38017300545,106.03385863514,1637.8510896091)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0053638261989333  position[mm]: (-175.64074066088,105.91276804863,1637.7353564677)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0069399252313435  position[mm]: (-175.66747275755,105.98204606126,1637.7523756399)
+  trackID: 100  chamberNb: 4  energy deposit[MeV]: 0.0049830057752498  position[mm]: (-175.67214108876,105.89363381342,1637.7651348656)
+  trackID: 99  chamberNb: 4  energy deposit[MeV]: 0.0014597490713152  position[mm]: (-175.57113291975,105.11568718675,1638.4817563174)
+  trackID: 98  chamberNb: 4  energy deposit[MeV]: 0.0014641842954022  position[mm]: (-176.61660132906,105.98480081423,1638.8303109115)
+  trackID: 97  chamberNb: 4  energy deposit[MeV]: 0.001472264535165  position[mm]: (-176.10251534977,107.67981437162,1640.2930719534)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0065914564657537  position[mm]: (-166.4124048093,111.97945877339,1643.4442736313)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0032829105300126  position[mm]: (-163.49140915514,114.67776148969,1648.3219767761)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.06295912285825  position[mm]: (-83.087755659599,128.93682661844,1762.2216620161)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.024069521166324  position[mm]: (-43.396372875306,149.53905773412,1799.5732648681)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 1.771784633703e-05  position[mm]: (-43.22349442638,149.43654848116,1800)
+  trackID: 104  chamberNb: 4  energy deposit[MeV]: 0.0015387955910417  position[mm]: (-43.387023529864,149.54033865086,1799.5701226311)
+  trackID: 103  chamberNb: 4  energy deposit[MeV]: 0.0025822197169989  position[mm]: (-83.09624411144,128.95392391748,1762.2227931732)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0068851603926115  position[mm]: (-163.76719665256,115.3438940172,1648.2635023487)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0074198799290258  position[mm]: (-163.42227273367,115.26999691159,1648.574429265)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0085987464965637  position[mm]: (-163.21789736424,115.1307570669,1648.6306692446)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0065185484947441  position[mm]: (-163.24110161176,115.06731553504,1648.6136144401)
+  trackID: 101  chamberNb: 4  energy deposit[MeV]: 0.0095425453516124  position[mm]: (-166.507254482,112.04891665716,1643.4787282832)
+  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0072849554508824  position[mm]: (-171.73459737955,106.79940867689,1618.7322153786)
+  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0085481988848323  position[mm]: (-171.7388387391,106.71078332356,1618.6078643798)
+  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0024301021927326  position[mm]: (-171.73750418438,106.72624699232,1618.6160307765)
+  trackID: 111  chamberNb: 4  energy deposit[MeV]: 0.0024402380191313  position[mm]: (-171.7210011453,106.78999009242,1618.738355245)
+  trackID: 60  chamberNb: 3  energy deposit[MeV]: 0.0023475389874368  position[mm]: (-143.71151109444,97.406859078498,998.33794844741)
+  trackID: 59  chamberNb: 3  energy deposit[MeV]: 0.0017223488672239  position[mm]: (-143.60269729645,97.371285144557,995.87304135359)
+  trackID: 58  chamberNb: 3  energy deposit[MeV]: 0.0049583788411016  position[mm]: (-142.40706017512,96.981129969685,969.67439964587)
+  trackID: 57  chamberNb: 3  energy deposit[MeV]: 0.0016048217820412  position[mm]: (-141.41059996296,96.607437151153,949.64008657978)
+  trackID: 56  chamberNb: 3  energy deposit[MeV]: 0.0017722115975638  position[mm]: (-140.64178385409,96.320002057123,934.16572977038)
+  trackID: 55  chamberNb: 3  energy deposit[MeV]: 0.0018384816094928  position[mm]: (-140.04090591008,96.100895088732,922.04399176753)
+  trackID: 54  chamberNb: 3  energy deposit[MeV]: 0.002300382283614  position[mm]: (-139.34470715749,95.845651110289,908.19706940526)
+  trackID: 53  chamberNb: 3  energy deposit[MeV]: 0.0014827827981976  position[mm]: (-135.91177346077,93.90669263713,834.3507865307)
+  trackID: 49  chamberNb: 2  energy deposit[MeV]: 0.0072164509010429  position[mm]: (-105.84466887018,75.396126100007,177.41874934862)
+  trackID: 49  chamberNb: 2  energy deposit[MeV]: 0.0045983029650313  position[mm]: (-106.08543465047,75.337980522222,177.41598892708)
+  trackID: 49  chamberNb: 2  energy deposit[MeV]: 0.0075419016188132  position[mm]: (-106.09575580444,75.329839316859,177.33107995195)
+  trackID: 115  chamberNb: 2  energy deposit[MeV]: 0.0028151666606663  position[mm]: (-106.10523637697,75.330025112837,177.41906084517)
+  trackID: 48  chamberNb: 2  energy deposit[MeV]: 0.007439323389025  position[mm]: (-104.64548014987,74.768564232318,137.69531702752)
+  trackID: 48  chamberNb: 2  energy deposit[MeV]: 1.682079665607e-05  position[mm]: (-104.64643487911,74.769981868536,137.68842846234)
+  trackID: 48  chamberNb: 2  energy deposit[MeV]: 0.00042808703161016  position[mm]: (-104.68065013327,74.750039443149,137.63767679012)
+  trackID: 48  chamberNb: 2  energy deposit[MeV]: 0.0040658112082308  position[mm]: (-104.7059140405,74.752484366234,137.61331751461)
+  trackID: 117  chamberNb: 2  energy deposit[MeV]: 0.0017032823740897  position[mm]: (-104.68787673206,74.753394107418,137.64546714732)
+  trackID: 116  chamberNb: 2  energy deposit[MeV]: 0.0022584100841515  position[mm]: (-104.64065513069,74.781894190385,137.67977795375)
+  trackID: 47  chamberNb: 2  energy deposit[MeV]: 0.0017488832414145  position[mm]: (-101.55995949725,72.840521572107,69.478817066096)
+  trackID: 46  chamberNb: 2  energy deposit[MeV]: 0.0056931084635229  position[mm]: (-101.31908584025,72.833191388397,64.660681932236)
+  trackID: 46  chamberNb: 2  energy deposit[MeV]: 0.0041856096438721  position[mm]: (-101.34714485564,72.827341545863,64.637821527065)
+  trackID: 45  chamberNb: 2  energy deposit[MeV]: 0.0050587489337731  position[mm]: (-98.538166669933,70.60906526002,1.5875989714147)
+  trackID: 45  chamberNb: 2  energy deposit[MeV]: 0.0025527452678216  position[mm]: (-98.558557405641,70.583942118371,1.5786085462947)
+  trackID: 45  chamberNb: 2  energy deposit[MeV]: 0.0013804845675769  position[mm]: (-98.556159813086,70.576382470051,1.5823053496579)
+  trackID: 118  chamberNb: 2  energy deposit[MeV]: 0.0019570188214455  position[mm]: (-98.537435354701,70.612895323936,1.5751051163243)
+  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.00044398270383504  position[mm]: (-72.018725745769,49.178801193471,-632.11468125943)
+  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.0028723649946006  position[mm]: (-72.031851768698,49.177377148199,-632.0968917388)
+  trackID: 119  chamberNb: 1  energy deposit[MeV]: 0.0014834210477457  position[mm]: (-72.026313179447,49.180818287907,-632.12009425533)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.004921170168049  position[mm]: (-67.887700990656,46.336494173757,-718.77678980561)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0047052534259324  position[mm]: (-67.841181651532,46.744534847855,-718.79601136675)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0065548530708055  position[mm]: (-67.792173820915,46.951753019797,-718.61861563169)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0067698126732647  position[mm]: (-67.740794489913,46.873143892963,-718.69498973303)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0026992043882916  position[mm]: (-67.721883368465,46.877783575772,-718.68907551721)
+  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.0092347476041692  position[mm]: (-67.100546523036,45.997546017415,-739.7255852011)
+  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.0093374340851139  position[mm]: (-67.175651067371,46.069127835595,-739.78274135506)
+  trackID: 120  chamberNb: 1  energy deposit[MeV]: 0.001567492573745  position[mm]: (-67.09321988935,46.004510237498,-739.7265690245)
+  trackID: 33  chamberNb: 1  energy deposit[MeV]: 0.0016323818909951  position[mm]: (-66.091830890578,45.231709315877,-771.92120129243)
+  trackID: 32  chamberNb: 1  energy deposit[MeV]: 0.0016774177132052  position[mm]: (-65.659754390099,44.95036304241,-782.09359356129)
+  trackID: 22  chamberNb: 0  energy deposit[MeV]: 0.0029781720154896  position[mm]: (-38.931861382312,26.015692728381,-1438.292593961)
+  trackID: 21  chamberNb: 0  energy deposit[MeV]: 0.0062009989872704  position[mm]: (-32.307026291405,21.634555492528,-1593.9233299854)
+writing Event_2
+>>> Event 0
+    0 trajectories stored in this event.
+CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
+<ExP01/TrackerChamberSD_HC> is not found.
+
+-------->Storing hits in the ROOT file: in this event there are 114 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.018397301085711  position[mm]: (233.02516274886,206.61266800014,-1562.3175070102)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0047909470793356  position[mm]: (236.20443052109,209.41644106025,-1550.8816328488)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0010995174573955  position[mm]: (236.89336957432,210.02519344665,-1548.40098104)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0020290348451444  position[mm]: (238.66295547091,211.59351554218,-1541.9937366973)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0027087477948745  position[mm]: (240,212.79108655006,-1537.1127265492)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0049909846380333  position[mm]: (445.0266920136,397.08432456014,-788.81921829383)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0030833972839766  position[mm]: (446.50146029588,398.41559010547,-783.46195497089)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 6.8172866200033e-05  position[mm]: (447.23026431088,399.0679214712,-780.81772830512)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.019589165275861  position[mm]: (460.32081301718,410.81326728062,-733.23678533143)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.031106349406291  position[mm]: (475.54953187331,424.40183225692,-678.00556629087)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.00025915100447048  position[mm]: (475.67079504899,424.50903170989,-677.57167991214)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.033184633072966  position[mm]: (497.38352005427,443.65004466935,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.006623133636833  position[mm]: (670.34500602371,597.56404802352,16.691930435798)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 9.4547560562347e-05  position[mm]: (670.76626616393,597.93925704932,18.18927147207)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.051596599747398  position[mm]: (708.71528462759,631.74317566777,153.09636459049)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.017334959222934  position[mm]: (721.53682082433,643.01616553602,197.91767128472)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 9.6849522030178e-05  position[mm]: (722.13501931153,643.53834725996,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.024742317030771  position[mm]: (914.37977123204,810.61537329009,870.04792859243)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 9.4528728525312e-05  position[mm]: (914.69390058485,810.88411150779,871.13802973034)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00031060499691709  position[mm]: (915.76050874199,811.79646584719,874.83875900131)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.01109038455553  position[mm]: (920.71983203235,816.04151279176,892.04831884578)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.036206672854609  position[mm]: (951.10427178767,841.94005069272,996.82098580588)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00075513983028853  position[mm]: (952.02979524566,842.70254411331,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.00014395504088519  position[mm]: (1126.098792419,987.22255841621,1600.6956346101)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.006458513973994  position[mm]: (1130.849899704,991.16712130811,1617.095166591)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.028696554610869  position[mm]: (1150.0139149083,1007.0705779428,1683.1321894701)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0021321701691668  position[mm]: (1151.4360329741,1008.2539003065,1688.0066466109)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0018063994598901  position[mm]: (1151.9452351567,1008.6783554596,1689.7520844199)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0016705934826449  position[mm]: (1152.4278243955,1009.08103249,1691.4058501087)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0049631877401264  position[mm]: (1155.7309443077,1011.8434587347,1702.7314656264)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0044061167438659  position[mm]: (1158.1737816326,1013.8979870292,1711.092700594)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.035072210154461  position[mm]: (1182.3700450312,1034.0546076864,1793.9876909031)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.0026599189495335  position[mm]: (1184.1078133109,1035.5196997091,1800)
+  trackID: 83  chamberNb: 4  energy deposit[MeV]: 0.0020876949640273  position[mm]: (1182.3702286703,1034.0409667628,1793.991686422)
+  trackID: 82  chamberNb: 4  energy deposit[MeV]: 0.0017441343820067  position[mm]: (1158.179041579,1013.9075854433,1711.0893648036)
+  trackID: 81  chamberNb: 4  energy deposit[MeV]: 0.0016421189175261  position[mm]: (1155.7359908665,1011.8341159984,1702.7327712325)
+  trackID: 80  chamberNb: 4  energy deposit[MeV]: 0.0030320968837783  position[mm]: (1152.4354813302,1009.1027348691,1691.3997857664)
+  trackID: 79  chamberNb: 4  energy deposit[MeV]: 0.0024142355384909  position[mm]: (1151.9354468745,1008.6927080945,1689.7524070494)
+  trackID: 78  chamberNb: 4  energy deposit[MeV]: 0.0016497766479336  position[mm]: (1151.4393127811,1008.2438507576,1688.0086214886)
+  trackID: 77  chamberNb: 4  energy deposit[MeV]: 0.0031975135826462  position[mm]: (1149.9899625471,1007.0698624218,1683.1409607824)
+  trackID: 76  chamberNb: 4  energy deposit[MeV]: 0.0036205706292274  position[mm]: (1130.8228098762,991.17777227948,1617.102475337)
+  trackID: 75  chamberNb: 4  energy deposit[MeV]: 0.0016756567327173  position[mm]: (1126.1023921938,987.2124016528,1600.6975342014)
+  trackID: 68  chamberNb: 3  energy deposit[MeV]: 0.0022120643375662  position[mm]: (951.09759543608,841.9538817071,996.82041811842)
+  trackID: 67  chamberNb: 3  energy deposit[MeV]: 0.01003684536986  position[mm]: (920.75747181368,816.24310920322,892.01420529179)
+  trackID: 67  chamberNb: 3  energy deposit[MeV]: 0.0032730280234096  position[mm]: (920.73931644454,816.251216458,891.99698485185)
+  trackID: 66  chamberNb: 3  energy deposit[MeV]: 0.0015388033812655  position[mm]: (915.77018855687,811.79585988247,874.83655450808)
+  trackID: 65  chamberNb: 3  energy deposit[MeV]: 0.0015914570536494  position[mm]: (914.38151828381,810.62524906528,870.04545033405)
+  trackID: 54  chamberNb: 2  energy deposit[MeV]: 0.0060021588422701  position[mm]: (721.49957320662,643.06553550176,197.92134006316)
+  trackID: 53  chamberNb: 2  energy deposit[MeV]: 0.003548856455017  position[mm]: (708.70841183949,631.71679454971,153.10690824646)
+  trackID: 52  chamberNb: 2  energy deposit[MeV]: 0.0023566711672041  position[mm]: (670.78163934013,597.93274518157,18.187487294076)
+  trackID: 51  chamberNb: 2  energy deposit[MeV]: 0.0014449650325127  position[mm]: (670.35396992444,597.56446343753,16.689699300402)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.00061013574984175  position[mm]: (665.68474781229,593.43324157409,0.019635879100215)
+  trackID: 50  chamberNb: 2  energy deposit[MeV]: 0.00021221976668172  position[mm]: (665.69961913062,593.43553952296,0.0035799658901786)
+  trackID: 46  chamberNb: 1  energy deposit[MeV]: 0.0066991559717488  position[mm]: (475.14068920075,424.93235305134,-677.39701748754)
+  trackID: 46  chamberNb: 1  energy deposit[MeV]: 0.0032120213308152  position[mm]: (475.00965261969,425.02334031953,-677.11086185522)
+  trackID: 46  chamberNb: 1  energy deposit[MeV]: 0.0021482833552128  position[mm]: (475.04057936504,425.16455560343,-676.85002798681)
+  trackID: 46  chamberNb: 1  energy deposit[MeV]: 0.011183106385614  position[mm]: (475.12971964015,425.09940516819,-677.03496119572)
+  trackID: 46  chamberNb: 1  energy deposit[MeV]: 0.0024271319854372  position[mm]: (475.12581463142,425.11611908479,-677.03841409008)
+  trackID: 101  chamberNb: 1  energy deposit[MeV]: 0.0016257291794929  position[mm]: (475.03253110922,425.1578732524,-676.85160951077)
+  trackID: 100  chamberNb: 1  energy deposit[MeV]: 0.0015340440355338  position[mm]: (475.01484000548,425.03052067411,-677.11530762144)
+  trackID: 45  chamberNb: 1  energy deposit[MeV]: 0.0086295918223163  position[mm]: (475.45008048218,424.47937308945,-677.98282665665)
+  trackID: 45  chamberNb: 1  energy deposit[MeV]: 0.0011925441614021  position[mm]: (475.45622125986,424.47607235569,-677.98082718272)
+  trackID: 44  chamberNb: 1  energy deposit[MeV]: 0.0015672158503306  position[mm]: (460.32685538897,410.8208250851,-733.239863665)
+  trackID: 43  chamberNb: 1  energy deposit[MeV]: 0.0018597447247492  position[mm]: (447.23724704154,399.07737635935,-780.82139279747)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0063727696273164  position[mm]: (445.65586528493,403.66771080075,-774.52776415222)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0022971836153043  position[mm]: (445.46666184088,404.80743149747,-773.18104275381)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.01424040049961  position[mm]: (451.32984234498,408.41781266225,-762.32714051963)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0038740022548934  position[mm]: (454.72896732826,411.78079610522,-764.63333464077)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0001051090321487  position[mm]: (455.00627608967,411.85539082144,-764.93929920176)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.013264319575749  position[mm]: (460.68224200439,421.12603474454,-765.04732709598)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0010584674200859  position[mm]: (461.07499594557,420.93169521078,-765.65611132261)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0022031102017448  position[mm]: (461.05347193025,419.83875238513,-768.9286258903)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.007840676460378  position[mm]: (462.39214368116,416.70547265304,-773.8580430132)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0030439950729531  position[mm]: (462.85848203608,414.18598322891,-774.21455234764)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0018905179312268  position[mm]: (463.58725364196,412.65218644743,-773.86476305988)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0065876148468575  position[mm]: (464.73252022149,406.6849565861,-773.90783428342)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0090542532222615  position[mm]: (467.19259594088,405.60464032834,-775.06273112532)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.00089704259222162  position[mm]: (467.96939579179,405.18233877215,-775.78776791058)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0036243067062923  position[mm]: (469.1522526049,404.23523150207,-776.23548018067)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0061509515058177  position[mm]: (469.70748648032,404.58866877233,-776.99266579451)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 6.6122669432601e-05  position[mm]: (469.68025836582,404.53834981335,-776.89102355141)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0061304195566019  position[mm]: (469.31229650371,404.35058005463,-776.6043964084)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.0051308021626178  position[mm]: (469.31334252531,404.10669782791,-776.50994320991)
+  trackID: 42  chamberNb: 1  energy deposit[MeV]: 0.010293629311835  position[mm]: (469.30867006298,404.06045982061,-776.6398070633)
+  trackID: 116  chamberNb: 1  energy deposit[MeV]: 0.0020268553288  position[mm]: (469.32402846775,404.35309481378,-776.59782764773)
+  trackID: 115  chamberNb: 1  energy deposit[MeV]: 0.0058488066930978  position[mm]: (469.66425900737,404.50104869719,-776.93481244619)
+  trackID: 114  chamberNb: 1  energy deposit[MeV]: 0.0014485910969659  position[mm]: (469.69974378892,404.59374854371,-776.99215807142)
+  trackID: 113  chamberNb: 1  energy deposit[MeV]: 0.0083088714083201  position[mm]: (469.32080235424,404.46351136215,-776.01731091438)
+  trackID: 113  chamberNb: 1  energy deposit[MeV]: 0.006880553317645  position[mm]: (469.24247134604,404.46603585746,-775.89437557597)
+  trackID: 113  chamberNb: 1  energy deposit[MeV]: 0.003780153058591  position[mm]: (469.2542280103,404.48738148037,-775.87394576647)
+  trackID: 112  chamberNb: 1  energy deposit[MeV]: 0.0018291883876278  position[mm]: (467.96456503991,405.1813157988,-775.79878995785)
+  trackID: 111  chamberNb: 1  energy deposit[MeV]: 0.0016159293464704  position[mm]: (464.72772540008,406.68364686228,-773.91709302001)
+  trackID: 110  chamberNb: 1  energy deposit[MeV]: 0.0018437700234369  position[mm]: (463.57961859007,412.64485451514,-773.85872002787)
+  trackID: 109  chamberNb: 1  energy deposit[MeV]: 0.0024376412575187  position[mm]: (462.85803705941,414.18421864046,-774.23207406659)
+  trackID: 108  chamberNb: 1  energy deposit[MeV]: 0.0015802403895111  position[mm]: (462.38259270777,416.70866358718,-773.85613474857)
+  trackID: 107  chamberNb: 1  energy deposit[MeV]: 0.0011114703849076  position[mm]: (461.0230472976,419.80192493206,-768.9005726911)
+  trackID: 107  chamberNb: 1  energy deposit[MeV]: 0.0036208965268647  position[mm]: (461.00350232162,419.8247047203,-768.90067234757)
+  trackID: 117  chamberNb: 1  energy deposit[MeV]: 0.0020076281806692  position[mm]: (461.0133898639,419.79366562367,-768.90516972005)
+  trackID: 106  chamberNb: 1  energy deposit[MeV]: 0.0064163874295583  position[mm]: (461.18806757504,420.751607414,-765.66767236046)
+  trackID: 106  chamberNb: 1  energy deposit[MeV]: 0.0070966622337676  position[mm]: (461.17741352214,420.67627197024,-765.68764753599)
+  trackID: 105  chamberNb: 1  energy deposit[MeV]: 0.010473550710952  position[mm]: (460.66263969725,421.26232596358,-765.0810233733)
+  trackID: 104  chamberNb: 1  energy deposit[MeV]: 0.001887996701005  position[mm]: (455.01265728951,411.8446053999,-764.9393959474)
+  trackID: 103  chamberNb: 1  energy deposit[MeV]: 0.0013723974121491  position[mm]: (445.47363034704,404.80449587852,-773.17676732302)
+  trackID: 102  chamberNb: 1  energy deposit[MeV]: 0.0045729149669557  position[mm]: (445.69460594963,403.65815926852,-774.51568936064)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.011644733308765  position[mm]: (444.06357105287,396.22736979845,-787.97479293426)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.0072713222308043  position[mm]: (443.20885286209,396.7265781855,-787.94086758811)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.0036644853131454  position[mm]: (443.57695420033,397.03117258805,-788.02368223568)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.0081116106005188  position[mm]: (443.62347287546,396.81201536469,-787.9802640236)
+  trackID: 41  chamberNb: 1  energy deposit[MeV]: 0.0060085975925622  position[mm]: (443.61721078332,396.82191087996,-787.91933082596)
+  trackID: 118  chamberNb: 1  energy deposit[MeV]: 0.0109895499804  position[mm]: (443.68560679971,397.07206332204,-787.92401049801)
+  trackID: 28  chamberNb: 0  energy deposit[MeV]: 0.0050232955707776  position[mm]: (238.68762889177,211.55306988236,-1541.9868060859)
+  trackID: 27  chamberNb: 0  energy deposit[MeV]: 0.0038902696250603  position[mm]: (236.92321609468,210.01117214026,-1548.4035509017)
+  trackID: 26  chamberNb: 0  energy deposit[MeV]: 0.0016523072374538  position[mm]: (236.21444548202,209.41909899665,-1550.8845793436)
+  trackID: 25  chamberNb: 0  energy deposit[MeV]: 0.0027624083638193  position[mm]: (233.04537266967,206.61539238592,-1562.3225655434)
+writing Event_3
+>>> Event 1
+    0 trajectories stored in this event.
+CalorimeterSD::Initialize:  TrackerChamberSD   ExP01/TrackerChamberSD_HC
+<ExP01/TrackerChamberSD_HC> is not found.
+
+-------->Storing hits in the ROOT file: in this event there are 183 hits in the tracker chambers: 
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0025437607296996  position[mm]: (-79.236712024126,-18.890261283024,-1591.9285513432)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.019282521897239  position[mm]: (-82.146800501792,-19.631391527678,-1561.9776715729)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0080134357113038  position[mm]: (-84.572814291122,-20.176014181927,-1537.3345552275)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.010457733135576  position[mm]: (-87.265908257713,-20.8368572325,-1509.9510288651)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0020378962895121  position[mm]: (-87.945711290839,-20.992989941427,-1503.1051863079)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0080287682225205  position[mm]: (-89.390304054541,-21.326060497518,-1488.4802443893)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.022874404481631  position[mm]: (-95.102508068256,-22.662350593362,-1429.2989715362)
+  trackID: 1  chamberNb: 0  energy deposit[MeV]: 0.0097386068387079  position[mm]: (-97.936716243398,-23.343188370052,-1400)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.012236281202641  position[mm]: (-159.92857428987,-37.862188714373,-758.59191265078)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0018532150396546  position[mm]: (-160.91638018645,-38.047321103336,-748.41150760584)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0053452014769624  position[mm]: (-162.7845172031,-38.405341286234,-729.19371427453)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0091219519881832  position[mm]: (-165.94934794712,-38.990681511601,-696.60635403051)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0030747122310682  position[mm]: (-166.29707979751,-39.059874992665,-692.94906613927)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0085869181576715  position[mm]: (-168.28949749173,-39.452496159256,-672.01024323042)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0066362886247615  position[mm]: (-170.30410811538,-39.823385552662,-650.3996375945)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0017617142593387  position[mm]: (-171.42479088234,-40.003284854533,-638.46361901171)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.010406654842351  position[mm]: (-174.0255891423,-40.394797176111,-610.860825657)
+  trackID: 1  chamberNb: 1  energy deposit[MeV]: 0.0025492863441973  position[mm]: (-175.02928669655,-40.554782272515,-600)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.022373222419433  position[mm]: (-234.72315001463,-49.34586065866,46.59720111933)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.012391072838891  position[mm]: (-237.39681787783,-49.843482978049,75.434648434649)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.023655710649776  position[mm]: (-243.28842717638,-50.915843488094,137.65905259295)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.001562519900958  position[mm]: (-244.12220691886,-51.076930202649,146.46389617466)
+  trackID: 1  chamberNb: 2  energy deposit[MeV]: 0.02071984674514  position[mm]: (-249.15768193057,-52.032902524194,200)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.012960133505331  position[mm]: (-311.00941472626,-61.992462467766,840.07699380466)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0041730642740526  position[mm]: (-312.79608149026,-62.307040228481,857.89002170254)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.019316833788457  position[mm]: (-319.86845314814,-63.552058929449,929.21139386415)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.00089221744383027  position[mm]: (-320.62606661626,-63.724110185702,936.74946165223)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.0026678031742841  position[mm]: (-321.3396994428,-63.885485017972,943.89993510357)
+  trackID: 1  chamberNb: 3  energy deposit[MeV]: 0.022844648501477  position[mm]: (-326.88042312562,-65.190030919526,1000)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.014284433306903  position[mm]: (-388.56789963299,-80.027398792562,1639.4165931007)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.01311803300835  position[mm]: (-391.99117963515,-80.904882881494,1674.6042104532)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.011705594421493  position[mm]: (-395.58928314429,-81.327774199679,1714.7831385785)
+  trackID: 1  chamberNb: 4  energy deposit[MeV]: 0.028423160203604  position[mm]: (-401.40102578126,-80.016195744576,1800)
+  trackID: 74  chamberNb: 4  energy deposit[MeV]: 0.0014908902769005  position[mm]: (-395.59264242016,-81.318789819425,1714.7831567239)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0027861751846067  position[mm]: (-387.15755797187,-82.078884283107,1680.3253173517)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.014757851100734  position[mm]: (-366.7174180476,-85.816982665374,1703.707194217)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.015952578272207  position[mm]: (-340.45117932856,-115.0593570925,1699.0518818387)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.029396667604782  position[mm]: (-308.48920927703,-174.5334683653,1730.1448805126)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.022671350657778  position[mm]: (-301.2391393726,-225.48316509377,1759.6879793863)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0035342424924448  position[mm]: (-298.10684940644,-231.43647217964,1759.4562788101)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0050921993926572  position[mm]: (-290.64770918358,-240.15052903109,1755.1751220189)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.00019112527523976  position[mm]: (-290.57663870909,-240.50120008644,1755.2070258609)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.031986380688468  position[mm]: (-280.87844009788,-278.96995073843,1754.3018046537)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.047875212157986  position[mm]: (-306.95873177296,-334.95414191874,1751.0246129848)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0012164818248976  position[mm]: (-306.30465619889,-337.05043363779,1748.4686250367)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0062339306793343  position[mm]: (-305.18963514677,-343.65930048417,1740.6537073337)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.022597090544205  position[mm]: (-272.23916578358,-340.79424930221,1708.3498163393)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0045610033006353  position[mm]: (-275.09241796778,-332.38805429692,1697.3997130393)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.019103206730827  position[mm]: (-261.85027569006,-327.25688073151,1674.0486007931)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.033353162222225  position[mm]: (-281.1599416599,-280.99644581741,1652.731890402)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.010907929841068  position[mm]: (-307.16016233887,-282.62092324666,1643.3346342839)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0073746046599762  position[mm]: (-324.33492668463,-283.39690270274,1640.2233140863)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.00087147112756791  position[mm]: (-325.54384655197,-284.35959865014,1640.9675740694)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0071841511656623  position[mm]: (-332.807671494,-299.97901121758,1646.7765747841)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.040441831424939  position[mm]: (-345.65852055914,-281.46856447216,1718.1688626042)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.010638891579516  position[mm]: (-332.71697689736,-279.35829498211,1713.2151822895)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.017099997426699  position[mm]: (-307.55679542891,-278.70399332337,1718.7742324404)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.011801875834746  position[mm]: (-304.13768044872,-290.00728106878,1703.4429775132)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0037365934575807  position[mm]: (-301.00831377164,-294.24513643908,1697.8638483481)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.00037199240356503  position[mm]: (-300.68063316036,-294.53879416772,1697.5659247051)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.028194963433458  position[mm]: (-275.78738539373,-318.92873939124,1716.0236505732)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0031916703422627  position[mm]: (-279.01980200496,-321.33688625014,1716.0606366373)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0067985333104579  position[mm]: (-278.57939476634,-324.80699617485,1710.2913446724)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.016013604793681  position[mm]: (-286.77395584494,-345.03203939057,1701.4520234631)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.010922905740469  position[mm]: (-280.33263803632,-350.23388849917,1696.9787733966)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.012531622455281  position[mm]: (-278.15546880561,-349.31131400957,1688.5651999897)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.003418863880996  position[mm]: (-276.23829585037,-351.06395813338,1685.2505279747)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.01839341379102  position[mm]: (-269.8338286229,-349.34281995747,1684.245188779)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.00030829457639784  position[mm]: (-269.61025704799,-349.64115014058,1684.2627826136)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.01605832436821  position[mm]: (-266.87284491291,-353.1324554493,1685.5672063698)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.016043154354437  position[mm]: (-267.10716401287,-354.69189026369,1688.3409764065)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 2.2056560498262e-05  position[mm]: (-267.0803908953,-354.60292226581,1688.3604400959)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0093991456965024  position[mm]: (-265.92620667821,-353.32356922138,1689.3416868208)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 8.7482100090627e-05  position[mm]: (-265.93006185221,-353.42767627916,1689.6318666534)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.005736258860709  position[mm]: (-266.27963491834,-353.88832696294,1690.7579012228)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0011452188372869  position[mm]: (-265.92119451778,-353.70503062628,1690.5101407265)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0076363361078647  position[mm]: (-265.19509648598,-353.07422449738,1690.6268140936)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0050321915968831  position[mm]: (-265.39193079457,-352.96928701484,1690.5655285041)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.0061803049916616  position[mm]: (-265.45123167119,-352.89261111803,1690.6292425387)
+  trackID: 73  chamberNb: 4  energy deposit[MeV]: 0.003031008878588  position[mm]: (-265.43201337357,-352.90647668697,1690.6313852318)
+  trackID: 126  chamberNb: 4  energy deposit[MeV]: 4.9886021007056e-05  position[mm]: (-265.18777632379,-353.0638584132,1690.6203259563)
+  trackID: 126  chamberNb: 4  energy deposit[MeV]: 0.0023023500052315  position[mm]: (-265.15179750633,-352.8916879809,1690.5255170971)
+  trackID: 126  chamberNb: 4  energy deposit[MeV]: 0.0063411136892203  position[mm]: (-265.06471845265,-352.97804167676,1690.5176945279)
+  trackID: 126  chamberNb: 4  energy deposit[MeV]: 0.0032204237832628  position[mm]: (-265.05902078813,-353.00166227362,1690.5091522414)
+  trackID: 127  chamberNb: 4  energy deposit[MeV]: 0.001851334160464  position[mm]: (-265.15184400702,-352.89070041764,1690.5133100754)
+  trackID: 125  chamberNb: 4  energy deposit[MeV]: 0.0013706918407701  position[mm]: (-266.28419666324,-353.881074309,1690.7565543613)
+  trackID: 124  chamberNb: 4  energy deposit[MeV]: 0.0024645253908524  position[mm]: (-265.91294813921,-353.42856868144,1689.6370146832)
+  trackID: 123  chamberNb: 4  energy deposit[MeV]: 0.0025166512915987  position[mm]: (-267.08988491586,-354.5887198498,1688.3535104925)
+  trackID: 122  chamberNb: 4  energy deposit[MeV]: 0.0046982522641422  position[mm]: (-266.85090406627,-353.22179294054,1685.603331481)
+  trackID: 121  chamberNb: 4  energy deposit[MeV]: 0.0059151731971439  position[mm]: (-269.60045594953,-349.65683602169,1684.2049939573)
+  trackID: 120  chamberNb: 4  energy deposit[MeV]: 0.0024586979226681  position[mm]: (-276.23895023192,-351.1232077726,1685.1111888306)
+  trackID: 120  chamberNb: 4  energy deposit[MeV]: 0.0071242854082719  position[mm]: (-276.2834720906,-351.1292109215,1685.0460789093)
+  trackID: 128  chamberNb: 4  energy deposit[MeV]: 0.0013956955718826  position[mm]: (-276.23459305073,-351.11639503593,1685.1075481676)
+  trackID: 119  chamberNb: 4  energy deposit[MeV]: 0.0018886102510505  position[mm]: (-278.1573868805,-349.3009665563,1688.5583862839)
+  trackID: 118  chamberNb: 4  energy deposit[MeV]: 0.001397279865969  position[mm]: (-280.3406070512,-350.23040722306,1696.9769715418)
+  trackID: 117  chamberNb: 4  energy deposit[MeV]: 0.002752411153391  position[mm]: (-286.78375620191,-345.04965754395,1701.4575583187)
+  trackID: 116  chamberNb: 4  energy deposit[MeV]: 0.0018511635286848  position[mm]: (-278.57662783543,-324.79519735185,1710.2895872499)
+  trackID: 115  chamberNb: 4  energy deposit[MeV]: 0.0017771155114889  position[mm]: (-279.02667949551,-321.34517859168,1716.0651647102)
+  trackID: 114  chamberNb: 4  energy deposit[MeV]: 0.0018895951409001  position[mm]: (-300.68981133601,-294.5444850095,1697.5595415063)
+  trackID: 113  chamberNb: 4  energy deposit[MeV]: 0.0023232893118354  position[mm]: (-300.99619684418,-294.24380675957,1697.8749028632)
+  trackID: 112  chamberNb: 4  energy deposit[MeV]: 0.0021014795503141  position[mm]: (-304.14859273519,-290.00329172781,1703.4345735861)
+  trackID: 111  chamberNb: 4  energy deposit[MeV]: 0.0020867865902012  position[mm]: (-307.5531716423,-278.7065267755,1718.787733953)
+  trackID: 110  chamberNb: 4  energy deposit[MeV]: 0.0035194197812007  position[mm]: (-332.73115033573,-279.34516222199,1713.1936759721)
+  trackID: 108  chamberNb: 4  energy deposit[MeV]: 0.0031421740570889  position[mm]: (-332.80743837033,-299.99645724107,1646.7587479864)
+  trackID: 107  chamberNb: 4  energy deposit[MeV]: 0.0014642130218004  position[mm]: (-325.5379911704,-284.36565798562,1640.97172275)
+  trackID: 106  chamberNb: 4  energy deposit[MeV]: 0.0015155764171011  position[mm]: (-324.34130357078,-283.39355344783,1640.2167058188)
+  trackID: 105  chamberNb: 4  energy deposit[MeV]: 0.0026206035235841  position[mm]: (-307.17043940033,-282.60657434947,1643.3429844729)
+  trackID: 104  chamberNb: 4  energy deposit[MeV]: 0.0024155011141962  position[mm]: (-281.14672393692,-281.00307302185,1652.7227397047)
+  trackID: 103  chamberNb: 4  energy deposit[MeV]: 0.001695139865902  position[mm]: (-261.84006299015,-327.26115525382,1674.048074098)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0026323485254696  position[mm]: (-274.99875135801,-332.33088482304,1697.3994118418)
+  trackID: 102  chamberNb: 4  energy deposit[MeV]: 0.0046160033185915  position[mm]: (-274.95890089236,-332.34290216767,1697.3920655637)
+  trackID: 129  chamberNb: 4  energy deposit[MeV]: 0.0017103274287066  position[mm]: (-275.00175489449,-332.34161435214,1697.4004942003)
+  trackID: 101  chamberNb: 4  energy deposit[MeV]: 0.0062206758858895  position[mm]: (-272.26643401394,-340.74771522056,1708.3864312962)
+  trackID: 100  chamberNb: 4  energy deposit[MeV]: 0.0016814955025622  position[mm]: (-305.17939852632,-343.65752620347,1740.6572739421)
+  trackID: 99  chamberNb: 4  energy deposit[MeV]: 0.0035459925278509  position[mm]: (-306.21384091976,-337.03713885806,1748.4642722883)
+  trackID: 99  chamberNb: 4  energy deposit[MeV]: 0.0027291056653088  position[mm]: (-306.21482573407,-337.02330204333,1748.4795869004)
+  trackID: 130  chamberNb: 4  energy deposit[MeV]: 0.0016208909600744  position[mm]: (-306.20999676465,-337.02971733936,1748.457843333)
+  trackID: 98  chamberNb: 4  energy deposit[MeV]: 0.00025836741257081  position[mm]: (-306.92681304904,-334.97823471647,1751.0443159475)
+  trackID: 98  chamberNb: 4  energy deposit[MeV]: 0.0028976278861625  position[mm]: (-306.91090435253,-334.9632640085,1751.0493404049)
+  trackID: 131  chamberNb: 4  energy deposit[MeV]: 0.0027494278764913  position[mm]: (-306.93282862855,-334.97846467037,1751.0643044489)
+  trackID: 97  chamberNb: 4  energy deposit[MeV]: 0.0086535701122467  position[mm]: (-280.77327292143,-278.9741314957,1754.3081429594)
+  trackID: 96  chamberNb: 4  energy deposit[MeV]: 0.0023991803183225  position[mm]: (-290.58467045535,-240.50511982176,1755.1923046071)
+  trackID: 95  chamberNb: 4  energy deposit[MeV]: 0.0019499113713962  position[mm]: (-298.11185752627,-231.44248726442,1759.4666955786)
+  trackID: 94  chamberNb: 4  energy deposit[MeV]: 0.0020057747478022  position[mm]: (-301.23854538824,-225.48076313109,1759.6747104385)
+  trackID: 93  chamberNb: 4  energy deposit[MeV]: 0.0059252029779725  position[mm]: (-308.4585364071,-174.48153474555,1730.152726847)
+  trackID: 92  chamberNb: 4  energy deposit[MeV]: 0.0031720470736633  position[mm]: (-340.46069084579,-115.07715258204,1699.0366962768)
+  trackID: 91  chamberNb: 4  energy deposit[MeV]: 0.0052222750788879  position[mm]: (-366.75059929286,-85.844165129929,1703.7342106884)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0044095098766072  position[mm]: (-384.87643176351,-83.349918736386,1679.7875953254)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.009604109117882  position[mm]: (-383.54689587436,-85.165046124879,1682.2452071213)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.007774153133404  position[mm]: (-384.31586650902,-87.085721543567,1681.2915586617)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0047752060843876  position[mm]: (-382.72546716409,-87.317961939785,1682.1433781958)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0074619988138301  position[mm]: (-382.32336779603,-85.97701748699,1681.9633263429)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0032721911976579  position[mm]: (-381.4932545828,-85.950565991872,1682.0025801547)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0028799273939449  position[mm]: (-380.92012947,-86.277470543889,1682.418686227)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0070269190844103  position[mm]: (-380.86071962405,-85.69743531693,1682.1676041499)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0067875946080105  position[mm]: (-380.63299552996,-86.003936463968,1682.084302702)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0074176746003028  position[mm]: (-380.66293860053,-86.20383657761,1682.0381953521)
+  trackID: 90  chamberNb: 4  energy deposit[MeV]: 0.0058690007800455  position[mm]: (-380.66128072327,-86.228950770566,1681.9837283664)
+  trackID: 137  chamberNb: 4  energy deposit[MeV]: 0.0014706627139881  position[mm]: (-380.91136168161,-86.276817121561,1682.4221248891)
+  trackID: 136  chamberNb: 4  energy deposit[MeV]: 0.0043443197493762  position[mm]: (-381.5162381702,-85.980318603889,1682.0116773652)
+  trackID: 135  chamberNb: 4  energy deposit[MeV]: 0.0015911142155169  position[mm]: (-382.32365303949,-85.980189789917,1681.9731512348)
+  trackID: 134  chamberNb: 4  energy deposit[MeV]: 0.0016793405597132  position[mm]: (-384.31117757392,-87.078235819025,1681.2850555031)
+  trackID: 133  chamberNb: 4  energy deposit[MeV]: 0.0056571560514631  position[mm]: (-383.59421341723,-85.162979759039,1682.2767805014)
+  trackID: 132  chamberNb: 4  energy deposit[MeV]: 0.0029148230027256  position[mm]: (-384.87961675785,-83.368887859628,1679.7757422623)
+  trackID: 72  chamberNb: 4  energy deposit[MeV]: 0.0039481974649568  position[mm]: (-388.54709890164,-80.053748952049,1639.4201703133)
+  trackID: 63  chamberNb: 3  energy deposit[MeV]: 0.0019084945901336  position[mm]: (-321.35219977555,-63.883358364091,943.89932849624)
+  trackID: 62  chamberNb: 3  energy deposit[MeV]: 0.0043507668752308  position[mm]: (-320.61298178622,-63.760463113893,936.75261155223)
+  trackID: 61  chamberNb: 3  energy deposit[MeV]: 0.0066421329390324  position[mm]: (-319.80152206403,-63.530511998689,929.22468348553)
+  trackID: 60  chamberNb: 3  energy deposit[MeV]: 0.0074753455680174  position[mm]: (-312.8466795763,-62.375095229908,857.89144490769)
+  trackID: 59  chamberNb: 3  energy deposit[MeV]: 0.0016599191248064  position[mm]: (-311.01995339597,-61.994863886701,840.07635462542)
+  trackID: 48  chamberNb: 2  energy deposit[MeV]: 0.0034019267115441  position[mm]: (-244.13440559017,-51.052127355828,146.46487224191)
+  trackID: 47  chamberNb: 2  energy deposit[MeV]: 0.0041832583198075  position[mm]: (-243.4536256265,-50.918266848426,137.66177825044)
+  trackID: 47  chamberNb: 2  energy deposit[MeV]: 0.00058890546723568  position[mm]: (-243.4835903583,-50.945205347471,137.67369174038)
+  trackID: 47  chamberNb: 2  energy deposit[MeV]: 0.0028601413234819  position[mm]: (-243.46536577978,-50.954169040531,137.66516504969)
+  trackID: 143  chamberNb: 2  energy deposit[MeV]: 0.0020547586564619  position[mm]: (-243.47855665548,-50.94724620944,137.6865109086)
+  trackID: 142  chamberNb: 2  energy deposit[MeV]: 0.0018441261601607  position[mm]: (-243.46187563001,-50.911984549861,137.65536683907)
+  trackID: 46  chamberNb: 2  energy deposit[MeV]: 0.0064320398152932  position[mm]: (-237.3298243706,-49.850011123799,75.446582437253)
+  trackID: 45  chamberNb: 2  energy deposit[MeV]: 0.0016941868726926  position[mm]: (-234.71217774661,-49.346163051309,46.598688491805)
+  trackID: 39  chamberNb: 1  energy deposit[MeV]: 0.0044289403614933  position[mm]: (-174.06339584685,-40.407140071122,-610.86174541525)
+  trackID: 38  chamberNb: 1  energy deposit[MeV]: 0.0027896994238359  position[mm]: (-171.41501657802,-40.022115945423,-638.46179318272)
+  trackID: 37  chamberNb: 1  energy deposit[MeV]: 0.0015157117369025  position[mm]: (-170.29709086307,-39.816678020122,-650.39848082581)
+  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.0003227432981864  position[mm]: (-168.28146255939,-39.50141883383,-672.00649198007)
+  trackID: 36  chamberNb: 1  energy deposit[MeV]: 0.0032413793586665  position[mm]: (-168.28404027234,-39.499602964921,-672.03227378982)
+  trackID: 144  chamberNb: 1  energy deposit[MeV]: 0.0019503066591619  position[mm]: (-168.26858502942,-39.499816035144,-672.00769883099)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.0054919502250325  position[mm]: (-166.34100503325,-39.233261442482,-692.93597887328)
+  trackID: 35  chamberNb: 1  energy deposit[MeV]: 0.004748136179323  position[mm]: (-166.34079710656,-39.264981827257,-692.96655926545)
+  trackID: 145  chamberNb: 1  energy deposit[MeV]: 0.0019221812198836  position[mm]: (-166.33145847733,-39.239178354961,-692.92983083365)
+  trackID: 34  chamberNb: 1  energy deposit[MeV]: 0.0017747798766435  position[mm]: (-165.95934660945,-38.984674666804,-696.60667850194)
+  trackID: 33  chamberNb: 1  energy deposit[MeV]: 0.0021421236660317  position[mm]: (-162.78026837199,-38.419398502873,-729.19284423031)
+  trackID: 32  chamberNb: 1  energy deposit[MeV]: 0.002172102415232  position[mm]: (-160.908704945,-38.034559264772,-748.40979533684)
+  trackID: 31  chamberNb: 1  energy deposit[MeV]: 0.0016438699395761  position[mm]: (-159.93325143643,-37.852554144961,-758.59173836105)
+  trackID: 26  chamberNb: 0  energy deposit[MeV]: 0.0028710179179611  position[mm]: (-95.080804519273,-22.665256158838,-1429.2957031237)
+  trackID: 25  chamberNb: 0  energy deposit[MeV]: 0.003473399429144  position[mm]: (-89.390503955427,-21.29774215643,-1488.4778792167)
+  trackID: 24  chamberNb: 0  energy deposit[MeV]: 0.0072329796196566  position[mm]: (-87.937605881006,-20.913141246818,-1503.0954141576)
+  trackID: 23  chamberNb: 0  energy deposit[MeV]: 0.002162582343535  position[mm]: (-87.253656962759,-20.828645881604,-1509.9489023444)
+  trackID: 22  chamberNb: 0  energy deposit[MeV]: 0.0021977003116726  position[mm]: (-84.586170934452,-20.168703059758,-1537.3349477579)
+  trackID: 21  chamberNb: 0  energy deposit[MeV]: 0.0050055975447916  position[mm]: (-82.104956697809,-19.610120988357,-1561.9695727813)
+  trackID: 20  chamberNb: 0  energy deposit[MeV]: 0.0015027173268714  position[mm]: (-79.235398231884,-18.88070085444,-1591.9277957348)
+  trackID: 109  chamberNb: 4  energy deposit[MeV]: 0.034556  position[mm]: (-345.85007142694,67.705723901919,1669.6526847771)
+  trackID: 154  chamberNb: 4  energy deposit[MeV]: 0.0066073037808912  position[mm]: (-345.59316379923,67.607659064552,1669.5646614593)
+  trackID: 154  chamberNb: 4  energy deposit[MeV]: 0.0040305530690781  position[mm]: (-345.59797878778,67.692195966792,1669.5788322831)
+  trackID: 154  chamberNb: 4  energy deposit[MeV]: 0.0035072083226096  position[mm]: (-345.60398241766,67.676628315932,1669.60228222)
+  trackID: 155  chamberNb: 4  energy deposit[MeV]: 0.0023270775756358  position[mm]: (-345.57678329031,67.608359338122,1669.5664572589)
+writing Event_4
+>>> Event 2
+    0 trajectories stored in this event.
+ Run terminated.
+Run Summary
+  Number of events processed : 3
+  User=0.01s Real=0.01s Sys=0s
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
+G4SDManager deleted.
+EventManager deleted.
+Units table cleared.
+TransportationManager deleted.
+Total navigation history collections cleaned: 19
+================== Deleting memory pools ===================
+Pool ID '20G4NavigationLevelRep', size : 0.0269 MB
+Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
+Pool ID '17G4DynamicParticle', size : 0.0183 MB
+Pool ID '7G4Event', size : 0.000961 MB
+Pool ID '15G4PrimaryVertex', size : 0.000961 MB
+Pool ID '17G4PrimaryParticle', size : 0.000961 MB
+Pool ID '15G4HCofThisEvent', size : 0.000961 MB
+Pool ID '16G4HitsCollection', size : 0.000961 MB
+Pool ID '7G4Track', size : 0.0356 MB
+Pool ID '18G4TouchableHistory', size : 0.00192 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
+Number of memory pools allocated: 13 of which, static: 2
+Dynamic pools deleted: 11 / Total memory freed: 0.11 MB
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
+StateManager deleted.
+RunManagerKernel is deleted. Good bye :)

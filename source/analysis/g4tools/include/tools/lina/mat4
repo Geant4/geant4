@@ -15,7 +15,11 @@ class mat4 : public mat<T,4> {
   typedef mat<T,4> parent;
   typedef mat<T,4> pr;
 public:
+#ifdef TOOLS_MEM
   mat4(bool a_inc = true):parent(a_inc) {}
+#else
+  mat4():parent() {}
+#endif
   mat4(const mat<T,4>& a_from):parent(a_from){}
   virtual ~mat4() {}
 public:
@@ -465,11 +469,11 @@ private:static void check_instantiation() {mat4<float> dummy;}
 /// common matrices : //////////////////////////
 ////////////////////////////////////////////////
 
-template <class T>
-inline const mat4<T>& mat4_zero() {
-  static const mat4<T> s_v(false); //inc mem count = false
-  return s_v;
-}
+#ifdef TOOLS_MEM
+template <class T> inline const mat4<T>& mat4_zero() {static const mat4<T> s_v(false);return s_v;}
+#else
+template <class T> inline const mat4<T>& mat4_zero() {static const mat4<T> s_v;return s_v;}
+#endif
 
 /*
 template <class T>

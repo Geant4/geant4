@@ -84,11 +84,13 @@ class G4ParticleHPManager
       G4bool GetNeglectDoppler() { return NEGLECT_DOPPLER; };
       G4bool GetDoNotAdjustFinalState() { return DO_NOT_ADJUST_FINAL_STATE; };
       G4bool GetProduceFissionFragments() { return PRODUCE_FISSION_FRAGMENTS; };
+      G4bool GetUseNRESP71Model() { return USE_NRESP71_MODEL; };
 
       void SetSkipMissingIsotopes( G4bool val ) { SKIP_MISSING_ISOTOPES = val; };
       void SetNeglectDoppler( G4bool val ) { NEGLECT_DOPPLER = val; };
       void SetDoNotAdjustFinalState( G4bool val ) { DO_NOT_ADJUST_FINAL_STATE = val; };
       void SetProduceFissionFragments( G4bool val ) { PRODUCE_FISSION_FRAGMENTS = val; };
+      void SetUseNRESP71Model( G4bool val ) { USE_NRESP71_MODEL = val; };
 
       void RegisterElasticCrossSections( G4PhysicsTable* val ){ theElasticCrossSections = val; };
       G4PhysicsTable* GetElasticCrossSections(){ return theElasticCrossSections; };
@@ -136,6 +138,7 @@ class G4ParticleHPManager
       G4bool NEGLECT_DOPPLER;
       G4bool DO_NOT_ADJUST_FINAL_STATE;
       G4bool PRODUCE_FISSION_FRAGMENTS;
+      G4bool USE_NRESP71_MODEL;
 
       G4PhysicsTable* theElasticCrossSections;
       G4PhysicsTable* theCaptureCrossSections;

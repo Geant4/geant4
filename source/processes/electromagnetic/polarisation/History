@@ -1,4 +1,4 @@
-$Id: History 97384 2016-06-02 09:59:17Z gcosmo $
+$Id: History 105740 2017-08-16 13:05:44Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+05 August 17: V.Ivanchenko (empolar-V10-03-01)
+03 August 17: V.Ivanchenko (empolar-V10-03-00)
+- G4PolarizedCompton, G4PolarizedGammaConversion, G4ePolarizedIonisation
+    make coherent model initialisation
 
 1 Jun 16: D.Sawkey (empolar-V10-02-04)
 - G4PolarizationManager: C++11 range-based for loop; 

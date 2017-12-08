@@ -4,16 +4,14 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
 
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-### ===  Auger cascade flag: 1
-### ===  Ignore cuts flag:   0
+  Set atomic relaxation mode 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -60,9 +58,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 /run/verbose 1
 /control/cout/ignoreThreadsExcept 0
 #
@@ -73,6 +69,20 @@ Available colours:
 #
 /tracking/verbose 2
 /run/beamOn 1
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     0.14427 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      0
+Auger electron emission enabled                   0
+Auger cascade enabled                             0
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 
 ========= Table of registered couples ==============================
 
@@ -130,7 +140,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.02s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -138,6 +148,7 @@ Run Summary
 
  Nb of generated particles: 
 
+             Co60:       1  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
    Ni60[2505.753]:       1  Emean =  1.818 eV 	( 1.818 eV  --> 1.818 eV )	mean life = 4.761 ps 
         anti_nu_e:       1  Emean =  188.1 keV	( 188.1 keV --> 188.1 keV)	stable
                e-:       1  Emean =  128.9 keV	( 128.9 keV --> 128.9 keV)	stable
@@ -204,7 +215,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.57s Real=1.56s Sys=0s
+  User=0.84s Real=0.84s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -212,6 +223,7 @@ Run Summary
 
  Nb of generated particles: 
 
+             Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
    Ni60[1332.514]:     118  Emean =  17.74 eV 	( 0.3673 eV  --> 32.55 eV )	mean life = 1.06 ps 
    Ni60[2505.753]:   99882  Emean =  1.469 eV 	( 0.0008295 eV  --> 3.757 eV )	mean life = 4.761 ps 
         anti_nu_e:  100000  Emean =    223 keV	( 3.89 keV --> 1.482 MeV)	stable
@@ -278,7 +290,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.87s Real=2.9s Sys=0s
+  User=1.86s Real=1.86s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -286,23 +298,24 @@ Run Summary
 
  Nb of generated particles: 
 
-             Ni60:  100000  Emean =  29.77 eV 	( 0.01064 eV  --> 84.79 eV )	stable
-   Ni60[1332.514]:   99999  Emean =  13.83 eV 	( 0.45 eV  --> 33.14 eV )	mean life = 1.06 ps 
-   Ni60[2158.632]:       8  Emean =  3.024 eV 	( 0.3664 eV  --> 5.569 eV )	mean life = 0.8512 ps 
-   Ni60[2505.753]:   99868  Emean =   1.47 eV 	( 0.001884 eV  --> 3.791 eV )	mean life = 4.761 ps 
-        anti_nu_e:  100000  Emean =  222.7 keV	( 1.032 keV --> 1.485 MeV)	stable
-               e-:  100035  Emean =  96.27 keV	( 5.686 eV  --> 1.436 MeV)	stable
-            gamma:  199840  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
+             Co60:  100000  Emean =      0 eV 	( 0 eV  --> 0 eV )	mean life = 7.61 y  
+             Ni60:  100000  Emean =  29.67 eV 	( 0.005493 eV  --> 87.52 eV )	stable
+   Ni60[1332.514]:   99999  Emean =  13.79 eV 	( 0.3471 eV  --> 35.7 eV )	mean life = 1.06 ps 
+   Ni60[2158.632]:       6  Emean =  1.894 eV 	( 0.6752 eV  --> 4.314 eV )	mean life = 0.8512 ps 
+   Ni60[2505.753]:   99878  Emean =  1.476 eV 	( 0.0005602 eV  --> 3.762 eV )	mean life = 4.761 ps 
+        anti_nu_e:  100000  Emean =  222.1 keV	( 3.749 keV --> 1.49 MeV)	stable
+               e-:  100028  Emean =  96.66 keV	( 3.218 eV  --> 1.458 MeV)	stable
+            gamma:  199855  Emean =  1.253 MeV	( 347.1 keV --> 2.159 MeV)	stable
 
    Ekin Total (Q single decay): mean =  941.3 keV	( 317.1 keV --> 2.159 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =  834.9 keV	( 2.505e-06 eV  --> 2.159 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =    835 keV	( 3.956e-07 eV  --> 2.159 MeV)
 
-   Total time of life (full chain): mean =  7.602 y    half-life =  5.269 y     ( 1.164 h   --> 101.5 y  )
+   Total time of life (full chain): mean =  7.582 y    half-life =  5.256 y     ( 11.42 min --> 84.33 y  )
 
-   Total visible energy (full chain) : mean =    2.6 MeV   ( 1.338 MeV --> 2.822 MeV)
+   Total visible energy (full chain) : mean =  2.601 MeV   ( 1.333 MeV --> 2.819 MeV)
 
-   Activity of Co60 = 4.187e+13 Bq/g   (1132 Ci/g) 
+   Activity of Co60 = 4.197e+13 Bq/g   (1134 Ci/g) 
 
 
 Graphics systems deleted.

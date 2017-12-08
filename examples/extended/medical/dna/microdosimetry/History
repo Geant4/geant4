@@ -9,6 +9,24 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+07-11-17 S. Incerti - microdosimetry-V10-03-08
+- updated plot.C
+
+06-11-17 S. Incerti - microdosimetry-V10-03-07
+- updated PL (manual approach of G4DNA activator)
+
+11-10-17 S. Incerti - microdosimetry-V10-03-06
+- added more flags for EM processes
+
+02-10-17 S. Incerti - microdosimetry-V10-03-05
+- added more flags for EM processes
+
+17-08-17 S. Incerti - microdosimetry-V10-03-04
+- fix to analysis manager call in SteppingAction
+
+16-08-17 S. Incerti - microdosimetry-V10-03-03
+- adapted to same scheme as dnaphysics
+
 23-02-17 I. Hrivnacova - microdosimetry-V10-03-02
 - fixed compilation (G4UIQt.hh include)
 

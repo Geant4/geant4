@@ -121,15 +121,16 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4bool useAblation1)
   // Set the default verbose level to 0 - no output.
   verboseLevel = 0;
   useAblation  = useAblation1;
+  theAblation  = nullptr;
 
   // No de-excitation handler has been supplied - define the default handler.
 
-  theExcitationHandler  = new G4ExcitationHandler();
+  theExcitationHandler = new G4ExcitationHandler();
   if (useAblation)
   {
     theAblation = new G4WilsonAblationModel;
     theAblation->SetVerboseLevel(verboseLevel);
-    theExcitationHandler->SetEvaporation(theAblation);
+    theExcitationHandler->SetEvaporation(theAblation, true);
   }
 
   // Set the minimum and maximum range for the model (despite nomanclature,
@@ -173,15 +174,15 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 
   verboseLevel = 0;
 
-  theAblation = NULL;   //A.R. 26-Jul-2012 Coverity fix.
-  useAblation = false;  //A.R. 14-Aug-2012 Coverity fix.
+  theAblation = nullptr;   //A.R. 26-Jul-2012 Coverity fix.
+  useAblation = false;     //A.R. 14-Aug-2012 Coverity fix.
                       
 //
 // The user is able to provide the excitation handler as well as an argument
 // which is provided in this instantiation is used to determine
 // whether the spectators of the interaction are free following the abrasion.
 //
-  theExcitationHandler             = aExcitationHandler;
+  theExcitationHandler = aExcitationHandler;
 //
 //
 // Set the minimum and maximum range for the model (despite nomanclature, this
@@ -205,9 +206,9 @@ G4WilsonAbrasionModel::G4WilsonAbrasionModel(G4ExcitationHandler* aExcitationHan
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
-G4WilsonAbrasionModel::~G4WilsonAbrasionModel ()
+G4WilsonAbrasionModel::~G4WilsonAbrasionModel()
 {
-  if (theExcitationHandler)  delete theExcitationHandler;
+  delete theExcitationHandler;
 }
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -277,7 +278,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // length for nucleons in the projectile and target, and hence calculate the
 // number of abraded nucleons and the excitation energy.
 //
-  G4NuclearAbrasionGeometry *theAbrasionGeometry = NULL;
+  G4NuclearAbrasionGeometry *theAbrasionGeometry = nullptr;
   G4double CT   = 0.0;
   G4double F    = 0.0;
   G4int Dabr    = 0;
@@ -291,12 +292,6 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   G4int loopCounter = -1;
   while (Dabr == 0 && ++loopCounter < maxNumberOfLoops)  /* Loop checking, 07.08.2015, A.Ribon */
   {
-// Added by MHM 20050119 to fix leaking memory on second pass through this loop
-    if (theAbrasionGeometry)
-    {
-      delete theAbrasionGeometry;
-      theAbrasionGeometry = NULL;
-    }
 //
 //
 // Sample the impact parameter.  For the moment, this class takes account of
@@ -360,12 +355,13 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // and if it fails after this to find a case for which the number of abraded
 // nucleons >1, the impact parameter is re-sampled.
 //
+    delete theAbrasionGeometry;
     theAbrasionGeometry = new G4NuclearAbrasionGeometry(AP,AT,r);
     F                   = theAbrasionGeometry->F();
     G4double lambda     = 16.6*fermi / G4Pow::GetInstance()->powA(E/MeV,0.26);
     G4double Mabr       = F * AP * (1.0 - G4Exp(-CT/lambda));
     G4long n            = 0;
-    for (G4int i = 0; i<10; i++)
+    for (G4int i = 0; i<10; ++i)
     {
       n = G4Poisson(Mabr);
       if (n > 0)
@@ -389,6 +385,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
              <<"########################################"
              <<G4endl;
     }
+    delete theAbrasionGeometry;
     return &theParticleChange;
   }
 
@@ -419,7 +416,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   G4Fragment *fragmentP = GetAbradedNucleons (Dabr, AP, ZP, rP); 
   G4int nSecP           = theParticleChange.GetNumberOfSecondaries();
   G4int i               = 0;
-  for (i=0; i<nSecP; i++)
+  for (i=0; i<nSecP; ++i)
   {
     TotalEPost += theParticleChange.GetSecondary(i)->
       GetParticle()->GetTotalEnergy();
@@ -440,7 +437,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // nucleus to the total energy of the secondaries.
 //
   G4bool excitationAbsorbedByProjectile = false;
-  if (fragmentP != NULL)
+  if (fragmentP != nullptr)
   {
     G4double EsP = theAbrasionGeometry->GetExcitationEnergyOfProjectile();
     G4double ExP = 0.0;
@@ -467,7 +464,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 //
   G4Fragment *fragmentT = GetAbradedNucleons (Dabr, AT, ZT, rT); 
   G4int nSec = theParticleChange.GetNumberOfSecondaries();
-  for (i=nSecP; i<nSec; i++)
+  for (i=nSecP; i<nSec; ++i)
   {
     TotalEPost += theParticleChange.GetSecondary(i)->
       GetParticle()->GetTotalEnergy();
@@ -487,7 +484,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // retained within the target (ExT).  Add the total energy from the excited
 // nucleus to the total energy of the secondaries.
 //
-  if (fragmentT != NULL)
+  if (fragmentT != nullptr)
   {
     G4double EsT = theAbrasionGeometry->GetExcitationEnergyOfTarget();
     G4double ExT = 0.0;
@@ -517,7 +514,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // Now boost the secondaries from the projectile.
 //
   G4ThreeVector pBalance = pP.vect();
-  for (i=0; i<nSecP; i++)
+  for (i=0; i<nSecP; ++i)
   {
     G4DynamicParticle *dynamicP = theParticleChange.GetSecondary(i)->
       GetParticle();
@@ -536,7 +533,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // prefragment, and therefore modifying the boost is an attempt to prevent
 // the momentum of the prefragment being excessive).
 //
-  if (fragmentP != NULL)
+  if (fragmentP != nullptr)
   {
     G4LorentzVector lorentzVector = fragmentP->GetMomentum();
     G4double fragmentM            = lorentzVector.m();
@@ -560,7 +557,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"Secondary nucleons from projectile:" <<G4endl;
     G4cout <<"-----------------------------------" <<G4endl;
     G4cout.precision(7);
-    for (i=0; i<nSecP; i++)
+    for (i=0; i<nSecP; ++i)
     {
       G4cout <<"Particle # " <<i <<G4endl;
       theParticleChange.GetSecondary(i)->GetParticle()->DumpInfo();
@@ -572,7 +569,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"---------------------------" <<G4endl;
     G4cout <<"The projectile prefragment:" <<G4endl;
     G4cout <<"---------------------------" <<G4endl;
-    if (fragmentP != NULL)
+    if (fragmentP != nullptr)
       G4cout <<*fragmentP <<G4endl;
     else
       G4cout <<"(No residual prefragment)" <<G4endl;
@@ -581,7 +578,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"Secondary nucleons from target:" <<G4endl;
     G4cout <<"-------------------------------" <<G4endl;
     G4cout.precision(7);
-    for (i=nSecP; i<nSec; i++)
+    for (i=nSecP; i<nSec; ++i)
     {
       G4cout <<"Particle # " <<i <<G4endl;
       theParticleChange.GetSecondary(i)->GetParticle()->DumpInfo();
@@ -593,7 +590,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
     G4cout <<"-----------------------" <<G4endl;
     G4cout <<"The target prefragment:" <<G4endl;
     G4cout <<"-----------------------" <<G4endl;
-    if (fragmentT != NULL)
+    if (fragmentT != nullptr)
       G4cout <<*fragmentT <<G4endl;
     else
       G4cout <<"(No residual prefragment)" <<G4endl;
@@ -603,15 +600,15 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // Now we can decay the nuclear fragments if present.  The secondaries are
 // collected and boosted as well.  This is performed first for the projectile...
 //
-  if (fragmentP !=NULL)
+  if (fragmentP !=nullptr)
   {
-    G4ReactionProductVector *products = NULL;
+    G4ReactionProductVector *products = nullptr;
     //    if (fragmentP->GetZ_asInt() != fragmentP->GetA_asInt())
     products = theExcitationHandler->BreakItUp(*fragmentP);
     // else
     //   products = theExcitationHandlerx->BreakItUp(*fragmentP);      
     delete fragmentP;
-    fragmentP = NULL;
+    fragmentP = nullptr;
   
     G4ReactionProductVector::iterator iter;
     for (iter = products->begin(); iter != products->end(); ++iter)
@@ -640,15 +637,15 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
 // approximation it is assumed that there is negligible momentum transfer from
 // the projectile.
 //
-  if (fragmentT != NULL)
+  if (fragmentT != nullptr)
   {
-    G4ReactionProductVector *products = NULL;
+    G4ReactionProductVector *products = nullptr;
     //    if (fragmentT->GetZ_asInt() != fragmentT->GetA_asInt())
       products = theExcitationHandler->BreakItUp(*fragmentT);
     // else
     //   products = theExcitationHandlerx->BreakItUp(*fragmentT);      
     // delete fragmentT;
-    fragmentT = NULL;
+    fragmentT = nullptr;
   
     G4ReactionProductVector::iterator iter;
     for (iter = products->begin(); iter != products->end(); ++iter)
@@ -678,7 +675,6 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
             <<G4endl;
   
   delete theAbrasionGeometry;
-  
   return &theParticleChange;
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -712,14 +708,14 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
   G4double Aabr                     = 0.0;
   G4double Zabr                     = 0.0; 
   G4ParticleDefinition *typeNucleon = G4Proton::ProtonDefinition();
-  G4DynamicParticle *dynamicNucleon = NULL;
+  G4DynamicParticle *dynamicNucleon = nullptr;
   G4ParticleMomentum pabr(0.0, 0.0, 0.0);
 //
 //
 // Now go through each abraded nucleon and sample type, spectrum and angle.
 //
   G4bool isForLoopExitAnticipated = false;
-  for (G4int i=0; i<Dabr; i++)
+  for (G4int i=0; i<Dabr; ++i)
   {
 //
 //
@@ -780,7 +776,7 @@ G4Fragment *G4WilsonAbrasionModel::GetAbradedNucleons (G4int Dabr, G4double A,
 // energy is a safety factor to avoid any possibility of negative rest mass
 // energy.)
 //
-  G4Fragment *fragment = NULL;
+  G4Fragment *fragment = nullptr;
   if ( ! isForLoopExitAnticipated && Z-Zabr>=1.0 )
   {
     G4double ionMass = G4ParticleTable::GetParticleTable()->GetIonTable()->
@@ -859,12 +855,11 @@ void G4WilsonAbrasionModel::SetUseAblation (G4bool useAblation1)
       theAblation = new G4WilsonAblationModel;
       theAblation->SetVerboseLevel(verboseLevel);
       theExcitationHandler->SetEvaporation(theAblation);
-      // theExcitationHandlerx->SetEvaporation(theAblation);
     }
     else
     {
       delete theExcitationHandler;
-      theAblation                      = NULL;
+      theAblation                      = nullptr;
       theExcitationHandler  = new G4ExcitationHandler();
     }
   }

@@ -48,11 +48,10 @@ using namespace CLHEP;
 //             - note if pDPhi>2PI then reset to 2PI
 
 G4USphere::G4USphere( const G4String& pName,
-                          G4double pRmin, G4double pRmax,
-                          G4double pSPhi, G4double pDPhi,
-                          G4double pSTheta, G4double pDTheta )
-  : G4USolid(pName, new USphere(pName, pRmin, pRmax, pSPhi, pDPhi,
-                                   pSTheta, pDTheta))
+                            G4double pRmin, G4double pRmax,
+                            G4double pSPhi, G4double pDPhi,
+                            G4double pSTheta, G4double pDTheta )
+  : Base_t(pName, pRmin, pRmax, pSPhi, pDPhi, pSTheta, pDTheta)
 {
 }
 
@@ -62,7 +61,7 @@ G4USphere::G4USphere( const G4String& pName,
 //                            for usage restricted to object persistency.
 //
 G4USphere::G4USphere( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 {
 }
 
@@ -79,7 +78,7 @@ G4USphere::~G4USphere()
 // Copy constructor
 
 G4USphere::G4USphere(const G4USphere& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 {
 }
 
@@ -95,7 +94,7 @@ G4USphere& G4USphere::operator = (const G4USphere& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -106,101 +105,89 @@ G4USphere& G4USphere::operator = (const G4USphere& rhs)
 
 G4double G4USphere::GetInnerRadius() const
 {
-  return GetShape()->GetInnerRadius();
+  return Base_t::GetInnerRadius();
 }
 G4double G4USphere::GetOuterRadius() const
 {
-  return GetShape()->GetOuterRadius();
+  return Base_t::GetOuterRadius();
 }
 G4double G4USphere::GetStartPhiAngle() const
 {
-  return GetShape()->GetStartPhiAngle();
+  return Base_t::GetStartPhiAngle();
 }
 G4double G4USphere::GetDeltaPhiAngle() const
 {
-  return GetShape()->GetDeltaPhiAngle();
+  return Base_t::GetDeltaPhiAngle();
 }
 G4double G4USphere::GetStartThetaAngle() const
 {
-  return GetShape()->GetStartThetaAngle();
+  return Base_t::GetStartThetaAngle();
 }
 G4double G4USphere::GetDeltaThetaAngle() const
 {
-  return GetShape()->GetDeltaThetaAngle();
+  return Base_t::GetDeltaThetaAngle();
 }
 G4double G4USphere::GetSinStartPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle();
-  return std::sin(phi);
+  return Base_t::GetSinSPhi();
 }
 G4double G4USphere::GetCosStartPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle();
-  return std::cos(phi);
+  return Base_t::GetCosSPhi();
 }
 G4double G4USphere::GetSinEndPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle() +
-    GetShape()->GetDeltaPhiAngle();
-  return std::sin(phi);
+  return Base_t::GetSinEPhi();
 }
 G4double G4USphere::GetCosEndPhi() const
 {
-  G4double phi = GetShape()->GetStartPhiAngle() +
-    GetShape()->GetDeltaPhiAngle();
-  return std::cos(phi);
+  return Base_t::GetCosEPhi();
 }
 G4double G4USphere::GetSinStartTheta() const
 {
-  G4double theta = GetShape()->GetStartThetaAngle();
-  return std::sin(theta);
+  return Base_t::GetSinSTheta();
 }
 G4double G4USphere::GetCosStartTheta() const
 {
-  G4double theta = GetShape()->GetStartThetaAngle();
-  return std::cos(theta);
+  return Base_t::GetCosSTheta();
 }
 G4double G4USphere::GetSinEndTheta() const
 {
-  G4double theta = GetShape()->GetStartThetaAngle() +
-                   GetShape()->GetDeltaThetaAngle();
-  return std::sin(theta);
+  return Base_t::GetSinETheta();
 }
 G4double G4USphere::GetCosEndTheta() const
 {
-  G4double theta = GetShape()->GetStartThetaAngle() +
-                   GetShape()->GetDeltaThetaAngle();
-  return std::cos(theta);
+  return Base_t::GetCosETheta();
 }
 
 void G4USphere::SetInnerRadius(G4double newRMin)
 {
-  GetShape()->SetInnerRadius(newRMin);
+  Base_t::SetInnerRadius(newRMin);
   fRebuildPolyhedron = true;
 }
 void G4USphere::SetOuterRadius(G4double newRmax)
 {
-  GetShape()->SetOuterRadius(newRmax);
+  Base_t::SetOuterRadius(newRmax);
   fRebuildPolyhedron = true;
 }
 void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
 {
-  GetShape()->SetStartPhiAngle(newSphi, trig);
+  Base_t::SetStartPhiAngle(newSphi, trig);
   fRebuildPolyhedron = true;
 }
 void G4USphere::SetDeltaPhiAngle(G4double newDphi)
 {
-  GetShape()->SetDeltaPhiAngle(newDphi);
+  Base_t::SetDeltaPhiAngle(newDphi);
   fRebuildPolyhedron = true;
 }
 void G4USphere::SetStartThetaAngle(G4double newSTheta)
 {
-  GetShape()->SetStartThetaAngle(newSTheta);
+  Base_t::SetStartThetaAngle(newSTheta);
   fRebuildPolyhedron = true;
 }
 void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
 {
-  GetShape()->SetDeltaThetaAngle(newDTheta);
+  Base_t::SetDeltaThetaAngle(newDTheta);
   fRebuildPolyhedron = true;
 }
 
@@ -287,8 +274,8 @@ void G4USphere::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   //
   if (checkBBox)
   {
-    UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    U3Vector vmin, vmax;
+    Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||

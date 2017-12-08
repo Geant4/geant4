@@ -1,4 +1,4 @@
-$Id: README 93674 2015-10-28 09:58:36Z gcosmo $
+$Id: README 105916 2017-08-28 11:57:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -38,10 +38,10 @@ $Id: README 93674 2015-10-28 09:58:36Z gcosmo $
  	
  2- AN EVENT : THE PRIMARY GENERATOR
  
- 	The primary kinematic consists of a single particle which hits the
- 	absorber perpendicular to the input face. The type of the particle
- 	and its energy can be set via the G4 build-in commands of G4ParticleGun.
- 	A RUN is a set of events.
+  The primary kinematic consists of a single particle which hits the
+  absorber perpendicular to the input face. The type of the particle
+  and its energy can be set via the G4 build-in commands of G4ParticleGun.
+  A RUN is a set of events.
  	
  3- DETECTOR RESPONSE
 
@@ -56,25 +56,33 @@ $Id: README 93674 2015-10-28 09:58:36Z gcosmo $
 
  4- PHYSICS 
  
- 	The particle's type and the physics processes which will be available
- 	in this example are set in PhysicsList class, which uses Geant4
+  The particle's type and the physics processes which will be available
+  in this example are set in PhysicsList class, which uses Geant4
   EM physics constructors provided in the physics_list library.
 
- 	The  messenger classes introduce interactive commands. In particular,
+  The  messenger classes introduce interactive commands. In particular,
   PAI ionisation model can be added using G4EmConfigurator helper class,
-  which is invoked by the UI command
+  which is invoked by one following UI commands:
 
   /testem/phys/addPhysics pai
+  /testem/phys/addPhysics pai_photon
+  /process/em/AddPAIRegion all GasDetector pai
+  /process/em/AddPAIRegion all GasDetector pai_photon
+
+  Cuts for all setup and/or for sensitive volume may changed via commands: 
+
+  /run/setCut  0.5 mm
+  /run/setCutForRegion GasDetector 1.8 mm
 
  5- HOW TO START ?
  
- 	- execute TestEm8 in 'batch' mode from macro files e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in N
-    here N means number of threads in multi-threaded mode, by
-    default 2 threads are used
+  Execute TestEm8 in 'batch' mode from macro files e.g.
+    % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in N
+  here N means number of threads in multi-threaded mode, by
+  default 2 threads are used
 		
- 	- execute TestEm8 in 'interactive' mode with visualization e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8
-		....
-		Idle> type your commands
-		....
+ - execute TestEm8 in 'interactive' mode with visualization e.g.
+ % $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8
+   ....
+   Idle> type your commands
+   ....

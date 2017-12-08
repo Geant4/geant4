@@ -19,7 +19,7 @@
 // =======================================================================
 
 #include <assert.h>
-#include "CLHEP/Random/JamesRandom.h"
+#include "CLHEP/Random/MixMaxRng.h"
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/StaticRandomStates.h"
 #include "CLHEP/Utility/memory.h"
@@ -65,7 +65,7 @@ namespace CLHEP {
     private:
 
       HepRandom theDefaultGenerator;
-      HepJamesRandom  theDefaultEngine;
+      MixMaxRng theDefaultEngine;
 
     public:
 

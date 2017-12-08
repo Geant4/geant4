@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/TestEm8.cc
 /// \brief Main program of the electromagnetic/TestEm8 example
 //
-// $Id: TestEm8.cc 92915 2015-09-21 15:01:23Z gcosmo $
+// $Id: TestEm8.cc 106960 2017-10-31 08:35:19Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,7 +54,7 @@
 int main(int argc,char** argv) 
 {
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng);
   
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
@@ -77,8 +77,9 @@ int main(int argc,char** argv)
 #endif
 
   // set mandatory initialization classes
-  runManager->SetUserInitialization(new PhysicsList);
-  runManager->SetUserInitialization(new DetectorConstruction());
+  DetectorConstruction* det = new DetectorConstruction();
+  runManager->SetUserInitialization(det);
+  runManager->SetUserInitialization(new PhysicsList(det));
  
   // set user action classes
   runManager->SetUserInitialization(new ActionInitialization());

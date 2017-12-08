@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.hh 86964 2014-11-21 11:47:44Z gcosmo $
+// $Id: G4CoupledTransportation.hh 105913 2017-08-28 08:39:12Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -101,11 +101,6 @@ class G4CoupledTransportation : public G4VProcess
      void SetPropagatorInField( G4PropagatorInField* pFieldPropagator);
        // Access/set the assistant class that Propagate in a Field.
 
-     inline void   SetVerboseLevel( G4int verboseLevel );
-     inline G4int  GetVerboseLevel() const;
-       // Level of warnings regarding eg energy conservation
-       // in field integration.
-
      inline G4double GetThresholdWarningEnergy() const; 
      inline G4double GetThresholdImportantEnergy() const; 
      inline G4int GetThresholdTrials() const; 
@@ -126,6 +121,18 @@ class G4CoupledTransportation : public G4VProcess
 
      static G4bool EnableUseMagneticMoment(G4bool useMoment=true); 
      // Whether to deflect particles with force due to magnetic moment
+
+     static void   SetSignifyStepsInAnyVolume( G4bool anyVol ) { fSignifyStepInAnyVolume = anyVol; } 
+     static G4bool GetSignifyStepsInAnyVolume(  ) { return fSignifyStepInAnyVolume; }
+     // Flag in step corresponds to first/last step in a volume 'any' geometry (if this is true)
+     //   or refers to first/last step in mass geometry only (if false).
+
+     // The following methods give access to first/last step in particular geometry
+     //   *independent* of the choice of the 'Signify' flag.
+     G4bool IsFirstStepInAnyVolume() { return fFirstStepInAnyVolume; }
+     G4bool IsLastStepInAnyVolume() { return fAnyGeometryLimitedStep; } 
+     G4bool IsFirstStepInMassVolume() { return fFirstStepInMassVolume; }
+     G4bool IsLastStepInMassVolume() { return fMassGeometryLimitedStep; } 
 
   public:  // without description
 
@@ -181,7 +188,7 @@ class G4CoupledTransportation : public G4VProcess
      G4double             fCandidateEndGlobalTime;
 
      G4bool               fParticleIsLooping;
-   
+     G4bool               fNewTrack;
      G4ThreeVector        fPreviousSftOrigin; 
      G4double             fPreviousMassSafety;
      G4double             fPreviousFullSafety;
@@ -221,15 +228,18 @@ class G4CoupledTransportation : public G4VProcess
 
      G4SafetyHelper* fpSafetyHelper;  // To pass it the safety value obtained
 
-  // Verbosity 
-     G4int    fVerboseLevel;
-       // Verbosity level for warnings
-       // eg about energy non-conservation in magnetic field.
-
-  // Whether to track state change from magnetic moment in a B-field
   private:
      friend class G4Transportation;
-     static G4bool fUseMagneticMoment; 
+     static G4bool fUseMagneticMoment;
+
+private:
+     G4bool fFirstStepInMassVolume;
+     G4bool fFirstStepInAnyVolume;
+   // G4bool fLastStepInMassVolume; => use fMassGeometryLimitedStep 
+   // G4bool fLastStepInAnyVolume; => use fAnyGeometryLimitedStep
+
+     static G4bool fSignifyStepInAnyVolume;  // True: First/Last step in any one of the geometries
+       // False:  First/last step flag signifies step in volume of 'mass' geometry 
 
 };
 

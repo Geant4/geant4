@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.cc 104525 2017-06-02 07:22:58Z gcosmo $
+// $Id: G4FieldManager.cc 107059 2017-11-01 14:58:16Z gcosmo $
 //
 // -------------------------------------------------------------------
 
@@ -156,10 +156,9 @@ void G4FieldManager::InitialiseFieldChangesEnergy()
 
 G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField, int failMode )
 {
-   G4MagInt_Driver*        driver= 0;
-   G4MagIntegratorStepper* stepper=0;
-   G4EquationOfMotion*     equation=0; 
-   // G4bool  compatibleField= false; 
+   G4VIntegrationDriver* driver = nullptr;
+   G4EquationOfMotion* equation = nullptr;
+   // G4bool  compatibleField= false;
    G4bool ableToSet= false;
 
    fDetectorField= pDetectorField;
@@ -171,16 +170,13 @@ G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField, int failMode )
    {
      failMode= std::max( failMode, 1) ; // If a chord finder exists, warn in case of error!
       
-     driver= fChordFinder->GetIntegrationDriver();
+     driver = fChordFinder->GetIntegrationDriver();
      if( driver ){
-        stepper= driver->GetStepper();
-        if( stepper ){
-          equation= stepper->GetEquationOfMotion();
-          // Should check the compatibility between the field and the equation HERE
-          if( equation ) {
-             equation->SetFieldObj(pDetectorField);
-             ableToSet = true;
-          }  
+        equation = driver->GetEquationOfMotion();
+        // Should check the compatibility between the field and the equation HERE
+        if( equation ) {
+           equation->SetFieldObj(pDetectorField);
+           ableToSet = true;
         }
      }
    }
@@ -194,7 +190,6 @@ G4bool G4FieldManager::SetDetectorField(G4Field *pDetectorField, int failMode )
       msg << "The problem encountered was the following: " << G4endl;
       if( !fChordFinder ) { msg << "  No ChordFinder. " ; }
       else if( !driver)   { msg << "  No Integration Driver set. ";}
-      else if( !stepper ) { msg << "  No Stepper found. " ; }
       else if( !equation) { msg << "  No Equation found. " ; }
       // else if( !compatibleField ) { msg << "  Field not compatible. ";}
       else { msg << "  Can NOT find reason for failure. ";}

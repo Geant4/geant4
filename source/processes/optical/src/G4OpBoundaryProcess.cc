@@ -280,7 +280,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	aMaterialPropertiesTable = Material1->GetMaterialPropertiesTable();
         if (aMaterialPropertiesTable) {
-		Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
+		Rindex = aMaterialPropertiesTable->GetProperty(kRINDEX);
 	}
 	else {
                 theStatus = NoRINDEX;
@@ -354,7 +354,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
               if (theFinish == polishedbackpainted ||
                   theFinish == groundbackpainted ) {
-                  Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
+                  Rindex = aMaterialPropertiesTable->GetProperty(kRINDEX);
 	          if (Rindex) {
                      Rindex2 = Rindex->Value(thePhotonMomentum);
                   }
@@ -368,11 +368,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               }
 
               PropertyPointer =
-                      aMaterialPropertiesTable->GetProperty("REFLECTIVITY");
+                      aMaterialPropertiesTable->GetProperty(kREFLECTIVITY);
               PropertyPointer1 =
-                      aMaterialPropertiesTable->GetProperty("REALRINDEX");
+                      aMaterialPropertiesTable->GetProperty(kREALRINDEX);
               PropertyPointer2 =
-                      aMaterialPropertiesTable->GetProperty("IMAGINARYRINDEX");
+                      aMaterialPropertiesTable->GetProperty(kIMAGINARYRINDEX);
 
               iTE = 1;
               iTM = 1;
@@ -389,14 +389,14 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               }
 
               PropertyPointer =
-              aMaterialPropertiesTable->GetProperty("EFFICIENCY");
+              aMaterialPropertiesTable->GetProperty(kEFFICIENCY);
               if (PropertyPointer) {
                       theEfficiency =
                       PropertyPointer->Value(thePhotonMomentum);
               }
 
               PropertyPointer =
-              aMaterialPropertiesTable->GetProperty("TRANSMITTANCE");
+              aMaterialPropertiesTable->GetProperty(kTRANSMITTANCE);
               if (PropertyPointer) {
                       theTransmittance =
                       PropertyPointer->Value(thePhotonMomentum);
@@ -405,11 +405,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               if (aMaterialPropertiesTable->
                                      ConstPropertyExists("SURFACEROUGHNESS"))
                  theSurfaceRoughness = aMaterialPropertiesTable->
-                                         GetConstProperty("SURFACEROUGHNESS");
+                                         GetConstProperty(kSURFACEROUGHNESS);
 
 	      if ( theModel == unified ) {
                  PropertyPointer =
-                 aMaterialPropertiesTable->GetProperty("SPECULARLOBECONSTANT");
+                 aMaterialPropertiesTable->GetProperty(kSPECULARLOBECONSTANT);
                  if (PropertyPointer) {
                          prob_sl =
                          PropertyPointer->Value(thePhotonMomentum);
@@ -418,7 +418,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  }
 
                  PropertyPointer =
-                 aMaterialPropertiesTable->GetProperty("SPECULARSPIKECONSTANT");
+                 aMaterialPropertiesTable->GetProperty(kSPECULARSPIKECONSTANT);
 	         if (PropertyPointer) {
                          prob_ss =
                          PropertyPointer->Value(thePhotonMomentum);
@@ -427,7 +427,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                  }
 
                  PropertyPointer =
-                 aMaterialPropertiesTable->GetProperty("BACKSCATTERCONSTANT");
+                 aMaterialPropertiesTable->GetProperty(kBACKSCATTERCONSTANT);
                  if (PropertyPointer) {
                          prob_bs =
                          PropertyPointer->Value(thePhotonMomentum);
@@ -455,7 +455,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
               aMaterialPropertiesTable =
                      Material2->GetMaterialPropertiesTable();
               if (aMaterialPropertiesTable)
-                 Rindex = aMaterialPropertiesTable->GetProperty("RINDEX");
+                 Rindex = aMaterialPropertiesTable->GetProperty(kRINDEX);
               if (Rindex) {
                  Rindex2 = Rindex->Value(thePhotonMomentum);
               }
@@ -541,7 +541,7 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         if ( theStatus == FresnelRefraction || theStatus == Transmission ) {
            G4MaterialPropertyVector* groupvel =
-           Material2->GetMaterialPropertiesTable()->GetProperty("GROUPVEL");
+           Material2->GetMaterialPropertiesTable()->GetProperty(kGROUPVEL);
            G4double finalVelocity = groupvel->Value(thePhotonMomentum);
            aParticleChange.ProposeVelocity(finalVelocity);
         }
@@ -926,9 +926,9 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
            G4ThreeVector vNorm = v/v.mag();
            G4ThreeVector u = vNorm.cross(theGlobalNormal);
 
-           u = u *= (sin(elevation) * cos(azimuth));
-           v = vNorm *= (sin(elevation) * sin(azimuth));
-           G4ThreeVector w = theGlobalNormal *= (cos(elevation));
+           u = u *= (std::sin(elevation) * std::cos(azimuth));
+           v = vNorm *= (std::sin(elevation) * std::sin(azimuth));
+           G4ThreeVector w = theGlobalNormal *= (std::cos(elevation));
            NewMomentum = G4ThreeVector(u+v+w);
 
            // Rotate Polarization too:
@@ -960,9 +960,9 @@ void G4OpBoundaryProcess::DielectricLUTDAVIS()
         G4ThreeVector vNorm = v/v.mag();
         G4ThreeVector u     = vNorm.cross(theGlobalNormal);
 
-        u = u *= (sin(elevation) * cos(azimuth));
-        v = vNorm *= (sin(elevation) * sin(azimuth));
-        G4ThreeVector w = theGlobalNormal*=(cos(elevation));
+        u = u *= (std::sin(elevation) * std::cos(azimuth));
+        v = vNorm *= (std::sin(elevation) * std::sin(azimuth));
+        G4ThreeVector w = theGlobalNormal*=(std::cos(elevation));
 
         NewMomentum = G4ThreeVector(u+v+w);
 
@@ -1341,9 +1341,9 @@ G4double G4OpBoundaryProcess::GetReflectivity(G4double E1_perp,
   G4MaterialPropertiesTable* aMaterialPropertiesTable =
                                     Material1->GetMaterialPropertiesTable();
   G4MaterialPropertyVector* aPropertyPointerR =
-                      aMaterialPropertiesTable->GetProperty("REALRINDEX");
+                      aMaterialPropertiesTable->GetProperty(kREALRINDEX);
   G4MaterialPropertyVector* aPropertyPointerI =
-                      aMaterialPropertiesTable->GetProperty("IMAGINARYRINDEX");
+                      aMaterialPropertiesTable->GetProperty(kIMAGINARYRINDEX);
   if (aPropertyPointerR && aPropertyPointerI) {
      G4double RRindex = aPropertyPointerR->Value(thePhotonMomentum);
      G4double IRindex = aPropertyPointerI->Value(thePhotonMomentum);

@@ -114,6 +114,20 @@ inline unsigned int size_int64()  {return 8;}
 inline unsigned int size_float()  {return 4;}
 inline unsigned int size_double() {return 8;}
 
+// used in arrout :
+inline const char* type_format(float)  {static const char s[] = "%g";return s;}
+inline const char* type_format(double) {static const char s[] = "%g";return s;}
+
+inline const char* type_format(char)   {static const char s[] = "%d";return s;}
+inline const char* type_format(short)  {static const char s[] = "%d";return s;}
+inline const char* type_format(int)    {static const char s[] = "%d";return s;}
+inline const char* type_format(int64)  {return int64_format();}
+
+inline const char* type_format(unsigned char)  {static const char s[] = "%u";return s;}
+inline const char* type_format(unsigned short) {static const char s[] = "%u";return s;}
+inline const char* type_format(unsigned int)   {static const char s[] = "%u";return s;}
+inline const char* type_format(uint64)         {return uint64_format();}
+
 }
 
 #endif

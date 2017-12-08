@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for USphere to make use of USphere from USolids module.
+//   Wrapper class for G4Sphere to make use of VecGeom Sphere.
 
 // History:
 // 13.09.13 G.Cosmo, CERN/PH
@@ -42,16 +42,19 @@
 #ifndef G4USPHERE_HH
 #define G4USPHERE_HH
 
-#include "G4USolid.hh"
+#include "G4UAdapter.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
 
-#include "USphere.hh"
+#include <volumes/UnplacedSphere.h>
 
 #include "G4Polyhedron.hh"
 
-class G4USphere : public G4USolid
+class G4USphere : public G4UAdapter<vecgeom::UnplacedSphere>
 {
+  using Shape_t = vecgeom::UnplacedSphere;
+  using Base_t  = G4UAdapter<vecgeom::UnplacedSphere>;
+
   public:  // with description
 
     G4USphere(const G4String& pName,
@@ -68,8 +71,6 @@ class G4USphere : public G4USolid
                            const G4VPhysicalVolume* pRep);
 
     G4VSolid* Clone() const;
-
-    inline USphere* GetShape() const;
 
     G4double GetInnerRadius    () const;
     G4double GetOuterRadius    () const;
@@ -120,11 +121,6 @@ class G4USphere : public G4USolid
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
-
-inline USphere* G4USphere::GetShape() const
-{
-  return (USphere*) fShape;
-}
 
 inline G4GeometryType G4USphere::GetEntityType() const
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmFluctuationModel.cc 92921 2015-09-21 15:06:51Z gcosmo $
+// $Id: G4VEmFluctuationModel.cc 106208 2017-09-20 01:53:57Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -71,5 +71,4 @@ void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)
 void G4VEmFluctuationModel::SetParticleAndCharge(const G4ParticleDefinition*, 
                                                  G4double)
 {}
-
 

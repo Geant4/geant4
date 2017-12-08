@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistMaterialBuilder.cc 99413 2016-09-21 09:02:30Z gcosmo $
+// $Id: G4NistMaterialBuilder.cc 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -129,7 +129,7 @@ G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name,
 
     if (name == names[i]) {
 #ifdef G4MULTITHREADED
-      G4MUTEXLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+      G4MUTEXLOCK(&nistMaterialMutex);
 #endif
       if(matIndex[i] == -1) { 
 	// Build new Nist material 
@@ -141,7 +141,7 @@ G4Material* G4NistMaterialBuilder::BuildNistMaterial(const G4String& name,
 	mat = (*theMaterialTable)[matIndex[i]]; 
       }
 #ifdef G4MULTITHREADED
-      G4MUTEXUNLOCK(&G4NistMaterialBuilder::nistMaterialMutex);
+      G4MUTEXUNLOCK(&nistMaterialMutex);
 #endif
       return mat;
     }

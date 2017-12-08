@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-09-17 SI (range-V10-03-03)
+- updated README
+
+26-07-17 SI (range-V10-03-02)
+- applied coding guidelines
+
+04-07-17 SI (range-V10-03-01)
+- reduced energy range in range.in (for STT)
+
 31-12-16 SI (range-V10-03-00)
 - cleanup
 

@@ -30,7 +30,11 @@
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//	History: first implementation, 1 July 16 K.Lynch
+//	History: 
+//  20160701 K.Lynch first implementation
+//  20170612 K L Genser major revision; also copied
+//                      functions from G4MuonMinusBoundDecay & 
+//                      old G4MuMinusCaptureCascade; used constexpr
 // ------------------------------------------------------------
 #ifndef G4MuonicAtomHelper_h
 #define G4MuonicAtomHelper_h 1
@@ -41,6 +45,20 @@
 class G4MuonicAtomHelper {
 public:
   static G4MuonicAtom* ConstructMuonicAtom(G4String name, G4int encoding, G4Ions const* baseion);
+
+  static G4double GetMuonCaptureRate(G4int Z, G4int A);
+
+  static G4double GetMuonDecayRate(G4int Z);
+
+  static G4double GetMuonZeff(G4int Z);
+
+  static G4double GetKShellEnergy(G4double A);
+
+  static G4double GetLinApprox(G4int N, 
+                               const G4double* const X, 
+                               const G4double* const Y, 
+                               G4double Xuser);
+
 };
 
 #endif

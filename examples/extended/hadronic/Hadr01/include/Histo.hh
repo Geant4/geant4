@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/include/Histo.hh
 /// \brief Definition of the Histo class
 //
-// $Id: Histo.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: Histo.hh 107541 2017-11-22 08:24:57Z gcosmo $
 
 #ifndef Histo_h
 #define Histo_h 1
@@ -101,7 +101,6 @@ public:
 
   // Set output file
   void SetFileName(const G4String&);
-  void SetFileType(const G4String&);
 
   inline void SetVerbose(G4int val) { fVerbose = val; };
 
@@ -113,7 +112,6 @@ private:
   HistoMessenger*        fMessenger;
  
   G4String fHistName;
-  G4String fHistType;
   G4String fTupleName;
   G4String fTupleTitle;
   G4int    fNHisto;

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 12, 2017  Soon Yung Jun  (ExUCN-V10-03-01)
+- ExUCNDetectorConstruction: commented out a wrong use of AddConstProperty
+
 February 14th, 2016  Gunter Folger  (ExUCN-V10-03-00)
 - ExUCN.in: reduce verbosity.
 

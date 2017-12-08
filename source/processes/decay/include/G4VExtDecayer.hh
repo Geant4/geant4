@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VExtDecayer.hh 71045 2013-06-10 09:34:33Z gcosmo $
+// $Id: G4VExtDecayer.hh 105727 2017-08-16 12:47:05Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -70,7 +70,7 @@ class G4VExtDecayer
                             ) = 0;
 
     const G4String& GetName() const;
-    
+
   protected:
     G4String decayerName;
 };

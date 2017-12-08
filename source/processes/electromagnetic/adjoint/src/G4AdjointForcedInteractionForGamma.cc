@@ -183,15 +183,26 @@ G4VParticleChange* G4AdjointForcedInteractionForGamma::AlongStepDoIt(const G4Tra
 	  theNumberOfInteractionLengthLeft-=nb_adj_interaction_length_over_step;
 
 	  //Following condition to remove very rare FPE issue
-      if (total_acc_nb_adj_interaction_length <=  1.e-50 &&  theNumberOfInteractionLengthLeft<=1.e-50) { //condition added to avoid FPE issue
-         mc_induced_survival_probability =  1.e50;
-       }
+	  //if (total_acc_nb_adj_interaction_length <=  1.e-50 &&  theNumberOfInteractionLengthLeft<=1.e-50) { //condition added to avoid FPE issue
+          // VI 06.11.2017 - new condition
+	  if (std::abs(total_acc_nb_adj_interaction_length - previous_acc_nb_adj_interaction_length) <= 1.e-15) {
+	    mc_induced_survival_probability =  1.e50;
+	    /*
+	    G4cout << "FPE protection: " << total_acc_nb_adj_interaction_length << " " 
+		   << previous_acc_nb_adj_interaction_length << " "
+		   << acc_nb_fwd_interaction_length << " " 
+		   << acc_nb_adj_interaction_length << " " 
+		   << theNumberOfInteractionLengthLeft 
+		   << G4endl;
+	    */
+	  }
       else {
        mc_induced_survival_probability= std::exp(-acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length);
        mc_induced_survival_probability=mc_induced_survival_probability/(std::exp(-previous_acc_nb_adj_interaction_length)-std::exp(-total_acc_nb_adj_interaction_length));
       }
   }
  G4double weight_correction = fwd_survival_probability/mc_induced_survival_probability;
+
  //weight_correction = 1.;
  //Caution!!!
    // It is important  to select the weight of the post_step_point

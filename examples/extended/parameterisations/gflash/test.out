@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,9 +68,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 Defining the materials
 There are 10 crystals per row in the calorimeter, so in total 100 crystals
 They have width of  3  cm and a length of  24 cm. The Material is  Material: G4_PbWO4    density:  8.280 g/cm3   RadL:   8.925 mm   Nucl.Int.Length:  20.740 cm 
@@ -170,7 +168,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
@@ -201,12 +199,12 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -232,8 +230,8 @@ hPairProd:   for  proton    SubType= 4
            hPairProd :  Emin=        0 eV    Emax=      100 TeV
 
 CoulombScat:   for  proton, integral: 1     SubType= 1  BuildTable= 1
-      Used Lambda table of anti_proton
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -265,7 +263,7 @@ ionIoni:   for  alpha    SubType= 2
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
 
 msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -292,12 +290,12 @@ hPairProd:   for  anti_proton    SubType= 4
 
 CoulombScat:   for  anti_proton, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -324,12 +322,12 @@ hPairProd:   for  kaon+    SubType= 4
 
 CoulombScat:   for  kaon+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -356,7 +354,7 @@ hPairProd:   for  kaon-    SubType= 4
 
 CoulombScat:   for  kaon-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of kaon+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -389,7 +387,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -422,12 +420,12 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of mu+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -454,12 +452,12 @@ hPairProd:   for  pi+    SubType= 4
 
 CoulombScat:   for  pi+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 100 TeV, 7 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
 msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
+      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         WentzelVIUni :  Emin=        0 eV    Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
 
@@ -486,7 +484,7 @@ hPairProd:   for  pi-    SubType= 4
 
 CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
       Used Lambda table of pi+
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=      100 TeV
 
@@ -686,6 +684,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -700,6 +699,7 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -808,30 +808,35 @@ CoulombScat:   for  pi-, integral: 1     SubType= 1  BuildTable= 1
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 ### Run 0 start.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 0
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
-  11918 hits are stored in ExGflashHitsCollection 
-   e1  11.9842   e3x3  48.1765   GeV  e5x5  48.727
- Total energy deposited in the calorimeter: 49.7221 (GeV)
+  12852 hits are stored in ExGflashHitsCollection 
+   e1  12.0359   e3x3  48.3943   GeV  e5x5  48.948
+ Total energy deposited in the calorimeter: 49.8895 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 1
@@ -843,23 +848,23 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
-  11927 hits are stored in ExGflashHitsCollection 
-   e1  12.1045   e3x3  48.3484   GeV  e5x5  48.8265
- Total energy deposited in the calorimeter: 49.682 (GeV)
+  11828 hits are stored in ExGflashHitsCollection 
+   e1  11.9606   e3x3  47.713   GeV  e5x5  48.1872
+ Total energy deposited in the calorimeter: 49.0038 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 2
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
-  11980 hits are stored in ExGflashHitsCollection 
-   e1  12.2569   e3x3  48.5507   GeV  e5x5  48.9485
- Total energy deposited in the calorimeter: 49.9297 (GeV)
+  11902 hits are stored in ExGflashHitsCollection 
+   e1  12.1876   e3x3  48.1912   GeV  e5x5  48.6714
+ Total energy deposited in the calorimeter: 49.6076 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 3
@@ -868,12 +873,12 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
-  11976 hits are stored in ExGflashHitsCollection 
-   e1  12.2324   e3x3  48.4143   GeV  e5x5  48.9223
- Total energy deposited in the calorimeter: 49.9051 (GeV)
+  11972 hits are stored in ExGflashHitsCollection 
+   e1  12.0925   e3x3  48.3606   GeV  e5x5  48.8969
+ Total energy deposited in the calorimeter: 49.8286 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 4
@@ -885,23 +890,23 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
-  11925 hits are stored in ExGflashHitsCollection 
-   e1  11.8926   e3x3  48.1353   GeV  e5x5  48.6351
- Total energy deposited in the calorimeter: 49.7034 (GeV)
+  11967 hits are stored in ExGflashHitsCollection 
+   e1  12.1205   e3x3  48.6191   GeV  e5x5  48.9999
+ Total energy deposited in the calorimeter: 49.8417 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 5
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
-  11948 hits are stored in ExGflashHitsCollection 
-   e1  12.0441   e3x3  48.3721   GeV  e5x5  48.8629
- Total energy deposited in the calorimeter: 49.743 (GeV)
+  11991 hits are stored in ExGflashHitsCollection 
+   e1  12.3237   e3x3  48.7073   GeV  e5x5  49.1682
+ Total energy deposited in the calorimeter: 49.9648 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 6
@@ -913,12 +918,26 @@ Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
-  11962 hits are stored in ExGflashHitsCollection 
-   e1  12.215   e3x3  48.4459   GeV  e5x5  48.9017
- Total energy deposited in the calorimeter: 49.8793 (GeV)
+  11918 hits are stored in ExGflashHitsCollection 
+   e1  11.9481   e3x3  48.0055   GeV  e5x5  48.5623
+ Total energy deposited in the calorimeter: 49.6703 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 7
+
+
+******************************************
+Internal Real Elapsed Time is: 0
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.01
+******************************************
+ ------ ExGflashEventAction::End of event nr. 7  -----
+  11987 hits are stored in ExGflashHitsCollection 
+   e1  12.1192   e3x3  48.6294   GeV  e5x5  48.9964
+ Total energy deposited in the calorimeter: 49.909 (GeV)
+    0 trajectories stored in this event.
+ ------ Start ExGflashEventAction ----- 
+ Start generating event Nr 8
 
 
 ******************************************
@@ -926,46 +945,32 @@ Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
- ------ ExGflashEventAction::End of event nr. 7  -----
-  11976 hits are stored in ExGflashHitsCollection 
-   e1  12.3076   e3x3  48.6858   GeV  e5x5  49.0614
- Total energy deposited in the calorimeter: 49.9252 (GeV)
-    0 trajectories stored in this event.
- ------ Start ExGflashEventAction ----- 
- Start generating event Nr 8
-
-
-******************************************
-Internal Real Elapsed Time is: 0.02
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
-******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
-  11926 hits are stored in ExGflashHitsCollection 
-   e1  11.9961   e3x3  48.1312   GeV  e5x5  48.7188
- Total energy deposited in the calorimeter: 49.7127 (GeV)
+  11969 hits are stored in ExGflashHitsCollection 
+   e1  12.4271   e3x3  48.5576   GeV  e5x5  48.9961
+ Total energy deposited in the calorimeter: 49.9157 (GeV)
     0 trajectories stored in this event.
  ------ Start ExGflashEventAction ----- 
  Start generating event Nr 9
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
-  11961 hits are stored in ExGflashHitsCollection 
-   e1  12.0764   e3x3  48.2565   GeV  e5x5  48.8779
- Total energy deposited in the calorimeter: 49.8739 (GeV)
+  11964 hits are stored in ExGflashHitsCollection 
+   e1  12.1623   e3x3  48.4061   GeV  e5x5  48.8677
+ Total energy deposited in the calorimeter: 49.8821 (GeV)
     0 trajectories stored in this event.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0166667
+Internal Real Elapsed Time /event is: 0.01
 
 ******************************************
-Total Real Elapsed Time is: 1.72
-Total System Elapsed Time: 0.03
-Total GetUserElapsed Time: 1.61
+Total Real Elapsed Time is: 1.24
+Total System Elapsed Time: 0.02
+Total GetUserElapsed Time: 1.1
 ******************************************

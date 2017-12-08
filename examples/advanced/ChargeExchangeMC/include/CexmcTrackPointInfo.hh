@@ -55,20 +55,23 @@
 
 struct  CexmcTrackPointInfo
 {
-    CexmcTrackPointInfo() : trackId( CexmcInvalidTrackId )
-    {}
+  // explicit argument is only needed by G4THitsMap template,
+  // it has no actual use here
+  explicit CexmcTrackPointInfo( G4double  unused = 0. ) :
+    momentumAmp ( unused ), trackId( CexmcInvalidTrackId )		       
+  {}
 
-    CexmcTrackPointInfo( const G4ThreeVector &  positionLocal,
-                         const G4ThreeVector &  positionWorld,
-                         const G4ThreeVector &  directionLocal,
-                         const G4ThreeVector &  directionWorld,
-                         G4double  momentumAmp,
-                         const G4ParticleDefinition *  particle,
-                         G4int  trackId, CexmcTrackType  trackType ) :
-        positionLocal( positionLocal ), positionWorld( positionWorld ),
-        directionLocal( directionLocal ), directionWorld( directionWorld ),
-        momentumAmp( momentumAmp ), particle( particle ), trackId( trackId ),
-        trackType( trackType )
+    CexmcTrackPointInfo( const G4ThreeVector &  positionLocal_,
+                         const G4ThreeVector &  positionWorld_,
+                         const G4ThreeVector &  directionLocal_,
+                         const G4ThreeVector &  directionWorld_,
+                         G4double  momentumAmp_,
+                         const G4ParticleDefinition *  particle_,
+                         G4int  trackId_, CexmcTrackType  trackType_ ) :
+        positionLocal( positionLocal_ ), positionWorld( positionWorld_ ),
+        directionLocal( directionLocal_ ), directionWorld( directionWorld_ ),
+        momentumAmp( momentumAmp_ ), particle( particle_ ), trackId( trackId_ ),
+        trackType( trackType_ )
     {}
 
     G4bool  IsValid( void ) const

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIsession.hh 98731 2016-08-09 10:49:49Z gcosmo $
+// $Id: G4UIsession.hh 106172 2017-09-15 13:03:57Z gcosmo $
 //
 // $id$
 
@@ -33,6 +33,7 @@
 
 #include "G4coutDestination.hh"
 #include "globals.hh"
+#include "icomsdefs.hh"
 
 // class description:
 //
@@ -62,7 +63,7 @@ class G4UIsession : public G4coutDestination
       // These two methods will be invoked by G4strstreambuf.
 
   protected:
-      static G4int inSession;
+      G4ICOMS_DLL static G4int inSession;
       G4int ifBatch;
   public:
       static G4int InSession() { return inSession; }

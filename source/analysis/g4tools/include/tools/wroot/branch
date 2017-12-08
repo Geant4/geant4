@@ -152,8 +152,7 @@ public:
       fBasketEntry[i] = 0;
       fBasketSeek[i] = 0;
     }}
-    m_baskets[m_write_basket] = new basket(m_out,m_byte_swap,a_seek_directory,
-                                           m_name,m_title,"TBasket",m_basket_size,m_verbose);
+    m_baskets[m_write_basket] = new basket(m_out,m_byte_swap,a_seek_directory,m_name,m_title,"TBasket",m_basket_size,m_verbose);
     fBasketEntry[m_write_basket] = (uint32)m_entry_number;
   }
   virtual ~branch(){
@@ -180,6 +179,9 @@ protected:
   {}
   branch& operator=(const branch&){return *this;}
 public:
+  const std::string& name() const {return m_name;}
+  const std::string& title() const {return m_title;}
+  
   uint64 entries() const {return m_entries;}
 
   uint64 tot_bytes() const {return m_tot_bytes;}
@@ -191,25 +193,100 @@ public:
   void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
   uint32 basket_size() const {return m_basket_size;}
 
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
   template <class T>
-  leaf<T>* create_leaf(const std::string& a_name,const std::string& a_title){
-    leaf<T>* lf = new leaf<T>(m_out,a_name,a_title);
+  leaf_ref<T>* create_leaf_ref(const std::string& a_name,const T& a_ref){
+    leaf_ref<T>* lf = new leaf_ref<T>(m_out,a_name,a_ref);
     m_leaves.push_back(lf);
     return lf;
   }
 
-  leaf_string* create_leaf_string(const std::string& a_name,const std::string& a_title){
-    leaf_string* lf = new leaf_string(m_out,a_name,a_title);
+  leaf_string_ref* create_leaf_string_ref(const std::string& a_name,const std::string& a_ref){
+    leaf_string_ref* lf = new leaf_string_ref(m_out,a_name,a_ref);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
+  
+  template <class T>
+  leaf<T>* create_leaf(const std::string& a_name){
+    leaf<T>* lf = new leaf<T>(m_out,a_name);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  leaf_string* create_leaf_string(const std::string& a_name){
+    leaf_string* lf = new leaf_string(m_out,a_name);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  leaf_element* create_leaf_element(const std::string& a_name,int a_id,int a_type){
+    leaf_element* lf = new leaf_element(m_out,a_name,a_id,a_type);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  // for row_wise ntuple :
+  template <class T>
+  leaf_std_vector_ref<T>* create_leaf_std_vector_ref(const std::string& a_name,
+                                                     base_leaf& a_leaf_count,const std::vector<T>& a_ref) {
+    leaf_std_vector_ref<T>* lf = new leaf_std_vector_ref<T>(m_out,a_name,a_leaf_count,a_ref);
     m_leaves.push_back(lf);
     return lf;
   }
 
   const std::vector<base_leaf*>& leaves() const {return m_leaves;}
 
+  void reset() {
+    m_baskets.clear_objs();  
+    delete [] fBasketBytes;
+    delete [] fBasketEntry;
+    delete [] fBasketSeek;
+    fBasketBytes = 0;
+    fBasketEntry = 0;
+    fBasketSeek = 0;
+    
+    m_max_baskets = 10;
+
+    m_write_basket = 0;
+    m_entry_number = 0;
+    m_entries = 0;
+    m_tot_bytes = 0;
+    m_zip_bytes = 0;
+  
+    m_baskets.resize(m_max_baskets,0);
+    fBasketBytes = new uint32[m_max_baskets];
+    fBasketEntry = new uint32[m_max_baskets];
+    fBasketSeek = new seek[m_max_baskets];
+   {for(uint32 i=0;i<m_max_baskets;i++) {
+      m_baskets[i] = 0;
+      fBasketBytes[i] = 0;
+      fBasketEntry[i] = 0;
+      fBasketSeek[i] = 0;
+    }}
+    fBasketEntry[m_write_basket] = (uint32)m_entry_number;
+    m_baskets[m_write_basket] = new basket(m_out,m_byte_swap,m_seek_directory,m_name,m_title,"TBasket",m_basket_size,m_verbose);
+
+   {tools_vforit(branch*,m_branches,it) (*it)->reset();}
+  }
+
   bool fill(ifile& a_file,uint32& a_nbytes,uint32& a_add_bytes,uint32& a_nout) {
     a_nbytes = 0;
     a_add_bytes = 0;
     a_nout = 0;
+
+    if(m_write_basket>=m_max_baskets) {
+      m_out << "tools::wroot::branch::fill :"
+            << " potential overflow : m_write_basket (" << m_write_basket << ")"
+	    << " >= m_max_baskets (" << m_max_baskets << ")."
+            << std::endl;
+      return false;
+    }
 
     //FIXME if (TestBit(kDoNotProcess)) return 0;
 
@@ -222,15 +299,22 @@ public:
     }
 
     buffer& buf = bk->datbuf();
-    
+
+    buf.reset_objs_map();
+
     uint32 lold = buf.length();
   
     bk->update(bk->key_length()+lold);
     m_entries++;
     m_entry_number++;
   
-    if(!fill_leaves(buf)) return false;
-  
+    if(!fill_leaves(buf)) {
+      m_out << "tools::wroot::branch::fill :"
+            << " fill_leaves() failed."
+            << std::endl;
+      return false;
+    }
+    
     uint32 lnew   = buf.length();
     uint32 nbytes = lnew - lold;
     uint32 nsize  = 0;
@@ -279,6 +363,14 @@ public:
   ///////////////////////////////////////////////////////////////////////////
   bool add_basket(ifile& a_file,basket& a_basket,uint32& a_add_bytes,uint32& a_nout) {
     //done on a (main) ntuple/branch.
+
+    if(m_write_basket>=m_max_baskets) {
+      m_out << "tools::wroot::branch::add_basket :"
+            << " potential overflow : m_write_basket (" << m_write_basket << ")"
+	    << " >= m_max_baskets (" << m_max_baskets << ")."
+            << std::endl;
+      return false;
+    }
 
     uint32 nout;
     if(!a_basket.write_on_file(a_file,m_write_basket,nout)) { //a_file is the main file (a true file).
@@ -347,7 +439,12 @@ public:
     //m_entries++;      //not used by parallel branches.
     //m_entry_number++; //idem.
 
-    if(!fill_leaves(buf)) return false;
+    if(!fill_leaves(buf)) {
+      m_out << "tools::wroot::branch::parallel_fill :"
+            << " fill_leaves() failed."
+            << std::endl;
+      return false;
+    }
   
     uint32 lnew   = buf.length();
     uint32 nbytes = lnew - lold;
@@ -388,13 +485,19 @@ public:
             << std::endl;
       return false;
     }
+    
+    buffer& buf = bk->datbuf();
+    uint32 lold = buf.length();
 
-    if(!a_badd.add_basket(*bk)) {
-      m_out << "tools::wroot::branch::parallel_fill :"
-            << " main_branch.add_basket() failed."
-            << std::endl;
-      return false;
+    if(lold) {
+      if(!a_badd.add_basket(*bk)) {
+        m_out << "tools::wroot::branch::parallel_fill :"
+              << " main_branch.add_basket() failed."
+              << std::endl;
+        return false;
+      }
     }
+    
     delete bk;
     m_baskets[m_write_basket] = 0; // no need to recreate a basket since it is end of fill.
 
@@ -458,7 +561,7 @@ protected:
   bool m_byte_swap;
   bool m_verbose;
   seek m_seek_directory;
-  ObjArray<basket> m_baskets;
+  obj_array<basket> m_baskets;
 protected:
   //Object
   //uint32 m_bits;
@@ -467,8 +570,10 @@ protected:
   std::string m_title;
 
   bool fAutoDelete;
-  ObjArray<branch> m_branches;
-  ObjArray<base_leaf> m_leaves;
+private: //be sure that sub branches are not used for the moment.
+  obj_array<branch> m_branches;
+protected:
+  obj_array<base_leaf> m_leaves;
   uint32 fCompress;      //  Compression level and algorithm
   uint32 m_basket_size;  //  Initial Size of Basket Buffer
   uint32 m_write_basket; //  Last basket number written

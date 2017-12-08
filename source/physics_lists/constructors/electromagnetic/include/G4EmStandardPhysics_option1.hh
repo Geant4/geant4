@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics_option1.hh 98736 2016-08-09 10:55:12Z gcosmo $
+// $Id: G4EmStandardPhysics_option1.hh 105735 2017-08-16 12:59:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -47,6 +47,7 @@
 #define G4EmStandardPhysics_option1_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,6 +65,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

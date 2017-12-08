@@ -34,6 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4Tet.hh"
+#if 0
 #include "G4UTet.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -224,3 +225,4 @@ G4Polyhedron* G4UTet::CreatePolyhedron() const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
+#endif

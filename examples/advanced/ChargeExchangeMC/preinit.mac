@@ -5,6 +5,5 @@
 
 /cexmc/geometry/gdmlFile lht.gdml
 /cexmc/geometry/validateGdmlFile
-/cexmc/histo/verbose 0
 
 /cexmc/physics/productionModel eta

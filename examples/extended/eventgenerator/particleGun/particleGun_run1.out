@@ -1,0 +1,134 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+ASCIITree (ATree)
+DAWNFILE (DAWNFILE)
+G4HepRep (HepRepXML)
+G4HepRepFile (HepRepFile)
+RayTracer (RayTracer)
+VRML1FILE (VRML1FILE)
+VRML2FILE (VRML2FILE)
+gMocrenFile (gMocrenFile)
+OpenGLImmediateQt (OGLIQt, OGLI)
+OpenGLStoredQt (OGLSQt, OGL, OGLS)
+OpenGLImmediateXm (OGLIXm, OGLIQt_FALLBACK)
+OpenGLStoredXm (OGLSXm, OGLSQt_FALLBACK)
+OpenGLImmediateX (OGLIX, OGLIQt_FALLBACK, OGLIXm_FALLBACK)
+OpenGLStoredX (OGLSX, OGLSQt_FALLBACK, OGLSXm_FALLBACK)
+RayTracerX (RayTracerX)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByAttribute
+  drawByCharge
+  drawByOriginVolume
+  drawByParticleID
+  drawByEncounteredVolume
+
+Registered filter factories:
+  attributeFilter
+  chargeFilter
+  originVolumeFilter
+  particleFilter
+  encounteredVolumeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+"/vis/list" to see available colours.
+/run/verbose 1
+#
+/run/initialize
+#
+/gunExample/selectGunAction 1
+#
+/tracking/verbose 1
+/run/beamOn 1
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 0 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 3,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.13 mm  -1.65 mm   1.39 mm      1 GeV     0 eV      0 fm      0 fm      World   initStep
+    1  -9.28 mm     -1 cm   1.39 mm      1 GeV     0 eV   1.17 cm   1.17 cm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 2,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -1.13 mm  -1.65 mm   1.39 mm      1 keV     0 eV      0 fm      0 fm      World   initStep
+    1   -4.9 mm     -1 cm   1.39 mm      1 keV     0 eV   9.16 mm   9.16 mm      World   OutOfWorld
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   1.13 mm   1.65 mm   1.39 mm      1 MeV     0 eV      0 fm      0 fm      World   initStep
+    1   6.82 mm      1 cm   1.39 mm      1 MeV     0 eV   1.01 cm   1.01 cm      World   OutOfWorld
+ Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+#
+/tracking/verbose 0
+/run/beamOn 5
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : G4_AIR
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 starts.
+ Run terminated.
+Run Summary
+  Number of events processed : 5
+  User=0s Real=0s Sys=0s
+G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.015 MB
+============================================================
+RunManagerKernel is deleted. Good bye :)

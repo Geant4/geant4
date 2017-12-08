@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc 104555 2017-06-06 07:31:32Z gcosmo $
+// $Id: G4PairProductionRelModel.cc 106628 2017-10-17 06:25:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -102,7 +102,7 @@ G4PairProductionRelModel::G4PairProductionRelModel(const G4ParticleDefinition*,
   thePositron = G4Positron::Positron();
   theElectron = G4Electron::Electron();
 
-  nist = G4NistManager::Instance();
+  g4calc = G4Pow::GetInstance();
 
   currentZ = z13 = z23 = lnZ = Fel = Finel = fCoulomb = phiLPM = gLPM = xiLPM = 0;
 }
@@ -388,7 +388,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > rndmEngine->flat() ) {
-	epsil = 0.5 - epsilrange*nist->GetZ13(rndmEngine->flat());
+	epsil = 0.5 - epsilrange*g4calc->Z13(rndmEngine->flat());
 	screenvar = screenfac/(epsil*(1-epsil));
 	if (fLPMflag && GammaEnergy > Eghigh) {
 	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);

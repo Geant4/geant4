@@ -1,4 +1,4 @@
-$Id: History 103236 2017-03-22 15:54:40Z gcosmo $
+$Id: History 107606 2017-11-27 09:39:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 23, 2017 - J.Apostolakis (geomnav-V10-03-09)
+---------------------------------
+- Fix in G4PathFinder to cope with zero proposed step.
+  Correction ensures that the 'physical' length of a step is used
+  in minimum, rather than 'logical' value (i.e. kInfinity).
+
+November 2, 2017 - G.Cosmo (geomnav-V10-03-08)
+--------------------------
+- Correction to use G4 types in G4Navigator after previous tags...
+
+November 2, 2017 - J.Apostolakis (geomnav-V10-03-07)
+--------------------------------
+- test/CMakeLists.txt: fixed to enable use with unit test infrastructure.
+
+November 1, 2017 - J.Apostolakis (geomnav-V10-03-06)
+--------------------------------
+- G4Navigator - loosened check on normal vector, whether it is a unit
+    vector.  Warn only if | norm - 1 | > 10^-3  ( not 10^-6 ).
+    Improved clarity by using a constant to define it.
+
+August 25, 2017 - J.Apostolakis (geomnav-V10-03-05)
+-------------------------------
+- G4PathFinder, G4PropagatorInField and all Locator classes (source files)
+  G4PropagatorInField.icc ( GetCurrentEquationOfMotion method ) 
+  *  Moved to using IntegrationDriver's direct method to Get Equation of motion
+     ( for cleaner code and future proofing - introducing non-RK drivers.)
+  * Used 'auto' for type of driver (to pave way for non-RK drivers.)
+
+- G4Navigator:  use 'perThousand' in check for unity of normal vector
+    ( issue was too noisy for no good reason otherwise. )
+    
 March 22, 2017 - G.Cosmo (geomnav-V10-03-04)
 ------------------------
 - Avoid eletion of field-manager pointer in destructor of

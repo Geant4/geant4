@@ -1,4 +1,4 @@
-$Id: History 101216 2016-11-09 13:54:13Z gcosmo $
+$Id: History 107541 2017-11-22 08:24:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21-11-17  V.Ivanchenko (exhadr01-V10-03-00)
+- Fixed histograms and radioactive decay 
 
 09-11-16  V.Ivanchenko (exhadr01-V10-02-03)
 - PhysicsList - synchronisation with physics_list library of 10.3

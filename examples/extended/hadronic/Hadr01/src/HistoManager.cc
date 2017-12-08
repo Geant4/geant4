@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr01/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 100811 2016-11-02 15:05:20Z gcosmo $
+// $Id: HistoManager.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -92,7 +92,6 @@ HistoManager* HistoManager::GetPointer()
 
 HistoManager::HistoManager()
 : fPrimaryDef(0),
-  fNeutron(0),
   fEdepMax(1.0*GeV),
   fLength (300.*mm),
   fPrimaryKineticEnergy(0.0),  
@@ -101,11 +100,11 @@ HistoManager::HistoManager()
   fNSlices(300),
   fNHisto (25),
   fBeamFlag(true),
-  fHistoBooked(false),
-  fHisto(0)
+  fHistoBooked(false)
 {
   fHisto     = new Histo();
   fHisto->SetVerbose(fVerbose);
+  BookHisto();
   fNeutron   = G4Neutron::Neutron();
 }
 

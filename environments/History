@@ -1,4 +1,4 @@
-$Id: History 101892 2016-12-07 08:07:30Z gcosmo $
+$Id: History 107590 2017-11-24 11:59:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V10-03-01 / Nov. 24 K.Murakami
+ - g4py, updated for 10.4 release
+ - zmq, new ZeroMQ interface (experimental)
 
 envs-V10-02-02 / 7 Dec. 2016 K.Murakami
  - remove G4VisAttributes::Invisible as deprecated

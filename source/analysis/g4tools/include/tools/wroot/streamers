@@ -267,7 +267,9 @@ inline bool TH_write_3D(buffer& a_buffer,
 
 inline bool TH1F_stream(buffer& a_buffer,const histo::h1df& a_h,const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  std::vector<double> bins_sum_w2d;
+  convert<float,double>(a_h.bins_sum_w2(),bins_sum_w2d);
+  if(!TH_write_1D(a_buffer,a_h,a_name,bins_sum_w2d)) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
@@ -275,7 +277,9 @@ inline bool TH1F_stream(buffer& a_buffer,const histo::h1df& a_h,const std::strin
 inline bool TH1F_stream(buffer& a_buffer,const histo::h1d& a_h,const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
   if(!TH_write_1D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false;
+  std::vector<float> bins_sum_wf;
+  convert<double,float>(a_h.bins_sum_w(),bins_sum_wf);
+  if(!a_buffer.write_array(bins_sum_wf)) return false;
   return true;
 }
 
@@ -289,13 +293,17 @@ inline bool TH1D_stream(buffer& a_buffer,const histo::h1d& a_h,const std::string
 inline bool TH2F_stream(buffer& a_buffer,const histo::h2d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
   if(!TH_write_2D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false; //fArray TArrayF
+  std::vector<float> bins_sum_wf;
+  convert<double,float>(a_h.bins_sum_w(),bins_sum_wf);
+  if(!a_buffer.write_array(bins_sum_wf)) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH2F_stream(buffer& a_buffer,const histo::h2df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  std::vector<double> bins_sum_w2d;
+  convert<float,double>(a_h.bins_sum_w2(),bins_sum_w2d);
+  if(!TH_write_2D(a_buffer,a_h,a_name,bins_sum_w2d)) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false;
   return true;
 }
@@ -310,13 +318,17 @@ inline bool TH2D_stream(buffer& a_buffer,const histo::h2d& a_h,const std::string
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
   if(!TH_write_3D(a_buffer,a_h,a_name,a_h.bins_sum_w2())) return false;
-  if(!a_buffer.write_array(convert<double,float>(a_h.bins_sum_w()))) return false; //fArray TArrayF
+  std::vector<float> bins_sum_wf;
+  convert<double,float>(a_h.bins_sum_w(),bins_sum_wf);
+  if(!a_buffer.write_array(bins_sum_wf)) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name,convert<float,double>(a_h.bins_sum_w2()))) return false;
+  std::vector<double> bins_sum_w2d;
+  convert<float,double>(a_h.bins_sum_w2(),bins_sum_w2d);
+  if(!TH_write_3D(a_buffer,a_h,a_name,bins_sum_w2d)) return false;
   if(!a_buffer.write_array(a_h.bins_sum_w())) return false; //fArray TArrayF
   return true;
 }

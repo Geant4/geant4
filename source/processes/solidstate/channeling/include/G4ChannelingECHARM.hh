@@ -44,7 +44,7 @@ public:
     
     G4double GetMax() {return fMaximum;};
     G4double GetMin() {return fMinimum;};
-    G4double GetMaxMin() {return fabs(fMaximum-fMinimum);};
+    G4double GetMaxMin() {return std::fabs(fMaximum-fMinimum);};
     
     G4double GetIntSp(G4int index) {return fDistances[index];};
     

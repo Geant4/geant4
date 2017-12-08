@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuBremsstrahlung.cc 107056 2017-11-01 14:52:32Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -131,3 +131,10 @@ void G4MuBremsstrahlung::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4MuBremsstrahlung::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Muon bremsstrahlung</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

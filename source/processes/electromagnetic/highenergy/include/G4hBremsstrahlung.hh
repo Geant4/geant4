@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlung.hh 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4hBremsstrahlung.hh 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -68,6 +68,9 @@ public:
   virtual ~G4hBremsstrahlung();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override;
+
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 

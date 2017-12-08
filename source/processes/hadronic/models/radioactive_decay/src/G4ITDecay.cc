@@ -85,8 +85,6 @@ G4DecayProducts* G4ITDecay::DecayIt(G4double)
   G4DecayProducts* products = new G4DecayProducts(parentParticle);
 
   // Let G4PhotonEvaporation do the decay
-  // but first pass nuclear polarization from end of previous IT decay to
-  // start of next one
   G4Fragment parentNucleus(parentA, parentZ, atRest);
 
   G4Fragment* eOrGamma = photonEvaporation->EmittedFragment(&parentNucleus);

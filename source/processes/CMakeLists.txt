@@ -8,9 +8,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: CMakeLists.txt 103639 2017-04-20 09:03:42Z gcosmo $
-#
-# 20130225  M. Kelsey -- Remove cascade/evaporation, cascade/utils
+# $Id: CMakeLists.txt 106468 2017-10-11 08:11:47Z gcosmo $
 #------------------------------------------------------------------------------
 
 # Add allocation export symbol for the EM category
@@ -78,6 +76,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/inclxx/utils/sources.cmake
             hadronic/models/inclxx/incl_physics/sources.cmake
             hadronic/models/inclxx/interface/sources.cmake
+            hadronic/models/gamma_nuclear/sources.cmake
             hadronic/models/lend/sources.cmake
             hadronic/models/lepto_nuclear/sources.cmake
             hadronic/models/management/sources.cmake
@@ -88,8 +87,8 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/parton_string/qgsm/sources.cmake
             hadronic/models/pre_equilibrium/exciton_model/sources.cmake
             hadronic/models/qmd/sources.cmake
-            hadronic/models/radioactive_decay/sources.cmake
             hadronic/models/quasi_elastic/sources.cmake
+            hadronic/models/radioactive_decay/sources.cmake
             hadronic/models/rpg/sources.cmake
             hadronic/models/theo_high_energy/sources.cmake
             hadronic/models/util/sources.cmake
@@ -98,7 +97,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/util/sources.cmake
             management/sources.cmake
             optical/sources.cmake
-            solidstate/phonon/sources.cmake
+	    solidstate/phonon/sources.cmake
             solidstate/channeling/sources.cmake
             parameterisation/sources.cmake
             scoring/sources.cmake

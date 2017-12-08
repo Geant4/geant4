@@ -20,6 +20,12 @@ static const std::string& s_##a_name() {\
   return s_v;\
 }
 
+#define TOOLS_CLASS_STRING_SVALUE(a_name,a_value)\
+static const std::string& s_##a_name() {\
+  static const std::string s_v(a_value);\
+  return s_v;\
+}
+
 #define TOOLS_GLOBAL_STRING(a_name)\
 inline const std::string& s_##a_name() {\
   static const std::string s_v(#a_name);\

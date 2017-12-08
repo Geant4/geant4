@@ -7,28 +7,30 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
                             Activation
                             ----------
 
-   Survey energy deposition and particle's flux from a hadronic cascade.
-   Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
-   Plot evolution of each species as a function of time.
-   Plot activity of emerging particles.
+  Survey energy deposition and particle's flux from an hadronic cascade,
+  including radioactive decays.
+  The main purpose of the example is to plot evolution of each metastable isomer
+  as a function of time, taking into account the time of exposure in the beam.
+  Also plot the activity of emerging particles.
+  Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.
 
  1- MATERIALS AND GEOMETRY DEFINITION
 
- The "absorber" is a box made of a given material.                
+  The "absorber" is a box made of a given material.                
 
- Three parameters define the absorber :
- - the material of the absorber
- - the thickness of an absorber
- - the transverse size of the absorber (the input face is a square)
+  Three parameters define the absorber :
+  - the material of the absorber
+  - the thickness of an absorber
+  - the transverse size of the absorber (the input face is a square)
 
- The volume "World" contains the "absorber". 
+  The volume "World" contains the "absorber". 
 
- A function, and its associated UI command, allows to build a material
- directly from a single isotope.
+  A function, and its associated UI command, allows to build a material
+  directly from a single isotope.
 
- To be identified by the ThermalScattering module, the elements composing a
- material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
- Examples of such materials are build in DetectorConstruction::DefineMaterials().
+  To be identified by the ThermalScattering module, the elements composing a
+  material must have a specific name (see G4ParticleHPThermalScatteringNames.cc)
+  Examples of such materials are build in DetectorConstruction::DefineMaterials().
 
  2- PHYSICS LIST
 
@@ -47,7 +49,7 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
   GammmaNuclearPhysics is a subset of G4BertiniElectroNuclearBuilder.
 
   ElectromagneticPhysics is a simplified version of G4EmStandardPhysics.
-  In perticular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
+  In particular, no step constraint is imposed for energy loss mechanism (ionisation and brems).
   This is enough when spatial distribution of deposited energy do not need
   to be accurate (see param->SetStepFunction(1., 1*mm)).
 
@@ -75,7 +77,8 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
 
    The program computes and plots energy deposited in the interaction volume
    (absorber), energy spectrum and activity of particles leaving the absorber,
-   and evolution of population of species within the absorber (see below : histograms).
+   and evolution of population of metastable isomers within the absorber 
+   (see below : histograms).
    Processes invoked and particles generated during interactions are listed.
 
  5- HISTOGRAMS
@@ -111,13 +114,13 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
             22    "dN/dt (becquerel) of all others emerging mesons"
             23    "dN/dt (becquerel) of all others emerging leptons (neutrinos)"
 
-   Histograms 24 to 43 are assigned to population of species.
-   A species is an ion of a given excitation energy, with mean life > 0.
-   In other words, 2 different excited states are 2 different species.
+   Histograms 24 to 43 are assigned to population of metastable isomer.
+   Here, ´metastable' means time life > 0.
    
-   The type and number of species created in a run cannot be predicted in advance.
-   Therefore the assignation : species <--> histo_Id is done dynamically 
-   and printed at end of run.
+   The type and number of isomers created in a run cannot be predicted in advance.
+   Therefore the assignation : isomer <--> histo_Id is done on fly 
+   and printed at end of run. A lock mechanism is necessary in MT mode; see Run.cc
+
    Activation and binning control of histograms is done with the usual command
    /analysis/h1/set 
 
@@ -147,10 +150,10 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
  7- HOW TO START ?
  
    Execute Activation in 'batch' mode from macro files :
- 	% Activation   run1.mac
+ 	% ./Activation   run1.mac
  		
    Execute Activation in 'interactive mode' with visualization :
- 	% Activation
+ 	% ./Activation
   Idle> control/execute vis.mac
  	....
  	Idle> type your commands

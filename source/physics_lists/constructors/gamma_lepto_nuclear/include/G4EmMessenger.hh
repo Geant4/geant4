@@ -61,6 +61,7 @@ private:
   G4UIcmdWithABool*   theSynch;
   G4UIcmdWithABool*   theSynchAll;
   G4UIcmdWithABool*   theGN;
+  G4UIcmdWithABool*   theGLENDN;
   G4UIcmdWithABool*   theEN;
   G4UIcmdWithABool*   theMUN;
   G4UIcmdWithABool*   theGMM;

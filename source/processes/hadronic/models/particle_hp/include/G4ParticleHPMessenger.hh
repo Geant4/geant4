@@ -51,6 +51,7 @@ class G4ParticleHPMessenger: public G4UImessenger
       G4UIcmdWithAString* NeglectDopplerCmd;
       G4UIcmdWithAString* DoNotAdjustFSCmd;
       G4UIcmdWithAString* ProduceFissionFragementCmd;
+      G4UIcmdWithAString* NRESP71Cmd;
       G4UIcmdWithAnInteger* VerboseCmd;
       //G4UIcmdWithAString* AllowHeavyElementCmd;
 /*

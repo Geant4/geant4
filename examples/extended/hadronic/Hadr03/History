@@ -1,4 +1,4 @@
-$Id: History 103488 2017-04-11 10:16:44Z gcosmo $
+$Id: History 105744 2017-08-16 13:13:16Z gcosmo $
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+04-07-17 mma  (exhadr03-V10-03-04)
+- SteppingAction() : take into account e- from internal conversion
 
 11-04-17 mma  (exhadr03-V10-03-03)
 - BeginOfRunAction() : remove SetRandomNumberStore()

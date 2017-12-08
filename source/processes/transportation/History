@@ -1,4 +1,4 @@
-$Id: History 87829 2015-01-14 17:19:59Z gcosmo $
+$Id: History 105913 2017-08-28 08:39:12Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,42 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 28th 2017, G.Cosmo transport-V10-03-02
+--------------------------------
+- Make appropriate setting/use of verbosity from base class G4VProcess,
+  instead of re-defining/using local verbosity flag in G4Transportation
+  and G4CoupledTransportation.
+  Addressing problem report #1999.
+
+August 28th 2017, G.Cosmo transport-V10-03-01
+--------------------------------
+- Fixed use of G4DEBUG_TRANSPORT flag in G4CoupledTransportation.
+
+August 25th 2017, J.Apostolakis transport-V10-03-00
+--------------------------------
+- G4CoupledTransportation & G4Transportation: obtain equation of motion
+    using dedicated method of ProgatorInField. 
+    Smaller code, and future proof.
+
+February 12th 2015, J.Apostolakis transport-V10-01-03
+--------------------------------
+- G4CoupledTransportation:: Made SignifyStepInAnyVolume 'flag' static.
+    Stoped using IsLastStepInVolume for step limitation.
+    
+January 20th 2015, J.Apostolakis transport-V10-01-02
+--------------------------------
+- G4CoupledTransportation: Added ability to identify first step in a volume in either
+    the mass geometry or in any geometry.  Also added flag for last step in a volume
+    in the mass geometry.
+    Extends fix of tag transport-V10-01-00. 
+
+  Since it is not clear whether user wants/needs to identify the first/last in
+    any geometry or just in the mass geometry, allowing this to be a choice:
+  Configurable: whether the flag represents a first/last step in mass geometry
+  or any geometry (currently the default - what was the case for last step before).
+  Also depends in geomnav-V10-01-02 and track-V10-01-00.
+  Addresses Bugzilla issue #1032.
+     
 January 10th 2014, M.Kelsey transport-V10-01-01
 ---------------------------
 - G4Transportation.cc, G4CoupledTransportation: In

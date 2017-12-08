@@ -8,6 +8,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+26.10.2017 D.Sorokin; Tag: hadrontherapy-V10-03-11
+	  - LaserDrivenBeamLine.cc build fix
+
 24.06.2017 G.A.P.Cirrone; Tag: hadrontherapy-V10-03-10
 	  - Added the batch.mac file 
 

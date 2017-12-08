@@ -84,11 +84,13 @@ G4DecayProducts* G4ECDecay::DecayIt(G4double)
     case KshellEC:
       shellIndex = 0;
       break;
-    case LshellEC:
-      shellIndex = G4int(G4UniformRand()*3) + 1;
+    case LshellEC: //default PL1/PL=0.995 PL2/PL=0.005 from Fe55 Allowed transition
+      if (G4UniformRand() < 0.995) shellIndex =1;
+      else shellIndex =2;
       break;
-    case MshellEC:
-      shellIndex = G4int(G4UniformRand()*3) + 4;
+    case MshellEC: //default PM1/PM=0.995 PM2/PM=0.005 from Fe55 Allowed transition
+      if (G4UniformRand() < 0.995) shellIndex =4;
+      else shellIndex =5;
       break;
     default:
       G4Exception("G4ECDecay::DecayIt()", "HAD_RDM_009",

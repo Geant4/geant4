@@ -38,7 +38,7 @@
 // Stopping of mu-
 //
 // Modifications: 
-//   20160701 
+//   20160912 K.L. Genser made it rest process
 //
 //------------------------------------------------------------------------
 
@@ -46,7 +46,7 @@
 #define G4MuonMinusAtomicCapture_h 1
  
 #include "globals.hh"
-#include "G4HadronicProcess.hh"
+#include "G4VRestProcess.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ElementSelector.hh"
 #include "G4HadronicInteraction.hh"
@@ -58,11 +58,13 @@
 
 class G4HadronicInteraction;
 
-class G4MuonMinusAtomicCapture : public G4HadronicProcess
+class G4MuonMinusAtomicCapture : public G4VRestProcess
+
 { 
 public:
  
-  explicit G4MuonMinusAtomicCapture(const G4String& name = "muMinusAtomicCaptureAtRest" );
+  explicit G4MuonMinusAtomicCapture(const G4String& name
+                                    = "muMinusAtomicCaptureAtRest" );
 
   ~G4MuonMinusAtomicCapture();
 
@@ -75,11 +77,6 @@ public:
   virtual G4double 
   AtRestGetPhysicalInteractionLength(const G4Track& track,
 				     G4ForceCondition* condition);
-
-  virtual G4double 
-  PostStepGetPhysicalInteractionLength(const G4Track& track,
-				       G4double   previousStepSize,
-				       G4ForceCondition* condition);
 
   virtual G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&);
 
@@ -104,6 +101,14 @@ private:
   G4ElementSelector* fElementSelector;
 
   G4HadronicInteraction* fEmCascade;
+
+  G4ParticleChange* theTotalResult;
+
+  G4HadFinalState* result;
+
+  G4HadProjectile thePro;
+
+  G4Nucleus targetNucleus;
 
 };
 

@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 September 17: S.Y. Jun (op-V10-03-03)
+- change material property keys by the enum type defined in 
+  G4MaterialPropertiesIndex
+
 29 May 17: P. Gumplinger (op-V10-03-02)
 - This version of Mariele Stockhoff's DAVIS model includes not only
   reflection but also the capability of transmitting photons based on LUTs

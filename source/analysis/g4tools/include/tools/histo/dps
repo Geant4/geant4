@@ -152,11 +152,11 @@ public:
   void clear() {m_points.clear();}
   size_t size() const {return m_points.size();}
 
-  const data_point& point(unsigned int a_index) const { 
+  const data_point& point(size_t a_index) const { 
     //WARNING : no check done on a_index.
     return m_points[a_index];
   }
-  data_point& point(unsigned int a_index) { 
+  data_point& point(size_t a_index) { 
     //WARNING : no check done on a_index.
     return m_points[a_index];
   }
@@ -166,7 +166,7 @@ public:
     return m_points.back();
   }
 
-  bool remove_point(unsigned int a_index) { 
+  bool remove_point(size_t a_index) { 
     bool done = false;
     if(a_index<m_points.size()){
       std::vector<data_point>::iterator it = m_points.begin();

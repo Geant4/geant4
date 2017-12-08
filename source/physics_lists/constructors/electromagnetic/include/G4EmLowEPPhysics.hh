@@ -28,6 +28,7 @@
 #define G4EmLowEPPhysics_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,6 +46,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

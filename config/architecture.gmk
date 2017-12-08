@@ -1,4 +1,4 @@
-# $Id: architecture.gmk 96443 2016-04-14 14:19:28Z gcosmo $
+# $Id: architecture.gmk 107491 2017-11-16 09:38:59Z gcosmo $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -188,15 +188,13 @@ endif
 ifdef G4USOLIDS
   G4LIB_USE_USOLIDS := 1
   ifndef USOLIDS_BASE_DIR
-    $(error ERROR - Define path USOLIDS_BASE_DIR to USolids/VecGeom installation!)
+    $(error ERROR - Define path USOLIDS_BASE_DIR to VecGeom installation!)
   else
     ifndef USOLIDS_LIB
       ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-        USOLIDS_LIB := usolids.lib
-        VECGEOM_LIB := vecgeom.lib
+        USOLIDS_LIB := vecgeom.lib
       else
-        USOLIDS_LIB := usolids 
-        VECGEOM_LIB := vecgeom 
+        USOLIDS_LIB := vecgeom 
       endif
     endif
     ifndef USOLIDS_INCLUDE_DIR
@@ -281,10 +279,10 @@ endif
 ifdef G4LIB_USE_USOLIDS
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDFLAGS   += -link $(LIB_PATH)$(USOLIDS_LIB_DIR)
-    LOADLIBS  += $(USOLIDS_LIB) $(VECGEOM_LIB)
+    LOADLIBS  += $(USOLIDS_LIB)
   else
     LDFLAGS   += -L$(USOLIDS_LIB_DIR)
-    LOADLIBS  += -l$(USOLIDS_LIB) -l$(VECGEOM_LIB)
+    LOADLIBS  += -l$(USOLIDS_LIB)
   endif
 endif
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))

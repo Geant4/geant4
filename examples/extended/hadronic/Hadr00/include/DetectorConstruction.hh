@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/DetectorConstruction.hh
 /// \brief Definition of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.hh 81073 2014-05-20 10:23:13Z gcosmo $
+// $Id: DetectorConstruction.hh 106244 2017-09-26 01:58:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -48,6 +48,7 @@
 
 class G4LogicalVolume;
 class DetectorMessenger;
+class G4VModularPhysicsList;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -67,6 +68,8 @@ public:
   void SetTargetLength(G4double val);
 
   const G4Material* GetTargetMaterial() const { return fTargetMaterial; }
+  G4VModularPhysicsList* GetPhysicsList() { return fPhysList; }
+  void SetPhysicsList(G4VModularPhysicsList* ptr) { fPhysList = ptr; }
 
 private:
 
@@ -83,7 +86,7 @@ private:
   G4LogicalVolume* fLogicWorld;
 
   DetectorMessenger* fDetectorMessenger;
-
+  G4VModularPhysicsList* fPhysList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -61,7 +61,7 @@ public:
     a_action.state().m_model = a_action.model_matrix();
   }
 public:
-  matrix():parent(),mtx(tools::mat4f()) {
+  matrix():parent(),mtx(mat4f()) {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif

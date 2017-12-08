@@ -1,4 +1,4 @@
-$Id: History 102480 2017-02-01 10:47:25Z gcosmo $
+$Id: History 107810 2017-12-04 15:58:40Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,22 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+4 December 2017 G.Folger     (phononExample-V10-03-08)
+- fix typo in caustic.out-clang-MT, it had extra \n at end.
+
+24 November 2017 G.Folger    (phononExample-V10-03-07)
+-  update references for caustic and timing
+     changed caused by new CLHEP 2.4.0.0 random number generator
+
+24 October 2017 G.Folger    (phononExample-V10-03-06)
+-  create caustic and timings with \n at least line, drop first
+     empty line; it is difficult to create file without final \nl
+-  update references for this change.       
+
+24 October 2017 G.Folger    (phononExample-V10-03-05)
+-  update references for caustic and timing
+     caused by change in G4RandomDirection, tag global-V10-03-11
 
 25 January 2017 G.Folger    (phononExample-V10-03-04)
 -  correct new timing.out-MT: remove last newline from file

@@ -188,7 +188,7 @@ void Run::EndOfRun()
    
   G4cout << "\n mean energy of charged secondaries: " 
          << G4BestUnit(MeanTransfer, "Energy")
-         << "\tmass_energy_transfer coef: "          
+         << "\n     ---> mass_energy_transfer coef: "
          << G4BestUnit(massTransfCoef, "Surface/Mass")
          << G4endl;       
 
@@ -209,10 +209,10 @@ void Run::EndOfRun()
        emCalculator.ComputeCrossSectionPerVolume(fEkin,fParticle,
                                               procName,material)/density;
     sumc += massSigma;
-    G4cout << "\t" << procName << "= " 
+    G4cout << "   " << procName << "= " 
            << G4BestUnit(massSigma, "Surface/Mass");
   }
-  G4cout << "\ttotal= " 
+  G4cout << "   total= " 
          << G4BestUnit(sumc, "Surface/Mass") << G4endl;
 
   // remove all contents in fProcCounter 

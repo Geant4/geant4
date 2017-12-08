@@ -9,6 +9,7 @@
 #include "idir"
 
 #include "branch_element"
+#include "branch_object"
 
 namespace tools {
 namespace wroot {
@@ -58,7 +59,7 @@ public: //iobject
 
     if(!m_branches.stream(a_buffer)) return false;
 
-   {ObjArray<base_leaf> m_leaves;
+   {obj_array<base_leaf> m_leaves;
     tools_vforcit(branch*,m_branches,itb) {
       const std::vector<base_leaf*>& leaves = (*itb)->leaves();
       tools_vforcit(base_leaf*,leaves,itl) {
@@ -82,7 +83,7 @@ public: //itree
   virtual idir& dir() {return m_dir;}
   virtual const idir& dir() const {return m_dir;}
 public:
-  tree(idir& a_dir,const std::string& a_name,const std::string& a_title)
+  tree(idir& a_dir,const std::string& a_name,const std::string& a_title,bool a_managed = true)
   :m_dir(a_dir)
   ,m_out(a_dir.file().out())
   ,m_name(a_name)
@@ -94,7 +95,7 @@ public:
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
 #endif
-    a_dir.append_object(this); //a_dir takes ownership of tree.
+    if(a_managed) a_dir.append_object(this); //a_dir takes ownership of tree.
   }
   virtual ~tree(){
 #ifdef TOOLS_MEM
@@ -109,6 +110,7 @@ protected:
   {}
   tree& operator=(const tree&){return *this;}
 public:
+  std::ostream& out() const {return m_out;}
   const std::vector<branch*>& branches() const {return m_branches;}
   //uint64 tot_bytes() const {return m_tot_bytes;}
   //uint64 zip_bytes() const {return m_zip_bytes;}
@@ -118,17 +120,79 @@ public:
     const ifile& _file = m_dir.file();
     branch* br = new branch(m_out,_file.byte_swap(),_file.compression(),
                             m_dir.seek_directory(),a_name,m_name,_file.verbose());
+    if(!br) return 0;
+    m_branches.push_back(br);
+    return br;
+  }
+
+  ////////////////////////////////////////////////
+  /// ref : //////////////////////////////////////
+  ////////////////////////////////////////////////
+  template <class TYPE>
+  leaf_ref<TYPE>* create_leaf_ref(const std::string& a_name,const TYPE& a_ref){
+    branch* br = create_branch(a_name);
+    if(!br) return 0;
+    return br->create_leaf_ref<TYPE>(a_name,a_ref);
+  }
+
+  leaf_string_ref* create_leaf_string_ref(const std::string& a_name,const std::string& a_ref){
+    branch* br = create_branch(a_name);
+    if(!br) return 0;
+    return br->create_leaf_string_ref(a_name,a_ref);
+  }
+
+  template <class T>
+  leaf_element* create_std_vector_leaf_ref(const std::string& a_name,const std::vector<T>& a_ref){
+    const ifile& _file = m_dir.file();
+    std_vector_be_ref<T>* br = new std_vector_be_ref<T>(m_out,_file.byte_swap(),_file.compression(),
+                                                        m_dir.seek_directory(),a_name,m_name,a_ref,_file.verbose());
+    leaf_element* le = br->create_leaf_element(a_name);
+    m_branches.push_back(br);
+    return le;
+  }
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
+  ////////////////////////////////////////////////
+  template <class T>
+  std_vector_be_ref<T>* create_std_vector_be_ref(const std::string& a_name,const std::vector<T>& a_ref){
+    const ifile& _file = m_dir.file();
+    std_vector_be_ref<T>* br = new std_vector_be_ref<T>(m_out,_file.byte_swap(),_file.compression(),
+                                                        m_dir.seek_directory(),a_name,m_name,a_ref,_file.verbose());
     m_branches.push_back(br);
     return br;
   }
 
   template <class T>
-  std_vector_be<T>* create_std_vector_be(const std::string& a_name,std::vector<T>& a_vec){
+  std_vector_be<T>* create_std_vector_be(const std::string& a_name,const std::vector<T>& a_def = std::vector<T>()){
     const ifile& _file = m_dir.file();
     std_vector_be<T>* br = new std_vector_be<T>(m_out,_file.byte_swap(),_file.compression(),
-                                                m_dir.seek_directory(),a_name,m_name,a_vec,_file.verbose());
+                                                m_dir.seek_directory(),a_name,m_name,a_def,_file.verbose());
     m_branches.push_back(br);
     return br;
+  }
+
+  template <class T>
+  std_vector_be_pointer<T>* create_std_vector_be_pointer(const std::string& a_name,std::vector<T>* a_pointer){
+    const ifile& _file = m_dir.file();
+    std_vector_be_pointer<T>* br = new std_vector_be_pointer<T>(m_out,_file.byte_swap(),_file.compression(),
+                                                                m_dir.seek_directory(),a_name,m_name,a_pointer,_file.verbose());
+    m_branches.push_back(br);
+    return br;
+  }
+
+  template <class TYPE>
+  leaf<TYPE>* create_leaf(const std::string& a_name){
+    branch* br = create_branch(a_name);
+    if(!br) return 0;
+    return br->create_leaf<TYPE>(a_name);
+  }
+
+  leaf_object* create_leaf(const std::string& a_name,const iobject& a_obj){
+    const ifile& _file = m_dir.file();
+    branch_object* br = new branch_object(m_out,_file.byte_swap(),_file.compression(),
+                                          m_dir.seek_directory(),a_name,m_name,_file.verbose());
+    m_branches.push_back(br);
+    return br->create_leaf(a_name,a_obj);
   }
 
   bool fill(uint32& a_nbytes) {
@@ -157,6 +221,16 @@ public:
     return true;
   }
 
+  void reset() {
+    // Reset buffers and entries count in all branches/leaves
+    m_entries       = 0;
+    m_tot_bytes     = 0;
+    m_zip_bytes     = 0;
+  //fSavedBytes     = 0;
+  //fTotalBuffers   = 0;
+  //fChainOffset    = 0;
+   {tools_vforcit(branch*,m_branches,it) (*it)->reset();}
+  }
 protected:
   idir& m_dir;
   std::ostream& m_out;
@@ -164,7 +238,7 @@ protected:
   std::string m_name;
   std::string m_title;
 
-  ObjArray<branch> m_branches;
+  obj_array<branch> m_branches;
   uint64 m_entries;   // Number of entries
   uint64 m_tot_bytes; // Total number of bytes in branches before compression
   uint64 m_zip_bytes; // Total number of bytes in branches after compression

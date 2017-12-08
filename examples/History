@@ -17,6 +17,53 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th December 2017  Gabriele Cosmo (examples-V10-04-00)
+- Updated reference outputs according to reference tag geant4-10-04-ref-00.
+- Includes tags: brachy-V10-03-01, exdna-V10-03-02, ChargeExchangeMC-V10-03-08,
+                 eRosita-V10-03-02, iort_therapy-V10-03-01, AnaEx02-V10-03-01,
+                 medical_linac-V10-03-02, ReverseMC01-V10-03-01, MPI-V10-03-02,
+                 testem0-V10-03-01, testem5-V10-03-08, testem7-V10-03-01,
+                 testem17-V10-03-00,  monopole-V10-03-04, exHadronic-V10-03-00,
+                 phononExample-V10-03-08, DICOM-V10-03-12, chem3-V10-03-00,
+                 gtherapy-V10-03-08, expar01-V10-03-00, exampleP01-V10-03-01,
+                 exampleP02-V10-03-01, extFactory-V10-03-00, factory-V10-03-01,
+                 genericPL-V10-03-01, activation-V10-03-05, rdecay01-V10-03-13,
+                 doxygen-V10-03-02.
+
+31st October 2017  Gabriele Cosmo (examples-V10-03-10)
+- Updated reference outputs according to reference tag geant4-10-03-ref-10.
+- Includes tags: ChargeExchangeMC-V10-03-06, hadrontherapy-V10-03-11,
+                 iort_therapy-V10-03-00, microbeam-V10-03-04, fano-V10-03-02,
+                 ReverseMC01-V10-03-00, excommon-V10-03-01, testem8-V10-03-01,
+                 testem18-V10-03-06, p6decayer-V10-03-01, monopole-V10-03-01,
+                 phononExample-V10-03-06, g3tog4Tests-V10-03-03,
+                 dnaphysics-V10-03-14, microdosimetry-V10-03-06,
+                 gtherapy-V10-03-07, factory-V10-03-00, genericPL-V10-03-00,
+                 physicslistsShared-V10-03-00, activation-V10-03-04,
+                 rdecay01-V10-03-12.
+
+28th September 2017  Gabriele Cosmo (examples-V10-03-09)
+- Updated reference outputs according to reference tag geant4-10-03-ref-09.
+- Includes tags: ExUCN-V10-03-01, exhadr00-V10-03-00, DICOM-V10-03-03,
+                 range-V10-03-03, svalue-V10-03-03, wvalue-V10-03-03
+                 MPI-V10-03-01.
+
+31st August 2017  Gabriele Cosmo (examples-V10-03-08)
+- Updated reference outputs according to reference tag geant4-10-03-ref-08.
+- Includes tags: microbeam-V10-03-03, AnaEx01-V10-03-00, AnaEx02-V10-03-00,
+                 AnaEx03-V10-03-00, testem5-V10-03-06, testem8-V10-03-00,
+                 testem14-V10-03-01,  testem18-V10-03-05, exhadr03-V10-03-04,
+                 channelingExample-V10-03-03, microdosimetry-V10-03-04,
+                 clustering-V10-03-00, dnaphysics-V10-03-11, mfp-V10-03-00,
+                 neuron-V10-03-02, range-V10-03-02, slowing-V10-03-02,
+                 svalue-V10-03-02, wvalue-V10-03-02, OpNovice-V10-03-02,
+                 ThreadsafeScorers-V10-03-02, rdecay01-V10-03-11.
+
+27th July 2017  Gabriele Cosmo (examples-V10-03-07)
+- Updated reference outputs according to reference tag geant4-10-03-ref-07.
+- Includes tags: testem18-V10-03-03, microyz-V10-03-01, range-V10-03-01,
+                 rdecay01-V10-03-09, rdecay02-V10-03-01.
+
 30th June 2017  Gabriele Cosmo (examples-V10-03-06)
 - Updated reference outputs according to reference tag geant4-10-03-ref-06.
 - Includes tags: doxygen-V10-03-00, hadrontherapy-V10-03-10, testem0-V10-03-00,

@@ -26,7 +26,7 @@
 /// \file analysis/AnaEx03/src/HistoManager.cc
 /// \brief Implementation of the HistoManager class
 //
-// $Id: HistoManager.cc 98059 2016-07-01 16:23:33Z gcosmo $
+// $Id: HistoManager.cc 105492 2017-07-28 09:00:58Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -218,5 +218,3 @@ void HistoManager::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

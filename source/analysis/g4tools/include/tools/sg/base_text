@@ -80,7 +80,7 @@ protected:
   }
 public:
 
-//  void get_bounds(float a_height,tools::box3f& a_box) {
+//  void get_bounds(float a_height,box3f& a_box) {
 //    //for backward compatibility.
 //    float mn_x,mn_y,mn_z;
 //    float mx_x,mx_y,mx_z;

@@ -490,7 +490,7 @@ protected:
     // D E C O M P R E S S   D A T A
 
     if (a_src[0] == 'Z' && a_src[1] == 'L') { //compressed with zlib.
-      tools::decompress_func func;
+      decompress_func func;
       if(!a_file.unziper('Z',func)) {
         a_out << "tools::rroot::key::unzip : "
               << " zlib unziper not found." << std::endl;

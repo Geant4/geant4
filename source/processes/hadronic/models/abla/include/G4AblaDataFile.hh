@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
+// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 #define ABLAXX_IN_GEANT4_MODE 1

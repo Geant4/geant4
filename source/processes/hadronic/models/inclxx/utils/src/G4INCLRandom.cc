@@ -112,6 +112,10 @@ namespace G4INCL {
     }
 
     G4double gauss(G4double sigma) {
+      return G4RandGauss::shoot(0.,sigma);
+    }
+
+    G4double gaussWithMemory(G4double sigma) {
       // generate a Gaussian random number with standard deviation sigma
       // uses the flat() and flat0() methods
       static G4ThreadLocal G4bool generated = false;
@@ -157,8 +161,8 @@ namespace G4INCL {
       G4double factor = 1.-corrCoeff*corrCoeff;
       if(factor<=0.)
         factor=0.;
-      const G4double x = gauss(sigma) + x0;
-      const G4double y = corrCoeff * x + gauss(sigma*std::sqrt(factor)) + x0;
+      const G4double x = gaussWithMemory(sigma) + x0;
+      const G4double y = corrCoeff * x + gaussWithMemory(sigma*std::sqrt(factor)) + x0;
       return std::make_pair(x, y);
     }
 

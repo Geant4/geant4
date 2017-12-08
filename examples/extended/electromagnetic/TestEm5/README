@@ -1,4 +1,4 @@
-$Id: README 104417 2017-05-30 08:30:48Z gcosmo $
+$Id: README 107435 2017-11-13 07:34:58Z gcosmo $
 -----------------------------------------------------
 
      =========================================================
@@ -10,25 +10,25 @@ $Id: README 104417 2017-05-30 08:30:48Z gcosmo $
  How to study the transmission, absorption and reflection of particles through
  a single, thin or thick, layer of material.
  In particular, the effects of the multiple scattering can be plotted.  
-	
+
  1- GEOMETRY DEFINITION
- 
- The "absorber" is a box made of a given material.                
- 	
+
+ The "absorber" is a box made of a given material.
+
  Three parameters define the absorber :
  - the material of the absorber,
  - the thickness of an absorber,
  - the transverse size of the absorber (the input face is a square). 
-    
+
  A volume "World" contains the "absorber". 
 
  In addition a transverse uniform magnetic field can be applied.
- 	
+
  The default geometry is constructed in DetectorConstruction class, but all the
  parameters can be changed via commands defined in the DetectorMessenger class.
  The parameters of the "World" can be changed, too. However, if World material
  is not set to vacuum, the plots 10->43 below may be not pertinent.
- 
+
  2- PHYSICS LIST
 
  Physics lists are based on modular design. Several modules are instantiated:
@@ -39,13 +39,13 @@ $Id: README 104417 2017-05-30 08:30:48Z gcosmo $
 
  EM physics builders can be local (eg. in this example) or from G4 kernel
  physics_lists subdirectory.
-     
+
  Local physics builders:	 
  - "local"	 standard EM physics with current 'best' options setting
                  these options are explicited in PhysListEmStandard
  - "standardSSM" standard EM physics with alternative single Coulomb 
                  scattering model instead of multiple scattering.
-    
+
  From geant4/source/physics_lists/builders:	 
  - "emstandard_opt0" recommended standard EM physics for LHC
  - "emstandard_opt1" best CPU performance standard physics for LHC
@@ -58,47 +58,47 @@ $Id: README 104417 2017-05-30 08:30:48Z gcosmo $
  - "empenelope"   low-energy EM physics implementing Penelope models
  - "emlowenergy"  low-energy EM physics implementing experimental 
                   low-energy models
-           
+
  Physics lists and options can be (re)set with UI commands
-    
+
  Please, notice that options set through G4EmProcessOptions are global, eg
  for all particle types. In G4 builders, it is shown how to set options per
  particle type.
 
  3- AN EVENT : THE PRIMARY GENERATOR
- 
+
  The primary kinematic consists of a single particle which hits the absorber 
  perpendicular to the input face. The type of the particle and its energy are 
  set in the PrimaryGeneratorAction class, and can be changed via the G4 
  build-in commands of G4ParticleGun class (see the macros provided with this 
  example).
-	
+
  In addition one can choose randomly the impact point of the incident particle.
  The interactive command is built in PrimaryGeneratorMessenger class.
- 
+
  4- VISUALIZATION
- 
+
  The Visualization Manager is set in the main().
  The initialisation of the drawing is done via the commands in vis.mac
  In interactive session:
  PreInit or Idle > /control/execute vis.mac
- 	
+
  The example has a default view which is a longitudinal view of the detector.
- 	
+
  The tracks are drawn at the end of event, and erased at the end of run.
  Optionally one can choose to draw all particles, only the charged, or none.
  This command is defined in EventActionMessenger class.
- 
+
  5- TRACKING
- 
+
  During the tracking, one can keep or not the secondaries : see StackingAction
  class and its Messenger (StackingMessenger).
  One can also limit 'by hand' the step lenght of the particle. As an example,
  this limitation is implemented as a 'full' process : see StepMax class and its
  Messenger. The 'StepMax process' is registered in the Physics List. 
-  	
+
  6- DETECTOR RESPONSE
-  	
+ 
  At the end of a run, from the histogram(s), one can study different
  physics quantities such as :
  - energy deposit in the absorber,
@@ -106,26 +106,26 @@ $Id: README 104417 2017-05-30 08:30:48Z gcosmo $
  - energy spectrum and angle distribution of particles at exit,
  - transmission and backscattering coefficients,
  -  ...
- 
+
  7- List of the built-in histograms
  ----------------------------------
-        
- The test contains more than 20 built-in 1D histograms, which are managed by
+
+ The test contains more than 60 built-in 1D histograms, which are managed by
  G4AnalysisManager class and its Messenger. The histos can be individually activated
  with the command :
  /analysis/h1/set id nbBins  valMin valMax unit 
  where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
  (see the macros xxxx.mac).
- 
+
 	1	"energy deposit in absorber"
 	2	"energy of charged secondaries at creation"
 	3	"energy of neutral secondaries at creation"	
 	4	"energy of charged at creation (log10(Ekin))"
 	5	"energy of neutral at creation (log10(Ekin))"	
-	6       "x_vertex of charged secondaries (all)"
-	7       "x_vertex of charged secondaries (not absorbed)"
+	6   "x_vertex of charged secondaries (all)"
+	7   "x_vertex of charged secondaries (not absorbed)"
 	10	"(transmit, charged) : kinetic energy at exit of world"
-  11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
+	11	"(transmit, charged) : ener fluence: dE(MeV)/dOmega"	
 	12	"(transmit, charged) : space angle dN/dOmega"
 	13	"(transmit, charged) : projected angle at exit of world"
 	14	"(transmit, charged) : projected position at exit of world"
@@ -142,38 +142,31 @@ $Id: README 104417 2017-05-30 08:30:48Z gcosmo $
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
-        50      "energy of Auger e- at creation"
-        51      "energy of fluorescence gamma at creation"
-        52      "energy of Auger e- at creation (log scale)"
-        53      "energy of fluorescence gamma at creation (log scale)"
-        54      "energy of PIXE Auger e- at creation"
-        55      "energy of PIXE gamma at creation"
-        56      "energy of PIXE Auger e- at creation (log scale)"
-        57      "energy of PIXE gamma at creation (log scale)"
-        58      "energy of G4DNA Auger e- at creation"
-        59      "energy of G4DNA gamma at creation"
-        60      "energy of G4DNA Auger e- at creation (log scale)"
-        61      "energy of G4DNA gamma at creation (log scale)"
+    50  "energy of Auger e- at creation"
+    51  "energy of fluorescence gamma at creation"
+    52  "energy of Auger e- at creation (log scale)"
+    53  "energy of fluorescence gamma at creation (log scale)"
+    54  "energy of PIXE Auger e- at creation"
+    55  "energy of PIXE gamma at creation"
+    56  "energy of PIXE Auger e- at creation (log scale)"
+    57  "energy of PIXE gamma at creation (log scale)"
+    58  "energy of G4DNA Auger e- at creation"
+    59  "energy of G4DNA gamma at creation"
+    60  "energy of G4DNA Auger e- at creation (log scale)"
+    61  "energy of G4DNA gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
- 
+
  One can control the name of the histograms file with the command:
  /analysis/setFileName  name  (default testem5)
-   
+
  It is possible to choose the format of the histogram file : root (default),
  hbook, xml, csv, by using namespace in HistoManager.hh
-     
+
  It is also possible to print selected histograms on an ascii file:
  /analysis/h1/setAscii id
  All selected histos will be written on a file name.ascii  (default testem5) 
-    
- Using hbook format
- ------------------
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in HistoManager.hh
- 				
+
  8- GEANT4/GEANT3/DATA COMPARISON
 
  A Geant4/Geant3/exp. data comparison is given here for a few cases.

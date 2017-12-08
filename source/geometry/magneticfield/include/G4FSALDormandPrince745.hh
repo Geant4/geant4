@@ -88,15 +88,15 @@ private :
     G4FSALDormandPrince745& operator=(const G4FSALDormandPrince745&);
     
     G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7,
-    *ak8, *ak9, 	//For additional stages in the interpolant
-    *yTemp, *yIn;
+       *ak8, *ak9, 	//For additional stages in the interpolant
+       *yTemp, *yIn;
     
     //Only for use with DistChord :-
     G4double *pseudoDydx_for_DistChord;
     
     G4double fLastStepLength;
     G4double *fLastInitialVector, *fLastFinalVector,
-    *fLastDyDx, *fMidVector, *fMidError;
+       *fInitialDyDx, *fLastDyDx, *fMidVector, *fMidError;
     // for DistChord calculations
     
     G4FSALDormandPrince745* fAuxStepper;

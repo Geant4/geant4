@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file Hadr06.cc
-/// \brief Main program of the hadronic/Hadr06 example
+/// \file Activation.cc
+/// \brief Main program of the radioactivedecay/Activation example
 //
 //
-// $Id: TestEm1.cc,v 1.16 2010-04-06 11:11:24 maire Exp $
+// $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

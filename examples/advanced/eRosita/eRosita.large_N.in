@@ -1,7 +1,0 @@
-/tracking/verbose 0
-
-/gun/energy    100 MeV
-/gun/particle proton
-/run/beamOn 10000
-
-exit

@@ -43,6 +43,7 @@
 #include "G4INCLRandom.hh"
 #include "G4INCLStandardPropagationModel.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLParticle.hh"
 #include "G4INCLNuclearMassTable.hh"
 #include "G4INCLGlobalInfo.hh"
 
@@ -69,14 +70,14 @@
 #include "G4INCLCascadeAction.hh"
 #include "G4INCLAvatarDumpAction.hh"
 
-#include <cstring>
+#include <cstring> 
 #include <cstdlib>
 #include <numeric>
 
 namespace G4INCL {
-
+  
   INCL::INCL(Config const * const config)
-    :propagationModel(0), theA(208), theZ(82),
+    :propagationModel(0), theA(208), theZ(82), theS(0),
     targetInitSuccess(false),
     maxImpactParameter(0.),
     maxUniverseRadius(0.),
@@ -119,6 +120,9 @@ namespace G4INCL {
 
     // Initialize the value of cutNN in BinaryCollisionAvatar
     BinaryCollisionAvatar::setCutNN(theConfig->getCutNN());
+
+    // Initialize the value of strange cross section bias
+    BinaryCollisionAvatar::setBias(theConfig->getBias());
 
     // Propagation model is responsible for finding avatars and
     // transporting the particles. In principle this step is "hidden"
@@ -175,15 +179,15 @@ namespace G4INCL {
     delete theConfig;
   }
 
-  G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
+  G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z, const G4int S) {
     if(A < 0 || A > 300 || Z < 1 || Z > 200) {
-      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << '\n'
+      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << " S = " << S << '\n'
                  << "Target configuration rejected." << '\n');
       return false;
     }
     if(projectileSpecies.theType==Composite &&
        (projectileSpecies.theZ==projectileSpecies.theA || projectileSpecies.theZ==0)) {
-      INCL_ERROR("Unsupported projectile: A = " << projectileSpecies.theA << " Z = " << projectileSpecies.theZ << '\n'
+      INCL_ERROR("Unsupported projectile: A = " << projectileSpecies.theA << " Z = " << projectileSpecies.theZ << " S = " << projectileSpecies.theS << '\n'
                  << "Projectile configuration rejected." << '\n');
       return false;
     }
@@ -196,11 +200,12 @@ namespace G4INCL {
 
     // Initialise the nucleus
     theZ = Z;
+    theS = S;
     if(theConfig->isNaturalTarget())
       theA = ParticleTable::drawRandomNaturalIsotope(Z);
     else
       theA = A;
-    initializeTarget(theA, theZ);
+    initializeTarget(theA, theZ, theS);
 
     // Set the maximum impact parameter
     maxImpactParameter = CoulombDistortion::maxImpactParameter(projectileSpecies, kineticEnergy, nucleus);
@@ -222,10 +227,10 @@ namespace G4INCL {
     return true;
   }
 
-  G4bool INCL::initializeTarget(const G4int A, const G4int Z) {
+  G4bool INCL::initializeTarget(const G4int A, const G4int Z, const G4int S) {
     delete nucleus;
 
-    nucleus = new Nucleus(A, Z, theConfig, maxUniverseRadius);
+    nucleus = new Nucleus(A, Z, S, theConfig, maxUniverseRadius);
     nucleus->getStore()->getBook().reset();
     nucleus->initializeParticles();
 
@@ -237,13 +242,19 @@ namespace G4INCL {
       ParticleSpecies const &projectileSpecies,
       const G4double kineticEnergy,
       const G4int targetA,
-      const G4int targetZ
+      const G4int targetZ,
+      const G4int targetS
       ) {
+    // ReInitialize the bias vector
+    Particle::INCLBiasVector.clear();
+    //Particle::INCLBiasVector.Clear();
+    Particle::nextBiasedCollisionID = 0;
+    
     // Set the target and the projectile
-    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ);
+    targetInitSuccess = prepareReaction(projectileSpecies, kineticEnergy, targetA, targetZ, targetS);
 
     if(!targetInitSuccess) {
-      INCL_WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << '\n');
+      INCL_WARN("Target initialisation failed for A=" << targetA << ", Z=" << targetZ << ", S=" << targetS << '\n');
       theEventInfo.transparent=true;
       return theEventInfo;
     }
@@ -270,9 +281,11 @@ namespace G4INCL {
     theEventInfo.projectileType = projectileSpecies.theType;
     theEventInfo.Ap = projectileSpecies.theA;
     theEventInfo.Zp = projectileSpecies.theZ;
+    theEventInfo.Sp = projectileSpecies.theS;
     theEventInfo.Ep = kineticEnergy;
     theEventInfo.At = nucleus->getA();
     theEventInfo.Zt = nucleus->getZ();
+    theEventInfo.St = nucleus->getS();
 
     // Do nothing below the Coulomb barrier
     if(maxImpactParameter<=0.) {
@@ -343,7 +356,6 @@ namespace G4INCL {
       // The handling of the channel is transparent to the API.
       // Final state tells what changed...
       avatar->fillFinalState(finalState);
-
       // Run book keeping actions that should take place after avatar:
       cascadeAction->afterAvatarAction(avatar, nucleus, finalState);
 
@@ -355,7 +367,7 @@ namespace G4INCL {
 
       ++loopCounter;
     } while(continueCascade() && loopCounter<maxLoopCounter); /* Loop checking, 10.07.2015, D.Mancusi */
-
+    
     delete finalState;
   }
 
@@ -387,6 +399,27 @@ namespace G4INCL {
         nucleus->getStore()->deleteIncoming();
       }
     } else {
+      
+      // Check if the nucleus contains strange particles
+      theEventInfo.sigmasInside = nucleus->containsSigma();
+      theEventInfo.antikaonsInside = nucleus->containsAntiKaon();
+      theEventInfo.lambdasInside = nucleus->containsLambda();
+      theEventInfo.kaonsInside = nucleus->containsKaon();
+      
+      // Capture antiKaons and Sigmas and produce Lambda instead
+      theEventInfo.absorbedStrangeParticle = nucleus->decayInsideStrangeParticles();
+      
+      // Emit antiKaons and Sigmas still inside the nucleus
+      nucleus->emitInsideStrangeParticles();
+      theEventInfo.emitKaon = nucleus->emitInsideKaon();
+      // Should be activated only for geant4
+#ifdef INCLXX_IN_GEANT4_MODE
+      theEventInfo.emitLambda = nucleus->emitInsideLambda();
+#endif // INCLXX_IN_GEANT4_MODE
+
+      // The event bias
+      theEventInfo.eventBias = (Double_t) Particle::getTotalBias();
+      
       // Check if the nucleus contains deltas
       theEventInfo.deltasInside = nucleus->containsDeltas();
 
@@ -394,13 +427,12 @@ namespace G4INCL {
       theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
       theEventInfo.forcedDeltasInside = nucleus->decayInsideDeltas();
 
-	  // Take care of any remaining etas and/or omegas
-/*	  if (theConfig->getDecayTimeThreshold() > 7.e-19) {
-		  theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances();
-	  }*/
-	  G4double timeThreshold=theConfig->getDecayTimeThreshold();
-	  theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
-		
+      // Take care of any remaining etas, omegas, neutral Sigmas and/or neutral kaons
+      G4double timeThreshold=theConfig->getDecayTimeThreshold();
+      theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
+      nucleus->decayOutgoingSigmaZero(timeThreshold);
+      nucleus->decayOutgoingNeutralKaon();
+        
       // Apply Coulomb distortion, if appropriate
       // Note that this will apply Coulomb distortion also on pions emitted by
       // unphysical remnants (see decayInsideDeltas). This is at variance with
@@ -597,10 +629,10 @@ namespace G4INCL {
       // Take care of any remaining deltas
       theEventInfo.forcedDeltasOutside = nucleus->decayOutgoingDeltas();
 
-	  // Take care of any remaining etas and/or omegas
-	  G4double timeThreshold=theConfig->getDecayTimeThreshold();
+      // Take care of any remaining etas and/or omegas
+      G4double timeThreshold=theConfig->getDecayTimeThreshold();
       theEventInfo.forcedPionResonancesOutside = nucleus->decayOutgoingPionResonances(timeThreshold);
-		
+        
       // Cluster decay
       theEventInfo.clusterDecay = nucleus->decayOutgoingClusters() | nucleus->decayMe();
 
@@ -633,7 +665,7 @@ namespace G4INCL {
       INCL_ERROR("Violation of charge conservation! ZBalance = " << theBalance.Z << '\n');
     }
     if(theBalance.A != 0) {
-      INCL_ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << '\n');
+      INCL_ERROR("Violation of baryon-number conservation! ABalance = " << theBalance.A << " Emit Lambda=" << theEventInfo.emitLambda << " eventNumber=" << theEventInfo.eventNumber << '\n');
     }
     G4double EThreshold, pLongThreshold, pTransThreshold;
     if(afterRecoil) {
@@ -648,7 +680,7 @@ namespace G4INCL {
       pTransThreshold = 0.1; // MeV/c
     }
     if(std::abs(theBalance.energy)>EThreshold) {
-      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << '\n');
+      INCL_WARN("Violation of energy conservation > " << EThreshold << " MeV. EBalance = " << theBalance.energy << " Emit Lambda=" << theEventInfo.emitLambda << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << '\n');
     }
     if(std::abs(pLongBalance)>pLongThreshold) {
       INCL_WARN("Violation of longitudinal momentum conservation > " << pLongThreshold << " MeV/c. pLongBalance = " << pLongBalance << " afterRecoil = " << afterRecoil << " eventNumber=" << theEventInfo.eventNumber << '\n');
@@ -784,13 +816,14 @@ namespace G4INCL {
       for(IsotopeIter i=theIsotopes.begin(), e=theIsotopes.end(); i!=e; ++i) {
         const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, i->theA, Z);
         const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, i->theA, Z);
-        const G4double maximumRadius = std::min(pMaximumRadius, nMaximumRadius);
+        const G4double maximumRadius = std::max(pMaximumRadius, nMaximumRadius);
         rMax = std::max(maximumRadius, rMax);
       }
     } else {
       const G4double pMaximumRadius = ParticleTable::getMaximumNuclearRadius(Proton, A, Z);
       const G4double nMaximumRadius = ParticleTable::getMaximumNuclearRadius(Neutron, A, Z);
-      rMax = std::min(pMaximumRadius, nMaximumRadius);
+      const G4double maximumRadius = std::max(pMaximumRadius, nMaximumRadius);
+      rMax = std::max(maximumRadius, rMax);
     }
     if(p.theType==Composite || p.theType==Proton || p.theType==Neutron) {
       const G4double interactionDistanceNN = CrossSections::interactionDistanceNN(p, kineticEnergy);
@@ -800,6 +833,20 @@ namespace G4INCL {
         || p.theType==PiMinus) {
       const G4double interactionDistancePiN = CrossSections::interactionDistancePiN(kineticEnergy);
       maxUniverseRadius = rMax + interactionDistancePiN;
+    } else if(p.theType==KPlus
+        || p.theType==KZero) {
+      const G4double interactionDistanceKN = CrossSections::interactionDistanceKN(kineticEnergy);
+      maxUniverseRadius = rMax + interactionDistanceKN;
+    } else if(p.theType==KZeroBar
+        || p.theType==KMinus) {
+      const G4double interactionDistanceKbarN = CrossSections::interactionDistanceKbarN(kineticEnergy);
+      maxUniverseRadius = rMax + interactionDistanceKbarN;
+    } else if(p.theType==Lambda
+        ||p.theType==SigmaPlus
+        || p.theType==SigmaZero
+        || p.theType==SigmaMinus) {
+      const G4double interactionDistanceYN = CrossSections::interactionDistanceYN(kineticEnergy);
+      maxUniverseRadius = rMax + interactionDistanceYN;
     }
     INCL_DEBUG("Initialised universe radius: " << maxUniverseRadius << '\n');
   }

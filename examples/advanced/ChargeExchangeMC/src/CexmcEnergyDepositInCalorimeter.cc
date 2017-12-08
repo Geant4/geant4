@@ -52,8 +52,8 @@
 
 
 CexmcEnergyDepositInCalorimeter::CexmcEnergyDepositInCalorimeter(
-                        const G4String &  name, const CexmcSetup *  setup ) :
-    CexmcEnergyDepositInLeftRightSet( name, setup )
+                        const G4String &  name, const CexmcSetup *  setup_ ) :
+    CexmcEnergyDepositInLeftRightSet( name, setup_ )
 {
 }
 

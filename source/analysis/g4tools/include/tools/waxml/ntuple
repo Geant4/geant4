@@ -297,7 +297,7 @@ public:
                 << " for std::vector column " << sout((*it).name())
                 << ", the user vector pointer is null."
                 << std::endl;
-          tools::clear<iobj>(m_cols);
+          safe_clear<iobj>(m_cols);
           return;
         }
       } else if((*it).cls_id()==_cid_std_vector<float>()) {
@@ -309,7 +309,7 @@ public:
                 << " for std::vector column " << sout((*it).name())
                 << ", the user vector pointer is null."
                 << std::endl;
-          tools::clear<iobj>(m_cols);
+          safe_clear<iobj>(m_cols);
           return;
         }
       } else if((*it).cls_id()==_cid_std_vector<double>()) {
@@ -321,7 +321,7 @@ public:
                 << " for std::vector column " << sout((*it).name())
                 << ", the user vector pointer is null."
                 << std::endl;
-          tools::clear<iobj>(m_cols);
+          safe_clear<iobj>(m_cols);
           return;
         }
 
@@ -331,13 +331,13 @@ public:
               << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
-        tools::clear<iobj>(m_cols);
+        safe_clear<iobj>(m_cols);
         return;
       }      
     }
   }
   virtual ~ntuple() {
-    tools::clear<iobj>(m_cols);
+    safe_clear<iobj>(m_cols);
   }
 protected:
   ntuple(const ntuple& a_from)

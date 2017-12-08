@@ -15,7 +15,8 @@ template <class TC,class TO,class TN,class TW,class TH>
 class b3 : public base_histo<TC,TO,TN,TW,TH> {
   typedef base_histo<TC,TO,TN,TW,TH> parent;
 public:
-  typedef axis<TC,TO> axis_t;
+  typedef base_histo<TC,TO,TN,TW,TH> base_histo_t;
+  typedef typename parent::axis_t axis_t;
   typedef typename parent::bn_t bn_t;
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};

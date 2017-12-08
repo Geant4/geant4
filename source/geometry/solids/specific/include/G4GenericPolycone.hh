@@ -50,7 +50,7 @@
 // --------------------------------------------------------------------
 #ifndef G4GenericPolycone_hh
 #define G4GenericPolycone_hh
-
+/*
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UGENERICPOLYCONE 1
 #endif
@@ -59,7 +59,7 @@
   #define G4UGenericPolycone G4GenericPolycone
   #include "G4UGenericPolycone.hh"
 #else
-
+*/
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 
@@ -160,6 +160,6 @@ class G4GenericPolycone : public G4VCSGfaceted
 
 #include "G4GenericPolycone.icc"
 
-#endif
+//#endif
 
 #endif

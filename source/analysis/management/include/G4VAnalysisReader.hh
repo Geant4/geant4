@@ -67,11 +67,11 @@ class G4VAnalysisReader
     G4String GetFileName() const;
     
     // Methods to read histograms from a file
-    G4int ReadH1(const G4String& h1Name, const G4String& fileName = "");
-    G4int ReadH2(const G4String& h2Name, const G4String& fileName = "");
-    G4int ReadH3(const G4String& h3Name, const G4String& fileName = "");
-    G4int ReadP1(const G4String& h1Name, const G4String& fileName = "");
-    G4int ReadP2(const G4String& h2Name, const G4String& fileName = "");
+    G4int ReadH1(const G4String& h1Name, const G4String& fileName = "", const G4String& dirName = "");
+    G4int ReadH2(const G4String& h2Name, const G4String& fileName = "", const G4String& dirName = "");
+    G4int ReadH3(const G4String& h3Name, const G4String& fileName = "", const G4String& dirName = "");
+    G4int ReadP1(const G4String& h1Name, const G4String& fileName = "", const G4String& dirName = "");
+    G4int ReadP2(const G4String& h2Name, const G4String& fileName = "", const G4String& dirName = "");
                            
     // The ids of histograms and ntuples are generated automatically
     // starting from 0; with following functions it is possible to
@@ -86,7 +86,7 @@ class G4VAnalysisReader
     G4bool SetFirstNtupleId(G4int firstId);
 
     // Methods to read ntuple from a file
-    G4int GetNtuple(const G4String& ntupleName, const G4String& fileName = "");
+    G4int GetNtuple(const G4String& ntupleName, const G4String& fileName = "", const G4String& dirName = "");
     
     // Methods for ntuple with id = FirstNtupleId
     G4bool SetNtupleIColumn(const G4String& columnName, G4int& value);
@@ -226,17 +226,17 @@ class G4VAnalysisReader
   protected:
     // virtual methods
     virtual G4int  ReadH1Impl(const G4String& h1Name, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
     virtual G4int  ReadH2Impl(const G4String& h2Name, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
     virtual G4int  ReadH3Impl(const G4String& h3Name, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
     virtual G4int  ReadP1Impl(const G4String& p1Name, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
     virtual G4int  ReadP2Impl(const G4String& p2Name, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
     virtual G4int  ReadNtupleImpl(const G4String& ntupleName, const G4String& fileName,
-                              G4bool isUserFileName) = 0;
+                              const G4String& dirName, G4bool isUserFileName) = 0;
  
     // methods
     void SetH1Manager(G4VH1Manager* h1Manager);

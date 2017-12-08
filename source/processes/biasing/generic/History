@@ -1,4 +1,4 @@
-$Id: History 101363 2016-11-15 15:27:42Z gcosmo $
+$Id: History 107595 2017-11-24 16:17:37Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 24th, 2017 M. Verderi
+- Fix G4BiasingProcessInterface for wrong setting of first/last
+  GPIL/DoIt flags in case charged particles. As the msc became
+  a pure along, this broke the initial logic based on the fact
+  that, before, physics processes always had a PostStepDoIt method.
+- proc-biasgen-V10-03-00
+  
 
 November 15th, 2016, M. Verderi
 - Fix one Coverity warning in G4ParallelGeometriesLimiterProcess.

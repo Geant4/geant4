@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.cc 103108 2017-03-16 13:00:35Z gcosmo $
+// $Id: G4ParticleTable.cc 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // class G4ParticleTable
 //
@@ -47,6 +47,7 @@
 //      RW PtrHashedDictionary           28 Oct., 99  H.Kurashige
 //      remove G4ShortLivedTable         25 July, 13 H.Kurashige
 //      remove FindIon/GetIon            25 Sep. 14 H.Kurashige
+//      added support for MuonicAtom  September, 17 K.L.Genser
 // 
 
 #include "globals.hh"
@@ -112,7 +113,8 @@ G4ParticleTable::G4ParticleTable()
      :verboseLevel(1),
       noName(" "),
       readyToUse(false),
-      genericIon(NULL)
+      genericIon(nullptr),
+      genericMuonicAtom(nullptr)
 {
   fDictionary = new G4PTblDictionary();
 

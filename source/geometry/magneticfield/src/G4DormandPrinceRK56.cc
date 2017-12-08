@@ -48,9 +48,8 @@ G4DormandPrinceRK56::G4DormandPrinceRK56(G4EquationOfMotion *EqRhs,
                        G4int noIntegrationVariables,
                        G4bool primary)
 : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-  fAuxStepper(0)
+  fLastStepLength(-1.0), fAuxStepper(nullptr)
 {
-    
     const G4int numberOfVariables = noIntegrationVariables;
     
     //New Chunk of memory being created for use by the stepper
@@ -64,7 +63,13 @@ G4DormandPrinceRK56::G4DormandPrinceRK56(G4EquationOfMotion *EqRhs,
     ak7 = new G4double[numberOfVariables];
     ak8 = new G4double[numberOfVariables];
     ak9 = new G4double[numberOfVariables];
-
+    
+    // Memory for Additional stages
+    ak10 = new G4double[numberOfVariables];
+    ak11 = new G4double[numberOfVariables];
+    ak12 = new G4double[numberOfVariables];
+    ak10_low = new G4double[numberOfVariables];
+    
     const G4int numStateVars = std::max(noIntegrationVariables, 8);
     yTemp = new G4double[numStateVars];
     yIn = new G4double[numStateVars] ;
@@ -96,7 +101,12 @@ G4DormandPrinceRK56::~G4DormandPrinceRK56(){
     delete[] ak7;
     delete[] ak8;
     delete[] ak9;
-    
+
+    delete[] ak10;
+    delete[] ak10_low;    
+    delete[] ak11;
+    delete[] ak12;
+
     delete[] yTemp;
     delete[] yIn;
     
@@ -430,8 +440,6 @@ void G4DormandPrinceRK56::SetupInterpolate_low( const G4double yInput[],
     b_108 = 2479.0/23040.0 ,
     b_109 = 1.0/64.0 ;
 
-    ak10_low = new G4double[numberOfVariables];
-    
     for(int i=0;i<numberOfVariables;i++)
     {
         yIn[i]=yInput[i];
@@ -445,7 +453,6 @@ void G4DormandPrinceRK56::SetupInterpolate_low( const G4double yInput[],
                                   b_107*ak7[i] + b_108*ak8[i] + b_109*ak9[i]);
     }
     RightHandSide(yTemp, ak10_low);          //10th Stage
-
 }
 
 void G4DormandPrinceRK56::Interpolate_low( const G4double yInput[],
@@ -558,15 +565,7 @@ void G4DormandPrinceRK56::SetupInterpolate_high( const G4double yInput[],
     
     yTemp[7]  = yIn[7];
     
-    
-	// New memory for Additional stages
 
-    if(ak10 == NULL)
-        ak10 = new G4double[numberOfVariables];
-    if(ak11 == NULL)
-        ak11 = new G4double[numberOfVariables];
-    if(ak12 == NULL)
-        ak12 = new G4double[numberOfVariables];
     
     //Evaluate the extra stages :
     

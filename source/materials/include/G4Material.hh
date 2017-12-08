@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh 100406 2016-10-21 08:18:05Z gcosmo $
+// $Id: G4Material.hh 106243 2017-09-26 01:56:43Z gcosmo $
 //
 
 //---------------------------------------------------------------------------
@@ -110,6 +110,7 @@
 #include "G4SandiaTable.hh"
 #include "G4ElementVector.hh"
 #include "G4MaterialTable.hh"
+#include "G4Threading.hh"
 
 enum G4State { kStateUndefined = 0, kStateSolid, kStateLiquid, kStateGas };
 
@@ -246,8 +247,7 @@ public:  // with description
   G4double GetA() const;
 
   //the MaterialPropertiesTable (if any) attached to this material:
-  inline void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
-  {fMaterialPropertiesTable = anMPT;}
+  void SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT);
   				       
   inline G4MaterialPropertiesTable* GetMaterialPropertiesTable() const
   {return fMaterialPropertiesTable;}
@@ -278,7 +278,6 @@ public:  // with description
 
   inline void SetName (const G4String& name) {fName=name;}
 
-public:
   virtual G4bool IsExtended() const;
 
 private:
@@ -352,6 +351,9 @@ private:
   G4double fMassOfMolecule; 		  // for materials built by atoms count
   std::map<G4Material*,G4double> fMatComponents; // for composites built via
                                                  // AddMaterial()
+#ifdef G4MULTITHREADED
+  static G4Mutex materialMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

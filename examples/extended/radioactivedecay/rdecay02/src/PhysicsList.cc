@@ -35,8 +35,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
-
-#include "EmStandardPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4EmParameters.hh"
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
@@ -48,7 +49,6 @@
 #include "G4IonElasticPhysics.hh"
 #include "G4IonPhysics.hh"
 #include "G4IonINCLXXPhysics.hh"
-#include "GammaPhysics.hh"
 
 // particles
 
@@ -82,8 +82,12 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition("year",   "y",   "Time", year);
           
   // EM physics
-  RegisterPhysics(new EmStandardPhysics());
-  
+  RegisterPhysics(new G4EmStandardPhysics());
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetAugerCascade(true);
+  param->SetStepFunction(1., 1*CLHEP::mm);
+  param->SetStepFunctionMuHad(1., 1*CLHEP::mm);
+ 
   // Decay
   RegisterPhysics(new G4DecayPhysics());
 
@@ -107,7 +111,10 @@ PhysicsList::PhysicsList()
   ////RegisterPhysics( new G4IonINCLXXPhysics(verb));
     
   // Gamma-Nuclear Physics
-  RegisterPhysics( new GammaPhysics("gamma"));
+  G4EmExtraPhysics* gnuc = new G4EmExtraPhysics(verb);
+  gnuc->ElectroNuclear(false);
+  gnuc->MuonNuclear(false);
+  RegisterPhysics(gnuc);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

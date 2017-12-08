@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc 83572 2014-09-01 15:23:27Z gcosmo $
+// $Id: G4CSGSolid.cc 105315 2017-07-20 14:35:13Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -32,6 +32,7 @@
 
 #include "G4CSGSolid.hh"
 #include "Randomize.hh"
+#include "G4RandomTools.hh"
 #include "G4Polyhedron.hh"
 
 #include "G4AutoLock.hh"
@@ -110,12 +111,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
 
 G4double G4CSGSolid::GetRadiusInRing(G4double rmin, G4double rmax) const
 {
-  // Generate radius in annular ring according to uniform area
-  //
-  if (rmin<=0.)   { return rmax*std::sqrt(G4UniformRand()); }
-  if (rmin!=rmax) { return std::sqrt(G4UniformRand()
-                           * (sqr(rmax)-sqr(rmin))+sqr(rmin)); }
-  return rmin;
+  return G4RandomRadiusInRing(rmin, rmax);
 }
 
 std::ostream& G4CSGSolid::StreamInfo(std::ostream& os) const

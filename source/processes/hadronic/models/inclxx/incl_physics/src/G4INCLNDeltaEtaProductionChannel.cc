@@ -55,7 +55,8 @@ namespace G4INCL {
   NDeltaEtaProductionChannel::~NDeltaEtaProductionChannel() {}
 
   G4double NDeltaEtaProductionChannel::sampleDeltaMass(G4double ecmorigin) {
-    const G4double ecm = ecmorigin - 686.987; // 686.987 MeV translation to open pion(delta) production in NNEta
+//    const G4double ecm = ecmorigin - 686.987; // 686.987 MeV translation to open pion(delta) production in NNEta
+    const G4double ecm = ecmorigin - 581.437; // 581.437 MeV translation to open pion(delta) production in NNEta
     const G4double maxDeltaMass = ecm - ParticleTable::effectiveNucleonMass - 1.0;
     const G4double maxDeltaMassRndm = std::atan((maxDeltaMass-ParticleTable::effectiveDeltaMass)*2./ParticleTable::effectiveDeltaWidth);
     const G4double deltaMassRndmRange = maxDeltaMassRndm - ParticleTable::minDeltaMassRndm;
@@ -93,7 +94,7 @@ namespace G4INCL {
     }
     return x;
   }
-
+ 
  void NDeltaEtaProductionChannel::fillFinalState(FinalState *fs) {
   
 /**
@@ -108,8 +109,6 @@ namespace G4INCL {
   ParticleList list;
   list.push_back(particle1);
   list.push_back(particle2);
-  fs->addModifiedParticle(particle1);
-  fs->addModifiedParticle(particle2);
   
 //  isospin Repartition of N and Delta;
   G4double ecm = KinematicsUtils::totalEnergyInCM(particle1, particle2);  
@@ -159,8 +158,6 @@ namespace G4INCL {
   if(particle1->isDelta()) particle1->setMass(xmdel);
   if(particle2->isDelta()) particle2->setMass(xmdel);
   
-  fs->addModifiedParticle(particle1);
-  fs->addModifiedParticle(particle2);
   
   const ThreeVector &rcolnucleon1 = particle1->getPosition();
   const ThreeVector &rcolnucleon2 = particle2->getPosition();
@@ -180,7 +177,8 @@ namespace G4INCL {
    particle1->setHelicity(0.0);
   else
    particle1->setHelicity(ctet*ctet);
-  fs->addModifiedParticle(particle1);  
+  fs->addModifiedParticle(particle1);
+  fs->addModifiedParticle(particle2);
   
  }
  

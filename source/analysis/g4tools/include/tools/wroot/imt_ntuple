@@ -1,0 +1,25 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_imt_ntuple
+#define tools_wroot_imt_ntuple
+
+// mt = multi-threads.
+
+#include "imutex"
+#include "ifile"
+
+namespace tools {
+namespace wroot {
+
+class imt_ntuple {
+public:
+  virtual bool add_row(imutex&,ifile&) = 0;
+  virtual bool end_fill(imutex&,ifile&) = 0;
+public:
+  virtual ~imt_ntuple() {}
+};
+
+}}
+
+#endif

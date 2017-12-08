@@ -59,10 +59,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
 
-    if(m_version>big_file_version_tag()) {
-    } else {
-      if(a_seek_directory>START_BIG_FILE()) m_version += big_file_version_tag();
-    }
+    if(a_seek_directory>START_BIG_FILE()) m_version += big_file_version_tag();
 
     m_key_length = record_size(m_version);
 

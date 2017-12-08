@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc 98352 2016-07-08 08:21:00Z gcosmo $
+// $Id: G4VDecayChannel.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -50,17 +50,18 @@ G4VDecayChannel::G4VDecayChannel()
   :kinematics_name(""),
    rbranch(0.0),
    numberOfDaughters(0),
-   parent_name(0), daughters_name(0),
+   parent_name(nullptr), 
+   daughters_name(nullptr),
    rangeMass(2.5),
    parent_polarization(),
-   particletable(0),
+   particletable(nullptr),
    verboseLevel(1)		
 {
-  G4MT_parent = 0;
-  G4MT_daughters = 0;
+  G4MT_parent = nullptr;
+  G4MT_daughters = nullptr;
   G4MT_parent_mass = 0.0;
-  G4MT_daughters_mass = 0;
-  G4MT_daughters_width = 0;
+  G4MT_daughters_mass = nullptr;
+  G4MT_daughters_width = nullptr;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -70,19 +71,20 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
   :kinematics_name(aName),
    rbranch(0.0),
    numberOfDaughters(0),
-   parent_name(0), daughters_name(0),
+   parent_name(nullptr), 
+   daughters_name(nullptr),
    rangeMass(2.5),
    parent_polarization(),
-   particletable(0),
+   particletable(nullptr),
    verboseLevel(Verbose),
    daughtersMutex(G4MUTEX_INITIALIZER),
    parentMutex(G4MUTEX_INITIALIZER)
 {
-  G4MT_parent = 0;
-  G4MT_daughters = 0;
+  G4MT_parent = nullptr;
+  G4MT_daughters = nullptr;
   G4MT_parent_mass = 0.0;
-  G4MT_daughters_mass = 0;
-  G4MT_daughters_width = 0;
+  G4MT_daughters_mass = nullptr;
+  G4MT_daughters_width = nullptr;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -99,7 +101,8 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
                :kinematics_name(aName),
 		rbranch(theBR),
 		numberOfDaughters(theNumberOfDaughters),
-		parent_name(0), daughters_name(0),
+		parent_name(nullptr), 
+		daughters_name(nullptr),
                 rangeMass(1.0),
                 parent_polarization(),
 		particletable(0),
@@ -107,11 +110,11 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 		daughtersMutex(G4MUTEX_INITIALIZER),
 		parentMutex(G4MUTEX_INITIALIZER)
 {
-  G4MT_parent = 0;
-  G4MT_daughters = 0;
+  G4MT_parent = nullptr;
+  G4MT_daughters = nullptr;
   G4MT_parent_mass = 0.0;
-  G4MT_daughters_mass = 0;
-  G4MT_daughters_width = 0;
+  G4MT_daughters_mass = nullptr;
+  G4MT_daughters_width = nullptr;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -128,6 +131,9 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
   if (numberOfDaughters>1) daughters_name[1] = new G4String(theDaughterName2);
   if (numberOfDaughters>2) daughters_name[2] = new G4String(theDaughterName3);
   if (numberOfDaughters>3) daughters_name[3] = new G4String(theDaughterName4);
+
+  if      (rbranch <0.  ) rbranch = 0.0;
+  else if (rbranch >1.0 ) rbranch = 1.0;
 }
 
 G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
@@ -139,26 +145,25 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
 
   // copy parent name
   parent_name = new G4String(*right.parent_name);
-  G4MT_parent = 0;
+  G4MT_parent = nullptr;
   G4MT_parent_mass = 0.0; 
 
   //create array
   numberOfDaughters = right.numberOfDaughters;
 
-  daughters_name =0;
+  daughters_name =nullptr;
   if ( numberOfDaughters >0 ) {
     daughters_name = new G4String*[numberOfDaughters];
     //copy daughters name
-    for (G4int index=0; index < numberOfDaughters; index++)
-      {
-	daughters_name[index] = new G4String(*right.daughters_name[index]);
-      }
+    for (G4int index=0; index < numberOfDaughters; index++){
+      daughters_name[index] = new G4String(*right.daughters_name[index]);
+    }
   }
 
   //
-  G4MT_daughters_mass = 0;
-  G4MT_daughters = 0;
-  G4MT_daughters_width = 0;
+  G4MT_daughters_mass = nullptr;
+  G4MT_daughters = nullptr;
+  G4MT_daughters_width = nullptr;
 
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
@@ -186,7 +191,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
     // recreate array
     numberOfDaughters = right.numberOfDaughters;
     if ( numberOfDaughters >0 ) {
-      if (daughters_name !=0) ClearDaughtersName();
+      if (daughters_name != nullptr) ClearDaughtersName();
       daughters_name = new G4String*[numberOfDaughters];
       //copy daughters name
       for (G4int index=0; index < numberOfDaughters; index++) {
@@ -196,11 +201,11 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
   }
 
   //
-  G4MT_parent = 0;
-  G4MT_daughters = 0;
+  G4MT_parent = nullptr;
+  G4MT_daughters = nullptr;
   G4MT_parent_mass = 0.0;
-  G4MT_daughters_mass = 0;
-  G4MT_daughters_width = 0;
+  G4MT_daughters_mass = nullptr;
+  G4MT_daughters_width = nullptr;
 
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
@@ -214,12 +219,12 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
 G4VDecayChannel::~G4VDecayChannel()
 {
   ClearDaughtersName();
-  if (parent_name != 0) delete parent_name;
-  parent_name = 0;
-  if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
-  G4MT_daughters_mass =0;
-  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
-  G4MT_daughters_width = 0;
+  if (parent_name != nullptr) delete parent_name;
+  parent_name = nullptr;
+  if (G4MT_daughters_mass != nullptr) delete [] G4MT_daughters_mass;
+  G4MT_daughters_mass =nullptr;
+  if (G4MT_daughters_width != nullptr) delete [] G4MT_daughters_width;
+  G4MT_daughters_width = nullptr;
   G4MUTEXDESTROY(daughtersMutex);
   G4MUTEXDESTROY(parentMutex);
 } 
@@ -227,7 +232,7 @@ G4VDecayChannel::~G4VDecayChannel()
 void G4VDecayChannel::ClearDaughtersName()
 {
   G4AutoLock l(&daughtersMutex);
-  if ( daughters_name != 0) {
+  if ( daughters_name != nullptr) {
     if (numberOfDaughters>0) {
 #ifdef G4VERBOSE
       if (verboseLevel>1) {
@@ -236,20 +241,19 @@ void G4VDecayChannel::ClearDaughtersName()
       }
 #endif
       for (G4int index=0; index < numberOfDaughters; index++) { 
-	if (daughters_name[index] != 0) delete daughters_name[index];
+	if (daughters_name[index] != nullptr) delete daughters_name[index];
       }
     }
     delete [] daughters_name;
-    daughters_name = 0;
+    daughters_name = nullptr;
   }
   // 
-  if (G4MT_daughters != 0) delete [] G4MT_daughters;
-  if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
-  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
-  G4MT_daughters_width = 0;
-  G4MT_daughters = 0;
-  G4MT_daughters_mass = 0;
-  G4MT_daughters_width = 0;
+  if (G4MT_daughters != nullptr) delete [] G4MT_daughters;
+  if (G4MT_daughters_mass != nullptr) delete [] G4MT_daughters_mass;
+  if (G4MT_daughters_width != nullptr) delete [] G4MT_daughters_width;
+  G4MT_daughters_width = nullptr;
+  G4MT_daughters = nullptr;
+  G4MT_daughters_mass = nullptr;
 
   numberOfDaughters = 0;
 }
@@ -261,7 +265,7 @@ void G4VDecayChannel::SetNumberOfDaughters(G4int size)
     ClearDaughtersName();
     // cleate array
     daughters_name = new G4String*[size];
-    for (G4int index=0;index<size;index++) daughters_name[index]=0;
+    for (G4int index=0;index<size;index++) daughters_name[index]=nullptr;
     numberOfDaughters = size;
   }
 }
@@ -290,15 +294,15 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
   // at construction, i.e. when G4MT_daugheters == 0
   // moreover this method can be called only after SetNumberOfDaugthers
   // has been called (see previous if), in such a case daughters_name != 0
-  if ( daughters_name == 0 ) {
-      G4Exception("G4VDecayChannel::SetDaughter","PART112",FatalException,
-          "Trying to add a daughter without specifying number of secondaries, useSetNumberOfDaughters first");
-      return;
+  if ( daughters_name == nullptr ) {
+    G4Exception("G4VDecayChannel::SetDaughter","PART112",FatalException,
+		"Trying to add a daughter without specifying number of secondaries, useSetNumberOfDaughters first");
+    return;
   }
-  if ( G4MT_daughters != 0 ) {
-      G4Exception("G4VDecayChannel::SetDaughter","PART111",FatalException,
-          "Trying to modify a daughter of a decay channel, but decay channel already has daughters.");
-      return;
+  if ( G4MT_daughters != nullptr ) {
+    G4Exception("G4VDecayChannel::SetDaughter","PART111",FatalException,
+		"Trying to modify a daughter of a decay channel, but decay channel already has daughters.");
+    return;
   }
   //<-:ANDREA
 
@@ -324,7 +328,7 @@ void G4VDecayChannel::SetDaughter(G4int anIndex,
 
 void G4VDecayChannel::SetDaughter(G4int anIndex, const G4ParticleDefinition * parent_type)
 {
-  if (parent_type != 0) SetDaughter(anIndex, parent_type->GetParticleName());
+  if (parent_type != nullptr) SetDaughter(anIndex, parent_type->GetParticleName());
 }
 
 void G4VDecayChannel::FillDaughters()
@@ -332,16 +336,16 @@ void G4VDecayChannel::FillDaughters()
   G4AutoLock lock(&daughtersMutex);
   //Double check, check again if another thread has already filled this, in
   //case do not need to do anything
-  if ( G4MT_daughters != 0 ) return;
+  if ( G4MT_daughters != nullptr ) return;
 
   G4int index;
   
 #ifdef G4VERBOSE
   if (verboseLevel>1) G4cout << "G4VDecayChannel::FillDaughters()" <<G4endl;
 #endif
-  if (G4MT_daughters != 0) {
+  if (G4MT_daughters != nullptr) {
     delete [] G4MT_daughters;
-    G4MT_daughters = 0;
+    G4MT_daughters = nullptr;
   }
 
   // parent mass
@@ -352,7 +356,7 @@ void G4VDecayChannel::FillDaughters()
   G4double sumofdaughtermass = 0.0;
   G4double sumofdaughterwidthsq = 0.0;
 
-  if ((numberOfDaughters <=0) || (daughters_name == 0) ){
+  if ((numberOfDaughters <=0) || (daughters_name == nullptr) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
       G4cout << "G4VDecayChannel::FillDaughters   "
@@ -360,7 +364,7 @@ void G4VDecayChannel::FillDaughters()
              << "numberOfDaughters is not defined yet";
     }
 #endif
-    G4MT_daughters = 0;
+    G4MT_daughters = nullptr;
     G4Exception("G4VDecayChannel::FillDaughters",
 		"PART011", FatalException,
 		"Can not fill daughters: numberOfDaughters is not defined yet");    
@@ -368,13 +372,13 @@ void G4VDecayChannel::FillDaughters()
 
   //create and set the array of pointers to daughter particles
   G4MT_daughters = new G4ParticleDefinition*[numberOfDaughters];
-  if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
-  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
+  if (G4MT_daughters_mass != nullptr) delete [] G4MT_daughters_mass;
+  if (G4MT_daughters_width != nullptr) delete [] G4MT_daughters_width;
   G4MT_daughters_mass = new G4double[numberOfDaughters];
   G4MT_daughters_width = new G4double[numberOfDaughters];
   // loop over all daughters
   for (index=0; index < numberOfDaughters;  index++) { 
-    if (daughters_name[index] == 0) {
+    if (daughters_name[index] == nullptr) {
       // daughter name is not defined
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
@@ -383,14 +387,14 @@ void G4VDecayChannel::FillDaughters()
 	       << index << "-th daughter is not defined yet" << G4endl;
       }
 #endif
-      G4MT_daughters[index] = 0;
+      G4MT_daughters[index] = nullptr;
       G4Exception("G4VDecayChannel::FillDaughters",
 		  "PART011", FatalException,
 		  "Can not fill daughters: name of a daughter is not defined yet");    
     } 
     //search daughter particles in the particle table 
     G4MT_daughters[index] = particletable->FindParticle(*daughters_name[index]);
-    if (G4MT_daughters[index] == 0) {
+    if (G4MT_daughters[index] == nullptr ) {
       // can not find the daughter particle
 #ifdef G4VERBOSE
       if (verboseLevel>0) {
@@ -448,9 +452,9 @@ void G4VDecayChannel::FillParent()
   G4AutoLock lock(&parentMutex);
   //Double check, check again if another thread has already filled this, in
   //case do not need to do anything
-  if ( G4MT_parent != 0 ) return;
+  if ( G4MT_parent != nullptr ) return;
 
-  if (parent_name == 0) {
+  if (parent_name == nullptr) {
     // parent name is not defined
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -458,7 +462,7 @@ void G4VDecayChannel::FillParent()
              << ": parent name is not defined !!" << G4endl;
     }
 #endif
-    G4MT_parent = 0;
+    G4MT_parent = nullptr;
     G4Exception("G4VDecayChannel::FillParent()",
 		"PART012", FatalException,
 		"Can not fill parent: parent name is not defined yet");    
@@ -466,7 +470,7 @@ void G4VDecayChannel::FillParent()
   }
   // search parent particle in the particle table
   G4MT_parent = particletable->FindParticle(*parent_name);
-  if (G4MT_parent == 0) {
+  if (G4MT_parent == nullptr) {
     // parent particle does not exist
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -484,7 +488,7 @@ void G4VDecayChannel::FillParent()
 
 void G4VDecayChannel::SetParent(const G4ParticleDefinition * parent_type)
 {
-  if (parent_type != 0) SetParent(parent_type->GetParticleName());
+  if (parent_type != nullptr) SetParent(parent_type->GetParticleName());
 }
 
 G4int G4VDecayChannel::GetAngularMomentum()
@@ -550,7 +554,7 @@ void G4VDecayChannel::DumpInfo()
   G4cout << " BR:  " << rbranch << "  [" << kinematics_name << "]";
   G4cout << "   :  " ;
   for (G4int index=0; index < numberOfDaughters; index++){
-    if(daughters_name[index] != 0) {
+    if(daughters_name[index] != nullptr) {
       G4cout << " " << *(daughters_name[index]);
     } else {
       G4cout << " not defined ";
@@ -597,3 +601,11 @@ G4bool    G4VDecayChannel::IsOKWithParentMass(G4double parentMass)
   }
   return (parentMass >= sumOfDaughterMassMin); 
 }
+
+void  G4VDecayChannel::SetBR(G4double value)
+{ 
+  rbranch = value; 
+  if      (rbranch <0.  ) rbranch = 0.0;
+  else if (rbranch >1.0 ) rbranch = 1.0;
+}
+

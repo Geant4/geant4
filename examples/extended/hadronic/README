@@ -43,12 +43,6 @@ including thermal scattering.
 See A.R. Garcia, E. Mendoza, D. Cano-Ott presentation at G4 Hadronic group 
 meeting (04/2013) and note on G4NeutronHP package
 
-Hadr05
-------
-
-This example demonstrates the usage of G4GenericPhysicsList to build 
-the concrete physics list at the run time.
-
 Hadr06
 ------
 
@@ -76,3 +70,8 @@ NeutronSource is an example of neutrons production. It illustrates the cooperati
 of nuclear reactions and radioactive decay processes.
 It survey energy deposition and particle's flux.
 It uses PhysicsConstructor objects.
+
+The example Hadr05, which demonstrated the usage of G4GenericPhysicsList to build 
+the concrete physics list at the run time, has been repleced in Geant4 10.4  by 
+extended/physicslists/genericPL the generic physics list was demonstrated in the 
+extended/hadronic/Hadr05 example.

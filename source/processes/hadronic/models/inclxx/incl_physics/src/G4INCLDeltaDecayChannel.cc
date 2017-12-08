@@ -56,9 +56,10 @@ namespace G4INCL {
     if(m > 1500.0) gg = 200.0;
     const G4double geff = p->getEnergy()/m;
     const G4double qqq = KinematicsUtils::momentumInCM(m, ParticleTable::effectiveNucleonMass, ParticleTable::effectivePionMass);
-    const G4double psf = std::pow(qqq, 3)/(std::pow(qqq, 3) + 5832000.0);
-    const G4double tdel = -G4INCL::PhysicalConstants::hc/(gg*psf)*std::log(Random::shoot())*geff;
-    return tdel;
+    const G4double psf = std::pow(qqq, 3)/(std::pow(qqq, 3) + 5832000.0); // phase space factor    5.832E6 = 180^3
+    const G4double tdel = -G4INCL::PhysicalConstants::hc/(gg*psf)*std::log(Random::shoot())*geff; // fm
+    if( m > 1400) return tdel * 1./(1. + std::pow((m-1400)/g0,2)); // reduction of Delta life time for high masses.
+    return tdel; // fm
   }
 
   void DeltaDecayChannel::sampleAngles(G4double *ctet_par, G4double *stet_par, G4double *phi_par) {

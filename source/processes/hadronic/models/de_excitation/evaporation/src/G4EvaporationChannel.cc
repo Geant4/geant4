@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EvaporationChannel.cc 103162 2017-03-20 09:40:58Z gcosmo $
+// $Id: G4EvaporationChannel.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 //J.M. Quesada (August2008). Based on:
 //
@@ -40,6 +40,7 @@
 
 #include "G4EvaporationChannel.hh"
 #include "G4PairingCorrection.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4NucleiProperties.hh"
 #include "G4Pow.hh"
 #include "G4Log.hh"
@@ -63,7 +64,7 @@ G4EvaporationChannel::G4EvaporationChannel(G4int anA, G4int aZ,
   ResA = ResZ = 0;
   Mass = CoulombBarrier = MinKinEnergy = MaxKinEnergy = EmissionProbability = 0.0; 
   EvapMass = G4NucleiProperties::GetNuclearMass(theA, theZ);
-  pairingCorrection = G4PairingCorrection::GetInstance();
+  pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
 
 G4EvaporationChannel::~G4EvaporationChannel()

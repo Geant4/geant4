@@ -1,6 +1,6 @@
 //$Id$
 
-///\file "medical/dna/neuron/.README"
+///\file "medical/dna/neuron/.README.txt"
 ///\brief Exampleneuron README page
 
 

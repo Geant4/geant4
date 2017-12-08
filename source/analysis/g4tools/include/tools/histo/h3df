@@ -21,6 +21,8 @@ public:
   }
   const std::string& s_cls() const {return s_class();}
 public:
+  h3df():parent("",10,0,1,10,0,1,10,0,1){} //for I/O when reading.
+  
   h3df(const std::string& a_title,
       unsigned int aXnumber,float aXmin,float aXmax,
       unsigned int aYnumber,float aYmin,float aYmax,

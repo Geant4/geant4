@@ -30,11 +30,13 @@ private:
   }
 #endif
 public:
-  mat(bool a_inc = true) {
+  mat(
+#ifdef TOOLS_MEM
+      bool a_inc = true
+#endif      
+      ) {
 #ifdef TOOLS_MEM
     if(a_inc) mem::increment(s_class().c_str());
-#else
-    (void)a_inc;
 #endif
 #ifdef TOOLS_MAT_NEW
     m_vec = new T[D*D];
@@ -161,6 +163,25 @@ inline nmat<T> copy(const mat<T,D>& a_from) {
   return v;
 }
 
+template <class VECTOR>
+inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type& a_mat) {
+  //typedef typename VECTOR::size_type sz_t;
+  //sz_t number = a_vec.size();
+  //for(sz_t index=0;index<number;index++) a_vec[index] *= a_mat;
+  typedef typename VECTOR::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) *it *= a_mat;
+}
+
+template <class VECTOR>
+inline void multiply(VECTOR& a_vec,const typename VECTOR::value_type::elem_t& a_value) {
+  typedef typename VECTOR::iterator it_t;
+  for(it_t it=a_vec.begin();it!=a_vec.end();++it) (*it).multiply(a_value);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+/// related to complex numbers : //////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+
 template <class MAT> 
 inline void conjugate(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
   typedef typename MAT::elem_t T;
@@ -172,10 +193,102 @@ inline void conjugate(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT
 }
 
 template <class MAT> 
+inline bool is_real(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&)) {
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_imag(*pos)) return false;}
+  return true;
+}
+
+template <class MAT,class PREC> 
+inline bool is_real_prec(MAT& a_m,typename MAT::elem_t::value_type (*a_imag)(const typename MAT::elem_t&),
+                         const PREC& a_prec,PREC(*a_fabs)(const typename MAT::elem_t::value_type&)) {\
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_fabs(a_imag(*pos))>=a_prec) return false;}
+  return true;
+}
+
+template <class MAT>
+inline bool is_imag(MAT& a_m,typename MAT::elem_t::value_type (*a_real)(const typename MAT::elem_t&)) {
+  typedef typename MAT::elem_t T;
+  T* pos = const_cast<T*>(a_m.data());
+  unsigned int D2 = a_m.dimension()*a_m.dimension();
+  for(unsigned int i=0;i<D2;i++,pos++) {if(a_real(*pos)) return false;}
+  return true;
+}
+
+template <class CMAT,class RMAT> 
+inline bool to_real(const CMAT& a_c,RMAT& a_r,typename CMAT::elem_t::value_type (*a_real)(const typename CMAT::elem_t&)) {
+  if(a_r.dimension()!=a_c.dimension()) return false;
+  typedef typename CMAT::elem_t CT;
+  const CT* cpos = a_c.data();
+  typedef typename RMAT::elem_t RT;
+  RT* rpos = const_cast<RT*>(a_r.data());
+  unsigned int D2 = a_c.dimension()*a_c.dimension();
+  for(unsigned int i=0;i<D2;i++,cpos++,rpos++) *rpos = a_real(*cpos);
+  return true;
+}
+
+template <class MAT> 
 inline void dagger(MAT& a_m,typename MAT::elem_t (*a_conj)(const typename MAT::elem_t&)) {
   conjugate<MAT>(a_m,a_conj);
   a_m.transpose();
 }
+
+template <class CMAT,class RMAT>
+inline bool decomplex(const CMAT& a_c,RMAT& a_r,
+                      typename CMAT::elem_t::value_type (*a_real)(const typename CMAT::elem_t&),
+                      typename CMAT::elem_t::value_type (*a_imag)(const typename CMAT::elem_t&)) {
+  //  CMAT = X+iY
+  //  RMAT = |  X  Y |
+  //         | -Y  X |
+  typedef typename CMAT::elem_t CT; //std::complex<double>
+  typedef typename RMAT::elem_t RT; //double
+  
+  unsigned int cdim = a_c.dimension();
+  if(a_r.dimension()!=2*cdim) {a_r.set_zero();return false;}  
+  RT value;unsigned int r,c;  
+  for(r=0;r<cdim;r++) {
+    for(c=0;c<cdim;c++) {
+      const CT& cvalue = a_c.value(r,c);
+      value = a_real(cvalue);      
+      a_r.set_value(r,c,value);
+      a_r.set_value(r+cdim,c+cdim,value);
+      value = a_imag(cvalue);      
+      a_r.set_value(r,c+cdim,value);
+      a_r.set_value(r+cdim,c,-value);
+    }
+  }
+  return true;
+}
+
+template <class VEC_CMAT,class VEC_RMAT>
+inline bool decomplex(
+ const VEC_CMAT& a_vc,VEC_RMAT& a_vr
+,typename VEC_CMAT::value_type::elem_t::value_type (*a_real)(const typename VEC_CMAT::value_type::elem_t&)
+,typename VEC_CMAT::value_type::elem_t::value_type (*a_imag)(const typename VEC_CMAT::value_type::elem_t&)
+) {
+  //  CMAT = X+iY
+  //  RMAT = |  X  Y |
+  //         | -Y  X |
+  typedef typename VEC_CMAT::size_type sz_t;
+  sz_t number = a_vc.size();
+  a_vr.resize(number);
+  for(sz_t index=0;index<number;index++) {
+    if(!decomplex(a_vc[index],a_vr[index],a_real,a_imag)) {
+      a_vr.clear();
+      return false;
+    }
+  }
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////
 
 //for sf, mf :
 //template <class T,unsigned int D>
@@ -409,13 +522,36 @@ inline void matrix_set(MAT& a_m
 ,const typename MAT::elem_t& a_40,const typename MAT::elem_t& a_41,const typename MAT::elem_t& a_42,const typename MAT::elem_t& a_43,const typename MAT::elem_t& a_44 //5 row
 ){
   //a_<R><C>
-  //vec[R + C * 4];
+  //vec[R + C * 5];
   typename MAT::elem_t* vec = const_cast<typename MAT::elem_t*>(a_m.data());
   vec[0] = a_00;vec[5] = a_01;vec[10] = a_02;vec[15] = a_03;vec[20] = a_04;
   vec[1] = a_10;vec[6] = a_11;vec[11] = a_12;vec[16] = a_13;vec[21] = a_14;
   vec[2] = a_20;vec[7] = a_21;vec[12] = a_22;vec[17] = a_23;vec[22] = a_24;
   vec[3] = a_30;vec[8] = a_31;vec[13] = a_32;vec[18] = a_33;vec[23] = a_34;
   vec[4] = a_40;vec[9] = a_41;vec[14] = a_42;vec[19] = a_43;vec[24] = a_44;
+}
+
+////////////////////////////////////////////////
+/// specific D=6 ///////////////////////////////
+////////////////////////////////////////////////
+template <class MAT>
+inline void matrix_set(MAT& a_m
+,const typename MAT::elem_t& a_00,const typename MAT::elem_t& a_01,const typename MAT::elem_t& a_02,const typename MAT::elem_t& a_03,const typename MAT::elem_t& a_04,const typename MAT::elem_t& a_05 //1 row
+,const typename MAT::elem_t& a_10,const typename MAT::elem_t& a_11,const typename MAT::elem_t& a_12,const typename MAT::elem_t& a_13,const typename MAT::elem_t& a_14,const typename MAT::elem_t& a_15 //2 row
+,const typename MAT::elem_t& a_20,const typename MAT::elem_t& a_21,const typename MAT::elem_t& a_22,const typename MAT::elem_t& a_23,const typename MAT::elem_t& a_24,const typename MAT::elem_t& a_25 //3 row
+,const typename MAT::elem_t& a_30,const typename MAT::elem_t& a_31,const typename MAT::elem_t& a_32,const typename MAT::elem_t& a_33,const typename MAT::elem_t& a_34,const typename MAT::elem_t& a_35 //4 row
+,const typename MAT::elem_t& a_40,const typename MAT::elem_t& a_41,const typename MAT::elem_t& a_42,const typename MAT::elem_t& a_43,const typename MAT::elem_t& a_44,const typename MAT::elem_t& a_45 //5 row
+,const typename MAT::elem_t& a_50,const typename MAT::elem_t& a_51,const typename MAT::elem_t& a_52,const typename MAT::elem_t& a_53,const typename MAT::elem_t& a_54,const typename MAT::elem_t& a_55 //6 row
+){
+  //a_<R><C>
+  //vec[R + C * 6];
+  typename MAT::elem_t* vec = const_cast<typename MAT::elem_t*>(a_m.data());
+  vec[0] = a_00;vec[ 6] = a_01;vec[12] = a_02;vec[18] = a_03;vec[24] = a_04;vec[30] = a_05;
+  vec[1] = a_10;vec[ 7] = a_11;vec[13] = a_12;vec[19] = a_13;vec[25] = a_14;vec[31] = a_15;
+  vec[2] = a_20;vec[ 8] = a_21;vec[14] = a_22;vec[20] = a_23;vec[26] = a_24;vec[32] = a_25;
+  vec[3] = a_30;vec[ 9] = a_31;vec[15] = a_32;vec[21] = a_33;vec[27] = a_34;vec[33] = a_35;
+  vec[4] = a_40;vec[10] = a_41;vec[16] = a_42;vec[22] = a_43;vec[28] = a_44;vec[34] = a_45;
+  vec[5] = a_50;vec[11] = a_51;vec[17] = a_52;vec[23] = a_53;vec[29] = a_54;vec[35] = a_55;
 }
 
 }

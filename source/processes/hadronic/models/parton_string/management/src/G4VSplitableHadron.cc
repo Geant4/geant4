@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSplitableHadron.cc 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4VSplitableHadron.cc 107318 2017-11-08 16:27:32Z gcosmo $
 //
 
 // ------------------------------------------------------------
@@ -57,9 +57,9 @@ G4VSplitableHadron::G4VSplitableHadron(const G4Nucleon & aNucleon)
   TimeOfCreation   = 0.;                                          
   theCollisionCount= 0;
   isSplit          = false;
-  theDefinition    =aNucleon.GetParticleType();
-  the4Momentum     =aNucleon.GetMomentum();
-  thePosition      =aNucleon.GetPosition();
+  theDefinition    = aNucleon.GetParticleType();
+  the4Momentum     = aNucleon.GetMomentum();
+  thePosition      = aNucleon.GetPosition();
   curStatus        = 0;                                           
 }
 
@@ -68,9 +68,9 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VKineticNucleon * aNucleon)
   TimeOfCreation   = 0.;   
   theCollisionCount= 0;
   isSplit          = false;
-  theDefinition    =aNucleon->GetDefinition();
-  the4Momentum     =aNucleon->Get4Momentum();
-  thePosition      =aNucleon->GetPosition();
+  theDefinition    = aNucleon->GetDefinition();
+  the4Momentum     = aNucleon->Get4Momentum();
+  thePosition      = aNucleon->GetPosition();
   curStatus        = 0;                                        
 }
 
@@ -81,7 +81,7 @@ G4VSplitableHadron::G4VSplitableHadron(const G4VSplitableHadron &right)
   isSplit          = false;
   theDefinition    = right.GetDefinition();
   the4Momentum     = right.Get4Momentum();
-  thePosition      =  right.GetPosition();
+  thePosition      = right.GetPosition();
   curStatus        = 0;                                        
 }
 

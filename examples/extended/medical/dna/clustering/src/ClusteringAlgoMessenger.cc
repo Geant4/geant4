@@ -43,7 +43,6 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIdirectory.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ClusteringAlgoMessenger::ClusteringAlgoMessenger(ClusteringAlgo* pClustAlgo)
@@ -124,4 +123,3 @@ void ClusteringAlgoMessenger::SetNewValue(G4UIcommand* pCommand,
     fpClusteringAlgo->SetEMaxDamage(fpEmaxCmd->GetNewDoubleValue(pNewValue));
   }
 }
-

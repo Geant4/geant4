@@ -24,8 +24,6 @@
 #ifdef _MSC_VER
 #include <direct.h>
 #include <io.h>
-// disable the warning about the usage of "this" in the constructor.
-#pragma warning(disable:4355)
 #else
 #include <unistd.h>
 #endif
@@ -34,6 +32,7 @@ namespace tools {
 namespace wroot {
 
 class file : public virtual ifile {
+  file& get_me() {return *this;} //_MSC_VER : to avoid warning about the usage of "this" in the constructor.
   static int not_open() {return -1;}
   static uint32 kBegin() {return 64;}
 public:
@@ -177,7 +176,7 @@ public: //ifile
     uint32 nbytes = a_buffer.length();
     uint32 cxlevel = m_compress;
     if(cxlevel && (nbytes>256)) {
-      tools::compress_func func;
+      compress_func func;
       if(!ziper('Z',func)) {
         //m_out << "tools::wroot::directory::write_object :" 
         //      << " zlib ziper not found."
@@ -225,7 +224,7 @@ public:
   ,m_verbose(a_verbose)
   ,m_file(not_open())
   //,m_bytes_write(0)
-  ,m_root_directory(*this,nosuffix(a_path),m_title)
+  ,m_root_directory(get_me(),nosuffix(a_path),m_title)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
@@ -346,7 +345,7 @@ protected:
   file(const file& a_from)
   :ifile(a_from)
   ,m_out(a_from.m_out)
-  ,m_root_directory(*this)
+  ,m_root_directory(get_me())
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -542,7 +541,7 @@ protected:
   }
 
   bool write_streamer_infos() {
-    List<StreamerInfo> sinfos;
+    obj_list<StreamerInfo> sinfos;
     fill_infos(sinfos,m_out);
 
     if(sinfos.empty()) return false;
@@ -551,7 +550,7 @@ protected:
 
     if(!sinfos.stream(bref)) {
       m_out << "tools::wroot::file::write_streamer_infos :" 
-            << " cannot stream List<StreamerInfo>."
+            << " cannot stream obj_list<StreamerInfo>."
             << std::endl;
       return false;
     }
@@ -693,7 +692,7 @@ protected:
   }
 
   static bool zip(std::ostream& a_out,
-                  tools::compress_func a_func,
+                  compress_func a_func,
                   int a_level,
                   uint32 a_srcsize,char* a_src,
                   uint32 a_tgtsize,char* a_tgt,

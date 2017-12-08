@@ -74,11 +74,16 @@ protected:
   }
 
   base_histo& operator=(const base_histo& a_from) {
+    if(&a_from==this) return *this;
     parent::operator=(a_from);
     return *this;
   }
 
 public:
+  bool equals(const base_histo& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    return parent::equals(a_from,a_prec,a_fabs);
+  }
+
   const std::string& title() const {return parent::m_title;}
   bool set_title(const std::string& a_title){parent::m_title = a_title;return true;}
   dim_t dimension() const {return parent::m_dimension;}

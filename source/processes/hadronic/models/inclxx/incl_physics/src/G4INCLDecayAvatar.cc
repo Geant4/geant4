@@ -39,6 +39,9 @@
 
 #include "G4INCLDeltaDecayChannel.hh"
 #include "G4INCLPionResonanceDecayChannel.hh"
+#include "G4INCLSigmaZeroDecayChannel.hh"
+#include "G4INCLNeutralKaonDecayChannel.hh"
+#include "G4INCLStrangeAbsorbtionChannel.hh"
 #include "G4INCLPauliBlocking.hh"
 #include <sstream>
 #include <string>
@@ -52,22 +55,42 @@ namespace G4INCL {
   {
     setType(DecayAvatarType);
   }
+  
+  DecayAvatar::DecayAvatar(G4INCL::Particle *aParticle, G4INCL::Particle *bParticle, G4double time, G4INCL::Nucleus *n, G4bool force)
+    : InteractionAvatar(time, n, aParticle, bParticle), forced(force),
+      incidentDirection(aParticle->getMomentum())
+  {
+    setType(DecayAvatarType);
+  }
 
   DecayAvatar::~DecayAvatar() {
 
   }
 
   G4INCL::IChannel* DecayAvatar::getChannel() {
-    if(particle1->isDelta()) {
-      INCL_DEBUG("DeltaDecayChannel chosen." << '\n');
-      return new DeltaDecayChannel(particle1, incidentDirection);
+    if(!particle2){
+       if(particle1->isDelta()) {
+         INCL_DEBUG("DeltaDecayChannel chosen." << '\n');
+         return new DeltaDecayChannel(particle1, incidentDirection);
+       }
+       else if(particle1->isEta() || particle1->isOmega()) {
+         INCL_DEBUG("PionResonanceDecayChannel chosen." << '\n');
+         return new PionResonanceDecayChannel(particle1, incidentDirection);
+       }
+       else if(particle1->getType() == SigmaZero) {
+         INCL_DEBUG("SigmaZeroDecayChannel chosen." << '\n');
+         return new SigmaZeroDecayChannel(particle1, incidentDirection);
+       }
+       else if(particle1->getType() == KZero || particle1->getType() == KZeroBar) {
+         INCL_DEBUG("NeutralKaonDecayChannel chosen." << '\n');
+         return new NeutralKaonDecayChannel(particle1);
+       }
     }
-	else if(particle1->isEta() || particle1->isOmega()) {
-	  INCL_DEBUG("PionResonanceDecayChannel chosen." << '\n');
-	  return new PionResonanceDecayChannel(particle1, incidentDirection);
-    }  
-    else
-      return NULL;
+    else if(((particle1->isAntiKaon() || particle1->isSigma()) && particle2->isNucleon()) || ((particle2->isAntiKaon() || particle2->isSigma()) && particle1->isNucleon())){
+      INCL_DEBUG("StrangeAbsorbtion." << '\n');
+      return new StrangeAbsorbtionChannel(particle1, particle2);
+    }
+    return NULL;
   }
 
   void DecayAvatar::preInteraction() {
@@ -76,10 +99,11 @@ namespace G4INCL {
 
   void DecayAvatar::postInteraction(FinalState *fs) {
     // Make sure we have at least two particles in the final state
-// assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
-
+    // Removed because of neutral kaon decay
+    
+// assert((fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2) || ((*fs->getModifiedParticles().begin())->getType() == KShort || (*fs->getModifiedParticles().begin())->getType() == KLong ));
+    //assert((fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 1));
     if(!forced) { // Normal decay
-
       // Call the postInteraction method of the parent class
       // (provides Pauli blocking and enforces energy conservation)
       InteractionAvatar::postInteraction(fs);
@@ -95,11 +119,20 @@ namespace G4INCL {
          * conditions, for example, that evolve with time.}
          */
         fs->addModifiedParticle(particle1);
-
     } else { // Forced decay
-      created = fs->getCreatedParticles();
       modified = fs->getModifiedParticles();
-
+      created = fs->getCreatedParticles();
+      Destroyed = fs->getDestroyedParticles();
+      modifiedAndCreated = modified;
+      modifiedAndCreated.insert(modifiedAndCreated.end(), created.begin(), created.end());
+      ModifiedAndDestroyed = modified;
+      ModifiedAndDestroyed.insert(ModifiedAndDestroyed.end(), Destroyed.begin(), Destroyed.end());
+      
+      std::vector<G4int> newBiasCollisionVector;
+      newBiasCollisionVector = ModifiedAndDestroyed.getParticleListBiasVector();
+      for(ParticleIter i=modifiedAndCreated.begin(), e=modifiedAndCreated.end(); i!=e; ++i ) {
+	    (*i)->setBiasCollisionVector(newBiasCollisionVector);
+      }
       // Try to enforce energy conservation
       fs->setTotalEnergyBeforeInteraction(oldTotalEnergy);
       const G4bool success = enforceEnergyConservation(fs);
@@ -153,7 +186,6 @@ namespace G4INCL {
 
       }
     }
-
     // If there is a nucleus, increment the counters
     if(theNucleus) {
       switch(fs->getValidity()) {
@@ -168,6 +200,7 @@ namespace G4INCL {
           theNucleus->getStore()->getBook().incrementAcceptedDecays();
       }
     }
+    
     return;
   }
 

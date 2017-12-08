@@ -64,7 +64,7 @@ namespace G4INCL {
 
   class Nucleus : public Cluster {
   public:
-    Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius=-1.);
+    Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius=-1.);
     virtual ~Nucleus();
 
     /// \brief Dummy copy constructor to silence Coverity warning
@@ -83,10 +83,19 @@ namespace G4INCL {
     void insertParticle(Particle *p) {
       theZ += p->getZ();
       theA += p->getA();
+      theS += p->getS();
       theStore->particleHasEntered(p);
       if(p->isNucleon()) {
         theNpInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
         theNnInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
+      }
+      if(p->isPion()) {
+        theNpionplusInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
+        theNpionminusInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
+      }
+      if(p->isKaon() || p->isAntiKaon()) {
+        theNkaonplusInitial += Math::heaviside(ParticleTable::getIsospin(p->getType()));
+        theNkaonminusInitial += Math::heaviside(-ParticleTable::getIsospin(p->getType()));
       }
       if(!p->isTargetSpectator()) theStore->getBook().incrementCascading();
     };
@@ -98,6 +107,7 @@ namespace G4INCL {
 
     G4int getInitialA() const { return theInitialA; };
     G4int getInitialZ() const { return theInitialZ; };
+    G4int getInitialS() const { return theInitialS; };
 
     /**
      * Propagate the particles one time step.
@@ -108,6 +118,8 @@ namespace G4INCL {
 
     G4int getNumberOfEnteringProtons() const { return theNpInitial; };
     G4int getNumberOfEnteringNeutrons() const { return theNnInitial; };
+    G4int getNumberOfEnteringPions() const { return theNpionplusInitial+theNpionminusInitial; };
+    G4int getNumberOfEnteringKaons() const { return theNkaonplusInitial+theNkaonminusInitial; };
 
     /** \brief Outgoing - incoming separation energies.
      *
@@ -125,17 +137,19 @@ namespace G4INCL {
           case DeltaPlus:
           case DeltaZero:
           case DeltaMinus:
+          case Lambda:
+          case PiPlus:
+          case PiMinus:
+          case KPlus:
+          case KMinus:
+          case SigmaPlus:
+          case SigmaZero:
+          case SigmaMinus:
             S += thePotential->getSeparationEnergy(*i);
             break;
           case Composite:
             S += (*i)->getZ() * thePotential->getSeparationEnergy(Proton)
               + ((*i)->getA() - (*i)->getZ()) * thePotential->getSeparationEnergy(Neutron);
-            break;
-          case PiPlus:
-            S += thePotential->getSeparationEnergy(Proton) - thePotential->getSeparationEnergy(Neutron);
-            break;
-          case PiMinus:
-            S += thePotential->getSeparationEnergy(Neutron) - thePotential->getSeparationEnergy(Proton);
             break;
           default:
             break;
@@ -144,6 +158,10 @@ namespace G4INCL {
 
       S -= theNpInitial * thePotential->getSeparationEnergy(Proton);
       S -= theNnInitial * thePotential->getSeparationEnergy(Neutron);
+      S -= theNpionplusInitial*thePotential->getSeparationEnergy(PiPlus);;
+      S -= theNkaonplusInitial*thePotential->getSeparationEnergy(KPlus);
+      S -= theNpionminusInitial*thePotential->getSeparationEnergy(PiMinus);
+      S -= theNkaonminusInitial*thePotential->getSeparationEnergy(KMinus);
       return S;
     }
 
@@ -158,13 +176,31 @@ namespace G4INCL {
      * \return true if any delta was forced to decay.
      */
     G4bool decayInsideDeltas();
-	  
-	  /** \brief Force the decay of outgoing PionResonances (eta/omega).
-	   *
-	   * \return true if any eta was forced to decay.
-	   */
-	G4bool decayOutgoingPionResonances(G4double timeThreshold);
-	  	  
+    
+    /** \brief Force the transformation of strange particles into a Lambda;
+     * 
+     *  \return true if any strange particles was forced to absorb.
+     */
+    G4bool decayInsideStrangeParticles();
+      
+    /** \brief Force the decay of outgoing PionResonances (eta/omega).
+     *
+     * \return true if any eta was forced to decay.
+     */
+    G4bool decayOutgoingPionResonances(G4double timeThreshold);
+      
+    /** \brief Force the decay of outgoing Neutral Sigma.
+     *
+     * \return true if any Sigma was forced to decay.
+     */
+    G4bool decayOutgoingSigmaZero(G4double timeThreshold);
+      
+    /** \brief Force the transformation of outgoing Neutral Kaon into propation eigenstate.
+     *
+     * \return true if any kaon was forced to decay.
+     */
+    G4bool decayOutgoingNeutralKaon();
+            
     /** \brief Force the decay of unstable outgoing clusters.
      *
      * \return true if any cluster was forced to decay.
@@ -181,6 +217,15 @@ namespace G4INCL {
 
     /// \brief Force emission of all pions inside the nucleus.
     void emitInsidePions();
+    
+    /// \brief Force emission of all strange particles inside the nucleus.
+    void emitInsideStrangeParticles();
+    
+    /// \brief Force emission of all Lambda (desexitation code with strangeness not implanted yet)
+    G4int emitInsideLambda();
+    
+    /// \brief Force emission of all Kaon inside the nucleus
+    G4bool emitInsideKaon();
 
     /** \brief Compute the recoil momentum and spin of the nucleus. */
     void computeRecoilKinematics();
@@ -240,23 +285,55 @@ namespace G4INCL {
         if((*i)->isDelta()) return true;
       return false;
     }
-	  
-	  ///\brief Returns true if the nucleus contains any etas.
-	  inline G4bool containsEtas() {
-		  ParticleList const &inside = theStore->getParticles();
-		  for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
-			  if((*i)->isEta()) return true;
-		  return false;
-	  }
-	  
-	  ///\brief Returns true if the nucleus contains any omegas.
-	  inline G4bool containsOmegas() {
-		  ParticleList const &inside = theStore->getParticles();
-		  for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
-			  if((*i)->isOmega()) return true;
-		  return false;
-	  }
-	  
+    
+    ///\brief Returns true if the nucleus contains any anti Kaons.
+    inline G4bool containsAntiKaon() {
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+        if((*i)->isAntiKaon()) return true;
+      return false;
+    }
+    
+    ///\brief Returns true if the nucleus contains any Lambda.
+    inline G4bool containsLambda() {
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+        if((*i)->isLambda()) return true;
+      return false;
+    }
+    
+    ///\brief Returns true if the nucleus contains any Sigma.
+    inline G4bool containsSigma() {
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+        if((*i)->isSigma()) return true;
+      return false;
+    }
+    
+    ///\brief Returns true if the nucleus contains any Kaons.
+    inline G4bool containsKaon() {
+      ParticleList const &inside = theStore->getParticles();
+      for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+        if((*i)->isKaon()) return true;
+      return false;
+    }
+      
+      ///\brief Returns true if the nucleus contains any etas.
+      inline G4bool containsEtas() {
+          ParticleList const &inside = theStore->getParticles();
+          for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+              if((*i)->isEta()) return true;
+          return false;
+      }
+      
+      ///\brief Returns true if the nucleus contains any omegas.
+      inline G4bool containsOmegas() {
+          ParticleList const &inside = theStore->getParticles();
+          for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i)
+              if((*i)->isOmega()) return true;
+          return false;
+      }
+      
     /**
      * Print the nucleus info
      */
@@ -300,7 +377,7 @@ namespace G4INCL {
     struct ConservationBalance {
       ThreeVector momentum;
       G4double energy;
-      G4int Z, A;
+      G4int Z, A, S;
     };
 
     /// \brief Compute charge, mass, energy and momentum balance
@@ -318,17 +395,17 @@ namespace G4INCL {
      * \return surface radius
      */
     G4double getSurfaceRadius(Particle const * const particle) const {
-//      if(particle->isPion())
-      if(particle->isPion() || particle->isEta() || particle->isOmega() || particle->isEtaPrime())
-        // Temporarily set RPION = RMAX
-        return getUniverseRadius();
-        //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
-      else {
+      if(particle->isNucleon() || particle->isLambda() || particle->isResonance()){
         const G4double pr = particle->getReflectionMomentum()/thePotential->getFermiMomentum(particle);
         if(pr>=1.)
           return getUniverseRadius();
         else
           return theDensity->getMaxRFromP(particle->getType(), pr);
+	    }
+      else {
+        // Temporarily set RPION = RMAX
+        return getUniverseRadius();
+        //return 0.5*(theDensity->getTransmissionRadius(particle)+getUniverseRadius());
       }
     }
 
@@ -399,11 +476,17 @@ namespace G4INCL {
     void computeOneNucleonRecoilKinematics();
 
   private:
-    G4int theInitialZ, theInitialA;
+    G4int theInitialZ, theInitialA, theInitialS;
     /// \brief The number of entering protons
     G4int theNpInitial;
     /// \brief The number of entering neutrons
     G4int theNnInitial;
+    /// \brief The number of entering pions
+    G4int theNpionplusInitial;
+    G4int theNpionminusInitial;
+    /// \brief The number of entering kaons
+    G4int theNkaonplusInitial;
+    G4int theNkaonminusInitial;
     G4double initialInternalEnergy;
     ThreeVector incomingAngularMomentum, incomingMomentum;
     ThreeVector initialCenterOfMass;
@@ -417,7 +500,9 @@ namespace G4INCL {
     G4int projectileZ;
     /// \brief The mass number of the projectile
     G4int projectileA;
-
+    /// \brief The strangeness number of the projectile
+    G4int projectileS;
+    
     /// \brief The radius of the universe
     G4double theUniverseRadius;
 

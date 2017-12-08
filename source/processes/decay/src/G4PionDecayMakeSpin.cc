@@ -84,7 +84,7 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
       return;
   }
 
-  G4DynamicParticle* aMuon = NULL;
+  G4DynamicParticle* aMuon = nullptr;
 
   G4double emu(0), eneutrino(0);
   G4ThreeVector p_muon, p_neutrino;
@@ -92,30 +92,28 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
   G4int numberOfSecondaries = products->entries();
 
   if (numberOfSecondaries > 0) {
-    for (G4int index=0; index < numberOfSecondaries; index++)
-    {
-        G4DynamicParticle* aSecondary = (*products)[index];
-        const G4ParticleDefinition* aSecondaryDef = aSecondary->GetDefinition();
-
-        if (aSecondaryDef == aMuonPlus ||
-            aSecondaryDef == aMuonMinus ) {
-            //          Muon+ or Muon-
-            aMuon = aSecondary;
-            emu    = aSecondary->GetTotalEnergy();
-            p_muon = aSecondary->GetMomentum();
-        } else if (aSecondaryDef == aNeutrinoMu ||
-                   aSecondaryDef == aAntiNeutrinoMu ) {
-            //          Muon-Neutrino / Muon-Anti-Neutrino
-            eneutrino  = aSecondary->GetTotalEnergy();
-            p_neutrino = aSecondary->GetMomentum();
-        }
+    for (G4int index=0; index < numberOfSecondaries; index++){
+      G4DynamicParticle* aSecondary = (*products)[index];
+      const G4ParticleDefinition* aSecondaryDef = aSecondary->GetDefinition();
+      
+      if (aSecondaryDef == aMuonPlus ||
+	  aSecondaryDef == aMuonMinus ) {
+	//          Muon+ or Muon-
+	aMuon = aSecondary;
+	emu    = aSecondary->GetTotalEnergy();
+	p_muon = aSecondary->GetMomentum();
+      } else if (aSecondaryDef == aNeutrinoMu ||
+		 aSecondaryDef == aAntiNeutrinoMu ) {
+	//          Muon-Neutrino / Muon-Anti-Neutrino
+	eneutrino  = aSecondary->GetTotalEnergy();
+	p_neutrino = aSecondary->GetMomentum();
+      }
     }
   }
 
   //  This routine deals only with decays with a 
   //  muon and mu-(anti)neutrinos in the final state
-
-  if (!aMuon) return;
+  if (aMuon == nullptr) return;
   if (eneutrino==0||emu==0) return;
 
   G4ThreeVector spin(0,0,0);
@@ -126,7 +124,6 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
   G4double emmu = aMuonPlus->GetPDGMass();
 
   if (numberOfSecondaries == 2 ) {
-
      G4double scale = - (eneutrino - ( p_muon * p_neutrino )/(emu+emmu));
 
      p_muon = scale * p_muon;
@@ -139,7 +136,6 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
      if (aParticle->GetCharge() < 0.0) spin = -spin;
 
   } else {
-
        spin = G4RandomDirection();
 
   }
@@ -150,3 +146,13 @@ void G4PionDecayMakeSpin::DaughterPolarization(const G4Track& aTrack,
 
   return; 
 }
+
+void G4PionDecayMakeSpin::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << GetProcessName() 
+	  << ": Decay of mesons that can decay into a muon \n"
+	  << " i.e. pi+, pi-, K+, K- and K0_long \n"
+	  << " kinematics of daughters are dertermined by DecayChannels \n"
+	  << " polarization of daughter particles are take into account. \n";
+}
+

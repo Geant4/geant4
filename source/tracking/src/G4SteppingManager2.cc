@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc 73605 2013-09-02 09:34:55Z gcosmo $
+// $Id: G4SteppingManager2.cc 106991 2017-10-31 10:13:42Z gcosmo $
 //
 //---------------------------------------------------------------
 //
@@ -370,7 +370,11 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
            if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+             { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+#ifdef G4MUATOMS_INUSE
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsMuonicAtom())
+             { pm = G4ParticleTable::GetParticleTable()->GetGenericMuonicAtom()->GetProcessManager(); }
+#endif
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -446,7 +450,11 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 	 if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
            if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-           { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+             { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+#ifdef G4MUATOMS_INUSE
+           if(!pm && tempSecondaryTrack->GetDefinition()->IsMuonicAtom())
+             { pm = G4ParticleTable::GetParticleTable()->GetGenericMuonicAtom()->GetProcessManager(); }
+#endif
 	   if (pm->GetAtRestProcessVector()->entries()>0){
 	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 	     fSecondary->push_back( tempSecondaryTrack );
@@ -564,7 +572,11 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 	    if(tempSecondaryTrack->GetKineticEnergy() <= DBL_MIN){
 	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
               if(!pm && tempSecondaryTrack->GetDefinition()->IsGeneralIon())
-              { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+                { pm = G4ParticleTable::GetParticleTable()->GetGenericIon()->GetProcessManager(); }
+#ifdef G4MUATOMS_INUSE
+              if(!pm && tempSecondaryTrack->GetDefinition()->IsMuonicAtom())
+                { pm = G4ParticleTable::GetParticleTable()->GetGenericMuonicAtom()->GetProcessManager(); }
+#endif
 	      if (pm->GetAtRestProcessVector()->entries()>0){
 		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
 		fSecondary->push_back( tempSecondaryTrack );

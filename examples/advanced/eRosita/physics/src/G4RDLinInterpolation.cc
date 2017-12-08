@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4RDLinInterpolation.cc 107396 2017-11-10 08:28:08Z gcosmo $
 // GEANT4 tag $Name: geant4-09-01-ref-00 $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelOKandVIxSection.cc 104802 2017-06-19 07:11:40Z gcosmo $
+// $Id: G4WentzelOKandVIxSection.cc 105734 2017-08-16 12:58:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -169,6 +169,11 @@ void G4WentzelOKandVIxSection::InitialiseA()
 
 void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
 {
+  /*
+  G4cout << "G4WentzelOKandVIxSection::SetupParticle " << p 
+	 << "  " << particle << "  " << this << G4endl; 
+  G4cout << this << "  " << p->GetParticleName() << G4endl; 
+  */
   particle = p;
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GEMChannel.hh 98739 2016-08-09 12:56:55Z gcosmo $
+// $Id: G4GEMChannel.hh 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -71,9 +71,6 @@ private:
 
   // Samples fragment kinetic energy.
   G4double SampleKineticEnergy(const G4Fragment & fragment);
-
-  // This has to be removed and put in Random Generator
-  G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
 
   G4GEMChannel(const G4GEMChannel & right) = delete;  
   const G4GEMChannel & operator=(const G4GEMChannel & right) = delete;

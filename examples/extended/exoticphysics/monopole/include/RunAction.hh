@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/include/RunAction.hh
 /// \brief Definition of the RunAction class
 //
-// $Id: RunAction.hh 104872 2017-06-23 14:19:16Z gcosmo $
+// $Id: RunAction.hh 107534 2017-11-21 13:13:36Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 class Run;
 class DetectorConstruction;
 class PrimaryGeneratorAction;
-class HistoManager;
 class RunActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,10 +62,11 @@ public:
 
 private:  
 
+  void Book();
+
   DetectorConstruction*   fDetector;
   PrimaryGeneratorAction* fKinematic;
   Run*                    fRun;        
-  HistoManager*           fHistoManager;
   RunActionMessenger*     fMessenger;
 
   G4double                fBinLength;

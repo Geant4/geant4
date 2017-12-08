@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 98741 2016-08-09 13:01:15Z gcosmo $
+# $Id: sources.cmake 106962 2017-10-31 08:37:31Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -59,6 +59,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLGlobalInfo.hh
         G4INCLGlobals.hh
         G4INCLHashing.hh
+        G4INCLHFB.hh
         G4INCLHornerFormEvaluator.hh
         G4INCLIAvatar.hh
         G4INCLIChannel.hh
@@ -89,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLEventInfo.cc
         G4INCLFinalState.cc
         G4INCLGlobals.cc
+        G4INCLHFB.cc
         G4INCLIAvatar.cc
         G4INCLIChannel.cc
         G4INCLIFunction1D.cc

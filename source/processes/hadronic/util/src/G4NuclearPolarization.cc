@@ -39,26 +39,44 @@
 #include "G4NuclearPolarization.hh"
 #include <iomanip>
 
-G4NuclearPolarization::G4NuclearPolarization()
+G4NuclearPolarization::G4NuclearPolarization(G4int Z, G4int A, G4double exc)
+  : fZ(Z), fA(A), fExcEnergy(exc)
 {
   Unpolarize();
+  //G4cout << "NP: new " << this << G4endl;
 }
 
 G4NuclearPolarization::~G4NuclearPolarization()
-{}
+{
+  //G4cout << "NP: delete " << this << G4endl;
+}
+
+void G4NuclearPolarization::Clean()
+{
+  if(!fPolarization.empty()) {
+    for(auto & pol : fPolarization) {
+      pol.clear();
+    }
+    fPolarization.clear();
+  }
+} 
 
 G4bool G4NuclearPolarization::operator==(const G4NuclearPolarization &right) const
 {
-  return (fPolarization == right.fPolarization);
+  return (fZ == right.fZ && fA == right.fA && fExcEnergy == right.fExcEnergy 
+	  && fPolarization == right.fPolarization);
 }
 
 G4bool G4NuclearPolarization::operator!=(const G4NuclearPolarization &right) const
 {
-  return (fPolarization != right.fPolarization);
+  return (fZ != right.fZ || fA != right.fA || fExcEnergy != right.fExcEnergy 
+	  || fPolarization != right.fPolarization);
 }
 
 std::ostream& operator<<(std::ostream& out, const G4NuclearPolarization& p)
 {
+  out << "G4NuclearPolarization: Z= " << p.fZ << " A= " << p.fA << " Exc(MeV)= " 
+      << p.fExcEnergy << G4endl;
   out << " P = [ {";
   size_t kk = p.fPolarization.size();
   for(size_t k=0; k<kk; ++k) {

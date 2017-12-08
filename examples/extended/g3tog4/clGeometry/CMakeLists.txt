@@ -47,7 +47,7 @@ target_link_libraries(clGeometry ${common_prefix}common ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(clGeometry_SCRIPTS
-    clGeometry.in clGeometry.out init.mac init_vis.mac vis.mac
+    clGeometry.in clGeometry.out init_vis.mac vis.mac
   )
 
 foreach(_script ${clGeometry_SCRIPTS})

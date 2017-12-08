@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4Hype.cc 106627 2017-10-17 06:23:58Z gcosmo $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 //
 // 
@@ -44,6 +44,8 @@
 // --------------------------------------------------------------------
 
 #include "G4Hype.hh"
+
+//#if !(defined(G4GEOM_USE_UHYPE) && defined(G4GEOM_USE_SYS_USOLIDS))
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1338,3 +1340,5 @@ G4double G4Hype::asinh(G4double arg)
 {
   return std::log(arg+std::sqrt(sqr(arg)+1));
 }
+
+//#endif // !defined(G4GEOM_USE_UHYPE) || !defined(G4GEOM_USE_SYS_USOLIDS)

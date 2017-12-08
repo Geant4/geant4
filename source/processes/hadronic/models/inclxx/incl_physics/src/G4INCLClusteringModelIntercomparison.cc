@@ -148,7 +148,7 @@ namespace G4INCL {
     nConsidered = 0;
     ParticleList const &particles = theNucleus->getStore()->getParticles();
     for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
-      if (!(*i)->isNucleon()) continue; // Only nucleons are allowed in clusters
+      if (!(*i)->isNucleonorLambda()) continue; // Only nucleons and lambdas are allowed in clusters
       if ((*i)->getID() == theLeadingParticle->getID()) continue; // Don't count the leading particle
 
       G4double space = ((*i)->getPosition() - leadingParticlePosition).mag2();

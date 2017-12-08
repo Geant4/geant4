@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc 102916 2017-03-02 12:58:58Z gcosmo $
+// $Id: G4IonTable.cc 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -44,6 +44,7 @@
 //      Modified Element Name for Z>103  06 Apr. 01 H.Kurashige
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
 //      Added initial support for Muonic Atoms   1 Jul 16  K.Lynch
+//      Extended support for Muonic Atoms        September 17  K.L.Genser
 
 #include <iostream>               
 #include <iomanip>               
@@ -1518,23 +1519,68 @@ void  G4IonTable::AddProcessManager(G4ParticleDefinition* ion)
 //    return;
 //  }
 
-  // check whether GenericIon has processes
-  G4ParticleDefinition* genericIon = 
-    G4ParticleTable::GetParticleTable()->GetGenericIon();
+  if(ion->IsGeneralIon()) {
 
-  G4ProcessManager* pman=0;
-  if (genericIon!=0) pman = genericIon->GetProcessManager();
-  if ((genericIon ==0) || (genericIon->GetParticleDefinitionID() < 0) || (pman==0)){
-    G4cout << "G4IonTable::AddProcessManager() : can not create ion of  " 
-           << ion->GetParticleName()
-           << "  because GenericIon is not available!!" <<   G4endl;
-    G4Exception( "G4IonTable::AddProcessManager()","PART105", FatalException, 
-		 "Can not create ions because GenericIon is not available");
-    return;
-  }
+    // check whether GenericIon has processes
+    G4ParticleDefinition* genericIon = 
+      G4ParticleTable::GetParticleTable()->GetGenericIon();
+
+    G4ProcessManager* pman=0;
+    if (genericIon!=0) pman = genericIon->GetProcessManager();
+    if ((genericIon ==0) || (genericIon->GetParticleDefinitionID() < 0) || (pman==0)){
+      G4cout << "G4IonTable::AddProcessManager() : can not create ion of  " 
+             << ion->GetParticleName()
+             << "  because GenericIon is not available!!" <<   G4endl;
+      G4Exception( "G4IonTable::AddProcessManager()","PART105", FatalException, 
+                   "Can not create ions because GenericIon is not available");
+      return;
+    }
   
-////////  ion->SetProcessManager(pman);
-  ion->SetParticleDefinitionID(genericIon->GetParticleDefinitionID());
+    ////////  ion->SetProcessManager(pman);
+    ion->SetParticleDefinitionID(genericIon->GetParticleDefinitionID());
+  }
+  else {
+
+    // is this a MuonicAtom ?
+
+    G4MuonicAtom* muatom = dynamic_cast<G4MuonicAtom*> (ion);
+
+    if ( muatom != nullptr ) {
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>1) {
+        G4cout << "G4IonTable::AddProcessManager() : MuonicAtom dynamic_cast succeeded for " 
+               << ion->GetParticleName() << G4endl;
+      }
+#endif
+      // check whether GenericMuonicAtom has processes
+      G4ParticleDefinition* genericMA = 
+        G4ParticleTable::GetParticleTable()->GetGenericMuonicAtom();
+
+      G4ProcessManager* pman = nullptr;
+      if (genericMA != nullptr) pman = genericMA->GetProcessManager();
+      if ((genericMA == nullptr) || (genericMA->GetParticleDefinitionID() < 0) || (pman==nullptr)){
+        G4cout << "G4IonTable::AddProcessManager() : can not create MuonicAtom  " 
+               << ion->GetParticleName()
+               << "  because GenericMuonicAtom is not available!!" <<   G4endl;
+        G4Exception( "G4IonTable::AddProcessManager()","PART106", FatalException, 
+                     "Can not create MuonicAtoms because GenericMuonicAtom is not available");
+        return;
+      }
+  
+      ////////  ion->SetProcessManager(pman);
+      ion->SetParticleDefinitionID(genericMA->GetParticleDefinitionID());
+      
+    }
+    else {
+      G4cout << "G4IonTable::AddProcessManager() : can not create  " 
+             << ion->GetParticleName()
+             << "  because of unsupported particle type !!" <<   G4endl;
+      G4Exception( "G4IonTable::AddProcessManager()","PART107", FatalException, 
+                   "Can not create particle");
+      return;
+    }
+  }
+  return;
 }
 
 #include <vector>     

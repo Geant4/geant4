@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.hh 104078 2017-05-10 14:50:23Z gcosmo $
+// $Id: G4ExcitationHandler.hh 104984 2017-07-03 15:13:37Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -133,6 +133,7 @@ private:
   G4int  fVerbose;
   G4bool isInitialised;
   G4bool isEvapLocal;
+  G4bool isActive;
 
   // list of fragments to store final result   
   std::vector<G4Fragment*> theResults;

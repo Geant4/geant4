@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.hh 98733 2016-08-09 10:51:58Z gcosmo $
+// $Id: G4DNASancheExcitationModel.hh 105719 2017-08-16 12:36:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -72,7 +72,7 @@ public:
 
   inline void ExtendLowEnergyLimit(G4double /*threshold*/);
 
-  inline void SetVerboseLevel(int verbose)
+  inline void SetVerboseLevel(G4int verbose)
   {
     verboseLevel = verbose;
   }
@@ -108,9 +108,9 @@ private:
   //
 //  typedef std::map<double, std::map<double, double> > TriDimensionMap;
 //  TriDimensionMap map1;
-  std::vector<double> tdummyVec;
-  std::vector<std::vector<double>> fEnergyLevelXS;
-  std::vector<double> fEnergyTotalXS;
+  std::vector<G4double> tdummyVec;
+  std::vector<std::vector<G4double>> fEnergyLevelXS;
+  std::vector<G4double> fEnergyTotalXS;
 
   //
   G4DNASancheExcitationModel & operator=(const G4DNASancheExcitationModel &right);

@@ -53,8 +53,8 @@
 
 
 CexmcSensitiveDetectorMessenger::CexmcSensitiveDetectorMessenger(
-                                                G4VPrimitiveScorer *  scorer ) :
-    scorer( scorer ), detectorPath( NULL ), setVerboseLevel( NULL )
+                                            G4VPrimitiveScorer *  scorer_ ) :
+    scorer( scorer_ ), detectorPath( NULL ), setVerboseLevel( NULL )
 {
     G4MultiFunctionalDetector *  detector(
                                         scorer->GetMultiFunctionalDetector() );

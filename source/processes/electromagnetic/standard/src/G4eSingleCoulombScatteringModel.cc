@@ -87,6 +87,7 @@ G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String&
 
   lowEnergyLimit  = 0*keV;
   recoilThreshold = 0.*eV;
+  XSectionModel = 1;
   FormFactor = 0;
   particle = nullptr;
   mass=0.0;
@@ -162,9 +163,11 @@ G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
 
   //Total Cross section
   Mottcross->SetupKinematic(kinEnergy, Z);
-  cross = Mottcross->NuclearCrossSection(FormFactor);
+  cross = Mottcross->NuclearCrossSection(FormFactor,XSectionModel);
 
   //cout<< "Compute Cross Section....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<" Z: "<<Z<<" kinEnergy: "<<kinEnergy<<endl;
+
+  //G4cout<<"Energy: "<<kinEnergy/MeV<<" Total Cross: "<<cross<<G4endl;
   return cross;
 }
 
@@ -198,11 +201,11 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   //G4cout<<"..Z: "<<Z<<" ..iz: "<<iz<<" ..ia: "<<ia<<" ..mass2: "<<mass2<<G4endl;
 
   Mottcross->SetupKinematic(kinEnergy, Z);
-  G4double cross= Mottcross->NuclearCrossSection(FormFactor); //MODIFY TO LOAD TABLE
+  G4double cross= Mottcross->NuclearCrossSection(FormFactor,XSectionModel);
   if(cross == 0.0) { return; }
   //cout<< "Energy: "<<kinEnergy/MeV<<" Z: "<<Z<<"....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
 
-  G4double z1 = Mottcross->GetScatteringAngle();
+  G4double z1 = Mottcross->GetScatteringAngle(FormFactor,XSectionModel);
   G4double sint = sin(z1);
   G4double cost = sqrt(1.0 - sint*sint);
   G4double phi  = twopi* G4UniformRand();
@@ -244,6 +247,8 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
   if(pCuts) {
     tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]);
+    //G4cout<<"Cuts: "<<(*pCuts)[currentMaterialIndex]/eV<<" eV"<<G4endl;
+    //G4cout<<"Threshold: "<<tcut/eV<<" eV"<<G4endl;
   }
 
   if(trec > tcut) {

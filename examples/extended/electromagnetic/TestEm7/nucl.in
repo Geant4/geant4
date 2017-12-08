@@ -1,4 +1,4 @@
-# $Id: nucl.in 101250 2016-11-10 08:54:02Z gcosmo $
+# $Id: nucl.in 107330 2017-11-08 16:42:09Z gcosmo $
 #
 # Macro file for "TestEm7.cc"
 # (can be run in batch, without graphic)
@@ -13,10 +13,10 @@
 /testem/det/setSizeYZ 20 cm
 #
 /testem/det/tallyNumber 4
-/testem/det/tallyDefinition 0 G4_WATER 2. 2. 2. mm
-/testem/det/tallyDefinition 1 G4_WATER 2. 2. 2. mm
-/testem/det/tallyDefinition 2 G4_WATER 2. 2. 2. mm
-/testem/det/tallyDefinition 3 G4_WATER 2. 2. 2. mm
+/testem/det/tallyDefinition 0 2. 2. 2. mm
+/testem/det/tallyDefinition 1 2. 2. 2. mm
+/testem/det/tallyDefinition 2 2. 2. 2. mm
+/testem/det/tallyDefinition 3 2. 2. 2. mm
 /testem/det/tallyPosition 0 -9.9 0. 0. cm
 /testem/det/tallyPosition 1 -5.  0. 0. cm
 /testem/det/tallyPosition 2  0.  0. 0. cm

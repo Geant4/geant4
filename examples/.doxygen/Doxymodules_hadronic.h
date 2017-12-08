@@ -1,4 +1,4 @@
-// $Id: Doxymodules_hadronic.h 101330 2016-11-14 15:38:27Z gcosmo $
+// $Id: Doxymodules_hadronic.h 107787 2017-11-30 13:11:33Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_hadronic.h
@@ -55,15 +55,6 @@
 
 /** @} */
 
-/** @defgroup extended_hadronic_Hadr05 Hadr05
- *  The Hadr05 hadronic classes have their
- *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
- *  @ingroup extended_hadronic
- *  @{
- */
-
-/** @} */
-
 /** @defgroup extended_hadronic_Hadr06 Hadr06
  *  The Hadr06 hadronic classes have their
  *  <a href="../html_Hadr06/html/index.html">standalone documentation </a>
@@ -71,12 +62,16 @@
  *  @{
  */
 
+/** @} */
+
 /** @defgroup extended_hadronic_Hadr07 Hadr07
  *  The Hadr07 hadronic classes have their
  *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
  *  @ingroup extended_hadronic
  *  @{
  */
+
+/** @} */
 
 /** @defgroup extended_hadronic_FissionFragment FissionFragment
  *  Hadronic example FissionFragment

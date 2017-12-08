@@ -31,45 +31,46 @@ The particularities are:
   the volume of the envelope throught energy spots
   (class Par01EnergySpot), those energy spots being
   recorded in the sensitive detector at this point
-  if any.
+  if any.  \n\n
   
   They are rather similar from a technical point of vue.
   They both make use of a private G4Navigator to set
   their energy spots into the sensitive volumes.
   However, we don't take care of putting every spot into
   a sensitive (which is recommended in a "serious"
-  parameterisation !). 
+  parameterisation !).  \n\n
   
   Those two models trigger their parameterisation
   on the first step the particle does in the envelope,
   but it would be perfectly possible to wait that the
   particle is far enough from the boundary of the envelope
-  for example.
+  for example.  \n\n
   
   - Par01PiModel: just there to show how a parameterisation
-    can create secondaries, but not used.
+    can create secondaries, but not used.  \n\n
 
 - Par01PhysicsList::AddParameterisation(). A method which
   sets the G4FastSimulationManagerProcess in the process
   manager of all the particles. This process provides
   the INTERFACE between the tracking and the parameterisation
-  models.
+  models.  \n\n
 
 - In Par01DetectorConstruction::Construct(): the parameterisation
-  models are built and bound to envelopes:
+  models are built and bound to envelopes:  \n\n
   
   - Par01EMShowerModel is bound to the electromagnetic
     calorimeter \n\n
     
   - Par01PionShowerModel is bound to a ghost volume
     which encompasses the electromagnetic and
-    hadronic calorimters
+    hadronic calorimters  \n\n
 
- - The Physics list used is FTFP_BERT which is augmented using the
+- The Physics list used is FTFP_BERT which is augmented using the
    G4FastSimulationPhysics physics constructor to insert the
    G4FastSimulationManagerProcess that is making the interface
    between the fast simulation and the tracking.
    The configuration is shown in examlePar01.cc.
+
 */  
 	
 

@@ -1,4 +1,4 @@
-$Id: History 104163 2017-05-15 06:52:42Z gcosmo $
+$Id: History 106957 2017-10-31 08:32:27Z gcosmo $
 
 -------------------------------------------------------------------
 
@@ -26,6 +26,41 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+29th October 2017  John Allison  (visman-V10-03-16)
+- G4VisManager.cc: Protect /vis/enable issued before run established.
+
+6th October 2017  John Allison  (visman-V10-03-15)
+- Needs greps-V10-03-07.
+- G4VisManager:
+  o Remove
+      if (!GetConcreteInstance()) return;
+    from Begin/EndOfRun so that even if the user
+      /vis/disable
+    the vis manager will still report fully, for example, with information
+    about the number of kept events for reviewing or redrawing.
+  o Introduce InitialiseG4ColourMap, which initialises G4Colour's colour map
+    and adds Guy Barrand's 65 X11 colours.
+  o Improve some messages.
+- G4VisCommands:
+  o Change /vis/drawOnlyKeptEvents to /vis/drawOnlyToBeKeptEvents and
+    improve the guidance for improved clarity.
+
+13th September 2017  John Allison  (visman-V10-03-14)
+- G4ViewParameters.cc, G4VisCommandsViewerSet.cc:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+21st June 2017  John Allison  (visman-V10-03-13)
+- Implement /vis/drawOnlyKeptEvents.
+  To draw selected events the user should set this flag, then in a user action:
+    if ( some criterion ) {
+      G4EventManager::GetEventManager()->KeepTheCurrentEvent();
+    }
+
+15th May 2017  John Allison
+- Cosmetic.
+
 14th May 2017  John Allison  (visman-V10-03-12)
 - Needs modeling-V10-03-07.
 - Add user-selected colour to /vis/scene/add/gps.
@@ -33,7 +68,7 @@ History file for visualization management sub-category
 12th May 2017  John Allison  (visman-V10-03-11)
 - Added G4VVisCommand::ConvertToColourGuidance.  This avoids having to
   repeat it for every command that uses it.
-- /vis/viewer/save: Add .g4view if an extension us not supplied by the user.
+- /vis/viewer/save: Add .g4view if an extension is not supplied by the user.
 - /vis/viewer/set/defaultTextColour: Changed default to blue and opaque to
   agree with default text vis attributes.
 

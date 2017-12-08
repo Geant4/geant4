@@ -1,0 +1,167 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_utest
+#define tools_utest
+
+#include "args"
+#include <cstdio> //for FILE*
+
+namespace tools {
+
+class test {
+public:
+  typedef bool(*func)(std::ostream&,bool);
+  typedef bool(*func2)(std::ostream&,const args&);
+  typedef bool(*func3)(std::ostream&,int,char**);
+
+  typedef bool(*cfunc)(FILE*,bool);
+public:
+  test():m_do_it(false),m_func(0),m_func2(0),m_func3(0),m_cfunc(0){}
+  test(bool a_do_it,func a_func):m_do_it(a_do_it),m_func(a_func),m_func2(0),m_func3(0),m_cfunc(0){}
+  test(bool a_do_it,func2 a_func):m_do_it(a_do_it),m_func(0),m_func2(a_func),m_func3(0),m_cfunc(0){}
+  test(bool a_do_it,func3 a_func):m_do_it(a_do_it),m_func(0),m_func2(0),m_func3(a_func),m_cfunc(0){}
+  test(bool a_do_it,cfunc a_func):m_do_it(a_do_it),m_func(0),m_func2(0),m_func3(0),m_cfunc(a_func){}
+  virtual ~test(){}
+public:
+  test(const test& a_from)
+  :m_do_it(a_from.m_do_it)
+  ,m_func(a_from.m_func),m_func2(a_from.m_func2),m_func3(a_from.m_func3),m_cfunc(a_from.m_cfunc){}
+  test& operator=(const test& a_from) {
+    m_do_it = a_from.m_do_it;
+    m_func = a_from.m_func;
+    m_func2 = a_from.m_func2;
+    m_func3 = a_from.m_func3;
+    m_cfunc = a_from.m_cfunc;
+    return *this;
+  }
+public:
+  bool m_do_it;
+  func m_func;
+  func2 m_func2;
+  func3 m_func3;
+  cfunc m_cfunc;
+};
+
+class utest : public std::vector< std::pair<std::string,test> > {
+  typedef std::pair<std::string,test> named_test;
+  typedef std::vector<named_test> parent;
+public:
+  utest(std::ostream& a_out):m_out(a_out){}
+  virtual~ utest(){}
+public:
+  utest(const utest& a_from):parent(a_from),m_out(a_from.m_out){}
+  utest& operator=(const utest& a_from){ parent::operator=(a_from);return *this;}
+public:
+  void add(const std::string& a_name,test::func a_func) {
+    (*this).push_back(named_test(a_name,test(false,a_func)));
+  }
+  void add(const std::string& a_name,test::func2 a_func) {
+    (*this).push_back(named_test(a_name,test(false,a_func)));
+  }
+  void add(const std::string& a_name,test::func3 a_func) {
+    (*this).push_back(named_test(a_name,test(false,a_func)));
+  }
+  void add(const std::string& a_name,test::cfunc a_func) {
+    (*this).push_back(named_test(a_name,test(false,a_func)));
+  }
+
+  bool exec(const args& a_args,bool a_verbose,int a_argc=0,char** a_argv=0) {
+   {tools_vforit(named_test,*this,it) (*it).second.m_do_it = false;}
+
+   {tools_vforcit(args::arg,a_args.get_args(),it) {
+      const std::string& key = (*it).first;
+      bool found = false;
+      tools_vforit(named_test,*this,itn) {
+        const std::string& name = (*itn).first;
+        if(key==std::string("-"+name)) {found=true;break;}
+        if(key==std::string("-no_"+name)) {found=true;break;} //valid arg, but not a test.
+      }
+      if(!found) {
+        m_out << "WARNING : arg " << sout(key) << " is not a test." << std::endl;
+      }
+    }}
+    
+    bool some = false;
+   {tools_vforit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if(a_args.is_arg("-"+name)) {
+        (*it).second.m_do_it = true;
+        some = true;
+      }
+    }}
+
+    if(!some) { //do all.
+      tools_vforit(named_test,*this,it) (*it).second.m_do_it = true;
+    }
+
+   {tools_vforit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if(a_args.is_arg("-no_"+name)) {
+        (*it).second.m_do_it = false;
+      }
+    }}
+
+    bool status = true;
+
+   {tools_vforcit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if((*it).second.m_do_it && (*it).second.m_func) {
+        if(a_verbose) m_out << "test_" << name << " ..." << std::endl;
+        if(!(*it).second.m_func(m_out,a_verbose)) {
+          m_out << "test_" << name << " failed." << std::endl;
+          status = false;
+        }
+        if(a_verbose) m_out << "test_" << name << " end." << std::endl;
+      }
+    }}
+
+   {tools_vforcit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if((*it).second.m_do_it && (*it).second.m_func2) {
+        if(a_verbose) m_out << "test_" << name << " ..." << std::endl;
+        if(!(*it).second.m_func2(m_out,a_args)) {
+          m_out << "test_" << name << " failed." << std::endl;
+          status = false;
+        }
+        if(a_verbose) m_out << "test_" << name << " end." << std::endl;
+      }
+    }}
+
+   {tools_vforcit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if((*it).second.m_do_it && (*it).second.m_func3) {
+        if(a_verbose) m_out << "test_" << name << " ..." << std::endl;
+        if(!(*it).second.m_func3(m_out,a_argc,a_argv)) {
+          m_out << "test_" << name << " failed." << std::endl;
+          status = false;
+        }
+        if(a_verbose) m_out << "test_" << name << " end." << std::endl;
+      }
+    }}
+
+   {tools_vforcit(named_test,*this,it) {
+      const std::string& name = (*it).first;
+      if((*it).second.m_do_it && (*it).second.m_cfunc) {
+        if(a_verbose) m_out << "test_" << name << " ..." << std::endl;
+        if(!(*it).second.m_cfunc(stdout,a_verbose)) {
+          m_out << "test_" << name << " failed." << std::endl;
+          status = false;
+        }
+        if(a_verbose) m_out << "test_" << name << " end." << std::endl;
+      }
+    }}
+
+    tools_vforit(named_test,*this,it) (*it).second.m_do_it = false;
+
+    return status;
+  }
+  
+  void list() {tools_vforit(named_test,*this,it) m_out << (*it).first << std::endl;}
+protected:
+  std::ostream& m_out;
+};
+
+}
+
+#endif

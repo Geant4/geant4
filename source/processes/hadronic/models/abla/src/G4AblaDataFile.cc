@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 // ABLAXX statistical de-excitation model
+// Jose Luis Rodriguez, CEA (translation from ABLA07 and contact person)
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL)
 // Aatos Heikkinen, HIP (project coordination)
 //
 #define ABLAXX_IN_GEANT4_MODE 1
@@ -82,15 +83,17 @@ bool G4AblaDataFile::readData()
     G4Exception("G4AblaDataFile::readData()","ABLA_001",
                 FatalException, ed);
   }
-  
   G4String dataPath(getenv("G4ABLADATA"));
 #else
-  G4String dataPath(theConfig->getABLAv3pCxxDataFilePath().c_str());
+  G4String dataPath(theConfig->getABLAXXDataFilePath().c_str());
 #endif
   G4String flAlphaFile(dataPath + "/flalpha.dat");
   G4String frldmFile(  dataPath + "/frldm.dat");
   G4String vgsldFile(  dataPath + "/vgsld.dat");
   G4String pace2File(  dataPath + "/pace2.dat");
+  G4String rmsFile(  dataPath + "/rms.dat");
+  G4String defoFile(  dataPath + "/defo.dat");
+  G4String massFile(  dataPath + "/mass2003.dat");
 
   if(verboseLevel > 1) {
     // G4cout <<"Data path   = " << dataPath    << G4endl;
@@ -104,31 +107,45 @@ bool G4AblaDataFile::readData()
   std::ifstream frldmin(frldmFile.c_str());  
   std::ifstream vgsldin(vgsldFile.c_str());  
   std::ifstream pace2in(pace2File.c_str());
+  std::ifstream rmsin(rmsFile.c_str());
+  std::ifstream defoin(defoFile.c_str());
+  std::ifstream massin(massFile.c_str());
 
   std::filebuf *buf1 = flalphain.rdbuf();
   std::filebuf *buf2 = frldmin.rdbuf();
   std::filebuf *buf3 = vgsldin.rdbuf();
   std::filebuf *buf4 = pace2in.rdbuf();  
-  if (!((buf1->is_open()) && (buf2->is_open()) && (buf3->is_open()) && (buf4->is_open()))) {
+  std::filebuf *buf5 = rmsin.rdbuf(); 
+  std::filebuf *buf6 = defoin.rdbuf();
+  std::filebuf *buf7 = massin.rdbuf();
+  if (!((buf1->is_open()) && (buf2->is_open()) && (buf3->is_open()) && (buf4->is_open()) && (buf5->is_open()) && (buf6->is_open()) && (buf7->is_open()))) {
 #ifdef ABLAXX_IN_GEANT4_MODE
     G4ExceptionDescription ed;
     ed << " Data missing: could not find ABLA data file in " << dataPath
        << "defined by environment variable G4ABLADATA" << G4endl;
-    G4Exception("G4AblaDataFile::readData()", "ABLA002", FatalException, ed);
+    G4Exception("G4AblaDataFile::readData()", "ABLA", FatalException, ed);
 #else
     std::cerr << "Error opening file." << std::endl;
 #endif
   }
   
-  G4double fflalpha, ffrldm, fvgsld, fpace2;
+  G4double fflalpha, ffrldm, fvgsld, fpace2, frms;
+  int fj,fk,a2,a3,a4;
+  G4double fbeta2,fbeta4;
+  G4double a7;
   const G4int rows = 99;
   const G4int cols = 154;
+  const G4int rowsbeta = 137;
+  const G4int colsbeta = 251;
+  const G4int rowsmass = 13;
+  const G4int colsmass = 154;
   const G4int massnumbers = 263;
   for(int i = 0; i < rows; i++) {
     for(int j = 0; j < cols; j++) {
       setAlpha(j, i, 0.0);
       setEcnz( j, i, 0.0);
       setVgsld(j, i, 0.0);
+      setRms(j, i, 0.0);
     }
   }
   
@@ -136,15 +153,51 @@ bool G4AblaDataFile::readData()
     for(int j = 0; j < cols; j++) {
       flalphain >> fflalpha;
       frldmin >> ffrldm;
-      vgsldin >> fvgsld;      
+      vgsldin >> fvgsld;  
+      rmsin >> frms;    
       setAlpha(j, i, fflalpha);
       setEcnz( j, i, ffrldm);
       setVgsld(j, i, fvgsld);
+      setRms(j, i, frms);
     }
   }
+
+
+  for(int i = 0; i < rowsbeta; i++) {
+    for(int j = 0; j < colsbeta; j++) {
+      setBeta2(j, i, 0.0);
+      setBeta4(j, i, 0.0);
+    }
+  }
+
+  for(int i = 0; i < 8983; i++) {
+  defoin >> fj >> fk >> fbeta2 >> fbeta4;
+  setBeta2(fk, fj, fbeta2);
+  setBeta4(fk, fj, fbeta4);
+  }
+
+  for(int i = 0; i < rowsmass; i++) {
+    for(int j = 0; j < colsmass; j++) {
+      setMexp(j, i, 0.0);
+      setMexpID(j,i,0);
+    }
+  }
+   massin >> a2 >> a3 >> a4 >> a7 ;
+   while(!massin.eof()){
+   //
+     if(a3<13.){
+     setMexpID(a2,a3,1);
+     setMexp(a2,a3,938.7829835*a3+939.5653301*a2-1.*a4*a7/1000.);
+     }
+     massin >> a2 >> a3 >> a4 >> a7 ;
+   }
+
   flalphain.close();
   frldmin.close();  
   vgsldin.close();
+  rmsin.close();
+  defoin.close();
+  massin.close();
 
   G4String str1, str2, str3;
   for(int i = 0; i < 500; i++) {

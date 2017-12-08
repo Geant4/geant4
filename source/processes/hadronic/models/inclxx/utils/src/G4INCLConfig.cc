@@ -41,7 +41,7 @@
 #include "G4INCLParticleTable.hh"
 
 namespace G4INCL {
-
+  
   Config::Config() {
     init();
   }
@@ -93,9 +93,9 @@ namespace G4INCL {
     maxMassFermiBreakUp = 16;
     maxChargeFermiBreakUp = 8;
 #endif
-    rpCorrelationCoefficient = 1.;
-    rpCorrelationCoefficientProton = 1.;
-    rpCorrelationCoefficientNeutron = 1.;
+    rpCorrelationCoefficient = 0.98;
+    rpCorrelationCoefficientProton = 0.5;
+    rpCorrelationCoefficientNeutron = 0.74;
     neutronSkin = 0.;
     neutronHalo = 0.;
     refraction=false;
@@ -107,14 +107,15 @@ namespace G4INCL {
     rngType = RanecuType;
     autosaveFrequency = 10000;
     maxNumberMultipions = -1;
-    crossSectionsString = "multipions-resonances";
-    crossSectionsType = MultiPionsAndResonancesCrossSections;
+    crossSectionsString = "strangeness";
+    crossSectionsType = StrangenessCrossSections;
     hadronizationTime = 0.;
 #ifdef INCL_ROOT_USE
     conciseROOTTree = false;
 #endif
     inverseKinematics = false;
-    decayTimeThreshold = 1.e-18;
+    decayTimeThreshold = 1.e-20;
+    bias = 1.;
   }
 
   std::string Config::summary() {
@@ -123,10 +124,10 @@ namespace G4INCL {
     if(projectileSpecies.theType != Composite)
       message << "Projectile: " << ParticleTable::getName(projectileSpecies) << '\n';
     else
-      message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << '\n';
+      message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << ", S=" << projectileSpecies.theS << '\n';
     message << "  energy = " << projectileKineticEnergy << '\n';
     if(targetSpecies.theA>0)
-      message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << '\n';
+      message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << " S = " << targetSpecies.theS << '\n';
     else
       message << "Target: natural isotopic composition, Z = " << targetSpecies.theZ << '\n';
     message << "Number of requested shots = " << nShots << '\n';

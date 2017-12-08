@@ -5,7 +5,7 @@
 #define tools_tosu
 
 // have a "sprintf(%u)" without #include.
-// It is used in os.
+// It is used in platform.
 
 namespace tools {
 
@@ -28,7 +28,7 @@ inline void tosu(T a_i,char a_s[],unsigned int& a_l) {
  {char* pos = a_s;
   T i = a_i;
   while(true) {
-    if(i<=9) {*pos = '0'+char(i);pos++;a_l++;*pos=0;break;}
+    if(i<=9) {*pos = '0'+char(i);pos++;a_l++;*pos=0;pos++;break;}
     T r = i % 10;
     *pos = '0'+char(r);pos++;
     a_l++;

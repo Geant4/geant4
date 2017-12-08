@@ -6,6 +6,7 @@
 
 #include "vertices"
 #include "gstos"
+#include "../vmanip"
 
 namespace tools {
 namespace sg {
@@ -17,6 +18,7 @@ public:
   mf<float> nms;
   sf<bool> do_back;
   sf<float> epsilon;
+  sf<bool> draw_edges;
 public:
   virtual const std::vector<field_desc>& node_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::atb_vertices)
@@ -27,8 +29,14 @@ public:
       TOOLS_ADD_FIELD_DESC(nms)
       TOOLS_ADD_FIELD_DESC(do_back)
       TOOLS_ADD_FIELD_DESC(epsilon)
+      TOOLS_ADD_FIELD_DESC(draw_edges)
     }
     return s_v;
+  }
+  virtual void protocol_one_fields(std::vector<field*>& a_fields) const {
+    parent::protocol_one_fields(a_fields);
+    const field* _draw_edges = static_cast<const field*>(&draw_edges);
+    removep<field>(a_fields,_draw_edges);
   }
 private:
   void add_fields(){
@@ -36,6 +44,7 @@ private:
     add_field(&nms);
     add_field(&do_back);
     add_field(&epsilon);
+    add_field(&draw_edges);
   }
 protected: //gstos
   virtual unsigned int create_gsto(std::ostream&,sg::gl_manager& a_mgr) {
@@ -57,6 +66,47 @@ protected: //gstos
           append(gsto_data,nms.values());
           append(gsto_data,rgbas.values());
         }
+        if(draw_edges.value()) {
+          // allocate edges :
+          size_t pos_edges = gsto_data.size();
+          append(gsto_data,xyzs.values());
+          append(gsto_data,xyzs.values());
+          float* pxyz = vec_data<float>(xyzs.values());    
+          float* pedges = vec_data<float>(gsto_data)+pos_edges;    
+          size_t npt = xyzs.values().size()/3;
+          size_t ntri = npt/3;
+          for(size_t itri=0;itri<ntri;itri++) {
+            // first edge :
+            *pedges = *(pxyz+0);pedges++;
+            *pedges = *(pxyz+1);pedges++;
+            *pedges = *(pxyz+2);pedges++;
+
+            *pedges = *(pxyz+3);pedges++;
+            *pedges = *(pxyz+4);pedges++;
+            *pedges = *(pxyz+5);pedges++;
+
+            // second edge :
+            *pedges = *(pxyz+3);pedges++;
+            *pedges = *(pxyz+4);pedges++;
+            *pedges = *(pxyz+5);pedges++;
+
+            *pedges = *(pxyz+6);pedges++;
+            *pedges = *(pxyz+7);pedges++;
+            *pedges = *(pxyz+8);pedges++;
+
+            // third edge :
+            *pedges = *(pxyz+6);pedges++;
+            *pedges = *(pxyz+7);pedges++;
+            *pedges = *(pxyz+8);pedges++;
+
+            *pedges = *(pxyz+0);pedges++;
+            *pedges = *(pxyz+1);pedges++;
+            *pedges = *(pxyz+2);pedges++;
+
+            pxyz += 9;
+          }
+
+        }
       } else {
         append(gsto_data,xyzs.values());
         append(gsto_data,rgbas.values());
@@ -76,6 +126,7 @@ public:
   virtual void render(render_action& a_action) {
     if(touched()) {
       if(do_back.value()) gen_back();
+      if(draw_edges.value()) gen_edges();
       reset_touched();
     }
     if(xyzs.empty()) return;
@@ -94,6 +145,7 @@ public:
             bufpos pos_back_xyzs = 0;
             bufpos pos_back_nms = 0;
             bufpos pos_rgbas = 0;
+            bufpos pos_edges = 0;
            {size_t sz = npt*3;
             if(do_back.value()) {
               pos_xyzs = 0;
@@ -106,12 +158,30 @@ public:
               pos_nms = pos_xyzs+sz*sizeof(float);
               pos_rgbas = pos_nms+sz*sizeof(float);
             }}
+            if(draw_edges.value()) {
+              pos_edges = pos_rgbas+npt*4*sizeof(float);
+            }  
             if(gl::is_line(mode.value())) {
               //Same logic as Inventor SoLightModel.model = BASE_COLOR.
               a_action.set_lighting(false);
               if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
               a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
               a_action.set_lighting(state.m_GL_LIGHTING);
+            } else if(mode.value()==gl::triangles()) {
+              if(draw_edges.value()) {
+                a_action.color4f(0,0,0,1);
+                a_action.line_width(1);
+                a_action.draw_gsto_v(gl::lines(),2*npt,pos_edges);
+                //pushes back the filled polygons to avoid z-fighting with lines
+                a_action.set_polygon_offset(true);
+
+                a_action.color4f(state.m_color);
+                a_action.line_width(state.m_line_width);
+                //a_action.set_lighting(state.m_GL_LIGHTING);
+              }
+              if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
+              a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
+              a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
             } else {
               if(do_back.value()) a_action.draw_gsto_vcn(mode.value(),npt,pos_back_xyzs,pos_rgbas,pos_back_nms);
               a_action.draw_gsto_vcn(mode.value(),npt,pos_xyzs,pos_rgbas,pos_nms);
@@ -177,6 +247,18 @@ public:
               a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
             a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
             a_action.set_lighting(state.m_GL_LIGHTING);
+          } else if(mode.value()==gl::triangles()) {
+            if(draw_edges.value()) {
+              a_action.color4f(0,0,0,1);
+              a_action.line_width(1);
+              a_action.draw_vertex_array(gl::lines(),m_edges);
+              a_action.set_polygon_offset(true);
+              a_action.color4f(state.m_color);
+              a_action.line_width(state.m_line_width);
+            }
+            if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
+            a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
+            a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
           } else {
             if(do_back.value()) a_action.draw_vertex_color_normal_array(mode.value(),m_back_xyzs,rgbas.values(),m_back_nms);
             a_action.draw_vertex_color_normal_array(mode.value(),xyzs.values(),rgbas.values(),nms.values());
@@ -223,6 +305,7 @@ public:
   :parent()
   ,do_back(false)
   ,epsilon(0)
+  ,draw_edges(false)
   ,m_xyzs_pos(0)
   ,m_rgbas_pos(0)
   ,m_nms_pos(0)
@@ -245,6 +328,7 @@ public:
   ,nms(a_from.nms)
   ,do_back(a_from.do_back)
   ,epsilon(a_from.epsilon)
+  ,draw_edges(a_from.draw_edges)
   ,m_xyzs_pos(a_from.m_xyzs_pos)
   ,m_rgbas_pos(a_from.m_rgbas_pos)
   ,m_nms_pos(a_from.m_nms_pos)
@@ -261,6 +345,7 @@ public:
     nms = a_from.nms;
     do_back = a_from.do_back;
     epsilon = a_from.epsilon;
+    draw_edges = a_from.draw_edges;
     m_xyzs_pos = a_from.m_xyzs_pos;
     m_rgbas_pos = a_from.m_rgbas_pos;
     m_nms_pos = a_from.m_nms_pos;
@@ -491,6 +576,52 @@ protected:
     }
   }
 
+  void gen_edges(){
+    m_edges.clear();
+
+    clean_gstos(); //must reset for all gl_manager.
+
+    std::vector<float>& _xyzs = xyzs.values();
+    if(_xyzs.empty()) return;
+
+    m_edges.resize(2*_xyzs.size(),0);
+
+    float* pxyz = vec_data<float>(xyzs.values());    
+    float* pedges = vec_data<float>(m_edges);    
+
+    size_t npt = xyzs.values().size()/3;
+    size_t ntri = npt/3;
+    for(size_t itri=0;itri<ntri;itri++) {
+      // first edge :
+      *pedges = *(pxyz+0);pedges++;
+      *pedges = *(pxyz+1);pedges++;
+      *pedges = *(pxyz+2);pedges++;
+
+      *pedges = *(pxyz+3);pedges++;
+      *pedges = *(pxyz+4);pedges++;
+      *pedges = *(pxyz+5);pedges++;
+
+      // second edge :
+      *pedges = *(pxyz+3);pedges++;
+      *pedges = *(pxyz+4);pedges++;
+      *pedges = *(pxyz+5);pedges++;
+
+      *pedges = *(pxyz+6);pedges++;
+      *pedges = *(pxyz+7);pedges++;
+      *pedges = *(pxyz+8);pedges++;
+
+      // third edge :
+      *pedges = *(pxyz+6);pedges++;
+      *pedges = *(pxyz+7);pedges++;
+      *pedges = *(pxyz+8);pedges++;
+
+      *pedges = *(pxyz+0);pedges++;
+      *pedges = *(pxyz+1);pedges++;
+      *pedges = *(pxyz+2);pedges++;
+
+      pxyz += 9;
+    }
+  }
 protected:
   std::vector<float> m_back_xyzs;
   std::vector<float> m_back_nms;

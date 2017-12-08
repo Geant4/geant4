@@ -102,8 +102,8 @@ class axis {
   static double TMath_ATan2(double y, double x) { 
     if (x != 0) return  ::atan2(y, x);
     if (y == 0) return  0;
-    if (y >  0) return  tools::half_pi();
-    else        return -tools::half_pi();
+    if (y >  0) return  half_pi();
+    else        return -half_pi();
   }
 
   //static short TMath_Abs(short d)  { return (d >= 0) ? d : -d; }
@@ -352,7 +352,7 @@ public:
      double rangeOffset = 0;
   
      double epsilon   = 1e-5;
-     const double kPI = tools::pi(); //GB
+     const double kPI = pi(); //GB
      double textSize = 0.05; //GB
      short textAlign = 11; //GB
      BinWidth = 0; //GB
@@ -528,9 +528,9 @@ public:
      int N1A   = ndiv%100;
      int N2A   = (ndiv%10000 - N1A)/100;
      int N3A   = ndiv/10000;
-     int NN3   = tools::mx(N3A,1);
-     int NN2   = tools::mx(N2A,1)*NN3;
-     int NN1   = tools::mx(N1A,1)*NN2+1;
+     int NN3   = mx<int>(N3A,1);
+     int NN2   = mx<int>(N2A,1)*NN3;
+     int NN1   = mx<int>(N1A,1)*NN2+1;
      int Nticks= NN1;
   
      // Axis bining optimization is ignored if:
@@ -616,9 +616,9 @@ public:
         N1Aold = N1A;
         NN1old = NN1;
         N1A    = nbins;
-        NN3    = tools::mx(NB3,1);
-        NN2    = tools::mx(NB2,1)*NN3;
-        NN1    = tools::mx(N1A,1)*NN2+1;
+        NN3    = mx<int>(NB3,1);
+        NN2    = mx<int>(NB2,1)*NN3;
+        NN1    = mx<int>(N1A,1)*NN2+1;
         Nticks = NN1;
      }
   
@@ -1174,7 +1174,7 @@ public:
                  NEXE   = 0;
                  bool FLEXPO = false;
                  bool FLEXNE = false;
-                 WW  = tools::mx(TMath_Abs(wmin),TMath_Abs(wmax));
+                 WW  = mx<double>(TMath_Abs(wmin),TMath_Abs(wmax));
   
                  // First case : (wmax-wmin)/N1A less than 0.001
                  // 0.001 fMaxDigits of 5 (fMaxDigits) characters). 
@@ -1246,10 +1246,10 @@ public:
                  }
   
                  IF2 = NA;
-                 IF1 = tools::mx(NF+NA,maxDigits)+1;
+                 IF1 = mx<int>(NF+NA,maxDigits)+1;
   L110:
-                 if (tools::mn(wmin,wmax) < 0)IF1 = IF1+1;
-                 IF1 = tools::mn(IF1,32);
+                 if (mn<double>(wmin,wmax) < 0)IF1 = IF1+1;
+                 IF1 = mn<int>(IF1,32);
   
                  // In some cases, IF1 and IF2 are too small....
                  while (DWlabel < ::pow(10.,-IF2)) {
@@ -1877,12 +1877,12 @@ private:
      int OptionTime;
      SETOPT(aCHOPT,'t',OptionTime);
   
-     double AL = tools::mn(A1,A2);
-     double AH = tools::mx(A1,A2);
+     double AL = mn<double>(A1,A2);
+     double AH = mx<double>(A1,A2);
      if (AL == AH) AH = AL+1;
      // if nold  ==  -1 , program uses binwidth input from calling routine
      if (nold == -1 && BinWidth > 0 ) goto L90;
-     ntemp = tools::mx(nold,2);
+     ntemp = (int)mx<double>(nold,2);
      if (ntemp < 1) ntemp = 1;
   
   L20:

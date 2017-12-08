@@ -63,9 +63,9 @@ struct  CexmcSimpleRangeWithValue
     CexmcSimpleRangeWithValue()
     {}
 
-    CexmcSimpleRangeWithValue( G4double  bottom, G4double  top,
-                               G4double  value ) :
-        bottom( bottom ), top( top ), value( value )
+    CexmcSimpleRangeWithValue( G4double  bottom_, G4double  top_,
+                               G4double  value_ ) :
+        bottom( bottom_ ), top( top_ ), value( value_ )
     {}
 
     G4double  bottom;

@@ -352,7 +352,7 @@ void Run::EndOfRun(G4bool print)
     G4int count = data.fCount;
     G4double Q  = data.fQ/count; 
     if (print)         
-      G4cout << "  " << std::setw(50) << name << ": " << std::setw(7) << count
+      G4cout << "  " << std::setw(60) << name << ": " << std::setw(7) << count
              << "   Q = " << std::setw(wid) << G4BestUnit(Q, "Energy")
              << G4endl;           
  } 
@@ -360,7 +360,7 @@ void Run::EndOfRun(G4bool print)
  //Gamma count
  //
  if (print && (fGammaCount > 0)) {       
-   G4cout << "\n" << std::setw(58) << "Number of gamma: N = " 
+   G4cout << "\n" << std::setw(58) << "number of gamma or e- (ic): N = " 
            << fNbGamma[1] << " --> " << fNbGamma[2] << G4endl;
  }
  

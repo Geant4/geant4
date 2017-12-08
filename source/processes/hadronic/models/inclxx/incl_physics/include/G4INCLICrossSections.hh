@@ -111,7 +111,7 @@ namespace G4INCL {
 	  
 		   	/// \brief Cross section for N-Delta-Eta production - NNEta Channel
 			   virtual G4double NNToNDeltaEta(Particle const * const p1, Particle const * const p2) = 0;
-	  
+			   
       /// \brief Cross section for NN->NNEta (inclusive)
       virtual G4double NNToNNOmega(Particle const * const p1, Particle const * const p2) = 0;
 	  
@@ -123,7 +123,64 @@ namespace G4INCL {
 	  
       /// \brief Cross section for N-Delta-Eta production - NNEta Channel
       virtual G4double NNToNDeltaOmega(Particle const * const p1, Particle const * const p2) = 0;
-   
+      
+      
+      /// \brief elastic scattering for Nucleon-Strange Particles cross sections
+      virtual G4double NYelastic(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbelastic(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKelastic(Particle const * const p1, Particle const * const p2) = 0;
+      
+      /// \brief Nucleon-Nucleon to Stange particles cross sections
+      virtual G4double NNToNLK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNSK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNLKpi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNSKpi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNLK2pi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNSK2pi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToNNKKb(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NNToMissingStrangeness(Particle const * const p1, Particle const * const p2) = 0;
+      
+      /// \brief Nucleon-Delta to Stange particles cross sections
+      virtual G4double NDeltaToNLK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NDeltaToNSK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NDeltaToDeltaLK(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NDeltaToDeltaSK(Particle const * const p1, Particle const * const p2) = 0;
+      
+      virtual G4double NDeltaToNNKKb(Particle const * const p1, Particle const * const p2) = 0;
+         
+         /// \brief Nucleon-Pion to Stange particles cross sections
+         virtual G4double NpiToLK(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToSK(Particle const * const p1, Particle const * const p2) = 0;
+		   virtual G4double p_pimToSzKz(Particle const * const p1, Particle const * const p2) = 0;
+		   virtual G4double p_pimToSmKp(Particle const * const p1, Particle const * const p2) = 0;
+		   virtual G4double p_pizToSzKp(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToLKpi(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToSKpi(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToLK2pi(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToSK2pi(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToNKKb(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NpiToMissingStrangeness(Particle const * const p1, Particle const * const p2) = 0;
+      
+      /// \brief Nucleon-Hyperon cross sections
+      virtual G4double NLToNS(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NSToNL(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NSToNS(Particle const * const p1, Particle const * const p2) = 0;
+         
+         /// \brief Nucleon-Kaon inelastic cross sections
+         virtual G4double NKToNK(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NKToNKpi(Particle const * const p1, Particle const * const p2) = 0;
+         virtual G4double NKToNK2pi(Particle const * const p1, Particle const * const p2) = 0;
+      
+      /// \brief Nucleon-antiKaon inelastic cross sections
+      virtual G4double NKbToNKb(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToSpi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToLpi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToS2pi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToL2pi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToNKbpi(Particle const * const p1, Particle const * const p2) = 0;
+      virtual G4double NKbToNKb2pi(Particle const * const p1, Particle const * const p2) = 0;
+
+
       /** \brief Calculate the slope of the NN DDXS.
        *
        * \param energyCM energy in the CM frame, in MeV

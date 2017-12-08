@@ -1,4 +1,4 @@
-# $Id: History 104803 2017-06-19 07:13:32Z gcosmo $
+# $Id: History 107438 2017-11-13 07:38:19Z gcosmo $
 # -----------------------------------------------------------
 
           ==================================================
@@ -14,6 +14,39 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+10 November 2017 Tatsumi Koi (hadr-lend-V10-03-12)
+-----------------------------------------------
+-Fix gamma(2.2MeV) emission from n captured by H
+-Fix minor problem on DumpLENDTargetInfo
+-Fix misplaced description in this file
+
+7 November 2017 Tatsumi Koi (hadr-lend-V10-03-11)
+-----------------------------------------------
+-Fix typo in names of cross section data set
+
+10 October 2017 Tatsumi Koi (hadr-lend-V10-03-10)
+-----------------------------------------------
+-Adding G4LENDCombinedModel and G4LENDCombinedCrossSection
+-Adding DumpLENDTargetInfo 
+-Reducing default (VerboseLevel=0) output from models and cross sections
+
+9 October 2017 Tatsumi Koi (hadr-lend-V10-03-09)
+-----------------------------------------------
+-G4LENDCrossSection: IsIsoApplicable returns false for the case of target is not exist
+-G4LENDModel: ApplyYourself returns unchanged final state for the case of target is not exist with warning message
+
+2 October 2017 Tatsumi Koi (hadr-lend-V10-03-08)
+-----------------------------------------------
+-Fix bug in G4LENDElastic
+
+21 June 2017 Tatsumi Koi (hadr-lend-V10-03-07)
+-----------------------------------------------
+-Fix Coverity 63049
+
+27 June 2017 Tatsumi Koi (hadr-lend-V10-03-06)
+-----------------------------------------------
+-Fix Coverity 63063
 
 14 June 2017 Tatsumi Koi (hadr-lend-V10-03-05)
 -----------------------------------------------

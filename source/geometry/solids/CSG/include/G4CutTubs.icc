@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CutTubs.icc 102768 2017-02-22 08:55:14Z gcosmo $
+// $Id: G4CutTubs.icc 105075 2017-07-11 14:22:53Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -33,6 +33,252 @@
 //
 // Implementation of inline methods of G4CutTubs
 // --------------------------------------------------------------------
+
+inline
+G4double G4CutTubs::GetInnerRadius () const
+{
+  return fRMin;
+}
+
+inline
+G4double G4CutTubs::GetOuterRadius () const
+{
+  return fRMax;
+}
+
+inline
+G4double G4CutTubs::GetZHalfLength () const
+{
+  return fDz;
+}
+
+inline
+G4double G4CutTubs::GetStartPhiAngle () const
+{
+  return fSPhi;
+}
+
+inline
+G4double G4CutTubs::GetDeltaPhiAngle () const
+{
+  return fDPhi;
+}
+
+inline
+G4double G4CutTubs::GetSinStartPhi () const
+{
+  return sinSPhi;
+}
+
+inline
+G4double G4CutTubs::GetCosStartPhi () const
+{
+  return cosSPhi;
+}
+
+inline
+G4double G4CutTubs::GetSinEndPhi () const
+{
+  return sinEPhi;
+}
+
+inline
+G4double G4CutTubs::GetCosEndPhi () const
+{
+  return cosEPhi;
+}
+
+inline
+G4ThreeVector G4CutTubs::GetLowNorm () const
+{
+  return fLowNorm;
+}
+
+inline
+G4ThreeVector G4CutTubs::GetHighNorm () const
+{
+  return fHighNorm;
+}
+
+inline
+void G4CutTubs::Initialize()
+{
+  fCubicVolume = 0.;
+  fSurfaceArea = 0.;
+  fRebuildPolyhedron = true;
+}
+
+inline
+void G4CutTubs::InitializeTrigonometry()
+{
+  G4double hDPhi = 0.5*fDPhi;                       // half delta phi
+  G4double cPhi  = fSPhi + hDPhi;
+  G4double ePhi  = fSPhi + fDPhi;
+
+  sinCPhi    = std::sin(cPhi);
+  cosCPhi    = std::cos(cPhi);
+  cosHDPhiIT = std::cos(hDPhi - 0.5*kAngTolerance); // inner/outer tol half dphi
+  cosHDPhiOT = std::cos(hDPhi + 0.5*kAngTolerance);
+  sinSPhi = std::sin(fSPhi);
+  cosSPhi = std::cos(fSPhi);
+  sinEPhi = std::sin(ePhi);
+  cosEPhi = std::cos(ePhi);
+}
+
+inline void G4CutTubs::CheckSPhiAngle(G4double sPhi)
+{
+  // Ensure fSphi in 0-2PI or -2PI-0 range if shape crosses 0
+
+  if ( sPhi < 0 )
+  {
+    fSPhi = CLHEP::twopi - std::fmod(std::fabs(sPhi),CLHEP::twopi);
+  }
+  else
+  {
+    fSPhi = std::fmod(sPhi,CLHEP::twopi) ;
+  }
+  if ( fSPhi+fDPhi > CLHEP::twopi )
+  {
+    fSPhi -= CLHEP::twopi ;
+  }
+}
+
+inline void G4CutTubs::CheckDPhiAngle(G4double dPhi)
+{
+  fPhiFullCutTube = true;
+  if ( dPhi >= CLHEP::twopi-kAngTolerance*0.5 )
+  {
+    fDPhi=CLHEP::twopi;
+    fSPhi=0;
+  }
+  else
+  {
+    fPhiFullCutTube = false;
+    if ( dPhi > 0 )
+    {
+      fDPhi = dPhi;
+    }
+    else
+    {
+      std::ostringstream message;
+      message << "Invalid dphi." << G4endl
+              << "Negative or zero delta-Phi (" << dPhi << "), for solid: "
+              << GetName();
+      G4Exception("G4CutTubs::CheckDPhiAngle()", "GeomSolids0002",
+                  FatalException, message);
+    }
+  }
+}
+
+inline void G4CutTubs::CheckPhiAngles(G4double sPhi, G4double dPhi)
+{
+  CheckDPhiAngle(dPhi);
+  if ( (fDPhi<CLHEP::twopi) && (sPhi) ) { CheckSPhiAngle(sPhi); }
+  InitializeTrigonometry();
+}
+
+inline
+void G4CutTubs::SetInnerRadius (G4double newRMin)
+{
+  if ( newRMin < 0 ) // Check radii
+  {
+    std::ostringstream message;
+    message << "Invalid radii." << G4endl
+            << "Invalid values for radii in solid " << GetName() << G4endl
+            << "        newRMin = " << newRMin
+            << ", fRMax = " << fRMax << G4endl
+            << "        Negative inner radius!";
+    G4Exception("G4CutTubs::SetInnerRadius()", "GeomSolids0002",
+                FatalException, message);
+  }
+  fRMin= newRMin;
+  Initialize();
+}
+
+inline
+void G4CutTubs::SetOuterRadius (G4double newRMax)
+{
+  if ( newRMax <= 0 ) // Check radii
+  {
+    std::ostringstream message;
+    message << "Invalid radii." << G4endl
+            << "Invalid values for radii in solid " << GetName() << G4endl
+            << "        fRMin = " << fRMin
+            << ", newRMax = " << newRMax << G4endl
+            << "        Invalid outer radius!";
+    G4Exception("G4CutTubs::SetOuterRadius()", "GeomSolids0002",
+                FatalException, message);
+  }
+  fRMax= newRMax;
+  Initialize();
+}
+
+inline
+void G4CutTubs::SetZHalfLength (G4double newDz)
+{
+  if (newDz<=0) // Check z-len
+  {
+    std::ostringstream message;
+    message << "Invalid Z half-length." << G4endl
+            << "Negative Z half-length (" << newDz << "), for solid: "
+            << GetName();
+    G4Exception("G4CutTubs::SetZHalfLength()", "GeomSolids0002",
+                FatalException, message);
+  }
+  fDz= newDz;
+  Initialize();
+}
+
+inline
+void G4CutTubs::SetStartPhiAngle (G4double newSPhi, G4bool compute)
+{
+  // Flag 'compute' can be used to explicitely avoid recomputation of
+  // trigonometry in case SetDeltaPhiAngle() is invoked afterwards
+
+  CheckSPhiAngle(newSPhi);
+  fPhiFullCutTube = false;
+  if (compute)  { InitializeTrigonometry(); }
+  Initialize();
+}
+
+inline
+void G4CutTubs::SetDeltaPhiAngle (G4double newDPhi)
+{
+  CheckPhiAngles(fSPhi, newDPhi);
+  Initialize();
+}
+
+//  Older names for access functions
+
+inline
+G4double G4CutTubs::GetRMin () const
+{
+  return GetInnerRadius();
+}
+
+inline
+G4double G4CutTubs::GetRMax () const
+{
+  return GetOuterRadius();
+}
+
+inline
+G4double G4CutTubs::GetDz () const
+{
+  return GetZHalfLength();
+}
+
+inline
+G4double G4CutTubs::GetSPhi () const
+{
+  return GetStartPhiAngle();
+}
+
+inline
+G4double G4CutTubs::GetDPhi () const
+{
+  return GetDeltaPhiAngle();
+}
 
 inline G4double G4CutTubs::GetCubicVolume()
 {
@@ -44,15 +290,4 @@ inline G4double G4CutTubs::GetSurfaceArea()
 {
   if (fSurfaceArea == 0.) { fSurfaceArea = G4VSolid::GetSurfaceArea(); }
   return fSurfaceArea;
-}
-
-inline
-G4ThreeVector G4CutTubs::GetLowNorm () const
-{
-  return fLowNorm;
-}
-inline
-G4ThreeVector G4CutTubs::GetHighNorm () const
-{
-  return fHighNorm;
 }

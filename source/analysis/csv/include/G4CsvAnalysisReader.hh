@@ -68,17 +68,17 @@ class G4CsvAnalysisReader : public G4ToolsAnalysisReader
   protected:
     // virtual methods from base class
     virtual G4int  ReadH1Impl(const G4String& h1Name, const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
     virtual G4int  ReadH2Impl(const G4String& h2Name, const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
     virtual G4int  ReadH3Impl(const G4String& h3Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
     virtual G4int  ReadP1Impl(const G4String& p1Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
     virtual G4int  ReadP2Impl(const G4String& p2Name,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
     virtual G4int  ReadNtupleImpl(const G4String& ntupleName,  const G4String& fileName,
-                              G4bool isUserFileName) final;
+                              const G4String& dirName, G4bool isUserFileName) final;
 
   private:
     // static data members

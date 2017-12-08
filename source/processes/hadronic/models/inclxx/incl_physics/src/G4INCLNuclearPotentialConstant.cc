@@ -80,6 +80,13 @@ namespace G4INCL {
       fermiEnergy[DeltaPlus] = fermiEnergy.find(Proton)->second;
       fermiEnergy[DeltaZero] = fermiEnergy.find(Neutron)->second;
       fermiEnergy[DeltaMinus] = fermiEnergy.find(Neutron)->second;
+      
+      fermiEnergy[SigmaPlus] = fermiEnergy.find(Proton)->second;
+      fermiEnergy[SigmaZero] = fermiEnergy.find(Proton)->second;
+      fermiEnergy[SigmaMinus] = fermiEnergy.find(Proton)->second;
+      
+      fermiEnergy[Lambda] = fermiEnergy.find(Neutron)->second;
+      
 
       const G4double theAverageSeparationEnergy = 0.5*(ParticleTable::getSeparationEnergy(Proton,theA,theZ)+ParticleTable::getSeparationEnergy(Neutron,theA,theZ));
       separationEnergy[Proton] = theAverageSeparationEnergy;
@@ -88,6 +95,8 @@ namespace G4INCL {
       // Use separation energies from the ParticleTable
       vNucleon = 0.5*(theProtonFermiEnergy + theNeutronFermiEnergy) + theAverageSeparationEnergy;
       vDelta = vNucleon;
+      vSigma = -16.; // Caution: repulsive potential for Sigmas
+      vLambda = 28.;
       separationEnergy[DeltaPlusPlus] = vDelta - fermiEnergy.find(DeltaPlusPlus)->second;
       separationEnergy[DeltaPlus] = vDelta - fermiEnergy.find(DeltaPlus)->second;
       separationEnergy[DeltaZero] = vDelta - fermiEnergy.find(DeltaZero)->second;
@@ -101,6 +110,17 @@ namespace G4INCL {
 	  separationEnergy[Omega]    = 0.;
 	  separationEnergy[EtaPrime] = 0.;
 	  separationEnergy[Photon]   = 0.;
+      
+      separationEnergy[Lambda]		= 0.;
+      separationEnergy[SigmaPlus]	= 0.;
+      separationEnergy[SigmaZero]	= 0.;
+      separationEnergy[SigmaMinus]	= 0.;
+      separationEnergy[KPlus]		= 0.;
+      separationEnergy[KZero]		= 0.;
+      separationEnergy[KZeroBar]	= 0.;
+      separationEnergy[KMinus]		= 0.;
+      separationEnergy[KShort]		= 0.;
+      separationEnergy[KLong]		= 0.;
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -116,6 +136,16 @@ namespace G4INCL {
 			<< "  omega:   " << separationEnergy[Omega] << '\n'
 			<< "  etaprime:" << separationEnergy[EtaPrime] << '\n'
 			<< "  photon:  " << separationEnergy[Photon] << '\n'
+            << "  lambda:  " << separationEnergy[Lambda] << '\n'
+            << "  sigmaplus:  " << separationEnergy[SigmaPlus] << '\n'
+            << "  sigmazero:  " << separationEnergy[SigmaZero] << '\n'
+            << "  sigmaminus:  " << separationEnergy[SigmaMinus] << '\n'
+            << "  kplus:  " << separationEnergy[KPlus] << '\n'
+            << "  kzero:  " << separationEnergy[KZero] << '\n'
+            << "  kzerobar:  " << separationEnergy[KZeroBar] << '\n'
+            << "  kminus:  " << separationEnergy[KMinus] << '\n'
+            << "  kshort:  " << separationEnergy[KShort] << '\n'
+            << "  klong:  " << separationEnergy[KLong] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -125,6 +155,10 @@ namespace G4INCL {
             << "  delta+:  " << fermiEnergy[DeltaPlus] << '\n'
             << "  delta0:  " << fermiEnergy[DeltaZero] << '\n'
             << "  delta-:  " << fermiEnergy[DeltaMinus] << '\n'
+            << "  lambda:  " << fermiEnergy[Lambda] << '\n'
+            << "  sigmaplus:  " << fermiEnergy[SigmaPlus] << '\n'
+            << "  sigmazero:  " << fermiEnergy[SigmaZero] << '\n'
+            << "  sigmaminus:  " << fermiEnergy[SigmaMinus] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -152,6 +186,22 @@ namespace G4INCL {
         case Omega:
 		case EtaPrime:
           return computePionResonancePotentialEnergy(particle);
+          break;
+        
+        case SigmaPlus:
+        case SigmaZero:
+        case SigmaMinus:
+          return vSigma;
+          break;
+        case Lambda:
+          return vLambda;
+          break;
+
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KMinus:
+          return computeKaonPotentialEnergy(particle);
           break;
 			  
 		case Photon:

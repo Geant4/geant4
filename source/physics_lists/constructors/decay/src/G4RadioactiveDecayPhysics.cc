@@ -45,19 +45,14 @@
 //
 G4_DECLARE_PHYSCONSTR_FACTORY(G4RadioactiveDecayPhysics);
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(G4int)
-:  G4VPhysicsConstructor("G4RadioactiveDecay")//, theRadioactiveDecay(0)
+:  G4VPhysicsConstructor("G4RadioactiveDecay")
 {
-  G4EmParameters* param = G4EmParameters::Instance();
-  param->SetAugerCascade(true);
-  param->AddPhysics("world","G4RadioactiveDecay");
-
+  G4EmParameters::Instance()->SetAugerCascade(true);
   G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
-  deex->SetUseFilesNEW(true);
-  deex->SetStoreAllLevels(true);
+  deex->SetStoreICLevelData(true);
   deex->SetMaxLifeTime(G4NuclideTable::GetInstance()->GetThresholdOfHalfLife()
                        /std::log(2.));
 }
@@ -69,9 +64,7 @@ G4RadioactiveDecayPhysics::G4RadioactiveDecayPhysics(const G4String&)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4RadioactiveDecayPhysics::~G4RadioactiveDecayPhysics()
-{
-  //delete theRadioactiveDecay;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -87,6 +80,7 @@ void G4RadioactiveDecayPhysics::ConstructProcess()
   G4LossTableManager* man = G4LossTableManager::Instance();
   G4VAtomDeexcitation* ad = man->AtomDeexcitation();
   if(!ad) {
+    G4EmParameters::Instance()->SetAugerCascade(true);
     ad = new G4UAtomicDeexcitation();
     man->SetAtomDeexcitation(ad);
     ad->InitialiseAtomicDeexcitation();

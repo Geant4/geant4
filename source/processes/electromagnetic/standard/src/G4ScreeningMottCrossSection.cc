@@ -152,7 +152,6 @@ void G4ScreeningMottCrossSection::SetScreeningCoefficient()
 
   G4double factor= 1.13 + 3.76*targetZ*targetZ*invbeta2*alpha2;
   As=0.25*(htc2)/(twoR2*mom2)*factor;
-  //cout<<"0k .........................As  "<<As<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,7 +161,6 @@ G4double G4ScreeningMottCrossSection::GetScreeningAngle()
   SetScreeningCoefficient();
 
   G4double screenangle=2.*asin(sqrt(As));
-  //	cout<<"  screenangle  "<<  screenangle <<endl;
   if(screenangle>=pi) screenangle=pi;
 
   return screenangle;
@@ -183,8 +181,8 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
 
   mottcoeff->SetMottCoeff(targetZ, coeffb);
 
-  //cout<<"......... targetA "<< targetA <<endl;
-  //cout<<"......... targetMass "<< targetMass/MeV <<endl;
+  //G4cout<<"......... targetA "<< targetA <<G4endl;
+  //G4cout<<"......... targetMass "<< targetMass/MeV <<G4endl;
 
   // incident particle lab
   tkinLab = ekin;
@@ -209,7 +207,7 @@ void G4ScreeningMottCrossSection::SetupKinematic(G4double ekin, G4double Z )
   tkin = momCM*sqrt(invbeta2) - mu_rel;//Ekin of mu_rel
   G4double  beta2=1./invbeta2;
   beta=std::sqrt(beta2) ;
-  G4double gamma2= invbeta2/x; 
+  G4double gamma2= invbeta2/x;
   gamma=std::sqrt(gamma2);
 
   //.........................................................
@@ -244,8 +242,6 @@ G4double G4ScreeningMottCrossSection::FormFactor2ExpHof(G4double angles)
   G4double form2=(FN*FN);
 
   return form2;
-
-  //cout<<"..................... form2 "<< form2<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -268,8 +264,6 @@ G4double G4ScreeningMottCrossSection::FormFactor2Gauss(G4double angles)
   G4double form2=(FN*FN);
 
   return form2;
-
-  //cout<<"..................... form2 "<< form2<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -298,11 +292,7 @@ G4double G4ScreeningMottCrossSection::FormFactor2UniformHelm(G4double angles)
 
   G4double form2=(F*F);
 
-  //cout<<"htc: "<<sqrt(htc2)<<" R0: "<<R0<<" F0: "<<F0<<" F1: "<<F1<<" Targer Mass: "<<targetMass<<" Energy: "<<tkinLab<<" ANGLE: "<<angles<<" FORM: "<<form2<<endl;
-
   return form2;
-
-  //cout<<"..................... form2 "<< form2<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -342,60 +332,82 @@ G4double G4ScreeningMottCrossSection::RatioMottRutherford(G4double angles)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ScreeningMottCrossSection::NuclearCrossSection(G4int form)
+G4double G4ScreeningMottCrossSection::SetDifferentialXSection(G4double angles, G4double step, G4int form)
+{
+
+  G4double Xsec=0;
+  G4double R=0;
+  G4double F2=0;
+
+  if(form==0){F2=1;}
+  if(form==1){F2=FormFactor2ExpHof(angles);}
+  if(form==2){F2=FormFactor2Gauss(angles);}
+  if(form==3){F2=FormFactor2UniformHelm(angles);}
+
+  if (coeffb[0][0]!=0){
+    //G4cout<<" Mott....targetZ "<< targetZ<<G4endl;
+    R=RatioMottRutherford(angles);
+  } else if (coeffb[0][0]==0){
+    //G4cout<<" McF.... targetZ "<< targetZ<<G4endl;
+    R=McFcorrection(angles);
+  }
+
+  G4double den=2.*As+2.*fG4pow->powN(sin(angles*0.5),2);
+  G4double func=1./(den*den);
+
+  G4double fatt= targetZ/(mu_rel*gamma*beta*beta);
+  G4double sigma=e2*e2*fatt*fatt*func;
+  G4double pi2sintet=twopi*sin(angles);
+
+  Xsec=pi2sintet*F2*R*sigma*step;
+  if(Xsec<0){Xsec=0;};
+
+  return Xsec;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4ScreeningMottCrossSection::NuclearCrossSection(G4int form, G4int FastComputation)
 {
   if(cosTetMaxNuc >= cosTetMinNuc) return 0.0;
 
   TotalCross=0;
+//G4cout<<"MODEL: "<<FastComputation<<G4endl;
+//************ PRECISE COMPUTATION
+  if(FastComputation==0){
 
-  for(G4int i=0; i<DIM; ++i){
-    G4double R=0;
-
-    G4double F2=0;
-
-    if(form==0){F2=1;}
-    if(form==1){F2=FormFactor2ExpHof(tet[i]);}
-    if(form==2){F2=FormFactor2Gauss(tet[i]);}
-    if(form==3){F2=FormFactor2UniformHelm(tet[i]);}
-
-    if (coeffb[0][0]!=0){
-      //cout<<" Mott....targetZ "<< targetZ<<endl;
-      R=RatioMottRutherford(tet[i]);
-    } else if (coeffb[0][0]==0){
-      // cout<<" McF.... targetZ "<< targetZ<<endl;
-      R=McFcorrection(tet[i]);
+    for(G4int i=0; i<DIM; ++i){
+      cross[i]=SetDifferentialXSection(tet[i],dangle[i],form);
+      //G4cout<<i<<" Angle: "<<angle[i]<<" tet: "<<tet[i]<<" Cross: "<<cross[i]<G4endl;
+      TotalCross+=cross[i];
     }
+//**************** FAST COMPUTATION
+  }else if(FastComputation==1){
 
-    //cout<<"----------------- R "<<R<<" F2 "<<F2<<endl;
-    //                cout<<"angle "<<tet[i] << " F2 "<<F2<<endl;
+    G4double p0 = electron_mass_c2*classic_electr_radius;
+    G4double coeff  = twopi*p0*p0;
 
-    G4double den=2.*As+2.*fG4pow->powN(sin(tet[i]*0.5),2);
-    G4double func=1./(den*den);
+    G4double fac = coeff*targetZ*(targetZ)*invbeta2/mom2;
 
-    G4double fatt= targetZ/(mu_rel*gamma*beta*beta);
-    G4double sigma=e2*e2*fatt*fatt*func;
-    G4double pi2sintet=twopi*sin(tet[i]);
+    G4double x  = 1.0 - cosTetMinNuc;
+    G4double x1 = x + 2*As;
 
-    cross[i]=pi2sintet*F2*R*sigma*dangle[i];
-    //cout<<i<<" Angle: "<<angle[i]<<" tet: "<<tet[i]<<" Cross: "<<cross[i]<<endl;
-    if(cross[i]<0){cross[i]=0;};
-    TotalCross+=cross[i];
-  }//end integral
+  // scattering with nucleus
+    TotalCross = fac*(cosTetMinNuc - cosTetMaxNuc)/
+               (x1*(1.0 - cosTetMaxNuc + 2*As));
+  }
 
-  //cout<< "ok ......... TotalCross "<<TotalCross<<endl;
+  //  G4cout<<"Energy: "<<tkinLab/MeV<<" Total Cross: "<<TotalCross<<G4endl;
   return TotalCross;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4ScreeningMottCrossSection::GetScatteringAngle()
+G4double G4ScreeningMottCrossSection::GetScatteringAngle(G4int form, G4int FastComputation)
 {
 
-  //cout<<"Z: "<<targetZ<<" Energy: "<<tkinLab/MeV<<endl;
-
-  //	cout<<"................ tkinLab  "<< G4BestUnit(tkinLab,"Energy") << " anglemin=  "<<anglemin<<endl;
-  //cout<<"anglemax=  "<<anglemax<<endl;
-  //G4double r =3e-6*G4UniformRand();
+  //***** FOR TESTING HIGH ANGLES
+  //G4double r=3e-6*G4UniformRand();
   //G4double r=1e-12*G4UniformRand();
   G4double r=G4UniformRand();
 
@@ -403,14 +415,45 @@ G4double G4ScreeningMottCrossSection::GetScatteringAngle()
   G4double y=0;
   G4double step=0;
 
-  for(G4int i=DIM-1; i>=0; --i){
-    step=(1./TotalCross)*cross[i];
-    y+=step;
-    if(r >=y-step && r<y ){
-      scattangle= angle[i] +G4UniformRand()*dangle[i];
-      break;
+  //************ PRECISE COMPUTATION
+  if(FastComputation==0){
+
+    for(G4int i=DIM-1; i>=0; --i){
+      step=(1./TotalCross)*cross[i];
+      y+=step;
+      if(r >=y-step && r<y ){
+	scattangle= angle[i] +G4UniformRand()*dangle[i];
+	break;
+      }
+    }
+
+    //**************** FAST COMPUTATION
+  }else if(FastComputation==1){
+
+    G4double limit=mottcoeff->GetTransitionRandom(targetZ,tkinLab);
+    G4double Sz=2*As;
+    G4double angle_limit=acos(Sz-((Sz*(2+Sz))/(Sz+2*limit))+1);
+    //G4cout<<"ANGLE LIMIT: "<<angle_limit<<G4endl;
+
+    if(r>limit){
+      scattangle=acos(Sz-((Sz*(2+Sz))/(Sz+2*r))+1);
+      //G4cout<<"FAST"<<G4endl;
+    }else{
+      //G4cout<<"SLOW"<<G4endl;
+      for(G4int i=DIM-1; i>=0; --i){
+
+	cross[i]=SetDifferentialXSection(tet[i],dangle[i],form);
+	step=(1./TotalCross)*cross[i];
+	y+=step;
+	if(r >=y-step && r<y ){
+	  scattangle= angle[i] +G4UniformRand()*dangle[i];
+	  if(scattangle<angle_limit){scattangle=0;};
+	  break;
+	}
+      }
     }
   }
-  //cout<<"Energy: "<<tkinLab/MeV<<" SCATTANGLE: "<<scattangle<<endl;
+  //************************************************
+  //G4cout<<"Energy: "<<tkinLab/MeV<<" SCATTANGLE: "<<scattangle<<G4endl;
   return scattangle;
 }

@@ -45,7 +45,6 @@ using namespace G4DNAPARSER;
 CommandLineParser* CommandLineParser::fpInstance(0);
 G4String Command::fNoOption = "NoOption";
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline bool MATCH(const char *a, const char *b)
@@ -119,7 +118,6 @@ CommandWithOption::CommandWithOption(Command::Type commandType,
   fOptionName = optionName;
   fOption = "";
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -324,7 +322,7 @@ void Parser::AddCommand(vector<G4String> markers,
     fCommandMap.insert(make_pair(marker, command));
   }
 }
- */
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

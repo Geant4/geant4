@@ -1,4 +1,4 @@
-$Id: History 100673 2016-10-31 10:43:05Z gcosmo $
+$Id: History 107645 2017-11-28 14:26:13Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-17 B. Morgan (AnaEx02-V10-03-01)
+- Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+27-07-17 I. Hrivnacova (AnaEx02-V10-03-00)
+- Coding guidelines: removed redundant empty lines
 
 26-10-16 I. Hrivnacova (AnaEx02-V10-02-02)
 - Updated main program according to basic examples

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CoupledTransportation.icc 84478 2014-10-16 08:49:24Z gcosmo $
+// $Id: G4CoupledTransportation.icc 105913 2017-08-28 08:39:12Z gcosmo $
 //
 
 // 
@@ -57,16 +57,6 @@ inline G4bool G4CoupledTransportation::DoesGlobalFieldExist()
   // fFieldExists= transportMgr->GetFieldManager()->DoesFieldExist();
   // return fFieldExists;
   return transportMgr->GetFieldManager()->DoesFieldExist();
-}
-
-inline void G4CoupledTransportation::SetVerboseLevel( G4int verboseLev )
-{
-  fVerboseLevel= verboseLev;
-}
-
-inline G4int G4CoupledTransportation::GetVerboseLevel( ) const
-{
-  return fVerboseLevel;
 }
 
 inline G4double G4CoupledTransportation::GetThresholdWarningEnergy() const

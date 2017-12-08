@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4VTwistedFaceted.cc 105776 2017-08-17 08:09:09Z gcosmo $
 //
 // 
 // --------------------------------------------------------------------
@@ -1152,7 +1152,8 @@ G4Polyhedron* G4VTwistedFaceted::CreatePolyhedron () const
 {
   // number of meshes
   const G4int k =
-    G4int(G4Polyhedron::GetNumberOfRotationSteps() * fPhiTwist / twopi) + 2;
+  G4int(G4Polyhedron::GetNumberOfRotationSteps() *
+        std::abs(fPhiTwist) / twopi) + 2;
   const G4int n = k;
 
   const G4int nnodes = 4*(k-1)*(n-2) + 2*k*k ;

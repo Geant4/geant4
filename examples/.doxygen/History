@@ -18,6 +18,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30/11/17 I.Hrivnacova (doxygen-V10-03-02)
+- Fixing documentation for 10.4:
+  - Added still missing new dna examples (mft, neuron)
+  - Removed Hadr05
+
+28/11/17 I.Hrivnacova (doxygen-V10-03-01)
+- Added new physicslists category
+- Fixed warning in Doxymodules_hadronic.h
+
 13/06/17 I.Hrivnacova (doxygen-V10-03-00)
 - Added new extended examples exoticphysics/dmparticle,
   medical/dna/icsd, slowing, spower and radioactivedecay/Activation

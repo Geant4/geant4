@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ChordFinderSaf.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4ChordFinderSaf.hh 107059 2017-11-01 14:58:16Z gcosmo $
 //
 // 
 // class G4ChordFinderRad
@@ -43,7 +43,7 @@ class G4ChordFinderSaf : public G4ChordFinder
 {
 
 public:
-  G4ChordFinderSaf(G4MagInt_Driver* pIntegrationDriver); 
+  G4ChordFinderSaf(G4VIntegrationDriver* pIntegrationDriver);
     
   G4ChordFinderSaf( G4MagneticField*        theMagField,
 		    G4double                stepMinimum, 

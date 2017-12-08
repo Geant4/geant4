@@ -59,6 +59,7 @@ public:
 #if defined(G4USE_STD11) || defined(G4USE_STD14)
   #include <type_traits>
   using std::remove_reference;
+  using std::remove_const;
 // original usage below in G4AnyMethod (pre C++11) was without namespace std::
 // so if compiler has them, make them available without the namespace
 #else
@@ -71,6 +72,7 @@ public:
 template<typename T> struct remove_reference {typedef T type;};
 template<typename T> struct remove_reference<T&> {typedef T type;};
 template<typename T> struct remove_reference<const T&> {typedef T type;};
+template<typename T> struct remove_const<const T> {typedef T type;};
 #endif
 
 /**
@@ -172,8 +174,8 @@ private:
   };
   
   template <class S, class T, class A0> struct FuncRef1: public Placeholder {
-    typedef typename remove_reference<A0>::type  nakedA0;
-    
+    typedef typename remove_const<typename remove_reference<A0>::type>::type  nakedA0;
+
     FuncRef1(S (T::*f)(A0)) : fRef(f) {}
     
     virtual void operator()(void*) {
@@ -195,8 +197,8 @@ private:
   };
 
   template <class S, class T, class A0, class A1> struct FuncRef2: public Placeholder {
-    typedef typename remove_reference<A0>::type  nakedA0;
-    typedef typename remove_reference<A1>::type  nakedA1;
+    typedef typename remove_const<typename remove_reference<A0>::type>::type  nakedA0;
+    typedef typename remove_const<typename remove_reference<A1>::type>::type  nakedA1;
     
     FuncRef2(S (T::*f)(A0, A1)) : fRef(f) {}
     
@@ -222,8 +224,5 @@ private:
   Placeholder* fContent;
   size_t narg;
 };
-
-
-
 
 #endif

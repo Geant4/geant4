@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.cc 96673 2016-04-29 12:08:20Z gcosmo $
+// $Id: G4GDMLMessenger.cc 105114 2017-07-13 09:49:54Z gcosmo $
 //
 //
 // class G4GDMLMessenger Implementation
@@ -46,7 +46,7 @@
 #include "G4SolidStore.hh"
 
 G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
-  : myParser(myPars), topvol(0)
+  : myParser(myPars), topvol(0), pFlag(true)
 { 
   persistencyDir = new G4UIdirectory("/persistency/");
   persistencyDir->SetGuidance("UI commands specific to persistency.");
@@ -67,6 +67,20 @@ G4GDMLMessenger::G4GDMLMessenger(G4GDMLParser* myPars)
   WriterCmd->SetGuidance("Write GDML file.");
   WriterCmd->SetParameterName("filename",false);
   WriterCmd->AvailableForStates(G4State_Idle);
+
+  StripCmd = new G4UIcmdWithABool("/persistency/gdml/strip_pointers",this);
+  StripCmd->SetGuidance("Enable/disable stripping of pointers on names");
+  StripCmd->SetGuidance("when reading a GDML file.");
+  StripCmd->SetParameterName("strip_pointers",true);
+  StripCmd->SetDefaultValue(true);
+  StripCmd->AvailableForStates(G4State_Idle);
+
+  AppendCmd = new G4UIcmdWithABool("/persistency/gdml/add_pointers",this);
+  AppendCmd->SetGuidance("Enable/disable appending of pointers to names");
+  AppendCmd->SetGuidance("when writing a GDML file.");
+  AppendCmd->SetParameterName("append_pointers",true);
+  AppendCmd->SetDefaultValue(true);
+  AppendCmd->AvailableForStates(G4State_Idle);
 
   RegionCmd = new G4UIcmdWithABool("/persistency/gdml/export_regions",this);
   RegionCmd->SetGuidance("Enable export of geometrical regions");
@@ -108,10 +122,24 @@ G4GDMLMessenger::~G4GDMLMessenger()
   delete SDCmd;
   delete persistencyDir;
   delete gdmlDir;
+  delete StripCmd;
+  delete AppendCmd;
 }
 
 void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
+  if( command == StripCmd )
+  {
+    G4bool mode = StripCmd->GetNewBoolValue(newValue);
+    myParser->SetStripFlag(mode);
+  }
+
+  if( command == AppendCmd )
+  {
+    pFlag = AppendCmd->GetNewBoolValue(newValue);
+    myParser->SetAddPointerToName(pFlag);
+  }
+
   if( command == ReaderCmd )
   { 
     G4GeometryManager::GetInstance()->OpenGeometry();
@@ -144,7 +172,7 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
    
   if( command == WriterCmd )
   {
-    myParser->Write(newValue, topvol);
+    myParser->Write(newValue, topvol, pFlag);
   }  
 
   if( command == ClearCmd )

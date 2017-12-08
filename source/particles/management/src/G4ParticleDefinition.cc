@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc 103108 2017-03-16 13:00:35Z gcosmo $
+// $Id: G4ParticleDefinition.cc 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -48,6 +48,7 @@
 //
 //      modify FillQuarkContents() to use G4PDGCodeChecker 17 Aug. 99 H.Kurashige
 //      modified for thread-safety for MT - G.Cosmo, A.Dotti - January 2013
+//      added support for MuonicAtom - K.L.Genser - June 2017
 // --------------------------------------------------------------
 
 
@@ -121,9 +122,11 @@ G4ParticleDefinition::G4ParticleDefinition(
                    theAtomicMass(0),
                    verboseLevel(1),
   		   fApplyCutsFlag(false),
-		   isGeneralIon(false)
+		   isGeneralIon(false),
+		   isMuonicAtom(false)
 {
-   static G4String nucleus("nucleus");
+   static const G4String nucleus("nucleus");
+   static const G4String muAtom("MuonicAtom"); 
 
    g4particleDefinitionInstanceID = -1;
    theProcessManagerShadow = 0;
@@ -151,7 +154,7 @@ G4ParticleDefinition::G4ParticleDefinition(
    // check initialization is in Pre_Init state except for ions
    G4ApplicationState currentState = G4StateManager::GetStateManager()->GetCurrentState();
 
-   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (currentState!=G4State_PreInit)){
+   if ( !fShortLivedFlag && (theParticleType!=nucleus) && (theParticleType!=muAtom) && (currentState!=G4State_PreInit)){
 #ifdef G4VERBOSE
      if (GetVerboseLevel()>0) {
        G4cout << "G4ParticleDefintion (other than ions and shortlived) should be created in Pre_Init state  " 
@@ -440,7 +443,7 @@ void G4ParticleDefinition::SetParticleDefinitionID(G4int id)
   }
   else
   {
-    if(isGeneralIon)
+    if( isGeneralIon || isMuonicAtom )
     { g4particleDefinitionInstanceID = id; }
     else
     {

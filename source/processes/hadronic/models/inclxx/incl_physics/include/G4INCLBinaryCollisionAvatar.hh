@@ -78,10 +78,17 @@ namespace G4INCL {
     static G4double getCutNN() { return cutNN; }
 
     static G4double getCutNNSquared() { return cutNNSquared; }
+    
+    /// \brief Get the bias
+    static G4double getBias() { return bias; }
+    
+    /// \brief Set the bias
+    static void setBias(const G4double b) { bias=b; }
 
   private:
     static G4ThreadLocal G4double cutNN;
     static G4ThreadLocal G4double cutNNSquared;
+    static G4ThreadLocal G4double bias;
     G4double theCrossSection;
     G4bool isParticle1Spectator;
     G4bool isParticle2Spectator;

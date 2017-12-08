@@ -40,7 +40,7 @@ G4LambdaInelasticProcess::G4LambdaInelasticProcess(const G4String& name)
 
 void G4LambdaInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of Lambda\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4LambdaInelasticProcess handles the inelastic scattering of\n"
+          << "Lambda from nuclei by invoking one or more hadronic models and\n"
+          << "one or more hadronic cross section sets.\n";
 }

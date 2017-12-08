@@ -18,8 +18,6 @@ using the Geant4-DNA physics processes and models.
 
 It is adapted from TestEm12.
 
-*** It is a preliminary version which might be buggy ***
-
 This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:

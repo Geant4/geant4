@@ -63,6 +63,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 #include "G4ParticleChangeForMSC.hh"
 
 #include "G4Poisson.hh"
@@ -123,7 +124,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   firstStep     = true; 
   insideskin    = false;
   latDisplasmentbackup = false;
-  displacementFlag = true;
+  dispAlg96 = true;
 
   rangecut = geombig;
   drr      = 0.35 ;
@@ -153,19 +154,13 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 {
   // set values of some data members
   SetParticle(p);
-  /*
-  if(p->GetPDGMass() > MeV) {
-    G4cout << "### WARNING: G4UrbanMscModel model is used for " 
-           << p->GetParticleName() << " !!! " << G4endl;
-    G4cout << "###          This model should be used only for e+-" 
-           << G4endl;
-  }
-  */
   fParticleChange = GetParticleChangeForMSC(p);
 
   latDisplasmentbackup = latDisplasment;
+  dispAlg96 = (G4EmParameters::Instance()->LateralDisplacementAlg96());
 
-  //G4cout << "### G4UrbanMscModel::Initialise done!" << G4endl;
+  //G4cout << "### G4UrbanMscModel::Initialise done for " 
+  //	 << p->GetParticleName() << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -869,7 +864,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double cth = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::fabs(cth) >= 1.0) { return fDisplacement; } 
+  if(std::abs(cth) >= 1.0) { return fDisplacement; } 
 
   /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && cth < 0.5 &&
@@ -899,10 +894,9 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
          << G4endl;
   */
 
-
   if (latDisplasment && currentTau >= tausmall) {
-    if(displacementFlag) { SampleDisplacementNew(cth, phi); }
-    else                 { SampleDisplacement(sth, phi); }
+    if(dispAlg96) { SampleDisplacement(sth, phi); }
+    else          { SampleDisplacementNew(cth, phi); }
     fDisplacement.rotateUz(oldDirection);
   }
   return fDisplacement;
@@ -919,7 +913,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
   lambdaeff    = lambda0;
 
   G4double lambda1 = GetTransportMeanFreePath(particle,KineticEnergy);
-  if(std::fabs(lambda1 - lambda0) > lambda0*0.01 && lambda1 > 0.)
+  if(std::abs(lambda1 - lambda0) > lambda0*0.01 && lambda1 > 0.)
   {
     // mean tau value
     tau = trueStepLength*G4Log(lambda0/lambda1)/(lambda0-lambda1);
@@ -980,7 +974,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     // parameter for tail
     G4double ltau= G4Log(tau);
     G4double u   = G4Exp(ltau/6.);
-    if(extremesmallstep)  u = G4Exp(G4Log(tsmall/lambda0)/6.);
+    if(extremesmallstep) { u = G4Exp(G4Log(tsmall/lambda0)/6.); }
     G4double xx  = G4Log(lambdaeff/currentRadLength);
     G4double xsi = coeffc1+u*(coeffc2+coeffc3*u)+coeffc4*xx;
 
@@ -1159,8 +1153,7 @@ void G4UrbanMscModel::SampleDisplacement(G4double sth, G4double phi)
 	  (1.-(kappa+1.)*currentTau*third)*third;
 
       } else {
-	G4double etau = 0.;
-	if(currentTau < taubig) { etau = G4Exp(-currentTau); }
+	G4double etau = (currentTau < taubig) ? G4Exp(-currentTau) : 0.;
 	latcorr = -kappa*currentTau;
 	latcorr = G4Exp(latcorr)/kappami1;
 	latcorr += 1.-kappa*etau/kappami1 ;
@@ -1171,7 +1164,7 @@ void G4UrbanMscModel::SampleDisplacement(G4double sth, G4double phi)
 
     // sample direction of lateral displacement
     // compute it from the lateral correlation
-    G4double Phi = 0.;
+    G4double Phi;
     if(std::abs(r*sth) < latcorr) {
       Phi  = twopi*rndmEngineMod->flat();
 
@@ -1179,11 +1172,8 @@ void G4UrbanMscModel::SampleDisplacement(G4double sth, G4double phi)
       //G4cout << "latcorr= " << latcorr << "  r*sth= " << r*sth 
       //     << " ratio= " << latcorr/(r*sth) <<  G4endl;
       G4double psi = std::acos(latcorr/(r*sth));
-      if(rndmEngineMod->flat() < 0.5) {
-	Phi = phi+psi;
-      } else {
-	Phi = phi-psi;
-      }
+      G4double rdm = rndmEngineMod->flat();
+      Phi = (rdm < 0.5) ? phi+psi : phi-psi;
     }
     fDisplacement.set(r*std::cos(Phi),r*std::sin(Phi),0.0);
   }
@@ -1244,15 +1234,13 @@ void G4UrbanMscModel::SampleDisplacementNew(G4double , G4double phi)
 
     } else {
 
-      if(random < probv2) {
-        v = (-1.+1./G4Exp(G4Log(1.-rndmEngineMod->flat()*(1.-w2v))/30.))/6.30e-2;
-      } else {
-        v = (-1.+1./G4Exp(G4Log(1.-rndmEngineMod->flat()*(1.-w3v))/-1.842))/1.45e1;
-      }
+      G4double rnd = rndmEngineMod->flat();
+      v = (random < probv2) 
+        ? (-1.+1./G4Exp(G4Log(1.-rnd*(1.-w2v))/30.))/6.30e-2
+        : (-1.+1./G4Exp(G4Log(1.-rnd*(1.-w3v))/-1.842))/1.45e1;
 
-      random = rndmEngineMod->flat();
-      if(random < 0.5) { Phi = phi+v; }
-      else             { Phi = phi-v; }
+      rnd = rndmEngineMod->flat();
+      Phi = (rnd < 0.5) ? phi+v : phi-v;
     }
     fDisplacement.set(r*std::cos(Phi),r*std::sin(Phi),0.0);
   }

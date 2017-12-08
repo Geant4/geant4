@@ -84,7 +84,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       void BuildPhysicsTable( const G4ParticleDefinition& );
 
       void DumpPhysicsTable( const G4ParticleDefinition& );
-
+      void DumpLENDTargetInfo( G4bool force = false );
 
 //TK110810
       //G4double GetCrossSection( const G4DynamicParticle* , const G4Element* , G4double aT );
@@ -126,6 +126,7 @@ class G4LENDCrossSection : public G4VCrossSectionDataSet
       //G4String name;
       G4ParticleDefinition* proj;
       void create_used_target_map();
+      G4GIDI_target* get_target_from_map( G4int nuclear_code );
       virtual G4double getLENDCrossSection( G4GIDI_target* , G4double , G4double ) { return 0.0; };
       //                                         elow       ehigh     xs_elow   xs_ehigh    ke (<elow)
       G4double GetUltraLowEnergyExtrapolatedXS( G4double , G4double , G4double , G4double , G4double );

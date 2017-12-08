@@ -1,0 +1,236 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_tess_contour
+#define tools_tess_contour
+
+#include "glutess/glutess"
+#include "lina/vec3f"
+#include "glprims"
+
+namespace tools {
+
+typedef struct {
+  double pointA[3];
+  double pointB[3];
+  double pointC[3];
+} tess_triangle;
+
+class tess_contour {  
+public:
+  tess_contour(std::ostream& a_out)
+  :m_out(a_out),m_vertex_number(0),m_begin_type(gl::triangles()),m_error(false){}
+  virtual ~tess_contour(){}
+protected:
+  tess_contour(const tess_contour& a_from):m_out(a_from.m_out){}
+  tess_contour& operator=(const tess_contour&){return *this;}
+public:
+  std::vector<tess_triangle> getFilledArea(const std::vector<std::vector<vec3f> > aContour) {
+    m_triangles.clear();
+    m_combine_tmps.clear();
+    m_error = false;
+
+    GLUtesselator* tobj = gluNewTess();
+
+    ::gluTessCallback(tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertexCallback);
+    ::gluTessCallback(tobj,(GLUenum)GLU_TESS_BEGIN_DATA,  (Func)beginCallback);
+    ::gluTessCallback(tobj,(GLUenum)GLU_TESS_END_DATA,    (Func)endCallback);
+    ::gluTessCallback(tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)errorCallback);
+    ::gluTessCallback(tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combineCallback);  
+    ::gluTessProperty(tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
+
+    for(unsigned int a=0;a<aContour.size();a++) {
+      //if(aContour[a][0]!=aContour[a][aContour[a].size()-1]) continue;
+      int vecSize = aContour[a].size()-1;
+      if(vecSize<=0) continue; //should not happen.
+  
+      typedef GLUdouble point[3];
+      point* tab = new point[vecSize];
+  
+      ::gluTessBeginPolygon(tobj, this);
+  
+      ::gluTessBeginContour(tobj);
+      for(unsigned int b=0;b<aContour[a].size()-1;b++) {
+        tab[b][0] = aContour[a][b][0];
+        tab[b][1] = aContour[a][b][1];
+        tab[b][2] = aContour[a][b][2];
+        ::gluTessVertex(tobj, tab[b],tab[b]);
+      }
+      ::gluTessEndContour(tobj);
+  
+      ::gluTessEndPolygon(tobj);
+  
+      delete [] tab;  
+    }
+  
+    ::gluDeleteTess(tobj);
+  
+    for(unsigned int index=0;index<m_combine_tmps.size();index++) {
+      delete [] m_combine_tmps[index];
+    }
+    m_combine_tmps.clear();
+
+    if(m_error) m_triangles.clear();
+  
+    return m_triangles;
+  }
+
+protected:  
+  void resetVertex() {m_vertex_number = 0;}
+  void setBeginType(gl::mode_t aType) {m_begin_type = aType;}
+  void setError(bool aError) {m_error = aError;}
+  std::vector<double*>& combineTmps(){return m_combine_tmps;}
+
+  void addVertex(const double* vertex) {
+    // GLU_TRIANGLE_STRIP
+    // Draws a connected group of triangles. One triangle is defined for each
+    // vertex presented after the first two vertices. For odd n, vertices n,
+    // n+1, and n+2 define triangle n. For even n, vertices n+1, n, and n+2
+    // define triangle n. N-2 triangles are drawn.
+    if (m_begin_type == gl::triangle_strip()) {
+      m_tmp.pointC[0] = vertex[0];
+      m_tmp.pointC[1] = vertex[1];
+      m_tmp.pointC[2] = vertex[2];
+  
+      if(m_vertex_number>=2) m_triangles.push_back(m_tmp);
+  
+      int rest = m_vertex_number % 2;
+      if(rest==1) {
+        m_tmp.pointA[0] = vertex[0];
+        m_tmp.pointA[1] = vertex[1];
+        m_tmp.pointA[2] = vertex[2];
+      } else {
+        m_tmp.pointB[0] = vertex[0];
+        m_tmp.pointB[1] = vertex[1];
+        m_tmp.pointB[2] = vertex[2];
+      }
+      m_vertex_number++;
+    }
+  
+    // GLU_TRIANGLE_FAN
+    // Draws a connected group of triangles. One triangle is defined for each
+    // vertex presented after the first two vertices. Vertices 1, n+1,
+    // and n+2 define triangle n. N-2 triangles are drawn.
+    else if (m_begin_type == gl::triangle_fan()) {
+      if (m_vertex_number == 0) {
+        m_tmp.pointA[0] = vertex[0];
+        m_tmp.pointA[1] = vertex[1];
+        m_tmp.pointA[2] = vertex[2];
+      } else {
+        m_tmp.pointC[0] = vertex[0];
+        m_tmp.pointC[1] = vertex[1];
+        m_tmp.pointC[2] = vertex[2];
+  
+        if (m_vertex_number >=2 ) {
+          m_triangles.push_back(m_tmp);
+        }
+        m_tmp.pointB[0] = vertex[0];
+        m_tmp.pointB[1] = vertex[1];
+        m_tmp.pointB[2] = vertex[2];
+      }
+      m_vertex_number++;
+    }
+  
+    // GLU_TRIANGLES
+    // Treats each triplet of vertices as an independent triangle.
+    // Vertices 3n-2, 3n-1, and 3n define triangle n. N/3 triangles are drawn.
+    else if (m_begin_type == gl::triangles()) {
+  
+      int rest = m_vertex_number % 3;
+  
+      if(rest==2) {
+        m_tmp.pointC[0] = vertex[0];
+        m_tmp.pointC[1] = vertex[1];
+        m_tmp.pointC[2] = vertex[2];
+  
+        m_triangles.push_back(m_tmp);
+  
+      } else if(rest==1) {
+        m_tmp.pointB[0] = vertex[0];
+        m_tmp.pointB[1] = vertex[1];
+        m_tmp.pointB[2] = vertex[2];
+  
+      } else if(rest==0) {
+        m_tmp.pointA[0] = vertex[0];
+        m_tmp.pointA[1] = vertex[1];
+        m_tmp.pointA[2] = vertex[2];
+      }
+      m_vertex_number++;
+  
+    } else {
+      // do nothing and should never happend
+    }
+  }
+protected:  
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  typedef GLUvoid(__stdcall *Func)();
+#else
+  typedef GLUvoid(*Func)();
+#endif
+
+  static void 
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  __stdcall  
+#endif
+  beginCallback(GLUenum aWhich,GLUvoid * aThis) {
+    tess_contour* This = (tess_contour*)aThis;
+    This->setBeginType(aWhich);
+    This->resetVertex();
+  }
+
+  static void 
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  __stdcall  
+#endif
+  errorCallback(GLUenum aErrorCode,GLUvoid * aThis) {
+    tess_contour* This = (tess_contour*)aThis;
+    This->m_out << "tools::tess_contour::errorCallback : " << aErrorCode << std::endl;
+    This->setError(true);
+  }
+
+  static void 
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  __stdcall  
+#endif
+  endCallback(){}
+
+  static void 
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  __stdcall  
+#endif
+  vertexCallback(GLUvoid *vertex,GLUvoid* aThis) {
+    tess_contour* This = (tess_contour*)aThis;
+    This->addVertex((double*)vertex);
+  }
+
+  static void 
+#ifdef TOOLS_TESS_CONTOUR_STDCALL
+  __stdcall  
+#endif
+  combineCallback(GLUdouble coords[3],
+                              void* /*vertex_data*/[4],
+                              GLUfloat /*weight*/[4],
+                              void** dataOut,
+                              void* aThis) {
+    tess_contour* This = (tess_contour*)aThis;
+    double* vertex = new double[3];
+    vertex[0] = coords[0];
+    vertex[1] = coords[1];
+    vertex[2] = coords[2];
+    This->combineTmps().push_back(vertex);
+    *dataOut = vertex;
+  }
+  
+protected:
+  std::ostream& m_out;
+  tess_triangle m_tmp;
+  unsigned int m_vertex_number;
+  gl::mode_t m_begin_type;
+  bool m_error;
+  std::vector<tess_triangle> m_triangles;
+  std::vector<double*> m_combine_tmps;
+};
+
+}
+
+#endif

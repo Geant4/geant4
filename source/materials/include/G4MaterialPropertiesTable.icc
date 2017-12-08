@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 99765 2016-10-05 08:49:47Z gcosmo $
+// $Id: G4MaterialPropertiesTable.icc 106997 2017-10-31 10:22:36Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -45,45 +45,21 @@ void G4MaterialPropertiesTable::AddConstProperty(const char *key,
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
-
-  MPTC [G4String(key)] = PropertyValue;
+  G4MCPindex index = GetConstPropertyIndex(G4String(key));
+  MCP[index] = PropertyValue;
 }
-
-inline
-G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
-                                            const char *key,
-                                            G4double   *PhotonEnergies,
-                                            G4double   *PropertyValues,
-                                            G4int      NumEntries)
-{
-  // Provides a way of adding a property to the Material Properties
-  // Table given a pair of numbers and a key
-
-  G4MaterialPropertyVector *mpv = new G4MaterialPropertyVector(PhotonEnergies, 
-                                                   PropertyValues, NumEntries);
-  MPT [G4String(key)] = mpv;
-
-  return mpv;
-}
-
-inline
-void G4MaterialPropertiesTable::
-AddProperty(const char *key, G4MaterialPropertyVector *mpv)
-{
-  //  Provides a way of adding a property to the Material Properties
-  //  Table given an G4MaterialPropertyVector Reference and a key
-
-  MPT [G4String(key)] = mpv;
-} 
 
 inline
 void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
 {
-  MPTC.erase(G4String(key));
+  G4MCPindex index = GetConstPropertyIndex(G4String(key));
+
+  MCP.erase(index);
 }
 
 inline
 void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
-  MPT.erase(G4String(key));
+  G4MPindex index = GetPropertyIndex(G4String(key));
+  MP.erase(index);
 }

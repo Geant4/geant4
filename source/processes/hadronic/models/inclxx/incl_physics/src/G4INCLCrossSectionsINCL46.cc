@@ -481,5 +481,261 @@ namespace G4INCL {
     }
 	
 	
+	
+    G4double CrossSectionsINCL46::NYelastic(Particle const * const , Particle const * const ) {
+        //
+        //      Hyperon-Nucleon elastic cross sections
+        //
+		return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKelastic(Particle const * const , Particle const * const ) {
+        //
+        //      Kaon-Nucleon elastic cross sections
+        //
+		return 0.;
+	}
+
+    G4double CrossSectionsINCL46::NKbelastic(Particle const * const , Particle const * const ) {
+        //
+        //      antiKaon-Nucleon elastic cross sections
+        //
+		return 0.;
+	}
+	
+	G4double CrossSectionsINCL46::NNToNLK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Lambda-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNSK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNLKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Lambda-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNSKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNLK2pi(Particle const * const, Particle const * const) {
+        //
+        //     Nucleon-Nucleon producing N-Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNSK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing N-Sigma-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToNNKKb(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon producing Nucleon-Nucleon-Kaon-antiKaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NNToMissingStrangeness(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Nucleon missing strangeness production cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NDeltaToNLK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon Lambda Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsINCL46::NDeltaToNSK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon Sigma Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsINCL46::NDeltaToDeltaLK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Delta Lambda Kaon cross section
+        return 0;
+    }
+    G4double CrossSectionsINCL46::NDeltaToDeltaSK(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Delta Sigma Kaon cross section
+        return 0;
+    }
+    
+    G4double CrossSectionsINCL46::NDeltaToNNKKb(Particle const * const, Particle const * const) {
+        // Nucleon-Delta producing Nucleon-Nucleon Kaon antiKaon cross section
+        return 0;
+    }
+
+    G4double CrossSectionsINCL46::NpiToLK(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToSK(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Sigma-Kaon cross sections
+        //
+        return 0.;
+    }
+    G4double CrossSectionsINCL46::p_pimToSmKp(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+    G4double CrossSectionsINCL46::p_pimToSzKz(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+    G4double CrossSectionsINCL46::p_pizToSzKp(Particle const * const, Particle const * const) {
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToLKpi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToSKpi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Sigma-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToLK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToSK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Lambda-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToNKKb(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon producing Nucleon-Kaon-antiKaon cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NpiToMissingStrangeness(Particle const * const, Particle const * const) {
+        //
+        //      Pion-Nucleon missing strangeness production cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NLToNS(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Hyperon multiplet changing cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NSToNL(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Sigma quasi-elastic cross sections
+        //
+        return 0.;
+    }
+    
+    G4double CrossSectionsINCL46::NSToNS(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Sigma quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKToNK(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKToNKpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon producing Nucleon-Kaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKToNK2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-Kaon producing Nucleon-Kaon-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToNKb(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon quasi-elastic cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToSpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Sigma-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToLpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Lambda-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToS2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Sigma-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToL2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Lambda-2pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToNKbpi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Nucleon-antiKaon-pion cross sections
+        //
+        return 0.;
+    }
+
+    G4double CrossSectionsINCL46::NKbToNKb2pi(Particle const * const, Particle const * const) {
+        //
+        //      Nucleon-antiKaon producing Nucleon-antiKaon-2pion cross sections
+        //
+        return 0.;
+    }
+	
 } // namespace G4INCL
 

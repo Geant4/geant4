@@ -18,14 +18,18 @@
 namespace tools {
 
 class mem {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::mem");
+    return s_v;
+  }
 protected:
-  mem(){increment();}
-  virtual ~mem(){decrement();}
+  mem(){increment(s_class().c_str());}
+  virtual ~mem(){decrement(s_class().c_str());}
   mem(const mem&){}
   mem& operator=(const mem&){return *this;}
 public:
-  static void increment(){counter()++;}
-  static void decrement(){counter()--;}
+//static void increment(){counter()++;}
+//static void decrement(){counter()--;}
 
   static void increment(const char* a_class){
     counter()++;
@@ -88,13 +92,13 @@ public:
     }
     list().clear();
   }
-
+  
+protected:
   static int& counter() {
     static int s_count = 0;
     return s_count;
   }
-
-protected:
+  
   static bool& check_by_class() {
     static bool s_check_by_class = false;
     return s_check_by_class;
@@ -103,8 +107,8 @@ protected:
   typedef std::list< std::pair<std::string,int> > mem_list;
 
   static mem_list& list() {
-    static mem_list s_list;
-    return s_list;
+    static mem_list* s_list = new mem_list(); //have it on the heap, so that an atexit logic works.
+    return *s_list;
   }
 };
 

@@ -46,11 +46,13 @@ public:
     m_data[2] = a_vec[2];
     m_data[3] = a_vec[3];
   }
-  vec4(const T& a0,const T& a1,const T& a2,const T& a3,bool a_inc = true) {
+  vec4(const T& a0,const T& a1,const T& a2,const T& a3
+#ifdef TOOLS_MEM
+       ,bool a_inc = true
+#endif       
+       ) {
 #ifdef TOOLS_MEM
     if(a_inc) mem::increment(s_class().c_str());
-#else
-    (void)a_inc;
 #endif
     m_data[0] = a0;
     m_data[1] = a1;

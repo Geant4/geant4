@@ -7,14 +7,17 @@
 namespace tools {
 
 template <class T>
-inline T mn(const T& a,const T& b) {
-  return (a<b?a:b);
-}    
+inline T mn(const T& a,const T& b) {return (a<b?a:b);}    
 
 template <class T>
-inline T mx(const T& a,const T& b) {
-  return (a>b?a:b);
-}    
+inline T mx(const T& a,const T& b) {return (a>b?a:b);}    
+
+// long name :
+template <class T>
+inline T min_of(const T& a,const T& b) {return (a<b?a:b);}    
+
+template <class T>
+inline T max_of(const T& a,const T& b) {return (a>b?a:b);}    
 
 }
 

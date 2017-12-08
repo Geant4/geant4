@@ -1,4 +1,4 @@
-$Id: History 102316 2017-01-20 16:12:52Z gcosmo $
+$Id: History 106980 2017-10-31 09:02:49Z gcosmo $
 -------------------------------------------------------------------
 
        ==========================================================
@@ -14,6 +14,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+26-Oct-2017 A. Ribon                     (hadr-qgsm-V10-03-05)
+- Brought back the stable, production QGS (as in 10.3).
+
+27-Jun-2017 G. Folger                    (hadr-qgsm-V10-03-04)
+-  Fixed leak in G4QGSParticipants::GetList() for targets not deleted
+   after interaction.
 
 19-Jan-2017 A. Ribon                     (hadr-qgsm-V10-03-03)
 -  Small fix in G4QGSParticipants to avoid a strange crash seen only

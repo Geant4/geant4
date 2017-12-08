@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 103291 2017-03-24 14:00:49Z gcosmo $
+// $Id: G4RunManagerKernel.cc 107524 2017-11-21 07:15:27Z gcosmo $
 //
 //
 
@@ -62,6 +62,7 @@
 #include "G4AllocatorList.hh"
 
 #include "G4AutoLock.hh"
+#include "G4RNGHelper.hh"
 
 #ifdef G4FPE_DEBUG
   #include "G4FPEDetection.hh"
@@ -311,6 +312,17 @@ G4RunManagerKernel::~G4RunManagerKernel()
   // deletion of navigation levels
   if(verboseLevel>1) G4NavigationHistoryPool::GetInstance()->Print();
   delete G4NavigationHistoryPool::GetInstance();
+
+  // deletion of G4RNGHelper singleton
+  if(runManagerKernelType!=workerRMK)
+  {
+    G4RNGHelper * rngHelper = G4RNGHelper::GetInstanceIfExist();
+    if(rngHelper)
+    {
+      delete rngHelper;
+      if(verboseLevel>1) G4cout << "G4RNGHelper object is deleted." << G4endl;
+    }
+  }
 
   // deletion of allocators
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();

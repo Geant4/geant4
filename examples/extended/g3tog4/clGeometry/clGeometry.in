@@ -3,6 +3,10 @@
 #
 /run/verbose 2
 /process/eLoss/verbose 1
+#
+# Initialize kernel
+/run/initialize
+#
 /gun/position   0. -1.5 0. mm
 /gun/direction  0.  1.   0.
 /gun/energy 1 GeV

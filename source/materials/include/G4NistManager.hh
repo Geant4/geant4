@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistManager.hh 97248 2016-05-30 15:00:11Z gcosmo $
+// $Id: G4NistManager.hh 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -73,6 +73,7 @@
 #include "G4NistElementBuilder.hh"
 #include "G4NistMaterialBuilder.hh"
 #include "G4Pow.hh"
+#include "G4Threading.hh"
 
 class G4NistMessenger;
 
@@ -278,7 +279,7 @@ public:
 
 private:
 
-  G4NistManager();
+  explicit G4NistManager();
   static G4NistManager* instance;
 
   G4Pow* g4pow;
@@ -297,6 +298,9 @@ private:
   G4NistMaterialBuilder*   matBuilder;
   G4NistMessenger*         messenger;
 
+#ifdef G4MULTITHREADED
+  static G4Mutex nistManagerMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

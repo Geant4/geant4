@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 104263 2017-05-23 12:13:24Z gcosmo $
+# $Id: sources.cmake 105784 2017-08-17 12:44:34Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -115,6 +115,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ZeroXS.hh
 	G4CrossSectionFactoryRegistry.hh
 	G4FastPathHadronicCrossSection.hh
+	G4MuNeutrinoNucleusTotXsc.hh
     SOURCES
 	G4BGGNucleonElasticXS.cc
 	G4BGGNucleonInelasticXS.cc
@@ -186,6 +187,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_xsect
         G4ZeroXS.cc
 	G4CrossSectionFactoryRegistry.cc
 	G4FastPathHadronicCrossSection.cc
+	G4MuNeutrinoNucleusTotXsc.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

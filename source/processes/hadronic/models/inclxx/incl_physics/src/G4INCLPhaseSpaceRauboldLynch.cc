@@ -296,21 +296,22 @@ namespace G4INCL {
       rnd[i] = Random::shoot();
     rnd[nParticles-1] = 1.;
     std::sort(rnd.begin()+1, rnd.begin()+nParticles-1);
-
+    
     // invariant masses
     for(size_t i=0; i<nParticles; ++i)
       invariantMasses[i] = rnd[i]*availableEnergy + sumMasses[i];
 
     // compute the CM momenta and the weight for the current event
-    G4double weight=KinematicsUtils::momentumInCM(invariantMasses[1], invariantMasses[0], masses[1]);;
+    G4double weight=KinematicsUtils::momentumInCM(invariantMasses[1], invariantMasses[0], masses[1]);
     momentaCM[0] = weight;
     for(size_t i=1; i<nParticles-1; ++i) {
-      const G4double momentumCM = KinematicsUtils::momentumInCM(invariantMasses[i+1], invariantMasses[i], masses[i+1]);
+      G4double momentumCM;
+// assert(invariantMasses[i+1]-invariantMasses[i]-masses[i+1]> - 1.E-8);
+      if(invariantMasses[i+1]-invariantMasses[i]-masses[i+1] < 0.) momentumCM = 0.;
+      else momentumCM = KinematicsUtils::momentumInCM(invariantMasses[i+1], invariantMasses[i], masses[i+1]);
       momentaCM[i] = momentumCM;
       weight *= momentumCM;
     }
-
-// assert(weight==weight);
 
     return weight;
   }

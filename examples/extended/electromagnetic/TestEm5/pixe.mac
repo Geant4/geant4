@@ -31,19 +31,21 @@
 /analysis/setFileName pixe
 /analysis/h1/set  3 100 0 0.1 MeV           #gamma: energy at vertex
 /analysis/h1/set  5 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
-/analysis/h1/set 17 100 0 0.1 MeV	    #gamma: energy at vertex
-/analysis/h1/set 19 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
-/analysis/h1/set 45 100 0 0.1 MeV	    #gamma: energy at vertex
-/analysis/h1/set 47 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
+/analysis/h1/set 51 100 0 0.1 MeV	    #gamma: energy at vertex
+/analysis/h1/set 53 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
+/analysis/h1/set 55 100 0 0.1 MeV	    #gamma: energy at vertex
+/analysis/h1/set 57 100 0.001 0.1 MeV log10 #gamma: energy at vertex (log scale)
 /analysis/h1/set 20 100 0 0.1 MeV           #gamma: energy at exit
 /analysis/h1/set 40 100 0 0.1 MeV           #gamma: energy at back
 #
 /analysis/h1/set  2 100 0 0.1 MeV           #e-: energy at vertex
 /analysis/h1/set  4 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
-/analysis/h1/set 16 100 0 0.1 MeV	    #e-: energy at vertex
-/analysis/h1/set 18 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
-/analysis/h1/set 44 100 0 0.1 MeV	    #e-: energy at vertex
-/analysis/h1/set 46 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
+/analysis/h1/set 50 100 0 0.1 MeV	    #e-: energy at vertex
+/analysis/h1/set 52 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
+/analysis/h1/set 54 100 0 0.1 MeV	    #e-: energy at vertex
+/analysis/h1/set 56 100 0.001 0.1 MeV log10 #e-: energy at vertex (log scale)
+/analysis/h1/set 10 100 0 0.1 MeV           #e-: energy at exit
+/analysis/h1/set 30 100 0 0.1 MeV           #e-: energy at back
 #
 /run/printProgress 10000
 # 

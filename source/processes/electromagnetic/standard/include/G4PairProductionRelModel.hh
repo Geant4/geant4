@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.hh 104477 2017-06-01 07:39:33Z gcosmo $
+// $Id: G4PairProductionRelModel.hh 106628 2017-10-17 06:25:38Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -54,9 +54,9 @@
 
 #include "G4VEmModel.hh"
 #include "G4PhysicsTable.hh"
-#include "G4NistManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Pow.hh"
 
 class G4ParticleChangeForGamma;
 
@@ -126,8 +126,7 @@ protected:
   (const G4PairProductionRelModel &right) = delete;
   G4PairProductionRelModel(const  G4PairProductionRelModel&) = delete;
 
-  G4NistManager*              nist;
-
+  G4Pow*                    g4calc;
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleDefinition*     thePositron;
@@ -198,9 +197,9 @@ inline void G4PairProductionRelModel::SetCurrentElement(G4double Z)
     currentZ = Z;
 
     G4int iz = G4lrint(Z);
-    z13 = nist->GetZ13(iz);
+    z13 = g4calc->Z13(iz);
     z23 = z13*z13;
-    lnZ = nist->GetLOGZ(iz);
+    lnZ = g4calc->logZ(iz);
 
     if (iz <= 4) {
       Fel = Fel_light[iz];  

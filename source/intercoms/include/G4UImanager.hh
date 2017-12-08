@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh 102561 2017-02-09 08:16:05Z gcosmo $
+// $Id: G4UImanager.hh 106172 2017-09-15 13:03:57Z gcosmo $
 //
 
 #ifndef G4UImanager_h
@@ -34,8 +34,10 @@
 
 #include <vector>
 #include <fstream>
+#include "icomsdefs.hh"
 #include "G4VStateDependent.hh"
 #include "G4UIcommandStatus.hh"
+
 class G4UIcommandTree;
 class G4UIcommand;
 class G4UIsession;
@@ -145,9 +147,9 @@ class G4UImanager : public G4VStateDependent
   //    void Interact(const char * promptCharacters);
 
   private:
-      static G4ThreadLocal G4UImanager * fUImanager;
-      static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
-      static G4UImanager * fMasterUImanager;
+      G4ICOMS_DLL static G4ThreadLocal G4UImanager * fUImanager;
+      G4ICOMS_DLL static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
+      G4ICOMS_DLL static G4UImanager * fMasterUImanager;
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
@@ -282,7 +284,7 @@ class G4UImanager : public G4VStateDependent
   private:
       G4int threadID;
       G4MTcoutDestination* threadCout;
-      static G4int igThreadID;
+      G4ICOMS_DLL static G4int igThreadID;
 
   public:
       void SetCoutFileName(const G4String& fileN = "G4cout.txt", G4bool ifAppend = true);
@@ -294,12 +296,11 @@ class G4UImanager : public G4VStateDependent
       inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
  
   private:
-      static G4bool doublePrecisionStr;
+      G4ICOMS_DLL static G4bool doublePrecisionStr;
 
   public:
-      inline static void UseDoublePrecisionStr(G4bool val) { doublePrecisionStr = val; }
-      inline static G4bool DoublePrecisionStr() { return doublePrecisionStr; }
-
+      static void UseDoublePrecisionStr(G4bool val);
+      static G4bool DoublePrecisionStr();
 };
 
 #endif

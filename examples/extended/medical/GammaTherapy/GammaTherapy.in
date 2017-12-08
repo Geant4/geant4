@@ -3,6 +3,7 @@
 #         10.04.01 V.Ivanchneko
 #================================================
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 1
 /tracking/verbose 0
 /event/verbose 0
@@ -23,12 +24,11 @@
 #
 #/testem/stepMax               1.0  mm
 #
-/gun/particle e-
-/gun/energy 50.0 MeV
+/run/setCut          0.1 mm
 #
 /run/initialize
 #
-/run/setCut          0.1 mm
-#
+/gun/particle e-
+/gun/energy 50.0 MeV
 /run/beamOn 10000
 #

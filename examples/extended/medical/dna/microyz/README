@@ -1,14 +1,14 @@
 *** microyz example ***
 
 Author: S. Incerti et al.
-Date: 17 Apr. 2015
+Date: 1 June 2017
 Email: incerti@cenbg.in2p3.fr
 
-****************************************************************
-WARNING: This is a beta example, still buggy and under testing !
-****************************************************************
-
 (c) The Geant4-DNA collaboration.
+
+This examples shows how to compute microdosimetry 
+distributions y, z in liquid water using exclusively Geant4-DNA
+physics processes and models.
 
 This example is provided by the Geant4-DNA collaboration.
 
@@ -19,10 +19,7 @@ Any report or published results obtained using the Geant4-DNA software shall
 cite the following Geant4-DNA collaboration publications:
 Phys. Med. 31 (2015) 861-874
 Med. Phys. 37 (2010) 4692-4708
-
-This examples shows how to compute microdosimetry 
-distributions in liquid water using exclusively Geant4-DNA
-physics processes and models.
+J. Appl. Phys. 122 (2017) 024303
 
 1) Geometry
 A box of liquid water.
@@ -34,17 +31,16 @@ They are shot from the center of the box.
 
 3) Physics
 The default Geant4-DNA physics constructor 2 is used in
-the PhysicsList class.
+the PhysicsList class. Alternative constructor can be
+selected from microyz.in
 
 4) Scoring of enery deposition
 Energy depositions are scored in spheres randomly
-along the incident particle track.
+placed along the incident particle track, 
+using a weighted sampling.
 
-The user can select in the TrackerSD class:
-
-1- the number of samplings (1000 by default)
-
-2- the radius of the sphere (1.5 um by default)
+The user can select in the TrackerSD class the radius
+of the sphere (5 nm by default).
 
 5) The code can be run using:
 ./microyz microyz.in
@@ -52,28 +48,7 @@ The user can select in the TrackerSD class:
 6) Results can be analyzed after the run using:
 root plot.C
 
-The following microdosimetry quantities are plotted
+The distribution of y is shown by default.
 
-- f(y) 
+The following quantities are calculated: yF and yD.
 
-- yf(y)
-
-- d(y)
-
-- yd(y)
-
-y is expressed in keV/um
-
-Plots are shown in lin-lin and log-lin coordinates.
-
-The following quantities are calculated:
-
-- Integral of f(y)dy
-
-- yF (in keV/um)
-
-- Integral of d(y)dy
-
-- yD (in keV/um)
-
-for linear lin-lin and log-lin plots, including normalization in the latter case.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc 103926 2017-05-03 13:43:27Z gcosmo $
+// $Id: G4OpenGLViewer.cc 107329 2017-11-08 16:41:26Z gcosmo $
 //
 // 
 // Andrew Walkden  27th March 1996
@@ -544,12 +544,11 @@ const std::vector < G4OpenGLViewerPickMap* > & G4OpenGLViewer::GetPickDetails(GL
   fIsGettingPickInfos = false;
   if (hits < 0) {
     G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
-    goto reset_and_return;
+    goto restoreMatrices;
   }
   if (hits > 0) {
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
-      G4OpenGLViewerPickMap* pickMap = new G4OpenGLViewerPickMap();
       GLuint nnames = *p++;
       // This bit of debug code or...
       //GLuint zmin = *p++;
@@ -561,31 +560,40 @@ const std::vector < G4OpenGLViewerPickMap* > & G4OpenGLViewer::GetPickDetails(GL
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
         GLuint name = *p++;
-        pickMap->setHitNumber(i);
-        pickMap->setSubHitNumber(j);
-        pickMap->setPickName(name);
-        std::map<GLuint, G4AttHolder*>::iterator iter =
-        fOpenGLSceneHandler.fPickMap.find(name);
-        if (iter != fOpenGLSceneHandler.fPickMap.end()) {
-          G4AttHolder* attHolder = iter->second;
-          if(attHolder && attHolder->GetAttDefs().size()) {
-            for (size_t iAtt = 0; iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
+	std::map<GLuint, G4AttHolder*>::iterator iter =
+	  fOpenGLSceneHandler.fPickMap.find(name);
+	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
+	  G4AttHolder* attHolder = iter->second;
+	  if(attHolder && attHolder->GetAttDefs().size()) {
+	    for (size_t iAtt = 0;
+		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
               std::ostringstream oss;
-              oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
+	      oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
                                 attHolder->GetAttDefs()[iAtt]);
+              G4OpenGLViewerPickMap* pickMap = new G4OpenGLViewerPickMap();
+//              G4cout
+//              << "i,j, attHolder->GetAttDefs().size(): "
+//              << i << ',' << j
+//              << ", " << attHolder->GetAttDefs().size()
+//              << G4endl;
+//              G4cout << "G4OpenGLViewer::GetPickDetails: " << oss.str() << G4endl;
               pickMap->addAttributes(oss.str());
+              pickMap->setHitNumber(i);
+              pickMap->setSubHitNumber(j);
+              pickMap->setPickName(name);
+              pickMapVector.push_back(pickMap);
             }
           }
         }
       }
-      pickMapVector.push_back(pickMap);
     }
   }
 
-reset_and_return:
+restoreMatrices:
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
+
   return pickMapVector;
 }
 
@@ -1521,13 +1529,9 @@ void G4OpenGLViewer::setVboDrawer(G4OpenGLVboDrawer* drawer) {
 
 G4String G4OpenGLViewerPickMap::print() {
   std::ostringstream txt;
-
-  txt << fName;
-
-  txt << "Hit: " << fHitNumber << ", Sub-hit: " << fSubHitNumber << ", PickName: " << fPickName << "\n";
-  
   for (unsigned int a=0; a<fAttributes.size(); a++) {
-    txt << fAttributes[a] << "\n";
+    txt << fAttributes[a];
+    if (a < fAttributes.size() - 1) txt << "\n";
   }
   return txt.str();
 }

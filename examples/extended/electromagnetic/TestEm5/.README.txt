@@ -108,7 +108,7 @@
  
 \section TestEm5_s7 List of the built-in histograms
         
- The test contains more than 20 built-in 1D histograms, which are managed by
+ The test contains more than 60 built-in 1D histograms, which are managed by
  G4AnalysisManager class and its Messenger. The histos can be individually activated
  with the command :
 \verbatim

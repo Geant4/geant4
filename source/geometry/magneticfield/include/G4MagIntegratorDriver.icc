@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.icc 69699 2013-05-13 08:50:30Z gcosmo $
+// $Id: G4MagIntegratorDriver.icc 107059 2017-11-01 14:58:16Z gcosmo $
 //
 // --------------------------------------------------------------------
 
@@ -114,18 +114,6 @@ void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
 }
 
 inline
-const G4MagIntegratorStepper* G4MagInt_Driver::GetStepper() const
-{
-  return pIntStepper;
-}
-
-inline
-G4MagIntegratorStepper* G4MagInt_Driver::GetStepper() 
-{
-  return pIntStepper;
-}
-
-inline
 G4int G4MagInt_Driver::GetMaxNoSteps() const
 {
   return fMaxNoSteps;
@@ -138,16 +126,7 @@ void G4MagInt_Driver::SetMaxNoSteps(G4int val)
 }
 
 inline
-void G4MagInt_Driver::GetDerivatives(const G4FieldTrack &y_curr, // const, INput
-                                           G4double     dydx[])  // OUTput
-{ 
-  G4double  tmpValArr[G4FieldTrack::ncompSVEC];
-  y_curr.DumpToArray( tmpValArr  );
-  pIntStepper -> RightHandSide( tmpValArr , dydx );
-}
-
-inline
-G4double G4MagInt_Driver::GetVerboseLevel() const
+G4int G4MagInt_Driver::GetVerboseLevel() const
 {
       return fVerboseLevel;
 } 
@@ -162,4 +141,5 @@ inline
 G4double G4MagInt_Driver::GetSmallestFraction() const
 {
       return fSmallestFraction; 
-} 
+}
+

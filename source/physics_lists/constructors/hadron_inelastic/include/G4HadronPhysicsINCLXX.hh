@@ -32,6 +32,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 19.07.2017 A. Dotti: Refactor code, following FTFP_BERT
 // 22.05.2014 D. Mancusi: Extend INCL++ to 20 GeV
 // 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
 // 01.03.2013 D. Mancusi: Rename to G4HadronPhysicsINCLXX and introduce
@@ -49,30 +50,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PionBuilder.hh"
-#include "G4KaonBuilder.hh"
-#include "G4QGSPPionBuilder.hh"
-#include "G4FTFPPionBuilder.hh"
-#include "G4QGSPKaonBuilder.hh"
-#include "G4FTFPKaonBuilder.hh"
-#include "G4INCLXXPionBuilder.hh"
-#include "G4BertiniKaonBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4QGSPProtonBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-#include "G4INCLXXProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4QGSPNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4INCLXXNeutronBuilder.hh"
-#include "G4NeutronPHPBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
+#include "G4Cache.hh"
 /**
  * Build hadronic physics using INCL++, high-energy models (QGSP or FTFP) and
  * possibly NeutronHP.
@@ -83,6 +61,7 @@
  * @see G4IonINCLXXBuilder
  */
 
+class G4VCrossSectionDataSet;
 class G4ComponentGGHadronNucleusXsc;
 
 
@@ -94,49 +73,28 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
     virtual ~G4HadronPhysicsINCLXX();
 
   public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    virtual void ConstructParticle() override;
+    virtual void ConstructProcess() override;
+    virtual void TerminateWorker() override;
 
     void SetQuasiElastic(G4bool value) {QuasiElastic = value;}; 
 
-  private:
-    void CreateModels();
-
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4QGSPNeutronBuilder * theQGSPNeutron;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4INCLXXNeutronBuilder * theINCLXXNeutron;
-      G4NeutronPHPBuilder * theNeutronHP;
-    
-      G4PionBuilder * thePion;
-      G4QGSPPionBuilder * theQGSPPion;
-      G4FTFPPionBuilder * theFTFPPion;
-      G4INCLXXPionBuilder * theINCLXXPion;
-
-      G4KaonBuilder * theKaon;
-      G4QGSPKaonBuilder * theQGSPKaon;
-      G4FTFPKaonBuilder * theFTFPKaon;
-      G4BertiniKaonBuilder * theBertiniKaon;
-
-      G4ProtonBuilder * thePro;
-      G4QGSPProtonBuilder * theQGSPPro;
-      G4FTFPProtonBuilder * theFTFPPro;
-      G4INCLXXProtonBuilder * theINCLXXPro;
-    
-      G4HyperonFTFPBuilder * theHyperon;
-    
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate *tpdata;
+  protected:
+    virtual void CreateModels();
+    virtual void Neutron();
+    virtual void Proton();
+    virtual void Pion();
+    virtual void Kaon();
+    virtual void Others();
+    //This contains extra configurataion specific to this PL
+    virtual void ExtraConfiguration();
 
     G4bool QuasiElastic;
     G4bool withNeutronHP;
     G4bool withFTFP;
+    //Thread-private data write them here to delete them
+    G4VectorCache<G4VCrossSectionDataSet*> xs_ds;
+    G4Cache<G4ComponentGGHadronNucleusXsc*> xs_k;
 };
 
 #endif

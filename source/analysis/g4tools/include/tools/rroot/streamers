@@ -11,6 +11,8 @@
 #include "clss"
 #include "info"
 #include "dummy"
+#include "list"
+#include "iros"
 
 #include "../sout"
 #include "../vmanip"
@@ -31,8 +33,8 @@
 namespace tools {
 namespace rroot {
 
-typedef tools::histo::histo_data<double,unsigned int,unsigned int,double> hd_data;
-typedef tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data;
+typedef histo::histo_data<double,unsigned int,unsigned int,double> hd_data;
+typedef histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data;
 
 inline bool AttAxis_stream(buffer& a_buffer){
     int fNdivisions = 510;       //Number of divisions(10000*n3 + 100*n2 + n1)
@@ -71,17 +73,17 @@ inline bool AttAxis_stream(buffer& a_buffer){
 class dummy_fac : public virtual ifac {
 public: //ifac
   virtual iro* create(const std::string& a_class,const args& a_args) {
-    if(tools::rcmp(a_class,"TGraph")) { //for TH_read_1D/List.
+    if(rcmp(a_class,"TGraph")) { //for TH_read_1D/List.
       return new graph();
 
     // for read_sinfos() :
-    } else if(tools::rcmp(a_class,"TStreamerInfo")) {
+    } else if(rcmp(a_class,"TStreamerInfo")) {
       return new StreamerInfo(*this);
-    } else if(tools::rcmp(a_class,"TObjArray")) {
+    } else if(rcmp(a_class,"TObjArray")) {
       std::string* sc = ifac::arg_class(a_args);
       if(sc) {
         if((*sc)==streamer_element::s_class()){
-          return new ObjArray<streamer_element>(*this,true);
+          return new obj_array<streamer_element>(*this,true,true);
         } else {
           m_out << "tools::rroot::dummy_fac::create :"
                 << " Can't create TObjArray of " << *sc << "."
@@ -89,19 +91,19 @@ public: //ifac
           return 0;
         }
       } else {
-        return new iros(*this,true);
+        return new iros(*this,true,true);
       }
 
-    } else if(tools::rcmp(a_class,"TStreamerBase")
-            ||tools::rcmp(a_class,"TStreamerBasicType")
-            ||tools::rcmp(a_class,"TStreamerBasicPointer")
-            ||tools::rcmp(a_class,"TStreamerObjectAny")
-            ||tools::rcmp(a_class,"TStreamerObject")
-            ||tools::rcmp(a_class,"TStreamerObjectPointer")
-            ||tools::rcmp(a_class,"TStreamerString")
-            ||tools::rcmp(a_class,"TStreamerSTL")
-            ||tools::rcmp(a_class,"TStreamerLoop")
-            ||tools::rcmp(a_class,"TList")
+    } else if(rcmp(a_class,"TStreamerBase")
+            ||rcmp(a_class,"TStreamerBasicType")
+            ||rcmp(a_class,"TStreamerBasicPointer")
+            ||rcmp(a_class,"TStreamerObjectAny")
+            ||rcmp(a_class,"TStreamerObject")
+            ||rcmp(a_class,"TStreamerObjectPointer")
+            ||rcmp(a_class,"TStreamerString")
+            ||rcmp(a_class,"TStreamerSTL")
+            ||rcmp(a_class,"TStreamerLoop")
+            ||rcmp(a_class,"TList")
              ) {
       return new dummy_streamer_element();
 
@@ -123,7 +125,7 @@ protected:
   std::ostream& m_out;
 };
 
-inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double,unsigned int>& a_fAxis){
+inline bool Axis_stream(buffer& a_buffer,histo::axis<double,unsigned int>& a_fAxis){
     // Version 6 streaming (ROOT/v3-00-6).
     short v;
     unsigned int s, c;
@@ -225,14 +227,21 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     if(!Axis_stream(a_buffer,a_data.m_axes[0])) return false;
     a_data.m_axes[0].m_offset = 1;
 
-    if(a_data.m_dimension==2) {
+    if(a_data.m_dimension==3) {
       if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
       a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
 
-      tools::histo::axis<double,unsigned int> dummy;
+      if(!Axis_stream(a_buffer,a_data.m_axes[2])) return false; //fZAxis
+      a_data.m_axes[2].m_offset = a_data.m_axes[1].m_offset * (a_data.m_axes[1].bins()+2);
+      
+    } else if(a_data.m_dimension==2) {
+      if(!Axis_stream(a_buffer,a_data.m_axes[1])) return false; //fYAxis
+      a_data.m_axes[1].m_offset = a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
+
+      histo::axis<double,unsigned int> dummy;
       if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
     } else {
-      tools::histo::axis<double,unsigned int> dummy;
+      histo::axis<double,unsigned int> dummy;
       if(!Axis_stream(a_buffer,dummy)) return false; //fYAxis
       if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
     }
@@ -279,10 +288,10 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     }
 
    {dummy_fac fac(a_buffer.out());
-    List dummy(fac,true);
+    obj_list dummy(fac,true,true);
     if(!dummy.stream(a_buffer)) {
       a_buffer.out() << "tools::rroot::TH_read_1D :"
-                     << " List stream failed."
+                     << " obj_list stream failed."
                      << std::endl;
       return false;
     }} //Functions
@@ -308,6 +317,11 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
       a_data.m_bin_number =
         (a_data.m_axes[0].m_number_of_bins + 2) *
 	(a_data.m_axes[1].m_number_of_bins + 2);
+    } else if(a_data.m_dimension==3) {
+      a_data.m_bin_number =
+        (a_data.m_axes[0].m_number_of_bins + 2) *
+	(a_data.m_axes[1].m_number_of_bins + 2) *
+	(a_data.m_axes[2].m_number_of_bins + 2);
     }
 
     unsigned int binn = a_data.m_bin_number;
@@ -397,7 +411,7 @@ inline bool TH_read_3D(buffer& a_buffer,hd_data& a_data,
     return true;
 }
 
-inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
+inline histo::h1d* TH1F_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -451,12 +465,12 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
     data.m_in_range_Sxw[0] = fSxw;
     data.m_in_range_Sx2w[0] = fSx2w;
 
-    tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
+    histo::h1d* h = new histo::h1d("",10,0,1);
     h->copy_from_data(data);
     return h; //give ownership to caller.
 }
 
-inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
+inline histo::h1d* TH1D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -505,12 +519,12 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
     data.m_in_range_Sxw[0] = fSxw;
     data.m_in_range_Sx2w[0] = fSx2w;
 
-    tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
+    histo::h1d* h = new histo::h1d("",10,0,1);
     h->copy_from_data(data);
     return h;
 }
 
-inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
+inline histo::h2d* TH2F_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -570,12 +584,12 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     data.m_in_range_Sxw[1] = fSyw;
     data.m_in_range_Sx2w[1] = fSy2w;
     
-    tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
+    histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     return h;
 }
 
-inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
+inline histo::h2d* TH2D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -631,12 +645,12 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     data.m_in_range_Sxw[1] = fSyw;
     data.m_in_range_Sx2w[1] = fSy2w;
     
-    tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
+    histo::h2d* h = new histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     return h;
 }
 
-inline tools::histo::h3d* TH3D_stream(buffer& a_buffer){
+inline histo::h3d* TH3D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -649,7 +663,7 @@ inline tools::histo::h3d* TH3D_stream(buffer& a_buffer){
     data.m_dimension = 3;
     //data.m_coords.resize(data.m_dimension,0);
     //data.m_ints.resize(data.m_dimension,0);
-    data.m_axes.resize(2);
+    data.m_axes.resize(3);
     data.m_in_range_plane_Sxyw.resize(3,0);
 
     double fEntries; //in range + outflow.
@@ -694,24 +708,24 @@ inline tools::histo::h3d* TH3D_stream(buffer& a_buffer){
     data.m_in_range_Sxw[2] = fSzw;
     data.m_in_range_Sx2w[2] = fSz2w;
 
-    tools::histo::h3d* h = new tools::histo::h3d("",10,0,1,10,0,1,10,0,1);
+    histo::h3d* h = new histo::h3d("",10,0,1,10,0,1,10,0,1);
     h->copy_from_data(data);
     return h;
 }
 
-inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
+inline histo::p1d* TProfile_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
-    //WARNING : the mapping tools::histo::p1d / TProfile is not obvious.
+    //WARNING : the mapping histo::p1d / TProfile is not obvious.
     //p1d::m_bin_Svw  <---> TProfile::fArray
     //p1d::m_bin_Sv2w <---> TProfile::fSumw2
     //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
-    tools::histo::h1d* h = TH1D_stream(a_buffer);
+    histo::h1d* h = TH1D_stream(a_buffer);
     if(!h) return 0;
 
     //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
@@ -762,25 +776,25 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
       data.m_bin_Sv2w[index] = sv2w;
     }
 
-    tools::histo::p1d* p = new tools::histo::p1d("",10,0,1);
+    histo::p1d* p = new histo::p1d("",10,0,1);
     p->copy_from_data(data);
-    // We have now a valid tools::histo::p1d.
+    // We have now a valid histo::p1d.
     return p;
 }
 
-inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
+inline histo::p2d* TProfile2D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
 
     // Version 3 streaming (ROOT/v3-00-6).
 
-    //WARNING : the mapping tools::histo::p1d / TProfile is not obvious.
+    //WARNING : the mapping histo::p1d / TProfile is not obvious.
     //p1d::m_bin_Svw  <---> TProfile::fArray
     //p1d::m_bin_Sv2w <---> TProfile::fSumw2
     //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
-    tools::histo::h2d* h = TH2D_stream(a_buffer);
+    histo::h2d* h = TH2D_stream(a_buffer);
     if(!h) return 0;
 
     //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
@@ -829,19 +843,19 @@ inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
       data.m_bin_Sv2w[index] = sv2w;
     }
 
-    tools::histo::p2d* p = new tools::histo::p2d("",10,0,1,10,0,1);
+    histo::p2d* p = new histo::p2d("",10,0,1,10,0,1);
     p->copy_from_data(data);
     return p;
 }
 
-class TDirectory : public tools::rroot::directory {
+class TDirectory : public rroot::directory {
 //public:
 //  static const std::string& store_class() {return TDirectory_cls();}
 public:
-  TDirectory(ifile& a_file):tools::rroot::directory(a_file){}
+  TDirectory(ifile& a_file):rroot::directory(a_file){}
   virtual ~TDirectory(){}
 protected:
-  TDirectory(const TDirectory& a_from):tools::rroot::directory(a_from){}
+  TDirectory(const TDirectory& a_from):rroot::directory(a_from){}
   TDirectory& operator=(const TDirectory&){return *this;}
 public:
   bool stream(buffer& a_buffer){
@@ -903,25 +917,25 @@ protected:
 
 
 inline void dump(std::ostream& a_out,
-                 tools::rroot::ifile& a_file,
-                 const std::vector<tools::rroot::key*>& a_keys,
+                 rroot::ifile& a_file,
+                 const std::vector<rroot::key*>& a_keys,
                  bool a_recursive,
                  unsigned int a_spaces = 0) {
 
   // dump non directory objects :
- {std::vector<tools::rroot::key*>::const_iterator it;
+ {std::vector<rroot::key*>::const_iterator it;
   for(it=a_keys.begin();it!=a_keys.end();++it) {
-    tools::rroot::key& k = *(*it);
-    if(k.object_class()==tools::rroot::TDirectory_cls()) continue;
+    rroot::key& k = *(*it);
+    if(k.object_class()==rroot::TDirectory_cls()) continue;
    {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
     k.dump(a_out);
   }}
 
   // dump directories :
- {std::vector<tools::rroot::key*>::const_iterator it;
+ {std::vector<rroot::key*>::const_iterator it;
   for(it=a_keys.begin();it!=a_keys.end();++it) {
-    tools::rroot::key& k = *(*it);
-    if(k.object_class()!=tools::rroot::TDirectory_cls()) continue;
+    rroot::key& k = *(*it);
+    if(k.object_class()!=rroot::TDirectory_cls()) continue;
 
     std::string label = k.object_name();
    {for(unsigned int index=0;index<a_spaces;index++) a_out << " ";}
@@ -937,25 +951,25 @@ inline void dump(std::ostream& a_out,
              << " can't get directory data buffer."
              << std::endl;
     } else {
-      tools::rroot::buffer b(a_out,a_file.byte_swap(),
+      rroot::buffer b(a_out,a_file.byte_swap(),
                              sz,buf,k.key_length(),false);
-      tools::rroot::TDirectory tdir(a_file);
+      rroot::TDirectory tdir(a_file);
       if(!tdir.stream(b)) {
         a_out  << "tools::rroot::dump :"
               << " can't stream TDirectory."
               << std::endl;
       } else {
-        const std::vector<tools::rroot::key*>& keys = tdir.keys();
+        const std::vector<rroot::key*>& keys = tdir.keys();
         dump(a_out,a_file,keys,a_recursive,a_spaces+1);
       }
     }
   }}
 }
 
-inline bool read_sinfos(tools::rroot::ifile& a_file){
+inline bool read_sinfos(rroot::ifile& a_file){
   key& k = a_file.sinfos_key();
   std::ostream& out = k.out();
-  if(k.object_class()!=tools::rroot::TList_cls()) {
+  if(k.object_class()!=rroot::TList_cls()) {
     out << "tools::rroot::read_sinfos :"
         << " key not a TList."
         << std::endl;
@@ -969,12 +983,12 @@ inline bool read_sinfos(tools::rroot::ifile& a_file){
         << std::endl;
     return false;
   }
-  tools::rroot::buffer b(out,a_file.byte_swap(),sz,buf,k.key_length(),false);
+  rroot::buffer b(out,a_file.byte_swap(),sz,buf,k.key_length(),false);
   dummy_fac fac(out);
-  List infos(fac,true);
+  obj_list infos(fac,true,true);
   if(!infos.stream(b)) return false;
   tools_vforcit(iro*,infos,it) {
-    StreamerInfo* info = tools::safe_cast<iro,StreamerInfo>(*(*it));
+    StreamerInfo* info = safe_cast<iro,StreamerInfo>(*(*it));
     if(!info) return false;
     info->out(out);
   }

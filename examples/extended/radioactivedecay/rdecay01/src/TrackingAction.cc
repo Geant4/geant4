@@ -26,7 +26,7 @@
 /// \file TrackingAction.cc
 /// \brief Implementation of the TrackingAction class
 //
-// $Id: TrackingAction.cc 102948 2017-03-06 15:57:14Z gcosmo $
+// $Id: TrackingAction.cc 105733 2017-08-16 12:56:18Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +97,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   
   //count particles
   //
-  if (ID>1) run->ParticleCount(name, Ekin, meanLife);
+  run->ParticleCount(name, Ekin, meanLife);
   
   //energy spectrum
   //

@@ -125,8 +125,8 @@ namespace G4INCL {
 		else if ((p1->isNucleon() && p2->isEta()) || (p2->isNucleon() && p1->isEta())){
 			return etaNElastic(p1, p2);
 		}
-  else if ((p1->isNucleon() && p2->isOmega()) || (p2->isNucleon() && p1->isOmega())){
-   return omegaNElastic(p1, p2);
+		else if ((p1->isNucleon() && p2->isOmega()) || (p2->isNucleon() && p1->isOmega())){
+			return omegaNElastic(p1, p2);
 		}
 		else {
 			return 0.0;
@@ -134,7 +134,7 @@ namespace G4INCL {
 	}
 	
 	
-		G4double CrossSectionsMultiPionsAndResonances::piNToxPiN(const G4int xpi, Particle const * const particle1, Particle const * const particle2) {
+	G4double CrossSectionsMultiPionsAndResonances::piNToxPiN(const G4int xpi, Particle const * const particle1, Particle const * const particle2) {
 			//
 			//     pion-Nucleon producing xpi pions cross sections (corrected due to eta and omega)
 			//
@@ -166,7 +166,7 @@ namespace G4INCL {
 						newXS2Pi=0.;
 				}
 				return newXS2Pi;
-			}												
+			}											
 			else if (xpi == 3) {
 				if (oldXS4Pi != 0.) {
 					newXS4Pi=oldXS4Pi-xsEta-xsOmega;
@@ -211,7 +211,7 @@ namespace G4INCL {
 			if ((particle1->getType()) == Neutron || (particle2->getType()) == Neutron) return sigma;
 			else return 0.5 * sigma;
 		}
-		else return 0. ; // should never return 0. (?)
+		else return 0. ; // should never return 0. (?) // pi+ p and pi- n return 0.
 		
 //		return sigma;
 	}
@@ -235,7 +235,7 @@ namespace G4INCL {
 			if ((particle1->getType()) == Neutron || (particle2->getType()) == Neutron) return sigma;
 			else return 0.5 * sigma;
 		}
-		else return 0. ; // should never return 0. (?)
+		else return 0. ; // should never return 0. (?) // pi+ p and pi- n return 0.
 		
 //		return sigma;
 	}
@@ -253,7 +253,7 @@ namespace G4INCL {
 		return 0.;
 	}
 	
-G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const particle1, Particle const * const particle2) {
+	G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const particle1, Particle const * const particle2) {
  //
  //     Eta-Nucleon producing Pion cross sections
  //
@@ -299,7 +299,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
  return sigma;
 }
 
-		G4double CrossSectionsMultiPionsAndResonances::etaNToPiPiN(Particle const * const particle1, Particle const * const particle2) {
+	G4double CrossSectionsMultiPionsAndResonances::etaNToPiPiN(Particle const * const particle1, Particle const * const particle2) {
 			//
 			//     Eta-Nucleon producing Two Pions cross sections
 			//
@@ -336,7 +336,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 		}
 		
 		
-		G4double CrossSectionsMultiPionsAndResonances::etaNElastic(Particle const * const particle1, Particle const * const particle2) {
+	G4double CrossSectionsMultiPionsAndResonances::etaNElastic(Particle const * const particle1, Particle const * const particle2) {
 			//
 			//     Eta-Nucleon elastic cross sections
 			//
@@ -373,60 +373,60 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 			return sigma; // Parameterization from the ANL-Osaka DCC model [PRC88(2013)035209]
 		}
 
-  G4double CrossSectionsMultiPionsAndResonances::omegaNInelastic(Particle const * const particle1, Particle const * const particle2) {
-   //
-   //     Omega-Nucleon inelastic cross sections
-   //
+	G4double CrossSectionsMultiPionsAndResonances::omegaNInelastic(Particle const * const particle1, Particle const * const particle2) {
+		//
+		//     Omega-Nucleon inelastic cross sections
+		//
 // assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
-   
-   G4double sigma=0.;		
-   
-			const Particle *omega;
-			const Particle *nucleon;
-   
-			if (particle1->isOmega()) {
-				omega = particle1;
-				nucleon = particle2;
+		
+		G4double sigma=0.;		
+		
+		const Particle *omega;
+		const Particle *nucleon;
+		
+		if (particle1->isOmega()) {
+			omega = particle1;
+			nucleon = particle2;
 			}
-		 else {
-				omega = particle2;
-				nucleon = particle1;
-			}
-
-		 const G4double pLab = KinematicsUtils::momentumInLab(omega, nucleon)/1000.; // GeV/c
-   
-   sigma = 20. + 4.0/pLab;	// Eq.(24) in G.I. Lykasov et al., EPJA 6, 71-81 (1999)
-   
-   return sigma;
-  }
+		else {
+			omega = particle2;
+			nucleon = particle1;
+		}
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(omega, nucleon)/1000.; // GeV/c
+		
+		sigma = 20. + 4.0/pLab;	// Eq.(24) in G.I. Lykasov et al., EPJA 6, 71-81 (1999)
+		
+		return sigma;
+	}
 
   
-  G4double CrossSectionsMultiPionsAndResonances::omegaNElastic(Particle const * const particle1, Particle const * const particle2) {
-   //
-   //     Omega-Nucleon elastic cross sections
-   //
+	G4double CrossSectionsMultiPionsAndResonances::omegaNElastic(Particle const * const particle1, Particle const * const particle2) {
+		//
+		//     Omega-Nucleon elastic cross sections
+		//
 // assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
-   
-   G4double sigma=0.;		
-   
-			const Particle *omega;
-			const Particle *nucleon;
-   
-			if (particle1->isOmega()) {
-				omega = particle1;
-				nucleon = particle2;
-			}
-		 else {
-				omega = particle2;
-				nucleon = particle1;
-			}
-   
-		 const G4double pLab = KinematicsUtils::momentumInLab(omega, nucleon)/1000.; // GeV/c
-   
-   sigma = 5.4 + 10.*std::exp(-0.6*pLab);	// Eq.(21) in G.I. Lykasov et al., EPJA 6, 71-81 (1999)
-   
-   return sigma;
-  }
+		
+		G4double sigma=0.;		
+		
+		const Particle *omega;
+		const Particle *nucleon;
+		
+		if (particle1->isOmega()) {
+			omega = particle1;
+			nucleon = particle2;
+		}
+		else {
+			omega = particle2;
+			nucleon = particle1;
+		}
+		
+		const G4double pLab = KinematicsUtils::momentumInLab(omega, nucleon)/1000.; // GeV/c
+		
+		sigma = 5.4 + 10.*std::exp(-0.6*pLab);	// Eq.(21) in G.I. Lykasov et al., EPJA 6, 71-81 (1999)
+		
+		return sigma;
+	}
   
 		
 	G4double CrossSectionsMultiPionsAndResonances::omegaNToPiN(Particle const * const particle1, Particle const * const particle2) {
@@ -474,18 +474,18 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 	}
 	
   
-  G4double CrossSectionsMultiPionsAndResonances::omegaNToPiPiN(Particle const * const particle1, Particle const * const particle2) {
-   //
-   //     Omega-Nucleon producing 2 PionS cross sections
-   //
+	G4double CrossSectionsMultiPionsAndResonances::omegaNToPiPiN(Particle const * const particle1, Particle const * const particle2) {
+		//
+		//     Omega-Nucleon producing 2 PionS cross sections
+		//
 // assert((particle1->isNucleon() && particle2->isOmega()) || (particle1->isOmega() && particle2->isNucleon()));
-   
-   G4double sigma=0.;		
-      
-   sigma = omegaNInelastic(particle1,particle2) - omegaNToPiN(particle1,particle2) ;
-   
-   return sigma;
-  }
+		
+		G4double sigma=0.;		
+		
+		sigma = omegaNInelastic(particle1,particle2) - omegaNToPiN(particle1,particle2) ;
+		
+		return sigma;
+	}
   
 	
 #if defined(NDEBUG) || defined(INCLXX_IN_GEANT4_MODE)
@@ -608,7 +608,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 		
 		G4double sigma;
 		if (plab < param) sigma=0.;
-		else sigma=13.76*(plab-param)/(std::pow(plab, 3.33) - 1.07); // Phys. Rev. C 41, 1701–1718 (1990)
+		else sigma=13.76*(plab-param)/(std::pow(plab, 3.33) - 1.07); // Phys. Rev. C 41, 1701â1718 (1990)
   
 		return sigma;
 }
@@ -640,51 +640,39 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 		const G4double Ecm=0.001*ener;
 		G4double sNNEta; // pp->pp+eta(+X)
 		G4double sNNEta1; // np->np+eta(+X)
-		G4double sNNEta2; // np->d+eta (d wil be considered as np - How far is this right?)
+		G4double sNNEta2; // np->d+eta (d will be considered as np - How far is this right?)
 		G4double x=Ecm*Ecm/5.88;
-					
-  if (Ecm > 5.5) {
-//  if (Ecm > 4) {
+                
+//jcd
+  if (Ecm >= 3.05) {
      sNNEta = 2.5*std::pow((x-1.),1.47)*std::pow(x,-1.25)*1000.;
   }      
-		else if(Ecm>2.70555) {
-			sNNEta = 167.68*Ecm*Ecm-528.3*Ecm+442.29; // Mimicking the reduction seen in omega by HADES compared to Sibirtsev (5.5)
-//			sNNEta = 710.1*Ecm*Ecm-3719.7*Ecm+5106.2; // Mimicking the reduction seen in omega by HADES compared to Sibirtsev (4)
-//			sNNEta = 2.5*std::pow((x-1.),1.47)*std::pow(x,-1.25)*1000.*std::exp(-std::pow(Ecm-2.70555,0.2)*0.3020904); //exp to reduce from 1 to 0.7 (2.07555 --> 5)
-			if (sNNEta <= NNToNNEtaExcluIso(ener, 2)*1000.) sNNEta = NNToNNEtaExcluIso(ener, 2)*1000.;
-		}
-/*		if(Ecm>2.70555) {
-			sNNEta = 2.5*std::pow((x-1.),1.47)*std::pow(x,-1.25)*1000.;
-//			sNNEta = 2.5*std::pow((x-1.),1.47)*std::pow(x,-1.25)*1000.*std::exp(-std::pow(Ecm-2.70555,0.2)*0.3020904); //exp to reduce from 1 to 0.7 (2.07555 --> 5)
-			if (sNNEta <= NNToNNEtaExcluIso(ener, 2)*1000.) sNNEta = NNToNNEtaExcluIso(ener, 2)*1000.;
-		}*/
-		else {
-			sNNEta = NNToNNEtaExcluIso(ener, 2)*1000.;
-		}
-
-		if (sNNEta < 1.e-9) sNNEta = 0.;
-
-		if (iso != 0) {
-			return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
-		}
-
-   if(Ecm>=5.5) {
-//   if(Ecm>=4.) {
-//  if(Ecm>=5.) {
-//   sNNEta1 = 3*sNNEta;
-   sNNEta1 = sNNEta;
-  }
-  else if (Ecm>=2.70555) {
-//   sNNEta1 = 2349.400647*Ecm - 4794.192041; // with factor 3
-//   sNNEta1 = 329.2183*Ecm + 671.5123; // with factor 1
-//   sNNEta1 = 26.19086*Ecm + 1491.368; // with factor 1 and pp reduced
-//   sNNEta1 = sNNEta*(-4.23*Ecm+17.92); // going from a factor 6.5 (low) to 1 (high) (4)
-   sNNEta1 = sNNEta*(-1.968187*Ecm+11.82503); // going from a factor 6.5 (low) to 1 (high) (5.5)
+  else if(Ecm >= 2.6) {
+     sNNEta = -327.29*Ecm*Ecm*Ecm + 2870.*Ecm*Ecm - 7229.3*Ecm + 5273.3;
+     if (sNNEta <= NNToNNEtaExcluIso(ener, 2)*1000.) sNNEta = NNToNNEtaExcluIso(ener, 2)*1000.;
   }
   else {
-    sNNEta1 = 6.5*sNNEta; // 6.5: ratio pn/pp
+     sNNEta = NNToNNEtaExcluIso(ener, 2)*1000.;
   }
-//  sNNEta1 = 6.5*sNNEta; // 6.5: ratio pn/pp
+//jcd
+  if (sNNEta < 1.e-9) sNNEta = 0.;
+
+  if (iso != 0) {
+     return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
+  }
+
+  if(Ecm >= 6.25) {
+     sNNEta1 = sNNEta;
+  }
+  else if (Ecm >= 2.6) {
+     sNNEta1 = sNNEta*std::exp(-(-5.53151576/Ecm+0.8850425));
+  }
+  else if (Ecm >= 2.525) { // = exclusive pn
+      sNNEta1 = -4433.586*Ecm*Ecm*Ecm*Ecm + 56581.54*Ecm*Ecm*Ecm - 270212.6*Ecm*Ecm + 571650.6*Ecm - 451091.6;
+  }
+  else { // = exclusive pn
+      sNNEta1 = 17570.217219*Ecm*Ecm - 84910.985402*Ecm + 102585.55847;
+  }
 
   sNNEta2 = -10220.89518466*Ecm*Ecm+51227.30841724*Ecm-64097.96025731;
   if (sNNEta2 < 0.) sNNEta2=0.;
@@ -695,9 +683,9 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
   G4double Mp=ParticleTable::getRealMass(Proton)/1000.;
   G4double Meta=ParticleTable::getRealMass(Eta)/1000.;
 		if (sNNEta < 1.e-9 || Ecm < Mn+Mp+Meta) sNNEta = 0.;
-
+		
 		return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
-}
+	}
 
 	
   G4double CrossSectionsMultiPionsAndResonances::NNToNNEta(Particle const * const particle1, Particle const * const particle2) {
@@ -715,17 +703,23 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 	
   G4double CrossSectionsMultiPionsAndResonances::NNToNNEtaExcluIso(const G4double ener, const G4int iso) {
 				
-				const G4double Ecm=0.001*ener;
-				G4double sNNEta; // pp->pp+eta
-				G4double sNNEta1; // np->np+eta
-				G4double sNNEta2; // np->d+eta (d wil be considered as np - How far is this right?)
+  const G4double Ecm=0.001*ener;
+  G4double sNNEta; // pp->pp+eta
+  G4double sNNEta1; // np->np+eta
+  G4double sNNEta2; // np->d+eta (d wil be considered as np - How far is this right?)
 				
-				if(Ecm>=2.70555) { // By hand (JCD)
-					sNNEta = -70.1*Ecm + 430.23;
-				}
-				else {
-					sNNEta = -147043.497285*std::pow(Ecm,4) + 1487222.5438123*std::pow(Ecm,3) - 5634399.900744*std::pow(Ecm,2) + 9477290.199378*Ecm - 5972174.353438;
-				}
+  if(Ecm>=3.875) { // By hand (JCD)
+     sNNEta = -13.008*Ecm*Ecm + 84.531*Ecm + 36.234;
+  }
+  else if(Ecm>=2.725) { // By hand (JCD)
+     sNNEta = -913.2809*std::pow(Ecm,5) + 15564.27*std::pow(Ecm,4) - 105054.9*std::pow(Ecm,3) + 351294.2*std::pow(Ecm,2) - 582413.9*Ecm + 383474.7;
+  }
+  else if(Ecm>=2.575) { // By hand (JCD)
+     sNNEta = -2640.3*Ecm*Ecm + 14692*Ecm - 20225;
+  }
+  else {
+     sNNEta = -147043.497285*std::pow(Ecm,4) + 1487222.5438123*std::pow(Ecm,3) - 5634399.900744*std::pow(Ecm,2) + 9477290.199378*Ecm - 5972174.353438;
+  }
 				
    G4double Mn=ParticleTable::getRealMass(Neutron)/1000.;
    G4double Mp=ParticleTable::getRealMass(Proton)/1000.;
@@ -743,49 +737,45 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 
    if (sNNEta < 1.e-9 || Ecm < Thr0) sNNEta = 0.;  // Thr0: Ecm threshold
 				
-				if (iso != 0) {
-					return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
-				}
+   if (iso != 0) {
+      return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
+   }
 				
-    if(Ecm>=5.5) {
-//    if(Ecm>=4.) {
-//    if(Ecm>=5.) {
-//     sNNEta1 = 3*sNNEta;
-     sNNEta1 = sNNEta;
-    }
-    else if (Ecm>=2.70555) {
-//     sNNEta1 = -577.2757*Ecm + 3125.5683;
-//     sNNEta1 = -646.775*Ecm + 3313.605;
-//     sNNEta1 = -646.775*Ecm + 3313.605;
-//     sNNEta1 = sNNEta*(-4.23*Ecm+17.92); // going from a factor 6.5 (low) to 1 (high) (4.)
-     sNNEta1 = sNNEta*(-1.968187*Ecm+11.82503); // going from a factor 6.5 (low) to 1 (high) (5.5)
-    }
-    else {
-     sNNEta1 = 6.5*sNNEta; // 6.5: ratio pn/pp
-    }
-//    sNNEta1 = 6.5*sNNEta; // 6.5: ratio pn/pp
+   if(Ecm>=3.9) {
+      sNNEta1 = sNNEta;
+   }
+   else if (Ecm >= 3.5) {
+      sNNEta1 = -1916.2*Ecm*Ecm*Ecm + 21556.0*Ecm*Ecm - 80828.0*Ecm + 101200.0;
+   }
+   else if (Ecm >= 2.525) {
+      sNNEta1 = -4433.586*Ecm*Ecm*Ecm*Ecm + 56581.54*Ecm*Ecm*Ecm - 270212.6*Ecm*Ecm + 571650.6*Ecm - 451091.6;
+   }
+   else {
+      sNNEta1 = 17570.217219*Ecm*Ecm - 84910.985402*Ecm + 102585.55847;
+  }
     
-    sNNEta2 = -10220.89518466*Ecm*Ecm+51227.30841724*Ecm-64097.96025731;
-    if (sNNEta2 < 0.) sNNEta2=0.;
+   sNNEta2 = -10220.89518466*Ecm*Ecm+51227.30841724*Ecm-64097.96025731;
+   if (sNNEta2 < 0.) sNNEta2=0.;
     
-				sNNEta = 2*(sNNEta1+sNNEta2)-sNNEta;
-    if (sNNEta < 1.e-9 || Ecm < Thr0) sNNEta = 0.;  // Thr0: Ecm threshold
+   sNNEta = 2*(sNNEta1+sNNEta2)-sNNEta;
+   if (sNNEta < 1.e-9 || Ecm < Thr0) sNNEta = 0.;  // Thr0: Ecm threshold
 				
-				return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
-			}
+  return sNNEta/1000.; // parameterization in microbarn (not millibarn)!
+
+}
 			
   G4double CrossSectionsMultiPionsAndResonances::NNToNNEtaExclu(Particle const * const particle1, Particle const * const particle2) {
 				
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2);
-				const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
+   const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2);
+   const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
 				
-				if (iso != 0) {
-					return NNToNNEtaExcluIso(ener, iso);
-				}
-				else {
-					return 0.5*(NNToNNEtaExcluIso(ener, 0)+NNToNNEtaExcluIso(ener, 2));
-				}
-			}
+   if (iso != 0) {
+      return NNToNNEtaExcluIso(ener, iso);
+   }
+   else {
+      return 0.5*(NNToNNEtaExcluIso(ener, 0)+NNToNNEtaExcluIso(ener, 2));
+   }
+}
 
    
    G4double CrossSectionsMultiPionsAndResonances::NNToNNOmegaIso(const G4double ener, const G4int iso) {
@@ -925,11 +915,11 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				 newXS1Pi=oldXS1Pi-(xsEtaOmega-oldXS2Pi);
 				else
 					newXS1Pi=oldXS1Pi;
-   }
+			}
 			else 
 				newXS1Pi=oldXS1Pi-xsEtaOmega;
 		 return newXS1Pi;
-		}									
+		}
 		else if (xpi == 2) {
 			if (oldXS4Pi != 0.)
 				newXS2Pi=oldXS2Pi;
@@ -944,9 +934,9 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				newXS2Pi=oldXS2Pi-xsEtaOmega;
 				if (newXS2Pi < 0.)
 					newXS2Pi=0.;
-   }
+			}
 			return newXS2Pi;
-		}												
+		}
 		else if (xpi == 3) {
 			if (oldXS4Pi != 0.) {
 				newXS4Pi=oldXS4Pi-xsEtaOmega;
@@ -961,7 +951,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 					newXS3Pi=0.;
 			}
 			return newXS3Pi;
-		}									
+		}
 		else if (xpi == 4) {
 			newXS4Pi=oldXS4Pi-xsEtaOmega;
 			if (newXS4Pi < 0.)
@@ -981,7 +971,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				if (iso!=0)
 					return 0.;
 				
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta (= 2705.55 - 2018.563; 4074595.287720512986=2018.563*2018.563)
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta (= 2705.55 - 2018.563; 4074595.287720512986=2018.563*2018.563)
 				if (ener < 2018.563) return 0.;
 				
 				const G4double xsiso2=CrossSectionsMultiPions::NNInelasticIso(ener, 2);
@@ -991,7 +981,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 			}
 			
 		 	G4double CrossSectionsMultiPionsAndResonances::NNToNNEtaOnePiOrDelta(Particle const * const particle1, Particle const * const particle2) {
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
 				const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
 				
@@ -1008,7 +998,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				//
 				//     Nucleon-Nucleon producing one eta and two pions 
 				//
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
 				const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
 				
@@ -1028,7 +1018,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				//     Nucleon-Nucleon producing one eta and three pions
 				//
 				
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
 				const G4int iso=ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
 				
@@ -1051,7 +1041,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 				//     Nucleon-Nucleon producing one eta and four pions
 				//
 				
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
 				const G4double s = ener*ener;
 				const G4int i = ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
@@ -1075,7 +1065,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 // assert(xpi>0 && xpi<=nMaxPiNN);
 // assert(particle1->isNucleon() && particle2->isNucleon());
 				
-				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(particle1, particle2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
 				const G4int i = ParticleTable::getIsospin(particle1->getType()) + ParticleTable::getIsospin(particle2->getType());
     G4double xsinelas;
@@ -1102,7 +1092,7 @@ G4double CrossSectionsMultiPionsAndResonances::etaNToPiN(Particle const * const 
 			G4double CrossSectionsMultiPionsAndResonances::NNToNDeltaEta(Particle const * const p1, Particle const * const p2) {
 // assert(p1->isNucleon() && p2->isNucleon());
     const G4int i = ParticleTable::getIsospin(p1->getType()) + ParticleTable::getIsospin(p2->getType());
-				const G4double ener=KinematicsUtils::totalEnergyInCM(p1, p2) - 686.987; // 686.987 MeV translation to open pion production in NNEta
+				const G4double ener=KinematicsUtils::totalEnergyInCM(p1, p2) - 581.437; // 581.437 MeV translation to open pion production in NNEta
 				if (ener < 2018.563) return 0.;
     G4double xsinelas;
 				if (i!=0) 

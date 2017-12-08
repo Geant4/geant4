@@ -397,7 +397,7 @@ void Run::EndOfRun()
   // The surface area is calculated as spherical medium
   GunArea = fDetector->GetTotSurfMedium();  
   // Fluence dose of single paticle track
-  G4double FluenceDoseperBeam = 0.160218*(dEdxFull)/(GunArea*pow(10,18)) ; 
+  G4double FluenceDoseperBeam = 0.160218*(dEdxFull)/(GunArea*std::pow(10,18)) ; 
   
  G4cout << "\n ======= The summary of simulation results 'neuron' ========\n";
  G4cout 
@@ -501,32 +501,20 @@ void Run::EndOfRun()
   //
   // EdepMedum + EdepSlice + EdepNeuron --> EdepAll
   // EdepSoma + EdepDend + EdepAxon + EdepSpines --> EdepNeuron
- G4cout << "\n Total energy (MeV) and dose (Gy) deposition :" << G4endl;
+ G4cout << "\n Total energy (MeV) deposition :" << G4endl;
   
  G4cout << "  " 
- << std::setw(13) << "All volume:  " << std::setw(7) << fEdepAll/MeV<< " and "
- << std::setw(wid) 
- << (fEdepAll/joule)/(fDetector->GetTotMassMedium()/kg) << "\n " 
+ << std::setw(13) << "All volume:  " << std::setw(7) << fEdepAll/MeV<< "\n " 
  << "  " << std::setw(13) << "Bounding slice: " 
- << std::setw(7) << (fEdepSlice+fEdepNeuron)/MeV<< " and "
- << std::setw(wid) << ((fEdepSlice+fEdepNeuron)/joule)/
-    (fDetector->GetTotMassSlice()/kg) << "\n " 
+ << std::setw(7) << (fEdepSlice+fEdepNeuron)/MeV << "\n " 
  << "  " << std::setw(13) << "Neuron:   " << std::setw(7) 
- << fEdepNeuron/MeV<< " and "
- << std::setw(wid) << (fEdepNeuron/joule)/ 
-    (fDetector->GetTotMassNeuron()/kg)<< "\n "  
+ << fEdepNeuron/MeV << "\n "  
  << "  " << std::setw(13) << "Soma:   " << std::setw(7) 
- << fEdepSoma/MeV<< " and "
- << std::setw(wid) << (fEdepSoma/joule)/ 
-    (fDetector->GetMassSomaTot()/kg)<< "\n " 
+ << fEdepSoma/MeV<< "\n " 
  << "  " << std::setw(13) << "Dendrites:  " << std::setw(7) 
- << fEdepDend/MeV<< " and "
- << std::setw(wid) << (fEdepDend/joule)/ 
-    (fDetector->GetMassDendTot()/kg)<< "\n " 
+ << fEdepDend/MeV << "\n " 
  << "  " << std::setw(13) << "Axon:   " << std::setw(7) 
- << fEdepAxon/MeV<< " and "
- << std::setw(wid) << (fEdepAxon/joule)/ 
-    (fDetector->GetMassAxonTot()/kg)  
+ << fEdepAxon/MeV  
  << G4endl;
    
   // compute mean Energy and Dose deposited in hit compartments
@@ -545,10 +533,10 @@ void Run::EndOfRun()
   {
   somaCompHit ++;
   somaCompEdep += fSoma3DEdep[i] ;
-  somaCompDose += fSoma3DEdep[i]/fDetector->GetMassSomacomp(i) ;
+  //somaCompDose += fSoma3DEdep[i]/fDetector->GetMassSomacomp(i) ;
   somaCompEdep2 += fSoma3DEdep[i]*fSoma3DEdep[i] ;
-  somaCompDose2 += (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i))*
-     (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i));
+  //somaCompDose2 += (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i))*
+  //   (fSoma3DEdep[i]/fDetector->GetMassSomacomp(i));
  /*G4double distSoma = 0.;
  //Fill ntuple #1
  analys->FillNtupleDColumn(1,0,i+1);
@@ -569,7 +557,7 @@ void Run::EndOfRun()
    // Edep in compartments 
    <<   fSoma3DEdep[i]/keV             << '\t' << "   "  
    // Dose in compartments
-   <<   (fSoma3DEdep[i]/joule)/(fDetector->GetMassSomacomp(i)/kg)
+   //<<   (fSoma3DEdep[i]/joule)/(fDetector->GetMassSomacomp(i)/kg)
    // Dose in whole structure of Soma  
    //<<   (fSoma3DEdep[i]/joule)/(fDetector->GetMassTotSo1()/kg)
    //<< '\t' << "   " 
@@ -604,10 +592,10 @@ void Run::EndOfRun()
   {
   DendCompHit ++;
   DendCompEdep += fDend3DEdep[i] ;
-  DendCompDose += fDend3DEdep[i]/fDetector->GetMassDendcomp(i) ;
+  //DendCompDose += fDend3DEdep[i]/fDetector->GetMassDendcomp(i) ;
   DendCompEdep2 += fDend3DEdep[i]*fDend3DEdep[i] ;
-  DendCompDose2 += (fDend3DEdep[i]/fDetector->GetMassDendcomp(i))*
-     (fDend3DEdep[i]/fDetector->GetMassDendcomp(i)); 
+  //DendCompDose2 += (fDend3DEdep[i]/fDetector->GetMassDendcomp(i))*
+  //   (fDend3DEdep[i]/fDetector->GetMassDendcomp(i)); 
  //Fill ntuple #2
  /*analys->FillNtupleDColumn(2,0,i+1);
  analys->FillNtupleDColumn(2,1,fDetector->GetDistDendsoma(i));
@@ -626,7 +614,7 @@ void Run::EndOfRun()
    <<   fDetector->GetDistADendSoma(i)<< '\t' << "   " 
    <<   fDetector->GetDistBDendSoma(i)<< '\t' << "   " 
    <<   fDend3DEdep[i]/keV   << '\t' << "   "  
-   <<   (fDend3DEdep[i]/joule)/(fDetector->GetMassDendcomp(i)/kg)
+   //<<   (fDend3DEdep[i]/joule)/(fDetector->GetMassDendcomp(i)/kg)
    << G4endl;    
   }
  }
@@ -657,10 +645,10 @@ void Run::EndOfRun()
   {
   AxonCompHit ++;
   AxonCompEdep += fAxon3DEdep[i] ;
-  AxonCompDose += fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i) ;
+  //AxonCompDose += fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i) ;
   AxonCompEdep2 += fAxon3DEdep[i]*fAxon3DEdep[i] ;
-  AxonCompDose2 += (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i))*
-     (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i)); 
+  //AxonCompDose2 += (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i))*
+  //   (fAxon3DEdep[i]/fDetector->GetMassAxoncomp(i)); 
  //Fill ntuple #3
  /*analys->FillNtupleDColumn(3,0,i+1);
  analys->FillNtupleDColumn(3,1,fDetector->GetDistAxonsoma(i));
@@ -678,7 +666,7 @@ void Run::EndOfRun()
    <<   fDetector->GetPosAxoncomp(i).z()<< '\t' << "   " 
    <<   fDetector->GetDistAxonsoma(i) << '\t' << "   "  
    <<   fAxon3DEdep[i]/keV             << '\t' << "   " 
-   <<   (fAxon3DEdep[i]/joule)/(fDetector->GetMassAxoncomp(i)/kg) 
+   //<<   (fAxon3DEdep[i]/joule)/(fDetector->GetMassAxoncomp(i)/kg) 
    << G4endl;    
   }
  } 
@@ -706,7 +694,7 @@ void Run::EndOfRun()
    << "  " << std::setw(13) << "Axon: " << std::setw(7) << AxonCompHit
    << " of total: "<< fDetector->GetnbAxoncomp() << "\n "    
    << G4endl;     
-
+/*
  G4cout << "\n Mean energy (keV) and dose (Gy) deposition in "
         << "hitting compartments :" << G4endl;   
  G4cout  
@@ -720,8 +708,8 @@ void Run::EndOfRun()
    << "  " << std::setw(13) << "Axon: " << std::setw(7) << AxonCompEdep/keV
    << " +- "<< rmsEdepA/keV << " and "
    << AxonCompDose/(joule/kg)<< " +- "<< rmsDoseA/(joule/kg)<< "\n "    
-   << G4endl;  
-    
+   << G4endl;  */
+  /*  
   // compute mean Energy and Dose deposited per event
   // 
   fEdepNeuron /= TotNbofEvents; fEdepNeuron_err /= TotNbofEvents;
@@ -735,15 +723,15 @@ void Run::EndOfRun()
   G4double rmsDose = fDoseNeuron_err - fDoseNeuron*fDoseNeuron;
   if (rmsDose>0.) rmsDose = std::sqrt(rmsDose);
   else            rmsDose = 0.;     
-  G4cout << "\n Mean energy (keV) and dose (Gy) deposition per event:" 
+  G4cout << "\n Mean energy (keV) deposition per event:" 
          << G4endl;  
   G4cout 
   << "  " << std::setw(13) << "Neuron:   " << std::setw(7) << fEdepNeuron/keV
   << " +- "<< rmsEdep/keV << " and "
   << std::setw(wid) << fDoseNeuron
   << " +- "<< rmsDose << "\n "   
-  << G4endl;
-  G4cout<< "\n Dendritic (or Axon) compartmental energy and dose deposits \n"
+  << G4endl; */
+  G4cout<< "\n Dendritic (or Axon) compartmental energy deposits \n"
   << " at the distance from Soma have been written into *.out files:" 
   << "\n Dend3DEdep.out, Axon3DEdep.out, Soma3DEdep.out"
   << "\n Outputs of energy deposition per event written in data file:" 

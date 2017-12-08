@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhysListFactory.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4PhysListFactory.hh 107319 2017-11-08 16:29:22Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -40,6 +40,8 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+
+class G4UImessenger;
 
 class G4PhysListFactory
 {
@@ -74,6 +76,7 @@ private:
   size_t nlists_hadr;
   size_t nlists_em;
   G4int verbose;
+  G4UImessenger* theMessenger;
 };
 
 #endif

@@ -52,8 +52,8 @@
 
 
 CexmcTrackPointsInCalorimeter::CexmcTrackPointsInCalorimeter(
-                        const G4String &  name, const CexmcSetup *  setup ) :
-    CexmcTrackPointsInLeftRightSet( name, setup )
+                        const G4String &  name, const CexmcSetup *  setup_ ) :
+    CexmcTrackPointsInLeftRightSet( name, setup_ )
 {
 }
 

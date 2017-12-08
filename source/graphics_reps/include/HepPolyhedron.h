@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h 101022 2016-11-04 08:25:50Z gcosmo $
+// $Id: HepPolyhedron.h 106123 2017-09-13 12:53:03Z gcosmo $
 //
 //
 // Class Description:
@@ -174,7 +174,7 @@
 #include "G4Transform3D.hh"
 
 #ifndef DEFAULT_NUMBER_OF_STEPS
-#define DEFAULT_NUMBER_OF_STEPS 72
+#define DEFAULT_NUMBER_OF_STEPS 24
 #endif
 
 class G4Facet {

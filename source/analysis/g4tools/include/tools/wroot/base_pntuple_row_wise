@@ -1,0 +1,233 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_base_pntuple_row_wise
+#define tools_wroot_base_pntuple_row_wise
+
+// pntuple = for parallel ntupling.
+
+#include "base_pntuple"
+
+#include "../ntuple_booking"
+
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+namespace tools {
+namespace wroot {
+
+class base_pntuple_row_wise : public base_pntuple {
+  typedef base_pntuple parent;
+public:
+  base_pntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                        const std::string& a_name,const std::string& a_title,
+                        uint32 a_basket_size,bool a_verbose)
+  :parent(a_out,a_seek_directory,a_name,a_title)
+  ,m_row_wise_branch(a_out,a_byte_swap,a_compression,a_seek_directory,"row_wise_branch","row_wise_branch",a_verbose)
+  {
+    m_row_wise_branch.set_basket_size(a_basket_size);
+  }
+  
+  base_pntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                        uint32 a_basket_size,
+	                const ntuple_booking& a_bkg,bool a_verbose)
+  :parent(a_out,a_seek_directory,a_bkg.name(),a_bkg.title())
+  ,m_row_wise_branch(a_out,a_byte_swap,a_compression,a_seek_directory,"row_wise_branch","row_wise_branch",a_verbose)
+  {
+    m_row_wise_branch.set_basket_size(a_basket_size);
+    
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    
+    tools_vforcit(column_booking,cols,it){
+
+#define TOOLS_WROOT_PNTUPLE_CREATE_COL(a__type) \
+      if((*it).cls_id()==_cid(a__type())) {\
+        a__type* user = (a__type*)(*it).user_obj();\
+        if(user) {\
+          if(!create_column_ref<a__type>((*it).name(),*user)) {\
+	    a_out << "tools::wroot::base_pntuple_row_wise : create_column_ref(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
+        } else {\
+          if(!create_column<a__type>((*it).name())) {\
+	    a_out << "tools::wroot::base_pntuple_row_wise : create_column(" << (*it).name() << ") failed." << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
+        }\
+      }
+	
+#define TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(a__type) \
+      if((*it).cls_id()==_cid_std_vector<a__type>()) {\
+        std::vector<a__type>* vec = (std::vector<a__type>*)(*it).user_obj();\
+        if(vec) {\
+          if(!create_column_vector_ref<a__type>((*it).name(),*vec)) {\
+            a_out << "tools::wroot::base_pntuple_row_wise :"\
+                  << " create_column_vector_ref failed for std::vector column " << sout((*it).name()) << "."\
+                  << std::endl;\
+            safe_clear<icol>(m_cols);\
+            return;\
+          }\
+        } else {\
+          if(!create_column_vector<a__type>((*it).name())) {\
+	    a_out << "tools::wroot::base_pntuple_row_wise :"\
+                  << " create_column_vector failed for std::vector column " << sout((*it).name()) << "."\
+	          << std::endl;\
+	    safe_clear<icol>(m_cols);\
+	    return;\
+	  }\
+        }\
+      }
+	
+           TOOLS_WROOT_PNTUPLE_CREATE_COL(char)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(short)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(int)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(float)
+      else TOOLS_WROOT_PNTUPLE_CREATE_COL(double)
+      
+      else if((*it).cls_id()==_cid(std::string())) {
+        std::string* user = (std::string*)(*it).user_obj();
+        if(user) {
+          if(!create_column_string_ref((*it).name(),*user)) {
+	    a_out << "tools::wroot::base_pntuple_row_wise : create_column_string_ref(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+	    return;
+	  }
+        } else {
+          if(!create_column_string((*it).name())) {
+	    a_out << "tools::wroot::base_pntuple_row_wise : create_column_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+	    return;
+	  }
+        }
+      }
+      
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(char)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(short)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(int)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(float)
+      else TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL(double)
+      
+      else if((*it).cls_id()==_cid_std_vector<std::string>()) {\
+        std::vector<std::string>* user = (std::vector<std::string>*)(*it).user_obj();
+        char sep = '\n';
+        if(user) {
+          if(!create_column_vector_string_ref((*it).name(),*user,sep)) {
+	    a_out << "tools::wroot::base_pntuple_row_wise :"
+                  << " create_column_vector_string_ref(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+	    return;
+	  }
+        } else {
+          if(!create_column_vector_string((*it).name(),std::vector<std::string>(),sep)) {
+	    a_out << "tools::wroot::base_pntuple_row_wise :"
+                  << " create_column_vector_string(" << (*it).name() << ") failed." << std::endl;
+	    safe_clear<icol>(m_cols);
+	    return;
+	  }
+        }
+      }
+      
+      // no leaf_store_class() defined for the other types.
+      
+      else {
+        a_out << "tools::wroot::base_pntuple_row_wise :"
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
+              << std::endl;
+        //throw
+        safe_clear<icol>(m_cols);
+        return;
+      }
+      
+#undef TOOLS_WROOT_PNTUPLE_CREATE_COL
+#undef TOOLS_WROOT_PNTUPLE_CREATE_VEC_COL
+    }
+  }
+
+  virtual ~base_pntuple_row_wise() {}
+protected:
+  base_pntuple_row_wise(const base_pntuple_row_wise& a_from)
+  :parent(a_from)
+  ,m_row_wise_branch(m_out,false,0,0,"row_wise_branch","row_wise_branch",false)
+  {}
+  base_pntuple_row_wise& operator=(const base_pntuple_row_wise&){return *this;}
+public:
+  template <class T>
+  column_ref<T>* create_column_ref(const std::string& a_name,const T& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_ref<T>* col = new column_ref<T>(m_row_wise_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column<T>* col = new column<T>(m_row_wise_branch,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string_ref* create_column_string_ref(const std::string& a_name,const std::string& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_string_ref* col = new column_string_ref(m_row_wise_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_string* create_column_string(const std::string& a_name,const std::string& a_def = std::string()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_string* col = new column_string(m_row_wise_branch,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string_ref* create_column_vector_string_ref(const std::string& a_name,
+                                                            const std::vector<std::string>& a_ref,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_vector_string_ref* col = new column_vector_string_ref(m_row_wise_branch,a_name,a_ref,a_sep);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  column_vector_string* create_column_vector_string(const std::string& a_name,const std::vector<std::string>& a_def,char a_sep) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    column_vector_string* col = new column_vector_string(m_row_wise_branch,a_name,a_def,a_sep);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column_ref<T>* create_column_vector_ref(const std::string& a_name,const std::vector<T>& a_ref) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_column_ref<T>* col = new std_vector_column_ref<T>(m_row_wise_branch,a_name,a_ref);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+  template <class T>
+  std_vector_column<T>* create_column_vector(const std::string& a_name,const std::vector<T>& a_def = std::vector<T>()) {
+    if(find_named<icol>(m_cols,a_name)) return 0;
+    std_vector_column<T>* col = new std_vector_column<T>(m_row_wise_branch,a_name,a_def);
+    if(!col) return 0;
+    m_cols.push_back(col);
+    return col;
+  }
+
+protected:
+  branch m_row_wise_branch;
+};
+
+}}
+
+#endif

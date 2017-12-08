@@ -76,9 +76,9 @@ G4GEMChannelVI::G4GEMChannelVI(G4int theA, G4int theZ)
   A13 = fG4pow->Z13(A);
 
   cBarrier = new G4CoulombBarrier(A, Z);
-  pairingCorrection = G4PairingCorrection::GetInstance();
 
   nData = G4NuclearLevelData::GetInstance();
+  pairingCorrection = nData->GetPairingCorrection();
   levelManager = nData->GetLevelManager(Z, A);
   maxLevelE = levelManager->MaxLevelEnergy();
 
@@ -332,8 +332,8 @@ G4double G4GEMChannelVI::FindLevel(const G4LevelManager* man,
   if(idx + 1 < idxm) {
     G4double e2 = man->LevelEnergy(idx+1);
     if(e2 <= exclim) {
-      G4int s1 = std::abs(man->SpinParity(idx))+1;
-      G4int s2 = std::abs(man->SpinParity(idx+1))+1;
+      G4int s1 = man->SpinTwo(idx)+1;
+      G4int s2 = man->SpinTwo(idx+1)+1;
       G4double pr = (G4double)s1/(G4double)(s1 + s2);
       pr = (exc - e1 <= e2 - exc) ? 1.0 - (1.0 - pr)*2*(exc - e1)/(e2 - e1) :
 	2*pr*(e2 - exc)/(e2 - e1);

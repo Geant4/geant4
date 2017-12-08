@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4WentzelVIModel.cc 104802 2017-06-19 07:11:40Z gcosmo $
+// $Id: G4WentzelVIModel.cc 105734 2017-08-16 12:58:28Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -89,11 +89,11 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool comb, const G4String& nam)
   invsqrt12 = 1./sqrt(12.);
   tlimitminfix = 1.e-6*mm;
   lowEnergyLimit = 1.0*eV;
-  particle = 0;
+  particle = nullptr;
   nelments = 5;
   xsecn.resize(nelments);
   prob.resize(nelments);
-  wokvi = nullptr;
+  wokvi = new G4WentzelOKandVIxSection(isCombined); 
   fixedCut = -1.0;
 
   minNCollisions = 10;
@@ -123,8 +123,6 @@ G4WentzelVIModel::~G4WentzelVIModel()
 void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
                                   const G4DataVector& cuts)
 {
-  if(!wokvi) { wokvi = new G4WentzelOKandVIxSection(isCombined); }
-
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
@@ -138,7 +136,7 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   //	 << " " << this << " " << wokvi << G4endl;
 
   wokvi->Initialise(p, cosThetaMax);
-  /*  
+  /* 
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
          << " SingScatFactor= " << ssFactor
@@ -229,7 +227,7 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
                              G4double cutEnergy, G4double)
 {
   G4double cross = 0.0;
-  if(p != particle) { SetupParticle(p); }
+  SetupParticle(p); 
   if(kinEnergy < lowEnergyLimit) { return cross; }
   if(!CurrentCouple()) {
     G4Exception("G4WentzelVIModel::ComputeCrossSectionPerAtom", "em0011",
@@ -256,7 +254,12 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
 
 void G4WentzelVIModel::StartTracking(G4Track* track)
 {
-  SetupParticle(track->GetDynamicParticle()->GetDefinition());
+  /*
+  G4cout << "G4WentzelVIModel::StartTracking " << track << "  " << this << "  "
+	 << track->GetParticleDefinition()->GetParticleName() 
+	 << "   workvi: " << wokvi << G4endl; 
+  */
+  SetupParticle(track->GetParticleDefinition());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -764,8 +767,8 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume(G4double cosTheta)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel:: ComputeSecondMoment(const G4ParticleDefinition* p,
-                                                G4double kinEnergy)
+G4double G4WentzelVIModel::ComputeSecondMoment(const G4ParticleDefinition* p,
+					       G4double kinEnergy)
 {
   G4double xs = 0.0;
 

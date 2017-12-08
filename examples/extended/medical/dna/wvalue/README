@@ -22,8 +22,6 @@ and the total number of ionisations.
 
 It is adapted from svalue.
 
-*** It is a preliminary version which might be buggy ***
-
 This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:

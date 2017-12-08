@@ -49,8 +49,8 @@
 
 
 CexmcPrimaryGeneratorActionMessenger::CexmcPrimaryGeneratorActionMessenger(
-        CexmcPrimaryGeneratorAction *  primaryGeneratorAction ) :
-    primaryGeneratorAction( primaryGeneratorAction ),
+        CexmcPrimaryGeneratorAction *  primaryGeneratorAction_ ) :
+    primaryGeneratorAction( primaryGeneratorAction_ ),
     fwhmPosX( NULL ), fwhmPosY( NULL ), fwhmDirX( NULL ), fwhmDirY( NULL ),
     fwhmMomentumAmp( NULL )
 {

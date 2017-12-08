@@ -527,7 +527,7 @@ public:
    {size_t atbn = m_atbs.size();
     for(size_t index=0;index<atbn;index++) {
       std::string& value = m_atbs[index].second;
-      tools::replace(value,a_old,a_new);
+      replace_(value,a_old,a_new);
     }}
   
     tools_lforit(ielem*,m_childs,it) {
@@ -659,9 +659,9 @@ public:
             a_out << value;
           } else {
             a_out << std::endl;
-            tools::replace(value,"\\n\\","@OnX@");
-            tools::replace(value,"@OnX@","\\n\\\n");
-            tools::strip(value,tools::trailing,' ');
+            replace_(value,"\\n\\","@OnX@");
+            replace_(value,"@OnX@","\\n\\\n");
+            strip(value,trailing,' ');
             a_out << value;
             size_t l = value.size();
             if(l && value[l-1]!='\n') a_out << std::endl;
@@ -802,7 +802,7 @@ public:
   bool element_value_boolean(const std::string& a_name,bool& a_value) const {
     std::string value;
     if(!element_value(a_name,value)) return false;
-    return tools::to(value,a_value);
+    return to(value,a_value);
   }
 
   void update_tree(const tree& a_old) {

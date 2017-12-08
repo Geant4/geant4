@@ -1,4 +1,4 @@
-$Id: History 104457 2017-05-31 15:52:37Z gcosmo $
+$Id: History 107364 2017-11-09 10:53:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,96 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 November 17: D.Sawkey (emutils-V10-03-31)
+ - G4LossTableManager, G4VEmProcess, G4VEnergyLossProcess,
+   G4VMultipleScattering - fix html documentation
+
+07 November 17: V.Ivant (emutils-V10-03-30)
+- G4EmParameters - fixed SetDeexcitationIgnoreCut() method
+
+03 November 17: V.Ivant (emutils-V10-03-28)
+- G4EmParameters - set lateralDisplacementAlg96 true by default,
+    fixed typo in dump of parameters 
+
+03 November 17: V.Ivant (emutils-V10-03-27)
+- G4EmParametersMessenger - atomic de-excitation commands 
+    allowed in G4State_Init
+
+31 October 17: D.Sawkey (emutils-V10-03-26)
+- G4LossTableManager: formatting html documentation
+
+25 October 17: V.Ivant (emutils-V10-03-25)
+- G4VEmProcess - select models for ions by using energy per nucleon
+
+19 October 17: D.Sawkey (emutils-V10-03-24)
+- retry of previous; change PrintHtml to DumpHtml
+
+18 October 17: D.Sawkey (emutils-V10-03-23)
+- G4LossTableManager: add new method PrintHtml to generate html doc.
+- G4VEmProcess, G4VEnergyLossPRocess, G4VMultipleScattering,
+  G4ModelManager, G4VEmModel: modify doc outputs incl. StreamInfo,
+  StreamProcessInfo, DumpModelList, to set end-of-line string.
+
+12 October 17: V.Ivant (emutils-V10-03-22)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - added
+  new protected method StreamProcessInfo(..) to be used by derived 
+  processes
+- G4EmModelManager - use general stream instead of G4cout in the
+  method DumpModelList(..)
+- G4EmModelManager - use optimal header
+
+11 October 17: V.Ivant (emutils-V10-03-21)
+- G4VEmProcess - added method StreamInfo(..) allowing to print in 
+    any stream, initialisation printout does not changed
+- G4EmConfigurator - minor cleanup
+
+10 October 17: V.Ivant (emutils-V10-03-20)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - added
+    initialisation printout for DNA particles 
+
+09 October 17: V.Ivant (emutils-V10-03-19)
+- G4EmParameters, G4EmParametersMessenger - added extra parameters
+
+19 September 17: V.Ivant (emutils-V10-03-18)
+- G4VEnergyLossProcess, G4VEmFluctuationModel - return back to tag 16
+
+31 August 17: V.Ivant (emutils-V10-03-17)
+- G4VMultipleScattering - improved initialisation printout
+- G4VEnergyLossProcess, G4VEmFluctuationModel - added possibility 
+    of smearing of the last step length of low-energy charged particle
+
+21 August 17: V.Ivant (emutils-V10-03-16)
+- G4EmParameters - fully thread safe singleton
+
+18 August 17: V.Ivant (emutils-V10-03-15)
+- G4EmDataHandler - class to keep G4PhysicsTables in easy way
+- G4VMultipleScattering, G4VEmProcess, G4VEnergyLossProcess - code 
+    cleanup/simplification
+
+16 August 17: V.Ivant (emutils-V10-03-14)
+- G4EmParametersMessenger, G4EmParameters - added parameters
+    "DNAFast", "DNAStationary", "DNAMsc" Get/Set methods and UI command
+
+04 August 17: V.Ivant (emutils-V10-03-13)
+- G4VMultipleScattering, G4VMscModel, G4VEnergyLossProcess - improved
+    comments to model interface
+- G4VMultipleScattering - more safe access to models in run time
+
+03 August 17: V.Ivant (emutils-V10-03-12)
+- G4VMultipleScattering, G4VMscModel, G4VEnergyLossProcess,
+  G4VEmProcess, G4EmConfigurator, G4EmConfigurator - make 
+   a new scheme of model initialisation in order do not create
+   extra fake model objects and reduce number of calls in run time
+
+18 July 17: G.Cosmo (emutils-V10-03-11)
+- Mark as 'override' ProcessDescription() method in G4VEmProcess,
+  G4VEnergyLossProcess and G4VMultipleScattering.
+
 31 May 17: V.Ivant (emutils-V10-03-10)
 - G4VEmModel - added triplet model pointer and Get/Set methods
 
 26 May 17: V.Ivant (emutils-V10-03-09)
-- G4EmSaturation - fixed typo
+- G4EmSaturation - fixed typo in printout
 
 25 May 17: V.Ivant (emutils-V10-03-08)
 - G4VEmProcess - added DNA ionisation process for hydrogen and helium

@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7-Nov-2017, T. Koi	(phys-builders-V10-03-06)
+- G4NeutronLENDBuilder: Modify setting of selection of target data
+
 26-Apr-2017, Andrea Dotti       (phys-builders-V10-03-03, -04 -05)
 - Next step in migration to new design to properly clean memory in MT mode
   G4BuilderInterface renamed G4PhysicsBuilderInterface and moved to run

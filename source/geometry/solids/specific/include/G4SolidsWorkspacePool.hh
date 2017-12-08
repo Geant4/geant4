@@ -30,6 +30,8 @@
 #ifndef G4SOLIDSWORKSPACEPOOL_HH
 #define G4SOLIDSWORKSPACEPOOL_HH
 
+#include "geomwdefs.hh"
+
 class G4SolidsWorkspace;
 
 class G4SolidsWorkspacePool
@@ -69,7 +71,7 @@ class G4SolidsWorkspacePool
  private: 
      static G4SolidsWorkspacePool* thePool;
 
-     static G4ThreadLocal G4SolidsWorkspace* fMyWorkspace;
+     G4GEOM_DLL static G4ThreadLocal G4SolidsWorkspace* fMyWorkspace;
      // The thread's workspace - if assigned.
 };
 

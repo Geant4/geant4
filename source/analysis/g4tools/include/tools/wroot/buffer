@@ -234,6 +234,7 @@ public:
 
     std::map<ibo*,uint32>::const_iterator it = m_objs.find((ibo*)&a_obj);
     if(it!=m_objs.end()) {
+
       uint32 objIdx = (*it).second;
 
       unsigned int offset = (unsigned int)(m_pos-m_buffer);
@@ -331,6 +332,10 @@ public:
     return true;
   }
 
+  void reset_objs_map() {
+    m_objs.clear();
+    //m_clss.clear();
+  }
 protected:
   static short kMaxVersion() {return 0x3FFF;}
   static uint32 kMaxMapCount() {return 0x3FFFFFFE;}

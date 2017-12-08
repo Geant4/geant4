@@ -7,7 +7,7 @@
                           ----------------------
 
 
-Authors: M. Batmunkh *(a,b), O.V. Belov *(a)
+Authors: M. Batmunkh *(a,b), O.V. Belov *(a), L. Bayarchimeg (a), O. Lkhagva (b)
 
 (a) Laboratory of Radiation Biology, Joint Institute for Nuclear Research (JINR), 6 Joliot-Curie St., 141980 Dubna, Moscow Region, Russia
 (b) Division of Natural Sciences, National University of Mongolia (NUM), 1 University St., 210646 Ulaanbaatar, Mongolia
@@ -152,7 +152,6 @@ Dend3DEdep.out, Axon3DEdep.out and Soma3DEdep.out files for given dose:
 - the position (x, y, z in micrometre) of compartments traversed by particle track.
 - the Axon and Dendrite (basal and apical) distance of compartments from Soma (in micrometre).
 - the energy deposition in compartments (in kiloelectronVolt).
-- the dose deposition in compartments (in Gray).
 
 This file can be easily analysed using for example the provided ROOT macro 
 file plotDend.C; to do so:

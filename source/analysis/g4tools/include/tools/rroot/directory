@@ -175,7 +175,7 @@ public:
     return true;
   }
   void clear_keys() {
-    clear<key>(m_keys);
+    safe_clear<key>(m_keys);
   }
 protected:
   ifile& m_file;

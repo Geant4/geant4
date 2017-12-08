@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceConfigurator.cc 103005 2017-03-08 08:08:35Z gcosmo $
+// $Id: G4ImportanceConfigurator.cc 105159 2017-07-14 09:17:32Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceConfigurator
@@ -76,7 +76,6 @@ G4ImportanceConfigurator(G4String worldvolumeName,
 
 G4ImportanceConfigurator::~G4ImportanceConfigurator()
 {
-  G4cout << "G4ImportanceConfigurator:: destructor " << G4endl;
   if (fImportanceProcess)
   {
     fPlacer.RemoveProcess(fImportanceProcess);

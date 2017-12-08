@@ -25,17 +25,15 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: DetectorConstruction.cc 87359 2014-12-01 16:04:27Z gcosmo $
 //
 /// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
  
 #include "DetectorConstruction.hh"
-#include "G4SDManager.hh"
 #include "TrackerSD.hh"
 
 #include "G4Material.hh"
@@ -48,19 +46,23 @@
 #include "G4GeometryManager.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4UserLimits.hh"
+#include "G4UnitsTable.hh"
+
+#include "G4SDManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::DetectorConstruction()
 :G4VUserDetectorConstruction()
 {
+  fpTrackingCut = 11.*eV; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 DetectorConstruction::~DetectorConstruction()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
@@ -92,7 +94,7 @@ void DetectorConstruction::DefineMaterials()
 
 G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
 {
-  G4double worldLength = 200*um;
+  G4double worldLength = 10*m;
 
   // World
 
@@ -123,6 +125,11 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes()
                  0,               // copy number
                  false); // checking overlaps 
   
+  worldLV->SetUserLimits(new G4UserLimits(DBL_MAX,DBL_MAX,DBL_MAX,
+                             fpTrackingCut));    
+
+  PrintParameters();
+  
   return worldPV;
 }
 
@@ -136,9 +143,24 @@ void DetectorConstruction::ConstructSDandField()
   
   TrackerSD* aTrackerSD = new TrackerSD(trackerChamberSDname,
                                             "TrackerHitsCollection");
-  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD); 
+  
+  G4SDManager::GetSDMpointer()->AddNewDetector(aTrackerSD);
+
   // Setting aTrackerSD to all logical volumes with the same name 
   // of "Chamber_LV".
   SetSensitiveDetector("World_LV", aTrackerSD, true);
 
 }  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::PrintParameters() const
+{
+  G4cout << "\n---------------------------------------------------------\n";
+  G4cout << "---> The tracking cut is set to " 
+         << G4BestUnit(fpTrackingCut,"Energy") << G4endl;
+  G4cout << "\n---------------------------------------------------------\n";
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

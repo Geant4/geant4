@@ -96,7 +96,7 @@ protected:
   unsigned int fCheckSum;    //checksum of original class
   int fStreamedClassVersion; //Class version identifier
   //int fNumber;               //!Unique identifier
-  ObjArray<streamer_element> fElements; //Array of TStreamerElements
+  obj_array<streamer_element> fElements; //Array of TStreamerElements
 };
 
 }}

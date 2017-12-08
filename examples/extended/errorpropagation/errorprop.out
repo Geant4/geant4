@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x185f970
+ creating G4RunManagerKernel 0x25ef5c0
 
 The materials defined are : 
 
@@ -81,15 +81,15 @@ Current application state is PreInit
 Warning : Geant4 kernel is not Init state : Assuming Init state.
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x1aa83b0G4ErrorPhysicsList:: particle process manager e+ = 0x1aaabb0
-0x1aa8220G4ErrorPhysicsList:: particle process manager e- = 0x1aac1a0
-0x1aa7f60G4ErrorPhysicsList:: particle process manager gamma = 0x1aac410
-0x1aa9a60G4ErrorPhysicsList:: particle process manager geantino = 0x1aac660
-0x1aa85c0G4ErrorPhysicsList:: particle process manager mu+ = 0x1aac8b0
-0x1aa8a60G4ErrorPhysicsList:: particle process manager mu- = 0x1aacb00
-0x1aa8f00G4ErrorPhysicsList:: particle process manager pi+ = 0x1aacd50
-0x1aa9380G4ErrorPhysicsList:: particle process manager pi- = 0x1aacfa0
-0x1aa9800G4ErrorPhysicsList:: particle process manager proton = 0x1aad1f0
+0x283cd30G4ErrorPhysicsList:: particle process manager e+ = 0x283f300
+0x283cbe0G4ErrorPhysicsList:: particle process manager e- = 0x2840cf0
+0x283ca90G4ErrorPhysicsList:: particle process manager gamma = 0x2840f20
+0x283e030G4ErrorPhysicsList:: particle process manager geantino = 0x2841170
+0x283cf10G4ErrorPhysicsList:: particle process manager mu+ = 0x28413c0
+0x283d270G4ErrorPhysicsList:: particle process manager mu- = 0x2841610
+0x283d640G4ErrorPhysicsList:: particle process manager pi+ = 0x2841860
+0x283da20G4ErrorPhysicsList:: particle process manager pi- = 0x2841ab0
+0x283de00G4ErrorPhysicsList:: particle process manager proton = 0x2841d00
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

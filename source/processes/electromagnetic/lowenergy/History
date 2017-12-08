@@ -1,4 +1,4 @@
-$Id: History 104801 2017-06-19 07:10:39Z gcosmo $
+$Id: History 107157 2017-11-03 11:27:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03.11.1017 V.Ivanchenko, emlowen-V10-03-19
+- G4RayleighScattering - added C++11 keywords to fix compilation warning at clang
+
+02.11.2017 V.Ivanchenko, emlowen-V10-03-18
+- G4LivermorePhotoElectricModel - fixed messages in the case of  G4Exception
+
+01.11.1017 D.Sawkey, emlowen-V10-03-17
+- G4RayleighScattering - add ProcessDescription
+
+20.10.2017 V.Ivanchenko, emlowen-V10-03-16
+- G4LivermorePhotoElectricModel - (M. Bandieramonte) changed dataset
+    to G4EMLOW7.2, where parameterisation is in the livermore/phot_epics2014
+
+10.10.2017 L.Pandola, emlowen-V10-03-15
+- added protection against (rare) infinite loops in 
+  G4PenelopeOscillatorManager, happening for materials made by >20 elements
+
+14.09.2017 V.Ivanchenko, emlowen-V10-03-14
+- G4hICRU49He - fixed Coverity warning
+
+01.09.2017 V.Ivanchenko, emlowen-V10-03-13
+- G4LivermorePhotoElectricModel - (M. Bandieramonte) new method of 
+    parameterisations based on epics2014 data (required G4EMLOW7.1)
+
+03.08.2017 V.Ivanchenko, emlowen-V10-03-12
+- G4MicroElecElastic, G4MicroElecInelastic - make coherent
+    initialsation of models
+
+02.08.2017 V.Ivanchenko, emlowen-V10-03-11
+- G4LowECapture - added scaling of energy threshold for ions
 
 17.06.2017 S.Incerti, emlowen-V10-03-10
 - bugzilla 1980 and C++ nullptr in G4LivermorePhotoElectricModel
@@ -44,8 +75,8 @@ committal in the CVS repository !
 10.05.2017 V.Ivanchenko, emlowen-V10-03-03
 - G4CrossSectionDataSet, G4MuElecCrossSectionDataSet - fixed gcc 7.1 warnings
 
-30.01.2016 JMC Brow, S. Incerti, emlowen-V10-03-02
-- fix of G4LowEPPolarizedComptonModel
+30.01.2017 JMC Brow, S. Incerti, emlowen-V10-03-02
+- G4LowEPPolarizedComptonModel - fixed FPE in comptation of std::acos
 
 19.12.2016 S. Incerti, emlowen-V10-03-01
 - extended coverage of shell ionisation models by M. Reis and A. Taborda

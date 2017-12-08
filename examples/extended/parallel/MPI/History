@@ -9,6 +9,16 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 November 2017 B.Morgan (MPI-V10-03-02)
+- Repace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+20 Sep 2017 B. Morgan (MPI-V10-03-01)
+- Migrate ctests definitions file to base directory
+- Update to provide tests to build/test G4mpi and each
+  example without requiring obsolete GEANT4_BUILD_EXAMPLES
+  switch.
+- COWORKS with ctests-V10-03-12
+
 5 Oct 2016 A. Dotti (MPI-V10-02-02)
 - Porting of scoring merging to new G4StatDouble based hits
  

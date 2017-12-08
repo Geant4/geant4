@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc 97800 2016-06-13 12:14:40Z gcosmo $
+// $Id: G4Decay.cc 105727 2017-08-16 12:47:05Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -65,7 +65,7 @@ G4Decay::G4Decay(const G4String& processName)
 				verboseLevel(1),
                                 HighestValue(20.0),
 				fRemainderLifeTime(-1.0),
-                                pExtDecayer(0)
+                                pExtDecayer(nullptr)
 {
   // set Process Sub Type
   SetProcessSubType(static_cast<int>(DECAY));
@@ -81,7 +81,7 @@ G4Decay::G4Decay(const G4String& processName)
 
 G4Decay::~G4Decay()
 {
-  if (pExtDecayer) {
+  if (pExtDecayer != nullptr) {
     delete pExtDecayer;
   }
 }
@@ -198,17 +198,17 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
 
   //check if thePreAssignedDecayProducts exists
   const G4DecayProducts* o_products = (aParticle->GetPreAssignedDecayProducts());
-  G4bool isPreAssigned = (o_products != 0);   
-  G4DecayProducts* products = 0;
+  G4bool isPreAssigned = (o_products != nullptr);   
+  G4DecayProducts* products = nullptr;
 
   // decay table
   G4DecayTable   *decaytable = aParticleDef->GetDecayTable();
  
   // check if external decayer exists
-  G4bool isExtDecayer = (decaytable == 0) && (pExtDecayer !=0);
+  G4bool isExtDecayer = (decaytable == nullptr) && (pExtDecayer != nullptr);
 
   // Error due to NO Decay Table 
-  if ( (decaytable == 0) && !isExtDecayer &&!isPreAssigned ){
+  if ( (decaytable == nullptr) && !isExtDecayer && !isPreAssigned ){
     if (GetVerboseLevel()>0) {
       G4cout <<  "G4Decay::DoIt  : decay table not defined  for ";
       G4cout << aParticle->GetDefinition()->GetParticleName()<< G4endl;
@@ -246,35 +246,38 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
     // wide resonance. However, if this is the case, and the channel is
     // accepted, then the masses of the resonance daughter particles will
     // be sampled by taking into account their widths.
-    G4VDecayChannel* decaychannel = 0;
+    G4VDecayChannel* decaychannel = nullptr;
     G4double massParent = aParticle->GetMass();
     decaychannel = decaytable->SelectADecayChannel(massParent);
-    if ( decaychannel ==0) {
+    if ( decaychannel == nullptr) {
       // decay channel not found
 	   G4ExceptionDescription ed;
       ed << "Can not determine decay channel for " 
-		   << aParticleDef->GetParticleName() << G4endl 
-		   << "  mass of dynamic particle: " << massParent/GeV << " (GEV)" << G4endl
-			<< "  dacay table has " << decaytable->entries() << " entries" << G4endl;
+	 << aParticleDef->GetParticleName() << G4endl 
+	 << "  mass of dynamic particle: " 
+	 << massParent/GeV << " (GEV)" << G4endl
+	 << "  dacay table has " << decaytable->entries() 
+	 << " entries" << G4endl;
       G4double checkedmass=massParent;
       if (massParent < 0.) {
-			checkedmass=aParticleDef->GetPDGMass();
-			ed << "Using PDG mass ("<<checkedmass/GeV << "(GeV)) in IsOKWithParentMass" << G4endl;	
-		}
-		for (G4int ic =0;ic <decaytable->entries();++ic) {
-		  G4VDecayChannel * dc= decaytable->GetDecayChannel(ic);
-   	  ed << ic << ": BR " << dc->GetBR() << ", IsOK? " 
-			  << dc->IsOKWithParentMass(checkedmass)
-			  << ", --> "; 
-		  G4int ndaughters=dc->GetNumberOfDaughters();
-		  for (G4int id=0;id<ndaughters;++id) {
-			  if (id>0) ed << " + ";   // seperator, except for first
-			  ed << dc->GetDaughterName(id);
-		  }
-		  ed << G4endl;
-		}
+	checkedmass=aParticleDef->GetPDGMass();
+	ed << "Using PDG mass ("<<checkedmass/GeV 
+	   << "(GeV)) in IsOKWithParentMass" << G4endl;	
+      }
+      for (G4int ic =0;ic <decaytable->entries();++ic) {
+	G4VDecayChannel * dc= decaytable->GetDecayChannel(ic);
+	ed << ic << ": BR " << dc->GetBR() << ", IsOK? " 
+	   << dc->IsOKWithParentMass(checkedmass)
+	   << ", --> "; 
+	G4int ndaughters=dc->GetNumberOfDaughters();
+	for (G4int id=0;id<ndaughters;++id) {
+	  if (id>0) ed << " + ";   // seperator, except for first
+	  ed << dc->GetDaughterName(id);
+	}
+	ed << G4endl;
+      }
       G4Exception("G4Decay::DoIt", "DECAY003", FatalException,ed);
-	 } else {
+    } else {
       // execute DecayIt() 
 #ifdef G4VERBOSE
       G4int temp = decaychannel->GetVerboseLevel();
@@ -353,35 +356,35 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   G4int index;
   G4ThreeVector currentPosition;
   const G4TouchableHandle thand = aTrack.GetTouchableHandle();
-  for (index=0; index < numberOfSecondaries; index++)
-  {
-     // get current position of the track
-     currentPosition = aTrack.GetPosition();
-     // create a new track object
-     G4Track* secondary = new G4Track( products->PopProducts(),
+  for (index=0; index < numberOfSecondaries; index++){
+    // get current position of the track
+    currentPosition = aTrack.GetPosition();
+    // create a new track object
+    G4Track* secondary = new G4Track( products->PopProducts(),
 				      finalGlobalTime ,
 				      currentPosition );
-     // switch on good for tracking flag
-     secondary->SetGoodForTrackingFlag();
-     secondary->SetTouchableHandle(thand);
-     // add the secondary track in the List
-     fParticleChangeForDecay.AddSecondary(secondary);
+    // switch on good for tracking flag
+    secondary->SetGoodForTrackingFlag();
+    secondary->SetTouchableHandle(thand);
+    // add the secondary track in the List
+    fParticleChangeForDecay.AddSecondary(secondary);
   }
   delete products;
-
+  
   // Kill the parent particle
   fParticleChangeForDecay.ProposeTrackStatus( fStopAndKill ) ;
   fParticleChangeForDecay.ProposeLocalEnergyDeposit(energyDeposit); 
   fParticleChangeForDecay.ProposeLocalTime( finalLocalTime );
-
+  
   // Clear NumberOfInteractionLengthLeft
   ClearNumberOfInteractionLengthLeft();
-
+  
   return &fParticleChangeForDecay ;
 } 
 
 void G4Decay::DaughterPolarization(const G4Track& , G4DecayProducts* )
 {
+  // empty implementation
 }
 
 
@@ -514,3 +517,9 @@ G4VParticleChange* G4Decay::PostStepDoIt(
   }
 }
 
+void G4Decay::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << GetProcessName() << ": Decay of particles. \n"
+	  << "kinematics of daughters are dertermined by DecayChannels " 
+          << " or by PreAssignedDecayProducts\n";
+}

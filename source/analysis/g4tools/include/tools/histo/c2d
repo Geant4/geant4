@@ -23,38 +23,37 @@ public:
   bool set_title(const std::string&);
   unsigned int dimension() const {return 2;}
   bool reset();
-  unsigned int entries() const;
+  unsigned int entries() const { return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();}
 public:
-  double sum_of_weights() const;
+  double sum_of_weights() const { return (m_histo ? m_histo->sum_bin_heights() : m_Sw);}
   bool convert_to_histogram();
-  bool is_converted() const;
+  bool is_converted() const {return m_histo ? true : false;}
   bool scale(double);
 public:
   bool fill(double,double,double = 1);
-  double lower_edge_x() const;
-  double upper_edge_x() const;
-  double lower_edge_y() const;
-  double upper_edge_y() const;
-  double value_x(unsigned int) const;
-  double value_y(unsigned int) const;
-  double weight(unsigned int) const;
-  double mean_x() const;
-  double mean_y() const;
+  double lower_edge_x() const {return m_histo ? m_histo->axis_x().lower_edge() : m_lower_x;}
+  double lower_edge_y() const { return m_histo ? m_histo->axis_y().lower_edge() : m_lower_y;}
+  double upper_edge_x() const { return m_histo ? m_histo->axis_x().upper_edge() : m_upper_x;}
+  double upper_edge_y() const { return m_histo ? m_histo->axis_y().upper_edge() : m_upper_y;}
+  double value_x(unsigned int aIndex) const { return m_histo ? 0 : m_xs[aIndex];}
+  double value_y(unsigned int aIndex) const { return m_histo ? 0 : m_ys[aIndex];}
+  double weight(unsigned int aIndex) const { return m_histo ? 0 : m_ws[aIndex];}
+  double mean_x() const {return m_histo ? m_histo->mean_x() : (m_Sw?m_Sxw/m_Sw:0);}
+  double mean_y() const {return m_histo ? m_histo->mean_y() : (m_Sw?m_Syw/m_Sw:0);}
   double rms_x() const;
   double rms_y() const;
-  bool convert(unsigned int,double,double,
-               unsigned int,double,double);
+  bool convert(unsigned int,double,double,unsigned int,double,double);
   bool convert(const std::vector<double>&,const std::vector<double>&);
   const histo::h2d& histogram() const;
-  bool fill_histogram(histo::h2d& a_histo) const {
+  template <class HISTO>
+  bool fill_histogram(HISTO& a_histo) const {
     size_t number = m_xs.size();
     for(size_t index=0;index<number;index++) {
       if(!a_histo.fill(m_xs[index],m_ys[index],m_ws[index])) return false;
     }
     return true;
   }
-  bool set_conversion_parameters(unsigned int,double,double,  
-                                 unsigned int,double,double);
+  bool set_conversion_parameters(unsigned int,double,double,unsigned int,double,double);
 
   bool set_histogram(h2d* a_histo){ //we take ownership of a_histo.
     reset();
@@ -63,7 +62,7 @@ public:
   }
 public:
   c2d();
-  c2d(const std::string&,int=-1);
+  c2d(const std::string&,int=base_cloud::UNLIMITED());
   virtual ~c2d(){delete m_histo;}
 public:
   c2d(const c2d& a_from)
@@ -117,6 +116,13 @@ public:
     }
     return *this;
   }
+public: //AIDA API
+  double lowerEdgeX() const {return lower_edge_x();}
+  double lowerEdgeY() const {return lower_edge_y();}
+  double upperEdgeX() const {return upper_edge_x();}
+  double upperEdgeY() const {return upper_edge_y();}
+  template <class HISTO>
+  bool fillHistogram(HISTO& a_histo) const {return fill_histogram<HISTO>(a_histo);}
 protected:
   void clear();
 protected:
@@ -186,9 +192,6 @@ c2d::c2d(const std::string& a_title,int aLimit)
 {
   set_title(a_title);
 }
-
-inline
-bool c2d::is_converted() const {return m_histo ? true : false;}
 
 inline
 void c2d::clear(){
@@ -335,53 +338,6 @@ const h2d& c2d::histogram() const {
   return *m_histo;
 }
 
-inline
-unsigned int c2d::entries() const { 
-  return m_histo ? m_histo->all_entries() : (unsigned int)m_ws.size();
-}
-
-inline
-double c2d::sum_of_weights() const { 
-  return (m_histo ? m_histo->sum_bin_heights() : m_Sw);
-}
-
-inline
-double c2d::lower_edge_x() const {
-  return m_histo ? m_histo->axis_x().lower_edge() : m_lower_x;
-}
-inline
-double c2d::lower_edge_y() const { 
-  return m_histo ? m_histo->axis_y().lower_edge() : m_lower_y;
-}
-inline
-double c2d::upper_edge_x() const { 
-  return m_histo ? m_histo->axis_x().upper_edge() : m_upper_x;
-}
-inline
-double c2d::upper_edge_y() const { 
-  return m_histo ? m_histo->axis_y().upper_edge() : m_upper_y;
-}
-inline
-double c2d::value_x(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_xs[aIndex];
-}
-inline
-double c2d::value_y(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_ys[aIndex];
-}
-inline
-double c2d::weight(unsigned int aIndex) const { 
-  return m_histo ? 0 : m_ws[aIndex];
-}
-
-inline
-double c2d::mean_x() const {
-  return m_histo ? m_histo->mean_x() : (m_Sw?m_Sxw/m_Sw:0);
-}
-inline
-double c2d::mean_y() const {
-  return m_histo ? m_histo->mean_y() : (m_Sw?m_Syw/m_Sw:0);
-}
 inline
 double c2d::rms_x() const {
   double rms = 0; //FIXME nan.

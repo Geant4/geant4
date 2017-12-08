@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.cc 97248 2016-05-30 15:00:11Z gcosmo $
+// $Id: G4NistElementBuilder.cc 105820 2017-08-22 08:03:26Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -59,6 +59,10 @@
 #include "G4NistElementBuilder.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+
+#ifdef G4MULTITHREADED
+G4Mutex G4NistElementBuilder::nistElementMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -103,8 +107,14 @@ G4Element* G4NistElementBuilder::FindOrBuildElement(G4int Z, G4bool)
 {
   G4Element* anElement = FindElement(Z);
   if(anElement == nullptr && Z > 0 && Z < maxNumElements) {
-    anElement = BuildElement(Z);
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&nistElementMutex);
+#endif
+    if(elmIndex[Z] < 0) { anElement = BuildElement(Z); }
     if(anElement) { elmIndex[Z] = anElement->GetIndex(); }
+#ifdef G4MULTITHREADED
+    G4MUTEXUNLOCK(&nistElementMutex);
+#endif
   }
   return anElement;
 }
@@ -127,7 +137,14 @@ G4NistElementBuilder::FindOrBuildElement(const G4String& symb, G4bool)
   if(nullptr == elm) {
     for(G4int Z = 1; Z<maxNumElements; ++Z) {
       if(symb == elmSymbol[Z]) { 
-	elm = BuildElement(Z);
+#ifdef G4MULTITHREADED
+	G4MUTEXLOCK(&nistElementMutex);
+#endif
+	if(elmIndex[Z] < 0) { elm = BuildElement(Z); }
+	if(elm) { elmIndex[Z] = elm->GetIndex(); }
+#ifdef G4MULTITHREADED
+	G4MUTEXUNLOCK(&nistElementMutex);
+#endif
 	break;
       }
     }

@@ -5,6 +5,39 @@
                        Package History file
                        --------------------
 
+7 Nov 17 S. Incerti - tag dnaphysics-V10-03-15
+- updated plot.C
+
+11 Oct 17 S. Incerti - tag dnaphysics-V10-03-14
+- updated flags for EM processes
+
+11 Oct 17 S. Incerti - tag dnaphysics-V10-03-13
+- added more flags for EM processes
+
+02 Oct 17 S. Incerti - tag dnaphysics-V10-03-12
+- added more flags for EM processes
+
+16 Aug 2017 - tag dnaphysics-V10-03-11 - SI
+- updated numbering scheme
+
+12 Aug 2017 - tag dnaphysics-V10-03-10 - SI, VI 
+- updated plot.C with numbering
+
+11 Aug 2017 - tag dnaphysics-V10-03-09 - SI, VI 
+- retag
+
+10 Aug 2017 - tag dnaphysics-V10-03-08 - SI, VI 
+- fixed FPE, improved SteppingAction
+
+09 Aug 2017 - tag dnaphysics-V10-03-07 - S. Incerti
+- added more variables to ntuple
+
+03 Aug 2017 - tag dnaphysics-V10-03-06 - V. Ivanchneko
+- PhysicsList - limit high energy by 1 GeV
+
+26 Jul 2017 - tag dnaphysics-V10-03-05 - S. Incerti
+- applied coding guidelines
+
 15 Jun 2017 - tag dnaphysics-V10-03-04 - S. Incerti
 - added visu. to dnaphysics.in
 

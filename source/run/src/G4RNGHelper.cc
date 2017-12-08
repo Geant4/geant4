@@ -42,6 +42,11 @@ G4TemplateRNGHelper<T>* G4TemplateRNGHelper<T>::GetInstance()
   }
   return instance;
 }
+template<class T>
+G4TemplateRNGHelper<T>* G4TemplateRNGHelper<T>::GetInstanceIfExist()
+{
+  return instance;
+}
 
 template<>
 G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstance()
@@ -50,6 +55,11 @@ G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstance()
   {
     instance = new G4TemplateRNGHelper<G4long>();
   }
+  return instance;
+}
+template<>
+G4TemplateRNGHelper<G4long>* G4TemplateRNGHelper<G4long>::GetInstanceIfExist()
+{
   return instance;
 }
 
@@ -61,4 +71,16 @@ G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::GetInstance()
     instance = new G4TemplateRNGHelper<G4String>();
   }
   return instance;
+}
+template<>
+G4TemplateRNGHelper<G4String>* G4TemplateRNGHelper<G4String>::GetInstanceIfExist()
+{
+  return instance;
+}
+
+template<class T>
+G4TemplateRNGHelper<T>::~G4TemplateRNGHelper()
+{
+  Clear();
+  instance = 0;
 }

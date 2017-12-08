@@ -1,4 +1,4 @@
-$Id: History 100677 2016-10-31 10:46:50Z gcosmo $
+$Id: History 107321 2017-11-08 16:31:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+07-11-17 D.Sawkey (testem17-V10-03-00)
+- PhysicsList: fix setting emstandard; add emstandard_opt4 
+
 25-10-16 I. Hrivnacova  (testem17-V10-02-04)
 - HistoManager : kMaxHisto (instead of MaxHisto)
   to get rid off the violation report in automatic checking of coding 

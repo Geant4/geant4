@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hBremsstrahlung.cc 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4hBremsstrahlung.cc 107367 2017-11-09 10:56:09Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -90,3 +90,10 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4hBremsstrahlung::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Hadron bremsstrahlung</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

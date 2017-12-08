@@ -10,6 +10,8 @@
 #include "matrix"
 #include "text_hershey"
 #include "base_freetype"
+#include "vertices"
+#include "markers"
 
 #include "../lina/vec3f"
 
@@ -33,8 +35,8 @@ inline void add_string(
   if(a_string.empty()) return;
 
   matrix* tsf = new matrix;
+  
  {tsf->mul_translate(a_x,a_y,a_z);
-
   vec3f X = a_X;
   vec3f Y = a_Y;
   X.normalize();
@@ -46,10 +48,9 @@ inline void add_string(
                  X.v2(),Y.v2(),Z.v2(),0,
                  0,0,0,1);
   tsf->mul_mtx(r);
-
-  tsf->mul_scale(a_size,a_size,1); //applied first on GL
-
- }a_sep.add(tsf);
+  tsf->mul_scale(a_size,a_size,1);} //applied first on GL
+  
+  a_sep.add(tsf);
 
   if(a_font==font_hershey()) {
 
@@ -63,8 +64,9 @@ inline void add_string(
   } else {
 
     base_freetype* text = base_freetype::create(a_ttf);
-    //TTNODE* text = new TTNODE;
-    text->font.value(a_font);
+    
+    text->font = a_font;
+    
     //text->modeling.value(font_outline);
     //text->encoding.value(a_encoding);
     //text->smooting.value(a_smoothing);
@@ -110,8 +112,9 @@ inline void add_string_opt(
   } else {
 
     base_freetype* text = base_freetype::create(a_ttf);
-    //TTNODE* text = new TTNODE;
-    text->font.value(a_font);
+    
+    text->font = a_font;
+    
     //text->modeling.value(font_outline);
     //text->encoding.value(a_encoding);
     //text->smooting.value(a_smoothing);
@@ -122,6 +125,39 @@ inline void add_string_opt(
 
   }
 
+}
+
+inline void add_markers(separator& a_sep,size_t a_num,vec3f* a_points,marker_style a_style,float a_size) {
+  if(a_num<=0) return;
+/*if(a_style==marker_dot) {
+    vertices* vtxs = new vertices;
+    vtxs->mode = gl::points();
+    for(size_t index=0;index<a_num;index++) vtxs->add(a_points[index]);
+    a_sep.add(vtxs);
+  } else {*/
+    markers* vtxs = new markers;
+    vtxs->size = a_size;
+    vtxs->style = a_style; 
+    for(size_t index=0;index<a_num;index++) vtxs->add(a_points[index]);
+    a_sep.add(vtxs);
+  //}
+}
+
+inline void add_markers(separator& a_sep,const std::vector<float>& a_xyzs,marker_style a_style,float a_size) {
+  size_t num = a_xyzs.size()/3;
+  if(!num) return;
+/*if(a_style==marker_dot) {
+    vertices* vtxs = new vertices;
+    vtxs->mode = gl::points();
+    vtxs->xyzs = a_xyzs;
+    a_sep.add(vtxs);
+  } else {*/
+    markers* vtxs = new markers;
+    vtxs->size = a_size;
+    vtxs->style = a_style;
+    vtxs->xyzs = a_xyzs;
+    a_sep.add(vtxs);
+//  }
 }
 
 }}

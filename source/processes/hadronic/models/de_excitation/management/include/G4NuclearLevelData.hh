@@ -50,9 +50,12 @@
 #include "G4DeexPrecoParameters.hh"
 #include "G4Threading.hh"
 #include <vector>
+#include <iostream>
 
 class G4LevelReader;
 class G4LevelManager;
+class G4PairingCorrection;
+class G4ShellCorrection;
 
 class G4NuclearLevelData 
 {
@@ -95,16 +98,23 @@ public:
 
   // access to all model parameters
   G4DeexPrecoParameters* GetParameters();
-  
-private:
+  G4PairingCorrection* GetPairingCorrection();
+  G4ShellCorrection* GetShellCorrection();  
 
-  void InitialiseForIsotope(G4int Z, G4int A);
+  // stream only existing levels
+  void StreamLevels(std::ostream& os, G4int Z, G4int A) const;
 
   G4NuclearLevelData(G4NuclearLevelData &) = delete;
   G4NuclearLevelData & operator=(const G4NuclearLevelData &right) = delete;
 
+private:
+
+  void InitialiseForIsotope(G4int Z, G4int A);
+
   G4DeexPrecoParameters* fDeexPrecoParameters;
-  G4LevelReader*    fLevelReader;
+  G4LevelReader*         fLevelReader;
+  G4PairingCorrection*   fPairingCorrection;
+  G4ShellCorrection*     fShellCorrection;
 
   static const G4int ZMAX = 118;
   static const G4int AMIN[ZMAX];

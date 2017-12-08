@@ -31,7 +31,7 @@ inline bool Named_stream(buffer& a_buffer,const std::string& a_name,const std::s
 }
 
 template <class T>
-class ObjArray : public virtual ibo, public std::vector<T*> {
+class obj_array : public virtual ibo, public std::vector<T*> {
   static unsigned int kNullTag() {return 0;}
 public: //ibo
   virtual const std::string& store_cls() const {
@@ -61,19 +61,19 @@ public: //ibo
     return true;
   }
 public:
-  ObjArray(){}
-  virtual ~ObjArray(){tools::clear<T>(*this);}
+  obj_array(){}
+  virtual ~obj_array(){safe_clear<T>(*this);}
 public:
-  ObjArray(const ObjArray& a_from): ibo(a_from),std::vector<T*>() {
+  obj_array(const obj_array& a_from): ibo(a_from),std::vector<T*>() {
     typedef typename std::vector<T*>::const_iterator it_t;
     it_t it;
     for(it=a_from.begin();it!=a_from.end();++it) {
       std::vector<T*>::push_back((*it)->copy());
     }
   }
-  ObjArray& operator=(const ObjArray& a_from){
+  obj_array& operator=(const obj_array& a_from){
     if(&a_from==this) return *this;
-    tools::clear<T>(*this);
+    safe_clear<T>(*this);
 
     typedef typename std::vector<T*>::const_iterator it_t;
     it_t it;
@@ -82,10 +82,12 @@ public:
     }
     return *this;
   }
+public:
+  void clear_objs() {safe_clear<T>(*this);}
 };
 
 template <class T>
-class List : public virtual ibo, public std::vector<T*> {
+class obj_list : public virtual ibo, public std::vector<T*> {
 public: //ibo
   virtual const std::string& store_cls() const {
     static const std::string s_v("TList");
@@ -112,11 +114,11 @@ public: //ibo
     return true;
   }
 public:
-  List(){}
-  virtual ~List(){tools::clear<T>(*this);}
+  obj_list(){}
+  virtual ~obj_list(){safe_clear<T>(*this);}
 protected:
-  List(const List& a_from):ibo(a_from),std::vector<T*>(){}
-  List& operator=(const List&){return *this;}
+  obj_list(const obj_list& a_from):ibo(a_from),std::vector<T*>(){}
+  obj_list& operator=(const obj_list&){return *this;}
 };
 
 inline bool AttLine_stream(buffer& a_buffer){

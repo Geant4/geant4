@@ -148,9 +148,9 @@ namespace
 const G4double  CexmcASTEval::constants[] = { eV, keV, MeV, GeV, mm, cm, m };
 
 
-CexmcASTEval::CexmcASTEval( const CexmcEventFastSObject *  evFastSObject,
-                            const CexmcEventSObject *  evSObject ) :
-    evFastSObject( evFastSObject ), evSObject( evSObject )
+CexmcASTEval::CexmcASTEval( const CexmcEventFastSObject *  evFastSObject_,
+                            const CexmcEventSObject *  evSObject_ ) :
+    evFastSObject( evFastSObject_ ), evSObject( evSObject_ )
 {
 }
 
@@ -208,10 +208,10 @@ CexmcAST::BasicEval::ScalarValueType  CexmcASTEval::GetVarScalarValue(
     }
     else
     {
-        const int * const &  addr( boost::get< const int * >( var.addr ) );
+        const int * const &  addr_( boost::get< const int * >( var.addr ) );
 
-        if ( addr )
-            return *addr;
+        if ( addr_ )
+            return *addr_;
     }
 
     /* found in varAddrMap */
@@ -220,26 +220,26 @@ CexmcAST::BasicEval::ScalarValueType  CexmcASTEval::GetVarScalarValue(
 
     if ( found != varAddrMap.end() )
     {
-        const CexmcEnergyDepositCalorimeterCollection * const *  addr(
+        const CexmcEnergyDepositCalorimeterCollection * const *  addr_(
                 boost::get< const CexmcEnergyDepositCalorimeterCollection * >(
                                                             &found->second ) );
-        if ( addr )
+        if ( addr_ )
         {
-            if ( *addr )
+            if ( *addr_ )
             {
-                if ( ( *addr )->size() == 0 )
+                if ( ( *addr_ )->size() == 0 )
                     throw CexmcException( CexmcCFUninitializedVector );
                 if ( var.index1 == 0 || var.index2 == 0 )
                     throw CexmcException( CexmcCFUnexpectedVectorIndex );
-                return ( *addr )->at( var.index1 - 1 ).at( var.index2 - 1 );
+                return ( *addr_ )->at( var.index1 - 1 ).at( var.index2 - 1 );
             }
         }
         else
         {
-            const bool * const &  addr( boost::get< const bool * >(
+            const bool * const &  addr__( boost::get< const bool * >(
                                                             found->second ) );
-            if ( addr )
-                return int( *addr );
+            if ( addr__ )
+                return int( *addr__ );
         }
     }
 

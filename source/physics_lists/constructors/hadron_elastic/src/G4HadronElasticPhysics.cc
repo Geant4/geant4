@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronElasticPhysics.cc 99978 2016-10-13 07:28:13Z gcosmo $
+// $Id: G4HadronElasticPhysics.cc 105730 2017-08-16 12:51:52Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -63,6 +63,7 @@
 #include "G4ElasticHadrNucleusHE.hh"
 #include "G4AntiNuclElastic.hh"
 
+#include "G4ComponentGGHadronNucleusXsc.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 
 #include "G4BGGNucleonElasticXS.hh"
@@ -141,6 +142,9 @@ void G4HadronElasticPhysics::ConstructProcess()
 
   G4ElasticHadrNucleusHE* he = new G4ElasticHadrNucleusHE(); 
   he->SetMinEnergy(elimitPi);
+
+  G4VCrossSectionDataSet* theComponentGGHadronNucleusData = 
+    new G4CrossSectionElastic( new G4ComponentGGHadronNucleusXsc );
 
   auto myParticleIterator=GetParticleIterator();
   myParticleIterator->reset();
@@ -232,6 +236,13 @@ void G4HadronElasticPhysics::ConstructProcess()
 	      ) {
       
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
+      //AR-14Aug2017 : Replaced Gheisha elastic kaon cross sections with
+      //               Grichine's Glauber-Gribov ones. In this way, the
+      //               total (elastic + inelastic) kaon cross sections
+      //               are consistent with the PDG ones.
+      //               For the time being, kept Gheisha elastic as
+      //               final-state model.
+      hel->AddDataSet( theComponentGGHadronNucleusData );
       hel->RegisterMe(lhep0);
       pmanager->AddDiscreteProcess(hel);
       if(verbose > 1) {

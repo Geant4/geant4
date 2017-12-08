@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include "G4NucLevel.hh"
 #include <vector>
+#include <iostream>
 
 class G4LevelManager 
 {
@@ -93,13 +94,13 @@ public:
 
   inline G4int SpinTwo(size_t i) const;
 
-  inline G4int SpinParity(size_t i) const;
-
   inline G4int Parity(size_t i) const;
 
   inline G4int FloatingLevel(size_t i) const;
 
   const G4String& FloatingType(size_t i) const;
+
+  void StreamInfo(std::ostream& os) const;
 
 private:
 
@@ -192,12 +193,12 @@ inline G4int G4LevelManager::SpinTwo(size_t i) const
   return std::abs(fSpin[i]%100000 - 100); 
 }
 
-inline G4int G4LevelManager::SpinParity(size_t i) const
+inline G4int G4LevelManager::Parity(size_t i) const
 {
 #ifdef G4VERBOSE
   if(i > nTransitions) { PrintError(i, "SpinTwo"); }
 #endif
-  return fSpin[i]%100000 - 100; 
+  return (fSpin[i]%100000 - 100 > 0) ? 1 : -1; 
 }
 
 inline G4int G4LevelManager::FloatingLevel(size_t i) const

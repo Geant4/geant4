@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History 100821 2016-11-02 15:21:34Z gcosmo $
+$Id: History 107393 2017-11-10 08:14:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History 100821 2016-11-02 15:21:34Z gcosmo $
 
                       Category History file
                       ---------------------
+
+10.11.2017 - G. Cosmo; brachy-V10-03-01
+             Avoid setting the initial seed to zero.
+
 1.11.2016  - S. Guatelli; brachy-V10-02-02
              Added comparison to reference data for the Flexisource
              Added Flexisurce and TG186 reference source; added method to calculate relative dose rate to compare to reference data

@@ -14,6 +14,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 October 2017 K.L. Genser   (hadr-stopping-V10-03-02)
+--------------------------------------------------------------------
+- G4MuonicAtomDecay fixed verbosity
+
+12 September 2017 K.L. Genser (hadr-stopping-V10-03-01)
+--------------------------------------------------------------------
+- made G4MuonMinusAtomicCapture G4VRestProcess; added G4MuonicAtomDecay
+
+01 July 2017 V. Ivantchenko  (hadr-stopping-V10-03-00)
+--------------------------------------------------------------------
+- G4AntiNeutronAnnihilationAtRest: fixed Coverity warning, removed usage
+    of static G4ThreadLocal, instead all variables are local
+
 16 November 2016 V. Ivantchenko  (hadr-stopping-V10-02-02)
 --------------------------------------------------------------------
 - G4EmCaptureCascade - added C++11 keywords, an attempt to remove 

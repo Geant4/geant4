@@ -51,29 +51,29 @@ CexmcProductionModelData::CexmcProductionModelData()
 
 
 CexmcProductionModelData::CexmcProductionModelData(
-                      const G4LorentzVector &  incidentParticleSCM,
-                      const G4LorentzVector &  incidentParticleLAB,
-                      const G4LorentzVector &  nucleusParticleSCM,
-                      const G4LorentzVector &  nucleusParticleLAB,
-                      const G4LorentzVector &  outputParticleSCM,
-                      const G4LorentzVector &  outputParticleLAB,
-                      const G4LorentzVector &  nucleusOutputParticleSCM,
-                      const G4LorentzVector &  nucleusOutputParticleLAB,
-                      const G4ParticleDefinition *  incidentParticle,
-                      const G4ParticleDefinition *  nucleusParticle,
-                      const G4ParticleDefinition *  outputParticle,
-                      const G4ParticleDefinition *  nucleusOutputParticle ) :
-    incidentParticleSCM( incidentParticleSCM ),
-    incidentParticleLAB( incidentParticleLAB ),
-    nucleusParticleSCM( nucleusParticleSCM ),
-    nucleusParticleLAB( nucleusParticleLAB ),
-    outputParticleSCM( outputParticleSCM ),
-    outputParticleLAB( outputParticleLAB ),
-    nucleusOutputParticleSCM( nucleusOutputParticleSCM ),
-    nucleusOutputParticleLAB( nucleusOutputParticleLAB ),
-    incidentParticle( incidentParticle ), nucleusParticle( nucleusParticle ),
-    outputParticle( outputParticle ),
-    nucleusOutputParticle( nucleusOutputParticle )
+                      const G4LorentzVector &  incidentParticleSCM_,
+                      const G4LorentzVector &  incidentParticleLAB_,
+                      const G4LorentzVector &  nucleusParticleSCM_,
+                      const G4LorentzVector &  nucleusParticleLAB_,
+                      const G4LorentzVector &  outputParticleSCM_,
+                      const G4LorentzVector &  outputParticleLAB_,
+                      const G4LorentzVector &  nucleusOutputParticleSCM_,
+                      const G4LorentzVector &  nucleusOutputParticleLAB_,
+                      const G4ParticleDefinition *  incidentParticle_,
+                      const G4ParticleDefinition *  nucleusParticle_,
+                      const G4ParticleDefinition *  outputParticle_,
+                      const G4ParticleDefinition *  nucleusOutputParticle_ ) :
+    incidentParticleSCM( incidentParticleSCM_ ),
+    incidentParticleLAB( incidentParticleLAB_ ),
+    nucleusParticleSCM( nucleusParticleSCM_ ),
+    nucleusParticleLAB( nucleusParticleLAB_ ),
+    outputParticleSCM( outputParticleSCM_ ),
+    outputParticleLAB( outputParticleLAB_ ),
+    nucleusOutputParticleSCM( nucleusOutputParticleSCM_ ),
+    nucleusOutputParticleLAB( nucleusOutputParticleLAB_ ),
+    incidentParticle( incidentParticle_ ), nucleusParticle( nucleusParticle_ ),
+    outputParticle( outputParticle_ ),
+    nucleusOutputParticle( nucleusOutputParticle_ )
 {
 }
 

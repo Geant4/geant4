@@ -37,7 +37,7 @@ public:
 
   virtual void render(render_action& a_action) {
     tools_vforcit(line_t,lines.values(),it) {
-      a_action.draw_vertex_array(tools::gl::line_strip(),*it);
+      a_action.draw_vertex_array(gl::line_strip(),*it);
     }
   }
 

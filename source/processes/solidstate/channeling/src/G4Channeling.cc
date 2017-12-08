@@ -96,7 +96,7 @@ G4bool G4Channeling::UpdateParameters(const G4Track& aTrack){
     G4ThreeVector posPre = preStepPoint->GetPosition();
     aLCV->RotateToLattice(posPre);
     
-    G4double integrationLimit = fabs(posPost.z() - posPre.z());
+    G4double integrationLimit = std::fabs(posPost.z() - posPre.z());
     
     if(integrationLimit > 0.){
         //----------------------------------------
@@ -276,8 +276,8 @@ UpdateIntegrationStep(const G4Track& aTrack,
             step = std::fabs(fTransverseVariationMax * GetPre(aTrack)->GetKineticEnergy() / std::pow(xy2,0.5));
             if(step < fTimeStepMin) step = fTimeStepMin;
             else{
-                fTimeStepMax = sqrt( fTransverseVariationMax * GetPre(aTrack)->GetKineticEnergy()
-                                    / fabs(GetMatData(aTrack)->GetEFX()->GetMax()));
+                fTimeStepMax = std::sqrt( fTransverseVariationMax * GetPre(aTrack)->GetKineticEnergy()
+                                    / std::fabs(GetMatData(aTrack)->GetEFX()->GetMax()));
                 
                 if(step > fTimeStepMax) step = fTimeStepMax;
             }

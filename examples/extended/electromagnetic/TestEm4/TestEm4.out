@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -140,11 +140,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.29s Real=1.29s Sys=0s
+  User=0.76s Real=0.76s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1132064224, 1988812961
+ Current couple of seeds = 1059479269, 543189994
 ----------------------------------------
 ... write Root file : testem4.root - done
 ... close Root file : testem4.root - done

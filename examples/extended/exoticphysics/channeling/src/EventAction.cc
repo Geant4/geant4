@@ -45,7 +45,7 @@
 #include "Analysis.hh"
 
 EventAction::EventAction():
-sdht_ID(-1){}
+fSDHT_ID(-1){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,16 +60,15 @@ void EventAction::BeginOfEventAction(const G4Event*){;}
 void EventAction::EndOfEventAction(const G4Event* evt){
     G4SDManager* SDman = G4SDManager::GetSDMpointer();
     
-    
     G4ThreeVector ssd[3];
     ssd[0]= G4ThreeVector(0.,0.,0.);
     ssd[1]= G4ThreeVector(0.,0.,0.);
     ssd[2]= G4ThreeVector(0.,0.,0.);
 
-    if(sdht_ID == -1) {
+    if(fSDHT_ID == -1) {
         G4String sdName;
         if(SDman->FindSensitiveDetector(sdName="telescope",0)){
-            sdht_ID = SDman->GetCollectionID(sdName="telescope/collection");
+            fSDHT_ID = SDman->GetCollectionID(sdName="telescope/collection");
         }
     }
     
@@ -77,8 +76,8 @@ void EventAction::EndOfEventAction(const G4Event* evt){
     G4HCofThisEvent *hce = evt->GetHCofThisEvent();
     
     if(hce){
-        if(sdht_ID != -1){
-            G4VHitsCollection* aHCSD = hce->GetHC(sdht_ID);
+        if(fSDHT_ID != -1){
+            G4VHitsCollection* aHCSD = hce->GetHC(fSDHT_ID);
             sdht = (SensitiveDetectorHitsCollection*)(aHCSD);
         }
     }

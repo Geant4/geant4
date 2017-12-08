@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4hMultipleScattering.cc 97741 2016-06-08 09:24:21Z gcosmo $
+// $Id: G4hMultipleScattering.cc 107365 2017-11-09 10:54:29Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -75,23 +75,36 @@ G4bool G4hMultipleScattering::IsApplicable (const G4ParticleDefinition& p)
 void G4hMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanMscModel(), 1); }
-  AddEmModel(1, EmModel(1));
+  if(!EmModel(0)) { SetEmModel(new G4UrbanMscModel()); }
+  AddEmModel(1, EmModel(0));
   isInitialized = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4hMultipleScattering::PrintInfo()
+void G4hMultipleScattering::StreamProcessInfo(std::ostream& out,
+                                              G4String endOfLine) const
 {
-  G4cout << "      RangeFactor= " << RangeFactor()
-	 << ", stepLimitType: " << StepLimitType()
-         << ", latDisplacement: " << LateralDisplasmentFlag();
+  out << "      RangeFactor= " << RangeFactor()
+      << ", stepLimitType: " << StepLimitType()
+      << ", latDisplacement: " << LateralDisplasmentFlag();
   if(StepLimitType() == fUseDistanceToBoundary) {
-    G4cout  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
+    out  << ", skin= " << Skin() << ", geomFactor= " << GeomFactor();
   }  
-  G4cout << G4endl;
+  out << endOfLine;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4hMultipleScattering::ProcessDescription(std::ostream& out) const
+{
+  out << 
+  "<strong>"
+  "Hadron multiple scattering</strong>. Simulates combined effects of <br>"
+  "elastic scattering at the end of the step, to save computing time. May<br>"
+  "be combined with Coulomb scattering in a 'mixed' scattering algorithm.";
+  G4VMultipleScattering::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 

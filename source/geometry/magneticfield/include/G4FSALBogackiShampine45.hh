@@ -28,14 +28,13 @@
 //
 // Sponsored by Google in Google Summer of Code 2015.
 // 
-// First version: 26 May 2015
-//
 //  History
 // -----------------------------
-//  Created by Somnath on 26 May 2015
-//
-//
-///////////////////////////////////////////////////////////////////////////////
+//  Created by Somnath Banerjee on 26 May 2015
+//  Fixes:
+//    J. Apostolakis - June 2017: Coverity issues
+//    J. Apostolakis - July 2017: Initialise bi coefficients only once.
+////////////////////////////////////////////////////////////////////////
 
 #ifndef G4FSAL_Bogacki_Shampine_45_hh
 #define G4FSAL_Bogacki_Shampine_45_hh
@@ -67,22 +66,29 @@ public:
     G4double  DistChord()   const;
     G4int IntegratorOrder() const { return 4; }
     
-    private :
+  private :
     
-    G4FSALBogackiShampine45(const G4FSALBogackiShampine45&);
-    G4FSALBogackiShampine45& operator=(const G4FSALBogackiShampine45&);
-    
-    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *ak8,
-    *ak9, *ak10, *ak11,
-    *yTemp, *yIn;
-    
+    G4FSALBogackiShampine45(const G4FSALBogackiShampine45&) = delete;
+    G4FSALBogackiShampine45& operator=(const G4FSALBogackiShampine45&) = delete;
+    void PrepareConstants(); 
+   
+   // Working arrays -- used during stepping
+    G4double *ak2, *ak3, *ak4, *ak5, *ak6, *ak7, *ak8, *ak9, *ak10, *ak11,
+       *DyDx, *yTemp, *yIn;
     G4double *pseudoDydx_for_DistChord;
+
     G4double fLastStepLength;
     G4double *fLastInitialVector, *fLastFinalVector,
-    *fLastDyDx, *fMidVector, *fMidError;
+             *fLastDyDx, *fMidVector, *fMidError;
     // for DistChord calculations
-    
+
+    G4double b[12];     // Working array for interpolation
+   
     G4FSALBogackiShampine45* fAuxStepper;
+
+    static bool     fPreparedConstants;
+    // Class constants
+    static G4double bi[12][7];
 };
 
 #endif /* defined( G4FSAL_Bogacki_Shampine_45_hh ) */

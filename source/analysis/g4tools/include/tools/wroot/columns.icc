@@ -1,0 +1,475 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+// common columns code for ntuple and base_pntuple.
+
+  template <class T>
+  class column_ref : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_ref<"+stype(T())+">");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return _cid(s_v)+10000;
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {}
+    virtual void set_def() {}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {m_branch.set_basket_size(a_size);}
+    virtual branch& get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
+  public:
+    column_ref(branch& a_branch,const std::string& a_name,const T& a_ref)
+    :m_branch(a_branch),m_leaf(0)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+      m_leaf = m_branch.create_leaf_ref<T>(a_name,a_ref);
+    }
+    virtual ~column_ref(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_ref(const column_ref& a_from)
+    :icol(a_from)
+    ,m_branch(a_from.m_branch)
+    ,m_leaf(0)
+    {}
+    column_ref& operator=(const column_ref& a_from){
+      if(&a_from==this) return *this;
+      m_leaf = 0;
+      return *this;
+    }
+  public:
+    const T& variable() const {return m_leaf->variable();}
+    T& variable() {return m_leaf->variable();}  
+  protected:
+    branch& m_branch;
+    leaf_ref<T>* m_leaf;
+  };
+
+  template <class T>
+  class column : public column_ref<T> {
+    typedef column_ref<T> parent;
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column<"+stype(T())+">");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return _cid(s_v);
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void set_def() {m_value = m_def;}
+  public:
+    column(branch& a_branch,const std::string& a_name,const T& a_def)
+    :parent(a_branch,a_name,m_value)
+    ,m_def(a_def),m_value(a_def)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~column(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column(const column& a_from)
+    :icol(a_from)
+    ,parent(a_from)
+    ,m_def(a_from.m_def)
+    ,m_value(a_from.m_value)
+    {}
+    column& operator=(const column& a_from){
+      if(&a_from==this) return *this;
+      parent::operator=(a_from);
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  public:
+    column& operator=(const T& a_value){m_value = a_value;return *this;}
+    bool fill(const T& a_value) {m_value = a_value;return true;}
+  protected:
+    T m_def;
+    T m_value;
+  };
+
+  class column_string_ref : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_string_ref");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {
+      static const std::string s_v;
+      return _cid(s_v)+10000;
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_string_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {}
+    virtual void set_def() {}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {m_branch.set_basket_size(a_size);}
+    virtual branch& get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
+  public:
+    column_string_ref(branch& a_branch,const std::string& a_name,const std::string& a_ref)
+    :m_branch(a_branch),m_leaf(0)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+      m_leaf = m_branch.create_leaf_string_ref(a_name,a_ref);
+    }
+    virtual ~column_string_ref(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_string_ref(const column_string_ref& a_from)
+    :icol(a_from)
+    ,m_branch(a_from.m_branch)
+    ,m_leaf(0)
+    {}
+    column_string_ref& operator=(const column_string_ref& a_from){
+      if(&a_from==this) return *this;
+      m_leaf = 0;
+      return *this;
+    }
+  public:
+    const std::string& variable() const {return m_leaf->variable();}
+    std::string& variable() {return m_leaf->variable();}  
+  protected:
+    branch& m_branch;
+    leaf_string_ref* m_leaf;
+  };
+
+  class column_string : public column_string_ref {
+    typedef column_string_ref parent;
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_string");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {
+      static const std::string s_v;
+      return _cid(s_v);
+    }
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_string>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void set_def() {m_value = m_def;}
+  public:
+    column_string(branch& a_branch,const std::string& a_name,const std::string& a_def)
+    :parent(a_branch,a_name,m_value)
+    ,m_def(a_def),m_value(a_def)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~column_string(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_string(const column_string& a_from)
+    :icol(a_from)
+    ,parent(a_from)
+    ,m_def(a_from.m_def)
+    ,m_value(a_from.m_value)
+    {}
+    column_string& operator=(const column_string& a_from){
+      if(&a_from==this) return *this;
+      parent::operator=(a_from);
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  public:
+    column_string& operator=(const std::string& a_value){m_value = a_value;return *this;}
+    bool fill(const std::string& a_value) {m_value = a_value;return true;}
+  protected:
+    std::string m_def;
+    std::string m_value;
+  };
+
+  class column_vector_string_ref : public column_string_ref {
+    typedef column_string_ref parent;
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_vector_string_ref");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {return _cid_std_vector<std::string>()+10000;}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_vector_string_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {
+      m_string.clear();
+      tools_vforcit(std::string,m_ref,it) {
+        if(it!=m_ref.begin()) m_string += m_sep;
+        m_string += *it;
+      }
+      parent::add();
+    }
+  public:
+    column_vector_string_ref(branch& a_branch,const std::string& a_name,const std::vector<std::string>& a_ref,char a_sep)
+    :parent(a_branch,a_name,m_string)
+    ,m_ref(a_ref)
+    ,m_sep(a_sep)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~column_vector_string_ref(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_vector_string_ref(const column_vector_string_ref& a_from)
+    :icol(a_from)
+    ,parent(a_from)
+    ,m_ref(a_from.m_ref)
+    ,m_sep(a_from.m_sep)
+    {}
+    column_vector_string_ref& operator=(const column_vector_string_ref& a_from){
+      if(&a_from==this) return *this;
+      m_sep = a_from.m_sep;
+      return *this;
+    }
+  public:
+    const std::vector<std::string>& variable() const {return m_ref;}
+    std::vector<std::string>& variable() {return const_cast< std::vector<std::string>& >(m_ref);}  
+  protected:
+    const std::vector<std::string>& m_ref;
+    char m_sep;
+    std::string m_string;
+  };
+
+  class column_vector_string : public column_vector_string_ref {
+    typedef column_vector_string_ref parent;
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::column_vector_string");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {return _cid_std_vector<std::string>();}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column_vector_string>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void set_def() {m_value = m_def;}
+  public:
+    column_vector_string(branch& a_branch,const std::string& a_name,const std::vector<std::string>& a_def,char a_sep)
+    :parent(a_branch,a_name,m_value,a_sep)
+    ,m_def(a_def),m_value(a_def)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~column_vector_string(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    column_vector_string(const column_vector_string& a_from)
+    :icol(a_from)
+    ,parent(a_from)
+    ,m_def(a_from.m_def)
+    ,m_value(a_from.m_value)
+    {}
+    column_vector_string& operator=(const column_vector_string& a_from){
+      if(&a_from==this) return *this;
+      parent::operator=(a_from);
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  public:
+    column_vector_string& operator=(const std::vector<std::string>& a_value){m_value = a_value;return *this;}
+    bool fill(const std::vector<std::string>& a_value) {m_value = a_value;return true;}
+  protected:
+    std::vector<std::string> m_def;
+    std::vector<std::string> m_value;
+  };
+
+  template <class T>
+  class std_vector_column_ref : public virtual icol {
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::std_vector_column_ref<"+stype(T())+">");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {return _cid_std_vector<T>()+10000;}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<std_vector_column_ref>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void add() {
+      if(m_leaf_count) m_leaf_count->fill((int)m_ref.size()); //row_wise
+    }
+    virtual void set_def() {}
+    virtual const std::string& name() const {return m_leaf->name();}
+    virtual void set_basket_size(uint32 a_size) {m_branch.set_basket_size(a_size);}
+    virtual branch& get_branch() const {return m_branch;}
+    virtual base_leaf* get_leaf() const {return m_leaf;}
+  public:
+    std_vector_column_ref(branch& a_branch,const std::string& a_name,const std::vector<T>& a_ref)
+    :m_branch(a_branch)
+    ,m_ref(a_ref)
+    ,m_leaf(0)
+    ,m_leaf_count(0) //row_wise
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+      if(a_branch.store_cls()==branch_element_store_class()) {
+        //::printf("debug : std_vector_column_ref : column_wise\n");
+        int id = -1;  //same as in std_vector_be.
+        int type = 0;
+        m_leaf = m_branch.create_leaf_element(a_name,id,type);
+      } else { //row_wise.
+        //::printf("debug : std_vector_column_ref : row_wise\n");
+        std::string leaf_count_name = a_name+"_count";
+        m_leaf_count = m_branch.create_leaf<int>(leaf_count_name);
+        m_leaf = m_branch.create_leaf_std_vector_ref<T>(a_name,*m_leaf_count,a_ref);
+        m_leaf->set_title(a_name+"["+leaf_count_name+"]"); //for TTreeFormula::RegisterDimensions.
+      }
+    }
+    virtual ~std_vector_column_ref(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    std_vector_column_ref(const std_vector_column_ref& a_from)
+    :icol(a_from)
+    ,m_branch(a_from.m_barnch)
+    ,m_ref(a_from.m_ref)
+    ,m_leaf(0)
+    ,m_leaf_count(0)
+    {}
+    std_vector_column_ref& operator=(const std_vector_column_ref& a_from){
+      if(&a_from==this) return *this;
+      m_leaf = 0;
+      m_leaf_count = 0;
+      return *this;
+    }
+  public:
+    const std::vector<T>& variable() const {return m_ref;}
+    std::vector<T>& variable() {return const_cast< std::vector<T>& >(m_ref);}  
+  protected:
+    branch& m_branch;
+    const std::vector<T>& m_ref;
+    base_leaf* m_leaf;
+    leaf<int>* m_leaf_count; //row_wise.
+  };
+
+  template <class T>
+  class std_vector_column : public std_vector_column_ref<T> {
+    typedef std_vector_column_ref<T> parent;
+#ifdef TOOLS_MEM
+    static const std::string& s_class() {
+      static const std::string s_v("tools::wroot::ntuple::std_vector_column<"+stype(T())+">");
+      return s_v;
+    }
+#endif
+  public:
+    static cid id_class() {return _cid_std_vector<T>();}
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<std_vector_column>(this,a_class)) {return p;}
+      else return 0;
+    }
+    virtual cid id_cls() const {return id_class();}
+  public: //icol
+    virtual void set_def() {m_value = m_def;}
+  public:
+    std_vector_column(branch& a_branch,const std::string& a_name,const std::vector<T>& a_def)
+    :parent(a_branch,a_name,m_value)
+    ,m_def(a_def),m_value(a_def)
+    {
+#ifdef TOOLS_MEM
+      mem::increment(s_class().c_str());
+#endif
+    }
+    virtual ~std_vector_column(){
+#ifdef TOOLS_MEM
+      mem::decrement(s_class().c_str());
+#endif
+    }
+  protected:
+    std_vector_column(const std_vector_column& a_from)
+    :icol(a_from)
+    ,parent(a_from)
+    ,m_def(a_from.m_def)
+    ,m_value(a_from.m_value)
+    {}
+    std_vector_column& operator=(const std_vector_column& a_from){
+      if(&a_from==this) return *this;
+      parent::operator=(a_from);
+      m_def = a_from.m_def;
+      m_value = a_from.m_value;
+      return *this;
+    }
+  public:
+    std_vector_column& operator=(const std::vector<T>& a_value){m_value = a_value;return *this;}
+    bool fill(const std::vector<T>& a_value) {m_value = a_value;return true;}
+  protected:
+    std::vector<T> m_def;
+    std::vector<T> m_value;
+  };

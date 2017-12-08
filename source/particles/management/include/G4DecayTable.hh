@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.hh 92057 2015-08-14 13:34:55Z gcosmo $
+// $Id: G4DecayTable.hh 105720 2017-08-16 12:38:10Z gcosmo $
 //
 //
 // ------------------------------------------------------------
@@ -93,7 +93,7 @@ class G4DecayTable
 
  private:
     G4ParticleDefinition       *parent;
-    G4VDecayChannelVector       *channels;
+    G4VDecayChannelVector      *channels;
 };
 
 inline     
@@ -112,7 +112,7 @@ inline
 inline     
  G4VDecayChannel* G4DecayTable::GetDecayChannel(G4int index) const
 {
-  G4VDecayChannel* selectedChannel = 0;
+  G4VDecayChannel* selectedChannel = nullptr;
   if ( (index>=0) && (index<G4int(channels->size())) ){
     selectedChannel = (*channels)[index];
   }

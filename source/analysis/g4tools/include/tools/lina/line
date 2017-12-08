@@ -63,7 +63,7 @@ public:
   const VEC3& direction() const {return m_dir;}
 
 /* not tested :
-  VEC3 closest_point(const VEC3& a_point) const {
+  void closest_point(const VEC3& a_point,VEC& a_out) const {
     //from coin3d/SbLine.cpp.
 
     //
@@ -76,12 +76,11 @@ public:
     //            \|
     //             x a_point
 
-    return m_pos + m_dir * ((a_point - m_pos).dot(m_dir));
+    a_out = m_pos + m_dir * ((a_point - m_pos).dot(m_dir));
   }
 
 
-  bool closest_points(const line<T>& a_line,
-                      VEC3& a_on_this,VEC3& a_on_line) const {
+  bool closest_points(const line<T>& a_line,VEC3& a_on_this,VEC3& a_on_line) const {
     //from coin3d/SbLine.cpp.
 
     //WARNING : if ret false, a_on_this, a_on_line not set.
@@ -100,10 +99,8 @@ public:
     T c[3], d[3];
   
     for(unsigned int i=0;i<3;i++) {
-      d[i] =
-        D1[i] - D0N[i]*(D0[0]*D1[0] + D0[1]*D1[1] + D0[2]*D1[2]);
-      c[i] =
-        P1[i] - P0[i] + D0N[i]*(D0[0]*P0[0] + D0[1]*P0[1] + D0[2]*P0[2]);
+      d[i] = D1[i] - D0N[i]*(D0[0]*D1[0] + D0[1]*D1[1] + D0[2]*D1[2]);
+      c[i] = P1[i] - P0[i] + D0N[i]*(D0[0]*P0[0] + D0[1]*P0[1] + D0[2]*P0[2]);
     }
   
     T den = d[0]*d[0]+d[1]*d[1]+d[2]*d[2];
@@ -112,7 +109,7 @@ public:
     T t = -(c[0]*d[0]+c[1]*d[1]+c[2]*d[2]) / den;
   
     a_on_line = a_line.m_pos + a_line.m_dir * t;
-    a_on_this = closest_point(a_on_line);
+    closest_point(a_on_line,a_on_this);
     return true;
   }
   

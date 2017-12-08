@@ -174,60 +174,46 @@ void G4EmDNAPhysics_option7::ConstructProcess()
       G4DNAUeharaScreenedRutherfordElasticModel* emElast =
         new G4DNAUeharaScreenedRutherfordElasticModel();
       emElast->SetHighEnergyLimit(1*MeV);
-//      emElast->SelectHighEnergyLimit(1*MeV);
       theDNAElasticProcess->SetEmModel(emElast);
       ph->RegisterProcess(theDNAElasticProcess, particle);
 
-      {
-       //  *** Excitation ***
+      //  *** Excitation ***
        
-       G4DNAExcitation* theDNAExcitationProcess =
+      G4DNAExcitation* theDNAExcitationProcess =
           new G4DNAExcitation("e-_G4DNAExcitation");
-       {
-        G4DNAEmfietzoglouExcitationModel* emExc = new G4DNAEmfietzoglouExcitationModel();
-        emExc->SetActivationLowEnergyLimit(8*eV);
-        emExc->SetActivationHighEnergyLimit(10.*keV);
-        theDNAExcitationProcess->SetEmModel(emExc,1);
-        theDNAExcitationProcess->AddEmModel(1, emExc);
-       }
+
+      // 1-st model should be Set
+      G4DNAEmfietzoglouExcitationModel* emExc = new G4DNAEmfietzoglouExcitationModel();
+      emExc->SetActivationLowEnergyLimit(8*eV);
+      emExc->SetActivationHighEnergyLimit(10.*keV);
+      theDNAExcitationProcess->SetEmModel(emExc);
+
+      // 2-nd model should be Add
+      G4DNABornExcitationModel* bornExc = new G4DNABornExcitationModel();
+      bornExc->SetActivationLowEnergyLimit(10*keV);
+      bornExc->SetActivationHighEnergyLimit(1.*MeV);
+      theDNAExcitationProcess->AddEmModel(1, bornExc);
       
-       {
-        G4DNABornExcitationModel* bornExc = new G4DNABornExcitationModel();
-        bornExc->SetActivationLowEnergyLimit(10*keV);
-        bornExc->SetActivationHighEnergyLimit(1.*MeV);
-        theDNAExcitationProcess->SetEmModel(bornExc,2);
-        theDNAExcitationProcess->AddEmModel(2, bornExc);
-       }
-      
-       ph->RegisterProcess(theDNAExcitationProcess, particle);
-      }
-      
-      {
-       //  *** Ionisation ***
+      ph->RegisterProcess(theDNAExcitationProcess, particle);
+
+      //  *** Ionisation ***
        
-       G4DNAIonisation* theDNAIonisationProcess =
+      G4DNAIonisation* theDNAIonisationProcess =
           new G4DNAIonisation("e-_G4DNAIonisation");
 
-       {
-        G4DNAEmfietzoglouIonisationModel* emIonModel = new G4DNAEmfietzoglouIonisationModel();
-        emIonModel->SetActivationLowEnergyLimit(10.*eV);
-        emIonModel->SetActivationHighEnergyLimit(10.*keV);
+      // 1-st model should be Set
+      G4DNAEmfietzoglouIonisationModel* emIonModel = new G4DNAEmfietzoglouIonisationModel();
+      emIonModel->SetActivationLowEnergyLimit(10.*eV);
+      emIonModel->SetActivationHighEnergyLimit(10.*keV);
+      theDNAIonisationProcess->SetEmModel(emIonModel);
 
-        theDNAIonisationProcess->SetEmModel(emIonModel,1);
-        theDNAIonisationProcess->AddEmModel(1,emIonModel);
-       }
+      // 2-nd model should be Add
+      G4DNABornIonisationModel* bornIon = new G4DNABornIonisationModel();
+      bornIon->SetActivationLowEnergyLimit(10*keV);
+      bornIon->SetActivationHighEnergyLimit(1.*MeV);
+      theDNAIonisationProcess->AddEmModel(1,bornIon);
       
-       {
-        G4DNABornIonisationModel* bornIon = new G4DNABornIonisationModel();
-        bornIon->SetActivationLowEnergyLimit(10*keV);
-        bornIon->SetActivationHighEnergyLimit(1.*MeV);
-
-        theDNAIonisationProcess->SetEmModel(bornIon,2);
-        theDNAIonisationProcess->AddEmModel(2,bornIon);
-       }
-      
-       ph->RegisterProcess(theDNAIonisationProcess, particle);
-      }
+      ph->RegisterProcess(theDNAIonisationProcess, particle);
       
       //  *** Vibrational excitation ***
       ph->RegisterProcess(new G4DNAVibExcitation("e-_G4DNAVibExcitation"), particle);
@@ -293,33 +279,23 @@ void G4EmDNAPhysics_option7::ConstructProcess()
 
     } else if (particleName == "gamma") {
     
-      G4double LivermoreHighEnergyLimit = GeV;
-
+      // photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-          new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
+      // Compton scattering - Livermore model only
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = 
-          new G4LivermoreComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
       ph->RegisterProcess(theComptonScattering, particle);
 
+      // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-          new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
+      // default Rayleigh scattering is Livermore
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
       ph->RegisterProcess(theRayleigh, particle);
     }
     

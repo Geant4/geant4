@@ -55,6 +55,7 @@ namespace G4INCL {
   class DecayAvatar: public InteractionAvatar {
   public:
     DecayAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus, G4bool force=false);
+    DecayAvatar(G4INCL::Particle *aParticle, G4INCL::Particle *bParticle, G4double time, G4INCL::Nucleus *aNucleus, G4bool force=false);
     virtual ~DecayAvatar();
 
     IChannel* getChannel();

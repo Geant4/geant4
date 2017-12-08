@@ -1,4 +1,4 @@
-$Id: History 104670 2017-06-09 10:01:02Z gcosmo $
+$Id: History 107408 2017-11-10 13:35:09Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 10, P.Arce (geommng-V10-03-22)
+- Bug report 2011: precision correction in G4ErrorPlaneSurfaceTarget.cc 
+
+October 16, 2017 G.Cosmo                   geommng-V10-03-21
+- Removed G4USolid base wrapper for USolids. Only native VecGeom
+  implementation through G4UAdapter is now supported.
+  Requires corresponding tag "geom-specific-V10-03-20".
+- Enable proper implementation of operator=() in G4UAdapter.
+
+October 11, 2017 E.Tcherniaev              geommng-V10-03-20, 19
+- G4GeomTools: added PointInPolygon() function, to dtermine the position of a
+  point relative to a polygon in 2D.
 
 June 9, 2017 G.Cosmo                       geommng-V10-03-18
 - Corrections and improvements to G4UAdapter.

@@ -118,7 +118,8 @@ namespace G4INCL {
     INCL46CrossSections,
     MultiPionsCrossSections,
 	TruncatedMultiPionsCrossSections,
-	MultiPionsAndResonancesCrossSections
+	MultiPionsAndResonancesCrossSections,
+	StrangenessCrossSections
   };
 
   // Enumerator for phase-space generator

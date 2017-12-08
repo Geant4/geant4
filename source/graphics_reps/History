@@ -1,4 +1,4 @@
-$Id: History 104093 2017-05-11 07:29:45Z gcosmo $
+$Id: History 106385 2017-10-09 09:36:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,22 @@ committal in the CVS repository !
 
 History file for graphics_reps category
 ---------------------------------------
+
+6th October 2017  John Allison  (greps-V10-03-07)
+- Rationalised:
+  o Colour map no longer G4ThreadLocal (no need). May be used from
+    non-master threads.
+  o Move InitialiseColourMap from private to public. In future vis tags
+    the map will be initialised from the vis manager.
+
+13th September 2017  John Allison  (greps-V10-03-06)
+- HepPolyhedron.h: Reverted default number of line segments per circle:
+  #define DEFAULT_NUMBER_OF_STEPS 24
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
+
+1st August 2017  John Allison  (greps-V10-03-05)
+- G4AttDefStore: Shared (i.e., no longer thread local). Added mutex.
 
 10th May 2017  John Allison  (greps-V10-03-04)
 - G4Colour: Added Set functions for components.

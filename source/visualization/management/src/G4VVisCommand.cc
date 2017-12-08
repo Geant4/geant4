@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.cc 104163 2017-05-15 06:52:42Z gcosmo $
+// $Id: G4VVisCommand.cc 105349 2017-07-21 12:23:24Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -94,10 +94,9 @@ const G4String& G4VVisCommand::ConvertToColourGuidance()
 {
   static G4String guidance
   ("Accepts (a) RGB triplet. e.g., \".3 .4 .5\", or"
-   "\n(b) string such as \"white\", \"black\", \"grey\", \"red\"..."
-   "\n(c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
-   "\n    or \"grey ! ! .6\" (note \"!\"'s for unused green and blue parameters),"
-   "\n    e.g. \"! ! ! 0.\" for a transparent colour.");
+   "\n (b) string such as \"white\", \"black\", \"grey\", \"red\"...or"
+   "\n (c) an additional number for opacity, e.g., \".3 .4 .5 .6\""
+   "\n     or \"grey ! ! .6\" (note \"!\"'s for unused parameters).");
   return guidance;
 }
 
@@ -105,12 +104,12 @@ void G4VVisCommand::ConvertToColour
 (G4Colour& colour,
  const G4String& redOrString, G4double green, G4double blue, G4double opacity)
 {
-  // Note: colour is supplied by the caller and becomes the default if the
-  // remaining parameters cannot be parsed.
-
+  // Note: colour is supplied by the caller and some or all of its components
+  // may act as default.
+  //
   // Note: redOrString is either a number or string.  If a string it must be
   // one of the recognised colours.
-
+  //
   // Thus the arguments can be, for example:
   // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
   // third and fourth arguments are ignored), or

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 103219 2017-03-22 11:30:15Z gcosmo $
+// $Id: G4PathFinder.cc 107606 2017-11-27 09:39:04Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -274,7 +274,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   else
   {
      const G4double checkTolerance = 1.0e-9; 
-     if( proposedStepLength < fTrueMinStep * ( 1.0 + checkTolerance) )  // For 2nd+ geometry 
+     if( proposedStepLength < fTrueMinStep * ( 1.0 - checkTolerance) )  // For 2nd+ geometry 
      { 
        std::ostringstream message;
        message.precision( 12 ); 
@@ -462,19 +462,18 @@ void G4PathFinder::ReportMove( const G4ThreeVector& OldVector,
 {
     G4ThreeVector moveVec = ( NewVector - OldVector );
 
-    G4int prc= G4cerr.precision(12); 
     std::ostringstream message;
+    message.precision(16); 
     message << "Endpoint moved between value returned by ComputeStep()"
             << " and call to Locate(). " << G4endl
             << "          Change of " << Quantity << " is "
             << moveVec.mag() / mm << " mm long" << G4endl
             << "          and its vector is "
             << (1.0/mm) * moveVec << " mm " << G4endl
-            << "          Endpoint of ComputeStep() was " << OldVector << G4endl
+            << "          Endpoint of ComputeStep() was     " << OldVector << G4endl
             << "          and current position to locate is " << NewVector;
     G4Exception("G4PathFinder::ReportMove()", "GeomNav1002",  
                 JustWarning, message); 
-    G4cerr.precision(prc); 
 }
 
 void
@@ -484,16 +483,18 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
 {
   // Locate the point in each geometry
 
+  static const G4double movLenTol = 10*kCarTolerance*kCarTolerance;
+
   std::vector<G4Navigator*>::iterator pNavIter=
      fpTransportManager->GetActiveNavigatorsIterator(); 
 
   G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
   G4ThreeVector moveVec = (position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
-  if( (!fNewTrack) && (!fRelocatedPoint)
-   && ( moveLenSq> 10*kCarTolerance*kCarTolerance ) )
+  if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq > movLenTol ) )
   {
-     ReportMove( position, lastEndPosition, "Position" ); 
+     ReportMove( lastEndPosition, position,
+                 " (End) Position / G4PathFinder::Locate" ); 
   }
   fLastLocatedPosition= position; 
 
@@ -670,8 +671,8 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
      if ( longMoveEnd && longMoveSaf
        && longMoveRevisedEnd && (moveMinusSafety>0.0) )
      { 
-        G4int oldPrec= G4cout.precision(9); 
         std::ostringstream message;
+        message.precision(9); 
         message << "ReLocation is further than end-safety value." << G4endl
                 << " Moved from last endpoint by " << moveLenEndPosition 
                 << " compared to end safety (from preStep point) = " 
@@ -703,7 +704,6 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
         ReportMove( lastEndPosition, position, "Position" ); 
         G4Exception("G4PathFinder::ReLocate", "GeomNav0003", 
                     FatalException, message); 
-        G4cout.precision(oldPrec); 
     }
   }
 
@@ -934,10 +934,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
                                                  initialDirection,
                                                  proposedStepLength,
                                                  safety ); 
-           minStep  = std::min( step,  minStep);
-
-           //  TODO: consider whether/how to reduce the proposed step 
-           //        to the latest minStep value - to reduce calculations
+           // minStep  = std::min( step,  minStep);  // OLD ==> can be 'logical' value, ie. kInfinity
 
 #ifdef G4DEBUG_PATHFINDER
            if( fVerboseLevel > 0)
@@ -952,8 +949,14 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            } 
 #endif
         }
-        fCurrentStepSize[num] = step; 
+        fCurrentStepSize[num] = step;   // Raw value - can be kInfinity
 
+        step    = std::min( step, proposedStepLength ); // Now a physical value (not kInf)
+        minStep = std::min( step, minStep);     // Minimum of physical values !!
+           //  TODO: consider whether/how to reduce the proposed step
+           //        to the latest minStep value - to reduce calculations.
+           //        ( If so, much change 1st minimum above. )
+        
         // Save safety value, must be done for all geometries "together"
         // (even if not recomputed using call to ComputeStep)
         // since they share the fPreSafetyLocation
@@ -1002,9 +1005,11 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 1 )
   {
+    G4int oldPrec= G4cout.precision(14);     
     G4cout << "G4PathFinder::DoNextLinearStep : "
            << " initialPosition = " << initialPosition 
            << " and endPosition = " << endPosition<< G4endl;
+    G4cout.precision(oldPrec);    
   }
 #endif
 
@@ -1169,8 +1174,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 
 
   G4EquationOfMotion* equationOfMotion = 
-     (fpFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
-     ->GetEquationOfMotion();
+     fpFieldPropagator->GetCurrentEquationOfMotion();
 
   equationOfMotion->SetChargeMomentumMass( *(initialState.GetChargeState()), 
                                            initialState.GetMomentum().mag2(),

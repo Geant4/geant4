@@ -1,4 +1,4 @@
-$Id: History 101662 2016-11-21 09:05:44Z gcosmo $
+$Id: History 106960 2017-10-31 08:35:19Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-10-17 V.Ivant (testem8-V10-03-01)
+- PhysicsList, DetectorConstruction, DetectorMesenger, StepMax
+  make StepMax initialisation to be more thread safe
+
+28-08-17 V.Ivant (testem8-V10-03-00)
+- PhysicsList - restore functionality for the old command
+  "/testem/phys/addPhysics pai"
 
 19-11-16 A.Dotti  (testem8-V10-02-05)
 - explicit set of SD to manager

@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 101157 2016-11-08 08:27:49Z gcosmo $
+# $Id: sources.cmake 106115 2017-09-13 10:16:51Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -56,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4materials
 			G4LatticeLogical.hh
 			G4LatticePhysical.hh
 			G4Material.hh
+                        G4MaterialPropertiesIndex.hh
 			G4MaterialPropertiesTable.hh
 			G4MaterialPropertiesTable.icc
 			G4MaterialPropertyVector.hh

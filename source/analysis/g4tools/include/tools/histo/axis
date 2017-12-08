@@ -244,6 +244,21 @@ public:
     m_edges = a_from.m_edges;
     return *this;
   }
+public:
+  bool equals(const axis& a_from) const {
+    if(&a_from==this) return true;
+    if(m_offset!=a_from.m_offset) return false;
+    if(m_number_of_bins!=a_from.m_number_of_bins) return false;
+    if(m_minimum_value!=a_from.m_minimum_value) return false;
+    if(m_maximum_value!=a_from.m_maximum_value) return false;
+    if(m_fixed!=a_from.m_fixed) return false;
+    if(m_bin_width!=a_from.m_bin_width) return false;
+    if(m_edges!=a_from.m_edges) return false;
+    return true;
+  }
+  
+  bool operator==(const axis& a_from) const {return equals(a_from);}
+  bool operator!=(const axis& a_from) const {return !equals(a_from);}
 
 public:
   TO m_offset;

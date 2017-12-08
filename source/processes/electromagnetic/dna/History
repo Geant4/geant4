@@ -14,6 +14,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+16-08-2017, SI tag emdna-V10-03-28
+- updated variable types in models
+
+10-08-2017, SI tag emdna-V10-03-27
+- test
+
+10-08-2017, SI tag emdna-V10-03-26
+- same as previous
+
+09-08-2017, SI tag emdna-V10-03-25
+- same as previous
+
+09-08-2017, SI tag emdna-V10-03-24
+- G4DNAEmfietzoglouIonisationModel: added protection for out of bound access
+
+03-08-2017, VI tag emdna-V10-03-23
+- G4DNAExcitation, G4DNAIonisation - make coherent model initialisation
+
+28-07-2017, SI, tag emdna-V10-03-22
+- added stationary mode flag to CPA100 ionisation.
+
+04-07-2017, SI, tag emdna-V10-03-21
+- added tagging of atom. deexc. products in ionisation models.
+
 31-05-2017, SM, tag emdna-V10-03-20
 - Correct windows issues with path of diff. CS data file.
 

@@ -148,25 +148,7 @@ void G4LENDModel::create_used_target_map()
       }
    }
 
-
-
-   G4cout << "Dump UsedTarget for " << GetModelName() << G4endl;
-   //G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) , Pointer of Target" << G4endl;
-   G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
-   for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
-         it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ )
-   {
-      G4cout 
-         << " " << it->second->GetWantedEvaluation() 
-         << ", " << it->second->GetWantedZ() 
-         << ", " << it->second->GetWantedA() 
-         << " -> " << it->second->GetActualEvaluation() 
-         << ", " << it->second->GetActualZ() 
-         << ", " << it->second->GetActualA() 
-         //<< ", " << it->second->GetTarget() 
-         << G4endl; 
-   } 
-
+   DumpLENDTargetInfo();
 }
   
 
@@ -266,4 +248,46 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
 
    return theResult; 
 
+}
+
+G4HadFinalState* G4LENDModel::returnUnchanged(const G4HadProjectile& aTrack, G4HadFinalState* theResult ) {
+   if ( lend_manager->GetVerboseLevel() >= 1 ) {
+      G4String message;
+      message = "Produce unchanged final state is requested in ";
+      message += this->GetModelName();
+      message += ". Cross section and model likely have an inconsistency.";
+      G4Exception( "G4LENDModel::returnUnchanged(,)" , "LENDModel-01" , JustWarning ,
+                  message );
+   }
+   theResult->SetEnergyChange( aTrack.GetKineticEnergy() );
+   theResult->SetMomentumChange( aTrack.Get4Momentum().getV().unit() );
+   return theResult;
+}
+
+G4GIDI_target* G4LENDModel::get_target_from_map( G4int nuclear_code ) {
+   G4GIDI_target* target = NULL;
+   if ( usedTarget_map.find( nuclear_code ) != usedTarget_map.end() ) {
+      target = usedTarget_map.find( nuclear_code )->second->GetTarget();
+   }
+   return target;
+}
+
+void G4LENDModel::DumpLENDTargetInfo( G4bool force ) {
+
+   if ( lend_manager->GetVerboseLevel() >= 1 || force ) {
+      if ( usedTarget_map.size() == 0 ) create_used_target_map(); 
+      G4cout << "Dumping UsedTarget of " << GetModelName() << " for " << proj->GetParticleName() << G4endl;
+      G4cout << "Requested Evaluation, Z , A -> Actual Evaluation, Z , A(0=Nat) " << G4endl;
+      for ( std::map< G4int , G4LENDUsedTarget* >::iterator 
+         it = usedTarget_map.begin() ; it != usedTarget_map.end() ; it ++ ) {
+         G4cout 
+         << " " << it->second->GetWantedEvaluation() 
+         << ", " << it->second->GetWantedZ() 
+         << ", " << it->second->GetWantedA() 
+         << " -> " << it->second->GetActualEvaluation() 
+         << ", " << it->second->GetActualZ() 
+         << ", " << it->second->GetActualA() 
+         << G4endl; 
+      } 
+   }
 }

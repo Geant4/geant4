@@ -26,7 +26,7 @@
 /// \file medical/fanoCavity/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 98764 2016-08-09 14:12:17Z gcosmo $
+// $Id: RunAction.cc 106553 2017-10-13 06:40:50Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,16 +51,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
-:fDetector(det),fKinematic(kin),fHistoManager(0),fRun(0)
+ :fDetector(det),fKinematic(kin),fRun(nullptr)
 {
- fHistoManager = new HistoManager(); 
+  fHistoManager = new HistoManager(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
 {
- delete fHistoManager;
+  delete fHistoManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,8 +78,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   
   // do not save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  CLHEP::HepRandom::showEngineStatus();
-
+  //if (!isMaster) CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,7 +96,7 @@ void RunAction::EndOfRunAction(const G4Run* )
   }      
 
   // show Rndm status
-  if ( isMaster )CLHEP::HepRandom::showEngineStatus();
+  // if(!isMaster )CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

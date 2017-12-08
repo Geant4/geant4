@@ -14,8 +14,8 @@
 #  ZLIB     - Control use of internal G4zlib, or locate external ZLIB
 #  GDML     - Requires external XercesC
 #  G3TOG4   - UNIX only
-#  USOLIDS  - Allow use of USolids classes in geometry, and must find
-#             external USolids install
+#  USOLIDS  - Allow use of VecGeom classes in geometry, and must find
+#             external VecGeom install
 #  FREETYPE - For analysis module, find external FreeType install
 
 #-----------------------------------------------------------------------
@@ -113,8 +113,24 @@ else()
   option(GEANT4_USE_SYSTEM_EXPAT "Use system Expat library" ON)
 
   if(GEANT4_USE_SYSTEM_EXPAT)
-    # If system package requested, make damn sure we find it
+    # If system package requested, find it or fail
     find_package(EXPAT REQUIRED)
+
+    # Check version requirement externally to provide information
+    # on using internal expat.
+    if(${EXPAT_VERSION_STRING} VERSION_LESS "2.0.1")
+      set(__badexpat_include_dir ${EXPAT_INCLUDE_DIR})
+      set(__badexpat_library ${EXPAT_LIBRARY})
+      unset(EXPAT_FOUND)
+      unset(EXPAT_INCLUDE_DIR CACHE)
+      unset(EXPAT_LIBRARY CACHE)
+      message(FATAL_ERROR
+"Detected system expat header and library:
+EXPAT_INCLUDE_DIR = ${__badexpat_include_dir}
+EXPAT_LIBRARY = ${__badexpat_library}
+are of insufficient version '${EXPAT_VERSION_STRING}' (Required >= 2.0.1)
+Set the above CMake variables to point to an expat install of the required version, or set GEANT4_USE_SYSTEM_EXPAT to OFF to use Geant4's packaged version.")
+    endif()
   else()
     set(EXPAT_FOUND TRUE)
     set(GEANT4_USE_BUILTIN_EXPAT TRUE)
@@ -191,18 +207,21 @@ if(UNIX)
 endif()
 
 #-----------------------------------------------------------------------
-# Optional support for USolids - Requires USolids package
+# Optional support for VecGeom - Requires VecGeom package
 # GEANT4_USE_USOLIDS is a list argument which must take values:
-# - Empty/CMake boolean false : DEFAULT, do not replace G4 solids with USolids
-# - ALL/CMake boolean true : Replace all G4 solids with USolids
-# - List : Replace listed G4 solids with Usolids equivalents. Valid elements are
+# - Empty/CMake boolean false : DEFAULT, do not replace G4 solids with VecGeom
+# - ALL/CMake boolean true : Replace all G4 solids with VecGeom
+# - List : Replace listed G4 solids with VecGeom equivalents. Valid elements are
 set(GEANT4_USOLIDS_SHAPES
   BOX
   CONS
+  CTUBS
   EXTRUDEDSOLID
+  HYPE
   GENERICPOLYCONE
   GENERICTRAP
   ORB
+  PARA
   PARABOLOID
   POLYCONE
   POLYHEDRA
@@ -214,7 +233,7 @@ set(GEANT4_USOLIDS_SHAPES
   TUBS
   )
 
-set(GEANT4_USE_USOLIDS OFF CACHE STRING "EXPERIMENTAL: List Geant4 solids to replace with USolids equivalents (ALL;${GEANT4_USOLIDS_SHAPES})")
+set(GEANT4_USE_USOLIDS OFF CACHE STRING "EXPERIMENTAL: List Geant4 solids to replace with VecGeom equivalents (ALL;${GEANT4_USOLIDS_SHAPES})")
 mark_as_advanced(GEANT4_USE_USOLIDS)
 
 # - Must be a CMake list - no real way to enforce this
@@ -242,28 +261,28 @@ if(NOT GEANT4_USE_ALL_USOLIDS AND GEANT4_USE_USOLIDS)
 endif()
 
 
-# - G4USolids setup
+# - Geant4 USolids/VecGom setup
 if(GEANT4_USE_ALL_USOLIDS OR GEANT4_USE_PARTIAL_USOLIDS)
-  find_package(USolids REQUIRED)
+  find_package(VecGeom REQUIRED)
 
   if(GEANT4_USE_ALL_USOLIDS)
     set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_USOLIDS")
-    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing all Geant4 solids with USolids equivalents (EXPERIMENTAL)")
+    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with all VecGeom equivalents (EXPERIMENTAL)")
   else()
     set(GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_PARTIAL_USOLIDS")
     foreach(__g4_usolid_shape ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST})
       list(APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS "-DG4GEOM_USE_U${__g4_usolid_shape}")
     endforeach()
-    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
+    GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with VecGeom equivalents for ${GEANT4_USE_PARTIAL_USOLIDS_SHAPE_LIST} (EXPERIMENTAL)")
   endif()
   list (APPEND GEANT4_USOLIDS_COMPILE_DEFINITIONS ${VECGEOM_DEFINITIONS})
 
   # Combined definitions
   add_definitions(${GEANT4_USOLIDS_COMPILE_DEFINITIONS})
 
-  # Add USolids inc dirs here - can be removed once USolids supports
+  # Add VecGeom inc dirs here - can be removed once VecGeom supports
   # INTERFACE_INCLUDE_DIRECTORIES
-  include_directories(${USOLIDS_INCLUDE_DIRS} ${VECGEOM_EXTERNAL_INCLUDES})
+  include_directories(${VECGEOM_INCLUDE_DIR} ${VECGEOM_EXTERNAL_INCLUDES})
 endif()
 
 
@@ -278,4 +297,47 @@ if(GEANT4_USE_FREETYPE)
 endif()
 
 GEANT4_ADD_FEATURE(GEANT4_USE_FREETYPE "Building Geant4 analysis library with Freetype support")
+
+#-----------------------------------------------------------------------
+# Optional support for HDF5
+# - Requires external HDF5 1.8 or higher install
+# - Install must be MT safe if building Geant4 in MT mode
+#
+option(GEANT4_USE_HDF5 "Build Geant4 analysis library with HDF5 support" OFF)
+mark_as_advanced(GEANT4_USE_HDF5)
+
+if(GEANT4_USE_HDF5)
+  find_package(HDF5 1.8 REQUIRED)
+
+  # If we're in MT mode, found HDF5 must also support MT
+  if(GEANT4_BUILD_MULTITHREADED)
+    include(CheckCXXSymbolExists)
+    set(CMAKE_REQUIRED_INCLUDES "${HDF5_INCLUDE_DIRS}")
+    check_cxx_symbol_exists(H5_HAVE_THREADSAFE "H5pubconf.h" GEANT4_HAVE_H5_HAVE_THREADSAFE)
+    unset(CMAKE_REQUIRED_INCLUDES)
+
+    if(NOT GEANT4_HAVE_H5_HAVE_THREADSAFE)
+      message(FATAL_ERROR
+        "Found an install of HDF5, but it was not built with support for thread safety. "
+        "Either build Geant4 in single threaded mode, or use/reinstall HDF5 with "
+        "thread safety enabled. See HDF5's install guides, available from https://support.hdfgroup.org/HDF5/release/, for instructions on this.\n"
+        )
+    endif()
+  endif()
+
+  # As FindHDF5 does not yet supply imported targets, we
+  # create an internal INTERFACE target to wrap these.
+  # This still hard-codes include/library paths, but limits it
+  # to one place. Later, we'll create proper imported targets
+  # with re-finds but for now this is the best minimally invasive proceedure
+  add_library(G4HDF5 INTERFACE)
+  target_include_directories(G4HDF5 INTERFACE ${HDF5_INCLUDE_DIRS})
+  target_link_libraries(G4HDF5 INTERFACE ${HDF5_LIBRARIES})
+  install(TARGETS G4HDF5 EXPORT Geant4LibraryDepends)
+
+  # Override HDF5_LIBRARIES for back compatibility
+  set(HDF5_LIBRARIES G4HDF5)
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_HDF5 "Building Geant4 analysis library with HDF5 support")
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PAIModel.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PAIModel.cc 106217 2017-09-21 00:03:23Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -90,6 +90,7 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 
   // default generator
   SetAngularDistribution(new G4DeltaAngle());
+  fLowestTcut = 12.5*CLHEP::eV;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -197,6 +198,14 @@ void G4PAIModel::InitialiseLocal(const G4ParticleDefinition* p,
   fMaterialCutsCoupleVector = 
     static_cast<G4PAIModel*>(masterModel)->GetVectorOfCouples();
   SetElementSelectors(masterModel->GetElementSelectors());
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+G4double G4PAIModel::MinEnergyCut(const G4ParticleDefinition*,
+				  const G4MaterialCutsCouple*)
+{
+  return fLowestTcut;
 }
 
 //////////////////////////////////////////////////////////////////////////////

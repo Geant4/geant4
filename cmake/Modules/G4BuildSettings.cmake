@@ -155,6 +155,8 @@ enum_option(GEANT4_BUILD_CXXSTD
 
 string(REGEX REPLACE "^c\\+\\+" "" GEANT4_BUILD_CXXSTD "${GEANT4_BUILD_CXXSTD}")
 mark_as_advanced(GEANT4_BUILD_CXXSTD)
+geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
+
 
 # Require at least C++11 with no extensions and the following features
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -307,6 +309,24 @@ if(GEANT4_BUILD_VERBOSE_CODE)
 endif()
 
 #.rst:
+# - ``GEANT4_BUILD_MUONIC_ATOMS_IN_USE`` (Default: OFF)
+#
+#   - Switched off by default to improve performance when not using
+#     Muonic Atom code. It should be switched on if the project requires
+#     support for Muonic Atoms.
+#     Mark as advanced because most users should not need to worry about it
+#
+option(GEANT4_BUILD_MUONIC_ATOMS_IN_USE
+  "Enable turning on some if statements in track and event code. Switch on if using new Muonic Atom code."
+  OFF)
+mark_as_advanced(GEANT4_BUILD_MUONIC_ATOMS_IN_USE)
+
+# TODO: Migrate this to header
+if(GEANT4_BUILD_MUONIC_ATOMS_IN_USE)
+  add_definitions(-DG4MUATOMS_INUSE)
+endif()
+
+#.rst:
 # - ``GEANT4_BUILD_MSVC_MP`` (Windows only, Default: OFF)
 #
 #    - Provide optional file level parallelization with MSVC compiler.
@@ -322,7 +342,6 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS "/MP ${CMAKE_CXX_FLAGS}")
   endif()
 endif()
-
 
 
 #-----------------------------------------------------------------------

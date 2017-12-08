@@ -50,11 +50,11 @@ public:
   }
 public:
   mf(){}
+  mf(const T& a_v):parent(a_v){}
+  mf(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf(){}
 public:
-  mf(const mf& a_from)
-  :parent(a_from)
-  {}
+  mf(const mf& a_from):parent(a_from){}
   mf& operator=(const mf& a_from){
     //typedef typename parent::iterator bmf_t;
     parent::operator=(a_from);
@@ -92,10 +92,11 @@ public:
   }
 public:
   mf_string():parent(){}
+  mf_string(const std::string& a_v):parent(a_v){}
+  mf_string(const std::vector<std::string>& a_v):parent(a_v){}
   virtual ~mf_string(){}
 public:
-  mf_string(const mf_string& a_from)
-  :parent(a_from){}
+  mf_string(const mf_string& a_from):parent(a_from){}
   mf_string& operator=(const mf_string& a_from){
     parent::operator=(a_from);
     return *this;
@@ -103,6 +104,10 @@ public:
 public:
   mf_string& operator=(const std::vector<std::string>& a_value){
     parent::operator=(a_value);
+    return *this;
+  }
+  mf_string& operator=(const char* a_cstr){
+    parent::operator=(a_cstr);
     return *this;
   }
 };
@@ -150,10 +155,11 @@ public:
   }
 public:
   mf_enum():parent(){}
+  mf_enum(const T& a_v):parent(a_v){}
+  mf_enum(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_enum(){}
 public:
-  mf_enum(const mf_enum& a_from)
-  :parent(a_from){}
+  mf_enum(const mf_enum& a_from):parent(a_from){}
   mf_enum& operator=(const mf_enum& a_from){
     parent::operator=(a_from);
     return *this;
@@ -243,10 +249,11 @@ public:
   }
 public:
   mf_vec():parent(){}
+  mf_vec(const T& a_v):parent(a_v){}
+  mf_vec(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_vec(){}
 public:
-  mf_vec(const mf_vec& a_from)
-  :parent(a_from){}
+  mf_vec(const mf_vec& a_from):parent(a_from){}
   mf_vec& operator=(const mf_vec& a_from){
     parent::operator=(a_from);
     return *this;
@@ -287,10 +294,11 @@ public:
   }
 public:
   mf_std_vec():parent(){}
+  mf_std_vec(const T& a_v):parent(a_v){}
+  mf_std_vec(const std::vector<T>& a_v):parent(a_v){}
   virtual ~mf_std_vec(){}
 public:
-  mf_std_vec(const mf_std_vec& a_from)
-  :parent(a_from){}
+  mf_std_vec(const mf_std_vec& a_from):parent(a_from){}
   mf_std_vec& operator=(const mf_std_vec& a_from){
     parent::operator=(a_from);
     return *this;

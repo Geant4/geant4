@@ -10,19 +10,13 @@
 namespace tools {
 namespace sg {
 
-inline void set_plotter_camera(plotter& a_plotter,tools::sg::ortho& a_camera,unsigned int a_ww,unsigned int a_wh) {
+inline void set_plotter_camera(float a_XSIZ,float a_YSIZ,float a_ZSIZ,
+                               plotter& a_plotter,ortho& a_camera,unsigned int a_ww,unsigned int a_wh) {
   if(!a_ww || !a_wh) return;
 
-  //PAW logic :
- {float xfac = 1.0F/20.0F; //0.05
-  float yfac = 1.0F/20.0F; //0.05
-  float XSIZ = 20 * xfac;    //1     //page width
-  float YSIZ = 20 * yfac;    //1     //page height
-  float zfac = 1.0F/20.0F; //0.05
-  float ZSIZ = 20 * zfac;    //1     //page depth
-  a_plotter.width.value(XSIZ);
-  a_plotter.height.value(YSIZ);
-  a_plotter.depth.value(ZSIZ);}
+  a_plotter.width.value(a_XSIZ);
+  a_plotter.height.value(a_YSIZ);
+  a_plotter.depth.value(a_ZSIZ);
 
   enum plotter_viewport_mapping {
     pvp_adjust_viewport,
@@ -90,8 +84,19 @@ inline void set_plotter_camera(plotter& a_plotter,tools::sg::ortho& a_camera,uns
   a_camera.znear.value(camera_znear);
   a_camera.zfar.value(camera_zfar);
 
-  a_camera.position.value(tools::vec3f(0,0,camera_z_pos));
-  a_camera.orientation.value(tools::rotf(tools::vec3f(0,0,1),0));}
+  a_camera.position.value(vec3f(0,0,camera_z_pos));
+  a_camera.orientation.value(rotf(vec3f(0,0,1),0));}
+}
+
+inline void set_plotter_camera(plotter& a_plotter,ortho& a_camera,unsigned int a_ww,unsigned int a_wh) {
+  //PAW logic :
+  float xfac = 1.0F/20.0F; //0.05
+  float yfac = 1.0F/20.0F; //0.05
+  float XSIZ = 20 * xfac;    //1     //page width
+  float YSIZ = 20 * yfac;    //1     //page height
+  float zfac = 1.0F/20.0F; //0.05
+  float ZSIZ = 20 * zfac;    //1     //page depth
+  set_plotter_camera(XSIZ,YSIZ,ZSIZ,a_plotter,a_camera,a_ww,a_wh);
 }
 
 }}

@@ -14,6 +14,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-17 Ivana Hrivnacova (activation-V10-03-05)
+- Fixed Doxygen warnings
+
+25-10-17 Ivana Hrivnacova (activation-V10-03-03,04)
+- Reverted back the example name; 
+  (it's not possible to tag the renamed example)
+- Minor modifications in  readme only
+
+19-10-17 Ivana Hrivnacova (activation-V10-03-02)
+- Renamed example from Activation in activation
+
+17-10-17 mma (activation-V10-03-01)
+- update readme
+
+16-05-17 mma (activation-V10-03-00)
+- first tag. Cowork with ctests-V10-03-07
+
 21-04-17 Ivana Hrivnacova
 - Make the Run::fIonMap, fIonId static and added lock in Run::GetIonId()
   where these data are updated. This makes the code working in MT mode. 

@@ -47,7 +47,7 @@
 #include "G4PhysicalConstants.hh"
 
 G4GammaTransition::G4GammaTransition() 
-  : polarFlag(false), fDirection(0.,0.,0.), fVerbose(0)
+  : polarFlag(false), fDirection(0.,0.,0.), fTwoJMAX(10), fVerbose(0)
 {}
 
 G4GammaTransition::~G4GammaTransition() 
@@ -92,7 +92,6 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   // Do complete Lorentz computation 
   G4LorentzVector lv = nucleus->GetMomentum();
   G4double mass = nucleus->GetGroundStateMass() + newExcEnergy;
-  //G4double e0 = lv.e();
 
   // select secondary
   G4ParticleDefinition* part;
@@ -104,7 +103,7 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
     nucleus->SetNumberOfElectrons(ne);
   }
 
-  if(polarFlag && isDiscrete) {
+  if(polarFlag && isDiscrete && JP1 <= fTwoJMAX) {
     SampleDirection(nucleus, mpRatio, JP1, JP2, MP);
   } else {
     fDirection = G4RandomDirection();
@@ -145,8 +144,8 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
   //G4cout << " DeltaE= " << e0 - lv.e() - res4mom.e() + emass
   //	 << "   Emass= " << emass << G4endl;
   if(fVerbose > 1) {
-    G4cout << "G4GammaTransition::SampleTransition : " << result << G4endl;
-    G4cout << "       Left nucleus: " << nucleus << G4endl;
+    G4cout << "G4GammaTransition::SampleTransition : " << *result << G4endl;
+    G4cout << "       Left nucleus: " << *nucleus << G4endl;
   }
   return result;
 }
@@ -154,55 +153,44 @@ G4GammaTransition::SampleTransition(G4Fragment* nucleus,
 void G4GammaTransition::SampleDirection(G4Fragment* nuc, G4double ratio, 
 					G4int twoJ1, G4int twoJ2, G4int mp)
 {
-  // PhotonEvaporation dataset:
-  // The multipolarity number with 1,2,3,4,5,6,7 representing E0,E1,M1,E2,M2,E3,M3
-  // monopole transition and 100*Nx+Ny representing multipolarity transition with
-  // Ny and Ny taking the value 1,2,3,4,5,6,7 referring to E0,E1,M1,E2,M2,E3,M3,..
-  // For example a M1+E2 transition would be written 304.
-  // M1 is the primary transition (L) and E2 is the secondary (L')
-
-  G4double mpRatio = ratio;
-
-  G4int L0 = 0, Lp = 0;
-  if (mp > 99) {
-    L0 = mp/200;
-    Lp = (mp%100)/2;
-  } else {
-    L0 = mp/2;
-    Lp = 0;
-    mpRatio = 0.;
-  } 
-
-  fPolTrans.SetGammaTransitionData(twoJ1, twoJ2, L0, mpRatio, Lp);
-
-  //AR-13Jun2017: Temporary workaround to avoid very long computations.
-  G4NuclearPolarization* np = nuc->GetNuclearPolarization();
   G4double cosTheta, phi;
-
-  if(np && twoJ1 > 6) { 
-    np->Unpolarize(); 
-    cosTheta = 2*G4UniformRand() - 1.0;
-    phi = CLHEP::twopi*G4UniformRand();
-
-  } else if(!np) {
-    // initial state is non-polarized - create polarization
-    np = new G4NuclearPolarization();
-    nuc->SetNuclearPolarization(np);
+  G4NuclearPolarization* np = nuc->GetNuclearPolarization(); 
+  if(fVerbose > 1) {
+    G4cout << "G4GammaTransition::SampleDirection : 2J1= " << twoJ1 
+	   << " 2J2= " << twoJ2 << " ratio= " << ratio 
+	   << " mp= " << mp << G4endl;
+    G4cout << "  Nucleus: " << *nuc << G4endl;
+  }
+  if(nullptr == np) {
     cosTheta = 2*G4UniformRand() - 1.0;
     phi = CLHEP::twopi*G4UniformRand();
 
   } else {
+    // PhotonEvaporation dataset:
+    // The multipolarity number with 1,2,3,4,5,6,7 representing E0,E1,M1,E2,M2,E3,M3
+    // monopole transition and 100*Nx+Ny representing multipolarity transition with
+    // Ny and Ny taking the value 1,2,3,4,5,6,7 referring to E0,E1,M1,E2,M2,E3,M3,..
+    // For example a M1+E2 transition would be written 304.
+    // M1 is the primary transition (L) and E2 is the secondary (L')
 
-    // initial state is polarized - generate correlation
-    cosTheta = fPolTrans.GenerateGammaCosTheta(np->GetPolarization());
-    phi = fPolTrans.GenerateGammaPhi(cosTheta, np->GetPolarization());
+    G4double mpRatio = ratio;
+
+    G4int L0 = 0, Lp = 0;
+    if (mp > 99) {
+      L0 = mp/200;
+      Lp = (mp%100)/2;
+    } else {
+      L0 = mp/2;
+      Lp = 0;
+      mpRatio = 0.;
+    } 
+    fPolTrans.SampleGammaTransition(np, twoJ1, twoJ2, L0, Lp, mpRatio, cosTheta, phi);
   }
-  fPolTrans.UpdatePolarizationToFinalState(cosTheta, phi, nuc);
 
   G4double sinTheta = std::sqrt((1.-cosTheta)*(1.+cosTheta));
   fDirection.set(sinTheta*std::cos(phi),sinTheta*std::sin(phi),cosTheta);
   if(fVerbose > 1) {
-    G4cout << "G4GammaTransition::SampleDirection : " << fDirection << G4endl;
-    G4cout << "Polarisation : " << *np << G4endl;
+    G4cout << "G4GammaTransition::SampleDirection done: " << fDirection << G4endl;
+    if(np) { G4cout << *np << G4endl; }
   }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh 96156 2016-03-21 08:10:21Z gcosmo $
+// $Id: G4MuPairProduction.hh 106716 2017-10-20 09:40:09Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -84,11 +84,16 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 				    const G4Material*, G4double cut) override;
 
-  virtual void PrintInfo() override;
-
   inline void SetLowestKineticEnergy(G4double e);
 
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
+
 protected:
+
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                            G4String endOfLine=G4String("\n")) const override;
 
   virtual void 
   InitialiseEnergyLossProcess(const G4ParticleDefinition*,

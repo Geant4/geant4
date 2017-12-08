@@ -87,9 +87,7 @@ namespace G4INCL {
 
         inline G4double operator()(const G4double r) const {
           const G4double arg = std::pow((r/theDiffusenessParameter),2);
-          return normalisation * r * arg
-            * (theDiffusenessParameter + theRadiusParameter * (arg - 1.) )
-            * std::exp(-arg);
+          return r*r*( 1. + theRadiusParameter * arg) * std::exp(-arg);
         }
 
         inline G4double getRadiusParameter() { return theRadiusParameter; };

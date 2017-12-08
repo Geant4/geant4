@@ -5,11 +5,14 @@
                        Package History file
                        --------------------
 
-19/11/2016 - tag microyz-V10-02-01 - A.Dotti
-explicit set of SD to manager
+24/07/2017 - tag microyz-V10-03-01 - S.Incerti
+update of README*
 
-09/07/2016 - tag microyz-V10-02-00 - S.Incerti
-updated README
+30/06/2017 - tag microyz-V10-03-00 - S.Incerti
+update of the code for release 10.4
+
+17/07/2016 - tag microyz-V10-02-00 - S.Incerti
+general update of the code
 
 19/11/2015 - tag microyz-V10-01-05 - S.Incerti
 updated plot.C and microyz.in

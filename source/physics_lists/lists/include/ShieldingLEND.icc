@@ -1,0 +1,141 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id: ShieldingLEND.icc 101814 2016-11-30 18:16:07Z gunter $
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   
+//
+// Author: 7 Nov 2017  Tatsumi Koi
+//   created from Shielding
+//
+// Modified:
+//----------------------------------------------------------------------------
+//
+
+#include <iomanip>   
+
+#include "globals.hh"
+#include "G4ios.hh"
+#include "G4ProcessManager.hh"
+#include "G4ProcessVector.hh"
+#include "G4ParticleTypes.hh"
+#include "G4ParticleTable.hh"
+
+#include "G4Material.hh"
+#include "G4MaterialTable.hh"
+
+#include "G4DecayPhysics.hh"
+#include "G4RadioactiveDecayPhysics.hh"
+#include "G4EmProcessOptions.hh"
+#include "G4EmStandardPhysics.hh"
+#include "G4EmExtraPhysics.hh"
+#include "G4IonQMDPhysics.hh"
+#include "G4IonElasticPhysics.hh"
+#include "G4StoppingPhysics.hh"
+#include "G4HadronElasticPhysicsLEND.hh"
+
+#include "G4DataQuestionaire.hh"
+#include "G4HadronPhysicsShieldingLEND.hh"
+
+template<class T> TShieldingLEND<T>::TShieldingLEND( G4int verbose, G4String /*LEN_model*/,
+                                             G4String HadrPhysVariant ): T()
+{
+
+  // default cut value  (1.0mm) 
+  // defaultCutValue = 1.0*CLHEP::mm;
+  G4DataQuestionaire it(photon, neutron, radioactive);
+  G4cout << "<<< Geant4 Physics List simulation engine: ShieldingLEND"
+         << HadrPhysVariant<< " 2.1"<<G4endl;
+  G4cout <<G4endl;
+  this->defaultCutValue = 0.7*CLHEP::mm;  
+  this->SetVerboseLevel(verbose);
+
+ // EM Physics
+  this->RegisterPhysics( new G4EmStandardPhysics(verbose) );
+  //G4EmProcessOptions emOptions;
+  //emOptions.SetFluo(true); // To activate deexcitation processes and fluorescence
+  //emOptions.SetAuger(true); // To activate Auger effect if deexcitation is activated
+  //emOptions.SetPIXE(true); // To activate Particle Induced X-Ray Emission (PIXE)   
+
+  // Synchroton Radiation & GN Physics
+  G4EmExtraPhysics* emExtraPhysics = new G4EmExtraPhysics(verbose);
+  // Use LEND model for Gamma Nuclear 
+  emExtraPhysics->LENDGammaNuclear(true);
+  this->RegisterPhysics( emExtraPhysics );
+
+  // Decays 
+  this->RegisterPhysics( new G4DecayPhysics(verbose) );
+  this->RegisterPhysics( new G4RadioactiveDecayPhysics(verbose) );
+
+  G4String evaluation("");
+  //evaluation="ENDF/BVII.1";
+  //"ENDF/BVII.1" is the only evaluation currently supported.
+
+  // Hadron Elastic scattering
+  this->RegisterPhysics( new G4HadronElasticPhysicsLEND(verbose,evaluation) );
+
+  G4DataQuestionaire itt(lend);
+  G4HadronPhysicsShieldingLEND* hps;
+  // Hadron Physics
+  if (HadrPhysVariant == "M") {
+    hps = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 9.5*CLHEP::GeV, 9.9*CLHEP::GeV);
+  } else {
+    hps = new G4HadronPhysicsShieldingLEND("hInelastic ShieldingLEND", verbose, 4.0*CLHEP::GeV, 5.0*CLHEP::GeV);
+  }
+  hps->UseLEND(evaluation); 
+  this->RegisterPhysics( hps );
+
+  // Stopping Physics
+  this->RegisterPhysics( new G4StoppingPhysics(verbose) );
+
+  // Ion Physics
+  this->RegisterPhysics( new G4IonQMDPhysics(verbose) );
+  
+  this->RegisterPhysics( new G4IonElasticPhysics(verbose) );
+
+  // Neutron tracking cut --> not by default
+  // this->RegisterPhysics( new G4NeutronTrackingCut(verbose));
+
+}
+
+template<class T> TShieldingLEND<T>::~TShieldingLEND()
+{
+}
+
+template<class T> void TShieldingLEND<T>::SetCuts()
+{
+  if (this->verboseLevel >1){
+    G4cout << "ShieldingLEND::SetCuts:";
+  }  
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+
+  this->SetCutsWithDefault();   
+
+  //Set proton cut value to 0 for producing low energy recoil nucleus 
+  this->SetCutValue(0, "proton");    
+}

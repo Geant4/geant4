@@ -44,7 +44,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR}
+                    ${ROOT_INCLUDE_DIRS}
 		    ${G4mpi_INCLUDE_DIR})
 
 

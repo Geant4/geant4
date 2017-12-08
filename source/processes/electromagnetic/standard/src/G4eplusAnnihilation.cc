@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation.cc 101249 2016-11-10 08:52:15Z gcosmo $
+// $Id: G4eplusAnnihilation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -103,16 +103,17 @@ void G4eplusAnnihilation::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    if(!EmModel(1)) { SetEmModel(new G4eeToTwoGammaModel(),1); }
-    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    if(!EmModel(0)) { SetEmModel(new G4eeToTwoGammaModel()); }
+    EmModel(0)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(0));
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eplusAnnihilation::PrintInfo()
+void G4eplusAnnihilation::StreamProcessInfo(std::ostream&,
+                                            G4String) const
 {} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -167,6 +168,14 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
   //
   fParticleChange.ProposeTrackStatus(fStopAndKill);
   return &fParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eplusAnnihilation::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Positron annihilation</strong>";
+  G4VEmProcess::ProcessDescription(out);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -77,7 +77,8 @@ G4BogackiShampine45::G4BogackiShampine45(G4EquationOfMotion *EqRhs,
                                          G4int     noIntegrationVariables,
                                          G4bool    primary)   
    : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-     fAuxStepper(0),
+     fLastStepLength(-1.0),
+     fAuxStepper(nullptr),
      fPreparedInterpolation(false)
 {
     

@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm0/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 104822 2017-06-20 12:24:22Z gcosmo $
+// $Id: RunAction.cc 107324 2017-11-08 16:35:06Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,9 +37,9 @@
 
 #include "G4Run.hh"
 #include "G4ProcessManager.hh"
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4EmCalculator.hh"
-#include "G4Electron.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Electron.hh"
@@ -133,6 +133,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
        emName.push_back(procName);
        enerCut.push_back(cut);
      }  
+  }
+  
+  // write html documentation, if requested
+  char* htmlDocName = getenv("G4PhysListName");   // file name 
+  char* htmlDocDir  = getenv("G4PhysListDocDir"); // directory
+  if (htmlDocName && htmlDocDir) {
+    G4LossTableManager::Instance()->DumpHtml();
   }
   
   // print list of processes

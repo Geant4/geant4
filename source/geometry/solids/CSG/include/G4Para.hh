@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh 104452 2017-05-31 15:41:24Z gcosmo $
+// $Id: G4Para.hh 105075 2017-07-11 14:22:53Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -70,6 +70,15 @@
 
 #ifndef G4Para_HH
 #define G4Para_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPARA 1
+#endif
+
+#if defined(G4GEOM_USE_UPARA)
+  #define G4UPara G4Para
+  #include "G4UPara.hh"
+#else
 
 #include "G4CSGSolid.hh"
 #include "G4Polyhedron.hh"
@@ -181,5 +190,7 @@ class G4Para : public G4CSGSolid
 };
 
 #include "G4Para.icc"
+
+#endif
 
 #endif

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -72,6 +72,20 @@ hBertiniCaptureAtRest,muMinusCaptureAtRest,      photonNuclear,                m
 /run/printProgress 1000
 #
 /run/beamOn 10000
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
 NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
@@ -241,6 +255,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -255,6 +270,7 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -384,16 +400,21 @@ NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1442.7
-Use new data files                                  1
-Use complete data files                             1
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   1
 Electron internal conversion ID                     0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 ========= Table of registered couples ==============================
 
@@ -432,49 +453,48 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=12.03s Real=12.1s Sys=0.01s
+  User=8.5s Real=8.51s Sys=0s
 
  The run is 10000 neutron of 14.1 MeV through 30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-                Decay=      1      RadioactiveDecay= 196874        Transportation=  72032
-              annihil=    192                 compt= 396781                  conv=    190
-           dInelastic=      1                 eIoni= 406412                 hIoni=    466
-           hadElastic= 180553               ionIoni= 197210                   msc=    204
-             nCapture=     24      neutronInelastic=  16425                  phot=  20617
-        photonNuclear=      1 
+     RadioactiveDecay= 197601        Transportation=  72557               annihil=    200
+                compt= 399455                  conv=    203                 eIoni= 409220
+                hIoni=    471            hadElastic= 181238               ionIoni= 197930
+                  msc=    152              nCapture=     23      neutronInelastic=  16458
+                 phot=  20690 
 
  List of generated particles:
-  Be8[3030.000]:      24  Emean =  6.7973 keV	( 1.0586 keV --> 12.085 keV)
-            He6:     157  Emean =  2.2365 MeV	( 84.269 keV --> 4.9248 MeV)
-            Li6:     752  Emean =  1.5818 MeV	( 29.436 eV  --> 6.6297 MeV)
-            Li7:  195917  Emean =  331.47 keV	( 0.84674 meV --> 6.1982 MeV)
-            Li8:      24  Emean =  681.83 eV 	( 75.3 eV  --> 3.5123 keV)
-          alpha:     360  Emean =  1.2205 MeV	( 91.342 keV --> 3.8631 MeV)
-      anti_nu_e:     181  Emean =  2.5164 MeV	( 460.79 keV --> 11.558 MeV)
-       deuteron:     466  Emean =  4.3596 MeV	( 104.05 keV --> 23.591 MeV)
-             e+:     190  Emean =  1.4267 MeV	( 25.979 keV --> 3.9762 MeV)
-             e-:  406391  Emean =  87.584 keV	( 100.01 eV  --> 10.573 MeV)
-          gamma:   45752  Emean =  1.2038 MeV	( 1.0001 keV --> 10.415 MeV)
-        neutron:   17173  Emean =  3.3761 MeV	( 3.4393 keV --> 13.63 MeV)
-         triton:       1  Emean =   1.293 MeV	( 1.293 MeV --> 1.293 MeV)
+  Be8[3030.000]:      23  Emean =  6.1596 keV	( 1.0389 keV --> 12.106 keV)
+            He6:     165  Emean =  2.3264 MeV	( 60.625 keV --> 4.9283 MeV)
+            Li6:     755  Emean =  1.5627 MeV	( 32.998 eV  --> 7.2488 MeV)
+            Li7:  196635  Emean =  329.04 keV	( 2.0682 meV --> 6.2204 MeV)
+            Li8:      23  Emean =  1.9651 keV	( 207.62 eV  --> 27.694 keV)
+          alpha:     352  Emean =  1.2579 MeV	( 46.152 keV --> 3.7667 MeV)
+      anti_nu_e:     188  Emean =  2.5489 MeV	( 302.1 keV --> 10.32 MeV)
+       deuteron:     471  Emean =  4.4101 MeV	( 34.84 keV --> 22.96 MeV)
+             e+:     203  Emean =  1.4722 MeV	( 6.236 keV --> 4.3069 MeV)
+             e-:  409174  Emean =  86.296 keV	( 100.02 eV  --> 10.696 MeV)
+          gamma:   46123  Emean =  1.1972 MeV	( 1 keV --> 5.8845 MeV)
+        neutron:   17189  Emean =  3.3712 MeV	( 2.1705 keV --> 13.634 MeV)
 
- Mean energy deposit per event = 10.464 MeV  rms = 3.4286 MeV
- Mean energy flow per event    = 3.0346 MeV  rms = 3.2299 MeV
+ Mean energy deposit per event = 10.42 MeV  rms = 3.4273 MeV
+ Mean energy flow per event    = 3.0861 MeV  rms = 3.221 MeV
 
  List of particles emerging from the absorber :
-      anti_nu_e:     181  Emean =  2.5164 MeV	( 460.79 keV --> 11.558 MeV) 	Eflow/event = 45.548 keV
-             e-:     155  Emean =  1.0885 MeV	( 15.602 keV --> 3.9814 MeV) 	Eflow/event = 16.872 keV
-          gamma:   24944  Emean =  778.37 keV	( 1.8578 keV --> 5.8833 MeV) 	Eflow/event = 1.9416 MeV
-        neutron:   10724  Emean =  961.02 keV	( 6.3259 meV --> 14.1 MeV) 	Eflow/event = 1.0306 MeV
+      anti_nu_e:     188  Emean =  2.5489 MeV	( 302.1 keV --> 10.32 MeV) 	Eflow/event = 47.919 keV
+             e+:       3  Emean =  1.9878 MeV	( 1.2359 MeV --> 2.4986 MeV) 	Eflow/event = 596.34 eV 
+             e-:     143  Emean =  1.2898 MeV	( 27.021 keV --> 4.8298 MeV) 	Eflow/event = 18.443 keV
+          gamma:   25230  Emean =  784.64 keV	( 10.929 keV --> 5.8845 MeV) 	Eflow/event = 1.9796 MeV
+        neutron:   10708  Emean =   970.8 keV	( 1.2451 meV --> 14.1 MeV) 	Eflow/event = 1.0395 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1490445430, 863021880
+ Current couple of seeds = 1426957929, 768314505
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.098 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.089 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

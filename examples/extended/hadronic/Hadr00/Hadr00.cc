@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr00 example
 //
 //
-// $Id: Hadr00.cc 81073 2014-05-20 10:23:13Z gcosmo $
+// $Id: Hadr00.cc 106244 2017-09-26 01:58:00Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr00
@@ -91,7 +91,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(det);
 
   G4PhysListFactory factory;
-  G4VModularPhysicsList* phys = 0;
+  G4VModularPhysicsList* phys = nullptr;
   G4String physName = "";
 
   // Physics List name defined via 3nd argument
@@ -112,6 +112,7 @@ int main(int argc,char** argv) {
   phys = factory.GetReferencePhysList(physName);
 
   runManager->SetUserInitialization(phys);
+  det->SetPhysicsList(phys);
 
   //set user action classes
   runManager->SetUserInitialization(new ActionInitialization(det));

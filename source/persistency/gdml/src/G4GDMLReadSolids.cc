@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 103463 2017-04-11 07:22:55Z gcosmo $
+// $Id: G4GDMLReadSolids.cc 105857 2017-08-24 07:52:24Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -2290,6 +2290,12 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
    G4double endouterrad = 0.0;
    G4double zlen = 0.0;
    G4double phi = 0.0;
+   G4double totphi = 0.0;
+   G4double midinnerrad = 0.0;
+   G4double midouterrad = 0.0;
+   G4double positiveEndz = 0.0;
+   G4double negativeEndz = 0.0;
+   G4int nseg = 0;
 
    const xercesc::DOMNamedNodeMap* const attributes
          = twistedtubsElement->getAttributes();
@@ -2329,6 +2335,12 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
       if (attName=="endinnerrad")  { endinnerrad=eval.Evaluate(attValue);  } else
       if (attName=="endouterrad")  { endouterrad=eval.Evaluate(attValue);  } else
       if (attName=="zlen") { zlen = eval.Evaluate(attValue); } else
+      if (attName=="midinnerrad")  { midinnerrad=eval.Evaluate(attValue);  } else
+      if (attName=="midouterrad")  { midouterrad=eval.Evaluate(attValue);  } else
+      if (attName=="negativeEndz") { negativeEndz = eval.Evaluate(attValue); } else
+      if (attName=="positiveEndz") { positiveEndz = eval.Evaluate(attValue); } else
+      if (attName=="nseg") { nseg = eval.Evaluate(attValue); } else
+      if (attName=="totphi") { totphi = eval.Evaluate(attValue); } else
       if (attName=="phi") { phi = eval.Evaluate(attValue); }
    }
 
@@ -2336,9 +2348,29 @@ TwistedtubsRead(const xercesc::DOMElement* const twistedtubsElement)
    endinnerrad *= lunit;
    endouterrad *= lunit;
    zlen *= 0.5*lunit;
+   midinnerrad *= lunit;
+   midouterrad *= lunit;
+   positiveEndz *= lunit;
+   negativeEndz *= lunit;
    phi *= aunit;
+   totphi *= aunit;
 
-   new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,phi);
+   if (zlen != 0.0)
+   {
+     if (nseg != 0)
+       new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,nseg,totphi);
+     else
+       new G4TwistedTubs(name,twistedangle,endinnerrad,endouterrad,zlen,phi);
+   }
+   else
+   {
+     if (nseg != 0)
+       new G4TwistedTubs(name,twistedangle,midinnerrad,midouterrad,
+                         negativeEndz,positiveEndz,nseg,totphi);
+     else
+       new G4TwistedTubs(name,twistedangle,midinnerrad,midouterrad,
+                         negativeEndz,positiveEndz,phi);
+   }
 }
 
 G4TwoVector G4GDMLReadSolids::

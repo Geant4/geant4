@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 102561 2017-02-09 08:16:05Z gcosmo $
+// $Id: G4UImanager.cc 106172 2017-09-15 13:03:57Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -167,6 +167,11 @@ G4int G4UImanager::operator==(const G4UImanager &right) const
 { return (this==&right); }
 G4int G4UImanager::operator!=(const G4UImanager &right) const
 { return (this!=&right); }
+
+void G4UImanager::UseDoublePrecisionStr(G4bool val)
+{ doublePrecisionStr = val; }
+G4bool G4UImanager::DoublePrecisionStr()
+{ return doublePrecisionStr; }
 
 G4String G4UImanager::GetCurrentValues(const char * aCommand)
 {

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VisManager.cc 103926 2017-05-03 13:43:27Z gcosmo $
+// $Id: G4VisManager.cc 106957 2017-10-31 08:32:27Z gcosmo $
 //
 // 
 // GEANT4 Visualization Manager - John Allison 02/Jan/1996.
@@ -111,6 +111,7 @@ G4VisManager::G4VisManager (const G4String& verbosityString):
   fNKeepRequests            (0),
   fEventKeepingSuspended    (false),
   fKeptLastEvent            (false),
+  fDrawEventOnlyIfToBeKept  (false),
   fpRequestedEvent          (0),
   fAbortReviewKeptEvents    (false),
   fIsDrawGroup              (false),
@@ -350,12 +351,110 @@ void G4VisManager::Initialise () {
     G4cout << G4endl;
   }
 
+  InitialiseG4ColourMap();
+
   if (fVerbosity >= startup) {
-    PrintAvailableColours (fVerbosity);
-    G4cout << G4endl;
+    G4cout <<
+    "Some /vis commands (optionally) take a string to specify colour."
+    "\n\"/vis/list\" to see available colours."
+    << G4endl;
   }
 
   fInitialised = true;
+}
+
+void G4VisManager::InitialiseG4ColourMap() const
+{
+  G4Colour::InitialiseColourMap();  // Initialises (if not already initialised)
+
+  // our forever 65 named colors taken long time ago from X11.
+  // Extracted from g4tools/include/tools/colors
+  // Copyright (C) 2010, Guy Barrand. All rights reserved.
+  // See the file tools.license for terms.
+
+#define TOOLS_COLORS_STAT(name,r,g,b) \
+G4Colour::AddToMap(#name, G4Colour(r,g,b));
+
+  //0-9
+  TOOLS_COLORS_STAT(aquamarine,0.496101F,0.996109F,0.828138F)
+  TOOLS_COLORS_STAT(mediumaquamarine,0.398444F,0.800793F,0.664073F)
+  //  TOOLS_COLORS_STAT(black,0,0,0) (already defined)
+  //  TOOLS_COLORS_STAT(blue,0,0,1) (already defined)
+  TOOLS_COLORS_STAT(cadetblue,0.371099F,0.617197F,0.62501F)
+  TOOLS_COLORS_STAT(cornflowerblue,0.390631F,0.58204F,0.925795F)
+  TOOLS_COLORS_STAT(darkslateblue,0.281254F,0.238285F,0.542977F)
+  TOOLS_COLORS_STAT(lightblue,0.675792F,0.843763F,0.898451F)
+  TOOLS_COLORS_STAT(lightsteelblue,0.68751F,0.765637F,0.867201F)
+  TOOLS_COLORS_STAT(mediumblue,0,0,0.800793F)
+
+  //10-19
+  TOOLS_COLORS_STAT(mediumslateblue,0.480476F,0.406256F,0.929702F)
+  TOOLS_COLORS_STAT(midnightblue,0.0976577F,0.0976577F,0.437507F)
+  TOOLS_COLORS_STAT(navyblue,0,0,0.500008F)
+  TOOLS_COLORS_STAT(navy,0,0,0.500008F)
+  TOOLS_COLORS_STAT(skyblue,0.527352F,0.8047F,0.917983F)
+  TOOLS_COLORS_STAT(slateblue,0.414069F,0.351568F,0.800793F)
+  TOOLS_COLORS_STAT(steelblue,0.273442F,0.50782F,0.703136F)
+  TOOLS_COLORS_STAT(coral,0.996109F,0.496101F,0.312505F)
+  //  TOOLS_COLORS_STAT(cyan,0,1,1) (already defined)
+  TOOLS_COLORS_STAT(firebrick,0.695323F,0.132815F,0.132815F)
+
+  //20-29
+  //  TOOLS_COLORS_STAT(brown,0.644541F,0.164065F,0.164065F) (already defined)
+  TOOLS_COLORS_STAT(gold,0.996109F,0.839857F,0)
+  TOOLS_COLORS_STAT(goldenrod,0.851575F,0.644541F,0.125002F)
+  //  TOOLS_COLORS_STAT(green,0,1,0) (already defined)
+  TOOLS_COLORS_STAT(darkgreen,0,0.390631F,0)
+  TOOLS_COLORS_STAT(darkolivegreen,0.332036F,0.417975F,0.183597F)
+  TOOLS_COLORS_STAT(forestgreen,0.132815F,0.542977F,0.132815F)
+  TOOLS_COLORS_STAT(limegreen,0.195315F,0.800793F,0.195315F)
+  TOOLS_COLORS_STAT(mediumseagreen,0.234379F,0.699229F,0.441413F)
+  TOOLS_COLORS_STAT(mediumspringgreen,0,0.976577F,0.601572F)
+
+  //30-39
+  TOOLS_COLORS_STAT(palegreen,0.593759F,0.980484F,0.593759F)
+  TOOLS_COLORS_STAT(seagreen,0.17969F,0.542977F,0.339849F)
+  TOOLS_COLORS_STAT(springgreen,0,0.996109F,0.496101F)
+  TOOLS_COLORS_STAT(yellowgreen,0.601572F,0.800793F,0.195315F)
+  TOOLS_COLORS_STAT(darkslategrey,0.183597F,0.308598F,0.308598F)
+  TOOLS_COLORS_STAT(dimgrey,0.410163F,0.410163F,0.410163F)
+  TOOLS_COLORS_STAT(lightgrey,0.824231F,0.824231F,0.824231F)
+  //  TOOLS_COLORS_STAT(grey,0.750011F,0.750011F,0.750011F) (already defined)
+  TOOLS_COLORS_STAT(khaki,0.937514F,0.898451F,0.546883F)
+  //  TOOLS_COLORS_STAT(magenta,1,0,1) (already defined)
+
+  //40-49
+  TOOLS_COLORS_STAT(maroon,0.68751F,0.187503F,0.375006F)
+  TOOLS_COLORS_STAT(orange,0.996109F,0.644541F,0)
+  TOOLS_COLORS_STAT(orchid,0.851575F,0.437507F,0.83595F)
+  TOOLS_COLORS_STAT(darkorchid,0.597665F,0.195315F,0.796887F)
+  TOOLS_COLORS_STAT(mediumorchid,0.726574F,0.332036F,0.824231F)
+  TOOLS_COLORS_STAT(pink,0.996109F,0.750011F,0.792981F)
+  TOOLS_COLORS_STAT(plum,0.863294F,0.62501F,0.863294F)
+  //  TOOLS_COLORS_STAT(red,1,0,0) (already defined)
+  TOOLS_COLORS_STAT(indianred,0.800793F,0.35938F,0.35938F)
+  TOOLS_COLORS_STAT(mediumvioletred,0.777356F,0.0820325F,0.519539F)
+
+  //50-59
+  TOOLS_COLORS_STAT(orangered,0.996109F,0.269535F,0)
+  TOOLS_COLORS_STAT(violetred,0.812512F,0.125002F,0.562509F)
+  TOOLS_COLORS_STAT(salmon,0.976577F,0.500008F,0.445319F)
+  TOOLS_COLORS_STAT(sienna,0.62501F,0.320317F,0.175784F)
+  TOOLS_COLORS_STAT(tan,0.820325F,0.703136F,0.546883F)
+  TOOLS_COLORS_STAT(thistle,0.843763F,0.746105F,0.843763F)
+  TOOLS_COLORS_STAT(turquoise,0.250004F,0.875013F,0.812512F)
+  TOOLS_COLORS_STAT(darkturquoise,0,0.8047F,0.816419F)
+  TOOLS_COLORS_STAT(mediumturquoise,0.281254F,0.816419F,0.796887F)
+  TOOLS_COLORS_STAT(violet,0.929702F,0.50782F,0.929702F)
+
+  //60-64
+  TOOLS_COLORS_STAT(blueviolet,0.539071F,0.167971F,0.882826F)
+  TOOLS_COLORS_STAT(wheat,0.957046F,0.867201F,0.699229F)
+  //  TOOLS_COLORS_STAT(white,1,1,1) (already defined)
+  //  TOOLS_COLORS_STAT(yellow,1,1,0) (already defined)
+  TOOLS_COLORS_STAT(greenyellow,0.675792F,0.996109F,0.18359F)
+
+#undef TOOLS_COLORS_STAT
 }
 
 void G4VisManager::RegisterMessengers () {
@@ -372,6 +471,7 @@ void G4VisManager::RegisterMessengers () {
   
   // Other top level commands...
   RegisterMessenger(new G4VisCommandAbortReviewKeptEvents);
+  RegisterMessenger(new G4VisCommandDrawOnlyToBeKeptEvents);
   RegisterMessenger(new G4VisCommandEnable);
   RegisterMessenger(new G4VisCommandList);
   RegisterMessenger(new G4VisCommandReviewKeptEvents);
@@ -547,8 +647,9 @@ void G4VisManager::Enable() {
       G4cout << "G4VisManager::Enable: visualization enabled." << G4endl;
     }
     if (fVerbosity >= warnings) {
-      auto nKeptEvents =
-      G4RunManager::GetRunManager()->GetCurrentRun()->GetEventVector()->size();
+      G4int nKeptEvents = 0;
+      const G4Run* run = G4RunManager::GetRunManager()->GetCurrentRun();
+      if (run) nKeptEvents = run->GetEventVector()->size();
       G4cout <<
   "There are " << nKeptEvents << " kept events."
   "\n  \"/vis/reviewKeptEvents\" to review them one by one."
@@ -1761,8 +1862,6 @@ void G4VisManager::BeginOfRun ()
 {
   if (fIgnoreStateChanges) return;
 
-  if (!GetConcreteInstance()) return;
-
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
@@ -1869,6 +1968,12 @@ void G4VisManager::EndOfEvent ()
   G4EventManager* eventManager = G4EventManager::GetEventManager();
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
+
+  // Discard event if fDrawEventOnlyIfToBeKept flag is set unless the
+  // user has requested the event to be kept.
+  if (fDrawEventOnlyIfToBeKept) {
+    if (!currentEvent->ToBeKept()) return;
+  }
 
   if (G4Threading::IsMultithreadedApplication()) {
 
@@ -2043,8 +2148,6 @@ void G4VisManager::EndOfRun ()
 {
   if (fIgnoreStateChanges) return;
 
-  if (!GetConcreteInstance()) return;
-
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
@@ -2122,7 +2225,7 @@ void G4VisManager::EndOfRun ()
       }
       G4cout <<
   "\n  \"/vis/reviewKeptEvents\" to review them one by one."
-  "\n  \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
+  "\n  \"/vis/enable\", then \"/vis/viewer/flush\" or \"/vis/viewer/rebuild\" to see them accumulated."
       << G4endl;
     }
     //    static G4bool warned = false;
@@ -2328,10 +2431,9 @@ G4bool G4VisManager::IsValidView () {
   "WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system"
   "\n  has been instantiated.  Use \"/vis/open\" or \"/vis/sceneHandler/create\"."
   "\n  Alternatively, to avoid this message, suppress instantiation of vis"
-  "\n  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure"
-  "\n  drawing code is executed only if G4VVisManager::GetConcreteInstance()"
-  "\n  is non-zero."
-	       << G4endl;
+  "\n  manager (G4VisExecutive) and ensure drawing code is executed only if"
+  "\n  G4VVisManager::GetConcreteInstance() is non-zero."
+        << G4endl;
       }
     }
     return false;

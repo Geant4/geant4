@@ -68,12 +68,11 @@ class G4BogackiShampine23 : public G4MagIntegratorStepper{
 
     G4double  DistChord()   const;
     G4int IntegratorOrder() const { return 2; }
-     G4bool isFSAL() const{ return true; }
-	G4double *getLastDydx();
-    
-	G4BogackiShampine23(const G4BogackiShampine23&);
-   G4BogackiShampine23& operator=(const G4BogackiShampine23&);
+    G4double *getLastDydx();
 
+ private:   
+    G4BogackiShampine23(const G4BogackiShampine23&) = delete;
+    G4BogackiShampine23& operator=(const G4BogackiShampine23&) = delete;
 
  private:
 

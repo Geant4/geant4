@@ -44,7 +44,7 @@ class EventAction : public G4UserEventAction
     virtual void EndOfEventAction(const G4Event*);
 
   private:
-    G4int sdht_ID;
+    G4int fSDHT_ID;
 };
 
 #endif

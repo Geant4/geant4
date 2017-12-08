@@ -40,7 +40,7 @@ target_link_libraries(TestEm5 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(TestEm5_SCRIPTS
-    acosta.mac anthony.mac berger.mac bichsel.mac dedx1.mac dedx2.mac fluo.mac gammaSpectrum.mac gottsch.mac hanson.mac hunger.mac ion.mac kulchi.mac mumsc.mac mutev.mac pixe.mac shen1.mac shen2.mac tavora.mac TestEm5.in TestEm5.out tramu.mac vincour.mac vis.mac
+    acosta.mac anthony.mac berger.mac bichsel.mac dedx1.mac dedx2.mac dna.mac fluo.mac gammaSpectrum.mac gottsch.mac hanson.mac hunger.mac ion.mac kulchi.mac mumsc.mac mutev.mac pixe.mac shen1.mac shen2.mac tavora.mac TestEm5.in TestEm5.out tramu.mac vincour.mac vis.mac
   )
 
 foreach(_script ${TestEm5_SCRIPTS})

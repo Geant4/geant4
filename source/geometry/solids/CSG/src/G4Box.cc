@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4Box.cc 105023 2017-07-05 09:55:35Z gcosmo $
 //
 // 
 //
@@ -482,11 +482,11 @@ G4double G4Box::DistanceToOut(const G4ThreeVector& p) const
     DumpInfo();
   }
 #endif
-  G4double dist = std::max(std::max(
-                  std::abs(p.x())-fDx,
-                  std::abs(p.y())-fDy),
-                  std::abs(p.z())-fDz);
-  return (dist < 0) ? -dist : 0.;
+  G4double dist = std::min(std::min(
+                  fDx-std::abs(p.x()),
+                  fDy-std::abs(p.y())),
+                  fDz-std::abs(p.z()));
+  return (dist > 0) ? dist : 0.;
 }
 
 //////////////////////////////////////////////////////////////////////////

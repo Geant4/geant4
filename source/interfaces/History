@@ -1,4 +1,4 @@
-$Id: History 102246 2017-01-16 13:10:31Z gcosmo $
+$Id: History 105742 2017-08-16 13:11:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th August 2017 Koichi Murakami (interfaces-V10-03-01)
+- G4VBasicShell
+ o Fix std::out_of_range exception in ModifyPath() when typing ls command 
+   at the top dir
+
+20th January Laurent Garnier
+- G4UIQt:
+  o Set always-on-top to the picking windows
 
 13th January Laurent Garnier (interfaces-V10-03-00)
 - G4UIQt:

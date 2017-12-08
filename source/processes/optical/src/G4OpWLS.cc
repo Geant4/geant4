@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc 86052 2014-11-07 08:31:04Z gcosmo $
+// $Id: G4OpWLS.cc 106117 2017-09-13 10:23:20Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Optical Photon WaveLength Shifting (WLS) Class Implementation
@@ -119,7 +119,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 
   const G4MaterialPropertyVector* WLS_Intensity = 
-    aMaterialPropertiesTable->GetProperty("WLSCOMPONENT"); 
+    aMaterialPropertiesTable->GetProperty(kWLSCOMPONENT); 
 
   if (!WLS_Intensity)
     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
@@ -129,7 +129,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   if (aMaterialPropertiesTable->ConstPropertyExists("WLSMEANNUMBERPHOTONS")) {
 
      G4double MeanNumberOfPhotons = aMaterialPropertiesTable->
-                                    GetConstProperty("WLSMEANNUMBERPHOTONS");
+                                    GetConstProperty(kWLSMEANNUMBERPHOTONS);
 
      NumPhotons = G4int(G4Poisson(MeanNumberOfPhotons));
 
@@ -158,7 +158,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   G4PhysicsOrderedFreeVector* WLSIntegral = 0;
 
   WLSTime   = aMaterialPropertiesTable->
-    GetConstProperty("WLSTIMECONSTANT");
+    GetConstProperty(kWLSTIMECONSTANT);
   WLSIntegral =
     (G4PhysicsOrderedFreeVector*)((*theIntegralTable)(materialIndex));
    
@@ -318,7 +318,7 @@ void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
       if (aMaterialPropertiesTable) {
 
 	G4MaterialPropertyVector* theWLSVector = 
-	  aMaterialPropertiesTable->GetProperty("WLSCOMPONENT");
+	  aMaterialPropertiesTable->GetProperty(kWLSCOMPONENT);
 
 	if (theWLSVector) {
 	  
@@ -398,7 +398,7 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
 
   if ( aMaterialPropertyTable ) {
     AttenuationLengthVector = aMaterialPropertyTable->
-      GetProperty("WLSABSLENGTH");
+      GetProperty(kWLSABSLENGTH);
     if ( AttenuationLengthVector ){
       AttenuationLength = AttenuationLengthVector->
 	Value(thePhotonEnergy);

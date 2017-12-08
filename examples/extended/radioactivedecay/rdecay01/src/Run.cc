@@ -287,9 +287,10 @@ void Run::EndOfRun()
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
            << "\t( "  << G4BestUnit(eMin, "Energy")
            << " --> " << G4BestUnit(eMax, "Energy") << ")";
-    if (meanLife >= 0.)
+    if (meanLife > 0.)
       G4cout << "\tmean life = " << G4BestUnit(meanLife, "Time")   << G4endl;
-    else G4cout << "\tstable" << G4endl;
+    else if (meanLife < 0.) G4cout << "\tstable" << G4endl;
+    else G4cout << G4endl;
  }
  
  //energy momentum balance

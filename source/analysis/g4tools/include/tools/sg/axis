@@ -329,11 +329,11 @@ public:
       ds->line_width = m_line_style.width;
       m_line_sep.add(ds);
 
-      vertices* so_line = new vertices;
-      so_line->mode = gl::line_strip();
-      so_line->add(0,0,0);
-      so_line->add(width,0,0);
-      m_line_sep.add(so_line);
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::line_strip();
+      vtxs->add(0,0,0);
+      vtxs->add(width,0,0);
+      m_line_sep.add(vtxs);
     }
 
     // ticks scene graph :
@@ -347,8 +347,8 @@ public:
     m_ticks_sep.clear();
     if(m_ticks_style.visible) {
 
-      vertices* so_lines = new vertices;
-      so_lines->mode = gl::lines();
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::lines();
   
       if(modeling==tick_modeling_hplot()) {
   
@@ -360,11 +360,11 @@ public:
           float ex = m_sub_ticks[pos];pos++;
           float ey = m_sub_ticks[pos];pos++;
           if(tick_up) {
-            so_lines->add(bx,by,0);
-            so_lines->add(ex,ey,0);
+            vtxs->add(bx,by,0);
+            vtxs->add(ex,ey,0);
           } else {
-            so_lines->add(bx,-by,0);
-            so_lines->add(ex,-ey,0);
+            vtxs->add(bx,-by,0);
+            vtxs->add(ex,-ey,0);
           }
         }
 
@@ -373,12 +373,12 @@ public:
         float yy = tick_up ? tick_length.value():-tick_length.value();
         for(unsigned int index=0;index<tick_number;index++) {
           float xx = coords.values()[index];
-          so_lines->add(xx,0,0);
-          so_lines->add(xx,yy,0);
+          vtxs->add(xx,0,0);
+          vtxs->add(xx,yy,0);
         }
       }
          
-      if(so_lines->number()) {
+      if(vtxs->number()) {
   
         rgba* mat = new rgba();
         mat->color = m_ticks_style.color;
@@ -390,9 +390,9 @@ public:
         ds->line_width = m_ticks_style.width;
         m_ticks_sep.add(ds);
 
-        m_ticks_sep.add(so_lines);
+        m_ticks_sep.add(vtxs);
       } else {
-        delete so_lines;
+        delete vtxs;
       }
   
     }
@@ -438,18 +438,25 @@ public:
       vec3f Z;X.cross(Y,Z);
       Z.cross(X,Y);
       mat4f scale_rot(X.v0(),Y.v0(),Z.v0(),0, //first row
-                             X.v1(),Y.v1(),Z.v1(),0,
-                             X.v2(),Y.v2(),Z.v2(),0,
-                             0,0,0,1);
-     //{mat4f scale;
-     // scale.set_scale(text_size,text_size,1);
-     // scale_rot *= scale;} //applied first on GL
+                      X.v1(),Y.v1(),Z.v1(),0,
+                      X.v2(),Y.v2(),Z.v2(),0,
+                      0,0,0,1);
       scale_rot.mul_scale(text_size,text_size,1);
 
-      vec3f vec;
+      bool bin_center = (m_labels_style.options.value()=="center"?true:false); //gopaw.
+
+      vec3f vec;float xx;
      {unsigned int number = tick_number;
-      for(unsigned int index=0;index<number;index++) { 
-        float xx = coords.values()[index];
+      for(unsigned int index=0;index<number;index++) {
+
+        if(bin_center) { //label at the center of the bin :
+	  if(index==(number-1)) continue;
+          xx = 0.5f*(coords.values()[index]+coords.values()[index+1]);
+	  
+	} else { // label on tick :
+          xx = coords.values()[index];
+	}
+	
         vec.set_value(xx,-label_to_axis,0);
         vec += m_labels_style.translation.value();
 
@@ -457,15 +464,15 @@ public:
         m_labels_sep.add(sep);
 
         add_string_opt(*sep,
-                           font,
-                           m_labels_style.encoding.value(),
-                           m_labels_style.smoothing,
-                           labels.values()[index],
-                           vec[0],vec[1],vec[2],
-                           scale_rot,
-                           m_labels_style.hjust,
-                           m_labels_style.vjust,
-                           m_ttf);
+                       font,
+                       m_labels_style.encoding.value(),
+                       m_labels_style.smoothing,
+                       labels.values()[index],
+                       vec[0],vec[1],vec[2],
+                       scale_rot,
+                       m_labels_style.hjust,
+                       m_labels_style.vjust,
+                       m_ttf);
       }}
     }
 
@@ -799,7 +806,7 @@ protected:
       else 
         pmag = startTick != 0.0 ? ffloor(flog10(ffabs(startTick))) : magxxx;
       
-      snpf(pstr,sizeof(pstr),"%%1.%df",(int)tools::mx<float>((pmag-magxxx),0.0));
+      snpf(pstr,sizeof(pstr),"%%1.%df",(int)max_of<float>((pmag-magxxx),0.0));
       
       y = startTick;
       while (y <= mx*(1.0+NUM_FUZZ)) {

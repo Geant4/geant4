@@ -1,4 +1,4 @@
-$Id: History 104601 2017-06-07 09:01:37Z gcosmo $
+$Id: History 107436 2017-11-13 07:36:25Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,18 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-November-2017, T.Koi (phys-ctor-glnuclear-V10-03-04)
+-Dumpping LEND target information in G4LENDBertiniGammaElectroNuclearBuilder
+
+30-October-2017, T.Koi (phys-ctor-glnuclear-V10-03-03)
+- Fix problem on GNUMake system
+
+27-October-2017, T.Koi (phys-ctor-glnuclear-V10-03-02)
+- Add G4LENDBertiniGammaElectroNuclearBuilder, which uses LEND 
+for low energy gamma-nuclear interaction 
+- Add option and UI command to use G4LENDBertiniGammaElectroNuclearBuilder 
+in the physics constructor of EmExtraPhysics
 
 06-June-2017, V.Ivanchenko (phys-ctor-glnuclear-V10-03-01)
 - G4EmExtraPhysics, G4EmMessenger - added extra UI commands to define 

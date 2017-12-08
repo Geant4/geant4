@@ -25,8 +25,8 @@ c1->cd(1);
   gStyle->SetOptStat(000000);
   
   // All
-  ntuple->Draw("flagProcess","","B");
   ntuple->SetFillColor(2);
+  ntuple->Draw("flagProcess","","B");
   
   gPad->SetLogy();
 

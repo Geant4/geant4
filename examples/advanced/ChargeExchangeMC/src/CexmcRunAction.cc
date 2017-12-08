@@ -53,8 +53,8 @@
 #include "CexmcException.hh"
 
 
-CexmcRunAction::CexmcRunAction( CexmcPhysicsManager *  physicsManager ) :
-    physicsManager( physicsManager )
+CexmcRunAction::CexmcRunAction( CexmcPhysicsManager *  physicsManager_ ) :
+    physicsManager( physicsManager_ )
 {
 }
 
@@ -167,8 +167,8 @@ void  CexmcRunAction::PrintResults(
 
         std::vector< std::string >  auxString( nmbOfAuxColumns );
 
-        for ( size_t  i( 0 ); i < nmbOfAuxColumns; ++i )
-            auxString[ i ] = auxStringStream[ i ].str();
+        for ( size_t  j( 0 ); j < nmbOfAuxColumns; ++j )
+            auxString[ j ] = auxStringStream[ j ].str();
 
         auxStrings.push_back( auxString );
     }

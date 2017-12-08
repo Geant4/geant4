@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.cc 97248 2016-05-30 15:00:11Z gcosmo $
+// $Id: G4IonisParamMat.cc 106243 2017-09-26 01:56:43Z gcosmo $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -50,6 +50,10 @@
 #include "G4SystemOfUnits.hh"
 
 G4DensityEffectData* G4IonisParamMat::fDensityData = nullptr;
+
+#ifdef G4MULTITHREADED
+  G4Mutex G4IonisParamMat::ionisMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -115,8 +119,8 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
 
 G4IonisParamMat::~G4IonisParamMat()
 {
-  if (fShellCorrectionVector) { delete [] fShellCorrectionVector; }
-  if (fDensityData) { delete fDensityData; }
+  delete [] fShellCorrectionVector; 
+  delete fDensityData;
   fDensityData = nullptr;
   fShellCorrectionVector = nullptr;
 }
@@ -269,12 +273,10 @@ void G4IonisParamMat::ComputeDensityEffect()
       if (1 == nelm && 1 == Z0) {
          fX0density = 0.425; fX1density = 2.0; fMdensity = 5.949;
       }
-    }
-    //
-    // gases
-    //
-    if (State == kStateGas) { 
-
+    } else {
+      //
+      // gases
+      //
       fMdensity = 3.;
       fX1density = 4.0;
       //static const G4double ClimiG[] = {10.,10.5,11.,11.5,12.25,13.804};
@@ -439,6 +441,51 @@ void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
   // recompute parameters of fluctuation model
   fLogMeanExcEnergy = newlog;
   ComputeFluctModel();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+void G4IonisParamMat::SetDensityEffectParameters(G4double cd, G4double md, 
+						 G4double ad, G4double x0, 
+						 G4double x1, G4double d0)
+{
+  // no check on consistence of user parameters  
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&ionisMutex);
+#endif
+  fCdensity  = cd; 
+  fMdensity  = md;
+  fAdensity  = ad;
+  fX0density = x0;
+  fX1density = x1;
+  fD0density = d0;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&ionisMutex);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+void G4IonisParamMat::SetDensityEffectParameters(const G4Material* bmat)
+{
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&ionisMutex);
+#endif
+  const G4IonisParamMat* ipm = bmat->GetIonisation();
+  fCdensity  = ipm->GetCdensity(); 
+  fMdensity  = ipm->GetMdensity();
+  fAdensity  = ipm->GetAdensity();
+  fX0density = ipm->GetX0density();
+  fX1density = ipm->GetX1density();
+  fD0density = ipm->GetD0density();
+
+  G4double corr = G4Log(bmat->GetDensity()/fMaterial->GetDensity());
+  fCdensity  += corr;
+  fX0density += corr/twoln10;
+  fX1density += corr/twoln10;
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&ionisMutex);
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

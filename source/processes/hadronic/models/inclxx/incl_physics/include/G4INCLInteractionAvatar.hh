@@ -109,6 +109,7 @@ namespace G4INCL {
       ThreeVector boostVector;
       G4double oldTotalEnergy, oldXSec;
       G4bool isPiN;
+      G4double weight;
 
     private:
       /// \brief RootFunctor-derived object for enforcing energy conservation in N-N.
@@ -219,7 +220,7 @@ namespace G4INCL {
        */
       G4bool enforceEnergyConservation(FinalState * const fs);
 
-      ParticleList modified, created, modifiedAndCreated;
+      ParticleList modified, created, modifiedAndCreated, Destroyed, ModifiedAndDestroyed;
 
       INCL_DECLARE_ALLOCATION_POOL(InteractionAvatar)
   };

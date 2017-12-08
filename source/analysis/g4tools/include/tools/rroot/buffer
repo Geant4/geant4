@@ -8,6 +8,7 @@
 #include "ifac"
 #include "iro"
 #include "../sout"
+#include "../mapmanip"
 #ifdef TOOLS_MEM
 #include "../mem"
 #endif
@@ -51,14 +52,14 @@ class buffer : public rbuf {
   typedef std::map<uint32,iro*> obj_map;
 #endif
 #ifdef TOOLS_RROOT_OBJ_MAP_OMAP
-  typedef inlib::omap<uint32,iro*> obj_map;
+  typedef omap<uint32,iro*> obj_map;
 #endif
 #ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
-  class obj_map : public inlib::hash_table<uint32,iro*> {
-    typedef inlib::hash_table<uint32,iro*> parent;
+  class obj_map : public hash_table<uint32,iro*> {
+    typedef hash_table<uint32,iro*> parent;
   protected:
     virtual unsigned int hash(const uint32& a_key) {
-      return inlib::hash(&a_key,sizeof(uint32));
+      return hash(&a_key,sizeof(uint32));
     }
     virtual bool cmp(const uint32& a_key1,const uint32& a_key2) {
       return a_key1==a_key2?true:false;
@@ -119,6 +120,7 @@ public:
   uint32 size() const {return m_size;}
 
   void set_map_objs(bool a_value) {m_map_objs = a_value;}
+  bool map_objs() const {return m_map_objs;}
 protected:
   // on first_int :
   static uint32 kNullTag() {return 0;}
@@ -256,9 +258,9 @@ protected:
       if(m_verbose) {
         std::ios::fmtflags old_flags = m_out.flags();
         m_out << "tools::rroot::read_class :"
-             << " first_int " << std::hex << first_int
-             << ". first_int is position toward object."
-             << std::endl;
+              << " first_int " << std::hex << first_int
+               << ". first_int is position toward object."
+               << std::endl;
         m_out.flags(old_flags);
       }
       a_bcnt = first_int; //pos toward object.
@@ -270,8 +272,16 @@ protected:
     return false;
   }  
 public:
-  bool read_object(ifac& a_fac,const ifac::args& a_args,iro*& a_obj){
+  void remove_in_map(iro* a_obj) {
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+    m_out << "tools::rroot::remove_in_map : dummy." << std::endl;
+#else
+    find_and_remove_value(m_objs,a_obj);
+#endif
+  }
+  bool read_object(ifac& a_fac,const ifac::args& a_args,iro*& a_obj,bool& a_created){
     a_obj = 0;
+    a_created = false;
 
     // before reading object save start position
     uint32 startpos = (uint32)(m_pos-m_buffer);
@@ -368,6 +378,7 @@ public:
         //      << std::endl;
 
         a_obj = obj;
+        a_created = true;
 
       } else {
         m_out << "tools::rroot::buffer::read_object :"
@@ -452,6 +463,7 @@ public:
         }
 
         a_obj = obj;
+        a_created = true;
       }
 
     }
@@ -594,6 +606,101 @@ protected:
   bool m_map_objs;
   obj_map m_objs;
 };
+
+inline bool dummy_TXxx_pointer_stream(buffer& a_buffer,ifac& a_fac,bool a_del = true) {
+  ifac::args args;
+  iro* obj;
+  bool created;
+  bool status = a_buffer.read_object(a_fac,args,obj,created);
+  if(obj && a_del) {
+    if(created) {
+      if(a_buffer.map_objs()) a_buffer.remove_in_map(obj);
+      delete obj;
+    } else {
+      a_buffer.out() << "dummy_TXxx_pointer_stream : warning : ask to delete an object of class " << sout(obj->s_cls())
+                     << " not created here." << std::endl;
+    }
+  }
+  return status;
+}
+
+template <class T>
+inline bool pointer_stream(buffer& a_buffer,
+                           ifac& a_fac,ifac::args& a_args,
+                           const std::string& a_T_class,
+                           T*& a_obj){
+  iro* obj;
+  bool created;
+  if(!a_buffer.read_object(a_fac,a_args,obj,created)) {
+    a_buffer.out() << "tools::rroot::pointer_stream : read_object failed." << std::endl;
+    a_obj = 0;
+    return false;
+  }
+  if(!obj) {
+    a_obj = 0;
+  } else {
+    a_obj = (T*)obj->cast(a_T_class);
+    if(!a_obj) {
+      a_buffer.out() << "tools::rroot::pointer_stream : "
+                     << " inlib::cast to " << a_T_class << " failed."
+                     << ". Object is a " << obj->s_cls() << "."
+                     << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+template <class T>
+inline bool pointer_stream(buffer& a_buffer,
+                           ifac& a_fac,ifac::args& a_args,
+                           cid a_T_class,
+                           T*& a_obj){
+  iro* obj;
+  bool created;
+  if(!a_buffer.read_object(a_fac,a_args,obj,created)) {
+    a_buffer.out() << "tools::rroot::pointer_stream : read_object failed." << std::endl;
+    a_obj = 0;
+    return false;
+  }
+  if(!obj) {
+    a_obj = 0;
+  } else {
+    a_obj = (T*)obj->cast(a_T_class);
+    if(!a_obj) {
+      a_buffer.out() << "tools::rroot::pointer_stream : "
+                     << " inlib::cast to " << a_T_class << " failed."
+                     << ". Object is a " << obj->s_cls() << "."
+                     << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+template <class T>
+inline bool pointer_stream(buffer& a_buffer,
+                           ifac& a_fac,ifac::args& a_args,T*& a_obj){
+  //return pointer_stream(a_buffer,a_fac,a_args,T::s_class(),a_obj);
+  return pointer_stream(a_buffer,a_fac,a_args,T::id_class(),a_obj);
+}
+
+template <class T>
+inline bool fixed_array_stream(buffer& a_buffer,int a_n,T*& a_v){
+  delete [] a_v;
+  a_v = 0;
+  char is_array;
+  if(!a_buffer.read(is_array)) return false;
+  if(!is_array) return true;
+  if(!a_n) return true;
+  a_v = new T[a_n];
+  if(!a_buffer.read_fast_array<T>(a_v,a_n)) {
+    delete [] a_v;
+    a_v = 0;
+    return false;
+  }
+  return true;
+}
 
 }}
 

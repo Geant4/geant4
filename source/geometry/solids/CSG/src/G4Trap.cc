@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc 104561 2017-06-06 07:54:54Z gcosmo $
+// $Id: G4Trap.cc 107555 2017-11-22 15:26:59Z gcosmo $
 //
 // class G4Trap
 //
@@ -421,6 +421,15 @@ void G4Trap::MakePlanes(const G4ThreeVector pt[8])
       fPlanes[2].a = -fPlanes[3].a;
       fPlanes[2].c =  fPlanes[3].c;
     }
+    if (std::abs(fPlanes[2].a + fPlanes[3].a) < DBL_EPSILON &&
+        std::abs(fPlanes[2].b - fPlanes[3].b) < DBL_EPSILON &&
+        fPlanes[2].c == 0 &&
+        fPlanes[3].c == 0)
+    {
+      fTrapType = 3; // ... and XY section is a isosceles trapezoid
+      fPlanes[2].a = -fPlanes[3].a;
+      fPlanes[2].b =  fPlanes[3].b;
+    }
   }
 }
 
@@ -612,43 +621,64 @@ G4bool G4Trap::CalculateExtent( const EAxis pAxis,
 
 ///////////////////////////////////////////////////////////////////////
 //
-// Return whether point inside/outside/on surface, using tolerance
+// Return whether point is inside/outside/on_surface
 
 EInside G4Trap::Inside( const G4ThreeVector& p ) const
 {
-  if (fTrapType == 2)      // YZ section is a rectangle and
-  {                        // XZ section is an isosceles trapezoid
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx = fPlanes[3].a*std::abs(p.x())+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,dx);
+  G4double dz = std::abs(p.z())-fDz;
+  if (dz > halfCarTolerance) return kOutside;
 
-    if (dist > halfCarTolerance) return kOutside;
-    return (dist > -halfCarTolerance) ? kSurface : kInside;
-  }
-  else if (fTrapType == 1) // YZ section is a rectangle
+  switch (fTrapType)
   {
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
+    case 0: // General case
+    {
+      G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
+      G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
+      G4double dy = std::max(dz,std::max(dy1,dy2));
 
-    if (dist > halfCarTolerance) return kOutside;
-    return (dist > -halfCarTolerance) ? kSurface : kInside;
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+
+      if (dist > halfCarTolerance) return kOutside;
+      return (dist > -halfCarTolerance) ? kSurface : kInside;
+    }
+    case 1: // YZ section is a rectangle
+    {
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+
+      if (dist > halfCarTolerance) return kOutside;
+      return (dist > -halfCarTolerance) ? kSurface : kInside;
+    }
+    case 2: // YZ section is a rectangle and
+    {       // XZ section is an isosceles trapezoid
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+
+      if (dist > halfCarTolerance) return kOutside;
+      return (dist > -halfCarTolerance) ? kSurface : kInside;
+    }
+    case 3: // YZ section is a rectangle and
+    {       // XY section is an isosceles trapezoid
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].b*p.y()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+
+      if (dist > halfCarTolerance) return kOutside;
+      return (dist > -halfCarTolerance) ? kSurface : kInside;
+    }
   }
-  else                     // General case
-  {
-    G4double dz = std::abs(p.z())-fDz;
-    G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
-    G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
-    G4double dy = std::max(dz,std::max(dy1,dy2));
-
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
-
-    if (dist > halfCarTolerance) return kOutside;
-    return (dist > -halfCarTolerance) ? kSurface : kInside;
-  }
+  return kOutside; 
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -657,64 +687,90 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  // Check Z faces
-  //
-  G4double nz = 0;
-  if (std::abs(std::abs(p.z()) - fDz) <= halfCarTolerance)
+  G4int nsurf = 0; // number of surfaces where p is placed
+  G4double nx = 0, ny = 0, nz = 0;
+  G4double dz = std::abs(p.z()) - fDz;
+  if (std::abs(dz) <= halfCarTolerance)
   {
     nz = (p.z() < 0) ? -1 : 1;
+    ++nsurf;
   }
 
-  // Check Y faces
-  //
-  G4double ny = 0;
-  if (fTrapType > 0)   // YZ section is a rectangle
+  switch (fTrapType)
   {
-    G4double dist = std::abs(p.y()) + fPlanes[1].d;
-    if (std::abs(dist) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
-  }
-  else
-  {
-    for (G4int i=0; i<2; ++i)
+    case 0: // General case
     {
-      G4double dist = fPlanes[i].b*p.y() + fPlanes[i].c*p.z() + fPlanes[i].d;
-      if (std::abs(dist) > halfCarTolerance) continue;
-      ny  = fPlanes[i].b;
-      nz += fPlanes[i].c;
+      for (G4int i=0; i<2; ++i)
+      {
+        G4double dy = fPlanes[i].b*p.y() + fPlanes[i].c*p.z() + fPlanes[i].d;
+        if (std::abs(dy) > halfCarTolerance) continue;
+        ny  = fPlanes[i].b;
+        nz += fPlanes[i].c;
+        ++nsurf;
+        break;
+      }
+      for (G4int i=2; i<4; ++i)
+      {
+        G4double dx = fPlanes[i].a*p.x() +
+                      fPlanes[i].b*p.y() + fPlanes[i].c*p.z() + fPlanes[i].d;
+        if (std::abs(dx) > halfCarTolerance) continue;
+        nx  = fPlanes[i].a;
+        ny += fPlanes[i].b;
+        nz += fPlanes[i].c;
+        ++nsurf;
+        break;
+      }
       break;
     }
-  }
-
-  // Check X faces
-  //
-  G4double nx = 0;
-  if (fTrapType == 2)   // YZ section is a rectangle and
-  {                     // XZ section is an isosceles trapezoid
-    G4double dist = fPlanes[3].a*std::abs(p.x())
-                  + fPlanes[3].c*p.z() + fPlanes[3].d;
-    if (std::abs(dist) <= halfCarTolerance)
+    case 1: // YZ section is a rectangle
     {
-      nx  = (p.x() < 0) ? -fPlanes[3].a : fPlanes[3].a;
-      nz += fPlanes[3].c;
-    }
-  }
-  else
-  {
-    for (G4int i=2; i<4; ++i)
-    {
-      G4double dist = fPlanes[i].a*p.x() +
+      G4double dy = std::abs(p.y()) + fPlanes[1].d;
+      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      for (G4int i=2; i<4; ++i)
+      {
+        G4double dx = fPlanes[i].a*p.x() +
                       fPlanes[i].b*p.y() + fPlanes[i].c*p.z() + fPlanes[i].d;
-      if (std::abs(dist) > halfCarTolerance) continue;
-      nx  = fPlanes[i].a;
-      ny += fPlanes[i].b;
-      nz += fPlanes[i].c;
+        if (std::abs(dx) > halfCarTolerance) continue;
+        nx  = fPlanes[i].a;
+        ny += fPlanes[i].b;
+        nz += fPlanes[i].c;
+        ++nsurf;
+        break;
+      }
+      break;
+    }
+    case 2: // YZ section is a rectangle and
+    {       // XZ section is an isosceles trapezoid
+      G4double dy = std::abs(p.y()) + fPlanes[1].d;
+      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      G4double dx = fPlanes[3].a*std::abs(p.x()) +
+                    fPlanes[3].c*p.z() + fPlanes[3].d;
+      if (std::abs(dx) <= halfCarTolerance)
+      {
+        nx  = (p.x() < 0) ? -fPlanes[3].a : fPlanes[3].a;
+        nz += fPlanes[3].c;
+        ++nsurf;
+      }
+      break;
+    }
+    case 3: // YZ section is a rectangle and
+    {       // XY section is an isosceles trapezoid
+      G4double dy = std::abs(p.y()) + fPlanes[1].d;
+      if (std::abs(dy) <= halfCarTolerance) ny = (p.y() < 0) ? -1 : 1;
+      G4double dx = fPlanes[3].a*std::abs(p.x()) +
+                    fPlanes[3].b*p.y() + fPlanes[3].d;
+      if (std::abs(dx) <= halfCarTolerance)
+      {
+        nx  = (p.x() < 0) ? -fPlanes[3].a : fPlanes[3].a;
+        ny += fPlanes[3].b;
+        ++nsurf;
+      }
       break;
     }
   }
 
   // Return normal
   //
-  G4int nsurf = nx*nx + ny*ny + nz*nz + 0.5;                  // get magnitude
   if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
   else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
@@ -835,40 +891,57 @@ G4double G4Trap::DistanceToIn(const G4ThreeVector& p,
 //
 // Calculate exact shortest distance to any boundary from outside
 // This is the best fast estimation of the shortest distance to trap
-// - Returns 0 is ThreeVector inside
+// - return 0 if point is inside
 
 G4double G4Trap::DistanceToIn( const G4ThreeVector& p ) const
 {
-  if (fTrapType == 2)      // YZ section is a rectangle and
-  {                        // XZ section is an isosceles trapezoid
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx = fPlanes[3].a*std::abs(p.x())+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,dx);
-
-    return (dist > 0) ? dist : 0.;
-  }
-  else if (fTrapType == 1) // YZ section is a rectangle
+  switch (fTrapType)
   {
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
+    case 0: // General case
+    {
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
+      G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
+      G4double dy = std::max(dz,std::max(dy1,dy2));
 
-    return (dist > 0) ? dist : 0.;
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+      return (dist > 0) ? dist : 0.;
+    }
+    case 1: // YZ section is a rectangle
+    {
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+      return (dist > 0) ? dist : 0.;
+    }
+    case 2: // YZ section is a rectangle and
+    {       // XZ section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+      return (dist > 0) ? dist : 0.;
+    }
+    case 3: // YZ section is a rectangle and
+    {       // XY section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].b*p.y()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+      return (dist > 0) ? dist : 0.;
+    }
   }
-  else                     // General case
-  {
-    G4double dz = std::abs(p.z())-fDz;
-    G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
-    G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
-    G4double dy = std::max(dz,std::max(dy1,dy2));
-
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
-
-    return (dist > 0) ? dist : 0.;
-  }
+  return 0.;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -978,36 +1051,53 @@ G4double G4Trap::DistanceToOut( const G4ThreeVector& p ) const
     DumpInfo();
   }
 #endif
-  if (fTrapType == 2)      // YZ section is a rectangle and
-  {                        // XZ section is an isosceles trapezoid
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx = fPlanes[3].a*std::abs(p.x())+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,dx);
-
-    return (dist < 0) ? -dist : 0.;
-  }
-  else if (fTrapType == 1) // YZ section is a rectangle
+  switch (fTrapType)
   {
-    G4double dy = std::max(std::abs(p.z())-fDz,std::abs(p.y())+fPlanes[1].d);
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
+    case 0: // General case
+    {
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
+      G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
+      G4double dy = std::max(dz,std::max(dy1,dy2));
 
-    return (dist < 0) ? -dist : 0.;
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+      return (dist < 0) ? -dist : 0.;
+    }
+    case 1: // YZ section is a rectangle
+    {
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()
+                   + fPlanes[2].c*p.z()+fPlanes[2].d;
+      G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()
+                   + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,std::max(dx1,dx2));
+      return (dist < 0) ? -dist : 0.;
+    }
+    case 2: // YZ section is a rectangle and
+    {       // XZ section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].c*p.z()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+      return (dist < 0) ? -dist : 0.;
+    }
+    case 3: // YZ section is a rectangle and
+    {       // XY section is an isosceles trapezoid
+      G4double dz = std::abs(p.z())-fDz;
+      G4double dy = std::max(dz,std::abs(p.y())+fPlanes[1].d);
+      G4double dx = fPlanes[3].a*std::abs(p.x())
+                  + fPlanes[3].b*p.y()+fPlanes[3].d;
+      G4double dist = std::max(dy,dx);
+      return (dist < 0) ? -dist : 0.;
+    }
   }
-  else                     // General case
-  {
-    G4double dz = std::abs(p.z())-fDz;
-    G4double dy1 = fPlanes[0].b*p.y()+fPlanes[0].c*p.z()+fPlanes[0].d;
-    G4double dy2 = fPlanes[1].b*p.y()+fPlanes[1].c*p.z()+fPlanes[1].d;
-    G4double dy = std::max(dz,std::max(dy1,dy2));
-
-    G4double dx1 = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z()+fPlanes[2].d;
-    G4double dx2 = fPlanes[3].a*p.x()+fPlanes[3].b*p.y()+fPlanes[3].c*p.z()+fPlanes[3].d;
-    G4double dist = std::max(dy,std::max(dx1,dx2));
-
-    return (dist < 0) ? -dist : 0.;
-  }
+  return 0.;
 }
 
 ////////////////////////////////////////////////////////////////////////////

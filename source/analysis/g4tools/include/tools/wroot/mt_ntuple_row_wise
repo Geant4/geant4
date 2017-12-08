@@ -1,0 +1,97 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_wroot_mt_ntuple_row_wise
+#define tools_wroot_mt_ntuple_row_wise
+
+// pntuple = for parallel ntupling.
+
+#include "base_pntuple_row_wise"
+#include "basket_add"
+#include "imt_ntuple"
+
+namespace tools {
+namespace wroot {
+
+class mt_ntuple_row_wise : public base_pntuple_row_wise, public virtual imt_ntuple {
+  typedef base_pntuple_row_wise parent;
+public:
+  virtual bool add_row(imutex& a_mutex,ifile& a_main_file) {
+    if(m_cols.empty()) return false;
+    tools_vforit(icol*,m_cols,it) (*it)->add();
+    basket_add _badd(a_mutex,a_main_file);
+    _badd.set_main_branch(&m_main_branch);
+    if(!m_row_wise_branch.pfill(_badd)) return false;
+    tools_vforit(icol*,m_cols,it) (*it)->set_def();
+    return true;
+  }
+  virtual bool end_fill(imutex& a_mutex,ifile& a_main_file) {
+    basket_add _badd(a_mutex,a_main_file);    
+    _badd.set_main_branch(&m_main_branch);
+    if(!m_row_wise_branch.end_pfill(_badd)) return false;
+    return end_leaves(a_mutex);
+  }
+public:
+  mt_ntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                     branch& a_main_branch,
+                     const std::string& a_name,const std::string& a_title,
+                     uint32 a_basket_size,
+                     bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_name,a_title,a_basket_size,a_verbose)
+  ,m_main_branch(a_main_branch)
+  {}
+  
+  mt_ntuple_row_wise(std::ostream& a_out,bool a_byte_swap,uint32 a_compression,seek a_seek_directory,
+                     branch& a_main_branch,
+                     uint32 a_basket_size,
+                     const ntuple_booking& a_bkg,bool a_verbose)
+  :parent(a_out,a_byte_swap,a_compression,a_seek_directory,a_basket_size,a_bkg,a_verbose)
+  ,m_main_branch(a_main_branch)
+  {}
+  
+  virtual ~mt_ntuple_row_wise() {}
+protected:
+  mt_ntuple_row_wise(const mt_ntuple_row_wise& a_from)
+  :imt_ntuple(a_from)
+  ,parent(a_from)
+  ,m_main_branch(a_from.m_main_branch)
+  {}
+  mt_ntuple_row_wise& operator=(const mt_ntuple_row_wise& a_from){parent::operator=(a_from);return *this;}
+protected:
+  bool end_leaves(imutex& a_mutex) const {
+    if(m_main_branch.leaves().size()!=m_row_wise_branch.leaves().size()) {
+      m_out << "tools::wroot::mt_ntuple_row_wise::end_leaves :"
+            << " m_main_branch.leaves().size() (" << m_main_branch.leaves().size() << ") != "
+            << "m_row_wise_branch.leaves().size() (" << m_row_wise_branch.leaves().size() << ")."
+            << std::endl;
+      return false;	  
+    }
+
+#include "MT_SET_MAX.icc"
+
+    std::vector<base_leaf*>::iterator pit = const_cast< std::vector<base_leaf*>& >(m_row_wise_branch.leaves()).begin();
+    tools_vforcit(base_leaf*,m_main_branch.leaves(),mit) {
+      base_leaf* _mleaf = *mit;
+      base_leaf* _pleaf = *pit; pit++; //WARNING.
+
+      TOOLS_WROOT_MT_NTUPLE_SET_MAX(char)
+      TOOLS_WROOT_MT_NTUPLE_SET_MAX(short)
+      TOOLS_WROOT_MT_NTUPLE_SET_MAX(int)
+      TOOLS_WROOT_MT_NTUPLE_SET_MAX(float)
+      TOOLS_WROOT_MT_NTUPLE_SET_MAX(double)
+
+      TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX
+      
+    }
+#undef TOOLS_WROOT_MT_NTUPLE_SET_MAX
+#undef TOOLS_WROOT_MT_NTUPLE_STRING_SET_MAX
+
+    return true;
+  }
+protected:
+  branch& m_main_branch;
+};
+
+}}
+
+#endif

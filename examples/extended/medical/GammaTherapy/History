@@ -1,4 +1,4 @@
-$Id: History 103888 2017-05-03 08:07:13Z gcosmo $
+$Id: History 107720 2017-11-29 08:28:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-17 I. Hrivnacova (gtherapy-V10-03-08)
+- Fixed Doxygen warnings
+
+12-10-17  V.Ivant (gtherapy-V10-03-07)
+- improved main macro
+
 02-05-17 S.Elles (gtherapy-V10-03-06)
 - Fix bug in RunAction destructor (non MT Geant4 release)
 

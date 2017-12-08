@@ -1,3 +1,205 @@
+ 4.2.1 : fix Coverity notifications.
+ - wroot/MT_SET_MAX.icc : protect usage of null object in "return false" messages.
+ - wroot/ntuple : tree : create_branch : add a null pointer check.
+ - wroot/tree : create_column_vector : displace col null pointer up one line.
+ - wroot/base_leaf : (protected) cp cstor : add some missing fields initialisation.
+ - rroot/base_leaf : (protected) cp cstor : add some missing fields initialisation.
+
+ 4.2.0 : correction to pass integration in Geant4 (for the 10.4) :
+ - aida_ntuple : id_class() method.
+ - ntuple_binding : add_column_cid() method.
+ - wroot/branch : fill(), add_basket() : have a check "m_write_basket>=m_max_baskets".
+ - wroot/mt_ntuple_column_wise : in add_row() and end_fill() : check m_cols.size() versus m_main_branches.size().
+ 
+ 4.1.0 : wroot : have material/corrections in order to do ntuple booking without the "ref" logic for all column types.
+ - test/cpp/mt_ntuple.cpp : now an example with the "variable on column" logic for all column types.
+ - test/cpp/mt_ntuple_ref.cpp : example with the "user variable ref" logic for all column types.
+
+ 4.0.0 : changes in wroot, rroot in order to handle row wise ntuple in case of multi-thread or MPI.
+ - wroot : branch::end_pfill : do not add empty basket.
+ - wroot : ObjArray => obj_array, List => obj_list.
+ - wroot : Windows : get_me() to avoid usage of *this in constructor.
+ - wroot : icol : get_branch() return ref and not a pointer.
+ - wroot : leaf_ref, leaf_string_ref, leaf_std_vector_ref : _ref logic to have same logic than for other drivers.
+ - wroot : leaf : rm m_title field : mimick ROOT logic.
+ - wroot : base_leaf : handle m_leaf_count object.
+ - wroot : columns.icc : to put column code in common between ntuple and base_pntuple.
+ - wroot : new file to support row wise ntuple for MT and MPI : SET_MAX.icc, base_pntuple_column_wise, base_pntuple_row_wise
+           basket_add, impi_ntuple, imt_ntuple,
+	   mpi_basket_add, mpi_create_basket, mpi_ntuple_column_wise, mpi_ntuple_row_wise, mpi_protocol.
+ - wroot : pntuple => mt_ntuple_column_wise, mpi_pntuple => mpi_ntuple_column_wise.
+
+ - rroot : ntuple : handle row_wise.
+ - rroot : base_leaf : handle m_is_range field, handle m_own_leaf_count.
+ - rroot : leaf : handle leaf_count logic : it permits to store std::vector of basic type on a leaf<T>.
+ - rroot : named splitted in iros, object, list, obj_array, named.
+ - rroot : buffer : read_object() : handle a trailing bool& a_created argument. It helps to know if
+           the created object is managed or not.
+ - rroot : Windows : get_me() to avoid usage of *this in constructor.
+ - rroot : ObjArray => obj_array, List => obj_list.
+
+ - ntuple_binding : handle class id in column_binding.
+ - ntuple_booking : has_similar_layout() : to compare with another ntuple_booking object. Used in MT to be sure MT booking object
+   as the same "layout" than the one coming from the main.
+
+ - wcsv_ntuple : in _ref columns, pass user variable as const.
+
+ - hdf5 : header : to write/read a "header" with general infos as the name of the writing library and the "data schema version.".
+
+ - test/cpp : pwroot.cpp => mt_ntuple.cpp, wroot_pntuple.cpp => mt_ntuple_seq.cpp.
+ - test/cpp : read_root.icc : used in mt_ntuple.cpp, mpi_ntuple.cpp to check consistency.
+ 
+ - test/cpp : cern_root_read_rg_rbw.cpp : to check that the ntuple in .root files produced by mt_ntuple.cpp
+   and mpi_ntuple.cpp are readable by CERN-ROOT.
+
+ 3.7.0 : quiet some Coverity notifications. In default code, remove some "a_inc" logic in some classes.
+   It comes from a revisit to the way we can decount static object deletion (by using an atexit logic in apps).
+ - tools/mem : have most methods protected. In the static list(), have the s_list on the heap.
+   It permits to have an atexit logic in apps that permits to count the deletion of static objects.
+ - tools/cstr, putenv : #ifdef TOOLS_MEM the "a_inc" argument in str_dup. In put_env(), do not use this
+   argument in default code.
+ - tools/colorf, colors : #ifdef TOOLS_MEM the a_inc argument in constructor. In colors, have a coworking
+   cpp TOOLS_MEM_ATEXIT logic so that this argument is not used in default code.
+ - tools/lina/mat, mat4, vec3, vec4, vec4f : #ifdef TOOLS_MEM the a_inc argument in constructor.
+   In sg/base_camera, have a coworking cpp TOOLS_MEM_ATEXIT logic so that this argument is not used in
+   default code of id_orientation().
+ - test/cpp/viewplot.cpp : #ifdef TOOLS_MEM : example of an atexit final object counting.
+ - tools/glutess/normal : static_ComputeNormal : remove Coverity warnings about not initialized minVert,
+   maxVert variables.
+
+ 3.6.0 :
+ - mesh : Coverity 96394 : in __gl_meshDelete : return to the original code which is in fact ok! Coverity
+   had been adused by (too much) clever C code.
+ - sweep : Coverity 96379 : have "#ifndef NDEBUG" around fixedEdges++.
+ - test/cpp/build : have : cppflags -DNDEBUG.
+ - test/cpp/build : rm test/hdf5_threads.cpp for utest.
+ - test/cpp/build : have use_dl for utest if using hdf5.
+
+ 3.5.0 : Coverity fixes and test/cpp/hdf5_threads.cpp program.
+ - hatcher.icc : 96393. Rm dead code.
+ - bsf : 96392 : bsf() : initialize m_value.
+ - hatcher.icc : 96393 : have a : delete [] listPoints;
+ - plotter : 96389 : comment out some not used variables.
+ - legend : 96388 : comment out some "rep_line" dead code. 
+ - plots : 96387, 96386 : fix an unneeded "if".
+ - data_axis : 96385 : avoid a not needed test.
+ - valop : 96380 : correct func_1() return logic.
+ - sweep : 96379 : have assert(++fixedEdges==1) in two steps.
+ - mesh : 96394 : in __gl_meshDelete : fix a eDel->Lface bad access.
+ - test/cpp/hdf5_threads.cpp : to test HDF5 and threads. It needs a HDF5 lib built with "configure --enable-threadsafe".
+
+ 3.3.0 : hdf5 : arrange to compile without -DH5_USE_16_API (then use 1.18 API if using hdf5/1.18.x).
+ - tools/hdf5 : hdf5_h : tools_H5<xxx> : in order to compile hdf5 related code with 1.18 API.
+ - tools/hdf5 : * : use tools_H5<xxx>.
+ - tools/h2file : use not_a_profile() in write/read_histo(). It permits to enforce that profiles must be used with
+   write/read_profile() functions.
+ - tools/ntuple : constructor for writing : supress the "bool write" argument. "bool compress, uint basket_size" args
+   permit to sign a constructor for writing.
+ - tools/ntuple : constructor for reading : suppress the "bool a_write,bool compress, uint basket_size" arguments that
+   are not needed when reading.
+ - tools/ntuple : constructor for reading : have a constructor with a tools::ntuple_binding argument.
+ - tools/ntuple : have column_ref, std_vector_column_ref, column_ref classes. It permits to handle properly the binding
+   of a user variable at write, but also at read.
+ - test/cpp/use_hdf5 : comment out usage of -DH5_USE_16_API.
+ - test/cpp/hdf5_ntuple.cpp : revisit ntuple constructors for writing and reading as described upper.
+ - test/cpp/hdf5_ntuple.cpp : have an example of reading by using tools::ntuple_binding.
+ - tools/wcsv_histo : tools::wcsv::hto : use not_a_profile(). Now this template will not compile if passing a profile. (For
+   a profile someone has to use the tools::wcsv::pto template).
+ - tools/histo/h1,h2,h3 : dummy not_a_profile() method to write templated function dedicated to histo but not intended
+   for profile.
+ - tools/utest : handle -no_<name> argument.
+ - tools/lina/geom3 : some unsigned int => size_t.
+ - tools/system : rmenv() => rm_env().
+
+ 3.2.0 : test/cpp/utest.cpp to do unitary tests.
+ - test/cpp/utest : have test/viewplot_ttf.cpp test. It permits to test plotting with freetype.
+ - test/cpp/utest : have test/lego_offscreen.cpp test. It permits to test 3D plotting with freetype.
+ - WARNING : freetype related tests may not pass according the version of freetype. They do not pass with a :
+     * 2.7.0 on my Mac
+     * 2.5.5 on another Mac (macpro4).
+   whilst it is ok with a :
+     * 2.8.0 on my Mac
+     * 2.5.2 on ubuntu     
+     * the 2.1.9 of softinex/ourex/freetype on Windows-10/64, ubuntu, macOS.
+
+ - to build and execute freetype related tests :
+     UNIX> ./build -expat -freetype utest.cpp
+     UNIX> ./tools_test_utest
+    (UNIX> ./tools_test_utest -verbose)
+   To build and execute hdf5 related tests :
+     UNIX> ./build -hdf5 utest.cpp
+     UNIX> ./tools_test_utest
+   To have the list of compiled tests :  
+     UNIX> ./tools_test_utest -list     
+
+ 3.1.0 :
+ - test/cpp/cern_root_hdf5_ntuple.cpp : program to read the ntuple.hdf5 file produced with hdf5_ntuple.cpp and to
+   plot a column projection by using CERN-ROOT/TH and TCanvas.
+ - test/cpp/use_cern_root, setup_cern_root.sh, setup_cern_root.csh : to access CERN-ROOT to compile, link and run
+   the cern_root_hdf5_ntuple.cpp program.
+ - test/cpp/use_zip, use_thread : to put in common acces to zlib, thread for the various programs that use them.
+ - test/sys/process, dir : for unitary test program.
+ - test/cpp/utest.cpp, test/*.cpp : unitary test program.
+
+ 3.0.0 : hdf5 write/read. contour plotting. w/r-root : handle branch_objet.
+         Various modifs coming from inlib/exlib dev done for other applications :
+ - tools/hdf : material to write/read histos and ntuple at the HDF5 file format.
+ - test/cpp/hdf5_histos.cpp : example to write/read histos with HDF5.
+ - test/cpp/hdf5_ntuple.cpp : example to write/read an ntuple with HDF5.
+
+ - tools/ccontour, clist_contour, hatcher, hatcher.icc, tess_contour, valop : for plotting contours.
+ - tools/sg/plotter : code to have contour plotting.
+ - tools/spline : to have nice function plotting.
+
+ - tools/rroot/branch_object, iobject, cids, fac, leaf : handle branch_object.
+ - tools/rroot/tree_manip : find_leaf, find_branch_element, read_leaf, read_leaf_object, read_std_vec.
+ - tools/rroot/branch, branch_element, file, tree : number of entries : uint32 => uint64.
+ - tools/rroot/ntuple : column_string::fetch_entry : test if m_leaf.value() is null.
+ - tools/rroot/streamers/TH3D_stream : m_axes.resize(3), instead of 2.
+
+ - tools/wroot/branch_object, cids : handle branch_object.
+ - tools/wroot/basket : in stream(), handle "displacement".
+ - tools/wroot/branch : reset() method.
+ - tools/wroot/branch, buffer : in fill() : buf.reset_objs_map().
+ - tools/wroot/ntuple : column_ref : to handle user variable binding at write.
+ - tools/wroot/tree : cstor : managed argument.
+ - tools/wroot/tree : have a reset method.
+
+ - tools/rcsv_ntuple : handle int64, uint64, bool columns.
+ - tools/wcsv_ntuple : column_ref to be able to bind a user variable on simple type columns.
+ - test/cpp/rcsv.cpp => rcsv_ntuple.cpp
+ - test/cpp/wcsv.cpp => wcsv_ntuple.cpp
+ - test/cpp/wcsv_booking.cpp => wcsv_ntuple_booking.cpp
+ - test/cpp/wcsv_booking_bind.cpp : to show user variable binding on simple type columns.
+ 
+ - tools/ntuple_booking, ntuple_binding : can pass now a user variable for simple types.
+
+ - tools/histo/axis, histo_data, base_histo, p1, p2,  : equals method to be able to compare easily histos.
+ - tools/histo/c1d,c2d,c3d : inline code in the classes.
+ - tools/histo/h1,h2,h3 : get_bin_content method.
+ - tools/histo/h1d,h2d,h3d,p1d,p2d,h2df,h3df : have a default constructor building a valid histo : needed when reading from file.
+
+ - tools/vmanip, sg/group, rroot/directory, named, waxml/ntuple : clear => safe_clear.
+ - tools/sg/vertices, text_hershey, style_parser, style_colormap, primitive_visitor, render_action,
+   manager_zb, normal, matrix, nodekit, line_set, head_light, pick_action, gl_manager, cube, h2plot,
+   draw_style, node : rm some not needed "tools::".
+ - tools/sg/set_plotter_camera : have a func to pass float x,y,z camera position.
+ - tools/sg/text_style : options field.
+ - tools/sg/strings : font_ROOT_<>() golabl strings.
+ - tools/sg/plottable, plottables : bins1D, bins2D, func1D, func2D, points2D, points3D now in plottables.
+ - tools/sg/viewer : fields m_produce_out_jpg, m_produce_out_png, m_produce_out_file.
+ - tools/sg/legend, markers mnmx text_valop valop2sg : handle markers and text with upper/lower script in legend box. 
+ - tools/sg/atb_vertices : draw_edges field. Have code to draw edges for triangles.
+ - tools/sg/bmf, mf : setup a multiple value field from one value or a std::vector of values.
+ - tools/sg/plots : handle new fields left_margin, right_margin, top_margin, bottom_margin, horizontal_spacing, vertical_spacing.
+ - tools/sg/axis : handle case of label at center of bin.
+
+ - tools/system : [is,get,put]env => [is,get,put]_env : to avoid clash with system functions.
+ 
+ 2.4.0 :
+ - test/cpp/mpi_ntuple.cpp : modifs to use an ntuple id.
+ - tools/mpi/pntuple : handle a ntuple id.
+ 
  2.3.0 :
  - test/cpp/mpi_ntuple.cpp : use a maximum tools::impi interface which does not bring mpi.h.
  - tools/mpi/pntuple : have the code using only the tools::impi interface.

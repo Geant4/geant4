@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.hh 104410 2017-05-30 07:17:09Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.hh 106173 2017-09-15 13:05:16Z gcosmo $
 //
 // Author: Sebastien Incerti
 //         30 October 2008
@@ -33,7 +33,7 @@
 //               Main cuts from G4ProductionCutsTable are always used
 // 30 May 2011   A Mantero & V Ivanchenko Migration to model design for deexcitation
 // 22 Oct 2012   A & V Ivanchenko Migration data structure to G4PhysicsVector
-//
+// 1 June 2017   M Bandieramonte
 
 
 #ifndef G4LivermorePhotoElectricModel_h
@@ -49,79 +49,82 @@ class G4LPhysicsFreeVector;
 
 class G4LivermorePhotoElectricModel : public G4VEmModel
 {
-
+    
 public:
-
-  G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
-
-  virtual ~G4LivermorePhotoElectricModel();
-
-  virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
-
-  virtual G4double CrossSectionPerVolume(const G4Material*,
-                                         const G4ParticleDefinition*,
-                                         G4double energy,
-                                         G4double cutEnergy = 0.0,
-                                         G4double maxEnergy = DBL_MAX);
-
-  virtual G4double ComputeCrossSectionPerAtom(
-                                const G4ParticleDefinition*,
-                                      G4double energy, 
-                                      G4double Z, 
-                                      G4double A=0., 
-                                      G4double cut=0.,
-                                      G4double emax=DBL_MAX);
-
-  virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
-				 const G4MaterialCutsCouple*,
-				 const G4DynamicParticle*,
-				 G4double tmin,
-				 G4double maxEnergy);
-
-
-  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
-
-  inline void SetLimitNumberOfShells(G4int);
+    
+    G4LivermorePhotoElectricModel(const G4String& nam = "LivermorePhElectric");
+    
+    virtual ~G4LivermorePhotoElectricModel();
+    
+    virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+    
+    virtual G4double CrossSectionPerVolume(const G4Material*,
+                                           const G4ParticleDefinition*,
+                                           G4double energy,
+                                           G4double cutEnergy = 0.0,
+                                           G4double maxEnergy = DBL_MAX);
+    
+    virtual G4double ComputeCrossSectionPerAtom(
+                                                const G4ParticleDefinition*,
+                                                G4double energy,
+                                                G4double Z,
+                                                G4double A=0,
+                                                G4double cut=0,
+                                                G4double emax=DBL_MAX);
+    
+    virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
+                                   const G4MaterialCutsCouple*,
+                                   const G4DynamicParticle*,
+                                   G4double tmin,
+                                   G4double maxEnergy);
+    
+    
+    virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+    
+    inline void SetLimitNumberOfShells(G4int);
+    G4double GetBindingEnergy (G4double ZZ, G4int shell);
+    
+    G4LivermorePhotoElectricModel & operator=
+    (const G4LivermorePhotoElectricModel &right) = delete;
+    G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&) = delete;
 
 protected:
-
-  G4ParticleChangeForGamma* fParticleChange;
-
+    
+    G4ParticleChangeForGamma* fParticleChange;
+    
 private:
-
-  void ReadData(G4int Z, const char* path = nullptr);
-
-  G4LivermorePhotoElectricModel & operator=(const G4LivermorePhotoElectricModel &right);
-  G4LivermorePhotoElectricModel(const G4LivermorePhotoElectricModel&);
-
-  G4ParticleDefinition*   theGamma;
-  G4ParticleDefinition*   theElectron;
-
-  G4int                   verboseLevel;
-  G4int                   maxZ;
-  G4int                   nShellLimit;
-  G4bool                  fDeexcitationActive;
-  G4bool                  isInitialised;
-
-  static G4LPhysicsFreeVector*   fCrossSection[99];
-  static G4LPhysicsFreeVector*   fCrossSectionLE[99];
-  static std::vector<G4double>*  fParam[99];
-  static G4int                   fNShells[99];
-  static G4int                   fNShellsUsed[99];
-  static G4ElementData*          fShellCrossSection;
-  static G4Material*             fWater;
-  static G4double                fWaterEnergyLimit;
-
-  G4VAtomDeexcitation*    fAtomDeexcitation;
-
-  G4double                fCurrSection;
-  std::vector<G4double>   fSandiaCof;
+    
+    void ReadData(G4int Z, const char* path = nullptr);
+        
+    G4ParticleDefinition*   theGamma;
+    G4ParticleDefinition*   theElectron;
+    
+    G4int                   verboseLevel;
+    G4int                   maxZ;
+    G4int                   nShellLimit;
+    G4bool                  fDeexcitationActive;
+    G4bool                  isInitialised;
+    
+    static G4LPhysicsFreeVector*   fCrossSection[99];
+    static G4LPhysicsFreeVector*   fCrossSectionLE[99];
+    static std::vector<G4double>*  fParamHigh[99];
+    static std::vector<G4double>*  fParamLow[99];
+    static G4int                   fNShells[99];
+    static G4int                   fNShellsUsed[99];
+    static G4ElementData*          fShellCrossSection;
+    static G4Material*             fWater;
+    static G4double                fWaterEnergyLimit;
+    
+    G4VAtomDeexcitation*    fAtomDeexcitation;
+    
+    G4double                fCurrSection;
+    std::vector<G4double>   fSandiaCof;
 };
 
 inline 
 void G4LivermorePhotoElectricModel::SetLimitNumberOfShells(G4int n)
 {
-  nShellLimit = n;
+    nShellLimit = n;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

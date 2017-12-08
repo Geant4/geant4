@@ -1,4 +1,4 @@
-$Id: History 104522 2017-06-02 07:19:30Z gcosmo $
+$Id: History 106992 2017-10-31 10:14:18Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 23, 2017, K.L.Genser (event-V10-03-04)
+- G4StackManager added #ifdef for the case when a particle IsMuonicAtom
+
+September 12, 2017, K.L.Genser (event-V10-03-03)
+- G4StackManager added a case when a particle IsMuonicAtom
 
 June 1, 2017 A.Dotti (event-V10-03-02)
 - Fixing gcc-7.1 warnings for fallthroughs in case statements

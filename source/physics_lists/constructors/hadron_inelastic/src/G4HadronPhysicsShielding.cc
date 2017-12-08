@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsShielding.cc 93878 2015-11-03 08:18:00Z gcosmo $
+// $Id: G4HadronPhysicsShielding.cc 107255 2017-11-07 09:55:47Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -206,18 +206,11 @@ void G4HadronPhysicsShielding::ConstructProcess()
   tpdata->theNeutrons->Build();
     
   tpdata->theBGGxsNeutron = 0; //set explictly to zero or destructor may fail
-//  tpdata->theBGGxsNeutron=new  G4ParticleHPBGGNucleonInelasticXS(G4Neutron::Neutron());
-//  FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theBGGxsNeutron);
-//
-
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new  G4BGGNucleonInelasticXS(G4Neutron::Neutron()));
   tpdata->theNeutronHPJENDLHEInelastic=new G4ParticleHPJENDLHEInelasticData;
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->theNeutronHPJENDLHEInelastic);
-  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(new G4ParticleHPInelasticData);
+  //Register the G4ParticleHPJENDLHEInelasticData as the 2nd priority.
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->GetCrossSectionDataStore()->AddDataSet(tpdata->theNeutronHPJENDLHEInelastic,1);
     
   tpdata->theBGGxsProton=0;
-//  tpdata->theBGGxsProton=new G4BGGNucleonInelasticXS(G4Proton::Proton());
-//  G4PhysListUtil::FindInelasticProcess(G4Proton::Proton())->AddDataSet(tpdata->theBGGxsProton);
 
   tpdata->thePiK->Build();
 
@@ -249,8 +242,8 @@ void G4HadronPhysicsShielding::ConstructProcess()
     pmanager->AddDiscreteProcess(capture);
   }
   tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
-  capture->AddDataSet(tpdata->xsNeutronCaptureXS);
-  capture->AddDataSet( new G4ParticleHPCaptureData );
+  //Register the G4NeutronCaptureXS data as the 2nd priority.
+  capture->GetCrossSectionDataStore()->AddDataSet(tpdata->xsNeutronCaptureXS,1);
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 
   theNeutronRadCapture->SetMinEnergy( minNonHPNeutronEnergy_ ); 
   capture->RegisterMe( theNeutronRadCapture );

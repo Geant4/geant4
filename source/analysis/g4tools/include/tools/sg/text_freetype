@@ -741,8 +741,7 @@ protected:
     m_trans_x += float(m_face->glyph->advance.x)*m_scale;
     m_trans_y += float(m_face->glyph->advance.y)*m_scale;
 
-   {wndg_type wdg =
-      ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
+   {wndg_type wdg = ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
     if(m_wndg==wndg_not_done) {
       m_wndg = wdg;
     } else if(m_wndg!=wdg) {
@@ -776,8 +775,7 @@ protected:
     ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_VERTEX_DATA, (Func)vertex_cbk);
     ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_COMBINE_DATA,(Func)combine_cbk);
     ::gluTessCallback(m_tobj,(GLUenum)GLU_TESS_ERROR_DATA,  (Func)error_cbk);
-    ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,
-                      GLU_TESS_WINDING_ODD);
+    ::gluTessProperty(m_tobj,(GLUenum)GLU_TESS_WINDING_RULE,GLU_TESS_WINDING_ODD);
 
     //::gluTessProperty(m_tobj, GLU_TESS_TOLERANCE, 0);
     //::gluTessNormal(m_tobj, 0.0f, 0.0f, -1.0f);
@@ -936,8 +934,7 @@ protected:
     m_trans_x += float(m_face->glyph->advance.x)*m_scale;
     m_trans_y += float(m_face->glyph->advance.y)*m_scale;
 
-   {wndg_type wdg =
-      ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
+   {wndg_type wdg = ((outline.flags & FT_OUTLINE_REVERSE_FILL)?wndg_ccw:wndg_cw);
     if(m_wndg==wndg_not_done) {
       m_wndg = wdg;
     } else if(m_wndg!=wdg) {
@@ -1542,7 +1539,9 @@ protected:
             << std::endl;
       return;
     }
+    
     std::string file;
+    
     //if(tools::file::exists(font.value())) { //look in current directory.
     //  file = font.value(); //ok
     //} else if(!inlib::find_with_dirs(a_out,font_dirs.values(),font.value(),file,false)) {

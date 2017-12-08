@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 99913 2016-10-11 08:48:39Z gcosmo $
+# $Id: sources.cmake 105338 2017-07-21 09:14:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,7 +43,6 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4RootPNtupleDescription.hh
         G4RootPNtupleManager.hh
         G4RootRFileManager.hh
-        G4RootRNtupleDescription.hh
         G4RootRNtupleManager.hh
        g4root_defs.hh
         g4root.hh

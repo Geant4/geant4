@@ -70,6 +70,7 @@ public:
   void Synch(G4bool val);
   void SynchAll(G4bool val);
   void GammaNuclear(G4bool val);
+  void LENDGammaNuclear(G4bool val);
   void ElectroNuclear(G4bool val);
   void MuonNuclear(G4bool val);
   void GammaToMuMu(G4bool val);
@@ -82,6 +83,7 @@ public:
 private:
 
   static G4bool gnActivated;
+  static G4bool gLENDActivated;
   static G4bool eActivated;
   static G4bool munActivated;
   static G4bool synActivated;

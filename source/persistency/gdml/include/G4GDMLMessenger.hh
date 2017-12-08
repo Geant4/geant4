@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLMessenger.hh 96673 2016-04-29 12:08:20Z gcosmo $
+// $Id: G4GDMLMessenger.hh 105114 2017-07-13 09:49:54Z gcosmo $
 //
 //
 // class G4GDMLMessenger
@@ -74,6 +74,10 @@ class G4GDMLMessenger : public G4UImessenger
     G4UIcmdWithABool*          RegionCmd;    
     G4UIcmdWithABool*          EcutsCmd;    
     G4UIcmdWithABool*          SDCmd;    
+    G4UIcmdWithABool*          StripCmd;    
+    G4UIcmdWithABool*          AppendCmd;
+
+    G4bool pFlag;  // Append pointers to names flag   
 };
 
 #endif

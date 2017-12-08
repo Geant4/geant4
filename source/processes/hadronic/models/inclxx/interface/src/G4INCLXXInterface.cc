@@ -122,11 +122,7 @@ G4INCLXXInterface::~G4INCLXXInterface()
 G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) const {
   // Use direct kinematics if the projectile is a nucleon or a pion
   const G4ParticleDefinition *projectileDef = aTrack.GetDefinition();
-  if(projectileDef == G4Proton::Proton()
-     || projectileDef == G4Neutron::Neutron()
-     || projectileDef == G4PionPlus::PionPlus()
-     || projectileDef == G4PionZero::PionZero()
-     || projectileDef == G4PionMinus::PionMinus())
+  if(std::abs(projectileDef->GetBaryonNumber()) < 2) // Every non-composite particle. abs()-> in case of anti-nucleus projectile
     return false;
 
   // Here all projectiles should be nuclei
@@ -315,7 +311,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     // The INCL model will be created at the first use
     theINCLModel = G4INCLXXInterfaceStore::GetInstance()->GetINCLModel();
 
-    const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy, theTargetNucleus->GetA_asInt(), theTargetNucleus->GetZ_asInt());
+    const G4INCL::EventInfo eventInfo = theINCLModel->processEvent(theSpecies, kineticEnergy, theTargetNucleus->GetA_asInt(), theTargetNucleus->GetZ_asInt(),0);
     //    eventIsOK = !eventInfo.transparent && nTries < maxTries;
     eventIsOK = !eventInfo.transparent;
     if(eventIsOK) {
@@ -513,6 +509,8 @@ G4INCL::ParticleType G4INCLXXInterface::toINCLParticleType(G4ParticleDefinition 
   else if(pdef == G4PionPlus::PionPlus())       return G4INCL::PiPlus;
   else if(pdef == G4PionMinus::PionMinus())     return G4INCL::PiMinus;
   else if(pdef == G4PionZero::PionZero())       return G4INCL::PiZero;
+  else if(pdef == G4KaonPlus::KaonPlus())       return G4INCL::KPlus;
+  else if(pdef == G4KaonMinus::KaonMinus())     return G4INCL::KMinus;
   else if(pdef == G4Deuteron::Deuteron())       return G4INCL::Composite;
   else if(pdef == G4Triton::Triton())           return G4INCL::Composite;
   else if(pdef == G4He3::He3())                 return G4INCL::Composite;
@@ -540,20 +538,29 @@ G4double G4INCLXXInterface::toINCLKineticEnergy(G4HadProjectile const &aTrack) c
 }
 
 G4ParticleDefinition *G4INCLXXInterface::toG4ParticleDefinition(G4int A, G4int Z, G4int PDGCode) const {
-  if     (A == 1 && Z == 1)  return G4Proton::Proton();
-  else if(A == 1 && Z == 0)  return G4Neutron::Neutron();
-  else if(A == 0 && Z == 1)  return G4PionPlus::PionPlus();
-  else if(A == 0 && Z == -1) return G4PionMinus::PionMinus();
-  else if(A == 0 && Z == 0)  {
-     if (PDGCode == 221) return G4Eta::Eta();
-     else if (PDGCode == 22)  return G4Gamma::Gamma();
-     else return G4PionZero::PionZero();
-  }
-  else if(A == 2 && Z == 1)  return G4Deuteron::Deuteron();
-  else if(A == 3 && Z == 1)  return G4Triton::Triton();
-  else if(A == 3 && Z == 2)  return G4He3::He3();
-  else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
-  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition
+  if(PDGCode == 2212)      return G4Proton::Proton();
+  else if(PDGCode == 2112) return G4Neutron::Neutron();
+  else if(PDGCode == 211)  return G4PionPlus::PionPlus();
+  else if(PDGCode == 111)  return G4PionZero::PionZero();
+  else if(PDGCode == -211) return G4PionMinus::PionMinus();
+  
+  else if(PDGCode == 221)  return G4Eta::Eta();
+  else if(PDGCode == 22)   return G4Gamma::Gamma();
+  
+  else if(PDGCode == 3122) return G4Lambda::Lambda();
+  else if(PDGCode == 3222) return G4SigmaPlus::SigmaPlus();
+  else if(PDGCode == 3212) return G4SigmaZero::SigmaZero();
+  else if(PDGCode == 3112) return G4SigmaMinus::SigmaMinus();
+  else if(PDGCode == 321)  return G4KaonPlus::KaonPlus();
+  else if(PDGCode == -321) return G4KaonMinus::KaonMinus();
+  else if(PDGCode == 130)  return G4KaonZeroLong::KaonZeroLong();
+  else if(PDGCode == 310)  return G4KaonZeroShort::KaonZeroShort();
+  
+  else if(PDGCode == 1002) return G4Deuteron::Deuteron();
+  else if(PDGCode == 1003) return G4Triton::Triton();
+  else if(PDGCode == 2003) return G4He3::He3();
+  else if(PDGCode == 2004) return G4Alpha::Alpha();
+  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition. No hyper-nucleus allows in Geant4
     return theIonTable->GetIon(Z, A, 0);
   } else { // Error, unrecognized particle
     return 0;
@@ -590,7 +597,7 @@ G4double G4INCLXXInterface::remnant4MomentumScaling(G4double mass,
 
 void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
    outFile
-     << "The Liège Intranuclear Cascade (INCL++) is a model for reactions induced\n"
+     << "The Li�ge Intranuclear Cascade (INCL++) is a model for reactions induced\n"
      << "by nucleons, pions and light ion on any nucleus. The reaction is\n"
      << "described as an avalanche of binary nucleon-nucleon collisions, which can\n"
      << "lead to the emission of energetic particles and to the formation of an\n"

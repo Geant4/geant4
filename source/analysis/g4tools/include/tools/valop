@@ -1,0 +1,805 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_valop
+#define tools_valop
+
+#include "ival_func"
+
+namespace tools {
+
+class valop {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::valop");
+    return s_v;
+  }
+public:
+  enum e_type {
+    CMP_GT = 1,
+    CMP_GE = 2,
+    CMP_LT = 3,
+    CMP_LE = 4,
+    CMP_EQ = 5,
+    CMP_NE = 6,
+    CMP_AND = 7,
+    CMP_OR = 8,
+
+    ADD = 9,
+    MUL = 10,
+    SUB = 11,
+    DIV = 12,
+
+    ASSIGN = 13,
+    MINUS = 14,
+    UNSIGNED_INTEGER = 15,
+    REAL = 16,
+    NAME = 17,
+    STRING = 18,
+    //PI = 19,
+    FUNC = 20,
+    BOOL_TRUE = 21,
+    BOOL_FALSE = 22,
+    NOT = 23,
+    // math edition :
+    SYMBOL = 100,
+    ASIDE = 101,
+    NVMUL = 102, //not visible mul
+    EQUAL = 103,
+    SUPS = 104,  //super script
+    SUBS = 105   //sub script
+  };
+
+public:
+  static bool is_binary(e_type a_type) {
+    switch(a_type) {
+    case CMP_GT:
+    case CMP_GE:
+    case CMP_LT:
+    case CMP_LE:
+    case CMP_EQ:
+    case CMP_NE:
+    case CMP_AND:
+    case CMP_OR:
+
+    case ADD:
+    case MUL:
+    case SUB:
+    case DIV:
+
+    case ASIDE:
+    case NVMUL:
+    case EQUAL:
+    case SUPS:
+    case SUBS:
+      return true;
+    default:
+      return false;
+    }
+  }  
+/*
+  static bool is_unary(e_type a_type) {
+    switch(a_type) {
+    case MINUS:
+      return true;
+    default:
+      return false;
+    }
+  }  
+  static bool is_edition(e_type a_type) { //for valop2s
+    switch(a_type) {
+    case SYMBOL:
+    case ASIDE:
+    case NVMUL:
+    case EQUAL:
+    case SUPS:
+    case SUBS:
+      return true;
+    default:
+      return false;
+    }
+  }
+*/
+public:
+  valop(e_type a_type)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  valop(e_type a_type,valop* a_A)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  valop(e_type a_type,valop* a_A,valop* a_B)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  valop(e_type a_type,ival_func* a_function,valop* a_A)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,ival_func* a_function,valop* a_A,valop* a_B)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,ival_func* a_function,valop* a_A,valop* a_B,valop* a_C)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(a_C),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,ival_func* a_function,valop* a_A,valop* a_B,valop* a_C,valop* a_D)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(a_C),m_D(a_D),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,ival_func* a_function,valop* a_A,valop* a_B,valop* a_C,valop* a_D,valop* a_E)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(a_C),m_D(a_D),m_E(a_E),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,ival_func* a_function,
+             valop* a_A,valop* a_B,valop* a_C,
+             valop* a_D,valop* a_E,valop* a_F)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(a_A),m_B(a_B),m_C(a_C),m_D(a_D),m_E(a_E),m_F(a_F),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_function = a_function?a_function->copy():0;
+  }
+
+  valop(e_type a_type,bool a_v)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_variable.set(a_v);
+  }
+
+  valop(e_type a_type,unsigned int a_number)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_variable.set(a_number);
+  }
+
+  valop(e_type a_type,double a_number)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_variable.set(a_number);
+  }
+
+  valop(e_type a_type,const std::string& a_string)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_variable.set(a_string);
+  }
+
+  //NOTE : the below is needed so that valop("t") not put on valop(bool).
+  valop(e_type a_type,const char* a_cstr)
+  :m_type(a_type),m_function(0),m_index(not_found())
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_variable.set(a_cstr);
+  }
+
+  valop(e_type a_type,const std::string& a_name,int a_index)
+  :m_type(a_type),m_function(0),m_name(a_name),m_index(a_index)
+  ,m_A(0),m_B(0),m_C(0),m_D(0),m_E(0),m_F(0),m_tag(0){
+    // a_name needed to not confuse with the constructor (e_type,unsigned int).
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  virtual ~valop() {
+    delete m_function;
+    delete m_A;
+    delete m_B;
+    delete m_C;
+    delete m_D;
+    delete m_E;
+    delete m_F;
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  valop(const valop& a_from)
+  :m_type(a_from.m_type)
+  ,m_function(a_from.m_function?a_from.m_function->copy():0)
+  ,m_variable(a_from.m_variable)
+  ,m_name(a_from.m_name)
+  ,m_index(a_from.m_index)
+
+  ,m_A(a_from.m_A?new valop(*a_from.m_A):0)
+  ,m_B(a_from.m_B?new valop(*a_from.m_B):0)
+  ,m_C(a_from.m_C?new valop(*a_from.m_C):0)
+  ,m_D(a_from.m_D?new valop(*a_from.m_D):0)
+  ,m_E(a_from.m_E?new valop(*a_from.m_E):0)
+  ,m_F(a_from.m_F?new valop(*a_from.m_F):0)
+
+  ,m_tag(a_from.m_tag)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  valop& operator=(const valop& a_from) {
+    if(&a_from==this) return *this;
+
+    m_type = a_from.m_type;
+
+    delete m_function;
+    m_function = a_from.m_function?a_from.m_function->copy():0;
+
+    m_variable = a_from.m_variable;
+    m_name = a_from.m_name;
+    m_index = a_from.m_index;
+
+    delete m_A;
+    delete m_B;
+    delete m_C;
+    delete m_D;
+    delete m_E;
+    delete m_F;    
+    m_A = a_from.m_A?new valop(*a_from.m_A):0;
+    m_B = a_from.m_B?new valop(*a_from.m_B):0;
+    m_C = a_from.m_C?new valop(*a_from.m_C):0;
+    m_D = a_from.m_D?new valop(*a_from.m_D):0;
+    m_E = a_from.m_E?new valop(*a_from.m_E):0;
+    m_F = a_from.m_F?new valop(*a_from.m_F):0;
+
+    m_tag = a_from.m_tag;
+    return *this;
+  }
+public:
+  static valop def() {return valop(REAL,0.0);}
+
+  valop* copy() const {return new valop(*this);}
+
+  e_type type() const {return m_type;}
+
+  void print(std::ostream& a_out) {
+    a_out << "Type : " << this << " " << (int)m_type << std::endl;
+    //if(!m_variable.is_none()) m_variable.print(a_out);
+    if(m_A) m_A->print(a_out);
+    if(m_B) m_B->print(a_out);
+  }
+
+  bool is_leaf() const {
+    switch(m_type) {
+    case UNSIGNED_INTEGER:
+    case REAL:
+    case STRING:
+    case NAME:
+    //case PI:
+    case SYMBOL:
+    case BOOL_TRUE:
+    case BOOL_FALSE:
+      return true;
+    default:
+      return false;
+    }
+  }
+  bool is_binary() const {
+    switch(m_type) {
+    case CMP_GT:
+    case CMP_GE:
+    case CMP_LT:
+    case CMP_LE:
+    case CMP_EQ:
+    case CMP_NE:
+    case CMP_AND:
+    case CMP_OR:
+
+    case ADD:
+    case MUL:
+    case SUB:
+    case DIV:
+
+    case ASIDE:
+    case NVMUL:
+    case EQUAL:
+    case SUPS:
+    case SUBS:
+      return true;
+    default:
+      return false;
+    }
+  }  
+  bool is_unary() const {
+    switch(m_type) {
+    case MINUS:
+    case NOT:
+    case ASSIGN:
+      return true;
+    case FUNC:
+      if(!m_A) return false;
+      if(!m_function) return false;
+      if(m_function->number_of_arguments()==1) return true;
+      return false;
+    default:
+      return false;
+    }
+  }  
+
+  //const value& variable() const {return m_variable;}
+  //value& variable() {return m_variable;}
+
+  void replace(valop* a_node,valop* a_to,bool a_delete) {
+    if(m_A==a_node) {if(a_delete) delete m_A;m_A = a_to;return;}
+    if(m_B==a_node) {if(a_delete) delete m_B;m_B = a_to;return;}
+    if(m_C==a_node) {if(a_delete) delete m_C;m_C = a_to;return;}
+    if(m_D==a_node) {if(a_delete) delete m_D;m_D = a_to;return;}
+    if(m_E==a_node) {if(a_delete) delete m_E;m_E = a_to;return;}
+    if(m_F==a_node) {if(a_delete) delete m_F;m_F = a_to;return;}
+  }
+
+protected:
+  static int not_found() {return -1;}
+public:
+  e_type m_type;
+  ival_func* m_function; //owner
+  value m_variable;
+  std::string m_name;
+  int m_index;
+  valop* m_A; 
+  valop* m_B;
+  valop* m_C;
+  valop* m_D;
+  valop* m_E;
+  valop* m_F;
+public:
+  int m_tag;
+};
+
+class valop_visitor {
+public:
+  virtual ~valop_visitor() {}
+public:
+  virtual bool binary(unsigned int,const valop&,const valop&) = 0;
+  virtual bool unary(unsigned int,const valop&) = 0;
+  virtual bool variable(unsigned int,const value&) = 0;
+  virtual bool option(const valop&) = 0;
+  virtual bool func_1(const valop&,const valop&) = 0;
+  virtual bool func_2(const valop&,const valop&,const valop&) = 0;
+  virtual bool func_3(const valop&,const valop&,const valop&,const valop&) = 0;
+  virtual bool func_4(const valop&,const valop&,const valop&,
+                                   const valop&,const valop&) = 0;
+  virtual bool func_5(const valop&,const valop&,const valop&,
+                                   const valop&,const valop&,const valop&) = 0;
+  virtual bool func_6(const valop&,const valop&,const valop&,
+                                   const valop&,const valop&,
+                                   const valop&,const valop&) = 0;
+public:
+  bool visit(const valop& a_valop) {
+    switch(a_valop.m_type) {
+    case valop::CMP_GT:
+    case valop::CMP_GE:
+    case valop::CMP_LT:
+    case valop::CMP_LE:
+    case valop::CMP_EQ:
+    case valop::CMP_NE:
+    case valop::CMP_AND:
+    case valop::CMP_OR:
+
+    case valop::ADD:
+    case valop::MUL:
+    case valop::SUB:
+    case valop::DIV:
+
+    case valop::ASIDE:
+    case valop::NVMUL:
+    case valop::EQUAL:
+    case valop::SUPS:
+    case valop::SUBS:
+      if(!a_valop.m_A || !a_valop.m_B) break;
+      return binary(a_valop.m_type,*a_valop.m_A,*a_valop.m_B);
+
+    case valop::BOOL_TRUE:
+    case valop::BOOL_FALSE:
+    case valop::UNSIGNED_INTEGER:
+    case valop::REAL:
+    case valop::STRING:
+    case valop::SYMBOL:
+      return variable(a_valop.m_type,a_valop.m_variable);
+    case valop::NAME:
+      return option(a_valop);
+    case valop::MINUS:
+    case valop::NOT:
+    case valop::ASSIGN:
+      if(!a_valop.m_A) break;
+      return unary(a_valop.m_type,*a_valop.m_A);
+    case valop::FUNC:{
+      if(!a_valop.m_A) break;
+      if(!a_valop.m_function) {
+        //a_error = std::string("valop::execute : null function");
+        return false;
+      }
+      size_t argn = a_valop.m_function->number_of_arguments();
+      if(argn==1) {
+        return func_1(a_valop,*a_valop.m_A);
+      } else if(argn==2) {
+        if(!a_valop.m_B) break;
+        return func_2(a_valop,*a_valop.m_A,*a_valop.m_B);
+      } else if(argn==3) {
+        if(!a_valop.m_B || !a_valop.m_C) break;
+        return func_3(a_valop,*a_valop.m_A,*a_valop.m_B,*a_valop.m_C);
+      } else if(argn==4) {
+        if(!a_valop.m_B || !a_valop.m_C || !a_valop.m_D) break;
+        return func_4(a_valop,*a_valop.m_A,*a_valop.m_B,*a_valop.m_C,*a_valop.m_D);
+      } else if(argn==5) {
+        if(!a_valop.m_B || !a_valop.m_C || !a_valop.m_D || !a_valop.m_E) break;
+        return func_5(a_valop,*a_valop.m_A,*a_valop.m_B,*a_valop.m_C,*a_valop.m_D,*a_valop.m_E);
+      } else if(argn==6) {
+        if(!a_valop.m_B || !a_valop.m_C || !a_valop.m_D || !a_valop.m_E || !a_valop.m_F) break;
+        return func_6(a_valop,*a_valop.m_A,*a_valop.m_B,*a_valop.m_C,*a_valop.m_D,*a_valop.m_E,*a_valop.m_F);
+      } else {
+        return false;
+      }}
+    default:
+      break;
+    }
+    return false;
+  }  
+};
+
+class get_path : public virtual valop_visitor {
+public:
+  virtual bool binary(unsigned int,const valop& a_1,const valop& a_2) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+
+  virtual bool unary(unsigned int,const valop& a_1) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    return true; //continue searching
+  }
+
+  virtual bool variable(unsigned int,const value&) {return true;}
+  virtual bool option(const valop&) {return true;}
+
+  virtual bool func_1(const valop&,const valop& a_1) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    return true; //continue searching
+  }
+  virtual bool func_2(const valop&,const valop& a_1,const valop& a_2) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+  virtual bool func_3(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_3)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_3);
+    if(!visit(a_3)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+  virtual bool func_4(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_3)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_4)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_3);
+    if(!visit(a_3)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_4);
+    if(!visit(a_4)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+  virtual bool func_5(const valop&,
+                 const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4,const valop& a_5) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_3)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_4)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_5)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_3);
+    if(!visit(a_3)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_4);
+    if(!visit(a_4)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_5);
+    if(!visit(a_5)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+  virtual bool func_6(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3,
+                      const valop& a_4,const valop& a_5,const valop& a_6) {
+    if(match(a_1)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_2)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_3)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_4)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_5)) {m_path.push_back(m_node);return false;} //stop searching
+    if(match(a_6)) {m_path.push_back(m_node);return false;} //stop searching
+    m_path.push_back((valop*)&a_1);
+    if(!visit(a_1)) return false; //found in sub hierachy
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_2);
+    if(!visit(a_2)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_3);
+    if(!visit(a_3)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_4);
+    if(!visit(a_4)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_5);
+    if(!visit(a_5)) return false;
+    m_path.pop_back();
+    m_path.push_back((valop*)&a_6);
+    if(!visit(a_6)) return false;
+    m_path.pop_back();
+    return true; //continue searching
+  }
+public:
+  get_path():m_node(0),m_tag(0){}
+  virtual ~get_path() {}
+public:
+  get_path(const get_path& a_from)
+  :valop_visitor(a_from)
+  ,m_node(a_from.m_node)
+  ,m_tag(a_from.m_tag)
+  {}
+  get_path& operator=(const get_path& a_from){
+    m_node = a_from.m_node;
+    m_tag = a_from.m_tag;
+    return *this;
+  }
+protected:
+  bool match(const valop& a_node) {
+    if(m_node) {
+      if((&a_node)==m_node) return true;
+    } else {
+      if(a_node.m_tag==m_tag) return true;
+    }
+    return false;
+  }
+public:
+  valop* m_node;
+  int m_tag;
+  std::vector<valop*> m_path;
+};
+
+class get_named : public virtual valop_visitor {
+public:
+  virtual bool binary(unsigned int,const valop& a_1,const valop& a_2) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    return true; //continue searching
+  }
+
+  virtual bool unary(unsigned int,const valop& a_1) {
+    if(!visit(a_1)) return false;
+    return true;
+  }
+
+  virtual bool variable(unsigned int,const value&) {return true;}
+  virtual bool option(const valop& a_node) {
+    m_nodes.push_back((valop*)&a_node);
+    return true;
+  }
+
+  virtual bool func_1(const valop&,const valop& a_1) {
+    if(!visit(a_1)) return false;
+    return true;
+  }
+
+  virtual bool func_2(const valop&,const valop& a_1,const valop& a_2) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    return true;
+  }
+  virtual bool func_3(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    return true;
+  }
+  virtual bool func_4(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    return true;
+  }
+  virtual bool func_5(const valop&,
+                 const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4,const valop& a_5) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    if(!visit(a_5)) return false;
+    return true;
+  }
+  virtual bool func_6(const valop&,
+                      const valop& a_1,const valop& a_2,const valop& a_3,
+                      const valop& a_4,const valop& a_5,const valop& a_6) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    if(!visit(a_5)) return false;
+    if(!visit(a_6)) return false;
+    return true;
+  }
+public:
+  get_named(){}
+  virtual ~get_named() {}
+public:
+  get_named(const get_named& a_from):valop_visitor(a_from){}
+  get_named& operator=(const get_named&){return *this;}
+public:
+  std::vector<valop*> m_nodes;
+};
+
+class get_funcs : public virtual valop_visitor {
+public:
+  virtual bool binary(unsigned int,const valop& a_1,const valop& a_2) {
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    return true; //continue searching
+  }
+
+  virtual bool unary(unsigned int,const valop& a_1) {
+    if(!visit(a_1)) return false;
+    return true;
+  }
+
+  virtual bool variable(unsigned int,const value&) {return true;}
+  virtual bool option(const valop&) {return true;}
+
+  virtual bool func_1(const valop& a_node,const valop& a_1) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    return true;
+  }
+
+  virtual bool func_2(const valop& a_node,const valop& a_1,const valop& a_2) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    return true;
+  }
+  virtual bool func_3(const valop& a_node,
+                      const valop& a_1,const valop& a_2,const valop& a_3) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    return true;
+  }
+  virtual bool func_4(const valop& a_node,
+                      const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    return true;
+  }
+  virtual bool func_5(const valop& a_node,
+                 const valop& a_1,const valop& a_2,const valop& a_3,const valop& a_4,const valop& a_5) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    if(!visit(a_5)) return false;
+    return true;
+  }
+  virtual bool func_6(const valop& a_node,
+                      const valop& a_1,const valop& a_2,const valop& a_3,
+                      const valop& a_4,const valop& a_5,const valop& a_6) {
+    m_nodes.push_back((valop*)&a_node);
+    if(!visit(a_1)) return false;
+    if(!visit(a_2)) return false;
+    if(!visit(a_3)) return false;
+    if(!visit(a_4)) return false;
+    if(!visit(a_5)) return false;
+    if(!visit(a_6)) return false;
+    return true;
+  }
+public:
+  get_funcs(){}
+  virtual ~get_funcs() {}
+public:
+  get_funcs(const get_funcs& a_from):valop_visitor(a_from){}
+  get_funcs& operator=(const get_funcs&){return *this;}
+public:
+  std::vector<valop*> m_nodes;
+};
+
+}
+
+#endif

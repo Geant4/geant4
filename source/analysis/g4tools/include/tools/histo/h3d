@@ -18,6 +18,8 @@ public:
   }
   const std::string& s_cls() const {return s_class();}
 public:
+  h3d():parent("",10,0,1,10,0,1,10,0,1){} //for I/O when reading.
+  
   h3d(const std::string& a_title,
       unsigned int aXnumber,double aXmin,double aXmax,
       unsigned int aYnumber,double aYmin,double aYmax,

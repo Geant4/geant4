@@ -104,8 +104,6 @@ public:
 
   G4double ComputeTheta0(G4double truePathLength, G4double KineticEnergy);
 
-  inline void SetNewDisplacementFlag(G4bool);
-
 private:
 
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
@@ -180,7 +178,7 @@ private:
   G4bool   insideskin;
 
   G4bool   latDisplasmentbackup ;
-  G4bool   displacementFlag;
+  G4bool   dispAlg96;
 
   G4double rangecut;
   G4double drr,finalr;
@@ -189,13 +187,6 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void G4UrbanMscModel::SetNewDisplacementFlag(G4bool val)
-{
-  displacementFlag = val;
-}
 
 inline
 void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
@@ -212,19 +203,13 @@ void G4UrbanMscModel::SetParticle(const G4ParticleDefinition* p)
 
 inline G4double G4UrbanMscModel::Randomizetlimit()
 {
-  G4double temptlimit = tlimit;
+  G4double res = tlimitmin;
   if(tlimit > tlimitmin)
   {
-    G4double delta = tlimit-tlimitmin;
-    do {
-         temptlimit = G4RandGauss::shoot(rndmEngineMod,tlimit,0.1*delta);
-         // Loop checking, 10-Apr-2016, Laszlo Urban         
-       } while ((temptlimit < tlimit-delta) ||
-                (temptlimit > tlimit+delta));
+    res = G4RandGauss::shoot(rndmEngineMod,tlimit,0.1*(tlimit-tlimitmin));
+    res = std::max(res, tlimitmin);
   }
-  else { temptlimit = tlimitmin; }
-
-  return temptlimit;
+  return res;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -262,12 +247,9 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
   G4double prob = (a+2.)*xmeanth/a;
 
   // sampling
-  G4double cth = 1.;
-  if(rndmEngineMod->flat() < prob) {
-    cth = -1.+2.*G4Exp(G4Log(rndmEngineMod->flat())/(a+1.));
-  } else {
-    cth = -1.+2.*rndmEngineMod->flat();
-  }
+  G4double rdm = rndmEngineMod->flat();
+  G4double cth = (rndmEngineMod->flat() < prob)
+    ? -1.+2.*G4Exp(G4Log(rdm)/(a+1.)) : -1.+2.*rdm;
   return cth;
 }
 

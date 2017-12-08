@@ -35,7 +35,6 @@
 #include "G4P1ToolsManager.hh"
 #include "G4P2ToolsManager.hh"
 #include "G4XmlRNtupleManager.hh"
-#include "G4XmlRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
@@ -167,6 +166,7 @@ G4bool G4XmlAnalysisReader::Reset()
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadH1Impl(const G4String& h1Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/,
                                       G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -192,6 +192,7 @@ G4int G4XmlAnalysisReader::ReadH1Impl(const G4String& h1Name,
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadH2Impl(const G4String& h2Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/,
                                       G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -217,6 +218,7 @@ G4int G4XmlAnalysisReader::ReadH2Impl(const G4String& h2Name,
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadH3Impl(const G4String& h3Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/,
                                       G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -242,6 +244,7 @@ G4int G4XmlAnalysisReader::ReadH3Impl(const G4String& h3Name,
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadP1Impl(const G4String& p1Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/,
                                       G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -267,6 +270,7 @@ G4int G4XmlAnalysisReader::ReadP1Impl(const G4String& p1Name,
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadP2Impl(const G4String& p2Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/,
                                       G4bool /*isUserFileName*/)
 {
 #ifdef G4VERBOSE
@@ -292,6 +296,7 @@ G4int G4XmlAnalysisReader::ReadP2Impl(const G4String& p2Name,
 //_____________________________________________________________________________
 G4int G4XmlAnalysisReader::ReadNtupleImpl(const G4String& ntupleName, 
                                           const G4String& fileName,
+                                          const G4String& /*dirName*/,
                                           G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -313,7 +318,7 @@ G4int G4XmlAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   if ( ! handler ) return kInvalidId;
 
   auto rntuple = static_cast<tools::aida::ntuple*>(handler->object());
-  auto id = fNtupleManager->SetNtuple(new G4XmlRNtupleDescription(rntuple));
+  auto id = fNtupleManager->SetNtuple(new G4TRNtupleDescription<tools::aida::ntuple>(rntuple));
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 

@@ -2,6 +2,8 @@
 #
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
+#/vis/ogl/flushAt endOfEvent
+/vis/ogl/set/eventsDrawInterval 1000000
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:
@@ -24,7 +26,7 @@
 /vis/drawVolume
 #
 # Specify view angle:
-#/vis/viewer/set/viewpointThetaPhi 90. 0.
+/vis/viewer/set/viewpointThetaPhi 45. 60.
 #
 # Specify zoom value:
 /vis/viewer/zoom 5.
@@ -71,4 +73,4 @@
 #
 /tracking/verbose 1
 /run/beamOn 10
-
+#/vis/viewer/update

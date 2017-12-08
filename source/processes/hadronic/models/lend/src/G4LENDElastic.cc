@@ -51,12 +51,12 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    G4double ke = aTrack.GetKineticEnergy();
 
-   //G4HadFinalState* theResult = new G4HadFinalState();
    G4HadFinalState* theResult = &theParticleChange;
    theResult->Clear();
 
-   G4GIDI_target* aTarget = usedTarget_map.find( lend_manager->GetNucleusEncoding( iZ , iA , iM ) )->second->GetTarget();
-   //G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, NULL, NULL );
+   G4GIDI_target* aTarget = get_target_from_map( lend_manager->GetNucleusEncoding( iZ , iA , iM ) );
+   if ( aTarget == NULL ) return returnUnchanged( aTrack , theResult );
+
    G4double aMu = aTarget->getElasticFinalState( ke*MeV, temp, MyRNG , NULL );
 
    G4double phi = twopi*G4UniformRand();
@@ -121,7 +121,8 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
        theTarget.SetTotalEnergy(std::sqrt((tP+tM)*(tP+tM)-2.*tP*tM));
 
 
-       theNeutron.Lorentz(theNeutron, -1.*theCMS);
+      theNeutron.Lorentz(theNeutron, -1.*theCMS);
+      theTarget.Lorentz(theTarget, -1.*theCMS);
 
 //110913 Add Protection for very low energy (1e-6eV) scattering 
       if ( theNeutron.GetKineticEnergy() <= 0 )
@@ -129,14 +130,11 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
          theNeutron.SetTotalEnergy ( theNeutron.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 
-      theTarget.Lorentz(theTarget, -1.*theCMS);
       if ( theTarget.GetKineticEnergy() < 0 )
       {
          theTarget.SetTotalEnergy ( theTarget.GetMass() * ( 1 + G4Pow::GetInstance()->powA( 10 , -15.65 ) ) );
       }
 //110913 END
-
-       theTarget.Lorentz(theTarget, -1.*theCMS);
 
      theResult->SetEnergyChange(theNeutron.GetKineticEnergy());
      theResult->SetMomentumChange(theNeutron.GetMomentum().unit());
@@ -144,7 +142,6 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
      theRecoil->SetDefinition( target_pd );
      theRecoil->SetMomentum( theTarget.GetMomentum() );
-
      theResult->AddSecondary( theRecoil );
 
    return theResult; 

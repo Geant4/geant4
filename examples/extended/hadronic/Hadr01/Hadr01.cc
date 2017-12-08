@@ -27,7 +27,7 @@
 /// \brief Main program of the hadronic/Hadr01 example
 //
 //
-// $Id: Hadr01.cc 101216 2016-11-09 13:54:13Z gcosmo $
+// $Id: Hadr01.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 // -------------------------------------------------------------
 //      GEANT4 Hadr01
@@ -74,7 +74,7 @@
 int main(int argc,char** argv) {
 
   //choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
+  CLHEP::HepRandom::setTheEngine(new CLHEP::MixMaxRng());
 
   //Construct the default run manager
   G4RunManager * runManager = new G4RunManager();

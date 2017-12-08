@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFChannel.cc 100379 2016-10-19 15:05:35Z gcosmo $
+// $Id: G4StatMFChannel.cc 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara
@@ -42,6 +42,7 @@
 #include "Randomize.hh"
 #include "G4Pow.hh"
 #include "G4Exp.hh"
+#include "G4RandomDirection.hh"
 
 class SumCoulombEnergy : public std::binary_function<G4double,G4double,G4double>
 {
@@ -177,7 +178,7 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
       // Sample the position of the first fragment
       G4double R = (Rsys - R0*g4calc->Z13(_theFragments[0]->GetA()))*
 	g4calc->A13(G4UniformRand());
-      _theFragments[0]->SetPosition(IsotropicVector(R));
+      _theFragments[0]->SetPosition(R*G4RandomDirection());
 	
 	
       // Sample the position of the remaining fragments
@@ -189,7 +190,7 @@ void G4StatMFChannel::PlaceFragments(G4int anA)
 	  do 
 	    {
 	      R = (Rsys - R0*g4calc->Z13((*i)->GetA()))*g4calc->A13(G4UniformRand());
-	      (*i)->SetPosition(IsotropicVector(R));
+	      (*i)->SetPosition(R*G4RandomDirection());
 		
 	      // Check that there are not overlapping fragments
 	      std::deque<G4StatMFFragment*>::iterator j;
@@ -232,7 +233,8 @@ void G4StatMFChannel::FragmentsMomenta(G4int NF, G4int idx,
   else if (NF == 1) 
     {
       // We have only one fragment to deal with
-      p = IsotropicVector(std::sqrt(2.0*_theFragments[idx]->GetNuclearMass()*KinE));
+      p = std::sqrt(2.0*_theFragments[idx]->GetNuclearMass()*KinE)
+	*G4RandomDirection();
       _theFragments[idx]->SetMomentum(p);
     } 
   else if (NF == 2) 
@@ -240,7 +242,7 @@ void G4StatMFChannel::FragmentsMomenta(G4int NF, G4int idx,
       // We have only two fragment to deal with
       G4double M1 = _theFragments[idx]->GetNuclearMass();
       G4double M2 = _theFragments[idx+1]->GetNuclearMass();
-      p = IsotropicVector(std::sqrt(2.0*KinE*(M1*M2)/(M1+M2)));		
+      p = std::sqrt(2.0*KinE*(M1*M2)/(M1+M2))*G4RandomDirection();		
       _theFragments[idx]->SetMomentum(p);
       _theFragments[idx+1]->SetMomentum(-p);
     } 
@@ -270,7 +272,8 @@ void G4StatMFChannel::FragmentsMomenta(G4int NF, G4int idx,
 	      // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
 	      while (RandE > 1.0);
 	      E *= T;
-	      p = IsotropicVector(std::sqrt(2.0*E*_theFragments[i]->GetNuclearMass()));
+	      p = std::sqrt(2.0*E*_theFragments[i]->GetNuclearMass())
+		*G4RandomDirection();
 	      _theFragments[i]->SetMomentum(p);
 	      SummedE += E;
 	      SummedP += p;
@@ -453,15 +456,3 @@ G4ThreeVector G4StatMFChannel::RotateMomentum(G4ThreeVector Pa,
   return RotatedMomentum;
 }
 
-G4ThreeVector G4StatMFChannel::IsotropicVector(const G4double Magnitude)
-    // Samples a isotropic random vector with a magnitud given by Magnitude.
-    // By default Magnitude = 1
-{
-    G4double CosTheta = 1.0 - 2.0*G4UniformRand();
-    G4double SinTheta = std::sqrt(1.0 - CosTheta*CosTheta);
-    G4double Phi = twopi*G4UniformRand();
-    G4ThreeVector Vector(Magnitude*std::cos(Phi)*SinTheta,
-			 Magnitude*std::cos(Phi)*CosTheta,
-			 Magnitude*std::sin(Phi));
-    return Vector;
-}

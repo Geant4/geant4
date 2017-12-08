@@ -32,7 +32,7 @@
 #ifndef G4RootPNtupleManager_h
 #define G4RootPNtupleManager_h 1
 
-#include "G4VNtupleManager.hh"
+#include "G4BaseNtupleManager.hh"
 #include "G4RootPNtupleDescription.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4AnalysisUtilities.hh"
@@ -47,7 +47,7 @@ namespace tools {
 namespace wroot {
 class file;
 class ntuple;
-class pntuple;
+class imt_ntuple;
 }
 }
 
@@ -76,7 +76,7 @@ protected:
   G4AutoLock& m_mutex;
 };
 
-class G4RootPNtupleManager : public G4VNtupleManager 
+class G4RootPNtupleManager : public G4BaseNtupleManager 
 {
   friend class G4RootAnalysisManager;
 
@@ -100,15 +100,14 @@ class G4RootPNtupleManager : public G4VNtupleManager
     // Methods to create ntuples
     //
     virtual G4int CreateNtuple(const G4String& name, const G4String& title) final;
-    // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(
-                    const G4String& name, std::vector<int>* vector) override;
-    virtual G4int CreateNtupleFColumn(
-                    const G4String& name, std::vector<float>* vector) override;
-    virtual G4int CreateNtupleDColumn(
-                    const G4String& name, std::vector<double>* vector) override;
-    virtual G4int CreateNtupleSColumn(const G4String& name) override;
-    virtual void  FinishNtuple() override;   
+
+    // Create columns in the last created ntuple (from base class)
+    using G4BaseNtupleManager::CreateNtupleIColumn;
+    using G4BaseNtupleManager::CreateNtupleFColumn;
+    using G4BaseNtupleManager::CreateNtupleDColumn;
+    using G4BaseNtupleManager::CreateNtupleSColumn;
+    using G4BaseNtupleManager::FinishNtuple; 
+
     // Create columns in the ntuple with given id
     virtual G4int CreateNtupleIColumn(G4int ntupleId, 
                     const G4String& name, std::vector<int>* vector) override;
@@ -120,12 +119,12 @@ class G4RootPNtupleManager : public G4VNtupleManager
     virtual void  FinishNtuple(G4int ntupleId) override;   
 
     // Methods to fill ntuples
-    // Methods for ntuple with id = FirstNtupleId                     
-    virtual G4bool FillNtupleIColumn(G4int columnId, G4int value) final;
-    virtual G4bool FillNtupleFColumn(G4int columnId, G4float value) final;
-    virtual G4bool FillNtupleDColumn(G4int columnId, G4double value) final;
-    virtual G4bool FillNtupleSColumn(G4int columnId, const G4String& value) final;
-    virtual G4bool AddNtupleRow() final;
+    // Methods for ntuple with id = FirstNtupleId (from base class)                    
+    using G4BaseNtupleManager::FillNtupleIColumn;
+    using G4BaseNtupleManager::FillNtupleFColumn;
+    using G4BaseNtupleManager::FillNtupleDColumn;
+    using G4BaseNtupleManager::FillNtupleSColumn;
+    using G4BaseNtupleManager::AddNtupleRow;
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) final;
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) final;
@@ -147,11 +146,12 @@ class G4RootPNtupleManager : public G4VNtupleManager
 
     // Access methods
     virtual G4int GetNofNtuples() const final;
+    virtual G4int GetNofNtupleBookings() const final;
 
   private:
     G4RootPNtupleDescription*  
       GetNtupleDescriptionInFunction(G4int id, G4String function, G4bool warn = true) const;
-    tools::wroot::pntuple*  
+    tools::wroot::base_pntuple*  
       GetNtupleInFunction(G4int id, G4String function, G4bool warn = true) const;
     tools::wroot::ntuple*  
       GetMainNtupleInFunction(G4int id, G4String function, G4bool warn = true) const;
@@ -174,7 +174,7 @@ class G4RootPNtupleManager : public G4VNtupleManager
     G4PNtupleCreateMode  fCreateMode;
     G4RootMainNtupleManager*  fMainNtupleManager;
     std::vector<G4RootPNtupleDescription*> fNtupleDescriptionVector;
-    std::vector<tools::wroot::pntuple*> fNtupleVector;
+    std::vector<tools::wroot::imt_ntuple*> fNtupleVector;
 };
 
 // inline functions
@@ -259,7 +259,7 @@ inline G4bool G4RootPNtupleManager::FillNtupleTColumn(
   }
 
   auto icolumn =  ntuple->columns()[index];
-  auto column = dynamic_cast<tools::wroot::pntuple::column_string* >(icolumn);
+  auto column = dynamic_cast<tools::wroot::base_pntuple::column_string* >(icolumn);
   if ( ! column ) {
     G4ExceptionDescription description;
     description << " Column type does not match: "
@@ -319,7 +319,7 @@ G4bool G4RootPNtupleManager::FillNtupleTColumn(
   auto icolumn =  ntuple->columns()[index];
 
   // get column and check its type
-  auto column = dynamic_cast<tools::wroot::pntuple::column<T>* >(icolumn);
+  auto column = dynamic_cast<tools::wroot::base_pntuple::column<T>* >(icolumn);
   if ( ! column ) {
     G4ExceptionDescription description;
     description << " Column type does not match: "

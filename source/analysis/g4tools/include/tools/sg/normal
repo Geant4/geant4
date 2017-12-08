@@ -16,7 +16,7 @@ namespace sg {
 class normal : public node {
   TOOLS_NODE(normal,tools::sg::normal,node)
 public:
-  sf_vec<tools::vec3f,float> vec;
+  sf_vec<vec3f,float> vec;
 public:
   virtual const std::vector<field_desc>& node_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::normal)
@@ -38,7 +38,7 @@ public:
 public:
   normal()
   :parent()
-  ,vec(tools::vec3f(0,0,1))
+  ,vec(vec3f(0,0,1))
   {
     add_fields();
   }

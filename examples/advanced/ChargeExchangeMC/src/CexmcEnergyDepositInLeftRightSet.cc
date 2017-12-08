@@ -52,8 +52,8 @@
 
 
 CexmcEnergyDepositInLeftRightSet::CexmcEnergyDepositInLeftRightSet(
-                        const G4String &  name, const CexmcSetup *  setup ) :
-    CexmcSimpleEnergyDeposit( name ), setup( setup )
+                        const G4String &  name, const CexmcSetup *  setup_ ) :
+    CexmcSimpleEnergyDeposit( name ), setup( setup_ )
 {
 }
 

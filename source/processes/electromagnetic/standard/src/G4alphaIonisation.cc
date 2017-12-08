@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4alphaIonisation.cc 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4alphaIonisation.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -87,7 +87,7 @@ G4alphaIonisation::~G4alphaIonisation()
 G4bool G4alphaIonisation::IsApplicable(const G4ParticleDefinition& p)
 {
   return (!p.IsShortLived() &&
-	  std::fabs(p.GetPDGCharge()/CLHEP::eplus - 2) < 0.01);
+	  std::abs(p.GetPDGCharge()/CLHEP::eplus - 2) < 0.01);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -124,23 +124,23 @@ void G4alphaIonisation::InitialiseEnergyLossProcess(
     SetBaseParticle(theBaseParticle);
     SetSecondaryParticle(G4Electron::Electron());
 
-    if (!EmModel(1)) { SetEmModel(new G4BraggIonModel(), 1); }
+    if (!EmModel(0)) { SetEmModel(new G4BraggIonModel()); }
 
     G4EmParameters* param = G4EmParameters::Instance();
     G4double emin = param->MinKinEnergy();
-    EmModel(1)->SetLowEnergyLimit(emin);
+    EmModel(0)->SetLowEnergyLimit(emin);
 
     // model limit defined for alpha
-    eth = (EmModel(1)->HighEnergyLimit())*ratio;
-    EmModel(1)->SetHighEnergyLimit(eth);
-    AddEmModel(1, EmModel(1), new G4IonFluctuations());
+    eth = (EmModel(0)->HighEnergyLimit())*ratio;
+    EmModel(0)->SetHighEnergyLimit(eth);
+    AddEmModel(1, EmModel(0), new G4IonFluctuations());
 
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
 
-    if (!EmModel(2)) { SetEmModel(new G4BetheBlochModel(),2); }  
-    EmModel(2)->SetLowEnergyLimit(eth);
-    EmModel(2)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(2, EmModel(2), FluctModel());    
+    if (!EmModel(1)) { SetEmModel(new G4BetheBlochModel()); }  
+    EmModel(1)->SetLowEnergyLimit(eth);
+    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(2, EmModel(1), FluctModel());    
 
     isInitialised = true;
   }
@@ -152,3 +152,11 @@ void G4alphaIonisation::PrintInfo()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4alphaIonisation::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Alpha ionisation</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

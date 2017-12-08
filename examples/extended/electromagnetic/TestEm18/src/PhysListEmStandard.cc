@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/PhysListEmStandard.cc
 /// \brief Implementation of the PhysListEmStandard class
 //
-// $Id: PhysListEmStandard.cc 100275 2016-10-17 08:29:19Z gcosmo $
+// $Id: PhysListEmStandard.cc 105252 2017-07-17 09:40:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,7 +76,11 @@ PhysListEmStandard::PhysListEmStandard(const G4String& name)
   param->SetMaxEnergy(10*TeV);
   param->SetNumberOfBinsPerDecade(10);
   param->SetBuildCSDARange(true);
+  param->SetMaxEnergyForCSDARange(10*TeV);
   SetPhysicsType(bElectromagnetic);
+  
+  param->SetVerbose(0);
+  param->Dump();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -169,9 +173,6 @@ void PhysListEmStandard::ConstructProcess()
   // Deexcitation
   //
   G4VAtomDeexcitation* de = new G4UAtomicDeexcitation();
-  de->SetFluo(true);
-  de->SetAuger(false);   
-  de->SetPIXE(false);  
   G4LossTableManager::Instance()->SetAtomDeexcitation(de);
 }
 

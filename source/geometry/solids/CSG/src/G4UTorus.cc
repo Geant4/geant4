@@ -54,7 +54,7 @@ using namespace CLHEP;
 G4UTorus::G4UTorus(const G4String& pName,
                          G4double rmin, G4double rmax, G4double rtor,
                          G4double sphi, G4double dphi)
-  : G4USolid(pName, new UTorus(pName, rmin, rmax, rtor, sphi, dphi))
+  : Base_t(pName, rmin, rmax, rtor, sphi, dphi)
 { }
 
 //////////////////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ G4UTorus::G4UTorus(const G4String& pName,
 //                            for usage restricted to object persistency.
 
 G4UTorus::G4UTorus( __void__& a )
-  : G4USolid(a)
+  : Base_t(a)
 { }
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ G4UTorus::~G4UTorus() { }
 // Copy constructor
 
 G4UTorus::G4UTorus(const G4UTorus& rhs)
-  : G4USolid(rhs)
+  : Base_t(rhs)
 { }
 
 //////////////////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ G4UTorus& G4UTorus::operator = (const G4UTorus& rhs)
 
    // Copy base class data
    //
-   G4USolid::operator=(rhs);
+   Base_t::operator=(rhs);
 
    return *this;
 }
@@ -103,93 +103,87 @@ G4UTorus& G4UTorus::operator = (const G4UTorus& rhs)
 
 G4double G4UTorus::GetRmin() const
 {
-  return GetShape()->GetRmin();
+  return rmin();
 }
 
 G4double G4UTorus::GetRmax() const
 {
-  return GetShape()->GetRmax();
+  return rmax();
 }
 
 G4double G4UTorus::GetRtor() const
 {
-  return GetShape()->GetRtor();
+  return rtor();
 }
 
 G4double G4UTorus::GetSPhi() const
 {
-  return GetShape()->GetSPhi();
+  return sphi();
 }
 
 G4double G4UTorus::GetDPhi() const
 {
-  return GetShape()->GetDPhi();
+  return dphi();
 }
 
 G4double G4UTorus::GetSinStartPhi() const
 {
-  G4double phi = GetShape()->GetSPhi();
-  return std::sin(phi);
+  return std::sin(sphi());
 }
 
 G4double G4UTorus::GetCosStartPhi() const
 {
-  G4double phi = GetShape()->GetSPhi();
-  return std::cos(phi);
+  return std::cos(sphi());
 }
 
 G4double G4UTorus::GetSinEndPhi() const
 {
-  G4double phi = GetShape()->GetSPhi() +
-                 GetShape()->GetDPhi();
-  return std::sin(phi);
+  return std::sin(sphi()+dphi());
 }
 
 G4double G4UTorus::GetCosEndPhi() const
 {
-  G4double phi = GetShape()->GetSPhi() +
-                 GetShape()->GetDPhi();
-  return std::cos(phi);
+  return std::cos(sphi()+dphi());
 }
 
 void G4UTorus::SetRmin(G4double arg)
 {
-  GetShape()->SetRmin(arg);
+  Base_t::SetRMin(arg);
   fRebuildPolyhedron = true;
 }
 
 void G4UTorus::SetRmax(G4double arg)
 {
-  GetShape()->SetRmax(arg);
+  Base_t::SetRMax(arg);
   fRebuildPolyhedron = true;
 }
 
 void G4UTorus::SetRtor(G4double arg)
 {
-  GetShape()->SetRtor(arg);
+  Base_t::SetRTor(arg);
   fRebuildPolyhedron = true;
 }
 
 void G4UTorus::SetSPhi(G4double arg)
 {
-  GetShape()->SetSPhi(arg);
+  Base_t::SetSPhi(arg);
   fRebuildPolyhedron = true;
 }
 
 void G4UTorus::SetDPhi(G4double arg)
 {
-  GetShape()->SetDPhi(arg);
+  Base_t::SetDPhi(arg);
   fRebuildPolyhedron = true;
 }
 
 void G4UTorus::SetAllParameters(G4double arg1, G4double arg2,
-                        G4double arg3, G4double arg4, G4double arg5)
+                                G4double arg3, G4double arg4, G4double arg5)
 {
-  GetShape()->SetRmin(arg1);
-  GetShape()->SetRmax(arg2);
-  GetShape()->SetRtor(arg3);
-  GetShape()->SetSPhi(arg4);
-  GetShape()->SetDPhi(arg5);
+  SetRmin(arg1);
+  SetRmax(arg2);
+  SetRtor(arg3);
+  SetSPhi(arg4);
+  SetDPhi(arg5);
   fRebuildPolyhedron = true;
 }
 
@@ -265,7 +259,7 @@ void G4UTorus::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const
   if (checkBBox)
   {
     UVector3 vmin, vmax;
-    GetShape()->Extent(vmin,vmax);
+    Base_t::Extent(vmin,vmax);
     if (std::abs(pMin.x()-vmin.x()) > kCarTolerance ||
         std::abs(pMin.y()-vmin.y()) > kCarTolerance ||
         std::abs(pMin.z()-vmin.z()) > kCarTolerance ||

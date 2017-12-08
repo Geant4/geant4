@@ -50,7 +50,7 @@
 #include "CexmcCommon.hh"
 
 class  CexmcReconstructorMessenger;
-class  CexmcEnergyDepositStore;
+struct  CexmcEnergyDepositStore;
 
 
 class  CexmcReconstructor

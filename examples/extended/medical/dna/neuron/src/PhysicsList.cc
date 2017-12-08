@@ -98,17 +98,17 @@ PhysicsList::PhysicsList()
     RegisterConstructor("G4EmLivermorePhysics");
 
   // G4.10.2 and before version
-  //  G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt0");
-  //  G4EmParameters::Instance()->AddDNA("Soma","Opt5");
-  //  G4EmParameters::Instance()->AddDNA("Dendrites","Opt5");
-  //  G4EmParameters::Instance()->AddDNA("Axon","Opt5");
+  //  G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt4");
+  //  G4EmParameters::Instance()->AddDNA("Soma","Opt4");
+  //  G4EmParameters::Instance()->AddDNA("Dendrites","Opt4");
+  //  G4EmParameters::Instance()->AddDNA("Axon","Opt4");
 
   // G4.10.3 and later version!
   // 'G4EmParameters' works together with 'G4EmDNAPhysicsActivator'
     RegisterPhysics(new G4EmDNAPhysicsActivator());
-    G4EmParameters::Instance()->AddDNA("Soma","Opt5");
-    G4EmParameters::Instance()->AddDNA("Dendrites","Opt5");
-    G4EmParameters::Instance()->AddDNA("Axon","Opt5");
+    G4EmParameters::Instance()->AddDNA("Soma","Opt4");
+    G4EmParameters::Instance()->AddDNA("Dendrites","Opt4");
+    G4EmParameters::Instance()->AddDNA("Axon","Opt4");
   }
   
   //  b) Livermore + DNAPhysics + DNAChemistry 
@@ -118,15 +118,15 @@ PhysicsList::PhysicsList()
     RegisterConstructor("G4EmLivermorePhysics");
 
   // G4.10.2 and before version
-  //  G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt0");
+  //  G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt4");
   //  RegisterConstructor("G4EmDNAChemistry");
 
   // G4.10.3 and later version
     RegisterPhysics(new G4EmDNAPhysicsActivator());
     RegisterPhysics(new G4EmDNAChemistry());
-    G4EmParameters::Instance()->AddDNA("Soma","Opt5");
-    G4EmParameters::Instance()->AddDNA("Dendrites","Opt5");
-    G4EmParameters::Instance()->AddDNA("Axon","Opt5");
+    G4EmParameters::Instance()->AddDNA("Soma","Opt4");
+    G4EmParameters::Instance()->AddDNA("Dendrites","Opt4");
+    G4EmParameters::Instance()->AddDNA("Axon","Opt4");
   }
 
   //  d) "QGSP_BIC_EMY" package from hadrontherapy advanced example
@@ -156,13 +156,13 @@ PhysicsList::PhysicsList()
 
     // EM physics: DNAPhysics inside BoundingSliceVolume
     // G4.10.2 and before version
-    //G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt0");
+    //G4EmParameters::Instance()->AddDNA("BoundingSlice","Opt4");
 
     // G4.10.3 and later version
     RegisterPhysics(new G4EmDNAPhysicsActivator());
-    G4EmParameters::Instance()->AddDNA("Soma","Opt5");
-    G4EmParameters::Instance()->AddDNA("Dendrites","Opt5");
-    G4EmParameters::Instance()->AddDNA("Axon","Opt5");
+    G4EmParameters::Instance()->AddDNA("Soma","Opt4");
+    G4EmParameters::Instance()->AddDNA("Dendrites","Opt4");
+    G4EmParameters::Instance()->AddDNA("Axon","Opt4");
   }
 
   //  Only G4EmStandardPhysics or G4EmLivermorePhysics in all volume
@@ -171,6 +171,7 @@ PhysicsList::PhysicsList()
     G4cout<< "Only LivermorePhysics is activated!"<<G4endl;
     RegisterConstructor("G4EmLivermorePhysics"); 
     //RegisterConstructor("G4EmStandardPhysics_option4"); 
+    //RegisterConstructor("G4EmDNAPhysics_option4");
   }
 }
 

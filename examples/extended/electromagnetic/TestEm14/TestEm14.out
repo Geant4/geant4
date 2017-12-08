@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -466,7 +466,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.61s Real=5.63s Sys=0.01s
+  User=3.86s Real=3.87s Sys=0s
 
  ======================== run summary ======================
 
@@ -477,10 +477,11 @@ Run Summary
  MeanFreePath:	6.0662 cm  +- 6.0665 cm 	massic: 6.0662 g/cm2 
  CrossSection:	0.16485 cm^-1 			massic: 16.485 mm2/g 
 
- mean energy of charged secondaries: 15.197 keV	mass_energy_transfer coef: 2.5052 mm2/g 
+ mean energy of charged secondaries: 15.197 keV
+     ---> mass_energy_transfer coef: 2.5052 mm2/g 
 
  Verification : crossSections from G4EmCalculator 
-	compt= 16.23 mm2/g 	phot= 268.53 um2/mg	total= 16.499 mm2/g 
+   compt= 16.23 mm2/g    phot= 268.53 um2/mg   total= 16.499 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -535,7 +536,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.37s Real=5.38s Sys=0s
+  User=3.35s Real=3.35s Sys=0s
 
  ======================== run summary ======================
 
@@ -546,10 +547,11 @@ Run Summary
  MeanFreePath:	1.6125 cm  +- 1.6124 cm 	massic: 1.6125 g/cm2 
  CrossSection:	0.62015 cm^-1 			massic: 62.015 mm2/g 
 
- mean energy of charged secondaries: 738.06 keV	mass_energy_transfer coef: 457.71 um2/mg
+ mean energy of charged secondaries: 738.06 keV
+     ---> mass_energy_transfer coef: 457.71 um2/mg
 
  Verification : crossSections from G4EmCalculator 
-	eBrem= 37.785 mm2/g 	eIoni= 24.166 mm2/g 	total= 61.951 mm2/g 
+   eBrem= 37.785 mm2/g    eIoni= 24.166 mm2/g    total= 61.951 mm2/g 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

@@ -83,7 +83,7 @@ inline branch_element* find_be(tree& a_tree,const std::string& a_name){
 }
 
 template <class T>
-inline stl_vector<T>* find_vec(ifile& a_file,branch_element& a_be,unsigned int a_event){
+inline stl_vector<T>* find_vec(ifile& a_file,branch_element& a_be,uint64 a_event){
   std::ostream& out = a_file.out();
 
   unsigned int n;
@@ -104,6 +104,88 @@ inline stl_vector<T>* find_vec(ifile& a_file,branch_element& a_be,unsigned int a
   }
 
   return od; //WARNING : we are not owner.
+}
+
+}}
+
+#include "leaf"
+
+namespace tools {
+namespace rroot {
+
+template <class LEAF>
+inline bool find_leaf(tree& a_tree,const std::string& a_name,branch*& a_branch,LEAF*& a_leaf) {
+  //used in MEMPHYS sim.
+  base_leaf* base_leaf = a_tree.find_leaf(a_name);
+  if(!base_leaf) {
+    a_tree.out() << "tools::rroot::find_leaf : base_leaf " << sout(a_name) << " not found." << std::endl;
+    a_branch = 0;
+    a_leaf = 0;
+    return false;
+  }
+  a_branch = a_tree.find_leaf_branch(*base_leaf);
+  if(!a_branch) {
+    a_tree.out() << "tools::rroot::find_leaf : branch of base_leaf " << sout(a_name) << " not found." << std::endl;
+    a_branch = 0;
+    a_leaf = 0;
+    return false;
+  }
+  a_leaf = safe_cast<rroot::base_leaf,LEAF>(*base_leaf); //rroot:: is needed, why ?
+  if(!a_leaf) {
+    a_tree.out() << "tools::rroot::find_leaf : base_leaf " << sout(a_name) << " is not a LEAF." << std::endl;
+    a_branch = 0;
+    a_leaf = 0;
+    return false;
+  }
+  return true;
+}
+
+inline branch_element* find_branch_element(tree& a_tree,const std::string& a_name) {
+  branch* _branch = a_tree.find_branch(a_name);
+  if(!_branch) {
+    a_tree.out() << "tools::rroot::find_branch_element : branch " << sout(a_name) << " not found." << std::endl;
+    return 0;
+  }
+  branch_element* be = safe_cast<branch,branch_element>(*_branch);
+  if(!be) {
+    a_tree.out() << "tools::rroot::find_branch_element : branch " << sout(a_name) << " not a branch_element."
+                 << " It is a " << sout(_branch->s_cls()) << "."
+                 << std::endl;
+    return 0;
+  }
+  return be;
+}
+
+template <class TYPE>
+inline bool read_leaf(ifile& a_file,branch& a_branch,leaf<TYPE>& a_leaf,uint64 a_event,TYPE& a_value) {
+  unsigned int n;
+  if(!a_branch.find_entry(a_file,a_event,n)) {
+    a_file.out() << "tools::rroot::read_leaf : a_branch.find_entry() failed." << std::endl;
+    a_value = TYPE(0);
+    return false;
+  }
+  return a_leaf.value(0,a_value);
+}
+
+inline bool read_leaf_object(ifile& a_file,branch& a_branch,leaf_object& a_leaf,uint64 a_event) {
+  unsigned int n;
+  if(!a_branch.find_entry(a_file,a_event,n)) {
+    a_file.out() << "tools::rroot::read_leaf_object : a_branch.find_entry() failed." << std::endl;
+    return false;
+  }
+  return true;
+}
+
+template <class TYPE>
+inline stl_vector<TYPE>* read_std_vec(ifile& a_file,branch_element& a_branch,uint64 a_event) {
+  unsigned int n;
+  if(!a_branch.find_entry(a_file,a_event,n)) {
+    a_file.out() << "tools::rroot::read_std_vec : a_branch.find_entry() failed." << std::endl;
+    return 0;
+  }
+  iro* obj = a_branch.object(); //Not owner.
+  if(!obj) return 0;
+  return id_cast<iro, stl_vector<TYPE> >(*obj);
 }
 
 }}

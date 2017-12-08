@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VMscModel.cc 96115 2016-03-16 18:53:00Z gcosmo $
+// $Id: G4VMscModel.cc 105745 2017-08-16 13:14:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ G4VMscModel::G4VMscModel(const G4String& nam):
   dedx       = 2.0*CLHEP::MeV*CLHEP::cm2/CLHEP::g;
   localrange = DBL_MAX;
   localtkin  = 0.0;
-  currentPart = 0;
+  currentPart = nullptr;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

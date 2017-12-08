@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsList class
 //
 //
-// $Id: PhysicsList.cc 101216 2016-11-09 13:54:13Z gcosmo $
+// $Id: PhysicsList.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -67,6 +67,7 @@
 #include "G4IonPhysics.hh"
 #include "G4EmExtraPhysics.hh"
 #include "G4EmParameters.hh"
+#include "G4PhysListFactoryMessenger.hh"
 
 #include "G4HadronPhysicsFTFP_BERT.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
@@ -79,6 +80,7 @@
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronPhysicsQGSP_FTFP_BERT.hh"
 #include "G4HadronPhysicsQGS_BIC.hh"
+#include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
@@ -99,6 +101,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
   verboseLevel = 1;
 
   fMessenger = new PhysicsListMessenger(this);
+  fFactMessenger = new G4PhysListFactoryMessenger(this);
 
   // Particles
   fParticleList = new G4DecayPhysics(verboseLevel);
@@ -268,6 +271,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     SetBuilderList0(true);
     fHadronPhys.push_back( new G4HadronPhysicsQGSP_BIC_HP(verboseLevel));
+
+  } else if (name == "RadioactiveDecay") {
+
+    fHadronPhys.push_back( new G4RadioactiveDecayPhysics(verboseLevel));
 
   } else {
 

@@ -29,18 +29,6 @@
 // Sponsored by Google in Google Summer of Code 2015.
 // 
 // First version: 26 June 2015
-//
-// This code is made available subject to the Geant4 license, a copy of
-// which is available at
-//   http://geant4.org/license
-//  G4DormandPrince745.cc
-//  Geant4
-//
-//  History
-// -----------------------------
-//  Created by Somnath on 26 June 2015
-//
-//
 ///////////////////////////////////////////////////////////////////////////////
 
 #ifndef DORMAND_PRINCE_RK56_H
@@ -48,8 +36,8 @@
 
 #include "G4MagIntegratorStepper.hh"
 
-class G4DormandPrinceRK56 : public G4MagIntegratorStepper{
-    
+class G4DormandPrinceRK56 : public G4MagIntegratorStepper
+{
     
 public:
     //constructor

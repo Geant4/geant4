@@ -36,6 +36,24 @@ inline T* vec_data(std::vector<T>& a_vec) {
 #endif
 }
 
+/*
+#include "forit"
+//std::vector<bool>::data() does not compile. The below may do the job :
+inline bool* _vec_data(std::vector<bool>& a_v,bool& a_to_delete) {
+  a_to_delete = true;
+  bool* _data = new bool[a_v.size()+1];
+  size_t count = 0;
+  tools_vforcit(bool,a_v,it) {_data[count] = *it;count++;}
+  return _data;
+}
+
+template <class TYPE>
+inline TYPE* _vec_data(std::vector<TYPE>& a_v,bool& a_to_delete) {
+  a_to_delete = false;
+  return vec_data(a_v);
+}
+*/
+
 inline void tools_vdata_check_compile() {std::vector<double> v;vec_data(v);}
 
 }

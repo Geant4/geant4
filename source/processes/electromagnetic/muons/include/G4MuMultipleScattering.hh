@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4MuMultipleScattering.hh 97392 2016-06-02 10:10:32Z gcosmo $
+// $Id: G4MuMultipleScattering.hh 107056 2017-11-01 14:52:32Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -69,10 +69,14 @@ public:    // with description
   // returns true for charged particles, false otherwise
   G4bool IsApplicable (const G4ParticleDefinition& p) override;
 
-  // Print few lines of informations about the process: validity range,
-  void PrintInfo() override;
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
+
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                             G4String endOfLine=G4String("\n")) const override;
 
   // This function initialise models
   void InitialiseProcess(const G4ParticleDefinition*) override;

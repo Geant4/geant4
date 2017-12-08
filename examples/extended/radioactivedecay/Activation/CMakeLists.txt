@@ -45,7 +45,7 @@ set(Activation_SCRIPTS
     debug.mac
     envHadronic.csh
     envHadronic.sh
-    activation.in
+    Activation.in
     plotHisto.C
     vis.mac
   )

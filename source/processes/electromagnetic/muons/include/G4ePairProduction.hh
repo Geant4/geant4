@@ -68,11 +68,16 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
 				    const G4Material*, G4double cut) override;
 
-  virtual void PrintInfo() override;
-
   inline void SetLowestKineticEnergy(G4double e);
 
+  // print description in html
+  virtual void ProcessDescription(std::ostream&) const override;
+
 protected:
+
+  // Print out of the class parameters
+  virtual void StreamProcessInfo(std::ostream& outFile,
+                             G4String endOfLine=G4String("\n")) const override;
 
   virtual void InitialiseEnergyLossProcess(const G4ParticleDefinition*,
 					   const G4ParticleDefinition*) override;

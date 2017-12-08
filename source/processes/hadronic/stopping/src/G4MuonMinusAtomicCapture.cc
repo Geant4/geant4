@@ -33,7 +33,8 @@
 //
 // File name:     G4MuonMinusAtomicCapture
 //
-// 20160701 K.L. Genser - New process using G4MuonicAtom somewhat based on G4HadronStoppingProcess
+// 20160912 K.L. Genser - New process using G4MuonicAtom somewhat
+//                        based on G4HadronStoppingProcess
 //
 // Class Description: 
 //
@@ -50,6 +51,7 @@
 #include "G4HadronicProcessType.hh"
 #include "G4MuonMinusBoundDecay.hh"
 #include "G4HadronicInteraction.hh"
+#include "G4HadProjectile.hh"
 #include "G4HadronicProcessStore.hh"
 #include "G4EmCaptureCascade.hh"
 #include "G4MuonMinus.hh"
@@ -60,20 +62,26 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonMinusAtomicCapture::G4MuonMinusAtomicCapture(const G4String& name)
-  : G4HadronicProcess(name, fHadronAtRest),// name, process type
+  : G4VRestProcess(name, fHadronic),
+    //  : G4HadronicProcess(name, fHadronAtRest),// name, process type
     fElementSelector(new G4ElementSelector()),
-    fEmCascade(new G4EmCaptureCascade())  // Owned by InteractionRegistry
+    fEmCascade(new G4EmCaptureCascade()),  // Owned by InteractionRegistry
+    theTotalResult(new G4ParticleChange())
 {
   // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
-  enableAtRestDoIt = true;
-  enablePostStepDoIt = false;
+  //  enableAtRestDoIt = true;
+  //  enablePostStepDoIt = false;
+  SetProcessSubType(fMuAtomicCapture);
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuonMinusAtomicCapture::~G4MuonMinusAtomicCapture()
-{}
+{
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+  delete theTotalResult;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -107,29 +115,19 @@ G4double G4MuonMinusAtomicCapture::AtRestGetPhysicalInteractionLength(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuonMinusAtomicCapture::PostStepGetPhysicalInteractionLength(
-                                                                const G4Track&, G4double, G4ForceCondition* condition)
-{
-  *condition = NotForced;
-  return DBL_MAX;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track, 
                                                 const G4Step&)
 {
   // if primary is not Alive then do nothing (how?)
   theTotalResult->Initialize(track);
 
-  G4Nucleus* nucleus = GetTargetNucleusPointer();
+  G4Nucleus* nucleus = &targetNucleus;
   // the call below actually sets the nucleus params; 
   // G4Nucleus targetNucleus; is a member of G4HadronicProcess
   // G4Element* elm = 
   fElementSelector->SelectZandA(track, nucleus);
 
-  G4HadFinalState* result = 0;
-  thePro.Initialise(track); // thePro is G4HadProjectile from G4HadronicProcess
+  thePro.Initialise(track); // thePro was G4HadProjectile from G4HadronicProcess
 
   // save track time an dstart capture from zero time
   thePro.SetGlobalTime(0.0);
@@ -165,10 +163,14 @@ G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track,
   G4double w  = track.GetWeight();
   theTotalResult->ProposeWeight(w);
 
-  G4cout << __func__ 
-         << " nSecondaries "
-         << nSecondaries
-         << G4endl;
+#ifdef G4VERBOSE
+    if (GetVerboseLevel() > 1) {
+      G4cout << __func__
+             << " nSecondaries "
+             << nSecondaries
+             << G4endl;
+    }
+#endif
 
   for(G4int i=0; i<nSecondaries; ++i) {
     G4HadSecondary* sec = result->GetSecondary(i);
@@ -178,14 +180,18 @@ G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track,
     if(time < 0.0) { time = 0.0; }
     time += time0;
 
-    G4cout << __func__ 
-           << " "
-           << i
-           << " Resulting secondary " 
-           << sec->GetParticle()->GetPDGcode() 
-           << " " 
-           << sec->GetParticle()->GetDefinition()->GetParticleName()
-           << G4endl;
+#ifdef G4VERBOSE
+    if (GetVerboseLevel() > 1) {
+      G4cout << __func__
+             << " "
+             << i
+             << " Resulting secondary "
+             << sec->GetParticle()->GetPDGcode()
+             << " "
+             << sec->GetParticle()->GetDefinition()->GetParticleName()
+             << G4endl;
+    }
+#endif
 
     // create secondary track
     G4Track* t = new G4Track(sec->GetParticle(),
@@ -210,8 +216,6 @@ G4VParticleChange* G4MuonMinusAtomicCapture::AtRestDoIt(const G4Track& track,
 void G4MuonMinusAtomicCapture::ProcessDescription(std::ostream& outFile) const
 {
   outFile << "Stopping of mu- using default element selector, EM cascade"
-          << " sampling and bound decay sampling.\n"
-	  << "Bertini model is used for nuclear capture\n"
           << "G4MuonicAtom is created\n";
 }
 

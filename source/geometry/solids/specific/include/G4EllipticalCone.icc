@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalCone.icc 102864 2017-02-27 14:22:02Z gcosmo $
+// $Id: G4EllipticalCone.icc 105324 2017-07-21 07:34:10Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -40,7 +40,13 @@
 inline
 G4double G4EllipticalCone::GetSemiAxisMax () const
 {
-  return ySemiAxis > xSemiAxis ? ySemiAxis : xSemiAxis;
+  return std::max(xSemiAxis,ySemiAxis);
+}
+
+inline
+G4double G4EllipticalCone::GetSemiAxisMin () const
+{
+  return std::min(xSemiAxis,ySemiAxis);
 }
 
 inline
@@ -72,20 +78,20 @@ void G4EllipticalCone::SetSemiAxis (G4double newxSemiAxis,
                                     G4double newySemiAxis,
                                     G4double newzMax)
 {
-  xSemiAxis = newxSemiAxis; 
-  ySemiAxis = newySemiAxis; 
+  xSemiAxis = newxSemiAxis;
+  ySemiAxis = newySemiAxis;
   zheight   = newzMax;
-  semiAxisMax = xSemiAxis > ySemiAxis ? xSemiAxis : ySemiAxis;
   if (zTopCut > +zheight) { zTopCut = +zheight; }
+  G4double axmin = std::min(xSemiAxis,ySemiAxis);
+  cosAxisMin = axmin/std::sqrt(1. + axmin*axmin);
+  invXX = 1/(xSemiAxis*xSemiAxis);
+  invYY = 1/(ySemiAxis*ySemiAxis);
   fRebuildPolyhedron = true;
 }
 
 inline
 void G4EllipticalCone::SetZCut (G4double newzTopCut)
 {
-  if (newzTopCut > +zheight)
-    { zTopCut = +zheight; }
-  else
-    { zTopCut = newzTopCut; }
+  zTopCut = std::min(newzTopCut,zheight);
   fRebuildPolyhedron = true;
 }

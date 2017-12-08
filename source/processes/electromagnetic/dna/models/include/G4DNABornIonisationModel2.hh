@@ -74,7 +74,7 @@ public:
                                           const G4ParticleDefinition*,
                                           G4double /*kineticEnergy*/);
 
-  double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
+  G4double DifferentialCrossSection(G4ParticleDefinition * aParticleDefinition, G4double k, G4double energyTransfer, G4int shell);
 
   G4double TransferedEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell, G4double random) ;
 
@@ -135,14 +135,14 @@ private:
 			     G4double t, 
 			     G4double e);
 
-  typedef std::map<double, std::map<double, double> > TriDimensionMap;
+  typedef std::map<G4double, std::map<G4double, G4double> > TriDimensionMap;
   
   TriDimensionMap fDiffCrossSectionData[6];
   TriDimensionMap fNrjTransfData[6]; // for cumulated dcs
   
-  std::vector<double> fTdummyVec;
+  std::vector<G4double> fTdummyVec;
 
-  typedef std::map<double, std::vector<double> > VecMap;
+  typedef std::map<G4double, std::vector<G4double> > VecMap;
   
   VecMap fVecm;
   VecMap fProbaShellMap[6]; // for cumulated dcs

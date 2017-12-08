@@ -57,7 +57,7 @@ namespace G4INCL {
      * This constructor should mainly be used when constructing Nucleus or
      * when constructing Clusters to be used as composite projectiles.
      */
-    Cluster(const G4int Z, const G4int A, const G4bool createParticleSampler=true) :
+    Cluster(const G4int Z, const G4int A, const G4int S, const G4bool createParticleSampler=true) :
       Particle(),
       theExcitationEnergy(0.),
       theSpin(0.,0.,0.),
@@ -66,6 +66,7 @@ namespace G4INCL {
       setType(Composite);
       theZ = Z;
       theA = A;
+      theS = S;
       setINCLMass();
       if(createParticleSampler)
         theParticleSampler = new ParticleSampler(A,Z);
@@ -129,7 +130,7 @@ namespace G4INCL {
     }
 
     ParticleSpecies getSpecies() const {
-      return ParticleSpecies(theA, theZ);
+      return ParticleSpecies(theA, theZ, theS);
     }
 
     void deleteParticles() {
@@ -146,6 +147,9 @@ namespace G4INCL {
 
     /// \brief Set the mass number of the cluster
     void setA(const G4int A) { theA = A; }
+
+    /// \brief Set the strangess number of the cluster
+    void setS(const G4int S) { theS = S; }
 
     /// \brief Get the excitation energy of the cluster.
     G4double getExcitationEnergy() const { return theExcitationEnergy; }
@@ -179,6 +183,7 @@ namespace G4INCL {
       thePosition += p->getPosition();
       theA += p->getA();
       theZ += p->getZ();
+      theS += p->getS();
       nCollisions += p->getNumberOfCollisions();
     }
 
@@ -190,6 +195,7 @@ namespace G4INCL {
       thePosition = ThreeVector();
       theA = 0;
       theZ = 0;
+      theS = 0;
       nCollisions = 0;
       for(ParticleIter p=particles.begin(), e=particles.end(); p!=e; ++p) {
         theEnergy += (*p)->getEnergy();
@@ -198,6 +204,7 @@ namespace G4INCL {
         thePosition += (*p)->getPosition();
         theA += (*p)->getA();
         theZ += (*p)->getZ();
+        theS += (*p)->getS();
         nCollisions += (*p)->getNumberOfCollisions();
       }
     }
@@ -218,6 +225,7 @@ namespace G4INCL {
       ss << '\n'
         << "   A = " << theA << '\n'
         << "   Z = " << theZ << '\n'
+        << "   S = " << theS << '\n'
         << "   mass = " << getMass() << '\n'
         << "   energy = " << theEnergy << '\n'
         << "   momentum = "

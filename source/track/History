@@ -1,4 +1,4 @@
-$Id: History 96764 2016-05-04 13:09:31Z gcosmo $
+$Id: History 107603 2017-11-27 07:21:59Z gcosmo $
 -------------------------------------------------------------------
 
 
@@ -16,6 +16,12 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
+
+- November 25, 2017 V.Ivanchenko (track-V10-03-00)
+- G4VelocityTable - use G4ThreadLocalSingletone patern in order
+    to provide correct deletion of these objects end of run;
+    use only G4Log and G4Exp instead of std::log10 which is not
+    needed
 
 - May 4, 2016 H.Kurashige(track-V10-02-01)
 - Use G4Log in G4VelocityTable::Value()

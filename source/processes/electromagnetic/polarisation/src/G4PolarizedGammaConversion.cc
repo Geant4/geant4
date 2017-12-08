@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PolarizedGammaConversion.cc 85018 2014-10-23 09:51:37Z gcosmo $
+// $Id: G4PolarizedGammaConversion.cc 105740 2017-08-16 13:05:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -75,10 +75,10 @@ void G4PolarizedGammaConversion::InitialiseProcess(const G4ParticleDefinition*)
     G4EmParameters* param = G4EmParameters::Instance();
     G4double emin = std::max(param->MinKinEnergy(), 2*electron_mass_c2);
     G4double emax = param->MaxKinEnergy();
-    if(!EmModel(1)) { SetEmModel(new G4PolarizedGammaConversionModel(), 1); }
-    EmModel(1)->SetLowEnergyLimit(emin);
-    EmModel(1)->SetHighEnergyLimit(emax);
-    AddEmModel(1, EmModel(1));
+    if(!EmModel(0)) { SetEmModel(new G4PolarizedGammaConversionModel()); }
+    EmModel(0)->SetLowEnergyLimit(emin);
+    EmModel(0)->SetHighEnergyLimit(emax);
+    AddEmModel(1, EmModel(0));
   } 
 }
 

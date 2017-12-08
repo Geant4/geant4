@@ -73,10 +73,8 @@ G4VParticleChange* G4DecayWithSpin::PostStepDoIt(const G4Track& aTrack, const G4
 // get parent_polarization
   G4ThreeVector parent_polarization = aParticle->GetPolarization();
 
-  if(parent_polarization == G4ThreeVector(0,0,0))
-  {
+  if(parent_polarization == G4ThreeVector(0,0,0)){
     // Generate random polarization direction
-
     G4double cost = 1. - 2.*G4UniformRand();
     G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
@@ -91,25 +89,19 @@ G4VParticleChange* G4DecayWithSpin::PostStepDoIt(const G4Track& aTrack, const G4
     parent_polarization.setX(px);
     parent_polarization.setY(py);
     parent_polarization.setZ(pz);
-
   }
 
 // decay table
   G4DecayTable *decaytable = aParticleDef->GetDecayTable();
-  if (decaytable) {
+  if (decaytable != nullptr) {
     for (G4int ip=0; ip<decaytable->entries(); ip++){
       decaytable->GetDecayChannel(ip)->SetPolarization(parent_polarization);
     }
-  } 
+  }
 
   G4ParticleChangeForDecay* pParticleChangeForDecay;
   pParticleChangeForDecay = (G4ParticleChangeForDecay*)G4Decay::DecayIt(aTrack,aStep);
-
   pParticleChangeForDecay->ProposePolarization(parent_polarization);
-
-  //G4cout << parent_polarization.x() << ", "
-  //       << parent_polarization.y() << ", "
-  //       << parent_polarization.z() << G4endl;
 
   return pParticleChangeForDecay;
 }
@@ -124,10 +116,8 @@ G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4St
 // get parent_polarization
   G4ThreeVector parent_polarization = aParticle->GetPolarization();
 
-  if(parent_polarization == G4ThreeVector(0,0,0))
-  {
+  if(parent_polarization == G4ThreeVector(0,0,0)) {
     // Generate random polarization direction
-
     G4double cost = 1. - 2.*G4UniformRand();
     G4double sint = std::sqrt((1.-cost)*(1.+cost));
 
@@ -147,8 +137,7 @@ G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4St
 
     G4FieldManager* fieldMgr = aStep.GetTrack()->GetVolume()->
                                      GetLogicalVolume()->GetFieldManager();
-
-    if (!fieldMgr) {
+    if (fieldMgr == nullptr) {
        G4TransportationManager *transportMgr =
                          G4TransportationManager::GetTransportationManager();
        G4PropagatorInField* fFieldPropagator = 
@@ -157,20 +146,18 @@ G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4St
                                   fFieldPropagator->GetCurrentFieldManager();
     }
 
-    const G4Field* field = NULL;
-    if(fieldMgr)field = fieldMgr->GetDetectorField();
+    const G4Field* field = nullptr;
+    if (fieldMgr != nullptr) field = fieldMgr->GetDetectorField();
 
-    if (field) {
-
+    if ( field != nullptr ) {
        G4double point[4];
        point[0] = (aStep.GetPostStepPoint()->GetPosition())[0];
        point[1] = (aStep.GetPostStepPoint()->GetPosition())[1];
        point[2] = (aStep.GetPostStepPoint()->GetPosition())[2];
        point[3] = aTrack.GetGlobalTime();
 
-       G4double fieldValue[6];
+       G4double fieldValue[6] ={ 0., 0., 0., 0., 0., 0.};
        field -> GetFieldValue(point,fieldValue);
-
        G4ThreeVector B(fieldValue[0],fieldValue[1],fieldValue[2]);
 
        // Call the spin precession only for non-zero mag. field
@@ -182,7 +169,7 @@ G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4St
 
 // decay table
   G4DecayTable *decaytable = aParticleDef->GetDecayTable();
-  if (decaytable) {
+  if ( decaytable != nullptr) {
     for (G4int ip=0; ip<decaytable->entries(); ip++){
       decaytable->GetDecayChannel(ip)->SetPolarization(parent_polarization);
     }
@@ -190,7 +177,6 @@ G4VParticleChange* G4DecayWithSpin::AtRestDoIt(const G4Track& aTrack, const G4St
 
   G4ParticleChangeForDecay* pParticleChangeForDecay;
   pParticleChangeForDecay = (G4ParticleChangeForDecay*)G4Decay::DecayIt(aTrack,aStep);
-
   pParticleChangeForDecay->ProposePolarization(parent_polarization);
 
   return pParticleChangeForDecay;
@@ -234,4 +220,11 @@ G4ThreeVector G4DecayWithSpin::Spin_Precession( const G4Step& aStep,
 
   return newSpin;
 
+}
+
+void G4DecayWithSpin::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << GetProcessName() 
+	  << ": Decay of particles considering parent polarization \n"
+	  << "kinematics of daughters are dertermined by DecayChannels \n";
 }

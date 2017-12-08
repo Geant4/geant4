@@ -5,13 +5,6 @@
 
 #/OnlyVisio true                                       # switch the visualization mode
 
-###  Experimental comparison and convergence
-
-/convergence/bCompareExp true                         # to compare the data with an experimental file data
-/convergence/nMaxLoop 2 # it is used if /convergence/bCompareExp is false
-/convergence/fileExperimentalData VoxelsTest.txt       # name of the experimental file
-/convergence/maxNumberOfEvents 5                       # maximum number of events at least in one experimental voxel
-/convergence/fileExperimentalDataOut VoxelsTest_Out # full path and name of the experimental file results
 
 ### Phase space
 

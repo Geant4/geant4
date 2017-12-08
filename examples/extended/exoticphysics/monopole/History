@@ -1,4 +1,4 @@
-$Id: History 104872 2017-06-23 14:19:16Z gcosmo $
+$Id: History 107534 2017-11-21 13:13:36Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21 November 17: V.Ivantchenko (monopole-V10-03-04)
+- Simplified histograms defition and filling
+
+20 November 17: V.Ivantchenko (monopole-V10-03-03)
+- Fixed lost functionality of histograms and monopole parameter
+  definitions
+
+26 October 17: D. Sorokin (monopole-V10-03-01)
+- G4MonopoleTransportation.cc - build fix
 
 23 June 17: S. Elles (monopole-V10-03-00)
 - add MT interface

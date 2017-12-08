@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.hh 104779 2017-06-16 09:20:56Z gcosmo $
+// $Id: G4Fragment.hh 104963 2017-07-03 07:38:44Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -160,9 +160,11 @@ public:
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
 
+  // G4Fragment class is not responsible for creation and delition of 
+  // G4NuclearPolarization object
   inline G4NuclearPolarization* NuclearPolarization();
   inline G4NuclearPolarization* GetNuclearPolarization() const;
-  void SetNuclearPolarization(G4NuclearPolarization*);
+  inline void SetNuclearPolarization(G4NuclearPolarization*);
 
   void SetAngularMomentum(const G4ThreeVector&);
   G4ThreeVector GetAngularMomentum() const;
@@ -216,15 +218,7 @@ private:
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
-/*
-inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
-{
-  if(p !=  thePolarization) {
-    delete thePolarization;
-    thePolarization = p;
-  }
-}
-*/
+
 #if defined G4HADRONIC_ALLOC_EXPORT
   extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
 #else
@@ -239,7 +233,6 @@ inline void * G4Fragment::operator new(size_t)
 
 inline void G4Fragment::operator delete(void * aFragment)
 {
-  ((G4Fragment *)aFragment)->SetNuclearPolarization(nullptr);
   pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
 }
 
@@ -463,6 +456,11 @@ inline G4NuclearPolarization* G4Fragment::NuclearPolarization()
 inline G4NuclearPolarization* G4Fragment::GetNuclearPolarization() const
 {
   return thePolarization;
+}
+
+inline void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
+{
+  thePolarization = p;
 }
 
 #endif

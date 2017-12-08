@@ -1,4 +1,4 @@
-// $Id:$
+//
 // -*- C++ -*-
 //
 // -----------------------------------------------------------------------
@@ -6,19 +6,23 @@
 //                        --- MixMax ---
 // -----------------------------------------------------------------------
 //
-//  The code is being released under GNU Lesser General Public License v3
+// Generator described in:
 //
-//	Generator described in
-//	N.Z.Akopov, G.K.Savvidy and N.G.Ter-Arutyunian, Matrix Generator of Pseudorandom Numbers,
-//	J.Comput.Phys. 97, 573 (1991);
-//	Preprint EPI-867(18)-86, Yerevan Jun.1986;
+// G.K.Savvidy and N.G.Ter-Arutyunian,
+//   On the Monte Carlo simulation of physical systems,
+//   J.Comput.Phys. 97, 566 (1991);
+//   Preprint EPI-865-16-86, Yerevan, Jan. 1986
+//   http://dx.doi.org/10.1016/0021-9991(91)90015-D
 //
-//  and
+// K.Savvidy
+//   "The MIXMAX random number generator"
+//   Comp. Phys. Commun. (2015)
+//   http://dx.doi.org/10.1016/j.cpc.2015.06.003
 //
-//  K.Savvidy
-//  The MIXMAX random number generator
-//  Comp. Phys. Commun. (2015)
-//  http://dx.doi.org/10.1016/j.cpc.2015.06.003
+// K.Savvidy and G.Savvidy
+//   "Spectrum and Entropy of C-systems. MIXMAX random number generator"
+//   Chaos, Solitons & Fractals, Volume 91, (2016) pp. 33-38
+//   http://dx.doi.org/10.1016/j.chaos.2016.05.003
 //
 // -----------------------------------------------------------------------
 

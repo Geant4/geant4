@@ -178,8 +178,8 @@ G4double  CexmcReimplementedGenbod::Generate( void )
         ++i;
     }
 
-    for ( int  i( 0 ); i < nmbOfOutputParticles; ++i )
-        *outVec[ i ].lVec *= GeV;
+    for ( int  j( 0 ); j < nmbOfOutputParticles; ++j )
+        *outVec[ j ].lVec *= GeV;
 
     //
     //---> return the weigth of event

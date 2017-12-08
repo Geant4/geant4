@@ -154,24 +154,6 @@ G4VSolid* G4UBox::Clone() const
 
 //////////////////////////////////////////////////////////////////////////
 //
-// StreamInfo
-
-std::ostream& G4UBox::StreamInfo(std::ostream &os) const
-{
-  G4int oldprc = os.precision(16);
-  os << "-----------------------------------------------------------\n"
-     << "     *** Dump for solid - " << GetEntityType() << " ***\n"
-     << "     ===================================================\n"
-     << " Solid type: Box\n"
-     << " Parameters: \n"
-     << "     half-dimensions in mm: x,y,z: " << dimensions() <<"\n"
-     << "-----------------------------------------------------------\n";
-  os.precision(oldprc);
-  return os;
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
 // Get bounding box
 
 void G4UBox::BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const

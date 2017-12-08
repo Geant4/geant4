@@ -68,8 +68,9 @@
 #include "CexmcException.hh"
 
 
-CexmcSetup::CexmcSetup( const G4String &  gdmlFile, G4bool  validateGDMLFile ) :
-    world( 0 ), gdmlFile( gdmlFile ), validateGDMLFile( validateGDMLFile ),
+CexmcSetup::CexmcSetup( const G4String &  gdmlFile_,
+                        G4bool  validateGDMLFile_ ) :
+    world( 0 ), gdmlFile( gdmlFile_ ), validateGDMLFile( validateGDMLFile_ ),
     calorimeterRegionInitialized( false ),
     calorimeterGeometryDataInitialized( false ), monitorVolume( NULL ),
     vetoCounterVolume( NULL ), calorimeterVolume( NULL ), targetVolume( NULL ),

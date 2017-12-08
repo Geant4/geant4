@@ -24,7 +24,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TessellatedSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4TessellatedSolid.cc 106710 2017-10-20 09:22:51Z gcosmo $
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
@@ -1605,6 +1605,7 @@ G4GeometryType G4TessellatedSolid::GetEntityType () const
 std::ostream &G4TessellatedSolid::StreamInfo(std::ostream &os) const
 {
   os << G4endl;
+  os << "Solid name       = " << GetName()      << G4endl;
   os << "Geometry Type    = " << fGeometryType  << G4endl;
   os << "Number of facets = " << fFacets.size() << G4endl;
 

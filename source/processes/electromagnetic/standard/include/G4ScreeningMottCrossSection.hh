@@ -32,7 +32,7 @@
 //
 // Author:      Cristina Consolandi
 //
-// Creation date: 20.10.2011 
+// Creation date: 20.10.2011
 //
 // Modifications:
 // 27-05-2012 Added Analytic Fitting to the Mott Cross Section by means of G4MottCoefficients class.
@@ -40,24 +40,24 @@
 //
 // Class Description:
 //      Computation of electron Coulomb Scattering Cross Section.
-//      Suitable for high energy electrons and light target materials. 
+//      Suitable for high energy electrons and light target materials.
 //
 //      Reference:
 //      M.J. Boschini et al.
 //     "Non Ionizing Energy Loss induced by Electrons in the Space Environment"
-//      Proc. of the 13th International Conference on Particle Physics and Advanced Technology 
+//      Proc. of the 13th International Conference on Particle Physics and Advanced Technology
 //      (13th ICPPAT, Como 3-7/10/2011), World Scientific (Singapore).
 //      Available at: http://arxiv.org/abs/1111.4042v4
 //
-//      1) Mott Differential Cross Section Approximation:  
+//      1) Mott Differential Cross Section Approximation:
 //         For Target material up to Z=92 (U):
-//         As described in http://arxiv.org/abs/1111.4042v4 
+//         As described in http://arxiv.org/abs/1111.4042v4
 //         par. 2.1 , eq. (16)-(17)
 //         Else (Z>92):
 //         W. A. McKinley and H. Fashbach, Phys. Rev. 74, (1948) 1759.
-//      2) Screening coefficient: 
+//      2) Screening coefficient:
 //      vomn G. Moliere, Z. Naturforsh A2 (1947), 133-145; A3 (1948), 78.
-//      3) Nuclear Form Factor: 
+//      3) Nuclear Form Factor:
 //      A.V. Butkevich et al. Nucl. Instr. and Meth. in Phys. Res. A 488 (2002), 282-294.
 //
 // ----------------------------------------------------------------------------------------
@@ -98,11 +98,11 @@ public:
 
 	G4double GetScreeningAngle();
 	void SetScreeningCoefficient();
-               
+
   	inline void SetupParticle(const G4ParticleDefinition*);
  	void SetupKinematic(G4double kinEnergy ,G4double Z);
 
-        G4double NuclearCrossSection(G4int form);
+        G4double NuclearCrossSection(G4int, G4int);
         G4ThreeVector GetNewDirection();
 
 	inline G4double GetMom2CM()const;
@@ -116,56 +116,55 @@ public:
         G4double FormFactor2ExpHof(G4double);
         G4double FormFactor2Gauss(G4double);
 	G4double FormFactor2UniformHelm(G4double);
-	G4double GetScatteringAngle();
-        G4double AngleDistribution(G4double);
+	G4double GetScatteringAngle(G4int, G4int);
+        G4double SetDifferentialXSection(G4double, G4double, G4int);
 
 private:
 
  	G4ScreeningMottCrossSection & operator=(const  G4ScreeningMottCrossSection &right) = delete;
   	G4ScreeningMottCrossSection(const  G4ScreeningMottCrossSection&) = delete;
 
-  	G4NistManager*  fNistManager;	
-	G4Pow*          fG4pow;	
+  	G4NistManager*  fNistManager;
+	G4Pow*          fG4pow;
 	G4MottCoefficients * mottcoeff;
 
-	G4double 		TotalCross;
-
-	//cost - min - max 
+	G4double 	        TotalCross;
+	//cost - min - max
         G4double                cosThetaMin;// def 1.0
         G4double                cosThetaMax;// def -1.0
 
-	G4double      		cosTetMinNuc;
-        G4double		cosTetMaxNuc;
+	G4double      	        cosTetMinNuc;
+        G4double	        cosTetMaxNuc;
 
 	//energy cut
-  	G4double                ecut;	    
-   	G4double                etag;	    
+  	G4double                ecut;
+   	G4double                etag;
 
 	// projectile........................
  	const G4ParticleDefinition* particle;
 
- 	G4double                spin;	   
-  	G4double                mass;	   
+ 	G4double                spin;
+  	G4double                mass;
 
-	//lab of incedent particle 
+	//lab of incedent particle
         G4double                tkinLab;
         G4double                momLab2;
         G4double                invbetaLab2;
 
 	//relative system with nucleus
 	G4double 		mu_rel;
- 	G4double                tkin;	   
-  	G4double                mom2;	   
-  	G4double                invbeta2;	   
+ 	G4double                tkin;
+  	G4double                mom2;
+  	G4double                invbeta2;
 	G4double		beta;
 	G4double		gamma;
 
   	// target nucleus
-  	G4double                targetZ;    
+  	G4double                targetZ;
 	G4double 		targetA;
-  	G4double                targetMass; 
+  	G4double                targetMass;
 	G4double 		Trec;
- 	G4double 		As; 
+ 	G4double 		As;
 	G4double 		coeffb[5][6];
 
 	//constants
@@ -229,5 +228,3 @@ inline G4double G4ScreeningMottCrossSection::GetTotalCross() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-
-

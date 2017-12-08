@@ -3,7 +3,7 @@
      ==========================================================
      Geant4 - an Object-Oriented Toolkit for Physics Simulation
      ==========================================================
-$Id: History 94861 2015-12-14 10:00:31Z gcosmo $
+$Id: History 106719 2017-10-20 09:44:30Z gcosmo $
 ---------------------------------------------------------------------
 
          History file for the ABLA evaporation/fission model
@@ -15,6 +15,10 @@ code and to keep track of all tags.
    ---------------------------------------------------------------
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
+
+19 October 2017 - Jose Luis Rodriguez Sanchez (hadr-abla-V10-03-00)
+--------------------------------------------------
+- New C++ version of abla07
 
 11 December 2015 - Davide Mancusi (hadr-abla-V10-02-00)
 --------------------------------------------------

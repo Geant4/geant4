@@ -46,6 +46,7 @@
 
 #include "G4StepLimiter.hh"
 #include "G4UserSpecialCuts.hh"
+#include "G4BuilderType.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -55,17 +56,15 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterPhysics::G4StepLimiterPhysics(const G4String& name)
-  :  G4VPhysicsConstructor(name),fStepLimiter(0),fUserSpecialCuts(0), 
-     fApplyToAll(false)
-{}
+  :  G4VPhysicsConstructor(name),fApplyToAll(false)
+{
+  SetPhysicsType(bUnknown);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterPhysics::~G4StepLimiterPhysics()
-{
-  delete fStepLimiter;
-  delete fUserSpecialCuts;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,8 +78,8 @@ void G4StepLimiterPhysics::ConstructProcess()
   auto myParticleIterator=GetParticleIterator();
   myParticleIterator->reset();
 
-  fStepLimiter = new G4StepLimiter();
-  fUserSpecialCuts = new G4UserSpecialCuts();
+  G4StepLimiter* stepLimiter = new G4StepLimiter();
+  G4UserSpecialCuts* userSpecialCuts = new G4UserSpecialCuts();
   while ((*myParticleIterator)()) {
     G4ParticleDefinition* particle = myParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -88,13 +87,13 @@ void G4StepLimiterPhysics::ConstructProcess()
 
     if(!particle->IsShortLived()) {
       if (charge != 0.0 || fApplyToAll) {
-	      // All charged particles should have a step limiter
-	      // to make sure that the steps do not get too long.
-	      pmanager->AddDiscreteProcess(fStepLimiter);
-	      pmanager->AddDiscreteProcess(fUserSpecialCuts);
+	// All charged particles should have a step limiter
+	// to make sure that the steps do not get too long.
+	pmanager->AddDiscreteProcess(stepLimiter);
+	pmanager->AddDiscreteProcess(userSpecialCuts);
       } else {
-	      // Energy cuts for all other neutral particles
-	      pmanager->AddDiscreteProcess(fUserSpecialCuts);
+	// Energy cuts for all other neutral particles
+	pmanager->AddDiscreteProcess(userSpecialCuts);
       }
     }
   }

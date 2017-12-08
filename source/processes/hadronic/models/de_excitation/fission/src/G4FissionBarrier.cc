@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4FissionBarrier.cc 96634 2016-04-27 09:31:49Z gcosmo $
+// $Id: G4FissionBarrier.cc 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -32,14 +32,15 @@
 // 21.03.2013 V.Ivanchenko redesign parameters classes
 
 #include "G4FissionBarrier.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4ShellCorrection.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Pow.hh"
 
 G4FissionBarrier::G4FissionBarrier()
 {
-  SPtr = 
-    G4ShellCorrection::GetInstance()->GetCameronShellPlusPairingCorrections();
+  SPtr = G4NuclearLevelData::GetInstance()->GetShellCorrection()
+    ->GetCameronShellPlusPairingCorrections();
 }
 
 G4FissionBarrier::~G4FissionBarrier()

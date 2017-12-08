@@ -320,7 +320,7 @@ c1->cd(11);
   histbis->GetYaxis()->SetTitleOffset(1.4);
   histbis->GetXaxis()->SetTitle("Y (um)");
   histbis->GetYaxis()->SetTitle("X (um)");
-  histbis->SetTitle("Mean energy deposit -transverse- (z axis in eV)");
+  histbis->SetTitle("Energy deposit -transverse- (z axis in eV)");
 
 c1->cd(12);
   TH2F *histter = new TH2F("histter","histter",50,-20,20,50,-20,20);
@@ -336,7 +336,7 @@ c1->cd(12);
   histter->GetYaxis()->SetTitleOffset(1.4);
   histter->GetXaxis()->SetTitle("Z (um)");
   histter->GetYaxis()->SetTitle("X (um)");
-  histter->SetTitle("Mean energy deposit -longitudinal- (z axis in eV)");
+  histter->SetTitle("Energy deposit -longitudinal- (z axis in eV)");
 
 //*******************************
 // BEAM POSITION AT CELL ENTRANCE

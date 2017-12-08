@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ExcitationHandler.cc 104780 2017-06-16 09:23:03Z gcosmo $
+// $Id: G4ExcitationHandler.cc 104984 2017-07-03 15:13:37Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (May 1998)
@@ -118,14 +118,18 @@ void G4ExcitationHandler::SetParameters()
 {
   G4DeexPrecoParameters* param = 
     G4NuclearLevelData::GetInstance()->GetParameters();
+  isActive = true;
+  if(fDummy == param->GetDeexChannelsType()) { isActive = false; }
   minEForMultiFrag = param->GetMinExPerNucleounForMF();
   minExcitation = param->GetMinExcitation();
   icID = param->GetInternalConversionID();
-  if(!thePhotonEvaporation) { 
-    SetPhotonEvaporation(new G4PhotonEvaporation()); 
-  } 
-  if(!theFermiModel) { SetFermiModel(new G4FermiBreakUpVI()); }
-  if(!theMultiFragmentation) { SetMultiFragmentation(new G4StatMF()); }
+  if(isActive) {
+    if(!thePhotonEvaporation) { 
+      SetPhotonEvaporation(new G4PhotonEvaporation()); 
+    } 
+    if(!theFermiModel) { SetFermiModel(new G4FermiBreakUpVI()); }
+    if(!theMultiFragmentation) { SetMultiFragmentation(new G4StatMF()); }
+  }
 }
 
 void G4ExcitationHandler::Initialise()
@@ -138,15 +142,11 @@ void G4ExcitationHandler::Initialise()
     G4NuclearLevelData::GetInstance()->GetParameters();
   isInitialised = true;
   SetParameters();
-  theFermiModel->Initialise();
-  theEvaporation->InitialiseChannels();
-  param->Dump();
-  if(G4Threading::IsMasterThread()) {
-    G4cout << "Number of de-excitation channels                    " 
-	   << theEvaporation->GetNumberOfChannels();
-    if(fVerbose > 0) { G4cout << " " << this; }
-    G4cout << G4endl; 
+  if(isActive) {
+    theFermiModel->Initialise();
+    theEvaporation->InitialiseChannels();
   }
+  param->Dump();
 }
 
 void G4ExcitationHandler::SetEvaporation(G4VEvaporation* ptr, G4bool flag)
@@ -190,6 +190,10 @@ G4ExcitationHandler::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
 void G4ExcitationHandler::SetDeexChannelsType(G4DeexChannelType val)
 {
   G4Evaporation* evap = static_cast<G4Evaporation*>(theEvaporation);
+  if(val == fDummy) { 
+    isActive = false;
+    return; 
+  }
   if(!evap) { return; }
   if(val == fEvaporation) {
     evap->SetDefaultChannel();
@@ -231,7 +235,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   G4int Z = theInitialState.GetZ_asInt();
   
   // In case A <= 1 the fragment will not perform any nucleon emission
-  if (A <= 1) {
+  if (A <= 1 || !isActive) {
     theResults.push_back( theInitialStatePtr );
 
     // check if a fragment is stable
@@ -432,9 +436,25 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
   kkmax = theResults.size();
   for (kk=0; kk<kkmax; ++kk) {
     frag = theResults[kk];
+
+    // in the case of dummy de-excitation, excitation energy is transfered 
+    // into kinetic energy
+    if(!isActive && 0 == kk) {
+      G4double mass = frag->GetGroundStateMass();
+      G4double ptot = (frag->GetMomentum()).vect().mag();
+      G4double etot = (frag->GetMomentum()).e();
+      G4double fac  = (etot <= mass || 0.0 == ptot) ? 0.0 
+	: std::sqrt((etot - mass)*(etot + mass))/ptot; 
+      G4LorentzVector lv((frag->GetMomentum()).px()*fac, 
+			 (frag->GetMomentum()).py()*fac,
+			 (frag->GetMomentum()).pz()*fac, etot);
+      frag->SetMomentum(lv);
+    }
     if(fVerbose > 1) { 
       G4cout << kk << "-th fragment " << frag;
-      if(frag->GetNuclearPolarization()) { G4cout << "  " << frag->GetNuclearPolarization(); }
+      if(frag->NuclearPolarization()) { 
+	G4cout << "  " << frag->NuclearPolarization(); 
+      }
       G4cout << G4endl;
       G4cout << *frag << G4endl; 
     }

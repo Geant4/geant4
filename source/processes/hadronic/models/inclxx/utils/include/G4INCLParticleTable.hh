@@ -46,6 +46,7 @@
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
 #include "G4INCLConfig.hh"
+#include "G4INCLHFB.hh"
 
 #ifdef INCLXX_IN_GEANT4_MODE
 #include "G4IonTable.hh"
@@ -69,6 +70,10 @@ namespace G4INCL {
     const G4double effectiveDeltaMass = 1232.0;
     const G4double effectiveDeltaWidth = 130.0;
     const G4double effectivePionMass = 138.0;
+    const G4double effectiveLambdaMass = 1115.683;
+    const G4double effectiveSigmaMass = 1197.45; // max value
+    const G4double effectiveKaonMass = 497.614; // max value
+    const G4double effectiveAntiKaonMass = 497.614; // max value
     const G4double effectiveEtaMass = 547.862;
     const G4double effectiveOmegaMass = 782.65;
     const G4double effectiveEtaPrimeMass = 957.78;
@@ -151,6 +156,9 @@ namespace G4INCL {
 
     /// \brief Get charge number from particle type
     G4int getChargeNumber(const ParticleType t);
+    
+    /// \brief Get strangeness number from particle type
+    G4int getStrangenessNumber(const ParticleType t);
 
     G4double getNuclearRadius(const ParticleType t, const G4int A, const G4int Z);
     G4double getLargestNuclearRadius(const G4int A, const G4int Z);
@@ -270,8 +278,17 @@ namespace G4INCL {
     /// \brief Get the type of delta
     ParticleType getDeltaType(const G4int isosp);
 
-	/// \brief Get particle width (in s)
-	G4double getWidth(const ParticleType t);
+    /// \brief Get the type of sigma
+    ParticleType getSigmaType(const G4int isosp);
+
+    /// \brief Get the type of kaon
+    ParticleType getKaonType(const G4int isosp);
+
+    /// \brief Get the type of antikaon
+    ParticleType getAntiKaonType(const G4int isosp);
+
+    /// \brief Get particle width (in s)
+    G4double getWidth(const ParticleType t);
   }
 }
 

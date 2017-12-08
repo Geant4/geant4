@@ -35,7 +35,8 @@
 #include "globals.hh"
 
 #include "tools/ntuple_booking"
-#include "tools/wroot/pntuple"
+#include "tools/wroot/mt_ntuple_row_wise"
+#include "tools/wroot/mt_ntuple_column_wise"
 
 #include <fstream>
 
@@ -51,6 +52,7 @@ struct G4RootPNtupleDescription
   G4RootPNtupleDescription() 
     :  fFile(nullptr),
        fNtuple(nullptr),
+       fBasePNtuple(nullptr),
        fMainBranches(),
        fNtupleBooking(),
        fActivation(true),
@@ -62,7 +64,8 @@ struct G4RootPNtupleDescription
       }    
 
   tools::wroot::file* fFile;    
-  tools::wroot::pntuple* fNtuple;
+  tools::wroot::imt_ntuple* fNtuple;
+  tools::wroot::base_pntuple* fBasePNtuple;
   std::vector<tools::wroot::branch*> fMainBranches; 
   tools::ntuple_booking fNtupleBooking; 
   G4bool fActivation;

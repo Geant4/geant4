@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisManager.hh 100648 2016-10-31 10:06:45Z gcosmo $
+// $Id: G4RootAnalysisManager.hh 106985 2017-10-31 10:07:18Z gcosmo $
 
 // The main manager for Root analysis.
 // It delegates most of functions to the object specific managers. 
@@ -81,6 +81,7 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     // MT/MPI
     void SetNtupleMerging(G4bool mergeNtuples, 
                           G4int nofReducedNtupleFiles = 0,
+                          G4bool rowWise = 0,
                           unsigned int basketSize = fgkDefaultBasketSize);
 
   protected:
@@ -118,8 +119,9 @@ class G4RootAnalysisManager : public  G4ToolsAnalysisManager
     G4bool Reset();
 
     // data members 
-    G4int  fNofNtupleFiles;
-    G4NtupleMergeMode      fNtupleMergeMode;  
+    G4int   fNofNtupleFiles;
+    G4bool  fNtupleRowWise;
+    G4NtupleMergeMode      fNtupleMergeMode;
     G4RootNtupleManager*   fNtupleManager; 
     G4RootPNtupleManager*  fSlaveNtupleManager;
     std::shared_ptr<G4RootFileManager> fFileManager;

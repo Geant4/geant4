@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id: DetectorConstruction.cc 106244 2017-09-26 01:58:00Z gcosmo $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -68,9 +68,9 @@
 
 DetectorConstruction::DetectorConstruction()
 : G4VUserDetectorConstruction(),
-  fTargetMaterial(0), fWorldMaterial(0),
-  fLogicTarget(0), fLogicWorld(0),
-  fDetectorMessenger(0)
+  fTargetMaterial(nullptr), fWorldMaterial(nullptr),
+  fLogicTarget(nullptr), fLogicWorld(nullptr),
+  fDetectorMessenger(nullptr), fPhysList(nullptr)
 {
   fDetectorMessenger = new DetectorMessenger(this);
 

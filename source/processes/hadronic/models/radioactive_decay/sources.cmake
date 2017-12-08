@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 99197 2016-09-08 09:45:49Z gcosmo $
+# $Id: sources.cmake 106990 2017-10-31 10:12:48Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -65,9 +65,13 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4NucleusLimits.hh
         G4ProtonDecay.hh
         G4RadioactiveDecay.hh
+        G4RadioactiveDecayBase.hh
+        G4RadioactiveDecayBaseMessenger.hh
+        G4Radioactivation.hh
+        G4RadioactivationMessenger.hh
         G4RadioactiveDecayMode.hh
-        G4RadioactiveDecayRate.hh
-        G4RadioactiveDecayRateVector.hh
+        G4RadioactiveDecayRatesToDaughter.hh
+        G4RadioactiveDecayChainsFromParent.hh
         G4RadioactiveDecaymessenger.hh
         G4RadioactivityTable.hh
         G4UIcmdWithNucleusLimits.hh
@@ -86,9 +90,13 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4NucleusLimits.cc
         G4ProtonDecay.cc
         G4RadioactiveDecay.cc
+        G4RadioactiveDecayBase.cc
+        G4RadioactiveDecayBaseMessenger.cc
+        G4Radioactivation.cc
+        G4RadioactivationMessenger.cc
         G4RadioactiveDecayMode.cc
-        G4RadioactiveDecayRate.cc
-        G4RadioactiveDecayRateVector.cc
+        G4RadioactiveDecayRatesToDaughter.cc
+        G4RadioactiveDecayChainsFromParent.cc
         G4RadioactiveDecaymessenger.cc
         G4RadioactivityTable.cc
         G4UIcmdWithNucleusLimits.cc

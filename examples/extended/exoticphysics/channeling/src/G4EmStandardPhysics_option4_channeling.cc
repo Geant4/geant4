@@ -199,7 +199,6 @@ void G4EmStandardPhysics_option4_channeling::ConstructProcess()
   G4CoulombScattering* piss = new G4CoulombScattering();
   G4CoulombScattering* kss = new G4CoulombScattering();
   G4CoulombScattering* pss = new G4CoulombScattering();
-  
 
   // energy limits for e+- scattering models
   //G4double highEnergyLimit = 100*MeV;

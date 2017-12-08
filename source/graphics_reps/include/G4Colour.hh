@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Colour.hh 104093 2017-05-11 07:29:45Z gcosmo $
+// $Id: G4Colour.hh 106385 2017-10-09 09:36:33Z gcosmo $
 //
 // 
 // John Allison 20th October 1996
@@ -127,24 +127,25 @@ public: // With description
   static G4Colour Magenta();
   static G4Colour Yellow();
 
+  static G4bool GetColour(const G4String& key, G4Colour& result);
+  // Get colour for given key, placing it in result.
+  // The key is usually the name of the colour.
+  // The key is not case sensitive.
+  // Returns false if key doesn't exist, leaving result unchanged.
+
   static void AddToMap(const G4String& key, const G4Colour& colour);
   // Add user defined colour to colour map with given key. Standard
   // colours are added to map by default.
 
-  static G4bool GetColour(const G4String& key, G4Colour& result);
-  // Get colour for given key. Returns false if key doesn't exist 
-  // in colour map, leaving result unchanged. Colour map
-  // is not sensitive to key case.
-
+  static void InitialiseColourMap();
   static const std::map<G4String, G4Colour>& GetMap();
-  
+
 private:
   G4double red, green, blue, alpha;
 
-  static G4ThreadLocal std::map<G4String, G4Colour> *fColourMap;
-  static G4ThreadLocal G4bool fInitColourMap;
-  static void InitialiseColourMap();
-    
+  static std::map<G4String, G4Colour> fColourMap;
+  static G4bool fInitColourMap;
+
 };
 
 inline G4double G4Colour::GetRed   () const {return red;}

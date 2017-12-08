@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.cc 102805 2017-02-22 16:34:13Z gcosmo $
+// $Id: G4MaterialPropertiesTable.cc 106997 2017-10-31 10:22:36Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -51,6 +51,8 @@
 #include "G4PhysicalConstants.hh"
 #include "G4Log.hh"
 
+#include <algorithm>
+
 /////////////////
 // Constructors
 /////////////////
@@ -72,32 +74,76 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
   }
   MPT.clear();
   MPTC.clear();
+
+  MPiterator it;
+  for (it = MP.begin(); it != MP.end(); ++it)
+  {
+    delete (*it).second;
+  }
+  MP.clear();
+  MCP.clear();
+
 }
 
 ////////////
 // Methods
 ////////////
 
+G4MCPindex G4MaterialPropertiesTable::GetConstPropertyIndex(const G4String& key) const
+{
+  // Returns the constant material property index corresponding to a key
+
+  size_t index = std::distance(G4MaterialConstPropertyName.begin(),
+                     std::find(G4MaterialConstPropertyName.begin(), 
+                                         G4MaterialConstPropertyName.end(), key));
+  if((G4MCPindex)index != kNumberOfConstPropertyIndex) return (G4MCPindex)index;
+  G4cout << "key: " << key << G4endl;
+  G4Exception("G4MaterialPropertiesTable::GetConstPropertyIndex()","mat206",
+              FatalException, "Constant Material Property Index not found.");
+  return kNullConstPropertyIndex;
+} 
+
+G4MPindex G4MaterialPropertiesTable::GetPropertyIndex(const G4String& key) const
+{
+  // Returns the material property index corresponding to a key
+  size_t index = std::distance(G4MaterialPropertyName.begin(),
+                     std::find(G4MaterialPropertyName.begin(), 
+                                         G4MaterialPropertyName.end(), key));
+  if((G4MPindex)index != kNumberOfPropertyIndex) return (G4MPindex)index;
+  G4cout << "key: " << key << G4endl;
+  G4Exception("G4MaterialPropertiesTable::GetPropertyIndex()","mat207",
+               FatalException, "Material Property Index not found.");
+  return kNullPropertyIndex;
+} 
+
+G4double G4MaterialPropertiesTable::GetConstProperty(const G4MCPindex index) const
+{
+  // Returns the constant material property corresponding to an index
+
+  MCPiterator j;
+  j = MCP.find(index);
+  if ( j != MCP.end() ) return j->second;
+  G4cout << "index: " << index << G4endl;
+  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
+              FatalException, "Constant Material Property Index not found.");
+  return 0.;
+}
+
 G4double G4MaterialPropertiesTable::GetConstProperty(const char *key) const
 {
   // Returns the constant material property corresponding to a key
-
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return j->second;
-  G4cout << "key: " << G4String(key) << G4endl;
-  G4Exception("G4MaterialPropertiesTable::GetConstProperty()","mat202",
-              FatalException, "Constant Material Property not found.");
-  return 0.;
+  const G4MCPindex index = GetConstPropertyIndex(G4String(key));
+  return GetConstProperty(index);
 }
 
 G4bool G4MaterialPropertiesTable::ConstPropertyExists(const char *key) const
 {
   // Returns true if a const property 'key' exists
+  const G4MCPindex index = GetConstPropertyIndex(G4String(key));
 
-  MPTCiterator j;
-  j = MPTC.find(G4String(key));
-  if ( j != MPTC.end() ) return true;
+  MCPiterator j;
+  j = MCP.find(index);
+  if ( j != MCP.end() ) return true;
   return false;
 }
 
@@ -105,36 +151,57 @@ G4MaterialPropertyVector*
 G4MaterialPropertiesTable::GetProperty(const char *key)
 {
   // Returns a Material Property Vector corresponding to a key
+  const G4MPindex index = GetPropertyIndex(G4String(key));
+  return GetProperty(index);
+}
 
-  //Important Note for MT. adotti 17 Feb 2016
-  //In previous implementation the following line was at the bottom of the
-  //function causing a rare race-condition.
-  //Moving this line here from the bottom solves the problem because:
-  //1- Map is accessed only via operator[] (to insert) and find() (to search),
-  //   and these are thread safe if done on separate elements.
-  //   See notes on data-races at:
-  //   http://www.cplusplus.com/reference/map/map/operator%5B%5D/
-  //   http://www.cplusplus.com/reference/map/map/find/
-  //2- So we have a data race if two threads access the same element (GROUPVEL)
-  //   one in read and one in write mode. This was happening with the line
-  //   at the bottom of the code, one thread in SetGROUPVEL(), 
-  //   and the other here
-  //3- SetGROUPVEL() is protected by a mutex that ensures that only
-  //   one thread at the time will execute its code
-  //4- The if() statement guarantees that only if two threads are searching
-  //   the same problematic key (GROUPVEL) the mutex will be used.
-  //   Different keys do not lock (good for performances)
-  //5- As soon as a thread acquires the mutex in SetGROUPVEL it checks again
-  //   if the map has GROUPVEL key, if so returns immediately.
-  //   This "double check" allows to execute the heavy code to calculate
-  //   group velocity only once even if two threads enter SetGROUPVEL together
-  if (G4String(key) == "GROUPVEL") return SetGROUPVEL();
-
-  MPTiterator i;
-  i = MPT.find(G4String(key));
-  if ( i != MPT.end() ) return i->second;
+G4MaterialPropertyVector*
+G4MaterialPropertiesTable::GetProperty(const G4MPindex index)
+{
+  // Returns a Material Property Vector corresponding to an index
+  MPiterator i;
+  i = MP.find(index);
+  if ( i != MP.end() ) return i->second;
   return nullptr;
 }
+
+G4MaterialPropertyVector* G4MaterialPropertiesTable::AddProperty(
+                                            const char *key,
+                                            G4double   *PhotonEnergies,
+                                            G4double   *PropertyValues,
+                                            G4int      NumEntries)
+{
+  // Provides a way of adding a property to the Material Properties
+  // Table given a pair of numbers and a key
+  G4MPindex index = GetPropertyIndex(G4String(key));
+
+  G4MaterialPropertyVector *mpv = new G4MaterialPropertyVector(PhotonEnergies, 
+                                                   PropertyValues, NumEntries);
+  MP[index] = mpv;
+
+  // if key is RINDEX, we calculate GROUPVEL - 
+  // contribution from Tao Lin (IHEP, the JUNO experiment) 
+  if (G4String(key)=="RINDEX") {
+      CalculateGROUPVEL();
+  }
+
+  return mpv;
+}
+
+void G4MaterialPropertiesTable::
+AddProperty(const char *key, G4MaterialPropertyVector *mpv)
+{
+  //  Provides a way of adding a property to the Material Properties
+  //  Table given an G4MaterialPropertyVector Reference and a key
+  G4MPindex index = GetPropertyIndex(G4String(key));
+  MP[ index ] = mpv;
+
+  // if key is RINDEX, we calculate GROUPVEL -
+  // contribution from Tao Lin (IHEP, the JUNO experiment) 
+  if (G4String(key)=="RINDEX") {
+      CalculateGROUPVEL();
+  }
+} 
 
 void G4MaterialPropertiesTable::AddEntry(const char *key,
                                          G4double    aPhotonEnergy,
@@ -142,8 +209,9 @@ void G4MaterialPropertiesTable::AddEntry(const char *key,
 {
   // Allows to add an entry pair directly to the Material Property Vector
   // given a key
+  const G4MPindex index = GetPropertyIndex(G4String(key));
 
-  G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
+  G4MaterialPropertyVector *targetVector=MP[index];
   if (targetVector != nullptr)
   {
     targetVector->InsertValues(aPhotonEnergy, aPropertyValue);
@@ -157,8 +225,8 @@ void G4MaterialPropertiesTable::AddEntry(const char *key,
 
 void G4MaterialPropertiesTable::DumpTable()
 {
-  MPTiterator i;
-  for (i = MPT.begin(); i != MPT.end(); ++i)
+  MPiterator i;
+  for (i = MP.begin(); i != MP.end(); ++i)
   {
     G4cout << (*i).first << G4endl;
     if ( (*i).second != 0 )
@@ -171,8 +239,8 @@ void G4MaterialPropertiesTable::DumpTable()
                   JustWarning, "NULL Material Property Vector Pointer.");
     }
   }
-  MPTCiterator j;
-  for (j = MPTC.begin(); j != MPTC.end(); ++j)
+  MCPiterator j;
+  for (j = MCP.begin(); j != MCP.end(); ++j)
   {
     G4cout << j->first << G4endl;
     if ( j->second != 0 )
@@ -194,20 +262,23 @@ namespace {
 }
 #endif
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
+G4MaterialPropertyVector* G4MaterialPropertiesTable::CalculateGROUPVEL()
 {
 #ifdef G4MULTITHREADED
   G4AutoLock mptm(&materialPropertyTableMutex);
 #endif
+  // reconsider (i.e, remove) above mutex as this method is likely called only
+  // when RINDEX is added during the detector construction phase (i.e., adding 
+  // meterials properties into geometry) on the master thread (Oct. 2017, SYJ)
 
   // check if "GROUPVEL" already exists
-  MPTiterator itr;
-  itr = MPT.find("GROUPVEL");
-  if(itr != MPT.end()) return itr->second;
+  MPiterator itr;
+  itr = MP.find(kGROUPVEL);
+  if(itr != MP.end()) return itr->second;
 
   // fetch RINDEX data, give up if unavailable
   //
-  G4MaterialPropertyVector *rindex = this->GetProperty("RINDEX");
+  G4MaterialPropertyVector *rindex = this->GetProperty(kRINDEX);
   if (rindex==0)  { return 0; }
 
   // RINDEX exists but has no entries, give up
@@ -226,7 +297,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
   if (E0 <= 0.)
   {
-    G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
+    G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat205",
                 FatalException, "Optical Photon Energy <= 0");
   }
                                                                                 
@@ -240,7 +311,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
     if (E1 <= 0.)
     {
-      G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
+      G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat205",
                   FatalException, "Optical Photon Energy <= 0");
     }
 
@@ -277,7 +348,7 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 
       if (E1 <= 0.)
       {
-        G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "mat205",
+        G4Exception("G4MaterialPropertiesTable::CalculateGROUPVEL()", "mat205",
                     FatalException, "Optical Photon Energy <= 0");
       }
     }
@@ -299,4 +370,51 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   this->AddProperty( "GROUPVEL", groupvel );
                                                                                 
   return groupvel;
+}
+
+G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
+{
+  G4String message("SetGROUPVEL will be obsolete from the next release ");
+  message += "Use G4MaterialPropertiesTable::CalculateGROUPVEL() instead";
+
+  G4Exception("G4MaterialPropertiesTable::SetGROUPVEL()", "Obsolete",
+               JustWarning, message);
+  return CalculateGROUPVEL();
+}
+
+std::map< G4String, G4MaterialPropertyVector*, std::less<G4String> >*
+G4MaterialPropertiesTable::GetPropertiesMap() 
+{ 
+  // warning message
+  G4String message("GetPropertiesMap will be obsolete from the next release ");
+  message += "Use G4MaterialPropertiesTable::GetPropertyMap() instead";
+  G4Exception("G4MaterialPropertiesTable::GetPropertiesMap()", "Obsolete",
+               JustWarning, message);
+
+  for (MPiterator miter = MP.begin(); miter != MP.end(); miter++)
+  {
+    if(miter->second) {
+      MPT [ G4MaterialPropertyName[miter->first] ] = miter->second;
+    }
+    else {
+      G4Exception("G4MaterialPropertiesTable::GetPropertiesMap()","NullPointer",
+                   JustWarning, "Null Pointer for Material Property");
+      continue;
+    }
+  }
+  return &MPT; 
+}
+
+std::map< G4String, G4double, std::less<G4String> >* G4MaterialPropertiesTable::GetPropertiesCMap()
+{ 
+  // warning message
+  G4String message("GetPropertiesCMap will be obsolete from the next release ");
+  message += "Use G4MaterialPropertiesTable::GetConstPropertyMap() instead";
+  G4Exception("G4MaterialPropertiesTable::GetPropertiesCMap()", "Obsolete",
+               JustWarning, message);
+
+  for (MCPiterator miter = MCP.begin(); miter != MCP.end(); miter++) {
+    MPTC[ G4MaterialConstPropertyName[miter->first] ] = miter->second;
+  }
+  return &MPTC; 
 }

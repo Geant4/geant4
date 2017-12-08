@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompetitiveFission.cc 98739 2016-08-09 12:56:55Z gcosmo $
+// $Id: G4CompetitiveFission.cc 107060 2017-11-01 15:00:04Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998)
@@ -37,8 +37,10 @@
 #include "G4CompetitiveFission.hh"
 #include "G4PairingCorrection.hh"
 #include "G4ParticleMomentum.hh"
+#include "G4NuclearLevelData.hh"
 #include "G4Pow.hh"
 #include "G4Exp.hh"
+#include "G4RandomDirection.hh"
 #include "G4PhysicalConstants.hh"
 
 G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
@@ -56,7 +58,7 @@ G4CompetitiveFission::G4CompetitiveFission() : G4VEvaporationChannel("fission")
   FissionBarrier = 0.0;
   FissionProbability = 0.0;
   LevelDensityParameter = 0.0;
-  pairingCorrection = G4PairingCorrection::GetInstance();
+  pairingCorrection = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
 }
 
 G4CompetitiveFission::~G4CompetitiveFission()
@@ -184,7 +186,8 @@ G4Fragment* G4CompetitiveFission::EmittedFragment(G4Fragment* theNucleus)
   M += U;
 
   G4double etot1 = ((M - M2)*(M + M2) + M1*M1)/(2*M);
-  G4ParticleMomentum Momentum1(IsotropicVector(std::sqrt((etot1 - M1)*(etot1+M1))));
+  G4ParticleMomentum Momentum1 = 
+    std::sqrt((etot1 - M1)*(etot1+M1))*G4RandomDirection();
   G4LorentzVector FourMomentum1(Momentum1, etot1);
   FourMomentum1.boost(theNucleusMomentum.boostVector());
     

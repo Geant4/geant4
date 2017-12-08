@@ -1,4 +1,4 @@
-$Id: History 104164 2017-05-15 06:53:09Z gcosmo $
+$Id: History 106122 2017-09-13 12:51:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+13th September 2017  John Allison  (modeling-V10-03-08)
+- G4ModelingParameters.cc, G4PhysicalVolumeModel.cc:
+  Reverted default number of line segments per circle to 24.
+  (72 lines per circle gives trouble in the Boolean Processor, so until that
+  is fixed we revert to 24.)
 
 14th May 2017  John Allison (modeling-V10-03-07)
 - G4GPSModel: Added user-selectable colour.

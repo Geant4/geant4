@@ -83,18 +83,22 @@ namespace
     G4Colour  CexmcTrackPointsMarkerColour( 0.0, 1.0, 0.4 );
     G4Colour  CexmcRecTrackPointsMarkerColour( 1.0, 0.4, 0.0 );
 
-
+#ifdef CEXMC_USE_ROOT
     inline G4double  CexmcGetKinEnergy( G4double  momentumAmp, G4double  mass )
     {
         return std::sqrt( momentumAmp * momentumAmp + mass * mass ) - mass;
     }
+#endif
 }
 
 
-CexmcEventAction::CexmcEventAction( CexmcPhysicsManager *  physicsManager,
-                                    G4int  verbose ) :
-    physicsManager( physicsManager ), reconstructor( NULL ), opKinEnergy( 0. ),
-    verbose( verbose ), verboseDraw( 4 ), messenger( NULL )
+CexmcEventAction::CexmcEventAction( CexmcPhysicsManager *  physicsManager_,
+                                    G4int  verbose_ ) :
+    physicsManager( physicsManager_ ), reconstructor( NULL ),
+#ifdef CEXMC_USE_ROOT
+    opKinEnergy( 0. ),
+#endif
+    verbose( verbose_ ), verboseDraw( 4 ), messenger( NULL )
 {
     G4DigiManager *  digiManager( G4DigiManager::GetDMpointer() );
     digiManager->AddNewModule( new CexmcEnergyDepositDigitizer(

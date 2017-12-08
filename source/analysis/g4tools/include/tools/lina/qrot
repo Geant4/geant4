@@ -183,6 +183,7 @@ public:
     return true;
   }
 
+/*
   template <class MAT4>
   void set_value(const MAT4& a_m,T(*a_sqrt)(T)) {
     //WARNING : not tested.
@@ -220,6 +221,7 @@ public:
       m_quat.multiply(one()/a_sqrt(a_m.v33()));
     }
   }
+*/
 
   template <class MAT4>
   void value(MAT4& a_m) const {

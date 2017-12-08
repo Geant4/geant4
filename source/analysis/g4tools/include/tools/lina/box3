@@ -97,12 +97,12 @@ public:
     if(is_empty()) {
       set_bounds(a_point,a_point);
     } else {
-      m_min.set_value(tools::mn<T_t>(a_point[0],m_min[0]),
-                      tools::mn<T_t>(a_point[1],m_min[1]),
-                      tools::mn<T_t>(a_point[2],m_min[2]));
-      m_max.set_value(tools::mx<T_t>(a_point[0],m_max[0]),
-                      tools::mx<T_t>(a_point[1],m_max[1]),
-                      tools::mx<T_t>(a_point[2],m_max[2]));
+      m_min.set_value(min_of<T_t>(a_point[0],m_min[0]),
+                      min_of<T_t>(a_point[1],m_min[1]),
+                      min_of<T_t>(a_point[2],m_min[2]));
+      m_max.set_value(max_of<T_t>(a_point[0],m_max[0]),
+                      max_of<T_t>(a_point[1],m_max[1]),
+                      max_of<T_t>(a_point[2],m_max[2]));
     }
   }
 
@@ -112,12 +112,12 @@ public:
     if(is_empty()) {
       set_bounds(a_x,a_y,a_z,a_x,a_y,a_z);
     } else {
-      m_min.set_value(tools::mn<T_t>(a_x,m_min[0]),
-                      tools::mn<T_t>(a_y,m_min[1]),
-                      tools::mn<T_t>(a_z,m_min[2]));
-      m_max.set_value(tools::mx<T_t>(a_x,m_max[0]),
-                      tools::mx<T_t>(a_y,m_max[1]),
-                      tools::mx<T_t>(a_z,m_max[2]));
+      m_min.set_value(min_of<T_t>(a_x,m_min[0]),
+                      min_of<T_t>(a_y,m_min[1]),
+                      min_of<T_t>(a_z,m_min[2]));
+      m_max.set_value(max_of<T_t>(a_x,m_max[0]),
+                      max_of<T_t>(a_y,m_max[1]),
+                      max_of<T_t>(a_z,m_max[2]));
     }
   }
 

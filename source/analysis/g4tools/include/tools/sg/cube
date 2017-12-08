@@ -51,7 +51,7 @@ protected: //gstos
     size_t ngsto = nsegs*2*3; //2 points * 3 coords.
     size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
-    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
+    float* pxyz = vec_data<float>(gsto_data)+sz;    
     floatp lines;
     _lines(lines);
     ::memcpy(pxyz,lines,ngsto*sizeof(float));
@@ -62,7 +62,7 @@ protected: //gstos
     size_t ngsto = nxyzs*2;     //xyz+nms
     size_t sz = gsto_data.size();
     gsto_data.resize(sz+ngsto);
-    float* pxyz = tools::vec_data<float>(gsto_data)+sz;    
+    float* pxyz = vec_data<float>(gsto_data)+sz;    
     floatp tris,nms;
     _tris(tris,nms);
     ::memcpy(pxyz,tris,nxyzs*sizeof(float));
@@ -92,7 +92,7 @@ public:
           a_action.color4f(0,0,0,1); //if lighten, then rendered grey.
           a_action.line_width(1);
 
-          a_action.draw_gsto_v(tools::gl::lines(),m_gsto_segs_sz/3,pxyzs);
+          a_action.draw_gsto_v(gl::lines(),m_gsto_segs_sz/3,pxyzs);
 
           //pushes back the filled polygons to avoid z-fighting with lines
           a_action.set_polygon_offset(true);
@@ -101,7 +101,7 @@ public:
           a_action.line_width(state.m_line_width);
           //a_action.set_lighting(state.m_GL_LIGHTING);
         }
-        a_action.draw_gsto_vn(tools::gl::triangles(),m_gsto_tris_sz/3,ptris,pnms);
+        a_action.draw_gsto_vn(gl::triangles(),m_gsto_tris_sz/3,ptris,pnms);
         a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
         a_action.end_gsto();
         return;
@@ -121,7 +121,7 @@ public:
 
       floatp lines;
       _lines(lines);
-      a_action.draw_vertex_array(tools::gl::lines(),144,lines);
+      a_action.draw_vertex_array(gl::lines(),144,lines);
 
       a_action.set_polygon_offset(true);
 
@@ -131,7 +131,7 @@ public:
 
     floatp tris,nms;
     _tris(tris,nms);
-    a_action.draw_vertex_normal_array(tools::gl::triangles(),108,tris,nms);
+    a_action.draw_vertex_normal_array(gl::triangles(),108,tris,nms);
     a_action.set_polygon_offset(state.m_GL_POLYGON_OFFSET_FILL);
   }
 

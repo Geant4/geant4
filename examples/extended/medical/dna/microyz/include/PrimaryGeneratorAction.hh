@@ -25,11 +25,10 @@
 //
 // This example is provided by the Geant4-DNA collaboration
 // Any report or published results obtained using the Geant4-DNA software 
-// shall cite the following Geant4-DNA collaboration publication:
+// shall cite the following Geant4-DNA collaboration publications:
+// Phys. Med. 31 (2015) 861-874
 // Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
-//
-// $Id: PrimaryGeneratorAction.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
 /// \file PrimaryGeneratorAction.hh
 /// \brief Definition of the PrimaryGeneratorAction class
@@ -53,7 +52,7 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* GetParticleGun() {return fParticleGun;}
   
   private:
-    G4ParticleGun*          fParticleGun; // G4 particle gun
+    G4ParticleGun*          fParticleGun;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PreCompoundEmission.cc 100378 2016-10-19 15:03:27Z gcosmo $
+// $Id: G4PreCompoundEmission.cc 107062 2017-11-01 15:01:02Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -49,6 +49,7 @@
 #include "G4Exp.hh"
 #include "G4Log.hh"
 #include "Randomize.hh"
+#include "G4RandomDirection.hh"
 #include "G4PreCompoundEmissionFactory.hh"
 #include "G4HETCEmissionFactory.hh"
 #include "G4HadronicException.hh"
@@ -65,6 +66,7 @@ G4PreCompoundEmission::G4PreCompoundEmission()
     G4NuclearLevelData::GetInstance()->GetParameters() ;
   fLevelDensity = param->GetLevelDensity();
   fFermiEnergy  = param->GetFermiEnergy();
+  fUseAngularGenerator = param->UseAngularGen();
 }
 
 G4PreCompoundEmission::~G4PreCompoundEmission()
@@ -117,16 +119,17 @@ G4PreCompoundEmission::PerformEmission(G4Fragment & aFragment)
 
   // Kinetic Energy of emitted fragment
   G4double kinEnergy = thePreFragment->SampleKineticEnergy(aFragment);
-  //  if(kinEnergy < MeV) {
-  //  G4cout << "Chosen fragment: " << G4endl;
-  //  G4cout << *thePreFragment << G4endl;
-  //  G4cout << "Ekin= " << kinEnergy << G4endl;
-  // }
   kinEnergy = std::max(kinEnergy, 0.0);
   
   // Calculate the fragment momentum (three vector)
-  AngularDistribution(thePreFragment,aFragment,kinEnergy);
-  
+  if(fUseAngularGenerator) {
+    AngularDistribution(thePreFragment,aFragment,kinEnergy);
+  } else {
+    G4double pmag = 
+      std::sqrt(kinEnergy*(kinEnergy + 2.0*thePreFragment->GetNuclearMass()));
+    theFinalMomentum = pmag*G4RandomDirection();
+  }
+
   // Mass of emittef fragment
   G4double EmittedMass = thePreFragment->GetNuclearMass();
   // Now we can calculate the four momentum 

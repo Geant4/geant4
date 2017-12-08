@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 104688 2017-06-12 12:16:28Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 106390 2017-10-09 09:42:18Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -448,12 +448,18 @@ TraverseVolumeTree(const G4LogicalVolume* const volumePtr, const G4int depth)
 
    const G4String name
      = GenerateName(tmplv->GetName(), tmplv);
-   const G4String materialref
-         = GenerateName(volumePtr->GetMaterial()->GetName(),
-                        volumePtr->GetMaterial());
-   const G4String solidref
-         = GenerateName(solidPtr->GetName(),solidPtr);
 
+   G4String materialref = "NULL";
+     
+   if(volumePtr->GetMaterial())
+     {
+       materialref = GenerateName(volumePtr->GetMaterial()->GetName(),
+				  volumePtr->GetMaterial());
+     }
+   
+   const G4String solidref
+     = GenerateName(solidPtr->GetName(),solidPtr);
+       
    xercesc::DOMElement* volumeElement = NewElement("volume");
    volumeElement->setAttributeNode(NewAttribute("name",name));
    xercesc::DOMElement* materialrefElement = NewElement("materialref");

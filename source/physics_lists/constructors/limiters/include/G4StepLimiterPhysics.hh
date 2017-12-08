@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepLimiterPhysics.hh 98777 2016-08-09 14:37:59Z gcosmo $
+// $Id: G4StepLimiterPhysics.hh 107562 2017-11-22 15:39:24Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -68,8 +68,6 @@ private:
   G4StepLimiterPhysics & operator=(const G4StepLimiterPhysics &right);
   G4StepLimiterPhysics(const G4StepLimiterPhysics&);
 
-  G4StepLimiter* fStepLimiter;
-  G4UserSpecialCuts* fUserSpecialCuts;
   G4bool  fApplyToAll;
 };
 

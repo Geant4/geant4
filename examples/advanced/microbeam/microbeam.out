@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -363,9 +363,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 
 ### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
           DefaultRegionForTheWorld  1  0  0
@@ -418,7 +416,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=        1 TeV
 
@@ -440,7 +438,7 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 1 TeV, 20 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=        1 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
@@ -449,14 +447,14 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=        1 TeV
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 TeV in 200 bins
@@ -519,7 +517,7 @@ nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 TeV in 200 bins
@@ -627,7 +625,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=        1 TeV
 
@@ -660,7 +658,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=        1 TeV
 
@@ -715,7 +713,7 @@ hPairProd:   for  pi-    SubType= 4
       Sampling table 12x1001 from 1.11656 GeV to 1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=        1 TeV
-##### Create analysis manager   0x154dec0
+##### Create analysis manager   0x22d8a20
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 
@@ -737,32 +735,26 @@ All Ntuples have been created
    -----> total absorbed dose within Cytoplasm is (Gy) = 0.0519444271045
 
 -> Event # 5 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.33775514908262
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.05092335583091
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 6 generated 
-   ===> Sorry, the incident alpha particle has missed the targeted cell !
+   ===> The incident alpha particle has reached the targeted cell :
+   -----> total absorbed dose within Nucleus   is (Gy) = 0.31112937557545
+   -----> total absorbed dose within Cytoplasm is (Gy) = 0.047890953048461
 
 -> Event # 7 generated 
    ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 8 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.29171468348048
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.026827784943745
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 9 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.32183120798728
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.043732080728164
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
 -> Event # 10 generated 
-   ===> The incident alpha particle has reached the targeted cell :
-   -----> total absorbed dose within Nucleus   is (Gy) = 0.2953272710055
-   -----> total absorbed dose within Cytoplasm is (Gy) = 0.04543035142464
+   ===> Sorry, the incident alpha particle has missed the targeted cell !
 
--> Total number of particles detected by the gas detector : 7
+-> Total number of particles detected by the gas detector : 4
 
 Graphics systems deleted.
 Visualization Manager deleting...

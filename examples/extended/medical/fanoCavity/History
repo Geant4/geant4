@@ -1,4 +1,4 @@
-$Id: History 103257 2017-03-23 08:54:31Z gcosmo $
+$Id: History 106553 2017-10-13 06:40:50Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12-10-17 V.Ivant (fano-V10-03-02)
+- simplified default printout
 
 21-03-17 S.Elles (fano-V10-03-01)
 - switch to NIST material description (keeping material densities defined in previous version)

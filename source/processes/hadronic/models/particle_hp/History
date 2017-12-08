@@ -14,6 +14,39 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29 November 2017 Tatsumi Koi (hadr-hpp-V10-03-09)
+---------------------------------------------------
+- Change tolerance value and implementation in calculation of KallbachZero. 
+  FPE errors occurred on several platforms in previous implementations
+-Apply some codes cleanup 
+
+
+3 November 2017 Tatsumi Koi (hadr-hpp-V10-03-08)
+---------------------------------------------------
+- Add NRESP71 model for n on C reaction
+
+
+5 Oct 2017 Tatsumi Koi (hadr-hpp-V10-03-07)
+---------------------------------------------------
+- Fix bug in coherent elastic scattering 
+  Contribution from  N. H. TRAN@CEA
+
+
+16 Aug 2017 Tatsumi Koi (hadr-hpp-V10-03-06)
+---------------------------------------------------
+- Remove test codes for the problem mac1011 
+
+
+11 Aug 2017 Tatsumi Koi (hadr-hpp-V10-03-05)
+---------------------------------------------------
+- A test for mac1011 problem on CDash 
+
+
+18 July 2017 Tatsumi Koi (hadr-hpp-V10-03-04)
+---------------------------------------------------
+- Fix Bugzilla #1971
+
+
 1 May 2017 Tatsumi Koi (hadr-hpp-V10-03-03)
 ---------------------------------------------------
 - Bug fix and improve stability: G4ParticleHPFinalState

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.hh 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4Orb.hh 105834 2017-08-23 08:14:34Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -38,6 +38,7 @@
 //   fRmax  outer radius
 
 //  History:
+// 08.08.17 E.Tcherniaev - revised 
 // 20.08.03 V.Grichine - created
 // --------------------------------------------------------------------
 
@@ -63,19 +64,17 @@ class G4Orb : public G4CSGSolid
   public:  // with description
 
     G4Orb(const G4String& pName, G4double pRmax);
-       
-    virtual ~G4Orb() ;
-    
-    // Accessors
-       
+
+    ~G4Orb();
+
+  // Accessors and modifiers
+
     inline G4double GetRadius() const;
     inline G4double GetRadialTolerance() const;
 
-    // Modifiers
-
     inline void SetRadius(G4double newRmax);
 
-    // Methods for solid
+  // Methods for solid
 
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
@@ -90,14 +89,14 @@ class G4Orb : public G4CSGSolid
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
                                  G4double& pmin, G4double& pmax) const;
-         
+
     EInside Inside(const G4ThreeVector& p) const;
 
     G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
 
     G4double DistanceToIn(const G4ThreeVector& p,
                           const G4ThreeVector& v) const;
-    
+
     G4double DistanceToIn(const G4ThreeVector& p) const;
     
     G4double DistanceToOut(const G4ThreeVector& p,
@@ -105,11 +104,11 @@ class G4Orb : public G4CSGSolid
                            const G4bool calcNorm=G4bool(false),
                                  G4bool *validNorm=0,
                                  G4ThreeVector *n=0) const;
-         
+
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
     G4GeometryType GetEntityType() const;
- 
+
     G4ThreeVector GetPointOnSurface() const;
 
     G4VSolid* Clone() const;
@@ -117,35 +116,31 @@ class G4Orb : public G4CSGSolid
     std::ostream& StreamInfo(std::ostream& os) const;
 
     // Visualisation functions
-  
-    void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
-    G4Polyhedron* CreatePolyhedron() const;
+
+    void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
+    G4VisExtent   GetExtent          () const;
+    G4Polyhedron* CreatePolyhedron   () const;
 
   public:  // without description
 
     G4Orb(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
-      // persistifiable objects.
+      // persistifiable objects
 
     G4Orb(const G4Orb& rhs);
     G4Orb& operator=(const G4Orb& rhs); 
-      // Copy constructor and assignment operator.
+      // Copy constructor and assignment operator
 
   protected:
-  
-    // Used by distanceToOut
-  
-    enum ESide {kNull,kRMax};
-  
-    // used by normal
-  
-    enum ENorm {kNRMax};
+
+    void Initialize();
 
   private:
 
     G4double fRmax;
-    G4double fRmaxTolerance;
+    G4double halfRmaxTol;
+    G4double sqrRmaxPlusTol, sqrRmaxMinusTol;
 };
 
 #include "G4Orb.icc"

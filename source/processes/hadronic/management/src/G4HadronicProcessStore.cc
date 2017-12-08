@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronicProcessStore.cc 96491 2016-04-19 06:58:23Z gcosmo $
+// $Id: G4HadronicProcessStore.cc 105940 2017-09-01 07:33:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -606,6 +606,7 @@ void G4HadronicProcessStore::DumpHtml()
     PrintHtml(G4KaonMinus::KaonMinus(), outFile);
     PrintHtml(G4Lambda::Lambda(), outFile);
     PrintHtml(G4Alpha::Alpha(), outFile);
+    PrintHtml(G4GenericIon::GenericIon(), outFile);
 
     outFile << "</ul>\n";
     outFile << "</body>\n";
@@ -678,8 +679,26 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 
     outFile << "  </li>\n";
     outFile << "</ul>\n";
+
   }
-}
+
+  // Loop over extra (G4VProcess) processes
+
+  std::multimap<PD,G4VProcess*,std::less<PD> >::iterator itp;
+  for (itp=ep_map.lower_bound(theParticle); itp!=ep_map.upper_bound(theParticle); ++itp) {
+    if (itp->first == theParticle) {
+      G4VProcess* proc = (itp->second);
+      outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : "
+              << proc->GetProcessName() << "</font></b>\n";
+      outFile << "<ul>\n";
+      outFile << "  <li>";
+      proc->ProcessDescription(outFile);
+      outFile << "  </li>\n";
+      outFile << "</ul>\n";
+    }
+  }
+
+} // PrintHtml for particle
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc 102905 2017-03-02 09:50:56Z gcosmo $
+// $Id: G4ExcitedMesonConstructor.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -1431,13 +1431,13 @@ const G4double G4ExcitedMesonConstructor::mass[G4ExcitedMesonConstructor::NMulti
 {
   {  1.2295*GeV, 1.170*GeV, 1.386*GeV, 1.272*GeV,  1.272*GeV },
   {   1.474*GeV, 1.350*GeV,       0.0, 1.430*GeV,  1.430*GeV },
-  {   1.230*GeV, 1.282*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
+  {   1.230*GeV,1.2819*GeV,1.4264*GeV, 1.403*GeV,  1.403*GeV },
   {  1.3183*GeV,1.2755*GeV, 1.525*GeV,1.4256*GeV, 1.4256*GeV },
   {  1.6722*GeV, 1.617*GeV, 1.842*GeV, 1.773*GeV,  1.773*GeV },
-  {   1.720*GeV, 1.670*GeV,       0.0, 1.717*GeV,  1.717*GeV },
+  {   1.720*GeV, 1.670*GeV,       0.0, 1.718*GeV,  1.718*GeV },
   {  1.6888*GeV, 1.667*GeV, 1.854*GeV, 1.776*GeV,  1.776*GeV },
   {   1.300*GeV, 1.294*GeV, 1.476*GeV, 1.460*GeV,  1.460*GeV },
-  {   1.465*GeV, 1.425*GeV, 1.680*GeV, 1.414*GeV,  1.414*GeV },
+  {   1.465*GeV, 1.425*GeV, 1.680*GeV, 1.421*GeV,  1.421*GeV },
   {         0.0, 1.815*GeV, 2.010*GeV, 1.973*GeV,  1.973*GeV }
 };
 
@@ -1455,13 +1455,13 @@ const G4double G4ExcitedMesonConstructor::width[G4ExcitedMesonConstructor::NMult
 {
   {  142.0*MeV, 360.0*MeV,  91.0*MeV,  90.0*MeV,  90.0*MeV },
   {  265.0*MeV, 350.0*MeV,       0.0, 270.0*MeV, 270.0*MeV },
-  {  420.0*MeV,  24.1*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
+  {  420.0*MeV,  22.7*MeV,  54.9*MeV, 174.0*MeV, 174.0*MeV },
   {  107.0*MeV, 186.7*MeV,  73.0*MeV,  98.5*MeV,  98.5*MeV },
   {  260.0*MeV, 181.0*MeV, 225.0*MeV, 186.0*MeV, 186.0*MeV },
   {  250.0*MeV, 315.0*MeV,       0.0, 320.0*MeV, 320.0*MeV },
   {  161.0*MeV, 168.0*MeV,  87.0*MeV, 159.0*MeV, 159.0*MeV },
   {  400.0*MeV,  55.0*MeV,  85.0*MeV, 260.0*MeV, 260.0*MeV },
-  {  400.0*MeV, 215.0*MeV, 150.0*MeV, 232.0*MeV, 232.0*MeV },
+  {  400.0*MeV, 215.0*MeV, 150.0*MeV, 236.0*MeV, 236.0*MeV },
   {        0.0, 197.0*MeV, 200.0*MeV, 373.0*MeV, 373.0*MeV }
 };
 

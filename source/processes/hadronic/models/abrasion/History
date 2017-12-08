@@ -13,7 +13,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-19-Mar-2017  Vladimir Ivanchenko (had-abrasion-V10-03-01)
+28-Jul-2017  Vladimir Ivanchenko (had-abrasion-V10-03-03)
+----------------------------------------------------
+- G4WilsonAbrasionModel - fixed Coverity warning (memory leak), 
+    substitute NULL by nullptr
+
+01-Jul-2017  Vladimir Ivanchenko (had-abrasion-V10-03-02)
+----------------------------------------------------
+- G4WilsonAbrasionModel - fixed Coverity warning 
+
+19-Jun-2017  Vladimir Ivanchenko (had-abrasion-V10-03-01)
 ----------------------------------------------------
 - G4WilsonAbrasionModel - C. Mancini Terracciano fixed crash at 
     initialisation

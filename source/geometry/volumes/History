@@ -1,4 +1,4 @@
-$Id: History 103041 2017-03-10 11:47:01Z gcosmo $
+$Id: History 106171 2017-09-15 13:02:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 15th, 2017 G.Cosmo              - geomvol-V10-03-02
+- G4GeometryWorkspacePool: use DLL export flag for static thread-local
+  symbol of the workspace.
 
 March 10th, 2017 G.Cosmo                  - geomvol-V10-03-01
 - G4GeometryWorkspacePool: implemented CleanUpAndDestroyAllWorkspaces(),

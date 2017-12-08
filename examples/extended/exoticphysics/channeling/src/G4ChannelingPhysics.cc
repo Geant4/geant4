@@ -92,4 +92,3 @@ void G4ChannelingPhysics::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

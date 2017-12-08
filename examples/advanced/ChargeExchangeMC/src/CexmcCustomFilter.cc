@@ -120,16 +120,16 @@ namespace  CexmcCustomFilter
             if ( candidate->children.size() < 2 )
                 break;
 
-            bool        haveSamePriorities( false );
+            bool        haveSamePriorities_( false );
             Operator *  candidateOp( boost::get< Operator >(
                                                         &candidate->type ) );
 
             if ( candidateOp )
-                haveSamePriorities = value.priority == candidateOp->priority;
+                haveSamePriorities_ = value.priority == candidateOp->priority;
 
             /* FIXME: what to do if candidate has RL association? Our grammar is
              * not a subject of this issue; probably no grammar is a subject */
-            if ( ! haveSamePriorities )
+            if ( ! haveSamePriorities_ )
                 break;
 
             astDeepestRight = candidate;

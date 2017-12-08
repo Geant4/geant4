@@ -7,6 +7,8 @@
 //#include "buffer"
 //#include "element"
 #include "named"
+#include "obj_array"
+#include "../forit"
 
 namespace tools {
 namespace rroot {
@@ -180,7 +182,7 @@ public: //iro
     if(!a_buffer.read(m_streamed_class_version)) return false;
 
     //TObjArray        *fElements;       //Array of TStreamerElements
-   {ObjArray<streamer_element>* obj;
+   {obj_array<streamer_element>* obj;
     ifac::args args;
     args[ifac::arg_class()] = (void*)&(streamer_element::s_class());
     if(!pointer_stream(a_buffer,m_fac,args,obj)) {
@@ -208,7 +210,7 @@ public:
   ,m_title()
   ,m_check_sum(0)
   ,m_streamed_class_version(0)
-  ,m_elements(a_fac,true)
+  ,m_elements(a_fac,true,true)
   {
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -251,7 +253,7 @@ protected:
   unsigned int m_check_sum;    //checksum of original class
   int m_streamed_class_version; //Class version identifier
   //int fNumber;               //!Unique identifier
-  ObjArray<streamer_element> m_elements; //Array of TStreamerElements
+  obj_array<streamer_element> m_elements; //Array of TStreamerElements
 };
 
 }}

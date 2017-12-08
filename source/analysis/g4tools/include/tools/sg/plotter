@@ -5,15 +5,13 @@
 #define tools_sg_plotter
 
 #include "../lina/vec2f"
-#include "../axis"
 
 #include "render_action"
-#include "plottable"
+#include "plottables"
 #include "style"
 #include "rep"
 #include "colormap"
 #include "noderef"
-#include "line_set"
 #include "atb_vertices"
 #include "cube" //for lego
 #include "matrix"
@@ -24,6 +22,19 @@
 #include "infos_box"
 #include "legend"
 #include "text"
+#include "torche"
+
+#include "../data_axis"
+#include "../hatcher"
+#include "../clist_contour"
+#include "../tess_contour"
+#include "../lina/geom3"
+#include "../spline"
+
+//#define INLIBS_SG_PLOTTER_TIMING
+#ifdef INLIBS_SG_PLOTTER_TIMING
+#include "../sys/atime"
+#endif
 
 namespace tools {
 namespace sg {
@@ -55,8 +66,6 @@ public:
   sf_enum<hjust> title_hjust;
   sf_string title; //output if title_automated.
 
-  //sf<bool> superposeBins;
-
   sf<bool> colormap_visible;
   enum colormap_axis_labeling_type {
     cells = 0,
@@ -65,13 +74,6 @@ public:
   sf_enum<colormap_axis_labeling_type> colormap_axis_labeling;
   sf<bool> colormap_attached;
   sf<bool> colormap_axis_visible;
-
-  /*
-  sf<bool> wallEnforced;
-  sf<bool> gridEnforced;
-  sf<bool> primitivesEnforced;
-  sf<bool> innerFrameEnforced;
-  */
 
   // Wanted axes parameters. 
   // They are not necessary realized on the sg::axis nodes.
@@ -100,47 +102,32 @@ public:
   sf<float> infos_y_margin; //in percent of height. From top.
   sf_string infos_what;
 
-  //sf<bool> inner_frame_visible;  
-  //sf<bool> grid_visible;  
-/*
-  sf<bool> topAxisVisible;  
-  sf<bool> rightAxisVisible;  
-
-  // For contours :
-  SoSFInt32 numberOfLevels;
-  SoMFFloat levels;
-
-  sf<bool> frozen;
-
-  sf<float> ttfScale;  
-
-*/
   sf<bool> func2D_borders_visible;  
 
   // used with shape xyz
   sf<float> theta;  //in degrees.
   sf<float> phi;    //in degrees.
 
-  //legend related :
-  sf<bool> legends_visible;
-  sf<bool> legends_attached_to_infos;
+  ////////////////////////////////////////////////////////////////
+  /// legend related :////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
+  sf<bool> legends_automated;
+  //sf<bool> legends_attached_to_infos;
   //if legends_attached_to_infos is false :
   //  legends_origin is used to place the legends. It is then
   //  the lower left corner of the box containing all legends.
-  sf_vec<vec2f,float> legends_origin; //common origin of legend boxes.
+  mf_vec<vec2f,float> legends_origin; //common origin of legend boxes.
   enum unit_type {
     unit_percent,
     unit_axis
   };
-  sf_enum<unit_type> legends_origin_unit;
-  sf_vec<vec2f,float> legends_size; //overall legend boxes size.
-
-  sf<bool> legends_automated;
+  mf_enum<unit_type> legends_origin_unit;
+  mf_vec<vec2f,float> legends_size; //overall legend boxes size.
   mf_string legends_string;
-  mf_vec<colorf,float> legends_color;
-
-  //sf<std::string> legends_font;
-  //sf<std::string> legends_encoding; 
+  
+  ////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////
 
   sf<bool> shape_automated;
 
@@ -149,22 +136,32 @@ public:
     xyz
   };
   sf_enum<shape_type> shape;
-/*
-  SoSFEnum shape; //Output if shapeAutomated == true.
-  SoMFString infos; //Output
-  SoMFString legend; //Output
-  SoSFInt32 numberOfPlottedObject; //Output
-  SoSFInt32 numberOfPlottedBins1D; //Output
-  SoSFInt32 numberOfPlottedBins2D; //Output
-  SoSFInt32 numberOfPlottedPoints2D; //Output
-  SoSFInt32 numberOfPlottedPoints3D; //Output
-  SoSFInt32 numberOfPlottedFunction1D; //Output
-  SoSFInt32 numberOfPlottedFunction2D; //Output
-  SoMFString plottedObjectNames; //Output
-  */
 
   // used with xy shape :
   sf<float> xy_depth; //all is in z [0,xy_depth]
+
+  sf<unsigned int> curve_number_of_points;
+
+  sf<bool> data_light_on_automated;
+  
+  // for gopaw :
+  sf<bool> primitives_enforced;
+  sf<bool> inner_frame_enforced;  
+  // to be implemented :
+  sf<bool> top_axis_visible;  
+  sf<bool> right_axis_visible;  
+  sf<bool> superpose_bins;
+  //sf<bool> grid_visible;  
+  // For contours :
+  sf<unsigned int> number_of_levels;
+  mf<float> levels;
+  //sf<bool> frozen;
+  //sf<float> ttfScale;  
+  //sf<bool> wallEnforced;
+  //sf<bool> gridEnforced;
+  //SoMFString infos; //Output
+  //SoMFString legend; //Output
+  
 public:
   virtual const std::vector<field_desc>& node_fields() const {
     TOOLS_FIELD_DESC_NODE_CLASS(tools::sg::plotter)
@@ -229,17 +226,14 @@ public:
       TOOLS_ADD_FIELD_DESC(theta)
       TOOLS_ADD_FIELD_DESC(phi)
 
-      TOOLS_ADD_FIELD_DESC(legends_visible)
-      TOOLS_ADD_FIELD_DESC(legends_attached_to_infos)
+      TOOLS_ADD_FIELD_DESC(legends_automated)
+      //TOOLS_ADD_FIELD_DESC(legends_attached_to_infos)
       TOOLS_ADD_FIELD_DESC(legends_origin)
       TOOLS_ADD_FIELD_DESC_ENUM(unit_percent)
       TOOLS_ADD_FIELD_DESC_ENUM(unit_axis)
-
       TOOLS_ADD_FIELD_DESC(legends_origin_unit)
       TOOLS_ADD_FIELD_DESC(legends_size)
-      TOOLS_ADD_FIELD_DESC(legends_automated)
       TOOLS_ADD_FIELD_DESC(legends_string)
-      TOOLS_ADD_FIELD_DESC(legends_color)
 
       TOOLS_ADD_FIELD_DESC(shape_automated)
 
@@ -248,6 +242,15 @@ public:
       TOOLS_ADD_FIELD_DESC_ENUM(xyz)
 
       TOOLS_ADD_FIELD_DESC(xy_depth)
+      TOOLS_ADD_FIELD_DESC(curve_number_of_points)
+      
+      TOOLS_ADD_FIELD_DESC(number_of_levels)
+      TOOLS_ADD_FIELD_DESC(levels)
+      
+      TOOLS_ADD_FIELD_DESC(data_light_on_automated)
+      
+      TOOLS_ADD_FIELD_DESC(primitives_enforced)
+      TOOLS_ADD_FIELD_DESC(inner_frame_enforced)
     }
     return s_v;
   }
@@ -300,34 +303,35 @@ private:
     add_field(&theta);
     add_field(&phi);
 
-    add_field(&legends_visible);
-    add_field(&legends_attached_to_infos);
+    add_field(&legends_automated);
+    //add_field(&legends_attached_to_infos);
     add_field(&legends_origin);
     add_field(&legends_origin_unit);
     add_field(&legends_size);
-    add_field(&legends_automated);
     add_field(&legends_string);
-    add_field(&legends_color);
 
     add_field(&shape_automated);
     add_field(&shape);
 
     add_field(&xy_depth);
+    add_field(&curve_number_of_points);
+    add_field(&number_of_levels);
+    add_field(&levels);
+    add_field(&data_light_on_automated);
+    add_field(&primitives_enforced);
+    add_field(&inner_frame_enforced);
   }
 public: //style
   void reset_style(bool a_geom = false) {
     //reset fields that are considered as part of the style.
-    ////////////////////////////////////////////
-    // we do not touch :    
-    ////////////////////////////////////////////
-    // not part of the style ???
-    //legends_string
-    //legends_color
-
+    
+    //::printf("debug : tools::sg::plotter::reset_style :\n");
+    
     shape_automated = true;
     shape = xy;
         
     xy_depth = 0.01f;
+    curve_number_of_points = 100;
     ////////////////////////////////////////////
     // CERN-PAW seems to have 0.1F and CERN-ROOT 0.05F.
     value_top_margin = 0.1f; //percent.
@@ -338,16 +342,6 @@ public: //style
     infos_x_margin = default_infos_margin(); //percent of width
     infos_y_margin = default_infos_margin(); //percent of height
 
-    legends_visible = false;
-    legends_attached_to_infos = true;
-    // if legends_attached_to_infos is false and
-    // unit_percent, legends_origin is the position
-    // of the upper right corner of the legends
-    // relative to the upper right corner of the plotter
-    // with positive values going in reverse x,y axis.
-    legends_origin.value().set_value(0.01f,0.01f);
-    legends_origin_unit = unit_percent;
-    legends_size.value().set_value(0.2f,0.16f);
     legends_automated = true;
 
     ////////////////////////////////////////////
@@ -490,6 +484,15 @@ public: //style
     m_z_axis.reset_style();
 
     ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    ////////////////////////////////////////////
+    number_of_levels = 10;
+    levels.clear();
+    data_light_on_automated = true;
+    primitives_enforced = false;
+    inner_frame_enforced = false;
+  
+    ////////////////////////////////////////////
     // setup styles :
     ////////////////////////////////////////////
 
@@ -497,6 +500,7 @@ public: //style
     m_infos_style = text_style();
     m_title_box_style = text_style();
     m_background_style = style();
+    m_wall_style = style();
     m_inner_frame_style = style();
     m_grid_style = style();
 
@@ -521,26 +525,33 @@ public: //style
     m_title_box_style.font = font_hershey();
     m_title_box_style.encoding = encoding_PAW();
 
-    //m_legend_style = std::vector<text_style>();
-   {std::vector<style>::iterator it;
-    for(it=m_bins_style.begin();it!=m_bins_style.end();++it){
+   {tools_vforit(style,m_bins_style,it) {
       (*it) = style();
       (*it).modeling = modeling_top_lines();
       (*it).marker_size = 5; //for profile.
     }}
-   {std::vector<style>::iterator it;
-    for(it=m_errors_style.begin();it!=m_errors_style.end();++it){
+   {tools_vforit(style,m_errors_style,it) {(*it) = style();(*it).visible = false;}}
+   {tools_vforit(style,m_func_style,it) (*it) = style();}
+   {tools_vforit(style,m_points_style,it) (*it) = style();}
+   {tools_vforit(style,m_left_hatch_style,it) {(*it) = style();(*it).visible = false;}}
+   {tools_vforit(style,m_right_hatch_style,it) {(*it) = style();(*it).visible = false;}}    
+   {tools_vforit(style,m_legend_style,it) {(*it) = style();(*it).visible = false;}}
+    
+  }
+
+  void gopaw_reset_style() {
+   {tools_vforit(style,m_bins_style,it) {
       (*it) = style();
-      (*it).visible = false;
+      (*it).modeling = modeling_top_lines();
+      (*it).marker_size = 5; //for profile.
     }}
-   {std::vector<style>::iterator it;
-    for(it=m_func_style.begin();it!=m_func_style.end();++it){
-      (*it) = style();
-    }}
-   {std::vector<style>::iterator it;
-    for(it=m_points_style.begin();it!=m_points_style.end();++it){
-      (*it) = style();
-    }}
+    
+   {tools_vforit(style,m_errors_style,it) {(*it) = style();(*it).visible = false;}}
+   {tools_vforit(style,m_func_style,it) (*it) = style();}
+   {tools_vforit(style,m_points_style,it) (*it) = style();}
+   {tools_vforit(style,m_left_hatch_style,it) {(*it) = style();(*it).visible = false;}}
+   {tools_vforit(style,m_right_hatch_style,it) {(*it) = style();(*it).visible = false;}}    
+   {tools_vforit(style,m_legend_style,it) {(*it) = style();(*it).visible = false;}}
   }
 
   typedef std::pair<std::string,std::string> style_item_t;
@@ -558,10 +569,6 @@ public: //style
         //   xml_style::load_plotter_style()
         //   xml_style::find_plotter_styles()
 
-
-      // not part of the style :
-      //legends_string
-      //legends_color
 
       //width,height,depth : could set from style (for exa for lego).
       } else if(key=="width") {
@@ -709,30 +716,30 @@ public: //style
       } else if(key=="infos_what") {
         infos_what = sv;
 
-      } else if(key=="legends_visible") {
-        bool v;
-        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
-        legends_visible = v;
-      } else if(key=="legends_attached_to_infos") {
-        bool v;
-        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
-        legends_attached_to_infos = v;
+//      } else if(key=="legends_visible") {
+//        bool v;
+//        if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+//        legends_visible = v;
       } else if(key=="legends_automated") {
         bool v;
         if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
         legends_automated = v;
+//    } else if(key=="legends_attached_to_infos") {
+//      bool v;
+//      if(!to(sv,v)) {style_failed(a_out,key,sv);return false;}
+//      legends_attached_to_infos = v;
       } else if(key=="legends_origin") {
         vec2f v;
         if(!sto(sv,v)) {style_failed(a_out,key,sv);return false;}
-        legends_origin = v;
+        legends_origin.setValue(v);
       } else if(key=="legends_size") {
         vec2f v;
         if(!sto(sv,v)) {style_failed(a_out,key,sv);return false;}
-        legends_size = v;
+        legends_size.setValue(v);
       } else if(key=="legends_origin_unit") {
         unit_type v;
         if(!sto(sv,v)) {style_failed(a_out,key,sv);return false;}
-        legends_origin_unit = v;
+        legends_origin_unit.setValue(v);
 
       } else if(key=="shape_automated") {
         bool v;
@@ -748,13 +755,13 @@ public: //style
           style_failed(a_out,key,sv);return false;
         }
 
+      //legends_string
+      //legends_color
       //legends_string mf_string
       //legends_color mf_vec<colorf,float> 
 
       } else {
-        a_out << "tools::sg::plotter::set_from_style :"
-              << " unknown key " << key << "."
-              << std::endl;
+        a_out << "tools::sg::plotter::set_from_style : unknown key " << key << "." << std::endl;
       }
     }
     return true;
@@ -864,23 +871,28 @@ public:
   ,theta(30)
   ,phi(30)
 
-  ,legends_visible(false)
-  ,legends_attached_to_infos(true)
+  ,legends_automated(true)
+  //,legends_attached_to_infos(true)
   // if legends_attached_to_infos is false and
   // unit_percent, legends_origin is the position
   // of the upper right corner of the legends
   // relative to the upper right corner of the plotter
   // with positive values going in reverse x,y axis.
-  ,legends_origin(vec2f(0.01f,0.01f))
-  ,legends_origin_unit(unit_percent)
-  ,legends_size(vec2f(0.2f,0.16f))
-
-  ,legends_automated(true)
+  //,legends_origin(vec2f(0.01f,0.01f))
+  //,legends_origin_unit(unit_percent)
+  //,legends_size(vec2f(0.2f,0.16f))
+  //legends_string
 
   ,shape_automated(true)
   ,shape(xy)
 
   ,xy_depth(0.01f)
+  ,curve_number_of_points(100)
+  ,data_light_on_automated(true)
+  ,primitives_enforced(false)
+  ,inner_frame_enforced(false)
+  ,number_of_levels(10)
+  ,levels()
 
   ,m_ttf(a_ttf)
 
@@ -891,14 +903,16 @@ public:
 
   ,m_shape(xy)
   {
+    m_cmaps[style_default_colormap::s_default()] = style_default_colormap(); //costly
+  
     add_fields();
-
     reset_style(true);
 
     init_sg(); // skeleton of scene graph.
   }
   virtual ~plotter(){
     clear_plottables();
+    clear_primitives();
     clear_cmaps();
   }
 public:
@@ -952,19 +966,23 @@ public:
   ,theta(a_from.theta)
   ,phi(a_from.phi)
 
-  ,legends_visible(a_from.legends_visible)
-  ,legends_attached_to_infos(a_from.legends_attached_to_infos)
+  ,legends_automated(a_from.legends_automated)
+//,legends_attached_to_infos(a_from.legends_attached_to_infos)
   ,legends_origin(a_from.legends_origin)
   ,legends_origin_unit(a_from.legends_origin_unit)
   ,legends_size(a_from.legends_size)
-  ,legends_automated(a_from.legends_automated)
   ,legends_string(a_from.legends_string)
-  ,legends_color(a_from.legends_color)
 
   ,shape_automated(a_from.shape_automated)
   ,shape(a_from.shape)
 
   ,xy_depth(a_from.xy_depth)
+  ,curve_number_of_points(a_from.curve_number_of_points)
+  ,data_light_on_automated(a_from.data_light_on_automated)
+  ,primitives_enforced(a_from.primitives_enforced)
+  ,inner_frame_enforced(a_from.inner_frame_enforced)
+  ,number_of_levels(a_from.number_of_levels)
+  ,levels(a_from.levels)
 
   ,m_ttf(a_from.m_ttf)
 
@@ -981,14 +999,18 @@ public:
   ,m_errors_style(a_from.m_errors_style)
   ,m_func_style(a_from.m_func_style)
   ,m_points_style(a_from.m_points_style)
-  //,m_legend_style(a_from.m_legend_style)
+  ,m_left_hatch_style(a_from.m_left_hatch_style)
+  ,m_right_hatch_style(a_from.m_right_hatch_style)
+  ,m_legend_style(a_from.m_legend_style)
 
   ,m_title_style(a_from.m_title_style)
   ,m_infos_style(a_from.m_infos_style)
   ,m_title_box_style(a_from.m_title_box_style)
   ,m_background_style(a_from.m_background_style)
+  ,m_wall_style(a_from.m_wall_style)
   ,m_inner_frame_style(a_from.m_inner_frame_style)
   ,m_grid_style(a_from.m_grid_style)
+  ,m_cmaps(a_from.m_cmaps)    
   {
     add_fields();
 
@@ -1000,11 +1022,8 @@ public:
 
     init_sg(); // skeleton of scene graph.
 
-   {std::vector<plottable*>::const_iterator it;
-    for(it=a_from.m_plottables.begin();it!=a_from.m_plottables.end();++it) {
-      m_plottables.push_back((*it)->copy());
-    }}
-
+   {tools_vforcit(plottable*,a_from.m_plottables,it) {m_plottables.push_back((*it)->copy());}}
+   {tools_vforcit(plotprim*,a_from.m_primitives,it) {m_primitives.push_back((*it)->copy());}}
   }
   plotter& operator=(const plotter& a_from){
     parent::operator=(a_from);
@@ -1058,30 +1077,37 @@ public:
     theta = a_from.theta;
     phi = a_from.phi;
 
-    legends_visible = a_from.legends_visible;
-    legends_attached_to_infos = a_from.legends_attached_to_infos;
+    legends_automated = a_from.legends_automated;
+  //legends_attached_to_infos = a_from.legends_attached_to_infos;
     legends_origin = a_from.legends_origin;
     legends_origin_unit = a_from.legends_origin_unit;
     legends_size = a_from.legends_size;
-    legends_automated = a_from.legends_automated;
     legends_string = a_from.legends_string;
-    legends_color = a_from.legends_color;
 
     shape_automated = a_from.shape_automated;
     shape = a_from.shape;
 
     xy_depth = a_from.xy_depth;
+    curve_number_of_points = a_from.curve_number_of_points;
+    number_of_levels = a_from.number_of_levels;
+    levels = a_from.levels;
+    data_light_on_automated = a_from.data_light_on_automated;
+    primitives_enforced = a_from.primitives_enforced;
+    inner_frame_enforced = a_from.inner_frame_enforced;
 
     m_bins_style = a_from.m_bins_style;
     m_errors_style = a_from.m_errors_style;
     m_func_style = a_from.m_func_style;
     m_points_style = a_from.m_points_style;
-  //m_legend_style = a_from.m_legend_style;
+    m_left_hatch_style = a_from.m_left_hatch_style;
+    m_right_hatch_style = a_from.m_right_hatch_style;
+    m_legend_style = a_from.m_legend_style;
 
     m_title_style = a_from.m_title_style;
     m_infos_style = a_from.m_infos_style;
     m_title_box_style = a_from.m_title_box_style;
     m_background_style = a_from.m_background_style;
+    m_wall_style = a_from.m_wall_style;
     m_inner_frame_style = a_from.m_inner_frame_style;
     m_grid_style = a_from.m_grid_style;
 
@@ -1091,26 +1117,79 @@ public:
     m_z_axis = a_from.m_z_axis;
     m_cmap_axis = a_from.m_cmap_axis;
 
+    m_cmaps = a_from.m_cmaps;
+    
     clear_plottables();
+    clear_primitives();
     clear_todels();
 
-   {std::vector<plottable*>::const_iterator it;
-    for(it=a_from.m_plottables.begin();it!=a_from.m_plottables.end();++it) {
-      m_plottables.push_back((*it)->copy());
-    }}
+   {tools_vforcit(plottable*,a_from.m_plottables,it) {m_plottables.push_back((*it)->copy());}}
+   {tools_vforcit(plotprim*,a_from.m_primitives,it) {m_primitives.push_back((*it)->copy());}}
 
     return *this;
   }
+public:
+  size_t number_of_plottables() const {
+    size_t number = 0;
+    tools_vforcit(plottable*,m_plottables,it) {
+      plottable* object = *it;
+      if(!object) continue;
+      if(!object->is_valid()) continue;
+      // take into account all valid plottables, even the one without a representation.
+      number++;
+    }
+    return number;
+  }
+
+#define TOOLS_SG_PLOTTER_NUMBER_OF(a__what) \
+  size_t number_of_plotted_##a__what##s() const {\
+    size_t number = 0;\
+    tools_vforcit(plottable*,m_plottables,it) {\
+      plottable* object = *it;\
+      if(!object) continue;\
+      if(!object->is_valid()) continue;\
+      if(safe_cast<plottable,a__what>(*object)) number++;\
+    }\
+    return number;\
+  }
+
+  TOOLS_SG_PLOTTER_NUMBER_OF(bins1D)
+  TOOLS_SG_PLOTTER_NUMBER_OF(bins2D)
+  TOOLS_SG_PLOTTER_NUMBER_OF(points2D)
+  TOOLS_SG_PLOTTER_NUMBER_OF(points3D)
+  TOOLS_SG_PLOTTER_NUMBER_OF(func1D)
+  TOOLS_SG_PLOTTER_NUMBER_OF(func2D)
+
+#undef TOOLS_SG_PLOTTER_NUMBER_OF
+
+  void plotted_object_names(std::vector<std::string>& a_names) const {
+    a_names.clear();
+    tools_vforcit(plottable*,m_plottables,it) {
+      plottable* object = *it;
+      if(!object) continue;
+      if(!object->is_valid()) continue;
+      // take into account all valid plottables, even the one without a representation.
+      a_names.push_back(object->name());
+    }
+  }
+  
 public: //public
+  const torche& data_light() const {return m_data_light;}
+  torche& data_light() {return m_data_light;}
+  
   matrix& tsf() {return m_tsf;}
 
-  const std::vector<plottable*>& plottables() const {
-    return m_plottables;
-  }
+  const std::vector<plottable*>& plottables() const {return m_plottables;}
 
   void add_plottable(plottable* a_p) {
     //WARNING : it takes ownership of a_p object.
     m_plottables.push_back(a_p);
+    touch();
+  }
+
+  void prep_plottable(plottable* a_p) {
+    //WARNING : it takes ownership of a_p object.
+    m_plottables.insert(m_plottables.begin(),a_p);
     touch();
   }
 
@@ -1138,6 +1217,8 @@ public: //public
     return found;
   }
 
+  void add_primitive(plotprim* a_prim) {m_primitives.push_back(a_prim);touch();}
+
   template <class T>
   void add_todel(T* a_obj) {
     m_todel_group.add(new sg::holder<T>(a_obj));
@@ -1155,18 +1236,18 @@ public: //public
 
   void clear() {
     clear_plottables();
+    clear_primitives();
     clear_todels();
 
-    //clearPlottablePrimitives();
+    legends_string.clear();
+    legends_origin_unit.clear();
+    legends_origin.clear();
+    legends_size.clear();
 
     //wallEnforced.setValue(false);
     //gridEnforced.setValue(false);
-    //primitivesEnforced.setValue(false);
-    //innerFrameEnforced.setValue(false);
-
-    //xAxisEnforced.setValue(false);
-    //yAxisEnforced.setValue(false);
-    //zAxisEnforced.setValue(false);
+    primitives_enforced = false;
+    inner_frame_enforced = false;
 
     //getEtcSeparator()->removeAllChildren();
     //getEtcDataSeparator()->removeAllChildren();
@@ -1186,12 +1267,13 @@ public: //public
 
   text_style& title_style() {return m_title_style;}
   style& background_style() {return m_background_style;}
+  style& wall_style() {return m_wall_style;}
   style& inner_frame_style() {return m_inner_frame_style;}
   style& grid_style() {return m_grid_style;}
   text_style& infos_style() {return m_infos_style;}
   text_style& title_box_style() {return m_title_box_style;}
 
-  style& bins_style(unsigned int a_index) {
+  style& bins_style(size_t a_index) {
     size_t sz = m_bins_style.size();
     if(a_index>=sz) {
       //012345 sz=6
@@ -1206,7 +1288,7 @@ public: //public
     return m_bins_style[a_index];
   }
 
-  style& errors_style(unsigned int a_index) {
+  style& errors_style(size_t a_index) {
     size_t sz = m_errors_style.size();
     if(a_index>=sz) {
       for(size_t index=sz;index<=a_index;index++) {
@@ -1217,7 +1299,7 @@ public: //public
     return m_errors_style[a_index];
   }
 
-  style& func_style(unsigned int a_index) {
+  style& func_style(size_t a_index) {
     size_t sz = m_func_style.size();
     if(a_index>=sz) {
       for(size_t index=sz;index<=a_index;index++) {
@@ -1227,7 +1309,7 @@ public: //public
     return m_func_style[a_index];
   }
 
-  style& points_style(unsigned int a_index) {
+  style& points_style(size_t a_index) {
     size_t sz = m_points_style.size();
     if(a_index>=sz) {
       //012345 sz=6
@@ -1240,25 +1322,42 @@ public: //public
     return m_points_style[a_index];
   }
 
-/*
-  text_style& legend_style(unsigned int a_index) {
+  style& left_hatch_style(size_t a_index) {
+    size_t sz = m_left_hatch_style.size();
+    if(a_index>=sz) {
+      for(size_t index=sz;index<=a_index;index++) {
+        m_left_hatch_style.push_back(style());
+        m_left_hatch_style.back().visible = false;
+      }
+    }
+    return m_left_hatch_style[a_index];
+  }
+
+  style& right_hatch_style(size_t a_index) {
+    size_t sz = m_right_hatch_style.size();
+    if(a_index>=sz) {
+      for(size_t index=sz;index<=a_index;index++) {
+        m_right_hatch_style.push_back(style());
+        m_right_hatch_style.back().visible = false;
+      }
+    }
+    return m_right_hatch_style[a_index];
+  }
+
+  style& legend_style(size_t a_index) {
     size_t sz = m_legend_style.size();
     if(a_index>=sz) {
-      //012345 sz=6
-      //         9 a_index wanted
-      //      6789 loop
       for(size_t index=sz;index<=a_index;index++) {
-        m_legend_style.push_back(text_style());
+        m_legend_style.push_back(style());
       }
     }
     return m_legend_style[a_index];
   }
-*/
 
-  std::vector<std::string> bins_modelings(unsigned int a_index) {
+  std::vector<std::string> bins_modelings(size_t a_index) {
     update_shape();
     if(m_shape==xy) {
-      unsigned int ibins = 0;
+      size_t ibins = 0;
       std::vector<plottable*>::iterator it;
       for(it=m_plottables.begin();it!=m_plottables.end();++it) {
         plottable* object = *it;
@@ -1285,9 +1384,10 @@ public: //public
           //update_bins2D_xy
           if(a_index==ibins) {
             std::vector<std::string> opts;
-            //opts.push_back(modeling_curve());
-            //opts.push_back(modeling_filled_curve());
+            opts.push_back(modeling_curve());
+            opts.push_back(modeling_filled_curve());
             opts.push_back(modeling_boxes());
+            opts.push_back(modeling_wire_boxes());
             opts.push_back(modeling_solid());
             return opts;
           }
@@ -1298,6 +1398,29 @@ public: //public
     return std::vector<std::string>();
   }
 
+  bool xx_2_yy(const vec3f& a_pos,vec3f& a_out) const {
+    // a_pos is in data frame NDC coordinates.
+   {float XSIZ = width;
+    float XMGL = left_margin;
+    float XMGR = right_margin;
+    float wData = XSIZ-XMGL-XMGR;
+    a_out[0] = wData*a_pos[0];}
+
+   {float YSIZ = height;
+    float YMGL = bottom_margin;
+    float YMGU = top_margin;
+    float hData = YSIZ-YMGL-YMGU;
+    a_out[1] = hData*a_pos[1];}
+  
+   {float ZSIZ = depth;
+    float ZMGD = down_margin;
+    float ZMGU = up_margin;
+    float dData = ZSIZ-ZMGD-ZMGU;
+    a_out[2] = dData*a_pos[2];}
+  
+    return true;
+  }
+
   bool data_frame_2_vp(const vec3f& a_pos,vec3f& a_vp) const {
     // a_pos is in data frame NDC coordinates.
     // a_vp is in viewport/screen coordinates (in [0,1]).
@@ -1306,7 +1429,7 @@ public: //public
     float XMGR = right_margin;
     float wData = XSIZ-XMGL-XMGR;
     if(XSIZ==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::data_frame_2_vp","XSIZ is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","XSIZ is 0");
       return false;
     }
     a_vp[0] = (wData*a_pos[0] + XMGL)/XSIZ;}
@@ -1316,7 +1439,7 @@ public: //public
     float YMGU = top_margin;
     float hData = YSIZ-YMGL-YMGU;
     if(YSIZ==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::data_frame_2_vp","YSIZ is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","YSIZ is 0");
       return false;
     }
     a_vp[1] = (hData*a_pos[1] + YMGL)/YSIZ;}
@@ -1326,7 +1449,7 @@ public: //public
     float ZMGU = up_margin;
     float dData = ZSIZ-ZMGD-ZMGU;
     if(ZSIZ==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::data_frame_2_vp","ZSIZ is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::data_frame_2_vp","ZSIZ is 0");
       return false;
     }
     a_vp[2] = (dData*a_pos[2] + ZMGD)/ZSIZ;}
@@ -1343,7 +1466,7 @@ public: //public
     float XMGR = right_margin;
     float wData = XSIZ-XMGL-XMGR;
     if(wData==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::vp_2_data_frame","wData is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","wData is 0");
       return false;
     }
     a_pos[0] = (a_vp[0]*XSIZ - XMGL)/wData;}
@@ -1353,7 +1476,7 @@ public: //public
     float YMGU = top_margin;
     float hData = YSIZ-YMGL-YMGU;
     if(hData==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::vp_2_data_frame","hData is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","hData is 0");
       return false;
     }
     a_pos[1] = (a_vp[1]*YSIZ - YMGL)/hData;}
@@ -1363,7 +1486,7 @@ public: //public
     float ZMGU = up_margin;
     float dData = ZSIZ-ZMGD-ZMGU;
     if(dData==0.0F) {
-      //SoDebugError::postInfo("SoPlotter::vp_2_data_frame","dData is 0");
+      //SoDebugError::postInfo("inlib::sg;:plotter::vp_2_data_frame","dData is 0");
       return false;
     }
     a_pos[2] = (a_vp[2]*ZSIZ - ZMGD)/dData;}
@@ -1380,7 +1503,7 @@ public: //public
    {float mn = m_x_axis.minimum_value;
     float mx = m_x_axis.maximum_value;
     bool lg = m_x_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       mn = fpow(10,mn);
       mx = fpow(10,mx);
     }
@@ -1389,7 +1512,7 @@ public: //public
    {float mn = m_y_axis.minimum_value;
     float mx = m_y_axis.maximum_value;
     bool lg = m_y_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       mn = fpow(10,mn);
       mx = fpow(10,mx);
     }
@@ -1398,7 +1521,7 @@ public: //public
    {float mn = m_z_axis.minimum_value;
     float mx = m_z_axis.maximum_value;
     bool lg = m_z_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       mn = fpow(10,mn);
       mx = fpow(10,mx);
     }
@@ -1417,19 +1540,19 @@ public: //public
     float mx = m_x_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("SoPlotter::axis_2_data_frame","x : mn (%g) == mx (%g)",mn,mx);
+      //  ("inlib::sg;:plotter::axis_2_data_frame","x : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_x_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","x log but mn (%g) <=0",mn);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","x log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","x log but mx (%g) <=0",mx);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","x log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -1441,19 +1564,19 @@ public: //public
     float mx = m_y_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("SoPlotter::axis_2_data_frame","y : mn (%g) == mx (%g)",mn,mx);
+      //  ("inlib::sg;:plotter::axis_2_data_frame","y : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_y_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","y log but mn (%g) <=0",mn);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","y log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","y log but mx (%g) <=0",mx);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","y log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -1465,19 +1588,19 @@ public: //public
     float mx = m_z_axis.maximum_value;
     if(mx==mn) {
       //SoDebugError::postInfo
-      //  ("SoPlotter::axis_2_data_frame","z : mn (%g) == mx (%g)",mn,mx);
+      //  ("inlib::sg;:plotter::axis_2_data_frame","z : mn (%g) == mx (%g)",mn,mx);
       return false;
     }
     bool lg = m_z_axis.is_log;
-    if(lg==true) {
+    if(lg) {
       if(mn<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","z log but mn (%g) <=0",mn);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","z log but mn (%g) <=0",mn);
         return false;
       }
       if(mx<=0) {
         //SoDebugError::postInfo
-        //  ("SoPlotter::axis_2_data_frame","z log but mx (%g) <=0",mx);
+        //  ("inlib::sg;:plotter::axis_2_data_frame","z log but mx (%g) <=0",mx);
         return false;
       }
       mn = flog10(mn);
@@ -1492,7 +1615,7 @@ public: //public
     // a_pos is in axes coordinates.
     // a_vp is in viewport/screen coordinates (in [0,1]).
     vec3f d; // In data area coodinate. In [0,1][0,1][0,1].
-    if(axis_2_data_frame(a_pos,d)==false) return false;
+    if(!axis_2_data_frame(a_pos,d)) return false;
     return data_frame_2_vp(d,a_vp);
   }
 
@@ -1500,7 +1623,7 @@ public: //public
     // a_vp is in viewport/screen coordinates (in [0,1]).
     // a_pos is in axes coordinates.
     vec3f d; // In data area coodinate. In [0,1][0,1][0,1].
-    if(vp_2_data_frame(a_vp,d)==false) return false;  
+    if(!vp_2_data_frame(a_vp,d)) return false;  
     return data_frame_2_axis(d,a_pos);
   }
 
@@ -1596,6 +1719,7 @@ protected:
     m_group.add(new noderef(m_z_axis_sep));
     m_group.add(new noderef(m_grid_sep));
     m_group.add(new noderef(m_data_sep));
+    m_group.add(new noderef(m_primitives_sep));
 
     m_cmap_sep.add(new noderef(m_cmap_matrix));
     m_cmap_sep.add(new noderef(m_cmap_cells_sep));
@@ -1611,6 +1735,7 @@ protected:
     m_z_axis_sep.add(new noderef(m_z_axis_matrix));
     m_z_axis_sep.add(new noderef(m_z_axis));
 
+    m_data_sep.add(new noderef(m_data_light));
     m_data_sep.add(new noderef(m_data_matrix));
 
     m_data_sep.add(new noderef(m_bins_sep));
@@ -1642,6 +1767,11 @@ protected:
       // in rep primitives (0,0) is the lower left corner
       // of the data area square; 
       mtx.mul_translate(-XSIZ/2+XMGL,-YSIZ/2+YMGL,0);
+
+      if(data_light_on_automated.value()) m_data_light.on = false;
+      vec3f dir(0,0,-1);
+      m_data_light.direction = dir;
+      
     } else { //xyz
       //printf("debug : update_layout : X : %g %g %g %g\n",
       //  XSIZ,XMGL,XMGR,wData);
@@ -1715,6 +1845,15 @@ protected:
       mtx.mul_scale(hData/xfac,hData/yfac,hData/zfac);
   
       mtx.mul_translate(-wData/2,-hData/2,-dData/2); //Applied first.
+
+      if(data_light_on_automated.value()) m_data_light.on = true;
+     {vec3f dir(1,-1,-10);
+      float dx,dy,dz;dir.value(dx,dy,dz);
+      mat4f inv;
+      if(mtx.invert(inv)) {
+        inv.mul_dir_3f(dx,dy,dz);
+        m_data_light.direction = vec3f(dx,dy,dz);
+      }}
     }}
 
    {mat4f& mtx = m_data_matrix.mtx.value();
@@ -1749,25 +1888,25 @@ public:
         *it = 0;
         delete object;
       } else {
-        nplottables++;
         if(safe_cast<plottable,bins1D>(*object)) {
+          nplottables++;
           nbins++; 
-        } else if(
-           safe_cast<plottable,bins2D>(*object)) {
+        } else if(safe_cast<plottable,bins2D>(*object)) {
+          nplottables++;
           nbins++; 
 
-        } else if(
-           safe_cast<plottable,points2D>(*object)) {
+        } else if(safe_cast<plottable,points2D>(*object)) {
+          nplottables++;
           npoints++;
-        } else if(
-           safe_cast<plottable,points3D>(*object)) {
+        } else if(safe_cast<plottable,points3D>(*object)) {
+          nplottables++;
           npoints++;
 
-        } else if(
-           safe_cast<plottable,func1D>(*object)) {
+        } else if(safe_cast<plottable,func1D>(*object)) {
+          nplottables++;
           nfunc++; 
-        } else if(
-           safe_cast<plottable,func2D>(*object)) {
+        } else if(safe_cast<plottable,func2D>(*object)) {
+          nplottables++;
           nfunc++; 
         }
       }
@@ -1783,7 +1922,6 @@ public:
     m_infos_title_sep.clear();
     m_infos_sep.clear();
     m_legend_strings.clear();
-    m_legend_colors.clear();
 
     bool superpose = false;
     /*uuuu 
@@ -1834,7 +1972,7 @@ public:
     bool xlog = m_x_axis_data.is_log();
     if(xlog) {
       if((xmin<=0) || (xmax<=0) ) {
-        m_x_axis_data.adjust_axis();
+        m_x_axis_data.adjust();
         xmin =  m_x_axis_data.min_value();
         xmax =  m_x_axis_data.max_value();
         // now should have reasonable values.
@@ -1852,7 +1990,7 @@ public:
     bool ylog = m_y_axis_data.is_log();
     if(ylog) {
       if((ymin<=0) || (ymax<=0) ) {
-        m_y_axis_data.adjust_axis();
+        m_y_axis_data.adjust();
         ymin = m_y_axis_data.min_value();
         ymax = m_y_axis_data.max_value();
         // now should have reasonable values.
@@ -1870,7 +2008,7 @@ public:
     bool zlog = m_z_axis_data.is_log();
     if(zlog) {
       if((zmin<=0) || (zmax<=0) ) {
-        m_z_axis_data.adjust_axis();
+        m_z_axis_data.adjust();
         zmin = m_z_axis_data.min_value();
         zmax = m_z_axis_data.max_value();
         // now should have reasonable values.
@@ -1946,8 +2084,9 @@ public:
     /// data : /////////////////////////
     ////////////////////////////////////
     if(m_shape==xy) {
-
-      // first data plane is at zz = ZOFFSET().
+      //a_out << "tools::sg::plotter::update_sg : shape xy :" << std::endl;
+      
+      // first data plane is at zz = _zoffset().
 
       float zz = 0;
 
@@ -1956,7 +2095,7 @@ public:
       ////////////////////////////////////
 
       //if(verbose) {
-      //  SoDebugError::postInfo("SoPlotter::updateChildren",
+      //  SoDebugError::postInfo("inlib::sg;:plotter::updateChildren",
       //  "%lu : XY : update bins",(unsigned long)this);
       //}
 
@@ -1972,24 +2111,45 @@ public:
         if(!object) continue;
         if(bins1D* b1 = safe_cast<plottable,bins1D>(*object)) {
 
-          zz += ZOFFSET(); // ibins = 0 back (PAW convention).
+          zz += _zoffset(); // ibins = 0 back (PAW convention).
           style* data_style = merge_bins_style(ibins,*object);
+          style* _left_hatch_style = merge_left_hatch_style(ibins,*object);
+          style* _right_hatch_style = merge_right_hatch_style(ibins,*object);
           style* error_style = merge_errors_style(ibins,*object);
+	  
           update_bins1D_xy(a_out,*b1,
-                           *data_style,*error_style,ibins,
+                           *data_style,*_left_hatch_style,*_right_hatch_style,*error_style,ibins,
                            superpose,boxX,boxY,zz);
-
-          m_legend_strings.push_back(object->legend());
-          m_legend_colors.push_back(data_style->color.value());
-
+			   
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+          }
+	  
           delete data_style;
+          delete _left_hatch_style;
+          delete _right_hatch_style;
           delete error_style;
           ibins++;
           //ibins1D++;
         } if(bins2D* b2 = safe_cast<plottable,bins2D>(*object)) {
-          zz += ZOFFSET(); // ibins = 0 back (PAW convention).
+          //a_out << "tools::sg::plotter::update_sg : bins2D." << std::endl;
+          zz += _zoffset(); // ibins = 0 back (PAW convention).
           style* data_style = merge_bins_style(ibins,*object);
+	  
           update_bins2D_xy(a_out,*b2,*data_style,ibins,boxX,boxY,boxZ,zz);
+
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+          }
+
           delete data_style;
           ibins++;
         }
@@ -2007,17 +2167,30 @@ public:
         plottable* object = *it;
         if(!object) continue;
         if(func1D* f1 = safe_cast<plottable,func1D>(*object)) {
-          zz += ZOFFSET();
+          zz += _zoffset();
           style* data_style = merge_func_style(ifunc,*object);
           update_func1D_xy(a_out,*f1,*data_style,boxX,boxY,zz);
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+          }
           delete data_style;
           ifunc++;
-        } else if(//func2D* f2 = 
-             safe_cast<plottable,func2D>(*object)) {
-          //zz += ZOFFSET();
-          //SoStyle* graphicStyle = mergeFunctionStyle(ifunc,*f2);
-          //updateFunction_XY(*f2,ifunc,*graphicStyle,boxX,boxY,boxZ,zz);
-          //graphicStyle->unref();
+        } else if(func2D* f2 = safe_cast<plottable,func2D>(*object)) {
+          zz += _zoffset();
+          style* data_style = merge_func_style(ifunc,*object);
+          update_func2D_xy(a_out,*f2,ifunc,*data_style,boxX,boxY,boxZ,zz);
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+          }
+          delete data_style;
           ifunc++;
         }
       }}     
@@ -2034,12 +2207,17 @@ public:
         if(!object) continue;
         if(points2D* p2 = safe_cast<plottable,points2D>(*object)) {
      
-          zz += ZOFFSET(); // ibins = 0 back (PAW convention).
+          zz += _zoffset(); // ibins = 0 back (PAW convention).
           style* data_style = merge_points_style(ipoints,*object);
           update_points2D_xy(a_out,*p2,*data_style,boxX,boxY,zz);
 
-          m_legend_strings.push_back(object->legend());
-          m_legend_colors.push_back(data_style->color.value());
+          if(legends_automated.value()) {
+            m_legend_strings.push_back(object->legend());
+            style& _style = legend_style(m_legend_strings.size()-1);
+            _style.color = data_style->color;
+            _style.marker_style = data_style->marker_style;
+            _style.marker_size = data_style->marker_size;
+	  }
 
           delete data_style;
           ipoints++;
@@ -2100,35 +2278,101 @@ public:
 
     // axes :
     if(m_shape==xy){
-      if(!nplottables) {
-        m_x_axis.width = 0;
-        m_y_axis.width = 0;
-        m_z_axis.width = 0;
-      } else {
+      if(x_axis_enforced.value()) {
         update_x_axis_2D();
-        update_axis(a_out,m_x_axis,m_x_axis_data);
-
+        m_x_axis.minimum_value = x_axis_min.value();
+        m_x_axis.maximum_value = x_axis_max.value();
+        m_x_axis.is_log = x_axis_is_log.value();
+        m_x_axis.update_sg(a_out); // So that the grid be correct.
+        m_x_axis.reset_touched();
+      } else {
+	if(!nplottables) {       
+	  m_x_axis.width = 0;
+	} else {
+          update_x_axis_2D();
+          update_axis(a_out,m_x_axis,m_x_axis_data);
+	}
+      }
+      
+      if(y_axis_enforced.value()) {
         update_y_axis_2D();
-        update_axis(a_out,m_y_axis,m_y_axis_data);
+        m_y_axis.minimum_value = y_axis_min.value();
+        m_y_axis.maximum_value = y_axis_max.value();
+        m_y_axis.is_log = y_axis_is_log.value();
+        m_y_axis.update_sg(a_out); // So that the grid be correct.
+        m_y_axis.reset_touched();
+      } else {
+	if(!nplottables) {
+	  m_y_axis.width = 0;
+	} else {
+          update_y_axis_2D();
+          update_axis(a_out,m_y_axis,m_y_axis_data);
+	}
+      }
 
+      if(z_axis_enforced.value()) {
         update_z_axis_2D();
+        m_z_axis.minimum_value = z_axis_min.value();
+        m_z_axis.maximum_value = z_axis_max.value();
+        m_z_axis.is_log = z_axis_is_log.value();
+        m_z_axis.update_sg(a_out); // So that the grid be correct.
+        m_z_axis.reset_touched();
+      } else {
+	if(!nplottables) {
+	  m_z_axis.width = 0;
+	} else {
+          update_z_axis_2D();
+	}
       }
     }
 
     if(m_shape==xyz){
-      if(!nplottables) {
-        m_x_axis.width = 0;
-        m_y_axis.width = 0;
-        m_z_axis.width = 0;
-      } else {
+      if(x_axis_enforced.value()) {
         update_x_axis_3D();
-        update_axis(a_out,m_x_axis,m_x_axis_data);
-
+        m_x_axis.minimum_value = x_axis_min.value();
+        m_x_axis.maximum_value = x_axis_max.value();
+        m_x_axis.is_log = x_axis_is_log.value();
+        m_x_axis.update_sg(a_out); // So that the grid be correct.
+        m_x_axis.reset_touched();
+      } else {
+	if(!nplottables) {       
+	  m_x_axis.width = 0;
+	} else {
+          update_x_axis_3D();
+          update_axis(a_out,m_x_axis,m_x_axis_data);
+	}
+      }
+      
+      if(y_axis_enforced.value()) {
         update_y_axis_3D();
-        update_axis(a_out,m_y_axis,m_y_axis_data);
+        m_y_axis.minimum_value = y_axis_min.value();
+        m_y_axis.maximum_value = y_axis_max.value();
+        m_y_axis.is_log = y_axis_is_log.value();
+        m_y_axis.update_sg(a_out); // So that the grid be correct.
+        m_y_axis.reset_touched();
+      } else {
+	if(!nplottables) {
+	  m_y_axis.width = 0;
+	} else {
+          update_y_axis_3D();
+          update_axis(a_out,m_y_axis,m_y_axis_data);
+	}
+      }
 
+      if(z_axis_enforced.value()) {
         update_z_axis_3D();
-        update_axis(a_out,m_z_axis,m_z_axis_data);
+        m_z_axis.minimum_value = z_axis_min.value();
+        m_z_axis.maximum_value = z_axis_max.value();
+        m_z_axis.is_log = z_axis_is_log.value();
+        m_z_axis.update_sg(a_out); // So that the grid be correct.
+        m_z_axis.reset_touched();
+      } else {
+	if(!nplottables) {
+	  m_z_axis.width = 0;
+	} else {
+          update_z_axis_3D();
+          update_axis(a_out,m_z_axis,m_z_axis_data);
+	}
       }
     }
 
@@ -2141,7 +2385,6 @@ public:
 
     if(!legends_automated) {
       m_legend_strings = legends_string.values();
-      m_legend_colors = legends_color.values();
     }
     update_legends(a_out);
 
@@ -2158,7 +2401,7 @@ public:
     if(nplottables) update_title_box();
 
     m_inner_frame_sep.clear();
-    if(nplottables) {
+    if(inner_frame_enforced.value() || nplottables) {
       if(m_shape==xy) {
         update_inner_frame_XY();
       } else {
@@ -2184,6 +2427,8 @@ public:
     } else if(m_func_cmaps.size() && m_func_cmaps[0] && m_func_cmaps[0]->valn()) { //major_func
       update_cmap(a_out,*(m_func_cmaps[0]));
     }
+
+    update_primitives(a_out);
   }
 
   void update_axes_data(std::ostream& a_out){
@@ -2241,7 +2486,7 @@ public:
           mx = mx + (mx-mn)*value_top_margin;
           m_y_axis_data.max_value(mx);
   
-          m_y_axis_data.adjust_axis();
+          m_y_axis_data.adjust();
         }
         
       } if(b2) {
@@ -2261,7 +2506,7 @@ public:
           m_z_axis_data.min_value(mn);
           mx = mx + (mx-mn)*value_top_margin;
           m_z_axis_data.max_value(mx);
-          m_z_axis_data.adjust_axis();
+          m_z_axis_data.adjust();
         }
       } /*else if(f_binsList[0]->getDimension()==3) {
         //FIXME : should do something.
@@ -2326,7 +2571,7 @@ public:
             xmx = m_x_axis_data.max_value();
           }
           unsigned int nstp = f1->x_steps();
-          nstp = nstp <=0 ? 100 : nstp;
+          nstp = nstp <=0 ? curve_number_of_points.value(): nstp;
   
           float df = (xmx - xmn)/nstp;      
           bool problem = false;
@@ -2347,7 +2592,7 @@ public:
           }
           m_y_axis_data.min_value(vmin);
           m_y_axis_data.max_value(vmax);
-          m_y_axis_data.adjust_axis();
+          m_y_axis_data.adjust();
         }
         
       } else if(f2) {
@@ -2418,7 +2663,7 @@ public:
           }
           m_z_axis_data.min_value(vmin);
           m_z_axis_data.max_value(vmax);
-          m_z_axis_data.adjust_axis();
+          m_z_axis_data.adjust();
         }
       }  
     }
@@ -2429,15 +2674,15 @@ public:
     //  shape.setValue(m_shape);
     //}
   }
-  void update_axis(std::ostream& a_out,sg::axis& a_axis,
-                   tools::axis& a_data){
+
+  void update_axis(std::ostream& a_out,sg::axis& a_axis,data_axis& a_data){
     a_axis.minimum_value = a_data.min_value();
     a_axis.maximum_value = a_data.max_value();
     a_axis.is_log = a_data.is_log();
     a_axis.update_sg(a_out); // So that the grid be correct.
     a_axis.reset_touched();
   }
-
+  
   void update_x_axis_2D(){
     float XSIZ = width;
     float XMGL = left_margin;
@@ -2449,13 +2694,12 @@ public:
     m_x_axis.width = wData;
 
    {text_style& style = m_x_axis.labels_style();
-    //if(!style->enforced) {
+    if(!style.enforced.value()) { //gopaw may enforce style.
       style.x_orientation = vec3f(1,0,0);
       style.y_orientation = vec3f(0,1,0);
       style.hjust = center;
       style.vjust = top;
-    //}
-    }
+    }}
     
    {text_style& style = m_x_axis.title_style();
     style.x_orientation = vec3f(1,0,0);
@@ -2467,7 +2711,7 @@ public:
     style.hjust = left;
     style.vjust = bottom;}
   
-    m_x_axis_matrix.set_translate(0,0,ZAXIS());
+    m_x_axis_matrix.set_translate(0,0,_zaxis());
   }
 
   void update_y_axis_2D(){
@@ -2481,13 +2725,12 @@ public:
     m_y_axis.width.value(hData);
 
    {text_style& style = m_y_axis.labels_style();
-    //if(!style->enforced) {
+    if(!style.enforced.value()) {
       style.x_orientation = vec3f(0,1,0);
       style.y_orientation = vec3f(1,0,0);
       style.hjust = right;
       style.vjust = middle;
-    //}
-    }
+    }}
     
    {text_style& style = m_y_axis.title_style();
     style.x_orientation = vec3f(1,0,0);
@@ -2502,7 +2745,7 @@ public:
     style.vjust = bottom;}
 
    {mat4f& mtx = m_y_axis_matrix.mtx.value();
-    mtx.set_translate(0,0,ZAXIS());
+    mtx.set_translate(0,0,_zaxis());
     mtx.mul_rotate(0,1,0,fpi());
     mtx.mul_rotate(0,0,1,fhalf_pi());}
   }
@@ -2523,14 +2766,13 @@ public:
     m_x_axis.width = wData;
 
    {text_style& style = m_x_axis.labels_style();
-    //if(!style->enforced) {
+    if(!style.enforced.value()) {
       //style->font_name = SbFont_Hershey; //Enforce Hershey.
       style.x_orientation = vec3f(1,0,0);
       style.y_orientation = vec3f(0,1,0);
       style.hjust = center;
       style.vjust = top;
-    //}
-    }
+    }}
     
    {text_style& style = m_x_axis.title_style();
     style.x_orientation = vec3f(1,0,0);
@@ -2557,14 +2799,13 @@ public:
     m_y_axis.width = hData;
 
    {text_style& style = m_y_axis.labels_style();
-    //if(!style->enforced) {
+    if(!style.enforced.value()) {
       //style->fontName.setValue(SbFont_Hershey); //Enforce Hershey.
       style.x_orientation = vec3f(-1,0,0);
       style.y_orientation = vec3f( 0,1,0);
       style.hjust = center;
       style.vjust = top;
-    //}
-    }
+    }}
     
    {text_style& style = m_y_axis.title_style();
     style.x_orientation = vec3f(-1,0,0);
@@ -2593,14 +2834,13 @@ public:
     m_z_axis.width = dData;
 
    {text_style& style = m_z_axis.labels_style();
-    //if(!style->enforced) {
+    if(!style.enforced.value()) {
       //style->fontName.setValue(SbFont_Hershey); //Enforce Hershey.
       style.x_orientation = vec3f(0,1,0);
       style.y_orientation = vec3f(1,0,0);
       style.hjust = right;
       style.vjust = middle;
-    //}
-    }
+    }}
     
    {text_style& style = m_z_axis.title_style();
     style.x_orientation = vec3f(0,1,0);
@@ -2642,7 +2882,7 @@ public:
    {mat4f& mtx = m_cmap_matrix.mtx.value();
     if(m_shape==xy) {
       mtx = m_layout.mtx.value();
-      mtx.mul_translate(0,0,ZGRID());
+      mtx.mul_translate(0,0,_zgrid());
     } else {
       float ZSIZ = depth;
       float ZMGD = down_margin;
@@ -2693,7 +2933,7 @@ public:
     draw_style* ds = new draw_style;
     ds->style = draw_style::lines;
     ds->line_pattern = line_solid;
-    ds->line_width.value(1);
+    ds->line_width = 1;
     m_cmap_cells_sep.add(ds);
 
     vertices* vtxs = new vertices;
@@ -2714,7 +2954,7 @@ public:
     mat4f& mtx = m_cmap_axis_matrix.mtx.value();
     mtx.set_identity();
 
-    zz += ZOFFSET()*0.01f;
+    zz += _zoffset()*0.01f;
 
     if(safe_cast<base_colormap,by_value_colormap>(a_cmap)) {
       if(colormap_axis_labeling.value()==cells) {
@@ -2797,32 +3037,45 @@ public:
     }//end axis
   }
 
+  void update_primitives(std::ostream& a_out) {
+//    if(primitives_enforced.value()) {
+      m_primitives_sep.clear();
+      tools_vforcit(plotprim*,m_primitives,it) {
+        if(plottable_text* ptext = safe_cast<plotprim,plottable_text>(*(*it))) {
+          update_primitive_text(*ptext);
+        } else if(plottable_box* pbox = safe_cast<plotprim,plottable_box>(*(*it))) {
+          update_primitive_box(a_out,*pbox);
+	}
+      }
+    //}
+  }
+  
 protected: //vis bins
   void update_bins1D_xy(std::ostream& a_out,
                         const bins1D& a_bins,
                         const style& a_data_style,
+                        const style& a_left_hatch_style,
+                        const style& a_right_hatch_style,
                         const style& a_errors_style,
                         int a_index,
                       /*SoStyle& aGraphicStyle,
-                        SoStyle& aRightHatchStyle,
-                        SoStyle& aLeftHatchStyle,
                         int aIndex1D,
                         const std::vector<SbPlottableBins1D*>& a_bins1DList,
                         const SbPList& a_bins1DListSwMnMx,*/
                         bool /*aSuperpose*/,
                         const rep_box& a_box_x,
                         const rep_box& a_box_y,
-                        float aZZ){
+                        float a_zz){
 
     //char sid[128];
     //::sprintf(sid,"tools::sg::bins1D/0x%lx",
     //  (unsigned long)const_cast<bins1D*>(&a_bins));
   
-    unsigned int xnbin = a_bins.bins();
+    size_t xnbin = a_bins.bins();
     std::vector<rep_bin1D> bins(xnbin);
-    for(unsigned int ibin=0;ibin<xnbin;ibin++) { 
-      float xx = a_bins.bin_lower_edge(ibin);
-      float xe = a_bins.bin_upper_edge(ibin);
+    for(size_t ibin=0;ibin<xnbin;ibin++) { 
+      float xx = float(a_bins.bin_lower_edge(ibin));
+      float xe = float(a_bins.bin_upper_edge(ibin));
       float vmin,vmax;
       //if(aSuperpose) {
         //uuugetHeight(aIndex1D,a_bins1DList,a_bins1DListSwMnMx,ibin,vmin,vmax);
@@ -2833,9 +3086,6 @@ protected: //vis bins
       bins[ibin] = rep_bin1D(xx,xe,vmin,vmax);
     }
 
-    float zHatchOffset = 0.01F;
-    float zErrorOffset = 2 * zHatchOffset;
-
     //modeling_profile could override errors_visible.
     bool errors_visible = a_errors_style.visible;
 
@@ -2843,10 +3093,7 @@ protected: //vis bins
 
       painting_policy painting = a_data_style.painting;
       if(painting==painting_by_value) {
-        cmaps_t cmaps;
-        cmaps[style_default_colormap::s_default()] =
-          style_default_colormap(); //costly
-        m_bins_cmaps[a_index] = new by_value_colormap(a_out,cmaps,a_data_style.color_mapping);
+        m_bins_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_data_style.color_mapping);
       } else if( (painting==painting_grey_scale) ||
                  (painting==painting_grey_scale_inverse) ||
                  (painting==painting_violet_to_red) ){
@@ -2855,7 +3102,7 @@ protected: //vis bins
         a_bins.bins_Sw_range(bmin,bmax);
        {float dbins = bmax-bmin;
         if(dbins!=0.0F) {
-          for(unsigned int index=0;index<xnbin;index++) bins[index].m_ratio = a_bins.bin_Sw(index)/dbins;
+          for(size_t index=0;index<xnbin;index++) bins[index].m_ratio = a_bins.bin_Sw(index)/dbins;
         }}
         if(painting==painting_grey_scale) {
           m_bins_cmaps[a_index] = new grey_scale_colormap(bmin,bmax,50);
@@ -2874,14 +3121,14 @@ protected: //vis bins
         // AND :
         //  rep_errors_plus for bins rep.
         // NOTE : a_data_style.modeling not used for the moment.
-        rep_bins1D_xy_points(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,aZZ);
+        rep_bins1D_xy_points(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz);
 
         std::vector<float> bars(xnbin);
-        for(unsigned int ibin=0;ibin<xnbin;ibin++) {
+        for(size_t ibin=0;ibin<xnbin;ibin++) {
           bars[ibin] = a_bins.bin_error(ibin);
         }
 
-        rep_errors_plus_xy(a_data_style,bins,a_box_x,a_box_y,bars,aZZ+zErrorOffset);
+        rep_errors_plus_xy(a_out,a_data_style,bins,a_box_x,a_box_y,bars,a_zz+_zerrors());
         errors_visible = false;
 
       } else {
@@ -2895,7 +3142,7 @@ protected: //vis bins
         //  oneNode = (xnbin>nlimit?true:false);
         //}}
   
-        //bool bar_chart = false;
+        bool _bar_chart = false;
     
         //char sid_bin[128];
         //::sprintf(sid_bin,"SbBin1D/0x%lx",(unsigned long)&a_bins);
@@ -2903,119 +3150,186 @@ protected: //vis bins
         if(modeling==modeling_points()){
           //if(oneNode) {
           //  rep_bins1D_xy_points_one(binsNode,aGraphicStyle,
-          //                       bins,a_box_x,a_box_y,aZZ,SbString(sid));
+          //                       bins,a_box_x,a_box_y,a_zz,std::string(sid));
           //} else {
             rep_bins1D_xy_points(a_data_style,
                                  *(m_bins_cmaps[a_index]),
-                                 bins,a_box_x,a_box_y,aZZ);
+                                 bins,a_box_x,a_box_y,a_zz);
           //}
         } else if(modeling==modeling_boxes()) {
           //if(oneNode) {
           //  rep_bins1D_xy_boxes_one(binsNode,aGraphicStyle,
-          //                      bins,a_box_x,a_box_y,aZZ,SbString(sid));
+          //                      bins,a_box_x,a_box_y,a_zz,std::string(sid));
           //} else {
             rep_bins1D_xy_boxes(a_data_style,
                                 *(m_bins_cmaps[a_index]),
-                                bins,a_box_x,a_box_y,aZZ //,SbString(sid_bin)
+                                bins,a_box_x,a_box_y,a_zz //,std::string(sid_bin)
                                 );
           //}
   
         } else if(modeling==modeling_wire_boxes()) {
           //if(oneNode) {
           //  rep_bins1D_xy_wire_boxes_one(binsNode,aGraphicStyle,barChart,
-          //                           bins,a_box_x,a_box_y,aZZ,SbString(sid));
+          //                           bins,a_box_x,a_box_y,a_zz,std::string(sid));
           //} else {
-            rep_bins1D_xy_wire_boxes(a_data_style,
-                                     *(m_bins_cmaps[a_index]),
-                                      bins,a_box_x,a_box_y,aZZ,false);
+            rep_bins1D_xy_wire_boxes(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz,false);
           //}
         } else if(modeling==modeling_bar_chart()) {
+           _bar_chart = true;
           //if(oneNode) {
           //  rep_bins1D_xy_wire_boxes_one(binsNode,aGraphicStyle,barChart,
-          //                           bins,a_box_x,a_box_y,aZZ,SbString(sid));
+          //                           bins,a_box_x,a_box_y,a_zz,std::string(sid));
           //} else {
-            rep_bins1D_xy_wire_boxes(a_data_style,
-                                     *(m_bins_cmaps[a_index]),
-                                      bins,a_box_x,a_box_y,aZZ,true);
-          //}
-        } else { //default modeling==modeling_top_lines()
-          //if(one_node) {
-          //  repBins1D_xy_top_lines_one(binsNode,aGraphicStyle,
-          //                             bins,a_box_x,a_box_y,aZZ,SbString(sid));
-          //} else {
-            rep_bins1D_xy_top_lines(a_data_style,
-                                    *(m_bins_cmaps[a_index]),
-                                    bins,a_box_x,a_box_y,aZZ/*,SbString(sid_bin)*/);
+            rep_bins1D_xy_wire_boxes(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz,true);
           //}
   
+        } else if(modeling==modeling_lines()){
+          rep_bins1D_xy_lines_one(a_data_style,bins,a_box_x,a_box_y,a_zz/*,std::string(sid)*/);
+        } else if(modeling==modeling_curve()){
+          rep_bins1D_xy_curve_one(a_out,a_data_style,bins,a_box_x,a_box_y,a_zz/*,std::string(sid)*/);
+	  
+        } else if(modeling==modeling_top_lines_boxes()) { //gopaw. pawex24, k_plus.
+          style _style;_style.color = colorf_white();
+          rep_bins1D_xy_boxes(_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz);	  
+          rep_bins1D_xy_top_lines(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz+_zhatch());
+	  
+        } else { //default modeling==modeling_top_lines()
+          rep_bins1D_xy_top_lines(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz/*,std::string(sid_bin)*/);
+	  
         }
-
-        /*
-        } else if(modeling==SbModeling_lines){
-          rep_bins1D_xy_lines_one(binsNode,aGraphicStyle,
-                              bins,a_box_x,a_box_y,aZZ,SbString(sid));
-        } else if(modeling==SbModeling_curve){
-          rep_bins1D_xy_curve_one(binsNode,aGraphicStyle,
-                              bins,a_box_x,a_box_y,aZZ,SbString(sid));
-        }*/
       
-  /*
-        SbHatchingPolicy hatching = 
-          (SbHatchingPolicy)aGraphicStyle.hatching.value();
-        if(hatching!=SbHatchingNone) {
+        hatching_policy hatching = a_data_style.hatching.value();
+	//::printf("debug : bins1D %d hatching : %d\n",a_index,hatching);
+        if(hatching!=hatching_none) {
           // WARNING : must come AFTER rep_bins1_xy.
-          if((hatching==SbHatchingRight)||((hatching==SbHatchingLeftAndRight))) {
-            if(oneNode) {
-              repHatch1D_xy_one(binsNode,aRightHatchStyle,barChart,
-                             bins,a_box_x,a_box_y,aZZ+zHatchOffset,SbString(sid));
-            } else {
-              repHatch1D_xy(binsNode,aRightHatchStyle,barChart,
-                         bins,a_box_x,a_box_y,aZZ+zHatchOffset);
-            }
+          if((hatching==hatching_right)||((hatching==hatching_left_and_right))) {
+            //if(oneNode) {
+              //repHatch1D_xy_one(binsNode,aRightHatchStyle,barChart,bins,a_box_x,a_box_y,a_zz+_zhatch(),std::string(sid));
+            //} else {
+              rep_hatch1D_xy(a_right_hatch_style,bins,a_box_x,a_box_y,a_zz+_zhatch(),_bar_chart);
+            //}
           }
-          if((hatching==SbHatchingLeft)||((hatching==SbHatchingLeftAndRight))) {
-            if(oneNode) {
-              repHatch1D_xy_one(binsNode,aLeftHatchStyle,barChart,
-                            bins,a_box_x,a_box_y,aZZ+zHatchOffset,SbString(sid));
-            } else {
-              repHatch1D_xy(binsNode,aLeftHatchStyle,barChart,
-                         bins,a_box_x,a_box_y,aZZ+zHatchOffset);
-            }
+          if((hatching==hatching_left)||((hatching==hatching_left_and_right))) {
+            //if(oneNode) {
+              //repHatch1D_xy_one(binsNode,aLeftHatchStyle,barChart,bins,a_box_x,a_box_y,a_zz+_zhatch(),std::string(sid));
+            //} else {
+              rep_hatch1D_xy(a_left_hatch_style,bins,a_box_x,a_box_y,a_zz+_zhatch(),_bar_chart);
+            //}
           }
         }
-  */  
+	
       } //end !is_profile.
     } //end data_style visible
   
     // Errors :
     if(errors_visible) { 
       std::vector<float> bars(xnbin);
-      for(unsigned int ibin=0;ibin<xnbin;ibin++) {
-        bars[ibin] = a_bins.bin_error(ibin);
-      }
+      for(size_t ibin=0;ibin<xnbin;ibin++) bars[ibin] = a_bins.bin_error(ibin);      
       const std::string& modeling = a_errors_style.modeling;
       if(modeling==modeling_plus()) {
-        rep_errors_plus_xy(a_errors_style,
-                        bins,a_box_x,a_box_y,bars,aZZ+zErrorOffset);
+        rep_errors_plus_xy(a_out,a_errors_style,bins,a_box_x,a_box_y,bars,a_zz+_zerrors());
       } else { //modeling_I()
-        rep_errors_I_xy(a_errors_style,
-                        bins,a_box_x,a_box_y,bars,aZZ+zErrorOffset);
+        rep_errors_I_xy(a_out,a_errors_style,bins,a_box_x,a_box_y,bars,a_zz+_zerrors());
       }
     }
 
   }
+  
+  static bool bins2D_to_func(const bins2D& a_bins,float a_X,float a_Y,float& a_value){
+    unsigned int xn = a_bins.x_bins();
+    float xmn = a_bins.x_axis_min();
+    float xmx = a_bins.x_axis_max();
+    unsigned int yn = a_bins.y_bins();
+    float ymn = a_bins.y_axis_min();
+    float ymx = a_bins.y_axis_max();
+  
+    float dx = (xmx-xmn)/xn;
+    float dy = (ymx-ymn)/yn;
+    int ibin = (int)((a_X-xmn)/dx);
+    int jbin = (int)((a_Y-ymn)/dy);
+  
+    if((ibin<0)||(ibin>=int(xn))) {a_value=0;return false;}
+    if((jbin<0)||(jbin>=int(yn))) {a_value=0;return false;}
+  
+    float xx_0 = a_bins.bin_lower_edge_x(ibin);
+    //float xe_0 = a_bins.bin_upper_edge_x(ibin);
+    float xx_1 = a_bins.bin_lower_edge_x(ibin+1);
+    //float xe_1 = a_bins.bin_upper_edge_x(ibin+1);
+  
+    float yy_0 = a_bins.bin_lower_edge_y(jbin);
+    //float ye_0 = a_bins.bin_upper_edge_y(jbin);
+    float yy_1 = a_bins.bin_lower_edge_y(jbin+1);
+    //float ye_1 = a_bins.bin_upper_edge_y(jbin+1);
+  
+    float val1 = a_bins.bin_Sw(ibin,jbin);
+    float val2 = a_bins.bin_Sw(ibin+1,jbin);
+    //float val3 = a_bins.getBinSumOfWeights(ibin+1,jbin+1);
+    float val4 = a_bins.bin_Sw(ibin,jbin+1);
+  
+    // Interpolate :
+    vec3f p1(xx_0,yy_0,val1);
+    vec3f p2(xx_1,yy_0,val2);
+    //vec3f p3(xx_1,yy_1,val3);
+    vec3f p4(xx_0,yy_1,val4);
+  
+    //FIXME : case of (x,y) in (p2,p3,p4)
+  
+    plane<vec3f> _plane(p1,p2,p4);
+    vec3f pt;
+    line<vec3f> _line(vec3f(a_X,a_Y,0),vec3f(a_X,a_Y,10));
+    _plane.intersect(_line,pt);
+  
+    a_value = pt[2];
+    return true;
+  }
 
+  typedef struct {
+    const func2D* m_func2D;
+    const bins2D* m_bins2D;
+    double m_limits[4];
+    double m_limits_in[4];
+    bool m_problem;
+  } SbFunc;
+
+  static double bins2D_to_contour(double a_X,double a_Y,void* aData) {
+    SbFunc* func =(SbFunc*)aData;
+    if( (a_X<func->m_limits_in[0])||
+        (a_X>func->m_limits_in[1])||
+        (a_Y<func->m_limits_in[2])||
+        (a_Y>func->m_limits_in[3])
+      ) return -FLT_MAX;
+    float value;
+    if(!bins2D_to_func(*(func->m_bins2D),(float)a_X,(float)a_Y,value)) func->m_problem = true;
+    return value;
+  }
+  
+  static double log_bins2D_to_contour(double a_X,double a_Y,void* aData) {
+    SbFunc* func =(SbFunc*)aData;
+    if( (a_X<func->m_limits_in[0])||
+        (a_X>func->m_limits_in[1])||
+        (a_Y<func->m_limits_in[2])||
+        (a_Y>func->m_limits_in[3])
+      ) return -FLT_MAX;
+    float value;
+    if(!bins2D_to_func(*(func->m_bins2D),(float)a_X,(float)a_Y,value)) func->m_problem = true;
+    return take_log(value);
+  }
+  
   void update_bins2D_xy(std::ostream& a_out,
                         const bins2D& a_bins,
                         const style& a_data_style,
                         int a_index,
                         const rep_box& a_box_x,
                         const rep_box& a_box_y,
-                        const rep_box& /*a_box_z*/,
-                        float aZZ){
+                        const rep_box& a_box_z,
+                        float a_zz){
 
+    //a_out << "tools::sg::update_bins2D_xy : begin :" << std::endl;
+    
     if(!a_data_style.visible) return;
 
+    //a_out << "tools::sg::update_bins2D_xy : visible :" << std::endl;
+    
     unsigned int xnbin = a_bins.x_bins();
     unsigned int ynbin = a_bins.y_bins();
 
@@ -3025,8 +3339,121 @@ protected: //vis bins
 
     const std::string& modeling = a_data_style.modeling;
 
-    if( (modeling==modeling_curve()) ||
-        (modeling==modeling_filled_curve()) ){
+    if( (modeling==modeling_curve()) || (modeling==modeling_filled_curve()) ){
+	
+      a_out << "tools::sg::update_bins2D_xy : modeling_curve :" << std::endl;
+      
+      painting_policy painting = a_data_style.painting;
+      
+      float zmin = a_box_z.m_pos;
+      float dz = a_box_z.m_width;
+      bool zlog = a_box_z.m_log;
+  
+      float xmn =  m_x_axis_data.min_value();
+      float xmx =  m_x_axis_data.max_value();
+      float ymn =  m_y_axis_data.min_value();
+      float ymx =  m_y_axis_data.max_value();
+  
+      clist_contour list_contour;
+      //int nFir = 32;
+      int nFir = 128;
+      list_contour.set_first_grid(nFir,nFir); //Default : 32,32 
+      //int nSec = 256;
+      int nSec = 512; //slower than 256
+      list_contour.set_secondary_grid(nSec,nSec); //Default : 256,256.
+
+      double limits[4];
+      // User limits :
+      limits[0] = xmn;
+      limits[1] = xmx;    
+      limits[2] = ymn;    
+      limits[3] = ymx;    
+
+      SbFunc sbFunc;
+      sbFunc.m_func2D = 0;
+      sbFunc.m_problem = false;
+      sbFunc.m_bins2D = &a_bins;
+      sbFunc.m_limits_in[0] = limits[0];
+      sbFunc.m_limits_in[1] = limits[1];
+      sbFunc.m_limits_in[2] = limits[2];
+      sbFunc.m_limits_in[3] = limits[3];
+
+      // Extend the grid to have some borders in order to close contours :
+      int n = nSec - 2 * 10;
+      double dx = (limits[1]-limits[0]) /n;
+      double dy = (limits[3]-limits[2]) /n;
+      limits[0] = limits[0] - 10 * dx;
+      limits[1] = limits[1] + 10 * dx;
+      limits[2] = limits[2] - 10 * dy;
+      limits[3] = limits[3] + 10 * dy;
+
+      sbFunc.m_limits[0] = limits[0];
+      sbFunc.m_limits[1] = limits[1];
+      sbFunc.m_limits[2] = limits[2];
+      sbFunc.m_limits[3] = limits[3];
+
+      list_contour.set_limits(limits);
+  
+      if(levels.size()) {
+        size_t zn = levels.size();
+        std::vector<double> zs(zn);
+        for(size_t zi=0;zi<zn;zi++) zs[zi] = levels[zi];
+        list_contour.set_planes(zs);
+      } else {
+        unsigned int zn = number_of_levels.value();
+        if(zn<=0) zn = 1;
+        std::vector<double> zs(zn+1);
+        float zmax = zmin + dz;
+        double zd = (zmax-zmin)/zn;
+        for(unsigned int zi=0;zi<=zn;zi++) zs[zi] = zmin + zi * zd;
+        list_contour.set_planes(zs);
+      }
+      
+      if(zlog)
+        list_contour.set_field_fcn(log_bins2D_to_contour,(void*)&sbFunc);
+      else
+        list_contour.set_field_fcn(bins2D_to_contour,(void*)&sbFunc);
+
+#ifdef INLIBS_SG_PLOTTER_TIMING
+      atime _start = atime::now();
+#endif      
+      list_contour.ccontour::generate();
+#ifdef INLIBS_SG_PLOTTER_TIMING
+      a_out << "tools::sg::update_bins2D_xy : contour generate elapsed " << atime::elapsed(_start) << "." << std::endl;
+      _start = atime::now();      
+#endif
+
+      if(!list_contour.compact_strips ()) {
+        a_out << "tools::sg::plotter::updateBins2D_XY : clist_contour::compact_strips () : failure." << std::endl;
+      } else {
+#ifdef INLIBS_SG_PLOTTER_TIMING
+        a_out << "tools::sg::update_bins2D_xy : contour compact strips elapsed " << atime::elapsed(_start) << "." << std::endl;
+#endif	      
+        if( (painting==painting_by_level) || (painting==painting_by_value) ){
+          m_bins_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_data_style.color_mapping);
+          //bool zlog = a_box_z.m_log;
+          if(zlog) m_bins_cmaps[a_index]->set_PAW_coloring();
+        } else {
+          m_bins_cmaps[a_index] = new const_colormap(a_data_style.color);
+        }
+  
+        if(modeling==modeling_filled_curve()) {
+          rep_contour_xy_filled(a_out,a_data_style,
+                                painting,*(m_bins_cmaps[a_index]),
+                                list_contour,a_box_x,a_box_y,a_box_z,a_zz /*,std::string(sid.c_str())*/);
+        } else {
+          rep_contour_xy(a_out,a_data_style,
+                         painting,*(m_bins_cmaps[a_index]),
+                         list_contour,a_box_x,a_box_y,a_box_z,a_zz /*,std::string(sid.c_str())*/);
+        }
+  
+      }
+  
+      if(sbFunc.m_problem) {
+        a_out << "tools::sg::plotter::updateFunction_XY(SbPlottableFunction2D) : "
+	      << "problem when getting some function value." << std::endl;
+      }
+      
     } else {
 
       bool hbe = a_bins.has_entries_per_bin();
@@ -3049,9 +3476,7 @@ protected: //vis bins
 
       painting_policy painting = a_data_style.painting;
       if(painting==painting_by_value) {
-        cmaps_t cmaps;
-        cmaps[style_default_colormap::s_default()] = style_default_colormap(); //costly
-        m_bins_cmaps[a_index] = new by_value_colormap(a_out,cmaps,a_data_style.color_mapping);
+        m_bins_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_data_style.color_mapping);
       } else if( (painting==painting_grey_scale) ||
                  (painting==painting_grey_scale_inverse) ||
                  (painting==painting_violet_to_red) ){
@@ -3073,88 +3498,73 @@ protected: //vis bins
       }
 
       if(modeling==modeling_solid()) {
+        //a_out << "tools::sg::update_bins2D_xy : modeling_solid :" << std::endl;
 
-        rep_bins2D_xy_solid(a_data_style,
-                            *(m_bins_cmaps[a_index]),
-                            bins,a_box_x,a_box_y,aZZ);
+        rep_bins2D_xy_solid(a_data_style,*(m_bins_cmaps[a_index]),bins,a_box_x,a_box_y,a_zz);
 
-/*
       } else if(modeling==modeling_points()) {
-        //rep_bins2D_xy_random_one(binsNode,
+        //a_out << "tools::sg::update_bins2D_xy : modeling_points :" << std::endl;
+        rep_bins2D_xy_random_one(a_data_style,bins,a_box_x,a_box_y,bmin,bmax,a_zz/*,std::string(sid)*/);
+
+      } else if(modeling==modeling_wire_boxes()) {
+        //a_out << "tools::sg::update_bins2D_xy : modeling_wire_boxes :" << std::endl;
+	
+        // one node decision :
+      /*bool oneNode = false;
+       {int nlimit = aGraphicStyle.multiNodeLimit.value();
+        if(nlimit!=NoLimit) {
+          oneNode = (number>nlimit?true:false);
+        }}*/
+    
+      /*if(oneNode) {
+          rep_bins2D_xy_wire_box_one(a_data_style,bins,a_box_x,a_box_y,bmin,bmax,std::string(sid));
+        } else {*/
+          rep_bins2D_xy_wire_box(a_data_style,bins,a_box_x,a_box_y,bmin,bmax,a_zz/*,std::string(sid_bin)*/);
+        //}
+	
+      } else if(modeling==modeling_texts()) {
+        //a_out << "tools::sg::update_bins2D_xy : modeling_wire_texts :" << std::endl;
+	
+        // one node decision :
+      //bool oneNode = false;
+     //{int nlimit = aGraphicStyle.multiNodeLimit.value();
+      // if(nlimit!=NoLimit) {
+      //   oneNode = (number>nlimit?true:false);
+      //}}
+    
+        //if(oneNode) {
+        //  rep_bins2D_xy_text_one(binsNode,
         //                        aGraphicStyle,
-        //                        bins,aBoxX,aBoxY,bmin,bmax,SbString(sid));
-*/
-
+        //                        bins,a_box_x,a_box_y,std::string(sid));
+        //} else {
+          rep_bins2D_xy_text(a_data_style,bins,a_box_x,a_box_y/*,std::string(sid_bin)*/);
+       //}
+       
       } else { //default rep modeling==modeling_boxes()
+        //a_out << "tools::sg::update_bins2D_xy : modeling_<else> :" << std::endl;
 
-        rep_bins2D_xy_box(a_data_style,
-                          bins,a_box_x,a_box_y,bmin,bmax,aZZ);
-
-      } /*else if(modeling==SbModeling_wire_boxes) {
-        // one node decision :
-        bool oneNode = false;
-       {int nlimit = aGraphicStyle.multiNodeLimit.value();
-        if(nlimit!=NoLimit) {
-          oneNode = (number>nlimit?true:false);
-        }}
-    
-        if(oneNode) {
-          rep_bins2D_xy_wire_box_one(binsNode,
-                                    aGraphicStyle,
-                                    bins,aBoxX,aBoxY,bmin,bmax,SbString(sid));
-        } else {
-          rep_bins2D_xy_wire_box(binsNode,
-                                aGraphicStyle,
-                                bins,aBoxX,aBoxY,bmin,bmax,
-                                SbString(sid_bin));
-        }
-      } else if(modeling==SbModeling_texts) {
-        // one node decision :
-        bool oneNode = false;
-       {int nlimit = aGraphicStyle.multiNodeLimit.value();
-        if(nlimit!=NoLimit) {
-          oneNode = (number>nlimit?true:false);
-        }}
-    
-        if(oneNode) {
-          rep_bins2D_xy_text_one(binsNode,
-                                aGraphicStyle,
-                                bins,aBoxX,aBoxY,SbString(sid));
-        } else {
-          rep_bins2D_xy_text(binsNode,
-                            aGraphicStyle,
-                            bins,aBoxX,aBoxY,
-                            SbString(sid_bin));
-         }
+        rep_bins2D_xy_box(a_data_style,bins,a_box_x,a_box_y,bmin,bmax,a_zz);
+	
       }
-  */
 
 
     } //end if modeling
   
   }
 
-  void update_func1D_xy(std::ostream& a_out,
-                               const func1D& a_func,
-                               const style& a_style,
-                               const rep_box& a_box_x,
-                               const rep_box& a_box_y,
-                               float aZZ){
+  void update_func1D_xy(std::ostream& a_out,const func1D& a_func,
+                        const style& a_style,const rep_box& a_box_x,const rep_box& a_box_y,float a_zz){
 
-    //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
-    //      << std::endl;
+    //a_out << "debug : tools::sg::plotter::update_func1D_xy : modeling " << a_style.modeling.value() << " :" << std::endl;
 
     if(!a_style.visible) return;
-
-    float xmn = a_func.x_min();
-    float xmx = a_func.x_max();
-    if(xmx<=xmn) {
-      xmn = m_x_axis_data.min_value();
-      xmx = m_x_axis_data.max_value();
-    }
+    
+    float xmn = m_x_axis_data.min_value();
+    float xmx = m_x_axis_data.max_value();
+    
     unsigned int nstp = a_func.x_steps();
-    nstp = nstp <=0 ? 100 : nstp;
-  
+    nstp = nstp <=0 ? curve_number_of_points.value() : nstp;
+      
     float df = (xmx - xmn)/nstp;      
     
     bool problem = false;
@@ -3163,7 +3573,7 @@ protected: //vis bins
       float xx = xmn + ibin * df;
       float val;
       if(!a_func.value(xx,val)) problem = true;
-      points[ibin].set_value(xx,val,aZZ);
+      points[ibin].set_value(xx,val,a_zz);
     }
     if(problem) {
       a_out << "tools::sg::plotter::update_func1D_xy :"
@@ -3171,21 +3581,43 @@ protected: //vis bins
             << std::endl;
     }
   
-    //const std::string& modeling = a_style.modeling;
+    const std::string& modeling = a_style.modeling;
 
-/*  if(modeling==modeling_points()){
-      //uuuu
-    } else */ {
+    if(modeling==modeling_points()){
+      std::vector<float> pts; //npt*3      
+      clip_points_2D(points,a_box_x,a_box_y,pts);
+      if(pts.size()) {
+        //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
+        //      << " ptn " << pts.size()
+        //      << std::endl;
+
+        separator* sep = new separator;
+        m_func_sep.add(sep);
+	
+        rgba* mat = new rgba();
+        mat->color = a_style.color;
+        sep->add(mat);
+
+/*      if(a_style.marker_style.value()==marker_dot) {
+          draw_style* ds = new draw_style;
+          ds->style = draw_style::lines;
+          ds->line_pattern = a_style.line_pattern;
+          ds->line_width = a_style.line_width;
+          sep->add(ds);
+	}*/
+
+        add_markers(*sep,pts,a_style.marker_style.value(),a_style.marker_size.value());
+      }
+
+    } else {
 
       vertices* vtxs = new vertices;
       std::vector<float>& pts = vtxs->xyzs.values(); //npt*3
 
       clip_polyline_2D(points,a_box_x,a_box_y,pts);
       if(pts.size()) {
-        //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
-        //      << " ptn " << pts.size()
-        //      << std::endl;
-
+        //a_out << "debug : tools::sg::plotter::update_func1D_xy : ptn " << pts.size() << std::endl;
+	
         separator* sep = new separator;
         m_func_sep.add(sep);
 
@@ -3207,15 +3639,277 @@ protected: //vis bins
     }  
   }
 
-  void update_points2D_xy(std::ostream& /*a_out*/,
-                               const points2D& a_points,
-                               const style& a_style,
-                               const rep_box& a_box_x,
-                               const rep_box& a_box_y,
-                               float aZZ){
+  static double function_to_contour(double a_X,double a_Y,void* aData) {
+    SbFunc* func = (SbFunc*)aData;
+    if( (a_X<func->m_limits_in[0])||
+        (a_X>func->m_limits_in[1])||
+        (a_Y<func->m_limits_in[2])||
+        (a_Y>func->m_limits_in[3])
+      ) return -FLT_MAX;
+    float value;
+    if(!func->m_func2D->value((float)a_X,(float)a_Y,value)) func->m_problem = true;
+    return double(value);
+  }
+  static double log_function_to_contour(double a_X,double a_Y,void* aData) {
+    SbFunc* func =(SbFunc*)aData;
+    if( (a_X<func->m_limits_in[0])||
+        (a_X>func->m_limits_in[1])||
+        (a_Y<func->m_limits_in[2])||
+        (a_Y>func->m_limits_in[3])
+      ) return -FLT_MAX;
+    float value;
+    if(!func->m_func2D->value((float)a_X,(float)a_Y,value)) func->m_problem = true;
+    return take_log(value);
+  }
 
-    //a_out << "debug : tools::sg::plotter::update_func1D_xy :"
-    //      << std::endl;
+  void update_func2D_xy(std::ostream& a_out,const func2D& a_func,int a_index,style& a_data_style,
+                        const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z,float a_zz){
+    //a_out << "debug : tools::sg::plotter::update_func2D_xy(Function2D) : begin :" << std::endl;
+    if(!a_data_style.visible.value()) return;
+    
+  //  std::string sid;
+  // {std::string sp;
+  //  if(!p2sx(&a_func,sp)){}
+  //  sid = "SbFunction2D/"+sp;}
+  
+    const std::string& modeling = a_data_style.modeling.getValue();
+    painting_policy painting = a_data_style.painting;
+  
+    if( (modeling==modeling_curve()) || (modeling==modeling_filled_curve()) ) {
+  
+      //a_out << "debug : tools::sg::plotter::update_func2D_xy(Function2D) : curve." << std::endl;
+      
+      float zmin = a_box_z.m_pos;
+      float dz = a_box_z.m_width;
+      bool zlog = a_box_z.m_log;
+  
+      float xmn = m_x_axis_data.min_value();
+      float xmx = m_x_axis_data.max_value();
+      float ymn = m_y_axis_data.min_value();
+      float ymx = m_y_axis_data.max_value();
+  
+      clist_contour list_contour;
+      //int nFir = 32;
+      int nFir = 128;
+      list_contour.set_first_grid(nFir,nFir); //Default : 32,32 
+      //int nSec = 256;
+      int nSec = 512; //slower than 256
+      list_contour.set_secondary_grid(nSec,nSec); //Default : 256,256.
+  
+      double limits[4];
+      // User limits :
+      limits[0] = xmn;
+      limits[1] = xmx;    
+      limits[2] = ymn;    
+      limits[3] = ymx;    
+  
+      SbFunc sbFunc;
+      sbFunc.m_func2D = &a_func;
+      sbFunc.m_problem = false;
+      sbFunc.m_bins2D = 0;
+      sbFunc.m_limits_in[0] = limits[0];
+      sbFunc.m_limits_in[1] = limits[1];
+      sbFunc.m_limits_in[2] = limits[2];
+      sbFunc.m_limits_in[3] = limits[3];
+  
+      // Extend the grid to have some borders in order to close contours :
+      int n = nSec - 2 * 10;
+      double dx = (limits[1]-limits[0]) /n;
+      double dy = (limits[3]-limits[2]) /n;
+      limits[0] = limits[0] - 10 * dx;
+      limits[1] = limits[1] + 10 * dx;
+      limits[2] = limits[2] - 10 * dy;
+      limits[3] = limits[3] + 10 * dy;
+  
+      sbFunc.m_limits[0] = limits[0];
+      sbFunc.m_limits[1] = limits[1];
+      sbFunc.m_limits[2] = limits[2];
+      sbFunc.m_limits[3] = limits[3];
+  
+      list_contour.set_limits(limits);
+  
+      if(levels.getNum()) {
+        size_t zn = levels.size();
+        std::vector<double> zs(zn);
+        for(size_t zi=0;zi<zn;zi++) zs[zi] = levels[zi];
+        list_contour.set_planes(zs);
+      } else {
+        unsigned int zn = number_of_levels;
+        if(zn<=0) zn = 1;
+        std::vector<double> zs(zn+1);
+        float zmax = zmin + dz;
+        double zd = (zmax-zmin)/zn;
+        for(unsigned int zi=0;zi<=zn;zi++) zs[zi] = zmin + zi * zd;
+        list_contour.set_planes(zs);
+      }
+  
+      if(zlog) {
+        list_contour.set_field_fcn(log_function_to_contour,(void*)&sbFunc);
+      } else {
+        list_contour.set_field_fcn(function_to_contour,(void*)&sbFunc);
+      }
+  
+#ifdef INLIBS_SG_PLOTTER_TIMING
+      atime _start = atime::now();
+#endif      
+      list_contour.ccontour::generate();
+      
+#ifdef INLIBS_SG_PLOTTER_TIMING
+      a_out << "tools::sg::update_func2D_xy : contour generate elapsed " << atime::elapsed(_start) << "." << std::endl;	    
+      _start = atime::now();
+#endif
+
+      if(!list_contour.compact_strips ()) {
+        a_out << "tools::sg::plotter::update_func2D_xy : clist_contour::compact_strips () : failure." << std::endl;
+      } else {
+#ifdef INLIBS_SG_PLOTTER_TIMING
+        a_out << "tools::sg::update_func2D_xy : contour compact strips elapsed " << atime::elapsed(_start) << "." << std::endl;
+#endif  
+        if( (painting==painting_by_level) || (painting==painting_by_value) ){
+          m_func_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_data_style.color_mapping.value());
+          //bool zlog = a_box_z.m_log;
+          if(zlog) m_func_cmaps[a_index]->set_PAW_coloring();
+        } else {
+          m_func_cmaps[a_index] = new const_colormap(a_data_style.color.value());
+        }
+        
+        if(modeling==modeling_filled_curve()) {
+          rep_contour_xy_filled(a_out,a_data_style,
+                                painting,*(m_func_cmaps[a_index]),
+                                list_contour,a_box_x,a_box_y,a_box_z,a_zz /*,std::string(sid.c_str())*/);
+        } else {
+          rep_contour_xy(a_out,a_data_style,
+                         painting,*(m_func_cmaps[a_index]),
+                         list_contour,a_box_x,a_box_y,a_box_z,a_zz /*,std::string(sid.c_str())*/);
+        }
+      }
+  
+      if(sbFunc.m_problem) {
+        a_out << "tools::sg::plotter::update_func2D_xy : problem when getting some function value." << std::endl;
+      }
+      
+  /*
+    } else if(modeling==SbModeling_polygon) {
+  
+      int npoint = a_func.getNumberOfPoints();
+      if(npoint) {
+  
+      std::vector<vec3f> points(npoint);
+      std::vector<int> controls;
+      for(int count=0;count<npoint;count++) {
+        float xx,yy;
+        bool isControl;
+        a_func.getIthPoint(count,xx,yy,isControl);
+        points[count] = vec3f(xx,yy,a_zz);
+        if(isControl) controls.push_back(count);
+      }
+      //check closure :
+      if((points.size()>=2) && (points[points.size()-1]!=points[0]) ) {
+        points.push_back(points[0]);
+      }
+  
+      project2D(points,a_box_x,a_box_y);
+  
+      bool editable = a_data_style.editable.getValue();
+      if(!editable) {
+        clip<float> clipper;
+       {size_t ptn = points.size();
+        for(size_t index=0;index<ptn;index++) clipper.add(points[index]);}
+      
+        plane<vec3f> plane_xy_bot(vec3f(0, 1,0),vec3f(0,0,0));
+        plane<vec3f> plane_xy_top(vec3f(0,-1,0),vec3f(0,1,0));
+        plane<vec3f> plane_yz_left (vec3f( 1, 0,0),vec3f(0,0,0));
+        plane<vec3f> plane_yz_right(vec3f(-1, 0,0),vec3f(1,0,0));
+  
+        clipper.execute(plane_xy_bot);
+        clipper.execute(plane_xy_top);
+        clipper.execute(plane_yz_left);
+        clipper.execute(plane_yz_right);
+  
+       {int n = clipper.getNumVertices();
+        points.resize(n);
+        for(int index=0;index<n;index++) {
+          clipper.getVertex(index,points[index]);
+        }}
+        if((points.size()>=2) && (points[points.size()-1]!=points[0]) ) {
+          points.push_back(points[0]);
+        }
+      }
+  
+      int ptn = points.size();
+      if(ptn) {
+      vec3f* pts = &(points[0]);
+  
+      SoSceneGraph* separator = new SoSceneGraph();
+      separator->setString(sid.c_str());
+      functionNode->addChild(separator);
+  
+      SoSeparator* sep = new SoSeparator;
+      separator->addChild(sep);
+     
+      sep->addChild(fStyleCache->getFilled());
+      sep->addChild(fStyleCache->getNormalBindingOverall());
+      sep->addChild(fStyleCache->getNormalZ());
+      sep->addChild(fStyleCache->getMaterial(a_data_style.color.getValue(),a_data_style.transparency.getValue()));
+  
+      SoCoordinate3* coordinate3 = new SoCoordinate3;
+      coordinate3->point.setValues(0,ptn,pts);
+      sep->addChild(coordinate3);
+  
+      SoFaceSet* faceSet = new SoFaceSet;
+      faceSet->numVertices.set1Value(0,ptn);
+      sep->addChild(faceSet);
+  
+      sep->addChild(fStyleCache->getLineStyle(SbLinePattern_solid,1));
+      sep->addChild(fStyleCache->getMaterial(SbColor_black,0));
+  
+      //NOTE : we could simply add faceSet again !
+      SoLineSet* lineSet = new SoLineSet;
+      lineSet->numVertices.set1Value(0,ptn);
+      sep->addChild(lineSet);
+  
+      if(editable) {
+        SoSeparator* sep = new SoSeparator;
+        separator->addChild(sep);
+  
+        float scale = 0.05F;
+  
+        for(int index=0;index<controls.size();index++) {
+          int icontrol = controls[index];
+          const vec3f& pt = pts[icontrol];
+  
+          SoSeparator* sp = new SoSeparator;
+          sep->addChild(sp);
+  
+          SoTransform* tsf = new SoTransform();
+          tsf->translation.setValue(pt);
+          tsf->scaleFactor.setValue(scale,scale,scale);
+          sp->addChild(tsf);
+  
+          SoPlotter_dragger* dragger =
+            new SoPlotter_dragger(*coordinate3,icontrol,scale,*this,const_cast<SbPlottableFunction2D&>(a_func),a_box_x,a_box_y,a_zz);
+          SoTools_setDraggerColor(*dragger,SbColor_red);
+          sp->addChild(dragger);
+        }
+      }
+  
+      } //ptn
+      } //npoint
+  
+  */
+    } else {
+      a_out << "tools::sg::plotter::update_func2D_xy :"
+            << " modeling " << modeling
+  	  << " does not apply on Functi  on2D in XY. Valid modelings ared curve, filled_curve and polygon."
+	  << std::endl;  
+    }  
+  
+  }
+
+  void update_points2D_xy(std::ostream& a_out,const points2D& a_points,const style& a_style,
+                          const rep_box& a_box_x,const rep_box& a_box_y,float a_zz) {
+
+    //a_out << "debug : tools::sg::plotter::update_points2D_xy : modeling " << a_style.modeling.value() << std::endl;
 
     if(!a_style.visible) return;
 
@@ -3225,11 +3919,11 @@ protected: //vis bins
     const std::string& modeling = a_style.modeling;
 
     if(modeling==modeling_lines()) {
-      rep_points2D_xy_lines(a_style,a_points,
-                            a_box_x,a_box_y,aZZ);
+      rep_points2D_xy_lines(a_style,a_points,a_box_x,a_box_y,a_zz);
+    } else if(modeling==modeling_curve()) {
+      rep_points2D_xy_curve(a_out,a_style,a_points,a_box_x,a_box_y,a_zz);
     } else {
-      rep_points2D_xy_points(a_style,a_points,
-                            a_box_x,a_box_y,aZZ);
+      rep_points2D_xy_points(a_style,a_points,a_box_x,a_box_y,a_zz);
     }  
   }
 
@@ -3262,22 +3956,21 @@ protected: //vis bins
     }
   }
 
-  void update_bins2D_xyz(std::ostream& a_out,
-                         const bins2D& a_bins,
-                         unsigned int a_index,
-                         const style& a_style,
-                         const rep_box& a_box_x,
-                         const rep_box& a_box_y,
-                         const rep_box& a_box_z){
-
+  void update_bins2D_xyz(std::ostream& a_out,const bins2D& a_bins,unsigned int a_index,const style& a_style,
+                         const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z){
+    //a_out << "tools::sg::update_bins2D_xyz : begin :" << std::endl;
+    
     if(!a_style.visible) return;
 
+    //a_out << "tools::sg::update_bins2D_xyz : visible :" << std::endl;
+    
     unsigned int xnbin = a_bins.x_bins();
     unsigned int ynbin = a_bins.y_bins();
+    if(!xnbin || !ynbin) return;
 
-    //const std::string& modeling = a_style.modeling;
+    const std::string& modeling = a_style.modeling;
 
-    //if(modeling==modeling_boxes()) {
+    if(modeling==modeling_boxes()) {
 
       bool hbe = a_bins.has_entries_per_bin();
 
@@ -3304,12 +3997,7 @@ protected: //vis bins
 
       painting_policy painting = a_style.painting;
       if(painting==painting_by_value) {
-        cmaps_t cmaps;
-        cmaps[style_default_colormap::s_default()] =
-          style_default_colormap(); //costly
-        m_bins_cmaps[a_index] =
-          new by_value_colormap
-            (a_out,cmaps,a_style.color_mapping);
+        m_bins_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_style.color_mapping);
       } else if( (painting==painting_grey_scale) ||
                  (painting==painting_grey_scale_inverse) ||
                  (painting==painting_violet_to_red) ){
@@ -3320,24 +4008,196 @@ protected: //vis bins
           }
         }}
         if(painting==painting_grey_scale) {
-          m_bins_cmaps[a_index] =
-            new grey_scale_colormap(bmin,bmax,50);
+          m_bins_cmaps[a_index] = new grey_scale_colormap(bmin,bmax,50);
         } else if(painting==painting_grey_scale_inverse) {
-          m_bins_cmaps[a_index] =
-            new grey_scale_inverse_colormap(bmin,bmax,50);
+          m_bins_cmaps[a_index] = new grey_scale_inverse_colormap(bmin,bmax,50);
         } else if(painting==painting_violet_to_red) {
-          m_bins_cmaps[a_index] =
-            new violet_to_red_colormap(bmin,bmax,50);
+          m_bins_cmaps[a_index] = new violet_to_red_colormap(bmin,bmax,50);
         }
       } else {        
         m_bins_cmaps[a_index] = new const_colormap(a_style.color);
       }
 
-      rep_bins2D_xyz_box(a_style,*m_bins_cmaps[a_index],
-                         bins,a_box_x,a_box_y,a_box_z,bmin,bmax);
+      rep_bins2D_xyz_box(a_style,*m_bins_cmaps[a_index],bins,a_box_x,a_box_y,a_box_z,bmin,bmax);
 
+    } else if(modeling==modeling_curve()){ //gopaw
 
-    //} //end if modeling
+      std::vector<rep_top_face2D> faces((xnbin-1)*(ynbin-1));
+      size_t facei = 0;
+      unsigned int xnbin_1 = xnbin-1;
+      unsigned int ynbin_1 = ynbin-1;
+      for(unsigned int jbin=0;jbin<ynbin_1;jbin++) { 
+        for(unsigned int ibin=0;ibin<xnbin_1;ibin++) { 
+    
+          float xx_0 = a_bins.bin_lower_edge_x(ibin);
+          float xe_0 = a_bins.bin_upper_edge_x(ibin);
+          float xx_1 = a_bins.bin_lower_edge_x(ibin+1);
+          float xe_1 = a_bins.bin_upper_edge_x(ibin+1);
+  
+          float yy_0 = a_bins.bin_lower_edge_y(jbin);
+          float ye_0 = a_bins.bin_upper_edge_y(jbin);
+          float yy_1 = a_bins.bin_lower_edge_y(jbin+1);
+          float ye_1 = a_bins.bin_upper_edge_y(jbin+1);
+  
+          float xx = (xx_0+xe_0)/2;
+          float xe = (xx_1+xe_1)/2;
+          float yy = (yy_0+ye_0)/2;
+          float ye = (yy_1+ye_1)/2;
+   
+          float val1 = a_bins.bin_Sw(ibin,jbin);
+          float val2 = a_bins.bin_Sw(ibin+1,jbin);
+          float val3 = a_bins.bin_Sw(ibin+1,jbin+1);
+          float val4 = a_bins.bin_Sw(ibin,jbin+1);
+                
+          faces[facei] = rep_top_face2D(xx,xe,yy,ye,val1,val2,val3,val4); 
+          facei++;
+        }
+      }
+
+      painting_policy painting = a_style.painting;
+      if((painting==painting_by_value)||(painting==painting_by_level)) {
+        m_bins_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_style.color_mapping);
+      } else {        
+        m_bins_cmaps[a_index] = new const_colormap(a_style.color);
+      }
+  
+      if(painting==painting_by_level) { //gopaw
+        float bmin;
+        float bmax;
+        a_bins.bins_Sw_range(bmin,bmax);
+        rep_top_face2D_xyz_by_level(a_style,painting,*(m_bins_cmaps[a_index]),
+                                    faces,a_box_x,a_box_y,a_box_z,
+                                    bmin,bmax/*,SbString(sid.c_str())*/);
+        //if(a_style.area_style.value()==area_edged) {
+        //  style gs;  
+        //  gs.light_model = light_model_base_color();
+        //  gs.line_width = 1;
+        //  rep_top_face2D_xyz_line(gs,faces,a_box_x,a_box_y,a_box_z);
+        //}
+	
+      } else {
+  
+        //bool oneNode = false;
+       //{int nlimit = aGraphicStyle.multiNodeLimit.getValue();
+        //if(nlimit!=NoLimit) {
+        //oneNode = ((int)faces.size()>nlimit?true:false);
+        //}}
+    
+        //if(oneNode) {       
+        //repTopFaces2D_xyz_one(binsNode,aGraphicStyle,faces,a_box_x,a_box_y,a_box_z,SbString(sid.c_str()));
+        //} else {
+        bool zlog = a_box_z.m_log;
+        if(zlog) m_func_cmaps[a_index]->set_PAW_coloring();
+        rep_top_face2D_xyz(m_bins_sep,a_style,*(m_bins_cmaps[a_index]),faces,a_box_x,a_box_y,a_box_z);
+  
+        if(a_style.area_style.value()==area_edged) {
+          style gs;  
+          gs.light_model = light_model_base_color();
+          gs.line_width = 1;
+          rep_top_face2D_xyz_line(gs,faces,a_box_x,a_box_y,a_box_z/*,SbString(sid.c_str())*/);
+        }
+  
+        if(painting==painting_uniform) { //gopaw SURF3 (s_SURF_CONT).
+	  
+          base_colormap* cmap = new by_value_colormap(a_out,m_cmaps,a_style.color_mapping);
+          if(cmap->colorn()<=0) {
+            //a_out << "tools::sg::update_bins2D_xyz : bypass rep_contour_xy_filled." << std::endl;
+            delete cmap;
+          } else {
+            //updateBins2D_XY(a_bins,aIndex,*gs,a_box_x,a_box_y,boxZ,1.1F);
+  
+            float zmin = a_box_z.m_pos;
+            float dz = a_box_z.m_width;
+            //bool zlog = a_box_z.m_log;
+  
+            float xmn =  m_x_axis_data.min_value();
+            float xmx =  m_x_axis_data.max_value();
+            float ymn =  m_y_axis_data.min_value();
+            float ymx =  m_y_axis_data.max_value();
+  
+            clist_contour list_contour;
+            //int nFir = 32;
+            int nFir = 128;
+            list_contour.set_first_grid(nFir,nFir); //Default : 32,32 
+            //int nSec = 256;
+            int nSec = 512;
+            list_contour.set_secondary_grid(nSec,nSec); //Default : 256,256.
+  
+            double limits[4];
+            // User limits :
+            limits[0] = xmn;
+            limits[1] = xmx;    
+            limits[2] = ymn;    
+            limits[3] = ymx;    
+
+            SbFunc sbFunc;
+            sbFunc.m_func2D = 0;
+            sbFunc.m_problem = false;
+            sbFunc.m_bins2D = &a_bins;
+            sbFunc.m_limits_in[0] = limits[0];
+            sbFunc.m_limits_in[1] = limits[1];
+            sbFunc.m_limits_in[2] = limits[2];
+            sbFunc.m_limits_in[3] = limits[3];
+
+            // Extend the grid to have some borders in order to close contours :
+            int n = nSec - 2 * 10;
+            double dx = (limits[1]-limits[0]) /n;
+            double dy = (limits[3]-limits[2]) /n;
+            limits[0] = limits[0] - 10 * dx;
+            limits[1] = limits[1] + 10 * dx;
+            limits[2] = limits[2] - 10 * dy;
+            limits[3] = limits[3] + 10 * dy;
+
+            sbFunc.m_limits[0] = limits[0];
+            sbFunc.m_limits[1] = limits[1];
+            sbFunc.m_limits[2] = limits[2];
+            sbFunc.m_limits[3] = limits[3];
+
+            list_contour.set_limits(limits);
+
+            //int zn = numberOfLevels.getValue();
+            int zn = cmap->colorn();
+            if(zn<=0) zn = 1;
+  
+            std::vector<double> zs(zn+1);
+            float zmax = zmin + dz;
+            double zd = (zmax-zmin)/zn;
+            for(int zi=0;zi<=zn;zi++) zs[zi] = zmin + zi * zd;
+            list_contour.set_planes(zs);
+  
+            if(zlog) list_contour.set_field_fcn(log_bins2D_to_contour,(void*)&sbFunc);
+            else     list_contour.set_field_fcn(bins2D_to_contour,(void*)&sbFunc);
+
+            list_contour.ccontour::generate();
+            if(!list_contour.compact_strips ()) {
+              a_out << "tools::sg::plotter::update_bins2D_xyz : clist_contour::compact_strips () : failure." << std::endl;  
+              delete cmap;
+            } else {
+              delete m_bins_cmaps[a_index];
+              m_bins_cmaps[a_index] = cmap; //to visualize the cmap.
+
+              matrix* transf = new matrix;
+              //contour back is at ZZ - 0.01F;
+              transf->set_translate(0,0,1.02F);
+              transf->mul_scale(1,1,0.01F); //applied first.
+	      m_bins_sep.add(transf);
+  
+              style gs;
+              gs.light_model = light_model_base_color();
+              //FIXME gs.transparency = 0.3F;
+  
+              float ZZ = 0.0F;
+
+              rep_contour_xy_filled(a_out,gs,painting_by_level,*cmap,list_contour,
+                                    a_box_x,a_box_y,a_box_z,ZZ/*,SbString(sid.c_str())*/);
+            }
+          }
+  
+        } //uniform
+
+      }
+
+    } //end if modeling
   
   }
 
@@ -3348,22 +4208,20 @@ protected: //vis bins
                          const rep_box& a_box_x,
                          const rep_box& a_box_y,
                          const rep_box& a_box_z){
+    //a_out << "tools::sg::plotter::update_func2D_xyz : begin :" << std::endl;			 
     if(!a_style.visible) return;
-    float xmn = a_func.x_min();
-    float xmx = a_func.x_max();
-    if(xmx<=xmn) {
-      xmn =  m_x_axis_data.min_value();
-      xmx =  m_x_axis_data.max_value();
-    }
+    
+    //a_out << "tools::sg::plotter::update_func2D_xyz : visible :" << std::endl;
+    
+    float xmn = m_x_axis_data.min_value();
+    float xmx = m_x_axis_data.max_value();
+    
     unsigned int nx = a_func.x_steps();
     nx = !nx?20:nx;
   
-    float ymn = a_func.y_min();
-    float ymx = a_func.y_max();
-    if(ymx<=ymn) {
-      ymn =  m_y_axis_data.min_value();
-      ymx =  m_y_axis_data.max_value();
-    }
+    float ymn = m_y_axis_data.min_value();
+    float ymx = m_y_axis_data.max_value();
+    
     unsigned int ny = a_func.y_steps();
     ny = !ny?20:ny;
   
@@ -3421,7 +4279,7 @@ protected: //vis bins
     }
     delete [] vprev;
     if(problem) {
-      a_out << "tools::sg::plotter::update_func2D_XYZ :"
+      a_out << "tools::sg::plotter::update_func2D_xyz :"
             << " problem when getting some function value."
             << std::endl;
     }}
@@ -3429,11 +4287,7 @@ protected: //vis bins
     painting_policy painting = a_style.painting;
   
     if(painting==painting_by_value) {
-      cmaps_t cmaps;
-      cmaps[style_default_colormap::s_default()] =
-        style_default_colormap(); //costly
-      m_func_cmaps[a_index] =
-        new by_value_colormap(a_out,cmaps,a_style.color_mapping);
+      m_func_cmaps[a_index] = new by_value_colormap(a_out,m_cmaps,a_style.color_mapping);
 
     } else if( (painting==painting_grey_scale) ||
                (painting==painting_grey_scale_inverse) ||
@@ -3474,24 +4328,22 @@ protected: //vis bins
     }
   
   // bool oneNode = false;
-  //{int nlimit = aGraphicStyle.multiNodeLimit.getValue();
+  //{int nlimit = a_data_style.multiNodeLimit.getValue();
   // if(nlimit!=NoLimit) {
-  //   oneNode = ((int)faces.size()>nlimit?TRUE:FALSE);
+  //   oneNode = ((int)faces.size()>nlimit?true:false);
   //}}
   
   //char sid[128];
-  //::sprintf(sid,"SbFunction2D/0x%lx",(unsigned long)&aFunction);
+  //::sprintf(sid,"SbFunction2D/0x%lx",(unsigned long)&a_func);
   
   //if(oneNode) {       
-  //  repTopFaces2D_xyz_one(functionNode,aGraphicStyle,
-  //                        faces,aBoxX,aBoxY,aBoxZ,SbString(sid));
+  //  repTopFaces2D_xyz_one(functionNode,a_data_style,
+  //                        faces,a_box_x,a_box_y,a_box_z,std::string(sid));
   //} else
     {
       bool zlog = a_box_z.m_log;
       if(zlog) m_func_cmaps[a_index]->set_PAW_coloring();
-      rep_top_face2D_xyz(a_style,
-                         *(m_func_cmaps[a_index]),
-                         faces,a_box_x,a_box_y,a_box_z);
+      rep_top_face2D_xyz(m_func_sep,a_style,*(m_func_cmaps[a_index]),faces,a_box_x,a_box_y,a_box_z);
     }
   
     float xmin = a_box_x.m_pos;
@@ -3535,7 +4387,7 @@ protected: //vis bins
     xx = verify_log(xx,xmin,dx,xlog);
     yy = verify_log(yy,ymin,dy,ylog);
     vtxs->add(xx,yy,0);}
-  
+
    {float val;
    {if(!a_func.value(xmx,ymn,val)) problem = true;
     val = verify_log(val,zmin,dz,zlog);
@@ -3550,7 +4402,7 @@ protected: //vis bins
     for(int ibin=nx-1;ibin>=0;ibin--) { 
   
       float xx = xmn + ibin * dfx;
-      float xe = xx + dfx;
+      //float xe = xx + dfx;
       float yy = ymn;
          
       float val;
@@ -3560,12 +4412,9 @@ protected: //vis bins
       if(val>1) val = 1;}
   
       xx = verify_log(xx,xmin,dx,xlog);
-      xe = verify_log(xe,xmin,dx,xlog);
       yy = verify_log(yy,ymin,dy,ylog);
-              
-      if((xx>=0)&&(xx<=1)   &&
-         (xe>=0)&&(xe<=1)   &&
-         (yy>=0)&&(yy<=1) ) {
+      
+      if((xx>=0)&&(xx<=1) && (yy>=0)&&(yy<=1) ) {
   
         vtxs->add(xx,yy,val);
   
@@ -3578,7 +4427,7 @@ protected: //vis bins
       m_func_sep.add(sep);
     }
     if(problem) {
-      a_out << "tools::sg::plotter::update_func2D_XYZ :"
+      a_out << "tools::sg::plotter::update_func2D_xyz :"
             << " problem when getting some function value."
             << std::endl;
     }}
@@ -3615,7 +4464,6 @@ protected: //vis bins
   
       float xx = xmn;
       float yy = ymn + jbin * dfy;
-      float ye = yy + dfy;
        
       float val;
      {if(!a_func.value(xx,yy,val)) problem = true;            
@@ -3625,11 +4473,9 @@ protected: //vis bins
   
       xx = verify_log(xx,xmin,dx,xlog);
       yy = verify_log(yy,ymin,dy,ylog);
-      ye = verify_log(ye,ymin,dy,ylog);
               
       if((xx>=0)&&(xx<=1)   &&
-         (yy>=0)&&(yy<=1)   &&
-         (ye>=0)&&(ye<=1)  ) {
+         (yy>=0)&&(yy<=1)   ){
   
         vtxs->add(xx,yy,val);
   
@@ -3654,7 +4500,7 @@ protected: //vis bins
       m_func_sep.add(sep);
     }
     if(problem) {
-      a_out << "tools::sg::plotter::update_func2D_XYZ"
+      a_out << "tools::sg::plotter::update_func2D_xyz :"
             << " problem when getting some function value."
             << std::endl;
     }}
@@ -3708,7 +4554,7 @@ protected: //vis bins
     float xx = wData/2;
     float yy = hData + title_to_axis;
 
-    float zz = ZINFOS();
+    float zz = _zinfos();
 
     vjust vjust = bottom; 
     if(!title_up) {
@@ -3738,7 +4584,7 @@ protected: //vis bins
     if(title.value().empty()) return;
 
     // same plane than infos, then in front of data and grid.
-    float zz = ZINFOS();
+    float zz = _zinfos();
     if(m_shape==xyz) zz = depth*0.5f;
 
     float wbox = width*0.3f;
@@ -3751,7 +4597,7 @@ protected: //vis bins
    {float xx = -width*0.5f+wbox*0.5f+xmargin; //at left.
     float yy = height*0.5f-hbox*0.5F-ymargin; //at top.
     _tsf->set_translate(xx,yy,zz);
-    _tsf->mul_scale(1,1,ZSCALE_TEXT());}
+    _tsf->mul_scale(1,1,_zscale_text());}
     m_title_box_sep.add(_tsf);
 
     sg::text* title_box = new sg::text(m_ttf);
@@ -3832,7 +4678,7 @@ protected: //vis bins
     words(sinfos,"\n",false,ws);
     size_t linen = ws.size()/2;
 
-    float zz = ZINFOS(); //xy
+    float zz = _zinfos(); //xy
     if(m_shape==xyz) zz = depth*0.5f;
 
     float _height = height;
@@ -3845,13 +4691,19 @@ protected: //vis bins
 
     std::string infos_title;
     if(m_infos_style.modeling==infos_modeling_ROOT()) {
+      std::vector<std::string> _ws; //to rm "Name".
       for(size_t index=0;index<linen;index++) {
         const std::string& name = ws[2*index];
+        const std::string& value = ws[2*index+1];
         if(name=="Name") {
-          infos_title = ws[2*index+1];
-          break;
-        }
+          infos_title = value;
+        } else {
+	  _ws.push_back(name);
+	  _ws.push_back(value);
+	}
       }
+      ws = _ws;
+      linen = ws.size()/2;
     }
 
     if(infos_title.size()) {
@@ -3861,7 +4713,7 @@ protected: //vis bins
      {float xx = width*0.5f  - wbox*0.5f -  width*infos_x_margin;
       float yy = _height*0.5f - hbox*0.5F - _height*infos_y_margin;
       _tsf->mul_translate(xx,yy,zz);
-      _tsf->mul_scale(1,1,ZSCALE_TEXT());}
+      _tsf->mul_scale(1,1,_zscale_text());}
       //in case of having infos, the tsf is refined below.
       m_infos_title_sep.add(_tsf);
 
@@ -3927,7 +4779,7 @@ protected: //vis bins
       float yy = _height*0.5f - title_hbox*0.5F - _height*infos_y_margin;
       infos_title_tsf->set_identity();
       infos_title_tsf->mul_translate(xx,yy,zz);
-      infos_title_tsf->mul_scale(1,1,ZSCALE_TEXT());
+      infos_title_tsf->mul_scale(1,1,_zscale_text());
 
       infos_title_text->height = title_hbox;
     }
@@ -3937,12 +4789,13 @@ protected: //vis bins
     float yy = _height*0.5f -hbox*0.5F - _height*infos_y_margin;
     yy -= title_hbox;
     _tsf->set_translate(xx,yy,zz);
-    _tsf->mul_scale(1,1,ZSCALE_TEXT());}
+    _tsf->mul_scale(1,1,_zscale_text());}
 
     m_infos_sep.add(infos);
   }
 
-  void update_legends(std::ostream& /*a_out*/){
+/*
+  void update_legends(std::ostream& a_out){
     if(!legends_visible) return;
 
     if(m_legend_strings.empty()) return;
@@ -3955,7 +4808,7 @@ protected: //vis bins
    {matrix* _tsf = new matrix;
     m_legend_sep.add(_tsf);
 
-    float zz = ZINFOS();
+    float zz = _zinfos();
 
     //set legends layout :
     if(legends_attached_to_infos) { 
@@ -4014,7 +4867,7 @@ protected: //vis bins
       sep->add(_tsf);
 
       //sg::text* text = new sg::text;
-      sg::legend* text = new sg::legend(m_ttf);
+      legend* text = new legend(m_ttf);
       //text->confine = true;
       text->strings.add(m_legend_strings[index]);
       sep->add(text);
@@ -4076,8 +4929,94 @@ protected: //vis bins
         _tsf->set_translate(xx,yy,0);
   
       }
-      _tsf->mul_scale(1,1,ZSCALE_TEXT());
+      _tsf->mul_scale(1,1,_zscale_text());
   
+    }
+  }
+*/
+
+  void update_legends(std::ostream& a_out) {
+    //::printf("debug : update_legends : begin\n");
+    if(m_legend_strings.empty()) return;
+    if(m_legend_strings.size()!=legends_origin.size()) return;
+    if(legends_size.size()!=legends_origin.size()) return;
+    if(legends_origin_unit.size()!=legends_origin.size()) return;
+
+    float zz = _zinfos();
+
+   {matrix* _tsf = new matrix;
+    _tsf->mul_scale(1,1,_zscale_text());
+    m_legend_sep.add(_tsf);}
+    
+    size_t number = m_legend_strings.size();
+    //::printf("debug : update_legends : 001 %lu\n",number);
+    for(size_t index=0;index<number;index++) {
+      const style& _style = legend_style(index);
+      if(!_style.visible) continue;
+      //::printf("debug : update_legends : 002 %lu |%s|\n",index,m_legend_strings[index].c_str());
+
+      separator* sep = new separator;
+      m_legend_sep.add(sep);
+
+      matrix* _tsf = new matrix;
+      sep->add(_tsf);
+
+      //sg::text* text = new sg::text;
+      legend* text = new legend(m_ttf);
+      text->font = _style.font;
+      text->encoding = _style.encoding;
+      text->strings.add(m_legend_strings[index]);
+      text->color = _style.color;
+      text->marker_style = _style.marker_style;
+      text->marker_size = _style.marker_size;
+      text->back_visible = false;
+      sep->add(text);
+      
+      //legends_size is in NDC of [0,width][0,height].
+      float w = width  * legends_size[index][0];
+      float h = height * legends_size[index][1];
+      text->width = w;
+      text->height = h;
+
+      float xxx = w * 0.5f;
+      float yyy = h * 0.5f;
+    
+      if(legends_origin_unit[index]==unit_axis) {        
+    
+        // legends_origin is in axes coordinates. 
+        float x = legends_origin[index][0];
+        float y = legends_origin[index][1];
+    
+        vec3f pos;
+        if(!axis_2_vp(vec3f(x,y,0),pos)) {
+          a_out << "tools::sg::plotter::update_legends : axis_2_vp() failed for x=" << x << ", y=" << y << "." << std::endl; 
+        } else {
+          //pos is in NDC of [0,width][0,height].
+          float xx = width  * (-0.5f+pos[0]);
+          float yy = height * (-0.5f+pos[1]);
+          _tsf->set_translate(xx,yy,zz);
+        }
+    
+      } else { //unit_percent
+        // legends_origin is 
+        // the UR corner of legend region relative 
+        // to UR of plotter region.
+        float xur = legends_origin[index][0];
+        float yur = legends_origin[index][1];
+
+        vec2f ur(1-xur,1-yur);
+
+        float x =  width*ur[0] - w;
+        float y = height*ur[1] - h;
+
+        float xx =  -width*0.5f + x;
+        float yy = -height*0.5f + y;
+
+        _tsf->set_translate(xx,yy,zz);
+      }
+
+      _tsf->mul_translate(xxx,yyy,0); //applied first.
+
     }
   }
 
@@ -4091,7 +5030,7 @@ protected: //vis bins
     float w2 = width*0.5F;
     float h2 = height*0.5F;
 
-    float zz = 0; //in xy, then before first data plane at ZOFFSET()
+    float zz = 0; //in xy, then before first data plane at _zoffset()
     if(m_shape==xyz) zz = -depth*0.5f;
 
    {rgba* mat = new rgba();
@@ -4129,7 +5068,7 @@ protected: //vis bins
       //float d = width*0.005;
       float d = width*m_background_style.line_width;
 
-      zz += ZOFFSET()*0.5f;
+      zz += _zoffset()*0.5f;
 
       vtxs->add(-w2+d,-h2+d,zz);
       vtxs->add( w2-d,-h2+d,zz);
@@ -4156,7 +5095,7 @@ protected: //vis bins
     vtxs->mode = gl::line_strip();
     m_inner_frame_sep.add(vtxs);
 
-    float zz = ZGRID();
+    float zz = _zgrid();
 
     vtxs->add(0,0,zz);
     vtxs->add(1,0,zz);
@@ -4178,46 +5117,27 @@ protected: //vis bins
     ds->line_width = m_inner_frame_style.line_width;
     m_inner_frame_sep.add(ds);
 
-    line_set* ls = new line_set;
+    vertices* ls = new vertices;
+    ls->mode = gl::lines();
     m_inner_frame_sep.add(ls);
+    
     // z bottom :
-   {std::vector<float> line;
-    line.push_back(0);line.push_back(0);line.push_back(0);
-    line.push_back(1);line.push_back(0);line.push_back(0);
-    line.push_back(1);line.push_back(1);line.push_back(0);
-    line.push_back(0);line.push_back(1);line.push_back(0);
-    line.push_back(0);line.push_back(0);line.push_back(0);
-    ls->add(line);}
+    ls->add(0,0,0);ls->add(1,0,0);
+    ls->add(1,0,0);ls->add(1,1,0);
+    ls->add(1,1,0);ls->add(0,1,0);
+    ls->add(0,1,0);ls->add(0,0,0);
 
     // z top :
-   {std::vector<float> line;
-    line.push_back(0);line.push_back(0);line.push_back(1);
-    line.push_back(1);line.push_back(0);line.push_back(1);
-    line.push_back(1);line.push_back(1);line.push_back(1);
-    line.push_back(0);line.push_back(1);line.push_back(1);
-    line.push_back(0);line.push_back(0);line.push_back(1);
-    ls->add(line);}
+    ls->add(0,0,1);ls->add(1,0,1);
+    ls->add(1,0,1);ls->add(1,1,1);
+    ls->add(1,1,1);ls->add(0,1,1);
+    ls->add(0,1,1);ls->add(0,0,1);
 
     // sides along z :
-   {std::vector<float> line;
-    line.push_back(0);line.push_back(0);line.push_back(0);
-    line.push_back(0);line.push_back(0);line.push_back(1);
-    ls->add(line);}
-
-   {std::vector<float> line;
-    line.push_back(1);line.push_back(0);line.push_back(0);
-    line.push_back(1);line.push_back(0);line.push_back(1);
-    ls->add(line);}
-
-   {std::vector<float> line;
-    line.push_back(1);line.push_back(1);line.push_back(0);
-    line.push_back(1);line.push_back(1);line.push_back(1);
-    ls->add(line);}
-
-   {std::vector<float> line;
-    line.push_back(0);line.push_back(1);line.push_back(0);
-    line.push_back(0);line.push_back(1);line.push_back(1);
-    ls->add(line);}
+    ls->add(0,0,0);ls->add(0,0,1);
+    ls->add(1,0,0);ls->add(1,0,1);
+    ls->add(1,1,0);ls->add(1,1,1);
+    ls->add(0,1,0);ls->add(0,1,1);
   }
 
   void update_grid_XY(){
@@ -4241,7 +5161,7 @@ protected: //vis bins
     ds->line_width = m_grid_style.line_width;
     m_grid_sep.add(ds);
 
-    float zz = ZGRID();
+    float zz = _zgrid();
 
     vertices* vtxs = new vertices;
     vtxs->mode = gl::lines();
@@ -4276,13 +5196,13 @@ protected: //vis bins
           for(size_t count=0;count<_number;count++) { 
             xx = m_x_axis.sub_coords[count];
             vtxs->add(xx, 0    ,zz);
-            vtxs->add(xx, width,zz);
+            vtxs->add(xx,_width,zz);
           }
         } else {
           pts.reserve(_number*100*6);
           for(size_t count=0;count<_number;count++) { 
             xx = m_x_axis.sub_coords[count];
-            vtxs->add_dashed_line(xx,0,zz,xx,width,zz,100);
+            vtxs->add_dashed_line(xx,0,zz,xx,_width,zz,100);
           }
         }
       }
@@ -4404,8 +5324,8 @@ protected: //rep
                                const std::vector<rep_bin1D>& a_bins,
                                const rep_box& a_box_x,
                                const rep_box& a_box_y,
-                               float aZZ/*,
-                               const SbString& aID*/){
+                               float a_zz/*,
+                               const std::string& aID*/){
     painting_policy painting = a_style.painting;
 
     float xmin = a_box_x.m_pos;
@@ -4463,8 +5383,8 @@ protected: //rep
       //::sprintf(s,"%d",index);
       sep->setInfos(s);
       //::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-      SbString sid = aID;
-      sid += SbString(s);
+      std::string sid = aID;
+      sid += std::string(s);
       sep->setString(sid);}*/
 
       if(painting==painting_by_value) {
@@ -4485,11 +5405,11 @@ protected: //rep
       vtxs->mode = gl::line_strip();
       sep->add(vtxs);
 
-      vtxs->add(xx,yp,aZZ);
-      vtxs->add(xx,y,aZZ);
-      vtxs->add(xe,y,aZZ);
+      vtxs->add(xx,yp,a_zz);
+      vtxs->add(xx,y,a_zz);
+      vtxs->add(xe,y,a_zz);
       if(index==xnbin-1){
-        vtxs->add(xe,y0,aZZ);
+        vtxs->add(xe,y0,a_zz);
       }
   
       empty = false;
@@ -4508,8 +5428,9 @@ protected: //rep
                             const std::vector<rep_bin1D>& a_bins,
                             const rep_box& a_box_x,
                             const rep_box& a_box_y,
-                            float aZZ/*,
-                            const SbString& aID*/){
+                            float a_zz/*,
+                            const std::string& aID*/){
+    //::printf("debug : tools::sg::plotter::rep_bins1D_xy_points : begin\n");			    
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
     bool xlog = a_box_x.m_log;
@@ -4522,20 +5443,16 @@ protected: //rep
 
     separator* _sep = new separator();
 
-    //separator->addChild(fStyleCache->getPoints());
-    //draw_style* ds = new draw_style;
-    //ds->style.value(draw_style::lines);
-    //ds->line_pattern.value(a_style.line_pattern);
-    //ds->line_width.value(a_style.line_width);
-    //_sep->add(ds);
-
-    draw_style* ds = new draw_style;
-    ds->style = draw_style::points;
-    ds->point_size = a_style.marker_size;
-    _sep->add(ds);
-
+/*  if(a_style.marker_style.value()==marker_dot) {
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::points;
+      ds->point_size = a_style.marker_size;
+      _sep->add(ds);
+    }*/
+    
     bool empty = true;
     colorf clr;
+    vec3f point;
 
     size_t xnbin = a_bins.size();
     for(size_t index=0;index<xnbin;index++) { 
@@ -4548,6 +5465,8 @@ protected: //rep
 
       if((x<0)||(x>1)||(y<0)||(y>1)) continue;
   
+      //::printf("debug : tools::sg::plotter::rep_bins1D_xy_points : x %g, y %g, val %g\n",x,y,val);
+    
       separator* sep = new separator();
       _sep->add(sep);
   
@@ -4557,8 +5476,8 @@ protected: //rep
      // ::sprintf(s,"%d",index);
      // sep->setInfos(s);
      // ::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-     // SbString sid = aID;
-     // sid += SbString(s);
+     // std::string sid = aID;
+     // sid += std::string(s);
      // sep->setString(sid);}
   
       if(painting==painting_by_value) {
@@ -4575,15 +5494,8 @@ protected: //rep
       mat->color = clr;
       sep->add(mat);
 
-      vertices* vtxs = new vertices;
-      vtxs->mode = gl::points();
-      sep->add(vtxs);
-
-      vtxs->add(x,y,aZZ);
-  
-      //SoTools_addPointsToNode(sep,1,points,
-      //  (SbMarkerStyle)a_style.markerStyle,
-      //  a_style.markerSize);
+      point.set_value(x,y,a_zz);
+      add_markers(*sep,1,&point,a_style.marker_style.value(),a_style.marker_size.value());
   
       empty = false;
     }
@@ -4600,7 +5512,7 @@ protected: //rep
                            const std::vector<rep_bin1D>& a_bins,
                            const rep_box& a_box_x,
                            const rep_box& a_box_y,
-                           float aZZ //,const SbString& aID
+                           float a_zz //,const std::string& aID
                                ){
     painting_policy painting = a_style.painting;
 
@@ -4659,8 +5571,8 @@ protected: //rep
     //::sprintf(s,"%d",index);
     //sep->setInfos(s);
     //::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-    //SbString sid = aID;
-    //sid += SbString(s);
+    //std::string sid = aID;
+    //sid += std::string(s);
     //sep->setString(sid);}
   
       if(painting==painting_by_value) {
@@ -4681,10 +5593,10 @@ protected: //rep
       vtxs->mode = gl::triangle_fan();
       sep->add(vtxs);
 
-      vtxs->add(xx,yy,aZZ);
-      vtxs->add(xe,yy,aZZ);
-      vtxs->add(xe,ye,aZZ);
-      vtxs->add(xx,ye,aZZ);
+      vtxs->add(xx,yy,a_zz);
+      vtxs->add(xe,yy,a_zz);
+      vtxs->add(xe,ye,a_zz);
+      vtxs->add(xx,ye,a_zz);
   
       empty = false;
     }
@@ -4700,9 +5612,9 @@ protected: //rep
                                 const base_colormap& a_cmap,
                                 const std::vector<rep_bin1D>& a_bins,
                                 const rep_box& a_box_x,const rep_box& a_box_y,
-                                float aZZ,
-                                bool a_bar_char/*,
-                                const SbString& aID*/){
+                                float a_zz,
+                                bool a_bar_chart/*,
+                                const std::string& aID*/){
 
     painting_policy painting = a_style.painting;
 
@@ -4734,7 +5646,7 @@ protected: //rep
 
       float val = rbin.m_val;
 
-      if(a_bar_char) {
+      if(a_bar_chart) {
         bar_chart(a_style.bar_offset.value(),
                   a_style.bar_width.value(),xx,xe);
       }
@@ -4761,8 +5673,8 @@ protected: //rep
     //::sprintf(s,"%d",index);
     //sep->setInfos(s);
     //::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-    //SbString sid = aID;
-    //sid += SbString(s);
+    //std::string sid = aID;
+    //sid += std::string(s);
     //sep->setString(sid);}
   
       if(painting==painting_by_value) {
@@ -4783,11 +5695,11 @@ protected: //rep
       vtxs->mode = gl::line_strip();
       sep->add(vtxs);
 
-      vtxs->add(xx,yy,aZZ);
-      vtxs->add(xe,yy,aZZ);
-      vtxs->add(xe,ye,aZZ);
-      vtxs->add(xx,ye,aZZ);
-      vtxs->add(xx,yy,aZZ);
+      vtxs->add(xx,yy,a_zz);
+      vtxs->add(xe,yy,a_zz);
+      vtxs->add(xe,ye,a_zz);
+      vtxs->add(xx,ye,a_zz);
+      vtxs->add(xx,yy,a_zz);
   
       empty = false;
     }
@@ -4798,19 +5710,112 @@ protected: //rep
       m_bins_sep.add(_sep);
     }
   }
+
+  void rep_bins1D_xy_lines_one(const style& a_style,const std::vector<rep_bin1D>& a_bins,
+                               const rep_box& a_box_x,const rep_box& a_box_y,float a_zz/*,const SbString& aID*/) {
+    // Draw lines connecting top middle of bins.
+
+    //::printf("debug : rep_bins2D_lines_one\n");
+    
+    int xnbin = a_bins.size();
+    std::vector<vec3f> points(xnbin);
+    for(int index=0;index<xnbin;index++) { 
+      float x = (a_bins[index].m_x_min + a_bins[index].m_x_max)/2;
+      float y = a_bins[index].m_val;
+      points[index] = vec3f(x,y,a_zz);
+    }
   
-  void rep_bins2D_xy_box(
-    const style& a_style,
-    const std::vector<rep_bin2D>& a_bins,
-    const rep_box& a_box_x,
-    const rep_box& a_box_y,
-    float a_bmin,
-    float a_bmax,
-    float aZZ
-  ){
+    vertices* vtxs = new vertices;
+    std::vector<float>& pts = vtxs->xyzs.values(); //npt*3
+  
+    clip_polyline_2D(points,a_box_x,a_box_y,pts);
+    if(pts.size()) {
+      sg::separator* separator = new sg::separator;
+      //separator->setString(aID);
+  
+      rgba* mat = new rgba();
+      mat->color = a_style.color;
+      separator->add(mat);
+    
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = a_style.line_pattern;
+      ds->line_width = a_style.line_width;
+      separator->add(ds);
+    
+      vtxs->mode = gl::line_strip();
+      separator->add(vtxs);
+  
+      m_bins_sep.add(separator);
+    } else {
+      delete vtxs;
+    }
+  }
+
+  void rep_bins1D_xy_curve_one(std::ostream& a_out,const style& a_style,const std::vector<rep_bin1D>& a_bins,
+                               const rep_box& a_box_x,const rep_box& a_box_y,float a_zz/*,const SbString& aID*/){
+    //::printf("debug : rep_bins1D_curve_one\n");
+
+    size_t number = a_bins.size();
+    if(!number) return;
+
+    double* xs = new double[number];
+    double* ys = new double[number];
+    float x,y;
+    for(size_t index=0;index<number;index++) { 
+      x = (a_bins[index].m_x_min + a_bins[index].m_x_max)/2;
+      y = a_bins[index].m_val;
+      xs[index] = x;ys[index] = y;
+    }
+    tools::spline::cubic _spline(a_out,number,xs,ys);    
+  //tools::spline::quintic _spline(a_out,number,xs,ys);    
+    delete [] xs;delete [] ys;
+
+    float xmn = m_x_axis_data.min_value();
+    float xmx = m_x_axis_data.max_value();
+    unsigned int nstp = curve_number_of_points;      
+    float step = (xmx - xmn)/nstp;          
+    std::vector<vec3f> points(nstp+1);
+    for(unsigned int ibin=0;ibin<=nstp;ibin++) { 
+      float xx = xmn + ibin * step;
+      double val = _spline.eval(xx);
+      points[ibin].set_value(xx,float(val),a_zz);
+    }
+  
+    vertices* vtxs = new vertices;
+    std::vector<float>& pts = vtxs->xyzs.values(); //npt*3
+  
+    clip_polyline_2D(points,a_box_x,a_box_y,pts);
+    if(pts.size()) {
+      sg::separator* separator = new sg::separator;
+      //separator->setString(aID);
+  
+      rgba* mat = new rgba();
+      mat->color = a_style.color;
+      separator->add(mat);
+    
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = a_style.line_pattern;
+      ds->line_width = a_style.line_width;
+      separator->add(ds);
+    
+      vtxs->mode = gl::line_strip();
+      separator->add(vtxs);
+  
+      m_bins_sep.add(separator);
+    } else {
+      delete vtxs;
+    }
+
+  }
+
+  
+  void rep_bins2D_xy_box(const style& a_style,const std::vector<rep_bin2D>& a_bins,
+                         const rep_box& a_box_x,const rep_box& a_box_y,float a_bmin,float a_bmax,float a_zz) {
     // Draw box of size proportionnal to bin value.
 
-  //std::cout << "debug : tools::sg::plotter::rep_bins2D_xy_box" << std::endl;
+    //std::cout << "debug : tools::sg::plotter::rep_bins2D_xy_box" << std::endl;
 
     separator* _sep = new separator();
 
@@ -4880,8 +5885,8 @@ protected: //rep
       //::sprintf(s,"%d %d",rbin.fI,rbin.fJ);
       sep->setInfos(s);
       //::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-      SbString sid = aID;
-      sid += SbString(s);
+      std::string sid = aID;
+      sid += std::string(s);
       sep->setString(sid);}*/
   
       vertices* vtxs = new vertices;
@@ -4889,10 +5894,10 @@ protected: //rep
       //sep->add(vtxs);
       _sep->add(vtxs);
   
-      vtxs->add(xx,yy,aZZ);
-      vtxs->add(xe,yy,aZZ);
-      vtxs->add(xe,ye,aZZ);
-      vtxs->add(xx,ye,aZZ);
+      vtxs->add(xx,yy,a_zz);
+      vtxs->add(xe,yy,a_zz);
+      vtxs->add(xe,ye,a_zz);
+      vtxs->add(xx,ye,a_zz);
   
       empty = false;
     }
@@ -4903,15 +5908,126 @@ protected: //rep
       m_bins_sep.add(_sep);
     }
   }
+  
+  void rep_bins2D_xy_wire_box(const style& a_style,
+                              const std::vector<rep_bin2D>& a_bins,
+			      const rep_box& a_box_x,const rep_box& a_box_y,
+			      float a_bmin,float a_bmax,float a_zz
+                              /*,const SbString& aID*/){
+    // Draw box of size proportionnal to bin value.
+  
+    sg::separator* separator = new sg::separator;
+    
+    rgba* mat = new rgba();
+    mat->color = a_style.color;
+    separator->add(mat);
+  
+    draw_style* ds = new draw_style;
+    ds->style = draw_style::lines;
+    ds->line_pattern = a_style.line_pattern;
+    ds->line_width = a_style.line_width;
+    separator->add(ds);
+  
+    vertices* vtxs = new vertices;
+    vtxs->mode = gl::lines();
+    separator->add(vtxs);
+      
+    bool empty = true;
+  
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
 
-  void rep_bins2D_xy_solid(
-    const style& a_style,
-    const base_colormap& a_cmap,
-    const std::vector<rep_bin2D>& a_bins,
-    const rep_box& a_box_x,
-    const rep_box& a_box_y,
-    float aZZ
-  ){
+    float range = a_bmax - a_bmin;
+    size_t number = a_bins.size();
+    for(size_t index=0;index<number;index++) {
+    
+      float xx = a_bins[index].m_x_min;
+      float xe = a_bins[index].m_x_max;
+      float yy = a_bins[index].m_y_min;
+      float ye = a_bins[index].m_y_max;
+      float val = a_bins[index].m_val;
+      
+      float xsize,ysize;
+      if(range>0) {                  
+        // If val = bmax, the box maps the cell.
+        xsize = (val - a_bmin) * (xe - xx) / range;
+        ysize = (val - a_bmin) * (ye - yy) / range;
+      } else {
+        //If range is 0. ; then all bins that have 
+        // entries have same values. Draw box xdbin * ydbin.
+        xsize = xe - xx;
+        ysize = ye - yy;
+      }
+  
+      xx = xx + ((xe-xx) - xsize)/2;
+      xe = xx + xsize;
+      yy = yy + ((ye-yy) - ysize)/2;
+      ye = yy + ysize;
+                                    
+      xx = verify_log(xx ,xmin,dx  ,xlog);
+      xe = verify_log(xe ,xmin,dx  ,xlog);
+      yy = verify_log(yy ,ymin,dy  ,ylog);
+      ye = verify_log(ye ,ymin,dy  ,ylog);
+                                    
+      // Clipping :
+      if(xx>1) continue;
+      if(xe<0) continue;
+      if(xx<0) xx = 0;
+      if(xe>1) xe = 1;
+      if(yy>1) continue;
+      if(ye<0) continue;
+      if(yy<0) yy = 0;
+      if(ye>1) ye = 1;
+  
+      //::printf("debug : zzzzuu : %g %g %g %g\n",xx,xe,yy,ye);
+
+     //{char s[128];
+     // ::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
+     // sep->setInfos(s);}
+     //{std::string sp;
+     // if(!p2sx(sep->getInfos(),sp)){}
+     // std::string sid(aID.getString());
+     // sid += "/"+sp;
+     // sep->setString(sid.c_str());}
+  
+    //vertices* vtxs = new vertices;
+    //vtxs->mode = gl::line_strip();
+    //separator->add(vtxs);      
+    //vtxs->add(xx,yy,a_zz);
+    //vtxs->add(xe,yy,a_zz);
+    //vtxs->add(xe,ye,a_zz);
+    //vtxs->add(xx,ye,a_zz);
+    //vtxs->add(xx,yy,a_zz);
+
+      vtxs->add(xx,yy,a_zz);
+      vtxs->add(xe,yy,a_zz);
+      
+      vtxs->add(xe,yy,a_zz);
+      vtxs->add(xe,ye,a_zz);
+      
+      vtxs->add(xe,ye,a_zz);
+      vtxs->add(xx,ye,a_zz);
+
+      vtxs->add(xx,ye,a_zz);
+      vtxs->add(xx,yy,a_zz);
+
+      empty = false;
+    }
+    
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+
+  void rep_bins2D_xy_solid(const style& a_style,const base_colormap& a_cmap,const std::vector<rep_bin2D>& a_bins,
+                           const rep_box& a_box_x,const rep_box& a_box_y,float a_zz) {
     painting_policy painting = a_style.painting;
 
     separator* _sep = new separator();
@@ -4973,10 +6089,10 @@ protected: //rep
       //sep->add(vtxs);
       _sep->add(vtxs);
   
-      vtxs->add(xx,yy,aZZ);
-      vtxs->add(xe,yy,aZZ);
-      vtxs->add(xe,ye,aZZ);
-      vtxs->add(xx,ye,aZZ);
+      vtxs->add(xx,yy,a_zz);
+      vtxs->add(xe,yy,a_zz);
+      vtxs->add(xe,ye,a_zz);
+      vtxs->add(xx,ye,a_zz);
   
       empty = false;
     }
@@ -4988,12 +6104,487 @@ protected: //rep
     }
   }
 
-  void rep_errors_plus_xy(const style& a_style,
-                             const std::vector<rep_bin1D>& a_bins,
-                             const rep_box& a_box_x,
-                             const rep_box& a_box_y,
-                             const std::vector<float>& a_bars,
-                             float aZ){
+  void rep_bins2D_xy_random_one(const style& a_style,const std::vector<rep_bin2D>& a_bins,
+                                const rep_box& a_box_x,const rep_box& a_box_y,float a_bmin,float a_bmax,float a_zz
+                                /*,const SbString& aID*/){
+    //::printf("debug : rep_bins2D_xy_random_one\n");
+
+    sg::separator* separator = new sg::separator;
+     
+    rgba* mat = new rgba();
+    mat->color = a_style.color;
+    separator->add(mat);
+  
+/*  if(a_style.marker_style.value()==marker_dot) {
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::points;
+      ds->point_size = a_style.marker_size;
+      separator->add(ds);
+    }*/
+    
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    //  Draw for each bins a number of random 
+    // points proportiannal to bins range.
+  
+    float range = a_bmax - a_bmin;
+
+    bool empty = true;    
+    vec3f points[100];
+    
+    size_t number = a_bins.size();
+    for(size_t index=0;index<number;index++) {
+  
+      float xx = a_bins[index].m_x_min;
+      float xe = a_bins[index].m_x_max;
+      float yy = a_bins[index].m_y_min;
+      float ye = a_bins[index].m_y_max;
+      float val = a_bins[index].m_val;
+  
+      // If range is 0. ; then all bins that have entries 
+      // have same values. Draw one point.
+  
+      int nmin = 1;
+      int nmax = 50;
+      int npt = range>0. ? (int)((val - a_bmin)*(nmax-nmin)/range + nmin):1;
+      if(npt>0) {
+        int ipt = 0;                              
+        float xdbin = xe - xx;
+        float ydbin = ye - yy;
+        for(int count=0;count<npt;count++) {
+          float xxx = xx + xdbin * (((float)::rand())/RAND_MAX);
+          float yyy = yy + ydbin * (((float)::rand())/RAND_MAX);
+          xxx = verify_log(xxx ,xmin,dx  ,xlog);
+          yyy = verify_log(yyy ,ymin,dy  ,ylog);
+          if((xxx>=0)&&(xxx<=1)  &&
+             (yyy>=0)&&(yyy<=1)  ) { 
+            points[ipt].set_value(xxx,yyy,a_zz);
+            ipt++;
+          }                                  
+        }
+        if(ipt>0) {
+          add_markers(*separator,ipt,points,a_style.marker_style.value(),a_style.marker_size.value());
+          empty = false;
+        }
+      }
+  
+    }//end for                      
+  
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+  
+  void rep_bins2D_xy_text(
+   const style& //a_style
+  ,const std::vector<rep_bin2D>& //a_bins
+  ,const rep_box& //a_box_x
+  ,const rep_box& //a_box_y
+  //,const SbString& aID
+  ){
+    //Draw box and text for number of entries.          
+    ::printf("debug : rep_bins2D_xy_text : dummy\n");
+  
+  /*
+    sg::separator* separator = new sg::separator;
+  
+    //bool drawWireBoxe = false;
+  
+    bool empty = true;
+    
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    vec3f points[5];
+              
+    for(unsigned int index=0;index<a_bins.size();index++) {
+  
+      float xx = a_bins[index].m_x_min;
+      float xe = a_bins[index].m_x_max;
+      float yy = a_bins[index].m_y_min;
+      float ye = a_bins[index].m_y_max;
+      float val = a_bins[index].m_val;
+  
+      int ival = (int)val;
+      if(ival==0) continue;
+  
+      xx = VerifyLog(xx ,xmin,dx  ,xlog);
+      xe = VerifyLog(xe ,xmin,dx  ,xlog);
+      yy = VerifyLog(yy ,ymin,dy  ,ylog);
+      ye = VerifyLog(ye ,ymin,dy  ,ylog);
+                  
+      // Clipping :
+      if(xx>1) continue;
+      if(xe<0) continue;
+      if(xx<0) xx = 0;
+      if(xe>1) xe = 1;
+      if(yy>1) continue;
+      if(ye<0) continue;
+      if(yy<0) yy = 0;
+      if(ye>1) ye = 1;
+  
+      char sval[32];
+      ::sprintf (sval,"%d",ival);
+      SbString sbval(sval);
+      int charn = sbval.getLength();
+      if(charn<=0) continue;
+  
+      SoSceneGraph* sep = new SoSceneGraph;
+      separator->addChild(sep);
+  
+     {char s[128];
+      ::sprintf(s,"%d %d",a_bins[index].fI,a_bins[index].fJ);
+      sep->setInfos(s);}
+     {std::string sp;
+      if(!p2sx(sep->getInfos(),sp)){}
+      std::string sid(aID.getString());
+      sid += "/"+sp;
+      sep->setString(sid.c_str());}
+  
+      SoMaterial* material = 
+        fStyleCache->getMaterial(a_style.color.getValue(),
+                                 a_style.transparency.getValue());
+      sep->addChild(material);
+  
+      sep->addChild(getLineStyle(a_style));
+  
+      float dx = xe-xx;
+      float dy = ye-yy;
+                    
+      if(drawWireBoxe) {
+        LIST_SET(points,0,xx,yy,0);
+        LIST_SET(points,1,xe,yy,0);
+        LIST_SET(points,2,xe,ye,0);
+        LIST_SET(points,3,xx,ye,0);
+        LIST_SET(points,4,xx,yy,0);
+        coordIndex[0] = icoord + 0;
+        coordIndex[1] = icoord + 1;
+        coordIndex[2] = icoord + 2;
+        coordIndex[3] = icoord + 3;
+        coordIndex[4] = icoord + 4;
+        coordIndex[5] = SO_END_LINE_INDEX;
+    
+        coordinate3->point.setValues(icoord,5,points);
+        icoord += 5;
+   
+        SoIndexedLineSet* lineSet = new SoIndexedLineSet;
+        lineSet->coordIndex.setValues(0,6,coordIndex);
+        sep->addChild(lineSet);
+      }
+  
+      float x = xx + 0.1F * dx;
+      float y = yy + 0.1F * dy;
+      float z = 0;
+      float w = dx * 0.5F;
+      float h = dy * 0.5F;
+  
+      SoTransform* transform = new SoTransform;
+      transform->scaleFactor.setValue(vec3f(w/charn,h,1));
+      transform->translation.setValue(x,y,z);
+      sep->addChild(transform);
+  
+      SoTextHershey* text = new SoTextHershey;
+      text->string.setValue(sbval);
+      sep->addChild (text);
+  
+      empty = false;
+    }
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  */
+  }
+  
+  void rep_contour_xy(std::ostream& a_out,const style& a_style,painting_policy a_painting,
+                      const base_colormap& a_cmap,clist_contour& a_contour,
+		      const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z,float a_zz
+                      /*,const std::string& aID*/){
+    //a_out << "debug : rep_contour_xy :" << std::endl;
+  
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    float zmin = a_box_z.m_pos;
+    float dz = a_box_z.m_width;
+    //bool zlog = a_box_z.m_log;
+  
+    sg::separator* separator = new sg::separator;
+    //separator->setString(aID);
+  
+    draw_style* ds = new draw_style;
+    ds->style.value(draw_style::lines);
+    ds->line_pattern.value(a_style.line_pattern);
+    ds->line_width.value(a_style.line_width);
+    separator->add(ds);
+
+    atb_vertices* vtxs = new atb_vertices;
+    vtxs->mode = gl::lines(); //segments
+    separator->add(vtxs);
+    
+    bool empty = true;
+  
+    for (unsigned int i=0;i<a_contour.get_number_of_planes();i++)  {
+      cline_strip_list* pStripList = a_contour.get_lines(i);
+      if(!pStripList) {
+        a_out << "tools::sg;:plotter::rep_contour_xy : problem with contour." << std::endl;
+        delete separator;
+        return;
+      }
+  
+      //If zlog true, zz is already in log.
+      float val = (float)a_contour.get_plane(i);
+      float zz = val;
+  
+      zz = verify_log(zz,zmin,dz,false);
+      if(zz>1) continue;
+      if(zz<0) continue;
+  
+      colorf _color;
+      if(a_painting==painting_by_value) {
+        a_cmap.get_color(val,_color);
+      } else if(a_painting==painting_by_level) {
+        size_t icol = a_cmap.colorn() ? (i % a_cmap.colorn()) :0;
+        _color = a_cmap.color(icol);
+      } else {
+        _color = a_style.color;
+      }
+  
+      tools_lforcit(cline_strip*,*pStripList,pos) {
+        cline_strip* pStrip = (*pos);
+        if(!pStrip) {
+          a_out << "tools::sg;:plotter::rep_contour_xy : problem with contour." << std::endl;
+          delete separator;
+          return;
+        }
+        if (pStrip->empty()) continue;
+      
+        //// putting point at start and end of strip
+        //// retreiving index
+        //unsigned int index=pStrip->front();
+        //double xb=a_contour.get_xi(index);
+        //double yb=a_contour.get_yi(index);
+        //// retreiving index
+        ////glColor4f(0,0,1,.8f);
+        //index=pStrip->back();
+        //double xe=a_contour.get_xi(index);
+        //double ye=a_contour.get_yi(index);
+
+        bool first = true;
+        float xprev = 0;
+	float yprev = 0;
+        float xx,yy;
+
+        tools_lforcit(unsigned int,*pStrip,pos2) {
+          xx = (float)a_contour.get_xi(*pos2);
+          yy = (float)a_contour.get_yi(*pos2);
+          xx = verify_log(xx,xmin,dx,xlog);
+          yy = verify_log(yy,ymin,dy,ylog);
+          if( 
+              (xx<0) || (xx>1) ||
+              (yy<0) || (yy>1) 
+            ) {
+            // Throw away this strip :
+          }
+	  if(first) {
+	    first = false;
+	  } else {
+            vtxs->add(xprev,yprev,a_zz+zz);
+            vtxs->add(xx,yy,a_zz+zz);
+            vtxs->add_color(_color);
+            vtxs->add_color(_color);
+	  }
+          xprev = xx;
+          yprev = yy;
+  	  
+          empty = false;
+      }  
+    }  
+  
+    }
+  
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+  
+  void rep_contour_xy_filled(std::ostream& a_out,const style& a_style,painting_policy a_painting,
+                             const base_colormap& a_cmap,clist_contour& a_contour,
+			     const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z,float a_zz
+                             /*,const std::string& aID*/){
+    //a_out << "debug : rep_contour_xy_filled :" << std::endl;
+    
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    float zmin = a_box_z.m_pos;
+    float dz = a_box_z.m_width;
+    //bool zlog = a_box_z.m_log;
+  
+    sg::separator* separator = new sg::separator;
+    //separator->setString(aID);
+  
+    vec3f AB,BC,vcross;
+
+    {// Draw background :
+      sg::separator* sep = new sg::separator;
+      separator->add(sep);
+  
+      float zz = a_zz - 0.01F;
+  
+      colorf _color;
+      if(a_cmap.colorn()) {
+        _color = a_cmap.color(0);
+      } else {
+        _color = a_style.color;
+      }
+  
+      rgba* mat = new rgba();
+      mat->color = _color;
+      sep->add(mat);
+  
+      float xx = xmin;
+      float xe = xmin+dx; 
+      float yy = ymin;
+      float ye = ymin+dy; 
+  
+      xx = verify_log(xx,xmin,dx,xlog);
+      xe = verify_log(xe,xmin,dx,xlog);
+      yy = verify_log(yy,ymin,dy,ylog);
+      ye = verify_log(ye,ymin,dy,ylog);
+                            
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::triangle_fan();
+      vtxs->add(xx,yy,zz);
+      vtxs->add(xe,yy,zz);
+      vtxs->add(xe,ye,zz);
+      vtxs->add(xx,ye,zz);
+      sep->add(vtxs);
+      
+    } // End background.
+  
+    bool empty = true;
+    
+    for (unsigned int i=0;i<a_contour.get_number_of_planes();i++)  {
+  
+      cline_strip_list* pStripList = a_contour.get_lines(i);
+      if(!pStripList) {
+        a_out << "tools::sg;:plotter::rep_contour_xy_filled : problem with contour." << std::endl;
+        delete separator;
+        return;
+      }
+  
+      sg::separator* sep = new sg::separator;
+      separator->add(sep);
+  
+      //If zlog true, zz is already in log.
+      float val = (float)a_contour.get_plane(i);
+      float zz = val;
+  
+      zz = verify_log(zz,zmin,dz,false);
+      if(zz>1) continue;
+      if(zz<0) continue;
+  
+      std::vector< std::vector<vec3f> > contourVector;
+
+      tools_lforcit(cline_strip*,*pStripList,pos) {
+        cline_strip* pStrip = (*pos);
+        if(pStrip->size() >2) {
+          std::vector<vec3f> v;
+          for (cline_strip::iterator pos2=pStrip->begin();pos2 != pStrip->end();pos2++) {
+            unsigned int index=(*pos2);
+            float xx = (float)a_contour.get_xi(index);
+            float yy = (float)a_contour.get_yi(index);
+            xx = verify_log(xx,xmin,dx,xlog);
+            yy = verify_log(yy,ymin,dy,ylog);
+            v.push_back(vec3f(xx,yy,a_zz+zz));
+          }
+          contourVector.push_back(v);
+        }
+      }
+  
+      tess_contour tessContour(a_out);
+      std::vector<tess_triangle> tris = tessContour.getFilledArea(contourVector);
+  
+      if(!tris.size()) continue;
+  
+      colorf _color;
+      if(a_painting==painting_by_value) {
+        a_cmap.get_color(val,_color);
+      } else if(a_painting==painting_by_level) {
+        int icol = a_cmap.colorn() ? (i % a_cmap.colorn()) :0;
+        _color = a_cmap.color(icol);
+      } else {
+        _color = a_style.color;
+      }
+  
+      atb_vertices* vtxs = new atb_vertices; //PAW_C/color.kumac. It needs back face.
+      vtxs->mode = gl::triangles();
+      sep->add(vtxs);
+
+      for(size_t itri=0;itri<tris.size();itri++) {
+        tess_triangle& tri = tris[itri];
+	AB.set_value((float)(tri.pointB[0]-tri.pointA[0]),
+                     (float)(tri.pointB[1]-tri.pointA[1]),
+                     (float)(tri.pointB[2]-tri.pointA[2]));
+        BC.set_value((float)(tri.pointC[0]-tri.pointB[0]),
+                     (float)(tri.pointC[1]-tri.pointB[1]),
+                     (float)(tri.pointC[2]-tri.pointB[2]));
+        AB.cross(BC,vcross);
+	if(vcross.z()>=0) {
+          vtxs->add((float)tri.pointA[0],(float)tri.pointA[1],(float)tri.pointA[2]);
+          vtxs->add((float)tri.pointB[0],(float)tri.pointB[1],(float)tri.pointB[2]);
+          vtxs->add((float)tri.pointC[0],(float)tri.pointC[1],(float)tri.pointC[2]);
+	} else {
+          vtxs->add((float)tri.pointA[0],(float)tri.pointA[1],(float)tri.pointA[2]);
+          vtxs->add((float)tri.pointC[0],(float)tri.pointC[1],(float)tri.pointC[2]);
+          vtxs->add((float)tri.pointB[0],(float)tri.pointB[1],(float)tri.pointB[2]);
+	}
+        vtxs->add_color(_color);
+        vtxs->add_color(_color);
+        vtxs->add_color(_color);
+      }
+  
+      empty = false;
+  
+    }
+  
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+  
+  void rep_errors_plus_xy(std::ostream& /*a_out*/,const style& a_style,const std::vector<rep_bin1D>& a_bins,
+                          const rep_box& a_box_x,const rep_box& a_box_y,const std::vector<float>& a_bars,float aZ) {
+    //a_out << "debug : rep_erros_plus_xy : begin :" << std::endl;		       
     separator* _sep = new separator();
     //_sep->setString(aID);
 
@@ -5087,12 +6678,9 @@ protected: //rep
     }
   }
 
-  void rep_errors_I_xy(const style& a_style,
-                             const std::vector<rep_bin1D>& a_bins,
-                             const rep_box& a_box_x,
-                             const rep_box& a_box_y,
-                             const std::vector<float>& a_bars,
-                             float aZ){
+  void rep_errors_I_xy(std::ostream& /*a_out*/,const style& a_style,const std::vector<rep_bin1D>& a_bins,
+                       const rep_box& a_box_x,const rep_box& a_box_y,const std::vector<float>& a_bars,float aZ){
+    //a_out << "debug : rep_erros_I_xy : begin :" << std::endl;		       
     separator* _sep = new separator();
     //_sep->setString(aID);
 
@@ -5139,7 +6727,7 @@ protected: //rep
             
       bar_min = verify_log(bar_min,ymin,dy,ylog);
       bar_max = verify_log(bar_max,ymin,dy,ylog);
-  
+      
       if(xe<0) continue;
       if(xx>1) continue;
       if(xx<0) xx = 0;
@@ -5189,11 +6777,131 @@ protected: //rep
     }
   }
 
-  void rep_points2D_xy_lines(const style& a_style,
-                                    const points2D& a_points,
-                                    const rep_box& a_box_x,
-                                    const rep_box& a_box_y,
-                                    float aZZ){
+  void rep_hatch1D_xy(const style& a_style,
+                      const std::vector<rep_bin1D>& a_bins,
+		      const rep_box& a_box_x,const rep_box& a_box_y,float a_zz,
+		      bool a_bar_chart){
+    //printf("debug : inlib::sg;:plotter::repHatch1D_xy : zz %g barchart %d sw %g\n",a_zz,aBarChart,a_style.stripWidth.getValue());
+    
+    separator* _sep = new separator;
+
+    rgba* mat = new rgba();
+    mat->color = a_style.color;
+    _sep->add(mat);
+
+    draw_style* ds = new draw_style;
+    if(a_style.strip_width.value()==0) {  
+      ds->style = draw_style::lines;
+      ds->line_pattern = line_solid;
+      ds->line_width = a_style.line_width;
+    } else {
+      ds->style = draw_style::filled;
+      //ds->cull_face = true;
+    }
+    _sep->add(ds);
+	    
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+
+    bool empty = true;
+
+    vec3f points[5];
+    size_t xnbin = a_bins.size();
+    for(size_t index=0;index<xnbin;index++) { 
+      float xx = a_bins[index].m_x_min;
+      float xe = a_bins[index].m_x_max;
+      float yy = a_bins[index].m_v_min;
+      float ye = a_bins[index].m_val;
+      if(ye<yy) {
+        yy = a_bins[index].m_val;
+        ye = a_bins[index].m_v_min;
+      }
+
+      if(a_bar_chart) bar_chart(a_style.bar_offset.value(),a_style.bar_width.value(),xx,xe);
+
+      xx = verify_log(xx,xmin,dx,xlog);
+      xe = verify_log(xe,xmin,dx,xlog);
+      yy = verify_log(yy,ymin,dy,ylog);
+      ye = verify_log(ye,ymin,dy,ylog);
+
+      // Clipping :
+      if(xx>1) continue;
+      if(xe<0) continue;
+      if(xx<0) xx = 0;
+      if(xe>1) xe = 1;
+      if(yy>1) continue;
+      if(ye<0) continue;
+      if(yy<0) yy = 0;
+      if(ye>1) ye = 1;  
+
+      points[0].set_value(xx,yy,a_zz);
+      points[1].set_value(xe,yy,a_zz);
+      points[2].set_value(xe,ye,a_zz);
+      points[3].set_value(xx,ye,a_zz);
+      points[4].set_value(xx,yy,a_zz);
+
+      //FIXME : have picking a hatch picks also the bin.
+      
+      hatcher _hatcher;
+      _hatcher.set_offset_point(vec3f(0,0,a_zz));
+      _hatcher.set_angle(a_style.angle.value());
+      _hatcher.set_spacing(a_style.spacing.value()); 
+      if(!_hatcher.set_strip_width(a_style.strip_width.value())) {}
+
+      bool res = _hatcher.check_polyline(points,4);      
+      if(res) res = _hatcher.compute_polyline(points,4);
+
+      size_t numPoints = _hatcher.points().size();
+      size_t numVertices = _hatcher.vertices().size();
+      if((res) && numPoints && numVertices) {
+
+          const std::vector<vec3f>& _points = _hatcher.points();
+	
+          if(a_style.strip_width.value()==0) {  
+
+            size_t ipt = 0;
+	    tools_vforcit(unsigned int,_hatcher.vertices(),itv) {
+              vertices* vtxs = new vertices;
+              vtxs->mode = gl::line_strip();
+              for(size_t _index=0;_index<(*itv);_index++) {
+                vtxs->add(_points[ipt]);
+		ipt++;
+       	      }
+              _sep->add(vtxs);
+              empty = false;
+	    }
+
+          } else {
+            size_t ipt = 0;
+	    tools_vforcit(unsigned int,_hatcher.vertices(),itv) {
+              vertices* vtxs = new vertices;
+              vtxs->mode = gl::triangle_fan();
+              for(size_t _index=0;_index<(*itv);_index++) {
+                vtxs->add(_points[ipt]);
+		ipt++;
+       	      }
+              _sep->add(vtxs);
+              empty = false;
+	    }
+	  }
+	  
+      }
+    }
+    if(empty) {
+      delete _sep;
+    } else {
+      m_bins_sep.add(_sep);
+    }
+  }
+
+  void rep_points2D_xy_lines(const style& a_style,const points2D& a_points,
+                             const rep_box& a_box_x,const rep_box& a_box_y,float a_zz){
+    //::printf("debug : rep_points2D_xy_lines\n");				      
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
     bool xlog = a_box_x.m_log;
@@ -5220,18 +6928,14 @@ protected: //rep
 
     bool empty = true;
 
+    float x,y;
     unsigned int number = a_points.points();
     for(unsigned int index=0;index<number;index++) { 
-      float x,y;
       a_points.ith_point(index,x,y);
-      
       x = verify_log(x,xmin,dx,xlog);
       y = verify_log(y,ymin,dy,ylog);
-
       if((x<0)||(x>1)||(y<0)||(y>1)) continue;
-
-      vtxs->add(x,y,aZZ);
-  
+      vtxs->add(x,y,a_zz);  
       empty = false;
     }
   
@@ -5242,11 +6946,64 @@ protected: //rep
     }
   }
 
-  void rep_points2D_xy_points(const style& a_style,
-                               const points2D& a_points,
-                               const rep_box& a_box_x,
-                               const rep_box& a_box_y,
-                               float aZZ){
+  void rep_points2D_xy_curve(std::ostream& a_out,const style& a_style,const points2D& a_points,
+                             const rep_box& a_box_x,const rep_box& a_box_y,float a_zz){
+    //::printf("debug : rep_points2D_xy_curve\n");				      
+    unsigned int number = a_points.points();
+    if(!number) return;
+
+    double* xs = new double[number];
+    double* ys = new double[number];
+    float x,y;
+   {for(unsigned int index=0;index<number;index++) { 
+      a_points.ith_point(index,x,y);
+      xs[index] = x;ys[index] = y;
+    }}    
+    tools::spline::cubic _spline(a_out,number,xs,ys);    
+  //tools::spline::quintic _spline(a_out,number,xs,ys);    
+    delete [] xs;delete [] ys;
+
+    float xmn = m_x_axis_data.min_value();
+    float xmx = m_x_axis_data.max_value();
+    unsigned int nstp = curve_number_of_points;      
+    float step = (xmx - xmn)/nstp;          
+    std::vector<vec3f> points(nstp+1);
+    for(unsigned int ibin=0;ibin<=nstp;ibin++) { 
+      float xx = xmn + ibin * step;
+      double val = _spline.eval(xx);
+      points[ibin].set_value(xx,float(val),a_zz);
+    }
+  
+    vertices* vtxs = new vertices;
+    std::vector<float>& pts = vtxs->xyzs.values(); //npt*3
+  
+    clip_polyline_2D(points,a_box_x,a_box_y,pts);
+    if(pts.size()) {
+      sg::separator* separator = new sg::separator;
+      //separator->setString(aID);
+  
+      rgba* mat = new rgba();
+      mat->color = a_style.color;
+      separator->add(mat);
+    
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = a_style.line_pattern;
+      ds->line_width = a_style.line_width;
+      separator->add(ds);
+    
+      vtxs->mode = gl::line_strip();
+      separator->add(vtxs);
+  
+      m_points_sep.add(separator);
+    } else {
+      delete vtxs;
+    }
+
+  }
+
+  void rep_points2D_xy_points(const style& a_style,const points2D& a_points,
+                              const rep_box& a_box_x,const rep_box& a_box_y,float a_zz) {
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
     bool xlog = a_box_x.m_log;
@@ -5272,20 +7029,15 @@ protected: //rep
 
     bool empty = true;
 
+    float x,y;
     unsigned int number = a_points.points();
     for(unsigned int index=0;index<number;index++) { 
-      float x,y;
-      a_points.ith_point(index,x,y);
-      
+      a_points.ith_point(index,x,y);      
       //float val = a_bins[index].m_val;
-
       x = verify_log(x,xmin,dx,xlog);
       y = verify_log(y,ymin,dy,ylog);
-
-      if((x<0)||(x>1)||(y<0)||(y>1)) continue;
-  
-      vtxs->add(x,y,aZZ);
-  
+      if((x<0)||(x>1)||(y<0)||(y>1)) continue;  
+      vtxs->add(x,y,a_zz);  
       empty = false;
     }
   
@@ -5296,16 +7048,8 @@ protected: //rep
     }
   }
 
-  void rep_bins2D_xyz_box(
-    const style& a_style,
-    const base_colormap& a_cmap,
-    const std::vector<rep_bin2D>& a_bins,
-    const rep_box& a_box_x,
-    const rep_box& a_box_y,
-    const rep_box& a_box_z,
-    float a_bmin,
-    float //a_bmax
-  ){
+  void rep_bins2D_xyz_box(const style& a_style,const base_colormap& a_cmap,const std::vector<rep_bin2D>& a_bins,
+                          const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z,float a_bmin,float /*a_bmax*/){
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
     bool xlog = a_box_x.m_log;
@@ -5386,8 +7130,8 @@ protected: //rep
       //::sprintf(s,"%d %d",rbin.fI,rbin.fJ);
       sep->setInfos(s);
       //::sprintf(s,"/0x%lx",(unsigned long)sep->getInfos());
-      SbString sid = aID;
-      sid += SbString(s);
+      std::string sid = aID;
+      sid += std::string(s);
       sep->setString(sid);}*/
   
       float sx = xe-xx;
@@ -5414,14 +7158,9 @@ protected: //rep
     }
   }
 
-  void rep_top_face2D_xyz(
-    const style& a_style,
-    const base_colormap& a_cmap,
-    const std::vector<rep_top_face2D>& a_faces,
-    const rep_box& a_box_x,
-    const rep_box& a_box_y,
-    const rep_box& a_box_z
-  ){
+  void rep_top_face2D_xyz(separator& a_sep,const style& a_style,const base_colormap& a_cmap,
+                          const std::vector<rep_top_face2D>& a_faces,
+			  const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z) {
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
     bool xlog = a_box_x.m_log;
@@ -5440,12 +7179,6 @@ protected: //rep
 
     separator* _sep = new separator();
 
-    //if(a_style.lightModel.getValue()==SbLightModel_base_color) { //OpenPAW
-    //  separator->addChild(fStyleCache->getLightModelBaseColor());
-    //}
-
-    //_sep->add(new normal);
-
     //draw_style* ds = new draw_style;
     //ds->style = draw_style::filled;
     //ds->cull_face = true;
@@ -5456,7 +7189,7 @@ protected: //rep
     vtxs->do_back = true;
     vtxs->epsilon = 1e-6f;
     _sep->add(vtxs);
-  
+
     colorf clr;
     vec3f nm;
 
@@ -5510,7 +7243,7 @@ protected: //rep
           clr = a_style.color;
         }
 
-        //if(aStyle.areaStyle.getValue()==SoStyle::EDGED) { //OpenPAW.
+        //if(a_style.area_style.getValue()==SoStyle::EDGED) { //OpenPAW.
         //}
   
         //////////////////////////////////////
@@ -5555,29 +7288,675 @@ protected: //rep
     if(empty) {
       delete _sep;
     } else {
-      m_func_sep.add(_sep);
+      a_sep.add(_sep);
     }
   }
+  
+  void rep_top_face2D_xyz_line(const style& /*a_style*/,const std::vector<rep_top_face2D>& a_top_faces,
+                               const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z/*,const SbString& aID*/){
+    //::printf("debug : rep_top_face2D_xyz_line\n");
 
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    float zmin = a_box_z.m_pos;
+    float dz = a_box_z.m_width;
+    bool zlog = a_box_z.m_log;
+  
+    sg::separator* separator = new sg::separator;
+    bool empty = true;
+    
+    rgba* mat = new rgba();
+    mat->color = colorf_black();
+    separator->add(mat);
+        
+    draw_style* ds = new draw_style;
+    ds->style = draw_style::lines;
+    ds->line_pattern = line_solid;
+    ds->line_width = 1;
+    separator->add(ds);
+  
+    vertices* vtxs = new vertices;
+    vtxs->mode = gl::lines();
+    separator->add(vtxs);
+  
+    float zepsilon = 0.02f; //for pawex9.kumac top-left and bottom-right.
+  
+    size_t number = a_top_faces.size();
+    for(size_t index=0;index<number;index++) {
+      float xx = a_top_faces[index].m_x_min;
+      float xe = a_top_faces[index].m_x_max;
+      float yy = a_top_faces[index].m_y_min;
+      float ye = a_top_faces[index].m_y_max;
+      float val1 = a_top_faces[index].m_v1;
+      float val2 = a_top_faces[index].m_v2;
+      float val3 = a_top_faces[index].m_v3;
+      float val4 = a_top_faces[index].m_v4;
+  
+      //float val = val1;
+  
+      val1 = verify_log(val1,zmin,dz,zlog);
+      val2 = verify_log(val2,zmin,dz,zlog);
+      val3 = verify_log(val3,zmin,dz,zlog);
+      val4 = verify_log(val4,zmin,dz,zlog);
+      xx = verify_log(xx,xmin,dx,xlog);
+      xe = verify_log(xe,xmin,dx,xlog);
+      yy = verify_log(yy,ymin,dy,ylog);
+      ye = verify_log(ye,ymin,dy,ylog);
+              
+      if(val1<0) val1 = 0;
+      if(val1>1) val1 = 1;
+  
+      if(val2<0) val2 = 0;
+      if(val2>1) val2 = 1;
+  
+      if(val3<0) val3 = 0;
+      if(val3>1) val3 = 1;
+  
+      if(val4<0) val4 = 0;
+      if(val4>1) val4 = 1;
+  
+      if((xx>=0)&&(xx<=1)   &&
+         (xe>=0)&&(xe<=1)   &&
+         (yy>=0)&&(yy<=1)   &&
+         (ye>=0)&&(ye<=1)  ) {
+  
+        vtxs->add(xx,ye,val4+zepsilon);
+        vtxs->add(xx,yy,val1+zepsilon);
+        
+        vtxs->add(xx,yy,val1+zepsilon);
+        vtxs->add(xe,yy,val2+zepsilon);
+        
+        vtxs->add(xe,yy,val2+zepsilon);
+        vtxs->add(xe,ye,val3+zepsilon);
+        
+        vtxs->add(xe,ye,val3+zepsilon);
+        vtxs->add(xx,ye,val4+zepsilon);
+        
+        empty = false;
+  
+      }              
+    }
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+  
+  void rep_top_face2D_xyz_by_level(const style& /*a_style*/,painting_policy /*a_painting*/,const base_colormap& a_cmap,
+                                   const std::vector<rep_top_face2D>& a_top_faces,
+                                   const rep_box& a_box_x,const rep_box& a_box_y,const rep_box& a_box_z,
+                                   float a_bmin,float a_bmax/*,const SbString& aID*/){  
+    //::printf("debug : rep_top_face2D_xyz_by_level\n");  
+    
+    size_t ncol = a_cmap.colorn();
+    if(!ncol) return;
+  
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+  
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+  
+    float zmin = a_box_z.m_pos;
+    float dz = a_box_z.m_width;
+    bool zlog = a_box_z.m_log;
+  
+    float zz = a_bmin;
+    zz = verify_log(zz,zmin,dz,zlog);
+    float zmx = a_bmax;
+    zmx = verify_log(zmx,zmin,dz,zlog);
+  
+    bool empty = true;
+          
+    sg::separator* separator = new sg::separator;
+    //separator->setString(aID);
+  
+    atb_vertices* tris = new atb_vertices;
+    tris->mode = gl::triangles();
+    tris->do_back = true;
+    tris->epsilon = 1e-6f;
+    separator->add(tris);
+  
+    colorf _color;
+    vec3f _point;
+  
+    float d_z = (zmx-zz)/ncol;
+  
+    size_t number = a_top_faces.size();
+  
+    for(size_t icol=0;icol<ncol;icol++) {
+  
+      //sg::separator* sep = new sg::separator;
+      //bool sep_empty = true;
+  
+      _color = a_cmap.color(icol);
+  
+      for(size_t index=0;index<number;index++) {
+        float xx = a_top_faces[index].m_x_min;
+        float xe = a_top_faces[index].m_x_max;
+        float yy = a_top_faces[index].m_y_min;
+        float ye = a_top_faces[index].m_y_max;
+        float val1 = a_top_faces[index].m_v1;
+        float val2 = a_top_faces[index].m_v2;
+        float val3 = a_top_faces[index].m_v3;
+        float val4 = a_top_faces[index].m_v4;
+    
+        //float val = val1;
+    
+        val1 = verify_log(val1,zmin,dz,zlog);
+        val2 = verify_log(val2,zmin,dz,zlog);
+        val3 = verify_log(val3,zmin,dz,zlog);
+        val4 = verify_log(val4,zmin,dz,zlog);
+        xx = verify_log(xx,xmin,dx,xlog);
+        xe = verify_log(xe,xmin,dx,xlog);
+        yy = verify_log(yy,ymin,dy,ylog);
+        ye = verify_log(ye,ymin,dy,ylog);
+                
+        if(val1<0) val1 = 0;
+        if(val1>1) val1 = 1;
+    
+        if(val2<0) val2 = 0;
+        if(val2>1) val2 = 1;
+    
+        if(val3<0) val3 = 0;
+        if(val3>1) val3 = 1;
+    
+        if(val4<0) val4 = 0;
+        if(val4>1) val4 = 1;
+    
+        if((xx>=0)&&(xx<=1)   &&
+           (xe>=0)&&(xe<=1)   &&
+           (yy>=0)&&(yy<=1)   &&
+           (ye>=0)&&(ye<=1)  ) {
+    
+          //////////////////////////////////////
+          //////////////////////////////////////
+         {clip<vec3f> clipper;
+          clipper.add(vec3f(xx,ye,val4));
+          clipper.add(vec3f(xx,yy,val1));
+          clipper.add(vec3f(xe,yy,val2));	
+          //val[n] had been z normalized.
+          float z1 = zz+d_z*icol;
+          float z2 = z1+d_z;
+          plane<vec3f> plane_z_bot(vec3f(0,0,1),vec3f(0,0,z1));
+          plane<vec3f> plane_z_top(vec3f(0,0,-1),vec3f(0,0,z2));
+          clipper.execute(plane_z_bot);
+          clipper.execute(plane_z_top);
+  
+          const std::vector<vec3f>& result = clipper.result();
+          if(result.size()) {
+            plane<vec3f> plane1(vec3f(xx,ye,val4),vec3f(xx,yy,val1),vec3f(xe,yy,val2));
+            if(result.size()==3) {
+              tools_vforcit(vec3f,result,it) {
+                tris->add(*it);
+                tris->add_color(_color);
+                tris->add_normal(plane1.normal());
+              }
+            } else {
+              atb_vertices* vtxs = new atb_vertices; //FIXME : ouch! optimize.
+              vtxs->mode = gl::triangle_fan();
+              vtxs->do_back = true;
+              vtxs->epsilon = 1e-6f;
+              separator->add(vtxs);    
+              tools_vforcit(vec3f,result,it) {
+                vtxs->add(*it);
+                vtxs->add_color(_color);
+                vtxs->add_normal(plane1.normal());
+              }
+    	  }
+            empty = false;
+            //sep_empty = false;
+          }}
+  	  
+          //////////////////////////////////////
+          //////////////////////////////////////
+         {clip<vec3f> clipper;
+          clipper.add(vec3f(xe,yy,val2));
+          clipper.add(vec3f(xe,ye,val3));
+          clipper.add(vec3f(xx,ye,val4));
+          //val[n] had been z normalized.
+          float z1 = zz+d_z*icol;
+          float z2 = z1+d_z;
+          plane<vec3f> plane_z_bot(vec3f(0,0,1),vec3f(0,0,z1));
+          plane<vec3f> plane_z_top(vec3f(0,0,-1),vec3f(0,0,z2));
+          clipper.execute(plane_z_bot);
+          clipper.execute(plane_z_top);
+    
+          const std::vector<vec3f>& result = clipper.result();
+          if(result.size()) {
+            plane<vec3f> plane2(vec3f(xe,yy,val2),vec3f(xe,ye,val3),vec3f(xx,ye,val4));
+            if(result.size()==3) {
+              tools_vforcit(vec3f,result,it) {
+                tris->add(*it);
+                tris->add_color(_color);
+                tris->add_normal(plane2.normal());
+              }
+            } else {
+              atb_vertices* vtxs = new atb_vertices; //FIXME : ouch! optimize.
+              vtxs->mode = gl::triangle_fan();
+              vtxs->do_back = true;
+              vtxs->epsilon = 1e-6f;
+              separator->add(vtxs);	  
+              tools_vforcit(vec3f,result,it) {
+                vtxs->add(*it);
+                vtxs->add_color(_color);
+                vtxs->add_normal(plane2.normal());
+              }      
+            }
+            empty = false;
+            //sep_empty = false;
+          }}
+        }              
+  
+      } //index faces
+  
+      //if(sep_empty) {
+      //  delete sep;
+      //} else {
+      //  separator->add(sep);
+      //}
+  
+    } //icol
+    
+    if(empty) {
+      delete separator;
+    } else {
+      m_bins_sep.add(separator);
+    }
+  }
+  
+  // for OpenPAW /GRAPHICS/PRIMITIVES/TEXT
+  // for OpenPAW /GRAPHICS/PRIMITIVES/ITX
+  void update_primitive_text(const plottable_text& a_obj){
+    float z = xy_depth.value()*1.1F;
+
+    vec3f pos;
+    axis_2_data_frame(vec3f(a_obj.m_X,a_obj.m_Y,z),pos); //FIXME return FALSE
+  
+    xx_2_yy(pos,pos);
+  
+    separator* sep = new separator;
+  
+    rgba* mat = new rgba();
+    mat->color = a_obj.m_TXCI;
+    sep->add(mat);
+      
+    matrix* _tsf = new matrix;
+    _tsf->set_translate(pos);
+    _tsf->mul_rotate(0,0,1,a_obj.m_ANGLE*fpi()/180.0f);
+    _tsf->mul_scale(a_obj.m_SCALE,a_obj.m_SCALE,1);
+    _tsf->mul_scale(a_obj.m_SIZE,a_obj.m_SIZE,1);
+    sep->add(_tsf);
+    
+    //SIZE is in page coordinate YSIZ.
+    //float YSIZ = height.value();
+    //if(YSIZ<=0) YSIZ = 1;
+
+    //::printf("debug : tools::sg::plotter::update_primitive_text : %s : X %g Y %g : SCALE %g SIZE %g : pos %g %g %g\n",
+    //    a_obj.m_TEXT.c_str(),a_obj.m_X,a_obj.m_Y,a_obj.m_SCALE,a_obj.m_SIZE,
+    //    pos[0],pos[1],pos[2]);
+  
+    if(a_obj.m_FONT==font_hershey()) {
+      //::printf("debug : tools::sg::plotter::update_primitive_text : hershey\n");
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = line_solid;
+      ds->line_width = 1;
+      //ds->line_pattern = m_title_style.line_pattern;
+      //ds->line_width = m_title_style.line_width;
+      sep->add(ds);
+  
+      text_hershey* text = new text_hershey;
+      text->encoding = "PAW";
+      text->strings.add(a_obj.m_TEXT);
+      if(a_obj.m_JUST=='R') {
+        text->hjust = right;
+      } else if(a_obj.m_JUST=='C') {
+        text->hjust = center;
+      } else {
+        text->hjust = left;
+      }
+      sep->add(text);
+  
+    } else {
+      //::printf("debug : tools::sg::plotter::update_primitive_text : freetype\n");
+      base_freetype* text = base_freetype::create(m_ttf);
+      
+      text->font = a_obj.m_FONT;
+      
+      //text->encoding = "PAW"
+      //text->smooting = a_obj.m_SMOOTHING;
+      //text->hinting = a_obj.m_HINTING;
+      text->strings.add(a_obj.m_TEXT);
+      //text->hjust.value(a_hjust);
+      //text->vjust.value(a_vjust);
+  
+      sep->add(text);
+    }
+    
+    m_primitives_sep.add(sep);
+  }
+  
+  // for OpenPAW /GRAPHICS/PRIMITIVES/BOX
+  void PAW_hatch(int aHTYP,hatching_policy& a_policy,float& a_spacing,float& a_angle_right,float& a_angle_left) {
+    // PAW hatching encoding (paw.pdf 1.14(1992) p 174) :
+  
+    a_policy = hatching_none;
+    a_spacing = 0;
+    a_angle_right = 0;
+    a_angle_left = 0;
+
+    int code = aHTYP;
+    if(code==0) return;
+  
+    // From PAW FAQ web page.
+    // special code from code [1,25]
+    if(code==1) {
+      a_policy = hatching_left_and_right;
+      a_spacing = 0.04F;
+      a_angle_right = 3.0F*fpi()/4.0F;
+      a_angle_left = fpi()/4.0F;
+      return;
+    } else if(code==2) {
+      a_policy = hatching_left_and_right;
+      a_spacing = 0.08F;
+      a_angle_right = 3.0F*fpi()/4.0F;
+      a_angle_left = fpi()/4.0F;
+      return;
+    } else if(code==3) {
+      a_policy = hatching_left_and_right;
+      a_spacing = 1.6f*0.07F; //cooking
+      a_angle_right = 3.0F*fpi()/4.0F;
+      a_angle_left = fpi()/4.0F;
+      return;
+    } else if(code==4) {
+      code = 354;
+    } else if(code==5) {
+      code = 345;
+    } else if(code==6) {
+      code = 359;
+    } else if(code==7) {
+      code = 350;
+    } else if(code<=25) {
+      //FIXME : seems to be done with patterns.
+      a_policy = hatching_none;
+      return;
+    } else if(code<=99) {
+      //FIXME
+      a_policy = hatching_none;
+      return;
+    }
+  
+    //code >=100
+  
+    // code = ijk
+  
+    int i = code / 100;
+    int j = (code - i * 100)/10;
+    int k = code - i * 100 - j * 10;
+  
+    // j-hatching on rightHatchStyle :
+    // k-hatching on leftHatchStyle :
+  
+    if((j==5)&&(k==5))
+      a_policy = hatching_none;
+    else if((j!=5)&&(k==5))
+      a_policy = hatching_right;
+    else if((j==5)&&(k!=5))
+      a_policy = hatching_left;
+    else if((j!=5)&&(k!=5))
+      a_policy = hatching_left_and_right;
+  
+    unsigned int NY = 1;
+  
+    a_spacing = float(NY) * float(i) * 0.07F; //cooking
+  
+    if(j!=5) {
+      float angle = float(j==4?45:j*10);
+      angle = 180.0F - angle;
+      angle *= fpi() / 180.0F;
+  
+      a_angle_right = angle;
+    }
+  
+    if(k!=5) {
+      float angle = float(k==4?45:k*10);
+      angle *= fpi() / 180.0F;  
+      a_angle_left = angle;
+    }
+  
+  }
+  
+  void rep_box_hatch(separator& a_parent,float a_spacing,float a_angle,float a_strip_width,
+                     float xx,float yy,float xe,float ye,float a_zz){
+  
+    //printf("debug : SoPlotter::repHatch1D_xy : zz %g\n",a_zz);
+    sg::separator* separator = new sg::separator;
+  
+    bool empty = true;
+  
+    vec3f points[5];
+  
+    points[0].set_value(xx,yy,a_zz);
+    points[1].set_value(xe,yy,a_zz);
+    points[2].set_value(xe,ye,a_zz);
+    points[3].set_value(xx,ye,a_zz);
+    points[4].set_value(xx,yy,a_zz);
+    
+    //We can have multiple hatching for a bins ; have a separator :
+    hatcher _hatcher;
+    _hatcher.set_offset_point(vec3f(0,0,a_zz));
+    _hatcher.set_angle(a_angle);
+    _hatcher.set_spacing(a_spacing); 
+    if(!_hatcher.set_strip_width(a_strip_width)) {}
+  
+    bool res = _hatcher.check_polyline(points,4);      
+    if(res) res = _hatcher.compute_polyline(points,4);
+  
+    size_t numPoints = _hatcher.points().size();
+    size_t numVertices = _hatcher.vertices().size();
+    if((res) && numPoints && numVertices) {
+  
+      const std::vector<vec3f>& _points = _hatcher.points();
+    	
+      if(a_strip_width==0) {    
+        size_t ipt = 0;
+        tools_vforcit(unsigned int,_hatcher.vertices(),itv) {
+          vertices* vtxs = new vertices;
+          vtxs->mode = gl::line_strip();
+          for(size_t index=0;index<(*itv);index++) {
+            vtxs->add(_points[ipt]);
+            ipt++;
+         	}
+          separator->add(vtxs);
+          empty = false;
+        }
+  
+      } else {
+        size_t ipt = 0;
+        tools_vforcit(unsigned int,_hatcher.vertices(),itv) {
+          vertices* vtxs = new vertices;
+          vtxs->mode = gl::triangle_fan();
+          for(size_t index=0;index<(*itv);index++) {
+            vtxs->add(_points[ipt]);
+            ipt++;
+          }
+          separator->add(vtxs);
+          empty = false;
+        }
+      }
+    	  
+      empty = false;
+    }
+  
+    if(empty) {
+      delete separator;
+    } else {
+      a_parent.add(separator);
+    }
+  }
+  
+  void update_primitive_box(std::ostream& a_out,const plottable_box& a_obj){
+  
+    float z = xy_depth.value()*1.1F;
+  
+    vec3f pos1;
+    axis_2_data_frame(vec3f(a_obj.m_X1,a_obj.m_Y1,z),pos1);
+    xx_2_yy(pos1,pos1);
+    
+    vec3f pos2;
+    axis_2_data_frame(vec3f(a_obj.m_X2,a_obj.m_Y2,z),pos2);
+    xx_2_yy(pos2,pos2);
+  
+    z = pos1[2];
+
+//    ::printf("debug : tools::sg::plotter::update_primitive_box : FAIS %d : %g %g %g : %g %g %g\n",a_obj.m_FAIS,
+//        pos1.x(),pos1.y(),pos1.z(),pos2.x(),pos2.y(),pos2.z());
+  
+    if(a_obj.m_FAIS==plottable_box::HOLLOW) {
+    
+      separator* sep = new separator;
+  
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_PLCI;
+      sep->add(mat);
+  
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::lines;
+      ds->line_pattern = line_solid;
+      ds->line_width = 1;
+      sep->add(ds);
+  
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::line_strip();
+      sep->add(vtxs);
+  
+      vtxs->add(pos1[0],pos1[1],z);
+      vtxs->add(pos2[0],pos1[1],z);
+      vtxs->add(pos2[0],pos2[1],z);
+      vtxs->add(pos1[0],pos2[1],z);
+      vtxs->add(pos1[0],pos1[1],z);
+  
+      m_primitives_sep.add(sep);
+      
+    } else if(a_obj.m_FAIS==plottable_box::SOLID) {
+      separator* sep = new separator;
+  
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_FACI;
+      sep->add(mat);
+  
+      draw_style* ds = new draw_style;
+      ds->style = draw_style::filled;
+      sep->add(ds);
+  
+      vertices* vtxs = new vertices;
+      vtxs->mode = gl::triangle_fan();
+      sep->add(vtxs);
+  
+      vtxs->add(pos1[0],pos1[1],z);
+      vtxs->add(pos2[0],pos1[1],z);
+      vtxs->add(pos2[0],pos2[1],z);
+      vtxs->add(pos1[0],pos2[1],z);
+  
+      m_primitives_sep.add(sep);
+      
+    } else if(a_obj.m_FAIS==plottable_box::HATCHED) {
+    
+     {separator* sep = new separator;
+  
+      rgba* mat = new rgba();
+      mat->color = a_obj.m_FACI;
+      sep->add(mat);
+  
+      hatching_policy hatching;
+      float spacing;
+      float angle_right;
+      float angle_left;
+      PAW_hatch(a_obj.m_FASI,hatching,spacing,angle_right,angle_left);
+      float stripWidth = 0;
+  
+      if((hatching==hatching_right)||((hatching==hatching_left_and_right))) {
+        rep_box_hatch(*sep,spacing,angle_right,stripWidth,pos1[0],pos1[1],pos2[0],pos2[1],z);
+      }
+      if((hatching==hatching_left)||((hatching==hatching_left_and_right))) {
+        rep_box_hatch(*sep,spacing,angle_left,stripWidth,pos1[0],pos1[1],pos2[0],pos2[1],z);
+      }
+      
+      if(hatching==hatching_none) {
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::filled;
+        sep->add(ds);
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::triangle_fan();
+        sep->add(vtxs);
+        vtxs->add(pos1[0],pos1[1],z);
+        vtxs->add(pos2[0],pos1[1],z);
+        vtxs->add(pos2[0],pos2[1],z);
+        vtxs->add(pos1[0],pos2[1],z);
+      }
+  
+      m_primitives_sep.add(sep);}
+  
+      if(a_obj.m_BORD) {
+        separator* sep = new separator;
+        rgba* mat = new rgba();
+        mat->color = a_obj.m_PLCI;
+        sep->add(mat);
+  
+        draw_style* ds = new draw_style;
+        ds->style = draw_style::lines;
+        ds->line_pattern = line_solid;
+        ds->line_width = 1;
+        sep->add(ds);
+  
+        vertices* vtxs = new vertices;
+        vtxs->mode = gl::line_strip();
+        sep->add(vtxs);
+  
+        z *= 1.01F;
+        vtxs->add(pos1[0],pos1[1],z);
+        vtxs->add(pos2[0],pos1[1],z);
+        vtxs->add(pos2[0],pos2[1],z);
+        vtxs->add(pos1[0],pos2[1],z);
+        vtxs->add(pos1[0],pos1[1],z);
+  
+        m_primitives_sep.add(sep);
+      }
+  
+    } else if(a_obj.m_FAIS==plottable_box::PATTERN) {
+      a_out << "tools::sg::plotter::update_plottable_box FAIS PATTERN not yet handled." << std::endl;      
+    }
+    
+  }
+  
 protected: //etc
   // background is at z = 0.
   // last z items are text in infos, legend boxes that should be at xy_depth().
 
-  float ZOFFSET() const {
-    // first data plane is at ZOFFSET.
-    // last one at m_plottables.size()*ZOFFSET = xy_depth-ZOFFSET().
+  float _zoffset() const {
+    // first data plane is at _zoffset.
+    // last one at m_plottables.size()*_zoffset = xy_depth-_zoffset().
     return xy_depth.value()/(m_plottables.size()+1);
   }
-  float ZAXIS() const {return ZOFFSET();}
-  float ZGRID() const {return xy_depth-ZOFFSET()*0.5f;}
-  float ZTEXT() const {return 0.01f;} //if text back is visible else 0. (sf<float> zfront ?)
-  float ZSCALE_TEXT() const {return ZOFFSET()*0.4f/ZTEXT();} //title and infos boxes thickness.
-  float ZINFOS() const {return xy_depth-ZOFFSET()*0.4f;} //in front ZGRID
+  float _zaxis() const {return _zoffset();}
+  float _zgrid() const {return xy_depth-_zoffset()*0.5f;}
+  float _ztext() const {return 0.01f;} //if text back is visible else 0. (sf<float> zfront ?)
+  float _zscale_text() const {return _zoffset()*0.4f/_ztext();} //title and infos boxes thickness.
+  float _zinfos() const {return xy_depth-_zoffset()*0.4f;} //in front _zgrid
+  float _zhatch() const {return _zoffset()*0.25f;}
+  float _zerrors() const {return _zoffset()*0.5f;}
 
-  //static void LIST_SET(vec3f a_list[],unsigned int a_index,
-  //                     float x,float y,float z) {
-  //  a_list[a_index].set_value(x,y,z);
-  //}
+  //static void LIST_SET(vec3f a_list[],unsigned int a_index,float x,float y,float z) {a_list[a_index].set_value(x,y,z);}
 
   static float take_log(float a_x){
     if(a_x<=0) {
@@ -5604,8 +7983,7 @@ protected: //etc
     }
   }
 
-  static float verify_log_inv(float aVal,
-                                     float aMin,float aDx,bool aLog){
+  static float verify_log_inv(float aVal,float aMin,float aDx,bool aLog){
    if(aLog) {
       return fpow(10,aVal*aDx+aMin);
     } else {
@@ -5613,37 +7991,44 @@ protected: //etc
     }
   }
 
-  style* merge_bins_style(unsigned int a_index,
-                                     plottable&) {
+  style* merge_bins_style(unsigned int a_index,plottable&) {
     style& _style = bins_style(a_index);
     //uuu merge with a_p.infos().
     return new style(_style);
   }
 
-  style* merge_errors_style(unsigned int a_index,
-                                     plottable&) {
+  style* merge_left_hatch_style(unsigned int a_index,plottable&) {
+    style& _style = left_hatch_style(a_index);
+    //uuu merge with a_p.infos().
+    return new style(_style);
+  }
+
+  style* merge_right_hatch_style(unsigned int a_index,plottable&) {
+    style& _style = right_hatch_style(a_index);
+    //uuu merge with a_p.infos().
+    return new style(_style);
+  }
+
+  style* merge_errors_style(unsigned int a_index,plottable&) {
     style& _style = errors_style(a_index);
     //uuu merge with a_p.infos().
     return new style(_style);
   }
 
-  style* merge_func_style(unsigned int a_index,
-                                     plottable&) {
+  style* merge_func_style(unsigned int a_index,plottable&) {
     style& _style = func_style(a_index);
     //uuu merge with a_p.infos().
     return new style(_style);
   }
 
-  style* merge_points_style(unsigned int a_index,
-                                     plottable&) {
+  style* merge_points_style(unsigned int a_index,plottable&) {
     style& _style = points_style(a_index);
     //uuu merge with a_p.infos().
     return new style(_style);
   }
 
 /*
-  text_style* merge_legend_style(unsigned int a_index,
-                                     plottable& a_p) {
+  text_style* merge_legend_style(unsigned int a_index,plottable& a_p) {
     if(a_index>=m_legend_style.size()) return new text_style();
     return new text_style(m_legend_style[a_index]);
     //uuu merge with a_p.infos().
@@ -5706,6 +8091,12 @@ protected: //etc
     }
     */
 
+    touch();
+  }
+  void clear_primitives() {
+   {std::vector<plotprim*>::iterator it;
+    for(it=m_primitives.begin();it!=m_primitives.end();++it) delete *it;
+    m_primitives.clear();}
     touch();
   }
 
@@ -5787,25 +8178,44 @@ protected: //etc
   }
 */
 
-  static void add_pt(std::vector<float>& a_pts,
-                            float a_x,float a_y,float a_z){
+  static void add_pt(std::vector<float>& a_pts,float a_x,float a_y,float a_z){
     a_pts.push_back(a_x);
     a_pts.push_back(a_y);
     a_pts.push_back(a_z);
   }
 
-  static void clip_polyline_2D(
-    const std::vector<vec3f>& a_points,
-    const rep_box& a_box_x,
-    const rep_box& a_box_y,
-    std::vector<float>& a_pts
-  ){
+  static void clip_points_2D(const std::vector<vec3f>& a_points,
+                             const rep_box& a_box_x,const rep_box& a_box_y,std::vector<float>& a_pts) {
+    float xmin = a_box_x.m_pos;
+    float dx = a_box_x.m_width;
+    bool xlog = a_box_x.m_log;
+
+    float ymin = a_box_y.m_pos;
+    float dy = a_box_y.m_width;
+    bool ylog = a_box_y.m_log;
+
+    a_pts.clear();
+
+    float xx,yy,zz;
+    tools_vforcit(vec3f,a_points,it) {
+      const vec3f& _point = *it;
+      xx = _point[0];
+      yy = _point[1];
+      zz = _point[2];
+      xx = verify_log(xx,xmin,dx,xlog);
+      yy = verify_log(yy,ymin,dy,ylog);
+      if((xx>=0)&&(xx<=1)&&(yy>=0)&&(yy<=1)) add_pt(a_pts,xx,yy,zz);
+    }
+  }
+
+  static void clip_polyline_2D(const std::vector<vec3f>& a_points,
+                               const rep_box& a_box_x,const rep_box& a_box_y,std::vector<float>& a_pts) {
     //  Clip line in a_box_x, a_box_y.
 
     //NOTE : it is not a general algorithm.
     //       It is assumed that a_points are ordered with increasing x.
     //       And the algorithm clips against up and bottom BoxY lines.
-    //       (Use SbClip for a more general algorithm ?)
+    //       (Use clip<float> for a more general algorithm ?)
 
     float xmin = a_box_x.m_pos;
     float dx = a_box_x.m_width;
@@ -5827,6 +8237,7 @@ protected: //etc
       float xx = _point[0];
       float yy = _point[1];
       float zz = _point[2];
+      //add_pt(a_pts,xx,yy,zz);continue; //debug
       xx = verify_log(xx,xmin,dx,xlog);
       yy = verify_log(yy,ymin,dy,ylog);
       if((xx>=0)&&(xx<=1) ) {
@@ -5969,19 +8380,21 @@ protected: //fields for skeleton.
   separator m_grid_sep;
 
   separator m_data_sep;
+  torche m_data_light;
   matrix m_data_matrix;
   separator m_bins_sep;
   separator m_errors_sep;
   separator m_func_sep;
   separator m_points_sep;
   separator m_inner_frame_sep;
-
+  separator m_primitives_sep;
+  
 protected: //fields
   shape_type m_shape;    
 
-  tools::axis m_x_axis_data;
-  tools::axis m_y_axis_data;
-  tools::axis m_z_axis_data;
+  data_axis m_x_axis_data;
+  data_axis m_y_axis_data;
+  data_axis m_z_axis_data;
 
   std::vector<plottable*> m_plottables; //it has ownership.
 
@@ -5989,24 +8402,28 @@ protected: //fields
   std::vector<style> m_errors_style;
   std::vector<style> m_func_style;
   std::vector<style> m_points_style;
-  //std::vector<text_style> m_legend_style;
+  std::vector<style> m_left_hatch_style;
+  std::vector<style> m_right_hatch_style;
+  std::vector<style> m_legend_style;
 
   text_style m_title_style;
   text_style m_infos_style;
   text_style m_title_box_style;
   style m_background_style;
+  style m_wall_style; //for gopaw.
   style m_inner_frame_style;
   style m_grid_style;
 
 protected:
   std::vector<std::string> m_legend_strings;
-  std::vector<colorf> m_legend_colors;
 
   std::vector<base_colormap*> m_bins_cmaps;
   std::vector<base_colormap*> m_points_cmaps;
   std::vector<base_colormap*> m_func_cmaps;
 
   group m_todel_group;
+  std::vector<plotprim*> m_primitives;
+  cmaps_t m_cmaps;
 };
 
 }}

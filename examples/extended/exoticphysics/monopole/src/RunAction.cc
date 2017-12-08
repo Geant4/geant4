@@ -26,7 +26,7 @@
 /// \file exoticphysics/monopole/src/RunAction.cc
 /// \brief Implementation of the RunAction class
 //
-// $Id: RunAction.cc 104872 2017-06-23 14:19:16Z gcosmo $
+// $Id: RunAction.cc 107534 2017-11-21 13:13:36Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "RunActionMessenger.hh" 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
 #include "Run.hh"
 
 #include "G4UnitsTable.hh"
@@ -51,11 +50,11 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   :fDetector(det),fKinematic(kin)
 {
   fMessenger = new RunActionMessenger(this);
-
   fBinLength = 5 * CLHEP::mm; 
-
-  // Book predefined histograms
-  fHistoManager = new HistoManager(det, fBinLength);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->SetFileName("monopole");
+  analysisManager->SetVerboseLevel(1);
+  analysisManager->SetActivation(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,14 +65,13 @@ RunAction::~RunAction()
   if(isMaster) delete fKinematic;
 #endif
   delete fMessenger;
-  delete fHistoManager;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
 { 
-  fRun = new Run(fDetector,fKinematic,fHistoManager);
+  fRun = new Run(fDetector,fKinematic);
   return fRun;
 }
 
@@ -82,23 +80,14 @@ G4Run* RunAction::GenerateRun()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
-  // save Rndm status
-  //
-  CLHEP::HepRandom::showEngineStatus();
-
   //histograms
   //        
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if ( analysisManager->IsActive() ) {
-    analysisManager->OpenFile();
-  } 
-
+  Book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
+void RunAction::EndOfRunAction(const G4Run*)
 {
   // print Run summary
   //
@@ -110,22 +99,36 @@ void RunAction::EndOfRunAction(const G4Run* /*aRun*/)
     analysisManager->Write();
     analysisManager->CloseFile();
   }  
-
-  // show Rndm status
-  if (isMaster) G4Random::showEngineStatus();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::SetBinSize(G4double size)
 { 
-  fBinLength =  size;
-
+  fBinLength = size;
   if(fBinLength > fDetector->GetMaxStepSize()) { 
     fBinLength = fDetector->GetMaxStepSize();
   }
-
-  //  fHistoManager->SetBinLength(fBinLength);  
-  fHistoManager->Update(fBinLength);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::Book()
+{
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();  
+  analysisManager->SetFirstHistoId(1);   
+
+  G4double length = fDetector->GetAbsorSizeX();
+  G4int nbBins = G4lrint(length / fBinLength);
+
+  // Create histograms
+  analysisManager->CreateH1("h1","Edep (MeV/mm) along absorber (mm)", 
+                            nbBins, 0, length);
+  analysisManager->CreateH1("h2","DEDX (MeV/mm) of proton", 100, -3., 7.);
+  analysisManager->CreateH1("h3","DEDX (MeV/mm) of monopole", 100, -3., 7.);
+  analysisManager->CreateH1("h4","Range(mm) of proton", 100, -3., 7., "mm");
+  analysisManager->CreateH1("h5","Range(mm) of monopole", 100, -3., 7., "mm");
+  analysisManager->OpenFile(); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

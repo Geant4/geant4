@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmStandardPhysics_option3.hh 98736 2016-08-09 10:55:12Z gcosmo $
+// $Id: G4EmStandardPhysics_option3.hh 105735 2017-08-16 12:59:43Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 #define G4EmStandardPhysics_option3_h 1
 
 #include "G4VPhysicsConstructor.hh"
+#include "G4EmParticleList.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,6 +63,7 @@ public:
 
 private:
   G4int  verbose;
+  G4EmParticleList partList;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

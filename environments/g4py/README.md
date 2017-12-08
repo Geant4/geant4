@@ -25,7 +25,7 @@ ROOT for histogramming/analysis
 ### Tested Platforms
 
 * CentOS7 (RH7 clones)
-* OSX (Sierra)
+* OSX (High Siera)
 
 
 How to Install

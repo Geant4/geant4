@@ -1,0 +1,10 @@
+/control/verbose 2
+/run/verbose 1
+#
+/gun/particle ion
+/gun/ion 88 228 0 63.823
+#
+/rdecay01/fullChain false
+#
+#/run/printProgress 1
+/run/beamOn 20

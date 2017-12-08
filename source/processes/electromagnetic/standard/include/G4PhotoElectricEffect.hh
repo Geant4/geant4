@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotoElectricEffect.hh 96934 2016-05-18 09:10:41Z gcosmo $
+// $Id: G4PhotoElectricEffect.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 //------------------ G4PhotoElectricEffect physics process ------------------
 //                   by Michel Maire, 24 May 1996
@@ -91,6 +91,9 @@ public:  // with description
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo() override;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 

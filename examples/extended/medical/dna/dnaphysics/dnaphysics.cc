@@ -42,10 +42,7 @@
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
-
-#ifdef G4VIS_USE
-  #include "G4VisExecutive.hh"
-#endif
+#include "G4VisExecutive.hh"
 
 #include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
@@ -81,20 +78,18 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new PhysicsList);
 
   // User action initialization
-  
   runManager->SetUserInitialization(new ActionInitialization());
   
-#ifdef G4VIS_USE
+  // Visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
     
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   
   // Process macro or start UI session
   //
-  if ( ! ui ) { 
+  if (argc>1) { 
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
@@ -107,10 +102,7 @@ int main(int argc,char** argv)
     delete ui;
   }
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-
   delete runManager;
 
   return 0;

@@ -16,7 +16,7 @@ public:
   virtual bool begin_render(int,int,unsigned int,unsigned int,float,float,float,float,bool = true) {return true;}
   virtual void end_render() {}
 
-  virtual unsigned int create_texture(const tools::img_byte& a_img) {    
+  virtual unsigned int create_texture(const img_byte& a_img) {    
     m_gen_id++; //never return 0.
     m_gstos[m_gen_id] = a_img;
     return m_gen_id;
@@ -36,7 +36,7 @@ public:
 
   //
   virtual gsto_mode get_gsto_mode() const {return gsto_memory;}
-  virtual void set_gsto_mode(tools::sg::gsto_mode) {}
+  virtual void set_gsto_mode(gsto_mode) {}
   virtual void available_gsto_modes(std::vector<std::string>& a_v) {a_v.clear();}
   virtual void available_not_memory_gsto_mode(std::string& a_s) const {a_s.clear();}
   virtual size_t used_texture_memory() const {return 0;}
@@ -59,7 +59,7 @@ public:
     return *this;
   }
 public:
-  bool find(unsigned int a_id,tools::img_byte& a_img) {
+  bool find(unsigned int a_id,img_byte& a_img) {
     gstos_t::iterator it = m_gstos.find(a_id);
     if(it==m_gstos.end()) return false;
     a_img = (*it).second;
@@ -71,7 +71,7 @@ public:
   }
 protected:
   unsigned int m_gen_id;
-  typedef std::map<unsigned int,tools::img_byte> gstos_t;
+  typedef std::map<unsigned int,img_byte> gstos_t;
   gstos_t m_gstos; //only textures for the moment.
 };
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4FieldManager.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4FieldManager.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4FieldManager.cc
 //
@@ -40,25 +40,18 @@
 using namespace boost::python;
 
 // ====================================================================
-// miscs
-// ====================================================================
-#if G4VERSION_NUMBER <= 801
-// What a hell!
-inline const G4ChordFinder* G4FieldManager::GetChordFinder() const
-{
-  return fChordFinder;
-}
-#endif
-
-// ====================================================================
 // thin wrappers
 // ====================================================================
 namespace pyG4FieldManager {
 
 G4ChordFinder*(G4FieldManager::*f1_GetChordFinder)()
   = &G4FieldManager::GetChordFinder;
+
 const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const
   = &G4FieldManager::GetChordFinder;
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetDetectorField,
+                                       SetDetectorField, 1, 2);
 
 }
 
@@ -78,7 +71,8 @@ void export_G4FieldManager()
     .def(init<G4Field*, G4ChordFinder*, G4bool>())
     .def(init<G4MagneticField*>())
     // ---
-    .def("SetDetectorField",      &G4FieldManager::SetDetectorField)
+    .def("SetDetectorField",      &G4FieldManager::SetDetectorField,
+                                  f_SetDetectorField())
     .def("GetDetectorField",      &G4FieldManager::GetDetectorField,
          return_internal_reference<>())
     .def("DoesFieldExist",        &G4FieldManager::DoesFieldExist)
@@ -103,4 +97,3 @@ void export_G4FieldManager()
     .def("SetFieldChangesEnergy", &G4FieldManager::SetFieldChangesEnergy)
     ;
 }
-

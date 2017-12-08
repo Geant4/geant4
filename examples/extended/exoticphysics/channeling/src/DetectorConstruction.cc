@@ -105,7 +105,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
                                                      false,
                                                      0);
     
-    
     //** Detectors instantiation **//
     G4ThreeVector fDetectorSizes(G4ThreeVector(38.0 * CLHEP::mm,
                                                38.0 * CLHEP::mm,
@@ -182,7 +181,6 @@ G4VPhysicalVolume* DetectorConstruction::Construct(){
     crystalLogic->SetVerbose(1);
     //** Crystal Definition End **//
     
-    
     G4RotationMatrix* rot = new G4RotationMatrix;
     if(fAngles.x()!=0.){
         rot->rotateX(fAngles.x());
@@ -246,4 +244,3 @@ void DetectorConstruction::ConstructSDandField(){;}
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

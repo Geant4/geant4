@@ -38,7 +38,6 @@
 #ifndef G4RNGHELPER_HH
 #define G4RNGHELPER_HH
 
-#include "G4Types.hh"
 #include <vector>
 #include <queue>
 #include "globals.hh"
@@ -49,14 +48,11 @@ class G4TemplateRNGHelper
   public:
     // The container is modeled as a (shared) singleton
     static G4TemplateRNGHelper<T>* GetInstance();
+    static G4TemplateRNGHelper<T>* GetInstanceIfExist(); 
     typedef std::vector<T> SeedsQueue;
     typedef typename SeedsQueue::size_type SeedsQueueSize_type;
-        
-    virtual ~G4TemplateRNGHelper()
-    {
-      Clear();
-      instance = 0;
-    }
+
+    virtual ~G4TemplateRNGHelper();
     
     //Returns seed given id
     virtual const T GetSeed(const G4int& sdId )

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc 104452 2017-05-31 15:41:24Z gcosmo $
+// $Id: G4Para.cc 107555 2017-11-22 15:26:59Z gcosmo $
 //
 // class G4Para
 //
@@ -47,6 +47,8 @@
 ////////////////////////////////////////////////////////////////////////////
 
 #include "G4Para.hh"
+
+#if !defined(G4GEOM_USE_UPARA)
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -427,10 +429,10 @@ G4bool G4Para::CalculateExtent( const EAxis pAxis,
 EInside G4Para::Inside( const G4ThreeVector& p ) const
 {
   G4double xx = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z();
-  G4double dx = std::max(xx,-xx) + fPlanes[2].d;
+  G4double dx = std::abs(xx) + fPlanes[2].d;
 
   G4double yy = fPlanes[0].b*p.y()+fPlanes[0].c*p.z();
-  G4double dy = std::max(yy,-yy) + fPlanes[0].d;
+  G4double dy = std::abs(yy) + fPlanes[0].d;
   G4double dxy = std::max(dx,dy);
 
   G4double dz = std::abs(p.z())-fDz;
@@ -446,11 +448,17 @@ EInside G4Para::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 {
+  G4int nsurf = 0; // number of surfaces where p is placed
+
   // Check Z faces
   //
   G4double nz = 0;
   G4double dz = std::abs(p.z()) - fDz;
-  if (std::abs(dz) <= halfCarTolerance) nz = (p.z() < 0) ? -1 : 1;
+  if (std::abs(dz) <= halfCarTolerance)
+  {
+    nz = (p.z() < 0) ? -1 : 1;
+    ++nsurf;
+  }
 
   // Check Y faces
   //
@@ -460,11 +468,13 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
   {
     ny  = fPlanes[0].b;
     nz += fPlanes[0].c;
+    ++nsurf;
   }
   else if (std::abs(fPlanes[1].d - yy) <= halfCarTolerance)
   {
     ny  = fPlanes[1].b;
     nz += fPlanes[1].c;
+    ++nsurf;
   }
 
   // Check X faces
@@ -476,17 +486,18 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
     nx  = fPlanes[2].a;
     ny += fPlanes[2].b;
     nz += fPlanes[2].c;
+    ++nsurf;
   }
   else if (std::abs(fPlanes[3].d - xx) <= halfCarTolerance)
   {
     nx  = fPlanes[3].a;
     ny += fPlanes[3].b;
     nz += fPlanes[3].c;
+    ++nsurf;
   }
 
   // Return normal
   //
-  G4int nsurf = nx*nx + ny*ny + nz*nz + 0.5;                  // get magnitude
   if (nsurf == 1)      return G4ThreeVector(nx,ny,nz);
   else if (nsurf != 0) return G4ThreeVector(nx,ny,nz).unit(); // edge or corner
   else
@@ -633,10 +644,10 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,
 G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 {
   G4double xx = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z();
-  G4double dx = std::max(xx,-xx) + fPlanes[2].d;
+  G4double dx = std::abs(xx) + fPlanes[2].d;
 
   G4double yy = fPlanes[0].b*p.y()+fPlanes[0].c*p.z();
-  G4double dy = std::max(yy,-yy) + fPlanes[0].d;
+  G4double dy = std::abs(yy) + fPlanes[0].d;
   G4double dxy = std::max(dx,dy);
 
   G4double dz = std::abs(p.z())-fDz;
@@ -779,10 +790,10 @@ G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
     }
 #endif
   G4double xx = fPlanes[2].a*p.x()+fPlanes[2].b*p.y()+fPlanes[2].c*p.z();
-  G4double dx = std::max(xx,-xx) + fPlanes[2].d;
+  G4double dx = std::abs(xx) + fPlanes[2].d;
 
   G4double yy = fPlanes[0].b*p.y()+fPlanes[0].c*p.z();
-  G4double dy = std::max(yy,-yy) + fPlanes[0].d;
+  G4double dy = std::abs(yy) + fPlanes[0].d;
   G4double dxy = std::max(dx,dy);
 
   G4double dz = std::abs(p.z())-fDz;
@@ -910,3 +921,4 @@ G4Polyhedron* G4Para::CreatePolyhedron () const
     
   return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
 }
+#endif

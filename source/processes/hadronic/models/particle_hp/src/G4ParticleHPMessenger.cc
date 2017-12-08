@@ -68,6 +68,12 @@ G4ParticleHPMessenger::G4ParticleHPMessenger( G4ParticleHPManager* man )
    ProduceFissionFragementCmd->SetCandidates("true false");
    ProduceFissionFragementCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+   NRESP71Cmd = new G4UIcmdWithAString("/process/had/particle_hp/use_NRESP71_model",this);
+   NRESP71Cmd->SetGuidance("Enable to use NRESP71 model for n on C reaction");
+   NRESP71Cmd->SetParameterName("choice",false);
+   NRESP71Cmd->SetCandidates("true false");
+   NRESP71Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
    VerboseCmd = new G4UIcmdWithAnInteger("/process/had/particle_hp/verbose",this);
    VerboseCmd->SetGuidance("Set Verbose level of ParticleHP package");
    VerboseCmd->SetParameterName("verbose_level",true);
@@ -106,6 +112,9 @@ void G4ParticleHPMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    }
    if ( command == ProduceFissionFragementCmd ) { 
       manager->SetProduceFissionFragments( bValue ); 
+   }
+   if ( command == NRESP71Cmd ) { 
+      manager->SetUseNRESP71Model( bValue ); 
    }
    if ( command == VerboseCmd ) {
       manager->SetVerboseLevel( VerboseCmd->ConvertToInt( newValue ) ); 

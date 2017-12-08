@@ -1,4 +1,4 @@
-$Id: History 104894 2017-06-26 13:30:00Z gcosmo $
+$Id: History 107555 2017-11-22 15:26:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,51 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 22, 2017 G.Cosmo geom-csg-V10-03-38
+- Fix in SurfaceNormal() for G4Trap, G4Para, G4Trd to assure explicit
+  counting of the surfaces where the point is placed on edges.
+
+October 20, 2017 G.Cosmo geom-csg-V10-03-37
+- Removed redundant overloaded implementation for StreamInfo() in G4UBox
+  wrapper.
+
+October 9, 2017 G.Cosmo geom-csg-V10-03-36
+- Enabled adapter for G4UTorus wrapper, according to migration done in
+  VecGeom for UnplacedTorus2.
+
+September 1, 2017 E.Tcherniaev geom-csg-V10-03-35
+- G4Trap: use specialization (fTrapType 3) for traps that could be also
+  defined as G4Trd, where isosceles trapeziod is in the XY section, instead
+  of XZ (faces at Xmin/Xmax symmetrical and have Z-component of normals equal
+  to zero). Factorised code with case statements for the different
+  specialisations.
+
+August 14, 2017 E.Tcherniaev geom-csg-V10-03-34
+- Reviewed implementation of G4Orb, made more compact and performant.
+
+July 20, 2017 E.Tcherniaev geom-csg-V10-03-33, 32
+- Use G4RandomRadiusInRing() in G4CSGSolid::GetRadiusInRing().
+
+July 19, 2017 G.Cosmo geom-csg-V10-03-31
+- Enabled adapter also in G4USphere wrapper.
+
+July 13, 2017 E.Tcherniaev geom-csg-V10-03-30
+- Improved calculation of bounding box in G4CutTubs and related wrapper.
+
+July 11, 2017 G.Cosmo geom-csg-V10-03-29
+- Added G4UPara wrapper for enabling VecGeom Parallelepiped shape.
+- Removed inheritance from G4Tubs for G4CutTubs.
+
+July 10, 2017 G.Cosmo geom-csg-V10-03-28
+- Added G4UCutTubs wrapper for enabling VecGeom CutTube shape.
+- Removed clone class G4OTubs no longer necessary and make G4CutTubs
+  directly inheriting (temporary) from G4Tubs.
+
+July 4, 2017 E.Tcherniaev geom-csg-V10-03-27
+- G4Box: minor optimisation in DistanceToOut(p).
+- G4Para: optimisation in Inside(), DistanceToIn/Out(p), use std::abs(xx)
+  in place of std::max(xx,-xx).
 
 June 26, 2017 E.Tcherniaev geom-csg-V10-03-26
 - G4Trd: allow Dx and Dy parameters be equal to zero where appropriate.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.cc 103766 2017-04-26 14:19:53Z gcosmo $
+// $Id: G4VProcess.cc 105271 2017-07-18 07:35:12Z gcosmo $
 //
 // 
 // --------------------------------------------------------------
@@ -183,7 +183,11 @@ void G4VProcess::DumpInfo() const
   G4cout << " : SubType[" << theProcessSubType << "]"<< G4endl;
 }
 
-
+void G4VProcess::ProcessDescription(std::ostream& outFile) const
+{
+  outFile << "This process has not yet been described\n";
+}
+ 
 const G4String&  G4VProcess::GetPhysicsTableFileName(const G4ParticleDefinition* particle,
 						     const G4String& directory,
 						     const G4String& tableName,

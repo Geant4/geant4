@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMillerGreenExcitationModel.cc 95948 2016-03-03 10:40:33Z gcosmo $
+// $Id: G4DNAMillerGreenExcitationModel.cc 105719 2017-08-16 12:36:37Z gcosmo $
 // GEANT4 tag $Name:  $
 //
 
@@ -497,7 +497,7 @@ G4int G4DNAMillerGreenExcitationModel::RandomSelect(G4double k,const G4ParticleD
 {
     G4int i = nLevels;
     G4double value = 0.;
-    std::deque<double> values;
+    std::deque<G4double> values;
 
     G4DNAGenericIonsManager *instance;
     instance = G4DNAGenericIonsManager::Instance();

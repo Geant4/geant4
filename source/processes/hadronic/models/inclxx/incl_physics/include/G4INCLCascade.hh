@@ -61,29 +61,32 @@ namespace G4INCL {
       /// \brief Dummy assignment operator to silence Coverity warning
       INCL &operator=(const INCL &rhs);
 
-      G4bool prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z);
-      G4bool initializeTarget(const G4int A, const G4int Z);
+      G4bool prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z, const G4int S);
+      G4bool initializeTarget(const G4int A, const G4int Z, const G4int S);
       inline const EventInfo &processEvent() {
         return processEvent(
             theConfig->getProjectileSpecies(),
             theConfig->getProjectileKineticEnergy(),
             theConfig->getTargetA(),
-            theConfig->getTargetZ()
+            theConfig->getTargetZ(),
+            theConfig->getTargetS()
             );
       }
       const EventInfo &processEvent(
           ParticleSpecies const &projectileSpecies,
           const G4double kineticEnergy,
           const G4int targetA,
-          const G4int targetZ
+          const G4int targetZ,
+          const G4int targetS
           );
 
       void finalizeGlobalInfo(Random::SeedVector const &initialSeeds);
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
+      
 
     private:
       IPropagationModel *propagationModel;
-      G4int theA, theZ;
+      G4int theA, theZ, theS;
       G4bool targetInitSuccess;
       G4double maxImpactParameter;
       G4double maxUniverseRadius;
@@ -93,7 +96,7 @@ namespace G4INCL {
       Config const * const theConfig;
       Nucleus *nucleus;
       G4bool forceTransparent;
-
+      
       EventInfo theEventInfo;
       GlobalInfo theGlobalInfo;
 

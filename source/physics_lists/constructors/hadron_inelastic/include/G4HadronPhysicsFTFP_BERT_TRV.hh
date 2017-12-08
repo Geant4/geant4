@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4HadronPhysicsFTFP_BERT_TRV.hh 93617 2015-10-27 09:00:41Z gcosmo $
+// $Id: G4HadronPhysicsFTFP_BERT_TRV.hh 105736 2017-08-16 13:01:11Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -36,76 +36,27 @@
 // 08.06.2006 V.Ivanchenko: remove stopping
 // 19.06.2008 G.Folger: change default for QE to NOT use Chips QE
 // 01.11.2012 W.Pokorski & A.Ribon: use new cross sections
+// 18.07.2016 A.Dotti: refactor following new code
 //
 //----------------------------------------------------------------------------
 //
 #ifndef G4HadronPhysicsFTFP_BERT_TRV_h
 #define G4HadronPhysicsFTFP_BERT_TRV_h 1
 
-#include "globals.hh"
-#include "G4ios.hh"
+#include "G4HadronPhysicsFTFP_BERT.hh"
 
-#include "G4VPhysicsConstructor.hh"
-
-#include "G4PiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-
-#include "G4ProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-#include "G4FTFPProtonBuilder.hh"
-
-#include "G4NeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
-#include "G4FTFPNeutronBuilder.hh"
-
-#include "G4HyperonFTFPBuilder.hh"
-#include "G4AntiBarionBuilder.hh"
-#include "G4FTFPAntiBarionBuilder.hh"
-
-class G4ComponentGGHadronNucleusXsc;
-
-
-class G4HadronPhysicsFTFP_BERT_TRV : public G4VPhysicsConstructor
+class G4HadronPhysicsFTFP_BERT_TRV : public G4HadronPhysicsFTFP_BERT
 {
   public: 
     G4HadronPhysicsFTFP_BERT_TRV(G4int verbose =1);
     G4HadronPhysicsFTFP_BERT_TRV(const G4String& name, G4bool quasiElastic=false);
-    virtual ~G4HadronPhysicsFTFP_BERT_TRV();
-
-  public: 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    virtual ~G4HadronPhysicsFTFP_BERT_TRV() {}
 
   private:
-    void CreateModels();
-
-    struct ThreadPrivate {
-      G4NeutronBuilder * theNeutrons;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
-      G4FTFPNeutronBuilder * theFTFPNeutron;
- 
-      G4PiKBuilder * thePiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-    
-      G4ProtonBuilder * thePro;
-      G4BertiniProtonBuilder * theBertiniPro;
-      G4FTFPProtonBuilder * theFTFPPro;    
-        
-      G4HyperonFTFPBuilder * theHyperon;
-    
-      G4AntiBarionBuilder * theAntiBaryon;
-      G4FTFPAntiBarionBuilder * theFTFPAntiBaryon;
-
-      G4ComponentGGHadronNucleusXsc * xsKaon;
-      G4VCrossSectionDataSet * xsNeutronInelasticXS;
-      G4VCrossSectionDataSet * xsNeutronCaptureXS;
-    };
-    static G4ThreadLocal ThreadPrivate* tpdata;
-
-    G4bool QuasiElastic;
+    //Modify the minimum needed
+      virtual void Pion() override;
+      virtual void Kaon() override;
+      virtual void DumpBanner() override;
 };
 
 #endif

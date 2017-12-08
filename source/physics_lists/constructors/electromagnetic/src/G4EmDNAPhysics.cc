@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmDNAPhysics.cc 102173 2017-01-09 13:19:42Z gcosmo $
+// $Id: G4EmDNAPhysics.cc 105735 2017-08-16 12:59:43Z gcosmo $
 // add elastic scattering processes of proton, hydrogen, helium, alpha+, alpha++
 
 #include "G4EmDNAPhysics.hh"
@@ -238,8 +238,6 @@ void G4EmDNAPhysics::ConstructProcess()
       // e+
       
     else if (particleName == "e+") {
-
-      // Identical to G4EmStandardPhysics_option3
       
       G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->SetStepLimitType(fUseDistanceToBoundary);
@@ -253,38 +251,26 @@ void G4EmDNAPhysics::ConstructProcess()
 
     } else if (particleName == "gamma") {
     
-      G4double LivermoreHighEnergyLimit = GeV;
-
+      // photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
+      // Compton scattering - Livermore model only
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = 
-	new G4LivermoreComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->AddEmModel(0, theLivermoreComptonModel);
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel());
       ph->RegisterProcess(theComptonScattering, particle);
 
+      // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel());
       ph->RegisterProcess(theGammaConversion, particle);
 
+      // default Rayleigh scattering is Livermore
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
       ph->RegisterProcess(theRayleigh, particle);
-    }
-    
-   // Warning : end of particles and processes are needed by EM Physics builders 
-    
+    }    
+    // Warning : end of particles and processes are needed by EM Physics builders 
   }
 
   // Deexcitation

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2337,9 +2337,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 /run/verbose 2
 /tracking/verbose 0
 # activating livermore processes
@@ -2450,7 +2448,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=        1 TeV
 
@@ -2473,7 +2471,7 @@ eBrem:   for  e+    SubType= 3
       Lambda tables from threshold to 1 TeV, 20 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   AngularGen2BS
             eBremLPM :  Emin=        1 GeV   Emax=        1 TeV   DipBustGen
 
 annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
@@ -2482,14 +2480,14 @@ annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
 
 CoulombScat:   for  e+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=        1 TeV
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 TeV in 200 bins
@@ -2559,7 +2557,7 @@ nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
+        WentzelVIUni :  Emin=        0 eV    Emax=        1 TeV  Table with 200 bins Emin=    100 eV    Emax=      1 TeV
 
 hIoni:   for  anti_proton    SubType= 2
       dE/dx and range tables from 100 eV  to 1 TeV in 200 bins
@@ -2679,7 +2677,7 @@ muPairProd:   for  mu+    SubType= 4
 
 CoulombScat:   for  mu+, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=        1 TeV
 
@@ -2715,7 +2713,7 @@ muPairProd:   for  mu-    SubType= 4
 
 CoulombScat:   for  mu-, integral: 1     SubType= 1  BuildTable= 1
       Lambda table from threshold  to 1 TeV, 20 bins per decade, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=        1 TeV
 
@@ -2867,7 +2865,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1s Real=1s Sys=0s
+  User=0.6s Real=0.61s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 ... close Root file : xrayfluo.root - done
@@ -2899,12 +2897,12 @@ Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.314 MB
-Pool ID '7G4Track', size : 0.629 MB
+Pool ID '17G4DynamicParticle', size : 0.321 MB
+Pool ID '7G4Track', size : 0.642 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.96 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.98 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

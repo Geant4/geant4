@@ -41,6 +41,7 @@ fMinimum(DBL_MAX){
     fPoints[0] = 0;
     fPoints[1] = 0;
     fPoints[2] = 0;
+    fVectorEC2D = 0;
     ReadFromECHARM(fileName,vConversion);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

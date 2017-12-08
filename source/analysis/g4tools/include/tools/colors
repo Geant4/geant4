@@ -93,11 +93,15 @@ TOOLS_COLORS_SET(greenyellow,0.675792F,0.996109F,0.18359F)
 
 #undef TOOLS_COLORS_SET
 
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
 #define TOOLS_COLORS_STAT(a__name,a__r,a__g,a__b) \
   template <class COLOR>\
   inline const COLOR& get_color_##a__name() {static const COLOR s_v(a__r,a__g,a__b,1,false);return s_v;}
-
-//NOTE : false in the upper so that mem balance is ok at exit.
+#else
+#define TOOLS_COLORS_STAT(a__name,a__r,a__g,a__b) \
+  template <class COLOR>\
+  inline const COLOR& get_color_##a__name() {static const COLOR s_v(a__r,a__g,a__b,1);return s_v;}
+#endif
 
 //0-9
 TOOLS_COLORS_STAT(aquamarine,0.496101F,0.996109F,0.828138F)

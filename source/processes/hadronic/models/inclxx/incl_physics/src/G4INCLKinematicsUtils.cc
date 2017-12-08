@@ -43,6 +43,7 @@ namespace G4INCL {
   namespace KinematicsUtils {
 
   void transformToLocalEnergyFrame(Nucleus const * const n, Particle * const p) {
+// assert(!p->isMeson()); // No local energy for mesons
     const G4double localEnergy = getLocalEnergy(n, p);
     const G4double localTotalEnergy = p->getEnergy() - localEnergy;
     p->setEnergy(localTotalEnergy);
@@ -50,8 +51,8 @@ namespace G4INCL {
   }
 
   G4double getLocalEnergy(Nucleus const * const n, Particle * const p) {
-// assert(!p->isPion()); // No local energy for pions
-
+// assert(!p->isMeson()); // No local energy for mesons
+    
     G4double vloc = 0.0;
     const G4double r = p->getPosition().mag();
     const G4double mass = p->getMass();

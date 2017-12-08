@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -273,19 +273,24 @@ Auger electron production enabled                  0
 Auger cascade enabled                              0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
-Msc lateraral displacement for e+- enabled         1
-Msc lateraral displacement for muons and hadrons   1
-Msc lateraral displacement beyond geometry safety  0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Msc lateral displacement alg96 for e+-             0
+Msc lateral displacement beyond geometry safety    0
 Enable angular generator interface                 0
 Use Mott correction for e- scattering              0
 Use integral approach for tracking                 1
 Use built-in Birks satuaration                     0
+Use fast sampling in DNA models                    0
+Use Stationary option in DNA models                0
+Use DNA with multiple scattering of e-             0
 Factor of cut reduction for sub-cutoff method      1
 Min kinetic energy for tables                      10 eV 
 Max kinetic energy for tables                      100 TeV
 Max kinetic energy for CSDA tables                 1 GeV
 Lowest e+e- kinetic energy                         100 eV 
 Lowest muon/hadron kinetic energy                  1 keV
+Lowest triplet kinetic energy                      1 MeV
 Linear loss limit 0.01
 Bremsstrahlung energy threshold above which 
   primary is added to the list of secondary        100 TeV
@@ -328,15 +333,15 @@ Index : 0     used in the geometry : Yes
 
   processes :                	         phot		        compt		         conv		         Rayl		        total
  
-  cross section per atom    : 	       1.7336 barn  	      11.0976 barn  	            0 pbarn 	      767.816 mbarn 	       13.599 barn  
+  cross section per atom    : 	      1.72573 barn  	      11.0976 barn  	            0 pbarn 	      767.816 mbarn 	      13.5911 barn  
 
  
-  compCrossSectionPerVolume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0338975 cm^-1	     0.600369 cm^-1
-  cross section per volume : 	     0.076535 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0339048 cm^-1	     0.600376 cm^-1
-  cross section per mass   : 	      1.43782 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      636.949 um2/mg	      11.2789 mm2/g 
+  compCrossSectionPerVolume : 	    0.0761873 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0338975 cm^-1	     0.600022 cm^-1
+  cross section per volume : 	    0.0761873 cm^-1	     0.489937 cm^-1	            0 cm^-1	    0.0339048 cm^-1	     0.600029 cm^-1
+  cross section per mass   : 	      1.43129 mm2/g 	      9.20415 mm2/g 	            0 um2/mg	      636.949 um2/mg	      11.2724 mm2/g 
  
-  mean free path           : 	      13.0659 cm 	      2.04108 cm 	 5.82593e+288 pc 	      29.4944 cm 	      1.66562 cm 
-        (g/cm2)            : 	      69.5499 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      156.998 g/cm2 	       8.8661 g/cm2 
+  mean free path           : 	      13.1255 cm 	      2.04108 cm 	 5.82593e+288 pc 	      29.4944 cm 	      1.66659 cm 
+        (g/cm2)            : 	      69.8672 g/cm2 	      10.8647 g/cm2 	 2.88022e+285 kg/cm2	      156.998 g/cm2 	      8.87124 g/cm2 
 
 -----------------------------------------------------------
 

@@ -42,7 +42,7 @@ G4VEmissionProbability::G4VEmissionProbability(G4int Z, G4int A)
    LevelDensity(0.1),elimit(CLHEP::MeV),accuracy(0.02) 
 {
   fG4pow = G4Pow::GetInstance();
-  fPairCorr = G4PairingCorrection::GetInstance();
+  fPairCorr = G4NuclearLevelData::GetInstance()->GetPairingCorrection();
   length = nfilled = 0;
   emin = emax = eCoulomb = probmax = eprobmax = totProbability = 0.0;
 }

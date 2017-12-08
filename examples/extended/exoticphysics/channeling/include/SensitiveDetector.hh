@@ -50,4 +50,3 @@ class SensitiveDetector : public G4VSensitiveDetector
 };
 
 #endif
-

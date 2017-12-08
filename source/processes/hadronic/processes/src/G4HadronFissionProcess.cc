@@ -63,7 +63,7 @@ G4bool G4HadronFissionProcess::IsApplicable(const G4ParticleDefinition& p)
 
 void G4HadronFissionProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles neutron-induced fission of nuclei by\n"
-          << "invoking one or more hadronic models and one or more hadronic\n"
+  outFile << "G4HadronFissionProcess handles neutron-induced fission of nuclei\n"
+          << "by invoking one or more hadronic models and one or more hadronic\n"
           << "cross sections.\n";
 }

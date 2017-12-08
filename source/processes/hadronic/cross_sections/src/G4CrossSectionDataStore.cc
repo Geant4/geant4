@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CrossSectionDataStore.cc 98827 2016-08-12 12:37:39Z gcosmo $
+// $Id: G4CrossSectionDataStore.cc 107119 2017-11-02 15:12:35Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -642,6 +642,13 @@ G4String G4CrossSectionDataStore::HtmlFileName(const G4String & in) const
    str=str + ".html";		
    return str;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-
+void G4CrossSectionDataStore::AddDataSet( G4VCrossSectionDataSet* aDataSet , size_t i )  
+{
+   if ( i > dataSetList.size() ) i = dataSetList.size(); 
+   std::vector< G4VCrossSectionDataSet* >::iterator it = dataSetList.end() - i;
+   dataSetList.insert( it , aDataSet );
+   ++nDataSetList;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

@@ -48,6 +48,7 @@
 
 #include "globals.hh"
 #include <vector>
+#include <iostream>
 
 class G4NucLevel 
 {
@@ -70,8 +71,6 @@ public:
 
   inline G4double GetTimeGamma() const;
 
-  inline G4float MixingRatio(size_t idx) const;
-
   inline G4float GammaProbability(size_t idx) const;
 
   inline G4float GammaCumProbability(size_t idx) const;
@@ -83,6 +82,8 @@ public:
   inline G4int SampleShell(size_t idx, G4double rndm) const;
 
   inline const std::vector<G4float>* ShellProbabilty(size_t idx) const;
+
+  void StreamInfo(std::ostream& os) const;
 
 private:  
 
@@ -129,14 +130,6 @@ inline G4int G4NucLevel::TransitionType(size_t idx) const
 inline G4double G4NucLevel::GetTimeGamma() const
 {
   return fTimeGamma;
-}
-
-inline G4float G4NucLevel::MixingRatio(size_t idx) const
-{
-#ifdef G4VERBOSE
-  if(idx >= length) { PrintError(idx, "MixingRatio"); }
-#endif
-  return fMpRatio[idx];
 }
 
 inline G4float G4NucLevel::GammaProbability(size_t idx) const

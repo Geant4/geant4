@@ -35,6 +35,7 @@
 
 #include "globals.hh"
 
+
 /** \file G4INCLINuclearPotential.cc
  * \brief Abstract interface to the nuclear potential.
  *
@@ -57,6 +58,8 @@ namespace G4INCL {
   namespace NuclearPotential {
 
     const G4double INuclearPotential::vPionDefault = 30.6; // MeV
+    const G4double INuclearPotential::vKPlusDefault = -25.; // MeV (repulsive)
+    const G4double INuclearPotential::vKMinusDefault = 60.; // MeV
 
     namespace {
 

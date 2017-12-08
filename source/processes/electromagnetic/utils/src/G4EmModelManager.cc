@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc 97742 2016-06-08 09:24:54Z gcosmo $
+// $Id: G4EmModelManager.cc 106714 2017-10-20 09:38:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -798,7 +798,15 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4EmModelManager::DumpModelList(G4int verb)
+void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb)
+{
+  DumpModelList(out, verb, G4String("\n"));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmModelManager::DumpModelList(std::ostream& out, G4int verb,
+                                     G4String endOfLine)
 {
   if(verb == 0) { return; }
   for(G4int i=0; i<nRegions; ++i) {
@@ -806,8 +814,8 @@ void G4EmModelManager::DumpModelList(G4int verb)
     const G4Region* reg = r->Region();
     G4int n = r->NumberOfModels();  
     if(n > 0) {
-      G4cout << "      ===== EM models for the G4Region  " << reg->GetName()
-             << " ======" << G4endl;;
+      out << "      ===== EM models for the G4Region  " << reg->GetName()
+	  << " ======" << endOfLine;
       for(G4int j=0; j<n; ++j) {
         G4VEmModel* model = models[r->ModelIndex(j)];
         G4double emin = 
@@ -815,11 +823,11 @@ void G4EmModelManager::DumpModelList(G4int verb)
         G4double emax = 
           std::min(r->LowEdgeEnergy(j+1),model->HighEnergyActivationLimit());
         if(emax > emin) {
-	  G4cout << std::setw(20);
-	  G4cout << model->GetName() << " :  Emin= " 
-		 << std::setw(8) << G4BestUnit(emin,"Energy")
-		 << "   Emax= " 
-		 << std::setw(8) << G4BestUnit(emax,"Energy");
+	  out << std::setw(20);
+	  out << model->GetName() << " :  Emin= " 
+	      << std::setw(8) << G4BestUnit(emin,"Energy")
+	      << "   Emax= " 
+	      << std::setw(8) << G4BestUnit(emax,"Energy");
 	  G4PhysicsTable* table = model->GetCrossSectionTable();
 	  if(table) {
 	    size_t kk = table->size();
@@ -827,28 +835,28 @@ void G4EmModelManager::DumpModelList(G4int verb)
 	      G4PhysicsVector* v = (*table)[k];
 	      if(v) {
 		G4int nn = v->GetVectorLength() - 1;
-		G4cout << "  Table with " << nn << " bins Emin= "
-		       << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
-		       << "   Emax= " 
-		       << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
+		out << "  Table with " << nn << " bins Emin= "
+		    << std::setw(6) << G4BestUnit(v->Energy(0),"Energy")
+		    << "   Emax= " 
+		    << std::setw(6) << G4BestUnit(v->Energy(nn),"Energy");
 		break;
 	      }
 	    }
           }
 	  G4VEmAngularDistribution* an = model->GetAngularDistribution();
-	  if(an) { G4cout << "   " << an->GetName(); }
+	  if(an) { out << "   " << an->GetName(); }
 	  if(fluoFlag && model->DeexcitationFlag()) { 
-	    G4cout << "  FluoActive"; 
+	    out << "  FluoActive"; 
 	  }
-	  G4cout << G4endl;
+	  out << endOfLine;
 	}
       }  
     }
     if(1 == nEmModels) { break; }
   }
   if(theCutsNew) {
-    G4cout << "      ===== Limit on energy threshold has been applied " 
-           << G4endl;
+    out << "      ===== Limit on energy threshold has been applied " 
+	<< endOfLine;
   }
 }
 

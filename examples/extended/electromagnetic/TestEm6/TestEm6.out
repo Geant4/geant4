@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -180,7 +180,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -248 m       0 fm      0 fm      0 eV      0 eV   1.95 m    1.95 m        Iron   GammaToMuPair
+    1   -250 m       0 fm      0 fm      0 eV      0 eV   22.7 cm   22.7 cm       Iron   GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -298,7 +298,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
  Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
  Number of process calls --->	ee2hadr : 5	AnnihiToMuPair : 1... write Root file : testem6_1.root - done
 ... close Root file : testem6_1.root - done

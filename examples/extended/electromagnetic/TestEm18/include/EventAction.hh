@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/include/EventAction.hh
 /// \brief Definition of the EventAction class
 //
-// $Id: EventAction.hh 82401 2014-06-18 14:43:54Z gcosmo $
+// $Id: EventAction.hh 105927 2017-08-29 13:25:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,8 +36,10 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include <map>
 
 class RunAction;
+class G4VProcess;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,14 +53,15 @@ class EventAction : public G4UserEventAction
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void AddEnergyDeposit(G4double edep)   {fEnergyDeposit  += edep;};
-    void AddSecondary(G4double ekin)     {fEnergySecondary  += ekin;};
-        
+    void SumEnergyDeposited(G4int trackID, G4double edep);
+    void SumEnergyTransfered(const G4VProcess*, G4double);
+
   private:
     RunAction*    fRunAction;
     
-    G4double      fEnergyDeposit;
-    G4double      fEnergySecondary;       
+    G4double      fEdepPrimary, fEdepSecondary;
+    std::map<G4String,G4double> fEnergyTransfered;
+    std::map<G4String,G4int> fProcessSubType;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

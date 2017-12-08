@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22, 2017 E. Bagli (channelingExample-V10-03-03)
+- Modified sdht_ID to fSDHT_ID
+- Removed G4VIS_USE, G4UI_USE
+- Removed double blank lines
+
 May 05,2017 E. Bagli (channelingExample-V10-03-00)
 - Added the support to the G4Crystal package implemented in V10-03
 - Added the support to G4Channeling process implemented in V10-03-01

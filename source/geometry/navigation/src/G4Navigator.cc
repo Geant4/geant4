@@ -45,6 +45,12 @@
 
 #include "G4VoxelSafety.hh"
 
+// Constant determining how precise normals should be (how close to unit
+// vectors). If exceeded, warnings will be issued.
+// Can be CLHEP::perMillion (its old default) for geometry checking.
+//
+static const G4double kToleranceNormalCheck = CLHEP::perThousand;
+
 // ********************************************************************
 // Constructor
 // ********************************************************************
@@ -1332,6 +1338,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
   G4ThreeVector    ExitNormal(0.,0.,0.);
   G4VSolid        *currentSolid=0;
   G4LogicalVolume *candidateLogical;
+
   if ( fLastTriedStepComputation ) 
   {
     // use fLastLocatedPointLocal and next candidate volume
@@ -1447,7 +1454,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
       G4VSolid* daughterSolid =fHistory.GetTopVolume()->GetLogicalVolume()
                                                       ->GetSolid();
       ExitNormal= -(daughterSolid->SurfaceNormal(fLastLocatedPointLocal));
-      if( std::fabs(ExitNormal.mag2()-1.0 ) > CLHEP::perMillion )
+      if( std::fabs(ExitNormal.mag2()-1.0 ) > kToleranceNormalCheck )
       {
         G4ExceptionDescription desc;
         desc << " Parameters of solid: " << *daughterSolid
@@ -1593,7 +1600,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     //
     globalNormal = fExitNormalGlobalFrame; 
     G4double  normMag2 = globalNormal.mag2(); 
-    if( std::fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
+    if( std::fabs ( normMag2 - 1.0 ) < perThousand ) // was perMillion )  // Value is good 
     {
        *pNormalCalculated = true; // ComputeStep always computes it if Exiting
                                   // (fExiting==true)
@@ -1669,7 +1676,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 #endif
      
      G4double localMag2= localNormal.mag2();
-     if( validNormal && (std::fabs(localMag2-1.0)) > CLHEP::perMillion )
+     if( validNormal && (std::fabs(localMag2-1.0)) > kToleranceNormalCheck )
      {
        G4ExceptionDescription edN;
        edN.precision(10); 
@@ -1713,7 +1720,7 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     
     // Check the value computed against fExitNormalGlobalFrame
     G4ThreeVector diffNorm = globalNormAgn - fExitNormalGlobalFrame;
-    if( diffNorm.mag2() > perMillion*CLHEP::perMillion)
+    if( diffNorm.mag2() > kToleranceNormalCheck )
     {
       G4ExceptionDescription edDfn;
       edDfn << "Found difference in normals in case of exiting mother "

@@ -244,7 +244,7 @@ public:
         float XL = 0;
         string_segs(false,*it,a_height,a_encoding,a_font,XL,Y,dummy,false);
         Y -= Y_ADVANCE;
-        width = tools::mx(width,XL);
+        width = mx<float>(width,XL);
       }
               
       a_mn_x = 0;
@@ -272,7 +272,7 @@ public:
     float XL = 0;
     string_segs(false,a_s,a_height,a_encoding,a_font,XL,Y,dummy,false);
     Y -= Y_ADVANCE;
-    width = tools::mx(width,XL);
+    width = mx<float>(width,XL);
 
     a_mn_x = 0;
     a_mn_y = -_descent(a_height);
@@ -415,10 +415,10 @@ protected:
       int pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = tools::mx(ymax,yp[ipoint]);
+          ymax = mx<float>(ymax,yp[ipoint]);
           box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint],yp[ipoint],0);
 
-          ymax = tools::mx(ymax,yp[ipoint+1]);
+          ymax = mx<float>(ymax,yp[ipoint+1]);
           box_3f_extend_by(a_mn_x,a_mn_y,a_mn_z,a_mx_x,a_mx_y,a_mx_z,xp[ipoint+1],yp[ipoint+1],0);
 
           ipoint ++;
@@ -522,12 +522,12 @@ protected:
       pointn  = max_point[ipoly];
       if(pointn>0) {
         for(int count=0;count<pointn-1;count++) {
-          ymax = tools::mx(ymax,yp[ipoint]);
+          ymax = mx<float>(ymax,yp[ipoint]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint]);
             a_segs.push_back(aY+yp[ipoint]);
           }
-          ymax = tools::mx(ymax,yp[ipoint+1]);
+          ymax = mx<float>(ymax,yp[ipoint+1]);
           if(a_fill_segs) {
             a_segs.push_back(aX+xp[ipoint+1]);
             a_segs.push_back(aY+yp[ipoint+1]);

@@ -1,4 +1,4 @@
-$Id: History 100810 2016-11-02 15:03:58Z gcosmo $
+$Id: History 106244 2017-09-26 01:58:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25-09-17  V.Ivanchenko (exhadr00-V10-03-00)
+- Added possibility to enable radioactive decay
 
 01-11-16  I. Hrivnacova (exhadr00-V10-02-00)
 - Coding guidelines (class data member names)

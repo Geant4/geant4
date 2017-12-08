@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DormandPrince745.cc 101384 2016-11-16 11:03:44Z gcosmo $
+// $Id: G4DormandPrince745.cc 107470 2017-11-15 07:14:28Z gcosmo $
 //
 // Class description:
 //
@@ -117,11 +117,13 @@ G4DormandPrince745::G4DormandPrince745(G4EquationOfMotion *EqRhs,
     
     fMidVector = new G4double[numberOfVariables];
     fMidError =  new G4double[numberOfVariables];
+    fAuxStepper = nullptr;
     if( primary )
     {
         fAuxStepper = new G4DormandPrince745(EqRhs, numberOfVariables,
                                            !primary);
     }
+    fLastStepLength = -1.0;
 }
 
 //Destructor

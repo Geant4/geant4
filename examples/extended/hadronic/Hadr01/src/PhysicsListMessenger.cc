@@ -27,7 +27,7 @@
 /// \brief Implementation of the PhysicsListMessenger class
 //
 //
-// $Id: PhysicsListMessenger.cc 99019 2016-08-31 08:27:06Z gcosmo $
+// $Id: PhysicsListMessenger.cc 107541 2017-11-22 08:24:57Z gcosmo $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -52,18 +52,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
-:G4UImessenger(), fPhysicsList(pPhys),
- fPListCmd(0), fListCmd(0) 
+:G4UImessenger(), fPhysicsList(pPhys)
 {   
   fPListCmd = new G4UIcmdWithAString("/testhadr/Physics",this);
-  fPListCmd->SetGuidance("Add modula physics list.");
+  fPListCmd->SetGuidance("Add modular physics list.");
   fPListCmd->SetParameterName("PList",false);
   fPListCmd->AvailableForStates(G4State_PreInit);
 
   fListCmd = new G4UIcmdWithoutParameter("/testhadr/ListPhysics",this);
   fListCmd->SetGuidance("Available Physics Lists");
   fListCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

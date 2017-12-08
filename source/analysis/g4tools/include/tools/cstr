@@ -23,11 +23,13 @@ inline const std::string& s_cstr() {
 }
 #endif
 
-inline char* str_dup(const char* a_cstr,bool a_inc = true) {
+inline char* str_dup(const char* a_cstr
+#ifdef TOOLS_MEM
+                     ,bool a_inc = true
+#endif		     
+		     ) {
 #ifdef TOOLS_MEM
   if(a_inc) mem::increment(s_cstr().c_str());
-#else
-  (void)a_inc;
 #endif
   return ::strcpy((char*)::malloc(::strlen(a_cstr)+1),a_cstr);
 }

@@ -1,4 +1,4 @@
-$Id: History 102618 2017-02-10 07:59:27Z gcosmo $
+$Id: History 107320 2017-11-08 16:30:22Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,29 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+7-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-06) 
+- Adding G4HadronPhysicsShieldingLEND
+
+6-Nov-2017, Tatsumi Koi (phys-ctor-hinelastic-V10-03-05) 
+- Fix registration of cross section data set in G4HadronPhysicsShielding
+
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-04) 
+- G4HadronPhysicsFTFQGSP_BERT : fixing trivial compiler warnings
+  of the previous tag.
+
+16-Oct-2017, Alberto Ribon (phys-ctor-hinelastic-V10-03-03) 
+- G4HadronPhysicsFTFQGSP_BERT : new hadron physics similar to
+  G4HadronPhysicsFTFP_BERT, but with QGS fragmentation of strings
+  (instead of the Lund string fragmentation).
+
+28-Jul-2017, Andrea Dotti (phys-ctor-hinelastic-V10-03-02)
+- Refactoring of QGSP_BERT, QGSP_BIC w/ variants
+
+26-Jul-2017, Andrea Dotti
+- Refactoring code of all FTFP_BERT variant, FTF_BIC and QGS_BIC
+
+14-Jul-2017, Andrea Dotti               (phys-ctor-hinelastic-V10-03-01)
+- Refactoring of code of FTFP_BERT and register physics builders
 
 09-Feb-2017, Makoto Asai                (phys-ctor-hinelastic-V10-03-00)
 - Print-out of the transition energy region between FTFP and BERT 

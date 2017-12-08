@@ -30,7 +30,6 @@
 #include "G4CsvAnalysisReader.hh"
 #include "G4CsvRFileManager.hh"
 #include "G4CsvRNtupleManager.hh"
-#include "G4CsvRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
@@ -177,6 +176,7 @@ G4bool G4CsvAnalysisReader::Reset()
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadH1Impl(const G4String& h1Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/, 
                                       G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -218,6 +218,7 @@ G4int G4CsvAnalysisReader::ReadH1Impl(const G4String& h1Name,
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadH2Impl(const G4String& h2Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/, 
                                       G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -259,6 +260,7 @@ G4int G4CsvAnalysisReader::ReadH2Impl(const G4String& h2Name,
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadH3Impl(const G4String& h3Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/, 
                                       G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -300,6 +302,7 @@ G4int G4CsvAnalysisReader::ReadH3Impl(const G4String& h3Name,
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadP1Impl(const G4String& p1Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/, 
                                       G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -341,6 +344,7 @@ G4int G4CsvAnalysisReader::ReadP1Impl(const G4String& p1Name,
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadP2Impl(const G4String& p2Name, 
                                       const G4String& fileName,
+                                      const G4String& /*dirName*/, 
                                       G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -383,6 +387,7 @@ G4int G4CsvAnalysisReader::ReadP2Impl(const G4String& p2Name,
 //_____________________________________________________________________________
 G4int G4CsvAnalysisReader::ReadNtupleImpl(const G4String& ntupleName, 
                                           const G4String& fileName,
+                                          const G4String& /*dirName*/, 
                                           G4bool isUserFileName)
 {
 #ifdef G4VERBOSE
@@ -404,7 +409,7 @@ G4int G4CsvAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
   
   // Create ntuple 
   auto rntuple = new tools::rcsv::ntuple(*ntupleFile);
-  auto id = fNtupleManager->SetNtuple(new G4CsvRNtupleDescription(rntuple));
+  auto id = fNtupleManager->SetNtuple(new G4TRNtupleDescription<tools::rcsv::ntuple>(rntuple));
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 

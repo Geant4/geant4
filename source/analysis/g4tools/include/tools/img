@@ -375,8 +375,8 @@ public:
     }
    {for(unsigned int ipix=0;ipix<m_n;ipix++) pixels[ipix] = 0;}
 
-    unsigned int wfac = double(m_w)/double(a_w);
-    unsigned int hfac = double(m_h)/double(a_h);
+    unsigned int wfac = (unsigned int)(double(m_w)/double(a_w));
+    unsigned int hfac = (unsigned int)(double(m_h)/double(a_h));
     if(!wfac) wfac = 1;
     if(!hfac) hfac = 1;
 
@@ -474,8 +474,8 @@ public:
     }
   
     // 012345
-    unsigned int rw = tools::mn<unsigned int>(m_w-a_sx,a_sw); 
-    unsigned int rh = tools::mn<unsigned int>(m_h-a_sy,a_sh); 
+    unsigned int rw = min_of<unsigned int>(m_w-a_sx,a_sw); 
+    unsigned int rh = min_of<unsigned int>(m_h-a_sy,a_sh); 
     unsigned int sz = rh*rw*m_n;
     if(!sz) {
       a_res.make_empty();

@@ -1,4 +1,4 @@
-$Id: History 104431 2017-05-31 07:45:11Z gcosmo $
+$Id: History 106172 2017-09-15 13:03:57Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 September, 2017 Gabriele Cosmo (intercoms-V10-03-04)
+- More cases of static symbols to export for DLLs.
+- Removed inline specification for two static methods in G4UImanager.
+
+15 September, 2017 Gabriele Cosmo (intercoms-V10-03-03)
+- Use DLL export flags for static symbols in G4UImanager.
+
+27 July, 2017 Ivana Hrivnacova (intercoms-V10-03-02)
+- Explicitly remove constness by means of remove_const.
+  Fixing problem report #1803 (with the patch provided here).  
 
 30 May, 2017 Ivana Hrivnacova (intercoms-V10-03-01)
 - Fixed G4GenericMessenger::Command::SetUnit:

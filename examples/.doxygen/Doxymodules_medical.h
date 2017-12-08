@@ -1,4 +1,4 @@
-// $Id: Doxymodules_medical.h 104750 2017-06-15 08:47:26Z gcosmo $
+// $Id: Doxymodules_medical.h 107787 2017-11-30 13:11:33Z gcosmo $
 // The example class categories definitions for Doxygen
 
 /// \file Doxymodules_medical.h
@@ -175,6 +175,15 @@
 
 /** @} */
 
+/** @defgroup extended_medical_dna_mfp mfp
+ *  Medical dna mfp example has its
+ *  <a href="../html_mfp/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
 /** @defgroup extended_medical_dna_microdosimetry microdosimetry
  *  Medical dna microdosimetry example has its
  *  <a href="../html_microdosimetry/html/index.html">standalone documentation </a>
@@ -187,6 +196,15 @@
 /** @defgroup extended_medical_dna_microyz microyz
  *  Medical dna microyz example has its
  *  <a href="../html_microyz/html/index.html">standalone documentation </a>
+ *  @ingroup extended_medical_dna
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_medical_dna_neuron neuron
+ *  Medical dna neuron example has its
+ *  <a href="../html_neuron/html/index.html">standalone documentation </a>
  *  @ingroup extended_medical_dna
  *  @{
  */

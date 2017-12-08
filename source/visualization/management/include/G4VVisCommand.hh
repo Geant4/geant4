@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVisCommand.hh 104163 2017-05-15 06:52:42Z gcosmo $
+// $Id: G4VVisCommand.hh 105349 2017-07-21 12:23:24Z gcosmo $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
@@ -71,9 +71,13 @@ protected:
                                     G4double& yval);
   // Return false if problem parsing paramString.
 
+  const G4String& ConvertToColourGuidance();
   void ConvertToColour
   (G4Colour& colour,
-   const G4String& redOrString, G4double green, G4double blue, G4double opacity);
+   const G4String& redOrString,
+   G4double green,
+   G4double blue,
+   G4double opacity);
   // Note: colour is supplied by the caller and becomes the default if the
   // remaining parameters cannot be parsed.
   // Note: redOrString is either a number or string.  If a string it must be
@@ -82,7 +86,6 @@ protected:
   // (colour,"red",...,...,0.5): will give the colour red with opacity 0.5 (the
   // third and fourth arguments are ignored), or
   // (1.,0.,0.,0.5): this also will be red with opacity 0.5.
-  static const G4String& ConvertToColourGuidance();
 
   // Other utilities.
   void UpdateVisManagerScene (const G4String& sceneName = "");

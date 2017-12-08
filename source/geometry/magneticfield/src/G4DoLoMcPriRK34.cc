@@ -54,7 +54,7 @@ G4DoLoMcPriRK34::G4DoLoMcPriRK34(G4EquationOfMotion *EqRhs,
                                   G4int noIntegrationVariables,
                                   G4bool primary)
    : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
-     fAuxStepper(0)
+     fLastStepLength( -1.0 ), fAuxStepper( nullptr )     
 {
    const G4int numberOfVariables = noIntegrationVariables;
    

@@ -28,10 +28,11 @@
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//      GEANT 4 class header file 
 //
-//	History: first implementation, 
+//      History: first implementation, 
 //      July 2016, K. Lynch
+//      June 2017, K.L. Genser added baseion, lifetimes and access functions
 
 #ifndef G4MuonicAtom_h 
 #define G4MuonicAtom_h 1
@@ -40,21 +41,83 @@
 
 class G4MuonicAtom : public G4Ions
 {
- public:
-   G4MuonicAtom(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,   
-       G4int               iSpin,        G4int               iParity,    
-       G4int               iConjugation, G4int               iIsospin,   
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,      
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable,  G4bool              shortlived,
-       const G4String&     subType =""
-   );
+ protected:
+   G4MuonicAtom(){};
 
+ public:
+  G4MuonicAtom(
+               const G4String&     aName,        G4double            mass,
+               G4double            width,        G4double            charge,   
+               G4int               iSpin,        G4int               iParity,    
+               G4int               iConjugation, G4int               iIsospin,   
+               G4int               iIsospin3,    G4int               gParity,
+               const G4String&     pType,        G4int               lepton,      
+               G4int               baryon,       G4int               encoding,
+               G4bool              stable,       G4double            lifeTime,
+               G4DecayTable        *decaytable,  G4bool              shortlived,
+               const G4String&     subType,      G4Ions const*       baseion,
+               G4int               anti_encoding  =0,
+               G4double            excitation = 0.0, 
+               G4int               isomer = 0,
+               G4double            DIOLifeTime = -1.0,
+               G4double            NCLifeTime = -1.0
+               );
+
+  virtual                      ~G4MuonicAtom();
+  G4MuonicAtom*                MuonicAtomDefinition();
+  G4MuonicAtom*                MuonicAtom();
+  G4Ions const*                GetBaseIon() const;
+  G4double                     GetDIOLifeTime() const;
+  void                         SetDIOLifeTime(G4double lt);
+  G4double                     GetNCLifeTime() const;
+  void                         SetNCLifeTime(G4double lt);
+
+ private:
+   G4Ions const*                baseIon;
+   G4double                     fDIOLifeTime;
+   G4double                     fNCLifeTime; 
 };
 
+inline
+ G4MuonicAtom* G4MuonicAtom::MuonicAtomDefinition()
+{
+  return this;
+}
+
+inline
+ G4MuonicAtom* G4MuonicAtom::MuonicAtom() 
+{
+  return this;
+}
+
+inline
+ G4Ions const* G4MuonicAtom::GetBaseIon() const
+{
+  return baseIon;
+}
+
+inline
+ G4double G4MuonicAtom::GetDIOLifeTime() const
+{
+  return fDIOLifeTime;
+}
+
+inline
+ void G4MuonicAtom::SetDIOLifeTime(G4double lt)
+{
+  fDIOLifeTime = lt;
+}
+
+inline
+ G4double G4MuonicAtom::GetNCLifeTime() const
+{
+  return fNCLifeTime;
+}
+
+inline
+ void G4MuonicAtom::SetNCLifeTime(G4double lt)
+{
+  fNCLifeTime = lt;
+}
 
 #endif

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleTable.hh 94421 2015-11-16 08:22:56Z gcosmo $
+// $Id: G4ParticleTable.hh 106143 2017-09-14 06:34:42Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -45,6 +45,7 @@
 //                                       28 ct., 99  H.Kurashige
 //      modified implementation of Remove 21 Mar.,08  H.Kurashige
 //      remove G4ShortLivedTable         25 July, 13 H.Kurashige
+//      added support for MuonicAtom     September, 17 K.L.Genser
 //
 
 #ifndef G4ParticleTable_h
@@ -219,12 +220,15 @@ class G4ParticleTable
 
    G4bool                readyToUse;
    G4ParticleDefinition* genericIon;
+   G4ParticleDefinition* genericMuonicAtom;
  
  public:
    void SetReadiness(G4bool val=true);
    G4bool GetReadiness() const;
    G4ParticleDefinition* GetGenericIon() const;
    void SetGenericIon(G4ParticleDefinition*);
+   G4ParticleDefinition* GetGenericMuonicAtom() const;
+   void SetGenericMuonicAtom(G4ParticleDefinition*);
  private:
    void CheckReadiness() const;
 

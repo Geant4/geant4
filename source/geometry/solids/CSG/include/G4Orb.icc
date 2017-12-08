@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Orb.icc 103471 2017-04-11 07:31:42Z gcosmo $
+// $Id: G4Orb.icc 105834 2017-08-23 08:14:34Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -43,14 +43,16 @@ G4double G4Orb::GetRadius() const
 inline
 G4double G4Orb::GetRadialTolerance() const
 {
-  return fRmaxTolerance;
+  return 2*halfRmaxTol;
 }
 
 inline
 void G4Orb::SetRadius(G4double newRmax)
 {
   fRmax=newRmax;
-  fCubicVolume= 0.;
+  Initialize();
+ 
+  fCubicVolume = 0.;
   fSurfaceArea = 0.;
   fRebuildPolyhedron = true;
 }

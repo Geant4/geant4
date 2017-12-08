@@ -28,10 +28,10 @@ find_package(ROOT REQUIRED)
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
-include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/shared/include 
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR}/shared/include
                     ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+                    ${ROOT_INCLUDE_DIRS})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
                   ${PROJECT_SOURCE_DIR}/shared/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eplusPolarizedAnnihilation.cc 97175 2016-05-27 12:42:05Z gcosmo $
+// $Id: G4eplusPolarizedAnnihilation.cc 105740 2017-08-16 13:05:44Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -77,7 +77,7 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
     theTransverseAsymmetryTable(nullptr)
 {
   emModel = new G4PolarizedAnnihilationModel();
-  SetEmModel(emModel, 1); 
+  SetEmModel(emModel); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

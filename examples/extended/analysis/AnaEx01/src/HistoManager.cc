@@ -27,7 +27,7 @@
 /// \brief Implementation of the HistoManager class
 //
 //
-// $Id: HistoManager.cc 100674 2016-10-31 10:43:40Z gcosmo $
+// $Id: HistoManager.cc 105494 2017-07-28 09:02:56Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
@@ -186,5 +186,3 @@ void HistoManager::PrintStatistic()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

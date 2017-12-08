@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm18/src/EventAction.cc
 /// \brief Implementation of the EventAction class
 //
-// $Id: EventAction.cc 82401 2014-06-18 14:43:54Z gcosmo $
+// $Id: EventAction.cc 105927 2017-08-29 13:25:29Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,19 +54,71 @@ EventAction::~EventAction()
 void EventAction::BeginOfEventAction(const G4Event*)
 {
  // initialisation per event
- fEnergyDeposit  = fEnergySecondary = 0.;
+ fEdepPrimary = fEdepSecondary = 0.;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::SumEnergyDeposited(G4int trackID, G4double edep)
+{
+  if (trackID == 1) fEdepPrimary  += edep;
+  else fEdepSecondary += edep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::SumEnergyTransfered(const G4VProcess* process,G4double energy)
+{
+  G4String procName = process->GetProcessName();
+  std::map<G4String,G4double>::iterator it = fEnergyTransfered.find(procName);
+  if ( it == fEnergyTransfered.end()) {
+    fEnergyTransfered[procName] = energy;
+  }
+  else {
+    fEnergyTransfered[procName] += energy;
+  }
+  
+  G4int subtype = process-> GetProcessSubType();
+  fProcessSubType[procName] = subtype;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
- fRunAction->AddEnergyDeposit(fEnergyDeposit);
- 
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
- analysisManager->FillH1(1, fEnergyDeposit);
- analysisManager->FillH1(2, fEnergySecondary);
- analysisManager->FillH1(3, fEnergyDeposit+fEnergySecondary);
+ 
+ G4double EtransferedTotal = 0.;
+ std::map<G4String,G4double>::iterator it;    
+ for (it = fEnergyTransfered.begin(); it != fEnergyTransfered.end(); it++) {
+    G4String procName = it->first;
+    G4double energy   = it->second;
+    fRunAction->EnergyTransferedByProcess(procName, energy);
+    EtransferedTotal += energy;
+    //
+    G4int ih = 0;
+    if(fProcessSubType[procName] == 2) ih = 3;
+    else if(fProcessSubType[procName] == 3) ih = 4;
+    else if(fProcessSubType[procName] == 4) ih = 5;
+    if (ih > 0) analysisManager->FillH1(ih, energy);
+ }
+
+ fRunAction->EnergyDeposited(fEdepPrimary, fEdepSecondary);
+ if (EtransferedTotal > 0.) fRunAction->EnergyTransfered(EtransferedTotal);
+ G4double energyLostTotal = fEdepPrimary + EtransferedTotal;
+ fRunAction->TotalEnergyLost(energyLostTotal);
+ G4double energyDepositTotal = fEdepPrimary + fEdepSecondary;
+ fRunAction->TotalEnergyDeposit(energyDepositTotal);
+ 
+
+ analysisManager->FillH1( 2, fEdepPrimary);
+ analysisManager->FillH1( 6, EtransferedTotal);
+ analysisManager->FillH1( 7, energyLostTotal);
+ analysisManager->FillH1( 9, fEdepSecondary);
+ analysisManager->FillH1(10, energyDepositTotal);
+ 
+ fEnergyTransfered.clear();
+ fProcessSubType.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

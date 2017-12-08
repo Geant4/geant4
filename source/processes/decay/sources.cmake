@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 100340 2016-10-18 07:50:12Z gcosmo $
+# $Id: sources.cmake 106151 2017-09-14 06:43:04Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -43,15 +43,13 @@ GEANT4_DEFINE_MODULE(NAME G4decay
         G4Decay.hh
         G4DecayProcessType.hh
         G4DecayWithSpin.hh
-	G4MuonicAtomDecay.hh
         G4PionDecayMakeSpin.hh
         G4UnknownDecay.hh
         G4VExtDecayer.hh
     SOURCES
         G4Decay.cc
         G4DecayWithSpin.cc
-	G4MuonicAtomDecay.cc
-	G4PionDecayMakeSpin.cc
+        G4PionDecayMakeSpin.cc
         G4UnknownDecay.cc
     GRANULAR_DEPENDENCIES
         G4csg

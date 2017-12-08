@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ElectronNuclearProcess.cc 66499 2012-12-19 09:16:35Z gcosmo $
+// $Id: G4ElectronNuclearProcess.cc 105287 2017-07-19 08:45:40Z gcosmo $
 //
 
 #include "G4ElectronNuclearProcess.hh" 
@@ -46,7 +46,7 @@ G4ElectronNuclearProcess::~G4ElectronNuclearProcess()
 
 void G4ElectronNuclearProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles inelastic electron scattering from\n" 
-          << "nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4ElectronNuclearProcess handles inelastic electron scattering\n" 
+          << "from nuclei by invoking one hybrid electromagnetic-hadronic\n"
+          << "model and one hybrid electromagnetic-hadronic cross section set.\n";
 }

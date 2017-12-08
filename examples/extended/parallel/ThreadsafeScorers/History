@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12/8/17 Hisaya Kurashige              (ThreadsafeScorers-V10-03-02)
+- Add inclusion of <deque> in TSPhysicsList.hh
+
 20/4/17 Jonathan Madsen               (ThreadsafeScorers-V10-03-00)
 - Fixes to deletion/clearing of static maps between runs
 - Removed some unnecessary typedefs

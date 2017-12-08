@@ -53,7 +53,7 @@ public:
   HepRandom();
   HepRandom(long seed);
   // Contructors with and without a seed using the default engine
-  // (JamesRandom).
+  // (MixMax).
  
   HepRandom(HepRandomEngine & algorithm);
   HepRandom(HepRandomEngine * algorithm);

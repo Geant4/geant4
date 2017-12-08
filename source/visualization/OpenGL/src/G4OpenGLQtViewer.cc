@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLQtViewer.cc 104288 2017-05-23 13:23:23Z gcosmo $
+// $Id: G4OpenGLQtViewer.cc 107329 2017-11-08 16:41:26Z gcosmo $
 //
 // 
 // G4OpenGLQtViewer : Class to provide Qt specific
@@ -1298,7 +1298,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
   double factorY =  ((double)viewport[3]/fGLWidget->height());
   fSpinningDelay = fLastEventTime->elapsed();
   QPoint delta = (fLastPos3-fLastPos1)*factorX;
-  
+
   // reset cursor state
   fGLWidget->setCursor(QCursor(Qt::ArrowCursor));
   
@@ -1307,7 +1307,7 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
       return;
     }
     updatePickInfosWidget(evnt->pos().x()*factorX,evnt->pos().y()*factorY);
-    
+
   } else if (fSpinningDelay < fLaunchSpinDelay ) {
     if ((delta.x() == 0) && (delta.y() == 0)) {
       return;
@@ -4452,7 +4452,7 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
     createPickInfosWidget();
   }
 
-  const std::vector < G4OpenGLViewerPickMap* > & pickMap = GetPickDetails(aX,aY);
+  const std::vector < G4OpenGLViewerPickMap* > & pickMapVector = GetPickDetails(aX,aY);
   
   // remove all previous widgets
   if (fPickInfosWidget) {
@@ -4475,64 +4475,76 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   fSignalMapperPicking = new QSignalMapper(this);
   
   // parse all pick results
-  for (unsigned int a=0; a< pickMap.size(); a++) {
+  G4int nPickedObjectsWithAttributes = 0;
+  for (unsigned int a=0; a< pickMapVector.size(); a++) {
+    const auto& pickMap = pickMapVector[a];
     // Add a box inside the pick viewer box
     std::ostringstream label;
-    if (pickMap[a]->getAttributes().size() > 0) {
-      std::string txt = pickMap[a]->getAttributes()[0].data();
+    std::ostringstream content;
+    std::string txt = pickMap->getAttributes()[0].data();
+    if (pickMapVector[a]->getAttributes().size()) {
+      ++nPickedObjectsWithAttributes;
 
-      // Look for Volumes
-      std::size_t pos = txt.find("Physical Volume Path (PVPath):") + 31;
-      if (pos != 31-1) {
-        std::size_t pos2 = txt.find("\n",pos);
-        label << "Volume: " + txt.substr(pos,pos2-pos);
-      } else  {
-        // Look for tracks
-        if (pickMap[a]->getAttributes().size() > 1) {
-          std::string txt1 = pickMap[a]->getAttributes()[1].data();
-          
-          pos = txt.find("Run ID (RunID):") + 16;
-          if (pos != 16-1) {
-            std::size_t pos2 = txt.find("\n",pos);
-            std::size_t posEID = txt.find("Event ID (EventID):",pos2) + 20;
-            std::size_t posEID2 = txt.find("\n",posEID);
-            std::size_t posPN = txt1.find("Particle Name (PN):") + 20;
-            std::size_t posPN2 = txt1.find("\n",posPN);
-            std::size_t posCh = txt1.find("Charge (Ch):",posPN2) + 13;
-            std::size_t posCh2 = txt1.find("\n",posCh);
-            label << "RunID:" << txt.substr(pos,pos2-pos)
-            << " EventID:" << txt.substr(posEID,posEID2-posEID)
-            << " PN:" << txt1.substr(posPN,posPN2-posPN)
-            << " Ch:" << txt1.substr(posCh,posCh2-posCh);
-          }
-        } else {
-          label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
-        }
-          
+      std::size_t pos1 = txt.find(':');
+      std::string storeKey = txt.substr(0,pos1);
+
+      if (storeKey == "G4PhysicalVolumeModel") {
+
+        label << "Volume:";
+        std::size_t pos2 = txt.find(':',pos1+1);
+        std::size_t pos3 = txt.find('\n',pos2+1);
+        label << txt.substr(pos2+1,pos3-pos2-1);
+
+      } else if (storeKey == "G4TrajectoriesModel") {
+
+        label << "Trajectory:";
+        std::size_t pos2 = txt.find(':',pos1+1);
+        std::size_t pos3 = txt.find('\n',pos2+1);
+        label << " Run:" << txt.substr(pos2+1,pos3-pos2-1);
+        std::size_t pos4 = txt.find(':',pos3+1);
+        std::size_t pos5 = txt.find('\n',pos4+1);
+        label << ", Event:" << txt.substr(pos4+1,pos5-pos4-1);
+
+      } else {
+
+        label << "Hit number:" << a << ", PickName: " << pickMap->getPickName();
+
       }
-    } else {
-      label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
+
+      // Accumulate all content with the same pickname
+      content << pickMap->print().data();
+      G4int thisPickName = pickMap->getPickName();
+      while (++a < pickMapVector.size()) {
+        const auto& a_pickMap = pickMapVector[a];
+        if (a_pickMap->getPickName() == thisPickName) {
+          content << a_pickMap->print().data();
+        } else {
+          a--;
+          break;
+        }
+      }
+
+      QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
+      pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
+      pickCoutButton->setIcon(*fTreeIconClosed);
+      fPickInfosWidget->layout()->addWidget(pickCoutButton);
+
+      QStringList newStr;
+
+      // Add to stringList
+      newStr = QStringList(QString(content.str().c_str()).trimmed());
+
+      QTextEdit* ed = new QTextEdit();
+      ed->setFontFamily("Courier");
+      ed->setFontPointSize(12);
+      ed->setReadOnly(true);
+      fPickInfosWidget->layout()->addWidget(ed);
+      ed->setVisible((false));
+      ed->append(newStr.join(""));
+
+      connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
+      fSignalMapperPicking->setMapping(pickCoutButton,fPickInfosWidget->layout()->count()-1);
     }
-    QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
-    pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
-    pickCoutButton->setIcon(*fTreeIconClosed);
-    fPickInfosWidget->layout()->addWidget(pickCoutButton);
-    
-    QStringList newStr;
-    
-    // Add to stringList
-    newStr = QStringList(QString(pickMap[a]->print().data()).trimmed());
-    
-    QTextEdit* ed = new QTextEdit();
-    ed->setFontFamily("Courier");
-    ed->setFontPointSize(12);
-    ed->setReadOnly(true);
-    fPickInfosWidget->layout()->addWidget(ed);
-    ed->setVisible((false));
-    ed->append(newStr.join(""));
-    
-    connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
-    fSignalMapperPicking->setMapping(pickCoutButton,fPickInfosWidget->layout()->count()-1);
   }
   
   connect(fSignalMapperPicking, SIGNAL(mapped(int)),this, SLOT(toggleSceneTreeComponentPickingCout(int)));
@@ -4544,31 +4556,30 @@ void G4OpenGLQtViewer::updatePickInfosWidget(int aX, int aY) {
   pushUp->setSizePolicy(vPolicy);
   fPickInfosWidget->layout()->addWidget(pushUp);
   
-/*  // highlight the first one :
+  // highlight the first one :
   
   // first un-highlight the last selected
   changeColorAndTransparency(fLastHighlightName,fLastHighlightColor);
   
-  if (pickMap.size() > 0 ) {
+  if (pickMapVector.size() > 0 ) {
     // get the new one
-    fLastHighlightName = pickMap[0]->getPickName();
+    fLastHighlightName = pickMapVector[0]->getPickName();
     fLastHighlightColor = getColorForPoIndex(fLastHighlightName);
     // set the new one
     changeColorAndTransparency(fLastHighlightName,G4Color(1,1,1,1));
     
     updateQWidget();
   }
- */
   QDialog* dial = static_cast<QDialog*> (fUIPickInfosWidget->parent());
   if (dial) {
     // change name
     std::ostringstream oss;
-    if (pickMap.size() == 0) {
+    if (nPickedObjectsWithAttributes == 0) {
       oss << "No object";
-    } else if (pickMap.size() == 1) {
+    } else if (nPickedObjectsWithAttributes == 1) {
       oss << "1 object";
     } else {
-      oss << QString::number(pickMap.size()).toStdString() << " objects";
+      oss << nPickedObjectsWithAttributes << " objects";
     }
     oss << " selected - " << GetName();
     dial->setWindowTitle(oss.str().c_str());
@@ -4633,9 +4644,13 @@ void G4OpenGLQtViewer::tableWidgetViewerSetItemChanged(QTableWidgetItem * item) 
 }
 
 bool G4OpenGLQtViewer::isCurrentWidget(){
-  // Prevent from repainting a hidden tab (the current tab name has to be the one of th GL viewer)
-  if ( GetName() != fUiQt->GetViewerTabWidget()->tabText(fUiQt->GetViewerTabWidget()->currentIndex()).toStdString().c_str()) {
-    return false;
+  G4Qt* interactorManager = G4Qt::getInstance ();
+  if (!interactorManager->IsExternalApp()) {
+
+    // Prevent from repainting a hidden tab (the current tab name has to be the one of th GL viewer)
+    if ( GetName() != fUiQt->GetViewerTabWidget()->tabText(fUiQt->GetViewerTabWidget()->currentIndex()).toStdString().c_str()) {
+      return false;
+    }
   }
   return true;
 }

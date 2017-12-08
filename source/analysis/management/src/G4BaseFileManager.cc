@@ -51,9 +51,9 @@ G4BaseFileManager::~G4BaseFileManager()
 G4String G4BaseFileManager::TakeOffExtension(G4String& name) const
 {
   G4String extension;
-  if ( name.find(".") != std::string::npos ) { 
-    extension = name.substr(name.find("."));
-    name = name.substr(0, name.find("."));
+  if ( name.rfind(".") != std::string::npos ) { 
+    extension = name.substr(name.rfind("."));
+    name = name.substr(0, name.rfind("."));
   }
   else {
     extension = ".";

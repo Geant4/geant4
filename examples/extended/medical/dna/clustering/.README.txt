@@ -1,7 +1,7 @@
 //$Id$
 -----------------------------------------
-///\file ".README.txt"
-///\brief clustering README page
+///\file "medical/dna/clustering/.README.txt"
+///\brief Exampleclustering README page
 
 /*! \page Exampleclustering Example clustering
 

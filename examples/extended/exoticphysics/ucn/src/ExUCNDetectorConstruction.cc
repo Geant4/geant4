@@ -98,7 +98,9 @@ void ExUCNDetectorConstruction::DefineMaterials()
 
   G4UCNMaterialPropertiesTable* MPT = new G4UCNMaterialPropertiesTable();
 
-  MPT->AddConstProperty("REFLECTIVITY",1.);
+  //  MPT->AddConstProperty("REFLECTIVITY",1.); 
+  //  Commented out above line as REFLECTIVITY=1 by default in
+  //  G4OpBoundaryProcess.  Also use AddProperty to set REFLECTIVITY if needed
   MPT->AddConstProperty("DIFFUSION",0.1);
   MPT->AddConstProperty("FERMIPOT",252.0); // Gollub, Table 2.1 in neV
   MPT->AddConstProperty("SPINFLIP",0.);

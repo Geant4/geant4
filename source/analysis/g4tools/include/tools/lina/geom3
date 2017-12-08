@@ -116,9 +116,10 @@ protected:
 
 namespace tools {
 
-// not tested yet.
-template <class T>
+template <class VEC3>
 class clip {
+protected:
+  typedef typename VEC3::elem_t T;
 public:
   clip():m_cur(0){}
   virtual ~clip() {}
@@ -132,41 +133,41 @@ public:
     m_cur = 0;
   }
 
-  void add(const vec3<T>& a_point) {m_data[m_cur].push_back(a_point);}
+  void add(const VEC3& a_point) {m_data[m_cur].push_back(a_point);}
 
-  void execute(const plane<T>& plane) {
+  void execute(const plane<VEC3>& plane) {
     //Clip polygon against plane. This might change the number of
     //vertices in the polygon.
 
-    unsigned int n = m_data[m_cur].size();
-    if (n == 0) return;
+    size_t n = m_data[m_cur].size();
+    if(!n) return;
 
     // create a loop :
-    vec3<T> dummy = m_data[m_cur][0];
+    VEC3 dummy = m_data[m_cur][0];
     m_data[m_cur].push_back(dummy);
 
-    const vec3<T>& planeN = plane.normal();
+    const VEC3& planeN = plane.normal();
 
-    for(unsigned int i = 0; i < n; i++) {
-      vec3<T> v0 = m_data[m_cur][i];
-      vec3<T> v1 = m_data[m_cur][i+1];
+    for(size_t i = 0; i < n; i++) {
+      VEC3 v0 = m_data[m_cur][i];
+      VEC3 v1 = m_data[m_cur][i+1];
   
       T d0 = plane.distance(v0);
       T d1 = plane.distance(v1);
   
       if (d0 >= 0.0f && d1 < 0.0f) { // exit plane
-        vec3<T> dir = v1-v0;
+        VEC3 dir = v1-v0;
         // we know that v0 != v1 since we got here
         dir.normalize();
         T dot = dir.dot(planeN);
-        vec3<T> newvertex = v0 - dir * (d0/dot);
+        VEC3 newvertex = v0 - dir * (d0/dot);
         out_point(newvertex);
       } else if (d0 < 0.0f && d1 >= 0.0f) { // enter plane
-        vec3<T> dir = v1-v0;
+        VEC3 dir = v1-v0;
         // we know that v0 != v1 since we got here
         dir.normalize();
         T dot = dir.dot(planeN);
-        vec3<T> newvertex = v0 - dir * (d0/dot);
+        VEC3 newvertex = v0 - dir * (d0/dot);
         out_point(newvertex);
         out_point(v1);
       } else if (d0 >= 0.0f && d1 >= 0.0f) { // in plane
@@ -177,13 +178,13 @@ public:
     m_cur ^= 1;
   }
 
-  const std::vector< vec3<T> >& result() const {return m_data[m_cur];}
+  const std::vector<VEC3>& result() const {return m_data[m_cur];}
 
 protected:
-  void out_point(const vec3<T>& a_p) {m_data[m_cur ^ 1].push_back(a_p);}
+  void out_point(const VEC3& a_p) {m_data[m_cur ^ 1].push_back(a_p);}
   
 protected:
-  std::vector< vec3<T> > m_data[2];
+  std::vector<VEC3> m_data[2];
   unsigned int m_cur;
 };
 

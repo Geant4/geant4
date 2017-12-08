@@ -49,8 +49,8 @@
 
 
 CexmcProductionModelMessenger::CexmcProductionModelMessenger(
-                                    CexmcProductionModel *  productionModel ) :
-    productionModel( productionModel ), applyFermiMotion( NULL ),
+                                    CexmcProductionModel *  productionModel_ ) :
+    productionModel( productionModel_ ), applyFermiMotion( NULL ),
     setAngularRange( NULL ), addAngularRange( NULL )
 {
     applyFermiMotion = new G4UIcmdWithABool(

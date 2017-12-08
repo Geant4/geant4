@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DecayTable.cc 95052 2016-01-21 08:34:03Z gcosmo $
+// $Id: G4DecayTable.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -40,7 +40,8 @@
 #include "G4DecayTable.hh"
 #include "Randomize.hh"
 
-G4DecayTable::G4DecayTable():parent(0)
+G4DecayTable::G4DecayTable()
+  :parent(nullptr), channels(nullptr)
 {
   channels =  new G4VDecayChannelVector;
 }
@@ -48,29 +49,32 @@ G4DecayTable::G4DecayTable():parent(0)
 G4DecayTable::~G4DecayTable()
 {
   // remove and delete all contents  
-  G4VDecayChannelVector::iterator i;
-  for (i = channels->begin(); i!= channels->end(); ++i) {
-    delete (*i);
+  G4VDecayChannelVector::iterator iCh;
+  for (iCh = channels->begin(); iCh!= channels->end(); ++iCh) {
+    delete (*iCh);
   }
   channels->clear();
   delete  channels;
-  channels = 0;
+  channels = nullptr;
+  parent = nullptr;
 }    
 
 void G4DecayTable::Insert( G4VDecayChannel * aChannel){
-  if (parent == 0) { parent = (G4ParticleDefinition*)(aChannel->GetParent()); }
+  if (parent == nullptr) { 
+    parent = (G4ParticleDefinition*)(aChannel->GetParent()); 
+  }
   if (parent != aChannel->GetParent()) {
 #ifdef G4VERBOSE
-    G4cout << " G4DecayTable::Insert :: bad   G4VDecayChannel (mismatch parent) "
+    G4cout << " G4DecayTable::Insert :: bad G4VDecayChannel (mismatch parent) "
            << "       " << parent->GetParticleName()
            << " input:" << aChannel->GetParent()->GetParticleName() << G4endl;
 #endif
   } else {
-    G4double r = aChannel->GetBR();
-    G4VDecayChannelVector::iterator i;
-    for (i = channels->begin(); i!= channels->end(); ++i) {
-      if (r > (*i)->GetBR()) {
-	channels->insert(i,aChannel);
+    G4double br = aChannel->GetBR();
+    G4VDecayChannelVector::iterator iCh;
+    for (iCh = channels->begin(); iCh!= channels->end(); ++iCh) {
+      if (br > (*iCh)->GetBR()) {
+	channels->insert(iCh,aChannel);
 	return;
       }
     }
@@ -84,30 +88,44 @@ G4VDecayChannel *G4DecayTable::SelectADecayChannel(G4double parentMass)
   if (channels->size()<1) return 0;
 
   if(parentMass<0.) parentMass=parent->GetPDGMass(); 
+
+  G4VDecayChannelVector::iterator iCh;
+  G4double sumBR = 0.;
+  for (iCh = channels->begin(); iCh!= channels->end(); ++iCh) {
+    if ( !((*iCh)->IsOKWithParentMass(parentMass)) ) continue;
+    sumBR += (*iCh)->GetBR();
+  }
+  if (sumBR <=0.0) {
+#ifdef G4VERBOSE
+    G4cout << " G4DecayTable::SelectADecayChannel :: no possible DecayChannel"
+           << "       " << parent->GetParticleName() << G4endl;
+#endif
+    return nullptr;
+  }
+
   const size_t MAX_LOOP = 10000;
   for (size_t loop_counter=0; loop_counter <MAX_LOOP; ++loop_counter){
-    G4double sumBR = 0.0;
-    G4double r= G4UniformRand();
+    G4double sum = 0.0;
+    G4double br= sumBR*G4UniformRand();
     // select decay channel
-    G4VDecayChannelVector::iterator i;
-    for (i = channels->begin(); i!= channels->end(); ++i) {
-      sumBR += (*i)->GetBR();
-      if ( !((*i)->IsOKWithParentMass(parentMass)) ) continue;
-      if (r < sumBR) return (*i);
+    for (iCh = channels->begin(); iCh!= channels->end(); ++iCh) {
+      sum += (*iCh)->GetBR();
+      if ( !((*iCh)->IsOKWithParentMass(parentMass)) ) continue;
+      if (br < sum) return (*iCh);
     }
   }
-  return 0;
+  return nullptr;
 }
 
 void G4DecayTable::DumpInfo() const
 {
   G4cout << "G4DecayTable:  " << parent->GetParticleName() << G4endl;
   G4int index =0;
-  G4VDecayChannelVector::iterator i;
-  for (i = channels->begin(); i!= channels->end(); ++i) {
+  G4VDecayChannelVector::iterator iCh;
+  for (iCh = channels->begin(); iCh!= channels->end(); ++iCh) {
     G4cout << index << ": ";
-    (*i)->DumpInfo();
-    index +=1;
+    (*iCh)->DumpInfo();
+    index += 1;
   }
   G4cout << G4endl;
 }

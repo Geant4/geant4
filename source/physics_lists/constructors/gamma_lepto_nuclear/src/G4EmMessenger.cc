@@ -74,6 +74,11 @@ G4EmMessenger::G4EmMessenger(G4EmExtraPhysics* ab)
   theGN->SetGuidance("Switching on gamma nuclear physics.");
   theGN->AvailableForStates(G4State_PreInit);
 
+  // command for lend gamma nuclear physics.
+  theGLENDN = new G4UIcmdWithABool("/physics_lists/em/LENDGammaNuclear",this);
+  theGLENDN->SetGuidance("Switching on LEND gamma nuclear physics.");
+  theGLENDN->AvailableForStates(G4State_PreInit);
+
   theEN = new G4UIcmdWithABool("/physics_lists/em/ElectroNuclear",this);
   theEN->SetGuidance("Switching on e+- nuclear physics.");
   theEN->AvailableForStates(G4State_PreInit);
@@ -113,6 +118,7 @@ G4EmMessenger::~G4EmMessenger()
   delete theSynch;
   delete theSynchAll;
   delete theGN;
+  delete theGLENDN;
   delete theEN;
   delete theMUN;
   delete theGMM;
@@ -130,6 +136,7 @@ void G4EmMessenger::SetNewValue(G4UIcommand* aComm, G4String aS)
   if(aComm==theSynch)    theB->Synch(theSynch->GetNewBoolValue(aS));
   if(aComm==theSynchAll) theB->SynchAll(theSynchAll->GetNewBoolValue(aS));
   if(aComm==theGN)       theB->GammaNuclear(theGN->GetNewBoolValue(aS));
+  if(aComm==theGLENDN)   theB->LENDGammaNuclear(theGLENDN->GetNewBoolValue(aS));
   if(aComm==theEN)       theB->ElectroNuclear(theEN->GetNewBoolValue(aS));
   if(aComm==theMUN)      theB->MuonNuclear(theMUN->GetNewBoolValue(aS));
   if(aComm==theGMM)      theB->GammaToMuMu(theGMM->GetNewBoolValue(aS));

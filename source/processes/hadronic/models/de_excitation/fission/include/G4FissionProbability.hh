@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FissionProbability.hh 103162 2017-03-20 09:40:58Z gcosmo $
+// $Id: G4FissionProbability.hh 105799 2017-08-21 07:35:55Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
 // by V. Lara (Oct 1998) 
@@ -35,41 +35,46 @@
 #include "G4VEmissionProbability.hh"
 #include "G4VLevelDensityParameter.hh"
 
+class G4PairingCorrection;
+
 class G4FissionProbability : public G4VEmissionProbability
 {
 public:
   // Default constructor
   explicit G4FissionProbability();
 
-  virtual ~G4FissionProbability();  
+  ~G4FissionProbability() override;  
 
-  virtual G4double EmissionProbability(const G4Fragment & fragment, 
-                                       G4double MaximalKineticEnergy);
+  G4double EmissionProbability(const G4Fragment & fragment, 
+			       G4double MaximalKineticEnergy) override;
 
-  inline void SetEvaporationLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  inline void 
+  SetEvaporationLevelDensityParameter(G4VLevelDensityParameter* aLevelDensity)
   { 
     if (ownEvapLDP) delete theEvapLDP;
     theEvapLDP = aLevelDensity;
     ownEvapLDP = false;
   }
 
-  inline void SetFissionLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
+  inline void 
+  SetFissionLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   { 
     if (ownFissLDP) delete theFissLDP;
     theFissLDP = aLevelDensity;
     ownFissLDP = false;
   }
 
-private:
-
   // Copy constructor
   G4FissionProbability(const G4FissionProbability &right) = delete;
   const G4FissionProbability & operator=(const G4FissionProbability &right) = delete;
   G4bool operator==(const G4FissionProbability &right) const = delete;
   G4bool operator!=(const G4FissionProbability &right) const = delete;
+
+private:
   
   G4VLevelDensityParameter *theEvapLDP;
   G4VLevelDensityParameter *theFissLDP;
+  G4PairingCorrection* fPairCorr;
   bool ownEvapLDP;
   bool ownFissLDP;
 

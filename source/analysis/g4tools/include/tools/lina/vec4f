@@ -17,8 +17,11 @@ public:
 public:
   vec4f():parent() {}
   vec4f(const float a_vec[4]):parent(a_vec) {}
-  vec4f(const float& a0,const float& a1,const float& a2,const float& a3,bool a_inc = true)
-  :parent(a0,a1,a2,a3,a_inc){}
+#ifdef TOOLS_MEM
+  vec4f(const float& a0,const float& a1,const float& a2,const float& a3,bool a_inc = true):parent(a0,a1,a2,a3,a_inc){}
+#else
+  vec4f(const float& a0,const float& a1,const float& a2,const float& a3):parent(a0,a1,a2,a3){}
+#endif
   virtual ~vec4f() {}
 public:
   vec4f(const vec4f& a_from):parent(a_from){}

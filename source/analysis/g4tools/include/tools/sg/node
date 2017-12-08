@@ -81,6 +81,8 @@ public:
   virtual void event(event_action&) {}
   virtual bool read(read_action& a_action) {return read_fields(a_action);}
   virtual void is_visible(visible_action&) {}
+  
+  virtual void protocol_one_fields(std::vector<field*>& a_fields) const {a_fields = m_fields;}
 public:
   node(){
 #ifdef TOOLS_MEM
@@ -229,16 +231,13 @@ public:
     return true;
   }
 */
-  std::vector<field*>& fields() {return m_fields;}
-  const std::vector<field*>& fields() const {return m_fields;}
-
 public:
   field& field_from_desc(const field_desc& a_desc) const {
     //WARNING : touchy.
     return *((field*)((char*)this+a_desc.offset()));
   }
 protected:
-  tools::sg::field_desc::offset_t field_offset(const field* a_field) const {
+  field_desc::offset_t field_offset(const field* a_field) const {
     //WARNING : touchy.
     return ((char*)(a_field)-(char*)(this));
   }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsMultiModel.hh 97391 2016-06-02 10:08:45Z gcosmo $
+// $Id: G4eeToHadronsMultiModel.hh 106715 2017-10-20 09:39:06Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -93,7 +93,10 @@ public:
 				 G4double tmin = 0.0,
 				 G4double maxEnergy = DBL_MAX) override;
 
-  virtual void PrintInfo();
+  virtual void ModelDescription(std::ostream& outFile) const override;
+  
+  virtual void ModelDescription(std::ostream& outFile,
+                                G4String endOfLine) const override;
 
   // Set the factor to artificially increase the crossSection (default 1)
   void SetCrossSecFactor(G4double fac);

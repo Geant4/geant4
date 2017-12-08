@@ -1,0 +1,296 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+// $Id$
+
+// Author: Ivana Hrivnacova, 20/07/2017 (ivana@ipno.in2p3.fr)
+
+#include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4TRNtupleManager<TNTUPLE>::G4TRNtupleManager(const G4AnalysisManagerState& state)
+ : G4BaseRNtupleManager(state),
+   fNtupleDescriptionVector()
+{}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4TRNtupleManager<TNTUPLE>::~G4TRNtupleManager()
+{  
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    delete ntupleDescription;
+  }   
+}
+
+// 
+// private methods
+//
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4TRNtupleDescription<TNTUPLE>* 
+G4TRNtupleManager<TNTUPLE>::GetNtupleDescriptionInFunction(
+  G4int id, G4String functionName, G4bool warn) const
+{                                      
+  G4int index = id - fFirstId;
+  if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
+    if ( warn) {
+      G4String inFunction = "G4TRNtupleManager<TNTUPLE>::";
+      inFunction += functionName;
+      G4ExceptionDescription description;
+      description << "      " << "ntuple " << id << " does not exist.";
+      G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
+    }
+    return nullptr;         
+  }
+  
+  return fNtupleDescriptionVector[index];
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+template <typename T> 
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleTColumn(
+  G4int ntupleId, const G4String& columnName, T& value)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL4()->Message("set", "ntuple I column", description);
+  }  
+#endif
+
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleTColumn");
+  if ( ! ntupleDescription )  return false;   
+  
+  auto ntupleBinding = ntupleDescription->fNtupleBinding;
+  ntupleBinding->add_column(columnName, value);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) { 
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL2()->Message("set", "ntuple I colum", description, true);
+  }  
+#endif
+
+  return true;
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+template <typename T> 
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleTColumn(
+  G4int ntupleId, const G4String& columnName, std::vector<T>& vector)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL4()->Message("set", "ntuple I column", description);
+  }  
+#endif
+
+  auto ntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "SetNtupleTColumn");
+  if ( ! ntupleDescription )  return false;   
+  
+  auto ntupleBinding = ntupleDescription->fNtupleBinding;
+  ntupleBinding->add_column(columnName, vector);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL2()->Message("set", "ntuple T colum", description, true);
+  }  
+#endif
+
+  return true;
+}
+
+// 
+// protected methods
+//
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool G4TRNtupleManager<TNTUPLE>::IsEmpty() const
+{
+  return ! fNtupleDescriptionVector.size();
+}  
+ 
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool G4TRNtupleManager<TNTUPLE>::Reset()
+{
+// Reset ntuples
+
+  for ( auto ntupleDescription : fNtupleDescriptionVector ) {
+    ntupleDescription->fNtuple=0; 
+  }  
+  
+  return true;
+}  
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+TNTUPLE* 
+G4TRNtupleManager<TNTUPLE>::GetNtuple() const
+{
+  return GetNtuple(fFirstId);  
+}  
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+TNTUPLE* 
+G4TRNtupleManager<TNTUPLE>::GetNtuple(
+  G4int ntupleId) const
+{
+  auto rntupleDescription = GetNtupleDescriptionInFunction(ntupleId, "GetNtuple");
+
+  if ( ! rntupleDescription ) return nullptr; 
+
+  return rntupleDescription->fNtuple;  
+}  
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4int G4TRNtupleManager<TNTUPLE>::SetNtuple(
+  G4TRNtupleDescription<TNTUPLE>* rntupleDescription)
+{
+  G4int id = fNtupleDescriptionVector.size() + fFirstId;
+
+  fNtupleDescriptionVector.push_back(rntupleDescription);
+  
+  return id;
+}  
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleIColumn(
+  G4int ntupleId, const G4String& columnName, G4int& value)
+{
+  return SetNtupleTColumn<int>(ntupleId, columnName, value);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleFColumn(
+  G4int ntupleId, const G4String& columnName, G4float& value)
+{                                             
+  return SetNtupleTColumn<float>(ntupleId, columnName, value);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleDColumn(
+  G4int ntupleId, const G4String& columnName, G4double& value)
+{                                             
+  return SetNtupleTColumn<double>(ntupleId, columnName, value);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleIColumn(
+  G4int ntupleId, const G4String& columnName, std::vector<G4int>& vector)
+{
+  return SetNtupleTColumn<int>(ntupleId, columnName, vector);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleFColumn(
+  G4int ntupleId, const G4String& columnName, std::vector<G4float>& vector)
+{
+  return SetNtupleTColumn<float>(ntupleId, columnName, vector);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleDColumn(
+  G4int ntupleId, const G4String& columnName, std::vector<G4double>& vector)
+{
+  return SetNtupleTColumn<double>(ntupleId, columnName, vector);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool 
+G4TRNtupleManager<TNTUPLE>::SetNtupleSColumn(
+  G4int ntupleId, const G4String& columnName, G4String& value)
+{                                             
+  return SetNtupleTColumn<std::string>(ntupleId, columnName, value);
+}
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4bool G4TRNtupleManager<TNTUPLE>::GetNtupleRow(G4int ntupleId)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fState.GetVerboseL4()->Message("get", "ntuple row", description);
+  }  
+#endif
+
+  auto ntupleDescription 
+    = GetNtupleDescriptionInFunction(ntupleId, "GetNtupleRow");
+  if ( ! ntupleDescription )  return false;   
+  
+  auto next = GetTNtupleRow(ntupleDescription);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId;  
+    fState.GetVerboseL2()->Message("get", "ntuple row", description, true);
+  }  
+#endif
+
+  return next;
+}
+
+
+//_____________________________________________________________________________
+template <typename TNTUPLE>
+G4int 
+G4TRNtupleManager<TNTUPLE>::GetNofNtuples() const
+{ 
+  return fNtupleDescriptionVector.size(); 
+}
+
+

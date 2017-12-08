@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -56,9 +56,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
 Construction /LXeDet/pmtSD
 Construction /LXeDet/scintSD
 ### Birks coefficients used in run time
@@ -193,16 +191,21 @@ muPairProd:   for  mu-    SubType= 4
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 ========= Table of registered couples ==============================
 
@@ -237,26 +240,25 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 starts.
-	Energy weighted position of hits in LXe : (-0.081251,-0.024051,-100.471)
-	Total energy deposition in scintillator : 540.442 (keV)
+	Energy weighted position of hits in LXe : (-0.0164407,0.0641416,-109.073)
+	Total energy deposition in scintillator : 539.559 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   has been instantiated.  Use "/vis/open" or "/vis/sceneHandler/create".
   Alternatively, to avoid this message, suppress instantiation of vis
-  manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
-  drawing code is executed only if G4VVisManager::GetConcreteInstance()
-  is non-zero.
-	Number of photons that hit PMTs in this event : 1567
+  manager (G4VisExecutive) and ensure drawing code is executed only if
+  G4VVisManager::GetConcreteInstance() is non-zero.
+	Number of photons that hit PMTs in this event : 1538
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5731
+	Number of photons produced by scintillation in this event : 5578
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 4164
+	Number of photons absorbed (OpAbsorption) in this event : 4040
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.1s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -291,25 +293,25 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-	Energy weighted position of hits in LXe : (1.31701,-4.24746,-98.9761)
-	Total energy deposition in scintillator : 539.055 (keV)
+	Energy weighted position of hits in LXe : (-0.234713,0.416708,-85.5965)
+	Total energy deposition in scintillator : 538.485 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
-	Number of photons that hit PMTs in this event : 1466
+	Number of photons that hit PMTs in this event : 1519
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5436
+	Number of photons produced by scintillation in this event : 5407
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3970
+	Number of photons absorbed (OpAbsorption) in this event : 3888
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
  Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.09s Real=0.08s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 15 of which, static: 0
-Dynamic pools deleted: 15 / Total memory freed: 2.8 MB
+Dynamic pools deleted: 15 / Total memory freed: 2.7 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

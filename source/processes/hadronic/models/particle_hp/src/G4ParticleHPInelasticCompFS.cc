@@ -56,6 +56,8 @@
 #include "G4IonTable.hh"
 #include "G4Pow.hh"
 
+#include "G4NRESP71M03.hh" // nresp71_m03.hh and nresp71_m02.hh are alike. The only difference between m02 and m03 is in the total carbon cross section that is properly included in the latter. These data are not used in nresp71_m0*.hh.
+
 void G4ParticleHPInelasticCompFS::InitGammas(G4double AR, G4double ZR)
 {
   //   char the[100] = {""};
@@ -284,6 +286,18 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
    
 // set target and neutron in the relevant exit channel
     InitDistributionInitialState(incidReactionProduct, theTarget, it);    
+
+   //---------------------------------------------------------------------//
+   //Hook for NRESP71MODEL
+   if ( G4ParticleHPManager::GetInstance()->GetUseNRESP71Model() ) {
+      if ( (G4int)(theBaseZ+0.1) == 6 ) // If the reaction is with Carbon...
+      {
+         if ( theProjectile == G4Neutron::Definition() ) {
+            if ( use_nresp71_model( aDefinition , it , theTarget , boosted ) ) return;
+         }
+      }
+   }
+   //---------------------------------------------------------------------//
 
     G4ReactionProductVector * thePhotons = 0;
     G4ReactionProductVector * theParticles = 0;
@@ -869,4 +883,104 @@ void G4ParticleHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G
 
    delete residual;
 
+}
+
+
+
+G4bool G4ParticleHPInelasticCompFS::use_nresp71_model( const G4ParticleDefinition* aDefinition , const G4int it , const G4ReactionProduct& theTarget , G4ReactionProduct& boosted )
+{
+	if ( aDefinition == G4Neutron::Definition() ) // If the outgoing particle is a neutron...
+		{
+		// LR: flag LR in ENDF. It indicates whether there is breakup of the residual nucleus or not.
+		// it: exit channel (index of the carbon excited state)
+
+		//if ( (G4int)(theBaseZ+0.1) == 6 ) G4cout << "LR[" << it << "] = " << LR[it] << G4endl;
+
+		// Added by A. R. García (CIEMAT) to include the physics of C(N,N'3A) reactions from NRESP71.
+
+		if ( LR[it] > 0 ) // If there is breakup of the residual nucleus LR(flag LR in ENDF)>0 (i.e. Z=6 MT=52-91 (it=MT-50)).
+			{
+			// Defining carbon as the target in the reference frame at rest.
+			G4ReactionProduct theCarbon(theTarget);
+
+			theCarbon.SetMomentum(G4ThreeVector());
+			theCarbon.SetKineticEnergy(0.);
+
+			// Creating four reaction products.
+			G4ReactionProduct theProds[4];
+
+			// Applying C(N,N'3A) reaction mechanisms in the target rest frame.
+			if ( it == 41 )
+				{
+				// QI=QM=-7.275 MeV for C-0(N,N')C-C(3A) in ENDF/B-VII.1. This is not the value of the QI of the first step according to the model. So we don't take it. Instead, we set the one we have calculated: QI=(mn+m12C)-(ma+m9Be+Ex9Be)=-8.130 MeV.
+				nresp71_model.ApplyMechanismI_NBeA2A(boosted, theCarbon, theProds, -8.130/*QI[it]*/); // N+C --> A[0]+9BE* | 9BE* --> N[1]+8BE | 8BE --> 2*A[2,3].
+				//printf("- QI=%f\n", QI[it]);
+				}
+			else
+				{
+				nresp71_model.ApplyMechanismII_ACN2A(boosted, theCarbon, theProds, QI[it]); // N+C --> N'[0]+C* | C* --> A[1]+8BE | 8BE --> 2*A[2,3].
+				}
+
+			//printf("it=%d   qi=%f  \n", it, QI[it]);
+
+			// Returning to the reference frame where the target was in motion.
+			for ( G4int j=0; j<4; j++ )
+				{
+				theProds[j].Lorentz(theProds[j], -1.*theTarget);
+				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()));
+				}
+
+			/*G4double EN0 = theNeutron.GetKineticEnergy();
+			G4double EN1 = theProds[0].GetKineticEnergy();
+
+			G4double EA1 = theProds[1].GetKineticEnergy();
+			G4double EA2 = theProds[2].GetKineticEnergy();
+			G4double EA3 = theProds[3].GetKineticEnergy();
+
+			printf("Q=%f\n", EN1+EA1+EA2+EA3-EN0);*/
+
+			// Killing the primary neutron.
+			theResult.Get()->SetStatusChange(stopAndKill);
+
+			return true;
+			}
+		}
+	else if ( aDefinition == G4Alpha::Definition() ) // If the outgoing particle is an alpha, ...
+		{
+		// Added by A. R. García (CIEMAT) to include the physics of C(N,A)9BE reactions from NRESP71.
+
+		if ( LR[it] == 0 ) // If Z=6, an alpha particle is emitted and there is no breakup of the residual nucleus LR(flag LR in ENDF)==0.
+			{
+			// Defining carbon as the target in the reference frame at rest.
+			G4ReactionProduct theCarbon(theTarget);
+
+			theCarbon.SetMomentum(G4ThreeVector());
+			theCarbon.SetKineticEnergy(0.);
+
+			// Creating four reaction products.
+			G4ReactionProduct theProds[2];
+
+			// Applying C(N,A)9BE reaction mechanism.
+			nresp71_model.ApplyMechanismABE(boosted, theCarbon, theProds); // N+C --> A[0]+9BE[1].
+
+			//G4DynamicParticle *theSec;
+			for ( G4int j=0; j<2; j++ )
+				{
+				// Returning to the system of reference where the target was in motion.
+				theProds[j].Lorentz(theProds[j], -1.*theTarget);
+				theResult.Get()->AddSecondary(new G4DynamicParticle(theProds[j].GetDefinition(), theProds[j].GetMomentum()));
+				}
+
+			// Killing the primary neutron.
+			theResult.Get()->SetStatusChange(stopAndKill);;
+
+			return true;
+			}
+		else
+			{
+			G4Exception("G4ParticleHPInelasticCompFS::CompositeApply()", "G4ParticleInelasticCompFS.cc", FatalException, "Alpha production with LR!=0.");
+			}
+	}
+
+   return false;
 }

@@ -1,4 +1,4 @@
-$Id: History 100674 2016-10-31 10:43:40Z gcosmo $
+$Id: History 105494 2017-07-28 09:02:56Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-07-17 I. Hrivnacova (AnaEx01-V10-03-00)
+- Coding guidelines: removed redundant empty lines
 
 26-10-16 I. Hrivnacova (AnaEx01-V10-02-03)
 - Activated merging ntuples

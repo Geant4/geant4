@@ -64,8 +64,8 @@ G4HadronCaptureProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 
 void G4HadronCaptureProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the capture of neutrons by nuclei by\n"
-          << "invoking one or more hadronic models and one or more hadronic\n"
-          << "cross sections.\n";
+  outFile << "G4HadronCaptureProcess handles the capture of neutrons by nuclei\n"
+          << "by invoking one or more hadronic models and one or more hadronic\n"
+          << "cross section sets.\n";
 }
 

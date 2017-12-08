@@ -58,7 +58,6 @@
 namespace G4INCL {
 
   namespace NuclearPotential {
-
     class INuclearPotential {
       public:
         INuclearPotential(const G4int A, const G4int Z, const G4bool pionPot) :
@@ -76,10 +75,18 @@ namespace G4INCL {
             vPiPlus = vPionDefault + 71.*xsi - vc;
             vPiZero = vPionDefault;
             vPiMinus = vPionDefault - 71.*xsi + vc;
+            vKPlus = vKPlusDefault;
+            vKZero = vKPlusDefault + 10.; // Hypothesis to be check
+            vKMinus = vKMinusDefault;
+            vKZeroBar = vKMinusDefault - 10.; // Hypothesis to be check
           } else {
             vPiPlus = 0.0;
             vPiZero = 0.0;
             vPiMinus = 0.0;
+            vKPlus = 0.0;
+            vKZero = 0.0;
+            vKMinus = 0.0;
+            vKZeroBar = 0.0;
           }
         }
 
@@ -186,6 +193,37 @@ namespace G4INCL {
         }
 
       protected:
+        /// \brief Compute the potential energy for the given kaon.
+        G4double computeKaonPotentialEnergy(const Particle * const p) const {
+// assert(p->getType()==KPlus || p->getType()==KZero || p->getType()==KZeroBar || p->getType()==KMinus|| p->getType()==KShort|| p->getType()==KLong);
+          if(pionPotential && !p->isOutOfWell()) { // if pionPotental false -> kaonPotential false
+            switch( p->getType() ) {
+              case KPlus:
+                return vKPlus;
+                break;
+              case KZero:
+                return vKZero;
+                break;
+              case KZeroBar:
+                return vKZeroBar;
+                break;
+              case KShort:
+              case KLong:
+                 return 0.0; // Should never be in the nucleus
+                 break;
+               case KMinus:
+                 return vKMinus;
+                 break;
+               default:
+                 return 0.0;
+                 break;
+               }
+            }
+        else
+          return 0.0;
+        }
+
+      protected:
         /// \brief Compute the potential energy for the given pion resonances (Eta, Omega and EtaPrime and Gamma also).
         G4double computePionResonancePotentialEnergy(const Particle * const p) const {
 // assert(p->getType()==Eta || p->getType()==Omega || p->getType()==EtaPrime || p->getType()==Photon);
@@ -223,6 +261,9 @@ namespace G4INCL {
         const G4bool pionPotential;
         G4double vPiPlus, vPiZero, vPiMinus;
         static const G4double vPionDefault;
+        G4double vKPlus, vKZero, vKZeroBar, vKMinus;
+        static const G4double vKPlusDefault;
+        static const G4double vKMinusDefault;
       protected:
         /* \brief map of Fermi energies per particle type */
         std::map<ParticleType,G4double> fermiEnergy;

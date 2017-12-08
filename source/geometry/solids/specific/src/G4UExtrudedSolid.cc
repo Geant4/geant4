@@ -31,6 +31,7 @@
 // --------------------------------------------------------------------
 
 #include "G4ExtrudedSolid.hh"
+#if 0
 #include "G4UExtrudedSolid.hh"
 
 #if ( defined(G4GEOM_USE_USOLIDS) || defined(G4GEOM_USE_PARTIAL_USOLIDS) )
@@ -396,3 +397,4 @@ G4Polyhedron* G4UExtrudedSolid::CreatePolyhedron () const
 }
 
 #endif  // G4GEOM_USE_USOLIDS
+#endif

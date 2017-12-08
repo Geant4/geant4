@@ -60,7 +60,7 @@ CexmcHistoWidget::CexmcHistoWidget()
 }
 
 
-void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  event )
+void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  aEvent )
 {
     /* TRootContextMenu responsiveness is very ugly and unstable in Geant4
      * environment, so we have to replace it with something more useful
@@ -69,7 +69,7 @@ void  CexmcHistoWidget::contextMenuEvent( QContextMenuEvent *  event )
      * backend for its context menu.
      * TQtWidget utilizes QContextMenuEvent::Other reason to draw
      * TRootContextMenu object. */
-    if ( event->reason() == QContextMenuEvent::Other )
+    if ( aEvent->reason() == QContextMenuEvent::Other )
     {
         TObject *  object( NULL );
         TListIter  curPrimitive( fCanvas->GetListOfPrimitives() );

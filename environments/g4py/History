@@ -11,6 +11,8 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 Nov. 2017 K. Murakami
+ - update for 10.4 release
 
 7 Dec. 2016 K. Murakami
  - remove G4VisAttributes::Invisible as deprecated

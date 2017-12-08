@@ -16,7 +16,11 @@ public:
   TOOLS_SCLASS(tools::colorf) //for stype()
 public:
   colorf():parent(0,0,0,1){}
+#ifdef TOOLS_MEM
   colorf(float a_r,float a_g,float a_b,float a_a = 1,bool a_inc = true):parent(a_r,a_g,a_b,a_a,a_inc){}
+#else
+  colorf(float a_r,float a_g,float a_b,float a_a = 1):parent(a_r,a_g,a_b,a_a){}
+#endif  
   virtual ~colorf() {}
 public:
   colorf(const colorf& a_from):parent(a_from){}
@@ -35,15 +39,23 @@ public:
   void set_b(float a_v) {m_data[2] = a_v;}
   void set_a(float a_v) {m_data[3] = a_v;}
 
+  uchar ruchar() const {return uchar(255.0f*m_data[0]);}
+  uchar guchar() const {return uchar(255.0f*m_data[1]);}
+  uchar buchar() const {return uchar(255.0f*m_data[2]);}
+  uchar auchar() const {return uchar(255.0f*m_data[3]);}
+
+#ifdef tools_colorf
+  // deprecated, use the upper ones.
   uchar rchar() const {return uchar(255.0f*m_data[0]);}
   uchar gchar() const {return uchar(255.0f*m_data[1]);}
   uchar bchar() const {return uchar(255.0f*m_data[2]);}
+#endif
 
 public:
 //#define tools_stat_colorfs
 #ifdef tools_stat_colorfs
   //NOTE : the below are deprecated, use functions in inlib/colorfs.
-  //       tools::colorf::white() replaced by tools::colorf_white()
+  //       colorf::white() replaced by colorf_white()
 
   // our forever 65 named colors taken long time ago from X11.
 
@@ -142,6 +154,12 @@ struct cmp_colorf {
     return false;
   }
 };
+
+#ifdef TOOLS_MEM
+inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1,false);return s_v;}
+#else
+inline const colorf& colorf_default() {static const colorf s_v(0.8f,0.8f,0.8f,1);return s_v;}
+#endif
 
 }
 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LundStringFragmentation.hh 102717 2017-02-20 10:37:13Z gcosmo $
+// $Id: G4LundStringFragmentation.hh 106967 2017-10-31 08:41:49Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -40,111 +40,102 @@
 //**************************************************************************************************************
 
 class G4LundStringFragmentation: public G4VLongitudinalStringDecay
-    {
-public:
+{
+  public:
 
     G4LundStringFragmentation();
     virtual ~G4LundStringFragmentation();
 
     virtual G4KineticTrackVector* FragmentString(const G4ExcitedString& theString);
 
-private:
+  private:
     // not implemented to protect/forbid use
     G4LundStringFragmentation(const G4LundStringFragmentation &right);
     const G4LundStringFragmentation & operator=(const G4LundStringFragmentation &right);
     int operator==(const G4LundStringFragmentation &right) const;
     int operator!=(const G4LundStringFragmentation &right) const;
 
-private:
-   void SetMinMasses();   // Uzhi 23 Dec. 2016
-   void SetMinimalStringMass(const G4FragmentingString  * const string);
-   void SetMinimalStringMass2(const G4double aValue);	
+  private:
+    void SetMinimalStringMass(const G4FragmentingString  * const string);		    
+    void SetMinimalStringMass2(const G4double aValue);	
 
-   virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
-   virtual G4bool IsFragmentable(const G4FragmentingString * const string);
+    virtual G4bool StopFragmenting(const G4FragmentingString  * const string);
+    virtual G4bool IsFragmentable(const G4FragmentingString * const string);
 
-   virtual G4bool SplitLast(G4FragmentingString * string, 
-		            G4KineticTrackVector * LeftVector,
-		            G4KineticTrackVector * RightVector);
+    virtual G4bool SplitLast(G4FragmentingString * string, 
+	 	             G4KineticTrackVector * LeftVector,
+		             G4KineticTrackVector * RightVector);
 
-   virtual void Sample4Momentum(G4LorentzVector* Mom,     G4double Mass, 
-                                G4LorentzVector* AntiMom, G4double AntiMass, 
-                                G4double InitialMass); 
+    virtual void Sample4Momentum(G4LorentzVector* Mom,     G4double Mass, 
+                                 G4LorentzVector* AntiMom, G4double AntiMass, 
+                                 G4double InitialMass); 
 
-   virtual G4KineticTrack * Splitup(G4FragmentingString *string,
-                            G4FragmentingString *&newString);
+    virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
+                                         G4FragmentingString * string,
+                                         G4FragmentingString * newString);
 
-   virtual G4LorentzVector * SplitEandP(G4ParticleDefinition * pHadron, 
-                                        G4FragmentingString * string,
-                                        G4FragmentingString * newString);
+    virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
+                                   G4int PartonEncoding,  
+                                   G4ParticleDefinition* pHadron,
+                                   G4double Px, G4double Py);      
 
-   virtual G4double GetLightConeZ(G4double zmin, G4double zmax, 
-                                  G4int PartonEncoding,  
-                                  G4ParticleDefinition* pHadron,
-                                  G4double Px, G4double Py);      
+    G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
 
-   G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
+    virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay,
+                                                  G4ParticleDefinition *&created);
 
-   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, 
-                                         G4ParticleDefinition *&created);
+  private:
+    // Internal methods introduced to improve the code structure (AR Nov 2011)
 
-private:
-   // Internal methods introduced to improve the code structure (AR Nov 2011)
+    G4bool Loop_toFragmentString(G4ExcitedString * & theStringInCMS, 
+                                 G4KineticTrackVector * & LeftVector, 
+                                 G4KineticTrackVector * & RightVector);
 
-   G4bool Loop_toFragmentString(const G4ExcitedString & theStringInCMS, // * &
-                                G4KineticTrackVector * & LeftVector, 
-                                G4KineticTrackVector * & RightVector);
+    G4bool Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
+                                                            G4ParticleDefinition * & LeftHadron,
+                                                            G4ParticleDefinition * & RightHadron);
 
-   G4bool Diquark_AntiDiquark_belowThreshold_lastSplitting(G4FragmentingString * & string,
-                                                           G4ParticleDefinition * & LeftHadron,
-                                                           G4ParticleDefinition * & RightHadron);
+    G4bool Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
+                                                            G4ParticleDefinition * & LeftHadron,
+                                                            G4ParticleDefinition * & RightHadron);
 
-   G4bool Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
-                                                           G4ParticleDefinition * & LeftHadron,
-                                                           G4ParticleDefinition * & RightHadron);
+    G4bool Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
+                                         G4ParticleDefinition * & LeftHadron,
+                                         G4ParticleDefinition * & RightHadron);
 
-   G4bool Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
-                                        G4ParticleDefinition * & LeftHadron,
-                                        G4ParticleDefinition * & RightHadron);
+    G4bool Quark_Diquark_lastSplitting(G4FragmentingString * & string,
+                                       G4ParticleDefinition * & LeftHadron,
+                                       G4ParticleDefinition * & RightHadron );
 
-   G4bool Quark_Diquark_lastSplitting(G4FragmentingString * & string,
-                                      G4ParticleDefinition * & LeftHadron,
-                                      G4ParticleDefinition * & RightHadron );
+    G4int SampleState(void); 
 
-   G4int SampleState(void); 
+  private:
+    // ------ For estimation of a minimal string mass ---------------
+    G4double Mass_of_light_quark;
+    G4double Mass_of_heavy_quark;
+    G4double Mass_of_string_junction;
+    // ------ An estimated minimal string mass ----------------------
+    G4double MinimalStringMass;
+    G4double MinimalStringMass2;
+    // ------ Minimal invariant mass used at a string fragmentation -
+    G4double WminLUND;		    
 
-private:
-// ------ For estimation of a minimal string mass ---------------
-   G4double Mass_of_light_quark;
-   G4double Mass_of_heavy_quark;
-   G4double Mass_of_string_junction;
+    G4int          Meson[3][3][6];
+    G4double MesonWeight[3][3][6];
 
-   G4double minMassQQbarStr[3][3];
-   G4double minMassQDiQStr[3][3][3];
+    G4int          Baryon[3][3][3][4];
+    G4double BaryonWeight[3][3][3][4];
 
-// ------ An estimated minimal string mass ----------------------
-   G4double MinimalStringMass;
-   G4double MinimalStringMass2;
-// ------ Minimal invariant mass used at a string fragmentation -
-   G4double WminLUND;		    
+    G4double Prob_QQbar[3];
 
-   G4int          Meson[3][3][6];
-   G4double MesonWeight[3][3][6];
-
-   G4int          Baryon[3][3][3][4];
-   G4double BaryonWeight[3][3][3][4];
-
-   G4double Prob_QQbar[3];
-
-// ------ To improve the code structure
-   G4ParticleDefinition * FS_LeftHadron[35], * FS_RightHadron[35];
-   G4double FS_Weight[35];
-   G4int NumberOf_FS;
-
+    // ------ To improve the code structure
+    G4ParticleDefinition * FS_LeftHadron[35], * FS_RightHadron[35];
+    G4double FS_Weight[35];
+    G4int NumberOf_FS;
 };
 
 //**************************************************************************************************************
 // Class G4LundStringFragmentation 
-#endif
 
+#endif
 

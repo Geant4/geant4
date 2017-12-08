@@ -1,4 +1,4 @@
-$Id: History 102433 2017-01-27 08:24:52Z gcosmo $
+$Id: History 107259 2017-11-07 09:59:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+
+06 Nov 2017: V. Ivanchenko (emadjoint-V10-03-01)
+-Extended correction of occurence of FPE in G4AdjointForcedInteractionForGamma.
+-G4eAdjointMultipleScattering - change index of the default accourding to recent 
+   modifications in emutils
+
 27 Jan 2017: L. Desorgher (emadjoint-V10-03-00)
 -Correction of occurence of FPE in G4AdjointForcedInteractionForGamma.
  

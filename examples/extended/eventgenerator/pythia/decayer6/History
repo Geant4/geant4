@@ -1,4 +1,4 @@
-$Id: History 100687 2016-10-31 11:20:33Z gcosmo $
+$Id: History 106393 2017-10-09 09:46:03Z gcosmo $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,11 @@ modifications introduced in the code and keep track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29/09/2017 I.Hrivnacova   (p6decayer-V10-03-00,01)
+- Updated for changes in common classes
+- Updated main (removed G4UI_USE, G4VIS_USE macros, moved initialization 
+  in macros)
 
 24/10/2016 I.Hrivnacova   (p6decayer-V10-02-05)
 - Do not use svn:extternal in the tag

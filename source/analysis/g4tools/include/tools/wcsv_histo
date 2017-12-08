@@ -83,6 +83,8 @@ inline bool hto(std::ostream& a_writer,const std::string& a_class,const HIST& a_
     a_writer << std::endl;
   }
 
+  a_h.not_a_profile(); //trick to be sure to use this function on an histo and not a profile.
+
   return true;
 }
 

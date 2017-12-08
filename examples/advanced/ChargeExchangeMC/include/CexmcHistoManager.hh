@@ -128,9 +128,9 @@ class  CexmcHistoManager
             CexmcHistoAxisData() : nBins( 0 ), nBinsMin( 0 ), nBinsMax( 0 )
             {}
 
-            CexmcHistoAxisData( Int_t  nBins, Double_t  nBinsMin,
-                                Double_t  nBinsMax ) :
-                nBins( nBins ), nBinsMin( nBinsMin ), nBinsMax( nBinsMax )
+            CexmcHistoAxisData( Int_t  nBins_, Double_t  nBinsMin_,
+                                Double_t  nBinsMax_ ) :
+                nBins( nBins_ ), nBinsMin( nBinsMin_ ), nBinsMax( nBinsMax_ )
             {}
 
             Int_t     nBins;
@@ -156,14 +156,14 @@ class  CexmcHistoManager
                 isARHisto( false ), isARRec( false ), triggerType( CexmcTPT )
             {}
 
-            CexmcHistoData( CexmcHistoType  type, CexmcHistoImpl  impl,
-                            bool  isARHisto, bool  isARRec,
-                            CexmcTriggerType  triggerType,
-                            const G4String &  name, const G4String &  title,
-                            const CexmcHistoAxes &  axes ) :
-                type( type ), impl( impl ), isARHisto( isARHisto ),
-                isARRec( isARRec ), triggerType( triggerType ), name( name ),
-                title( title ), axes( axes )
+            CexmcHistoData( CexmcHistoType  type_, CexmcHistoImpl  impl_,
+                            bool  isARHisto_, bool  isARRec_,
+                            CexmcTriggerType  triggerType_,
+                            const G4String &  name_, const G4String &  title_,
+                            const CexmcHistoAxes &  axes_ ) :
+                type( type_ ), impl( impl_ ), isARHisto( isARHisto_ ),
+                isARRec( isARRec_ ), triggerType( triggerType_ ), name( name_ ),
+                title( title_ ), axes( axes_ )
             {}
 
             CexmcHistoType    type;
@@ -310,6 +310,7 @@ inline G4int  CexmcHistoManager::GetVerboseLevel( void ) const
     return verboseLevel;
 }
 
+#ifdef CEXMC_USE_ROOTQT
 
 inline void  CexmcHistoManager::AddHistoMenu( const G4String &  handle,
                                               const G4String &  label )
@@ -335,7 +336,7 @@ inline void  CexmcHistoManager::SetDrawOptions3D( const G4String &  value )
 {
     drawOptions3D = value;
 }
-
+#endif //CEXMC_USE_ROOTQT
 #endif
 
 #endif

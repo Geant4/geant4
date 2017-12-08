@@ -1,4 +1,4 @@
-svn log $Id: History 103646 2017-04-20 09:30:24Z gcosmo $
+svn log $Id: History 107491 2017-11-16 09:38:59Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,28 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th November 2017 Gabriele Cosmo  (config-V10-03-07)
+- architecture.gmk: removed references to old USolids library; just use VecGeom.
+
+16th October 2017 Gabriele Cosmo  (config-V10-03-06)
+- geomconf.gmk: added G4GEOM_USE_UHYPE flag to enable VecGeom wrapper for G4Hype.
+
+10th October 2017 Gabriele Cosmo  (config-V10-03-05)
+- binmake.gmk: added hadronic/models/gamma_nuclear module to include paths.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-04)
+- geomconf.gmk: updated flags for Scalar build of VecGeom.
+
+11th July 2017 Gabriele Cosmo  (config-V10-03-03)
+- geomconf.gmk: added selector for G4GEOM_USE_UPARA flag, to enable
+  wrapping of G4Para for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-29.
+
+10th July 2017 Gabriele Cosmo  (config-V10-03-02)
+- geomconf.gmk: added selector for G4GEOM_USE_UCTUBS flag, to enable
+  wrapping of G4CutTubs for USolids/VecGeom.
+  Coworks with tag geom-csg-V10-03-28.
 
 20th April 2017 Gabriele Cosmo  (config-V10-03-01)
 - binmake-gmk: added 'processses/solidstate' module include path.

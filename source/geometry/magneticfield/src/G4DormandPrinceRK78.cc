@@ -24,23 +24,24 @@
 // ********************************************************************
 //
 //  Dormand-Prince 8(7)13M non-FSAL implementation by Somnath Banerjee
+//  Supported by Google as part of Google Summer of Code 2015.
 //  Supervision / code review: John Apostolakis
-//
-// Sponsored by Google in Google Summer of Code 2015.
 //
 // First version: 28 June 2015
 //
-//  DormandPrinceRK78.cc
-//  Geant4
-//
-// 
 //  Paper proposing this RK scheme:
-//     Title:    "High order embedded Runge-Kutta formulae"
-//     Authors:  P.J. Prince, J.R. Dormand,
+//     Title:    "High order embedded Runge-Kutta formulae",
+//     Authors:  P.J. Prince, J.R. Dormand
+//     Journal of Computational and Applied Mathematics, Volume 7, Issue 1, 1981,
+//       Pages 67-75, ISSN 0377-0427,
 //     Reference:  DOI: 10.1016/0771-050X(81)90010-3
-//  History
+//       http://dx.doi.org/10.1016/0771-050X(81)90010-3.
+//       (http://www.sciencedirect.com/science/article/pii/0771050X81900103)
+//
+//  History (condensed)
 // -----------------------------
-//  Created by Somnath on 28 June 2015
+// 28 June 2015:  First version created         - S. Banerjee
+//  4 July 2017:  Small fixes (Coverity issues) - J. Apostolakis
 
 #include "G4DormandPrinceRK78.hh"
 #include "G4LineSection.hh"
@@ -49,7 +50,8 @@
 G4DormandPrinceRK78::G4DormandPrinceRK78(G4EquationOfMotion *EqRhs,
                                      G4int noIntegrationVariables,
                                      G4bool primary)
-: G4MagIntegratorStepper(EqRhs, noIntegrationVariables)
+   : G4MagIntegratorStepper(EqRhs, noIntegrationVariables),
+     fLastStepLength(-1.0), fAuxStepper(nullptr)     
 {
     const G4int numberOfVariables = noIntegrationVariables;
     

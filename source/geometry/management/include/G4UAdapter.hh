@@ -19,6 +19,8 @@
 // * technical work of the GEANT4 collaboration.                      *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
 //
@@ -295,6 +297,7 @@ operator=(const G4UAdapter& rhs)
   // Copy base class data
   //
   G4VSolid::operator=(rhs);
+  UnplacedVolume_t::operator=(rhs);
 
   // Copy data
   //

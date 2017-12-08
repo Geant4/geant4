@@ -95,10 +95,10 @@ class G4DataQuestionaire
 	    if(!getenv("G4LENDDATA") )
 	    {
 	      desc << "Data files for Low Energy Nuclear Data (LEND) are needed."<<G4endl
+	      	   << "The Data files for Low Energy Nuclear Data (LEND) are available from" << G4endl 
+                   << " ftp://gdo-nuclear.ucllnl.org/GND_after2013/GND_v1.3.tar.gz."<<G4endl
 	           << "Please set the environmental variable G4LENDDATA"<<G4endl
-	      	   << "to point to the directory containing these LEND data."<<G4endl
-	      	   << "Data files for Low Energy Nuclear Data (LEND) are available from" <<
-	    		  " ftp://gdo-nuclear.ucllnl.org/pub/."<<G4endl<<G4endl;
+	      	   << "to point to the directory named v1.3 extracted from the archive file."<<G4endl<<G4endl;
 	      fail=true;
 	    }
 	    break;

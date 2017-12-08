@@ -78,8 +78,6 @@ class G4UBox : public G4UAdapter<vecgeom::UnplacedBox>
 
     inline G4GeometryType GetEntityType() const;
 
-    std::ostream& StreamInfo(std::ostream& os) const;
-
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
 
     G4bool CalculateExtent(const EAxis pAxis,

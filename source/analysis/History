@@ -1,4 +1,4 @@
-$Id: History 103532 2017-04-13 14:00:35Z gcosmo $
+$Id: History 107500 2017-11-17 11:06:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,71 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 16, 2017 I. Hrivnacova (analysis-V10-03-17)
+- Updated to g4tools 4.2.1 (Guy Barrand):
+  Coverity fixes.
+  See History_tools for the complete list of modifications.
+
+November 2, 2017 I. Hrivnacova (analysis-V10-03-16)
+- Fixed compilation warning
+
+October 25, 2017 I. Hrivnacova (analysis-V10-03-15)
+- Updated to g4tools 4.2.0 (Guy Barrand):
+  Changes in wroot, rroot in order to handle row wise ntuple in case of MT or MPI.
+  See History_tools for the complete list of modifications.
+- Added rowWise option to G4RootAnalysisManager::SetNtupleMerging()
+
+October 19, 2017 I. Hrivnacova (analysis-V10-03-14)
+- Fixed compiler warning in G4Hdf5FileManager.cc
+
+September 26, 2017 I. Hrivnacova (analysis-V10-03-13)
+- Updated to g4tools 3.7.0 (Guy Barrand):
+  - Update in colorf, colors to make possible to use the tools/colors color 
+    table in G4Colour class.
+  - Coverity fixes graphics/plotting code.
+  See History_tools for the complete list of modifications.
+
+September 11, 2017 I. Hrivnacova (analysis-V10-03-12)
+- Fixed generating file name on workers (adding _tN extension).
+  (The problem was reported in analysis category in hypernews as item #537.)
+
+August 3, 2017 I. Hrivnacova (analysis-V10-03-11)
+- Updated to g4tools 3.6.0 (Guy Barrand):
+  Fixing problems introduced in previous version.
+  See History_tools for the complete list of modifications.
+
+August 1, 2017 I. Hrivnacova (analysis-V10-03-09, 10)
+- Several fixes in hdf5
+- Updated to g4tools 3.5.0 (Guy Barrand):
+  Coverity fixes and test/cpp/hdf5_threads.cpp program.
+  See History_tools for the complete list of modifications.
+
+July 27, 2017 I. Hrivnacova (analysis-V10-03-08)
+- Adding support for Hdf5
+- Updated to g4tools 3.4.0 (Guy Barrand):
+  See History_tools for the complete list of modifications.
+  
+July 21, 2017 I. Hrivnacova (analysis-V10-03-07)
+- Updated to g4tools 3.3.0 (Guy Barrand):
+  Adding support for HDF5, improved tests.
+  See History_tools for the complete list of modifications.
+
+July 21, 2017 I. Hrivnacova (analysis-V10-03-06)
+- Fixing remaining compilation warnings (gcc)
+
+July 21, 2017 I. Hrivnacova (analysis-V10-03-05)
+- Fixing compilation warnings (gcc53)
+
+July 20, 2017 I. Hrivnacova (analysis-V10-03-04)
+- Code improvements:
+  - Moved common implementation from G4V[R]NtupleManager in
+    new G4Base[R]NtupleManager classes
+  - Introduced G4TRNtupleDescription, G4TRNtupleManager template classes
+  - Always create an ntuple from ntuple booking (removed usage of
+    ntupel::create_column)
+  - Added an optional directoryName argument in Read[Hn][Pn][Ntuple]
+    functions in G4VAnalysisReader (needed for HDF5)
 
 April 12, 2017 I. Hrivnacova (analysis-V10-03-03)
 - Corrected handling of open file failure 

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+29-11-17 I. Hrivnacova (exHadronic-V10-03-00)
+- Removed Hadr05 (replaced with physicslists/genericPL)
+
 28-09-16 M. Maire (exHadronic-V10-02-03)
 - remove AmBe
 

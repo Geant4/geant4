@@ -1,4 +1,4 @@
-$Id: History 99974 2016-10-13 07:22:33Z gcosmo $
+$Id: History 107409 2017-11-10 13:36:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-12-Oct-2016, Gunter Folger              (error-propagation-V10-02-01)
+10-Nov-2017 - P.Arce (error-propagation-V10-03-02)
+- Bug report 2010: precision correction in G4ErrorFreeTrajState.cc 
+
+ 1-Nov-2017 - J. Apostolakis, D. Sorokin (error-propagation-V10-03-01)
+                            same code as (error-propagation-V10-03-00)
+- Co-works with field-V10-03-19
+
+23-Oct-2017 - J. Apostolakis, D. Sorokin (error-propagation-V10-03-00)
+- migrate to use of new types for G4(Mag)IntegrationDriver and
+    use its new GetEquation method (not stepper's).
+
+12-Oct-2016 - Gunter Folger              (error-propagation-V10-02-01)
 - replace direct use of aParticleIterator by GetParticleIterator().
     fix required by clang39 on Windows and MAC
 	 

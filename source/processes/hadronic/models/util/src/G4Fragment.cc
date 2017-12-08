@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Fragment.cc 104779 2017-06-16 09:20:56Z gcosmo $
+// $Id: G4Fragment.cc 105013 2017-07-04 11:40:46Z gcosmo $
 //
 //---------------------------------------------------------------------
 //
@@ -73,7 +73,7 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
    theExcitationEnergy(right.theExcitationEnergy),
    theGroundStateMass(right.theGroundStateMass),
    theMomentum(right.theMomentum),
-   thePolarization(nullptr),
+   thePolarization(right.thePolarization),
    creatorModel(right.creatorModel),
    numberOfParticles(right.numberOfParticles),
    numberOfCharged(right.numberOfCharged),
@@ -84,24 +84,10 @@ G4Fragment::G4Fragment(const G4Fragment &right) :
    theParticleDefinition(right.theParticleDefinition),
    spin(right.spin),
    theCreationTime(right.theCreationTime)
-{
-  if(right.thePolarization != nullptr) { 
-    thePolarization = new G4NuclearPolarization(*(right.thePolarization));
-  }
-}
+{}
 
 G4Fragment::~G4Fragment()
-{
-  SetNuclearPolarization(nullptr);
-}
-
-void G4Fragment::SetNuclearPolarization(G4NuclearPolarization* p)
-{
-  if(p !=  thePolarization) {
-    delete thePolarization;
-    thePolarization = p;
-  }
-}
+{}
 
 G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
   theA(A),
@@ -163,11 +149,7 @@ G4Fragment & G4Fragment::operator=(const G4Fragment &right)
     theExcitationEnergy = right.theExcitationEnergy;
     theGroundStateMass = right.theGroundStateMass;
     theMomentum  = right.theMomentum;
-    delete thePolarization; 
-    thePolarization = nullptr;
-    if(right.thePolarization != nullptr) { 
-      thePolarization = new G4NuclearPolarization(*(right.thePolarization));
-    }
+    thePolarization = right.thePolarization;
     creatorModel = right.creatorModel;
     numberOfParticles = right.numberOfParticles;
     numberOfCharged = right.numberOfCharged;
@@ -236,7 +218,7 @@ std::ostream& operator << (std::ostream &out, const G4Fragment &theFragment)
   if(theFragment.GetNuclearPolarization()) { 
     out << *(theFragment.GetNuclearPolarization()); 
   }
-  out << G4endl;
+  //out << G4endl;
   out.setf(old_floatfield,std::ios::floatfield);
   out.precision(floatPrec);
 

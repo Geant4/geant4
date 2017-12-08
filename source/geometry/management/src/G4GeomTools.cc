@@ -146,6 +146,26 @@ G4bool G4GeomTools::PointInTriangle(const G4TwoVector& A,
 
 ///////////////////////////////////////////////////////////////////////
 //
+// Point inside 2D polygon
+
+G4bool G4GeomTools::PointInPolygon(const G4TwoVector& p,
+                                   const G4TwoVectorList& v)
+{
+  G4int Nv = v.size();
+  G4bool in = false;
+  for (G4int i = 0, k = Nv - 1; i < Nv; k = i++)
+  {
+    if ((v[i].y() > p.y()) != (v[k].y() > p.y()))
+    {
+      G4double ctg = (v[k].x()-v[i].x())/(v[k].y()-v[i].y());
+      in ^= (p.x() < (p.y()-v[i].y())*ctg + v[i].x());
+    }
+  }
+  return in;
+}
+
+///////////////////////////////////////////////////////////////////////
+//
 // Detemine whether 2D polygon is convex or not
 
 G4bool G4GeomTools::IsConvex(const G4TwoVectorList& polygon)

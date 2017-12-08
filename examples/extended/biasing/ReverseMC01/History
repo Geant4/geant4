@@ -1,4 +1,4 @@
-$Id: History 101420 2016-11-17 10:37:14Z gcosmo $
+$Id: History 107258 2017-11-07 09:58:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 6, 2017 V.Ivanchenko  (ReverseMC01-V10-03-01)
+- G4AdjointPhysicsList - use SetEmModel(..) instead of AddEmModel
+    where possible in order to remove initialisation warning 
+
+Oct 12, 2017 V.Ivanchenko  (ReverseMC01-V10-03-00)
+- G4AdjointPhysicsList - do not reset lateral displacement
+    algorithm in the Urban msc model
+
 Nov 16, 2016 L. Desorgher  (ReverseMC01-V10-02-03)
 - New attempt to solve the FPE issue  RMC01AnalysisManager::ComputeMeanEdepAndError() 
   remove of floating point exception issue.

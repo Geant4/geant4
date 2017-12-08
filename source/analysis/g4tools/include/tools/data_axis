@@ -1,0 +1,132 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_data_axis
+#define tools_data_axis
+
+#include "mathf"
+
+namespace tools {
+
+class data_axis {
+public:
+  data_axis():m_min_value(0),m_max_value(0),m_is_log(false){}
+  virtual ~data_axis(){}
+public:
+  data_axis(const data_axis& a_from)
+  :m_min_value(a_from.m_min_value)
+  ,m_max_value(a_from.m_max_value)
+  ,m_is_log(a_from.m_is_log)
+  {}
+  data_axis& operator=(const data_axis& a_from){
+    m_min_value = a_from.m_min_value;
+    m_max_value = a_from.m_max_value;
+    m_is_log = a_from.m_is_log;
+    return *this;
+  }
+public:
+  bool is_log(bool a_v) {if(m_is_log==a_v) return false;m_is_log = a_v;return true;}
+  bool min_value(float a_v) {if(m_min_value==a_v) return false;m_min_value = a_v;return true;}
+  bool max_value(float a_v) {if(m_max_value==a_v) return false;m_max_value = a_v;return true;}
+  float min_value() const {return m_min_value;}
+  float max_value() const {return m_max_value;}
+  bool is_log() const {return m_is_log;}
+
+  void adjust() { //from hippodraw.
+    int _axis = 0;
+    float step;
+    float mylow, myhigh;
+    int N_NICE = 4;
+    static const float nice[/*N_NICE*/4] = { 1.0,2.0,2.5,5.0 };
+  
+    if (m_min_value > m_max_value) {
+      float low = m_min_value;
+      m_min_value = m_max_value;
+      m_max_value = low;  
+    } else if (m_min_value == m_max_value) {
+      float value = m_min_value;  
+      m_min_value = value - 1;
+      m_max_value = value + 1;
+      return;
+    }
+  
+    //if (m_steps <= 0) { //if letting the if and m_steps as a field, twice this function do not give the same result.
+      _axis    = 1;
+    unsigned int m_steps = 10;
+    //}
+
+    // Round the "bin width" to a nice number.
+    // If this is being done for an axis (ie m_steps was 0 , then
+    // we don't have to go > *m_max_value.
+    //
+    float w = (m_max_value - m_min_value)/((float)m_steps);
+    float mag = ffloor(flog10(w));  
+    int i = 0;
+    do {
+      step   = nice[i] * fpow(10.0,mag);      
+      mylow  = ffloor(m_min_value/step) * step;
+    //myhigh = _axis==1 ? fceil(m_max_value/step) * step : mylow + step * m_steps;      
+      myhigh = fceil(m_max_value/step) * step; //quiet Coverity.
+      i++;
+      if (i>=N_NICE) {i = 0;mag++;}
+    }
+    while ( ( (_axis==1) && (myhigh < m_max_value)) || 
+            ( (_axis==0) && (myhigh <= m_max_value)) );
+  
+    float range = myhigh - mylow;
+  
+    // we now have decided on a range. Try to move 
+    // m_min_value/m_max_value a little
+    // to end up on a nice number.
+    //
+    // first check if either end is near 0.0
+    if ( !m_is_log && (m_min_value >= 0.0) && 
+        (( (_axis==1) && (range>=m_max_value) ) || 
+         ( (_axis==0) && (range>m_max_value) )) ) {  
+      m_min_value = 0.0;
+      m_max_value = range;
+      return;
+    }
+  
+    if ( (( (_axis==1) && (m_max_value<=0.0) ) || 
+          ( (_axis==0) && (m_max_value<0.0) )) 
+         && (-range<=m_min_value)) {     
+      m_max_value = 0.0;
+      m_min_value = -range;
+      return;
+    }
+ 
+    // try to round *m_min_value.
+    // correction
+    if( m_is_log && (m_min_value<=0.0)) m_min_value = 1.0;
+    
+    i   = N_NICE-1;
+    mag = myhigh != 0.0 ? fceil(flog10(ffabs(myhigh))) : fceil(flog10(ffabs(mylow)));
+    
+    do {
+      step   = nice[i] * fpow(10.0,mag);        
+      mylow  = ffloor(m_min_value/step) * step;
+      myhigh = mylow + range;      
+      i--;
+      if (i<0) {
+        i = N_NICE-1;
+        mag--;
+      }
+    } 
+    while (( m_is_log && (mylow  <= 0.0)     ) || 
+           ( (_axis==1)  && (myhigh < m_max_value)  ) || 
+           ( (_axis==0)  && (myhigh <= m_max_value) ) );
+    
+    m_min_value = mylow;
+    m_max_value = myhigh;    
+  }
+protected:
+  float m_min_value;
+  float m_max_value;
+  //int m_steps;
+  bool m_is_log;
+};
+
+}
+
+#endif

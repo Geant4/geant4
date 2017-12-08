@@ -23,13 +23,31 @@ class p1 : public b1<TC,TO,TN,TW,TH> {
 public:
   typedef profile_data<TC,TO,TN,TW,TV> pd_t;
   typedef typename parent::bn_t bn_t;
-  typedef histo::axis<TC,TO> axis_t;
+  typedef typename parent::axis_t axis_t;
   typedef std::vector<TV> vs_t;
 protected:
   virtual TH get_bin_height(TO a_offset) const {
     return (parent::m_bin_Sw[a_offset] ? (m_bin_Svw[a_offset]/parent::m_bin_Sw[a_offset]):0);
   }
 public:
+  bool equals(const p1& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    if(!parent::equals(a_from,a_prec,a_fabs)) return false;    
+    if(m_cut_v!=a_from.m_cut_v) return false;
+    if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
+    if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
+    return true;
+  }
+  bool equals_TH(const p1& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,false)) return false;    
+    if(m_cut_v!=a_from.m_cut_v) return false;
+    if(!numbers_are_equal(m_min_v,a_from.m_min_v,a_prec,a_fabs)) return false;
+    if(!numbers_are_equal(m_max_v,a_from.m_max_v,a_prec,a_fabs)) return false;    
+    if(!vectors_are_equal(m_bin_Svw,a_from.m_bin_Svw,a_prec,a_fabs)) return false;
+    if(!vectors_are_equal(m_bin_Sv2w,a_from.m_bin_Sv2w,a_prec,a_fabs)) return false;
+    return true;
+  }
 
   virtual TH bin_error(int aI) const { //TH should be the same as TV
     TO offset;

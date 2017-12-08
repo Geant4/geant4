@@ -29,16 +29,16 @@
 /// \file testCommon.cc
 /// \brief Test program for the common classes
 
-#include "ExG4DetectorConstruction01.hh"
-#include "ExG4DetectorConstruction02.hh"
-#include "ExG4PhysicsList00.hh"
-#include "ExG4PrimaryGeneratorAction01.hh"
-#include "ExG4PrimaryGeneratorAction02.hh"
-#include "ExG4EventAction01.hh"
-#include "ExG4RunAction01.hh"
+#include "DetectorConstruction.hh"
+#include "DetectorConstruction0.hh"
+#include "GeantinoPhysicsList.hh"
+#include "GpsPrimaryGeneratorAction.hh"
+#include "GunPrimaryGeneratorAction.hh"
 
 #include "G4RunManager.hh"
 #include "FTFP_BERT.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Test program which only instantiates classes defined in 
 // examples/common
@@ -47,38 +47,27 @@ int main()
 {
   // First construct necessary classes
   //
-  G4RunManager * runManager = new G4RunManager;
-  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  auto runManager = new G4RunManager;
+  auto physicsList = new FTFP_BERT;
   runManager->SetUserInitialization(physicsList);
 
   // Instantiate all detector construction classes
-  ExG4DetectorConstruction01* detectorConstruction01
-    = new ExG4DetectorConstruction01;
-  ExG4DetectorConstruction02* detectorConstruction02
-    = new ExG4DetectorConstruction02;
+  auto detectorConstruction = new DetectorConstruction;
+  auto detectorConstruction0 = new DetectorConstruction0;
 
   // Instantiate all physics list classes
-  ExG4PhysicsList00* physicsList00 = new ExG4PhysicsList00();
+  auto geantinoPhysicsList = new GeantinoPhysicsList();
   
   // Instantiate all primary generator actions classes
-  ExG4PrimaryGeneratorAction01* primaryGeneratorAction01
-    = new ExG4PrimaryGeneratorAction01();
-  ExG4PrimaryGeneratorAction02* primaryGeneratorAction02
-    = new ExG4PrimaryGeneratorAction02();
-
-  // Instantiate all user actions classes
-  ExG4EventAction01* eventAction01 = new ExG4EventAction01();
-  ExG4RunAction01* runAction01 = new ExG4RunAction01();
+  auto gpsPrimaryGeneratorAction = new GpsPrimaryGeneratorAction();
+  auto gunPrimaryGeneratorAction = new GunPrimaryGeneratorAction();
 
   // delete all
-  delete detectorConstruction01;
-  delete detectorConstruction02;
-  delete physicsList00;
-  delete primaryGeneratorAction01;
-  delete primaryGeneratorAction02;
-  delete eventAction01;
-  delete runAction01;
-
-  return 0;
+  delete detectorConstruction;
+  delete detectorConstruction0;
+  delete geantinoPhysicsList;
+  delete gpsPrimaryGeneratorAction;
+  delete gunPrimaryGeneratorAction;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

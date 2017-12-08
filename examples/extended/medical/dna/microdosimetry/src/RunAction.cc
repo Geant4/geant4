@@ -264,6 +264,12 @@ void RunAction::CreateHistogram()
   analysisManager->CreateNtupleDColumn("totalEnergyDeposit");
   analysisManager->CreateNtupleDColumn("stepLength");
   analysisManager->CreateNtupleDColumn("kineticEnergyDifference");
+  analysisManager->CreateNtupleDColumn("kineticEnergy");
+  analysisManager->CreateNtupleDColumn("cosTheta");
+  analysisManager->CreateNtupleIColumn("eventID");
+  analysisManager->CreateNtupleIColumn("trackID");
+  analysisManager->CreateNtupleIColumn("parentID");
+  analysisManager->CreateNtupleIColumn("stepID");
   analysisManager->FinishNtuple();
 }
 

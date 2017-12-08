@@ -86,12 +86,8 @@ int main(int argc ,char ** argv)
  G4RunManager* pRunManager = new G4RunManager;
 #endif
  
-  G4int seed = 0;
-  
-  G4Random::setTheSeed(seed);
-
   G4cout << "***********************" << G4endl;
-  G4cout << "*** " << seed << " ***" << G4endl;
+  G4cout << "*** " << G4Random::getTheSeed() << " ***" << G4endl;
   G4cout << "***********************" << G4endl;
  // Access to the Scoring Manager pointer
   

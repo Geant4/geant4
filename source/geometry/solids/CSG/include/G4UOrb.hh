@@ -34,7 +34,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UOrb to make use of UOrb from USolids module.
+//   Wrapper class for G4Orb to make use of VecGeom Orb.
 
 // History:
 // 30.10.13 G.Cosmo, CERN/PH

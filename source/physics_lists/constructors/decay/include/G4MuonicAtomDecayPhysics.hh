@@ -36,8 +36,8 @@
 class G4MuonicAtomDecayPhysics : public G4VPhysicsConstructor
 {
 public: 
-  G4MuonicAtomDecayPhysics(G4int verbose =1);
-  G4MuonicAtomDecayPhysics(const G4String& name);
+  explicit G4MuonicAtomDecayPhysics(G4int verbose = 0);
+  explicit G4MuonicAtomDecayPhysics(const G4String& name);
   virtual ~G4MuonicAtomDecayPhysics();
 
 public: 

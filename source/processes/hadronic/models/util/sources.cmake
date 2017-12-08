@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 90916 2015-06-11 13:56:26Z gcosmo $
+# $Id: sources.cmake 104985 2017-07-03 15:14:26Z gcosmo $
 #
 # 20110727  M. Kelsey -- Add G4DecayKineticTracks
 #------------------------------------------------------------------------------
@@ -64,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4KineticTrackVector.hh
         G4LegendrePolynomial.hh
         G4NuclearFermiDensity.hh
+        G4NuclearPolarizationStore.hh
         G4NuclearShellModelDensity.hh
         G4Nucleon.hh
         G4Parton.hh
@@ -90,6 +91,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_mod_util
         G4KineticTrackVector.cc
         G4LegendrePolynomial.cc
         G4NuclearFermiDensity.cc
+        G4NuclearPolarizationStore.cc
         G4NuclearShellModelDensity.cc
         G4Nucleon.cc
         G4Parton.cc

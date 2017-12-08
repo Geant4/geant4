@@ -71,7 +71,7 @@ namespace G4INCL {
             decayParticle = new Particle(Neutron, mom, pos);
             break;
           case AlphaDecay:
-            decayParticle = new Cluster(2,4,false);
+            decayParticle = new Cluster(2,4,0,false);
             break;
           default:
             INCL_ERROR("Unrecognized cluster-decay mode in two-body decay: " << theDecayMode << '\n'
@@ -553,6 +553,8 @@ namespace G4INCL {
     ParticleList decay(Cluster * const c) {
       ParticleList decayProducts;
       recursiveDecay(c, &decayProducts);
+      
+      for(ParticleIter i = decayProducts.begin(), e =decayProducts.end(); i!=e; i++) (*i)->setBiasCollisionVector(c->getBiasCollisionVector());
 
       // Correctly update the particle type
       if(c->getA()==1) {

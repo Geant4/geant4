@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNASancheExcitationModel.cc 98733 2016-08-09 10:51:58Z gcosmo $
+// $Id: G4DNASancheExcitationModel.cc 105719 2017-08-16 12:36:37Z gcosmo $
 //
 
 // Created by Z. Francis
@@ -153,17 +153,17 @@ Initialise(const G4ParticleDefinition* /*particle*/,
   tdummyVec.clear();
   //
 
-  double t;
-  double xs;
+  G4double t;
+  G4double xs;
 
   while(!input.eof())
   {
     input>>t;
     tdummyVec.push_back(t);
 
-    fEnergyLevelXS.push_back(std::vector<double>());
+    fEnergyLevelXS.push_back(std::vector<G4double>());
     fEnergyTotalXS.push_back(0);
-    std::vector<double>& levelXS = fEnergyLevelXS.back();
+    std::vector<G4double>& levelXS = fEnergyLevelXS.back();
     levelXS.reserve(9);
 
 //    G4cout<<t;
@@ -300,19 +300,19 @@ void G4DNASancheExcitationModel::SampleSecondaries(std::vector<
 G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
                                                          G4int level)
 {
-  std::vector<double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<double>::iterator t1 = t2 - 1;
+  std::vector<G4double>::iterator t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();
 
-  double sigma = LinInterpolate((*t1), (*t2),
+  G4double sigma = LinInterpolate((*t1), (*t2),
                                 t / eV,
                                 fEnergyLevelXS[i1][level],
                                 fEnergyLevelXS[i2][level]);
 
-  static const double conv_factor =  1e-16 * cm * cm;
+  static const G4double conv_factor =  1e-16 * cm * cm;
 
   sigma *= conv_factor;
   if (sigma == 0.) sigma = 1e-30;
@@ -323,19 +323,19 @@ G4double G4DNASancheExcitationModel::PartialCrossSection(G4double t,
 
 G4double G4DNASancheExcitationModel::TotalCrossSection(G4double t)
 {
-  std::vector<double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
+  std::vector<G4double>::iterator t2 = std::upper_bound(tdummyVec.begin(),
                                                       tdummyVec.end(), t / eV);
-  std::vector<double>::iterator t1 = t2 - 1;
+  std::vector<G4double>::iterator t1 = t2 - 1;
 
   size_t i1 = t1 - tdummyVec.begin();
   size_t i2 = t2 - tdummyVec.begin();
 
-  double sigma = LinInterpolate((*t1), (*t2),
+  G4double sigma = LinInterpolate((*t1), (*t2),
                                 t / eV,
                                 fEnergyTotalXS[i1],
                                 fEnergyTotalXS[i2]);
 
-  static const double conv_factor =  1e-16 * cm * cm;
+  static const G4double conv_factor =  1e-16 * cm * cm;
 
   sigma *= conv_factor;
   if (sigma == 0.) sigma = 1e-30;
@@ -360,7 +360,7 @@ G4int G4DNASancheExcitationModel::RandomSelect(G4double k)
 
   G4int i = nLevels;
   G4double value = 0.;
-  std::deque<double> values;
+  std::deque<G4double> values;
 
   while (i > 0)
   {

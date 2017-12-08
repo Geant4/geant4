@@ -54,7 +54,11 @@
 using namespace G4DNAPARSER;
 CommandLineParser* parser(0);
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Parse(int& argc, char** argv);
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc, char** argv)
 {
@@ -176,6 +180,8 @@ int main(int argc, char** argv)
   return 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Parse(int& argc, char** argv)
 {
   //////////
@@ -217,6 +223,7 @@ void Parse(int& argc, char** argv)
     // if you are using ROOT, create a TApplication in this condition in order
     // to print the help from ROOT as well
     CommandLineParser::DeleteInstance();
+    // Exit is kept
     std::exit(0);
   }
 

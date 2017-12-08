@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -56,9 +56,7 @@ End of Event User Vis Actions: none
 End of Run User Vis Actions: none
 
 Some /vis commands (optionally) take a string to specify colour.
-Available colours:
-  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
-
+"/vis/list" to see available colours.
  Using the DMX gun 
 
 Calibration source centre (X,Y,Z):  0, 0, -302.65 mm
@@ -194,6 +192,20 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :  Emin=        0 eV    Emax=      100 GeV   deltaVI
       ===== Limit on energy threshold has been applied 
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1e+15 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           0
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             0
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -548,30 +560,40 @@ hBrems:   for  pi-    SubType= 3
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 =======================================================================
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1e+12
-Use new data files                                  1
-Use complete data files                             0
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   0
 Electron internal conversion ID                     2
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 ========= Table of registered couples ==============================
 
@@ -722,10 +744,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 26.0302 ns
-     Number of PMT hits (photoelectron equivalent): 25
+     Number of hits in LXe: 59
+     Total energy in LXe: 60 keV
+     Average light collection time: 16.8645 ns
+     Number of PMT hits (photoelectron equivalent): 67
      Event summary in file gamma_1000.out
 
 ---> End of event: 60
@@ -750,7 +772,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 90
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 6
+     Total energy in LXe: 7.55419 keV
+     Average light collection time: 29.292 ns
+     Number of PMT hits (photoelectron equivalent): 6
+     Event summary in file gamma_1000.out
 
 ---> End of event: 90
 
@@ -759,10 +786,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 56
-     Total energy in LXe: 60 keV
-     Average light collection time: 24.769 ns
-     Number of PMT hits (photoelectron equivalent): 62
+     Number of hits in LXe: 42
+     Total energy in LXe: 26.1349 keV
+     Average light collection time: 26.0587 ns
+     Number of PMT hits (photoelectron equivalent): 20
      Event summary in file gamma_1000.out
 
 ---> End of event: 100
@@ -779,12 +806,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 120
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 22
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 22.4963 ns
-     Number of PMT hits (photoelectron equivalent): 28
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 120
 
@@ -792,12 +814,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 130
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 47
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.9446 ns
-     Number of PMT hits (photoelectron equivalent): 52
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 130
 
@@ -805,7 +822,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 140
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 31
+     Total energy in LXe: 26.3706 keV
+     Average light collection time: 10.6623 ns
+     Number of PMT hits (photoelectron equivalent): 17
+     Event summary in file gamma_1000.out
 
 ---> End of event: 140
 
@@ -821,12 +843,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 160
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 25
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 13.5985 ns
-     Number of PMT hits (photoelectron equivalent): 26
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 160
 
@@ -859,10 +876,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 48
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 24.6929 ns
-     Number of PMT hits (photoelectron equivalent): 32
+     Number of hits in LXe: 29
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 20.517 ns
+     Number of PMT hits (photoelectron equivalent): 29
      Event summary in file gamma_1000.out
 
 ---> End of event: 200
@@ -879,7 +896,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 220
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 64
+     Total energy in LXe: 60 keV
+     Average light collection time: 19.4373 ns
+     Number of PMT hits (photoelectron equivalent): 81
+     Event summary in file gamma_1000.out
 
 ---> End of event: 220
 
@@ -887,12 +909,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 230
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 58
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.8288 ns
-     Number of PMT hits (photoelectron equivalent): 61
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 230
 
@@ -925,9 +942,9 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 51
+     Number of hits in LXe: 58
      Total energy in LXe: 60 keV
-     Average light collection time: 22.071 ns
+     Average light collection time: 21.2002 ns
      Number of PMT hits (photoelectron equivalent): 58
      Event summary in file gamma_1000.out
 
@@ -937,12 +954,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 280
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 15.9839 ns
-     Number of PMT hits (photoelectron equivalent): 43
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 280
 
@@ -950,12 +962,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 290
 
      Primary Energy: 60 keV
-     First hit in LXe: e-
-     Number of hits in LXe: 164
-     Total energy in LXe: 34.2393 keV
-     Average light collection time: 20.4614 ns
-     Number of PMT hits (photoelectron equivalent): 29
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 290
 
@@ -963,12 +970,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 300
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 30
-     Total energy in LXe: 26.3706 keV
-     Average light collection time: 23.3286 ns
-     Number of PMT hits (photoelectron equivalent): 27
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 300
 
@@ -993,10 +995,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 58
+     Number of hits in LXe: 50
      Total energy in LXe: 60 keV
-     Average light collection time: 24.5095 ns
-     Number of PMT hits (photoelectron equivalent): 64
+     Average light collection time: 19.6611 ns
+     Number of PMT hits (photoelectron equivalent): 72
      Event summary in file gamma_1000.out
 
 ---> End of event: 330
@@ -1005,7 +1007,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 340
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 54
+     Total energy in LXe: 60 keV
+     Average light collection time: 17.2232 ns
+     Number of PMT hits (photoelectron equivalent): 56
+     Event summary in file gamma_1000.out
 
 ---> End of event: 340
 
@@ -1021,7 +1028,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 360
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 29
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 23.4753 ns
+     Number of PMT hits (photoelectron equivalent): 36
+     Event summary in file gamma_1000.out
 
 ---> End of event: 360
 
@@ -1029,7 +1041,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 370
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 60
+     Total energy in LXe: 60 keV
+     Average light collection time: 20.4804 ns
+     Number of PMT hits (photoelectron equivalent): 55
+     Event summary in file gamma_1000.out
 
 ---> End of event: 370
 
@@ -1037,7 +1054,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 380
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 64
+     Total energy in LXe: 60 keV
+     Average light collection time: 26.8194 ns
+     Number of PMT hits (photoelectron equivalent): 66
+     Event summary in file gamma_1000.out
 
 ---> End of event: 380
 
@@ -1045,12 +1067,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 390
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 69
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.4408 ns
-     Number of PMT hits (photoelectron equivalent): 42
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 390
 
@@ -1059,10 +1076,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 32
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 17.3517 ns
-     Number of PMT hits (photoelectron equivalent): 21
+     Number of hits in LXe: 69
+     Total energy in LXe: 60 keV
+     Average light collection time: 18.6173 ns
+     Number of PMT hits (photoelectron equivalent): 53
      Event summary in file gamma_1000.out
 
 ---> End of event: 400
@@ -1088,10 +1105,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 35
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 16.3086 ns
-     Number of PMT hits (photoelectron equivalent): 31
+     Number of hits in LXe: 58
+     Total energy in LXe: 60 keV
+     Average light collection time: 18.5522 ns
+     Number of PMT hits (photoelectron equivalent): 116
      Event summary in file gamma_1000.out
 
 ---> End of event: 430
@@ -1100,12 +1117,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 440
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 24
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 19.8002 ns
-     Number of PMT hits (photoelectron equivalent): 27
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 440
 
@@ -1129,11 +1141,11 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 470
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 29
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 21.3202 ns
-     Number of PMT hits (photoelectron equivalent): 33
+     First hit in LXe: e-
+     Number of hits in LXe: 89
+     Total energy in LXe: 55.0541 keV
+     Average light collection time: 22.5391 ns
+     Number of PMT hits (photoelectron equivalent): 55
      Event summary in file gamma_1000.out
 
 ---> End of event: 470
@@ -1150,7 +1162,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 490
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 27
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 25.1062 ns
+     Number of PMT hits (photoelectron equivalent): 44
+     Event summary in file gamma_1000.out
 
 ---> End of event: 490
 
@@ -1166,7 +1183,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 510
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 64
+     Total energy in LXe: 60 keV
+     Average light collection time: 24.6187 ns
+     Number of PMT hits (photoelectron equivalent): 59
+     Event summary in file gamma_1000.out
 
 ---> End of event: 510
 
@@ -1182,7 +1204,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 530
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 53
+     Total energy in LXe: 60 keV
+     Average light collection time: 19.7209 ns
+     Number of PMT hits (photoelectron equivalent): 61
+     Event summary in file gamma_1000.out
 
 ---> End of event: 530
 
@@ -1191,10 +1218,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 33
+     Number of hits in LXe: 66
      Total energy in LXe: 60 keV
-     Average light collection time: 18.552 ns
-     Number of PMT hits (photoelectron equivalent): 48
+     Average light collection time: 17.5031 ns
+     Number of PMT hits (photoelectron equivalent): 45
      Event summary in file gamma_1000.out
 
 ---> End of event: 540
@@ -1203,12 +1230,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 550
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 45
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.8442 ns
-     Number of PMT hits (photoelectron equivalent): 57
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 550
 
@@ -1216,7 +1238,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 560
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 64
+     Total energy in LXe: 60 keV
+     Average light collection time: 20.988 ns
+     Number of PMT hits (photoelectron equivalent): 54
+     Event summary in file gamma_1000.out
 
 ---> End of event: 560
 
@@ -1241,10 +1268,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 55
+     Number of hits in LXe: 44
      Total energy in LXe: 60 keV
-     Average light collection time: 21.662 ns
-     Number of PMT hits (photoelectron equivalent): 53
+     Average light collection time: 19.9812 ns
+     Number of PMT hits (photoelectron equivalent): 57
      Event summary in file gamma_1000.out
 
 ---> End of event: 590
@@ -1269,7 +1296,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 620
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 49
+     Total energy in LXe: 60 keV
+     Average light collection time: 22.2923 ns
+     Number of PMT hits (photoelectron equivalent): 78
+     Event summary in file gamma_1000.out
 
 ---> End of event: 620
 
@@ -1277,7 +1309,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 630
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 43
+     Total energy in LXe: 60 keV
+     Average light collection time: 21.5712 ns
+     Number of PMT hits (photoelectron equivalent): 50
+     Event summary in file gamma_1000.out
 
 ---> End of event: 630
 
@@ -1293,12 +1330,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 650
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 54
-     Total energy in LXe: 60 keV
-     Average light collection time: 23.2243 ns
-     Number of PMT hits (photoelectron equivalent): 65
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 650
 
@@ -1314,7 +1346,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 670
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 47
+     Total energy in LXe: 60 keV
+     Average light collection time: 21.9746 ns
+     Number of PMT hits (photoelectron equivalent): 81
+     Event summary in file gamma_1000.out
 
 ---> End of event: 670
 
@@ -1330,12 +1367,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 690
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 51
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.2369 ns
-     Number of PMT hits (photoelectron equivalent): 61
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 690
 
@@ -1343,12 +1375,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 700
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 51
-     Total energy in LXe: 60 keV
-     Average light collection time: 22.4656 ns
-     Number of PMT hits (photoelectron equivalent): 60
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 700
 
@@ -1356,12 +1383,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 710
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 55
-     Total energy in LXe: 60 keV
-     Average light collection time: 21.149 ns
-     Number of PMT hits (photoelectron equivalent): 54
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 710
 
@@ -1369,7 +1391,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 720
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 40
+     Total energy in LXe: 60 keV
+     Average light collection time: 23.7438 ns
+     Number of PMT hits (photoelectron equivalent): 63
+     Event summary in file gamma_1000.out
 
 ---> End of event: 720
 
@@ -1409,12 +1436,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 770
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 65
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.6455 ns
-     Number of PMT hits (photoelectron equivalent): 145
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 770
 
@@ -1423,10 +1445,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 30.5479 keV
-     Average light collection time: 18.9853 ns
-     Number of PMT hits (photoelectron equivalent): 19
+     Number of hits in LXe: 35
+     Total energy in LXe: 26.3706 keV
+     Average light collection time: 19.506 ns
+     Number of PMT hits (photoelectron equivalent): 33
      Event summary in file gamma_1000.out
 
 ---> End of event: 780
@@ -1443,7 +1465,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 800
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 27
+     Total energy in LXe: 25.592 keV
+     Average light collection time: 20.3079 ns
+     Number of PMT hits (photoelectron equivalent): 19
+     Event summary in file gamma_1000.out
 
 ---> End of event: 800
 
@@ -1452,10 +1479,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 41
+     Number of hits in LXe: 63
      Total energy in LXe: 60 keV
-     Average light collection time: 20.0126 ns
-     Number of PMT hits (photoelectron equivalent): 81
+     Average light collection time: 18.8517 ns
+     Number of PMT hits (photoelectron equivalent): 74
      Event summary in file gamma_1000.out
 
 ---> End of event: 810
@@ -1465,10 +1492,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 52
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.0733 ns
-     Number of PMT hits (photoelectron equivalent): 45
+     Number of hits in LXe: 19
+     Total energy in LXe: 26.3706 keV
+     Average light collection time: 20.5512 ns
+     Number of PMT hits (photoelectron equivalent): 19
      Event summary in file gamma_1000.out
 
 ---> End of event: 820
@@ -1477,12 +1504,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 830
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 31
-     Total energy in LXe: 30.2187 keV
-     Average light collection time: 14.9168 ns
-     Number of PMT hits (photoelectron equivalent): 40
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 830
 
@@ -1514,7 +1536,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 870
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 60
+     Total energy in LXe: 60 keV
+     Average light collection time: 22.3989 ns
+     Number of PMT hits (photoelectron equivalent): 73
+     Event summary in file gamma_1000.out
 
 ---> End of event: 870
 
@@ -1522,7 +1549,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 880
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 24.5389 ns
+     Number of PMT hits (photoelectron equivalent): 22
+     Event summary in file gamma_1000.out
 
 ---> End of event: 880
 
@@ -1538,12 +1570,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 900
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 60
-     Total energy in LXe: 60 keV
-     Average light collection time: 18.0721 ns
-     Number of PMT hits (photoelectron equivalent): 59
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 900
 
@@ -1551,7 +1578,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 910
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 58
+     Total energy in LXe: 60 keV
+     Average light collection time: 23.503 ns
+     Number of PMT hits (photoelectron equivalent): 53
+     Event summary in file gamma_1000.out
 
 ---> End of event: 910
 
@@ -1559,7 +1591,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 920
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 30.5479 keV
+     Average light collection time: 26.8343 ns
+     Number of PMT hits (photoelectron equivalent): 30
+     Event summary in file gamma_1000.out
 
 ---> End of event: 920
 
@@ -1568,10 +1605,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 51
-     Total energy in LXe: 60 keV
-     Average light collection time: 17.8688 ns
-     Number of PMT hits (photoelectron equivalent): 46
+     Number of hits in LXe: 53
+     Total energy in LXe: 30.2187 keV
+     Average light collection time: 14.6923 ns
+     Number of PMT hits (photoelectron equivalent): 23
      Event summary in file gamma_1000.out
 
 ---> End of event: 930
@@ -1580,7 +1617,12 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 940
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 72
+     Total energy in LXe: 60 keV
+     Average light collection time: 16.24 ns
+     Number of PMT hits (photoelectron equivalent): 42
+     Event summary in file gamma_1000.out
 
 ---> End of event: 940
 
@@ -1597,10 +1639,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 22
-     Total energy in LXe: 25.6047 keV
-     Average light collection time: 19.7899 ns
-     Number of PMT hits (photoelectron equivalent): 21
+     Number of hits in LXe: 59
+     Total energy in LXe: 60 keV
+     Average light collection time: 17.3515 ns
+     Number of PMT hits (photoelectron equivalent): 81
      Event summary in file gamma_1000.out
 
 ---> End of event: 960
@@ -1617,12 +1659,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 980
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 48
-     Total energy in LXe: 60 keV
-     Average light collection time: 20.4008 ns
-     Number of PMT hits (photoelectron equivalent): 54
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 980
 
@@ -1631,10 +1668,10 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 71
+     Number of hits in LXe: 62
      Total energy in LXe: 60 keV
-     Average light collection time: 18.5944 ns
-     Number of PMT hits (photoelectron equivalent): 67
+     Average light collection time: 19.1619 ns
+     Number of PMT hits (photoelectron equivalent): 55
      Event summary in file gamma_1000.out
 
 ---> End of event: 990

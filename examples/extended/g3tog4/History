@@ -1,4 +1,4 @@
-$Id: History 103117 2017-03-16 14:17:21Z gcosmo $
+$Id: History 106392 2017-10-09 09:44:29Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 29, 2017 I.Hrivnacova  (g3tog4Tests-V10-03-02,03)
+---------------------------
+- Updated for changes in common classes
+- Updated main (removed G4UI_USE, G4VIS_USE macros, moved initialization
+  in macros)
 
 March 16, 2017 Gunter Folger  (g3tog4Tests-V10-03-01)
 ---------------------------

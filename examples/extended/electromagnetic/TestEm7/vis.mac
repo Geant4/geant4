@@ -5,6 +5,7 @@
 # and initializes the graphic.
 #
 /control/verbose 2
+/control/saveHistory
 /run/verbose 2
 #
 /run/initialize
@@ -33,7 +34,7 @@
 /vis/drawVolume
 #
 # Specify view angle:
-#/vis/viewer/set/viewpointThetaPhi 90. 0.
+/vis/viewer/set/viewpointThetaPhi 90. 0.
 #
 # Specify zoom value:
 /vis/viewer/zoom 1.4

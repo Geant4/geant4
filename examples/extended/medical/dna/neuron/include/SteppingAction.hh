@@ -46,7 +46,6 @@
 #include "G4UserSteppingAction.hh"
 
 class RunAction;
-class DetectorConstruction;
 class PrimaryGeneratorAction;
 //class NeuronHitCompartments;
 //class NeuronLoadDataFile;
@@ -57,7 +56,7 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  SteppingAction(DetectorConstruction*, RunAction*); 
+  SteppingAction(RunAction*); 
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
@@ -66,7 +65,6 @@ public:
   
 private:
 
-  DetectorConstruction* fDet;
   RunAction*            fRunAction;
   //NeuronLoadDataFile * fNeuronLoadParamz;  
 

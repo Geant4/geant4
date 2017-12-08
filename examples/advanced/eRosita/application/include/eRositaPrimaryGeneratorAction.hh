@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: eRositaPrimaryGeneratorAction.hh 107473 2017-11-15 08:02:34Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,6 @@
 #include "globals.hh"
 #include "G4VUserPrimaryGeneratorAction.hh"
 
-class eRositaDetectorConstruction;
 class G4ParticleGun;
 class G4Event;
 
@@ -44,7 +43,7 @@ class G4Event;
 class eRositaPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-  eRositaPrimaryGeneratorAction(eRositaDetectorConstruction*);    
+  eRositaPrimaryGeneratorAction();    
   ~eRositaPrimaryGeneratorAction();
 
 public:
@@ -52,7 +51,6 @@ public:
 
 private:
   G4ParticleGun* particleGun;
-  eRositaDetectorConstruction* myDetector;
 
   G4double xposition;     // x position of vertex
   G4double yposition;     // y      -"-

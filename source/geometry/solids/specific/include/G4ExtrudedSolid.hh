@@ -24,9 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4ExtrudedSolid.hh 107099 2017-11-02 11:40:23Z gcosmo $
 //
-// 
+//
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
@@ -39,7 +39,7 @@
 // polygon with fixed outline in the defined Z sections.
 // The z-sides of the solid are the scaled versions of the same polygon.
 // The solid is implemented as a specification of G4TessellatedSolid.
-//  
+//
 // Parameters in the constructor:
 // const G4String& pName             - solid name
 // std::vector<G4TwoVector> polygon  - the vertices of the outlined polygon
@@ -62,7 +62,7 @@
 
 #ifndef G4ExtrudedSolid_HH
 #define G4ExtrudedSolid_HH
-
+/*
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UEXTRUDEDSOLID 1
 #endif
@@ -71,7 +71,7 @@
   #define G4UExtrudedSolid G4ExtrudedSolid
   #include "G4UExtrudedSolid.hh"
 #else
-
+*/
 #include <vector>
 
 #include "G4TwoVector.hh"
@@ -122,14 +122,18 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     inline ZSection    GetZSection(G4int index) const;
     inline std::vector<ZSection> GetZSections() const;
 
-    // Solid methods                                
+    // Solid methods
 
-    EInside  Inside (const G4ThreeVector &p) const;
+    EInside  Inside(const G4ThreeVector &p) const;
+    G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
+    G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
+    G4double DistanceToIn(const G4ThreeVector& p ) const;
     G4double DistanceToOut(const G4ThreeVector &p,
                            const G4ThreeVector &v,
                            const G4bool calcNorm=false,
                                  G4bool *validNorm=0, G4ThreeVector *n=0) const;
-    G4double DistanceToOut (const G4ThreeVector &p) const;
+    G4double DistanceToOut(const G4ThreeVector &p) const;
+
     void BoundingLimits(G4ThreeVector& pMin, G4ThreeVector& pMax) const;
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
@@ -154,7 +158,11 @@ class G4ExtrudedSolid : public G4TessellatedSolid
   private:
 
     void ComputeProjectionParameters();
-    
+    void ComputeLateralPlanes();
+    inline G4bool PointInPolygon(const G4ThreeVector& p) const;
+    inline G4double DistanceToPolygonSqr(const G4ThreeVector& p) const;
+    G4ThreeVector ApproxSurfaceNormal(const G4ThreeVector& p) const;
+
     G4ThreeVector GetVertex(G4int iz, G4int ind) const;
     G4TwoVector ProjectPoint(const G4ThreeVector& point) const;
 
@@ -174,10 +182,10 @@ class G4ExtrudedSolid : public G4TessellatedSolid
                          const G4TwoVector& p) const;
     G4double GetAngle(const G4TwoVector& p0,
                       const G4TwoVector& pa,
-                      const G4TwoVector& pb) const;                      
-      
-    G4VFacet* MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const;      
-    G4VFacet* MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const;      
+                      const G4TwoVector& pb) const;
+
+    G4VFacet* MakeDownFacet(G4int ind1, G4int ind2, G4int ind3) const;
+    G4VFacet* MakeUpFacet(G4int ind1, G4int ind2, G4int ind3) const;
 
     G4bool AddGeneralPolygonFacets();
     G4bool MakeFacets();
@@ -192,14 +200,21 @@ class G4ExtrudedSolid : public G4TessellatedSolid
     G4bool          fIsConvex;
     G4GeometryType  fGeometryType;
 
+    G4int fSolidType;
+    struct plane { G4double a,b,c,d; }; // a*x + b*y + c*z + d = 0
+    std::vector<plane> fPlanes;
+    struct line { G4double k,m; };      // x = k*y + m;
+    std::vector<line> fLines;
+    std::vector<G4double> fLengths;     // edge lengths
+
     std::vector<G4double>      fKScales;
     std::vector<G4double>      fScale0s;
     std::vector<G4TwoVector>   fKOffsets;
     std::vector<G4TwoVector>   fOffset0s;
-};    
+};
 
 #include "G4ExtrudedSolid.icc"
 
-#endif
+//#endif
 
 #endif

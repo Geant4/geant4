@@ -81,5 +81,3 @@ private:
     G4ThreeVector fBR;
     G4ThreeVector fAngles;
 };
-
-

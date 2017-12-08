@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm7/TestEm7.cc
 /// \brief Main program of the electromagnetic/TestEm7 example
 //
-// $Id: TestEm7.cc 82280 2014-06-13 14:45:31Z gcosmo $
+// $Id: TestEm7.cc 107330 2017-11-08 16:42:09Z gcosmo $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -90,16 +90,17 @@ int main(int argc,char** argv) {
 
   if (argc!=1)   // batch mode  
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
     
-  else           //define visualization and UI terminal for interactive mode
+  else //define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+      UI->ApplyCommand("/control/execute vis.mac");
 #endif    
      
 #ifdef G4UI_USE
@@ -109,7 +110,7 @@ int main(int argc,char** argv) {
 #endif
      
 #ifdef G4VIS_USE
-     delete visManager;
+      delete visManager;
 #endif     
     }
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmStandardPhysics.cc 104043 2017-05-09 07:47:10Z gcosmo $
+// $Id: G4EmStandardPhysics.cc 107183 2017-11-03 14:57:23Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -82,6 +82,7 @@
 #include "G4ionIonisation.hh"
 #include "G4alphaIonisation.hh"
 
+#include "G4ParticleTable.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
@@ -176,20 +177,16 @@ void G4EmStandardPhysics::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->AddEmModel(0, new G4WentzelVIModel());
+  mumsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* muss = new G4CoulombScattering();
 
-  G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  pimsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* piss = new G4CoulombScattering();
 
-  G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  kmsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* kss = new G4CoulombScattering();
-
-  G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4CoulombScattering* pss = new G4CoulombScattering();
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
@@ -197,16 +194,14 @@ void G4EmStandardPhysics::ConstructProcess()
   G4double highEnergyLimit = 100*MeV;
 
   // Add standard EM Processes
-  auto myParticleIterator=GetParticleIterator();
-  myParticleIterator->reset();
-  while( (*myParticleIterator)() ){
-    G4ParticleDefinition* particle = myParticleIterator->value();
-    G4String particleName = particle->GetParticleName();
-
+  G4ParticleTable* table = G4ParticleTable::GetParticleTable();
+  for(const auto& particleName : partList.PartNames()) {
+    G4ParticleDefinition* particle = table->FindParticle(particleName);
+    if (!particle) { continue; }
     if (particleName == "gamma") {
 
       G4PhotoElectricEffect* pee = new G4PhotoElectricEffect();
-      pee->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
+      pee->SetEmModel(new G4LivermorePhotoElectricModel());
       ph->RegisterProcess(pee, particle);
 
       ph->RegisterProcess(new G4ComptonScattering(), particle);
@@ -218,15 +213,14 @@ void G4EmStandardPhysics::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetNewDisplacementFlag(false);
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
+      msc->SetEmModel(msc1);
+      msc->SetEmModel(msc2);
 
       G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
+      ss->SetEmModel(ssm); 
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -241,15 +235,14 @@ void G4EmStandardPhysics::ConstructProcess()
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       G4UrbanMscModel* msc1 = new G4UrbanMscModel();
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetNewDisplacementFlag(false);
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
+      msc->SetEmModel(msc1);
+      msc->SetEmModel(msc2);
 
       G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
+      ss->SetEmModel(ssm); 
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
@@ -272,7 +265,6 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "alpha" ||
                particleName == "He3") {
 
-      //ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hMultipleScattering(), particle);
       ph->RegisterProcess(new G4ionIonisation(), particle);
 
@@ -284,7 +276,6 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       ph->RegisterProcess(pimsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pib, particle);
@@ -294,7 +285,6 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       ph->RegisterProcess(kmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(kb, particle);
@@ -304,12 +294,14 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      pmsc->SetEmModel(new G4WentzelVIModel());
+
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
-      ph->RegisterProcess(pss, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||

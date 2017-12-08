@@ -56,6 +56,7 @@
 #include "G4IonBinaryCascadePhysics.hh"
 #include "G4DecayPhysics.hh"
 
+#include <deque>
 class TSPhysicsList : public G4VUserPhysicsList
 {
 public:

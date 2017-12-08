@@ -14,6 +14,87 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 November 2017  Dennis Wright  radioactive_decay-V10-03-20
+------------------------------------------------------------
+- G4RadioactiveDecay::DecayIt in the variance reduction branch:
+  replace the line 
+      if (asecondaryparticle->GetDefinition()->GetBaryonNumber() < 5) {
+  with 
+      if (asecondaryparticle->GetDefinition()->GetPDGStable() ) {
+  This will allow the stable nucleus at the end of the decay chain to 
+  be added to the final state particle stack.  Fixes bug report #2007.
+
+
+09 November 2017  L.Desorgher  radioactive_decay-V10-03-19
+-----------------------------------------------------------
+- G4ECDecay: Set the probability for selection of L and M subshells to PL1/PL=0.995,PL2/PL=0.005
+             PM1/PM=0.995 and PM2/PM=0.005. Close to Fe55 case.
+                     
+
+01 November 2017  V.Ivanchenko  radioactive_decay-V10-03-18
+-----------------------------------------------------------
+- G4RadioactiveDecay: added StreamInfo method for printing
+    radioactive decay parameters; call this method in BuildPhysicsTable;
+    do not enable correlated gamma; removed unused EM headers 
+
+23 October 2017  Dennis Wright  radioactive_decay-V10-03-17
+-----------------------------------------------------------
+- G4Radioactivation.hh: fix unused variable warning for isInitilised
+
+20 October 2017  Dennis Wright  radioactive_decay-V10-03-16
+-----------------------------------------------------------
+- G4Radioactivation.hh: fix unused variable warning for fRemainderLifeTime
+- include Gabriele's GNUmakefile fix
+
+20 October 2017  Gabriele Cosmo
+-----------------------------------------------------------
+- Fixed GNUmakefile for missing dependency on module
+  processes/hadronic/models/management.
+
+ 5 October 2017  Dennis Wright  radioactive_decay-V10-03-15
+-----------------------------------------------------------
+- change name of class and file G4RadioactiveDecayRate to 
+  G4RadioactiveDecayRatesToDaughter
+
+- change name of class and file G4RadioactiveDecayRateVector to
+  G4RadioactiveDecayChainsFromParent
+
+- add and fill method G4RadioactiveDecay::ProcessDescription()
+
+- create new classes G4Radioactivation and G4RadioactivationMessenger for 
+    biased use only
+
+- create new classes G4RadioactiveDecayBase and G4RadioactiveDecayBaseMessenger
+    for unbiased use only
+
+- sources.cmake: use new class names mentioned above
+
+13 September 2017  Laurent Desorgher  radioactive_decay-V10-03-14
+--------------------------------------------------------
+- G4RadioactiveDecay::LoadDecayTable()
+  Divide the b branching ratio of a specific decay channel read in the database
+  by 100 to avoid that it is higher than 1 as prevented by G4VDecayChannel.
+  This BR is given in pc in the database while it should be smaller than 1
+  when setting it by G4VDecayChannel::SetBR method.
+  This solve a bug that appeared  with changes in  G4VDecayChannel from
+  tag particles-V10-03-13.
+  
+11 July 2017  Dennis Wright  radioactive_decay-V10-03-13
+--------------------------------------------------------
+- G4RadioactiveDecay::BuildPhysicsTable(): remove all settings of photon 
+    evaporation; now done in G4PhotonEvaporation and in physics list
+
+- G4ITDecay::DecayIt() remove all manipulations of nuclear polarization - now 
+    done in G4PhotonEvaporation
+
+16 June 2017  Dennis Wright  radioactive_decay-V10-03-12
+--------------------------------------------------------
+- G4RadioactiveDecay.hh:
+    restore static G4ThreadLocal G4Fragment* polarizedNucleus;
+- G4RadioactiveDecay.cc:
+    add G4ThreadLocal G4Fragment* G4RadioactiveDecay::polarizedNucleus = nullptr;
+    outside of class to avoid Clang compiler error
+
 12 June 2017  Dennis Wright  radioactive_decay-V10-03-11
 --------------------------------------------------------
 - due to run and compile errors on Mac, go back to radioactive_decay-V10-03-07,

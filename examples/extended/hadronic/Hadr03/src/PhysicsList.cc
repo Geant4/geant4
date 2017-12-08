@@ -26,7 +26,7 @@
 /// \file PhysicsList.cc
 /// \brief Implementation of the PhysicsList class
 //
-// $Id: PhysicsList.cc 103488 2017-04-11 10:16:44Z gcosmo $
+// $Id: PhysicsList.cc 105744 2017-08-16 13:13:16Z gcosmo $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,8 +80,8 @@ PhysicsList::PhysicsList()
 
   // Hadron Inelastic physics
   //
-  RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
-  ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
+  ////RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));
+  RegisterPhysics( new G4HadronPhysicsQGSP_BIC_HP(verb));
   ////RegisterPhysics( new G4HadronPhysicsQGSP_BIC_AllHP(verb));
   ////RegisterPhysics( new G4HadronInelasticQBBC(verb));
   ////RegisterPhysics( new G4HadronPhysicsINCLXX(verb));

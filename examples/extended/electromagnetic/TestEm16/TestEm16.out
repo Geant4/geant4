@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -268,7 +268,7 @@ G4SynchrotronRadiation::GetRandomEnergySR :
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.37s Real=0.37s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 Summary for synchrotron radiation :
   Number of photons = 64554
   Emean             = 20.24 +/- 0.1449 keV

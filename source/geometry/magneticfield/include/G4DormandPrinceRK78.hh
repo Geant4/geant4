@@ -23,7 +23,24 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//  G4DormandPrinceRK78.hh
+//  Description of G4DormandPrinceRK78 class
+//
+//  Implementation of Dormand-Prince 8(7)13M non-FSAL RK method
+//    Author: Somnath Banerjee
+//    Supported by Google as part of Google Summer of Code 2015.
+//    Supervision / code review: John Apostolakis
+//
+//  Implements a 13 stage embedded explicit Runge-Kutta method, 
+//    using a pair of 7th and 8th order formulae
+//
+//  Paper proposing this RK scheme:
+//     Title:    "High order embedded Runge-Kutta formulae",
+//     Authors:  P.J. Prince, J.R. Dormand
+//     Journal of Computational and Applied Mathematics, Volume 7, Issue 1, 1981,
+//       Pages 67-75, ISSN 0377-0427,
+//     Reference:  DOI: 10.1016/0771-050X(81)90010-3
+//       http://dx.doi.org/10.1016/0771-050X(81)90010-3.
+//       (http://www.sciencedirect.com/science/article/pii/0771050X81900103)
 //
 //  Created by Somnath on 30/06/15.
 

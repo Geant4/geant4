@@ -49,7 +49,7 @@
 
 G4LowECapture::G4LowECapture(G4double ekinlim)
   : G4VDiscreteProcess("Capture", fElectromagnetic), 
-    kinEnergyThreshold(ekinlim),
+    kinEnergyThreshold(ekinlim), isIon(false),
     nRegions(0)
 {}
 
@@ -87,7 +87,7 @@ void G4LowECapture::AddRegion(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LowECapture::BuildPhysicsTable(const G4ParticleDefinition&)
+void G4LowECapture::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   G4RegionStore* store = G4RegionStore::GetInstance();
   for(G4int i=0; i<nRegions; ++i) {  
@@ -100,6 +100,15 @@ void G4LowECapture::BuildPhysicsTable(const G4ParticleDefinition&)
     if(r) { region.push_back(r); }
   }
   nRegions = region.size();
+
+  // ions reusing G4GenericIon parameters
+  if(part.GetParticleType() == "nucleus") {
+    G4String pname = part.GetParticleName();
+    if(pname != "deuteron" && pname != "triton" &&
+       pname != "alpha"    && pname != "He3" &&
+       pname != "alpha+"   && pname != "helium" &&
+       pname != "hydrogen") { isIon = true; }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,7 +123,11 @@ G4double G4LowECapture::PostStepGetPhysicalInteractionLength(
 {
   *condition = NotForced;  
   G4double limit = DBL_MAX;
-  if(aTrack.GetKineticEnergy() < kinEnergyThreshold) { 
+  G4double eLimit = kinEnergyThreshold;
+  if(isIon) { 
+    eLimit *= aTrack.GetDefinition()->GetPDGMass()/CLHEP::proton_mass_c2; 
+  }
+  if(aTrack.GetKineticEnergy() < eLimit) { 
     for(G4int i=0; i<nRegions; ++i) {  
       if(aTrack.GetVolume()->GetLogicalVolume()->GetRegion() == region[i]) { 
 	limit = 0.0; 

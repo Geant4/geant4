@@ -93,7 +93,7 @@ G4_DECLARE_PHYSLIST_FACTORY(Shielding);
 
 // some extra hoops because the physlist factory expects to be able
 // to construct a list using just a verbosity argument
-// but 
+// but
 //   "ShieldingLEND" is Shielding(verbose,"LEND");
 //   "ShieldingM"    is Shielding(verbose,"HP","M");
 
@@ -124,4 +124,18 @@ G4_DECLARE_PHYSLIST_FACTORY(G4GenericPhysicsList);
 #include "QGSP_BIC_AllHP.hh"
 G4_DECLARE_PHYSLIST_FACTORY(QGSP_BIC_AllHP);
 
-// 
+#include "FTFQGSP_BERT.hh"
+G4_DECLARE_PHYSLIST_FACTORY(FTFQGSP_BERT);
+
+////  should these also be included?
+
+/*
+#include "FTF_BIC.hh"
+G4_DECLARE_PHYSLIST_FACTORY(FTF_BIC);
+
+#include "QGS_BIC.hh"
+G4_DECLARE_PHYSLIST_FACTORY(QGS_BIC);
+*/
+
+
+//

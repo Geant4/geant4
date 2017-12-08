@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: pyG4ChordFinder.cc 76884 2013-11-18 12:54:03Z gcosmo $
+// $Id: pyG4ChordFinder.cc 107590 2017-11-24 11:59:22Z gcosmo $
 // ====================================================================
 //   pyG4ChordFinder.cc
 //
@@ -54,7 +54,6 @@ void export_G4ChordFinder()
   class_<G4ChordFinder, G4ChordFinder*, boost::noncopyable>
     ("G4ChordFinder", "chord finder class", no_init)
     // constructor
-    .def(init<G4MagInt_Driver*>())
     .def(init<G4MagneticField*>())
     .def(init<G4MagneticField*, G4double>())
     .def(init<G4MagneticField*, G4double, G4MagIntegratorStepper*>())

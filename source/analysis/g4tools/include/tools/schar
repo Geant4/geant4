@@ -1,0 +1,38 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_schar
+#define tools_schar
+
+#include <string>
+
+namespace tools {
+
+inline bool belong(const std::string& a_string,char a_c){
+  std::string::const_iterator it;
+  for(it=a_string.begin();it!=a_string.end();++it) {
+    if((*it)==a_c) return true;
+  }
+  return false;
+}
+
+inline size_t numchar(const std::string& a_string,char a_c){
+  size_t num = 0;  
+  std::string::const_iterator it;
+  for(it=a_string.begin();it!=a_string.end();++it) {
+    if((*it)==a_c) num++;
+  }
+  return num;
+}
+
+inline bool is_spaces(const std::string& a_string){
+  std::string::const_iterator it;
+  for(it=a_string.begin();it!=a_string.end();++it) {
+    if((*it)!=' ') return false;
+  }
+  return true;
+}
+
+}
+
+#endif

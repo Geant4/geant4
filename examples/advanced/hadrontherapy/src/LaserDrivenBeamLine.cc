@@ -48,6 +48,7 @@
 #include "G4Material.hh"
 //
 #include "G4FieldManager.hh"
+#include "G4MagIntegratorDriver.hh"
 #include "G4MagIntegratorStepper.hh"
 #include "G4Mag_UsualEqRhs.hh"
 #include "G4ExplicitEuler.hh"

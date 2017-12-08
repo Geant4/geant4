@@ -1,5 +1,5 @@
 
-$Id: History 104822 2017-06-20 12:24:22Z gcosmo $
+$Id: History 107324 2017-11-08 16:35:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+07-11-17 D.Sawkey (testem0-V10-03-01)
+- RunAction: write html documentation of physics list if envvars
+    G4PhysListName, G4PhysListDocDir set
+
 19-06-17 mma  (testem0-V10-03-00)
 - RunAction : update max energy for CSDARange table
 

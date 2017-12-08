@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4NuclearStopping.hh 103955 2017-05-04 11:29:54Z gcosmo $
+// $Id: G4NuclearStopping.hh 106717 2017-10-20 09:41:27Z gcosmo $
 //
 // -----------------------------------------------------------------------------
 //
@@ -86,6 +86,9 @@ public:    // with description
 
   // Print few lines of informations about the process: validity range,
   virtual void PrintInfo() final;
+
+  // print documentation in html format
+  virtual void ProcessDescription(std::ostream&) const override;
 
 protected:
 

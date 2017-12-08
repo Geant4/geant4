@@ -48,7 +48,10 @@ template <class T>
 inline cid _cid(const std::vector<T>&) {return 20+_cid(T());}
 
 template <class T>
-inline cid _cid_std_vector() {return 20+_cid(T());}
+inline cid _cid_std_vector() {
+  static const T s_v = T(); //do that for T = std::string.
+  return 20+_cid(s_v);
+}
 
 // Then : cid for std::vector< std::vector<T> > is going to be :
 //   20+_cid(std::vector<T>) = 2*20+_cid(T)

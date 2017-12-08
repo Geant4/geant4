@@ -13,6 +13,7 @@
 /run/printProgress 10
 /run/setCut           1 km
 #
+/testhadr/RadDecay true
 /run/initialize
 /process/em/workerVerbose 0
 #

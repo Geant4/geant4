@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PhotonEvaporation.cc 104747 2017-06-15 08:42:37Z gcosmo $
+// $Id: G4PhotonEvaporation.cc 106723 2017-10-20 09:50:34Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -45,6 +45,7 @@
 
 #include "G4PhotonEvaporation.hh"
 
+#include "G4NuclearPolarizationStore.hh"
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 #include "G4LorentzVector.hh"
@@ -57,15 +58,22 @@
 G4float G4PhotonEvaporation::GREnergy[] = {0.0f};
 G4float G4PhotonEvaporation::GRWidth[] = {0.0f};
 
+#ifdef G4MULTITHREADED
+G4Mutex G4PhotonEvaporation::PhotonEvaporationMutex = G4MUTEX_INITIALIZER;
+#endif
+
 G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
-  : fLevelManager(nullptr), fTransition(p), fVerbose(0), fPoints(0), 
-    vShellNumber(-1), fIndex(0), fMaxLifeTime(DBL_MAX), 
-    fICM(false), fRDM(false), fSampleTime(true), isInitialised(false)
+  : fLevelManager(nullptr), fTransition(p), fPolarization(nullptr),
+    fVerbose(0), fPoints(0), vShellNumber(-1), fIndex(0), 
+    fMaxLifeTime(DBL_MAX), 
+    fICM(true), fRDM(false), fSampleTime(true), 
+    fCorrelatedGamma(false), isInitialised(false)
 {
   //G4cout << "### New G4PhotonEvaporation() " << this << G4endl;   
   fNuclearLevelData = G4NuclearLevelData::GetInstance(); 
+  fNucPStore = G4NuclearPolarizationStore::GetInstance();
   LevelDensity = 0.125/CLHEP::MeV;
-  Tolerance = 0.1*CLHEP::keV;
+  Tolerance = 20*CLHEP::eV;
 
   if(!fTransition) { fTransition = new G4GammaTransition(); }
 
@@ -73,14 +81,7 @@ G4PhotonEvaporation::G4PhotonEvaporation(G4GammaTransition* p)
   fLevelEnergyMax = fStep = fExcEnergy = fProbability = 0.0;
 
   for(G4int i=0; i<MAXDEPOINT; ++i) { fCummProbability[i] = 0.0; }
-  if(0.0f == GREnergy[1]) {
-    G4Pow* g4calc = G4Pow::GetInstance();
-    static const G4float GRWfactor = 0.3f;
-    for (G4int A=1; A<MAXGRDATA; ++A) {
-      GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
-      GRWidth[A] = GRWfactor*GREnergy[A];
-    }
-  } 
+  if(0.0f == GREnergy[1]) { InitialiseGRData(); }
 }
 
 G4PhotonEvaporation::~G4PhotonEvaporation()
@@ -100,24 +101,75 @@ void G4PhotonEvaporation::Initialise()
   LevelDensity = param->GetLevelDensity();
   Tolerance = param->GetMinExcitation();
   fMaxLifeTime = param->GetMaxLifeTime();
+  fCorrelatedGamma = param->CorrelatedGamma();
+  fICM = param->GetInternalConversionFlag();
 
-  fTransition->SetPolarizationFlag(param->CorrelatedGamma());
+  fTransition->SetPolarizationFlag(fCorrelatedGamma);
+  fTransition->SetTwoJMAX(param->GetTwoJMAX());
   fTransition->SetVerbose(fVerbose);
+}
+
+void G4PhotonEvaporation::InitialiseGRData()
+{
+#ifdef G4MULTITHREADED
+  G4MUTEXLOCK(&G4PhotonEvaporation::PhotonEvaporationMutex);
+#endif
+  if(0.0f == GREnergy[1]) { 
+    G4Pow* g4calc = G4Pow::GetInstance();
+    static const G4float GRWfactor = 0.3f;
+    for (G4int A=1; A<MAXGRDATA; ++A) {
+      GREnergy[A] = (G4float)(40.3*CLHEP::MeV/g4calc->powZ(A,0.2));
+      GRWidth[A] = GRWfactor*GREnergy[A];
+    }
+  } 
+#ifdef G4MULTITHREADED
+  G4MUTEXUNLOCK(&G4PhotonEvaporation::PhotonEvaporationMutex);
+#endif
 }
 
 G4Fragment* 
 G4PhotonEvaporation::EmittedFragment(G4Fragment* nucleus)
 {
-  if(fRDM) { fSampleTime = false; }
-  else     { fSampleTime = true; }
+  if(!isInitialised) { Initialise(); }
+  fSampleTime = (fRDM) ? false : true;
 
+  // potentially external code may set initial polarization
+  // but only for radioactive decay nuclear polarization is considered
+  if(fCorrelatedGamma && fRDM) {
+    if(nucleus->GetNuclearPolarization()) { 
+      fNucPStore->RemoveMe(nucleus->GetNuclearPolarization());
+      delete nucleus->GetNuclearPolarization(); 
+    } 
+    fPolarization = fNucPStore->FindOrBuild(nucleus->GetZ_asInt(),
+					    nucleus->GetA_asInt(),
+					    nucleus->GetExcitationEnergy());
+    nucleus->SetNuclearPolarization(fPolarization);
+  }
+  if(fVerbose > 1) { 
+    G4cout << "G4PhotonEvaporation::EmittedFragment: " 
+	   << *nucleus << G4endl;
+    if(fPolarization) { G4cout << "NucPolar: " << fPolarization << G4endl; }
+    G4cout << " CorrGamma: " << fCorrelatedGamma << " RDM: " << fRDM
+	   << " fPolarization: " << fPolarization << G4endl;
+  }
   G4Fragment* gamma = GenerateGamma(nucleus);
-  if(fVerbose > 0) {
-    G4cout << "G4PhotonEvaporation::EmittedFragment: RDM= " << fRDM << G4endl; 
+
+  // remove G4NuclearPolarizaton when reach ground state
+  if(fPolarization && 0 == fIndex) {
+    if(fVerbose > 1) { 
+      G4cout << "G4PhotonEvaporation::EmittedFragment: remove " 
+	     << fPolarization << G4endl;
+    }
+    fNucPStore->RemoveMe(fPolarization);
+    fPolarization = nullptr;
+    nucleus->SetNuclearPolarization(fPolarization);
+  }
+
+  if(fVerbose > 1) {
+    G4cout << "G4PhotonEvaporation::EmittedFragment: RDM= " 
+	   << fRDM << " done:" << G4endl; 
     if(gamma) { G4cout << *gamma << G4endl; }
     G4cout << "   Residual: " << *nucleus << G4endl;
-    G4cout << "   ExcEnergy(MeV)= " << nucleus->GetExcitationEnergy()
-	   << "  idxf= " << nucleus->GetFloatingLevelNumber() << G4endl;
   }
   return gamma; 
 }
@@ -138,13 +190,21 @@ G4PhotonEvaporation::BreakItUp(const G4Fragment& nucleus)
 G4bool G4PhotonEvaporation::BreakUpChain(G4FragmentVector* products,
 					 G4Fragment* nucleus)
 {
+  if(!isInitialised) { Initialise(); }
   if(fVerbose > 0) {
     G4cout << "G4PhotonEvaporation::BreakUpChain RDM= " << fRDM << " "
 	   << *nucleus << G4endl;
   }
   G4Fragment* gamma = nullptr;
-  if(fRDM) { fSampleTime = false; }
-  else     { fSampleTime = true; }
+  fSampleTime = (fRDM) ? false : true;
+
+  // start decay chain from unpolarized state
+  if(fCorrelatedGamma) {
+    fPolarization = new G4NuclearPolarization(nucleus->GetZ_asInt(),
+					      nucleus->GetA_asInt(),
+					      nucleus->GetExcitationEnergy());
+    nucleus->SetNuclearPolarization(fPolarization);
+  }
 
   do {
     gamma = GenerateGamma(nucleus);
@@ -160,6 +220,13 @@ G4bool G4PhotonEvaporation::BreakUpChain(G4FragmentVector* products,
     } 
     // Loop checking, 05-Aug-2015, Vladimir Ivanchenko
   } while(gamma);
+
+  // clear nuclear polarization end of chain
+  if(fPolarization) {
+    delete fPolarization;
+    fPolarization = nullptr;
+    nucleus->SetNuclearPolarization(fPolarization);
+  }  
   return false;
 }
 
@@ -295,13 +362,18 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
       if(level) { 
 	ntrans = level->NumberOfTransitions();
         JP1 = fLevelManager->SpinTwo(fIndex); 
-        if(ntrans > 0) { isDiscrete = true; }
-        else if(fLevelManager->FloatingLevel(fIndex) > 0) {
-	  --fIndex;
-	  level = fLevelManager->GetLevel(fIndex);
-	  ntrans = level->NumberOfTransitions();
-	  JP1 = fLevelManager->SpinTwo(fIndex); 
-	  if(ntrans > 0) { isDiscrete = true; }
+        if(ntrans > 0) { 
+	  isDiscrete = true; 
+	} else {
+	  // if no transition available nothing is done for RDM
+	  if(fRDM) {return result; }
+	  if(fLevelManager->FloatingLevel(fIndex) > 0) {
+	    --fIndex;
+	    level = fLevelManager->GetLevel(fIndex);
+	    ntrans = level->NumberOfTransitions();
+	    JP1 = fLevelManager->SpinTwo(fIndex); 
+	    if(ntrans > 0) { isDiscrete = true; }
+	  }
 	}
       }
     }
@@ -384,7 +456,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     G4double prob = (G4double)level->GammaProbability(idx);
     // prob = 0 means that there is only internal conversion
-    if(prob < 1.0) {
+    if(fICM && prob < 1.0) {
       G4double rndm = G4UniformRand();
       if(rndm > prob) {
 	isGamma = false;
@@ -394,7 +466,7 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
     }
     // it is discrete transition with possible gamma correlation
     isDiscrete = true;
-    ratio  = level->MixingRatio(idx);
+    ratio  = level->MultipolarityRatio(idx);
     multiP = level->TransitionType(idx);
     fIndex = level->FinalExcitationIndex(idx);
     JP2    = fLevelManager->SpinTwo(fIndex); 
@@ -413,8 +485,11 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
 					 JP2, multiP, vShellNumber, 
 					 isDiscrete, isGamma);
   if(result) { result->SetCreationTime(time); }
+
+  // updated residual nucleus
   nucleus->SetCreationTime(time);
   nucleus->SetSpin(0.5*JP2);
+  if(fPolarization) { fPolarization->SetExcitationEnergy(efinal); }
 
   // ignore the floating levels with zero energy and create ground state
   if(efinal == 0.0 && fIndex > 0) {
@@ -431,9 +506,6 @@ G4PhotonEvaporation::GenerateGamma(G4Fragment* nucleus)
   }
   return result;
 }
-
-void G4PhotonEvaporation::SetMaxHalfLife(G4double)
-{}
 
 void G4PhotonEvaporation::SetGammaTransition(G4GammaTransition* p)
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc 103926 2017-05-03 13:43:27Z gcosmo $
+// $Id: G4PhysicalVolumeModel.cc 106122 2017-09-13 12:51:53Z gcosmo $
 //
 // 
 // John Allison  31st December 1997.
@@ -134,7 +134,7 @@ void G4PhysicalVolumeModel::CalculateExtent ()
        false,  // Density culling.
        0.,     // Density (not relevant if density culling false).
        true,   // Cull daughters of opaque mothers.
-       72);    // No of sides (not relevant for this operation).
+       24);    // No of sides (not relevant for this operation).
     fpMP = &mParams;
     DescribeYourselfTo (bsScene);
     G4double radius = bsScene.GetRadius();

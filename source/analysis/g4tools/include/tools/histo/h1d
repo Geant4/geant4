@@ -20,6 +20,8 @@ public:
   }
   const std::string& s_cls() const {return s_class();}
 public:
+  h1d():parent("",10,0,1){} //for I/O when reading.
+
   h1d(const std::string& a_title,unsigned int aXnumber,double aXmin,double aXmax)
   :parent(a_title,aXnumber,aXmin,aXmax){}
 
@@ -30,6 +32,7 @@ public:
 public:
   h1d(const h1d& a_from):parent(a_from){}
   h1d& operator=(const h1d& a_from){
+    if(&a_from==this) return *this;
     parent::operator=(a_from);
     return *this;
   }

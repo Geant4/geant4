@@ -11,7 +11,7 @@
 #
 # Generated on : 15/07/2013
 #
-# $Id: sources.cmake 93451 2015-10-22 14:53:57Z gcosmo $
+# $Id: sources.cmake 105338 2017-07-21 09:14:27Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -36,6 +36,8 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisUtilities.hh
         G4BaseAnalysisManager.hh
         G4BaseFileManager.hh
+        G4BaseNtupleManager.hh
+        G4BaseRNtupleManager.hh
         G4BinScheme.hh
         G4Fcn.hh
         G4AnalysisMessengerHelper.hh
@@ -57,6 +59,9 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4TNtupleDescription.hh
         G4TNtupleManager.hh
         G4TNtupleManager.icc
+        G4TRNtupleDescription.hh
+        G4TRNtupleManager.hh
+        G4TRNtupleManager.icc
         G4VAnalysisManager.hh
         G4VAnalysisManager.icc
         G4VAnalysisReader.hh
@@ -76,6 +81,8 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4AnalysisMessenger.cc
         G4BaseAnalysisManager.cc
         G4BaseFileManager.cc
+        G4BaseNtupleManager.cc
+        G4BaseRNtupleManager.cc
         G4AnalysisUtilities.cc
         G4BinScheme.cc
         G4Fcn.cc
@@ -95,7 +102,6 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4VAnalysisManager.cc
         G4VAnalysisReader.cc
         G4VFileManager.cc
-        G4VNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms

@@ -110,8 +110,8 @@ inline vec3f operator*(float a_f,const vec3f& a_v) {
 
 #define TOOLS_VEC3F_MORE_PREC
 #ifdef TOOLS_VEC3F_MORE_PREC
-inline void normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
-                   vec3f& a_tmp_1,vec3f& a_tmp_2) {
+inline void get_normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
+                       vec3f& a_tmp_1,vec3f& a_tmp_2) {
   // Used to optimize sg::bin().
   //(a_p1-a_p0).cross(a_p2-a_p1,a_nm);
 
@@ -126,9 +126,9 @@ inline void normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& 
   a_nm.normalize();
 }
 #else
-inline void normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
-                   vec3f& a_tmp_1,vec3f& a_tmp_2) {
-  normal<float>(a_p0,a_p1,a_p2,a_nm,a_tmp_1,a_tmp_2,::sqrtf);
+inline void get_normal(const vec3f& a_p0,const vec3f& a_p1,const vec3f& a_p2,vec3f& a_nm,
+                       vec3f& a_tmp_1,vec3f& a_tmp_2) {
+  get_normal<float>(a_p0,a_p1,a_p2,a_nm,a_tmp_1,a_tmp_2,::sqrtf);
 }
 #endif
 

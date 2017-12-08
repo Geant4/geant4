@@ -101,7 +101,7 @@ void G4ePairProduction::InitialiseEnergyLossProcess(
     theParticle = part;
 
     G4MuPairProductionModel* mod = new G4MuPairProductionModel(part); 
-    SetEmModel(mod, 1);
+    SetEmModel(mod);
 
     lowestKinEnergy = std::max(lowestKinEnergy, part->GetPDGMass()*8.0);
     mod->SetLowestKineticEnergy(lowestKinEnergy);
@@ -116,18 +116,19 @@ void G4ePairProduction::InitialiseEnergyLossProcess(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4ePairProduction::PrintInfo()
+void G4ePairProduction::StreamProcessInfo(std::ostream& out,
+                                          G4String endOfLine) const
 {
-  G4ElementData* ed = EmModel(1)->GetElementData();
+  G4ElementData* ed = EmModel(0)->GetElementData();
   if(ed) {
     for(G4int Z=1; Z<93; ++Z) {
       G4Physics2DVector* pv = ed->GetElement2DData(Z);
       if(pv) {
-        G4cout << "      Sampling table " << pv->GetLengthY()
-	       << "x" << pv->GetLengthX() << "; from "
-	       << G4Exp(pv->GetY(0))/GeV << " GeV to " 
-	       << G4Exp(pv->GetY(pv->GetLengthY()-1))/TeV 
-	       << " TeV " << G4endl;
+        out << "      Sampling table " << pv->GetLengthY()
+	    << "x" << pv->GetLengthX() << "; from "
+	    << G4Exp(pv->GetY(0))/GeV << " GeV to " 
+	    << G4Exp(pv->GetY(pv->GetLengthY()-1))/TeV 
+	    << " TeV " << endOfLine;
 	break;
       }
     }
@@ -136,6 +137,10 @@ void G4ePairProduction::PrintInfo()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4ePairProduction::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Pair production</strong>";
+  G4VEnergyLossProcess::ProcessDescription(out);
+}
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

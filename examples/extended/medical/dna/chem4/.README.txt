@@ -67,7 +67,7 @@ The default geometry is constructed in DetectorConstruction class.
 
 \section CHEM4_s5 DETECTOR RESPONSE : Scorers
 
-\subsection CHEM4_s5.1 Species scorer
+\subsection CHEM4_s5_sub1 Species scorer
 
   Scorers are defined in DetectorConstruction::ConstructSDandField(). There is
   one G4MultiFunctionalDetector object which computes the energy deposition and
@@ -88,7 +88,7 @@ The default geometry is constructed in DetectorConstruction class.
   ntuple file Species.root. The root macro program PlotNtuple.C can be used to
   plot the G values vs time, for each species.
   
-\subsection CHEM4_s5.2 Primary Killer
+\subsection CHEM4_s5_sub2 Primary Killer
   The G-values are computing for a range of deposited energy. 
   We are in an infinite volume. Therefore the energy lost by the 
   primary equals the deposited energy since all secondary particles 

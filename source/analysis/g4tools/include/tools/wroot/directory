@@ -324,8 +324,8 @@ public:
     return true;
   }
 
-  void clear_dirs() {clear<directory>(m_dirs);}
-  void clear_objs() {clear<iobject>(m_objs);}
+  void clear_dirs() {safe_clear<directory>(m_dirs);}
+  void clear_objs() {safe_clear<iobject>(m_objs);}
 
 protected:
   void clear_keys() {

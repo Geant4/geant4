@@ -176,7 +176,7 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
             G4Exp(-c[iMolecula][4]*std::pow(T0,-c[iMolecula][6])) +
             c[iMolecula][3]/(T0*T0) ;
 
-      ionloss *= std::sqrt(T/T0) ;
+      ionloss = a1*a2*std::sqrt(T/T0) ;
 
   // Main parametrisation
     } else {
@@ -184,13 +184,14 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
       a2 = (c[iMolecula][0]*std::log(T)/T + c[iMolecula][2]/T) *
             G4Exp(-c[iMolecula][4]*std::pow(T,-c[iMolecula][6])) +
             c[iMolecula][3]/(T*T) ;
+      ionloss = a1*a2;
     }
 
   // He effective charge
     G4double z = (material->GetTotNbOfElectPerVolume()) /
                  (material->GetTotNbOfAtomsPerVolume()) ;
 
-    ionloss     = a1*a2 / HeEffChargeSquare(z, kineticEnergy*rateMass) ;
+    ionloss /= HeEffChargeSquare(z, kineticEnergy*rateMass) ;
 
     if ( ionloss < 0.0) ionloss = 0.0 ;
   }

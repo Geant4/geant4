@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -43,8 +43,6 @@ Command is ignored.
          --->  Isotope:  Ge76   Z = 32   N =  76   A =  75.92 g/mole   abundance:  7.610 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
-### WARNING: G4EmProcessOptions class is obsolete and will be removed in the next public release 
-    Please, try to use G4EmParameters class and/or UI interface to EM parameters
 
  FTFP_BERT_HP : new threshold between BERT and FTFP is over the interval 
  for pions :   3 to 12 GeV
@@ -60,20 +58,20 @@ NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /
 NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
 #
 /process/list
-     Transportation,                msc,              hIoni,            ionIoni
-    nuclearStopping,              eIoni,              eBrem,            annihil
-               phot,              compt,               conv,             muIoni
-            muBrems,         muPairProd,              Decay,   RadioactiveDecay
-         hadElastic,   neutronInelastic,           nCapture,           nFission
-    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
-     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
-anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
-anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
-  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
-anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
-anti_alphaInelastic,         ionElastic,         dInelastic,         tInelastic
-       He3Inelastic,     alphaInelastic,       ionInelastic,      photonNuclear
-
+     Transportation,               phot,              compt,               conv
+               Rayl,                msc,              eIoni,              eBrem
+        CoulombScat,            annihil,             muIoni,            muBrems
+         muPairProd,              hIoni,             hBrems,          hPairProd
+            ionIoni,              Decay,   RadioactiveDecay,         hadElastic
+   neutronInelastic,           nCapture,           nFission,    protonInelastic
+       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic
+    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic,anti-lambdaInelastic
+    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic,anti_sigma+Inelastic
+       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic,  anti_xi0Inelastic
+    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic,anti_neutronInelastic
+anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic
+         ionElastic,         dInelastic,         tInelastic,       He3Inelastic
+     alphaInelastic,       ionInelastic,      photonNuclear
 #
 /gun/particle ion
 /gun/ion 10 24
@@ -85,243 +83,26 @@ Set file name: rdecay02
 #
 /run/printProgress 1000
 /run/beamOn 10000
-
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
-          DefaultRegionForTheWorld  1  1  0
-### ===  Auger cascade flag: 1
-### ===  Ignore cuts flag:   0
-
-phot:   for  gamma    SubType= 12  BuildTable= 0
-      LambdaPrime table from 200 keV to 100 TeV in 61 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       PhotoElectric :  Emin=        0 meV   Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
-
-compt:   for  gamma    SubType= 13  BuildTable= 1
-      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
-      LambdaPrime table from 1 MeV to 100 TeV in 56 bins 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       Klein-Nishina :  Emin=        0 meV   Emax=      100 TeV
-
-conv:   for  gamma    SubType= 14  BuildTable= 1
-      Lambda table from 1.022 MeV to 100 TeV, 18 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        BetheHeitler :  Emin=        0 meV   Emax=       80 GeV
-     BetheHeitlerLPM :  Emin=       80 GeV   Emax=      100 TeV
-
-msc:   for e-    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-eIoni:   for  e-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 meV   Emax=      100 TeV
-
-eBrem:   for  e-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 meV   Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
-
-msc:   for e+    SubType= 10
-      RangeFactor= 0.04, stepLimitType: 1, latDisplacement: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-eIoni:   for  e+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 1, dRoverRange= 1, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        MollerBhabha :  Emin=        0 meV   Emax=      100 TeV
-
-eBrem:   for  e+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      LPM flag: 1 for E > 1 GeV,  VertexHighEnergyTh(GeV)= 100000
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-             eBremSB :  Emin=        0 meV   Emax=        1 GeV   DipBustGen
-            eBremLPM :  Emin=        1 GeV   Emax=      100 TeV   DipBustGen
-
-annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            eplus2gg :  Emin=        0 meV   Emax=      100 TeV
-
-msc:   for proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 meV   Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
-
-msc:   for GenericIon    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV
-
-ionIoni:   for  GenericIon    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 meV   Emax=      100 TeV   deltaVI
-
-nuclearStopping:   for  GenericIon    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 meV   Emax=      100 TeV
-
-msc:   for alpha    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-ionIoni:   for  alpha    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.02
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            BraggIon :  Emin=        0 meV   Emax=   7.9452 MeV
-          BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
-
-nuclearStopping:   for  alpha    SubType= 8  BuildTable= 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   ICRU49NucStopping :  Emin=        0 meV   Emax=      100 TeV
-
-msc:   for anti_proton    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  anti_proton    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 meV   Emax=        2 MeV
-          BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
-
-msc:   for kaon+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  kaon+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 meV   Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
-
-msc:   for kaon-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  kaon-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 meV   Emax=  1.05231 MeV
-          BetheBloch :  Emin=  1.05231 MeV   Emax=      100 TeV
-
-msc:   for mu+    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-muIoni:   for  mu+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 meV   Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
-
-muBrems:   for  mu+    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 meV   Emax=      100 TeV
-
-muPairProd:   for  mu+    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 meV   Emax=      100 TeV
-
-msc:   for mu-    SubType= 10
-      RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 0, polarAngleLimit(deg)= 180
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-muIoni:   for  mu-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 meV   Emax=      200 keV
-          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
-        MuBetheBloch :  Emin=        1 GeV   Emax=      100 TeV
-
-muBrems:   for  mu-    SubType= 3
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-              MuBrem :  Emin=        0 meV   Emax=      100 TeV
-
-muPairProd:   for  mu-    SubType= 4
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      Sampling table 21x1001 from 1 GeV to 100 TeV 
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-          muPairProd :  Emin=        0 meV   Emax=      100 TeV
+=======================================================================
+======       Radioactive Decay Physics Parameters              ========
+=======================================================================
+Max life time                                     1.4427e+06 ps
+Internal e- conversion flag                       1
+Stored internal conversion coefficients           1
+Enable correlated gamma emission                  0
+Max 2J for sampling of angular correlations       10
+Atomic de-excitation enabled                      1
+Auger electron emission enabled                   1
+Auger cascade enabled                             1
+Check EM cuts disabled for atomic de-excitation   0
+Use Bearden atomic level energies                 0
+=======================================================================
 NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
 NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic/CrossSection/8_17_Oxygen
 NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 @@@ G4ParticleHPInelastic instantiated for particle neutron data directory variable is G4NEUTRONHPDATA pointing to /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Inelastic
 NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /cvmfs/geant4.cern.ch/share/data/G4NDL4.5/Capture/CrossSection/8_17_Oxygen
-
-msc:   for pi+    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  pi+    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-               Bragg :  Emin=        0 meV   Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
-
-msc:   for pi-    SubType= 10
-      RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            UrbanMsc :  Emin=        0 meV   Emax=      100 TeV  Table with 84 bins Emin=    100 eV    Emax=    100 TeV
-
-hIoni:   for  pi-    SubType= 2
-      dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
-      Lambda tables from threshold to 100 TeV, 7 bins per decade, spline: 1
-      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-            ICRU73QO :  Emin=        0 meV   Emax=  297.505 keV
-          BetheBloch :  Emin=  297.505 keV   Emax=      100 TeV
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -466,7 +247,8 @@ hIoni:   for  pi-    SubType= 2
                            Hadronic Processes for gamma
 
   Process: photonNuclear
-        Model:            BertiniCascade: 0 meV ---> 10 GeV
+        Model:            BertiniCascade: 0 meV ---> 3.5 GeV
+        Model:           TheoFSGenerator: 3 GeV ---> 100 TeV
      Cr_sctns:            PhotoNuclearXS: 0 meV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 meV ---> 100 TeV
 
@@ -475,6 +257,7 @@ hIoni:   for  pi-    SubType= 2
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: kaon+Inelastic
@@ -489,6 +272,7 @@ hIoni:   for  pi-    SubType= 2
 
   Process: hadElastic
         Model:              hElasticLHEP: 0 meV ---> 100 TeV
+     Cr_sctns:            Glauber-Gribov: 0 meV ---> 2.88022e+295 J  
      Cr_sctns:            GheishaElastic: 0 meV ---> 100 TeV
 
   Process: kaon-Inelastic
@@ -609,16 +393,21 @@ hIoni:   for  pi-    SubType= 2
 ======       Pre-compound/De-excitation Physics Parameters     ========
 =======================================================================
 Type of pre-compound inverse x-section              3
+Pre-compound model active                           1
+Pre-compound low energy (MeV)                       0.1
 Type of de-excitation inverse x-section             3
+Type of de-excitation factory                       Evaporation
+Number of de-excitation channels                    8
 Min excitation energy (keV)                         0.01
+Min energy per nucleon for multifragmentation (MeV) 1e+05
 Level density (1/MeV)                               0.1
 Time limit for long lived isomeres (ns)             1442.7
-Use new data files                                  1
-Use complete data files                             1
-Correlated gamma emission flag                      0
+Internal e- conversion flag                         1
+Store e- internal conversion data                   1
 Electron internal conversion ID                     0
+Correlated gamma emission flag                      0
+Max 2J for sampling of angular correlations         10
 =======================================================================
-Number of de-excitation channels                    8
 
 ========= Table of registered couples ==============================
 
@@ -665,51 +454,51 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.47s Real=1.49s Sys=0s
+  User=0.95s Real=0.96s Sys=0s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 811.5 keV  rms = 423.75 keV
- Mean energy deposit in detector, in time window = 18.74 keV  rms = 106.88 keV
+ Mean energy deposit in target,   in time window = 802.36 keV  rms = 417.09 keV
+ Mean energy deposit in detector, in time window = 17.688 keV  rms = 104.11 keV
 
  Process calls frequency in target :
-     RadioactiveDecay=  60791        Transportation=  50214               annihil=    158
-                compt=   4313                  conv=    161                 eIoni=  26030
-              ionIoni=  29995                   msc=   3445                  phot=   1538
-
+     RadioactiveDecay=  60806                  Rayl=    292        Transportation=  50272
+              annihil=    162                 compt=   4255                  conv=    165
+                eIoni=  26055               ionIoni=  29993                   msc=   3691
+                 phot=   1594 
 
  Process calls frequency in detector:
-       Transportation=  45816               annihil=    351                 compt=  22669
-                 conv=    354                 eIoni=  27727                   msc=   7062
-                 phot=   4398 
+                 Rayl=   1200        Transportation=  45997               annihil=    359
+                compt=  22879                  conv=    358                 eIoni=  27899
+                  msc=   7014                  phot=   4335 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.197 eV 	( 41.932 eV  --> 815.8 eV )
-  Mg24[1368.672]:    9995  Emean =  170.05 eV 	( 133.97 eV  --> 431.48 eV )
-  Mg24[4122.889]:    9978  Emean =  39.119 eV 	( 36.02 meV --> 74.642 eV )
-  Mg24[5235.120]:      12  Emean =  3.7333 eV 	( 731.32 meV --> 5.6161 eV )
-           Na24:    9995  Emean =  4.9955 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     805  Emean =  28.449 eV 	( 240.28 meV --> 53.094 eV )
-  Na24[472.207]:   10000  Emean =  67.662 eV 	( 185.29 meV --> 133.78 eV )
-  Na24[563.199]:       6  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  976.86 keV	( 30.073 keV --> 4.5508 MeV)
-             e+:     161  Emean =  805.54 keV	( 1.0566 keV --> 1.6238 MeV)
-             e-:   26027  Emean =  641.07 keV	( 72.339 eV  --> 5.4715 MeV)
-          gamma:   31100  Emean =  1.5045 MeV	( 90.991 keV --> 3.8661 MeV)
+           Mg24:   10000  Emean =  42.341 eV 	( 41.932 eV  --> 859.77 eV )
+  Mg24[1368.672]:    9994  Emean =  169.91 eV 	( 115.32 eV  --> 433.09 eV )
+  Mg24[4122.889]:    9984  Emean =  39.208 eV 	( 113.79 meV --> 74.653 eV )
+  Mg24[5235.120]:       3  Emean =   5.115 eV 	( 4.0206 eV  --> 6.8376 eV )
+           Na24:    9994  Emean =  4.9978 eV 	( 4.9901 eV  --> 15.742 eV )
+  Na24[1346.621]:     827  Emean =  27.305 eV 	( 78.238 meV --> 52.841 eV )
+  Na24[472.207]:    9999  Emean =  67.991 eV 	( 74.942 meV --> 133.83 eV )
+  Na24[563.199]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  980.69 keV	( 26.322 keV --> 4.4166 MeV)
+             e+:     165  Emean =  838.88 keV	( 15.327 keV --> 1.6985 MeV)
+             e-:   26033  Emean =  633.29 keV	( 72.795 eV  --> 4.141 MeV)
+          gamma:   31121  Emean =  1.5036 MeV	( 90.991 keV --> 3.8661 MeV)
 
  List of generated particles in detector:
-             e+:     354  Emean =  791.26 keV	( 20.294 keV --> 1.6706 MeV)
-             e-:   27409  Emean =  378.86 keV	( 101.6 eV  --> 3.5685 MeV)
-          gamma:     702  Emean =  516.03 keV	( 393.02 keV --> 1.0493 MeV)
+             e+:     358  Emean =  790.12 keV	( 2.0312 keV --> 1.643 MeV)
+             e-:   27556  Emean =  377.08 keV	( 107.45 eV  --> 3.3336 MeV)
+          gamma:     718  Emean =   522.6 keV	( 369.37 keV --> 1.5438 MeV)
 
 ... write Root file : rdecay02.root - done
 ... close Root file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 227804932, 1591453627
+ Current couple of seeds = 1103516712, 1181810666
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

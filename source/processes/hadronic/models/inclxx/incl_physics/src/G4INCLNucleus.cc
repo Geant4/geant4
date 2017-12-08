@@ -52,21 +52,25 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLDecayAvatar.hh"
+#include "G4INCLStrangeAbsorbtionChannel.hh"
 #include "G4INCLCluster.hh"
 #include "G4INCLClusterDecay.hh"
 #include "G4INCLDeJongSpin.hh"
 #include "G4INCLParticleSpecies.hh"
+#include "G4INCLParticleTable.hh"
 #include <iterator>
 #include <cstdlib>
 #include <sstream>
 // #include <cassert>
 
 namespace G4INCL {
-
-  Nucleus::Nucleus(G4int mass, G4int charge, Config const * const conf, const G4double universeRadius)
-    : Cluster(charge,mass,true),
-     theInitialZ(charge), theInitialA(mass),
-     theNpInitial(0), theNnInitial(0),
+  
+  Nucleus::Nucleus(G4int mass, G4int charge, G4int strangess, Config const * const conf, const G4double universeRadius)
+    : Cluster(charge,mass,strangess,true),
+     theInitialZ(charge), theInitialA(mass), theInitialS(strangess),
+     theNpInitial(0), theNnInitial(0), 
+     theNpionplusInitial(0), theNpionminusInitial(0), 
+     theNkaonplusInitial(0), theNkaonminusInitial(0),
      initialInternalEnergy(0.),
      incomingAngularMomentum(0.,0.,0.), incomingMomentum(0.,0.,0.),
      initialCenterOfMass(0.,0.,0.),
@@ -160,7 +164,7 @@ namespace G4INCL {
       ParticleList const &out = finalstate->getOutgoingParticles();
       for(ParticleIter iter=out.begin(), e=out.end(); iter!=e; ++iter) {
         if((*iter)->isCluster()) {
-	  Cluster *clusterOut = dynamic_cast<Cluster*>((*iter));
+      Cluster *clusterOut = dynamic_cast<Cluster*>((*iter));
 // assert(clusterOut);
 #ifdef INCLXX_IN_GEANT4_MODE
           if(!clusterOut)
@@ -175,6 +179,7 @@ namespace G4INCL {
         totalEnergy += (*iter)->getEnergy();      // No potential here because the particle is gone
         theA -= (*iter)->getA();
         theZ -= (*iter)->getZ();
+        theS -= (*iter)->getS();
         theStore->addToOutgoing(*iter);
         (*iter)->setEmissionTime(theStore->getBook().getCurrentTime());
       }
@@ -218,9 +223,12 @@ namespace G4INCL {
         totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
       else if((*p)->isResonance())
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy() - ParticleTable::effectiveNucleonMass;
+      else if((*p)->isLambda())
+        totalEnergy += (*p)->getKineticEnergy() - (*p)->getPotentialEnergy();
       else
         totalEnergy += (*p)->getEnergy() - (*p)->getPotentialEnergy();
     }
+
     return totalEnergy;
   }
 
@@ -334,6 +342,7 @@ namespace G4INCL {
       pion->adjustEnergyFromMomentum();
       pion->setEmissionTime(nucleon->getEmissionTime());
       pion->boost(beta);
+      pion->setBiasCollisionVector(nucleon->getBiasCollisionVector());
 
       nucleon->setTableMass();
       nucleon->setMomentum(-newMomentum);
@@ -404,75 +413,221 @@ namespace G4INCL {
 
     return true;
   }
+  
+  G4bool Nucleus::decayInsideStrangeParticles() {
+     
+    /* Transform each strange particles into a lambda
+     * Every Kaon (KPlus and KZero) are emited
+     */
+    const G4bool unphysicalRemnant = (theZ<0 || theZ>theA);
+    if(unphysicalRemnant){
+        emitInsideStrangeParticles();
+        INCL_WARN("Remnant is unphysical: Z=" << theZ << ", A=" << theA << ", too much strange particles? -> all emit" << '\n');
+        return false;
+    }
 
-	G4bool Nucleus::decayOutgoingPionResonances(G4double timeThreshold) {
-		ParticleList const &out = theStore->getOutgoingParticles();
-		ParticleList pionResonances;
-		for(ParticleIter i=out.begin(), e=out.end(); i!=e; ++i) {
-//			if((*i)->isEta() || (*i)->isOmega()) pionResonances.push_back((*i));
-			if(((*i)->isEta() && timeThreshold > ParticleTable::getWidth(Eta)) || ((*i)->isOmega() && timeThreshold > ParticleTable::getWidth(Omega))) pionResonances.push_back((*i));
-		}
-		if(pionResonances.empty()) return false;
-		
-		for(ParticleIter i=pionResonances.begin(), e=pionResonances.end(); i!=e; ++i) {
-			INCL_DEBUG("Decay outgoing pionResonances particle:" << '\n'
-					   << (*i)->print() << '\n');
-			const ThreeVector beta = -(*i)->boostVector();
-			const G4double pionResonanceMass = (*i)->getMass();
-			
-			// Set the pionResonance momentum to zero and sample the decay in the CM frame.
-			// This makes life simpler if we are using real particle masses.
-			(*i)->setMomentum(ThreeVector());
-			(*i)->setEnergy((*i)->getMass());
-			
-			// Use a DecayAvatar
-			IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
-			FinalState *fs = decay->getFinalState();
-			
-			Particle * const theModifiedParticle = fs->getModifiedParticles().front();
-			ParticleList const &created = fs->getCreatedParticles();
-			Particle * const theCreatedParticle1 = created.front();
-							
-			if (created.size() == 1) {
-				
-				// Adjust the decay momentum if we are using the real masses
-				const G4double decayMomentum = KinematicsUtils::momentumInCM(pionResonanceMass,theModifiedParticle->getTableMass(),theCreatedParticle1->getTableMass());
-				ThreeVector newMomentum = theCreatedParticle1->getMomentum();
-				newMomentum *= decayMomentum / newMomentum.mag();
-				
-				theCreatedParticle1->setTableMass();
-				theCreatedParticle1->setMomentum(newMomentum);
-				theCreatedParticle1->adjustEnergyFromMomentum();
-				//theCreatedParticle1->setEmissionTime(nucleon->getEmissionTime());
-				theCreatedParticle1->boost(beta);
-				
-				theModifiedParticle->setTableMass();
-				theModifiedParticle->setMomentum(-newMomentum);
-				theModifiedParticle->adjustEnergyFromMomentum();
-				theModifiedParticle->boost(beta);
-				
-				theStore->addToOutgoing(theCreatedParticle1);
-			}
-			else if (created.size() == 2) {
-				Particle * const theCreatedParticle2 = created.back();
-				
-				theCreatedParticle1->boost(beta);
-				theCreatedParticle2->boost(beta);
-				theModifiedParticle->boost(beta);
-				
-				theStore->addToOutgoing(theCreatedParticle1);
-				theStore->addToOutgoing(theCreatedParticle2);
-			}
-			else {
-				INCL_ERROR("Wrong number (< 2) of created particles during the decay of a pion resonance");
-			}
-			delete fs;
-			delete decay;
-		}
-		
-		return true;
-	}	
-	
+    /* Build a list of particles with a strangeness == -1 except Lambda,
+     * and two other one for proton and neutron
+     */
+    ParticleList const &inside = theStore->getParticles();
+    ParticleList stranges;
+    ParticleList protons;
+    ParticleList neutrons;
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i){
+        if((*i)->isSigma() || (*i)->isAntiKaon()) stranges.push_back((*i));
+        else if((*i)->isNucleon() && (*i)->getZ() == 1) protons.push_back((*i));
+        else if((*i)->isNucleon() && (*i)->getZ() == 0) neutrons.push_back((*i));
+    }
+    
+    if((stranges.size() > protons.size()) || (stranges.size() > neutrons.size())){
+        INCL_WARN("Remnant is unphysical: Nproton=" << protons.size() << ", Nneutron=" << neutrons.size() << ", Strange particles : " << stranges.size() <<  '\n');
+        emitInsideStrangeParticles();
+        return false;
+    }
+    
+    // Loop over the strange particles, make them absorbe
+    ParticleIter protonIter = protons.begin();
+    ParticleIter neutronIter = neutrons.begin();
+    for(ParticleIter i=stranges.begin(), e=stranges.end(); i!=e; ++i) {
+      INCL_DEBUG("Absorbe inside strange particles:" << '\n'
+          << (*i)->print() << '\n');
+      IAvatar *decay;
+      if((*i)->getType() == SigmaMinus){
+          decay = new DecayAvatar((*protonIter), (*i), 0.0, this, true);
+          ++protonIter;
+      }
+      else if((*i)->getType() == SigmaPlus){
+          decay = new DecayAvatar((*neutronIter), (*i), 0.0, this, true);
+          ++neutronIter;
+      }
+      else if(Random::shoot()*(protons.size() + neutrons.size()) < protons.size()){
+          decay = new DecayAvatar((*protonIter), (*i), 0.0, this, true);
+          ++protonIter;
+      }
+      else {
+          decay = new DecayAvatar((*neutronIter), (*i), 0.0, this, true);
+          ++neutronIter;
+      }
+      FinalState *fs = decay->getFinalState();
+      applyFinalState(fs);
+      delete fs;
+      delete decay;
+    }
+
+    return true;
+  }
+
+  G4bool Nucleus::decayOutgoingPionResonances(G4double timeThreshold) {
+        ParticleList const &out = theStore->getOutgoingParticles();
+        ParticleList pionResonances;
+        for(ParticleIter i=out.begin(), e=out.end(); i!=e; ++i) {
+//            if((*i)->isEta() || (*i)->isOmega()) pionResonances.push_back((*i));
+            if(((*i)->isEta() && timeThreshold > ParticleTable::getWidth(Eta)) || ((*i)->isOmega() && timeThreshold > ParticleTable::getWidth(Omega))) pionResonances.push_back((*i));
+        }
+        if(pionResonances.empty()) return false;
+        
+        for(ParticleIter i=pionResonances.begin(), e=pionResonances.end(); i!=e; ++i) {
+            INCL_DEBUG("Decay outgoing pionResonances particle:" << '\n'
+                       << (*i)->print() << '\n');
+            const ThreeVector beta = -(*i)->boostVector();
+            const G4double pionResonanceMass = (*i)->getMass();
+            
+            // Set the pionResonance momentum to zero and sample the decay in the CM frame.
+            // This makes life simpler if we are using real particle masses.
+            (*i)->setMomentum(ThreeVector());
+            (*i)->setEnergy((*i)->getMass());
+            
+            // Use a DecayAvatar
+            IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+            FinalState *fs = decay->getFinalState();
+            
+            Particle * const theModifiedParticle = fs->getModifiedParticles().front();
+            ParticleList const &created = fs->getCreatedParticles();
+            Particle * const theCreatedParticle1 = created.front();
+                            
+            if (created.size() == 1) {
+                
+                // Adjust the decay momentum if we are using the real masses
+                const G4double decayMomentum = KinematicsUtils::momentumInCM(pionResonanceMass,theModifiedParticle->getTableMass(),theCreatedParticle1->getTableMass());
+                ThreeVector newMomentum = theCreatedParticle1->getMomentum();
+                newMomentum *= decayMomentum / newMomentum.mag();
+                
+                theCreatedParticle1->setTableMass();
+                theCreatedParticle1->setMomentum(newMomentum);
+                theCreatedParticle1->adjustEnergyFromMomentum();
+                //theCreatedParticle1->setEmissionTime(nucleon->getEmissionTime());
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                
+                theModifiedParticle->setTableMass();
+                theModifiedParticle->setMomentum(-newMomentum);
+                theModifiedParticle->adjustEnergyFromMomentum();
+                theModifiedParticle->boost(beta);
+                
+                theStore->addToOutgoing(theCreatedParticle1);
+            }
+            else if (created.size() == 2) {
+                Particle * const theCreatedParticle2 = created.back();
+                
+                theCreatedParticle1->boost(beta);
+                theCreatedParticle1->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theCreatedParticle2->boost(beta);
+                theCreatedParticle2->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                theModifiedParticle->boost(beta);
+                
+                theStore->addToOutgoing(theCreatedParticle1);
+                theStore->addToOutgoing(theCreatedParticle2);
+            }
+            else {
+                INCL_ERROR("Wrong number (< 2) of created particles during the decay of a pion resonance");
+            }
+            delete fs;
+            delete decay;
+        }
+        
+        return true;
+    }
+    
+  G4bool Nucleus::decayOutgoingSigmaZero(G4double timeThreshold) {
+        ParticleList const &out = theStore->getOutgoingParticles();
+        ParticleList neutralsigma;
+        for(ParticleIter i=out.begin(), e=out.end(); i!=e; ++i) {
+            if((*i)->getType() == SigmaZero && timeThreshold > ParticleTable::getWidth(SigmaZero))  neutralsigma.push_back((*i));
+        }
+        if(neutralsigma.empty()) return false;
+        
+        for(ParticleIter i=neutralsigma.begin(), e=neutralsigma.end(); i!=e; ++i) {
+            INCL_DEBUG("Decay outgoing neutral sigma:" << '\n'
+                       << (*i)->print() << '\n');
+            const ThreeVector beta = -(*i)->boostVector();
+            const G4double neutralsigmaMass = (*i)->getMass();
+            
+            // Set the neutral sigma momentum to zero and sample the decay in the CM frame.
+            // This makes life simpler if we are using real particle masses.
+            (*i)->setMomentum(ThreeVector());
+            (*i)->setEnergy((*i)->getMass());
+            
+            // Use a DecayAvatar
+            IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+            FinalState *fs = decay->getFinalState();
+            
+            Particle * const theModifiedParticle = fs->getModifiedParticles().front();
+            ParticleList const &created = fs->getCreatedParticles();
+            Particle * const theCreatedParticle = created.front();
+                            
+            if (created.size() == 1) {
+                
+                // Adjust the decay momentum if we are using the real masses
+                const G4double decayMomentum = KinematicsUtils::momentumInCM(neutralsigmaMass,theModifiedParticle->getTableMass(),theCreatedParticle->getTableMass());
+                ThreeVector newMomentum = theCreatedParticle->getMomentum();
+                newMomentum *= decayMomentum / newMomentum.mag();
+                
+                theCreatedParticle->setTableMass();
+                theCreatedParticle->setMomentum(newMomentum);
+                theCreatedParticle->adjustEnergyFromMomentum();
+                theCreatedParticle->boost(beta);
+                theCreatedParticle->setBiasCollisionVector(theModifiedParticle->getBiasCollisionVector());
+                
+                theModifiedParticle->setTableMass();
+                theModifiedParticle->setMomentum(-newMomentum);
+                theModifiedParticle->adjustEnergyFromMomentum();
+                theModifiedParticle->boost(beta);
+                
+                theStore->addToOutgoing(theCreatedParticle);
+            }
+            else {
+                INCL_ERROR("Wrong number (!= 1) of created particles during the decay of a sigma zero");
+            }
+            delete fs;
+            delete decay;
+        }
+        
+        return true;
+    }
+    
+  G4bool Nucleus::decayOutgoingNeutralKaon() {
+        ParticleList const &out = theStore->getOutgoingParticles();
+        ParticleList neutralkaon;
+        for(ParticleIter i=out.begin(), e=out.end(); i!=e; ++i) {
+            if((*i)->getType() == KZero  || (*i)->getType() == KZeroBar)  neutralkaon.push_back((*i));
+        }
+        if(neutralkaon.empty()) return false;
+        
+        for(ParticleIter i=neutralkaon.begin(), e=neutralkaon.end(); i!=e; ++i) {
+            INCL_DEBUG("Transform outgoing neutral kaon:" << '\n'
+                       << (*i)->print() << '\n');
+            
+            // Use a DecayAvatar
+            IAvatar *decay = new DecayAvatar((*i), 0.0, NULL);
+            FinalState *fs = decay->getFinalState();
+            
+            delete fs;
+            delete decay;
+        }
+        
+        return true;
+    }
+    
   G4bool Nucleus::decayOutgoingClusters() {
     ParticleList const &out = theStore->getOutgoingParticles();
     ParticleList clusters;
@@ -490,8 +645,10 @@ namespace G4INCL {
 #endif
       cluster->deleteParticles(); // Don't need them
       ParticleList decayProducts = ClusterDecay::decay(cluster);
-      for(ParticleIter j=decayProducts.begin(), end=decayProducts.end(); j!=end; ++j)
+      for(ParticleIter j=decayProducts.begin(), end=decayProducts.end(); j!=end; ++j){
+        (*j)->setBiasCollisionVector(cluster->getBiasCollisionVector());
         theStore->addToOutgoing(*j);
+      }
     }
     return true;
   }
@@ -502,9 +659,11 @@ namespace G4INCL {
       return false;
 
     ParticleList decayProducts = ClusterDecay::decay(this);
-    for(ParticleIter j=decayProducts.begin(), e=decayProducts.end(); j!=e; ++j)
+    for(ParticleIter j=decayProducts.begin(), e=decayProducts.end(); j!=e; ++j){
+      (*j)->setBiasCollisionVector(this->getBiasCollisionVector());
       theStore->addToOutgoing(*j);
-
+    }
+    
     return true;
   }
 
@@ -544,7 +703,137 @@ namespace G4INCL {
     for(ParticleIter i=toEject.begin(), e=toEject.end(); i!=e; ++i) {
       theStore->particleHasBeenEjected(*i);
       theStore->addToOutgoing(*i);
+      (*i)->setParticleBias(Particle::getTotalBias());
     }
+  }
+  
+  void Nucleus::emitInsideStrangeParticles() {
+    /* Forcing emissions of all strange particles exept Lambda particles in the nucleus.
+     * This probably violates energy conservation
+     * (although the computation of the recoil kinematics
+     * might sweep this under the carpet).
+     */
+    INCL_DEBUG("Forcing emissions of all strange particles in the nucleus." << '\n');
+
+    // Emit the strange particles with this kinetic energy
+    const G4double tinyEnergy = 0.1; // MeV
+
+    // Push out the emitted strange particles
+    ParticleList const &inside = theStore->getParticles();
+    ParticleList toEject;
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
+      if((*i)->isSigma() || (*i)->isAntiKaon()) {
+        Particle * const theParticle = *i;
+        INCL_DEBUG("Forcing emission of the following particle: "
+                   << theParticle->print() << '\n');
+        theParticle->setEmissionTime(theStore->getBook().getCurrentTime());
+        // Correction for real masses
+        const G4double theQValueCorrection = theParticle->getEmissionQValueCorrection(theA,theZ); // Does it work for strange particles? should be check
+        const G4double kineticEnergyOutside = theParticle->getKineticEnergy() - theParticle->getPotentialEnergy() + theQValueCorrection;
+        theParticle->setTableMass();
+        if(kineticEnergyOutside > 0.0)
+          theParticle->setEnergy(theParticle->getMass()+kineticEnergyOutside);
+        else
+          theParticle->setEnergy(theParticle->getMass()+tinyEnergy);
+        theParticle->adjustMomentumFromEnergy();
+        theParticle->setPotentialEnergy(0.);
+        theA -= theParticle->getA();
+        theZ -= theParticle->getZ();
+        theS -= theParticle->getS();
+        toEject.push_back(theParticle);
+      }
+    }
+    for(ParticleIter i=toEject.begin(), e=toEject.end(); i!=e; ++i) {
+      theStore->particleHasBeenEjected(*i);
+      theStore->addToOutgoing(*i);
+      (*i)->setParticleBias(Particle::getTotalBias());
+    }
+  }
+
+  G4int Nucleus::emitInsideLambda() {
+    /* Forcing emissions of all Lambda in the nucleus.
+     * This probably violates energy conservation
+     * (although the computation of the recoil kinematics
+     * might sweep this under the carpet).
+     */
+    INCL_DEBUG("Forcing emissions of all Lambda in the nucleus." << '\n');
+
+    // Emit the Lambda with this kinetic energy
+    const G4double tinyEnergy = 0.1; // MeV
+
+    // Push out the emitted Lambda
+    ParticleList const &inside = theStore->getParticles();
+    ParticleList toEject;
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
+      if((*i)->isLambda()) {
+        Particle * const theLambda = *i;
+        INCL_DEBUG("Forcing emission of the following particle: "
+                   << theLambda->print() << '\n');
+        theLambda->setEmissionTime(theStore->getBook().getCurrentTime());
+        // Correction for real masses
+        const G4double theQValueCorrection = theLambda->getEmissionQValueCorrection(theA,theZ); // Does it work for strange particles? Should be check
+        const G4double kineticEnergyOutside = theLambda->getKineticEnergy() - theLambda->getPotentialEnergy() + theQValueCorrection;
+        theLambda->setTableMass();
+        if(kineticEnergyOutside > 0.0)
+          theLambda->setEnergy(theLambda->getMass()+kineticEnergyOutside);
+        else
+          theLambda->setEnergy(theLambda->getMass()+tinyEnergy);
+        theLambda->adjustMomentumFromEnergy();
+        theLambda->setPotentialEnergy(0.);
+        theA -= theLambda->getA();
+        theS -= theLambda->getS();
+        toEject.push_back(theLambda);
+      }
+    }
+    for(ParticleIter i=toEject.begin(), e=toEject.end(); i!=e; ++i) {
+      theStore->particleHasBeenEjected(*i);
+      theStore->addToOutgoing(*i);
+      (*i)->setParticleBias(Particle::getTotalBias());
+    }
+    return toEject.size();
+  }
+      
+  G4bool Nucleus::emitInsideKaon() {
+    /* Forcing emissions of all Kaon in the nucleus.
+     * This probably violates energy conservation
+     * (although the computation of the recoil kinematics
+     * might sweep this under the carpet).
+     */
+    INCL_DEBUG("Forcing emissions of all Kaon in the nucleus." << '\n');
+
+    // Emit the Kaon with this kinetic energy (not supposed to append
+    const G4double tinyEnergy = 0.1; // MeV
+
+    // Push out the emitted kaon
+    ParticleList const &inside = theStore->getParticles();
+    ParticleList toEject;
+    for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
+      if((*i)->isKaon()) {
+        Particle * const theKaon = *i;
+        INCL_DEBUG("Forcing emission of the following particle: "
+                   << theKaon->print() << '\n');
+        theKaon->setEmissionTime(theStore->getBook().getCurrentTime());
+        // Correction for real masses
+        const G4double theQValueCorrection = theKaon->getEmissionQValueCorrection(theA,theZ);
+        const G4double kineticEnergyOutside = theKaon->getKineticEnergy() - theKaon->getPotentialEnergy() + theQValueCorrection;
+        theKaon->setTableMass();
+        if(kineticEnergyOutside > 0.0)
+          theKaon->setEnergy(theKaon->getMass()+kineticEnergyOutside);
+        else
+          theKaon->setEnergy(theKaon->getMass()+tinyEnergy);
+        theKaon->adjustMomentumFromEnergy();
+        theKaon->setPotentialEnergy(0.);
+        theZ -= theKaon->getZ();
+        theS -= theKaon->getS();
+        toEject.push_back(theKaon);
+      }
+    }
+    for(ParticleIter i=toEject.begin(), e=toEject.end(); i!=e; ++i) {
+      theStore->particleHasBeenEjected(*i);
+      theStore->addToOutgoing(*i);
+      (*i)->setParticleBias(Particle::getTotalBias());
+    }
+    return toEject.size() != 0;
   }
 
   G4bool Nucleus::isEventTransparent() const {
@@ -571,6 +860,7 @@ namespace G4INCL {
     Particle *remN = theStore->getParticles().front();
     theA -= remN->getA();
     theZ -= remN->getZ();
+    theS -= remN->getS();
     theStore->particleHasBeenEjected(remN);
     theStore->addToOutgoing(remN);
     remN->setEmissionTime(theStore->getBook().getCurrentTime());
@@ -739,7 +1029,7 @@ namespace G4INCL {
     // and no ejected particles.
     if(outgoingParticles.size() == 0 &&
        (eventInfo->projectileType == Proton ||
-	eventInfo->projectileType == Neutron)) {
+    eventInfo->projectileType == Neutron)) {
       isNucleonAbsorption = true;
     }
 
@@ -755,9 +1045,12 @@ namespace G4INCL {
           isPionAbsorption = false;
         }
       }
-
+      
+      eventInfo->ParticleBias[eventInfo->nParticles] = (*i)->getParticleBias();
+      
       eventInfo->A[eventInfo->nParticles] = (*i)->getA();
       eventInfo->Z[eventInfo->nParticles] = (*i)->getZ();
+      eventInfo->S[eventInfo->nParticles] = (*i)->getS();
       eventInfo->emissionTime[eventInfo->nParticles] = (*i)->getEmissionTime();
       eventInfo->EKin[eventInfo->nParticles] = (*i)->getKineticEnergy();
       ThreeVector mom = (*i)->getMomentum();
@@ -768,16 +1061,16 @@ namespace G4INCL {
       eventInfo->phi[eventInfo->nParticles] = Math::toDegrees(mom.phi());
       eventInfo->origin[eventInfo->nParticles] = -1;
       eventInfo->history.push_back("");
-	  if ((*i)->getType() != Composite) {
-		ParticleSpecies pt((*i)->getType());
-		eventInfo->PDGCode[eventInfo->nParticles] = pt.ParticleSpecies::getPDGCode();
-	  }
-	  else {
-		ParticleSpecies pt((*i)->getA(), (*i)->getZ());
-		eventInfo->PDGCode[eventInfo->nParticles] = pt.ParticleSpecies::getPDGCode();
-	  }
-		eventInfo->nParticles++;
-	}
+      if ((*i)->getType() != Composite) {
+        ParticleSpecies pt((*i)->getType());
+        eventInfo->PDGCode[eventInfo->nParticles] = pt.getPDGCode();
+      }
+      else {
+        ParticleSpecies pt((*i)->getA(), (*i)->getZ(), (*i)->getS());
+        eventInfo->PDGCode[eventInfo->nParticles] = pt.getPDGCode();
+      }
+      eventInfo->nParticles++;
+    }
     eventInfo->nucleonAbsorption = isNucleonAbsorption;
     eventInfo->pionAbsorption = isPionAbsorption;
     eventInfo->nCascadeParticles = eventInfo->nParticles;
@@ -786,18 +1079,19 @@ namespace G4INCL {
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
       eventInfo->ARem[eventInfo->nRemnants] = theProjectileRemnant->getA();
       eventInfo->ZRem[eventInfo->nRemnants] = theProjectileRemnant->getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = theProjectileRemnant->getS();
       G4double eStar = theProjectileRemnant->getExcitationEnergy();
       if(std::abs(eStar)<1E-10)
         eStar = 0.0; // blame rounding and set the excitation energy to zero
       eventInfo->EStarRem[eventInfo->nRemnants] = eStar;
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
-	INCL_WARN("Negative excitation energy in projectile-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << '\n');
+    INCL_WARN("Negative excitation energy in projectile-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << '\n');
       }
       const ThreeVector &spin = theProjectileRemnant->getSpin();
       if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
+    eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
       } else { // odd-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
+    eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
       }
       eventInfo->EKinRem[eventInfo->nRemnants] = theProjectileRemnant->getKineticEnergy();
       const ThreeVector &mom = theProjectileRemnant->getMomentum();
@@ -816,15 +1110,16 @@ namespace G4INCL {
     if(hasRemnant()) {
       eventInfo->ARem[eventInfo->nRemnants] = getA();
       eventInfo->ZRem[eventInfo->nRemnants] = getZ();
+      eventInfo->SRem[eventInfo->nRemnants] = getS();
       eventInfo->EStarRem[eventInfo->nRemnants] = getExcitationEnergy();
       if(eventInfo->EStarRem[eventInfo->nRemnants]<0.) {
-	INCL_WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << '\n');
+    INCL_WARN("Negative excitation energy in target-like remnant! EStarRem = " << eventInfo->EStarRem[eventInfo->nRemnants] << " eventNumber=" << eventInfo->eventNumber << '\n');
       }
       const ThreeVector &spin = getSpin();
       if(eventInfo->ARem[eventInfo->nRemnants]%2==0) { // even-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
+    eventInfo->JRem[eventInfo->nRemnants] = (G4int) (spin.mag()/PhysicalConstants::hc + 0.5);
       } else { // odd-A nucleus
-	eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
+    eventInfo->JRem[eventInfo->nRemnants] = ((G4int) (spin.mag()/PhysicalConstants::hc)) + 0.5;
       }
       eventInfo->EKinRem[eventInfo->nRemnants] = getKineticEnergy();
       const ThreeVector &mom = getMomentum();
@@ -861,6 +1156,7 @@ namespace G4INCL {
     // Initialise balance variables with the incoming values
     theBalance.Z = theEventInfo.Zp + theEventInfo.Zt;
     theBalance.A = theEventInfo.Ap + theEventInfo.At;
+    theBalance.S = theEventInfo.Sp + theEventInfo.St;
 
     theBalance.energy = getInitialEnergy();
     theBalance.momentum = getIncomingMomentum();
@@ -870,6 +1166,7 @@ namespace G4INCL {
     for(ParticleIter i=outgoingParticles.begin(), e=outgoingParticles.end(); i!=e; ++i ) {
       theBalance.Z -= (*i)->getZ();
       theBalance.A -= (*i)->getA();
+      theBalance.S += (*i)->getS();
       // For outgoing clusters, the total energy automatically includes the
       // excitation energy
       theBalance.energy -= (*i)->getEnergy(); // Note that outgoing particles should have the real mass
@@ -880,8 +1177,10 @@ namespace G4INCL {
     if(theProjectileRemnant && theProjectileRemnant->getA()>0) {
       theBalance.Z -= theProjectileRemnant->getZ();
       theBalance.A -= theProjectileRemnant->getA();
+      theBalance.S += theProjectileRemnant->getS();
       theBalance.energy -= ParticleTable::getTableMass(theProjectileRemnant->getA(),theProjectileRemnant->getZ()) +
         theProjectileRemnant->getExcitationEnergy();
+      if(theProjectileRemnant->getS() != 0) theBalance.energy -= theProjectileRemnant->getS()*(ParticleTable::effectiveNucleonMass - ParticleTable::effectiveLambdaMass); // Trick because hypernuclus mass unkown
       theBalance.energy -= theProjectileRemnant->getKineticEnergy();
       theBalance.momentum -= theProjectileRemnant->getMomentum();
     }
@@ -890,8 +1189,10 @@ namespace G4INCL {
     if(hasRemnant()) {
       theBalance.Z -= getZ();
       theBalance.A -= getA();
+      theBalance.S += getS();
       theBalance.energy -= ParticleTable::getTableMass(getA(),getZ()) +
         getExcitationEnergy();
+      if(getS() != 0) theBalance.energy -= getS()*(ParticleTable::effectiveNucleonMass - ParticleTable::effectiveLambdaMass); // Trick because hypernuclus mass unkown
       if(afterRecoil)
         theBalance.energy -= getKineticEnergy();
       theBalance.momentum -= getMomentum();

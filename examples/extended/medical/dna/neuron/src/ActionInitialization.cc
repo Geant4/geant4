@@ -105,7 +105,7 @@ void ActionInitialization::Build() const
   RunAction* runAction= new RunAction(fDetector, kinematics);
   SetUserAction(runAction);
 
-  SetUserAction(new SteppingAction(fDetector, runAction));
+  SetUserAction(new SteppingAction(runAction));
   SetUserAction(new EventAction(runAction));
   // added  
   SetUserAction(new StackingAction());

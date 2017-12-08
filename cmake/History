@@ -31,6 +31,131 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+30th November 2017 - Gabriele Cosmo (cmake-V10-03-49)
+- Replaced USolids specific flags with VecGeom in Geant4OptionalComponents.cmake.
+  From now on VecGeomConfig.cmake will be required and used instead of
+  USolidsConfig.cmake, as well as VecGeom_DIR instead of USolids_DIR.
+
+29th November 2017 - Ben Morgan (cmake-V10-03-48)
+- Bugfix: Restore reporting of GEANT4_BUILD_CXXSTD.
+
+27th November 2017 - Ben Morgan (cmake-V10-03-47)
+- Remove obsolete FindROOT module
+
+10th November 2017 - Gunter Folger  (cmake-V10-03-46)
+- Switch to new dataset G4PhotonEvaporation5.2
+
+10th November 2017 - Gabriele Cosmo (cmake-V10-03-45)
+- G4ConfigureGNUMakeHelpers.cmake: corrected setting of USOLIDS_BASE_DIR
+  path for GNUmake.
+
+7th November 2017 - Ben Morgan (cmake-V10-03-44)
+- Modules/Geant4OptionalComponents.cmake:
+  When using HDF5 with Multithreaded Geant4, check
+  that found install of HDF5 was built with thread
+  safety. Require HDF5 >= 1.8.
+
+3rd November 2017 - Ben Morgan (cmake-V10-03-43)
+- BUGFIX: Make HDF5 component checkable by clients
+- Templates/Geant4Config.cmake.in : Add "hdf5" component
+  with associated boolean Geant4_hdf5_FOUND.
+- Templates/geant4-config.in: add "hdf5" feature
+
+27th October 2017 - Gunter Folger  (cmake-V10-03-42)
+- Switch to new dataset G4EMLOW 7.3
+
+25th October 2017 - Ben Morgan (cmake-V10-03-41)
+- Modules/Geant4LibraryBuildOptions.cmake:
+  Add new advanced build option GEANT4_BUILD_MUONIC_ATOMS_IN_USE,
+  requested by Krzysztof Genser and Makoto Asai. OFF by default,
+  when ON, adds G4MUTOMS_INUSE to compile definitions. As the
+  code protected by the symbol only appears in .cc files, do
+  not export this definition to clinet side build settings.
+- Templates/geant4-config.in, Templates/Geant4Config.cmake.in
+  Record use of GEANT4_BUILD_MUONIC_ATOMS_IN_USE as a feature
+  and component respectively. Neither affects the build settings,
+  it's simply a report on whether the option was used or not.
+
+19th October 2017 - Gunter Folger  (cmake-V10-03-40)
+- Switch to new dataset G4EMLOW 7.2
+
+19th October 2017 - Gunter Folger  (cmake-V10-03-39)
+- Switch to new dataset G4ABLA 3.1
+
+16th October 2017 - Gabriele Cosmo (cmake-V10-03-38)
+- Modules/Geant4OptionalComponents.cmake: add HYPE flag to enable
+  wrapping of G4Hype in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-specific-V10-03-21.
+
+26th September 2017 - Gunter Folger (cmake-V10-03-37)
+- Switch to new datasets:
+  - G4ENSDFSTATE2.2
+  - G4PhotonEvaporation5.1
+  - G4RadioactiveDecay5.2
+
+13th September 2017 - Ben Morgan (cmake-V10-03-36)
+- Modules/Geant4OptionalComponents.cmake: Require system expat version
+  >= 2.0.1. Identified in Bugzilla #2003. g4tools uses expat functions
+  only present in 2.0.1 or higher. Though Geant4 supported systems all
+  meet this requirement, check expat version and error out if version
+  is < 2.0.1. On error, report information on cause and how to rectify.
+
+11th September 2017 - Ben Morgan (cmake-V10-03-35)
+- Modules/G4CMakeMain.cmake: Remove GEANT4_BUILD_EXAMPLES option.
+  Add GEANT4_INSTALL_EXAMPLES option. Advanced and ON by default,
+  thia is for use by developers who wish to save time/space by not
+  installing all the example code.
+
+7th September 2017 - Ben Morgan (cmake-V10-03-34)
+- Modules/G4DeveloperAPI_OLD.cmake: Set INSTALL_RPATH on macOS
+  Requested by Fons Rademackers. Loading Geant4 dylibs in Python
+  can lead to resolution errors as they cannot locate each other.
+  Append "@loader_path" to the INSTALL_RPATH for all Geant4 libraries.
+  This will expand to the directory of the library being loaded, which
+  will contain the other Geant4 libraries. Append is used to that
+  users may still supply CMAKE_INSTALL_RPATH at configure time,
+  and this will be preferred.
+
+5th September 2017 - Gunter Folger (cmake-V10-03-33)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW7.1
+
+23rd August 2017 - Gunter Folger   (cmake-V10-03-32)
+- Modules/Geant4DatasetDefinitions.cmake: switch to G4EMLOW7.0
+
+3rd August 2017 - Ben Morgan (cmake-V10-03-31)
+- Create a G4HDF INTERFACE target for uniform access to HDF5 headers
+  and libraries at build, test and install time. It is not completely
+  relocatable as the target hardcodes header/library paths. However,
+  it creates a single point of access so that adding relocation
+  will require minimal changes, limited to the cmake category.
+
+27th July 2017 - Ivana Hrivnacova (cmake-V10-03-30)
+- Removed FindHdf5.cmake as the find module is provided with CMake
+
+27th July 2017 - Ivana Hrivnacova (cmake-V10-03-29)
+- Modules/Geant4OptionalComponents.cmake : Add new GEANT4_USE_HDF5
+  option, OFF by defaults, to allow user to enable Hdf5 support
+  in analysis library.
+
+18th July 2017 - Andrea Dotti (cmake-V10-03-27,-28)
+- Modules/FindStatTest.cmake fix logic to set
+  STATTEST_FOUND==FALSE if GEANT4_ENABLE_TESTING==FALSE
+ 
+17th July 2017 - Gabriele Cosmo (cmake-V10-03-26)
+- Modules/G4ConfigureGNUMakeHelpers, Modules/Geant4InterfaceOptions.cmake:
+  corrected Qt setup for GNUmake builds, avoid setting QTLIBS and GLQTLIBS
+  as already handled by the GNUmake system for Qt4 and Qt5.
+
+11th July 2017 - Gabriele Cosmo (cmake-V10-03-25)
+- Modules/Geant4OptionalComponents.cmake: add PARA flag to enable
+  wrapping of G4Para in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-csg-V10-03-29.
+
+10th July 2017 - Gabriele Cosmo (cmake-V10-03-24)
+- Modules/Geant4OptionalComponents.cmake: add CTUBS flag to enable
+  wrapping of G4CutTubs in GEANT4_USOLIDS_SHAPES.
+  Coworks with tag geom-csg-V10-03-28.
+
 12th June 2017 - Ben Morgan (cmake-V10-03-23)
 - Remove support for modulefile generation, as not used and
   generated files not compatible with relocatability. It's

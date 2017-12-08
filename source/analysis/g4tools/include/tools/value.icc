@@ -11,39 +11,39 @@ inline bool value::assign(value& aThis,const value& aV,std::string& aError){
 
     //} else if(aV.m_type==value::ARRAY_UNSIGNED_CHAR) {
     //  aThis.u.m_array_unsigned_char = 
-    //    new tools::array<unsigned char>(*aV.u.m_array_unsigned_char);
+    //    new array<unsigned char>(*aV.u.m_array_unsigned_char);
     //} else if(aV.m_type==value::ARRAY_CHAR) {
-    //  aThis.u.m_array_char = new tools::array<char>(*aV.u.m_array_char);
+    //  aThis.u.m_array_char = new array<char>(*aV.u.m_array_char);
 
     } else if(aV.m_type==value::ARRAY_UNSIGNED_SHORT) {
       aThis.u.m_array_unsigned_short = 
-        new tools::array<unsigned short>(*aV.u.m_array_unsigned_short);
+        new array<unsigned short>(*aV.u.m_array_unsigned_short);
     } else if(aV.m_type==value::ARRAY_SHORT) {
-      aThis.u.m_array_short = new tools::array<short>(*aV.u.m_array_short);
+      aThis.u.m_array_short = new array<short>(*aV.u.m_array_short);
 
     } else if(aV.m_type==value::ARRAY_UNSIGNED_INT) {
       aThis.u.m_array_unsigned_int = 
-        new tools::array<unsigned int>(*aV.u.m_array_unsigned_int);
+        new array<unsigned int>(*aV.u.m_array_unsigned_int);
     } else if(aV.m_type==value::ARRAY_INT) {
-      aThis.u.m_array_int = new tools::array<int>(*aV.u.m_array_int);
+      aThis.u.m_array_int = new array<int>(*aV.u.m_array_int);
 
     } else if(aV.m_type==value::ARRAY_UNSIGNED_INT64) {
       aThis.u.m_array_unsigned_int64 = 
-        new tools::array<uint64>(*aV.u.m_array_unsigned_int64);
+        new array<uint64>(*aV.u.m_array_unsigned_int64);
     } else if(aV.m_type==value::ARRAY_INT64) {
       aThis.u.m_array_int64 = 
-        new tools::array<int64>(*aV.u.m_array_int64);
+        new array<int64>(*aV.u.m_array_int64);
 
     } else if(aV.m_type==value::ARRAY_FLOAT) {
-      aThis.u.m_array_float = new tools::array<float>(*aV.u.m_array_float);
+      aThis.u.m_array_float = new array<float>(*aV.u.m_array_float);
     } else if(aV.m_type==value::ARRAY_DOUBLE) {
-      aThis.u.m_array_double = new tools::array<double>(*aV.u.m_array_double);
+      aThis.u.m_array_double = new array<double>(*aV.u.m_array_double);
     } else if(aV.m_type==value::ARRAY_BOOL) {
-      aThis.u.m_array_bool = new tools::array<bool>(*aV.u.m_array_bool);
+      aThis.u.m_array_bool = new array<bool>(*aV.u.m_array_bool);
 
     } else if(aV.m_type==value::ARRAY_STRING) {
       aThis.u.m_array_string = 
-        new tools::array<std::string>(*aV.u.m_array_string);
+        new array<std::string>(*aV.u.m_array_string);
 
     } else {
       aThis.u = aV.u;
@@ -2333,28 +2333,28 @@ inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
       return true;
     case value::INT:
      {int v;
-      if(!tools::to<int>(*aThis.u.m_string,v)) break;
+      if(!to<int>(*aThis.u.m_string,v)) break;
       aThis.set((bool)(v==aV.u.m_int?true:false));
       return true;}
     case value::FLOAT:
      {float v;
-      if(!tools::to<float>(*aThis.u.m_string,v)) break;
+      if(!to<float>(*aThis.u.m_string,v)) break;
       aThis.set((bool)(v==aV.u.m_float?true:false));
       return true;}
     case value::DOUBLE:
      {double v;
-      if(!tools::to<double>(*aThis.u.m_string,v)) break;
+      if(!to<double>(*aThis.u.m_string,v)) break;
       aThis.set((bool)(v==aV.u.m_double?true:false));
       return true;}
     case value::UNSIGNED_INT:
      {typedef unsigned int uint_t;
       uint_t v;
-      if(!tools::to<uint_t>(*aThis.u.m_string,v)) break;
+      if(!to<uint_t>(*aThis.u.m_string,v)) break;
       aThis.set((bool)(v==aV.u.m_unsigned_int ?true:false));
       return true;}
     case value::BOOL:
      {bool v;
-      if(!tools::to(*aThis.u.m_string,v)) break;
+      if(!to(*aThis.u.m_string,v)) break;
       aThis.set((bool)(v==aV.u.m_bool?true:false));
       return true;}
     case value::NONE:
@@ -2973,7 +2973,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_UNSIGNED_CHAR:
    {std::vector<unsigned int> is;
     const std::vector<unsigned char>& vd = aValue.get_array_unsigned_char(is);
-    aThis.u.m_array_unsigned_char = new tools::array<unsigned char>();
+    aThis.u.m_array_unsigned_char = new array<unsigned char>();
     if(!aThis.u.m_array_unsigned_char->configure(is)){
       aThis.set_none();return false;
     }
@@ -2983,7 +2983,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_CHAR:
    {std::vector<unsigned int> is;
     const std::vector<char>& vd = aValue.get_array_char(is);
-    aThis.u.m_array_char = new tools::array<char>();
+    aThis.u.m_array_char = new array<char>();
     if(!aThis.u.m_array_char->configure(is)){
       aThis.set_none();return false;
     }
@@ -2993,7 +2993,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
    {std::vector<unsigned int> is;
     const std::vector<unsigned short>& vd = 
       aValue.get_array_unsigned_short(is);
-    aThis.u.m_array_unsigned_short = new tools::array<unsigned short>();
+    aThis.u.m_array_unsigned_short = new array<unsigned short>();
     if(!aThis.u.m_array_unsigned_short->configure(is)){
       aThis.set_none();return false;
     }
@@ -3005,7 +3005,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_SHORT:
    {std::vector<unsigned int> is;
     const std::vector<short>& vd = aValue.get_array_short(is);
-    aThis.u.m_array_short = new tools::array<short>();
+    aThis.u.m_array_short = new array<short>();
     if(!aThis.u.m_array_short->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_short->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3013,7 +3013,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_UNSIGNED_INT:
    {std::vector<unsigned int> is;
     const std::vector<unsigned int>& vd = aValue.get_array_unsigned_int(is);
-    aThis.u.m_array_unsigned_int = new tools::array<unsigned int>();
+    aThis.u.m_array_unsigned_int = new array<unsigned int>();
     if(!aThis.u.m_array_unsigned_int->configure(is)){
       aThis.set_none();return false;
     }
@@ -3025,7 +3025,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_INT:
    {std::vector<unsigned int> is;
     const std::vector<int>& vd = aValue.get_array_int(is);
-    aThis.u.m_array_int = new tools::array<int>();
+    aThis.u.m_array_int = new array<int>();
     if(!aThis.u.m_array_int->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_int->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3033,7 +3033,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_UNSIGNED_INT64:
    {std::vector<unsigned int> is;
     const std::vector<uint64>& vd = aValue.get_array_unsigned_int64(is);
-    aThis.u.m_array_unsigned_int64 = new tools::array<uint64>();
+    aThis.u.m_array_unsigned_int64 = new array<uint64>();
     if(!aThis.u.m_array_unsigned_int64->configure(is)){
       aThis.set_none();return false;
     }
@@ -3045,7 +3045,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_INT64:
    {std::vector<unsigned int> is;
     const std::vector<int64>& vd = aValue.get_array_int64(is);
-    aThis.u.m_array_int64 = new tools::array<int64>();
+    aThis.u.m_array_int64 = new array<int64>();
     if(!aThis.u.m_array_int64->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_int64->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3053,7 +3053,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_FLOAT:
    {std::vector<unsigned int> is;
     const std::vector<float>& vd = aValue.get_array_float(is);
-    aThis.u.m_array_float = new tools::array<float>();
+    aThis.u.m_array_float = new array<float>();
     if(!aThis.u.m_array_float->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_float->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3061,7 +3061,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_DOUBLE:
    {std::vector<unsigned int> is;
     const std::vector<double>& vd = aValue.get_array_double(is);
-    aThis.u.m_array_double = new tools::array<double>();
+    aThis.u.m_array_double = new array<double>();
     if(!aThis.u.m_array_double->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_double->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3069,7 +3069,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_BOOL:
    {std::vector<unsigned int> is;
     const std::vector<bool>& vd = aValue.get_array_bool(is);
-    aThis.u.m_array_bool = new tools::array<bool>();
+    aThis.u.m_array_bool = new array<bool>();
     if(!aThis.u.m_array_bool->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_bool->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3077,7 +3077,7 @@ inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
   case value::ARRAY_STRING:
    {std::vector<unsigned int> is;
     const std::vector<std::string>& vd = aValue.get_array_string(is);
-    aThis.u.m_array_string = new tools::array<std::string>();
+    aThis.u.m_array_string = new array<std::string>();
     if(!aThis.u.m_array_string->configure(is)){aThis.set_none();return false;}
     if(!aThis.u.m_array_string->fill(vd)){aThis.set_none();return false;}
     return true;}
@@ -3093,92 +3093,92 @@ inline std::string value::to_string(const value& aThis){
   std::string s;
   switch(aThis.m_type) {
   case value::NONE:
-    tools::sprintf(s,5,"(nil)");
+    sprintf(s,5,"(nil)");
     return s;
   case value::INT:
-    tools::sprintf(s,16,"%d",aThis.u.m_int);
+    sprintf(s,16,"%d",aThis.u.m_int);
     return s;
   case value::DOUBLE:
-    tools::sprintf(s,16,"%g",aThis.u.m_double);
+    sprintf(s,16,"%g",aThis.u.m_double);
     return s;
   case value::VOID_STAR:
-    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_void_star);
+    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_void_star);
     return s;
   case value::UNSIGNED_SHORT:
-    tools::sprintf(s,16,"%u",aThis.u.m_unsigned_short);
+    sprintf(s,16,"%u",aThis.u.m_unsigned_short);
     return s;
   case value::UNSIGNED_INT:
-    tools::sprintf(s,16,"%u",aThis.u.m_unsigned_int);
+    sprintf(s,16,"%u",aThis.u.m_unsigned_int);
     return s;
   case value::BOOL:
-    tools::sprintf(s,5,"%s",aThis.u.m_bool?"true":"false");
+    sprintf(s,5,"%s",aThis.u.m_bool?"true":"false");
     return s;
   case value::SHORT:
-    tools::sprintf(s,16,"%d",aThis.u.m_short);
+    sprintf(s,16,"%d",aThis.u.m_short);
     return s;
   case value::INT64:{
-    tools::sprintf(s,16,tools::int64_format(),aThis.u.m_int64);
+    sprintf(s,16,int64_format(),aThis.u.m_int64);
    }return s;
   case value::UNSIGNED_INT64:{
-    tools::sprintf(s,16,tools::int64_format(),aThis.u.m_unsigned_int64);
+    sprintf(s,16,int64_format(),aThis.u.m_unsigned_int64);
    }return s;
   case value::FLOAT:
-    tools::sprintf(s,16,"%g",aThis.u.m_float);
+    sprintf(s,16,"%g",aThis.u.m_float);
     return s;
   //case value::UNSIGNED_CHAR:
-  //  tools::sprintf(s,16,"%c",aThis.u.m_unsigned_char);
+  //  sprintf(s,16,"%c",aThis.u.m_unsigned_char);
   //  return s;
   //case value::CHAR:
-  //  tools::sprintf(s,16,"%c",aThis.u.m_char);
+  //  sprintf(s,16,"%c",aThis.u.m_char);
   //  return s;
   case value::DOUBLE_STAR:
-    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_double_star);
+    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_double_star);
     return s;
   case value::FLOAT_STAR:
-    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_float_star);
+    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_float_star);
     return s;
   case value::INT_STAR:
-    tools::sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_int_star);
+    sprintf(s,32,upointer_format_x(),(upointer)aThis.u.m_int_star);
     return s;
   case value::STRING:
     return *aThis.u.m_string;
 
   //case value::ARRAY_UNSIGNED_CHAR:
-  //  return tools::tos<unsigned char>(aThis.u.m_array_unsigned_char->vector());
+  //  return tos<unsigned char>(aThis.u.m_array_unsigned_char->vector());
   //case value::ARRAY_CHAR:
-  //  return tools::tos<char>(aThis.u.m_array_char->vector());
+  //  return tos<char>(aThis.u.m_array_char->vector());
   case value::ARRAY_UNSIGNED_SHORT:
-    if(!tools::nums2s<unsigned short>(aThis.u.m_array_unsigned_short->vector(),s)) {}
+    if(!nums2s<unsigned short>(aThis.u.m_array_unsigned_short->vector(),s)) {}
     return s;
   case value::ARRAY_SHORT:
-    if(!tools::nums2s<short>(aThis.u.m_array_short->vector(),s)) {}
+    if(!nums2s<short>(aThis.u.m_array_short->vector(),s)) {}
     return s;
 
   case value::ARRAY_UNSIGNED_INT:
-    if(!tools::nums2s<unsigned int>(aThis.u.m_array_unsigned_int->vector(),s)) {}
+    if(!nums2s<unsigned int>(aThis.u.m_array_unsigned_int->vector(),s)) {}
     return s;
   case value::ARRAY_INT:
-    if(!tools::nums2s<int>(aThis.u.m_array_int->vector(),s)) {}
+    if(!nums2s<int>(aThis.u.m_array_int->vector(),s)) {}
     return s;
 
   case value::ARRAY_UNSIGNED_INT64:
-    if(!tools::nums2s<uint64>(aThis.u.m_array_unsigned_int64->vector(),s)) {}
+    if(!nums2s<uint64>(aThis.u.m_array_unsigned_int64->vector(),s)) {}
     return s;
   case value::ARRAY_INT64:
-    if(!tools::nums2s<int64>(aThis.u.m_array_int64->vector(),s)) {}
+    if(!nums2s<int64>(aThis.u.m_array_int64->vector(),s)) {}
     return s;
 
   case value::ARRAY_FLOAT:
-    if(!tools::nums2s<float>(aThis.u.m_array_float->vector(),s)) {}
+    if(!nums2s<float>(aThis.u.m_array_float->vector(),s)) {}
     return s;
   case value::ARRAY_DOUBLE:
-    if(!tools::nums2s<double>(aThis.u.m_array_double->vector(),s)) {}
+    if(!nums2s<double>(aThis.u.m_array_double->vector(),s)) {}
     return s;
   case value::ARRAY_BOOL:
-    tools::b2s(aThis.u.m_array_bool->vector(),s);
+    b2s(aThis.u.m_array_bool->vector(),s);
     return s;
   case value::ARRAY_STRING:
-    if(!tools::nums2s<std::string>(aThis.u.m_array_string->vector(),s)) {}
+    if(!nums2s<std::string>(aThis.u.m_array_string->vector(),s)) {}
     return s;
   default:
     return "unknow"; //it should not happen.

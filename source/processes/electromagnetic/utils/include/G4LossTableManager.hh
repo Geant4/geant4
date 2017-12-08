@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh 104349 2017-05-26 07:18:59Z gcosmo $
+// $Id: G4LossTableManager.hh 106714 2017-10-20 09:38:06Z gcosmo $
 //
 //
 // -------------------------------------------------------------------
@@ -96,6 +96,7 @@ class G4EmConfigurator;
 class G4ElectronIonPair;
 class G4VMultipleScattering;
 class G4VEmProcess;
+class G4GammaShark;
 
 class G4LossTableManager
 {
@@ -134,7 +135,9 @@ public:
 
   void LocalPhysicsTables(const G4ParticleDefinition* aParticle, 
                           G4VEnergyLossProcess* p);
-  
+ 
+  void DumpHtml();
+
   //-------------------------------------------------
   // Run time access to DEDX, range, energy for a given particle, 
   // energy, and G4MaterialCutsCouple
@@ -237,6 +240,10 @@ public:
 
   inline G4LossTableBuilder* GetTableBuilder();
 
+  inline void SetGammaShark(G4GammaShark*); 
+
+  inline G4GammaShark* GetGammaShark(); 
+
 private:
 
   //-------------------------------------------------
@@ -301,6 +308,7 @@ private:
   G4VSubCutProducer*          subcutProducer;
 
   G4EmParameters* theParameters;
+  G4GammaShark* gammaShark;
 
   G4int verbose;
 
@@ -443,6 +451,16 @@ inline G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
 {
   return tableBuilder;
 }
+
+inline void G4LossTableManager::SetGammaShark(G4GammaShark* ptr)
+{
+  gammaShark = ptr;
+} 
+
+inline G4GammaShark* G4LossTableManager::GetGammaShark()
+{
+  return gammaShark;
+} 
 
 #endif
 

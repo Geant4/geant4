@@ -41,7 +41,7 @@
 
 namespace g4alt {
 
-G4PhysListFactory::G4PhysListFactory() 
+G4PhysListFactory::G4PhysListFactory()
 {
 }
 
@@ -53,30 +53,30 @@ void G4PhysListFactory::SetDefaultReferencePhysList(const G4String& name)
   return G4PhysListRegistry::Instance()->SetUserDefaultPhysList(name);
 }
 
-G4VModularPhysicsList* 
+G4VModularPhysicsList*
 G4PhysListFactory::ReferencePhysList()
 {
   return G4PhysListRegistry::Instance()->GetModularPhysicsListFromEnv();
 }
 
-G4VModularPhysicsList* 
+G4VModularPhysicsList*
 G4PhysListFactory::GetReferencePhysList(const G4String& name)
 {
   return G4PhysListRegistry::Instance()->GetModularPhysicsList(name);
 }
-  
+
 G4bool G4PhysListFactory::IsReferencePhysList(const G4String& name)
 {
   return G4PhysListRegistry::Instance()->IsReferencePhysList(name);
 }
 
-const std::vector<G4String>& 
+const std::vector<G4String>&
 G4PhysListFactory::AvailablePhysLists() const
 {
   return G4PhysListRegistry::Instance()->AvailablePhysLists();
 }
 
-const std::vector<G4String>& 
+const std::vector<G4String>&
 G4PhysListFactory::AvailablePhysListsEM() const
 {
   return G4PhysListRegistry::Instance()->AvailablePhysListsEM();

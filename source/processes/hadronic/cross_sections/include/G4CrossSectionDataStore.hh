@@ -95,6 +95,7 @@ public:
   void PrintCrossSectionHtml(const G4VCrossSectionDataSet *cs) const;
   
   inline void AddDataSet(G4VCrossSectionDataSet*);
+  void AddDataSet(G4VCrossSectionDataSet*,size_t);
 
   inline void SetVerboseLevel(G4int value);
 

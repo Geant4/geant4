@@ -49,11 +49,9 @@ inline void cvt_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {
 }
 
 
-inline void triangle_fan_to_triangles(size_t a_npt,
-                                      const float* a_fxyzs,const float* a_fnms,
-                                      float*& a_xyzs,float*& a_nms) {
+inline void triangle_fan_to_triangles(size_t a_npt,const float* a_fxyzs,float*& a_xyzs) {
 
- {const float* vpos = a_fxyzs;
+  const float* vpos = a_fxyzs;
 
   float x1 = *vpos;vpos++;
   float y1 = *vpos;vpos++;
@@ -83,9 +81,13 @@ inline void triangle_fan_to_triangles(size_t a_npt,
     x2 = x3;
     y2 = y3;
     z2 = z3;
-  }}
+  }
 
- {const float* vpos = a_fnms;
+}
+
+inline void triangle_strip_to_triangles(size_t a_npt,const float* a_fxyzs,float*& a_xyzs) {
+
+  const float* vpos = a_fxyzs;
 
   float x1 = *vpos;vpos++;
   float y1 = *vpos;vpos++;
@@ -96,138 +98,62 @@ inline void triangle_fan_to_triangles(size_t a_npt,
   float z2 = *vpos;vpos++;
 
   float x3,y3,z3;
+  bool flip = false;
   for(size_t i=2;i<a_npt;i++) {
     x3 = *vpos;vpos++;
     y3 = *vpos;vpos++;
     z3 = *vpos;vpos++;
-    *a_nms = x1;a_nms++;
-    *a_nms = y1;a_nms++;
-    *a_nms = z1;a_nms++;
 
-    *a_nms = x2;a_nms++;
-    *a_nms = y2;a_nms++;
-    *a_nms = z2;a_nms++;
+    if(flip) {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = z1;a_xyzs++;
 
-    *a_nms = x3;a_nms++;
-    *a_nms = y3;a_nms++;
-    *a_nms = z3;a_nms++;
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = z3;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = z2;a_xyzs++;
+    } else {
+      *a_xyzs = x1;a_xyzs++;
+      *a_xyzs = y1;a_xyzs++;
+      *a_xyzs = z1;a_xyzs++;
+
+      *a_xyzs = x2;a_xyzs++;
+      *a_xyzs = y2;a_xyzs++;
+      *a_xyzs = z2;a_xyzs++;
+
+      *a_xyzs = x3;a_xyzs++;
+      *a_xyzs = y3;a_xyzs++;
+      *a_xyzs = z3;a_xyzs++;
+    }
+
+    x1 = x2;
+    y1 = y2;
+    z1 = z2;
 
     x2 = x3;
     y2 = y3;
     z2 = z3;
-  }}
+
+    flip = flip?false:true;
+  }
+}
+
+inline void triangle_fan_to_triangles(size_t a_npt,
+                                      const float* a_fxyzs,const float* a_fnms,
+                                      float*& a_xyzs,float*& a_nms) {
+  triangle_fan_to_triangles(a_npt,a_fxyzs,a_xyzs);
+  triangle_fan_to_triangles(a_npt,a_fnms,a_nms);
 }
 
 inline void triangle_strip_to_triangles(size_t a_npt,
                                         const float* a_fxyzs,const float* a_fnms,
                                         float*& a_xyzs,float*& a_nms) {
-
- {const float* vpos = a_fxyzs;
-
-  float x1 = *vpos;vpos++;
-  float y1 = *vpos;vpos++;
-  float z1 = *vpos;vpos++;
-
-  float x2 = *vpos;vpos++;
-  float y2 = *vpos;vpos++;
-  float z2 = *vpos;vpos++;
-
-  float x3,y3,z3;
-  bool flip = false;
-  for(size_t i=2;i<a_npt;i++) {
-    x3 = *vpos;vpos++;
-    y3 = *vpos;vpos++;
-    z3 = *vpos;vpos++;
-
-    if(flip) {
-      *a_xyzs = x1;a_xyzs++;
-      *a_xyzs = y1;a_xyzs++;
-      *a_xyzs = z1;a_xyzs++;
-
-      *a_xyzs = x3;a_xyzs++;
-      *a_xyzs = y3;a_xyzs++;
-      *a_xyzs = z3;a_xyzs++;
-
-      *a_xyzs = x2;a_xyzs++;
-      *a_xyzs = y2;a_xyzs++;
-      *a_xyzs = z2;a_xyzs++;
-    } else {
-      *a_xyzs = x1;a_xyzs++;
-      *a_xyzs = y1;a_xyzs++;
-      *a_xyzs = z1;a_xyzs++;
-
-      *a_xyzs = x2;a_xyzs++;
-      *a_xyzs = y2;a_xyzs++;
-      *a_xyzs = z2;a_xyzs++;
-
-      *a_xyzs = x3;a_xyzs++;
-      *a_xyzs = y3;a_xyzs++;
-      *a_xyzs = z3;a_xyzs++;
-    }
-
-    x1 = x2;
-    y1 = y2;
-    z1 = z2;
-
-    x2 = x3;
-    y2 = y3;
-    z2 = z3;
-
-    flip = flip?false:true;
-  }}
-
- {const float* vpos = a_fnms;
-
-  float x1 = *vpos;vpos++;
-  float y1 = *vpos;vpos++;
-  float z1 = *vpos;vpos++;
-
-  float x2 = *vpos;vpos++;
-  float y2 = *vpos;vpos++;
-  float z2 = *vpos;vpos++;
-
-  float x3,y3,z3;
-  bool flip = false;
-  for(size_t i=2;i<a_npt;i++) {
-    x3 = *vpos;vpos++;
-    y3 = *vpos;vpos++;
-    z3 = *vpos;vpos++;
-
-    if(flip) {
-      *a_nms = x1;a_nms++;
-      *a_nms = y1;a_nms++;
-      *a_nms = z1;a_nms++;
-
-      *a_nms = x3;a_nms++;
-      *a_nms = y3;a_nms++;
-      *a_nms = z3;a_nms++;
-
-      *a_nms = x2;a_nms++;
-      *a_nms = y2;a_nms++;
-      *a_nms = z2;a_nms++;
-    } else {
-      *a_nms = x1;a_nms++;
-      *a_nms = y1;a_nms++;
-      *a_nms = z1;a_nms++;
-
-      *a_nms = x2;a_nms++;
-      *a_nms = y2;a_nms++;
-      *a_nms = z2;a_nms++;
-
-      *a_nms = x3;a_nms++;
-      *a_nms = y3;a_nms++;
-      *a_nms = z3;a_nms++;
-    }
-
-    x1 = x2;
-    y1 = y2;
-    z1 = z2;
-
-    x2 = x3;
-    y2 = y3;
-    z2 = z3;
-    flip = flip?false:true;
-  }}
+  triangle_strip_to_triangles(a_npt,a_fxyzs,a_xyzs);
+  triangle_strip_to_triangles(a_npt,a_fnms,a_nms);
 }
 
 inline void triangle_fan_to_triangles_2to3(size_t a_npt,const float* a_xys,float*& a_xyzs) {

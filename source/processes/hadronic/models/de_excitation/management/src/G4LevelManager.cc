@@ -42,6 +42,7 @@
 
 #include "G4LevelManager.hh"
 #include "G4HadronicException.hh"
+#include <iomanip>
 
 G4String G4LevelManager::fFloatingLevels[] = {
   "-", "+X", "+Y", "+Z", "+U", "+V", "+W", "+R", "+S", "+T", "+A", "+B", "+C"};
@@ -106,7 +107,6 @@ const G4String& G4LevelManager::FloatingType(size_t i) const
   if(i > nTransitions) { PrintError(i, "Meta"); }
 #endif
   return fFloatingLevels[fSpin[i]/100000]; 
-  //  return fFloatingLevels[fFloating[i]]; 
 }
 
 #ifdef G4VERBOSE
@@ -116,7 +116,26 @@ void G4LevelManager::PrintError(size_t idx, const G4String& ss) const
   G4ExceptionDescription ed;
   ed << "Index of a level " << idx << " > " 
      << nTransitions << " (number of levels)";
-  G4Exception(sss,"had061",JustWarning,ed,"");
+  G4Exception(sss,"had061",JustWarning,ed,"stop run");
   throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
 }  
 #endif
+
+void G4LevelManager::StreamInfo(std::ostream& out) const
+{
+  for(size_t i=0; i<=nTransitions; ++i) {
+    G4int prec = out.precision(6);
+    out << std::setw(6) << i << ". " 
+	<< std::setw(8) << fLevelEnergy[i];
+    if(fLevels[i]) {
+	out << std::setw(8) << fLevels[i]->GetTimeGamma()
+	    << std::setw(4) << fLevels[i]->NumberOfTransitions()
+	    << std::setw(4) << SpinTwo(i)
+	    << std::setw(4) << Parity(i)
+	    << std::setw(4) << FloatingLevel(i);
+    }
+    out << "\n";
+    out.precision(prec);
+    if(fLevels[i]) { fLevels[i]->StreamInfo(out); }
+  }
+}

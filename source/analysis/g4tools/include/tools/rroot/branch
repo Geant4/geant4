@@ -6,7 +6,7 @@
 
 #include "base_leaf"
 #include "basket"
-#include "named"
+#include "obj_array"
 #include "seek"
 #include "ifile"
 #include "ifac"
@@ -460,14 +460,14 @@ public:
    {// There are (m_write_basket+1) sensitive elements in fBasketEntry :
     // (Do we have to check that ?)
     for(uint32 i=0;i<m_write_basket;i++) {
-      uint32 first = fBasketEntry[i];
-      uint32 last = fBasketEntry[i+1]-1;
-      m_first_last.push_back(std::pair<uint32,uint32>(first,last));
+      uint64 first = fBasketEntry[i];
+      uint64 last = fBasketEntry[i+1]-1;
+      m_first_last.push_back(std::pair<uint64,uint64>(first,last));
     }
     if(m_entry_number) {
-      uint32 first = fBasketEntry[m_write_basket];
-      uint32 last = m_entry_number-1;
-      m_first_last.push_back(std::pair<uint32,uint32>(first,last));
+      uint64 first = fBasketEntry[m_write_basket];
+      uint64 last = m_entry_number-1;
+      m_first_last.push_back(std::pair<uint64,uint64>(first,last));
     }}
     //_dump_first_last();
 
@@ -526,7 +526,7 @@ public:
     return true;
   }
 
-  virtual bool find_entry(ifile& a_file,uint32 a_entry,uint32& a_nbytes){
+  virtual bool find_entry(ifile& a_file,uint64 a_entry,uint32& a_nbytes){
     // Read all leaves of entry and return total number of bytes :
     // The input argument entry is the entry serial number in the current tree.
     a_nbytes = 0;
@@ -555,8 +555,8 @@ public:
       return false;
     }
 
-    uint32 first = m_first_last[m_read_basket].first;
-    uint32 last = m_first_last[m_read_basket].second;
+    uint64 first = m_first_last[m_read_basket].first;
+    uint64 last = m_first_last[m_read_basket].second;
 
     // Are we still in the same ReadBasket?
     if((a_entry<first)||(a_entry>last)) {
@@ -575,7 +575,7 @@ public:
       }
       if(!found) {
         uint32 count = 0;
-        typedef std::pair<uint32,uint32> first_last;
+        typedef std::pair<uint64,uint64> first_last;
         tools_vforcit(first_last,m_first_last,it) {
           first = (*it).first;
           last = (*it).second;
@@ -662,7 +662,7 @@ public:
     uint32 bufbegin;
    {int* entry_offset = m__read_basket->entry_offset();
     if(entry_offset) {
-      uint32 index = a_entry-first;
+      uint32 index = uint32(a_entry-first);
       if(index>=m__read_basket->nev()) {
         m_out << "tools::rroot::branch::find_entry :"
               << " can't access entry offset " << index
@@ -673,7 +673,7 @@ public:
       bufbegin = entry_offset[index];
       //::printf("debug : xxx++ %u : %u\n",index,bufbegin);
     } else {
-      bufbegin = m__read_basket->key_length() + (a_entry-first)*m__read_basket->nev_buf_size();
+      bufbegin = (uint32)(m__read_basket->key_length() + (a_entry-first)*m__read_basket->nev_buf_size());
     }}
 
    {int* displacement = m__read_basket->displacement();
@@ -727,7 +727,7 @@ public:
     return true;
   }
 
-  virtual bool show(std::ostream& a_out,ifile& a_file,uint32 a_entry) {
+  virtual bool show(std::ostream& a_out,ifile& a_file,uint64 a_entry) {
     // Print values of all active leaves for entry :
     // if entry==-1, print current entry (default)
     uint32 n;
@@ -760,7 +760,7 @@ public:
   :m_out(a_out)
   ,m_fac(a_fac)
 
-  ,m_streamed_baskets(m_fac,true)
+  ,m_streamed_baskets(m_fac,true,true)
   ,m__read_basket(0)
 
   //,m_bits(0)
@@ -768,8 +768,8 @@ public:
   ,m_title("")
   ,fAutoDelete(false)
 
-  ,m_branches(m_fac,true)
-  ,m_leaves(m_fac,true)
+  ,m_branches(m_fac,true,true)
+  ,m_leaves(m_fac,true,true)
 
   ,fEntryOffsetLen(0)
   ,m_write_basket(0)
@@ -793,9 +793,11 @@ protected:
   branch(const branch& a_from)
   :iro(a_from)
   ,m_out(a_from.m_out),m_fac(a_from.m_fac)
-  ,m_streamed_baskets(m_fac,false),m__read_basket(0)
+  ,m_streamed_baskets(m_fac,false,true)
+  ,m__read_basket(0)
   ,fAutoDelete(false)
-  ,m_branches(m_fac,false),m_leaves(m_fac,false)
+  ,m_branches(m_fac,false,true)
+  ,m_leaves(m_fac,false,true)
   ,fEntryOffsetLen(1000)
   ,m_write_basket(0)
   ,m_entry_number(0)
@@ -894,10 +896,10 @@ protected:
     m_out << "tools::rroot::branch::_dump_first_last :"
           << " first_last " << m_first_last.size()
           << std::endl;
-    typedef std::pair<uint32,uint32> first_last;
+    typedef std::pair<uint64,uint64> first_last;
     tools_vforcit(first_last,m_first_last,it) {
-      uint32 first = (*it).first;
-      uint32 last = (*it).second;
+      uint64 first = (*it).first;
+      uint64 last = (*it).second;
       m_out << "tools::rroot::branch::stream :"
             << "   first " << first
             << "   last " << last
@@ -913,9 +915,9 @@ protected:
 protected:
   std::ostream& m_out;
   ifac& m_fac;
-  std::vector< std::pair<uint32,uint32> > m_first_last;
+  std::vector< std::pair<uint64,uint64> > m_first_last;
   std::map<uint32, std::pair<basket*,bool> > m_baskets;
-  ObjArray<basket> m_streamed_baskets;
+  obj_array<basket> m_streamed_baskets;
   basket* m__read_basket; //optimization
 protected:
   //Object
@@ -925,8 +927,8 @@ protected:
   std::string m_title;
 
   bool fAutoDelete;
-  ObjArray<branch> m_branches;
-  ObjArray<base_leaf> m_leaves;
+  obj_array<branch> m_branches;
+  obj_array<base_leaf> m_leaves;
   uint32 fEntryOffsetLen;  //  Initial Length of fEntryOffset table in the basket buffers
   uint32 m_write_basket;   //  Last basket number written
   uint32 m_entry_number;   // Current entry number (last one filled in this branch)

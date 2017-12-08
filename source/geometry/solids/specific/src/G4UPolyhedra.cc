@@ -102,7 +102,7 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
                                  G4int    numRZ,
                            const G4double r[],
                            const G4double z[]   )
-  : Base_t(name, phiStart, phiTotal, numSide, numRZ/2, r, z)
+  : Base_t(name, phiStart, phiTotal, numSide, numRZ, r, z)
 {
   fGenericPgon = true;
   SetOriginalParameters();

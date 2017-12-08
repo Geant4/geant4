@@ -246,11 +246,11 @@ inline bool is_hippo(const std::string& a_file,bool& a_is){
   char csep;
   unsigned int number;
   if(!num_csv_doubles(txt[2],csep,number)) {a_is=false;return true;}
-  std::vector<std::string> words;
-  tools::words(txt[1],"\t",false,words);
-  if(words.size()!=number) {a_is=false;return true;}
+  std::vector<std::string> ws;
+  words(txt[1],"\t",false,ws);
+  if(ws.size()!=number) {a_is=false;return true;}
   bool all_doubles = true;
-  tools_vforcit(std::string,words,it) {
+  tools_vforcit(std::string,ws,it) {
     const char* pos = (*it).c_str();
     char* end;
     double d = ::strtod(pos,&end);(void)d;

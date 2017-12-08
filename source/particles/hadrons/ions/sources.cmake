@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 66892 2013-01-17 10:57:59Z gunter $
+# $Id: sources.cmake 106143 2017-09-14 06:34:42Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4ions
         G4He3.hh
         G4IonConstructor.hh
         G4Triton.hh
+        G4GenericMuonicAtom.hh
     SOURCES
         G4Alpha.cc
         G4AntiAlpha.cc
@@ -52,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4ions
         G4He3.cc
         G4IonConstructor.cc
         G4Triton.cc
+        G4GenericMuonicAtom.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4materials

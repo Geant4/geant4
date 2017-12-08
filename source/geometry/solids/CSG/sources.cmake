@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 103471 2017-04-11 07:31:42Z gcosmo $
+# $Id: sources.cmake 105075 2017-07-11 14:22:53Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -44,8 +44,6 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4CutTubs.icc
         G4Orb.hh
         G4Orb.icc
-        G4OTubs.hh
-        G4OTubs.icc
         G4Para.hh
         G4Para.icc
         G4Sphere.hh
@@ -60,7 +58,9 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Tubs.icc
         G4UBox.hh
         G4UCons.hh
+        G4UCutTubs.hh
         G4UOrb.hh
+        G4UPara.hh
         G4USphere.hh
         G4UTorus.hh
         G4UTrap.hh
@@ -72,7 +72,6 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Cons.cc
         G4CutTubs.cc
         G4Orb.cc
-        G4OTubs.cc
         G4Para.cc
         G4Sphere.cc
         G4Torus.cc
@@ -81,7 +80,9 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4Tubs.cc
         G4UBox.cc
         G4UCons.cc
+        G4UCutTubs.cc
         G4UOrb.cc
+        G4UPara.cc
         G4USphere.cc
         G4UTorus.cc
         G4UTrap.cc

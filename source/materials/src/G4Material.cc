@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4Material.cc 102843 2017-02-27 13:02:28Z gcosmo $
+// $Id: G4Material.cc 106243 2017-09-26 01:56:43Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
@@ -82,6 +82,10 @@
 #include "G4Log.hh"
 
 G4MaterialTable G4Material::theMaterialTable;
+
+#ifdef G4MULTITHREADED
+  G4Mutex G4Material::materialMutex = G4MUTEX_INITIALIZER;
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -238,11 +242,11 @@ G4Material::~G4Material()
     delete theElementVector;  
     delete fSandiaTable; 
     //delete fMaterialPropertiesTable;
-    if(fMassFractionVector) { delete [] fMassFractionVector; } 
-    if(fAtomsVector)        { delete [] fAtomsVector; } 
+    delete [] fMassFractionVector;
+    delete [] fAtomsVector;
   }
   delete fIonisation; 
-  if(VecNbOfAtomsPerVolume) { delete [] VecNbOfAtomsPerVolume; } 
+  delete [] VecNbOfAtomsPerVolume; 
 
   // Remove this material from theMaterialTable.
   //
@@ -330,6 +334,8 @@ void G4Material::CopyPointersOfBaseMaterial()
   G4double factor = fDensity/fBaseMaterial->GetDensity();
   TotNbOfAtomsPerVolume = factor*fBaseMaterial->GetTotNbOfAtomsPerVolume();
   TotNbOfElectPerVolume = factor*fBaseMaterial->GetTotNbOfElectPerVolume();
+
+  if(fState == kStateUndefined) { fState = fBaseMaterial->GetState(); }
 
   theElementVector = 
     const_cast<G4ElementVector*>(fBaseMaterial->GetElementVector());
@@ -718,5 +724,21 @@ std::ostream& operator<<(std::ostream& flux, G4MaterialTable MaterialTable)
 
 G4bool G4Material::IsExtended() const
 { return false; }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4Material::SetMaterialPropertiesTable(G4MaterialPropertiesTable* anMPT)
+{
+  if(anMPT && fMaterialPropertiesTable != anMPT) {
+#ifdef G4MULTITHREADED
+    G4MUTEXLOCK(&materialMutex);
+#endif
+    delete fMaterialPropertiesTable;
+    fMaterialPropertiesTable = anMPT;
+#ifdef G4MULTITHREADED
+    G4MUTEXUNLOCK(&materialMutex);
+#endif
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

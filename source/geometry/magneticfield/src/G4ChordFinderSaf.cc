@@ -29,7 +29,7 @@
 
 // ..........................................................................
 
-G4ChordFinderSaf::G4ChordFinderSaf(G4MagInt_Driver* pIntegrationDriver)
+G4ChordFinderSaf::G4ChordFinderSaf(G4VIntegrationDriver* pIntegrationDriver)
   : G4ChordFinder(pIntegrationDriver)
 {
     // check the values and set the other parameters
@@ -156,7 +156,7 @@ G4ChordFinderSaf::FindNextChord( const  G4FieldTrack&  yStart,
 
   stepTrial  = std::min( stepMax,  likelyGood ); 
 
-  G4MagInt_Driver *pIntgrDriver= G4ChordFinder::GetIntegrationDriver(); 
+  auto pIntgrDriver= G4ChordFinder::GetIntegrationDriver();
   G4double newStepEst_Uncons= 0.0;
   G4double stepForChord= -1.0;
   do

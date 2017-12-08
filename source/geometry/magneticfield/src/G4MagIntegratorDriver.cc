@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc 101384 2016-11-16 11:03:44Z gcosmo $
+// $Id: G4MagIntegratorDriver.cc 107059 2017-11-01 14:58:16Z gcosmo $
 //
 // 
 //
@@ -76,7 +76,7 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
     fNoVars( std::max( fNoIntegrationVariables, fMinNoVars )),
     fStatisticsVerboseLevel(statisticsVerbose),
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0),
-    fNoInitialSmallSteps(0), 
+    fNoInitialSmallSteps(0), fNoCalls(0),
     fDyerr_max(0.0), fDyerr_mx2(0.0), 
     fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
     fSumH_sm(0.0), fSumH_lg(0.0),
@@ -1053,3 +1053,31 @@ void G4MagInt_Driver::SetSmallestFraction(G4double newFraction)
            << "  Value must be between 1.e-8 and 1.e-16" << G4endl;
   }
 }
+
+void G4MagInt_Driver::GetDerivatives(const G4FieldTrack& y_curr, G4double* dydx) const
+{
+    G4double ytemp[G4FieldTrack::ncompSVEC];
+    y_curr.DumpToArray(ytemp);
+    GetStepper()->RightHandSide(ytemp, dydx);
+}
+
+G4EquationOfMotion* G4MagInt_Driver::GetEquationOfMotion()
+{
+    return pIntStepper->GetEquationOfMotion();
+}
+
+void G4MagInt_Driver::SetEquationOfMotion(G4EquationOfMotion *equation)
+{
+    pIntStepper->SetEquationOfMotion(equation);
+}
+
+const G4MagIntegratorStepper* G4MagInt_Driver::GetStepper() const
+{
+    return pIntStepper;
+}
+
+G4MagIntegratorStepper* G4MagInt_Driver::GetStepper()
+{
+    return pIntStepper;
+}
+

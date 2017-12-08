@@ -25,15 +25,15 @@ include(${Geant4_USE_FILE})
 #
 find_package(ROOT QUIET)
 if(ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT found. --> iort_therapy example with ROOT plotter enabled.") 
+  message(STATUS "G4 Examples: ROOT found. --> iort_therapy example with ROOT plotter enabled.")
   # Uncomment this line if suitable (some customization may be needed)
-  add_definitions(-DG4ANALYSIS_USE_ROOT)   
-  include_directories(${PROJECT_SOURCE_DIR}/include 
+  add_definitions(-DG4ANALYSIS_USE_ROOT)
+  include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
-                    ${ROOT_INCLUDE_DIR})
+                    ${ROOT_INCLUDE_DIRS})
 else()
-  message(STATUS "G4 Examples: ROOT not found. --> iort_therapy example with ROOT plotter disabled.") 
-  include_directories(${PROJECT_SOURCE_DIR}/include 
+  message(STATUS "G4 Examples: ROOT not found. --> iort_therapy example with ROOT plotter disabled.")
+  include_directories(${PROJECT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR})
 endif()
 

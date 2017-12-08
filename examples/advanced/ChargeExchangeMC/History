@@ -7,6 +7,38 @@ cirrone@lns.infn.it
              History file of the ChargeExchangeMC application
          ====================================================
 
+29.11.2017 - B.Morgan, Tag ChargeExchangeMC-V10-03-08
+             Use full path to ROOT Qt library, if found
+
+28.11.2017 - B.Morgan, Tag ChargeExchangeMC-V10-03-07
+             Replace ROOT_INCLUDE_DIR with ROOT_INCLUDE_DIRS
+
+31.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-06
+             Clean up preinit.mac, to avoid a cerr when 
+              ROOT is not available
+
+26.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-05
+             Edit CMakeLists.txt such to copy mac/gmdl in the 
+              build directory
+
+25.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-04
+             Fix residual shadowing on gcc 4.9
+
+23.10.2017 - A. Radkov, Tag ChargeExchangeMC-V10-03-03
+             Fix shadowed variabiles (and removed flag from 
+              CMakeLists.txt)
+
+12.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-02
+             Fix residual compiler warning on clang
+
+11.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-01
+             Fix compiler warnings in clang
+
+10.10.2017 - L. Pandola, Tag ChargeExchangeMC-V10-03-00
+             Fix CMakeLists.txt to allow for STT integration
+             Fix compilation error in CexmcHistoManager.hh (when
+                CEXMC_USE_ROOTQT is not defined)
+
 02.11.2016 - L. Garnier, Tag ChargeExchangeMC-V10-02-00
              Remove icons.mac. Automatically include since interfaces-V10-02-07
 

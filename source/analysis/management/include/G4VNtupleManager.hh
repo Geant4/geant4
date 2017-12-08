@@ -25,7 +25,7 @@
 //
 // $Id: G4VNtupleManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Base class for Ntuple manager. 
+// The pure abstract base class for Ntuple manager. 
 // It defines functions independent from the output type. 
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
@@ -45,28 +45,28 @@ class G4VNtupleManager : public G4BaseAnalysisManager
   friend class G4VAnalysisManager;
 
   public:
-    explicit G4VNtupleManager(const G4AnalysisManagerState& state);
-    virtual ~G4VNtupleManager();
+    explicit G4VNtupleManager(const G4AnalysisManagerState& state)
+      : G4BaseAnalysisManager(state) {}
+    virtual ~G4VNtupleManager() {}
 
     // deleted copy constructor & assignment operator
     G4VNtupleManager(const G4VNtupleManager& rhs) = delete;
-    G4VNtupleManager& operator=(const G4VNtupleManager& rhs) =delete;
+    G4VNtupleManager& operator=(const G4VNtupleManager& rhs) = delete;
 
   protected:
-    //G4VNtupleManager(const G4AnalysisManagerState& state);
-    //virtual ~G4VNtupleManager();
-   
     // Methods for handling ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title) = 0;
+
     // Create columns in the last created ntuple
     virtual G4int CreateNtupleIColumn(const G4String& name, 
-                                      std::vector<int>* vector) = 0;
+                              std::vector<int>* vector) = 0;
     virtual G4int CreateNtupleFColumn(const G4String& name,
-                                      std::vector<float>* vector) = 0;
+                              std::vector<float>* vector) = 0;
     virtual G4int CreateNtupleDColumn(const G4String& name,
-                                      std::vector<double>* vector) = 0;
+                              std::vector<double>* vector) = 0;
     virtual G4int CreateNtupleSColumn(const G4String& name) = 0;
     virtual void  FinishNtuple() = 0;   
+
     // Create columns in the ntuple with given id
     virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name,
                                       std::vector<int>* vector) = 0;
@@ -80,8 +80,8 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     // The ntuple column ids are generated automatically starting from 0; 
     // with the following function it is possible to change it 
     // to start from another value
-    G4bool SetFirstNtupleColumnId(G4int firstId); 
-    G4int  GetFirstNtupleColumnId() const;
+    virtual G4bool SetFirstNtupleColumnId(G4int firstId) = 0; 
+    virtual G4int  GetFirstNtupleColumnId() const = 0;
 
     // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId                     
@@ -90,6 +90,7 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual G4bool FillNtupleDColumn(G4int id, G4double value) = 0;
     virtual G4bool FillNtupleSColumn(G4int id, const G4String& value) = 0;
     virtual G4bool AddNtupleRow() = 0;
+
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
     virtual G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value) = 0;
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) = 0;
@@ -105,16 +106,8 @@ class G4VNtupleManager : public G4BaseAnalysisManager
 
     // Access methods
     virtual G4int GetNofNtuples() const = 0;
-    
-  protected:
-    G4int   fFirstNtupleColumnId;
-    G4bool  fLockFirstNtupleColumnId;     
+    virtual G4int GetNofNtupleBookings() const = 0;
 };
-// inline functions
 
-inline G4int G4VNtupleManager::GetFirstNtupleColumnId() const {
-  return fFirstNtupleColumnId;
-}  
-    
 #endif
 

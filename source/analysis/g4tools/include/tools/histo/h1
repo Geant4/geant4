@@ -21,7 +21,7 @@ class h1 : public b1<TC,TO,TN,TW,TH> {
 public:
   typedef histo_data<TC,TO,TN,TW> hd_t;
   typedef typename parent::bn_t bn_t;
-  typedef histo::axis<TC,TO> axis_t;
+  typedef typename parent::axis_t axis_t;
 protected:
   virtual TH get_bin_height(TO a_offset) const { //TH should be the same as TW
     return parent::m_bin_Sw[a_offset];
@@ -119,6 +119,28 @@ public:
     return true;
   }
 
+  bool get_bin_content(bn_t a_ibin,TN& a_entries,TW& a_Sw,TW& a_Sw2,TC& a_Sxw,TC& a_Sx2w) {
+    if(parent::m_dimension!=1) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;a_Sxw = 0;a_Sx2w = 0;
+      return false;
+    }
+    if(a_ibin>(parent::m_axes[0].m_number_of_bins+1)) {
+      a_entries = 0;a_Sw = 0;a_Sw2 = 0;a_Sxw = 0;a_Sx2w = 0;
+      return false;
+    }
+
+    TO offset = a_ibin;
+
+    a_entries = parent::m_bin_entries[offset];
+    a_Sw = parent::m_bin_Sw[offset];
+    a_Sw2 = parent::m_bin_Sw2[offset];
+
+    a_Sxw = parent::m_bin_Sxw[offset][0];
+    a_Sx2w = parent::m_bin_Sx2w[offset][0];
+
+    return true;
+  }
+
   bool add(const h1& a_histo){
     parent::base_add(a_histo);
     return true;
@@ -198,6 +220,16 @@ public:
     *this = *new_h;
     return true;
   }
+  
+  bool equals_TH(const h1& a_from,const TW& a_prec,TW(*a_fabs)(TW)) const {
+    if(!parent::equals_TH(a_from,a_prec,a_fabs,true)) return false;    
+    return true;
+  }
+  
+  void not_a_profile() const {}
+  
+public: //CERN-ROOT API (for MEMPHYS sim).
+  bool Fill(TC aX,TW aWeight = 1) {return fill(aX,aWeight);}
 
 public:
   h1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax)
@@ -210,6 +242,7 @@ public:
 public:
   h1(const h1& a_from):parent(a_from){}
   h1& operator=(const h1& a_from){
+    if(&a_from==this) return *this;
     parent::operator=(a_from);
     return *this;
   }

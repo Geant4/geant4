@@ -73,6 +73,8 @@ public:
 
   inline void SetPolarizationFlag(G4bool val) { polarFlag = val; };
 
+  inline void SetTwoJMAX(G4int val) { fTwoJMAX = val; };
+
   inline void SetVerbose(G4int val) { fVerbose = val; fPolTrans.SetVerbose(val); };
 
 private:  
@@ -88,6 +90,7 @@ protected:
 
   G4ThreeVector fDirection;
   G4PolarizationTransition fPolTrans;
+  G4int fTwoJMAX;
   G4int fVerbose;
 };
 

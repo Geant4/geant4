@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedCompton.cc 97175 2016-05-27 12:42:05Z gcosmo $
+// $Id: G4PolarizedCompton.cc 105740 2017-08-16 13:05:44Z gcosmo $
 // 
 //
 // File name:     G4PolarizedCompton
@@ -120,15 +120,15 @@ void G4PolarizedCompton::InitialiseProcess(const G4ParticleDefinition*)
   if(!isInitialised) {
     isInitialised = true;
     if(0 == mType) {
-      if(!EmModel(1)) { SetEmModel(new G4KleinNishinaCompton(), 1); }
+      if(!EmModel(0)) { SetEmModel(new G4KleinNishinaCompton()); }
     } else {
       emModel = new G4PolarizedComptonModel();
       SetEmModel(emModel, 1); 
     }
     G4EmParameters* param = G4EmParameters::Instance();
-    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
-    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
-    AddEmModel(1, EmModel(1));
+    EmModel(0)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(0)->SetHighEnergyLimit(param->MaxKinEnergy());
+    AddEmModel(1, EmModel(0));
   } 
 }
 
@@ -138,7 +138,7 @@ void G4PolarizedCompton::PrintInfo()
 {
   G4cout << " Total cross sections has a good parametrisation"
          << " from 10 KeV to (100/Z) GeV" 
-         << "\n      Sampling according " <<  EmModel(1)->GetName() << " model" 
+         << "\n      Sampling according " <<  EmModel(0)->GetName() << " model" 
 	 << G4endl;
 }         
 

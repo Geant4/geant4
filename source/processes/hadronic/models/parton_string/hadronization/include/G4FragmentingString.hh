@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FragmentingString.hh 102717 2017-02-20 10:37:13Z gcosmo $
+// $Id: G4FragmentingString.hh 106967 2017-10-31 08:41:49Z gcosmo $
 //
 
 #ifndef G4FragmentingString_h
@@ -42,14 +42,12 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4LorentzVector.hh"
-#include "G4LorentzRotation.hh"
 #include "G4ParticleDefinition.hh"
 
 class G4ExcitedString;
 
 class G4FragmentingString 
 {
-
   public:
      
       G4FragmentingString(const G4FragmentingString &right);
@@ -66,8 +64,7 @@ class G4FragmentingString
       int operator==(const G4FragmentingString &right) const;
 
       int operator!=(const G4FragmentingString &right) const;
-
-      
+     
       G4LorentzVector Get4Momentum() const;
 
       G4ThreeVector StablePt();
@@ -96,17 +93,6 @@ class G4FragmentingString
       G4bool    StableIsQuark();
       G4bool    FourQuarkString(void) const;
 
-G4LorentzVector   GetPstring();
-G4LorentzVector   GetPleft();
-void              SetPleft(G4LorentzVector a4momentum);
-G4LorentzVector   GetPright();
-void              SetPright(G4LorentzVector a4momentum);
-void              LorentzRotate(const G4LorentzRotation & rotation);
-G4LorentzRotation TransformToCenterOfMass();
-G4LorentzRotation TransformToAlignedCms();
-void              Boost(G4ThreeVector& Velocity);
-
-
   private:
 
       G4ParticleDefinition *LeftParton, *RightParton; 
@@ -115,7 +101,6 @@ void              Boost(G4ThreeVector& Velocity);
   
       G4ParticleDefinition * theStableParton, * theDecayParton;
       
-      G4LorentzVector Pstring, Pleft, Pright;
       enum DecaySide { None, Left, Right };
       DecaySide decaying; 
 };
@@ -136,85 +121,26 @@ int G4FragmentingString::operator!=(const G4FragmentingString &right) const
 inline
 G4ParticleDefinition * G4FragmentingString::GetStableParton() const
 {
-     return  theStableParton;
+        return  theStableParton;
 }	
 
 inline
 G4ParticleDefinition * G4FragmentingString::GetDecayParton() const
 {
-     return  theDecayParton;
+        return  theDecayParton;
 }	
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetLeftParton(void) const
-    {
-    return LeftParton; 
-    }
+{
+        return LeftParton; 
+}
 
 inline
 G4ParticleDefinition* G4FragmentingString::GetRightParton(void) const
-    {
-    return RightParton; 
-    }
-
-//+++++++++++++++++++++++++++
-inline
-void G4FragmentingString::LorentzRotate(const G4LorentzRotation & rotation)
 {
-     SetPleft(rotation*Pleft);
-     SetPright(rotation*Pright);
-     Pstring = Pleft+Pright;
-Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-Ptright=Pright.vect(); Ptright.setZ(0.);
-Pplus =Pstring.plus();
-Pminus=Pstring.minus();
+        return RightParton; 
 }
 
-inline
-G4LorentzRotation G4FragmentingString::TransformToCenterOfMass()
-{
-     G4LorentzVector momentum=Pstring;
-     G4LorentzRotation toCMS(-1*momentum.boostVector());
-
-     Pleft   *= toCMS;
-     Pright  *= toCMS;
-     Pstring *= toCMS;
-Ptleft =Pleft.vect();  Ptleft.setZ(0.);
-Ptright=Pright.vect(); Ptright.setZ(0.);
-Pplus =Pstring.plus();
-Pminus=Pstring.minus();
-     return toCMS;
-}
-
-inline
-G4LorentzRotation G4FragmentingString::TransformToAlignedCms()
-{
-     G4LorentzVector momentum=Pstring;
-     G4LorentzRotation toAlignedCms(-1*momentum.boostVector());
-
-     momentum= toAlignedCms* Pleft;
-     toAlignedCms.rotateZ(-1*momentum.phi());
-     toAlignedCms.rotateY(-1*momentum.theta());
-
-     Pleft   *= toAlignedCms;
-     Pright  *= toAlignedCms;
-     Pstring *= toAlignedCms;
-
-Ptleft  = G4ThreeVector(0.,0.,0.);
-Ptright = G4ThreeVector(0.,0.,0.);
-Pplus  = Pstring.plus();
-Pminus = Pstring.minus();
-
-     return toAlignedCms;
-}
-
-inline
-void G4FragmentingString::SetPleft(G4LorentzVector a4momentum)
-{    Pleft = a4momentum;}
-
-inline
-void G4FragmentingString::SetPright(G4LorentzVector a4momentum)
-{    Pright = a4momentum;}
 #endif
-
 

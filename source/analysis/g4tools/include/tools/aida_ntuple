@@ -17,6 +17,7 @@
 #include "scast"
 #include "forit"
 #include "ntuple_binding"
+#include "mnmx"
 
 #include <string>
 #include <vector>
@@ -118,7 +119,7 @@ protected:
         m_out << s_class() << "::cstor :"
               << " can't copy column."
               << std::endl;
-        tools::clear<base_col>(m_cols);
+        safe_clear<base_col>(m_cols);
         m_index = -1;
         return; //throw
       }
@@ -128,7 +129,7 @@ protected:
   base_ntu& operator=(const base_ntu& a_from){
     if(&a_from==this) return *this;
 
-    tools::clear<base_col>(m_cols);
+    safe_clear<base_col>(m_cols);
     m_index = a_from.m_index;
 
     m_title = a_from.m_title;
@@ -138,7 +139,7 @@ protected:
         m_out << s_class() << "::operator=() :"
               << " can't copy column."
               << std::endl;
-        tools::clear<base_col>(m_cols);
+        safe_clear<base_col>(m_cols);
         m_index = -1;
         return *this;
       }
@@ -150,6 +151,12 @@ protected:
 public:
   std::ostream& out() const {return m_out;}
   const std::vector<base_col*>& cols() const {return m_cols;}
+  size_t columns() const {return m_cols.size();}
+
+  void column_names(std::vector<std::string>& a_names) const {
+    a_names.clear();
+    tools_vforcit(base_col*,m_cols,it) a_names.push_back((*it)->name());
+  }
 
   const std::string& title() const {return m_title;}
   void set_title(const std::string& a_title) {m_title = a_title;}
@@ -160,7 +167,7 @@ public:
   }
 
   void clear() { //must not be confused with reset().
-    tools::clear<base_col>(m_cols);
+    safe_clear<base_col>(m_cols);
     m_index = -1;
   }
 
@@ -374,6 +381,8 @@ inline bool s__fill(const std::string& a_s,double& a_v) {
 template <class T>
 class aida_col : public aida_base_col {
 public:
+  typedef T entry_t;
+public:
   static const std::string& s_class() {
     static const std::string s_v("tools::aida::aida_col<"+stype(T())+">");
     return s_v;
@@ -483,6 +492,8 @@ protected:
 
 class ntuple : public base_ntu {
 public:
+  static cid id_class() {return 2000;} //for ntuple_binding.
+public:
   static const std::string& s_class() {
     static const std::string s_v("tools::aida::ntuple");
     return s_v;
@@ -491,6 +502,7 @@ public:
     if(void* p = cmp_cast<ntuple>(this,a_class)) {return p;}
     return base_ntu::cast(a_class);
   }
+  virtual const std::string& s_cls() const {return s_class();}
 public:
   ntuple(std::ostream& a_out,const std::string& a_title)
   :base_ntu(a_out,a_title)
@@ -527,6 +539,20 @@ public:
     base_col* col = find_named<base_col>(m_cols,a_name);
     if(!col) return 0;
     return safe_cast<base_col, aida_col<T> >(*col);
+  }
+
+  template <class T>
+  bool find_column(const std::string& a_name,aida_col<T>*& a_col,bool a_case_sensitive = true) { //for exlib::evaluator.
+    base_col* col = a_case_sensitive ? find_named<base_col>(m_cols,a_name) : find_named_case_insensitive<base_col>(m_cols,a_name);
+    if(!col) {a_col = 0;return false;}
+    a_col = safe_cast<base_col, aida_col<T> >(*col);
+    return a_col?true:false;
+  }
+
+  aida_base_col* find_aida_base_column(const std::string& a_name,bool a_case_sensitive = true){ //for opaw/panntu.
+    base_col* col = a_case_sensitive ? find_named<base_col>(m_cols,a_name) : find_named_case_insensitive<base_col>(m_cols,a_name);
+    if(!col) return 0;
+    return safe_cast<base_col,aida_base_col>(*col);
   }
 
   bool get_row() const {
@@ -984,7 +1010,7 @@ inline bool create_col(ntuple& a_ntu,
     ntuple* sub_aida = safe_cast<base_ntu,ntuple>(*sub_base_ntu);
     if(!sub_aida) {delete col_ntu;return false;}
 
-    std::vector<value> vars = f.result();
+    std::vector<value> vars;f.result(vars);
     if(!create_cols_from_vals(*sub_aida,vars)) {
       columns::delete_columns(vars);
       delete col_ntu;
@@ -1025,7 +1051,7 @@ inline bool create_cols_from_string(ntuple& a_ntu,
           << std::endl;
     return false;
   }
-  std::vector<value> vars = f.result();
+  std::vector<value> vars;f.result(vars);
   if(a_verbose) columns::dump_columns(a_ntu.out(),vars);
 
   if(!create_cols_from_vals(a_ntu,vars)) {
@@ -1201,8 +1227,8 @@ protected:
 
       m_first = false;
     } else {
-      m_mn = tools::mn<T>(m_mn,a_v);
-      m_mx = tools::mx<T>(m_mx,a_v);
+      m_mn = min_of<T>(m_mn,a_v);
+      m_mx = max_of<T>(m_mx,a_v);
       m_S += a_v;
       m_S2 += a_v*a_v;
     }
@@ -1318,6 +1344,54 @@ inline bool to_vector(base_ntu& a_ntu,std::vector<double>& a_vec,unsigned int a_
     if(!a_ntu.next()) {a_vec.clear();return false;}
     if(!_col->get_entry(v)) {}
     a_vec[row] = v;
+  }}
+  return true;
+}
+
+template <class T>
+inline bool column_min(base_ntu& a_ntu,unsigned int a_col,T& a_value) {
+  a_value = T();
+  const std::vector<base_col*>& cols = a_ntu.cols();
+  if(cols.empty()) return false;
+  if(a_col>=cols.size()) return false;
+  base_col* _base_col = cols[a_col];
+  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+  if(!_col) return false;
+  a_ntu.start();
+  uint64 _rows = a_ntu.rows();
+  T v;
+ {for(uint64 row=0;row<_rows;row++) {
+    if(!a_ntu.next()) {a_value = T();return false;}
+    if(!_col->get_entry(v)) {}
+    if(!row) {
+      a_value = v;
+    } else {
+      a_value = mn<T>(a_value,v);
+    }
+  }}
+  return true;
+}
+
+template <class T>
+inline bool column_max(base_ntu& a_ntu,unsigned int a_col,T& a_value) {
+  a_value = T();
+  const std::vector<base_col*>& cols = a_ntu.cols();
+  if(cols.empty()) return false;
+  if(a_col>=cols.size()) return false;
+  base_col* _base_col = cols[a_col];
+  aida_col<T>* _col = safe_cast<base_col, aida_col<T> >(*_base_col);
+  if(!_col) return false;
+  a_ntu.start();
+  uint64 _rows = a_ntu.rows();
+  T v;
+ {for(uint64 row=0;row<_rows;row++) {
+    if(!a_ntu.next()) {a_value = T();return false;}
+    if(!_col->get_entry(v)) {}
+    if(!row) {
+      a_value = v;
+    } else {
+      a_value = mx<T>(a_value,v);
+    }
   }}
   return true;
 }

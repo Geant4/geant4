@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc 70764 2013-06-05 12:54:37Z gcosmo $
+// $Id: G4GDMLWriteMaterials.cc 106194 2017-09-19 04:05:34Z gcosmo $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -230,41 +230,50 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
 {
    xercesc::DOMElement* propElement;
    G4MaterialPropertiesTable* ptable = mat->GetMaterialPropertiesTable();
-   const std::map< G4String, G4PhysicsOrderedFreeVector*,
-                 std::less<G4String> >* pmap = ptable->GetPropertiesMap();
-   const std::map< G4String, G4double,
-                 std::less<G4String> >* cmap = ptable->GetPropertiesCMap();
-   std::map< G4String, G4PhysicsOrderedFreeVector*,
-                 std::less<G4String> >::const_iterator mpos;
-   std::map< G4String, G4double,
-                 std::less<G4String> >::const_iterator cpos;
+
+   const std::map< G4MPindex, G4PhysicsOrderedFreeVector*,
+                 std::less<G4MPindex> >* pmap = ptable->GetPropertyMap();
+   const std::map< G4MCPindex, G4double,
+                 std::less<G4MCPindex> >* cmap = ptable->GetConstPropertyMap();
+   std::map< G4MPindex, G4PhysicsOrderedFreeVector*,
+                 std::less<G4MPindex> >::const_iterator mpos;
+   std::map< G4MCPindex, G4double,
+                 std::less<G4MCPindex> >::const_iterator cpos;
+
+
    for (mpos=pmap->begin(); mpos!=pmap->end(); mpos++)
    {
       propElement = NewElement("property");
-      propElement->setAttributeNode(NewAttribute("name", mpos->first));
+      propElement->setAttributeNode(NewAttribute("name", 
+                                    G4MaterialPropertyName[mpos->first]));
       propElement->setAttributeNode(NewAttribute("ref",
-                                    GenerateName(mpos->first, mpos->second)));
+        GenerateName(G4MaterialPropertyName[mpos->first], mpos->second)));
       if (mpos->second)
       {
-         PropertyVectorWrite(mpos->first, mpos->second);
+         PropertyVectorWrite(G4MaterialPropertyName[mpos->first], mpos->second);
          matElement->appendChild(propElement);
       }
       else
       {
          G4String warn_message = "Null pointer for material property -"
-                  + mpos->first + "- of material -" + mat->GetName() + "- !";
+                  + G4MaterialPropertyName[mpos->first] + "- of material -" 
+                  + mat->GetName() + "- !";
          G4Exception("G4GDMLWriteMaterials::PropertyWrite()", "NullPointer",
                      JustWarning, warn_message);
          continue;
       }
    }
+
    for (cpos=cmap->begin(); cpos!=cmap->end(); cpos++)
    {
       propElement = NewElement("property");
-      propElement->setAttributeNode(NewAttribute("name", cpos->first));
-      propElement->setAttributeNode(NewAttribute("ref", cpos->first));
+      propElement->setAttributeNode(NewAttribute("name", 
+                   G4MaterialConstPropertyName[cpos->first]));
+      propElement->setAttributeNode(NewAttribute("ref", 
+                   G4MaterialConstPropertyName[cpos->first]));
       xercesc::DOMElement* constElement = NewElement("constant");
-      constElement->setAttributeNode(NewAttribute("name", cpos->first));
+      constElement->setAttributeNode(NewAttribute("name", 
+                    G4MaterialConstPropertyName[cpos->first]));
       constElement->setAttributeNode(NewAttribute("value", cpos->second));
       defineElement->appendChild(constElement);
       matElement->appendChild(propElement);

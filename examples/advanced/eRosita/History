@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2010-12-06 15:32:30 pia Exp $
+$Id: History 107473 2017-11-15 08:02:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15.11.2017, G.Cosmo eRosita-V10-03-02
+            Fixed compilation warning.
+            Removed unnecessary dependency of PrimaryGeneratorAction on
+            DetectorConstruction.
+
+13.11.2017, L.Pandola eRosita-V10-03-01
+            Small changes to CMakeLists.txt, to allow integration in 
+            ctests
+
+09.11.2017, MGP,M.C.Han tag eRosita-V10-03-00
+            Changes for ctest.
 
 11.10.2012, G.Cosmo, tag eRosita-V09-05-00
             Explicit inclusion of units and constants headers.

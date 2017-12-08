@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc 99391 2016-09-20 13:32:30Z gcosmo $
+// $Id: G4ParticleDefinition.icc 106143 2017-09-14 06:34:42Z gcosmo $
 //
 
 inline 
@@ -202,6 +202,12 @@ inline
   G4bool G4ParticleDefinition::IsGeneralIon() const
 {
   return isGeneralIon;
+}
+
+inline
+  G4bool G4ParticleDefinition::IsMuonicAtom() const
+{
+  return isMuonicAtom;
 }
 
 inline

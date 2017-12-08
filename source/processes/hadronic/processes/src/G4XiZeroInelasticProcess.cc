@@ -40,7 +40,7 @@ G4XiZeroInelasticProcess::G4XiZeroInelasticProcess(const G4String& name)
 
 void G4XiZeroInelasticProcess::ProcessDescription(std::ostream& outFile) const
 {
-  outFile << "This process handles the inelastic scattering of Xi0\n" 
-          << "from nuclei by invoking one or more hadronic models and one\n"
-          << "or more hadronic cross sections.\n";
+  outFile << "G4XiZeroInelasticProcess handles the inelastic scattering of\n" 
+          << "Xi0 from nuclei by invoking one or more hadronic models and one\n"
+          << "or more hadronic cross section sets.\n";
 }

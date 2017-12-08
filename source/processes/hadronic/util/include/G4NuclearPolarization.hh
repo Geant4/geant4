@@ -55,19 +55,23 @@ class G4NuclearPolarization
 {
 public:
 
-  G4NuclearPolarization();
+  explicit G4NuclearPolarization(G4int Z, G4int A, G4double exc);
 
   ~G4NuclearPolarization();
 
   inline void Unpolarize() 
   { 
+    Clean(); 
     fPolarization.resize(1); 
-    fPolarization[0].assign(1, 1.); 
+    fPolarization[0].push_back(1.0); 
   }
   
   inline void SetPolarization(std::vector< std::vector<G4complex> >& p) 
   { 
-    fPolarization = p; 
+    Clean(); 
+    for(auto & pol : p) {
+      fPolarization.push_back(pol);
+    }
   }
 
   inline std::vector< std::vector<G4complex> >& GetPolarization() 
@@ -75,11 +79,36 @@ public:
     return fPolarization; 
   }
 
+  inline G4int GetZ() const
+  {
+    return fZ;
+  }
+
+  inline G4int GetA() const
+  {
+    return fA;
+  }
+
+  inline G4double GetExcitationEnergy() const
+  {
+    return fExcEnergy;
+  }
+
+  inline void SetExcitationEnergy(G4double val)
+  {
+    fExcEnergy = val;
+  }
+
   // ============= OPERATORS ==================
 
   inline G4NuclearPolarization & operator=(const G4NuclearPolarization &right)
   {
-    if (this != &right) { fPolarization = right.fPolarization; }
+    if (this != &right) { 
+      fZ = right.fZ;
+      fA = right.fA;
+      fExcEnergy = right.fExcEnergy;
+      fPolarization = right.fPolarization; 
+    }
     return *this;
   }
     
@@ -95,6 +124,11 @@ public:
 
 private:
 
+  void Clean(); 
+
+  G4int fZ;
+  G4int fA;
+  G4double fExcEnergy;
   std::vector< std::vector<G4complex> > fPolarization;
 };
 

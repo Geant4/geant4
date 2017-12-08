@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-03-ref-06    (30-June-2017)
+ Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,20 +21,17 @@ e-_G4DNAPTBAugerModel is constructed
 
 
 e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
- Total cross sections computed from e-_elastic_interaction model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 e-_elastic_interaction :  Emin=        0 eV    Emax=      100 TeV
 
 e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
- Total cross sections computed from e-_excitation_interaction
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 e-_excitation_interaction :  Emin=        0 eV    Emax=      100 TeV
 
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
- Total cross sections computed from e-_ionisation_interaction
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 e-_ionisation_interaction :  Emin=        0 eV    Emax=      100 TeV
-##### Create analysis manager   0x130f7e0
+##### Create analysis manager   0xccf6f0
 Using Root analysis manager
 ... open Root analysis file : ICSD.root - done
 ... write Root file : ICSD.root - done

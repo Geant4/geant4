@@ -76,8 +76,8 @@ G4bool G4eAdjointMultipleScattering::IsApplicable (const G4ParticleDefinition& p
 void G4eAdjointMultipleScattering::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(isInitialized) { return; }
-  if(!EmModel(1)) { SetEmModel(new G4UrbanAdjointMscModel(), 1); }
-  AddEmModel(1, EmModel(1));
+  if(!EmModel(0)) { SetEmModel(new G4UrbanAdjointMscModel(), 0); }
+  AddEmModel(1, EmModel(0));
   isInitialized = true;
 }
 

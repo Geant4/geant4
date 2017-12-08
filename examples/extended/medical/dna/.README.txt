@@ -12,16 +12,25 @@ This directory contains a set of Geant4-DNA examples.
    The dnaphysics example shows how to simulate track structures in liquid water
 using the Geant4-DNA physics processes and models.
 
+   - \link ExampleIcsd icsd \endlink 
+       This example shows how to use cross section models for DNA materials
+
+   - \link ExampleMfp mfp \endlink 
+       This example shows how to simulate mean free path in liquid water
+
    - \link ExampleMicrodosimetry  microdosimetry \endlink   
    The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
 are used in a Target volume, declared as a Region.
 
    - \link Examplemicroyz  microyz \endlink  
-   Simulation of microdosimetry spectra (beta version only, not finalized yet).
+   Simulation of microdosimetry spectra
 
    - \link Examplerange  range \endlink  
    Simulation of ranges.
+
+   - \link ExampleSlowing  slowing \endlink  
+   Simulation of slowing down spectra.
 
    - \link Examplespower  spower \endlink  
    Simulation of stopping power.
@@ -34,9 +43,6 @@ are used in a Target volume, declared as a Region.
    This example shows how to simulate W-values in liquid water
    using the Geant4-DNA physics processes and models.
 
-   - \link Exampleslowing  slowing \endlink  
-   Simulation of slowing down spectra.
-
 \section dna_s1 Chemistry
    - \link ExampleChem1  chem1 \endlink   Simple activation of the chemistry module.
    - \link ExampleChem2  chem2 \endlink   Usage of TimeStepAction in the chemistry module.
@@ -46,7 +52,7 @@ are used in a Target volume, declared as a Region.
 \section dna_s2 Geometry and other   
    - \link ExamplePdb4dna  pdb4dna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries.
    - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink   Geometrical description of a full simplified cell nucleus.
-   - \link ExampleNeuron  neuron \endlink   Irradiation of a realistic neuron cell.
+   - \link Exampleneuron  neuron \endlink   Irradiation of a realistic neuron cell.
    - \link Exampleclustering  clustering \endlink   Clustering application for direct damage extraction  
 
 

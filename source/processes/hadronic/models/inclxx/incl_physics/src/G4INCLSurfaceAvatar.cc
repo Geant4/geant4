@@ -70,8 +70,8 @@ namespace G4INCL {
     setType(SurfaceAvatarType);
   }
 
-  SurfaceAvatar::~SurfaceAvatar() {
-
+  SurfaceAvatar::~SurfaceAvatar()
+  {
   }
 
   G4INCL::IChannel* SurfaceAvatar::getChannel() {
@@ -107,7 +107,7 @@ namespace G4INCL {
      * projectile spectators makes the code *really* slow if the projectile is
      * large.
      */
-    if(theParticle->isNucleon()
+    if(theParticle->isNucleonorLambda()
         && (!theParticle->isProjectileSpectator() || !theNucleus->isNucleusNucleusCollision())
         && transmissionProbability>1.E-4) {
       Cluster *candidateCluster = 0;
@@ -182,6 +182,7 @@ namespace G4INCL {
           if(!(*i)->isTargetSpectator())
             theNucleus->getStore()->getBook().decrementCascading();
         }
+        out->setBiasCollisionVector(components.getParticleListBiasVector());
       } else if(!theParticle->isTargetSpectator()) {
 // assert(out==theParticle);
         theNucleus->getStore()->getBook().decrementCascading();
@@ -220,6 +221,9 @@ namespace G4INCL {
     const G4double particlePOut2 = 2.*particleMass*TMinusV+TMinusV2;
     particlePIn  = std::sqrt(particlePIn2);
     particlePOut = std::sqrt(particlePOut2);
+    
+    if (0. > V) // Automatic transmission for repulsive potential
+      return 1.0;
 
     // Compute the transmission probability
     G4double theTransmissionProbability;
@@ -237,7 +241,6 @@ namespace G4INCL {
       theTransmissionProbability = 1. - y*y;
     } else {
       // Use the formula without refraction
-
       // Intermediate variable for calculation
       const G4double y = particlePIn+particlePOut;
 

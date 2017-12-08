@@ -1,4 +1,4 @@
-$Id: History 98002 2016-06-30 13:03:36Z gcosmo $
+$Id: History 106116 2017-09-13 10:19:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11 September 17: S.Y.Jun (xrays-V10-03-00)
+- Change material property keys by the enum (index) type defined in 
+  G4MaterialPropertiesIndex
 
 20 Jun 16: P. Gumplinger (xrays-V10-02-05)
 - Add a stacking flag to G4Scintillation and G4Cerenkov and add

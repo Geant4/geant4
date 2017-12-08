@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VIntersectionLocator.cc 99915 2016-10-11 09:24:43Z gcosmo $
+// $Id: G4VIntersectionLocator.cc 105904 2017-08-28 07:36:13Z gcosmo $
 //
 // Class G4VIntersectionLocator implementation
 //
@@ -195,7 +195,7 @@ ReEstimateEndpoint( const G4FieldTrack& CurrentStateA,
                           G4double      ) // curveDist )    // NOT used
 {  
   G4FieldTrack newEndPoint( CurrentStateA );
-  G4MagInt_Driver* integrDriver = GetChordFinderFor()->GetIntegrationDriver(); 
+  auto integrDriver = GetChordFinderFor()->GetIntegrationDriver(); 
 
   G4FieldTrack retEndPoint( CurrentStateA );
   G4bool goodAdvance;

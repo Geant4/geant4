@@ -27,7 +27,7 @@
 /// \brief Main program of the electromagnetic/TestEm18 example
 //
 //
-// $Id: TestEm18.cc 66241 2012-12-13 18:34:42Z gunter $
+// $Id: TestEm18.cc 105252 2017-07-17 09:40:37Z gcosmo $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,6 +41,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
+#include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
 #include "StackingAction.hh"
@@ -85,13 +86,17 @@ int main(int argc,char** argv) {
   //eventAction
   EventAction* eventaction = new EventAction(runaction);
   runManager->SetUserAction(eventaction);
-
+  
+  //TrackingAction
+  TrackingAction* trackingaction = new TrackingAction(runaction);
+  runManager->SetUserAction(trackingaction);
+  
   //stepAction
   SteppingAction* steppingaction = new SteppingAction(runaction, eventaction);
   runManager->SetUserAction(steppingaction);
   
   //stackAction
-  StackingAction* stackingaction = new StackingAction(runaction, eventaction);
+  StackingAction* stackingaction = new StackingAction();
   runManager->SetUserAction(stackingaction);      
    
   // get the pointer to the User Interface manager 

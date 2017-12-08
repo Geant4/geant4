@@ -382,10 +382,11 @@ protected:
     _state.m_proj = a_action.projection_matrix();
   }
 
-  static const vec4<float>& id_orientation() {
-    static const vec4<float> s_v(0,0,0,1,false);
-    return s_v;
-  }
+#if defined(TOOLS_MEM) && !defined(TOOLS_MEM_ATEXIT)
+  static const vec4<float>& id_orientation() {static const vec4<float> s_v(0,0,0,1,false);return s_v;}
+#else
+  static const vec4<float>& id_orientation() {static const vec4<float> s_v(0,0,0,1);return s_v;}
+#endif
 
 protected:
   //OPTIMIZATION :

@@ -802,7 +802,6 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   if (verbosityLevel > 1)
       G4cout << "Cutoff energy: " << cutEnergy/eV << " eV" << G4endl;
-
   //
   //Copy helper in the oscillatorTable for Ionisation
   //
@@ -826,12 +825,14 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 
   size_t firstIndex = (isAConductor) ? 1 : 0; //for conductors, skip conduction oscillator
   G4bool loopAgain = false;
+  G4int nLoops = 0;
   G4int removedLevels = 0;
   do
     {
       loopAgain = false;
+      nLoops++;
       if (Nost>firstIndex+1)
-	{
+	{	  
 	  removedLevels = 0;
 	  for (size_t i=firstIndex;i<theTable->size()-1;i++)
 	    {
@@ -899,6 +900,9 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	  Rgroup = Rgroup*Rgroup;
 	  loopAgain = true;
 	}
+      //Add protection against infinite loops here
+      if (nLoops > 100 && !removedLevels)
+	loopAgain = false;
     }while(loopAgain);
 
   if (verbosityLevel > 1)
@@ -952,6 +956,7 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
   removedLevels = 0;
   do
     {
+      nLoops++;
       loopAgain = false;
       if (Nost>firstIndex+1)
 	{
@@ -1009,6 +1014,9 @@ void G4PenelopeOscillatorManager::BuildOscillatorTable(const G4Material* materia
 	  Rgroup = Rgroup*Rgroup;
 	  loopAgain = true;
 	}
+      //Add protection against infinite loops here
+      if (nLoops > 100 && !removedLevels)
+	loopAgain = false;
     }while(loopAgain);
 
 

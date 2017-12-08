@@ -14,10 +14,12 @@ typedef void* MPI_Comm;
 typedef void* MPI_Datatype;
 
 #define MPI_UNSIGNED           0
+#define MPI_FLOAT              0
 #define MPI_DOUBLE             0
 #define MPI_UNSIGNED_CHAR      0
 #define MPI_CHAR               0
 #define MPI_LONG               0
+#define MPI_SHORT              0
 #define MPI_INT                0
 #define MPI_UNSIGNED_LONG      0
 #define MPI_LONG_LONG          0

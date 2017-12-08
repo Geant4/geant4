@@ -199,8 +199,8 @@ G4DNAIonElasticModel::Initialise (
 
   while(!diffCrossSection.eof())
   {
-    double tDummy;
-    double eDummy;
+    G4double tDummy;
+    G4double eDummy;
     diffCrossSection>>tDummy>>eDummy;
 
     // SI : mandatory eVecm initialization
@@ -387,19 +387,19 @@ G4DNAIonElasticModel::Theta (G4ParticleDefinition * /*particleDefinition*/,
   G4double xs21 = 0;
   G4double xs22 = 0;
 
-  std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
+  std::vector<G4double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),
                                                       eTdummyVec.end(), k);
-  std::vector<double>::iterator t1 = t2 - 1;
+  std::vector<G4double>::iterator t1 = t2 - 1;
 
-  std::vector<double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
+  std::vector<G4double>::iterator e12 = std::upper_bound(eVecm[(*t1)].begin(),
                                                        eVecm[(*t1)].end(),
                                                        integrDiff);
-  std::vector<double>::iterator e11 = e12 - 1;
+  std::vector<G4double>::iterator e11 = e12 - 1;
 
-  std::vector<double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
+  std::vector<G4double>::iterator e22 = std::upper_bound(eVecm[(*t2)].begin(),
                                                        eVecm[(*t2)].end(),
                                                        integrDiff);
-  std::vector<double>::iterator e21 = e22 - 1;
+  std::vector<G4double>::iterator e21 = e22 - 1;
 
   valueT1 = *t1;
   valueT2 = *t2;

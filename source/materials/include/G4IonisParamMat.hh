@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4IonisParamMat.hh 97248 2016-05-30 15:00:11Z gcosmo $
+// $Id: G4IonisParamMat.hh 106243 2017-09-26 01:56:43Z gcosmo $
 //
 
 // class description
@@ -49,6 +49,7 @@
 #include "globals.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
+#include "G4Threading.hh"
 
 class G4Material;                        // forward declaration
 class G4DensityEffectData;
@@ -93,6 +94,13 @@ public:
   G4double  GetX1density()              const {return fX1density;};
   inline
   G4double  GetD0density()              const {return fD0density;};
+
+  // user defined density correction parameterisation
+  void SetDensityEffectParameters(G4double cd, G4double md, G4double ad,
+                                  G4double x0, G4double x1, G4double d0);
+
+  // defined density correction parameterisation via base material
+  void SetDensityEffectParameters(const G4Material* bmat);
     
   // compute density correction as a function of the kinematic variable
   // x = log10(beta*gamma)  
@@ -211,6 +219,9 @@ private:
   // static data created only once
   static G4DensityEffectData* fDensityData;
   G4double twoln10;
+#ifdef G4MULTITHREADED
+  static G4Mutex ionisMutex;
+#endif
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

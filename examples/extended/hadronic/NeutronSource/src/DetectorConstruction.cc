@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/DetectorConstruction.cc
+/// \file DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
 // $Id: DetectorConstruction.cc 70755 2013-06-05 12:17:48Z ihrivnac $

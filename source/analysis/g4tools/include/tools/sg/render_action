@@ -37,15 +37,8 @@ public:
   /////////////////////////////////////////////////////////////////
   /// texture /////////////////////////////////////////////////////
   /////////////////////////////////////////////////////////////////
-  virtual void draw_vertex_array_texture(tools::gl::mode_t,
-                                         size_t,const float*,
-                                         gstoid,
-                                         const float*) = 0;
-  virtual void draw_vertex_normal_array_texture(tools::gl::mode_t,
-                                         size_t,
-                                         const float*,const float*,
-                                         gstoid,
-                                         const float*) = 0;
+  virtual void draw_vertex_array_texture(gl::mode_t,size_t,const float*,gstoid,const float*) = 0;
+  virtual void draw_vertex_normal_array_texture(gl::mode_t,size_t,const float*,const float*,gstoid,const float*) = 0;
 
   /////////////////////////////////////////////////////////////////
   /// VBO /////////////////////////////////////////////////////////
@@ -78,7 +71,7 @@ public:
   virtual void set_lighting(bool) = 0;
   virtual void restore_state(unsigned int) = 0;
 
-  virtual tools::sg::gl_manager& gl_manager() = 0;
+  virtual sg::gl_manager& gl_manager() = 0; //sg:: is needed.
 public:
   render_action(std::ostream& a_out,unsigned int a_ww,unsigned int a_wh)
   :matrix_action(a_out,a_ww,a_wh){}
@@ -211,7 +204,7 @@ public:
   }
 
   bool add_line_loop(const std::vector<float>& a_xyzs){
-    const float* _xyzs = tools::vec_data<float>(a_xyzs);
+    const float* _xyzs = vec_data<float>(a_xyzs);
     draw_vertex_array(gl::line_loop(),a_xyzs.size(),_xyzs);
     return true;
   }

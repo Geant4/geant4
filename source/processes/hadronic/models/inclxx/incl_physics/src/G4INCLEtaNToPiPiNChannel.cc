@@ -70,44 +70,52 @@ namespace G4INCL {
       eta = particle1;
     }
 
-				const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, eta);
+    const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, eta);
 			
-				ind2=ParticleTable::getIsospin(nucleon->getType());
+    ind2=ParticleTable::getIsospin(nucleon->getType());
 
-				eta->setType(PiZero);
+    eta->setType(PiZero);
 
-			 ParticleType pionType;		   
-				G4double rs1=Random::shoot();
-				if (ind2 == 1) {
-					if (rs1*2. > 1.) pionType=PiZero;		    	  
-					else {
-						pionType=PiPlus;
-						ind2=-ind2;
-					}
-				}
-				else {
-					if (rs1*2. > 1.) pionType=PiZero;		    	  
-					else {
-						pionType=PiMinus;
-						ind2=-ind2;
-						}
-				}
+    ParticleType pionType;
+    G4double rs1=Random::shoot();
+    if (ind2 == 1) {
+        if (rs1*6. > 5.) pionType=PiZero;
+        else if (rs1*6. > 3.) {
+            pionType=PiPlus;
+            ind2=-ind2;
+        }
+        else {
+            pionType=PiPlus;
+            eta->setType(PiMinus);
+            }
+    }
+    else {
+        if (rs1*6. > 5.) pionType=PiZero;
+        else if (rs1*6. > 3.) {
+            pionType=PiMinus;
+            ind2=-ind2;
+        }
+        else {
+            pionType=PiPlus;
+            eta->setType(PiMinus);
+        }
+    }
 			
 
-				const ParticleType tn=ParticleTable::getNucleonType(ind2);
-				nucleon->setType(tn);
-		 	ParticleList list;
-			 list.push_back(nucleon);
-		 	list.push_back(eta);
-			 const ThreeVector &rcolpion = eta->getPosition();
-				const ThreeVector zero;
-				Particle *newPion = new Particle(pionType,zero,rcolpion);
-				list.push_back(newPion);
-		 	fs->addModifiedParticle(nucleon);
-			 fs->addModifiedParticle(eta);
-				fs->addCreatedParticle(newPion);
+    const ParticleType tn=ParticleTable::getNucleonType(ind2);
+    nucleon->setType(tn);
+    ParticleList list;
+    list.push_back(nucleon);
+    list.push_back(eta);
+    const ThreeVector &rcolpion = eta->getPosition();
+    const ThreeVector zero;
+    Particle *newPion = new Particle(pionType,zero,rcolpion);
+    list.push_back(newPion);
+    fs->addModifiedParticle(nucleon);
+    fs->addModifiedParticle(eta);
+    fs->addCreatedParticle(newPion);
 
-				PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
+    PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
 
   }
 

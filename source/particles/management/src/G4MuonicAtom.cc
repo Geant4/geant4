@@ -30,7 +30,9 @@
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	History: first implementation, K.Lynch July 2016
+//	History: 
+//      July 2016, K.Lynch - first implementation
+//      June 2017, K.L.Genser - added baseion, lifetimes and access functions
 
 #include "G4MuonicAtom.hh"
 
@@ -42,17 +44,28 @@ G4MuonicAtom::G4MuonicAtom(
        G4int               iIsospin3,    G4int               gParity,
        const G4String&     pType,        G4int               lepton,      
        G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
+       G4bool              stable,       G4double            lifeTime,
        G4DecayTable        *decaytable,  G4bool              shortlived,
-       const G4String&     subType
+       const G4String&     subType,      G4Ions const*       baseion,
+       G4int               anti_encoding,
+       G4double            excitation, 
+       G4int               isomer,
+       G4double            DIOLifeTime,
+       G4double            NCLifeTime
    ) : G4Ions( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable,
-	       shortlived, subType, 0,0,0)
+               iConjugation,iIsospin,iIsospin3,gParity,pType,
+               lepton,baryon,encoding,stable,lifeTime,decaytable,
+               shortlived,subType,anti_encoding,excitation,isomer),
+       baseIon(baseion),
+       fDIOLifeTime(DIOLifeTime),
+       fNCLifeTime(NCLifeTime)
 {
   // member is private in base, so we need to go through the public
   // interface
-  SetFloatLevelBase(G4FloatLevelBase::no_Float); 
-
-  isGeneralIon=true;
+  SetFloatLevelBase(G4FloatLevelBase::no_Float);
+  // from G4ParticleDefinition
+  isGeneralIon = false;
+  isMuonicAtom = true;
 }
+
+G4MuonicAtom::~G4MuonicAtom(){}

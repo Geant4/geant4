@@ -42,6 +42,7 @@
 
 #include "G4NucLevel.hh"
 #include "G4HadronicException.hh"
+#include <iomanip>
 
 G4NucLevel::G4NucLevel(size_t ntrans, G4double tgamma,
 		       const std::vector<G4int>&   vTrans,
@@ -92,3 +93,24 @@ void G4NucLevel::PrintError(size_t idx, const G4String& ss) const
   throw G4HadronicException(__FILE__, __LINE__,"FATAL Hadronic Exception");
 }  
 #endif
+
+void G4NucLevel::StreamInfo(std::ostream& out) const
+{
+  G4int prec = out.precision(4);
+  for(size_t i=0; i<length; ++i) {
+    out << std::setw(12) << FinalExcitationIndex(i) 
+	<< std::setw(4) << TransitionType(i)
+	<< std::setw(7) << fMpRatio[i] 
+	<< std::setw(7) << fGammaCumProbability[i]
+	<< std::setw(7) << fGammaProbability[i]
+	<< "\n";
+    const std::vector<G4float>* vec = fShellProbability[i];
+    if(vec) {
+      size_t len = vec->size();
+      out << "              ";
+      for(size_t j=0; j<len; ++j) { out << std::setw(7) << (*vec)[j]; }
+      out << "\n";
+    }
+  }
+  out.precision(prec);
+}

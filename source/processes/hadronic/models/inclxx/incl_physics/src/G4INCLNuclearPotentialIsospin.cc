@@ -68,6 +68,7 @@ namespace G4INCL {
 
       const G4double mp = ParticleTable::getINCLMass(Proton);
       const G4double mn = ParticleTable::getINCLMass(Neutron);
+      const G4double ml = ParticleTable::getINCLMass(Lambda);
 
       const G4double theFermiMomentum = ParticleTable::getFermiMomentum(theA,theZ);
 
@@ -99,6 +100,11 @@ namespace G4INCL {
       vDeltaZero = vNeutron;
       vDeltaPlusPlus = std::max(separationEnergyDeltaPlusPlus + tinyMargin, 2.*vDeltaPlus - vDeltaZero);
       vDeltaMinus = std::max(separationEnergyDeltaMinus + tinyMargin, 2.*vDeltaZero - vDeltaPlus);
+      
+      vSigmaMinus = -16.; // Repulsive potential, from Eur. Phys.J.A. (2016) 52:21
+      vSigmaZero = -16.; // hypothesis: same potential for each sigma
+      vSigmaPlus = -16.;
+      vLambda = 28.;
 
       separationEnergy[PiPlus] = theProtonSeparationEnergy - theNeutronSeparationEnergy;
       separationEnergy[PiZero] = 0.;
@@ -108,11 +114,29 @@ namespace G4INCL {
       separationEnergy[Omega]    = 0.;
       separationEnergy[EtaPrime] = 0.;
       separationEnergy[Photon]   = 0.;
+      
+      separationEnergy[Lambda]		= theNeutronSeparationEnergy;
+      separationEnergy[SigmaPlus]	= theProtonSeparationEnergy;
+      separationEnergy[SigmaZero]	= theNeutronSeparationEnergy;
+      separationEnergy[SigmaMinus]	= 2*theNeutronSeparationEnergy - theProtonSeparationEnergy;
+      separationEnergy[KPlus]		= theProtonSeparationEnergy - theNeutronSeparationEnergy;
+      separationEnergy[KZero]		= 0.;
+      separationEnergy[KZeroBar]	= 0.;
+      separationEnergy[KMinus]		= theNeutronSeparationEnergy - theProtonSeparationEnergy;
+      separationEnergy[KShort]		= 0.;
+      separationEnergy[KLong]		= 0.;
 
       fermiEnergy[DeltaPlusPlus] = vDeltaPlusPlus - separationEnergy[DeltaPlusPlus];
       fermiEnergy[DeltaPlus] = vDeltaPlus - separationEnergy[DeltaPlus];
       fermiEnergy[DeltaZero] = vDeltaZero - separationEnergy[DeltaZero];
       fermiEnergy[DeltaMinus] = vDeltaMinus - separationEnergy[DeltaMinus];
+      
+      fermiEnergy[Lambda] = vLambda - separationEnergy[Lambda];
+      fermiMomentum[Lambda]=std::sqrt(std::pow(fermiEnergy[Lambda]+ml,2.0)-ml*ml);
+
+      fermiEnergy[SigmaPlus] = vSigmaPlus - separationEnergy[SigmaPlus];
+      fermiEnergy[SigmaZero] = vSigmaZero - separationEnergy[SigmaZero];
+      fermiEnergy[SigmaMinus] = vSigmaMinus - separationEnergy[SigmaMinus];
 
       INCL_DEBUG("Table of separation energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
             << "  proton:  " << separationEnergy[Proton] << '\n'
@@ -128,6 +152,16 @@ namespace G4INCL {
             << "  omega:   " << separationEnergy[Omega] << '\n'
             << "  etaprime:" << separationEnergy[EtaPrime] << '\n'
             << "  photon:  " << separationEnergy[Photon] << '\n'
+            << "  lambda:  " << separationEnergy[Lambda] << '\n'
+            << "  sigmaplus:  " << separationEnergy[SigmaPlus] << '\n'
+            << "  sigmazero:  " << separationEnergy[SigmaZero] << '\n'
+            << "  sigmaminus:  " << separationEnergy[SigmaMinus] << '\n'
+            << "  kplus:  " << separationEnergy[KPlus] << '\n'
+            << "  kzero:  " << separationEnergy[KZero] << '\n'
+            << "  kzerobar:  " << separationEnergy[KZeroBar] << '\n'
+            << "  kminus:  " << separationEnergy[KMinus] << '\n'
+            << "  kshort:  " << separationEnergy[KShort] << '\n'
+            << "  klong:  " << separationEnergy[KLong] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi energies [MeV] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -137,6 +171,10 @@ namespace G4INCL {
             << "  delta+:  " << fermiEnergy[DeltaPlus] << '\n'
             << "  delta0:  " << fermiEnergy[DeltaZero] << '\n'
             << "  delta-:  " << fermiEnergy[DeltaMinus] << '\n'
+            << "  lambda:  " << fermiEnergy[Lambda] << '\n'
+            << "  sigma+:  " << fermiEnergy[SigmaPlus] << '\n'
+            << "  sigma0:  " << fermiEnergy[SigmaZero] << '\n'
+            << "  sigma-:  " << fermiEnergy[SigmaMinus] << '\n'
             );
 
       INCL_DEBUG("Table of Fermi momenta [MeV/c] for A=" << theA << ", Z=" << theZ << ":" << '\n'
@@ -161,11 +199,33 @@ namespace G4INCL {
         case PiMinus:
           return computePionPotentialEnergy(particle);
           break;
+        
+        case SigmaPlus:
+          return vSigmaPlus;
+          break;
+        case SigmaZero:
+          return vSigmaZero;
+          break;
+        case Lambda:
+          return vLambda;
+          break;
+        case SigmaMinus:
+          return vSigmaMinus;
+          break;
 
         case Eta:
         case Omega:
 		case EtaPrime:
           return computePionResonancePotentialEnergy(particle);
+          break;
+
+        case KPlus:
+        case KZero:
+        case KZeroBar:
+        case KMinus:
+        case KShort:
+        case KLong:
+          return computeKaonPotentialEnergy(particle);
           break;
 
         case Photon:

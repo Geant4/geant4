@@ -59,12 +59,6 @@ enum class G4NtupleCreateMode {
 
 template <>
 template <>
-void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
-  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
-  const G4String& name, std::vector<std::string>* vector);
-
-template <>
-template <>
 G4bool G4TNtupleManager<tools::wroot::ntuple>::FillNtupleTColumn(
   G4int ntupleId, G4int columnId, const std::string& value);
 
@@ -76,7 +70,8 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
 
   public:
     explicit G4RootNtupleManager(const G4AnalysisManagerState& state, 
-                                 G4int nofMainManagers = 0);
+                                 G4int nofMainManagers = 0,
+                                 G4bool rowWise = true);
     virtual ~G4RootNtupleManager();
 
    private:
@@ -89,11 +84,11 @@ class G4RootNtupleManager : public G4TNtupleManager<tools::wroot::ntuple>
     void SetNtupleDirectory(tools::wroot::directory* directory);
     void SetFileManager(std::shared_ptr<G4RootFileManager> fileManager);
     
+    // Utility function  
+    void CreateTNtuple(NtupleDescriptionType*  ntupleDescription);
+
     // Methods from the templated base class
-    //
-    virtual void CreateTNtuple(
-                    NtupleDescriptionType*  ntupleDescription,
-                    const G4String& name, const G4String& title) final;
+
     virtual void CreateTNtupleFromBooking(
                     NtupleDescriptionType*  ntupleDescription) final;
 
@@ -137,26 +132,6 @@ G4RootNtupleManager::SetFileManager(std::shared_ptr<G4RootFileManager> fileManag
 inline const std::vector<G4TNtupleDescription<tools::wroot::ntuple>* >& 
 G4RootNtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
-
-//_____________________________________________________________________________
-template <>
-template <>
-inline void G4TNtupleManager<tools::wroot::ntuple>::CreateTColumnInNtuple(
-  G4TNtupleDescription<tools::wroot::ntuple>* ntupleDescription,
-  const G4String& name, std::vector<std::string>* vector)
-{
-  if ( ntupleDescription->fNtuple ) {
-    if ( vector  == nullptr ) {
-      ntupleDescription->fNtuple->create_column_string(name);
-    }  
-    else {
-      G4ExceptionDescription description;
-      description << "Column of vector<std::string> type is not supported";
-      G4Exception("G4RootNtupleManager::CreateTColumnInNtuple()",
-                  "Analysis_W001", JustWarning, description);
-    } 
-  }  
-}
 
 //_____________________________________________________________________________
 template <>

@@ -45,8 +45,8 @@
 
 
 CexmcIncidentParticleTrackInfo::CexmcIncidentParticleTrackInfo(
-                                                CexmcTrackType  trackType ) :
-    CexmcTrackInfo( trackType ), currentTrackLengthInTarget( 0. ),
+                                                CexmcTrackType  trackType_ ) :
+    CexmcTrackInfo( trackType_ ), currentTrackLengthInTarget( 0. ),
     finalTrackLengthInTarget( 0. ), isStudiedProcessActivated( false ),
     needsTrackLengthResampling( false )
 {

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EtaPrime.cc 102905 2017-03-02 09:50:56Z gcosmo $
+// $Id: G4EtaPrime.cc 105720 2017-08-16 12:38:10Z gcosmo $
 //
 // 
 // ----------------------------------------------------------------
@@ -70,7 +70,7 @@ G4EtaPrime* G4EtaPrime::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     0.95778*GeV,     0.197*MeV,         0.0,
+                 name,     0.95778*GeV,     0.196*MeV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         331,

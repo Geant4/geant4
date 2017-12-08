@@ -26,7 +26,7 @@
 /// \file medical/DICOM/src/DicomNestedPhantomParameterisation.cc
 /// \brief Implementation of the DicomNestedPhantomParameterisation class
 //
-// $Id: DicomNestedPhantomParameterisation.cc 101905 2016-12-07 11:34:39Z gunter $
+// $Id: DicomNestedPhantomParameterisation.cc 106196 2017-09-19 04:19:33Z gcosmo $
 //
 
 #include "DicomNestedPhantomParameterisation.hh"
@@ -93,7 +93,12 @@ void DicomNestedPhantomParameterisation::ReadColourData()
     fColours["Default"] = blankAtt;
 
     //----- Read file
+#ifdef DICOM_USE_HEAD
+ G4String colourFile = "DICOM_HEAD/ColourMap.dat";
+#else
     G4String colourFile = "ColourMap.dat";
+#endif
+  
     std::ifstream fin(colourFile.c_str());
     G4int nMate;
     G4String mateName;

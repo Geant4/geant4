@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh 95657 2016-02-17 13:03:36Z gcosmo $
+// $Id: G4VEmProcess.hh 106983 2017-10-31 09:08:30Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -105,11 +105,14 @@ public:
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) override = 0;
 
-  virtual void PrintInfo() = 0;
+  // obsolete
+  virtual void PrintInfo() {};
 
-  virtual void ProcessDescription(std::ostream& outFile) const; // = 0;
+  virtual void ProcessDescription(std::ostream& outFile) const override;
 
 protected:
+
+  virtual void StreamProcessInfo(std::ostream&, G4String) const {};
 
   virtual void InitialiseProcess(const G4ParticleDefinition*) = 0;
 
@@ -223,12 +226,13 @@ public:
   // model will be selected for a given energy interval  
   void AddEmModel(G4int, G4VEmModel*, const G4Region* region = nullptr);
 
-  // return the assigned model
-  G4VEmModel* EmModel(G4int index = 1) const;
-
-  // Assign a model to a process
-  void SetEmModel(G4VEmModel*, G4int index = 1);
+  // Assign a model to a process local list, to enable the list in run time 
+  // the derived process should execute AddEmModel(..) for all such models
+  void SetEmModel(G4VEmModel*, G4int index = 0);
       
+  // return a model from the local list
+  G4VEmModel* EmModel(size_t index = 0) const;
+
   // Define new energy range for the model identified by the name
   void UpdateEmModel(const G4String&, G4double, G4double);
 
@@ -312,7 +316,8 @@ private:
 
   void BuildLambdaTable();
 
-  void PrintInfoProcess(const G4ParticleDefinition&);
+  void StreamInfo(std::ostream& outFile, const G4ParticleDefinition&,
+                  G4String endOfLine=G4String("\n")) const;
 
   void FindLambdaMax();
 
@@ -375,6 +380,7 @@ private:
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
   G4double                     biasFactor;
+  G4double                     massRatio;
 
   G4bool                       integral;
   G4bool                       applyCuts;
@@ -384,6 +390,7 @@ private:
   G4bool                       actMaxKinEnergy;
   G4bool                       actBinning;
   G4bool                       actSpline;
+  G4bool                       isIon;
 
   // ======== Cashed values - may be state dependent ================
 

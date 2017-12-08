@@ -450,7 +450,7 @@ void G4EmModelActivator::ActivatePAI()
       }
       G4VEmModel* em = nullptr;
       G4VEmFluctuationModel* fm = nullptr;
-      if(typesPAI[i] == "PAIphoton") {
+      if(typesPAI[i] == "PAIphoton" || typesPAI[i] == "pai_photon") {
 	G4PAIPhotModel* mod = new G4PAIPhotModel(p,"PAIPhotModel");
 	em = mod;
 	fm = mod;

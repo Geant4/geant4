@@ -1,4 +1,4 @@
-$Id: History 101151 2016-11-08 08:06:16Z gcosmo $
+$Id: History 107718 2017-11-29 08:23:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-11-2017 I. Hrivnacova (expar01-V10-03-00)
+- Fixed Doxygen warnings, formatting
 
 03-11-2016 M. Verderi (expar01-V10-02-03)
 - Use new G4FastSimulationPhysics physics constructor to configure

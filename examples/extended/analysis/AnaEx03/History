@@ -1,4 +1,4 @@
-$Id: History 100672 2016-10-31 10:42:11Z gcosmo $
+$Id: History 105492 2017-07-28 09:00:58Z gcosmo $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27-07-17 I. Hrivnacova (AnaEx03-V10-03-00)
+- Coding guidelines: removed redundant empty lines
 
 26-10-16 I. Hrivnacova (AnaEx03-V10-02-02)
 - Updated main program according to basic examples

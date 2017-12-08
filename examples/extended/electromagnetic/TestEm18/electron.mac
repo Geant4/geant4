@@ -1,4 +1,4 @@
-# $Id: electron.mac 82401 2014-06-18 14:43:54Z gcosmo $
+# $Id: electron.mac 105927 2017-08-29 13:25:29Z gcosmo $
 #
 # macro file for TestEm18.cc
 #
@@ -18,15 +18,18 @@
 /gun/energy 10 MeV
 #
 /analysis/setFileName electron
-# 
-/analysis/h1/set 1 100 0 10 MeV	  #continuous eLoss 
-/analysis/h1/set 2 100 0 10 MeV	  #secondary  eLoss
-/analysis/h1/set 3 100 0 10 MeV	  #total eLoss
-/analysis/h1/set 4 100 0 10 MeV	  #e- energy spectrum
-/analysis/h1/set 5 100 0 10 MeV	  #gamma energy spectrum
-/analysis/h1/set 6 100 0 10 mm	  #step size
 #
-/run/printProgress 100000
+/analysis/h1/set 1 100 0 10 mm	  #step size
+/analysis/h1/set 2 100 0 10 MeV	  #continuous Edeposited 
+/analysis/h1/set 3 100 0 10 MeV	  #Etransfered by ionisation
+/analysis/h1/set 4 100 0 10 MeV	  #Etransfered by brems
+/analysis/h1/set 6 100 0 10 MeV	  #total Etransfered
+/analysis/h1/set 7 100 0 10 MeV	  #total Elost
+/analysis/h1/set 8 100 0 10 MeV	  #energy balance
+/analysis/h1/set 11 100 0 10 MeV  #gamma energy spectrum
+/analysis/h1/set 12 100 0 10 MeV  #e- energy spectrum
 #
-/run/beamOn 1000000
+/run/printProgress 10000
+#
+/run/beamOn 100000
 

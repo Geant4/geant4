@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-11-2017 I.Hrivnacova  (clustering-V10-03-01)
+- Fixed Doxygen warnings
+
+26-07-2017 S.Incerti  (clustering-V10-03-00)
+- applied coding guidelines
+
 30-08-2016 I.Hrivnacova  (clustering-V10-02-03)
 - Removed obsolete EventActionMessenger
 

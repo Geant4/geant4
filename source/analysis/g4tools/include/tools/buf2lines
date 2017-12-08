@@ -1,0 +1,116 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_buf2lines
+#define tools_buf2lines
+
+#include <vector>
+#include <string>
+
+namespace tools {
+
+inline void buf2lines(char* a_buffer,std::vector<std::string>& a_lines) {
+  // WARNING : it is assumed that last char of a_buffer is 0.
+  //           This function seeks '\n' and replaces them with '0'.
+  a_lines.clear();
+  char* pos = a_buffer;
+  char* beg = pos;
+  while(true) {
+    if((*pos=='\r')&&(*(pos+1)=='\n')) {
+      *pos = 0;
+      a_lines.push_back(beg);
+      pos += 2;
+      beg = pos;
+    } else if(*pos=='\n') {
+      *pos = 0;
+      a_lines.push_back(beg);
+      pos++;
+      beg = pos;
+    } else if(*pos==0) {
+      a_lines.push_back(beg);
+      return;
+    } else {
+      pos++;
+    }
+  }
+}
+
+}
+
+#include <string.h> //memcpy
+
+namespace tools {
+
+// used in exlib/hdf5/T_tools,tools :
+/*
+inline bool strings2buf(size_t a_number,const char** a_strings,size_t& a_size,char*& a_buffer) {
+  // For {"aa","bbb"}, it produces "aa0bbb00".
+  // For {""}, it produces "00".
+  // For {}, it produces "0".
+  a_size = 0;
+  for(size_t index=0;index<a_number;index++) a_size += ::strlen(a_strings[index])+1;
+  a_size++;  
+  a_buffer = new char[a_size];
+  if(!a_buffer) {a_size = 0;return false;}
+  char* pos = a_buffer;  
+  size_t array_size;
+  for(size_t index=0;index<a_number;index++) {
+    const char* s = a_strings[index];
+    array_size = ::strlen(s)+1;
+    ::memcpy(pos,s,array_size);
+    pos += array_size;
+  }
+  *pos = '\0';  
+  return true;
+}
+*/
+
+inline bool strings2buf(const std::vector<std::string>& a_strings,size_t& a_size,char*& a_buffer) {
+  // For {"aa","bbb"}, it produces "aa0bbb00".
+  // For {""}, it produces "00".
+  // For {}, it produces "0".
+  size_t number = a_strings.size();
+  a_size = 0;
+  for(size_t index=0;index<number;index++) a_size += a_strings[index].size()+1;
+  a_size++;  
+  a_buffer = new char[a_size];
+  if(!a_buffer) {a_size = 0;return false;}
+  char* pos = a_buffer;  
+  size_t array_size;
+  for(size_t index=0;index<number;index++) {
+    const std::string& s = a_strings[index];
+    array_size = s.size()+1;
+    ::memcpy(pos,s.c_str(),array_size);
+    pos += array_size;
+  }
+  *pos = '\0';  
+  return true;
+}
+
+inline bool buf2strings(size_t a_size,char* a_buffer,std::vector<std::string>& a_strings) {
+  if(a_size<=1) return false;
+  // We assume here a_size>=1
+  // Exa : if ab0cde00, then a_strings should contain two strings ab and cde.
+  a_strings.clear();
+  char* begin = a_buffer;
+  char* pos = a_buffer;
+  size_t number = a_size-1;
+  for(size_t index=0;index<number;index++) {
+    if((*pos)=='\0') {
+      size_t l = pos - begin;
+      std::string s(l,0);
+      char* data = (char*)s.c_str();
+      ::memcpy(data,begin,l);
+      a_strings.push_back(s);
+      begin = pos+1;
+    }
+    pos++;
+  }
+  //pos++;
+  return true;
+}
+
+}
+
+#endif
+

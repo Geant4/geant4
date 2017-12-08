@@ -307,16 +307,21 @@ macro(geant4_library_target)
     set_target_properties(${G4LIBTARGET_NAME}
       PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
-    # Always use '@rpath' in install names of libraries. This is the
-    # most flexible mechanism for
+    # Use '@rpath' in install names of libraries on macOS to provide relocatibility
     set_target_properties(${G4LIBTARGET_NAME}
       PROPERTIES MACOSX_RPATH 1
       )
+    # Add '@loader_path' to INSTALL_RPATH on macOS so that Geant4
+    # libraries self-locate each other whilst remaining relocatable
+    if(APPLE)
+      set_property(TARGET ${G4LIBTARGET_NAME}
+        APPEND PROPERTY INSTALL_RPATH "@loader_path"
+        )
+    endif()
 
     # Install the library - note the use of RUNTIME, LIBRARY and ARCHIVE
     # this helps with later DLL builds.
     # Export to standard depends file for later install
-    # NEEDS WORK TO REMOVE HARDCODED LIB/BIN DIR
     install(TARGETS ${G4LIBTARGET_NAME}
       EXPORT Geant4LibraryDepends
       RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT Runtime

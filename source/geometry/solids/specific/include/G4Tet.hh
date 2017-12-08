@@ -28,7 +28,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tet.hh 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4Tet.hh 106603 2017-10-16 09:17:44Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -51,7 +51,7 @@
 // --------------------------------------------------------------------
 #ifndef G4TET_HH
 #define G4TET_HH
-
+/*
 #if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UTET 1
 #endif
@@ -60,7 +60,7 @@
   #define G4UTet G4Tet
   #include "G4UTet.hh"
 #else
-
+*/
 #include "G4VSolid.hh"
 
 class G4Tet : public G4VSolid
@@ -133,7 +133,7 @@ class G4Tet : public G4VSolid
       // Copy constructor and assignment operator.
 
     const char* CVSHeaderVers()
-      { return "$Id: G4Tet.hh 104316 2017-05-24 13:04:23Z gcosmo $"; }
+      { return "$Id: G4Tet.hh 106603 2017-10-16 09:17:44Z gcosmo $"; }
     const char* CVSFileVers()
       { return CVSVers; }
     void PrintWarnings(G4bool flag)
@@ -168,6 +168,6 @@ class G4Tet : public G4VSolid
     G4double fDx, fDy, fDz, fTol, fMaxSize;
 };
 
-#endif
+//#endif
 
 #endif

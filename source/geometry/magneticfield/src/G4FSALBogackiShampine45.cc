@@ -64,13 +64,16 @@
 #include "G4FSALBogackiShampine45.hh"
 #include "G4LineSection.hh"
 
+G4bool   G4FSALBogackiShampine45::fPreparedConstants= false;
+G4double G4FSALBogackiShampine45::bi[12][7];
+
 //Constructor
 G4FSALBogackiShampine45::G4FSALBogackiShampine45(G4EquationOfMotion *EqRhs,
                                      G4int noIntegrationVariables,
                                      G4bool primary)
-: G4VFSALIntegrationStepper(EqRhs, noIntegrationVariables)
+   : G4VFSALIntegrationStepper(EqRhs, noIntegrationVariables),
+     fLastStepLength( -1.0 ), fAuxStepper( nullptr )
 {
-    
     const G4int numberOfVariables = noIntegrationVariables;
     
     //New Chunk of memory being created for use by the stepper
@@ -87,7 +90,8 @@ G4FSALBogackiShampine45::G4FSALBogackiShampine45(G4EquationOfMotion *EqRhs,
     ak9 = new G4double[numberOfVariables];
     ak10 = new G4double[numberOfVariables];
     ak11 = new G4double[numberOfVariables];
-
+    DyDx = new G4double[numberOfVariables];
+    
     assert ( GetNumberOfStateVariables() >= 8 );
     const G4int numStateVars = std::max(noIntegrationVariables,
                                         GetNumberOfStateVariables() );  
@@ -112,6 +116,8 @@ G4FSALBogackiShampine45::G4FSALBogackiShampine45(G4EquationOfMotion *EqRhs,
         fAuxStepper = new G4FSALBogackiShampine45(EqRhs, numberOfVariables,
                                             !primary);
     }
+    if( ! fPreparedConstants )
+       PrepareConstants();
 }
 
 
@@ -125,11 +131,10 @@ G4FSALBogackiShampine45::~G4FSALBogackiShampine45(){
     delete[] ak6;
     delete[] ak7;
     delete[] ak8;
-    
     delete[] ak9;
     delete[] ak10;
     delete[] ak11;
-    
+    delete[] DyDx;    
     delete[] yTemp;
     delete[] yIn;
     
@@ -210,8 +215,6 @@ void G4FSALBogackiShampine45::Stepper(const G4double yInput[],
     
     
     const G4int numberOfVariables= this->GetNumberOfVariables();
-    
-    G4double *DyDx = new G4double[numberOfVariables];
     
     // The number of variables to be integrated over
     yOut[7] = yTemp[7]  = yIn[7];
@@ -339,93 +342,21 @@ G4double  G4FSALBogackiShampine45::DistChord() const
     return distChord;
 }
 
+// ---------------------------------------------------------------------------------------
 
-
-
-void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
-                             const G4double dydx[],
-                             G4double yOut[],
-                             G4double Step,
-                             G4double tau
-                             ){
-    
-    
-//    G4double *ak9, *ak10, *ak11;
-    
-    G4double
-    a91 = 455.0/6144.0 ,
-    a92 = 0.0 ,
-    a93 = 10256301.0/35409920.0 ,
-    a94 = 2307361.0/17971200.0 ,
-    a95 = -387.0/102400.0 ,
-    a96 = 73.0/5130.0 ,
-    a97 = -7267.0/215040.0 ,
-    a98 = 1.0/32.0 ,
-
-
-    a101 = -837888343715.0/13176988637184.0 ,
-    a102 = 30409415.0/52955362.0 ,
-    a103 = -48321525963.0/759168069632.0 ,
-    a104 = 8530738453321.0/197654829557760.0 ,
-    a105 = 1361640523001.0/1626788720640.0 ,
-    a106 = -13143060689.0/38604458898.0 ,
-    a107 = 18700221969.0/379584034816.0 ,
-    a108 = -5831595.0/847285792.0 ,
-    a109 = -5183640.0/26477681.0 ,
-
-    a111 = 98719073263.0/1551965184000.0 ,
-    a112 = 1307.0/123552.0 ,
-    a113 = 4632066559387.0/70181753241600.0 ,
-    a114 = 7828594302389.0/382182512025600.0 ,
-    a115 = 40763687.0/11070259200.0 ,
-    a116 = 34872732407.0/224610586200.0 ,
-    a117 = -2561897.0/30105600.0 ,
-    a118 = 1.0/10.0 ,
-    a119 = -1.0/10.0 ,
-    a1110 = -1403317093.0/11371610250.0 ;
-    
-//    a91 = 455.e0/6144.e0 ,
-//    a101 = -837888343715.e0/13176988637184.e0 ,
-//    a111 = 98719073263.e0/1551965184000.e0 ,
-//    a92 = 0.e0 ,
-//    a102 = 30409415.e0/52955362.e0 ,
-//    a112 = 1307.e0/123552.e0 ,
-//    a93 = 10256301.e0/35409920.e0 ,
-//    a103 = -48321525963.e0/759168069632.e0 ,
-//    a113 = 4632066559387.e0/70181753241600.e0 ,
-//    a94 = 2307361.e0/17971200.e0 ,
-//    a104 = 8530738453321.e0/197654829557760.e0 ,
-//    a114 = 7828594302389.e0/382182512025600.e0 ,
-//    a95 = -387.e0/102400.e0 ,
-//    a105 = 1361640523001.e0/1626788720640.e0 ,
-//    a115 = 40763687.e0/11070259200.e0 ,
-//    a96 = 73.e0/5130.e0 ,
-//    a106 = -13143060689.e0/38604458898.e0 ,
-//    a116 = 34872732407.e0/224610586200.e0 ,
-//    a97 = -7267.e0/215040.e0 ,
-//    a107 = 18700221969.e0/379584034816.e0 ,
-//    a117 = -2561897.e0/30105600.e0 ,
-//    a98 = 1.e0/32.e0 ,
-//    a108 = -5831595.e0/847285792.e0 ,
-//    a118 = 1.e0/10.e0 ,
-//    a109 = -5183640.e0/26477681.e0 ,
-//    a119 = -1.e0/10.e0 ,
-//    a1110 = -1403317093.e0/11371610250.e0 ;
-    
-    
-
+void G4FSALBogackiShampine45::PrepareConstants()
+{
     //  --------------------------------------------------------
     //  COEFFICIENTS FOR INTERPOLANT  bi  WITH  11  STAGES
     //  --------------------------------------------------------
     
-    G4double bi[13][7], b[13];  //For bi[1][1] to bi[11][6] and b[1] to b[11]
-    
-    for(int i=1; i<= 11; i++)
-        bi[i][1] = 0.0 ;
-    
-    for(int i=1; i<=6; i++)
-        bi[2][i] = 0.0 ;
-    
+    // Initialise all values of G4double bi[12][7] 
+    for(int i=1; i<12; i++){
+       for(int j=1; j<7; j++){
+          bi[i][j] = 0.0 ;
+       }
+    }
+  
     bi[1][6] = -12134338393.0/1050809760.0 ,
     bi[1][5] = -1620741229.0/50038560.0 ,
     bi[1][4] = -2048058893.0/59875200.0 ,
@@ -486,80 +417,50 @@ void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
     bi[11][4] = 117.0 ,
     bi[11][3] = 59.0 ,
     bi[11][2] = 12.0 ;
-        //
-    
-    
-//    for (int i = 1; i <= 11; i++) {
-//        bi[i][1] = 0.e0;
-//    }
-//    for (int i = 1; i <= 6; i++) {
-//        bi[2][i] = 0.e0;
-//    }
-//    bi[1][6] = -12134338393.e0/1050809760.e0;
-//    bi[1][5] = -1620741229.e0/50038560.e0;
-//    bi[1][4] = -2048058893.e0/59875200.e0;
-//    bi[1][3] = -87098480009.e0/5254048800.e0;
-//    bi[1][2] = -11513270273.e0/3502699200.e0;
-//    //C
-//    bi[3][6] = -33197340367.e0/1218433216.e0;
-//    bi[3][5] = -539868024987.e0/6092166080.e0;
-//    bi[3][4] = -39991188681.e0/374902528.e0;
-//    bi[3][3] = -69509738227.e0/1218433216.e0;
-//    bi[3][2] = -29327744613.e0/2436866432.e0;
-//    //C
-//    bi[4][6] = -284800997201.e0/19905339168.e0;
-//    bi[4][5] = -7896875450471.e0/165877826400.e0;
-//    bi[4][4] = -333945812879.e0/5671036800.e0;
-//    bi[4][3] = -16209923456237.e0/497633479200.e0;
-//    bi[4][2] = -2382590741699.e0/331755652800.e0;
-//    //C
-//    bi[5][6] = -540919.e0/741312.e0;
-//    bi[5][5] = -103626067.e0/43243200.e0;
-//    bi[5][4] = -633779.e0/211200.e0;
-//    bi[5][3] = -32406787.e0/18532800.e0;
-//    bi[5][2] = -36591193.e0/86486400.e0;
-//    //C
-//    bi[6][6] = 7157998304.e0/374350977.e0;
-//    bi[6][5] = 30405842464.e0/623918295.e0;
-//    bi[6][4] = 183022264.e0/5332635.e0;
-//    bi[6][3] = -3357024032.e0/1871754885.e0;
-//    bi[6][2] = -611586736.e0/89131185.e0;
-//    //C
-//    bi[7][6] = -138073.e0/9408.e0;
-//    bi[7][5] = -719433.e0/15680.e0;
-//    bi[7][4] = -1620541.e0/31360.e0;
-//    bi[7][3] = -385151.e0/15680.e0;
-//    bi[7][2] = -65403.e0/15680.e0;
-//    //C
-//    bi[8][6] = 1245.e0/64.e0;
-//    bi[8][5] = 3991.e0/64.e0;
-//    bi[8][4] = 4715.e0/64.e0;
-//    bi[8][3] = 2501.e0/64.e0;
-//    bi[8][2] = 149.e0/16.e0;
-//    bi[8][1] = 1.e0;
-//    //C
-//    bi[9][6] = 55.e0/3.e0;
-//    bi[9][5] = 71.e0;
-//    bi[9][4] = 103.e0;
-//    bi[9][3] = 199.e0/3.e0;
-//    bi[9][2] = 16.0e0;
-//    //C
-//    bi[10][6] = -1774004627.e0/75810735.e0;
-//    bi[10][5] = -1774004627.e0/25270245.e0;
-//    bi[10][4] = -26477681.e0/359975.e0;
-//    bi[10][3] = -11411880511.e0/379053675.e0;
-//    bi[10][2] = -423642896.e0/126351225.e0;
-//    //C
-//    bi[11][6] = 35.e0;
-//    bi[11][5] = 105.e0;
-//    bi[11][4] = 117.e0;
-//    bi[11][3] = 59.e0;
-//    bi[11][2] = 12.e0;
+}
 
-    
-    
+// ---------------------------------------------------------------------------------------
+
+void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
+                             const G4double dydx[],
+                             G4double yOut[],
+                             G4double Step,
+                             G4double tau
+                             )
+{
+    const G4double
+    a91 = 455.0/6144.0 ,
+    a92 = 0.0 ,
+    a93 = 10256301.0/35409920.0 ,
+    a94 = 2307361.0/17971200.0 ,
+    a95 = -387.0/102400.0 ,
+    a96 = 73.0/5130.0 ,
+    a97 = -7267.0/215040.0 ,
+    a98 = 1.0/32.0 ,
+
+    a101 = -837888343715.0/13176988637184.0 ,
+    a102 = 30409415.0/52955362.0 ,
+    a103 = -48321525963.0/759168069632.0 ,
+    a104 = 8530738453321.0/197654829557760.0 ,
+    a105 = 1361640523001.0/1626788720640.0 ,
+    a106 = -13143060689.0/38604458898.0 ,
+    a107 = 18700221969.0/379584034816.0 ,
+    a108 = -5831595.0/847285792.0 ,
+    a109 = -5183640.0/26477681.0 ,
+
+    a111 = 98719073263.0/1551965184000.0 ,
+    a112 = 1307.0/123552.0 ,
+    a113 = 4632066559387.0/70181753241600.0 ,
+    a114 = 7828594302389.0/382182512025600.0 ,
+    a115 = 40763687.0/11070259200.0 ,
+    a116 = 34872732407.0/224610586200.0 ,
+    a117 = -2561897.0/30105600.0 ,
+    a118 =  1.0/10.0 ,
+    a119 = -1.0/10.0 ,
+    a1110 = -1403317093.0/11371610250.0 ;
+
     const G4int numberOfVariables= this->GetNumberOfVariables();
-    
+
     //  Saving yInput because yInput and yOut can be aliases for same array
     for(int i=0;i<numberOfVariables;i++)
     {
@@ -568,11 +469,8 @@ void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
     
     // The number of variables to be integrated over
     yOut[7] = yTemp[7]  = yIn[7];
-    
-    
-    
+
     //    calculating extra stages
-    
     for(int i=0; i<numberOfVariables; i++){
         yTemp[i] = yIn[i] + Step*(a91*dydx[i] + a92*ak2[i] + a93*ak3[i] +
                                   a94*ak4[i] + a95*ak5[i] + a96*ak6[i] +
@@ -598,7 +496,6 @@ void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
     
     RightHandSide(yTemp, ak11);
     
-    
     G4double tau0 = tau;
     //    Calculating the polynomials :
     for(int i=1; i<=11; i++){   //Here i is NOT the coordinate no. , it's stage no.
@@ -615,8 +512,7 @@ void G4FSALBogackiShampine45::interpolate( const G4double yInput[],
                                  b[4]*ak4[i] + b[5]*ak5[i] + b[6]*ak6[i] +
                                  b[7]*ak7[i] + b[8]*ak8[i] + b[9]*ak9[i] +
                                  b[10]*ak10[i] + b[11]*ak11[i] );
-    }
-    
+    }  
 }
 
 

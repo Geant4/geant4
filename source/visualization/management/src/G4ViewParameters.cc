@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc 101035 2016-11-04 08:48:17Z gcosmo $
+// $Id: G4ViewParameters.cc 106122 2017-09-13 12:51:53Z gcosmo $
 //
 // 
 // John Allison  19th July 1996
@@ -53,7 +53,7 @@ G4ViewParameters::G4ViewParameters ():
   fCutawayMode (cutawayUnion),
   fCutawayPlanes (),
   fExplodeFactor (1.),
-  fNoOfSides (72),
+  fNoOfSides (24),
   fViewpointDirection (G4Vector3D (0., 0., 1.)),  // On z-axis.
   fUpVector (G4Vector3D (0., 1., 0.)),            // y-axis up.
   fFieldHalfAngle (0.),                           // Orthogonal projection.

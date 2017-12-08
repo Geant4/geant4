@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GammaConversion.cc 84598 2014-10-17 07:39:15Z gcosmo $
+// $Id: G4GammaConversion.cc 107058 2017-11-01 14:54:12Z gcosmo $
 //
 // 
 //------------------ G4GammaConversion physics process -------------------------
@@ -114,16 +114,16 @@ void G4GammaConversion::InitialiseProcess(const G4ParticleDefinition*)
 
     SetMinKinEnergy(emin);
 
-    if(!EmModel(1)) { SetEmModel(new G4BetheHeitlerModel(), 1); }
-    EmModel(1)->SetLowEnergyLimit(emin);
-    EmModel(1)->SetHighEnergyLimit(energyLimit);
-    AddEmModel(1, EmModel(1));
+    if(!EmModel(0)) { SetEmModel(new G4BetheHeitlerModel()); }
+    EmModel(0)->SetLowEnergyLimit(emin);
+    EmModel(0)->SetHighEnergyLimit(energyLimit);
+    AddEmModel(1, EmModel(0));
 
     if(emax > energyLimit) {
-      if(!EmModel(2)) { SetEmModel(new G4PairProductionRelModel(), 2); }
-      EmModel(2)->SetLowEnergyLimit(energyLimit);
-      EmModel(2)->SetHighEnergyLimit(emax);
-      AddEmModel(2, EmModel(2));
+      if(!EmModel(1)) { SetEmModel(new G4PairProductionRelModel()); }
+      EmModel(1)->SetLowEnergyLimit(energyLimit);
+      EmModel(1)->SetHighEnergyLimit(emax);
+      AddEmModel(1, EmModel(1));
     }
   } 
 }
@@ -142,3 +142,11 @@ void G4GammaConversion::PrintInfo()
 {}         
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4GammaConversion::ProcessDescription(std::ostream& out) const
+{
+  out << "<strong>Gamma conversion</strong>";
+  G4VEmProcess::ProcessDescription(out);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

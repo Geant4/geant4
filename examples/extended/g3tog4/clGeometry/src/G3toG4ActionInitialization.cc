@@ -31,9 +31,9 @@
 #include "G3toG4ActionInitialization.hh"
 
 // common package includes
-#include "ExG4EventAction01.hh"
-#include "ExG4RunAction01.hh"
-#include "ExG4PrimaryGeneratorAction01.hh"
+// #include "ExG4EventAction01.hh"
+// #include "ExG4RunAction01.hh"
+#include "GunPrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -49,17 +49,13 @@ G3toG4ActionInitialization::~G3toG4ActionInitialization()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G3toG4ActionInitialization::BuildForMaster() const
-{
-  SetUserAction(new ExG4RunAction01);
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G3toG4ActionInitialization::Build() const
 {
-  SetUserAction(new ExG4PrimaryGeneratorAction01);
-  SetUserAction(new ExG4RunAction01);
-  SetUserAction(new ExG4EventAction01);
+  SetUserAction(new GunPrimaryGeneratorAction);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

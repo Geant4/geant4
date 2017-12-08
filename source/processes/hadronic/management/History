@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 September 2017  Krzysztof Genser (hadr-man-V10-03-06)
+---------------------------------------------------
+- G4HadronicProcessType.hh added fMuAtomicCapture
+
+31 August 2017  Dennis Wright  (hadr-man-V10-03-05)
+---------------------------------------------------
+- G4HadronicProcessStore.cc: remove circular dependence on G4RadioactiveDecay
+
+17 July 2017  Dennis Wright  (hadr-man-V10-03-04)
+-------------------------------------------------
+- G4HadronicProcessStore::DumpHtml(): add PrintHtml for generic ion
+- G4HadronicProcessStore::PrintHtml(): add loop to print descriptions
+   of "extra" processes, including radioactive decay.
+- G4HadronicProcessStore::Clean(): add exception to prevent deletion 
+   of G4RadioactiveDecay - already deleted somwhere else. 
+
 11 May 2017 V. Ivanchenko (hadr-man-V10-03-03)
 10 May 2017 V. Ivanchenko (hadr-man-V10-03-00)
 ---------------------------------------------------

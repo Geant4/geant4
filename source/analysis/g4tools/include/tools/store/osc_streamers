@@ -385,7 +385,9 @@ inline bool visitHistogram(const HIST& a_hist,iobj_const_visitor& a_visitor){
   if(!a_visitor.visit("fDimension",(int)a_hist.dimension())) return false;
   if(!a_visitor.visit("fBinNumber",(int)a_hist.get_bins())) return false;
 
-  if(!a_visitor.visit("fBinEntries",convert<unsigned int,int>(a_hist.bins_entries()))) return false;
+  std::vector<int> bins_entries;
+  convert<unsigned int,int>(a_hist.bins_entries(),bins_entries);
+  if(!a_visitor.visit("fBinEntries",bins_entries)) return false;
 
   if(!a_visitor.visit("fBinSw",a_hist.bins_sum_w())) return false;
   if(!a_visitor.visit("fBinSw2",a_hist.bins_sum_w2())) return false;
@@ -426,7 +428,7 @@ inline bool readHistogram(hd_data& aData,iobj_visitor& a_visitor){
 
  {std::vector<int> vec;
   if(!a_visitor.visit(vec)) return false;
-  aData.m_bin_entries = convert<int,unsigned int>(vec);}
+  convert<int,unsigned int>(vec,aData.m_bin_entries);}
 
   if(!a_visitor.visit(aData.m_bin_Sw)) return false;
   if(!a_visitor.visit(aData.m_bin_Sw2)) return false;
@@ -629,7 +631,9 @@ inline bool visitProfile(const PROF& a_prof,iobj_const_visitor& a_visitor){
   if(!a_visitor.visit("fDimension",(int)a_prof.dimension())) return false;
   if(!a_visitor.visit("fBinNumber",(int)a_prof.get_bins())) return false;
 
-  if(!a_visitor.visit("fBinEntries",convert<unsigned int,int>(a_prof.bins_entries()))) return false;
+  std::vector<int> bins_entries;
+  convert<unsigned int,int>(a_prof.bins_entries(),bins_entries);
+  if(!a_visitor.visit("fBinEntries",bins_entries)) return false;
 
   if(!a_visitor.visit("fBinSw",a_prof.bins_sum_w())) return false;
   if(!a_visitor.visit("fBinSw2",a_prof.bins_sum_w2())) return false;
@@ -719,7 +723,7 @@ inline bool readProfile(pd_data& aData,iobj_visitor& a_visitor){
 
  {std::vector<int> vec;
   if(!a_visitor.visit(vec)) return false;
-  aData.m_bin_entries = convert<int,unsigned int>(vec);}
+  convert<int,unsigned int>(vec,aData.m_bin_entries);}
 
   if(!a_visitor.visit(aData.m_bin_Sw)) return false;
   if(!a_visitor.visit(aData.m_bin_Sw2)) return false;
