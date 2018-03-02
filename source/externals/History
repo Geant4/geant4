@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-December-2017 - G.Cosmo (externals-V10-03-09)
+- CLHEP: in MixMaxRng::modadd(), fixed guard for assembly code to protect
+  builds on 32-bit systems.
+
 15-November-2017 - G.Cosmo (externals-V10-03-08)
 - CLHEP: fixed print_state() method to proper C++ in MixMaxRng.
 

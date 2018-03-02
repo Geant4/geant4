@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 ... open Root analysis file : pol01.root - done
 /run/verbose 2
@@ -146,39 +148,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.08s Real=0.09s Sys=0s
+  User=0.17s Real=0.18s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
  Process calls frequency --->
-	Transportation = 31214
-	pol-compt = 280
-	pol-eBrem = 346
-	msc = 1660
-	pol-phot = 169
-	pol-eIoni = 611
-	pol-conv = 218
-	pol-annihil = 76
+	Transportation = 31196
+	pol-compt = 273
+	pol-eBrem = 338
+	msc = 1653
+	pol-phot = 168
+	pol-eIoni = 598
+	pol-conv = 216
+	pol-annihil = 75
  Gamma: 
-Mean Number per Event :1.0104
-Mean Energy :9.5562 MeV +- 1.9536 MeV
-Mean Polarization :-0.96183 +- 0.19896
+Mean Number per Event :1.0097
+Mean Energy :9.5662 MeV +- 1.9314 MeV
+Mean Polarization :-0.9629 +- 0.19652
  Electron: 
-Mean Number per Event :0.0359
-Mean Energy :5.1273 MeV +- 2.6463 MeV
-Mean Polarization :-0.70913 +- 0.30364
+Mean Number per Event :0.0358
+Mean Energy :5.1328 MeV +- 2.632 MeV
+Mean Polarization :-0.70797 +- 0.30113
  Positron: 
-Mean Number per Event :0.0144
-Mean Energy :4.5515 MeV +- 1.935 MeV
-Mean Polarization :-0.64914 +- 0.2977
+Mean Number per Event :0.0143
+Mean Energy :4.479 MeV +- 1.9568 MeV
+Mean Polarization :-0.63459 +- 0.30059
 ... write Root file : pol01.root - done
 ... close Root file : pol01.root - done
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.824281 0.649202 0.0446345 0.894948 0.606357 0.489642 0.510011 0.0576167 0.590362 0.755708 0.937923 0.369891 0.210332 0.159548 0.157692 0.182391 0.23594 0.0959533 0.785225 0.648076 0.441417 0.960755 0.425169 0.794151 
- i_lag = 1, j_lag = 11
- carry = 0, count24 = 0
+ float_seed_table[] = 0.131495 0.121923 0.0415006 0.228428 0.871279 0.640975 0.588515 0.949477 0.0525096 0.853258 0.245586 0.949002 0.535031 0.906211 0.380819 0.24449 0.609894 0.231424 0.589433 0.716564 0.143253 0.916324 0.905474 0.487329 
+ i_lag = 23, j_lag = 9
+ carry = 0, count24 = 6
  luxury = 3 nskip = 199
 ----------------------------------------
 #

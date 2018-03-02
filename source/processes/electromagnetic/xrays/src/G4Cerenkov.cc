@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc 106116 2017-09-13 10:19:06Z gcosmo $
+// $Id: G4Cerenkov.cc 108508 2018-02-15 15:54:35Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Cerenkov Radiation Class Implementation
@@ -679,3 +679,15 @@ G4double
 
   return NumPhotons;		
 }
+
+void G4Cerenkov::DumpPhysicsTable() const
+{
+  G4int PhysicsTableSize = thePhysicsTable->entries();
+  G4PhysicsOrderedFreeVector *v;
+
+  for (G4int i = 0 ; i < PhysicsTableSize ; i++ ) {
+      v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
+      v->DumpValues();
+  }
+}
+

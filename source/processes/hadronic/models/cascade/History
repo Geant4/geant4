@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 February 2018  Alberto Ribon (hadr-casc-V10-03-07)
+-----------------------------------------------------
+-  G4NucleiModel : replaced obsolete std::bind2nd with std::bind .
+
 27 November 2017  Dennis Wright (hadr-casc-V10-03-06)
 -----------------------------------------------------
 - G4CascadeInterface::createBullet, G4CascadeInterface::ApplyYourself: 

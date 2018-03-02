@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 ##### Hadr00 started in sequential mode #####
 G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
@@ -58,6 +60,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /process/em/workerVerbose 0
+/run/physicsModified
 /gun/particle proton
 /gun/energy 20. GeV
 /testhadr/verbose 1
@@ -809,7 +812,7 @@ EventAction: Event # 0 started
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.03s Real=0.03s Sys=0.01s
+  User=0.05s Real=0.1s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al

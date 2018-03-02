@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -320,7 +322,7 @@ nb event 175000
  Run terminated.
 Run Summary
   Run Aborted after 175178 events processed.
-  User=80.12s Real=80.31s Sys=0.05s
+  User=145.36s Real=145.81s Sys=0.12s
 Results of reverse/adjoint simulation!
 normalised edep [MeV] = 0.00167385
 error[MeV] = 1.67379e-05

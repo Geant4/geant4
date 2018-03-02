@@ -93,7 +93,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   splCmd->SetGuidance("Enable/disable usage spline for Physics Vectors");
   splCmd->SetParameterName("spl",true);
   splCmd->SetDefaultValue(false);
-  splCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  splCmd->AvailableForStates(G4State_PreInit);
 
   rsCmd = new G4UIcmdWithABool("/process/eLoss/useCutAsFinalRange",this);
   rsCmd->SetGuidance("Enable/disable use of cut in range as a final range");
@@ -168,7 +168,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   catCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   delCmd = new G4UIcmdWithABool("/process/eLoss/UseAngularGenerator",this);
-  delCmd->SetGuidance("Enable usage of angular generator");
+  delCmd->SetGuidance("Enable usage of angular generator for ionisation");
   delCmd->SetParameterName("del",true);
   delCmd->SetDefaultValue(false);
   delCmd->AvailableForStates(G4State_PreInit);
@@ -224,19 +224,19 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
   minEnCmd->SetParameterName("emin",true);
   minEnCmd->SetUnitCategory("Energy");
-  minEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  minEnCmd->AvailableForStates(G4State_PreInit);
 
   maxEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergy",this);
   maxEnCmd->SetGuidance("Set the max kinetic energy for EM tables");
   maxEnCmd->SetParameterName("emax",true);
   maxEnCmd->SetUnitCategory("Energy");
-  maxEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  maxEnCmd->AvailableForStates(G4State_PreInit);
 
   cenCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/maxKinEnergyCSDA",this);
   cenCmd->SetGuidance("Set the max kinetic energy for CSDA table");
   cenCmd->SetParameterName("emaxCSDA",true);
   cenCmd->SetUnitCategory("Energy");
-  cenCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  cenCmd->AvailableForStates(G4State_PreInit);
 
   lowEnCmd = new G4UIcmdWithADoubleAndUnit("/process/em/lowestElectronEnergy",this);
   lowEnCmd->SetGuidance("Set the lowest kinetic energy for e+-");
@@ -277,7 +277,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   mscfCmd->SetParameterName("Fact",true);
   mscfCmd->SetRange("Fact>0");
   mscfCmd->SetDefaultValue(1.);
-  mscfCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  mscfCmd->AvailableForStates(G4State_PreInit);
 
   angCmd = new G4UIcmdWithADoubleAndUnit("/process/msc/ThetaLimit",this);
   angCmd->SetGuidance("Set the limit on the polar angle for msc and single scattering");
@@ -319,20 +319,20 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for EM tables");
   dedxCmd->SetParameterName("binsDEDX",true);
-  dedxCmd->SetDefaultValue(77);
-  dedxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  dedxCmd->SetDefaultValue(84);
+  dedxCmd->AvailableForStates(G4State_PreInit);
 
   lamCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsLambda",this);
   lamCmd->SetGuidance("Set number of bins for EM tables");
   lamCmd->SetParameterName("binsL",true);
-  lamCmd->SetDefaultValue(77);
-  lamCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  lamCmd->SetDefaultValue(84);
+  lamCmd->AvailableForStates(G4State_PreInit);
 
   amCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsPerDecade",this);
   amCmd->SetGuidance("Set number of bins per decade for EM tables");
   amCmd->SetParameterName("bins",true);
   amCmd->SetDefaultValue(7);
-  amCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  amCmd->AvailableForStates(G4State_PreInit);
 
   verCmd = new G4UIcmdWithAnInteger("/process/eLoss/verbose",this);
   verCmd->SetGuidance("Set verbose level for EM physics");
@@ -560,7 +560,7 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   nffCmd->SetGuidance("Define typy of nuclear form-factor");
   nffCmd->SetParameterName("NucFF",true);
   nffCmd->SetCandidates("None Exponential Gaussian Flat");
-  nffCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  nffCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -659,7 +659,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == splCmd) {
     theParameters->SetSpline(splCmd->GetNewBoolValue(newValue));
-    physicsModified = true;
   } else if (command == rsCmd) {
     theParameters->SetUseCutAsFinalRange(rsCmd->GetNewBoolValue(newValue));
     physicsModified = true;
@@ -717,10 +716,8 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == maxEnCmd) { 
     theParameters->SetMaxEnergy(maxEnCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == cenCmd) { 
     theParameters->SetMaxEnergyForCSDARange(cenCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -744,7 +741,6 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == mscfCmd) {
     theParameters->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == angCmd) { 
     theParameters->SetMscThetaLimit(angCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -765,19 +761,18 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
 
   } else if (command == dedxCmd) { 
     theParameters->SetNumberOfBins(dedxCmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == lamCmd) { 
     theParameters->SetNumberOfBins(lamCmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == amCmd) { 
     theParameters->SetNumberOfBinsPerDecade(amCmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == verCmd) {
     theParameters->SetVerbose(verCmd->GetNewIntValue(newValue));
   } else if (command == ver1Cmd) {
     theParameters->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
+    physicsModified = true;
   } else if (command == ver2Cmd) {
     theParameters->SetWorkerVerbose(ver2Cmd->GetNewIntValue(newValue));
+    physicsModified = true;
 
   } else if (command == mscCmd || command == msc1Cmd) {
     G4MscStepLimitType msctype = fUseSafety;
@@ -790,8 +785,9 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     } else if(newValue == "UseSafetyPlus") {
       msctype = fUseSafetyPlus; 
     } else {
-      G4cout << "### G4EmParametersMessenger WARNING: StepLimit type <" 
-             << newValue << "> unknown!" << G4endl;
+      G4ExceptionDescription ed;
+      ed << " StepLimit type <" << newValue << "> unknown!"; 
+      G4Exception("G4EmParametersMessenger", "em0044", JustWarning, ed);
       return;
     }
     if (command == mscCmd) {
@@ -886,8 +882,13 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     if(newValue == "Exponential") { x = fExponentialNF; }
     else if(newValue == "Gaussian") { x = fGaussianNF; }
     else if(newValue == "Flat") { x = fFlatNF; }
+    else if(newValue != "None") { 
+      G4ExceptionDescription ed;
+      ed << " NuclearFormFactor type <" << newValue << "> unknown!"; 
+      G4Exception("G4EmParametersMessenger", "em0044", JustWarning, ed);
+      return; 
+    }
     theParameters->SetNuclearFormfactorType(x);
-    physicsModified = true;
   }
   if(physicsModified) {
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");

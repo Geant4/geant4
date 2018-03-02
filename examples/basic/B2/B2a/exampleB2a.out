@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
@@ -14174,9 +14176,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.136  -0.0047 -2.42e+03    0.0357        0        0         0      Target initStep
-    1    0.136 -0.00473 -2.42e+03         0   0.0357  0.00517   0.00517      Target eIoni
-
-****************************************************************************
+    1    0.136 -0.00473 -2.42e+03      
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: B5EventAction.cc 103553 2017-04-18 09:00:54Z gcosmo $
+// $Id: B5EventAction.cc 108624 2018-02-26 11:48:31Z gcosmo $
 //
 /// \file B5EventAction.cc
 /// \brief Implementation of the B5EventAction class
@@ -201,7 +201,8 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
       analysisManager->FillNtupleDColumn(iDet + 4, hit->GetTime());
     }
   }
-    
+  analysisManager->AddNtupleRow();
+
   //
   // Print diagnostics
   // 

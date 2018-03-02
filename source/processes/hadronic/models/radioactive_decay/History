@@ -14,6 +14,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 December 2017  Dennis Wright  radioactive_decay-V10-03-22
+------------------------------------------------------------
+- re-tag 
+ 
+12 December 2017  Dennis Wright  radioactive_decay-V10-03-21
+------------------------------------------------------------
+- G4RadioactiveDecay.hh, .cc: add check that environment variable
+   G4RADIOACTIVEDATA is pointing to correct directory.  Moved check from
+   G4RadioactiveDecay::LoadDecayTable() to ctor.  Fixes bug #1942.
+
+- G4RadioactiveDecayBase.hh, .cc: same change as above  
+
+
 15 November 2017  Dennis Wright  radioactive_decay-V10-03-20
 ------------------------------------------------------------
 - G4RadioactiveDecay::DecayIt in the variance reduction branch:

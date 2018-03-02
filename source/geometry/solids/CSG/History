@@ -1,4 +1,4 @@
-$Id: History 107555 2017-11-22 15:26:59Z gcosmo $
+$Id: History 108482 2018-02-15 14:34:23Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 5, 2018 G.Cosmo geom-csg-V10-03-39
+- Correction in G4UPara::ComputeDimensions() to add explicit cast for the
+  solid type to parameterise.
+
+December 11, 2017 E.Tcherniaev
+- Fixed typo in G4Trd::GetPointOnSurface() for the area settings.
 
 November 22, 2017 G.Cosmo geom-csg-V10-03-38
 - Fix in SurfaceNormal() for G4Trap, G4Para, G4Trd to assure explicit

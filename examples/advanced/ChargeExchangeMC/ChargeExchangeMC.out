@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
@@ -1482,7 +1484,7 @@ Event 11650
 Run terminated.
 Run Summary
   Number of events processed : 11651, effectively: 10
-  User=8.1s Real=8.12s Sys=0s
+  User=12.5s Real=12.52s Sys=0s
 
  --- Setup acceptances (range | real (trg / mon) | rec (trg / mon / all)):
         1 [ 1.0000,  0.8000)  | 0.00112108 ( 1 / 892 )  | 0.00224215 ( 2 / 892 / 1090 )

@@ -79,7 +79,7 @@ void G4MTcoutDestination::SetDefaultOutput( G4bool addmasterDestination ,
   const auto filter_out = [this](G4String&)->G4bool {
     if (this->ignoreCout ||
         ( this->ignoreInit &&
-          this->stateMgr->GetCurrentState() == G4State_Idle ) )
+          this->stateMgr->GetCurrentState() == G4State_Init ) )
       { return false; }
     return true;
   };

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PairProductionRelModel.cc 106628 2017-10-17 06:25:38Z gcosmo $
+// $Id: G4PairProductionRelModel.cc 108504 2018-02-15 15:46:37Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -350,6 +350,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
   // select randomly one element constituing the material
   const G4Element* anElement =
     SelectRandomAtom(aMaterial, theGamma, GammaEnergy);
+  SetCurrentElement(anElement->GetZasInt());
 
   CLHEP::HepRandomEngine* rndmEngine = G4Random::getTheEngine();
 
@@ -388,7 +389,7 @@ G4PairProductionRelModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fve
 
     do {
       if ( NormF1/(NormF1+NormF2) > rndmEngine->flat() ) {
-	epsil = 0.5 - epsilrange*g4calc->Z13(rndmEngine->flat());
+	epsil = 0.5 - epsilrange*g4calc->A13(rndmEngine->flat());
 	screenvar = screenfac/(epsil*(1-epsil));
 	if (fLPMflag && GammaEnergy > Eghigh) {
 	  CalcLPMFunctions(GammaEnergy,GammaEnergy*epsil);

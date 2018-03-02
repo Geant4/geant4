@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 December 2017 Gabriele Cosmo (hadr-deex-V10-03-52)
+- Fixed self-consistency in G4ChatterjeeCrossSection header (missing #include).
+  Fixed #ifdef guard in G4StatMFMacroBiNucleon header.
+  Thanks to Raphael Isemann for reporting these.
+
 03 November 2017 Vladimir Ivanchenko (hadr-deex-V10-03-51)
 - G4DeexPrecoParameters - fixed printout of parameters
 

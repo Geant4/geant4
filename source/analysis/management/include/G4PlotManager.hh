@@ -34,13 +34,12 @@
 
 #include "G4AnalysisManagerState.hh"
 #include "G4PlotParameters.hh"
+#include "G4HnInformation.hh"
 
 #include <tools/viewplot>
 
 #include <vector>
 #include <memory>
-
-class G4HnInformation;
 
 class G4PlotManager
 {

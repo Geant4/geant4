@@ -142,7 +142,7 @@
 //		Check zone argument to inverseMFP() to ensure within range.
 // 20130611  M. Kelsey -- Undo "spath<=path" change (20130511), replace with
 //		explicit check on spath==0.
-// 20130619  A. Ribon -- Fixed reproducibility problem in the method
+// 20130619  A. Ribon  -- Fixed reproducibility problem in the method
 //              generateParticleFate
 // 20130627  M. Kelsey -- Check "path==0.", rather than spath.
 // 20130628  M. Kelsey -- Print deuteron type code, rather than array index,
@@ -158,6 +158,7 @@
 // 20141001  M. Kelsey -- Change sign of "dv" in boundaryTransition
 // 20150608  M. Kelsey -- Label all while loops as terminating.
 // 20150622  M. Kelsey -- Use G4AutoDelete for _TLS_ buffers.
+// 20180227  A. Ribon  -- Replaced obsolete std::bind2nd with std::bind
 
 #include "G4NucleiModel.hh"
 #include "G4AutoDelete.hh"
@@ -1264,7 +1265,7 @@ void G4NucleiModel::choosePointAlongTraj(G4CascadParticle& cparticle) {
 
   // Normalize CDF to unit integral
   std::transform(wtlen.begin(), wtlen.end(), wtlen.begin(),
-		 std::bind2nd(std::divides<G4double>(), wtlen.back()));
+		 std::bind(std::divides<G4double>(), std::placeholders::_1, wtlen.back()));
   
   if (verboseLevel > 3) {
     G4cout << " weights";

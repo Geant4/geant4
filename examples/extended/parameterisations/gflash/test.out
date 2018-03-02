@@ -8,12 +8,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 +-------------------------------------------------------+
 |        Constructing sequential run manager            |
@@ -829,9 +831,9 @@ Max 2J for sampling of angular correlations         10
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
-Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal Real Elapsed Time is: 0.02
+Internal System Elapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   12852 hits are stored in ExGflashHitsCollection 
@@ -859,7 +861,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
   11902 hits are stored in ExGflashHitsCollection 
@@ -899,7 +901,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.01
+Internal Real Elapsed Time is: 0
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -927,7 +929,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -967,10 +969,10 @@ Internal GetUserElapsed Time: 0.01
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.01
+Internal Real Elapsed Time /event is: 0.0111111
 
 ******************************************
-Total Real Elapsed Time is: 1.24
-Total System Elapsed Time: 0.02
-Total GetUserElapsed Time: 1.1
+Total Real Elapsed Time is: 1.43
+Total System Elapsed Time: 0.04
+Total GetUserElapsed Time: 1.33
 ******************************************

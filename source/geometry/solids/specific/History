@@ -1,4 +1,4 @@
-$Id: History 107558 2017-11-22 15:29:33Z gcosmo $
+$Id: History 108484 2018-02-15 14:38:03Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-December-2017  E.Tcherniaev     (geom-specific-V10-03-26)
+- Removed redundant data initialistion in G4ExtrudedSolid constructors. 
+
+11-December-2017  E.Tcherniaev
+- Added missing initialisation of two data-members in copy-ctor and
+  assignment operator of G4ExtrudedSolid. Addressing problem report #2016.
 
 22-November-2017  G.Cosmo         (geom-specific-V10-03-25)
 - Fix in SurfaceNormal() for G4ExtrudedSolid to assure explicit

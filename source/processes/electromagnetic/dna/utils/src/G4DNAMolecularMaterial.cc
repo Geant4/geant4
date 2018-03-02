@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAMolecularMaterial.cc 103042 2017-03-10 11:50:07Z gcosmo $
+// $Id: G4DNAMolecularMaterial.cc 108498 2018-02-15 15:33:07Z gcosmo $
 //
 // Author: Mathieu Karamitros
 //
@@ -376,14 +376,14 @@ GetDensityTableFor(const G4Material* lookForMaterial) const
                   exceptionDescription);
     }
 
-    if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Idle){
+    if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Init){
       const_cast<G4DNAMolecularMaterial*>(this)->Initialize();
     }
     else{
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
           << "The geant4 application is at the wrong state. State must be: "
-          "G4State_Idle."
+          "G4State_Init."
           << G4endl;
       G4Exception("G4DNAMolecularMaterial::GetDensityTableFor",
                   "G4DNAMolecularMaterial_WRONG_STATE_APPLICATION",
@@ -450,14 +450,14 @@ const std::vector<double>* G4DNAMolecularMaterial::GetNumMolPerVolTableFor(
                   exceptionDescription);
     }
 
-    if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Idle){
+    if (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Init){
       const_cast<G4DNAMolecularMaterial*>(this)->Initialize();
     }
     else{
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
           << "The geant4 application is at the wrong state. State must be : "
-          "G4State_Idle."
+          "G4State_Init."
           << G4endl;
       G4Exception("G4DNAMolecularMaterial::GetNumMolPerVolTableFor",
                   "G4DNAMolecularMaterial_WRONG_STATE_APPLICATION",

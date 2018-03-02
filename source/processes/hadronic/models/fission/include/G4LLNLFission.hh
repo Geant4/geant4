@@ -55,8 +55,10 @@
 // $Id: G4LLNLFission.hh 67966 2013-03-13 09:38:38Z gcosmo $
 //
 
+#include "G4Types.hh"
+
 //
-// This class is a copy of Fission.hh, made for use with Geant4.
+// This file is a copy of Fission.hh, made for use with Geant4.
 //
 
   extern void genspfissevt_(G4int *isotope, G4double *time);

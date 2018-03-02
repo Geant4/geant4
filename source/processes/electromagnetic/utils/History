@@ -1,4 +1,4 @@
-$Id: History 107364 2017-11-09 10:53:25Z gcosmo $
+$Id: History 108506 2018-02-15 15:50:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14 December 17: V.Ivant (emutils-V10-03-32)
+- G4EmParametersMessenger - use G4Exception for warnings instead 
+    of G4cout, review G4State for UI commands and make a signal to
+    the RunManager about modification of physics if a command
+    is issued in Idle state
+- G4EmParameters, G4VEmProcess, G4VEnergyLossProcess - define the 
+    same default values for few internal members (this is a 
+    cleanup, which does not affect results)
+
+13 December 17: V.Ivant
+- G4EmParameters, G4EmParametersMessenger - fixed printout format
+    and add lock and protection in commands defining physics
+    pre region
 
 08 November 17: D.Sawkey (emutils-V10-03-31)
  - G4LossTableManager, G4VEmProcess, G4VEnergyLossProcess,

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4DNAOneStepThermalizationModel.hh 101354 2016-11-15 08:27:51Z gcosmo $
+// $Id: G4DNAOneStepThermalizationModel.hh 108498 2018-02-15 15:33:07Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -44,8 +44,8 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4DNAOneStepThermalizationModel_
-#define G4DNAOneStepThermalizationModel_
+#ifndef G4DNAOneStepThermalizationModel_hh
+#define G4DNAOneStepThermalizationModel_hh
 
 #include "G4VEmModel.hh"
 

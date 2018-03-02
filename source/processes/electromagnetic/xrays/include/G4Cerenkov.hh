@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.hh 98002 2016-06-30 13:03:36Z gcosmo $
+// $Id: G4Cerenkov.hh 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -263,18 +263,6 @@ inline
 G4int G4Cerenkov::GetNumPhotons() const
 {
         return fNumPhotons;
-}
-
-inline
-void G4Cerenkov::DumpPhysicsTable() const
-{
-  G4int PhysicsTableSize = thePhysicsTable->entries();
-  G4PhysicsOrderedFreeVector *v;
-
-  for (G4int i = 0 ; i < PhysicsTableSize ; i++ ) {
-      v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
-      v->DumpValues();
-  }
 }
 
 inline

@@ -1,15 +1,17 @@
-Seed used : 1512639121
+Seed used : 1519841847
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 G4SDManager::AddNewCollection : the collection <mfDetector/PrimaryKiller> is registered at 1
 G4SDManager::AddNewCollection : the collection <mfDetector/Species> is registered at 2
@@ -260,12 +262,14 @@ Start event 5
 Start event 6
 Start event 7
 Start event 8
+ * PrimaryKiller: aborts event 8, energy loss is too large. 
+ * Energy loss by primary is: 2.768 keV. Event is aborted if the Eloss is > 2 keV
 Start event 9
 
 --------------------End of Global Run-----------------------
-  The run has 10 events 
-Number of events recorded by the species scorer = 10
- Total energy deposited in the world volume : 11985 eV
+  The run has 9 events 
+Number of events recorded by the species scorer = 9
+ Total energy deposited in the world volume : 9719.9 eV
  ------------------------------------------------------------
 
 Graphics systems deleted.

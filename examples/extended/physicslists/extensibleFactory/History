@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18/1/18  G.Folger       (extFactory-V10-03-01)
+-  Re-tag using corrected procedure.
+
+18/1/18  G.Folger
+-  Re-tag using procedure to remove svn:externals from tag.
+
+15/1/18  G.Folger
+- Correct G4INSTALL in GNUmakefile.
      
 06/11/17 I. Hrivnacova  (extFactory-V10-03-00)
 - The first tag

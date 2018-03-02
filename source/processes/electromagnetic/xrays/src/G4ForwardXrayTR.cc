@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4ForwardXrayTR.cc 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // G4ForwardXrayTR class -- implementation file
 //
@@ -800,16 +800,36 @@ G4ForwardXrayTR::GetEnergyTR(G4int iMat, G4int jMat, G4int iTkin) const
 // theta angle relative to particle direction
 //
 
-
 G4double
 G4ForwardXrayTR::GetThetaTR(G4int, G4int, G4int) const
 {
-  G4double theta = 0.0;
-
-  return theta;
+  return 0.0;
 }
 
+G4int G4ForwardXrayTR::GetSympsonNumber()
+{ 
+  return fSympsonNumber;
+}
 
+G4int G4ForwardXrayTR::GetBinTR()
+{ 
+  return fBinTR;
+}
+
+G4double G4ForwardXrayTR::GetMinProtonTkin()
+{ 
+  return fMinProtonTkin; 
+}
+
+G4double G4ForwardXrayTR::GetMaxProtonTkin()
+{ 
+  return fMaxProtonTkin; 
+}
+
+G4int G4ForwardXrayTR::GetTotBin()
+{ 
+  return fTotBin;
+}
 
 // end of G4ForwardXrayTR implementation file
 //

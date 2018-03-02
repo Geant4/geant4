@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Reference Physics List QBBC 
 G4HEPEvtInterface - pythia_event.data is open.
@@ -820,12 +822,12 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   7 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k expHall_L
+     100.00         0.01         0.00            2k expHall_L
        0.00         0.00         0.00            0k trackerT_L
        0.00         0.00         0.00            1k caloT_L
        0.00         0.00         0.00            3k caloROlogical
@@ -835,7 +837,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       38.29          2k         1       48         48         0.00    caloROlogical
-      33.30          2k         6       33         48         0.00    expHall_L
+      33.30          2k         6       33         48         0.01    expHall_L
       16.54          1k         1       20         20         0.00    caloROphiDivisionLogical
        8.32          0k         1        9         12         0.00    caloT_L
        3.55          0k         1        3          5         0.00    trackerT_L
@@ -1444,7 +1446,7 @@ G4HEPEvtInterface - reading 755 HEPEvt particles from pythia_event.data.
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.47s Real=13.99s Sys=0.05s
+  User=18.43s Real=19.33s Sys=0.09s
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

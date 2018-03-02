@@ -705,7 +705,7 @@ myuint_t MixMaxRng::apply_bigskip( myuint_t* Vout, myuint_t* Vin, myID_t cluster
 
 myuint_t MixMaxRng::modadd(myuint_t foo, myuint_t bar)
 {
-#if (defined(__x86_64__) || defined(__i386__)) &&  defined(__GNUC__) && (!defined(__ICC))
+#if defined(__x86_64__) && defined(__GNUC__) && (!defined(__ICC))
    //#warning Using assembler routine in modadd
    myuint_t out;
    /* Assembler trick suggested by Andrzej Görlich     */

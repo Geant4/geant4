@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TrajectoryDrawerUtils.cc 83403 2014-08-21 15:07:30Z gcosmo $
+// $Id: G4TrajectoryDrawerUtils.cc 108542 2018-02-16 09:35:32Z gcosmo $
 //
 // Jane Tinslay, John Allison, Joseph Perl November 2005
 //
@@ -116,6 +116,7 @@ namespace G4TrajectoryDrawerUtils {
 		G4cout <<
   "*************************************************************************"
   "\n*  WARNING: G4TrajectoryDrawerUtils::GetPointsAndTimes: times not found."
+  "\n You need to specify \"/vis/scene/add/trajectories rich\""
   "\n*************************************************************************"
 		       << G4endl;
 		warnedTimesNotFound = true;

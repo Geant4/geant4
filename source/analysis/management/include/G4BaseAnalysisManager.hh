@@ -37,7 +37,7 @@
 #include "G4BinScheme.hh"
 #include "globals.hh"
 
-class G4AnalysisManagerState;
+#include "G4AnalysisManagerState.hh"
 
 class G4BaseAnalysisManager
 {

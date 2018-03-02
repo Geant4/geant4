@@ -1,4 +1,4 @@
-$Id: History 105924 2017-08-29 12:28:09Z gcosmo $
+$Id: History 108676 2018-02-27 07:38:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+February 26th, 2018  Alexander Howard (procbiasing-V10-03-04)
+- G4ImportanceConfigurator: cleaned up unnecessary G4cout and removed
+  copy of G4String - thanks to Gabriele
+
+February 21st, 2018  Alexander Howard
+- G4ImportanceConfigurator: put back clear() in the destructor
+
+February 21st, 2018  Alexander Howard
+- G4ImportanceConfigurator: introduced AutoLock (G4Mutex) to protect
+  instantiation of the biasing process against a threadrace
 
 August 29th, 2017  Gabriele Cosmo (procbiasing-V10-03-03)
 - Removed duplicate class definition G4TrackTerminator.hh, which is part

@@ -33,6 +33,7 @@
 #ifndef G4ChatterjeeCrossSection_h
 #define G4ChatterjeeCrossSection_h 1
 
+#include <CLHEP/Units/SystemOfUnits.h>
 #include "globals.hh"
 #include "G4Pow.hh"
 

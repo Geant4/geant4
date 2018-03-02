@@ -30,8 +30,9 @@
 #include <vector>
 #include <CLHEP/Units/SystemOfUnits.h>
 
-#include "G4ParticleDefinition.hh"
 #include "globals.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4KineticTrack.hh"
 
 class G4CrossSectionBuffer
 {

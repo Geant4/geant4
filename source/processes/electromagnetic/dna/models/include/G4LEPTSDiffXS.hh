@@ -26,8 +26,8 @@
 #ifndef G4LEPTSDiffXS_h
 #define G4LEPTSDiffXS_h 1
 
-
 #include <string>
+#include "G4Types.hh"
 
 class G4LEPTSDiffXS {
 

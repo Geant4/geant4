@@ -31,6 +31,24 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+26th February 2018 - Ben Morgan (cmake-V10-03-53, 52)
+- Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
+  to "cern.ch/geant4-data" as the correct alias to new EOS area, seperate
+  from main website. Superceeds cmake-V10-03-51.
+
+26th February 2018 - Ben Morgan (cmake-V10-03-51)
+- Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
+  to "cern.ch/geant4" as the correct alias.
+
+26th February 2018 - Ben Morgan (cmake-V10-03-50)
+- G4BuildSettings.cmake: Add 17/c++17 to C++ standards against which
+  Geant4 can be compiled. Will require a minimum CMake version of
+  3.8 to enable, but this is not checked.
+
+8th December 2017 - Ben Morgan
+- Templates/UseGeant4_internal.cmake: When running test driver directly,
+  make it run in WORKING_DIRECTORY if this is supplied.
+
 30th November 2017 - Gabriele Cosmo (cmake-V10-03-49)
 - Replaced USolids specific flags with VecGeom in Geant4OptionalComponents.cmake.
   From now on VecGeomConfig.cmake will be required and used instead of

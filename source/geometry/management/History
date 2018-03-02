@@ -1,4 +1,4 @@
-$Id: History 107408 2017-11-10 13:35:09Z gcosmo $
+$Id: History 108480 2018-02-15 14:28:27Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 10, P.Arce (geommng-V10-03-22)
+December 19, 2017 G.Cosmo (geommng-V10-03-23)
+- Fixed self-consistency in G4VVolumeMaterialScanner header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+November 10, 2017 P.Arce (geommng-V10-03-22)
 - Bug report 2011: precision correction in G4ErrorPlaneSurfaceTarget.cc 
 
 October 16, 2017 G.Cosmo                   geommng-V10-03-21

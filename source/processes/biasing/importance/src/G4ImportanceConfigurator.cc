@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceConfigurator.cc 105159 2017-07-14 09:17:32Z gcosmo $
+// $Id: G4ImportanceConfigurator.cc 108676 2018-02-27 07:38:33Z gcosmo $
 //
 // ----------------------------------------------------------------------
 // Class G4ImportanceConfigurator
@@ -39,6 +39,13 @@
 #include "G4ImportanceAlgorithm.hh"
 
 #include "G4TransportationManager.hh"
+#include "G4AutoLock.hh"
+
+#ifdef G4MULTITHREADED
+namespace {
+ G4Mutex BiasConfigMutex = G4MUTEX_INITIALIZER;
+}
+#endif
 
 G4ImportanceConfigurator::
 G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume, 
@@ -57,7 +64,7 @@ G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume,
 {;}
 
 G4ImportanceConfigurator::
-G4ImportanceConfigurator(G4String worldvolumeName, 
+G4ImportanceConfigurator(const G4String &worldvolumeName, 
 			 const G4String &particlename,
                           G4VIStore &istore,
                           const G4VImportanceAlgorithm *ialg, G4bool para)
@@ -71,7 +78,7 @@ G4ImportanceConfigurator(G4String worldvolumeName,
   paraflag(para)
 {
   fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
-    if(paraflag) fWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
+  if(paraflag) fWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
 }
 
 G4ImportanceConfigurator::~G4ImportanceConfigurator()
@@ -97,10 +104,15 @@ G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
     terminator = preConf->GetTrackTerminator();
   };
 
+
+#ifdef G4MULTITHREADED
+  G4AutoLock l(&BiasConfigMutex);
+#endif
   fImportanceProcess = 
     new G4ImportanceProcess(*fIalgorithm, 
                                 fIStore, 
                                 terminator,"ImportanceProcess",paraflag);
+
   if (!fImportanceProcess)
   {
     G4Exception("G4ImportanceConfigurator::Configure()",
@@ -110,10 +122,13 @@ G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
   
   // G4cout << "G4ImportanceConfigurator:: setting parallel World " << paraflag << G4endl;
   if(paraflag) fImportanceProcess->SetParallelWorld(fWorld->GetName());
+#ifdef G4MULTITHREADED
+  l.unlock();
+//   G4MUTEXUNLOCK(&G4ImportanceConfigurator::BiasConfigMutex);
+#endif
   //  if(paraflag) fImportanceProcess->SetParallelWorld(fWorldName);
   // G4cout << "G4ImportanceConfigurator:: set " << paraflag << " name: " << fWorld->GetName() << G4endl;
   // getchar();
-
   fPlacer.AddProcessAsSecondDoIt(fImportanceProcess);
 }
 
@@ -123,7 +138,8 @@ GetTrackTerminator() const
   return fImportanceProcess;
 }
 
-void G4ImportanceConfigurator::SetWorldName(G4String name)
+void G4ImportanceConfigurator::SetWorldName(const G4String& name)
 {
+  G4cout << " G4ImportanceConfigurator:: setting world name: " << name << G4endl;
   fWorldName = name;
 }

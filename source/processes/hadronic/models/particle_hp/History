@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 December 2017 Gabriele Cosmo (hadr-hpp-V10-03-10)
+---------------------------------------------------
+- Fixed self-consistency in headers (missing #include) in G4FFGEnumerations,
+  G4FPYNubarValues, G4ParticleHPAngularP and G4ParticleHPHash.
+  Thanks to Raphael Isemann for reporting these.
+
 29 November 2017 Tatsumi Koi (hadr-hpp-V10-03-09)
 ---------------------------------------------------
 - Change tolerance value and implementation in calculation of KallbachZero. 

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc 107555 2017-11-22 15:26:59Z gcosmo $
+// $Id: G4Trd.cc 108482 2018-02-15 14:34:23Z gcosmo $
 //
 //
 // Implementation for G4Trd class
@@ -748,8 +748,8 @@ G4ThreeVector G4Trd::GetPointOnSurface() const
 
   // Set areas
   // 
-  G4double syz = (fDy1 + fDy2)*std::hypot(fDx1 - fDx2, 2*fDz);
-  G4double sxz = (fDx1 + fDx2)*std::hypot(fDy1 - fDy2, 2*fDz);
+  G4double sxz = (fDy1 + fDy2)*std::hypot(fDx1 - fDx2, 2*fDz);
+  G4double syz = (fDx1 + fDx2)*std::hypot(fDy1 - fDy2, 2*fDz);
   G4double sface[6] = { 4*fDx1*fDy1, syz, syz, sxz, sxz, 4*fDx2*fDy2 };
   for (G4int i=1; i<6; ++i) { sface[i] += sface[i-1]; }
 

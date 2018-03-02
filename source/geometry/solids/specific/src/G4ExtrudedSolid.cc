@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExtrudedSolid.cc 107558 2017-11-22 15:29:33Z gcosmo $
+// $Id: G4ExtrudedSolid.cc 108484 2018-02-15 14:38:03Z gcosmo $
 //
 //
 // --------------------------------------------------------------------
@@ -77,9 +77,6 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   : G4TessellatedSolid(pName),
     fNv(polygon.size()),
     fNz(zsections.size()),
-    fPolygon(),
-    fZSections(),
-    fTriangles(),
     fIsConvex(false),
     fGeometryType("G4ExtrudedSolid"),
     fSolidType(0)
@@ -205,9 +202,6 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
   : G4TessellatedSolid(pName),
     fNv(polygon.size()),
     fNz(2),
-    fPolygon(),
-    fZSections(),
-    fTriangles(),
     fIsConvex(false),
     fGeometryType("G4ExtrudedSolid"),
     fSolidType(0)
@@ -297,9 +291,8 @@ G4ExtrudedSolid::G4ExtrudedSolid( const G4String& pName,
 //_____________________________________________________________________________
 
 G4ExtrudedSolid::G4ExtrudedSolid( __void__& a )
-  : G4TessellatedSolid(a), fNv(0), fNz(0), fPolygon(), fZSections(),
-    fTriangles(), fIsConvex(false), fGeometryType("G4ExtrudedSolid"),
-    fSolidType(0)
+  : G4TessellatedSolid(a), fNv(0), fNz(0), fIsConvex(false),
+    fGeometryType("G4ExtrudedSolid"), fSolidType(0)
 {
   // Fake default constructor - sets only member data and allocates memory
   //                            for usage restricted to object persistency.
@@ -313,6 +306,7 @@ G4ExtrudedSolid::G4ExtrudedSolid(const G4ExtrudedSolid& rhs)
     fTriangles(rhs.fTriangles), fIsConvex(rhs.fIsConvex),
     fGeometryType(rhs.fGeometryType),
     fSolidType(rhs.fSolidType), fPlanes(rhs.fPlanes),
+    fLines(rhs.fLines), fLengths(rhs.fLengths),
     fKScales(rhs.fKScales), fScale0s(rhs.fScale0s),
     fKOffsets(rhs.fKOffsets), fOffset0s(rhs.fOffset0s)
 {
@@ -337,6 +331,7 @@ G4ExtrudedSolid& G4ExtrudedSolid::operator = (const G4ExtrudedSolid& rhs)
    fTriangles = rhs.fTriangles; fIsConvex = rhs.fIsConvex;
    fGeometryType = rhs.fGeometryType;
    fSolidType = rhs.fSolidType; fPlanes = rhs.fPlanes;
+   fLines = rhs.fLines; fLengths = rhs.fLengths;
    fKScales = rhs.fKScales; fScale0s = rhs.fScale0s;
    fKOffsets = rhs.fKOffsets; fOffset0s = rhs.fOffset0s;
 

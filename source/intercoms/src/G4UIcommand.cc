@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc 102561 2017-02-09 08:16:05Z gcosmo $
+// $Id: G4UIcommand.cc 108488 2018-02-15 14:52:00Z gcosmo $
 //
 // 
 
@@ -41,14 +41,16 @@
 
 G4UIcommand::G4UIcommand()
   : messenger(0), toBeBroadcasted(false), toBeFlushed(false), workerThreadOnly(false),
-    bp(0), token(IDENTIFIER), paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
 }
 
 G4UIcommand::G4UIcommand(const char * theCommandPath,
      G4UImessenger * theMessenger, G4bool tBB)
 :messenger(theMessenger),toBeBroadcasted(tBB),toBeFlushed(false), workerThreadOnly(false),
-token(IDENTIFIER),paramERR(0)
+    commandFailureCode(0), failureDescription(""),
+    bp(0), token(IDENTIFIER),paramERR(0)
 {
   G4String comStr = theCommandPath;
   if(!theMessenger)

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh 98002 2016-06-30 13:03:36Z gcosmo $
+// $Id: G4Scintillation.hh 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -276,15 +276,6 @@ private:
 // Inline methods
 ////////////////////
 
-inline 
-G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
-{
-       if (aParticleType.GetParticleName() == "opticalphoton") return false;
-       if (aParticleType.IsShortLived()) return false;
-
-       return true;
-}
-
 inline
 void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
 {
@@ -399,31 +390,6 @@ G4int G4Scintillation::GetNumPhotons() const
         return fNumPhotons;
 }
 
-inline
-void G4Scintillation::DumpPhysicsTable() const
-{
-        if (fFastIntegralTable) {
-           G4int PhysicsTableSize = fFastIntegralTable->entries();
-           G4PhysicsOrderedFreeVector *v;
-
-           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
-           {
-        	v = (G4PhysicsOrderedFreeVector*)(*fFastIntegralTable)[i];
-        	v->DumpValues();
-           }
-         }
-
-        if (fSlowIntegralTable) {
-           G4int PhysicsTableSize = fSlowIntegralTable->entries();
-           G4PhysicsOrderedFreeVector *v;
-
-           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
-           {
-                v = (G4PhysicsOrderedFreeVector*)(*fSlowIntegralTable)[i];
-                v->DumpValues();
-           }
-         }
-}
 
 inline
 G4double G4Scintillation::single_exp(G4double t, G4double tau2)

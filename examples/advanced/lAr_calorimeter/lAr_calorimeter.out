@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 ### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
     Default Physics Lists FTFP_BERT is instantiated
@@ -894,13 +896,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   395 kByte
-    Total CPU time elapsed for geometry optimisation: 0.3 seconds
+    Total CPU time elapsed for geometry optimisation: 0.35 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      56.67         0.17         0.00          152k EmModuleLogical
-      43.33         0.13         0.00          238k HadModuleLogical
+      62.86         0.22         0.00          152k EmModuleLogical
+      37.14         0.13         0.00          238k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -912,7 +914,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       60.17        238k      1385     2370       3792         0.13    HadModuleLogical
-      38.50        152k      1129     1152       2426         0.17    EmModuleLogical
+      38.50        152k      1129     1152       2426         0.22    EmModuleLogical
        0.93          3k         8       42        146         0.00    Mother
        0.12          0k         1        7          8         0.00    SolidWLogical
        0.12          0k         1        7          8         0.00    CuPlateLogical
@@ -1273,7 +1275,7 @@ Edep in FCAL1 FCAl2 : 12712.7 0.422433
  Run terminated.
 Run Summary
   Number of events processed : 18
-  User=8.98s Real=8.99s Sys=0.01s
+  User=16.04s Real=16.06s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

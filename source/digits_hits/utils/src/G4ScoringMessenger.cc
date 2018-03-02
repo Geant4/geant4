@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoringMessenger.cc 94951 2016-01-07 11:58:57Z gcosmo $
+// $Id: G4ScoringMessenger.cc 108471 2018-02-15 14:12:06Z gcosmo $
 //
 // ---------------------------------------------------------------------
 
@@ -378,9 +378,11 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==meshBoxCreateCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
-	       << "] : Mesh <" << currentmesh->GetWorldName() 
-	       << "> is still open. Close it first. Command ignored." << G4endl;
+        G4ExceptionDescription ed;
+	ed << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	   << "] : Mesh <" << currentmesh->GetWorldName() 
+	   << "> is still open. Close it first. Command ignored.";
+        command->CommandFailed(ed);
       } else {
 
 	G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
@@ -388,17 +390,21 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  mesh = new G4ScoringBox(newVal);
 	  fSMan->RegisterScoringMesh(mesh);
 	}else{
-	  G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
-		 << "] : Scoring mesh <" << newVal
-		 << "> already exists. Command ignored." << G4endl;
+          G4ExceptionDescription ed;
+	  ed << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	     << "] : Scoring mesh <" << newVal
+	     << "> already exists. Command ignored.";
+          command->CommandFailed(ed);
 	}
       }
   } else if(command==meshCylinderCreateCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-	G4cerr << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
-	       << "] : Mesh <" << currentmesh->GetWorldName() 
-	       << "> is still open. Close it first. Command ignored." << G4endl;
+        G4ExceptionDescription ed;
+	ed << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
+	   << "] : Mesh <" << currentmesh->GetWorldName() 
+	   << "> is still open. Close it first. Command ignored.";
+        command->CommandFailed(ed);
       } else {
 
 	G4VScoringMesh*  mesh = fSMan->FindMesh(newVal);
@@ -406,9 +412,11 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	  mesh = new G4ScoringCylinder(newVal);
 	  fSMan->RegisterScoringMesh(mesh);
 	}else{
-	  G4cerr << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
-		 << "] : Scoring mesh <" << newVal
-		 << "> already exists. Command ignored." << G4endl;
+          G4ExceptionDescription ed;
+	  ed << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
+	     << "] : Scoring mesh <" << newVal
+	     << "> already exists. Command ignored.";
+          command->CommandFailed(ed);
 	}
       }
   } else if(command==listColorMapCmd) {
@@ -418,9 +426,11 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       if(colorMap)
       { colorMap->SetFloatingMinMax(true); }
       else
-      { G4cerr << "ERROR[" << floatMinMaxCmd->GetCommandPath()
-	       << "] : color map <" << newVal << "> is not defined. Command ignored." 
-	       << G4endl; 
+      {
+        G4ExceptionDescription ed;
+        ed << "ERROR[" << floatMinMaxCmd->GetCommandPath()
+	       << "] : color map <" << newVal << "> is not defined. Command ignored." ;
+        command->CommandFailed(ed);
       }
   } else if(command==colorMapMinMaxCmd) {
       G4Tokenizer next(newVal);
@@ -432,20 +442,28 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
       { colorMap->SetFloatingMinMax(false);
         colorMap->SetMinMax(minVal,maxVal); }
       else
-      { G4cerr << "ERROR[" << colorMapMinMaxCmd->GetCommandPath()
-	       << "] : color map <" << newVal << "> is not defined. Command ignored." 
-	       << G4endl; 
+      { 
+        G4ExceptionDescription ed;
+        ed << "ERROR[" << colorMapMinMaxCmd->GetCommandPath()
+	   << "] : color map <" << newVal << "> is not defined. Command ignored." 
+	   << G4endl; 
+        command->CommandFailed(ed);
       }
   } else if(command==meshOpnCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-	G4cerr << "ERROR[" << meshOpnCmd->GetCommandPath()
-	       << "] : Mesh <" << currentmesh->GetWorldName() << "> is still open. Close it first. Command ignored." << G4endl;
+        G4ExceptionDescription ed;
+	ed << "ERROR[" << meshOpnCmd->GetCommandPath()
+	   << "] : Mesh <" << currentmesh->GetWorldName()
+           << "> is still open. Close it first. Command ignored.";
+        command->CommandFailed(ed);
       } else {
 	G4VScoringMesh* mesh = fSMan->FindMesh(newVal); 
 	if ( !mesh ){
-          G4cerr << "ERROR[" << meshOpnCmd->GetCommandPath()
-		 << "] : Scoring mesh <" << newVal << "> does not exist. Command ignored." << G4endl;
+          G4ExceptionDescription ed;
+          ed << "ERROR[" << meshOpnCmd->GetCommandPath()
+	     << "] : Scoring mesh <" << newVal << "> does not exist. Command ignored.";
+          command->CommandFailed(ed);
 	} else {
 	  fSMan->SetCurrentMesh(mesh);
 	}
@@ -479,8 +497,10 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  vsize[2] = size.z();
 		  mesh->SetSize(vsize);
 	      } else {
-                 G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
-			<< "] : This mesh is not Box. Command ignored." << G4endl;
+                 G4ExceptionDescription ed;
+                 ed << "ERROR[" << mBoxSizeCmd->GetCommandPath()
+		    << "] : This mesh is not Box. Command ignored.";
+                 command->CommandFailed(ed);
 	      }
 	  }else if(command==mCylinderSizeCmd) {
 	      MeshShape shape = mesh->GetShape();
@@ -494,8 +514,10 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 		  vsize[2]  = 0.0;
 		  mesh->SetSize(vsize);
 	      } else {
-		  G4cerr << "ERROR[" << mBoxSizeCmd->GetCommandPath()
-			 << "] : This mesh is not Box. Command ignored." << G4endl;
+                 G4ExceptionDescription ed;
+		 ed << "ERROR[" << mBoxSizeCmd->GetCommandPath()
+		     << "] : This mesh is not Box. Command ignored.";
+                 command->CommandFailed(ed);
 	      }
 	  } else if(command==mBinCmd) {
 	      MeshBinCommand(mesh,token);
@@ -521,7 +543,9 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
 	      mesh->RotateZ(value);
 	  }
       }else{
-        G4cerr << "ERROR: No mesh is currently open. Open/create a mesh first. Command ignored." << G4endl;
+        G4ExceptionDescription ed;
+        ed << "ERROR: No mesh is currently open. Open/create a mesh first. Command ignored.";
+        command->CommandFailed(ed);
       }
   }
 }

@@ -1,4 +1,4 @@
-$Id: History 105753 2017-08-16 13:46:21Z gcosmo $
+$Id: History 108471 2018-02-15 14:12:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 19, 2018 M. Asai (digits_hits-V10-03-03)
+- G4ScoringMessenger G4ScoreQuantityMessenger:
+- UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
 
 August 1, 2017 M. Asai (digits_hits-V10-03-02)
 - G4SDStructure.cc : fix propagating warning flag. Addressing bug

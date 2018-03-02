@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.hh 77563 2013-11-26 09:03:18Z gcosmo $
+// $Id: G4UIcommand.hh 108488 2018-02-15 14:52:00Z gcosmo $
 //
 //
 
@@ -194,6 +194,22 @@ class G4UIcommand
     inline G4bool IsWorkerThreadOnly() const
     { return workerThreadOnly; }
 
+  protected:
+    G4int commandFailureCode;
+    G4String failureDescription;
+
+  public:
+    inline void CommandFailed( G4int errCode, G4ExceptionDescription& ed )
+    { commandFailureCode = errCode; failureDescription = ed.str(); }
+    inline void CommandFailed( G4ExceptionDescription& ed )
+    { commandFailureCode = 1; failureDescription = ed.str(); }
+    inline G4int IfCommandFailed() 
+    { return commandFailureCode; }
+    inline G4String& GetFailureDescription()
+    { return failureDescription; }
+    inline void ResetFailure()
+    { commandFailureCode = 0; failureDescription = ""; }
+    
   protected:
     G4int CheckNewValue(const char* newValue);
 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4StokesVector.cc 96114 2016-03-16 18:51:33Z gcosmo $
+// $Id: G4StokesVector.cc 108502 2018-02-15 15:41:45Z gcosmo $
 //
 // GEANT4 Class file
 //
@@ -64,9 +64,10 @@ G4StokesVector::G4StokesVector(const G4ThreeVector & v)
 {
 }
 
-G4StokesVector::~G4StokesVector()
-{
-}
+G4bool G4StokesVector::IsZero() const 
+{ 
+  return *this==ZERO; 
+} 
 
 void G4StokesVector::RotateAz(G4ThreeVector nInteractionFrame, 
 			      G4ThreeVector particleDirection) 

@@ -1,4 +1,4 @@
-$Id: History 103005 2017-03-08 08:08:35Z gcosmo $
+$Id: History 108676 2018-02-27 07:38:33Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+February 26th, 2018  A.Howard
+- G4ImportanceConfigurator: cleaned up unnecessary G4cout and removed
+  copy of G4String - thanks to Gabriele
+
+February 21st, 2018  A.Howard
+- G4ImportanceConfigurator: put back clear in the destructor
+
+February 21st, 2018  A.Howard
+- G4ImportanceConfigurator: introduced AutoLock (G4Mutex) to protect
+  instantiation of the biasing process against a threadrace
 
 March 7th, 2017  A.Howard
 - G4GeometrySampler: removed unnecessary ClearSampling from the destructor

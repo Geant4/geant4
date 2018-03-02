@@ -33,7 +33,7 @@ if(GEANT4_ENABLE_TESTING)
   endforeach()
 
   # - Add base URL for test reference files
-  set (GEANT4_TEST_REFERENCES_URL "http://geant4.cern.ch/stt/references/" CACHE
+  set (GEANT4_TEST_REFERENCES_URL "http://cern.ch/geant4-data/stt/references/" CACHE
        STRING "base URL for test reference files")
   mark_as_advanced(GEANT4_TEST_REFERENCES_URL)
 

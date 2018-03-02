@@ -1,4 +1,4 @@
-$Id: History 106116 2017-09-13 10:19:06Z gcosmo $
+$Id: History 108508 2018-02-15 15:54:35Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 February 18: V.Ivanchenko (xrays-V10-03-01)
+- G4VTransitionRadiation, G4TransitionRadiation, G4SynchrotronRadiationInMat,
+  G4Scintillation, G4ForwardXrayTR, G4Cerenkov - moved static and virtual
+    methods from inline to the source, removed extra empty and commented lines
+
+26 January 18: V.Ivanchenko
+- G4VXTRenergyLoss - V.Grichine exteded XTR angle limit up to 250/gamma
+    (ATLAS requirements)
+
+21 December 17: G.Cosmo
+- Fixed self-consistency in G4VTRModel header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
 
 11 September 17: S.Y.Jun (xrays-V10-03-00)
 - Change material property keys by the enum (index) type defined in 

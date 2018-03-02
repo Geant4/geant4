@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 December 2017 - G.Cosmo
+- MixMaxRng: fixed guard for assembly code in modadd() to protect
+  builds on 32-bit systems.
+
 15 November 2017 - G.Cosmo
 - MixMaxRng: fixed print_state() method to proper C++.
 

@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4VertexCode.hh 100828 2016-11-02 15:25:59Z gcosmo $
+// $Id: G4VertexCode.hh 108528 2018-02-16 08:38:40Z gcosmo $
 //
 #ifndef G4VertexCode_h
 #define G4VertexCode_h 1
 
+#include "G4String.hh"
 
 class G4VertexCode
 {

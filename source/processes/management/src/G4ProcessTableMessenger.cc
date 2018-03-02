@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTableMessenger.cc 92125 2015-08-18 14:35:23Z gcosmo $
+// $Id: G4ProcessTableMessenger.cc 108536 2018-02-16 09:20:49Z gcosmo $
 //
 //
 //---------------------------------------------------------------
@@ -130,7 +130,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   dumpCmd->SetParameter(param);
   dumpCmd->AvailableForStates(G4State_Init,G4State_Idle,G4State_GeomClosed,G4State_EventProc);
 
-  //Commnad   /particle/process/activate
+  //Commnad   /process/activate
   activateCmd = new G4UIcommand("/process/activate",this);
   activateCmd->SetGuidance("Activate processes  ");
   activateCmd->SetGuidance(" Activate  name [particle]");
@@ -141,9 +141,9 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   activateCmd->SetParameter(param);
-  activateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  activateCmd->AvailableForStates(G4State_Idle);
   
-  //Commnad   /particle/process/inactivate
+  //Commnad   /process/inactivate
   inactivateCmd = new G4UIcommand("/process/inactivate",this);
   inactivateCmd->SetGuidance("Inactivate process  ");
   inactivateCmd->SetGuidance("Inactivate processes  ");
@@ -155,7 +155,7 @@ G4ProcessTableMessenger::G4ProcessTableMessenger(G4ProcessTable* pTable)
   param = new G4UIparameter("particle",'s',true);
   param->SetDefaultValue("all");
   inactivateCmd->SetParameter(param);
-  inactivateCmd->AvailableForStates(G4State_Idle,G4State_GeomClosed,G4State_EventProc);
+  inactivateCmd->AvailableForStates(G4State_Idle);
 }
 
 //////////////////
@@ -176,8 +176,8 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
   G4ProcessTable::G4ProcNameVector* procNameVector 
                          = theProcessTable->GetNameList(); 
   G4int idx;
-
   G4int type = -1;
+  G4ExceptionDescription ed;
 
   if( command == listCmd ){
     //Commnad  /process/list
@@ -276,7 +276,9 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
       type  = GetProcessType(currentProcessName);
       if (type <0 ) {
 	// no processes with specifed name
-	G4cout << " illegal process (or type) name " << G4endl;
+	ed << " illegal process (or type) name ["
+           << currentProcessName << "]";
+        command->CommandFailed(ed);
 	currentProcessName = "";
 	return;
       }
@@ -299,7 +301,8 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 
     if ( !isParticleFound ) {
       // no particle with specifed name
-      G4cout << " illegal particle name " << G4endl;
+      ed << " illegal particle name [" << currentParticleName << "]";
+      command->CommandFailed(ed);
       currentParticleName = "";
       return;
     }

@@ -301,12 +301,12 @@ class G4GeneralParticleSourceMessenger: public G4UImessenger
 
   private: // for ion shooting
     G4bool   fShootIon; 
+
     G4int    fAtomicNumber;
     G4int    fAtomicMass;
     G4int    fIonCharge;
     G4double fIonExciteEnergy;
 
-    G4bool   fShootIonL;
     G4int    fAtomicNumberL;
     G4int    fAtomicMassL;
     G4int    fIonChargeL;

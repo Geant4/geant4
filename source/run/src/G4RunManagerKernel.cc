@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc 107524 2017-11-21 07:15:27Z gcosmo $
+// $Id: G4RunManagerKernel.cc 108682 2018-02-27 07:54:34Z gcosmo $
 //
 //
 
@@ -137,12 +137,14 @@ G4RunManagerKernel::G4RunManagerKernel()
   versionString += "   ";
   versionString += G4Date;
   G4cout << G4endl
-    << "*************************************************************" << G4endl
+    << "**************************************************************" << G4endl
     << versionString << G4endl
-    << "                      Copyright : Geant4 Collaboration" << G4endl
-    << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-    << "                            WWW : http://cern.ch/geant4" << G4endl
-    << "*************************************************************" << G4endl
+    << "                       Copyright : Geant4 Collaboration" << G4endl
+    << "                      References : NIM A 506 (2003), 250-303" << G4endl
+    << "                                 : IEEE-TNS 53 (2006), 270-278" << G4endl
+    << "                                 : NIM A 835 (2016), 186-225" << G4endl
+    << "                             WWW : http://geant4.org/" << G4endl
+    << "**************************************************************" << G4endl
     << G4endl;
 }
 
@@ -218,13 +220,15 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
       versionString += "   ";
       versionString += G4Date;
       G4cout << G4endl
-       << "*************************************************************" << G4endl
+       << "**************************************************************" << G4endl
        << versionString << G4endl
        << "  << in Multi-threaded mode >> " << G4endl
-       << "                      Copyright : Geant4 Collaboration" << G4endl
-       << "                      Reference : NIM A 506 (2003), 250-303" << G4endl
-       << "                            WWW : http://cern.ch/geant4" << G4endl
-       << "*************************************************************" << G4endl
+       << "                       Copyright : Geant4 Collaboration" << G4endl
+       << "                      References : NIM A 506 (2003), 250-303" << G4endl
+       << "                                 : IEEE-TNS 53 (2006), 270-278" << G4endl
+       << "                                 : NIM A 835 (2016), 186-225" << G4endl
+       << "                             WWW : http://geant4.org/" << G4endl
+       << "**************************************************************" << G4endl
        << G4endl;
        break;
      default:
@@ -684,6 +688,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   if(geometryNeedsToBeClosed) CheckRegularGeometry();
 
+  stateManager->SetNewState(G4State_Init);
   PropagateGenericIonID();
   SetupShadowProcess();
   UpdateRegion();
@@ -706,6 +711,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 #ifdef G4MULTITHREADED
   G4UnitDefinition::GetUnitsTable().Synchronize();
 #endif
+  stateManager->SetNewState(G4State_Idle);
   stateManager->SetNewState(G4State_GeomClosed);
   return true;
 }
@@ -757,12 +763,12 @@ void G4RunManagerKernel::UpdateRegion()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-  if( currentState != G4State_Idle )
+  if( currentState != G4State_Init )
   { 
     G4Exception("G4RunManagerKernel::UpdateRegion",
                 "Run0024",
                 JustWarning,
-                "Geant4 kernel not in Idle state : method ignored.");
+                "Geant4 kernel not in Init state : method ignored.");
     return;
   }
 

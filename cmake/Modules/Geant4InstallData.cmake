@@ -99,7 +99,7 @@
 # retrieving them globally
 #-----------------------------------------------------------------------
 # Geant4 Data Repository
-set(GEANT4_DATASETS_URL "http://geant4.cern.ch/support/source")
+set(GEANT4_DATASETS_URL "http://cern.ch/geant4-data/datasets")
 
 # Where to install data in the build tree
 set(GEANT4_BUILD_FULL_DATADIR ${PROJECT_BINARY_DIR}/data)

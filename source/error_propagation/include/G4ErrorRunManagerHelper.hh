@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ErrorRunManagerHelper.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ErrorRunManagerHelper.hh 108476 2018-02-15 14:21:25Z gcosmo $
 //
 //
 // Class Description:
@@ -40,6 +40,8 @@
 
 #ifndef G4ErrorRunManagerHelper_hh
 #define G4ErrorRunManagerHelper_hh
+
+#include "tls.hh"
 
 class G4RunManagerKernel;
 class G4VUserDetectorConstruction;

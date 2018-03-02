@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4TransitionRadiation.hh 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4TransitionRadiation.hh 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // G4TransitionRadiation  -- header file
 //
@@ -52,7 +52,6 @@
 
 #include "G4VDiscreteProcess.hh"
 #include "G4Material.hh"
-// #include "G4OpBoundaryProcess.hh"
 
 class G4TransitionRadiation : public   G4VDiscreteProcess
 {

@@ -1,4 +1,4 @@
-svn log $Id: History 107491 2017-11-16 09:38:59Z gcosmo $
+svn log $Id: History 108466 2018-02-15 13:48:04Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th February 2018 Gabriele Cosmo  (config-V10-03-08)
+- Disable "-Wl,-force_load" global linker flag for static libraries in macro
+  Darwing-clang.gmk.
 
 16th November 2017 Gabriele Cosmo  (config-V10-03-07)
 - architecture.gmk: removed references to old USolids library; just use VecGeom.

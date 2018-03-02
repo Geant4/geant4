@@ -17,6 +17,19 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 12, 2018 G.Cosmo (global-V10-03-12)
+- G4StateManager: move static method SetVerboseLevel() to be non inline.
+
+February 9, 2018 M.Asai
+- G4MTcoutDestination.cc blocks G4cout from worker threads while spplication
+  is in G4State_Init instead of G4State_Idle.
+- G4StateManager has a new method to set verbosity and print the state change.
+  
+December 19, 2017 G.Cosmo
+- Fixed self-consistency in G4ReferenceCountedHandle header (missing #include).
+  Added missing #ifdef guard in G4CacheDetails header; code formatting.
+  Thanks to Raphael Isemann for reporting these.
+
 October 20, 2017 E.Tcherniaev (global-V10-03-11)
 - Use more performant G.Marsaglia (1972) algorithm for G4RandomDirection.
   Thanks to Kostas Savvidy for the suggestion.

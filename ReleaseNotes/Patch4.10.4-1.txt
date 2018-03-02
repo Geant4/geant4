@@ -1,0 +1,237 @@
+
+                 Geant4 10.4 - patch-01 Release Notes
+                 ------------------------------------
+
+                                                               28 February 2018
+
+List of fixes included in this public patch since the public release 10.4:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Added c++17 to C++ standards against which Geant4 can be compiled,
+        as experimental build. Will require a minimum CMake version 3.8 to
+        enable, but this is not checked.
+      o Updated URL for downloads to use dedicated server alias.
+    + GNUMake:
+      o Disabled obsolete linker flag for static libraries in Darwing-clang.gmk.
+
+  o Analysis:
+    --------
+    + Fixed self-consistency in headers (missing #include) in
+      G4BaseAnalysisManager and G4PlotManager.
+
+  o Digits-Hits:
+    -----------
+    + G4ScoringMessenger, G4ScoreQuantityMessenger: UI command returns an error
+      message if a command is refused due to incorrect parameter(s).
+
+  o Error Propagation:
+    -----------------
+    + Fixed self-consistency in headers (missing #include) in G4ErrorMatrix,
+      G4ErrorRunManagerHelper and G4ErrorSymMatrix.
+
+  o Event:
+    -----
+    + G4GeneralParticleSourceMessenger, G4ParticleGunMessenger: UI command
+      returns an error message if a command is refused due to incorrect
+      parameter(s).
+    + Added deprecation warning for '/gun/ionL' UI command.
+    + Fixed self-consistency in G4SPSRandomGenerator header (missing #include).
+
+  o Externals:
+    ---------
+    + CLHEP: in MixMaxRng::modadd(), fixed guard for assembly code to protect
+      builds on 32-bit systems.
+
+  o Geometry:
+    --------
+    + management:
+      o Fixed self-consistency in G4VVolumeMaterialScanner header (missing
+        #include).
+    + navigation:
+      o Fix for momentum value in G4PathFinder::SetChargeMomentumMass();
+        where magnitude square was passed instead of magnitude.
+        Addressing problem report #2037.
+    + solids/CSG:
+      o Fixed typo in G4Trd::GetPointOnSurface() for the area settings.
+      o Correction in G4UPara wrapper in ComputeDimensions() to add explicit
+        cast for the solid type to parameterise.
+    + solids/specific:
+      o Added missing initialisation of two data-members in copy-ctor and
+        assignment operator of G4ExtrudedSolid. Addressing problem report #2016.
+        Removed redundant data initialistion in G4ExtrudedSolid constructors.
+
+  o Global:
+    ------
+    + G4MTcoutDestination blocks G4cout from worker threads while application
+      is in G4State_Init instead of G4State_Idle.
+    + Added SetVerbosity() method in G4StateManager and notify state change.
+    + Fixed self-consistency in G4ReferenceCountedHandle header (missing
+      #include). Added missing #ifdef guard in G4CacheDetails header; code
+      formatting.
+    + Updated date and version for 10.4.p01.
+
+  o Intercoms:
+    ---------
+    + G4UIcommand, G4UImanager: additional implementation for adding a
+      mechanism of carrying back error message from the messenger if a command
+      is rejected due to the target class or the messenger.
+
+  o Interfaces:
+    ----------
+    + G4UIQt: fix to remove parameters from popup in Qt interface when
+      autocompleting command line. Take into account of '\n' character for
+      command guidance in help tree.
+
+  o Materials:
+    ---------
+    + Re-enable user-defined material properties in G4MaterialPropertiesTable
+      and G4MaterialPropertiesIndex. Addressing problem report #2030.
+    + G4OpticalSurface: moved static methods to source.
+    + Fixed self-consistency in headers (missing #include) in G4ElementTable
+      and G4MaterialTable.
+
+  o Parameterisations - gflash
+    --------------------------
+    + Fixed self-consistency in GVFlashHomoShowerTuning header (missing
+      #include).
+
+  o Persistency - gdml
+    ------------------
+    + Updates to G4GDMLWriteSolids and G4GDMLWriteMaterials for changes in
+      G4Material[Const]PropertiesTable for addressing problem report #2030.
+    + Fixed self-consistency in G4GDMLAuxStructType header (missing #include).
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + dna:
+      o G4DNAMolecularMaterial: allow GetDensityTableFor() and
+        GetNumMolPerVolTableFor() methods to be accepted at G4State_Init
+        rather than G4State_Idle.
+      o Fixed self-consistency in headers (missing #include) in G4IosFlagsSaver,
+        G4KDNode, G4MoleculeIterator and G4LEPTSDiffXS. Fixed spurious
+        definition of G4IT namespace in G4ITMultiNavigator header.
+    + lowenergy:
+      o Fixed self-consistency in G4ecpssrFormFactorMixsModel header
+        (missing #include).
+    + polarisation:
+      o G4StokesVector: moved static inline method to the source.
+    + standard:
+      o G4PairProductionRelModel: fixed misuse of G4Pow (A13(..) should be used
+        instead of Z13(..)); added initialisation of an element cache before
+        sampling of final state. Partially addressing problem report #2017.
+    + utils:
+      o G4EmParametersMessenger: use G4Exception for warnings instead of G4cout,
+        review G4State for UI commands and signal the RunManager about
+        modification of physics if a command is issued in Idle state.
+      o G4EmParameters, G4VEmProcess, G4VEnergyLossProcess: define the same
+        default values for few internal members.
+      o G4EmParameters, G4EmParametersMessenger: fixed printout format and
+        added lock and protection in commands defining physics per region.
+    + xrays:
+      o G4VXTRenergyLoss: extended XTR angle limit up to 250/gamma,
+        on ATLAS request.
+      o Moved few static and virtual methods from inline to source.
+        Code cleanup.
+      o Fixed self-consistency in G4VTRModel header (missing #include).
+
+  o Processes - Generic:
+    -------------------
+    + biasing:
+      o G4ImportanceConfigurator: introduced mutex to protect instantiation
+        of the biasing process against a thread-race in MT mode and clearing
+        data in destructor. Addressing problem report #1945.
+    + management:
+      o G4ProcessManager: added method GetProcess(name) to return a pointer to
+         a process from its name.
+      o The following UI commands are now forbidden for 'G4State_GeomClosed' or
+        'G4State_EventProc' application states:
+        - /process/activate
+        - /process/inactivate
+        - /particle/process/activate
+        - /particle/process/inactivate
+      o G4ProcessManagerMessenger, G4ProcessTableMessenger: UI command returns
+        an error message if a command is refused due to incorrect parameter(s).
+    + parameterisation:
+      o Fixed self-consistency in G4FastSimulationVector heade
+        (missing #include).
+
+  o Processes - Hadronic:
+    --------------------
+    + models/cascade:
+      o G4NucleiModel: replaced use of obsolete std::bind2nd with std::bind.
+    + models/de_excitation:
+      o Fixed self-consistency in G4ChatterjeeCrossSection header (missing
+        #include). Fixed #ifdef guard in G4StatMFMacroBiNucleon header.
+    + models/fission:
+      o Fixed self-consistency in G4LLNLFission header (missing #include).
+        Added missing #ifdef guards in G4fissionEvent header.
+    + models/im_r_matrix:
+      o Fixed self-consistency in headers (missing #include) in
+        G4CrossSectionBuffer, G4DeltaNstarBuilder and G4NNstarBuilder.
+    + models/particle_hp:
+      o Fixed self-consistency in headers (missing #include) in
+        G4FFGEnumerations, G4FPYNubarValues, G4ParticleHPAngularP and
+        G4ParticleHPHash.
+    + models/parton_string/management:
+      o Fixed self-consistency in G4VertexCode header (missing #include).
+    + models/parton_string/qgsm:
+      o Fixed self-consistency in G4SPPartonInfo header (missing #include).
+    + models/radioactive_decay:
+      o G4RadioactiveDecay, G4RadioactiveDecayBase: added check that
+        environment variable G4RADIOACTIVEDATA is pointing to correct
+        directory. Moved check from G4RadioactiveDecay::LoadDecayTable()
+        to constructor. Addresses problem report #1942.
+    + util:
+      o G4StableIsotopes: moved static member function definitions to
+        source file.
+      o Fixed self-consistency in headers (missing #include) in DumpFrame,
+        G4GHEKinematicsVector and G4ping.
+
+  o Run:
+    ---
+    + G4RunManagerKernel: application state is set to G4State_Init while
+      application is in RunInitialization().
+      Updated banners by adding last two general papers.
+    + Fixed self-consistency in G4FastSimulationVector header
+      (missing #include).
+
+  o Visualization:
+    -------------
+    + modeling:
+      o Fixed self-consistency in G4AttValueFilterT header (missing #include).
+    + OpenGL:
+      o G4OpenGLStoredSceneHandler: removed call to glDrawBuffer(GL_FRONT),
+        which seems to cause problems for the case of display list memory
+        being exceeded.
+
+  o Examples:
+    --------
+    + basic/B5:
+      o Added missing filling of row n-tuple in EventAction.
+    + extended/hadronic/Hadr04:
+      o NeutronHPphysics: use pManager->GetProcess(processName).
+    + extended/medical/electronScattering2:
+      o Removed unused instantiation of G4ScoringManager.
+    + extended/physicslists/extensibleFactory:
+    + extended/physicslists/factory:
+    + extended/physicslists/genericPL:
+      o Corrected GNUmake script.
+    + extended/physicslists/shared:
+      o Corrected copy script.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.4.
+  o  Technical notes distributed for release 10.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.4.p01 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

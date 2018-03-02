@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
  Material: FluorCarbonate    density:  1.610 g/cm3   RadL:  22.435 cm   Nucl.Int.Length:  54.514 cm 
                        Imean:  99.957 eV   temperature: 293.15 K  pressure:   1.00 atm
@@ -140,7 +142,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=0.76s Real=0.76s Sys=0s
+  User=1.58s Real=1.58s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

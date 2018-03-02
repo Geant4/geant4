@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc 107364 2017-11-09 10:53:25Z gcosmo $
+// $Id: G4VEnergyLossProcess.cc 108506 2018-02-15 15:50:39Z gcosmo $
 //
 // -------------------------------------------------------------------
 //
@@ -209,7 +209,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   // Size of tables assuming spline
   minKinEnergy     = 0.1*keV;
   maxKinEnergy     = 100.0*TeV;
-  nBins            = 77;
+  nBins            = 84;
   maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
   actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit 

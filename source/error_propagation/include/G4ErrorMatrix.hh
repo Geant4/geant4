@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ErrorMatrix.hh 66892 2013-01-17 10:57:59Z gunter $
+// $Id: G4ErrorMatrix.hh 108476 2018-02-15 14:21:25Z gcosmo $
 //
 // Class Description:
 //
@@ -37,6 +37,7 @@
 #define G4ErrorMatrix_hh
 
 #include <vector>
+#include "G4Types.hh"
 
 class G4ErrorSymMatrix;
 
@@ -293,7 +294,7 @@ void row_givens(G4ErrorMatrix *A, G4double c, G4double s,
                 G4int k1, G4int k2, G4int col_min=1, G4int col_max=0);
 // do a row Givens update
 
-void givens(G4double a, G4double b, G4double *c, G4double *s);
+// void givens(G4double a, G4double b, G4double *c, G4double *s);
 // algorithm 5.1.5 in Golub and Van Loan
 
 // Returns a Householder vector to zero elements.

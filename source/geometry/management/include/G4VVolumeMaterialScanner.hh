@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VVolumeMaterialScanner.hh 66356 2012-12-18 09:02:32Z gcosmo $
+// $Id: G4VVolumeMaterialScanner.hh 108480 2018-02-15 14:28:27Z gcosmo $
 //
 // class G4VVolumeMaterialScanner
 //
@@ -38,6 +38,8 @@
 // --------------------------------------------------------------------
 #ifndef G4VVOLUMEMATERIALSCANNER_HH
 #define G4VVOLUMEMATERIALSCANNER_HH
+
+#include "G4Types.hh"
 
 class G4Material;
 

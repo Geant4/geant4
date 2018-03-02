@@ -43,9 +43,9 @@
 #ifndef G4GHEKinematicsVector_h
 #define G4GHEKinematicsVector_h 1
 
-#include "G4ios.hh"
-
 #include <CLHEP/Units/PhysicalConstants.h>
+#include "G4ios.hh"
+#include "G4ParticleMomentum.hh"
 
 class G4GHEKinematicsVector
  {

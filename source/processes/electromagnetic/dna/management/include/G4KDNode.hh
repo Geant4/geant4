@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4KDNode.hh 102616 2017-02-10 07:57:14Z gcosmo $
+// $Id: G4KDNode.hh 108498 2018-02-15 15:33:07Z gcosmo $
 //
 // Author: Mathieu Karamitros
 
@@ -48,13 +48,13 @@
 #define G4KDNODE_HH
 
 #include <list>
-//#include <map>
 #include <vector>
 #include <deque>
 #include <ostream>
 
 // geant4
-#include <G4Allocator.hh>
+#include "G4Types.hh"
+#include "G4Allocator.hh"
 
 class G4KDTree;
 class G4KDMap;

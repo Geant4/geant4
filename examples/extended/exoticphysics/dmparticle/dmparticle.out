@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 LDMPhoton is created: m(GeV)= 0.5
 /run/verbose 1
@@ -17,6 +19,7 @@ LDMPhoton is created: m(GeV)= 0.5
 /testex/det/setSizeZ 130 cm
 /testex/det/setSizeXY 30 cm
 /process/em/verbose 1
+/run/physicsModified
 /testex/phys/addPhysics emstandard_opt0
 /run/initialize
 
@@ -973,7 +976,7 @@ Event = 0 z0 = -779.999  Primary direction = (0,0,1)
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.86s Real=0.86s Sys=0s
+  User=1.37s Real=1.38s Sys=0.01s
 RunAction: End of run actions are started 1  Nevt=  100  Edep= 4066.64
  ====================================================
    Beam Particle: proton
