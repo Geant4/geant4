@@ -62,7 +62,7 @@
 #include "G4TrackState.hh"
 #include "G4MultiNavigator.hh"
 
-namespace G4IT
+namespace G4ITMN
 {
 enum ELimited
 {

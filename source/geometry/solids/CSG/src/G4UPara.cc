@@ -342,7 +342,7 @@ void G4UPara::ComputeDimensions(      G4VPVParameterisation* p,
                                 const G4int n,
                                 const G4VPhysicalVolume* pRep )
 {
-  p->ComputeDimensions(*this,n,pRep);
+  p->ComputeDimensions(*(G4Para*)this,n,pRep);
 }
 
 //////////////////////////////////////////////////////////////////////////

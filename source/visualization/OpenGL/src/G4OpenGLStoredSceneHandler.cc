@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc 99312 2016-09-13 09:47:18Z gcosmo $
+// $Id: G4OpenGLStoredSceneHandler.cc 108544 2018-02-16 09:47:30Z gcosmo $
 //
 // 
 // Andrew Walkden  10th February 1997
@@ -416,7 +416,6 @@ end_of_display_list_reuse_test:
       glNewList (fDisplayListId, GL_COMPILE);
     }
   } else {  // Out of memory (or being used when display lists not required).
-    glDrawBuffer (GL_FRONT);
     glPushMatrix();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());

@@ -1,4 +1,4 @@
-$Id: History 106172 2017-09-15 13:03:57Z gcosmo $
+$Id: History 108488 2018-02-15 14:52:00Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 December, 2017 Makoto Asai (intercoms-V10-03-05)
+- G4UIcommand, G4UImanager: additional implementation for adding 
+  a mechanism of carrying back error message from the messenger
+  if a command is rejected due to the target class or the messenger.
+
+18 December, 2017 Makoto Asai
+- G4UIcommand: added a mechanism of carrying error message from
+  the messenger.
 
 15 September, 2017 Gabriele Cosmo (intercoms-V10-03-04)
 - More cases of static symbols to export for DLLs.

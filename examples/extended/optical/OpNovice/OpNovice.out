@@ -3,15 +3,17 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Water G4MaterialPropertiesTable
-0
+0: RINDEX
 2.034e-06   1.3435
 2.068e-06   1.344
 2.103e-06   1.3445
@@ -44,7 +46,7 @@ Water G4MaterialPropertiesTable
 3.877e-06   1.3595
 4.002e-06   1.36
 4.136e-06   1.3608
-9
+9: GROUPVEL
 2.034e-06   218.243
 2.051e-06   218.204
 2.0855e-06   218.183
@@ -77,7 +79,7 @@ Water G4MaterialPropertiesTable
 3.8185e-06   217.941
 3.9395e-06   217.951
 4.136e-06   216.443
-10
+10: MIEHG
 1.56962e-06   1.67024e+08
 1.58974e-06   1.58727e+08
 1.61039e-06   1.50742e+08
@@ -138,7 +140,7 @@ Water G4MaterialPropertiesTable
 5.63635e-06   1.00453e+06
 5.90475e-06   833967
 6.19998e-06   686106
-14
+14: ABSLENGTH
 2.034e-06   3448
 2.068e-06   4082
 2.103e-06   6329
@@ -171,7 +173,7 @@ Water G4MaterialPropertiesTable
 3.877e-06   19500
 4.002e-06   17500
 4.136e-06   14500
-15
+15: FASTCOMPONENT
 2.034e-06   1
 2.068e-06   1
 2.103e-06   1
@@ -204,7 +206,7 @@ Water G4MaterialPropertiesTable
 3.877e-06   1
 4.002e-06   1
 4.136e-06   1
-16
+16: SLOWCOMPONENT
 2.034e-06   0.01
 2.068e-06   1
 2.103e-06   2
@@ -237,24 +239,24 @@ Water G4MaterialPropertiesTable
 3.877e-06   6
 4.002e-06   5
 4.136e-06   4
-5
+5: MIEHG_FORWARD
 0.99
-6
+6: MIEHG_BACKWARD
 0.99
-7
+7: MIEHG_FORWARD_RATIO
 0.8
-8
+8: SCINTILLATIONYIELD
 50
-9
+9: RESOLUTIONSCALE
 1
-10
+10: FASTTIMECONSTANT
 1
-12
+12: SLOWTIMECONSTANT
 10
-14
+14: YIELDRATIO
 0.8
 Air G4MaterialPropertiesTable
-0
+0: RINDEX
 2.034e-06   1
 2.068e-06   1
 2.103e-06   1
@@ -287,7 +289,7 @@ Air G4MaterialPropertiesTable
 3.877e-06   1
 4.002e-06   1
 4.136e-06   1
-9
+9: GROUPVEL
 2.034e-06   299.792
 2.051e-06   299.792
 2.0855e-06   299.792
@@ -339,26 +341,26 @@ Reflectivity LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface
 1
 
 Water Surface G4MaterialPropertiesTable
-0
+0: RINDEX
 2.034e-06   1.35
 4.136e-06   1.4
-6
+6: SPECULARLOBECONSTANT
 2.034e-06   0.3
 4.136e-06   0.3
-7
+7: SPECULARSPIKECONSTANT
 2.034e-06   0.2
 4.136e-06   0.2
-8
+8: BACKSCATTERCONSTANT
 2.034e-06   0.2
 4.136e-06   0.2
-9
+9: GROUPVEL
 2.034e-06   211.055
 4.136e-06   203.878
 Air Surface G4MaterialPropertiesTable
-1
+1: REFLECTIVITY
 2.034e-06   0.3
 4.136e-06   0.5
-4
+4: EFFICIENCY
 2.034e-06   0.8
 4.136e-06   1
 ### Birks coefficients used in run time

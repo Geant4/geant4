@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -2636,7 +2638,7 @@ Number of digits in this event =  9
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.92s Real=1.14s Sys=0.02s
+  User=1.33s Real=1.87s Sys=0.03s
 End of Run 0
 /gun/particle gamma
 /gun/energy 1 GeV
@@ -4102,7 +4104,7 @@ Number of digits in this event =  1
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.48s Real=3.49s Sys=0s
+  User=5.39s Real=5.4s Sys=0s
 End of Run 1
 /gun/particle e-
 /gun/energy 1 GeV
@@ -7227,7 +7229,7 @@ Number of digits in this event =  16
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.42s Real=3.45s Sys=0s
+  User=6.25s Real=6.27s Sys=0.01s
 End of Run 2
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -26,6 +26,8 @@
 #ifndef G4IosFlagsSaver_
 #define G4IosFlagsSaver_
 
+#include <iostream>
+
 class G4IosFlagsSaver
 {
 public:

@@ -14,6 +14,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+09-02-2018, M.Asai tag emdna-V10-03-31
+- G4DNAMolecularMaterial.cc :
+  GetDensityTableFor() and GetNumMolPerVolTableFor() methods are accepted
+  at G4State_Init rather than G4State_Idle.
+- Co-works with run-V10-04-01 and global-V10-04-01.
+
+21-12-2017, G.Cosmo
+- Fixed self-consistency in headers (missing #include) in G4IosFlagsSaver,
+  G4KDNode, G4MoleculeIterator and G4LEPTSDiffXS.
+  Fixed spurious definition of G4IT namespace in G4ITMultiNavigator header.
+  Thanks to Raphael Isemann for reporting these.
+
+01-11-2017, MK tag emdna-V10-03-30
+- remove models/test directory
+
+31-10-2017, JA ( tag missing )
+- G4KDNode.hh: Add missing included file - needed in test
+
 16-08-2017, SI tag emdna-V10-03-28
 - updated variable types in models
 

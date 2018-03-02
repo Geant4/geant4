@@ -1,4 +1,4 @@
-$Id: History 106992 2017-10-31 10:14:18Z gcosmo $
+$Id: History 108474 2018-02-15 14:15:39Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,24 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 8, 2018  Dennis Wright  (event-V10-03-05)
+- add deprecation warning for /gun/ionL in 
+  G4ParticleGunMessenger::SetNewValue()
+
+January 9, 2018, M.Asai
+- G4GeneralParticleSourceMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+
+December 26, 2017, M.Asai
+- G4ParticleGunMessenger :
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
+
+December 19, 2017, G.Cosmo
+- Fixed self-consistency in G4SPSRandomGenerator header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
 
 October 23, 2017, K.L.Genser (event-V10-03-04)
 - G4StackManager added #ifdef for the case when a particle IsMuonicAtom

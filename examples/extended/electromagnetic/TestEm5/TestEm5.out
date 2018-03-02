@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 /control/cout/ignoreThreadsExcept 0
 /run/numberOfThreads 2
@@ -51,6 +53,7 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
  X position of the middle of the absorber 0 fm 
 #/process/em/verbose 1
 /process/em/workerVerbose 0
+/run/physicsModified
 #
 /testem/gun/setDefault
 /gun/particle pi+
@@ -433,7 +436,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1s Real=1.01s Sys=0s
+  User=2.89s Real=2.89s Sys=0s
 
  ======================== run summary ======================
 
@@ -857,7 +860,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=1.17s Real=1.18s Sys=0s
+  User=2.47s Real=2.48s Sys=0s
 
  ======================== run summary ======================
 
@@ -1286,7 +1289,7 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.73s Real=2.73s Sys=0s
+  User=4.02s Real=4.03s Sys=0s
 
  ======================== run summary ======================
 
@@ -1721,7 +1724,7 @@ Index : 4     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=0.54s Real=0.55s Sys=0s
+  User=1.14s Real=1.14s Sys=0s
 
  ======================== run summary ======================
 
@@ -2157,7 +2160,7 @@ Index : 5     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=8.72s Real=8.74s Sys=0.01s
+  User=14.05s Real=14.09s Sys=0.01s
 
  ======================== run summary ======================
 

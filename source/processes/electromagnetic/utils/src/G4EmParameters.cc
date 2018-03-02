@@ -158,7 +158,7 @@ void G4EmParameters::Initialise()
   finalRangeMuHad = 0.1*CLHEP::mm;
   factorScreen = 1.0;
 
-  nbins  = 77;
+  nbins  = 84;
   nbinsPerDecade = 7;
   verbose = 1;
   workerVerbose = 0;
@@ -927,6 +927,7 @@ void G4EmParameters::AddPAIModel(const G4String& particle,
                                  const G4String& region,
                                  const G4String& type)
 {
+  if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesPAI.size();
   for(G4int i=0; i<nreg; ++i) {
@@ -965,6 +966,7 @@ const std::vector<G4String>& G4EmParameters::TypesPAI() const
 
 void G4EmParameters::AddMicroElec(const G4String& region)
 {
+  if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesME.size();
   for(G4int i=0; i<nreg; ++i) {
@@ -980,6 +982,7 @@ const std::vector<G4String>& G4EmParameters::RegionsMicroElec() const
 
 void G4EmParameters::AddDNA(const G4String& region, const G4String& type)
 {
+  if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesDNA.size();
   for(G4int i=0; i<nreg; ++i) {
@@ -1001,13 +1004,7 @@ const std::vector<G4String>& G4EmParameters::TypesDNA() const
 
 void G4EmParameters::AddMsc(const G4String& region, const G4String& type)
 {
-  G4String r = CheckRegion(region);
-  G4int nreg =  m_regnamesMsc.size();
-  for(G4int i=0; i<nreg; ++i) {
-    if(r == m_regnamesMsc[i]) { return; }
-  }
-  m_regnamesMsc.push_back(r);
-  m_typesMsc.push_back(type);
+  AddPhysics(region, type);
 }
 
 const std::vector<G4String>& G4EmParameters::RegionsMsc() const
@@ -1022,6 +1019,7 @@ const std::vector<G4String>& G4EmParameters::TypesMsc() const
 
 void G4EmParameters::AddPhysics(const G4String& region, const G4String& type)
 {
+  if(IsLocked()) { return; }
   G4String r = CheckRegion(region);
   G4int nreg =  m_regnamesMsc.size();
   for(G4int i=0; i<nreg; ++i) {
@@ -1255,36 +1253,37 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "=======================================================================" << "\n";
   os << "======                 Electromagnetic Physics Parameters      ========" << "\n";
   os << "=======================================================================" << "\n";
-  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
-  os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
   os << "LPM effect enabled                                 " <<flagLPM << "\n";
   os << "Spline of EM tables enabled                        " <<spline << "\n";
-  os << "Use cut as a final range enabled                   " <<finalRange << "\n";
   os << "Apply cuts on all EM processes                     " <<applyCuts << "\n";
-  os << "Fluorescence enabled                               " <<fluo << "\n";
-  os << "Fluorescence Bearden data files enabled            " <<beardenFluoDir << "\n";
-  os << "Auger electron production enabled                  " <<auger << "\n";
-  os << "Auger cascade enabled                              " <<augerCascade << "\n";
-  os << "PIXE atomic de-excitation enabled                  " <<pixe << "\n";
-  os << "De-excitation module ignores cuts                  " <<deexIgnoreCut << "\n";
-  os << "Msc lateral displacement for e+- enabled           " <<lateralDisplacement << "\n";
-  os << "Msc lateral displacement for muons and hadrons     " <<muhadLateralDisplacement << "\n";
-  os << "Msc lateral displacement alg96 for e+-             " <<lateralDisplacementAlg96 << "\n";
-  os << "Msc lateral displacement beyond geometry safety    " <<latDisplacementBeyondSafety << "\n";
-  os << "Enable angular generator interface                 " 
-     <<useAngGeneratorForIonisation << "\n";
-  os << "Use Mott correction for e- scattering              " << useMottCorrection << "\n";
   os << "Use integral approach for tracking                 " << integral << "\n";
+  os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
   os << "Use built-in Birks satuaration                     " << birks << "\n";
-  os << "Use fast sampling in DNA models                    " << dnaFast << "\n";
-  os << "Use Stationary option in DNA models                " << dnaStationary << "\n";
-  os << "Use DNA with multiple scattering of e-             " << dnaMsc << "\n";
-
-  os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";
   os << "Min kinetic energy for tables                      " 
      <<G4BestUnit(minKinEnergy,"Energy") << "\n";
   os << "Max kinetic energy for tables                      " 
      <<G4BestUnit(maxKinEnergy,"Energy") << "\n";
+  os << "Number of bins in tables                           " <<nbins   << "\n";
+  os << "Number of bins per decade of a table               " <<nbinsPerDecade << "\n";
+  os << "Verbose level                                      " <<verbose << "\n";
+  os << "Verbose level for worker thread                    " <<workerVerbose << "\n";
+  os << "Bremsstrahlung energy threshold above which \n" 
+     << "  primary is added to the list of secondary        " 
+     <<G4BestUnit(bremsTh,"Energy") << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Ionisation Parameters                   ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Step function for e+-                              " <<"("<< dRoverRange
+     << ", " << finalRange << " mm)\n";
+  os << "Step function for muons/hadrons                    " <<"("<< dRoverRangeMuHad
+     << ", " << finalRangeMuHad << " mm)\n";
+  os << "Fluctuations of dE/dx are enabled                  " <<lossFluctuation << "\n";
+  os << "Build CSDA range enabled                           " <<buildCSDARange << "\n";
+  os << "Use cut as a final range enabled                   " <<finalRange << "\n";
+  os << "Enable angular generator interface                 " 
+     <<useAngGeneratorForIonisation << "\n";
+  os << "Factor of cut reduction for sub-cutoff method      " << minSubRange << "\n";
   os << "Max kinetic energy for CSDA tables                 " 
      <<G4BestUnit(maxKinEnergyCSDA,"Energy") << "\n";
   os << "Lowest e+e- kinetic energy                         " 
@@ -1294,36 +1293,47 @@ std::ostream& G4EmParameters::StreamInfo(std::ostream& os) const
   os << "Lowest triplet kinetic energy                      " 
      <<G4BestUnit(lowestTripletEnergy,"Energy") << "\n";
   os << "Linear loss limit " <<linLossLimit << "\n";
-  os << "Bremsstrahlung energy threshold above which \n" 
-     << "  primary is added to the list of secondary        " 
-     <<G4BestUnit(bremsTh,"Energy") << "\n";
-  os << "X-section factor for integral approach             " <<lambdaFactor << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 Multiple Scattering Parameters          ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Type of msc step limit algorithm for e+-           " <<mscStepLimit << "\n";
+  os << "Type of msc step limit algorithm for muons/hadrons " <<mscStepLimitMuHad << "\n";
+  os << "Msc lateral displacement for e+- enabled           " <<lateralDisplacement << "\n";
+  os << "Msc lateral displacement for muons and hadrons     " <<muhadLateralDisplacement << "\n";
+  os << "Msc lateral displacement alg96 for e+-             " <<lateralDisplacementAlg96 << "\n";
+  os << "Msc lateral displacement beyond geometry safety    " <<latDisplacementBeyondSafety << "\n";
+  os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
+  os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
+  os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
+  os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
+  os << "Use Mott correction for e- scattering              " << useMottCorrection << "\n";
   os << "Factor used for dynamic computation of angular \n" 
      << "  limit between single and multiple scattering     " << factorForAngleLimit << "\n";
   os << "Fixed angular limit between single \n"
      << "  and multiple scattering                          " 
      <<thetaLimit/rad << " rad" << "\n";
-  os << "Range factor for msc step limit for e+-            " <<rangeFactor << "\n";
-  os << "Range factor for msc step limit for muons/hadrons  " <<rangeFactorMuHad << "\n";
-  os << "Geometry factor for msc step limitation of e+-     " <<geomFactor << "\n";
-  os << "Skin parameter for msc step limitation of e+-      " <<skin << "\n";
-  os << "Screening factor                                   " <<factorScreen << "\n";
-  os << "Step function for e+-                              " <<"("<< dRoverRange
-     << ", " << finalRange << " mm)\n";
-  os << "Step function for muons/hadrons                    " <<"("<< dRoverRangeMuHad
-     << ", " << finalRangeMuHad << " mm)\n";
-
-  os << "Number of bins in tables                           " <<nbins   << "\n";
-  os << "Number of bins per decade of a table               " <<nbinsPerDecade << "\n";
-  os << "Verbose level                                      " <<verbose << "\n";
-  os << "Verbose level for worker thread                    " <<workerVerbose << "\n";
-
-  os << "Type of msc step limit algorithm for e+-           " <<mscStepLimit << "\n";
-  os << "Type of msc step limit algorithm for muons/hadrons " <<mscStepLimitMuHad << "\n";
   os << "Type of nuclear form-factor                        " <<nucFormfactor << "\n";
+  os << "Screening factor                                   " <<factorScreen << "\n";
 
+  os << "=======================================================================" << "\n";
+  os << "======                 Atomic Deexcitation Parameters          ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Fluorescence enabled                               " <<fluo << "\n";
+  os << "Fluorescence Bearden data files enabled            " <<beardenFluoDir << "\n";
+  os << "Auger electron production enabled                  " <<auger << "\n";
+  os << "Auger cascade enabled                              " <<augerCascade << "\n";
+  os << "PIXE atomic de-excitation enabled                  " <<pixe << "\n";
+  os << "De-excitation module ignores cuts                  " <<deexIgnoreCut << "\n";
   os << "Type of PIXE cross section for hadrons             " <<namePIXE << "\n";
   os << "Type of PIXE cross section for e+-                 " <<nameElectronPIXE << "\n";
+
+  os << "=======================================================================" << "\n";
+  os << "======                 DNA Physics Parameters                  ========" << "\n";
+  os << "=======================================================================" << "\n";
+  os << "Use fast sampling in DNA models                    " << dnaFast << "\n";
+  os << "Use Stationary option in DNA models                " << dnaStationary << "\n";
+  os << "Use DNA with multiple scattering of e-             " << dnaMsc << "\n";
   os << "=======================================================================" << "\n";
   os.precision(prec);
   return os;
@@ -1348,4 +1358,3 @@ G4bool G4EmParameters::IsLocked() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-

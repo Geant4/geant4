@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 
 ***** Table : Nb of materials = 19 *****
@@ -261,60 +263,72 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
 =======================================================================
 ======                 Electromagnetic Physics Parameters      ========
 =======================================================================
-Fluctuations of dE/dx are enabled                  1
-Build CSDA range enabled                           1
 LPM effect enabled                                 1
 Spline of EM tables enabled                        1
-Use cut as a final range enabled                   1
 Apply cuts on all EM processes                     0
+Use integral approach for tracking                 1
+X-section factor for integral approach             0.8
+Use built-in Birks satuaration                     0
+Min kinetic energy for tables                      10 eV 
+Max kinetic energy for tables                      100 TeV
+Number of bins in tables                           260
+Number of bins per decade of a table               20
+Verbose level                                      0
+Verbose level for worker thread                    0
+Bremsstrahlung energy threshold above which 
+  primary is added to the list of secondary        100 TeV
+=======================================================================
+======                 Ionisation Parameters                   ========
+=======================================================================
+Step function for e+-                              (0.2, 1 mm)
+Step function for muons/hadrons                    (0.2, 0.1 mm)
+Fluctuations of dE/dx are enabled                  1
+Build CSDA range enabled                           1
+Use cut as a final range enabled                   1
+Enable angular generator interface                 0
+Factor of cut reduction for sub-cutoff method      1
+Max kinetic energy for CSDA tables                 1 GeV
+Lowest e+e- kinetic energy                         100 eV 
+Lowest muon/hadron kinetic energy                  1 keV
+Lowest triplet kinetic energy                      1 MeV
+Linear loss limit 0.01
+=======================================================================
+======                 Multiple Scattering Parameters          ========
+=======================================================================
+Type of msc step limit algorithm for e+-           3
+Type of msc step limit algorithm for muons/hadrons 0
+Msc lateral displacement for e+- enabled           1
+Msc lateral displacement for muons and hadrons     1
+Msc lateral displacement alg96 for e+-             0
+Msc lateral displacement beyond geometry safety    0
+Range factor for msc step limit for e+-            0.04
+Range factor for msc step limit for muons/hadrons  0.2
+Geometry factor for msc step limitation of e+-     2.5
+Skin parameter for msc step limitation of e+-      1
+Use Mott correction for e- scattering              0
+Factor used for dynamic computation of angular 
+  limit between single and multiple scattering     1
+Fixed angular limit between single 
+  and multiple scattering                          3.1416 rad
+Type of nuclear form-factor                        1
+Screening factor                                   1
+=======================================================================
+======                 Atomic Deexcitation Parameters          ========
+=======================================================================
 Fluorescence enabled                               1
 Fluorescence Bearden data files enabled            0
 Auger electron production enabled                  0
 Auger cascade enabled                              0
 PIXE atomic de-excitation enabled                  0
 De-excitation module ignores cuts                  0
-Msc lateral displacement for e+- enabled           1
-Msc lateral displacement for muons and hadrons     1
-Msc lateral displacement alg96 for e+-             0
-Msc lateral displacement beyond geometry safety    0
-Enable angular generator interface                 0
-Use Mott correction for e- scattering              0
-Use integral approach for tracking                 1
-Use built-in Birks satuaration                     0
+Type of PIXE cross section for hadrons             Empirical
+Type of PIXE cross section for e+-                 Livermore
+=======================================================================
+======                 DNA Physics Parameters                  ========
+=======================================================================
 Use fast sampling in DNA models                    0
 Use Stationary option in DNA models                0
 Use DNA with multiple scattering of e-             0
-Factor of cut reduction for sub-cutoff method      1
-Min kinetic energy for tables                      10 eV 
-Max kinetic energy for tables                      100 TeV
-Max kinetic energy for CSDA tables                 1 GeV
-Lowest e+e- kinetic energy                         100 eV 
-Lowest muon/hadron kinetic energy                  1 keV
-Lowest triplet kinetic energy                      1 MeV
-Linear loss limit 0.01
-Bremsstrahlung energy threshold above which 
-  primary is added to the list of secondary        100 TeV
-X-section factor for integral approach             0.8
-Factor used for dynamic computation of angular 
-  limit between single and multiple scattering     1
-Fixed angular limit between single 
-  and multiple scattering                          3.1416 rad
-Range factor for msc step limit for e+-            0.04
-Range factor for msc step limit for muons/hadrons  0.2
-Geometry factor for msc step limitation of e+-     2.5
-Skin parameter for msc step limitation of e+-      1
-Screening factor                                   1
-Step function for e+-                              (0.2, 1 mm)
-Step function for muons/hadrons                    (0.2, 0.1 mm)
-Number of bins in tables                           260
-Number of bins per decade of a table               20
-Verbose level                                      0
-Verbose level for worker thread                    0
-Type of msc step limit algorithm for e+-           3
-Type of msc step limit algorithm for muons/hadrons 0
-Type of nuclear form-factor                        1
-Type of PIXE cross section for hadrons             Empirical
-Type of PIXE cross section for e+-                 Livermore
 =======================================================================
 
 ========= Table of registered couples ==============================

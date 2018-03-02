@@ -42,9 +42,11 @@
 // Version 1.0, 05/02/2004, Fan Lei, Created.
 //    Based on the G4GeneralParticleSource class in Geant4 v6.0
 //
+// Version 1.1, 13/02/2017, Maxime Chauvin
+//    Added surface and volume shape "EllipticCylinder"
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
-
 #include "G4SPSPosDistribution.hh"
 
 #include "G4PhysicalConstants.hh"
@@ -506,6 +508,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
   G4double theta, phi;
   G4double x, y, z;
   x = y = z = 0.;
+  G4double expression;
   G4ThreeVector RandPos;
   //  G4double tempx, tempy, tempz;
   thread_data_t& td = ThreadData.Get();
@@ -743,6 +746,101 @@ void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
       RandPos.setZ(z);
 
     }
+  else if(Shape == "EllipticCylinder")
+    {
+      G4double AreaTop, AreaBot, AreaLat, AreaTotal;
+      G4double h;
+      G4double prob1, prob2, prob3;
+      G4double testrand;
+
+      // User giver x, y and z-half length
+      // Calculate surface areas, maybe move this to
+      // a different routine.
+
+      AreaTop = pi * halfx * halfy;
+      AreaBot = AreaTop;
+      // Using circumference approximation by Ramanujan (order h^3)
+      //AreaLat = 2*halfz * pi*( 3*(halfx + halfy) - std::sqrt((3*halfx + halfy) * (halfx + 3*halfy)) );
+      // Using circumference approximation by Ramanujan (order h^5)
+      h = ((halfx - halfy)*(halfx - halfy)) / ((halfx + halfy)*(halfx + halfy));
+      AreaLat = 2*halfz * pi*(halfx + halfy)*(1 + (3*h)/(10 + std::sqrt(4 - 3*h)));
+      AreaTotal = AreaTop + AreaBot + AreaLat;
+
+      prob1 = AreaTop / AreaTotal;
+      prob2 = AreaBot / AreaTotal;
+      prob3 = 1.00 - prob1 - prob2;
+      if(std::fabs(prob3 - (AreaLat/AreaTotal)) >= 0.001)
+        {
+          if(verbosityLevel >= 1)
+            G4cout << AreaLat/AreaTotal << " " << prob3<<G4endl;
+          G4cout << "Error in prob3" << G4endl;
+        }
+
+      // Decide surface to calculate point on.
+
+      testrand = G4UniformRand();
+      if(testrand <= prob1)
+        {
+          //Point on Top surface
+          z = halfz;
+          expression = 20.;
+          while(expression > 1.)
+	    {
+	      x = PosRndm->GenRandX();
+	      y = PosRndm->GenRandY();
+
+	      x = (x * 2. * halfx) - halfx;
+	      y = (y * 2. * halfy) - halfy;
+
+              expression = ((x*x)/(halfx*halfx)) + ((y*y)/(halfy*halfy));
+	    }
+        }
+      else if((testrand > prob1) && (testrand <= (prob1 + prob2)))
+        {
+          //Point on Bottom surface
+          z = -halfz;
+          expression = 20.;
+          while(expression > 1.)
+	    {
+	      x = PosRndm->GenRandX();
+	      y = PosRndm->GenRandY();
+
+	      x = (x * 2. * halfx) - halfx;
+	      y = (y * 2. * halfy) - halfy;
+
+              expression = ((x*x)/(halfx*halfx)) + ((y*y)/(halfy*halfy));
+	    }
+        }
+      else if(testrand > (prob1+prob2))
+        {
+          G4double rand;
+          //Point on Lateral Surface
+          rand = PosRndm->GenRandPosPhi();
+          rand = rand * 2. * pi;
+
+          x = halfx * std::cos(rand);
+          y = halfy * std::sin(rand);
+
+          z = PosRndm->GenRandZ();
+
+          z = (z * 2. * halfz) - halfz;
+        }
+      else
+        G4cout << "Error: testrand " << testrand << G4endl;
+
+      RandPos.setX(x);
+      RandPos.setY(y);
+      RandPos.setZ(z);
+
+      // Cosine law
+      G4ThreeVector zdash(x,y,z);
+      zdash = zdash.unit();
+      G4ThreeVector xdash = Rotz.cross(zdash);
+      G4ThreeVector ydash = xdash.cross(zdash);
+      td.CSideRefVec1 = xdash.unit();
+      td.CSideRefVec2 = ydash.unit();
+      td.CSideRefVec3 = zdash.unit();
+    }
   else if(Shape == "Para")
     {
       G4double testrand;
@@ -912,6 +1010,7 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
   G4double x, y, z;
+  G4double expression;
   x = y = z = 0.;
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Volume" << G4endl;
@@ -964,6 +1063,22 @@ void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
 	  y = (y*2.*Radius) - Radius;
 	  z = (z*2.*halfz) - halfz;
 	}
+    }
+  else if(Shape == "EllipticCylinder")
+    {
+      expression = 20.;
+      while(expression > 1.)
+        {
+          x = PosRndm->GenRandX();
+          y = PosRndm->GenRandY();
+          z = PosRndm->GenRandZ();
+
+          x = (x*2.*halfx) - halfx;
+          y = (y*2.*halfy) - halfy;
+          z = (z*2.*halfz) - halfz;
+
+          expression = ((x*x)/(halfx*halfx)) + ((y*y)/(halfy*halfy));
+        }
     }
   else if(Shape == "Para")
     {
@@ -1036,6 +1151,7 @@ G4bool G4SPSPosDistribution::IsSourceConfined(G4ThreeVector& pos)
   theVolume=gNavigator->LocateGlobalPointAndSetup(pos,ptr,true);
   if(!theVolume) return(false);
   G4String theVolName = theVolume->GetName();
+
   if(theVolName == VolName)
     {
       if(verbosityLevel >= 1)

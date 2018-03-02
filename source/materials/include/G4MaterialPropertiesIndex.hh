@@ -65,34 +65,6 @@ enum G4MaterialPropertyIndex   {
   kNumberOfPropertyIndex       // the number of G4MaterialPropertyIndex
 } ;
 
-typedef G4MaterialPropertyIndex G4MPindex;
-
-const std::vector<G4String> G4MaterialPropertyName = {
-  "RINDEX",
-  "REFLECTIVITY",                 
-  "REALRINDEX",
-  "IMAGINARYRINDEX",
-  "EFFICIENCY",
-  "TRANSMITTANCE",
-  "SPECULARLOBECONSTANT",
-  "SPECULARSPIKECONSTANT",
-  "BACKSCATTERCONSTANT",
-  "GROUPVEL",
-  "MIEHG",                     
-  "RAYLEIGH",
-  "WLSCOMPONENT",
-  "WLSABSLENGTH",
-  "ABSLENGTH",
-  "FASTCOMPONENT",
-  "SLOWCOMPONENT",
-  "PROTONSCINTILLATIONYIELD",
-  "DEUTERONSCINTILLATIONYIELD",
-  "TRITONSCINTILLATIONYIELD",
-  "ALPHASCINTILLATIONYIELD",
-  "IONSCINTILLATIONYIELD",
-  "ELECTRONSCINTILLATIONYIELD"
-};
-
 enum G4MaterialConstPropertyIndex 
 { 
   kNullConstPropertyIndex = -1, // the number of G4MaterialPropertyIndex
@@ -130,44 +102,6 @@ enum G4MaterialConstPropertyIndex
   kMR_ANGNOPHI,                 // number of phi angles in the look-up table
   kMR_ANGCUT,                   // angular cut
   kNumberOfConstPropertyIndex   // the number of G4MaterialConstPropertyIndex
-};
-
-typedef G4MaterialConstPropertyIndex G4MCPindex;
-
-const std::vector<G4String> G4MaterialConstPropertyName = {
-  "SURFACEROUGHNESS",                  
-  "ISOTHERMAL_COMPRESSIBILITY",
-  "RS_SCALE_FACTOR",
-  "WLSMEANNUMBERPHOTONS",
-  "WLSTIMECONSTANT",
-  "MIEHG_FORWARD",
-  "MIEHG_BACKWARD",
-  "MIEHG_FORWARD_RATIO",
-  "SCINTILLATIONYIELD",
-  "RESOLUTIONSCALE",
-  "FASTTIMECONSTANT",
-  "FASTSCINTILLATIONRISETIME",
-  "SLOWTIMECONSTANT",
-  "SLOWSCINTILLATIONRISETIME",
-  "YIELDRATIO",
-  "FERMIPOT",
-  "DIFFUSION",
-  "SPINFLIP",
-  "LOSS",
-  "LOSSCS",
-  "ABSCS",
-  "SCATCS",
-  "MR_NBTHETA",
-  "MR_NBE",
-  "MR_RRMS",
-  "MR_CORRLEN",
-  "MR_THETAMIN",
-  "MR_THETAMAX",
-  "MR_EMIN",
-  "MR_EMAX",
-  "MR_ANGNOTHETA",
-  "MR_ANGNOPHI",
-  "MR_ANGCUT"
 };
 
 #endif /* G4MaterialPropertiesIndex_h */

@@ -49,6 +49,10 @@
 //      particularly when the blackbody function is not used. Also moved to dynamically allocated
 //      memory in the LinearInterpolation, ExpInterpolation and LogInterpolation functions. Again,
 //      this will save space if these functions are unused.
+//
+//
+// 24/11/2017  Fan Lei
+//    Added cutoff power-law distribution option. Implementation is similar to that of the BlackBody one.
 ///////////////////////////////////////////////////////////////////////////////
 #include "G4SPSEneDistribution.hh"
 
@@ -98,11 +102,15 @@ G4SPSEneDistribution::G4SPSEneDistribution(): Epnflag(false),eneRndm(0),Splinete
     Arb_grad_cept_flag = false;
     Arb_alpha_Const_flag = false;
     Arb_ezero_flag = false;
-    histInit = false;
-    histCalcd = false;
+    BBhistInit = false;
+    BBhistCalcd = false;
+    CPhistInit = false;
+    CPhistCalcd = false;
     
     BBHist = NULL;
     Bbody_x = NULL;
+    CPHist = NULL;
+    CP_x = NULL;
 
     threadLocal_t& data = threadLocalData.Get();
     data.Emax = Emax;
@@ -137,6 +145,8 @@ G4SPSEneDistribution::~G4SPSEneDistribution()
     }
     delete Bbody_x;
     delete BBHist;
+    delete CP_x;
+    delete CPHist;
     for ( std::vector<G4DataInterpolation*>::iterator it = SplineInt.begin() ; it!=SplineInt.end() ; ++it)
     {
         delete *it;
@@ -393,20 +403,36 @@ void G4SPSEneDistribution::Calculate()
     }
 	else if (EnergyDisType == "Bbody")
     {
-        if(!histInit)
+        if(!BBhistInit)
         {
-            InitHists();
+            BBInitHists();
         }
 		CalculateBbodySpectrum();
+    }
+	else if (EnergyDisType == "CPow")
+    {
+        if(!CPhistInit)
+        {
+            CPInitHists();
+        }
+		CalculateCPowSpectrum();
     }
 }
 
 //MT: Lock in caller
-void G4SPSEneDistribution::InitHists()
+void G4SPSEneDistribution::BBInitHists()
 {
     BBHist = new std::vector<G4double>(10001, 0.0);
     Bbody_x = new std::vector<G4double>(10001, 0.0);
-    histInit = true;
+    BBhistInit = true;
+}
+
+//MT: Lock in caller
+void G4SPSEneDistribution::CPInitHists()
+{
+    CPHist = new std::vector<G4double>(10001, 0.0);
+    CP_x = new std::vector<G4double>(10001, 0.0);
+    CPhistInit = true;
 }
 
 
@@ -496,6 +522,42 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
 	count = 0;
 	while (count < 10001) {
 		BBHist->at(count) = BBHist->at(count) / sum;
+		count++;
+	}
+}
+
+//MT: Lock in caller
+void G4SPSEneDistribution::CalculateCPowSpectrum()
+{
+	// create cutoff power-law spectrum
+	// x^a exp(-x/b)
+	// the integral of this function is an incomplete gamma function, which is only available in the Boost library.
+    // 
+	// User inputs are emin, emax and alpha and Ezero. These are used to
+	// create a 10,000 bin histogram.
+    
+	G4double erange = threadLocalData.Get().Emax - threadLocalData.Get().Emin;
+	G4double steps = erange / 10000.;
+	alpha = threadLocalData.Get().alpha ;
+	Ezero = threadLocalData.Get().Ezero ;
+    
+	G4int count = 0;
+	G4double sum = 0.;
+	CPHist->at(0) = 0.;
+    
+	while (count < 10000) {
+		CP_x->at(count) = threadLocalData.Get().Emin + G4double(count * steps);
+        G4double CP_y = std::pow(CP_x->at(count), alpha) * std::exp(-CP_x->at(count) / Ezero);
+		sum = sum + CP_y;
+		CPHist->at(count + 1) = CPHist->at(count) + CP_y;
+        count++;
+	}
+
+	CP_x->at(10000) = threadLocalData.Get().Emax;
+	// Normalise cumulative histo.
+	count = 0;
+	while (count < 10001) {
+		CPHist->at(count) = CPHist->at(count) / sum;
 		count++;
 	}
 }
@@ -1143,6 +1205,79 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
     }
 }
 
+void G4SPSEneDistribution::GenerateCPowEnergies()
+{
+	// Method to generate particle energies distributed in
+	// cutoff power-law distribution
+
+	// CP_x holds Energies, and CPHist holds the cumulative histo.
+	// binary search to find correct bin then lin interpolation.
+	// Use the earlier defined histogram + RandGeneral method to generate
+	// random numbers following the histos distribution.
+	G4double rndm;
+	G4int nabove, nbelow = 0, middle;
+	nabove = 10001;
+	rndm = eneRndm->GenRandEnergy();
+    G4AutoLock l(&mutex);
+    G4bool done = CPhistCalcd;
+    l.unlock();
+    if(!done)
+    {
+        Calculate(); //This is has a lock inside, risk is to do it twice
+        l.lock();
+        CPhistCalcd = true;
+        l.unlock();
+    }
+
+	// Binary search to find bin that rndm is in
+	while (nabove - nbelow > 1)
+    {
+		middle = (nabove + nbelow) / 2;
+		if (rndm == CPHist->at(middle))
+        {
+			break;
+        }
+		if (rndm < CPHist->at(middle))
+        {
+			nabove = middle;
+        }
+		else
+        {
+			nbelow = middle;
+        }
+	}
+
+	// Now interpolate in that bin to find the correct output value.
+	G4double x1, x2, y1, y2, t, q;
+	x1 = CP_x->at(nbelow);
+    if(nbelow+1 == static_cast<G4int>(CP_x->size()))
+    {
+        x2 = CP_x->back();
+    }
+    else
+    {
+        x2 = CP_x->at(nbelow + 1);
+    }
+	y1 = CPHist->at(nbelow);
+    if(nbelow+1 == static_cast<G4int>(CPHist->size()))
+    {
+        G4cout << CPHist->back() << G4endl;
+        y2 = CPHist->back();
+    }
+    else
+    {
+        y2 = CPHist->at(nbelow + 1);
+    }
+	t = (y2 - y1) / (x2 - x1);
+	q = y1 - t * x1;
+
+	threadLocalData.Get().particle_energy = (rndm - q) / t;
+
+	if (verbosityLevel >= 1) {
+		G4cout << "Energy is " << threadLocalData.Get().particle_energy << G4endl;
+	}
+}
+
 void G4SPSEneDistribution::GenerateBiasPowEnergies()//G4double& ene,G4double& wweight)
 {
   // Method to generate particle energies distributed as
@@ -1294,13 +1429,13 @@ void G4SPSEneDistribution::GenerateBbodyEnergies()
 	nabove = 10001;
 	rndm = eneRndm->GenRandEnergy();
     G4AutoLock l(&mutex);
-    G4bool done = histCalcd;
+    G4bool done = BBhistCalcd;
     l.unlock();
     if(!done)
     {
         Calculate(); //This is has a lock inside, risk is to do it twice
         l.lock();
-        histCalcd = true;
+        BBhistCalcd = true;
         l.unlock();
     }
 
@@ -1753,6 +1888,10 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
 			else if (EnergyDisType == "Pow")
             {
 				GeneratePowEnergies(false);
+            }
+			else if (EnergyDisType == "CPow")
+            {
+				GenerateCPowEnergies();
             }
 			else if (EnergyDisType == "Exp")
             {

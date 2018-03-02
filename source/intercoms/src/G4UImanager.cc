@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc 106172 2017-09-15 13:03:57Z gcosmo $
+// $Id: G4UImanager.cc 108488 2018-02-15 14:52:00Z gcosmo $
 //
 //
 // ---------------------------------------------------------------------
@@ -526,7 +526,22 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
 
-  return targetCommand->DoIt( commandParameter );
+  targetCommand->ResetFailure();
+  G4int commandFailureCode = targetCommand->DoIt( commandParameter );
+  if(commandFailureCode==0)
+  {
+    G4int additionalFailureCode = targetCommand->IfCommandFailed();
+    if(additionalFailureCode > 0)
+    {
+      G4ExceptionDescription msg;
+      msg << targetCommand->GetFailureDescription() << "\n"
+          << "Error code : " << additionalFailureCode;
+      G4Exception("G4UImanager::ApplyCommand","UIMAN0123",
+                   JustWarning,msg);
+      commandFailureCode += additionalFailureCode;
+    }
+  }
+  return commandFailureCode;
 }
 
 void G4UImanager::StoreHistory(const char* fileName)

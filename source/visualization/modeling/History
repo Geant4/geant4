@@ -1,4 +1,4 @@
-$Id: History 106122 2017-09-13 12:51:53Z gcosmo $
+$Id: History 108542 2018-02-16 09:35:32Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+19th December 2017  Gabriele Cosmo  (modeling-V10-03-09)
+- Fixed self-consistency in G4AttValueFilterT header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
+12th December 2017  John Allison
+- G4TrajectoryDrawerUtils.cc: Improvement to an informational message.
 
 13th September 2017  John Allison  (modeling-V10-03-08)
 - G4ModelingParameters.cc, G4PhysicalVolumeModel.cc:

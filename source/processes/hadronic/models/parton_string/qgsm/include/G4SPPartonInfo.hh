@@ -26,6 +26,8 @@
 #ifndef G4SPPartonInfo_h
 #define G4SPPartonInfo_h
 
+#include "G4Types.hh"
+
 class G4SPPartonInfo
 {
   public:

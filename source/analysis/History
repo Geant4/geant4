@@ -1,4 +1,4 @@
-$Id: History 107500 2017-11-17 11:06:53Z gcosmo $
+$Id: History 108469 2018-02-15 14:07:01Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the SVN repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+December 21, 2017 G. Cosmo (analysis-V10-03-18)
+- Fixed self-consistency in headers (missing #include) in G4BaseAnalysisManager,
+  and G4PlotManager.
 
 November 16, 2017 I. Hrivnacova (analysis-V10-03-17)
 - Updated to g4tools 4.2.1 (Guy Barrand):

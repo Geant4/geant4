@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 <<< Geant4 Physics List simulation engine: FTFP_BERT 2.0
 
@@ -965,7 +967,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.77s Real=0.91s Sys=0.13s
+  User=1.52s Real=1.86s Sys=0.34s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1614,7 +1616,7 @@ Index : 6     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.47s Real=1.75s Sys=0.28s
+  User=3.24s Real=3.95s Sys=0.7s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2294,7 +2296,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.42s Real=0.53s Sys=0.11s
+  User=1.18s Real=1.47s Sys=0.3s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -3003,7 +3005,7 @@ Index : 12     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.54s Real=0.66s Sys=0.11s
+  User=1.3s Real=1.6s Sys=0.3s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################

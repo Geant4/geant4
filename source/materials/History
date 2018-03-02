@@ -1,4 +1,4 @@
-$Id: History 106997 2017-10-31 10:22:36Z gcosmo $
+$Id: History 108517 2018-02-16 08:18:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-02-18 D.Sawkey (materials-V10-03-15)
+- G4MaterialPropertiesTable: Restore return of nullptr if material property
+  not found. Add bool to print warnings. Continuation of bug #2030
+
+12-02-18 V.Ivanchenko (materials-V10-03-14)
+- G4OpticalSurface - move static methods to source
+
+07-02-18 D.Sawkey
+- Re-enable user-defined material properties (fix bug #2030)
+  in G4MaterialPropertiesTable and G4MaterialPropertiesIndex
+
+19-12-17 G.Cosmo
+- Fixed self-consistency in headers (missing #include) in G4ElementTable and
+  G4MaterialTable. Thanks to Raphael Isemann for reporting these.
 
 20-10-17 S.Y.Jun (materials-V10-03-13)
 - G4MaterialPropertiesTable - rename SetGROUPVEL to CalculateGROUPVEL

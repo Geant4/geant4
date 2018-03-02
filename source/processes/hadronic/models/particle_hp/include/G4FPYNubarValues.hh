@@ -49,6 +49,8 @@
 #ifndef G4FPYNUBARVALUES_HH
 #define	G4FPYNUBARVALUES_HH
 
+#include "G4Types.hh"
+
 /** Evaluated nubar values for neutron induced fission. The data are represented
  *  as linear regression fits from experimental data in the form: v = mx + b,
  *  where x is the incident neutron energy.

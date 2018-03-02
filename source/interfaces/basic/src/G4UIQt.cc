@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 105742 2017-08-16 13:11:07Z gcosmo $
+// $Id: G4UIQt.cc 108490 2018-02-15 14:54:21Z gcosmo $
 //
 // L. Garnier
 
@@ -167,6 +167,7 @@ G4UIQt::G4UIQt (
 ,fDefaultViewerFirstPageHTMLText("")
 ,fViewerPropertiesDialog(NULL)
 ,fPickInfosDialog(NULL)
+,fLastCompleteCommand("")
 ,fMoveSelected(false)
 ,fRotateSelected(true)
 ,fPickSelected(false)
@@ -3158,9 +3159,11 @@ void G4UIQt::updateHelpArea (
     txt += "<b>Command </b> " + QString((char*)(commandPath).data()) + "<br />";
   }
   txt += "<b>Guidance :</b> ";
-  
+  QString tmpGuidance = "";
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
-    txt += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "<br />";
+    tmpGuidance = QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data());
+    tmpGuidance.replace("\n","<br />");
+    txt += tmpGuidance + "<br />";
   }
   if( ! rangeString.isNull() ) {
     txt += "<b>Range of parameters : </b> " + QString((char*)(rangeString).data()) + "<br />";
@@ -3332,6 +3335,10 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
       if (e->key() == (Qt::Key_Tab)) {
         tabKeyPress = true;
       }
+    } else if ( aEvent->type() == QEvent::Hide ) {
+        // Store this value
+        QString c = fCommandArea->text();
+        fLastCompleteCommand = c.left(c.indexOf("<"));
     }
   }
   
@@ -3377,6 +3384,11 @@ bool G4UIQt::eventFilter( // Should stay with a minuscule eventFilter because of
        fCommandArea->end(false);
        return true;
       }
+    } else if (aEvent->type() == QEvent::Paint) {
+        if (fLastCompleteCommand != "") {
+            fCommandArea->setText(fLastCompleteCommand);
+            fLastCompleteCommand = "";
+        }
     }
   }
   if (tabKeyPress == true) {

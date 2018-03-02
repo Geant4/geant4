@@ -23,7 +23,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc 107824 2017-12-05 15:47:44Z gunter $
+// $Id: G4Scintillation.cc 108508 2018-02-15 15:54:35Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 // Scintillation Light Class Implementation
@@ -154,6 +154,14 @@ G4Scintillation::~G4Scintillation()
         ////////////
         // Methods
         ////////////
+
+G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
+{
+       if (aParticleType.GetParticleName() == "opticalphoton") return false;
+       if (aParticleType.IsShortLived()) return false;
+
+       return true;
+}
 
 void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 {
@@ -853,4 +861,29 @@ GetScintillationYieldByParticleType(const G4Track &aTrack, const G4Step &aStep)
 #endif
 
   return ScintillationYield;
+}
+
+void G4Scintillation::DumpPhysicsTable() const
+{
+        if (fFastIntegralTable) {
+           G4int PhysicsTableSize = fFastIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
+
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+        	v = (G4PhysicsOrderedFreeVector*)(*fFastIntegralTable)[i];
+        	v->DumpValues();
+           }
+         }
+
+        if (fSlowIntegralTable) {
+           G4int PhysicsTableSize = fSlowIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
+
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+                v = (G4PhysicsOrderedFreeVector*)(*fSlowIntegralTable)[i];
+                v->DumpValues();
+           }
+         }
 }

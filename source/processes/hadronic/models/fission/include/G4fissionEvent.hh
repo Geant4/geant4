@@ -54,6 +54,8 @@
 //
 // $Id: G4fissionEvent.hh 68799 2013-04-05 13:29:46Z gcosmo $
 //
+#ifndef G4fissionEvent_hh
+#define G4fissionEvent_hh
 
 #include "globals.hh"
 #include <string>
@@ -190,3 +192,5 @@ class G4fissionEvent {
       static G4double fisslibrng(void);
       static G4double rngf2d(void);
 };
+
+#endif

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4OpticalSurface.cc 104459 2017-05-31 15:54:52Z gcosmo $
+// $Id: G4OpticalSurface.cc 108492 2018-02-15 15:00:12Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -204,6 +204,31 @@ G4int G4OpticalSurface::operator!=(const G4OpticalSurface &right) const
         ////////////
         // Methods
         ////////////
+
+G4int G4OpticalSurface::GetInmax(void) const 
+{ 
+  return indexmax; 
+}
+
+G4int G4OpticalSurface::GetLUTbins(void) const 
+{ 
+  return LUTbins; 
+}
+
+G4int G4OpticalSurface::GetRefMax(void) const 
+{ 
+  return RefMax; 
+}
+    
+G4int G4OpticalSurface::GetThetaIndexMax(void) const 
+{ 
+  return thetaIndexMax; 
+}
+
+G4int G4OpticalSurface::GetPhiIndexMax(void) const 
+{ 
+  return phiIndexMax; 
+}
 
 void G4OpticalSurface::DumpInfo() const 
 {

@@ -29,8 +29,9 @@
 #ifndef G4ParticleHPHash_h
 #define G4ParticleHPHash_h
 
-#include "globals.hh"
 #include <vector>
+#include "globals.hh"
+#include "G4ParticleHPDataPoint.hh"
 
 class G4ParticleHPHash
 {

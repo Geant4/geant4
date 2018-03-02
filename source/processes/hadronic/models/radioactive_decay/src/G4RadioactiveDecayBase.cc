@@ -98,7 +98,8 @@ DecayTableMap* G4RadioactiveDecayBase::master_dkmap = 0;
 
 G4RadioactiveDecayBase::G4RadioactiveDecayBase(const G4String& processName)
  : G4VRestDiscreteProcess(processName, fDecay), isInitialised(false),
-   forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), verboseLevel(0)
+   forceDecayDirection(0.,0.,0.), forceDecayHalfAngle(0.*deg), dirPath(""),
+   verboseLevel(0)
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 1) {
@@ -119,7 +120,23 @@ G4RadioactiveDecayBase::G4RadioactiveDecayBase(const G4String& processName)
 
   G4DeexPrecoParameters* deex = G4NuclearLevelData::GetInstance()->GetParameters();
   deex->SetCorrelatedGamma(true);
-  
+
+  // Check data directory
+  char* path_var = getenv("G4RADIOACTIVEDATA");
+  if (!path_var) {
+    G4Exception("G4RadioactiveDecay()","HAD_RDM_200",FatalException,
+                "Environment variable G4RADIOACTIVEDATA is not set");
+  } else {
+    dirPath = path_var;   // convert to string
+    std::ostringstream os;
+    os << dirPath << "/z1.a3";   // used as a dummy 
+    std::ifstream testFile;
+    testFile.open(os.str() );
+    if (!testFile.is_open() )
+      G4Exception("G4RadioactiveDecay()","HAD_RDM_201",FatalException,
+                  "Environment variable G4RADIOACTIVEDATA is set, but does not point to correct directory");
+  }
+
   // Reset the list of user defined data files
   theUserRadioactiveDataFiles.clear();
 
@@ -446,15 +463,16 @@ G4RadioactiveDecayBase::LoadDecayTable(const G4ParticleDefinition& theParentNucl
   G4String file = theUserRadioactiveDataFiles[1000*A+Z];
 
   if (file == "") {
+/*
     if (!getenv("G4RADIOACTIVEDATA") ) {
       G4cout << "Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files."
              << G4endl;
       throw G4HadronicException(__FILE__, __LINE__, " Please setenv G4RADIOACTIVEDATA to point to the radioactive decay data files.");
     }
     G4String dirName = getenv("G4RADIOACTIVEDATA");
-
+*/
     std::ostringstream os;
-    os << dirName << "/z" << Z << ".a" << A << '\0';
+    os << dirPath << "/z" << Z << ".a" << A << '\0';
     file = os.str();
   }
 

@@ -46,6 +46,7 @@
 #define G4MOLECULEITERATOR_HH_
 
 #include <map>
+#include "globals.hh"
 
 template<typename MOLECULE>
 class G4MoleculeIterator

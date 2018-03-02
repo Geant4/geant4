@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.cc 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4SynchrotronRadiationInMat.cc 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -123,15 +123,9 @@ G4SynchrotronRadiationInMat::fIntegralProbabilityOfSR[200] =
 G4SynchrotronRadiationInMat::G4SynchrotronRadiationInMat(const G4String& processName,
   G4ProcessType type):G4VDiscreteProcess (processName, type),
   LowestKineticEnergy (10.*keV),
-  //HighestKineticEnergy (100.*TeV),
-  //TotBin(200),
   theGamma (G4Gamma::Gamma() ),
   theElectron ( G4Electron::Electron() ),
   thePositron ( G4Positron::Positron() ), 
-  //GammaCutInKineticEnergy(nullptr),
-  //ElectronCutInKineticEnergy(nullptr),
-  //PositronCutInKineticEnergy(nullptr),
-  //ParticleCutInKineticEnergy(nullptr),
   fAlpha(0.0), fRootNumber(80),
   fVerboseLevel( verboseLevel )
 {
@@ -156,10 +150,18 @@ G4SynchrotronRadiationInMat::~G4SynchrotronRadiationInMat()
 G4bool
 G4SynchrotronRadiationInMat::IsApplicable( const G4ParticleDefinition& particle )
 {
-
   return ( ( &particle == (const G4ParticleDefinition *)theElectron ) ||
-	   ( &particle == (const G4ParticleDefinition *)thePositron )    );
+	   ( &particle == (const G4ParticleDefinition *)thePositron ));
+}
 
+G4double G4SynchrotronRadiationInMat::GetLambdaConst()
+{ 
+  return fLambdaConst; 
+}
+
+G4double G4SynchrotronRadiationInMat::GetEnergyConst()
+{ 
+  return fEnergyConst; 
 }
  
 /////////////////////////////// METHODS /////////////////////////////////

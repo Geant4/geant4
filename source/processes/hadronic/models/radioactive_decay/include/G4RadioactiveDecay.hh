@@ -316,7 +316,10 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     G4int decayWindows[100];
     static const G4double levelTolerance;
 
-    //User define radioactive decay data files replacing some files in the G4RADECAY database
+    // Radioactive decay database directory path 
+    G4String dirPath;
+
+    // User-defined radioactive decay data files
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 
     // Library of decay tables

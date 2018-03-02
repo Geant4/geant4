@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialPropertiesTable.icc 106997 2017-10-31 10:22:36Z gcosmo $
+// $Id: G4MaterialPropertiesTable.icc 108492 2018-02-15 15:00:12Z gcosmo $
 //
 ////////////////////////////////////////////////////////////////////////
 //
@@ -45,14 +45,21 @@ void G4MaterialPropertiesTable::AddConstProperty(const char *key,
 {
   // Provides a way of adding a constant property to the Material Properties
   // Table given a key
-  G4MCPindex index = GetConstPropertyIndex(G4String(key));
+  G4String k(key);
+  if (std::find(G4MaterialConstPropertyName.begin(),
+                G4MaterialConstPropertyName.end(), k) ==
+       G4MaterialConstPropertyName.end()) {
+    G4MaterialConstPropertyName.push_back(k);
+  }
+  G4int index = GetConstPropertyIndex(k);
+
   MCP[index] = PropertyValue;
 }
 
 inline
 void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
 {
-  G4MCPindex index = GetConstPropertyIndex(G4String(key));
+  G4int index = GetConstPropertyIndex(G4String(key));
 
   MCP.erase(index);
 }
@@ -60,6 +67,6 @@ void G4MaterialPropertiesTable::RemoveConstProperty(const char *key)
 inline
 void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
-  G4MPindex index = GetPropertyIndex(G4String(key));
+  G4int index = GetPropertyIndex(G4String(key));
   MP.erase(index);
 }

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.hh 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4ForwardXrayTR.hh 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // G4ForwardXrayTR
 //
@@ -125,15 +125,15 @@ G4double EnergySum( G4double energy1,
 
 ///////////////////////////   Access functions  ////////////////////////////
 
-  G4PhysicsTable* GetAngleDistrTable()  { return fAngleDistrTable; };
-  G4PhysicsTable* GetEnergyDistrTable() { return fEnergyDistrTable; };
+  G4PhysicsTable* GetAngleDistrTable();
+  G4PhysicsTable* GetEnergyDistrTable();
 
-  static G4int    GetSympsonNumber()       { return fSympsonNumber;  };
-  static G4int            GetBinTR()       { return fBinTR;       };
+  static G4int    GetSympsonNumber();
+  static G4int            GetBinTR();
 
-  static G4double GetMinProtonTkin()       { return fMinProtonTkin; };
-  static G4double GetMaxProtonTkin()       { return fMaxProtonTkin; };
-  static G4int           GetTotBin()       { return fTotBin;       };
+  static G4double GetMinProtonTkin();
+  static G4double GetMaxProtonTkin();
+  static G4int           GetTotBin();
 
 
 protected:  // for access from X-ray TR fast simulation models

@@ -34,6 +34,7 @@
 
 #include "globals.hh"
 #include "G4InterpolationManager.hh"
+#include "G4ParticleHPInterpolator.hh"
 
 class G4ParticleHPAngularP
 {

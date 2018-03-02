@@ -85,18 +85,17 @@ void NeutronHPphysics::ConstructProcess()
    
   // delete all neutron processes if already registered
   //
-  G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();
   G4VProcess* process = 0;
-  process = processTable->FindProcess("hadElastic", neutron);      
+  process = pManager->GetProcess("hadElastic");
   if (process) pManager->RemoveProcess(process);
   //
-  process = processTable->FindProcess("neutronInelastic", neutron);
+  process = pManager->GetProcess("neutronInelastic");
   if (process) pManager->RemoveProcess(process);
   //
-  process = processTable->FindProcess("nCapture", neutron);      
+  process = pManager->GetProcess("nCapture");      
   if (process) pManager->RemoveProcess(process);
   //
-  process = processTable->FindProcess("nFission", neutron);      
+  process = pManager->GetProcess("nFission");      
   if (process) pManager->RemoveProcess(process);      
          
   // (re) create process: elastic
@@ -112,9 +111,9 @@ void NeutronHPphysics::ConstructProcess()
   // model1b
   if (fThermal) {
     model1a->SetMinEnergy(4*eV);   
-    G4ParticleHPThermalScattering* model1b = new G4ParticleHPThermalScattering();
+   G4ParticleHPThermalScattering* model1b = new G4ParticleHPThermalScattering();
     process1->RegisterMe(model1b);
-    process1->AddDataSet(new G4ParticleHPThermalScatteringData());         
+    process1->AddDataSet(new G4ParticleHPThermalScatteringData());
   }
    
   // (re) create process: inelastic
@@ -137,7 +136,7 @@ void NeutronHPphysics::ConstructProcess()
   //
   // cross section data set
   G4ParticleHPCaptureData* dataSet3 = new G4ParticleHPCaptureData();
-  process3->AddDataSet(dataSet3);                               
+  process3->AddDataSet(dataSet3);
   //
   // models
   G4ParticleHPCapture* model3 = new G4ParticleHPCapture();
@@ -146,7 +145,7 @@ void NeutronHPphysics::ConstructProcess()
   // (re) create process: nFission   
   //
   G4HadronFissionProcess* process4 = new G4HadronFissionProcess();
-  pManager->AddDiscreteProcess(process4);    
+  pManager->AddDiscreteProcess(process4);
   //
   // cross section data set
   G4ParticleHPFissionData* dataSet4 = new G4ParticleHPFissionData();
@@ -154,7 +153,7 @@ void NeutronHPphysics::ConstructProcess()
   //
   // models
   G4ParticleHPFission* model4 = new G4ParticleHPFission();
-  process4->RegisterMe(model4);       
+  process4->RegisterMe(model4);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

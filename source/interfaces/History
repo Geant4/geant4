@@ -1,4 +1,4 @@
-$Id: History 105742 2017-08-16 13:11:07Z gcosmo $
+$Id: History 108490 2018-02-15 14:54:21Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th February 2018 Garnier Laurent (interfaces-V10-03-02)
+- G4UIQt:
+ o Take account \n in account for command guidance in help tree. Bug #296 Fixed
+
+13th December 2017 Garnier Laurent
+- G4UIQt:
+ o Remove parameters from popup in Qt interface when autocomplete command line
+ 
 5th August 2017 Koichi Murakami (interfaces-V10-03-01)
 - G4VBasicShell
  o Fix std::out_of_range exception in ModifyPath() when typing ls command 

@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 Current nMaxParticlesInRamPhaseSpace: 1000
 THE FOLLOWING ELECTROMAGNETIC PHYSICS LIST HAS BEEN ACTIVATED: G4EmLivermorePhysics
@@ -574,7 +576,7 @@ Launched 100000 random primary particles
 *********************************************
 n. of events collected in the whole ROG phantom for all geometries: 1094
 n. of events collected in the whole ROG phantom for the current geometry: 1094
-loop elapsed time [s] : 29.09
+loop elapsed time [s] : 45.33
 
 ################ END NEW GEOMETRY ########################
 
@@ -633,8 +635,8 @@ Launched 100000 random primary particles
 *********************************************
 n. of events collected in the whole ROG phantom for all geometries: 1902
 n. of events collected in the whole ROG phantom for the current geometry: 808
-loop elapsed time [s] : 28
+loop elapsed time [s] : 46.01
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 59.81
+loop elapsed time [s] : 94.36
 

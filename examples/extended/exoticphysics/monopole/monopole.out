@@ -3,12 +3,14 @@
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
-*************************************************************
- Geant4 version Name: geant4-10-04-ref-00    (08-December-2017)
-                      Copyright : Geant4 Collaboration
-                      Reference : NIM A 506 (2003), 250-303
-                            WWW : http://cern.ch/geant4
-*************************************************************
+**************************************************************
+ Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+                       Copyright : Geant4 Collaboration
+                      References : NIM A 506 (2003), 250-303
+                                 : IEEE-TNS 53 (2006), 270-278
+                                 : NIM A 835 (2016), 186-225
+                             WWW : http://geant4.org/
+**************************************************************
 
 ### G4PhysListFactory WARNING:  environment variable PHYSLIST is not defined
     Default Physics Lists FTFP_BERT is instantiated
@@ -19,7 +21,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 /monopole/setup 
-/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/10-03-ref-11_branch/10-03-ref-11_branch/examples/extended/exoticphysics/monopole/monopole.in
+/control/execute /mnt/build/jenkins/workspace/g4-cc7/COMPILER/gcc63/LABEL/cc7/THREAD/Seq/release/RelWithDebInfo/geant4-10-04-patches_branch/geant4-10-04-patches_branch/examples/extended/exoticphysics/monopole/monopole.in
 /control/verbose 1
 /control/cout/ignoreThreadsExcept 0
 /run/verbose 0
@@ -33,6 +35,7 @@ Monopole is created: m(GeV)= 100 Qel= 0 Qmag= 68.518
 /testex/det/setStepSize 0.2 mm
 /testex/run/binSize 0.2 mm
 /process/em/verbose 1
+/run/physicsModified
 /run/initialize
 
 ---------------------------------------------------------

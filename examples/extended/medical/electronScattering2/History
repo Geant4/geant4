@@ -1,4 +1,4 @@
-$Id: History 101670 2016-11-21 09:17:10Z gcosmo $
+$Id: History 108546 2018-02-16 09:51:30Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02-02-18 D.Sawkey (exampleES2-V10-03-00)
+- remove unused ScoringManager
 
 19-11-16 A.Dotti  (exampleES2-V10-02-01)
 - explicit set of SD to manager

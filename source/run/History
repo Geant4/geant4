@@ -1,4 +1,4 @@
-$Id: History 107529 2017-11-21 07:38:24Z gcosmo $
+$Id: History 108682 2018-02-27 07:54:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 27, 2018, G. Cosmo (run-V10-03-18)
+- G4RunManagerKernel: updated also MT banner.
+
+February 26, 2018, M. Asai
+- G4RunManagerKernel: two general papers are added to the banner.
+
+February 9, 2018, M. Asai (run-V10-03-17)
+- G4RunManagerKernel.cc :
+  Application state is set to G4State_Init while application is in
+  RunInitialization().
+
+December 26, 2017, M. Asai
+- G4UserPhysicsListMessenger : 
+  UI command returns an error message if a command is refused due
+  to incorrect parameter(s).
 
 November 21, 2017, G. Cosmo (run-V10-03-16)
 - Fixed compilation warning on clang compiler.

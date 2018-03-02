@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpticalSurface.hh 104459 2017-05-31 15:54:52Z gcosmo $
+// $Id: G4OpticalSurface.hh 108492 2018-02-15 15:00:12Z gcosmo $
 //
 // 
 ////////////////////////////////////////////////////////////////////////
@@ -219,17 +219,17 @@ public: // With description
         inline G4double GetReflectivityLUTValue(G4int);
         // Returns the reflectivity value from the Davis Look-Up-Table
         
-        inline G4int GetInmax(void) const { return indexmax; }
+        G4int GetInmax(void) const;
         // Returns the number of lines in the Davis Look-Up-Table
 
-        inline G4int GetLUTbins(void) const { return LUTbins; }
+        G4int GetLUTbins(void) const;
         // Returns the number of probability values per incidentangle
 
-        inline G4int GetRefMax(void) const { return RefMax; }
+        G4int GetRefMax(void) const;
         // Returns the number of reflectivity values per angle
     
-        inline G4int GetThetaIndexMax(void) const { return thetaIndexMax; }
-        inline G4int GetPhiIndexMax(void) const { return phiIndexMax; }
+        G4int GetThetaIndexMax(void) const;
+        G4int GetPhiIndexMax(void) const;
 
         void ReadDichroicFile(void);
         // Method to read the dichroic surface data file into Dichroic

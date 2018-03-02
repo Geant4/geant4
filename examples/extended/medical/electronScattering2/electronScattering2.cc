@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: electronScattering2.cc 93734 2015-10-30 10:59:21Z gcosmo $
+// $Id: electronScattering2.cc 108546 2018-02-16 09:51:30Z gcosmo $
 //
 /// \file medical/electronScattering2/electronScattering2.cc
 /// \brief Main program of the medical/electronScattering2 example
@@ -35,7 +35,6 @@
 #endif
 
 #include "Randomize.hh"
-#include "G4ScoringManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -81,9 +80,6 @@ int main(int argc,char** argv) {
     std::istringstream is(startingSeed);
     is >> startingSeedInt;
     G4Random::setTheSeed(startingSeedInt);
-    
-    // Instantiate the scoring manager
-    G4ScoringManager::GetScoringManager();
     
     // Instantiate the geometry
     runManager->SetUserInitialization(new ElectronBenchmarkDetector);

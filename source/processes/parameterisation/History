@@ -1,4 +1,4 @@
-$Id: History 101152 2016-11-08 08:07:39Z gcosmo $
+$Id: History 108538 2018-02-16 09:25:16Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+December 19, 2017, G. Cosmo (param-V10-03-00)
+- Fixed self-consistency in G4FastSimulationVector header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
+
 November 03, 2016, M. Verderi (param-V10-02-01)
 - New G4FastSimulationManagerHelper utility for
   adding G4FastSimulationManagerProcess to a

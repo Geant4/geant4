@@ -204,6 +204,9 @@ class G4RadioactiveDecayBase : public G4VRestDiscreteProcess
     G4double      forceDecayHalfAngle;
     static const G4ThreeVector origin;	// (0,0,0) for convenience
 
+    // Radioactive decay database directory path 
+    G4String dirPath;
+
     //User define radioactive decay data files replacing some files in the G4RADECAY database
     std::map<G4int, G4String> theUserRadioactiveDataFiles;
 

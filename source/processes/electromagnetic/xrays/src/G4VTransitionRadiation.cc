@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4VTransitionRadiation.cc 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // G4VTransitionRadiation class -- implementation file
 
@@ -164,6 +164,24 @@ void G4VTransitionRadiation::SetModel(G4VTRModel* mod)
 void G4VTransitionRadiation::PrintInfoDefinition()
 {
   if(model) model->PrintInfo();
+}
+
+///////////////////////////////////////////////////////////////////////
+
+G4double G4VTransitionRadiation::GetMeanFreePath(
+                                const G4Track& track, G4double,
+                                G4ForceCondition* condition)
+{
+  if(nSteps > 0) {
+    *condition = StronglyForced;
+  } else {
+    *condition = NotForced;
+    if(track.GetKineticEnergy()/track.GetDefinition()->GetPDGMass() + 1.0 > gammaMin &&
+       track.GetVolume()->GetLogicalVolume()->GetRegion() == region) {
+         *condition = StronglyForced;
+    }
+  }
+  return DBL_MAX;      // so TR doesn't limit mean free path
 }
 
 ///////////////////////////////////////////////////////////////////////

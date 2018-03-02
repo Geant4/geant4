@@ -37,6 +37,7 @@
 #define _G4GDMLAUXSTRUCTTYPE_INCLUDED_
 
 #include <vector>
+#include "G4String.hh"
 
 struct G4GDMLAuxStructType
 {

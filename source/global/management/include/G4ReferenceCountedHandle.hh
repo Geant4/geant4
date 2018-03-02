@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh 67970 2013-03-13 10:10:06Z gcosmo $
+// $Id: G4ReferenceCountedHandle.hh 108486 2018-02-15 14:47:25Z gcosmo $
 //
 // 
 // Class G4ReferenceCountedHandle
@@ -49,12 +49,12 @@
 // error (since we're dealing with objects, not pointers!).
 
 // Author:      Radovan Chytracek, CERN  (Radovan.Chytracek@cern.ch)
-// Version:     3.0
 // Date:        November 2001
 // ----------------------------------------------------------------------
 #ifndef _G4REFERENCECOUNTEDHANDLE_H_
 #define _G4REFERENCECOUNTEDHANDLE_H_ 1
 
+#include "G4Types.hh"
 #include "G4Allocator.hh"
 
 template <class X> class G4CountedObject;
@@ -109,22 +109,14 @@ public:  // with description
   inline void operator delete( void *pObj );
     // Operator delete defined for G4Allocator.
 
-public:
-
-#ifdef G4RF_DEBUG
-  void* operator new( size_t, void *pObj );
-    // This is required on some compilers (Windows/VC++, Linux/g++) when this
-    // class is used in the context of STL container. It generates a warning
-    // saying something about not existing correspondent delete...
-#endif
-
 private:
 
   G4CountedObject<X>*     fObj;
     // The object subject to reference counting.
 };
 
-extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator;
+extern G4GLOB_DLL G4ThreadLocal
+G4Allocator<G4ReferenceCountedHandle<void> > *aRCHAllocator;
 
 template <class X>
 class G4CountedObject
@@ -164,7 +156,8 @@ private:
     // The counted object.
 };
 
-extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator;
+extern G4GLOB_DLL G4ThreadLocal
+G4Allocator<G4CountedObject<void> > *aCountedObjectAllocator;
 
 // --------- G4CountedObject<X> Inline function definitions ---------
 
@@ -299,13 +292,5 @@ void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
 {
     aRCHAllocator->FreeSingle( (G4ReferenceCountedHandle<void>*)pObj );
 }
-
-#ifdef G4RF_DEBUG
-template <class X>
-void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
-{
-    return pObj;
-}
-#endif
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_

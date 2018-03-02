@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreQuantityMessenger.hh 67992 2013-03-13 10:59:57Z gcosmo $
+// $Id: G4ScoreQuantityMessenger.hh 108471 2018-02-15 14:12:06Z gcosmo $
 //
 // (HISTORY)
 //  03-Sep-2007  T.Aso Command definitions are introduced.
@@ -75,7 +75,8 @@ class G4ScoreQuantityMessenger: public G4UImessenger
     void FParticleCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
     void FParticleWithEnergyCommand(G4VScoringMesh* mesh,G4TokenVec& token); 
 
-    G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname);
+    G4bool CheckMeshPS(G4VScoringMesh* mesh, G4String& psname,
+                       G4UIcommand * command);
   
   private:
     void QuantityCommands();

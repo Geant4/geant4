@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.hh 101111 2016-11-07 08:18:31Z gcosmo $
+// $Id: G4UIQt.hh 108490 2018-02-15 14:54:21Z gcosmo $
 //
 #ifndef G4UIQt_h
 #define G4UIQt_h 
@@ -368,7 +368,7 @@ private:
   
   QDialog* fViewerPropertiesDialog;
   QDialog* fPickInfosDialog;
-  
+  QString fLastCompleteCommand;
   bool fMoveSelected;
   bool fRotateSelected;
   bool fPickSelected;

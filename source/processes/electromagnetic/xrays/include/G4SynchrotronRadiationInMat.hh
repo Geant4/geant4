@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiationInMat.hh 97385 2016-06-02 09:59:53Z gcosmo $
+// $Id: G4SynchrotronRadiationInMat.hh 108508 2018-02-15 15:54:35Z gcosmo $
 //
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -107,8 +107,8 @@ public:  /////////////////    Post Step functions  //////////////////////////
 
   G4bool IsApplicable(const G4ParticleDefinition&) override;
 
-  static G4double GetLambdaConst(){ return fLambdaConst; };
-  static G4double GetEnergyConst(){ return fEnergyConst; };
+  static G4double GetLambdaConst();
+  static G4double GetEnergyConst();
 
   void SetRootNumber(G4int rn){ fRootNumber = rn; };
   void SetVerboseLevel(G4int v){ fVerboseLevel = v; };
@@ -128,22 +128,11 @@ private:
   const G4double
   LowestKineticEnergy;   // low  energy limit of the cross-section formula
 
-  //const G4double
-  //HighestKineticEnergy;  // high energy limit of the cross-section formula
-
-  //G4int TotBin;          // number of bins in the tables
-
   G4double CutInRange;
 
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theElectron;
   const G4ParticleDefinition* thePositron;
-
-  //const G4double* GammaCutInKineticEnergy;
-  //const G4double* ElectronCutInKineticEnergy;
-  //const G4double* PositronCutInKineticEnergy;
-  //const G4double* ParticleCutInKineticEnergy;
-
 
   G4double GammaCutInKineticEnergyNow;
   G4double ElectronCutInKineticEnergyNow;

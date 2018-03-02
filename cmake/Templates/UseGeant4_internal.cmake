@@ -223,6 +223,12 @@ function(geant4_add_test test)
     if(ARG_FAILREGEX)
       set_property(TEST ${test} PROPERTY FAIL_REGULAR_EXPRESSION ${ARG_FAILREGEX})
     endif()
+
+    # If WORKING_DIRECTORY supplied, make sure testdriver is run in
+    # that directory.
+    if(ARG_WORKING_DIRECTORY)
+      set_property(TEST ${test} PROPERTY WORKING_DIRECTORY "${ARG_WORKING_DIRECTORY}")
+    endif()
   endif()
 
   #- Handle TIMOUT and DEPENDS arguments

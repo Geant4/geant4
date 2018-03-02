@@ -1,4 +1,4 @@
-$Id: History 107157 2017-11-03 11:27:29Z gcosmo $
+$Id: History 108500 2018-02-15 15:38:58Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19.12.2017 G.Cosmo, emlowen-V10-03-20
+- Fixed self-consistency in G4ecpssrFormFactorMixsModel header (missing #include).
+  Thanks to Raphael Isemann for reporting this.
 
 03.11.1017 V.Ivanchenko, emlowen-V10-03-19
 - G4RayleighScattering - added C++11 keywords to fix compilation warning at clang

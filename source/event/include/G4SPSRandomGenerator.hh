@@ -140,6 +140,7 @@
 
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4DataInterpolation.hh"
+#include "G4ThreeVector.hh"
 #include "G4Threading.hh"
 #include "G4Cache.hh"
 

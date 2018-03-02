@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+18/1/18  G.Folger       (genericPL-V10-03-02)
+-  Re-tag using procedure to remove svn:externals from tag.
+
+15/1/18  G.Folger
+- Correct G4INSTALL in GNUmakefile.
+
 28/11/17 I. Hrivnacova  (genericPL-V10-03-01)
 - Fixed documentation
 

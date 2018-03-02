@@ -44,6 +44,7 @@
 #define G4FastSimulationVector_h 1
 
 #include <vector>
+#include "G4Types.hh"
 
 template<class T>
 class G4FastSimulationVector : public std::vector<T*>

@@ -143,13 +143,13 @@ endif() #NOT WIN32
 #
 
 #.rst
-# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, c++11, c++14)
+# - ``GEANT4_BUILD_CXXSTD`` (Allowed values: 11, 14, 17, c++11, c++14, c++17)
 #
 #   - Choose C++ Standard to build against from supported list.
 #
 enum_option(GEANT4_BUILD_CXXSTD
   DOC "C++ Standard to compile against"
-  VALUES 11 14 c++11 c++14
+  VALUES 11 14 17 c++11 c++14 c++17
   CASE_INSENSITIVE
   )
 
@@ -189,7 +189,7 @@ if(GEANT4_BUILD_CXXSTD GREATER 11)
   if(CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES)
     list(APPEND GEANT4_TARGET_COMPILE_FEATURES ${CMAKE_CXX${GEANT4_BUILD_CXXSTD}_COMPILE_FEATURES})
   else()
-    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support any features of that standard")
+    message(FATAL_ERROR "Geant4 requested to be compiled against C++ standard '${GEANT4_BUILD_CXXSTD}'\nbut detected compiler '${CMAKE_CXX_COMPILER_ID}', version '${CMAKE_CXX_COMPILER_VERSION}'\ndoes not support, or CMake (${CMAKE_VERSION}) is not aware of, any features of that standard.")
   endif()
 endif()
 

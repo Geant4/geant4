@@ -8,8 +8,8 @@
 
 DIRNAME=$1
 
-cp -rp $DIRNAME/include/* include
-cp -rp $DIRNAME/src/* src
+cp -rp $DIRNAME/include include
+cp -rp $DIRNAME/src src
 
 echo "... copy_files.sh from $1 finished"
 
