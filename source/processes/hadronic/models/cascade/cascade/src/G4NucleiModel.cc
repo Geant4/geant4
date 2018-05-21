@@ -239,6 +239,7 @@ G4NucleiModel::G4NucleiModel()
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(G4CascadeParameters::potentialThickness()),
     neutronEP(neutron), protonEP(proton) {}
 
 G4NucleiModel::G4NucleiModel(G4int a, G4int z)
@@ -256,6 +257,7 @@ G4NucleiModel::G4NucleiModel(G4int a, G4int z)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(G4CascadeParameters::potentialThickness()),
     neutronEP(neutron), protonEP(proton) {
   generateModel(a,z);
 }
@@ -275,6 +277,7 @@ G4NucleiModel::G4NucleiModel(G4InuclNuclei* nuclei)
     fermiMomentum(G4CascadeParameters::fermiScale()),
     R_nucleon(G4CascadeParameters::radiusTrailing()),
     gammaQDscale(G4CascadeParameters::gammaQDScale()),
+    potentialThickness(G4CascadeParameters::potentialThickness()),
     neutronEP(neutron), protonEP(proton) {
   generateModel(nuclei);
 }
@@ -1123,6 +1126,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   
   G4double r = pos.mag();
   G4double pr = pos.dot(mom.vect()) / r;
+  G4double pperp2 = mom.mag()*mom.mag()-pr*pr;
   
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
 
@@ -1135,6 +1139,9 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   }
 
   G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
+  //  G4double qv = dv * dv + 2.0 * dv * mom.m() + pr * pr;  // Potential change suggested by Natalia -- Yukawa potential should be proportional to mass not energy in relativistic regime.  But commenting out for now -- want to understand effects of changing one thing at a time.
+
+  G4double qperp = 2*pperp2*potentialThickness/r; // perpendicular contribution to pr^2 after penetrating potential, to leading order in thickness
   
   G4double p1r = 0.;
   
@@ -1143,28 +1150,64 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 	   << " qv " << qv << " dv " << dv << G4endl;
   }
 
-  if (qv <= 0.0) { 	// reflection
+  bool adjustpperp=false;
+
+  if (qv <= 0.0 && qv+qperp <=0 ) { 	// reflection
     if (verboseLevel > 3) G4cout << " reflects off boundary" << G4endl;
     p1r = -pr;
     cparticle.incrementReflectionCounter();
-  } else {		// transition
+  } else if ( qv > 0.0 )  {		// standard transition
     if (verboseLevel > 3) G4cout << " passes thru boundary" << G4endl;
     p1r = std::sqrt(qv);
     if (pr < 0.0) p1r = -p1r;
 
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
+  } else {		// transition via transverse kinetic energy (allowed for thick walls)
+    if (verboseLevel > 3) G4cout << " passes thru boundary due to angular momentum" << G4endl;
+    p1r = 0;
+    adjustpperp=true;
+
+    cparticle.updateZone(next_zone);
+    cparticle.resetReflection();
   }
   
-  G4double prr = (p1r - pr) / r;  
-  
+  G4double prr = (p1r - pr) / r; // change to radial momentum, divided by r  
+
   if (verboseLevel > 3) {
     G4cout << " prr " << prr << " delta px " << prr*pos.x() << " py "
 	   << prr*pos.y()  << " pz " << prr*pos.z() << " mag "
 	   << std::fabs(prr*r) << G4endl;
   }
 
-  mom.setVect(mom.vect() + pos*prr);
+  if(adjustpperp){
+    G4ThreeVector old_pperp=mom.vect()-pos*(pr/r);
+    if(verboseLevel > 4) {
+      G4cout << " pperp_x  " << old_pperp.x() 
+	     << " pperp_y  " << old_pperp.y() 
+	     << " pperp_z  " << old_pperp.z() 
+	     << " pperp.r " << old_pperp.dot(pos)
+	     << " |pperp|" << old_pperp.mag() << " =? " << std::sqrt(pperp2) << G4endl;
+	}
+    G4double new_pperp_mag=std::sqrt(pperp2 + qv);
+    if(verboseLevel > 4) {
+      G4cout << " |pperp|_new  " << new_pperp_mag << G4endl;
+    }
+    mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2)); // new total momentum found by rescaling p_perp
+
+    if(verboseLevel > 3) {
+      G4cout << " newp_x  " << mom.x()
+	     << " newp_y  " << mom.y() 
+	     << " newp_z  " << mom.z() 
+	     << " newp.r " << mom.vect().dot(pos)
+	     << " |newp|" << mom.mag() << G4endl;
+    }
+    
+  }
+  else {
+    mom.setVect(mom.vect() + pos*prr);
+  }
+
   cparticle.updateParticleMomentum(mom);
 }
 

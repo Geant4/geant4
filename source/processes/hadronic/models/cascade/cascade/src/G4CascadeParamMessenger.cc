@@ -91,6 +91,8 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 			"Scale fator for total cross-sections");
   nucGammaQDCmd = CreateCommand<G4UIcmdWithADouble>("gammaQuasiDeutScale",
 			"Scale factor for gamma-quasideutron cross-sections");
+  nucPotentialThickness = CreateCommand<G4UIcmdWithADouble>("potentialThickness",
+			"Thickness (in fm) for potential walls, used in determining when they can be penetrated by particles with low p_r high L");
   coalDPmax2Cmd = CreateCommand<G4UIcmdWithADouble>("cluster2DPmax",
 			"Maximum momentum for p-n clusters");
   coalDPmax3Cmd = CreateCommand<G4UIcmdWithADouble>("cluster3DPmax",

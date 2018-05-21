@@ -307,6 +307,7 @@ private:
   const G4double fermiMomentum;
   const G4double R_nucleon;
   const G4double gammaQDscale;		// Gamma/cluster scattering rescaling
+  const G4double potentialThickness;		// Thickness of potential barriers, for purpose of low p_r, high L barrier penetration
 
   // Cutoffs for extreme values
   static const G4double small;
