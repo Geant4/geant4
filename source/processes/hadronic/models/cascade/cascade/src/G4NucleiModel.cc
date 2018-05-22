@@ -1121,12 +1121,23 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
   G4LorentzVector mom = cparticle.getMomentum();
   G4ThreeVector pos = cparticle.getPosition();
-  
+
+  if (verboseLevel > 4) {
+    G4cout << "p = {" << mom.x() << ", " << mom.y() << ", " << mom.z() << "}" << G4endl;
+    G4cout << "r = {" << pos.x() << ", " << pos.y() << ", " << pos.z() << G4endl;
+  }
   G4int type = cparticle.getParticle().type();
   
   G4double r = pos.mag();
+  G4double p = mom.vect().mag();
   G4double pr = pos.dot(mom.vect()) / r;
-  G4double pperp2 = mom.mag()*mom.mag()-pr*pr;
+  G4double pperp2 = p*p-pr*pr;
+
+  if (verboseLevel > 4) {
+    G4cout << "r = " << r << " pr = " << pr << " pperp2 = " << pperp2 << G4endl;
+    G4cout << "|p| = " << p << " mom^2 = " << p*p << " pr2 = " << pr*pr << G4endl;
+  }
+
   
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
 
@@ -1136,6 +1147,8 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
     G4cout << "Potentials for type " << type << " = " 
 	   << getPotential(type,zone) << " , "
   	   << getPotential(type,next_zone) << G4endl;
+    G4cout << " dv = " << dv << G4endl;
+    G4cout << " potential thickness = " << potentialThickness << G4endl;
   }
 
   G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
@@ -1147,7 +1160,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
-	   << " qv " << qv << " dv " << dv << G4endl;
+	   << " qv " << qv << " qperp " << qperp << " dv " << dv << G4endl;
   }
 
   bool adjustpperp=false;
@@ -1200,7 +1213,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 	     << " newp_y  " << mom.y() 
 	     << " newp_z  " << mom.z() 
 	     << " newp.r " << mom.vect().dot(pos)
-	     << " |newp|" << mom.mag() << G4endl;
+	     << " |newp|" << mom.vect().mag() << G4endl;
     }
     
   }
