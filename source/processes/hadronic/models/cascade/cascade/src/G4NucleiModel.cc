@@ -1134,7 +1134,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4double pperp2 = p*p-pr*pr;
 
   if (verboseLevel > 4) {
-    G4cout << "r = " << r << " pr = " << pr << " pperp2 = " << pperp2 << G4endl;
+    G4cout << "r = " << r << " pr = " << pr << " pperp = " << std::sqrt(pperp2) << G4endl;
     G4cout << "|p| = " << p << " mom^2 = " << p*p << " pr2 = " << pr*pr << G4endl;
   }
 
@@ -1160,7 +1160,8 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
-	   << " qv " << qv << " qperp " << qperp << " dv " << dv << G4endl;
+	   << " qv " << qv 
+	   << " qr " << pr*pr << "qv " << dv * dv + 2.0*dv*mom.e() << " qperp " << qperp << G4endl;
   }
 
   bool adjustpperp=false;
