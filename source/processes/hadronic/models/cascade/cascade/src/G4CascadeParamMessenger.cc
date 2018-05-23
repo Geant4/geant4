@@ -55,6 +55,7 @@ G4CascadeParamMessenger::G4CascadeParamMessenger(G4CascadeParameters* params)
 
   verboseCmd = CreateCommand<G4UIcmdWithAnInteger>("verbose",
 			"Enable information messages");
+  verboseCmd->AvailableForStates(G4ApplicationState::G4State_PreInit); 
   balanceCmd = CreateCommand<G4UIcmdWithABool>("checkBalance",
 			"Enable internal conservation checking");
   reportCmd = CreateCommand<G4UIcmdWithoutParameter>("report",
