@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeMessenger.cc 99076 2016-09-01 12:40:47Z gcosmo $
+// $Id: G4ASCIITreeMessenger.cc 110130 2018-05-16 06:43:10Z gcosmo $
 //
 // 
 // John Allison  5th April 2001
@@ -55,14 +55,11 @@ fpASCIITree(ASCIITree) {
 
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
   fVerbosityGuidance.push_back
-    ("  <  10: - does not print daughters of repeated placements,"
-     " does not repeat replicas.");
+    ("  <  10: notifies but does not print details of repeated volumes.");
   fVerbosityGuidance.push_back
-    ("  >= 10: prints all physical volumes.");
+    ("  >= 10: prints all physical volumes (touchables).");
   fVerbosityGuidance.push_back
     ("The level of detail is given by verbosity%10:");
-  fVerbosityGuidance.push_back
-    ("for each volume:");
   fVerbosityGuidance.push_back
     ("  >=  0: physical volume name.");
   fVerbosityGuidance.push_back

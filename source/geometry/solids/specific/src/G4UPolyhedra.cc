@@ -245,7 +245,16 @@ G4PolyhedraHistorical* G4UPolyhedra::GetOriginalParameters() const
 }
 void G4UPolyhedra::SetOriginalParameters()
 {
-  G4int numPlanes = GetZSegmentCount() + 1;
+  G4double startPhi = GetPhiStart();
+  G4double deltaPhi = GetPhiDelta();
+  G4int numPlanes   = GetZSegmentCount() + 1;
+  G4int numSides    = GetSideCount();
+
+  fOriginalParameters.Start_angle   = startPhi;
+  fOriginalParameters.Opening_angle = deltaPhi;
+  fOriginalParameters.Num_z_planes  = numPlanes;
+  fOriginalParameters.numSide       = numSides;
+
   delete [] fOriginalParameters.Z_values;
   delete [] fOriginalParameters.Rmin;
   delete [] fOriginalParameters.Rmax;
@@ -253,17 +262,13 @@ void G4UPolyhedra::SetOriginalParameters()
   fOriginalParameters.Rmin = new G4double[numPlanes];
   fOriginalParameters.Rmax = new G4double[numPlanes];
 
-  for (G4int j=0; j<numPlanes; ++j)
+  G4double convertRad = std::cos(0.5*deltaPhi/numSides);
+  for (G4int i=0; i<numPlanes; ++i)
   {
-    fOriginalParameters.Z_values[j] = GetZPlanes()[j];
-    fOriginalParameters.Rmax[j]     = GetRMax()[j];
-    fOriginalParameters.Rmin[j]     = GetRMin()[j];
+    fOriginalParameters.Z_values[i] = GetZPlanes()[i];
+    fOriginalParameters.Rmax[i]     = GetRMax()[i]/convertRad;
+    fOriginalParameters.Rmin[i]     = GetRMin()[i]/convertRad;
   }
-
-  fOriginalParameters.Start_angle   = GetPhiStart();
-  fOriginalParameters.Opening_angle = GetPhiDelta();
-  fOriginalParameters.Num_z_planes  = numPlanes;
-  fOriginalParameters.numSide       = GetSideCount();
 }
 void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
 {
@@ -298,18 +303,17 @@ G4bool G4UPolyhedra::Reset()
     wrDelta = twopi;
   }
   wrNumSide = fOriginalParameters.numSide;
-  G4double convertRad = 1./std::cos(0.5*wrDelta/wrNumSide);
   rzcorners.resize(0);
   for (G4int i=0; i<fOriginalParameters.Num_z_planes; ++i)
   {
     G4double z = fOriginalParameters.Z_values[i];
-    G4double r = fOriginalParameters.Rmax[i]*convertRad;
+    G4double r = fOriginalParameters.Rmax[i];
     rzcorners.push_back(G4TwoVector(r,z));
   }
   for (G4int i=fOriginalParameters.Num_z_planes-1; i>=0; --i)
   {
     G4double z = fOriginalParameters.Z_values[i];
-    G4double r = fOriginalParameters.Rmin[i]*convertRad;
+    G4double r = fOriginalParameters.Rmin[i];
     rzcorners.push_back(G4TwoVector(r,z));
   }
   std::vector<G4int> iout;

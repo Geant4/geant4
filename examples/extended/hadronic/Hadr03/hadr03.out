@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -419,7 +419,7 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.33s Real=0.33s Sys=0s
+  User=0.21s Real=0.28s Sys=0s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 

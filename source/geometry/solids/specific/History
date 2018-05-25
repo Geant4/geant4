@@ -1,4 +1,4 @@
-$Id: History 108484 2018-02-15 14:38:03Z gcosmo $
+$Id: History 110072 2018-05-15 09:59:42Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11-April-2018  G.Cosmo             (geom-specific-V10-03-27)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+13-February-2018  G.Cosmo
+- Corrected conversion of input parameters to internal structure (used for
+  caching for adoption in GDML persistency) in G4UPolycone and G4UPolyhedra
+  wrappers.
 
 13-December-2017  E.Tcherniaev     (geom-specific-V10-03-26)
 - Removed redundant data initialistion in G4ExtrudedSolid constructors. 

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -184,24 +184,24 @@ Use DNA with multiple scattering of e-             0
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=1.76s Real=1.77s Sys=0s
+  User=1.02s Real=1.03s Sys=0s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.945 MeV +- 211.960 keV
+ Total Energy deposited        = 3.942 MeV +- 227.271 keV
 
- Track length of primary track = 2.048 cm  +- 2.789 mm 
+ Track length of primary track = 2.044 cm  +- 2.842 mm 
  Range from EmCalculator = 2.045 cm  (from full dE/dx)
 
- Projected range               = 1.328 cm  +- 3.573 mm 
+ Projected range               = 1.327 cm  +- 3.570 mm 
 
- Nb of steps of primary track  = 16.33 +- 3.02	 Step size= 1.292 mm  +- 280.099 um 
+ Nb of steps of primary track  = 16.31 +- 3.02	 Step size= 1.289 mm  +- 278.279 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 180165142, 530886527
+ Current couple of seeds = 272666396, 987623930
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

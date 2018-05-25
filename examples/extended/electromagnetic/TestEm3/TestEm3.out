@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -508,28 +508,28 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.79s Real=2.8s Sys=0s
+  User=2.41s Real=2.46s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead:  779.8 MeV :  15.42 MeV     1.978 +- 0.1978 %      55.1 cm  +- 1.31 cm 
-   liquidArgon: 208.74 MeV :  15.69 MeV     7.515 +- 0.7515 %      1.03 m   +- 8.16 cm 
+          Lead:  782.1 MeV :  15.83 MeV     2.024 +- 0.2024 %      55.3 cm  +- 1.26 cm 
+   liquidArgon: 208.75 MeV :  14.69 MeV     7.036 +- 0.7036 %      1.03 m   +- 7.46 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       510
- Mean number of e-          871
- Mean number of e+          53.9
- Mean number of charged steps  3614.53
- Mean number of neutral steps  3705.38
+ Mean number of gamma       511
+ Mean number of e-          876
+ Mean number of e+          53.8
+ Mean number of charged steps  3601.95
+ Mean number of neutral steps  3706.26
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 779.797 MeV
-liquidArgon:	 208.69 MeV
+      Lead:	 782.1 MeV
+liquidArgon:	 208.735 MeV
 
 ------------------------------------------------------------
 
@@ -959,28 +959,28 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.6s Real=2.6s Sys=0s
+  User=1.71s Real=1.74s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 775.45 MeV :  21.43 MeV     2.763 +- 0.2763 %      52.1 cm  +- 1.35 cm 
-   liquidArgon: 212.63 MeV :  17.14 MeV     8.062 +- 0.8062 %      1.01 m   +- 8.15 cm 
+          Lead: 774.13 MeV :  24.73 MeV     3.195 +- 0.3195 %      52.2 cm  +- 1.41 cm 
+   liquidArgon: 212.94 MeV :  18.39 MeV     8.638 +- 0.8638 %      1.01 m   +- 8.69 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
  Mean number of gamma       291
- Mean number of e-          556
- Mean number of e+          53.7
- Mean number of charged steps  3066.95
- Mean number of neutral steps  2952.94
+ Mean number of e-          551
+ Mean number of e+          53.6
+ Mean number of charged steps  3054.29
+ Mean number of neutral steps  2911.63
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 774.345 MeV
-liquidArgon:	 213.727 MeV
+      Lead:	 774.328 MeV
+liquidArgon:	 215.025 MeV
 
 ------------------------------------------------------------
 
@@ -995,19 +995,19 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 163
+Total navigation history collections cleaned: 34
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.252 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0509 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.0413 MB
-Pool ID '7G4Track', size : 0.0817 MB
-Pool ID '18G4TouchableHistory', size : 0.0192 MB
-Pool ID '15G4CountedObjectIvE', size : 0.00288 MB
+Pool ID '17G4DynamicParticle', size : 0.0115 MB
+Pool ID '7G4Track', size : 0.0231 MB
+Pool ID '18G4TouchableHistory', size : 0.00385 MB
+Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.4 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.094 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

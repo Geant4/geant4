@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.icc 96960 2016-05-18 14:59:54Z gcosmo $
+// $Id: G4BooleanSolid.icc 110069 2018-05-15 09:32:07Z gcosmo $
 //
 // --------------------------------------------------------------------
 // GEANT 4 inline definitions file
@@ -49,15 +49,15 @@ G4double G4BooleanSolid::GetCubVolEpsilon() const
 inline
 void G4BooleanSolid::SetCubVolStatistics(G4int st)
 {
-  fCubicVolume=0.;
-  fStatistics=st;
+  fCubicVolume = -1.;
+  fStatistics = st;
 }
 
 inline    
 void G4BooleanSolid::SetCubVolEpsilon(G4double ep)
 {
-  fCubicVolume=0.;
-  fCubVolEpsilon=ep;
+  fCubicVolume = -1.;
+  fCubVolEpsilon = ep;
 }
 
 inline
@@ -75,29 +75,33 @@ G4double G4BooleanSolid::GetAreaAccuracy() const
 inline
 void G4BooleanSolid::SetAreaStatistics(G4int st)
 {
-  fSurfaceArea=0.;
-  fStatistics=st;
+  fSurfaceArea = -1.;
+  fStatistics = st;
 }
 
 inline    
 void G4BooleanSolid::SetAreaAccuracy(G4double ep)
 {
-  fSurfaceArea=0.;
-  fAreaAccuracy=ep;
+  fSurfaceArea = -1.;
+  fAreaAccuracy = ep;
 }
 
 inline
 G4double G4BooleanSolid::GetCubicVolume()
 {
-  if(fCubicVolume != 0.) {;}
-  else   { fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon); }
+  if(fCubicVolume < 0.)
+  {
+    fCubicVolume = EstimateCubicVolume(fStatistics,fCubVolEpsilon);
+  }
   return fCubicVolume;
 }
 
 inline
 G4double G4BooleanSolid::GetSurfaceArea()
 {
-  if(fSurfaceArea != 0.) {;}
-  else   { fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy); }
+  if(fSurfaceArea < 0.)
+  {
+    fSurfaceArea = EstimateSurfaceArea(fStatistics,fAreaAccuracy);
+  }
   return fSurfaceArea;
 }

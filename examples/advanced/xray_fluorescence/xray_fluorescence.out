@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -2867,7 +2867,7 @@ Created histos
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.31s Real=1.31s Sys=0s
+  User=0.66s Real=0.7s Sys=0s
 Going to save histograms
 ... write Root file : xrayfluo.root - done
 ... close Root file : xrayfluo.root - done
@@ -2890,21 +2890,21 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 8
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.00865 MB
+Pool ID '20G4NavigationLevelRep', size : 0.00673 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
 Pool ID '16G4HitsCollection', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.321 MB
-Pool ID '7G4Track', size : 0.642 MB
+Pool ID '17G4DynamicParticle', size : 0.316 MB
+Pool ID '7G4Track', size : 0.632 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.98 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.96 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

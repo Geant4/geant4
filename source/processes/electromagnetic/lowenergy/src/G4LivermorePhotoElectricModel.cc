@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4LivermorePhotoElectricModel.cc 107157 2017-11-03 11:27:29Z gcosmo $
+// $Id: G4LivermorePhotoElectricModel.cc 110113 2018-05-15 11:53:10Z gcosmo $
 //
 //
 // Author: Sebastien Incerti
@@ -99,15 +99,16 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
 {
     if(IsMaster()) {
         delete fShellCrossSection;
+        fShellCrossSection = nullptr;
         for(G4int i=0; i<maxZ; ++i) {
             delete fParamHigh[i];
-            fParamHigh[i] = 0;
+            fParamHigh[i] = nullptr;
             delete fParamLow[i];
-            fParamLow[i] = 0;
+            fParamLow[i] = nullptr;
             delete fCrossSection[i];
-            fCrossSection[i] = 0;
+            fCrossSection[i] = nullptr;
             delete fCrossSectionLE[i];
-            fCrossSectionLE[i] = 0;
+            fCrossSectionLE[i] = nullptr;
         }
     }
 }
@@ -119,7 +120,7 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
                                           const G4DataVector&)
 {
     if (verboseLevel > 2) {
-        G4cout << "Calling G4LivermorePhotoElectricModel::Initialise()" << G4endl;
+      G4cout << "Calling G4LivermorePhotoElectricModel::Initialise() " << G4endl;
     }
     
     if(IsMaster()) {

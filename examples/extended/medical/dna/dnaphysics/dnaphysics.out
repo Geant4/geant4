@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -697,13 +697,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x1182bc0
+##### Create analysis manager   0x15397b0
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
  Run terminated.
 Run Summary
   Number of events processed : 2
-  User=7.41s Real=7.54s Sys=0.05s
+  User=8.88s Real=9.46s Sys=0.04s
 ... write Root file : dna.root - done
 ... close Root file : dna.root - done
 Graphics systems deleted.
@@ -725,12 +725,12 @@ Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00673 MB
-Pool ID '7G4Track', size : 0.0135 MB
+Pool ID '17G4DynamicParticle', size : 0.361 MB
+Pool ID '7G4Track', size : 0.722 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.031 MB
+Dynamic pools deleted: 9 / Total memory freed: 1.1 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteStructure.cc 106390 2017-10-09 09:42:18Z gcosmo $
+// $Id: G4GDMLWriteStructure.cc 110108 2018-05-15 11:46:54Z gcosmo $
 //
 // class G4GDMLWriteStructure Implementation
 //
@@ -362,8 +362,9 @@ G4GDMLWriteStructure::GetBorderSurface(const G4VPhysicalVolume* const pvol)
 
 void G4GDMLWriteStructure::SurfacesWrite()
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing surfaces..." << G4endl;
-
+#endif
    std::vector<xercesc::DOMElement*>::const_iterator pos;
    for (pos = skinElementVec.begin(); pos != skinElementVec.end(); pos++)
    {
@@ -377,8 +378,9 @@ void G4GDMLWriteStructure::SurfacesWrite()
 
 void G4GDMLWriteStructure::StructureWrite(xercesc::DOMElement* gdmlElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing structure..." << G4endl;
-
+#endif
    structureElement = NewElement("structure");
    gdmlElement->appendChild(structureElement);
 }

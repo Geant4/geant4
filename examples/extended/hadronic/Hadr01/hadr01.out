@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -808,7 +808,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
      100.00         10k         1      197        200         0.00    Check
 ### Run 0 starts.
 ### Run 0 start
-RunAction::BeginOfRunAction:  User=1.05s Real=1.09s Sys=0.02s
+RunAction::BeginOfRunAction:  User=1.01s Real=1.3s Sys=0.01s
 NuclearData:  User=0s Real=0s Sys=0s
 EventAction: Event # 0 started
 EventAction: Event # 10 started
@@ -823,33 +823,33 @@ EventAction: Event # 90 started
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.23s Real=0.24s Sys=0s
+  User=0.16s Real=0.21s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         77.13   RMS(MeV) 71.81
-Average number of steps              222.8
-Average number of gamma              1.92
-Average number of e-                 3.93
-Average number of e+                 0.08
-Average number of neutrons           1.61
-Average number of protons            1.46
+Average energy deposit (MeV)         71.54   RMS(MeV) 66.03
+Average number of steps              216
+Average number of gamma              1.77
+Average number of e-                 3.79
+Average number of e+                 0.07
+Average number of neutrons           1.29
+Average number of protons            1.29
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.35
-Average number of pi0                0.19
+Average number of pi+ & pi-          0.28
+Average number of pi0                0.21
 Average number of kaons              0
-Average number of muons              0.02
-Average number of deuterons+tritons  0.31
-Average number of He3+alpha          0.52
+Average number of muons              0
+Average number of deuterons+tritons  0.33
+Average number of He3+alpha          0.24
 Average number of ions               0.53
-Average number of forward neutrons   0.29
-Average number of reflected neutrons 1.25
-Average number of leaked neutrons    0.02
-Average number of proton leak        0.64
-Average number of pion leak          0.31
+Average number of forward neutrons   0.18
+Average number of reflected neutrons 0.97
+Average number of leaked neutrons    0.04
+Average number of proton leak        0.59
+Average number of pion leak          0.25
 ========================================================
 
 #
@@ -863,22 +863,22 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 TransportationManager deleted.
-Total navigation history collections cleaned: 16
+Total navigation history collections cleaned: 14
 ================== Deleting memory pools ===================
-Pool ID '20G4NavigationLevelRep', size : 0.0221 MB
+Pool ID '20G4NavigationLevelRep', size : 0.0192 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00577 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '15G4HCofThisEvent', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.0106 MB
+Pool ID '7G4Track', size : 0.0115 MB
 Pool ID '18G4TouchableHistory', size : 0.00192 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.05 MB
+Dynamic pools deleted: 12 / Total memory freed: 0.048 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

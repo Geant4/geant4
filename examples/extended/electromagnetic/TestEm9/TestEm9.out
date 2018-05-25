@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -52,8 +52,6 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
-      ===== EM models for the G4Region  VertexDetector ======
- LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -84,9 +82,11 @@ msc:   for e-    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -108,6 +108,10 @@ CoulombScat:   for  e-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -115,9 +119,11 @@ msc:   for e+    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -142,6 +148,10 @@ CoulombScat:   for  e+, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
@@ -497,39 +507,39 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.62s Real=1.62s Sys=0s
+  User=1.77s Real=1.79s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         402.6
-Average number of gamma      639.1
-Average number of e+         48.4
-Average number of steps      2951
-Edep 1x1 =                   0.831 +- 0.002834  res=  3.411 %   100
-Edep 3x3 =                   0.9584 +- 0.00124  res=  1.294 %   100
-Edep 5x5 =                   0.9797 +- 0.0009971  res=  1.018 %   100
+Average number of e-         401.9
+Average number of gamma      639
+Average number of e+         48.31
+Average number of steps      2935
+Edep 1x1 =                   0.8319 +- 0.003156  res=  3.794 %   100
+Edep 3x3 =                   0.9579 +- 0.001528  res=  1.595 %   100
+Edep 5x5 =                   0.9793 +- 0.001252  res=  1.278 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.867 +- 0.002526
-  E1/E25 =                   0.8482 +- 0.002643
-  E9/E25 =                   0.9783 +- 0.0007847
+  E1/E9  =                   0.8684 +- 0.002692
+  E1/E25 =                   0.8494 +- 0.002756
+  E9/E25 =                   0.9781 +- 0.0009556
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.831  delEdep1x1= -0.169 nrms= -1.69
-Erms1x1: 0.02834  delErms1x1= -0.9717 nrms= -9.717
-Edep3x3: 0.9584  delEdep3x3= -0.04165 nrms= -0.4165
-Erms3x3: 0.0124  delErms3x3= -0.9876 nrms= -9.876
-Edep5x5: 0.9797  delEdep5x5= -0.02034 nrms= -0.2034
-Erms5x5: 0.009971  delErms5x5= -0.99 nrms= -9.9
+Edep1x1: 0.8319  delEdep1x1= -0.1681 nrms= -1.681
+Erms1x1: 0.03156  delErms1x1= -0.9684 nrms= -9.684
+Edep3x3: 0.9579  delEdep3x3= -0.04213 nrms= -0.4213
+Erms3x3: 0.01528  delErms3x3= -0.9847 nrms= -9.847
+Edep5x5: 0.9793  delEdep5x5= -0.02072 nrms= -0.2072
+Erms5x5: 0.01252  delErms5x5= -0.9875 nrms= -9.875
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         156           0
-  53         259          41           0          46
-  55         282          48           0          47
+  13           0           0         155           0
+  53         261          41           0          45
+  55         280          48           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -607,22 +617,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.57s Real=2.58s Sys=0.01s
+  User=2.47s Real=2.49s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         72.86
-Average number of gamma      66.96
-Average number of e+         3.733
-Average number of steps      445.7
-Edep 1x1 =                   0.01457 +- 0.0003715
-Edep 3x3 =                   0.01494 +- 0.0004103
-Edep 5x5 =                   0.015 +- 0.0004153
+Average number of e-         75.1
+Average number of gamma      73.3
+Average number of e+         4.238
+Average number of steps      474.2
+Edep 1x1 =                   0.01475 +- 0.0004408
+Edep 3x3 =                   0.01518 +- 0.0004927
+Edep 5x5 =                   0.01526 +- 0.0005008
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9836 +- 0.000714
-  E1/E25 =                   0.9807 +- 0.0007997
-  E9/E25 =                   0.9971 +- 0.0001825
+  E1/E9  =                   0.983 +- 0.0007771
+  E1/E25 =                   0.98 +- 0.0008873
+  E9/E25 =                   0.9968 +- 0.0002145
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -666,8 +676,6 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
-      ===== EM models for the G4Region  VertexDetector ======
- LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -698,9 +706,11 @@ msc:   for e-    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -722,6 +732,10 @@ CoulombScat:   for  e-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -729,9 +743,11 @@ msc:   for e+    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -756,6 +772,10 @@ CoulombScat:   for  e+, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
@@ -1111,22 +1131,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.26s Real=1.27s Sys=0s
+  User=1.2s Real=1.22s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         169.8
-Average number of gamma      220.5
-Average number of e+         46.77
-Average number of steps      1824
-Edep 1x1 =                   0.8323 +- 0.003977  res=  4.779 %   100
-Edep 3x3 =                   0.9576 +- 0.003537  res=  3.694 %   100
-Edep 5x5 =                   0.9782 +- 0.003546  res=  3.625 %   100
+Average number of e-         172.6
+Average number of gamma      221.5
+Average number of e+         47.17
+Average number of steps      1832
+Edep 1x1 =                   0.8369 +- 0.003966  res=  4.739 %   100
+Edep 3x3 =                   0.9612 +- 0.003515  res=  3.657 %   100
+Edep 5x5 =                   0.9811 +- 0.003431  res=  3.497 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8692 +- 0.002999
-  E1/E25 =                   0.851 +- 0.003134
-  E9/E25 =                   0.979 +- 0.0009744
+  E1/E9  =                   0.8708 +- 0.002784
+  E1/E25 =                   0.8531 +- 0.002962
+  E9/E25 =                   0.9797 +- 0.0008941
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1170,8 +1190,6 @@ phot:   for  gamma, applyCuts: 1     SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 100 TeV in 61 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
-      ===== EM models for the G4Region  VertexDetector ======
- LivermorePhElectric :  Emin=        0 eV    Emax=      100 TeV   AngularGenSauterGavrila  FluoActive
 
 compt:   for  gamma, applyCuts: 1     SubType= 13  BuildTable= 1
       Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
@@ -1202,9 +1220,11 @@ msc:   for e-    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -1226,6 +1246,10 @@ CoulombScat:   for  e-, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for e+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -1233,9 +1257,11 @@ msc:   for e+    SubType= 10
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
         WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  VertexDetector ======
-            UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+  GoudsmitSaunderson :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
       ===== EM models for the G4Region  MuonDetector ======
             UrbanMsc :  Emin=        0 eV    Emax=      100 MeV  Table with 42 bins Emin=    100 eV    Emax=    100 MeV
+        WentzelVIUni :  Emin=      100 MeV   Emax=      100 TeV  Table with 42 bins Emin=    100 MeV   Emax=    100 TeV
 
 eIoni:   for  e+    SubType= 2
       dE/dx and range tables from 100 eV  to 100 TeV in 84 bins
@@ -1260,6 +1286,10 @@ CoulombScat:   for  e+, integral: 1 , applyCuts: 1     SubType= 1  BuildTable= 1
       Lambda table from 100 MeV to 100 TeV, 7 bins per decade, spline: 1
       ThetaMin(p) < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  VertexDetector ======
+  eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  MuonDetector ======
   eCoulombScattering :  Emin=      100 MeV   Emax=      100 TeV
 
 msc:   for proton    SubType= 10
@@ -1615,22 +1645,22 @@ Index : 7     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.67s Real=1.67s Sys=0s
+  User=1.71s Real=1.77s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         170.2
-Average number of gamma      361.2
-Average number of e+         47.1
-Average number of steps      1968
-Edep 1x1 =                   0.8306 +- 0.003578  res=  4.307 %   100
-Edep 3x3 =                   0.9584 +- 0.003325  res=  3.469 %   100
-Edep 5x5 =                   0.9812 +- 0.003357  res=  3.422 %   100
+Average number of e-         171.9
+Average number of gamma      359.1
+Average number of e+         47
+Average number of steps      1980
+Edep 1x1 =                   0.8298 +- 0.003736  res=  4.502 %   100
+Edep 3x3 =                   0.9597 +- 0.003305  res=  3.444 %   100
+Edep 5x5 =                   0.9807 +- 0.003426  res=  3.493 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.867 +- 0.002999
-  E1/E25 =                   0.8468 +- 0.00319
-  E9/E25 =                   0.9767 +- 0.001136
+  E1/E9  =                   0.8648 +- 0.002977
+  E1/E25 =                   0.8463 +- 0.003196
+  E9/E25 =                   0.9786 +- 0.001021
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1638,6 +1668,6 @@ Beam Energy                  1 GeV
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.17 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.082 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

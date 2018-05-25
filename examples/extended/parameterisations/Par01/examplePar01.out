@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -795,45 +795,9 @@ Max 2J for sampling of angular correlations         10
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004353139927471102 mm long
-          and its vector is (-0.0002534693285930393,-0.0037265227986083,0.002235756775469611) mm 
-          Endpoint of ComputeStep() was     (0,36.23208295710608,60.38680492851014)
-          and current position to locate is (-0.0002534693285930393,36.22835643430747,60.38904068528561)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -0.000253     36.2     60.4     1e+03   0.0138     70.4      70.4 WorldPhysical eBrem
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 3.196936416102626e-05 mm long
-          and its vector is (-3.088647181757323e-05,7.074728152645093e-06,-4.244328579261492e-06) mm 
-          Endpoint of ComputeStep() was     (-0.0004125143072152354,38.68366076517497,64.48302226747498)
-          and current position to locate is (-0.0004434007790328086,38.68366783990312,64.4830180231464)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2 -0.000443     38.7     64.5     1e+03 0.000612     4.77      75.2 WorldPhysical eIoni
     3  -0.0043       60      100     1e+03   0.0108     41.4       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.03944160821572006 mm long
-          and its vector is (0.01376263379043696,0.03170262807873314,-0.01900457162616931) mm 
-          Endpoint of ComputeStep() was     (-0.1247793416848232,501.0683103027721,835.7509014546339)
-          and current position to locate is (-0.1110167078943863,501.1000129308508,835.7318968830077)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4   -0.111      501      836     1e+03   0.0248      858       974 DriftChamberPhysical eIoni
     5   -0.118      540      900     1e+03  0.00213     74.9  1.05e+03 WorldPhysical CoupledTransportation
     6    -0.13      600    1e+03     1e+03   0.0287      117  1.17e+03     Crystal CoupledTransportation
@@ -891,46 +855,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.00617363962378749 mm long
-          and its vector is (0.005465766837950539,-0.002461456050966149,0.001476635766437084) mm 
-          Endpoint of ComputeStep() was     (0,48.07007831556175,80.11679719260293)
-          and current position to locate is (0.005465766837950539,48.06761685951079,80.11827382836937)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  0.00547     48.1     80.1     1e+03   0.0166     93.4      93.4 WorldPhysical eIoni
     2  0.00886       60      100     1e+03  0.00463     23.2       117 DriftChamberPhysical CoupledTransportation
     3    0.142      540      900     1e+03   0.0241      933  1.05e+03 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.000118793917045632 mm long
-          and its vector is (0.0001083249054513458,4.180903545147885e-05,-2.509410569473403e-05) mm 
-          Endpoint of ComputeStep() was     (0.1431516478072977,544.1655844647191,907.2274946248961)
-          and current position to locate is (0.143259972712749,544.1656262737546,907.2274695307904)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4    0.143      544      907     1e+03   0.0018     8.43  1.06e+03 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0007151579230948839 mm long
-          and its vector is (0.0006574243505418909,-0.0002414611616359252,0.0001447086234520611) mm 
-          Endpoint of ComputeStep() was     (0.1462222097997998,554.6224717837268,924.6605625446889)
-          and current position to locate is (0.1468796341503417,554.6222303225652,924.6607072533124)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5    0.147      555      925     1e+03  0.00269     20.3  1.08e+03 WorldPhysical eIoni
     6    0.159      600    1e+03     1e+03   0.0193     87.8  1.17e+03     Crystal CoupledTransportation
     7    0.159      600    1e+03         0    1e+03        0  1.17e+03     Crystal fastSimProcess_massGeom
@@ -966,72 +894,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0002484276034823052 mm long
-          and its vector is (-4.026841287358582e-07,-0.0002130260605159862,0.0001278123998620373) mm 
-          Endpoint of ComputeStep() was     (0,5.720741804142206,9.534569673570344)
-          and current position to locate is (-4.026841287358582e-07,5.72052877808169,9.534697485970206)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -4.03e-07     5.72     9.53     1e+03  0.00162     11.1      11.1 WorldPhysical eIoni
     2 -0.00539       60      100     1e+03   0.0173      105       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01533444658804633 mm long
-          and its vector is (0.01413990634796372,-0.005088391422134464,0.003052306237520952) mm 
-          Endpoint of ComputeStep() was     (0.05733420002663023,283.3004308131327,471.9336600232557)
-          and current position to locate is (0.07147410637459395,283.2953424217106,471.9367123294932)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3   0.0715      283      472     1e+03   0.0127      434       550 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.002010577877073499 mm long
-          and its vector is (0.0006050834314653836,0.001643766784241052,-0.000987080645018068) mm 
-          Endpoint of ComputeStep() was     (0.08352412415845623,325.203254567807,541.7351329523314)
-          and current position to locate is (0.08412920758992161,325.2048983345912,541.7341458716863)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4   0.0841      325      542     1e+03  0.00308     81.4       632 DriftChamberPhysical eIoni
     5    0.116      540      900     1e+03   0.0142      418  1.05e+03 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0009343480962542462 mm long
-          and its vector is (0.0006039165173021555,-0.000611321500628037,0.0003668476904294948) mm 
-          Endpoint of ComputeStep() was     (0.1206126320799186,552.2361129163235,919.8657303657646)
-          and current position to locate is (0.1212165485972208,552.2355015948228,919.8660972134551)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6    0.121      552      920     1e+03  0.00507     23.2  1.07e+03 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 5.615279316164114e-05 mm long
-          and its vector is (-4.998568240258128e-05,-2.192873228068493e-05,1.317947021561849e-05) mm 
-          Endpoint of ComputeStep() was     (0.1222079524375917,553.9117035185297,922.6586681307947)
-          and current position to locate is (0.1221579667551891,553.9116815897975,922.6586813102649)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7    0.122      554      923     1e+03 0.000113     3.26  1.08e+03 WorldPhysical eIoni
     8    0.146      600    1e+03     1e+03   0.0199     90.2  1.17e+03     Crystal CoupledTransportation
     9    0.146      600    1e+03         0    1e+03        0  1.17e+03     Crystal fastSimProcess_massGeom
@@ -1104,59 +972,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02358733199002978 mm long
-          and its vector is (-0.006015727661996863,-0.019558395832874,0.01173210993594864) mm 
-          Endpoint of ComputeStep() was     (0,57.01282101197773,95.02136835329621)
-          and current position to locate is (-0.006015727661996863,56.99326261614485,95.03310046323216)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -0.00602       57       95     1e+03   0.0213      111       111 WorldPhysical eIoni
     2  -0.0062       60      100     1e+03 0.000868     5.79       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02967306169859029 mm long
-          and its vector is (0.01650900980371584,0.02114589770218345,-0.01268046514280741) mm 
-          Endpoint of ComputeStep() was     (-0.02133107421825595,273.2817194952303,455.7303825968471)
-          and current position to locate is (-0.004822064414540118,273.3028653929325,455.7177021317043)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3 -0.00482      273      456     1e+03   0.0133      415       531 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01718584250794019 mm long
-          and its vector is (-0.003662618848816711,-0.01440026602091393,0.008635435391624924) mm 
-          Endpoint of ComputeStep() was     (0.02360669106142322,499.3535530232575,832.6699153730085)
-          and current position to locate is (0.01994407221260651,499.3391527572365,832.6785508084001)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4   0.0199      499      833     1e+03   0.0114      440       971 DriftChamberPhysical eIoni
     5   0.0262      540      900     1e+03  0.00259     78.5  1.05e+03 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 5.182903897346584e-05 mm long
-          and its vector is (1.199495479043897e-05,-4.324720180193253e-05,2.592392479527916e-05) mm 
-          Endpoint of ComputeStep() was     (0.02647822333875985,541.8095409324801,903.5191444739528)
-          and current position to locate is (0.02649021829355028,541.8094976852783,903.5191703978776)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6   0.0265      542      904     1e+03  0.00144      4.1  1.05e+03 WorldPhysical eIoni
     7   0.0382      600    1e+03     1e+03   0.0217      112  1.17e+03     Crystal CoupledTransportation
     8   0.0382      600    1e+03         0    1e+03        0  1.17e+03     Crystal fastSimProcess_massGeom
@@ -1202,98 +1022,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001176076993757274 mm long
-          and its vector is (1.751464091270619e-05,0.001126346867353689,-0.0003379246469279451) mm 
-          Endpoint of ComputeStep() was     (0,10.07802561631805,33.59341872106017)
-          and current position to locate is (1.751464091270619e-05,10.0791519631854,33.59308079641324)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 1.75e-05     10.1     33.6     1e+03  0.00518     35.1      35.1 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004275657156140105 mm long
-          and its vector is (0.00239003857230107,-0.003395781352537597,0.001018640636104351) mm 
-          Endpoint of ComputeStep() was     (-0.0007094646807447561,22.81546565286676,76.04410020514865)
-          and current position to locate is (0.001680573891556314,22.81206987151422,76.04511884578476)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2  0.00168     22.8       76     1e+03  0.00869     44.3      79.4 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0003586176344978683 mm long
-          and its vector is (0.000354908258675611,4.926186437970159e-05,-1.483254578715787e-05) mm 
-          Endpoint of ComputeStep() was     (0.003500897540971821,27.01937271297577,90.066308209838)
-          and current position to locate is (0.003855805799647432,27.01942197484015,90.06629337729221)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  0.00386       27     90.1     1e+03  0.00286     14.6        94 WorldPhysical eIoni
     4  0.00528       30      100     1e+03 0.000777     10.4       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02123648503545843 mm long
-          and its vector is (0.006951340497057867,0.01921976213597532,-0.005767833682739365) mm 
-          Endpoint of ComputeStep() was     (0.065778818327379,167.4613418382641,558.1648523748712)
-          and current position to locate is (0.07273015882443687,167.4805616004001,558.1590845411885)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5   0.0727      167      558     1e+03   0.0136      478       583 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005361464261170833 mm long
-          and its vector is (-0.004560794856635575,-0.002699530851231202,0.000810544559385562) mm 
-          Endpoint of ComputeStep() was     (0.08960190855845389,217.6271468513644,725.2502436120739)
-          and current position to locate is (0.08504111370181831,217.6244473205132,725.2510541566332)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6    0.085      218      725     1e+03  0.00501      174       757 DriftChamberPhysical eIoni
     7    0.104      270      900     1e+03  0.00385      182       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001372858603097035 mm long
-          and its vector is (-0.0009926281897703615,-0.000908358700030476,0.000272606847033785) mm 
-          Endpoint of ComputeStep() was     (0.1072079097249701,278.6518970027886,928.6549103328998)
-          and current position to locate is (0.1062152815351997,278.6509886440886,928.6551829397469)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     8    0.106      279      929     1e+03  0.00622     29.9       970 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0007495693836728639 mm long
-          and its vector is (-8.373395511740434e-05,0.0007134624955256186,-0.0002140424097660798) mm 
-          Endpoint of ComputeStep() was     (0.1054805384330969,282.9519977583469,942.9932346831902)
-          and current position to locate is (0.1053968044779795,282.9527112208424,942.9930206407804)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     9    0.105      283      943     1e+03  0.00253       15       985 WorldPhysical eIoni
    10    0.108      300    1e+03     1e+03   0.0119     59.5  1.04e+03     Crystal CoupledTransportation
    11    0.108      300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -1390,46 +1126,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 1.094995075981905e-05 mm long
-          and its vector is (-1.014960274380566e-05,-3.936076858002124e-06,1.180798354205592e-06) mm 
-          Endpoint of ComputeStep() was     (0,1.622773317336929,5.409244391123099)
-          and current position to locate is (-1.014960274380566e-05,1.622769381260071,5.409245571921453)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -1.01e-05     1.62     5.41     1e+03   0.0012     5.65      5.65 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.003276659182895159 mm long
-          and its vector is (-0.002721952616111073,-0.001747249025211062,0.0005240135498212339) mm 
-          Endpoint of ComputeStep() was     (0.001897062418991613,19.30869712206702,64.38013116916513)
-          and current position to locate is (-0.0008248901971194596,19.30694987304181,64.38065518271495)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2 -0.000825     19.3     64.4     1e+03  0.00984     61.6      67.2 WorldPhysical eIoni
     3 0.000146       30      100     1e+03  0.00625     37.2       104 DriftChamberPhysical CoupledTransportation
     4   0.0615      270      900     1e+03   0.0215      835       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0002274680140349891 mm long
-          and its vector is (-9.71407220906606e-06,-0.0002176881085347304,6.526271226903191e-05) mm 
-          Endpoint of ComputeStep() was     (0.06336529028206127,273.592492413025,913.1377603486467)
-          and current position to locate is (0.0633555762098522,273.5922747249164,913.1378256113589)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5   0.0634      274      913     1e+03  0.00374     13.7       953 WorldPhysical eIoni
     6   0.0815      300    1e+03     1e+03    0.018     90.7  1.04e+03     Crystal CoupledTransportation
     7   0.0815      300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -1466,59 +1166,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0021440179432363 mm long
-          and its vector is (0.0006139414268331148,0.001967580901890642,-0.0005903509632858572) mm 
-          Endpoint of ComputeStep() was     (0,8.990709146338039,29.96903048779346)
-          and current position to locate is (0.0006139414268331148,8.99267672723993,29.96844013683018)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 0.000614     8.99       30     1e+03  0.00636     31.3      31.3 WorldPhysical eIoni
     2 -0.00293       30      100     1e+03   0.0155     73.1       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.05127807644191311 mm long
-          and its vector is (-0.05093699416981146,-0.005655248171052563,0.001697620879667738) mm 
-          Endpoint of ComputeStep() was     (0.02303398459469876,207.1391349828175,690.0681289032113)
-          and current position to locate is (-0.0279030095751127,207.1334797346465,690.069826524091)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  -0.0279      207      690     1e+03   0.0206      616       720 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0002126573658591953 mm long
-          and its vector is (0.0001733989375116013,0.0001179093478356208,-3.540267528023833e-05) mm 
-          Endpoint of ComputeStep() was     (-0.02747650063784476,219.7628150221589,732.1369144703328)
-          and current position to locate is (-0.02730310170033316,219.7629329315067,732.1368790676576)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  -0.0273      220      732     1e+03   0.0014     43.9       764 DriftChamberPhysical eIoni
     5    -0.02      270      900     1e+03  0.00685      175       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.009628688147912727 mm long
-          and its vector is (0.009461178231748439,0.001712383507822324,-0.0005152520150204509) mm 
-          Endpoint of ComputeStep() was     (-0.01414085398115607,293.9750575531862,979.3833130828464)
-          and current position to locate is (-0.004679675749407633,293.976769936694,979.3827978308314)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6 -0.00468      294      979     1e+03   0.0168     82.9  1.02e+03 WorldPhysical eIoni
     7  0.00139      300    1e+03     1e+03   0.0034     21.5  1.04e+03     Crystal CoupledTransportation
     8  0.00139      300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -1574,46 +1226,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.013400145323435 mm long
-          and its vector is (-0.002202506860966553,-0.01266071146753944,0.003797267879974697) mm 
-          Endpoint of ComputeStep() was     (0,28.48531673108135,94.95105577027117)
-          and current position to locate is (-0.002202506860966553,28.47265601961381,94.95485303815114)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  -0.0022     28.5       95     1e+03    0.021     99.1      99.1 WorldPhysical eIoni
     2 -0.00211       30      100     1e+03  0.00125     5.27       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02450340555683822 mm long
-          and its vector is (-0.01570867364328797,0.01801334997216486,-0.005401266428521012) mm 
-          Endpoint of ComputeStep() was     (-2.84168018238949e-05,171.4008155716192,571.6733583243852)
-          and current position to locate is (-0.01573709044511187,171.4188289215914,571.6679570579566)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  -0.0157      171      572     1e+03   0.0174      492       597 DriftChamberPhysical eIoni
     4   -0.023      270      900     1e+03  0.00626      343       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005533539551421216 mm long
-          and its vector is (0.004547334130468837,0.003020232165397374,-0.0009055440023075789) mm 
-          Endpoint of ComputeStep() was     (-0.02774714689830077,296.3421266495181,988.2858655074826)
-          and current position to locate is (-0.02319981276783193,296.3451468816835,988.2849599634803)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5  -0.0232      296      988     1e+03    0.015     92.2  1.03e+03 WorldPhysical eIoni
     6   -0.023      300    1e+03     1e+03  0.00272     12.2  1.04e+03     Crystal CoupledTransportation
     7   -0.023      300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -1648,72 +1264,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0003054912082179097 mm long
-          and its vector is (-0.0002255661546826448,-0.0001973332569740194,5.91977520869591e-05) mm 
-          Endpoint of ComputeStep() was     (0,6.291549510386059,20.97183170128686)
-          and current position to locate is (-0.0002255661546826448,6.291352177129085,20.97189089903895)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -0.000226     6.29       21     1e+03  0.00435     21.9      21.9 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.002579195503390077 mm long
-          and its vector is (-0.002343350883922026,-0.001032071503614063,0.0003094906960754429) mm 
-          Endpoint of ComputeStep() was     (0.001485895686420021,15.0990264471387,50.34542029212871)
-          and current position to locate is (-0.0008574551975020044,15.09799437563509,50.34572978282478)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2 -0.000857     15.1     50.3     1e+03  0.00718     30.7      52.6 WorldPhysical eIoni
     3 -0.00657       30      100     1e+03    0.013     51.8       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01147753044232732 mm long
-          and its vector is (0.001127084830159317,-0.01094136549376401,0.003278704922990983) mm 
-          Endpoint of ComputeStep() was     (-0.02671873704516992,103.2670435751045,344.545352113448)
-          and current position to locate is (-0.02559165221501061,103.2561022096108,344.548630818371)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  -0.0256      103      345     1e+03     0.01      255       360 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005002608105685755 mm long
-          and its vector is (-0.004632762320525743,0.001808247829643506,-0.0005420709613872532) mm 
-          Endpoint of ComputeStep() was     (-0.0344828496750863,153.5950151269866,512.5689461896211)
-          and current position to locate is (-0.03911561199561204,153.5968233748163,512.5684041186597)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5  -0.0391      154      513     1e+03  0.00251      175       535 DriftChamberPhysical eIoni
     6  -0.0823      270      900     1e+03   0.0105      404       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001651209070643864 mm long
-          and its vector is (0.001529967032278076,-0.0005948681911718268,0.0001783931339787159) mm 
-          Endpoint of ComputeStep() was     (-0.08576872165699934,278.6145529040461,929.7741488892638)
-          and current position to locate is (-0.08423875462472126,278.613958035855,929.7743272823977)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7  -0.0842      279      930     1e+03  0.00906     31.1       971 WorldPhysical eIoni
     8  -0.0881      300    1e+03     1e+03   0.0128     73.3  1.04e+03     Crystal CoupledTransportation
     9  -0.0881      300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -1766,71 +1322,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.000155257090752417 mm long
-          and its vector is (9.158678126058407e-05,0.0001200794622300272,3.602150021553285e-05) mm 
-          Endpoint of ComputeStep() was     (0,-2.107266252616045,7.024220842053484)
-          and current position to locate is (9.158678126058407e-05,-2.107146173153815,7.0242568635537)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 9.16e-05    -2.11     7.02     1e+03 0.000908     7.33      7.33 WorldPhysical eIoni
     2  0.00545      -30      100     1e+03   0.0165     97.1       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0007896457439471562 mm long
-          and its vector is (-0.0001722317065532362,-0.0007381356331563893,-0.0002214326698037894) mm 
-          Endpoint of ComputeStep() was     (-0.01355972669197873,-48.59952344492267,162.0239581151138)
-          and current position to locate is (-0.01373195839853196,-48.60026158055582,162.023736682444)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  -0.0137    -48.6      162     1e+03 0.000973     64.8       169 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01123825666177459 mm long
-          and its vector is (0.01039652375537412,-0.00408819940328442,-0.001223655277783564) mm 
-          Endpoint of ComputeStep() was     (-0.05328066709286728,-94.02182684665729,313.4915556810105)
-          and current position to locate is (-0.04288414333749316,-94.02591504606058,313.4903320257327)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  -0.0429      -94      313     1e+03  0.00451      158       327 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.002873009781026989 mm long
-          and its vector is (0.0002384499761741432,0.002742432972894449,0.0008224282339028832) mm 
-          Endpoint of ComputeStep() was     (-0.077402417553115,-153.1191842078302,510.5451350380315)
-          and current position to locate is (-0.07716396757694086,-153.1164417748573,510.5459574662654)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5  -0.0772     -153      511     1e+03  0.00694      206       533 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01035729342352192 mm long
-          and its vector is (-0.008684317998884167,0.005406656549411082,0.001619942255729256) mm 
-          Endpoint of ComputeStep() was     (-0.07779582443501554,-221.067911682403,737.3016547851906)
-          and current position to locate is (-0.0864801424338997,-221.0625050258535,737.3032747274464)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6  -0.0865     -221      737     1e+03  0.00601      237       770 DriftChamberPhysical eIoni
     7  -0.0819     -270      900     1e+03  0.00741      170       940 WorldPhysical CoupledTransportation
     8  -0.0857     -300    1e+03     1e+03   0.0179      104  1.04e+03     Crystal CoupledTransportation
@@ -1933,46 +1429,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001108790049792879 mm long
-          and its vector is (-0.001107806633850825,4.472259213983421e-05,1.340620259782099e-05) mm 
-          Endpoint of ComputeStep() was     (0,-17.43843470535392,58.12811568451306)
-          and current position to locate is (-0.001107806633850825,-17.43838998276178,58.12812909071566)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -0.00111    -17.4     58.1     1e+03  0.00885     60.7      60.7 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005485395478378722 mm long
-          and its vector is (0.004294371640338517,0.00326892234031817,0.0009808580436754255) mm 
-          Endpoint of ComputeStep() was     (-0.00271429233834593,-29.33995210296332,97.78436335930733)
-          and current position to locate is (0.001580079301992586,-29.33668318062301,97.78534421735101)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2  0.00158    -29.3     97.8     1e+03  0.00659     41.4       102 WorldPhysical eIoni
     3  0.00214      -30      100     1e+03  0.00025     2.31       104 DriftChamberPhysical CoupledTransportation
     4    0.193     -270      900     1e+03    0.023      835       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.006957611134200794 mm long
-          and its vector is (-0.006600109315793773,-0.002108824218055361,-0.0006322737790469546) mm 
-          Endpoint of ComputeStep() was     (0.2007093877818557,-290.4552103972288,968.2936491371233)
-          and current position to locate is (0.1941092784660619,-290.4573192214469,968.2930168633443)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5    0.194     -290      968     1e+03   0.0155     71.3  1.01e+03 WorldPhysical eIoni
     6    0.195     -300    1e+03     1e+03  0.00589     33.1  1.04e+03     Crystal CoupledTransportation
     7    0.195     -300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -2016,44 +1476,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001014962317749962 mm long
-          and its vector is (-0.0009461515882627934,-0.000351849794843595,-0.0001055812499863862) mm 
-          Endpoint of ComputeStep() was     (0,-5.872796409601675,19.57598803200559)
-          and current position to locate is (-0.0009461515882627934,-5.873148259396519,19.5758824507556)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -0.000946    -5.87     19.6     1e+03  0.00684     20.4      20.4 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001232817149678068 mm long
-          and its vector is (-0.0007608953365313567,0.0009291111350044901,0.0002786196514890094) mm 
-          Endpoint of ComputeStep() was     (-0.002992440475401712,-12.95649262987748,43.18834898660567)
-          and current position to locate is (-0.003753335811933069,-12.95556351874248,43.18862760625716)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2 -0.00375      -13     43.2     1e+03  0.00248     24.7      45.1 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0005098372607445582 mm long
-          and its vector is (-0.0002362439405090653,-0.0004327497063592034,-0.0001298095707653601) mm 
-          Endpoint of ComputeStep() was     (-0.01016387559767998,-28.74102886299969,95.82573186981978)
-          and current position to locate is (-0.01040011953818905,-28.74146161270605,95.82560206024901)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  -0.0104    -28.7     95.8     1e+03   0.0118       55       100 WorldPhysical eIoni
     4  -0.0104      -30      100     1e+03 0.000246     4.36       104 DriftChamberPhysical CoupledTransportation
     5  -0.0503     -270      900     1e+03   0.0258      835       940 WorldPhysical CoupledTransportation
@@ -2090,32 +1514,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004196741123324709 mm long
-          and its vector is (0.001709353391360684,-0.003671151141057649,-0.001101542708731529) mm 
-          Endpoint of ComputeStep() was     (0,-13.38573942423464,44.61913141411547)
-          and current position to locate is (0.001709353391360684,-13.3894105753757,44.61802987140674)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  0.00171    -13.4     44.6     1e+03  0.00932     46.6      46.6 WorldPhysical eIoni
     2  0.00288      -30      100     1e+03  0.00791     57.8       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0804090369258483 mm long
-          and its vector is (0.04910904353122174,-0.06098187571981839,-0.01830644412450511) mm 
-          Endpoint of ComputeStep() was     (-0.01253226545307736,-252.1775791263135,840.203074757579)
-          and current position to locate is (0.03657677807814437,-252.2385610020334,840.1847683134545)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3   0.0366     -252      840     1e+03   0.0226      773       877 DriftChamberPhysical eIoni
     4   0.0479     -270      900     1e+03  0.00106     62.5       940 WorldPhysical CoupledTransportation
     5   0.0667     -300    1e+03     1e+03   0.0176      104  1.04e+03     Crystal CoupledTransportation
@@ -2143,72 +1543,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.007130937792534291 mm long
-          and its vector is (0.003120633455764883,0.006141525316440521,0.00184216921678626) mm 
-          Endpoint of ComputeStep() was     (0,-26.44978828119672,88.16596093732241)
-          and current position to locate is (0.003120633455764883,-26.44364675588028,88.1678031065392)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  0.00312    -26.4     88.2     1e+03   0.0188       92        92 WorldPhysical eIoni
     2  0.00365      -30      100     1e+03  0.00369     12.4       104 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01382811817980815 mm long
-          and its vector is (-0.0001287603095076499,0.0132448000527603,0.003971843997419455) mm 
-          Endpoint of ComputeStep() was     (0.004877040479514744,-114.2541456359546,380.9634116777842)
-          and current position to locate is (0.004748280170007094,-114.2409008359019,380.9673835217816)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  0.00475     -114      381     1e+03    0.011      293       398 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0004338748351882863 mm long
-          and its vector is (-0.0002879651036999135,0.0003108656695616219,9.319875078972473e-05) mm 
-          Endpoint of ComputeStep() was     (0.005172081181419363,-117.9597772301359,393.372022036985)
-          and current position to locate is (0.00488411607771945,-117.9594663644663,393.3721152357357)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  0.00488     -118      393     1e+03 0.000395       13       411 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001245719919315099 mm long
-          and its vector is (-0.001021093094440561,-0.0006835095768735755,-0.000204943085236664) mm 
-          Endpoint of ComputeStep() was     (0.001756046387173645,-152.0665880308523,507.1427956488477)
-          and current position to locate is (0.0007349532927330841,-152.0672715404292,507.1425907057625)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5 0.000735     -152      507     1e+03  0.00476      119       529 DriftChamberPhysical eIoni
     6  0.00121     -270      900     1e+03   0.0105      410       940 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.002614759044195719 mm long
-          and its vector is (0.002024001472519323,-0.001585752068990587,-0.0004751560524027809) mm 
-          Endpoint of ComputeStep() was     (-0.005416838611883529,-293.1400439177908,977.7743013156827)
-          and current position to locate is (-0.003392837139364206,-293.1416296698598,977.7738261596303)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7 -0.00339     -293      978     1e+03   0.0166     81.2  1.02e+03 WorldPhysical eIoni
     8 -0.00161     -300    1e+03     1e+03  0.00482     23.2  1.04e+03     Crystal CoupledTransportation
     9 -0.00161     -300    1e+03         0    1e+03        0  1.04e+03     Crystal fastSimProcess_massGeom
@@ -2259,33 +1599,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01114573911129229 mm long
-          and its vector is (-0.009603763913433266,-0.0048499872444836,-0.002910814793210648) mm 
-          Endpoint of ComputeStep() was     (0,-45.31388888486273,75.5231481414379)
-          and current position to locate is (-0.009603763913433266,-45.31873887210722,75.52023732664469)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  -0.0096    -45.3     75.5     1e+03    0.015     88.1      88.1 WorldPhysical eIoni
     2  -0.0132      -60      100     1e+03  0.00452     28.6       117 DriftChamberPhysical CoupledTransportation
     3   -0.051     -540      900     1e+03   0.0252      933  1.05e+03 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.008286986095236749 mm long
-          and its vector is (0.007195136818649459,-0.003524838774978889,-0.002116519859100663) mm 
-          Endpoint of ComputeStep() was     (-0.04843655544009638,-572.8165488735754,954.4421749564403)
-          and current position to locate is (-0.04124141862144692,-572.8200737123503,954.4400584365812)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  -0.0412     -573      954     1e+03   0.0126     63.5  1.11e+03 WorldPhysical eIoni
     5  -0.0288     -600    1e+03     1e+03  0.00611     53.1  1.17e+03     Crystal CoupledTransportation
     6  -0.0288     -600    1e+03         0    1e+03        0  1.17e+03     Crystal fastSimProcess_massGeom
@@ -2312,45 +1628,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004090820374722703 mm long
-          and its vector is (0.004071857728755669,-0.000337273209972011,-0.0002025654384496534) mm 
-          Endpoint of ComputeStep() was     (0,-24.91381055530185,41.52301759216976)
-          and current position to locate is (0.004071857728755669,-24.91414782851183,41.52281502673131)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  0.00407    -24.9     41.5     1e+03   0.0114     48.4      48.4 WorldPhysical eIoni
     2   0.0134      -60      100     1e+03  0.00827     68.2       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02835474430927039 mm long
-          and its vector is (0.01648362531338095,-0.01978400076524167,-0.01186907473618248) mm 
-          Endpoint of ComputeStep() was     (-0.1171581521764399,-376.1410330352655,626.8186927701261)
-          and current position to locate is (-0.1006745268630589,-376.1608170360307,626.8068236953899)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3   -0.101     -376      627     1e+03   0.0174      614       731 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005199913539894341 mm long
-          and its vector is (0.00115813339251844,0.004346548617093049,0.002608705231864406) mm 
-          Endpoint of ComputeStep() was     (-0.1395510994703536,-493.1503758724477,821.7434933001008)
-          and current position to locate is (-0.1383929660778352,-493.1460293238306,821.7461020053327)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4   -0.138     -493      822     1e+03  0.00614      227       958 DriftChamberPhysical eIoni
     5   -0.153     -540      900     1e+03  0.00406     91.3  1.05e+03 WorldPhysical CoupledTransportation
     6   -0.172     -600    1e+03     1e+03   0.0242      117  1.17e+03     Crystal CoupledTransportation
@@ -2387,85 +1667,13 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004565682876982059 mm long
-          and its vector is (-4.240914523317081e-05,0.003915020375888645,0.002348675595722938) mm 
-          Endpoint of ComputeStep() was     (0,-18.5771964306946,30.96199405115766)
-          and current position to locate is (-4.240914523317081e-05,-18.57328141031871,30.96434272675338)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1 -4.24e-05    -18.6       31     1e+03  0.00703     36.1      36.1 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.001013802920566025 mm long
-          and its vector is (-0.000591379119741314,-0.0007062042040644201,-0.0004234887491350037) mm 
-          Endpoint of ComputeStep() was     (0.004002707079206735,-42.28873511178585,70.50748251616392)
-          and current position to locate is (0.003411327959465421,-42.28944131598992,70.50705902741478)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2  0.00341    -42.3     70.5     1e+03   0.0106     46.1      82.2 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 9.795944485096194e-05 mm long
-          and its vector is (-7.284745312324164e-05,-5.616801270491578e-05,-3.368168282236184e-05) mm 
-          Endpoint of ComputeStep() was     (0.003767309055727748,-49.51439076437559,82.55485130523978)
-          and current position to locate is (0.003694461602604506,-49.5144469323883,82.55481762355696)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  0.00369    -49.5     82.6     1e+03  0.00315       14      96.3 WorldPhysical eIoni
     4  0.00445      -60      100     1e+03  0.00395     20.3       117 DriftChamberPhysical CoupledTransportation
     5   0.0502     -540      900     1e+03   0.0292      933  1.05e+03 WorldPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0003480672265003167 mm long
-          and its vector is (-5.961761776282493e-05,0.0002940633233947665,0.0001764179572774083) mm 
-          Endpoint of ComputeStep() was     (0.05468017737688242,-553.2024825382118,922.2359490772475)
-          and current position to locate is (0.0546205597591196,-553.2021884748884,922.2361254952048)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6   0.0546     -553      922     1e+03  0.00421     25.9  1.08e+03 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.003341885259965624 mm long
-          and its vector is (-8.587366129464424e-06,-0.002865709422962937,-0.00171925357381042) mm 
-          Endpoint of ComputeStep() was     (0.0632007199888493,-575.5209734661445,959.4410287449524)
-          and current position to locate is (0.06319213262271983,-575.5238391755674,959.4393094913786)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7   0.0632     -576      959     1e+03  0.00907     43.4  1.12e+03 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0003251003266025556 mm long
-          and its vector is (0.0002574829950195701,-0.0001701557132491871,-0.0001021751578491603) mm 
-          Endpoint of ComputeStep() was     (0.06627675665487096,-582.0572377998801,970.3278875920564)
-          and current position to locate is (0.06653423964989053,-582.0574079555934,970.3277854168986)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     8   0.0665     -582      970     1e+03  0.00286     12.7  1.13e+03 WorldPhysical eIoni
     9   0.0743     -600    1e+03     1e+03   0.0104     34.6  1.17e+03     Crystal CoupledTransportation
    10   0.0743     -600    1e+03         0    1e+03        0  1.17e+03     Crystal fastSimProcess_massGeom
@@ -2526,58 +1734,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.004159847475306258 mm long
-          and its vector is (0.003322414238134351,0.002146553673444629,0.001287711914628176) mm 
-          Endpoint of ComputeStep() was     (0,-23.56581075215752,39.27635125359587)
-          and current position to locate is (0.003322414238134351,-23.56366419848407,39.2776389655105)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1  0.00332    -23.6     39.3     1e+03  0.00995     45.8      45.8 WorldPhysical eIoni
     2   0.0105      -60      100     1e+03   0.0118     70.8       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 7.848693997978011e-05 mm long
-          and its vector is (2.918875488034517e-05,-6.247942070558565e-05,-3.747717070723411e-05) mm 
-          Endpoint of ComputeStep() was     (0.01084687570198797,-68.06466123844952,113.4648564412647)
-          and current position to locate is (0.01087606445686831,-68.06472371787022,113.464818964094)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3   0.0109    -68.1      113     1e+03 0.000358     15.7       132 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02746960218794234 mm long
-          and its vector is (-0.01496274249702154,-0.019755692059789,-0.01184938870028418) mm 
-          Endpoint of ComputeStep() was     (0.0393501498103301,-313.4353548115833,522.5507212101301)
-          and current position to locate is (0.02438740731330855,-313.4551105036431,522.5388718214298)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4   0.0244     -313      523     1e+03   0.0119      477       609 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.01079364819214553 mm long
-          and its vector is (-0.01079256235082431,-0.0001314487477657167,-7.848838185964269e-05) mm 
-          Endpoint of ComputeStep() was     (0.04200926180445681,-529.3418093724325,882.4150984244181)
-          and current position to locate is (0.03121669945363249,-529.3419408211803,882.4150199360363)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5   0.0312     -529      882     1e+03   0.0107      420  1.03e+03 DriftChamberPhysical eIoni
     6   0.0323     -540      900     1e+03 0.000126     20.5  1.05e+03 WorldPhysical CoupledTransportation
     7   0.0372     -600    1e+03     1e+03   0.0231      117  1.17e+03     Crystal CoupledTransportation
@@ -2622,31 +1782,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0     1e+03        0        0         0 WorldPhysical initStep
     1        0      -60      100     1e+03   0.0248      117       117 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.005857820777279943 mm long
-          and its vector is (0.001811012774783112,-0.004776145324001391,-0.002867530790126693) mm 
-          Endpoint of ComputeStep() was     (-0.01256432027908563,-317.4229387226915,528.7604416341212)
-          and current position to locate is (-0.01075330750430252,-317.4277148680155,528.7575741033311)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2  -0.0108     -317      529     1e+03   0.0142      500       617 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.0001363860402966196 mm long
-          and its vector is (9.637322816411983e-05,-8.273688155213677e-05,-4.967858001236891e-05) mm 
-          Endpoint of ComputeStep() was     (-0.01151189303267489,-332.1948914237134,553.3503258781731)
-          and current position to locate is (-0.01141551980451077,-332.194974160595,553.3502761995931)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3  -0.0114     -332      553     1e+03  0.00149     28.7       645 DriftChamberPhysical eIoni
     4   -0.037     -540      900     1e+03  0.00985      404  1.05e+03 WorldPhysical CoupledTransportation
     5   -0.064     -600    1e+03     1e+03   0.0201      117  1.17e+03     Crystal CoupledTransportation
@@ -2732,57 +1868,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.104      540      900   0.00549        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.02960529958553934 mm long
-          and its vector is (-0.02668876250255995,0.008986577615587521,-0.009133736496664824) mm 
-          Endpoint of ComputeStep() was     (0.05260228295034106,539.9307379465233,900.2289034227949)
-          and current position to locate is (0.02591352044778111,539.9397245241389,900.2197696862983)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1   0.0259      540      900   0.00539 0.000105    0.133     0.133 WorldPhysical msc
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.05366623288185662 mm long
-          and its vector is (0.006178393629574397,-0.0485530715141067,-0.02201116195101349) mm 
-          Endpoint of ComputeStep() was     (-0.03913466335801193,539.8912242554596,900.3084948400883)
-          and current position to locate is (-0.03295626972843753,539.8426711839455,900.2864836781373)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2   -0.033      540      900   0.00529 0.000101    0.133     0.265 WorldPhysical msc
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.07696336363971547 mm long
-          and its vector is (-0.07552280800964442,-0.002881992373772846,-0.01453818878110269) mm 
-          Endpoint of ComputeStep() was     (-0.049227634544206,539.7377912890736,900.3918009388548)
-          and current position to locate is (-0.1247504425538504,539.7349092966998,900.3772627500737)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3   -0.125      540      900   0.00497 0.000314    0.171     0.436 WorldPhysical msc
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.1105406100063538 mm long
-          and its vector is (0.09318908681736773,0.03991438229547839,0.0440665706028085) mm 
-          Endpoint of ComputeStep() was     (-0.1361284392924378,539.6183643654409,900.5068876332585)
-          and current position to locate is (-0.04293935247507005,539.6582787477364,900.5509542038614)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4  -0.0429      540      901   0.00227 0.000833     0.21     0.646 WorldPhysical eIoni
     5   0.0093      540      901         0  0.00227    0.199     0.844 WorldPhysical eIoni
 
@@ -3027,136 +2115,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0063     28.7     95.8     0.114        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.4564301752507604 mm long
-          and its vector is (-0.09856111755053576,0.2647274369134749,0.3585158227078011) mm 
-          Endpoint of ComputeStep() was     (-0.5194012573301258,23.65141903574077,99.39931281021325)
-          and current position to locate is (-0.6179623748806615,23.91614647265425,99.75782863292105)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1   -0.618     23.9     99.8     0.113  0.00108     6.38      6.38 WorldPhysical eIoni
     2   -0.701     23.5      100     0.113 0.000171    0.465      6.85 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 66.8148062942188 mm long
-          and its vector is (-28.9564975630891,37.05568250806468,47.4617317728115) mm 
-          Endpoint of ComputeStep() was     (-67.31056331974158,-196.7546698449493,231.346784851466)
-          and current position to locate is (-96.26706088283068,-159.6989873368846,278.8085166242775)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3    -96.3     -160      279    0.0968   0.0162      275       282 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 50.31198262271568 mm long
-          and its vector is (42.96208814618463,16.23560387080261,20.54165875722521) mm 
-          Endpoint of ComputeStep() was     (-122.0863924451724,-287.3322580834587,433.6867404636324)
-          and current position to locate is (-79.12430429898774,-271.0966542126561,454.2283992208576)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4    -79.1     -271      454    0.0857   0.0111      210       492 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 15.18028621718088 mm long
-          and its vector is (5.339033105138672,9.788734195675431,10.3012862296016) mm 
-          Endpoint of ComputeStep() was     (-27.54015879318786,-395.9978508607179,546.179552993481)
-          and current position to locate is (-22.20112568804919,-386.2091166650425,556.4808392230826)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     5    -22.2     -386      556    0.0737    0.012      170       662 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 28.43651889629203 mm long
-          and its vector is (13.72441534823376,22.66852938281346,10.31570675760327) mm 
-          Endpoint of ComputeStep() was     (54.62943520500671,-461.7803976756292,620.3286482416765)
-          and current position to locate is (68.35385055324048,-439.1118682928158,630.6443549992798)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6     68.4     -439      631    0.0629   0.0108      130       792 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 16.01663695352126 mm long
-          and its vector is (-0.6046842194132864,-13.40762748504528,-8.740854736120127) mm 
-          Endpoint of ComputeStep() was     (143.2515815375909,-472.8983584888698,677.2882143114532)
-          and current position to locate is (142.6468973181776,-486.3059859739151,668.5473595753331)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7      143     -486      669    0.0553  0.00762     98.2       890 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 15.17721154912169 mm long
-          and its vector is (2.964093202583996,14.68606740417511,2.425144550993537) mm 
-          Endpoint of ComputeStep() was     (198.8616132013162,-501.5287104635541,692.0248469986283)
-          and current position to locate is (201.8257064039002,-486.842643059379,694.4499915496218)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     8      202     -487      694    0.0452  0.00488     64.8       955 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.4138277432573844 mm long
-          and its vector is (0.05001438580671902,0.403377174675029,-0.07770982726185593) mm 
-          Endpoint of ComputeStep() was     (209.4939022381973,-487.9095914086982,693.8469467684675)
-          and current position to locate is (209.543916624004,-487.5062142340232,693.7692369412057)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     9      210     -488      694    0.0419  0.00333     7.81       963 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.423090158242851 mm long
-          and its vector is (0.06942737818661726,0.1916199930465723,0.3707652888620032) mm 
-          Endpoint of ComputeStep() was     (215.7379253768277,-488.9118229484221,693.3358332194404)
-          and current position to locate is (215.8073527550143,-488.7202029553756,693.7065985083024)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
    10      216     -489      694    0.0388  0.00156      6.4       969 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 10.84464497558686 mm long
-          and its vector is (-1.849350087134809,-8.090988452951308,-6.980124265078985) mm 
-          Endpoint of ComputeStep() was     (254.8170436822964,-490.0084894987206,684.8644831783577)
-          and current position to locate is (252.9676935951616,-498.0994779516719,677.8843589132787)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
    11      253     -498      678    0.0343  0.00443     41.6  1.01e+03 DriftChamberPhysical eIoni
    12      280     -500      661    0.0305   0.0038     33.6  1.04e+03 DriftChamberPhysical eIoni
    13      306     -501      654    0.0257  0.00488     27.4  1.07e+03 DriftChamberPhysical eIoni
@@ -3599,110 +2567,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  0.00222    -53.2     88.7    0.0462        0        0         0 WorldPhysical initStep
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 2.015447013874636 mm long
-          and its vector is (0.5368549097915469,0.9123311461121801,1.715070071863693) mm 
-          Endpoint of ComputeStep() was     (7.807847036087853,-57.24963447023254,88.36967832422059)
-          and current position to locate is (8.3447019458794,-56.33730332412036,90.08474839608428)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     1     8.34    -56.3     90.1    0.0406  0.00566     10.4      10.4 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 3.252384443212696 mm long
-          and its vector is (-1.347821596433446,-2.236613582059114,-1.93879890529891) mm 
-          Endpoint of ComputeStep() was     (11.25392153879222,-60.80080924513192,93.21144139857796)
-          and current position to locate is (9.906099942358777,-63.03742282719103,91.27264249327905)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     2     9.91      -63     91.3    0.0323  0.00478     7.11      17.5 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 2.674685371399455 mm long
-          and its vector is (1.090491901972548,1.165376564729428,2.146314681049816) mm 
-          Endpoint of ComputeStep() was     (11.00803794432493,-67.61798639061833,93.19986546713886)
-          and current position to locate is (12.09852984629748,-66.4526098258889,95.34618014818868)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     3     12.1    -66.5     95.3    0.0275  0.00472     6.13      23.6 WorldPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 0.9966955069412103 mm long
-          and its vector is (-0.3868359342446901,0.8438819197590135,0.3627991166440125) mm 
-          Endpoint of ComputeStep() was     (11.70648374379971,-68.20025536704649,98.99323686167557)
-          and current position to locate is (11.31964780955502,-67.35637344728748,99.35603597831958)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     4     11.3    -67.4     99.4    0.0238  0.00378     4.97      28.6 WorldPhysical eIoni
     5     11.4    -67.3      100    0.0236 0.000145    0.675      29.3 DriftChamberPhysical CoupledTransportation
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 1.524845497844493 mm long
-          and its vector is (-1.485646093418231,0.3361305768349752,0.07089226138553784) mm 
-          Endpoint of ComputeStep() was     (11.64185041780823,-68.51767582007442,111.0325791231167)
-          and current position to locate is (10.15620432439,-68.18154524323944,111.1034713845023)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     6     10.2    -68.2      111      0.02  0.00211     11.4      40.7 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 3.113445325943885 mm long
-          and its vector is (2.863087454458821,1.222240659148817,0.04898772178616184) mm 
-          Endpoint of ComputeStep() was     (8.490700304256123,-64.76878138968164,123.2956065099418)
-          and current position to locate is (11.35378775871494,-63.54654073053282,123.344594231728)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     7     11.4    -63.5      123    0.0185  0.00147     13.3        54 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 2.443626127051665 mm long
-          and its vector is (2.038395793130418,-1.316231151638924,0.2894594873432368) mm 
-          Endpoint of ComputeStep() was     (11.22328111025142,-61.56447330617261,133.2764956462638)
-          and current position to locate is (13.26167690338183,-62.88070445781153,133.565955133607)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     8     13.3    -62.9      134    0.0153  0.00222     10.5      64.5 DriftChamberPhysical eIoni
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : GeomNav1002
-      issued by : G4PathFinder::ReportMove()
-Endpoint moved between value returned by ComputeStep() and call to Locate(). 
-          Change of  (End) Position / G4PathFinder::Locate is 2.340918230434988 mm long
-          and its vector is (-1.772565553751043,1.489052538451503,-0.3473212590229195) mm 
-          Endpoint of ComputeStep() was     (14.58910555493189,-59.54517629242025,141.0916170706442)
-          and current position to locate is (12.81654000118084,-58.05612375396875,140.7442958116213)
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
     9     12.8    -58.1      141    0.0132  0.00212     8.72      73.2 DriftChamberPhysical eIoni
    10     11.1    -55.9      147    0.0108  0.00238     6.99      80.2 DriftChamberPhysical eIoni
    11       12    -52.9      151   0.00883  0.00195      5.3      85.5 DriftChamberPhysical eIoni

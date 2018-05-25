@@ -1,4 +1,4 @@
-svn log $Id: History 108466 2018-02-15 13:48:04Z gcosmo $
+svn log $Id: History 110053 2018-05-15 08:55:49Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12th April 2018 Gabriele Cosmo  (config-V10-03-09)
+- WIN32-VC.gmk: updated obsolete configuration for Qt5.
+
+20th March 2018 Gabriele Cosmo
+- architecture.gmk: corrected default path for external expat and zlib.
+
+19th March 2018 Gabriele Cosmo
+- architecture.gmk: corrected settings for external expat and zlib.
+
+9th March 2018 Gabriele Cosmo
+- Darwing-clang.gmk: removed -pthread and -fPIC compilation options.
 
 14th February 2018 Gabriele Cosmo  (config-V10-03-08)
 - Disable "-Wl,-force_load" global linker flag for static libraries in macro

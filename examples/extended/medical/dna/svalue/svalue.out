@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -406,46 +406,46 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 1000 e- of 2.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 89.561 eV  +- 127.127 eV 
+ Total Energy deposited        = 90.088 eV  +- 128.112 eV 
 
- S value                       = 428.204 Gy/Bq.s  +- 607.814 Gy/Bq.s 
+ S value                       = 430.726 Gy/Bq.s  +- 612.520 Gy/Bq.s 
 
- Track length of primary track = 15.461 nm  +- 10.812 nm 
- Projected range               = 14.040 nm  +- 5.128 nm 
+ Track length of primary track = 15.452 nm  +- 10.820 nm 
+ Projected range               = 14.067 nm  +- 5.129 nm 
 
  Nb of steps of primary track  = 4.71 +- 3.80
 
- Step size                     = 3.628 nm  +- 2.389 nm 
+ Step size                     = 3.622 nm  +- 2.384 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 61.869 eV  +- 91.626 eV 
+ Total Energy deposited        = 61.902 eV  +- 91.965 eV 
 
- S value                       = 295.804 Gy/Bq.s  +- 438.075 Gy/Bq.s 
+ S value                       = 295.960 Gy/Bq.s  +- 439.697 Gy/Bq.s 
 
- Track length of primary track = 14.873 nm  +- 9.985 nm 
- Projected range               = 14.502 nm  +- 4.410 nm 
+ Track length of primary track = 14.833 nm  +- 9.951 nm 
+ Projected range               = 14.509 nm  +- 4.404 nm 
 
- Nb of steps of primary track  = 3.52 +- 2.34
+ Nb of steps of primary track  = 3.51 +- 2.34
 
- Step size                     = 4.676 nm  +- 3.491 nm 
+ Step size                     = 4.689 nm  +- 3.503 nm 
 
  ======================== run summary =====================
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 20.00 nm of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 46.268 eV  +- 74.783 eV 
+ Total Energy deposited        = 46.077 eV  +- 76.840 eV 
 
- S value                       = 221.214 Gy/Bq.s  +- 357.546 Gy/Bq.s 
+ S value                       = 220.300 Gy/Bq.s  +- 367.382 Gy/Bq.s 
 
- Track length of primary track = 15.008 nm  +- 9.941 nm 
- Projected range               = 14.612 nm  +- 4.482 nm 
+ Track length of primary track = 15.063 nm  +- 9.970 nm 
+ Projected range               = 14.604 nm  +- 4.465 nm 
 
- Nb of steps of primary track  = 2.99 +- 1.97
+ Nb of steps of primary track  = 2.98 +- 1.95
 
- Step size                     = 5.545 nm  +- 3.819 nm 
+ Step size                     = 5.566 nm  +- 3.823 nm 
 
  ======================== run summary =====================
 

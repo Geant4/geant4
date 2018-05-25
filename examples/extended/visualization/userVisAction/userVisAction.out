@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -778,7 +778,7 @@ Max 2J for sampling of angular correlations         10
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 33.9849 picoGy  +- 3.53275 picoGy 
+ Dose in scoring volume : 39.9906 picoGy  +- 3.84284 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 starts.
@@ -795,7 +795,7 @@ Max 2J for sampling of angular correlations         10
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.17767 nanoGy  +- 145.642 picoGy 
+ Dose in scoring volume : 4.94889 nanoGy  +- 145.96 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

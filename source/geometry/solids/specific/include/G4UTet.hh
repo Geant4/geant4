@@ -38,10 +38,10 @@
 //
 // Class description:
 //
-//   Wrapper class for UTet to make use of UTet from USolids module.
+//   Wrapper class for G4Tet to make use of VecGeom Tet.
 
 // History:
-// 1.11.13 G.Cosmo, CERN/PH
+// 1.11.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UTET_HH
 #define G4UTET_HH

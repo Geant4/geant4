@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadSolids.cc 105857 2017-08-24 07:52:24Z gcosmo $
+// $Id: G4GDMLReadSolids.cc 110108 2018-05-15 11:46:54Z gcosmo $
 //
 // class G4GDMLReadSolids Implementation
 //
@@ -2689,8 +2689,9 @@ OpticalSurfaceRead(const xercesc::DOMElement* const opticalsurfaceElement)
 
 void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading solids..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = solidsElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {

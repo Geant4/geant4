@@ -1,4 +1,4 @@
-$Id: History 107332 2017-11-08 16:44:06Z gcosmo $
+$Id: History 110187 2018-05-17 10:41:08Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,6 +13,15 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17-May-2018 V.Ivanchenko (phys-ctor-em-V10-03-38)
+- G4EmModelActivator - fixed GS and Opt3 configurations
+
+27-April-2018 V.Ivanchenko
+- G4EmModelActivator - modified accordingly
+
+28-March-2018 V.Ivanchenko
+- G4EmModelActivator - fixed Opt4 and single scattering (problem #2045)
 
 07-November-2017 V.Ivanchenko (phys-ctor-em-V10-03-37)
 - G4EmStandardPhysics_option4 - enable Auger cascade

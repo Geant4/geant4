@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -998,96 +998,6 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 >>> Event 7
 >>> Event 8
 >>> Event 9
->>> Event 10
->>> Event 11
->>> Event 12
->>> Event 13
->>> Event 14
->>> Event 15
->>> Event 16
->>> Event 17
->>> Event 18
->>> Event 19
->>> Event 20
->>> Event 21
->>> Event 22
->>> Event 23
->>> Event 24
->>> Event 25
->>> Event 26
->>> Event 27
->>> Event 28
->>> Event 29
->>> Event 30
->>> Event 31
->>> Event 32
->>> Event 33
->>> Event 34
->>> Event 35
->>> Event 36
->>> Event 37
->>> Event 38
->>> Event 39
->>> Event 40
->>> Event 41
->>> Event 42
->>> Event 43
->>> Event 44
->>> Event 45
->>> Event 46
->>> Event 47
->>> Event 48
->>> Event 49
->>> Event 50
->>> Event 51
->>> Event 52
->>> Event 53
->>> Event 54
->>> Event 55
->>> Event 56
->>> Event 57
->>> Event 58
->>> Event 59
->>> Event 60
->>> Event 61
->>> Event 62
->>> Event 63
->>> Event 64
->>> Event 65
->>> Event 66
->>> Event 67
->>> Event 68
->>> Event 69
->>> Event 70
->>> Event 71
->>> Event 72
->>> Event 73
->>> Event 74
->>> Event 75
->>> Event 76
->>> Event 77
->>> Event 78
->>> Event 79
->>> Event 80
->>> Event 81
->>> Event 82
->>> Event 83
->>> Event 84
->>> Event 85
->>> Event 86
->>> Event 87
->>> Event 88
->>> Event 89
->>> Event 90
->>> Event 91
->>> Event 92
->>> Event 93
->>> Event 94
->>> Event 95
->>> Event 96
->>> Event 97
->>> Event 98
->>> Event 99
 >>> Event 100
 >>> Event 200
 >>> Event 300
@@ -1098,392 +1008,34 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 >>> Event 800
 >>> Event 900
 >>> Event 1000
->>> Event 1100
->>> Event 1200
->>> Event 1300
->>> Event 1400
->>> Event 1500
->>> Event 1600
->>> Event 1700
->>> Event 1800
->>> Event 1900
 >>> Event 2000
->>> Event 2100
->>> Event 2200
->>> Event 2300
->>> Event 2400
->>> Event 2500
->>> Event 2600
->>> Event 2700
->>> Event 2800
->>> Event 2900
 >>> Event 3000
->>> Event 3100
->>> Event 3200
->>> Event 3300
->>> Event 3400
->>> Event 3500
->>> Event 3600
->>> Event 3700
->>> Event 3800
->>> Event 3900
 >>> Event 4000
->>> Event 4100
->>> Event 4200
->>> Event 4300
->>> Event 4400
->>> Event 4500
->>> Event 4600
->>> Event 4700
->>> Event 4800
->>> Event 4900
 >>> Event 5000
->>> Event 5100
->>> Event 5200
->>> Event 5300
->>> Event 5400
->>> Event 5500
->>> Event 5600
->>> Event 5700
->>> Event 5800
->>> Event 5900
 >>> Event 6000
->>> Event 6100
->>> Event 6200
->>> Event 6300
->>> Event 6400
->>> Event 6500
->>> Event 6600
->>> Event 6700
->>> Event 6800
->>> Event 6900
 >>> Event 7000
->>> Event 7100
->>> Event 7200
->>> Event 7300
->>> Event 7400
->>> Event 7500
->>> Event 7600
->>> Event 7700
->>> Event 7800
->>> Event 7900
 >>> Event 8000
->>> Event 8100
->>> Event 8200
->>> Event 8300
->>> Event 8400
->>> Event 8500
->>> Event 8600
->>> Event 8700
->>> Event 8800
->>> Event 8900
 >>> Event 9000
->>> Event 9100
->>> Event 9200
->>> Event 9300
->>> Event 9400
->>> Event 9500
->>> Event 9600
->>> Event 9700
->>> Event 9800
->>> Event 9900
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.5s Real=0.52s Sys=0.01s
+  User=0.26s Real=0.26s Sys=0s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 83
-  copy no.: 588200  Run Value : 0.0597165
-  copy no.: 620200  Run Value : 0.0576855
-  copy no.: 628000  Run Value : 0.0597358
-  copy no.: 729601  Run Value : 0.06
-  copy no.: 750200  Run Value : 0.0581043
-  copy no.: 830600  Run Value : 0.0559498
-  copy no.: 907000  Run Value : 0.0599839
-  copy no.: 910400  Run Value : 0.0190909
-  copy no.: 929400  Run Value : 0.06
-  copy no.: 931000  Run Value : 0.0583633
-  copy no.: 949400  Run Value : 4.93137
-  copy no.: 949600  Run Value : 12.4624
-  copy no.: 949601  Run Value : 0.136782
-  copy no.: 949800  Run Value : 10.7636
-  copy no.: 950000  Run Value : 11.493
-  copy no.: 950001  Run Value : 0.0377254
-  copy no.: 950200  Run Value : 12.8742
-  copy no.: 950400  Run Value : 5.52
-  copy no.: 950401  Run Value : 0.0817856
-  copy no.: 951600  Run Value : 0.0590098
-  copy no.: 969400  Run Value : 11.3013
-  copy no.: 969600  Run Value : 0.208117
-  copy no.: 969601  Run Value : 21.3789
-  copy no.: 969800  Run Value : 22.244
-  copy no.: 969801  Run Value : 0.06
-  copy no.: 970000  Run Value : 0.2852
-  copy no.: 970001  Run Value : 22.1917
-  copy no.: 970200  Run Value : 23.879
-  copy no.: 970400  Run Value : 0.0455888
-  copy no.: 970401  Run Value : 10.8737
-  copy no.: 970600  Run Value : 0.06
-  copy no.: 989400  Run Value : 11.5127
-  copy no.: 989600  Run Value : 24.1798
-  copy no.: 989601  Run Value : 0.12
-  copy no.: 989800  Run Value : 24.1382
-  copy no.: 990000  Run Value : 22.8611
-  copy no.: 990001  Run Value : 0.06
-  copy no.: 990200  Run Value : 25.1206
-  copy no.: 990400  Run Value : 12.4741
-  copy no.: 990401  Run Value : 0.118788
-  copy no.: 1007400  Run Value : 0.0597873
-  copy no.: 1009400  Run Value : 11.2231
-  copy no.: 1009600  Run Value : 0.17409
-  copy no.: 1009601  Run Value : 24.2385
-  copy no.: 1009800  Run Value : 24.7265
-  copy no.: 1010000  Run Value : 0.463532
-  copy no.: 1010001  Run Value : 20.7745
-  copy no.: 1010200  Run Value : 25.2159
-  copy no.: 1010201  Run Value : 0.0627956
-  copy no.: 1010400  Run Value : 0.138786
-  copy no.: 1010401  Run Value : 11.6741
-  copy no.: 1010600  Run Value : 0.12
-  copy no.: 1029400  Run Value : 12.4829
-  copy no.: 1029600  Run Value : 22.2638
-  copy no.: 1029601  Run Value : 0.177536
-  copy no.: 1029800  Run Value : 23.5311
-  copy no.: 1030000  Run Value : 25.0056
-  copy no.: 1030001  Run Value : 0.12
-  copy no.: 1030200  Run Value : 22.9781
-  copy no.: 1030400  Run Value : 11.9811
-  copy no.: 1031400  Run Value : 0.0154332
-  copy no.: 1042600  Run Value : 0.0589824
-  copy no.: 1049400  Run Value : 5.82741
-  copy no.: 1049401  Run Value : 0.12
-  copy no.: 1049600  Run Value : 0.152815
-  copy no.: 1049601  Run Value : 10.4533
-  copy no.: 1049800  Run Value : 12.7222
-  copy no.: 1049801  Run Value : 0.0586385
-  copy no.: 1050000  Run Value : 0.0563729
-  copy no.: 1050001  Run Value : 12.5103
-  copy no.: 1050200  Run Value : 9.48
-  copy no.: 1050400  Run Value : 0.00681481
-  copy no.: 1050401  Run Value : 5.57789
-  copy no.: 1050600  Run Value : 0.0567643
-  copy no.: 1065000  Run Value : 0.06
-  copy no.: 1069600  Run Value : 0.0549252
-  copy no.: 1070000  Run Value : 0.053613
-  copy no.: 1087400  Run Value : 0.06
-  copy no.: 1090401  Run Value : 0.0596513
-  copy no.: 1092401  Run Value : 0.059888
-  copy no.: 1392200  Run Value : 0.0597381
-  copy no.: 1470200  Run Value : 0.06
-  copy no.: 1588000  Run Value : 0.0587289
  PrimitiveScorer RUN PhantomSD,protonEDep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,protonNStep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,chargedPassCellFlux
  Number of entries 20
-  copy no.: 949601  Run Value : 0.000358025
-  copy no.: 949800  Run Value : 2.77457e-05
-  copy no.: 950000  Run Value : 0.000153027
-  copy no.: 950001  Run Value : 4.2108e-05
-  copy no.: 950200  Run Value : 0.000446643
-  copy no.: 950401  Run Value : 0.00014025
-  copy no.: 969600  Run Value : 0.000707141
-  copy no.: 969601  Run Value : 0.000397693
-  copy no.: 970001  Run Value : 0.000127994
-  copy no.: 970200  Run Value : 0.000136725
-  copy no.: 970401  Run Value : 2.40337e-05
-  copy no.: 989600  Run Value : 0.000259292
-  copy no.: 990200  Run Value : 0.000643949
-  copy no.: 1010200  Run Value : 0.00115013
-  copy no.: 1010201  Run Value : 8.69629e-05
-  copy no.: 1010400  Run Value : 0.00356116
-  copy no.: 1010401  Run Value : 2.3024e-05
-  copy no.: 1029600  Run Value : 0.00010663
-  copy no.: 1030200  Run Value : 0.000202016
-  copy no.: 1031400  Run Value : 0.00019481
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
  Number of entries 83
-  copy no.: 588200  Run Value : 0.000996751
-  copy no.: 620200  Run Value : 0.000834123
-  copy no.: 628000  Run Value : 0.00099742
-  copy no.: 729601  Run Value : 0.00100663
-  copy no.: 750200  Run Value : 0.000867288
-  copy no.: 830600  Run Value : 0.000797486
-  copy no.: 907000  Run Value : 0.000909963
-  copy no.: 910400  Run Value : 0.000202361
-  copy no.: 929400  Run Value : 0.000910504
-  copy no.: 931000  Run Value : 0.00128446
-  copy no.: 949400  Run Value : 0.0844705
-  copy no.: 949600  Run Value : 0.21762
-  copy no.: 949601  Run Value : 0.0024535
-  copy no.: 949800  Run Value : 0.188818
-  copy no.: 950000  Run Value : 0.204956
-  copy no.: 950001  Run Value : 0.000765279
-  copy no.: 950200  Run Value : 0.224259
-  copy no.: 950400  Run Value : 0.099727
-  copy no.: 950401  Run Value : 0.00177369
-  copy no.: 951600  Run Value : 0.000897308
-  copy no.: 969400  Run Value : 0.197366
-  copy no.: 969600  Run Value : 0.0117355
-  copy no.: 969601  Run Value : 0.373101
-  copy no.: 969800  Run Value : 0.383507
-  copy no.: 969801  Run Value : 0.000910504
-  copy no.: 970000  Run Value : 0.0250042
-  copy no.: 970001  Run Value : 0.385026
-  copy no.: 970200  Run Value : 0.414684
-  copy no.: 970400  Run Value : 0.00251714
-  copy no.: 970401  Run Value : 0.188865
-  copy no.: 970600  Run Value : 0.000910504
-  copy no.: 989400  Run Value : 0.198902
-  copy no.: 989600  Run Value : 0.421041
-  copy no.: 989601  Run Value : 0.0018411
-  copy no.: 989800  Run Value : 0.416603
-  copy no.: 990000  Run Value : 0.399061
-  copy no.: 990001  Run Value : 0.00100663
-  copy no.: 990200  Run Value : 0.43931
-  copy no.: 990400  Run Value : 0.219028
-  copy no.: 990401  Run Value : 0.00240453
-  copy no.: 1007400  Run Value : 0.000999213
-  copy no.: 1009400  Run Value : 0.196158
-  copy no.: 1009600  Run Value : 0.0126001
-  copy no.: 1009601  Run Value : 0.421386
-  copy no.: 1009800  Run Value : 0.43041
-  copy no.: 1010000  Run Value : 0.0413395
-  copy no.: 1010001  Run Value : 0.365574
-  copy no.: 1010200  Run Value : 0.440865
-  copy no.: 1010201  Run Value : 0.00101756
-  copy no.: 1010400  Run Value : 0.0117424
-  copy no.: 1010401  Run Value : 0.20365
-  copy no.: 1010600  Run Value : 0.0018612
-  copy no.: 1029400  Run Value : 0.213038
-  copy no.: 1029600  Run Value : 0.391512
-  copy no.: 1029601  Run Value : 0.00293504
-  copy no.: 1029800  Run Value : 0.403584
-  copy no.: 1030000  Run Value : 0.438182
-  copy no.: 1030001  Run Value : 0.0018411
-  copy no.: 1030200  Run Value : 0.399245
-  copy no.: 1030400  Run Value : 0.208566
-  copy no.: 1031400  Run Value : 0.00019481
-  copy no.: 1042600  Run Value : 0.000971345
-  copy no.: 1049400  Run Value : 0.0980575
-  copy no.: 1049401  Run Value : 0.00191713
-  copy no.: 1049600  Run Value : 0.0137586
-  copy no.: 1049601  Run Value : 0.178166
-  copy no.: 1049800  Run Value : 0.221738
-  copy no.: 1049801  Run Value : 0.00130563
-  copy no.: 1050000  Run Value : 0.00322097
-  copy no.: 1050001  Run Value : 0.213942
-  copy no.: 1050200  Run Value : 0.166717
-  copy no.: 1050400  Run Value : 0.000100787
-  copy no.: 1050401  Run Value : 0.0947261
-  copy no.: 1050600  Run Value : 0.000823601
-  copy no.: 1065000  Run Value : 0.00146485
-  copy no.: 1069600  Run Value : 0.000786453
-  copy no.: 1070000  Run Value : 0.000793481
-  copy no.: 1087400  Run Value : 0.000910504
-  copy no.: 1090401  Run Value : 0.000804125
-  copy no.: 1092401  Run Value : 0.00100272
-  copy no.: 1392200  Run Value : 0.00133761
-  copy no.: 1470200  Run Value : 0.000910504
-  copy no.: 1588000  Run Value : 0.000868228
  PrimitiveScorer RUN PhantomSD,chargedSurfFlux
  Number of entries 24
-  copy no.: 910400  Run Value : 0.682139
-  copy no.: 949600  Run Value : 2.15853
-  copy no.: 949800  Run Value : 1.16324
-  copy no.: 950000  Run Value : 3.43842
-  copy no.: 950200  Run Value : 9.65333
-  copy no.: 969400  Run Value : 1.02066
-  copy no.: 969601  Run Value : 25.8164
-  copy no.: 970001  Run Value : 1.62906
-  copy no.: 970200  Run Value : 14.9493
-  copy no.: 970401  Run Value : 0.30801
-  copy no.: 989600  Run Value : 4.41755
-  copy no.: 989800  Run Value : 0.314417
-  copy no.: 990200  Run Value : 8.31911
-  copy no.: 1009400  Run Value : 1.12789
-  copy no.: 1010001  Run Value : 0.975034
-  copy no.: 1010200  Run Value : 7.69725
-  copy no.: 1010401  Run Value : 0.546506
-  copy no.: 1029600  Run Value : 3.44582
-  copy no.: 1030200  Run Value : 0.285312
-  copy no.: 1030400  Run Value : 0.250821
-  copy no.: 1031400  Run Value : 3.96703
-  copy no.: 1049400  Run Value : 0.483234
-  copy no.: 1049601  Run Value : 0.422585
-  copy no.: 1050001  Run Value : 1.11609
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr000
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr001
  Number of entries 67
-  copy no.: 588200  Run Value : 0.25
-  copy no.: 620200  Run Value : 0.25
-  copy no.: 628000  Run Value : 0.25
-  copy no.: 729600  Run Value : 0.25
-  copy no.: 729601  Run Value : 0.25
-  copy no.: 750200  Run Value : 0.25
-  copy no.: 830600  Run Value : 0.25
-  copy no.: 907000  Run Value : 0.25
-  copy no.: 929400  Run Value : 0.25
-  copy no.: 931000  Run Value : 0.25
-  copy no.: 949400  Run Value : 21.25
-  copy no.: 949600  Run Value : 51.75
-  copy no.: 949800  Run Value : 47.25
-  copy no.: 950000  Run Value : 48
-  copy no.: 950200  Run Value : 53.5
-  copy no.: 950400  Run Value : 22.75
-  copy no.: 951600  Run Value : 0.25
-  copy no.: 969400  Run Value : 47.25
-  copy no.: 969600  Run Value : 96
-  copy no.: 969601  Run Value : 90.25
-  copy no.: 969800  Run Value : 93.25
-  copy no.: 970000  Run Value : 95.75
-  copy no.: 970001  Run Value : 95
-  copy no.: 970200  Run Value : 101.75
-  copy no.: 970400  Run Value : 47
-  copy no.: 970401  Run Value : 46.5
-  copy no.: 989400  Run Value : 47.5
-  copy no.: 989600  Run Value : 101.5
-  copy no.: 989800  Run Value : 101.25
-  copy no.: 990000  Run Value : 95.5
-  copy no.: 990200  Run Value : 105.5
-  copy no.: 990400  Run Value : 51.75
-  copy no.: 1007600  Run Value : 0.25
-  copy no.: 1009400  Run Value : 48.5
-  copy no.: 1009600  Run Value : 105
-  copy no.: 1009601  Run Value : 102.5
-  copy no.: 1009800  Run Value : 103.25
-  copy no.: 1010000  Run Value : 92.5
-  copy no.: 1010001  Run Value : 88.25
-  copy no.: 1010200  Run Value : 105.5
-  copy no.: 1010400  Run Value : 51.75
-  copy no.: 1010401  Run Value : 49.5
-  copy no.: 1029400  Run Value : 52
-  copy no.: 1029600  Run Value : 95
-  copy no.: 1029800  Run Value : 99
-  copy no.: 1030000  Run Value : 105.25
-  copy no.: 1030200  Run Value : 95.25
-  copy no.: 1030400  Run Value : 50.5
-  copy no.: 1042800  Run Value : 0.25
-  copy no.: 1049400  Run Value : 24
-  copy no.: 1049600  Run Value : 46.75
-  copy no.: 1049601  Run Value : 44.75
-  copy no.: 1049800  Run Value : 54.25
-  copy no.: 1050000  Run Value : 54.25
-  copy no.: 1050001  Run Value : 52.75
-  copy no.: 1050200  Run Value : 40
-  copy no.: 1050400  Run Value : 23.5
-  copy no.: 1050401  Run Value : 23.25
-  copy no.: 1065200  Run Value : 0.25
-  copy no.: 1087400  Run Value : 0.25
-  copy no.: 1090400  Run Value : 0.25
-  copy no.: 1090401  Run Value : 0.25
-  copy no.: 1092400  Run Value : 0.25
-  copy no.: 1092401  Run Value : 0.25
-  copy no.: 1392200  Run Value : 0.25
-  copy no.: 1470200  Run Value : 0.25
-  copy no.: 1568000  Run Value : 0.25
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr003

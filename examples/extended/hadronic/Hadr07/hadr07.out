@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -444,7 +444,7 @@ Index : 1     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=8.28s Real=8.37s Sys=0s
+  User=7.23s Real=7.38s Sys=0s
 
  ======================== run summary =====================
 
@@ -452,46 +452,43 @@ Run Summary
     1        30 cm  of Li7 (density: 1.85 g/cm3 )
 
  Process calls frequency :
-     RadioactiveDecay= 101110        Transportation=  89888               annihil=    126
-                compt= 127817                  conv=    128            dInelastic=      1
-                eBrem=   1104                 eIoni= 139765                 hIoni=    480
-           hadElastic=  87269               ionIoni= 101440                   msc=    370
-             nCapture=      2      neutronInelastic=  14008                  phot=  12787
+     RadioactiveDecay= 101417        Transportation=  90522               annihil=    112
+                compt= 129345                  conv=    118                 eBrem=   1033
+                eIoni= 141492                 hIoni=    454            hadElastic=  87252
+              ionIoni= 101710                   msc=    391      neutronInelastic=  14297
+                 phot=  12987 
 
-
- Edep in absorber 1 = 8.09 MeV	(8.67 keV-->33.3 MeV)
+ Edep in absorber 1 = 8.06 MeV	(1.24 keV-->37.6 MeV)
 
  List of generated particles in absorber 1:
-  Be8[3030.000]:       2  Emean =    9.02 keV	( 7.43 keV --> 10.6 keV)
-            He6:     155  Emean =     2.4 MeV	( 151 keV --> 4.9 MeV)
-            Li6:     677  Emean =     1.5 MeV	( 44.7 eV  --> 7.44 MeV)
-            Li7:  100274  Emean =     552 keV	( 149 meV --> 6.22 MeV)
-            Li8:       2  Emean =     443 keV	( 1.57 keV --> 885 keV)
-          alpha:     332  Emean =    1.24 MeV	( 74 keV --> 9.97 MeV)
-      anti_nu_e:     157  Emean =    1.95 MeV	( 200 keV --> 11 MeV)
-       deuteron:     480  Emean =    4.85 MeV	( 62.3 keV --> 29.9 MeV)
-             e+:     128  Emean =    1.44 MeV	( 58.2 keV --> 3.9 MeV)
-             e-:  139168  Emean =     157 keV	( 100 eV  --> 9.25 MeV)
-          gamma:   41784  Emean =    1.25 MeV	( 1 keV --> 5.88 MeV)
-        neutron:   14703  Emean =    3.61 MeV	( 9.09 keV --> 13.6 MeV)
-         proton:       1  Emean =    3.42 MeV	( 3.42 MeV --> 3.42 MeV)
+            He6:     161  Emean =    2.55 MeV	( 8.89 keV --> 4.92 MeV)
+            Li6:     734  Emean =    1.58 MeV	( 46.5 eV  --> 7.29 MeV)
+            Li7:  100522  Emean =     552 keV	( 73 meV --> 6.2 MeV)
+          alpha:     293  Emean =    1.21 MeV	( 64.6 keV --> 3.89 MeV)
+      anti_nu_e:     161  Emean =    1.95 MeV	( 261 keV --> 3.5 MeV)
+       deuteron:     453  Emean =    4.61 MeV	( 125 keV --> 33 MeV)
+             e+:     118  Emean =    1.53 MeV	( 121 keV --> 4.62 MeV)
+             e-:  140890  Emean =     154 keV	( 100 eV  --> 5.56 MeV)
+          gamma:   42273  Emean =    1.24 MeV	( 1 keV --> 5.88 MeV)
+        neutron:   15003  Emean =    3.63 MeV	( 8.65 keV --> 13.6 MeV)
+         proton:       1  Emean =    3.28 MeV	( 3.28 MeV --> 3.28 MeV)
 
  List of particles emerging from absorbers :
-      anti_nu_e:     157  Emean =    1.95 MeV	( 200 keV --> 11 MeV)
-             e+:       3  Emean =     861 keV	( 376 keV --> 1.28 MeV)
-             e-:     211  Emean =    1.47 MeV	( 13.1 keV --> 4.76 MeV)
-          gamma:   28869  Emean =    1.06 MeV	( 1.82 keV --> 5.88 MeV)
-        neutron:   10693  Emean =    2.16 MeV	( 912 meV --> 14.1 MeV)
+      anti_nu_e:     161  Emean =    1.95 MeV	( 261 keV --> 3.5 MeV)
+             e+:       6  Emean =    1.68 MeV	( 487 keV --> 4.06 MeV)
+             e-:     206  Emean =    1.22 MeV	( 15.1 keV --> 4.2 MeV)
+          gamma:   29168  Emean =    1.06 MeV	( 2.34 keV --> 5.88 MeV)
+        neutron:   10706  Emean =    2.13 MeV	( 131 meV --> 14.1 MeV)
 
- Nb of events with primary absorbed = 87 %,   transmit = 6.7 %,   reflected = 6.2 %
+ Nb of events with primary absorbed = 87 %,   transmit = 6.5 %,   reflected = 6 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 64805195, 1867984484
+ Current couple of seeds = 436367230, 1503345295
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.067 MB
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.043 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

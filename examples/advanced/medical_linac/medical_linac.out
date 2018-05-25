@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -574,9 +574,9 @@ Phantom and its ROG centre: (0,0,0)
 loop n. 1/1
 Launched 100000 random primary particles
 *********************************************
-n. of events collected in the whole ROG phantom for all geometries: 1094
-n. of events collected in the whole ROG phantom for the current geometry: 1094
-loop elapsed time [s] : 45.33
+n. of events collected in the whole ROG phantom for all geometries: 1934
+n. of events collected in the whole ROG phantom for the current geometry: 1934
+loop elapsed time [s] : 41.24
 
 ################ END NEW GEOMETRY ########################
 
@@ -633,10 +633,10 @@ Phantom and its ROG centre: (0,0,-200)
 loop n. 1/1
 Launched 100000 random primary particles
 *********************************************
-n. of events collected in the whole ROG phantom for all geometries: 1902
-n. of events collected in the whole ROG phantom for the current geometry: 808
-loop elapsed time [s] : 46.01
+n. of events collected in the whole ROG phantom for all geometries: 3044
+n. of events collected in the whole ROG phantom for the current geometry: 1110
+loop elapsed time [s] : 37.85
 
 ################ END NEW GEOMETRY ########################
-loop elapsed time [s] : 94.36
+loop elapsed time [s] : 82.67
 

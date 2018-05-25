@@ -674,7 +674,7 @@ void G4Navigator::SetSavedState()
   fSaveState.sEntering = fEntering;
 
   fSaveState.spBlockedPhysicalVolume = fBlockedPhysicalVolume;
-  fSaveState.sBlockedReplicaNo = fBlockedReplicaNo, 
+  fSaveState.sBlockedReplicaNo = fBlockedReplicaNo;
 
   fSaveState.sLastStepWasZero = fLastStepWasZero;
   
@@ -704,7 +704,7 @@ void G4Navigator::RestoreSavedState()
   fEntering = fSaveState.sEntering;
 
   fBlockedPhysicalVolume = fSaveState.spBlockedPhysicalVolume;
-  fBlockedReplicaNo = fSaveState.sBlockedReplicaNo, 
+  fBlockedReplicaNo = fSaveState.sBlockedReplicaNo; 
 
   fLastStepWasZero = fSaveState.sLastStepWasZero;
   
@@ -1394,7 +1394,9 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
  
             // Entering the solid ==> opposite
             //
-            ExitNormal = -nextSolidExitNormal;
+            // First flip ( ExitNormal = -nextSolidExitNormal; )
+            //  and then rotate the the normal to the frame of the mother (current volume)
+            ExitNormal = MotherToDaughterTransform.Inverse().TransformAxis( -nextSolidExitNormal );
             fCalculatedExitNormal= true;
           }
           else

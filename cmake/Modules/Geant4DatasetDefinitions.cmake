@@ -68,11 +68,11 @@ geant4_add_dataset(
 # - Optical Surfaces
 geant4_add_dataset(
   NAME      RealSurface
-  VERSION   2.1
+  VERSION   2.1.1
   FILENAME  G4RealSurface
   EXTENSION tar.gz
   ENVVAR    G4REALSURFACEDATA
-  MD5SUM    f1c72b31d45905f011e2ec4ea96612f4
+  MD5SUM    1d0fcc24c7082edae1e22a3d43fbb4d9
   )
 
 # - SAID

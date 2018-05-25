@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 108664 2018-02-27 07:20:25Z gcosmo $
+// $Id: G4PathFinder.cc 110067 2018-05-15 09:20:12Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
@@ -79,7 +79,7 @@ G4PathFinder* G4PathFinder::GetInstanceIfExist()
 G4PathFinder::G4PathFinder() 
   : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
     fFieldExertedForce(false),
-    fRelocatedPoint(true),
+    fRelocatedPoint(false),
     fLastStepNo(-1), fCurrentStepNo(-1),
     fVerboseLevel(0)
 {
@@ -256,6 +256,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        //--------------
     }
     fLastStepNo= stepNo; 
+    fRelocatedPoint= false;
 
 #ifdef  G4DEBUG_PATHFINDER
     if ( (fNoGeometriesLimiting < 0)
@@ -335,7 +336,6 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
   pNewSafety  = fCurrentPreStepSafety[ navigatorNo ]; 
   limitedStep = fLimitedStep[ navigatorNo ];
-  fRelocatedPoint= false;
 
   possibleStep= std::min(proposedStepLength, fCurrentStepSize[ navigatorNo ]);
   EndState = fEndState;  //  now corrected for smaller step, if needed
@@ -488,10 +488,11 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   std::vector<G4Navigator*>::iterator pNavIter=
      fpTransportManager->GetActiveNavigatorsIterator(); 
 
-  G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
-  G4ThreeVector moveVec = (position - lastEndPosition );
+  G4ThreeVector lastEndPosition= fRelocatedPoint ?
+             fLastLocatedPosition : fEndState.GetPosition();
+  G4ThreeVector moveVec = ( position - lastEndPosition );
   G4double      moveLenSq= moveVec.mag2();
-  if( (!fNewTrack) && (!fRelocatedPoint) && ( moveLenSq > movLenTol ) )
+  if( (!fNewTrack) && ( moveLenSq > movLenTol ) )
   {
      ReportMove( lastEndPosition, position,
                  " (End) Position / G4PathFinder::Locate" ); 
@@ -739,7 +740,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   }
 
   fLastLocatedPosition= position; 
-  fRelocatedPoint= false;
+  fRelocatedPoint= true;
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
@@ -826,8 +827,8 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 {
   std::vector<G4Navigator*>::iterator pNavigatorIter;
   G4double safety= 0.0, step=0.0;
-  G4double minSafety= kInfinity, minStep;
-
+  G4double minSafety= kInfinity, minStep= kInfinity;
+     
   const G4int IdTransport= 0;  // Id of Mass Navigator !!
   G4int num=0; 
 
@@ -933,9 +934,9 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            step= (*pNavigatorIter)->ComputeStep( initialPosition, 
                                                  initialDirection,
                                                  proposedStepLength,
-                                                 safety ); 
-           // minStep  = std::min( step,  minStep);  // OLD ==> can be 'logical' value, ie. kInfinity
-
+                                                 safety );
+           minStep  = std::min( step,  minStep);  // OLD ==> can be 'logical' value, ie. kInfinity
+           
 #ifdef G4DEBUG_PATHFINDER
            if( fVerboseLevel > 0)
            {
@@ -951,8 +952,6 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
         }
         fCurrentStepSize[num] = step;   // Raw value - can be kInfinity
 
-        step    = std::min( step, proposedStepLength ); // Now a physical value (not kInf)
-        minStep = std::min( step, minStep);     // Minimum of physical values !!
            //  TODO: consider whether/how to reduce the proposed step
            //        to the latest minStep value - to reduce calculations.
            //        ( If so, much change 1st minimum above. )

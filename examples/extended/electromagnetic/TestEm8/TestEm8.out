@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -577,6 +577,8 @@ ionIoni:   for  GenericIon    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=        2 MeV
           BetheBloch :  Emin=        2 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  GasDetector ======
+            PAIModel :  Emin=        0 eV    Emax=      100 TeV   deltaVI
 
 msc:   for alpha    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -590,6 +592,8 @@ ionIoni:   for  alpha    SubType= 2
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             BraggIon :  Emin=        0 eV    Emax=   7.9452 MeV
           BetheBloch :  Emin=   7.9452 MeV   Emax=      100 TeV
+      ===== EM models for the G4Region  GasDetector ======
+            PAIModel :  Emin=        0 eV    Emax=      100 TeV   deltaVI
 
 msc:   for anti_proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
@@ -871,7 +875,7 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.15s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 RunAction: End of run actions are started 1  Nevt=  1000  Edep= 0.0162951
  ====================================================
    Beam Particle: proton

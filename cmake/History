@@ -31,6 +31,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+23rd May 2018 -      Gunter Folger (cmake-V10-03-54)
+- Update Geant4DatasetDefinitions to use G4RealSurface 2.1.1
+   patched version bringing back data lost in 2.1
+
 26th February 2018 - Ben Morgan (cmake-V10-03-53, 52)
 - Geant4InstallData.cmake, Geant4CTest.cmake: Update URL for downloads 
   to "cern.ch/geant4-data" as the correct alias to new EOS area, seperate

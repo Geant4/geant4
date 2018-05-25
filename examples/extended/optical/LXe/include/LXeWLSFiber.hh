@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: LXeWLSFiber.hh 77664 2013-11-27 10:13:53Z gcosmo $
+// $Id: LXeWLSFiber.hh 110132 2018-05-16 06:48:25Z gcosmo $
 //
 /// \file optical/LXe/include/LXeWLSFiber.hh
 /// \brief Definition of the LXeWLSFiber class
 //
-#ifndef LXeMainVolume_H
-#define LXeMainVolume_H 1
+#ifndef LXeWLSFiber_H
+#define LXeWLSFiber_H 1
 
 #include "G4PVPlacement.hh"
 #include "G4Box.hh"

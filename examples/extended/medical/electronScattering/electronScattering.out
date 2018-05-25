@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -290,7 +290,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=11.41s Real=11.45s Sys=0s
+  User=7.53s Real=7.8s Sys=0s
 
  ======================== run summary ======================
 
@@ -300,7 +300,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 616984463, 1864341724
+ Current couple of seeds = 1181298208, 2146998257
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -320,11 +320,11 @@ Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
 Pool ID '17G4DynamicParticle', size : 0.00288 MB
-Pool ID '7G4Track', size : 0.00481 MB
+Pool ID '7G4Track', size : 0.00577 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.029 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.03 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

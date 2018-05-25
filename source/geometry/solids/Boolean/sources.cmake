@@ -11,7 +11,7 @@
 #
 # Generated on : 24/9/2010
 #
-# $Id: sources.cmake 103464 2017-04-11 07:24:03Z gcosmo $
+# $Id: sources.cmake 110069 2018-05-15 09:32:07Z gcosmo $
 #
 #------------------------------------------------------------------------------
 
@@ -65,7 +65,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4graphics_reps
         G4intercoms
     LINK_LIBRARIES
-        ${USOLIDS_LIBRARIES}
+        ${VECGEOM_LIBRARIES}
 )
 
 # List any source specific properties here

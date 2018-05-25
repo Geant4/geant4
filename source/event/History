@@ -1,4 +1,4 @@
-$Id: History 108474 2018-02-15 14:15:39Z gcosmo $
+$Id: History 110058 2018-05-15 09:02:41Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 30, 2018  M. Asai (event-V10-03-06)
+- Change the default stack to
+  G4TrackStack. Addressing to bug report #2040.
+
+March 16, 2018  M. Asai
+- Change the default stack to G4TrackStack. Addressing to bug
+  report #2040.
 
 February 8, 2018  Dennis Wright  (event-V10-03-05)
 - add deprecation warning for /gun/ionL in 

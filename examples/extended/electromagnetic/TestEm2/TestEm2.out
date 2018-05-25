@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -568,36 +568,36 @@ Index : 0     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.47s Real=5.49s Sys=0s
+  User=5.05s Real=5.29s Sys=0.01s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7251.16
- Mean number of neutral steps:  4106.57
+ Mean number of charged steps:  7259.57
+ Mean number of neutral steps:  4106.07
 
- energy deposit :   95.08 % E0 +-    0.77 % E0
- charged traklen:  484.99 radl +-    3.93 radl
- neutral traklen: 4222.01 radl +-  113.66 radl
+ energy deposit :   95.01 % E0 +-    0.93 % E0
+ charged traklen:  484.76 radl +-    4.72 radl
+ neutral traklen: 4206.70 radl +-  136.89 radl
 
- 90.00 % confinement: radius = 2.89 radl  (2.58 cm )
+ 90.00 % confinement: radius = 2.92 radl  (2.60 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.950797  delEdep= 0.00179722 nrms= 2.19173
-Erms: 0.00772883  delErms= -0.000471166 nrms= -0.574592
+Edep: 0.950099  delEdep= 0.00109901 nrms= 1.34026
+Erms: 0.00933018  delErms= 0.00113018 nrms= 1.37827
 <<<<END>>>>   IS ACCEPTED
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 403164875, 1360176001
+ Current couple of seeds = 653022131, 168608089
 ----------------------------------------
 ... write Root file : testem2.root - done
 ... close Root file : testem2.root - done
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.25 MB
+Dynamic pools deleted: 9 / Total memory freed: 0.058 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -404,7 +404,17 @@ G4Polyhedron*
 G4ScaledSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  polyhedron->Transform(GetScaleTransform());
+  if (polyhedron)
+  {
+    polyhedron->Transform(GetScaleTransform());
+  }
+  else
+  {
+    DumpInfo();
+    G4Exception("G4ScaledSolid::CreatePolyhedron()",
+                "GeomSolids2003", JustWarning,
+                "No G4Polyhedron for scaled solid");
+  }
   return polyhedron;
 }
 

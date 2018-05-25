@@ -1,5 +1,5 @@
 
-$Id: History 104316 2017-05-24 13:04:23Z gcosmo $
+$Id: History 110069 2018-05-15 09:32:07Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ April 24, 2018 E. Tcherniaev            geom-bool-V10-03-05
+ - G4UnionSolid: define simple bounding-box and make use of early returns
+   in Inside() for points laying outside.
+
+ April 11, 2018 E. Tcherniaev
+ - G4BooleanSolid: Use -1 instead of 0 as default initialisation value
+   for area and capacity, so to distinguish cases when values are zero
+   referring to NULL Boolean constructs.
+
+ April 11, 2018 G. Cosmo
+ - G4BooleanSolid: enhanced warning message for the case of an invalid
+   (NULL) Boolean construct in GetPointOnSurface() and StackPolyhedron().
+ - Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+ February 28, 2018 E. Tcherniaev
+ - Improved contruction of G4DiplaceSolid to combine transformations for
+   nested displaced types.
+
+ June 13, 2017 J. Allison
+ - G4BooleanSolid.cc, G4DisplacedSolid.cc, G4ScaledSolid.cc:
+   Added protection and a warning message in the case of a null
+   polyhedron pointer.
 
  May 24, 2017 G. Cosmo                   geom-bool-V10-03-04
  - Renamed ambiguous name Extent() in all shapes to BoundingLimits().

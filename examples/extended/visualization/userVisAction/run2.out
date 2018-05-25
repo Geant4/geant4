@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -849,11 +849,11 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 33.9849 picoGy  +- 3.53275 picoGy 
+ Dose in scoring volume : 39.9906 picoGy  +- 3.84284 picoGy 
 ------------------------------------------------------------
 
 #
@@ -924,11 +924,11 @@ Index : 3     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.56s Real=0.57s Sys=0.01s
+  User=0.34s Real=0.41s Sys=0s
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 5.17767 nanoGy  +- 145.642 picoGy 
+ Dose in scoring volume : 4.94889 nanoGy  +- 145.96 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
@@ -947,17 +947,17 @@ Total navigation history collections cleaned: 11
 ================== Deleting memory pools ===================
 Pool ID '20G4NavigationLevelRep', size : 0.0154 MB
 Pool ID '24G4ReferenceCountedHandleIvE', size : 0.000961 MB
-Pool ID '17G4DynamicParticle', size : 0.00481 MB
+Pool ID '17G4DynamicParticle', size : 0.00385 MB
 Pool ID '7G4Event', size : 0.000961 MB
 Pool ID '15G4PrimaryVertex', size : 0.000961 MB
 Pool ID '17G4PrimaryParticle', size : 0.000961 MB
-Pool ID '7G4Track', size : 0.00865 MB
+Pool ID '7G4Track', size : 0.00769 MB
 Pool ID '18G4TouchableHistory', size : 0.000961 MB
 Pool ID '15G4CountedObjectIvE', size : 0.000961 MB
 Pool ID '10G4Fragment', size : 0.00192 MB
 Pool ID '17G4ReactionProduct', size : 0.00192 MB
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.038 MB
+Dynamic pools deleted: 11 / Total memory freed: 0.037 MB
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
