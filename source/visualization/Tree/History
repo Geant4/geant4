@@ -1,5 +1,5 @@
 
-$Id: History 99076 2016-09-01 12:40:47Z gcosmo $
+$Id: History 110130 2018-05-16 06:43:10Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,12 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+11th March 2018  John Allison  (vistree-V10-03-00)
+- G4ASCIITreeSceneHandler.cc:
+  o Fix bug in suppressed writing of repeated parameterised volumes.
+- G4ASCIITreeMessenger.cc:
+  o Improve command guidance and advice printing.
 
 31st August 2016  John Allison (vistree-V10-02-02)
 - G4ASCIITreeSceneHandler.cc:

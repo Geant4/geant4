@@ -1,4 +1,4 @@
-$Id: History 108682 2018-02-27 07:54:34Z gcosmo $
+$Id: History 110119 2018-05-15 12:22:31Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 3, 2018, M. Asai (run-V10-03-19)
+- G4ExceptionHandler: Add track/step/volume information when 
+  exception happens while event is in process.
 
 February 27, 2018, G. Cosmo (run-V10-03-18)
 - G4RunManagerKernel: updated also MT banner.

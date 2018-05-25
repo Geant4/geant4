@@ -14,6 +14,24 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ 4 April 2018  Dennis Wright  radioactive_decay-V10-03-23
+---------------------------------------------------------
+- G4RadioactiveDecay::ConvolveSourceTimeProfile: switch from std::exp to
+  std::expm1 where small exp arguments are expected.  This greatly reduces
+  cancellation errors as well as the accumulated error in the variance
+  reduction weight calculation.  Although negative weights still occur,
+  their size is reduced by about ten orders of magnitude, enough to set
+  negative weights to zero.  Fixes bug report #1480.
+
+- G4Radioactivation::ConvolveSourceTimeProfile: same as above. 
+
+12 March 2018  Dennis Wright
+---------------------------------------------------------
+- G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode: make sure 
+    last stable nuclide in decay chain is included as secondary.
+    Fixes bug 2024.
+- G4Radioactivation::AddDeexcitationSpectrumForBiasMode: same as above 
+
 14 December 2017  Dennis Wright  radioactive_decay-V10-03-22
 ------------------------------------------------------------
 - re-tag 

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -562,34 +562,34 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 1000 e- of 900.00 eV  through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 39.238 +- 2.435
+ Nb of ionisations = 39.415 +- 2.410
 
- w = 22.937 eV  +- 1.424 eV 
+ w = 22.834 eV  +- 1.396 eV 
 
  Total Energy deposited        = 900.000 eV  +- 0.000 eV 
 
- Track length of primary track = 69.479 nm  +- 19.472 nm 
- Projected range               = 22.018 nm  +- 16.197 nm 
+ Track length of primary track = 68.422 nm  +- 19.910 nm 
+ Projected range               = 21.028 nm  +- 16.580 nm 
 
- Nb of steps of primary track  = 107.55 +- 51.56
+ Nb of steps of primary track  = 105.83 +- 55.71
 
- Step size                     = 7.179 Ang +- 2.325 Ang
+ Step size                     = 7.247 Ang +- 2.353 Ang
 
  ======================== run summary =====================
 
  The run is 1000 e- of 1.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Nb of ionisations = 43.759 +- 2.645
+ Nb of ionisations = 43.842 +- 2.492
 
- w = 22.852 eV  +- 1.381 eV 
+ w = 22.809 eV  +- 1.296 eV 
 
  Total Energy deposited        = 1.000 keV +- 0.000 eV 
 
- Track length of primary track = 79.451 nm  +- 21.940 nm 
- Projected range               = 25.955 nm  +- 18.894 nm 
+ Track length of primary track = 78.769 nm  +- 21.923 nm 
+ Projected range               = 25.552 nm  +- 18.775 nm 
 
- Nb of steps of primary track  = 111.68 +- 55.31
+ Nb of steps of primary track  = 111.88 +- 55.62
 
- Step size                     = 7.877 Ang +- 2.414 Ang
+ Step size                     = 7.847 Ang +- 2.506 Ang
 Graphics systems deleted.
 Visualization Manager deleting...

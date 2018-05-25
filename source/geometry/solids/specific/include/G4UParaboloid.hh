@@ -35,7 +35,7 @@
 //
 // Class description:
 //
-//   Wrapper class for UParaboloid to make use of it from USolids module.
+//   Wrapper class for G4Paraboloid to make use of VecGeom Paraboloid.
 
 // History:
 // 19.08.15 Guilherme Lima, FNAL

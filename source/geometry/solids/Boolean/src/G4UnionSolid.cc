@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4UnionSolid.cc 110069 2018-05-15 09:32:07Z gcosmo $
 //
 // Implementation of methods for the class G4UnionSolid
 //
@@ -35,6 +35,7 @@
 // 27.07.99 V.Grichine: modifications in DistToOut(p,v,...), while -> do-while
 // 16.03.01 V.Grichine: modifications in CalculateExtent()
 // 17.03.17 E.Tcherniaev: revision of SurfaceNormal()
+// 23.04.18 E.Tcherniaev: added extended BBox, yearly return in Inside()
 //
 // --------------------------------------------------------------------
 
@@ -61,6 +62,11 @@ G4UnionSolid:: G4UnionSolid( const G4String& pName,
                                    G4VSolid* pSolidB )
   : G4BooleanSolid(pName,pSolidA,pSolidB)
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -75,6 +81,11 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
   : G4BooleanSolid(pName,pSolidA,pSolidB,rotMatrix,transVector)
 
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 }
 
 ///////////////////////////////////////////////////////////
@@ -87,6 +98,11 @@ G4UnionSolid::G4UnionSolid( const G4String& pName,
                             const G4Transform3D& transform )
   : G4BooleanSolid(pName,pSolidA,pSolidB,transform)
 {
+  G4ThreeVector pdelta(0.5*kCarTolerance,0.5*kCarTolerance,0.5*kCarTolerance);
+  G4ThreeVector pmin, pmax;
+  BoundingLimits(pmin, pmax);
+  fPMin = pmin - pdelta;
+  fPMax = pmax + pdelta;
 } 
 
 //////////////////////////////////////////////////////////////////
@@ -114,6 +130,8 @@ G4UnionSolid::~G4UnionSolid()
 G4UnionSolid::G4UnionSolid(const G4UnionSolid& rhs)
   : G4BooleanSolid (rhs)
 {
+  fPMin = rhs.fPMin;
+  fPMax = rhs.fPMax;
 }
 
 ///////////////////////////////////////////////////////////////
@@ -130,6 +148,8 @@ G4UnionSolid& G4UnionSolid::operator = (const G4UnionSolid& rhs)
   //
   G4BooleanSolid::operator=(rhs);
 
+  fPMin = rhs.fPMin;
+  fPMax = rhs.fPMax;
   return *this;
 }  
 
@@ -208,27 +228,23 @@ G4UnionSolid::CalculateExtent( const EAxis pAxis,
 
 EInside G4UnionSolid::Inside( const G4ThreeVector& p ) const
 {
-  EInside positionA = fPtrSolidA->Inside(p);
-  if (positionA == kInside)  { return kInside; }
+  if (std::max(p.z()-fPMax.z(),fPMin.z()-p.z()) > 0) return kOutside;
 
+  EInside positionA = fPtrSolidA->Inside(p);
+  if (positionA == kInside)  { return positionA; } // inside A
+  EInside positionB = fPtrSolidB->Inside(p);
+  if (positionA == kOutside) { return positionB; }
+
+  if (positionB == kInside)  { return positionB; } // inside  B
+  if (positionB == kOutside) { return positionA; } // surface A
+
+  // Both points are on surface
+  //
   static const G4double rtol
     = 1000*G4GeometryTolerance::GetInstance()->GetRadialTolerance();
-  EInside positionB = fPtrSolidB->Inside(p);
 
-  if( positionB == kInside  ||
-    ( positionA == kSurface && positionB == kSurface &&
-        ( fPtrSolidA->SurfaceNormal(p) + 
-          fPtrSolidB->SurfaceNormal(p) ).mag2() < rtol ) )
-  {
-    return kInside;
-  }
-  else
-  {
-    if( ( positionB == kSurface ) || ( positionA == kSurface ) )
-      { return kSurface; }
-    else
-      { return kOutside; } 
-  }
+  return ((fPtrSolidA->SurfaceNormal(p) + 
+           fPtrSolidB->SurfaceNormal(p)).mag2() < rtol) ? kInside : kSurface;
 }
 
 //////////////////////////////////////////////////////////////

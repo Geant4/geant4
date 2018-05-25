@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4PathFinder.hh 103219 2017-03-22 11:30:15Z gcosmo $
+// $Id: G4PathFinder.hh 110067 2018-05-15 09:20:12Z gcosmo $
 // 
 // class G4PathFinder 
 //
@@ -238,7 +238,7 @@ class G4PathFinder
    G4ThreeVector fPreSafetyLocation;    //  last initial position for which safety evaluated
    G4double      fPreSafetyMinValue;    //   /\ corresponding value of full safety
    G4double      fPreSafetyValues[ fMaxNav ]; //   Safeties for the above point
-   // This part of the state can be retained for severall calls --> CARE
+   // This part of the state can be retained for several calls --> CARE
 
    G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
    G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of full safety

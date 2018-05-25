@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 April 2018 Alberto Ribon (hadr-hpp-V10-03-11)
+---------------------------------------------------
+- G4ParticleHPFissionFS : protect against very rare cases of division by zero.
+
 19 December 2017 Gabriele Cosmo (hadr-hpp-V10-03-10)
 ---------------------------------------------------
 - Fixed self-consistency in headers (missing #include) in G4FFGEnumerations,

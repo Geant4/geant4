@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc 105023 2017-07-05 09:55:35Z gcosmo $
+// $Id: G4Box.cc 110070 2018-05-15 09:40:05Z gcosmo $
 //
 // 
 //
@@ -438,23 +438,9 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,
   if (calcNorm)
   {
     *validNorm = true;
-    G4double xnew = p.x() + tmax*vx;
-    if (std::abs(std::abs(xnew) - fDx) <= delta)
-    {
-      n->set(std::copysign(1.,xnew), 0., 0.);
-      return tmax;
-    }
-    G4double ynew = p.y() + tmax*vy;
-    if (std::abs(std::abs(ynew) - fDy) <= delta)
-    {
-      n->set(0., std::copysign(1.,ynew), 0.);
-      return tmax;
-    }
-    else
-    {
-      G4double znew = p.z() + tmax*vz;
-      n->set(0., 0., std::copysign(1.,znew));
-    }
+    if (tmax == tx)      n->set((v.x() < 0) ? -1. : 1., 0., 0.);
+    else if (tmax == ty) n->set(0., (v.y() < 0) ? -1. : 1., 0.);
+    else                 n->set(0., 0., (v.z() < 0) ? -1. : 1.);
   }
   return tmax;
 }

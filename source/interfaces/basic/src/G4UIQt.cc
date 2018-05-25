@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIQt.cc 108490 2018-02-15 14:54:21Z gcosmo $
+// $Id: G4UIQt.cc 110081 2018-05-15 10:13:55Z gcosmo $
 //
 // L. Garnier
 
@@ -2042,6 +2042,9 @@ G4int G4UIQt::ReceiveG4cout (
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
 #endif
+	
+  // reset error stack
+  fLastErrMessage = aString;
   return 0;
 }
 
@@ -2083,7 +2086,14 @@ G4int G4UIQt::ReceiveG4cerr (
     if ((G4StateManager::GetStateManager()->GetCurrentState() == G4State_Abort) ||
         (G4StateManager::GetStateManager()->GetCurrentState() == G4State_Quit )) {
       // In case of Abort or Quit, the useful error message should be in the last error message !
-      QMessageBox::critical(fMainWindow, "Error",QString(fLastErrMessage.data())+"\n"+aString.data());
+		fLastErrMessage += "\n"+aString;
+		QString criticalMessage = fLastErrMessage.data();
+#if QT_VERSION < 0x050000
+		criticalMessage = Qt::escape(criticalMessage);
+#else
+		criticalMessage = criticalMessage.toHtmlEscaped();
+#endif
+      QMessageBox::critical(fMainWindow, "Error",QString(fLastErrMessage));
     }
   }
   QColor previousColor = fCoutTBTextArea->textColor();
@@ -2093,7 +2103,7 @@ G4int G4UIQt::ReceiveG4cerr (
   fCoutTBTextArea->ensureCursorVisible ();
 
   if (QString(aString.data()).trimmed() != "") {
-    fLastErrMessage = aString;
+    fLastErrMessage += aString;
   }
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
@@ -3162,11 +3172,23 @@ void G4UIQt::updateHelpArea (
   QString tmpGuidance = "";
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
     tmpGuidance = QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data());
-    tmpGuidance.replace("\n","<br />");
+#if QT_VERSION < 0x050000
+	  tmpGuidance = Qt::escape(tmpGuidance);
+#else
+	  tmpGuidance = tmpGuidance.toHtmlEscaped();
+#endif
+	  tmpGuidance.replace("\n","<br />");
     txt += tmpGuidance + "<br />";
   }
   if( ! rangeString.isNull() ) {
-    txt += "<b>Range of parameters : </b> " + QString((char*)(rangeString).data()) + "<br />";
+	  QString range = QString((char*)(rangeString).data());
+#if QT_VERSION < 0x050000
+	  range = Qt::escape(range);
+#else
+	  range = range.toHtmlEscaped();
+#endif
+
+	  txt += "<b>Range of parameters : </b> " + range + "<br />";
   } else {
     txt += "<br />";
   }

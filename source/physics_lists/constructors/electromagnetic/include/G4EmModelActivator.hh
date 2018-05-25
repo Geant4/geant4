@@ -54,6 +54,8 @@
 class G4EmParameters;
 class G4ProcessManager;
 class G4ParticleDefinition;
+class G4EmConfigurator;
+class G4VMscModel;
 
 class G4EmModelActivator 
 {
@@ -70,6 +72,10 @@ private:
   void ActivateEmOptions();
 
   void FindOrAddProcess(const G4ParticleDefinition*, const G4String&);
+
+  void AddStandardScattering(const G4ParticleDefinition*, G4EmConfigurator*,
+                             G4VMscModel*, const G4String&, 
+                             G4double, G4double);
 
   G4bool HasMsc(G4ProcessManager*) const;
 

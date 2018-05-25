@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -1259,19 +1259,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
  Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 10
-  copy no.: 969603  Run Value : 0.356
-  copy no.: 970001  Run Value : 0.356
-  copy no.: 970007  Run Value : 0.356
-  copy no.: 990400  Run Value : 0.356
-  copy no.: 1009601  Run Value : 0.356
-  copy no.: 1009605  Run Value : 0.356
-  copy no.: 1010203  Run Value : 0.03977797630134466
-  copy no.: 1029404  Run Value : 0.356
-  copy no.: 1029600  Run Value : 0.712
-  copy no.: 1030204  Run Value : 0.3162220236986553
  PrimitiveScorer RUN PhantomSD,protonEDep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,protonNStep
@@ -1280,16 +1270,6 @@ Run Summary
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
  Number of entries 10
-  copy no.: 969603  Run Value : 0.01465065010743185
-  copy no.: 970001  Run Value : 0.01577067977310829
-  copy no.: 970007  Run Value : 0.01577067977310829
-  copy no.: 990400  Run Value : 0.01577067977310829
-  copy no.: 1009601  Run Value : 0.01577067977310829
-  copy no.: 1009605  Run Value : 0.01478311151451044
-  copy no.: 1010203  Run Value : 0.000768362357516395
-  copy no.: 1029404  Run Value : 0.01559754580770623
-  copy no.: 1029600  Run Value : 0.02876195304860029
-  copy no.: 1030204  Run Value : 0.01266462066776306
  PrimitiveScorer RUN PhantomSD,chargedSurfFlux
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr000
@@ -1298,36 +1278,6 @@ Run Summary
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
  Number of entries 30
-  copy no.: 969600  Run Value : 0.25
-  copy no.: 969601  Run Value : 0.25
-  copy no.: 969602  Run Value : 0.25
-  copy no.: 969603  Run Value : 0.25
-  copy no.: 970000  Run Value : 0.5
-  copy no.: 970001  Run Value : 0.5
-  copy no.: 970002  Run Value : 0.25
-  copy no.: 970003  Run Value : 0.25
-  copy no.: 970004  Run Value : 0.25
-  copy no.: 970005  Run Value : 0.25
-  copy no.: 970006  Run Value : 0.25
-  copy no.: 970007  Run Value : 0.25
-  copy no.: 990400  Run Value : 0.25
-  copy no.: 1009600  Run Value : 0.5
-  copy no.: 1009601  Run Value : 0.5
-  copy no.: 1009602  Run Value : 0.25
-  copy no.: 1009603  Run Value : 0.25
-  copy no.: 1009604  Run Value : 0.25
-  copy no.: 1009605  Run Value : 0.25
-  copy no.: 1010200  Run Value : 0.25
-  copy no.: 1010201  Run Value : 0.25
-  copy no.: 1010202  Run Value : 0.25
-  copy no.: 1010203  Run Value : 0.25
-  copy no.: 1010204  Run Value : 0.25
-  copy no.: 1029400  Run Value : 0.25
-  copy no.: 1029401  Run Value : 0.25
-  copy no.: 1029402  Run Value : 0.25
-  copy no.: 1029403  Run Value : 0.25
-  copy no.: 1029404  Run Value : 0.25
-  copy no.: 1029600  Run Value : 0.5
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr003
  Number of entries 0
 =============================================================

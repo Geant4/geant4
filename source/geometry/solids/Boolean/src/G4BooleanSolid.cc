@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc 97300 2016-06-01 09:27:19Z gcosmo $
+// $Id: G4BooleanSolid.cc 110069 2018-05-15 09:32:07Z gcosmo $
 //
 // Implementation for the abstract base class for solids created by boolean 
 // operations between other solids
@@ -62,7 +62,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                 G4VSolid* pSolidA ,
                                 G4VSolid* pSolidB   ) :
   G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
   fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
   createdDisplacedSolid(false)
 {
@@ -80,7 +80,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4RotationMatrix* rotMatrix,
                                 const G4ThreeVector& transVector    ) :
   G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
   fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
   createdDisplacedSolid(true)
 {
@@ -97,7 +97,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
                                       G4VSolid* pSolidB ,
                                 const G4Transform3D& transform    ) :
   G4VSolid(pName), fStatistics(1000000), fCubVolEpsilon(0.001),
-  fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+  fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
   fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
   createdDisplacedSolid(true)
 {
@@ -113,7 +113,7 @@ G4BooleanSolid::G4BooleanSolid( const G4String& pName,
 G4BooleanSolid::G4BooleanSolid( __void__& a )
   : G4VSolid(a), fPtrSolidA(0), fPtrSolidB(0),
     fStatistics(1000000), fCubVolEpsilon(0.001), 
-    fAreaAccuracy(-1.), fCubicVolume(0.), fSurfaceArea(0.),
+    fAreaAccuracy(-1.), fCubicVolume(-1.), fSurfaceArea(-1.),
     fRebuildPolyhedron(false), fpPolyhedron(0), fPrimitivesSurfaceArea(0.),
     createdDisplacedSolid(false)
 {
@@ -354,8 +354,8 @@ G4ThreeVector G4BooleanSolid::GetPointOnSurface() const
   }
   std::ostringstream message;
   message << "Solid - " << GetName() << "\n"
-	  << "All attempts to generate a point on the surface have failed.\n"
-	  << "Returning point from the last unsuccessful attempt!";
+          << "All attempts to generate a point on the surface have failed!\n"
+          << "The solid created may be an invalid Boolean construct!";
   G4Exception("G4BooleanSolid::GetPointOnSurface()",
               "GeomSolids1001", JustWarning, message);
   return p;
@@ -420,7 +420,18 @@ G4BooleanSolid::StackPolyhedron(HepPolyhedronProcessor& processor,
     top = solidA->GetPolyhedron();
   }
   G4Polyhedron* operand = solidB->GetPolyhedron();
-  processor.push_back (operation, *operand);
+  if (operand)
+  {
+    processor.push_back (operation, *operand);
+  }
+  else
+  {
+    std::ostringstream message;
+    message << "Solid - " << solid->GetName()
+            << " - No G4Polyhedron for Boolean component";
+    G4Exception("G4BooleanSolid::StackPolyhedron()",
+                "GeomSolids2001", JustWarning, message);
+  }
 
   return top;
 }

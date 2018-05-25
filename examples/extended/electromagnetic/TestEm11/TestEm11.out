@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -472,27 +472,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=2.92s Real=2.93s Sys=0s
+  User=2.37s Real=2.52s Sys=0s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
     1      1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Edep in absorber 1 = 447.899 keV	(20.838 keV-->500.000 keV)
+ Edep in absorber 1 = 447.818 keV	(20.838 keV-->500.000 keV)
 
- Track length of primary track = 880.206 um  +- 193.066 um 
+ Track length of primary track = 880.168 um  +- 192.969 um 
  Range from EmCalculator = 942.776 um  (from full dE/dx)
 
- Projected range               = 316.914 um  +- 198.204 um 
+ Projected range               = 317.026 um  +- 198.295 um 
 
- Nb of steps of primary track  = 21.03 +- 4.89	 Step size= 42.327 um  +- 6.720 um 
+ Nb of steps of primary track  = 21.02 +- 4.89	 Step size= 42.334 um  +- 6.726 um 
 
- absorbed = 78.06 %   transmit = 5.12 %   reflected = 16.82 %
+ absorbed = 78.01 %   transmit = 5.12 %   reflected = 16.86 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1739046891, 800497309
+ Current couple of seeds = 512212800, 564968512
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

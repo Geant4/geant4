@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -715,7 +715,7 @@ hPairProd:   for  pi-    SubType= 4
       Sampling table 12x1001 from 1.11656 GeV to 1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=        1 TeV
-##### Create analysis manager   0x20f5fb0
+##### Create analysis manager   0x1d41b30
 Using Root analysis manager
 All Ntuples have been created 
 -> Event # 1 generated 

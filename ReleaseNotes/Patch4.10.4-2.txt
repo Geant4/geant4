@@ -1,0 +1,157 @@
+
+                 Geant4 10.4 - patch-02 Release Notes
+                 ------------------------------------
+
+                                                               25 May 2018
+
+List of fixes included in this public patch since the public release 10.4.p01:
+
+  o Configuration:
+    -------------
+    + CMake:
+      o Updated to data-set G4RealSurface-2.1.1.
+        Addressing problem report #2043.
+    + GNUMake:
+      o architecture.gmk: corrected default path for external expat and zlib.
+      o Darwing-clang.gmk: removed -pthread and -fPIC compilation options.
+      o WIN32-VC.gmk: updated obsolete configuration for Qt5.
+
+  o Event:
+    -----
+      o Use G4TrackStack as default and make use of G4SmartTrackStack optional.
+        Addressing problem report #2040.
+
+  o Externals:
+    ---------
+    + Corrected GNUmakefile on Windows.
+
+  o Geometry:
+    --------
+    + navigation:
+      o G4PathFinder: in DoNextLinearStep(), use flag for relocated point to
+        signal move from call to ReLocate(), and ensure that new point is used
+        in cross-checks in subsequent Locate().
+        Fix to revert change previously introduced in release 10.4, to keep
+        fMinStep as 'logical' value, which can be kInfinity when step is not
+        limited by Navigators. Resolves warnings issued by G4PathFinder for
+        inaccuracies in relocation. Addressing problem report #2033.
+      o G4Navigator::GetLocalExitNormal(): fix for normal calculated at the
+        endpoint of current step, on a 'candidate' next volume. Adds missing
+        transformation to the frame of the current volume.
+        Addresses problem report #2054.
+      o G4Navigator: fix in Set/RestoreSavedState() for setting of
+        ReplicaNumber.
+      o G4SafetyHelper: do not limit memorisation of safety in case of parallel
+        geometries (when a length is not passed to safety method).
+        Fix to include full message in Exception.
+    + solids/Boolean:
+      o G4BooleanSolid: enhanced warning message for the case of an invalid
+        (NULL) Boolean construct in GetPointOnSurface() and StackPolyhedron().
+        Use -1 instead of 0 as default initialisation value for area and
+        capacity, so to distinguish cases when values are zero referring to
+        NULL Boolean constructs.
+      o G4UnionSolid: define simple bounding-box and make use of early returns
+        in Inside() for points laying outside.
+      o Improved contruction of G4DiplacedSolid to combine transformations for
+        nested displaced types.
+      o Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+    + solids/CSG:
+      o G4Box: simplified and optimised calculation of normal in method
+        DistanceToOut(p,v,..).
+      o Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+    + solids/specific:
+      o Corrected conversion of input parameters to internal structure (used
+        for caching for adoption in GDML persistency) in G4UPolycone and
+        G4UPolyhedra wrappers.
+      o Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
+
+  o Global:
+    ------
+    + Updated date and version for 10.4.p02.
+
+  o Interfaces:
+    ----------
+    + G4UIQt: fixed bug with command guidance including HTML tags inside
+      (<, > and &) and for "critical errors" message.
+
+  o Particles:
+    ---------
+    + G4PhaseSpaceDecayChannel: fixed incorrect indexing in ManyBodyDecayIt(),
+      causing incorrect setting of daughter momentum in 4-body phase-space
+      decay. Addressing problem report #2053.
+
+  o Persistency - gdml
+    ------------------
+    + Protect printout of progress in reading/writing by G4VERBOSE.
+
+  o Physics Lists
+    -------------
+    + constructors/electromagnetic:
+      o G4EmModelActivator: fix for Opt4 and single-scattering activation.
+        Addressing problem report #2045.
+
+  o Processes - Electromagnetic:
+    ---------------------------
+    + lowenergy:
+      o G4LivermorePhotoElectricModel: fixed incorrect deletion of static
+        members when models defined per region. Addressing problem report #2052.
+
+  o Processes - Hadronic:
+    --------------------
+    + models/particle_hp:
+      o G4ParticleHPFissionFS: protect against very rare cases of division
+        by zero.
+    + models/radioactive_decay:
+      o G4RadioactiveDecay: in ConvolveSourceTimeProfile(), switch from
+        std::exp() to std::expm1() where small exp arguments are expected.
+        This greatly reduces cancellation errors as well as the accumulated
+        error in the variance reduction weight calculation. Although negative
+        weights still occur, their size is reduced by about ten orders of
+        magnitude, enough to set negative weights to zero.
+        G4Radioactivation::ConvolveSourceTimeProfile(): same as above.
+        Addresses problem report #1480.
+      o Make sure last stable nuclide in decay chain is included as secondary
+        in G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode() and in
+        G4Radioactivation::AddDeexcitationSpectrumForBiasMode().
+        Addresses problem report #2024.
+
+  o Run:
+    ---
+    + G4ExceptionHandler: added track/step/volume information when an
+      exception happens while event is being processed.
+
+  o Visualization:
+    -------------
+    + modeling:
+      o Fixed bug in calculation of mass of parallel world, protecting for
+        the case of no material assigned. Addressing problem report #2039.
+    + Tree:
+      o Fixed bug in suppressed writing of repeated parameterised volumes.
+      o Improved command guidance and advice printing.
+
+  o Data sets:
+    ---------
+    + Patched data set for measured optical surface reflectance
+      G4RealSurface-2.1.1:
+      o Merged LBNL LUTs data introduced in 2.0 with the Davis LUTs.
+        Addressing problem report #2043.
+
+  o Examples:
+    --------
+    + extended/optical/LXe:
+      o Fixed header guard. Addressing problem report #2041.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  This patch should be applied on top of release 10.4 or 10.4.p01.
+  o  Technical notes distributed for release 10.4 are also applicable and
+     valid for this patch.
+
+The code and rebuilt binary libraries for release 10.4.p02 are available
+through our "Download" Web page.
+
+Please refer to the Geant4 User Documentation for further information about
+using Geant4.

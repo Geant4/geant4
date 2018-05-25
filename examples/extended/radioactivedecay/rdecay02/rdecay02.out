@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -456,55 +456,56 @@ Index : 2     used in the geometry : Yes
  Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=2.16s Real=2.18s Sys=0s
+  User=1.28s Real=1.34s Sys=0s
 
  The run is 10000 Ne24 of 0 meV through : 
  Target   : Length = 1 cm  Radius    = 5 mm  Material = G4_CESIUM_IODIDE
  Detector : Length = 5 cm  Thickness = 2 cm  Material = Germanium
 
- Mean energy deposit in target,   in time window = 802.36 keV  rms = 417.09 keV
- Mean energy deposit in detector, in time window = 17.688 keV  rms = 104.11 keV
+ Mean energy deposit in target,   in time window = 808.99 keV  rms = 420.14 keV
+ Mean energy deposit in detector, in time window = 21.014 keV  rms = 115.41 keV
 
  Process calls frequency in target :
-     RadioactiveDecay=  60806                  Rayl=    292        Transportation=  50272
-              annihil=    162                 compt=   4255                  conv=    165
-                eIoni=  26055               ionIoni=  29993                   msc=   3691
-                 phot=   1594 
+     RadioactiveDecay=  60806                  Rayl=    300        Transportation=  50193
+              annihil=    155                 compt=   4197                  conv=    165
+                eIoni=  26001               ionIoni=  29996                   msc=   3653
+                 phot=   1589 
 
  Process calls frequency in detector:
-                 Rayl=   1200        Transportation=  45997               annihil=    359
-                compt=  22879                  conv=    358                 eIoni=  27899
-                  msc=   7014                  phot=   4335 
+                 Rayl=   1325        Transportation=  45761               annihil=    353
+                compt=  22737                  conv=    351                 eIoni=  27760
+                  msc=   6427                  phot=   4381 
 
  List of generated particles in target:
-           Mg24:   10000  Emean =  42.341 eV 	( 41.932 eV  --> 859.77 eV )
-  Mg24[1368.672]:    9994  Emean =  169.91 eV 	( 115.32 eV  --> 433.09 eV )
-  Mg24[4122.889]:    9984  Emean =  39.208 eV 	( 113.79 meV --> 74.653 eV )
-  Mg24[5235.120]:       3  Emean =   5.115 eV 	( 4.0206 eV  --> 6.8376 eV )
-           Na24:    9994  Emean =  4.9978 eV 	( 4.9901 eV  --> 15.742 eV )
-  Na24[1346.621]:     827  Emean =  27.305 eV 	( 78.238 meV --> 52.841 eV )
-  Na24[472.207]:    9999  Emean =  67.991 eV 	( 74.942 meV --> 133.83 eV )
-  Na24[563.199]:       5  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
-      anti_nu_e:   20000  Emean =  980.69 keV	( 26.322 keV --> 4.4166 MeV)
-             e+:     165  Emean =  838.88 keV	( 15.327 keV --> 1.6985 MeV)
-             e-:   26033  Emean =  633.29 keV	( 72.795 eV  --> 4.141 MeV)
-          gamma:   31121  Emean =  1.5036 MeV	( 90.991 keV --> 3.8661 MeV)
+           Mg24:   10000  Emean =  42.165 eV 	( 41.932 eV  --> 874.87 eV )
+  Mg24[1368.672]:    9996  Emean =  170.04 eV 	( 84.008 eV  --> 403.22 eV )
+  Mg24[4122.889]:    9977  Emean =  39.441 eV 	( 26.204 meV --> 74.891 eV )
+  Mg24[4238.240]:       1  Emean =  22.241 eV 	( 22.241 eV  --> 22.241 eV )
+  Mg24[5235.120]:      12  Emean =  3.6628 eV 	( 1.4761 eV  --> 5.7315 eV )
+           Na24:    9997  Emean =  4.9989 eV 	( 4.9901 eV  --> 15.787 eV )
+  Na24[1346.621]:     816  Emean =  27.344 eV 	( 291.06 meV --> 52.053 eV )
+  Na24[472.207]:    9999  Emean =  68.213 eV 	( 185.29 meV --> 134.38 eV )
+  Na24[563.199]:       8  Emean =  13.735 eV 	( 13.735 eV  --> 13.735 eV )
+      anti_nu_e:   20000  Emean =  979.71 keV	( 45.206 keV --> 4.3 MeV)
+             e+:     165  Emean =  860.61 keV	( 28.287 keV --> 1.655 MeV)
+             e-:   25974  Emean =  633.95 keV	( 64.566 eV  --> 3.9153 MeV)
+          gamma:   31108  Emean =  1.5043 MeV	( 90.991 keV --> 4.2378 MeV)
 
  List of generated particles in detector:
-             e+:     358  Emean =  790.12 keV	( 2.0312 keV --> 1.643 MeV)
-             e-:   27556  Emean =  377.08 keV	( 107.45 eV  --> 3.3336 MeV)
-          gamma:     718  Emean =   522.6 keV	( 369.37 keV --> 1.5438 MeV)
+             e+:     351  Emean =  828.08 keV	( 13.441 keV --> 1.9307 MeV)
+             e-:   27458  Emean =  373.44 keV	( 116.82 eV  --> 3.3945 MeV)
+          gamma:     706  Emean =  520.84 keV	( 311.5 keV --> 2.0037 MeV)
 
 ... write Root file : rdecay02.root - done
 ... close Root file : rdecay02.root - done
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1103516712, 1181810666
+ Current couple of seeds = 88308746, 498406364
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.028 MB
+Dynamic pools deleted: 10 / Total memory freed: 0.026 MB
 ============================================================
 RunManagerKernel is deleted. Good bye :)

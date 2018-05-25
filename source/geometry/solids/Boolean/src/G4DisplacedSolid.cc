@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4DisplacedSolid.cc 110069 2018-05-15 09:32:07Z gcosmo $
 //
 // Implementation for G4DisplacedSolid class for boolean 
 // operations between other solids
@@ -34,6 +34,7 @@
 // 28.10.98 V.Grichine: created
 // 14.11.99 V.Grichine: modifications in CalculateExtent(...) method
 // 22.11.00 V.Grichine: new set methods for matrix/vectors
+// 28.02.18 E.Tcherniaev: improved contruction from G4DisplacedSolid
 //
 // --------------------------------------------------------------------
 
@@ -57,10 +58,19 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                     const G4ThreeVector& transVector    )
   : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
-  fPtrSolid = pSolid ;
-  fPtrTransform = new G4AffineTransform(rotMatrix,transVector) ;
-  fPtrTransform->Invert() ;
-  fDirectTransform = new G4AffineTransform(rotMatrix,transVector) ;
+  if (pSolid->GetEntityType() == "G4DisplacedSolid")
+  {
+    fPtrSolid = ((G4DisplacedSolid*)pSolid)->GetConstituentMovedSolid();
+    G4AffineTransform t1 = ((G4DisplacedSolid*)pSolid)->GetDirectTransform();
+    G4AffineTransform t2 = G4AffineTransform(rotMatrix,transVector);
+    fDirectTransform = new G4AffineTransform(t1*t2);
+  }
+  else
+  { 
+    fPtrSolid = pSolid;
+    fDirectTransform = new G4AffineTransform(rotMatrix,transVector);
+  }
+  fPtrTransform = new G4AffineTransform(fDirectTransform->Inverse());
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -72,13 +82,21 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                     const G4Transform3D& transform  )
   : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
-  fPtrSolid = pSolid ;
-  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
-
-  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
-  fPtrTransform->Invert() ;
+  if (pSolid->GetEntityType() == "G4DisplacedSolid")
+  {
+    fPtrSolid = ((G4DisplacedSolid*)pSolid)->GetConstituentMovedSolid();
+    G4AffineTransform t1 = ((G4DisplacedSolid*)pSolid)->GetDirectTransform();
+    G4AffineTransform t2 = G4AffineTransform(transform.getRotation().inverse(),
+                                             transform.getTranslation());
+    fDirectTransform = new G4AffineTransform(t1*t2);
+  }
+  else
+  { 
+    fPtrSolid = pSolid;
+    fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
+                                             transform.getTranslation()) ;
+  }
+  fPtrTransform = new G4AffineTransform(fDirectTransform->Inverse());
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -91,9 +109,19 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                     const G4AffineTransform directTransform )
   : G4VSolid(pName), fRebuildPolyhedron(false), fpPolyhedron(0)
 {
-  fPtrSolid = pSolid ;
-  fDirectTransform = new G4AffineTransform( directTransform );
-  fPtrTransform    = new G4AffineTransform( directTransform.Inverse() ) ; 
+  if (pSolid->GetEntityType() == "G4DisplacedSolid")
+  {
+    fPtrSolid = ((G4DisplacedSolid*)pSolid)->GetConstituentMovedSolid();
+    G4AffineTransform t1 = ((G4DisplacedSolid*)pSolid)->GetDirectTransform();
+    G4AffineTransform t2 = G4AffineTransform(directTransform);
+    fDirectTransform = new G4AffineTransform(t1*t2);
+  }
+  else
+  { 
+    fPtrSolid = pSolid;
+    fDirectTransform = new G4AffineTransform(directTransform);
+  }
+  fPtrTransform = new G4AffineTransform(fDirectTransform->Inverse());
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -491,8 +519,18 @@ G4Polyhedron*
 G4DisplacedSolid::CreatePolyhedron () const 
 {
   G4Polyhedron* polyhedron = fPtrSolid->CreatePolyhedron();
-  polyhedron
+  if (polyhedron)
+  {
+    polyhedron
     ->Transform(G4Transform3D(GetObjectRotation(),GetObjectTranslation()));
+  }
+  else
+  {
+    DumpInfo();
+    G4Exception("G4DisplacedSolid::CreatePolyhedron()",
+                "GeomSolids2002", JustWarning,
+                "No G4Polyhedron for displaced solid");
+  }
   return polyhedron;
 }
 

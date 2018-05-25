@@ -1,4 +1,4 @@
-# $Id: architecture.gmk 107491 2017-11-16 09:38:59Z gcosmo $
+# $Id: architecture.gmk 110053 2018-05-15 08:55:49Z gcosmo $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -288,13 +288,41 @@ endif
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
 endif
-ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-  ifndef G4LIB_USE_EXPAT
-    LOADLIBS += -lexpat
+
+ifndef G4LIB_USE_EXPAT
+  ifndef EXPATROOT
+    EXPATROOT := /usr
   endif
-  ifndef G4LIB_USE_ZLIB
-    LOADLIBS += -lz
+  ifndef EXPATFLAGS
+    EXPATFLAGS := -I$(EXPATROOT)/include
   endif
+  ifndef EXPATLIBS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      EXPATLIBS := $(LIB_PATH)$(EXPATROOT)/lib expat.lib
+    else
+      EXPATLIBS := -L$(EXPATROOT)/lib -lexpat
+    endif
+  endif
+  CPPFLAGS  += $(EXPATFLAGS)
+  LOADLIBS  += $(EXPATLIBS)
+endif
+
+ifndef G4LIB_USE_ZLIB
+  ifndef ZLIBROOT
+    ZLIBROOT := /usr
+  endif
+  ifndef ZLIBFLAGS
+    ZLIBFLAGS := -I$(ZLIBROOT)/include
+  endif
+  ifndef ZLIBLIBS
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      ZLIBLIBS := $(LIB_PATH)$(ZLIBROOT)/lib zlib.lib
+    else
+      ZLIBLIBS := -L$(ZLIBROOT)/lib -lz
+    endif
+  endif
+  CPPFLAGS  += $(ZLIBFLAGS)
+  LOADLIBS  += $(ZLIBLIBS)
 endif
 
 # Graphic variables...

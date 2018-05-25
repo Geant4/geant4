@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWriteMaterials.cc 108496 2018-02-15 15:28:32Z gcosmo $
+// $Id: G4GDMLWriteMaterials.cc 110108 2018-05-15 11:46:54Z gcosmo $
 //
 // class G4GDMLWriteMaterials Implementation
 //
@@ -284,8 +284,9 @@ void G4GDMLWriteMaterials::PropertyWrite(xercesc::DOMElement* matElement,
 
 void G4GDMLWriteMaterials::MaterialsWrite(xercesc::DOMElement* element)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Writing materials..." << G4endl;
-
+#endif
    materialsElement = NewElement("materials");
    element->appendChild(materialsElement);
 

@@ -35,10 +35,10 @@
 //
 // Class description:
 //
-//   Wrapper class for UPolycone to make use of it from USolids module.
+//   Wrapper class for G4Polycone to make use of VecGeom Polycone.
 
 // History:
-// 31.10.13 G.Cosmo, CERN/PH
+// 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UPOLYCONE_HH
 #define G4UPOLYCONE_HH

@@ -9,7 +9,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -832,8 +832,8 @@ Max 2J for sampling of angular correlations         10
 
 ******************************************
 Internal Real Elapsed Time is: 0.02
-Internal System Elapsed Time: 0.01
-Internal GetUserElapsed Time: 0.02
+Internal System Elapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   12852 hits are stored in ExGflashHitsCollection 
@@ -861,7 +861,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
   11902 hits are stored in ExGflashHitsCollection 
@@ -901,7 +901,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.01
 ******************************************
@@ -969,10 +969,10 @@ Internal GetUserElapsed Time: 0.01
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0111111
+Internal Real Elapsed Time /event is: 0.0122222
 
 ******************************************
-Total Real Elapsed Time is: 1.43
-Total System Elapsed Time: 0.04
-Total GetUserElapsed Time: 1.33
+Total Real Elapsed Time is: 1.62
+Total System Elapsed Time: 0.03
+Total GetUserElapsed Time: 1.25
 ******************************************

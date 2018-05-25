@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -496,24 +496,24 @@ DNADingfelderChargeIncreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
  The run is 1000 e- of 3.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 377.637 nm  +- 94.170 nm 
- Projected range               = 166.878 nm  +- 107.438 nm 
- Penetration                   = 237.542 nm  +- 80.767 nm 
+ Track length of primary track = 376.145 nm  +- 94.110 nm 
+ Projected range               = 164.969 nm  +- 107.003 nm 
+ Penetration                   = 235.620 nm  +- 80.279 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 4.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 597.543 nm  +- 139.398 nm 
- Projected range               = 261.667 nm  +- 163.201 nm 
- Penetration                   = 379.630 nm  +- 124.551 nm 
+ Track length of primary track = 591.244 nm  +- 145.135 nm 
+ Projected range               = 265.742 nm  +- 169.172 nm 
+ Penetration                   = 379.224 nm  +- 122.319 nm 
 
  ======================= run summary ====================
 
  The run is 1000 e- of 5.00 keV through a sphere of radius 1.00 m  of G4_WATER (density: 1.00 g/cm3 )
 
- Track length of primary track = 857.493 nm  +- 203.859 nm 
- Projected range               = 412.942 nm  +- 225.472 nm 
- Penetration                   = 568.522 nm  +- 180.665 nm 
+ Track length of primary track = 852.382 nm  +- 205.673 nm 
+ Projected range               = 398.287 nm  +- 228.650 nm 
+ Penetration                   = 556.740 nm  +- 177.753 nm 
 Graphics systems deleted.
 Visualization Manager deleting...

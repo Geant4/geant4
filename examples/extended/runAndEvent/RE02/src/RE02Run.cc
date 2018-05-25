@@ -27,7 +27,7 @@
 /// \brief Implementation of the RE02Run class
 //
 //
-// $Id: RE02Run.cc 76292 2013-11-08 13:10:20Z gcosmo $
+// $Id: RE02Run.cc 110134 2018-05-16 06:51:34Z gcosmo $
 //
 
 //=====================================================================
@@ -224,12 +224,12 @@ void RE02Run::DumpAllScorer(){
       G4cout << " PrimitiveScorer RUN " 
              << runMap->GetSDname() <<","<< runMap->GetName() << G4endl;
       G4cout << " Number of entries " << runMap->entries() << G4endl;
-      std::map<G4int,G4double*>::iterator itr = runMap->GetMap()->begin();
-      for(; itr != runMap->GetMap()->end(); itr++) {
-        G4cout << "  copy no.: " << itr->first
-               << "  Run Value : " << *(itr->second) 
-               << G4endl;
-      }
+////      std::map<G4int,G4double*>::iterator itr = runMap->GetMap()->begin();
+////      for(; itr != runMap->GetMap()->end(); itr++) {
+////        G4cout << "  copy no.: " << itr->first
+////               << "  Run Value : " << *(itr->second) 
+////               << G4endl;
+////      }
     }
   }
 }

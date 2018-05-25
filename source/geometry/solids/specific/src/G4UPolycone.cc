@@ -231,24 +231,26 @@ G4PolyconeHistorical* G4UPolycone::GetOriginalParameters() const
 }
 void G4UPolycone::SetOriginalParameters()
 {
-  G4int numPlanes = GetNSections()+1;
+  vecgeom::PolyconeHistorical* original_parameters = Base_t::GetOriginalParameters();
+
+  fOriginalParameters.Start_angle   = original_parameters->fHStart_angle;
+  fOriginalParameters.Opening_angle = original_parameters->fHOpening_angle;
+  fOriginalParameters.Num_z_planes  = original_parameters->fHNum_z_planes;
+
   delete [] fOriginalParameters.Z_values;
   delete [] fOriginalParameters.Rmin;
   delete [] fOriginalParameters.Rmax;
+
+  G4int numPlanes = fOriginalParameters.Num_z_planes;
   fOriginalParameters.Z_values = new G4double[numPlanes];
   fOriginalParameters.Rmin = new G4double[numPlanes];
   fOriginalParameters.Rmax = new G4double[numPlanes];
-
-  for (G4int j=0; j<numPlanes; ++j)
-  {
-    fOriginalParameters.Z_values[j] = GetZAtPlane(j);
-    fOriginalParameters.Rmax[j]     = GetRmaxAtPlane(j);
-    fOriginalParameters.Rmin[j]     = GetRminAtPlane(j);
-  }
-
-  fOriginalParameters.Start_angle   = Base_t::GetStartPhi();
-  fOriginalParameters.Opening_angle = Base_t::GetDeltaPhi();
-  fOriginalParameters.Num_z_planes  = numPlanes;
+  for (G4int i=0; i<numPlanes; ++i)
+    {
+      fOriginalParameters.Z_values[i] = original_parameters->fHZ_values[i];
+      fOriginalParameters.Rmin[i]     = original_parameters->fHRmin[i];
+      fOriginalParameters.Rmax[i]     = original_parameters->fHRmax[i];
+    }
 }
 void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
 {

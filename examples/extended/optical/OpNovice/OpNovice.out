@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -322,8 +322,8 @@ Air G4MaterialPropertiesTable
 3.8185e-06   299.792
 3.9395e-06   299.792
 4.136e-06   299.792
-LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1/Rough_LUT.dat read in! 
-Reflectivity LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1/Rough_LUTR.dat read in! 
+LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1.1/Rough_LUT.dat read in! 
+Reflectivity LUT DAVIS - data file: /cvmfs/geant4.cern.ch/share/data/RealSurface2.1.1/Rough_LUTR.dat read in! 
   Surface type   = 3
   Surface finish = 30
   Surface model  = 3
@@ -660,9 +660,9 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 start.
-Number of Scintillation photons produced in this event : 72
-Number of Cerenkov photons produced in this event : 15
-number of event = 1 User=0s Real=0s Sys=0s
+Number of Scintillation photons produced in this event : 73
+Number of Cerenkov photons produced in this event : 17
+number of event = 1 User=0s Real=0.01s Sys=0s
 #
 Graphics systems deleted.
 Visualization Manager deleting...

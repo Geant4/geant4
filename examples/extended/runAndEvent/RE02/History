@@ -1,4 +1,4 @@
-$Id: History 76939 2013-11-19 09:52:57Z gcosmo $
+$Id: History 110134 2018-05-16 06:51:34Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 14, 2018  M. Asai (exampleRE02-V10-03-00)
+- RE02EventAction.cc and RE02Run.cc are modified to shorten the
+  output.
 
 November 18, 2013  I.Hrivnacova (exampleRE02-V09-06-09)
 - Fixed .README

@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -793,7 +793,7 @@ Max 2J for sampling of angular correlations         10
 --> Event 90 starts.
 
  The run consists of 100 monopole of 100 GeV through 10 cm  of G4_Si (density: 2.33 g/cm3 )
- Projected Range= 7.7473 cm    rms= 94.936 um 
+ Projected Range= 7.748 cm    rms= 101.85 um 
 
 ### Stopping Powers
  E(MeV)= 0.001  dedxp(MeV/mm)= 24.465 dedxmp(MeV/mm)= 1.2659

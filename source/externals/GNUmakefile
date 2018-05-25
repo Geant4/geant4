@@ -1,4 +1,4 @@
-# $Id: GNUmakefile 93155 2015-10-08 12:00:14Z gcosmo $
+# $Id: GNUmakefile 110061 2018-05-15 09:06:38Z gcosmo $
 # -----------------------------------------------------------------------
 # GNUmakefile for Geant4 external packages
 # Gunter Folger 26-April-2011 
@@ -13,11 +13,6 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-
-ifeq ($(G4SYSTEM), WIN32-VC)
-  G4LIB_BUILD_EXPAT = 1
-  G4LIB_USE_EXPAT = 1
-endif
 
 SUBDIRS :=
 SUBLIBS :=

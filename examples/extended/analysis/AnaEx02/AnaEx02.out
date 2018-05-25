@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -835,20 +835,20 @@ Max 2J for sampling of angular correlations         10
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 454.496 MeV +- 13.0711 MeV
- mean Energy in Gap      : 23.8344 MeV +- 6.75401 MeV
+ mean Energy in Absorber : 453.887 MeV +- 14.0057 MeV
+ mean Energy in Gap      : 24.5258 MeV +- 6.99993 MeV
 
- mean trackLength in Absorber : 32.7448 cm  +- 1.0388 cm 
- mean trackLength in Gap      : 11.7761 cm  +- 3.45507 cm 
+ mean trackLength in Absorber : 32.6876 cm  +- 1.06906 cm 
+ mean trackLength in Gap      : 12.1502 cm  +- 3.61349 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
-EAbs: mean = 454.496 MeV rms = 13.0711 MeV
-EGap: mean = 23.8344 MeV rms = 6.75401 MeV
-LAbs: mean = 32.7448 cm  rms = 1.0388 cm 
-LGap: mean = 11.7761 cm  rms = 3.45507 cm 
+EAbs: mean = 453.887 MeV rms = 14.0057 MeV
+EGap: mean = 24.5258 MeV rms = 6.99993 MeV
+LAbs: mean = 32.6876 cm  rms = 1.06906 cm 
+LGap: mean = 12.1502 cm  rms = 3.61349 cm 
 
 ----> Histograms and ntuples are saved
 

@@ -1,4 +1,4 @@
-$Id: History 108490 2018-02-15 14:54:21Z gcosmo $
+$Id: History 110081 2018-05-15 10:13:55Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14th May 2018 Garnier Laurent (interfaces-V10-03-03)
+- G4UIQt.cc:
+ o Fix a bug with some "critical errors" message containing HTML tags inside (<, > and &)
+ 
+23th April 2018 Garnier Laurent
+- G4UIQt:
+ o Fix a bug with command guidance with HTML tags inside (<, > and &)
 
 8th February 2018 Garnier Laurent (interfaces-V10-03-02)
 - G4UIQt:

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLWrite.cc 96170 2016-03-22 09:17:29Z gcosmo $
+// $Id: G4GDMLWrite.cc 110108 2018-05-15 11:46:54Z gcosmo $
 //
 // class G4GDMLWrite Implementation
 //
@@ -112,8 +112,9 @@ void G4GDMLWrite::UserinfoWrite(xercesc::DOMElement* gdmlElement)
 {
   if(auxList.size()>0)
   {
+#ifdef G4VERBOSE
     G4cout << "G4GDML: Writing userinfo..." << G4endl;
-      
+#endif
     userinfoElement = NewElement("userinfo");
     gdmlElement->appendChild(userinfoElement);
     AddAuxInfo(&auxList, userinfoElement);
@@ -171,10 +172,10 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
 {
    SchemaLocation = setSchemaLocation;
    addPointerToName = refs;
-
+#ifdef G4VERBOSE
    if (depth==0) { G4cout << "G4GDML: Writing '" << fname << "'..." << G4endl; }
    else   { G4cout << "G4GDML: Writing module '" << fname << "'..." << G4endl; }
-   
+#endif
    if (FileExists(fname))
    {
      G4String ErrorMessage = "File '"+fname+"' already exists!";
@@ -272,7 +273,9 @@ G4Transform3D G4GDMLWrite::Write(const G4String& fname,
    }
    else
    {
+#ifdef G4VERBOSE
      G4cout << "G4GDML: Writing module '" << fname << "' done !" << G4endl;
+#endif
    }
 
    return R;

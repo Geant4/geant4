@@ -35,10 +35,10 @@
 //
 // Class description:
 //
-//   Wrapper class for UPolyhedra to make use of it from USolids module.
+//   Wrapper class for G4Polyhedra to make use of VecGeom Polyhedron.
 
 // History:
-// 31.10.13 G.Cosmo, CERN/PH
+// 31.10.13 G.Cosmo, CERN
 // --------------------------------------------------------------------
 #ifndef G4UPOLYHEDRA_HH
 #define G4UPOLYHEDRA_HH

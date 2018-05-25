@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -33,7 +33,7 @@ e-_excitation_interaction :  Emin=        0 eV    Emax=      100 TeV
 e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 e-_ionisation_interaction :  Emin=        0 eV    Emax=      100 TeV
-##### Create analysis manager   0x19910f0
+##### Create analysis manager   0x1355cd0
 Using Root analysis manager
 ... open Root analysis file : ICSD.root - done
 ... write Root file : ICSD.root - done

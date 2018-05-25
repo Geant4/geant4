@@ -24,7 +24,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     endif
   endif
   ifdef G4MULTITHREADED
-    CXXFLAGS += -ftls-model=initial-exec -pthread
+    CXXFLAGS += -ftls-model=initial-exec
   endif
   ifdef G4OPTIMISE
     CXXFLAGS  += -O3
@@ -46,11 +46,6 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     CXXFLAGS  += -O2 -g
     FCFLAGS   += -O2 -g
     CCFLAGS   += -O2 -g
-  endif
-  ifdef G4LIB_BUILD_SHARED
-    CXXFLAGS  += -fPIC
-    FCFLAGS   += -fPIC
-    CCFLAGS   += -fPIC
   endif
   G4RUNPATHOPTION := -Wl,-rpath 
 #  G4STATIC_MODE += -Wl,-force_load

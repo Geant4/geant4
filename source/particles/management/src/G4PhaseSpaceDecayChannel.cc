@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhaseSpaceDecayChannel.cc 102916 2017-03-02 12:58:58Z gcosmo $
+// $Id: G4PhaseSpaceDecayChannel.cc 110104 2018-05-15 11:40:56Z gcosmo $
 //
 // 
 // ------------------------------------------------------------
@@ -554,7 +554,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
     //Calculate daughter momentum
     weight = 1.0;
     G4bool smOK=true;
-    for(index =0; index< numberOfDaughters-1 && smOK; index--) {
+    for(index =0; index< numberOfDaughters-1 && smOK; index++) {
       smOK = (sm[index]-daughtermass[index]- sm[index+1] >=0.); 
     }
     if (!smOK) continue;

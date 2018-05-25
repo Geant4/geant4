@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -466,7 +466,7 @@ Physics stage ends
   Kinetic energy of beam         = 3480 A*MeV
   Particle traversals the neuron = 0 of 2
   Full LET of beam as formulas   = 12.865 keV/um
-  Mean LET of beam as simulation = 10.723 +- 0.24262 keV/um
+  Mean LET of beam as simulation = 10.726 +- 0.23917 keV/um
   Mean track length of beam      = 420.8 +- 0.012227 um
   Particle fluence               = 383.66 particles/cm^2
   Fluence dose (full)            = 7.9081e-06 Gy
@@ -474,14 +474,14 @@ Physics stage ends
 
  List of generated physical process:
                 eBrem=      1
-                eIoni=   4018
+                eIoni=   3982
               ionIoni=   2847
-                  msc=    416
+                  msc=    428
                  phot=      1
 
 
  List of generated particles outside neuron structure:
-             e- :    3163  Emean =  1.3784 keV	( 190.91 eV  --> 321.17 keV) 	Eflow/event = 2.1799 MeV
+             e- :    3142  Emean =  1.3833 keV	( 190.91 eV  --> 321.17 keV) 	Eflow/event = 2.1731 MeV
           gamma :       1  Emean =  728.19 eV 	( 728.19 eV  --> 728.19 eV ) 	Eflow/event = 364.09 eV 
 
  Number of secondary particles inside neuron structure:
@@ -490,8 +490,8 @@ Physics stage ends
     time: 1 ps - 10 ps 
 
  Total energy (MeV) deposition :
-  All volume:   9.0244
-   Bounding slice:    2.32
+  All volume:   9.0273
+   Bounding slice:  2.3347
       Neuron:         0
         Soma:         0
     Dendrites:        0
@@ -509,7 +509,7 @@ Physics stage ends
  Outputs of energy deposition per event written in data file:
  OutputPerEvent.out
  
- Calculation time                      = 2.73 s 
+ Calculation time                      = 3.47 s 
 
 Graphics systems deleted.
 Visualization Manager deleting...

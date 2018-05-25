@@ -1,4 +1,4 @@
-$Id: History 108482 2018-02-15 14:34:23Z gcosmo $
+$Id: History 110070 2018-05-15 09:40:05Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 11, 2018 G.Cosmo geom-csg-V10-03-40
+- G4Box: simplified and optimised calculation of normal in method
+  DistanceToOut(p,v,..). (E.Tcherniaev)
+- Replaced USOLIDS_LIBRARIES with VECGEOM_LIBRARIES in sources.cmake.
 
 February 5, 2018 G.Cosmo geom-csg-V10-03-39
 - Correction in G4UPara::ComputeDimensions() to add explicit cast for the

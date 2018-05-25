@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -596,8 +596,16 @@ Run 0 starts ...
  Run terminated.
 Run Summary
   Number of events processed : 500
-  User=8.11s Real=8.28s Sys=0.03s
+  User=6.92s Real=7.45s Sys=0.06s
 Dose is being written to Dose.out
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : Analysis_W011
+      issued by : G4TNtupleManager::FillNtupleTColumn
+      ntupleId 1 does not exist.
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : Analysis_W011

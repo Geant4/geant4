@@ -256,16 +256,20 @@ G4RadioactiveDecay::~G4RadioactiveDecay()
 
 G4bool G4RadioactiveDecay::IsApplicable(const G4ParticleDefinition& aParticle)
 {
-  // All particles other than G4Ions, are rejected by default
-  if (((const G4Ions*)(&aParticle))->GetExcitationEnergy() > 0.) {return true;}
+  // All particles other than G4Ions are rejected by default
+  if (((const G4Ions*)(&aParticle))->GetExcitationEnergy() > 0.) {
+    return true;    // Not ground state - decay
+  }
+
   if (aParticle.GetParticleName() == "GenericIon") {
     return true;
   } else if (!(aParticle.GetParticleType() == "nucleus")
              || aParticle.GetPDGLifeTime() < 0. ) {
-    return false;
+    return false;   // Nuclide is stable - no decay
   }
 
-  // Determine whether the nuclide falls into the correct A and Z range
+  // At this point nuclide must be an unstable ground state
+  // Determine whether it falls into the correct A and Z range
   G4int A = ((const G4Ions*) (&aParticle))->GetAtomicMass();
   G4int Z = ((const G4Ions*) (&aParticle))->GetAtomicNumber();
 
@@ -412,12 +416,7 @@ G4RadioactiveDecay::GetChainsFromParent(const G4ParticleDefinition& aParticle)
 #endif
 }
 
-// ConvolveSourceTimeProfile performs the convolution of the source time profile
-// function with a single exponential characterized by a decay constant in the 
-// decay chain.  The time profile is treated as a step function so that the 
-// convolution integral can be done bin-by-bin.
-// Input time and mean life (tau) are in ns.   
-
+/* DHW: long double version - only few % improvement, but don't delete yet
 G4double
 G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double tau)
 {
@@ -431,7 +430,7 @@ G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double t
     G4int loop = 0;
     G4ExceptionDescription ed;
     ed << " While count exceeded " << G4endl;
-    while (t > SBin[nbin]) {  /* Loop checking, 01.09.2015, D.Wright */
+    while (t > SBin[nbin]) {
       loop++;
       if (loop > 1000) {
         G4Exception("G4RadioactiveDecay::ConvolveSourceTimeProfile()",
@@ -443,18 +442,25 @@ G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double t
     }
     nbin--;
   }
+
   long double lt = t ;
   long double ltau = tau;
-  // G4cout << " Convolve: tau = " << tau << G4endl;
+  long double earg = 0.L;
   if (nbin > 0) {
     for (G4int i = 0; i < nbin; i++) {
-      convolvedTime += (long double)SProfile[i] *
-       (std::exp(-(lt-(long double)SBin[i+1])/ltau)-std::exp(-(lt-(long double)SBin[i])/ltau));
+      earg = (long double)(SBin[i+1] - SBin[i])/ltau;
+      if (earg < 100.) {
+        convolvedTime += (long double)SProfile[i] *
+                         std::exp(((long double)SBin[i] - lt)/ltau) *
+                         std::expm1(earg);
+      } else {
+        convolvedTime += (long double)SProfile[i] *
+          (std::exp(-(lt-(long double)SBin[i+1])/ltau)-std::exp(-(lt-(long double)SBin[i])/ltau));
+      }
     }
   }
-  convolvedTime +=  (long double)SProfile[nbin] * (1.L-std::exp(-(lt-(long double)SBin[nbin])/ltau));
-  // Is the above line necessary?  If so, the 1.L looks incorrect - should be an exp
-  // Also, it looks like the final integral should be multiplied by ltau
+  // Use -expm1 instead of 1 - exp 
+  convolvedTime -= (long double)SProfile[nbin] * std::expm1(((long double)SBin[nbin] - lt)/ltau);
 
   if (convolvedTime < 0.)  {
     G4cout << " Convolved time =: " << convolvedTime << " reset to zero! " << G4endl;
@@ -466,119 +472,73 @@ G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double t
   if (GetVerboseLevel() > 1)
     G4cout << " Convolved time: " << convolvedTime << G4endl;
 #endif
-  return (G4double)convolvedTime ;
-}
-
-/*
-// Other implementation tests to avoid use of  long double
-G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
-{
-  long double taotime =0.L;
-  G4int nbin;
-  if ( t > SBin[NSourceBin]) {
-    nbin  = NSourceBin;}
-  else {
-    nbin = 0;
-    while (t > SBin[nbin]) nbin++;
-    nbin--;}
-  long double lt = t ;
-  long double ltao = tao;
-  long double factor,factor1,dt1,dt;
-  if (nbin > 0) {
-	    for (G4int i = 0; i < nbin; i++)
-	      { long double s1=SBin[i];
-	        long double s2=SBin[i+1];
-	    	dt1=(s2-s1)/ltao;
-	      	if (dt1 <50.) {
-	      		factor1=std::exp(dt1)-1.;
-	      		if (factor1<dt1) factor1 =dt1;
-	      		dt=(lt-s1)/ltao;
-	      		factor=std::exp(-dt);
-	      	}
-	      	else {
-	      		factor1=1.-std::exp(-dt1);
-	      		dt=(lt-s2)/ltao;
-	      		factor=std::exp(-dt);
-	      	}
-	      	G4cout<<(long double) SProfile[i] *factor*factor1<<'\t'<<std::endl;
-	      	long double test  = (long double)SProfile[i] * (std::exp(-(lt-(long double)SBin[i+1])/ltao)-std::exp(-(lt-(long double)SBin[i])/ltao));
-	      	G4cout<<test<<std::endl;
-	      	taotime += (long double) SProfile[i] *factor*factor1;
-	   }
-   }
-  long double s=SBin[nbin];
-  dt1=(lt-s)/ltao;
-  factor=1.-std::exp(-dt1);
-  taotime += (long double)  SProfile[nbin] *factor;
- if (taotime < 0.)  {
-    G4cout <<" Tao time =: " <<taotime << " reset to zero!"<<G4endl;
-    G4cout <<" t = " << t <<" tao = " <<tao <<G4endl;
-    G4cout << SBin[nbin] << " " <<SBin[0] << G4endl;
-    taotime = 0.;
-  }
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1)
-    {G4cout <<" Tao time: " <<taotime <<G4endl;}
-#endif
-  return (G4double)taotime ;
-}
-
-
-
-G4double G4RadioactiveDecay::GetTaoTime(const G4double t, const G4double tao)
-{
-  G4double taotime =0.;
-  G4int nbin;
-  if ( t > SBin[NSourceBin]) {
-    nbin  = NSourceBin;}
-  else {
-    nbin = 0;
-    while (t > SBin[nbin]) nbin++;
-    nbin--;}
-  G4double lt = t ;
-  G4double ltao = tao;
-  G4double factor,factor1,dt1,dt;
-
-  if (nbin > 0) {
-    for (G4int i = 0; i < nbin; i++)
-      { dt1=(SBin[i+1]-SBin[i])/ltao;
-      	if (dt1 <50.) {
-      		factor1=std::exp(dt1)-1.;
-      		if (factor1<dt1) factor1 =dt1;
-      		dt=(lt-SBin[i])/ltao;
-      		factor=std::exp(-(lt-SBin[i])/ltao);
-      		G4cout<<factor<<'\t'<<factor1<<std::endl;
-      	}
-      	else {
-      		factor1=1.-std::exp(-dt1);
-      		factor=std::exp(-(lt-SBin[i+1])/ltao);
-      	}
-      	G4cout<<factor<<'\t'<<factor1<<std::endl;
-      	taotime += SProfile[i] *factor*factor1;
-      	G4cout<<taotime<<std::endl;
-      }
-  }
-  dt1=(lt-SBin[nbin])/ltao;
-  factor=1.-std::exp(-dt1);
-  if (factor<(dt1-0.5*dt1*dt1)) factor =dt1-0.5*dt1*dt1;
-
-
-  taotime +=  SProfile[nbin] *factor;
-  G4cout<<factor<<'\t'<<taotime<<std::endl;
-  if (taotime < 0.)  {
-    G4cout <<" Tao time =: " <<taotime << " reset to zero!"<<G4endl;
-    G4cout <<" t = " << t <<" tao = " <<tao <<G4endl;
-    G4cout << SBin[nbin] << " " <<SBin[0] << G4endl;
-    taotime = 0.;
-  }
-
-#ifdef G4VERBOSE
-  if (GetVerboseLevel()>1)
-    {G4cout <<" Tao time: " <<taotime <<G4endl;}
-#endif
-  return (G4double)taotime ;
+  return (G4double)convolvedTime;
 }
 */
+
+// ConvolveSourceTimeProfile performs the convolution of the source time profile
+// function with a single exponential characterized by a decay constant in the 
+// decay chain.  The time profile is treated as a set of step functions so that 
+// the convolution integral can be done bin-by-bin.
+// This implements Eq. 4.13 of DERA technical note, with SProfile[i] = F(t')
+
+G4double
+G4RadioactiveDecay::ConvolveSourceTimeProfile(const G4double t, const G4double tau)
+{
+  G4double convolvedTime = 0.0;
+  G4int nbin;
+  if ( t > SBin[NSourceBin]) {
+    nbin  = NSourceBin;
+  } else {
+    nbin = 0;
+
+    G4int loop = 0;
+    G4ExceptionDescription ed;
+    ed << " While count exceeded " << G4endl;
+    while (t > SBin[nbin]) {  // Loop checking, 01.09.2015, D.Wright
+      loop++;
+      if (loop > 1000) {
+        G4Exception("G4RadioactiveDecay::ConvolveSourceTimeProfile()",
+                    "HAD_RDM_100", JustWarning, ed);
+        break;
+      }
+      nbin++;
+    }
+    nbin--;
+  }
+
+  // Use expm1 wherever possible to avoid large cancellation errors in
+  // 1 - exp(x) for small x 
+  G4double earg = 0.0;
+  if (nbin > 0) {
+    for (G4int i = 0; i < nbin; i++) {
+      earg = (SBin[i+1] - SBin[i])/tau;
+      if (earg < 100.) {
+        convolvedTime += SProfile[i] * std::exp((SBin[i] - t)/tau) *
+                         std::expm1(earg);
+      } else {
+        convolvedTime += SProfile[i] *
+          (std::exp(-(t-SBin[i+1])/tau)-std::exp(-(t-SBin[i])/tau));
+      }
+    }
+  }
+  convolvedTime -= SProfile[nbin] * std::expm1((SBin[nbin] - t)/tau);
+  // tau divided out of final result to provide probability of decay in window
+
+  if (convolvedTime < 0.)  {
+    G4cout << " Convolved time =: " << convolvedTime << " reset to zero! " << G4endl;
+    G4cout << " t = " << t << " tau = " << tau << G4endl;
+    G4cout << SBin[nbin] << " " << SBin[0] << G4endl;
+    convolvedTime = 0.;
+  }
+#ifdef G4VERBOSE
+  if (GetVerboseLevel() > 1)
+    G4cout << " Convolved time: " << convolvedTime << G4endl;
+#endif
+  return convolvedTime;
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //                                                                            //
 //  GetDecayTime                                                              //
@@ -1792,11 +1752,11 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
       G4String keyName;
       std::vector<G4double> PT;
       std::vector<G4double> PR;
-      G4double taotime;
+      G4double tauprob;
       long double decayRate;
 
       size_t i;
-      size_t j;
+//      size_t j;
       G4int numberOfSecondaries;
       G4int totalNumberOfSecondaries = 0;
       G4double currentTime = 0.;
@@ -1828,7 +1788,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
         // it should be calculated in seconds
         weight1 /= s ;
 	    
-        // loop over all the possible secondaries of the nucleus
+        // Loop over all the possible secondaries of the nucleus
         // the first one is itself.
         for (i = 0; i < theDecayRateVector.size(); i++) {
           PZ = theDecayRateVector[i].GetZ();
@@ -1837,39 +1797,100 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
           PT = theDecayRateVector[i].GetTaos();
           PR = theDecayRateVector[i].GetDecayRateC();
 
-          // Calculate the decay rate of the isotope
-          // decayRate is the radioactivity of isotope (PZ,PA,PE) at the 
-          // time 'theDecayTime'
-          // it will be used to calculate the statistical weight of the 
+          // The array of arrays theDecayRateVector contains all possible decay
+          // chains of a given parent nucleus (ZP,AP,EP) to a given descendant
+          // nuclide (Z,A,E).
+          //
+          // theDecayRateVector[0] contains the decay parameters of the parent
+          // nucleus
+          //           PZ = ZP
+          //           PA = AP
+          //           PE = EP
+          //           PT[] = {TP}
+          //           PR[] = {RP}
+          //
+          // theDecayRateVector[1] contains the decay of the parent to the first
+          // generation daughter (Z1,A1,E1).
+          //           PZ = Z1
+          //           PA = A1
+          //           PE = E1
+          //           PT[] = {TP, T1}
+          //           PR[] = {RP, R1}
+          //
+          // theDecayRateVector[2] contains the decay of the parent to the first
+          // generation daughter (Z1,A1,E1) and the decay of the first
+          // generation  daughter to the second generation daughter (Z2,A2,E2).
+          //           PZ = Z2
+          //           PA = A2
+          //           PE = E2
+          //           PT[] = {TP, T1, T2}
+          //           PR[] = {RP, R1, R2}
+          //
+          // theDecayRateVector[3] may contain a branch chain
+          //           PZ = Z2a
+          //           PA = A2a
+          //           PE = E2a
+          //           PT[] = {TP, T1, T2a}
+          //           PR[] = {RP, R1, R2a}
+          //
+          // and so on.
+
+          // Calculate the decay rate of the isotope.  decayRate is the 
+          // radioactivity of isotope (PZ,PA,PE) at 'theDecayTime'.
+          // It will be used to calculate the statistical weight of the 
           // decay products of this isotope
 
-//          G4cout <<"PA= "<< PA << " PZ= " << PZ << " PE= "<< PE  <<G4endl;
+          // For each nuclide, calculate all the decay chains which can reach
+          // the parent nuclide
           decayRate = 0.L;
-          for (j = 0; j < PT.size(); j++) {
-//            G4cout <<  " RDM::DecayIt: tau input to Convolve: " <<  PT[j] << G4endl; 
-            taotime = ConvolveSourceTimeProfile(theDecayTime,PT[j]);
-//            taotime = GetTaoTime(theDecayTime,PT[j]);
-            decayRate -= PR[j] * (long double)taotime;
+          for (G4int j = 0; j < G4int(PT.size()); j++) {
+            tauprob = ConvolveSourceTimeProfile(theDecayTime,PT[j]);
+            // tauprob is dimensionless, PR has units of s-1
+            decayRate -= PR[j] * (long double)tauprob;
             // Eq.4.23 of of the TN
             // note the negative here is required as the rate in the
             // equation is defined to be negative, 
             // i.e. decay away, but we need positive value here.
 
-            // G4cout << j << "\t"<< PT[j]/s <<"\t"<<PR[j]<< "\t"
-            //        << decayRate << G4endl;		
+            // G4cout << j << "\t" << PT[j]/s << "\t" << PR[j] << "\t" << decayRate << G4endl;
           }
 
-          // add the isotope to the radioactivity tables
-          //  G4cout <<theDecayTime/s <<"\t"<<nbin<<G4endl;
-          //  G4cout << theTrack.GetWeight() <<"\t"<<weight1<<"\t"<<decayRate<< G4endl;
-          theRadioactivityTables[decayWindows[nbin-1]]->AddIsotope(PZ,PA,PE,weight1*decayRate,theTrack.GetWeight());
+          // At this point any negative decay rates are probably small enough
+          // (order 10**-30) that negative values are likely due to cancellation
+          // errors.  Set them to zero.
+          if (decayRate < 0.0) decayRate = 0.0;
+/*
+          if (decayRate < 0.0) {
+            if (-decayRate > 1.0e-30) {
+              G4ExceptionDescription ed;
+              ed << "    Negative decay probability (magnitude > 1e-30) \n"
+                 << "    in variance reduction branch " << G4endl;
+              G4Exception("G4RadioactiveDecay::DecayIt()",
+                          "HAD_RDM_200", JustWarning, ed);
+            } else {
+              // Decay probability is small enough that negative value is likely
+              // due to cancellation errors.  Set it to zero.
+              decayRate = 0.0;
+            }
+          }
+
+          if (decayRate < 0.0) G4cout << " NEGATIVE decay rate = " << decayRate << G4endl;
+*/
+          //  G4cout << theDecayTime/s << "\t" << nbin << G4endl;
+          //  G4cout << theTrack.GetWeight() << "\t" << weight1 << "\t" << decayRate << G4endl;
+
+          // Add isotope to the radioactivity tables
+          // One table for each observation time window specifed in
+          // SetDecayBias(G4String filename)
+          theRadioactivityTables[decayWindows[nbin-1]]
+                ->AddIsotope(PZ,PA,PE,weight1*decayRate,theTrack.GetWeight());
 
           // Now calculate the statistical weight
           // One needs to fold the source bias function with the decaytime
           // also need to include the track weight! (F.Lei, 28/10/10)
           G4double weight = weight1*decayRate*theTrack.GetWeight();
 
-          // decay the isotope 
+          // Decay the isotope 
           theIonTable = (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
           parentNucleus = theIonTable->GetIon(PZ,PA,PE);
 
@@ -1905,7 +1926,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
             tempprods = DoDecay(*parentNucleus);
           }
 
-          // save the secondaries for buffers
+          // Save the secondaries for buffers
           numberOfSecondaries = tempprods->entries();
           currentTime = finalGlobalTime + theDecayTime;
           for (index = 0; index < numberOfSecondaries; index++) {
@@ -1953,7 +1974,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
     // Reset NumberOfInteractionLengthLeft.
     ClearNumberOfInteractionLengthLeft();
 
-    return &fParticleChangeForRadDecay ;
+    return &fParticleChangeForRadDecay;
   }
 } 
 
@@ -2069,35 +2090,45 @@ G4ThreeVector G4RadioactiveDecay::ChooseCollimationDirection() const {
   return dir;
 }
 
-//Add gamma,Xray,conversion,and auger electrons for bias mode
-void G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
-                                            G4double weight,G4double currentTime,
-                                            std::vector<double>& weights_v,
-                                            std::vector<double>& times_v,
-                                            std::vector<G4DynamicParticle*>& secondaries_v)
+// Add gamma, X-ray, conversion and auger electrons for bias mode
+void
+G4RadioactiveDecay::AddDeexcitationSpectrumForBiasMode(G4ParticleDefinition* apartDef,
+                                        G4double weight,G4double currentTime,
+                                        std::vector<double>& weights_v,
+                                        std::vector<double>& times_v,
+                                        std::vector<G4DynamicParticle*>& secondaries_v)
 {
-  G4double elevel=((const G4Ions*)(apartDef))->GetExcitationEnergy();
-  G4double life_time=apartDef->GetPDGLifeTime();
-  while (life_time <halflifethreshold && elevel>0.) {
-    G4ITDecay* anITChannel = new G4ITDecay(apartDef, 100., elevel,elevel,
-                                           photonEvaporation);
+  G4double elevel = ((const G4Ions*)(apartDef))->GetExcitationEnergy();
+  G4double life_time = apartDef->GetPDGLifeTime();
+  G4ITDecay* anITChannel = 0;
+
+  while (life_time < halflifethreshold && elevel > 0.) {
+    anITChannel = new G4ITDecay(apartDef, 100., elevel, elevel, photonEvaporation);
     G4DecayProducts* pevap_products = anITChannel->DecayIt(0.);
     G4int nb_pevapSecondaries = pevap_products->entries();
+
+    G4DynamicParticle* a_pevap_secondary = 0;
+    G4ParticleDefinition* secDef = 0;
     for (G4int ind = 0; ind < nb_pevapSecondaries; ind++) {
-		G4DynamicParticle* a_pevap_secondary= pevap_products->PopProducts();
-		//Gammas,electrons, alphas coming from excited state
-		if (a_pevap_secondary->GetDefinition()->GetBaryonNumber() < 5) {
-		  weights_v.push_back(weight);
-		  times_v.push_back(currentTime);
-		  secondaries_v.push_back(a_pevap_secondary);
-		}
-		//New excited or ground state
-		else {
-		  apartDef =a_pevap_secondary->GetDefinition();
-		  elevel=((const G4Ions*)(apartDef))->GetExcitationEnergy();
-		  life_time=apartDef->GetPDGLifeTime();
-		}
+      a_pevap_secondary = pevap_products->PopProducts();
+      secDef = a_pevap_secondary->GetDefinition();
+
+      if (secDef->GetBaryonNumber() > 4) {
+        elevel = ((const G4Ions*)(secDef))->GetExcitationEnergy();
+        life_time = secDef->GetPDGLifeTime();
+        apartDef = secDef;
+        if (secDef->GetPDGStable() ) {
+          weights_v.push_back(weight);
+          times_v.push_back(currentTime);
+          secondaries_v.push_back(a_pevap_secondary);
+        }
+      } else {
+        weights_v.push_back(weight);
+        times_v.push_back(currentTime);
+        secondaries_v.push_back(a_pevap_secondary);
+      }
     }
+
     delete anITChannel;
   }
 }

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4GDMLReadDefine.cc 96190 2016-03-29 08:07:36Z gcosmo $
+// $Id: G4GDMLReadDefine.cc 110108 2018-05-15 11:46:54Z gcosmo $
 //
 // class G4GDMLReadDefine Implementation
 //
@@ -466,8 +466,9 @@ void G4GDMLReadDefine::QuantityRead(const xercesc::DOMElement* const element)
 void
 G4GDMLReadDefine::DefineRead(const xercesc::DOMElement* const defineElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading definitions..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = defineElement->getFirstChild();
         iter != 0;iter = iter->getNextSibling())
    {

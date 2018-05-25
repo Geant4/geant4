@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 March 2018 - G.Cosmo (externals-V10-03-10)
+- Corrected GNUmakefile for Windows.
+
 11-December-2017 - G.Cosmo (externals-V10-03-09)
 - CLHEP: in MixMaxRng::modadd(), fixed guard for assembly code to protect
   builds on 32-bit systems.

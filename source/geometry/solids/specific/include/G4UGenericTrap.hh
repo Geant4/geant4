@@ -35,7 +35,7 @@
 //
 // Class description:
 //
-//   Wrapper class for G4UGenericTrap to make use of it from USolids module.
+//   Wrapper class for G4GenericTrap to make use of VecGeom GenericTrap.
 
 // History:
 // 30.10.13 G.Cosmo, CERN/PH

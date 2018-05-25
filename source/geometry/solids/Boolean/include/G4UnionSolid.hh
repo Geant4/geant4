@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnionSolid.hh 104316 2017-05-24 13:04:23Z gcosmo $
+// $Id: G4UnionSolid.hh 110069 2018-05-15 09:32:07Z gcosmo $
 //
 //
 // class G4UnionSolid
@@ -117,6 +117,9 @@ class G4UnionSolid : public G4BooleanSolid
     void DescribeYourselfTo ( G4VGraphicsScene& scene ) const ;
     G4Polyhedron* CreatePolyhedron () const ;
 
+  private:
+
+    G4ThreeVector fPMin, fPMax; // bounding box extended by half-tolerance
 };
 
 #endif

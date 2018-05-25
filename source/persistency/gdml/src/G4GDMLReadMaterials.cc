@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GDMLReadMaterials.cc 96190 2016-03-29 08:07:36Z gcosmo $
+// $Id: G4GDMLReadMaterials.cc 110108 2018-05-15 11:46:54Z gcosmo $
 // GEANT4 tag $ Name:$
 //
 // class G4GDMLReadMaterials Implementation
@@ -697,8 +697,9 @@ PropertyRead(const xercesc::DOMElement* const propertyElement,
 void G4GDMLReadMaterials::
 MaterialsRead(const xercesc::DOMElement* const materialsElement)
 {
+#ifdef G4VERBOSE
    G4cout << "G4GDML: Reading materials..." << G4endl;
-
+#endif
    for (xercesc::DOMNode* iter = materialsElement->getFirstChild();
         iter != 0; iter = iter->getNextSibling())
    {

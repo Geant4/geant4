@@ -38,20 +38,24 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     UI32LIBS  := gdi32.lib user32.lib
   endif
   ifndef QTHOME
-    QTHOME    := /usr
+    QTHOME   := /Qt
   endif
-  ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include/Qt -I$(QTHOME)/include
+  ifndef QTFLAGS            # Qt5
+    QTFLAGS  := -I$(QTHOME)/include
+    QTFLAGS  += -I$(QTHOME)/include/QtCore
+    QTFLAGS  += -I$(QTHOME)/include/QtGui
+    QTFLAGS  += -I$(QTHOME)/include/QtWidgets
+    QTFLAGS  += -I$(QTHOME)/include/QtOpenGL
+    QTFLAGS  += -I$(QTHOME)/include/QtPrintSupport
   endif
   ifndef QTMOC
-    QTMOC     := $(QTHOME)/bin/moc
+    QTMOC    := $(QTHOME)/bin/moc
   endif
-
-  ifndef QTLIBS
-    QTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib
+  ifndef QTLIBS              # Qt5
+    QTLIBS   := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5PrintSupport.lib
   endif
   ifndef GLQTLIBS
-    GLQTLIBS   := -L$(QTHOME)/lib QtCore4.lib QtGui4.lib QtOpenGL4.lib
+    GLQTLIBS := $(LIB_PATH)$(QTHOME)/lib Qt5Core.lib Qt5Gui.lib Qt5Widgets.lib Qt5OpenGL.lib Qt5PrintSupport.lib
   endif
 
 #
@@ -77,9 +81,6 @@ ifeq ($(G4SYSTEM),WIN32-VC)
 #  Note that a DLL must be fully linked. You should NOT have undefined 
 #  symbols as output of the link command.
 #
-  ifdef G4LIB_USE_USOLIDS
-    GLOBLIBS += libG4geomUSolids.lib
-  endif
   ifdef G4LIB_USE_CLHEP
     GLOBLIBS += libG4clhep.lib
   endif

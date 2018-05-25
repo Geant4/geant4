@@ -4,7 +4,7 @@
         ############################################
 
 **************************************************************
- Geant4 version Name: geant4-10-04-patch-01    (28-February-2018)
+ Geant4 version Name: geant4-10-04-patch-02    (25-May-2018)
                        Copyright : Geant4 Collaboration
                       References : NIM A 506 (2003), 250-303
                                  : IEEE-TNS 53 (2006), 270-278
@@ -12,7 +12,7 @@
                              WWW : http://geant4.org/
 **************************************************************
 
- creating G4RunManagerKernel 0x724640
+ creating G4RunManagerKernel 0xe07600
 
 The materials defined are : 
 
@@ -83,15 +83,15 @@ Current application state is PreInit
 Warning : Geant4 kernel is not Init state : Assuming Init state.
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x972a70G4ErrorPhysicsList:: particle process manager e+ = 0x975040
-0x972920G4ErrorPhysicsList:: particle process manager e- = 0x976ad0
-0x9727d0G4ErrorPhysicsList:: particle process manager gamma = 0x976d00
-0x973d70G4ErrorPhysicsList:: particle process manager geantino = 0x976f50
-0x972c50G4ErrorPhysicsList:: particle process manager mu+ = 0x9771a0
-0x972fb0G4ErrorPhysicsList:: particle process manager mu- = 0x9773f0
-0x973380G4ErrorPhysicsList:: particle process manager pi+ = 0x977640
-0x973760G4ErrorPhysicsList:: particle process manager pi- = 0x977890
-0x973b40G4ErrorPhysicsList:: particle process manager proton = 0x977ae0
+0x1007770G4ErrorPhysicsList:: particle process manager e+ = 0x1009c70
+0x1007590G4ErrorPhysicsList:: particle process manager e- = 0x100b700
+0x1007440G4ErrorPhysicsList:: particle process manager gamma = 0x100b930
+0x10089a0G4ErrorPhysicsList:: particle process manager geantino = 0x100bb80
+0x1007950G4ErrorPhysicsList:: particle process manager mu+ = 0x100bdd0
+0x1007be0G4ErrorPhysicsList:: particle process manager mu- = 0x100c020
+0x1007fb0G4ErrorPhysicsList:: particle process manager pi+ = 0x100c270
+0x1008390G4ErrorPhysicsList:: particle process manager pi- = 0x100c4c0
+0x1008770G4ErrorPhysicsList:: particle process manager proton = 0x100c710
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 

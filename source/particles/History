@@ -1,4 +1,4 @@
-$Id: History 106143 2017-09-14 06:34:42Z gcosmo $
+$Id: History 110104 2018-05-15 11:40:56Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 09 April 2018 Makoto Asai ( particles-V10-03-17 )
+- G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
+  Fix incorrect indexing. Addressing bug report #2053.
 
 - 13 September 2017 Krzysztof Genser ( particles-V10-03-16 )
 - moved G4MuonicAtom & G4MuonicAtomHelper to management
