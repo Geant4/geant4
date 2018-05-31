@@ -276,6 +276,7 @@ private:
   std::vector<G4double> binding_energies;
   G4double nuclei_radius;
   G4double nuclei_volume;
+  G4double dinucDensityScale;
   G4int number_of_zones;
 
   G4int A;

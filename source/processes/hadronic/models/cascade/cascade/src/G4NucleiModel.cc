@@ -215,11 +215,16 @@ namespace {
        0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
        2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
 
+
+  // up to 0.56: match Kossov g1+g2
+  // 0.56 to 1.8: use MAX differential cross-section from CLAS, multiplied by 4pi.  This overestimates TOTAL cross-section by a factor of 2-10 to avoid under-producing on the tails.
+  // 1.8 to 18.0: a rough fit to the 1-2 GeV CLAS data: (delta_t/s^8 * 10000 mb), extrapolated.  Falls slower than the expected s^11/t scaling.  Note like above, overestimates total xsec by a significant factor.
+  // > 18: zero
+
   const G4double gammaQDxsec[30] =
-    { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098,
-      0.071, 0.054,  0.0003, 0.0007, 0.0027, 0.0014, 0.001,  0.0012, 0.0005,
-      0.0003, 0.0002,0.0002, 0.0002, 0.0002, 0.0002, 0.0001, 0.0001, 0.0001,
-      0.0001, 0.0001, 0.0001 };
+    { 2.8,    1.3,    0.89,   0.56,   0.38,   0.27,   0.19,   0.14,   0.098, 0.071, 
+      0.054,  0.037, 0.028, 0.021, 0.016, 0.01,  0.004, 0.0015, 0.0006, 0.0002,
+      0.00007, 0.000015, 3.7e-6, 7.4e-7, 1.3e-7, 2.2e-8, 4.2e-9, 5.0e-10, 0.00, 0.00 };
 }
 
 
@@ -364,6 +369,8 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   fillPotentials(proton, tot_vol);		// Protons
   fillPotentials(neutron, tot_vol);		// Neutrons
 
+  setDinucDensityScale();
+
   // Additional flat zone potentials for other hadrons
   const std::vector<G4double> vp(number_of_zones, (A>4)?pion_vp:pion_vp_small);
   const std::vector<G4double> kp(number_of_zones, kaon_vp);
@@ -377,6 +384,7 @@ void G4NucleiModel::generateModel(G4int a, G4int z) {
   nuclei_volume = std::accumulate(zone_volumes.begin(),zone_volumes.end(),0.);
 
   if (verboseLevel > 3) printModel();
+
 }
 
 
@@ -394,6 +402,37 @@ void G4NucleiModel::fillBindingEnergies() {
   binding_energies.push_back(std::fabs(bindingEnergy(A-1,Z)-dm)/GeV);
 }
 
+
+// Compute correction to dinucleon densities to get correct total number
+
+void G4NucleiModel::setDinucDensityScale()
+{
+  if(A<5) return 1;  // don't do this for light nuclei -- just calculate number of dinuclei.
+
+  double naiveNumQD = 0;
+
+  double zoneQD = 0;
+  for (G4int i = 0; i < number_of_zones; i++) { 
+    zoneQD = getVolume(i) * getVolume(i) * 
+      getDensity(proton, i) * getDensity(neutron, i);
+    naiveNumQD += zoneQD;
+    if(verboseLevel>4 )
+	G4cout << " zone " << i << " : " << zoneQD << " naive quasideuterons" << G4endl;
+  }
+
+  // from eqn. (36) of Benhar et al arXiv:nucl-th/0301091v1
+  double L_LDA = 10.83 - 9.73 * std::pow(A, -1/3.);
+  double NumQD_LDA = L_LDA * Z * (A-Z) / A;
+
+  dinucDensityScale =NumQD_LDA / naiveNumQD;
+
+  if(verboseLevel>4 ){
+    G4cout << " total:  " << naiveNumQD << " naive quasideuterons" << G4endl;
+    G4cout << "  vs. Levinger L = " << L_LDA << " => " << NumQD_LDA << " quasideuterons" << G4endl;
+    G4cout << " => dinucleon numbers being rescaled by " << dinucDensityScale << G4endl;
+
+  }
+}
 // Load zone boundary radius array for current nucleus
 
 void G4NucleiModel::fillZoneRadii(G4double nuclearRadius) {
@@ -1415,7 +1454,7 @@ G4double G4NucleiModel::getRatio(G4int ip) const {
 }
 
 G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
-  const G4double pn_spec = 1.0;		// Scale factor for pn vs. pp/nn
+  const G4double combinatoric = 0.5;		// Scale factor for pn vs. pp/nn
   //const G4double pn_spec = 0.5;
 
   G4double dens = 0.;
@@ -1424,13 +1463,13 @@ G4double G4NucleiModel::getCurrentDensity(G4int ip, G4int izone) const {
   else {	// For dibaryons, remove extra 1/volume term in density product
     switch (ip) {
     case diproton:  
-      dens = getDensity(proton,izone) * getDensity(proton,izone);
+      dens = getDensity(proton,izone) * getDensity(proton,izone) * combinatoric * dinucDensityScale;
       break;
     case unboundPN: 
-      dens = getDensity(proton,izone) * getDensity(neutron,izone) * pn_spec;
+      dens = getDensity(proton,izone) * getDensity(neutron,izone) *  dinucDensityScale;
       break;
     case dineutron:
-      dens = getDensity(neutron,izone) * getDensity(neutron,izone);
+      dens = getDensity(neutron,izone) * getDensity(neutron,izone) * combinatoric * dinucDensityScale;
       break;
     default: dens = 0.;
     }
