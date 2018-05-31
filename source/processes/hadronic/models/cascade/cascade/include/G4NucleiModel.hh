@@ -324,6 +324,8 @@ private:
   // Neutrons and protons, for computing trajectory placements
   const G4InuclElementaryParticle neutronEP;
   const G4InuclElementaryParticle protonEP;
+
+  void setDinucDensityScale();
 };        
 
 #endif // G4NUCLEI_MODEL_HH 

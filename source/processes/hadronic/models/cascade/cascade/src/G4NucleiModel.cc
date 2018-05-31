@@ -407,7 +407,10 @@ void G4NucleiModel::fillBindingEnergies() {
 
 void G4NucleiModel::setDinucDensityScale()
 {
-  if(A<5) return 1;  // don't do this for light nuclei -- just calculate number of dinuclei.
+  if(A<5) {
+    dinucDensityScale = 1.0;
+    return;  // don't do this for light nuclei -- just calculate number of dinuclei.
+  }
 
   double naiveNumQD = 0;
 
