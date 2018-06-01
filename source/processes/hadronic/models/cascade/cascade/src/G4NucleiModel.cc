@@ -1143,11 +1143,17 @@ generateParticleFate(G4CascadParticle& cparticle,
   
 
   if (no_interaction) {
+    if(verboseLevel>2)
+      G4cout << "handling a failed interaction in G4NucleiModel::generateParticleFate" << G4endl;
     if(forceFirst(cparticle)) { 		// still no interactions -- exception for forced incident particles. 
+      if(verboseLevel>2)
+	G4cout << "forced particle -- attempting to regenerate" << G4endl;
       // NT: the default code below, which calls for passing through to next region, is not appropriate when we have forced interaction.  If the forced interaction failed, we just need to try again, to ensure that the reaction happens as intended.  It would be more accurate to pick a new interaction point, etc. (since probability of a "failed" reaction is location dependent) but will just recurse this function for simplicity.
       generateParticleFate(cparticle, theEPCollider, outgoing_cparticles);
     }
     else { 		// still no interactions -- normal case
+      if(verboseLevel>3)
+	G4cout << "non-forced particle -- standard case" << G4endl;
       if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
       
       // For conservation checking (below), get particle before updating
