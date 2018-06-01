@@ -946,8 +946,9 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
 	  G4cout <<  " partner " << i->first << " invmfp " << i->second << G4endl;
           
       G4double sl = inuclRndm() * total_invmfp;
-
-      G4cout <<  " choose process based on running-sum invmfp = " << sl << G4endl;
+      
+      if(verboseLevel > 3)
+	G4cout <<  " choose process based on running-sum invmfp = " << sl << G4endl;
 
       G4double sumcsecs = 0.0;
       
