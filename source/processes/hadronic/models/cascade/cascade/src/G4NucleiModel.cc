@@ -838,8 +838,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     qdeutrons.clear();
     //    acsecs.clear();
   
-    G4double tot_invmfp = 0.0;		// Total inv. mean-free-path for all QDs
-
     // Proton-proton state interacts with pi-, mu- or neutrals
     if (protonNumberCurrent >= 2 && ptype != pip) {
       G4InuclElementaryParticle ppd = generateQuasiDeuteron(pro, pro, zone);
@@ -908,8 +906,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     // Select interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
       for (size_t i=0; i<candidatePartners.size(); i++) {
-	G4cout << " csecs[" << candidatePartners[i].first().getDefinition()->GetParticleName()
-	       << "] " << candidatePartners[i].second();
+	G4cout << " csecs[" << candidatePartners[i].first.getDefinition()->GetParticleName()
+	       << "] " << candidatePartners[i].second;
       }
       G4cout << G4endl;
     }
@@ -936,12 +934,12 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
       G4double sumcsecs = 0.0;
       
       for (size_t i = 0; i < candidatePartners.size(); i++) {
-	sumcsecs += thePartners[i].second();
+	sumcsecs += thePartners[i].second;
 	if (sl < sumcsecs) { 
 	  if (verboseLevel > 2)
-	    G4cout << " interact with type " << candidatePartners[i].first() << G4endl; 
+	    G4cout << " interact with type " << candidatePartners[i].first << G4endl; 
 	  
-	  thePartners.push_back(partner(candidatePartners[i].first(),intpath));
+	  thePartners.push_back(partner(candidatePartners[i].first,intPath));
 	  break;
 	} 
       }	// for (candidatePartners...
