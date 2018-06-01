@@ -168,6 +168,8 @@
 //              total invmfp to pick interaction point, then relative rates to
 //              select target.  This is needed to achieve correct relative rates
 //              when forcing interactions for incident photon or muon
+// 20180601  N. Toro -- if forced-interaction particle fails to interact in 
+//              generateParticleFate, try again rather than propagating.
 
 #include "G4NucleiModel.hh"
 #include "G4AutoDelete.hh"
@@ -777,8 +779,10 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    if (verboseLevel)
+    if (verboseLevel){
       G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
+      G4cout << " generateInteractionPartners-> negative path length" << G4endl;
+    }
     return;
   }
 
@@ -901,8 +905,6 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     } 
     
 
-    /// FIX FROM HERE: SAME ALGORITHM BUT USE THE PAIRS OF PARTNERS NOT THE ACSEC STUFF
-
     // Select interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
       for (size_t i=0; i<candidatePartners.size(); i++) {
@@ -995,9 +997,12 @@ generateParticleFate(G4CascadParticle& cparticle,
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
   if (thePartners.empty()) { // smth. is wrong -> needs special treatment
-    if (verboseLevel)
+    if (verboseLevel){
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
+      G4cout << " generateParticleFate-> got empty interaction-partners list "
+	     << G4endl;
+    }
     return;
   }
 
@@ -1136,7 +1141,13 @@ generateParticleFate(G4CascadParticle& cparticle,
     break;
   }		// loop over partners
   
-  if (no_interaction) { 		// still no interactions
+
+  if (no_interaction) {
+    if(forceFirst(cparticle)) { 		// still no interactions
+      // NT: the default code below, which calls for passing through to next region, is not appropriate when we have forced interaction.  If the forced interaction failed, we just need to try again, to ensure that the reaction happens as intended.  It would be more accurate to pick a new interaction point, etc. (since probability of a "failed" reaction is location dependent) but will just recurse this function for simplicity.
+      generateParticleFate(cparticle, theEPCollider, outgoing_cparticles)
+    }
+    else { 		// still no interactions
     if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
     
     // For conservation checking (below), get particle before updating
