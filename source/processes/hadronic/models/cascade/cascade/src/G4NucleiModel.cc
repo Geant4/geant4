@@ -925,21 +925,39 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     // choose interaction point.  Hadrons may have intpath>path, photons and muons
     // are forced to interact so intpath<path.
     // note this mean free path includes both scattering and absorption
+
+    if(verboseLevel>3)
+      G4cout <<  " with total_invmfp " << total_invmfp << " and " << candidatePartners.size() << " possible partners, attempting to generate interaction" << G4endl;
+
     G4double intPath = generateInteractionLength(cparticle, path, total_invmfp);
-    
+
+    if(verboseLevel>3)
+      G4cout <<  " interaction length = " << intPath << G4endl;
+
     if (path<small || intPath < path) {		// interaction happens -- choose partner
-      std::sort(candidatePartners.begin(), candidatePartners.end(), sortPartners);
-      
+    
+      if(verboseLevel>3)
+	G4cout <<  " sort possible partners before selecting one " << G4endl;
+
+      std::sort(candidatePartners.begin(), candidatePartners.end(), invSortPartners);
+
+      if(verboseLevel>3)
+	for(std::vector<partner>::const_iterator i=candidatePartners.begin(); i != candidatePartners.end(); ++i) 
+	  G4cout <<  " partner " << i->first << " invmfp " << i->second << G4endl;
+          
       G4double sl = inuclRndm() * total_invmfp;
+
+      G4cout <<  " choose process based on running-sum invmfp = " << sl << G4endl;
+
       G4double sumcsecs = 0.0;
       
-      for (size_t i = 0; i < candidatePartners.size(); i++) {
-	sumcsecs += thePartners[i].second;
+      for (std::vector<partner>::const_iterator i=candidatePartners.begin(); i != candidatePartners.end(); ++i) {
+	sumcsecs += i->second;
 	if (sl < sumcsecs) { 
 	  if (verboseLevel > 2)
-	    G4cout << " interact with type " << candidatePartners[i].first << G4endl; 
+	    G4cout << " interact with type " << i->first << G4endl; 
 	  
-	  thePartners.push_back(partner(candidatePartners[i].first,intPath));
+	  thePartners.push_back(partner(i->first,intPath));
 	  break;
 	} 
       }	// for (candidatePartners...

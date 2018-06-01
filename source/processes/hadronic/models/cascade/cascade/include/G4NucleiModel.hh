@@ -212,6 +212,10 @@ protected:
     return (p2.second > p1.second);
   }
 
+  static G4bool invSortPartners(const partner& p1, const partner& p2) {
+    return (p2.second < p1.second);
+  }
+
   // Functions used to generate model nuclear structure
   void fillBindingEnergies();
 
