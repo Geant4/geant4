@@ -597,7 +597,7 @@ G4double G4NucleiModel::zoneIntegralGaussian(G4double r1, G4double r2,
     fun1 = fun;
   }	// while (itry < itry_max)
 
-  if (verboseLevel > 2 && itry == itry_max)
+  if (abs(verboseLevel) > 2 && itry == itry_max)
     G4cerr << " zoneIntegralGaussian-> n iter " << itry_max << G4endl;
 
   return gaussRadius*gaussRadius*gaussRadius * fun;
@@ -719,7 +719,7 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    if (verboseLevel)
+    if (abs(verboseLevel))
       G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
     return;
   }
@@ -875,7 +875,7 @@ generateParticleFate(G4CascadParticle& cparticle,
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
   if (thePartners.empty()) { // smth. is wrong -> needs special treatment
-    if (verboseLevel)
+    if (abs(verboseLevel))
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
     return;
@@ -1115,7 +1115,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4int zone = cparticle.getCurrentZone();
 
   if (cparticle.movingInsideNuclei() && zone == 0) {
-    if (verboseLevel) G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
+    if (abs(verboseLevel)) G4cerr << " boundaryTransition-> in zone 0 " << G4endl;
     return;
   }
 
@@ -1165,6 +1165,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   }
 
   bool adjustpperp=false;
+  double smallish = 0.001; 
 
   if (qv <= 0.0 && qv+qperp <=0 ) { 	// reflection
     if (verboseLevel > 3) G4cout << " reflects off boundary" << G4endl;
@@ -1179,7 +1180,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
     cparticle.resetReflection();
   } else {		// transition via transverse kinetic energy (allowed for thick walls)
     if (verboseLevel > 3) G4cout << " passes thru boundary due to angular momentum" << G4endl;
-    p1r = 0;
+    p1r = smallish * pr; // don't want exactly tangent momentum
     adjustpperp=true;
 
     cparticle.updateZone(next_zone);
@@ -1203,11 +1204,12 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 	     << " pperp.r " << old_pperp.dot(pos)
 	     << " |pperp|" << old_pperp.mag() << " =? " << std::sqrt(pperp2) << G4endl;
 	}
-    G4double new_pperp_mag=std::sqrt(pperp2 + qv);
+    G4double new_pperp_mag=std::sqrt(pperp2 + qv - p1r*p1r);
     if(verboseLevel > 4) {
       G4cout << " |pperp|_new  " << new_pperp_mag << G4endl;
     }
     mom.setVect(old_pperp * new_pperp_mag/std::sqrt(pperp2)); // new total momentum found by rescaling p_perp
+    mom.setVect(mom.vect() + pos* p1r/r); // add a small radial component to make sure that we propagate into new zone.
 
     if(verboseLevel > 3) {
       G4cout << " newp_x  " << mom.x()
