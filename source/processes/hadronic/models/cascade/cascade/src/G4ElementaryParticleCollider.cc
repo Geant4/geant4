@@ -231,8 +231,12 @@ G4ElementaryParticleCollider::collide(G4InuclParticle* bullet,
   }    
 
   if (particles.empty()) {	// No final state possible, pass bullet through
-    if (verboseLevel) {
+    if (abs(verboseLevel)) {
       G4cerr << " ElementaryParticleCollider -> failed to collide " 
+	     << particle1->getMomModule() << " GeV/c " 
+	     << particle1->getDefinition()->GetParticleName() << " with "
+	     << particle2->getDefinition()->GetParticleName() << G4endl;
+      G4cout << " ElementaryParticleCollider -> failed to collide " 
 	     << particle1->getMomModule() << " GeV/c " 
 	     << particle1->getDefinition()->GetParticleName() << " with "
 	     << particle2->getDefinition()->GetParticleName() << G4endl;
