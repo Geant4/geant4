@@ -283,11 +283,12 @@ FillMagnitudes(G4double initialMass, const std::vector<G4double>& masses) {
   }	// while (itry < itry_max)
 
   if (itry >= itry_max) {		// Too many attempts
-    if (GetVerboseLevel() > 2)
+    if (GetVerboseLevel() > 2) {
       G4cerr << " Unable to generate momenta for multiplicity "
 	     << multiplicity << G4endl;
       G4cout << " Unable to generate momenta for multiplicity "
 	     << multiplicity << G4endl;
+    }
 
     modules.clear();		// Something went wrong, throw away partial
   }
