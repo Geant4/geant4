@@ -168,8 +168,6 @@
 //              total invmfp to pick interaction point, then relative rates to
 //              select target.  This is needed to achieve correct relative rates
 //              when forcing interactions for incident photon or muon
-// 20180601  N. Toro -- if forced-interaction particle fails to interact in 
-//              generateParticleFate, try again rather than propagating.
 
 #include "G4NucleiModel.hh"
 #include "G4AutoDelete.hh"
@@ -779,10 +777,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
   }
 
   if (path < -small) { 			// something wrong
-    if (verboseLevel){
+    if (verboseLevel)
       G4cerr << " generateInteractionPartners-> negative path length" << G4endl;
-      G4cout << " generateInteractionPartners-> negative path length" << G4endl;
-    }
     return;
   }
 
@@ -905,6 +901,8 @@ G4NucleiModel::generateInteractionPartners(G4CascadParticle& cparticle) {
     } 
     
 
+    /// FIX FROM HERE: SAME ALGORITHM BUT USE THE PAIRS OF PARTNERS NOT THE ACSEC STUFF
+
     // Select interaction from non-zero cross-section choices
     if (verboseLevel > 2) {
       for (size_t i=0; i<candidatePartners.size(); i++) {
@@ -997,12 +995,9 @@ generateParticleFate(G4CascadParticle& cparticle,
   generateInteractionPartners(cparticle);	// Fills "thePartners" data
 
   if (thePartners.empty()) { // smth. is wrong -> needs special treatment
-    if (verboseLevel){
+    if (verboseLevel)
       G4cerr << " generateParticleFate-> got empty interaction-partners list "
 	     << G4endl;
-      G4cout << " generateParticleFate-> got empty interaction-partners list "
-	     << G4endl;
-    }
     return;
   }
 
@@ -1141,45 +1136,33 @@ generateParticleFate(G4CascadParticle& cparticle,
     break;
   }		// loop over partners
   
-
-  if (no_interaction) {
-    if(verboseLevel>2)
-      G4cout << "handling a failed interaction in G4NucleiModel::generateParticleFate" << G4endl;
-    if(forceFirst(cparticle)) { 		// still no interactions -- exception for forced incident particles. 
-      if(verboseLevel>2)
-	G4cout << "forced particle -- attempting to regenerate" << G4endl;
-      // NT: the default code below, which calls for passing through to next region, is not appropriate when we have forced interaction.  If the forced interaction failed, we just need to try again, to ensure that the reaction happens as intended.  It would be more accurate to pick a new interaction point, etc. (since probability of a "failed" reaction is location dependent) but will just recurse this function for simplicity.
-      generateParticleFate(cparticle, theEPCollider, outgoing_cparticles);
+  if (no_interaction) { 		// still no interactions
+    if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
+    
+    // For conservation checking (below), get particle before updating
+    static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
+    if (!prescatCP_G4MT_TLS_) {
+      prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
+      G4AutoDelete::Register(prescatCP_G4MT_TLS_);
     }
-    else { 		// still no interactions -- normal case
-      if(verboseLevel>3)
-	G4cout << "non-forced particle -- standard case" << G4endl;
-      if (verboseLevel > 1) G4cout << " no interaction " << G4endl;
-      
-      // For conservation checking (below), get particle before updating
-      static G4ThreadLocal G4InuclElementaryParticle *prescatCP_G4MT_TLS_ = 0;
-      if (!prescatCP_G4MT_TLS_) {
-	prescatCP_G4MT_TLS_ = new G4InuclElementaryParticle;
-	G4AutoDelete::Register(prescatCP_G4MT_TLS_);
-      }
-      G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
-      prescatCP = cparticle.getParticle();
-      
-      // Last "partner" is just a total-path placeholder
-      cparticle.updatePosition(old_position); 
-      cparticle.propagateAlongThePath(thePartners[npart-1].second);
-      cparticle.incrementCurrentPath(thePartners[npart-1].second);
-      boundaryTransition(cparticle);
-      outgoing_cparticles.push_back(cparticle);
-      
-      // Check conservation for simple scattering (ignore target nucleus!)
+    G4InuclElementaryParticle &prescatCP = *prescatCP_G4MT_TLS_;	// Avoid memory churn
+    prescatCP = cparticle.getParticle();
+    
+    // Last "partner" is just a total-path placeholder
+    cparticle.updatePosition(old_position); 
+    cparticle.propagateAlongThePath(thePartners[npart-1].second);
+    cparticle.incrementCurrentPath(thePartners[npart-1].second);
+    boundaryTransition(cparticle);
+    outgoing_cparticles.push_back(cparticle);
+    
+    // Check conservation for simple scattering (ignore target nucleus!)
+
 #ifdef G4CASCADE_CHECK_ECONS
-      if (verboseLevel > 2) {
-	balance.collide(&prescatCP, 0, outgoing_cparticles);
-	balance.okay();		// Report violations, but don't act on them
-      }
+    if (verboseLevel > 2) {
+      balance.collide(&prescatCP, 0, outgoing_cparticles);
+      balance.okay();		// Report violations, but don't act on them
+    }
 #endif
-    }   // else (not forced)
   }	// if (no_interaction)
   
   return;
