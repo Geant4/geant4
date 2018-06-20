@@ -34,6 +34,7 @@
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.
 // 20130620  Address Coverity warnings about missing copy actions
+// 20180619  N Toro -- add G4GamP2PiNPBackScatterAngDst;	
 
 #ifndef G4TwoBodyAngularDist_h
 #define G4TwoBodyAngularDist_h 1
@@ -43,6 +44,7 @@
 class G4VTwoBodyAngDst;
 class G4GamP2NPipAngDst;
 class G4GamP2PPi0AngDst;
+class G4GamP2PiNPBackScatterAngDst;		// gamma p -> pi n/p backscatter
 class G4PP2PPAngDst;
 class G4NP2NPAngDst;
 class G4NuclNuclAngDst;
@@ -89,6 +91,7 @@ private:
   // Generators for various initial/final state combinations
   G4GamP2NPipAngDst* gp_npip;		// gamma p -> n pi+
   G4GamP2PPi0AngDst* gp_ppi0;		// gamma p -> p pi0
+  //  G4GamP2PiNPBackScatterAngDst* gp_npiback;		// gamma p -> pi n/p backscatter
   G4PP2PPAngDst* ppAngDst;              // pp, nn elastic
   G4NP2NPAngDst* npAngDst;              // np and pn elastic
   G4NuclNuclAngDst* nnAngDst;		// Y N elastic and inelastic

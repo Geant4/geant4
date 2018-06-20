@@ -34,7 +34,7 @@
 #include "G4PionNucSampler.hh"
 
 struct G4CascadeGamNChannelData {
-  typedef G4CascadeData<30,6,6,4,5,6,7,7,7> data_t;
+  typedef G4CascadeData<30,8,6,4,5,6,7,7,7> data_t;
   static const data_t data;
 };
 

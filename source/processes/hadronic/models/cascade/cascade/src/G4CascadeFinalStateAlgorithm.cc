@@ -61,7 +61,7 @@
 #include <cmath>
 
 using namespace G4InuclSpecialFunctions;
-
+using namespace G4InuclParticleNames;
 
 // Cut-offs and iteration limits for generation
 
@@ -101,13 +101,15 @@ Configure(G4InuclElementaryParticle* bullet,
   G4int is = bullet->type() * target->type();
   G4int fs = (multiplicity==2) ? particle_kinds[0]*particle_kinds[1] : 0;
 
+  // Save particle types for use with distributions //nt: move this earlier so
+  // ChooseGenerators can access 2-body final state order
+  kinds = particle_kinds;
+
   ChooseGenerators(is, fs);
 
   // Save kinematics for use with distributions
   SaveKinematics(bullet, target);
 
-  // Save particle types for use with distributions
-  kinds = particle_kinds;
 }
 
 // Save kinematics for use with generators
@@ -145,6 +147,18 @@ void G4CascadeFinalStateAlgorithm::ChooseGenerators(G4int is, G4int fs) {
 
   if (fs > 0 && multiplicity == 2) {
     G4int kw = (fs==is) ? 1 : 2;
+
+    if(GetVerboseLevel()>1)
+      G4cout << " kinds.size() " << kinds.size() << G4endl;
+
+    if((is == gam*pro || is == gam*neu) &&
+       (kinds[0]==pip  || kinds[0]==pim || kinds[0]==pi0) &&
+       (kinds[1]==pro || kinds[1]==neu))
+      kw = -1;   // NT: backscatter case
+
+    if(GetVerboseLevel()>1)
+      G4cout << " kw = " << kw << G4endl;
+
     angDist = G4TwoBodyAngularDist::GetDist(is, fs, kw);
   } else if (multiplicity == 3) {
     angDist = G4TwoBodyAngularDist::GetDist(is);

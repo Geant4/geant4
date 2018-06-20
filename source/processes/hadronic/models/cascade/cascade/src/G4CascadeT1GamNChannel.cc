@@ -34,8 +34,8 @@ using namespace G4InuclParticleNames;
 
 namespace {
   // gamma p : Outgoing particle types of a given multiplicity
-  static const G4int gamp2bfs[6][2] =
-  {{gam,pro}, {pro,pi0}, {neu,pip}, {lam,kpl}, {s0, kpl}, {sp,k0}};
+  static const G4int gamp2bfs[8][2] =
+    {{gam,pro}, {pro,pi0}, {neu,pip}, {pi0, pro}, {pip, neu}, {lam,kpl}, {s0, kpl}, {sp,k0}};
 
   static const G4int gamp3bfs[6][3] =
   {{pro,pip,pim}, {pro,pi0,pi0}, {neu,pip,pi0},
@@ -73,8 +73,8 @@ namespace {
 
 namespace {
   // gamma n : Outgoing particle types of a given multiplicity
-  static const G4int gamn2bfs[6][2] =
-  {{gam,neu}, {neu,pi0}, {pro,pim}, {lam,k0}, {s0, k0}, {sm,kpl}};
+  static const G4int gamn2bfs[8][2] =
+    {{gam,neu}, {neu,pi0}, {pro,pim}, {pi0,neu}, {pim, pro}, {lam,k0}, {s0, k0}, {sm,kpl}};
 
   static const G4int gamn3bfs[6][3] =
   {{neu,pip,pim}, {neu,pi0,pi0}, {pro,pim,pi0},
@@ -119,7 +119,7 @@ namespace {
     0.18,   0.146,  0.138,  0.1296, 0.1275, 0.124,  0.122,  0.12,   0.1185,
     0.117,  0.115,  0.115};
 
-  static const G4double gampCrossSections[48][30] = {
+  static const G4double gampCrossSections[50][30] = {
   //
   // multiplicity 2 (6 channels)
   //
@@ -138,6 +138,27 @@ namespace {
    {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,   0.0,
     0.0,    0.062,  0.152,  0.2373, 0.1143, 0.084, 0.0983, 0.0419, 0.015, 0.006,
     0.0035, 0.0022, 0.0014, 0.0007, 0.0003, 0.0,   0.0,    0.0,    0.0,   0.0},
+
+
+   /*   static const G4double bins[30] = {
+     0.0,  0.01, 0.013, 0.018, 0.024, 0.032, 0.042, 0.056, 0.075, 0.1,
+     0.13, 0.18, 0.24,  0.32,  0.42,  0.56,  0.75,  1.0,   1.3,   1.8,
+     2.4,  3.2,  4.2,   5.6,   7.5,   10.0,  13.0,  18.0,  24.0, 32.0 };
+     }
+     bins ... 0.138,  0.1296, 0.1275, 0.124,  0.122,  0.12,   0.1185,
+    0.117,  0.115,  0.115};
+
+
+*/
+  // pi0 p ( = pi0 n ) backscatter -- artificially high.  Start at 2.4 GeV
+   {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
+    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
+  0.003,  0.003,  0.003,  0.003,  0.003,  0.003, 0.003,  0.003,    0.0,    0.0}, 
+ 
+  // pi+ n ( = pi- p ) backscatter -- artificially high
+   {0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
+    0.0,    0.0,    0.0,    0.0,    0.0,    0.0,   0.0,    0.0,    0.0,    0.0,
+   0.003, 0.003,  0.003,  0.003,  0.003,  0.003, 0.003,  0.003,    0.0,    0.0}, 
 
   // L K+ ( = L K0 )
    {0.0,    0.0,    0.0,    0.0,    0.0,   0.0,  0.0,  0.0,    0.0,    0.0,

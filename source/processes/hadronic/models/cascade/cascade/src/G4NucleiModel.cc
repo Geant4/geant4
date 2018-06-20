@@ -324,7 +324,7 @@ void G4NucleiModel::generateModel(G4InuclNuclei* nuclei) {
 }
 
 void G4NucleiModel::generateModel(G4int a, G4int z) {
-  if (verboseLevel) {
+  if (verboseLevel || true) {
     G4cout << " >>> G4NucleiModel::generateModel A " << a << " Z " << z
 	   << G4endl;
   }

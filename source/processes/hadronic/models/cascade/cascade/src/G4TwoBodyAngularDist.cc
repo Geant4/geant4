@@ -136,15 +136,37 @@ G4TwoBodyAngularDist::ChooseDist(G4int is, G4int fs, G4int kw) const {
     else return hn3BodyDst;
   }
 
+  // gamma-nucleon backscatter
+  if (((is == gam*pro || is == gam*neu) &&
+       (fs == pro*pim || pro*pi0 || neu*pi0 || neu*pip)) && kw== -1) {
+    G4cerr << ">>> G4TwoBodyAngularDist: backscatter case (dummy mode)! " << G4endl;
+    G4cout << ">>> G4TwoBodyAngularDist: backscatter case (dummy mode)! " << G4endl;
+    //    return gp_npiback;
+    return gp_ppi0;
+  } 
+
+  // UNPHYSICAL CASE
+  if ( kw== -1) {
+    G4cerr << ">>> G4TwoBodyAngularDist: SHOULDN'T REACH HERE!" << G4endl;
+    G4cout << ">>> G4TwoBodyAngularDist: SHOULDN'T REACH HERE!" << G4endl;
+    //    return gp_npiback;
+    return gp_ppi0;
+  } 
+
+
   // gamma-nucleon -> nucleon pi0
-  if ((is == gam*pro && fs == pro*pi0) ||
-      (is == gam*neu && fs == neu*pi0)) {
+  if ((is == gam*pro && fs == pro*pi0 ) ||
+      (is == gam*neu && fs == neu*pi0 )) {
+    G4cerr << ">>> G4TwoBodyAngularDist: standard case " << G4endl;
+    G4cout << ">>> G4TwoBodyAngularDist: standard case " << G4endl;
     return gp_ppi0;
   } 
 
   // gamma-nucleon charge exchange
   if ((is == gam*pro && fs == neu*pip) ||
       (is == gam*neu && fs == pro*pim)) {
+    G4cerr << ">>> G4TwoBodyAngularDist: standard case " << G4endl;
+    G4cout << ">>> G4TwoBodyAngularDist: standard case " << G4endl;
     return gp_npip;
   } 
 
