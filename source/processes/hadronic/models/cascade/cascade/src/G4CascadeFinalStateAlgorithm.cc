@@ -152,8 +152,8 @@ void G4CascadeFinalStateAlgorithm::ChooseGenerators(G4int is, G4int fs) {
       G4cout << " kinds.size() " << kinds.size() << G4endl;
 
     if((is == gam*pro || is == gam*neu) &&
-       (kinds[0]==pip  || kinds[0]==pim || kinds[0]==pi0) &&
-       (kinds[1]==pro || kinds[1]==neu))
+       (kinds[0]==pro || kinds[0]==neu) && 
+       (kinds[1]==pip || kinds[1]==pim || kinds[1]==pi0))
       kw = -1;   // NT: backscatter case
 
     if(GetVerboseLevel()>1)
