@@ -34,6 +34,7 @@
 # 20130627  M. Kelsey -- Add G4InuclParticleNames.cc with enum/string fns
 # 20130630  M. Kelsey -- Add G4CascadeDeexciteBase
 # 20150323  M. Kelsey -- Add newly split G4KaonSampler and G4HyperonSampler
+# 20180620  N. Toro -- Add G4GamP2NucPiBackscatterAngDst
 #------------------------------------------------------------------------------
 
 # List external includes needed.
@@ -151,6 +152,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4Fissioner.hh
         G4GamP2NPipAngDst.hh
         G4GamP2PPi0AngDst.hh
+        G4GamP2NucPiBackscatterAngDst.hh
         G4GammaNuclAngDst.hh
 	G4GDecay3.hh
         G4HadNElastic1AngDst.hh
@@ -264,6 +266,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_bert_cascade
         G4Fissioner.cc
         G4GamP2NPipAngDst.cc
         G4GamP2PPi0AngDst.cc
+        G4GamP2NucPiBackscatterAngDst.cc
         G4GammaNuclAngDst.cc
 	G4GDecay3.cc
         G4HadNElastic1AngDst.cc
